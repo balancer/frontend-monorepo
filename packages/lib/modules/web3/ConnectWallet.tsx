@@ -1,62 +1,61 @@
 import { ConnectButton, WalletButton } from '@rainbow-me/rainbowkit'
-import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Show } from '@chakra-ui/react'
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
 import { useIsSafeApp } from './safe.hooks'
+
+type ConnectWalletProps = {
+  /** Text for the connect button (default: "Connect wallet") */
+  connectLabel?: string
+  /** Show a “Create wallet” button (Coinbase) when disconnected */
+  showCreateWalletButton?: boolean
+} & ButtonProps
 
 export function ConnectWallet({
   connectLabel = 'Connect wallet',
   showCreateWalletButton = false,
   ...rest
-}: { connectLabel?: string; showCreateWalletButton?: boolean } & ButtonProps) {
+}: ConnectWalletProps) {
   const { isLoading: isLoadingAccount, isConnected: isConnectedAccount } = useUserAccount()
   const isSafeApp = useIsSafeApp()
 
   return (
     <ConnectButton.Custom>
-      {({
-        mounted,
-        openConnectModal,
-        authenticationStatus,
-        account,
-        chain,
-        openChainModal,
-        openAccountModal,
-      }) => {
+      {({ mounted, openConnectModal, authenticationStatus, account, openAccountModal }) => {
+        /* ----- connection state helpers ----- */
         const isReady = mounted && authenticationStatus !== 'loading'
         const isLoading = authenticationStatus === 'loading' || isLoadingAccount
         const isConnected =
           isReady &&
           account &&
-          chain &&
           isConnectedAccount &&
           (!authenticationStatus || authenticationStatus === 'authenticated')
 
+        /* ------- NOT CONNECTED: show “connect” (+ optional “create”) ------- */
         if (!isConnected) {
           return (
             <HStack width="full">
               {showCreateWalletButton && (
                 <WalletButton.Custom wallet="coinbase">
-                  {({ ready, connect }) => {
-                    return (
-                      <Button
-                        disabled={!ready || !mounted || isLoading}
-                        onClick={connect}
-                        type="button"
-                        variant="tertiary"
-                      >
-                        Create wallet
-                      </Button>
-                    )
-                  }}
+                  {({ ready, connect }) => (
+                    <Button
+                      isDisabled={!ready || !mounted || isLoading}
+                      onClick={connect}
+                      variant="tertiary"
+                      type="button"
+                    >
+                      Create wallet
+                    </Button>
+                  )}
                 </WalletButton.Custom>
               )}
+
               <Button
                 isDisabled={isLoading || !mounted}
                 loadingText={connectLabel}
                 onClick={openConnectModal}
-                backgroundColor={'#00F5E0'}
-                color={'black'}
+                backgroundColor="#00F5E0"
+                color="black"
                 {...rest}
               >
                 {connectLabel}
@@ -65,69 +64,29 @@ export function ConnectWallet({
           )
         }
 
-        if (chain.unsupported) {
-          return (
-            <Button
-              onClick={openChainModal}
-              type="button"
-              variant="tertiary"
-              {...rest}
-              isDisabled={isSafeApp}
-            >
-              Unsupported network
-            </Button>
-          )
-        }
-
+        /* ------------- CONNECTED: avatar + address only ------------- */
         return (
-          <HStack spacing="sm">
-            <Button
-              alignItems="center"
-              display="flex"
-              isDisabled={isSafeApp}
-              type="button"
-              backgroundColor={'#00F5E0'}
-              color={'black'}
-              {...rest}
-            >
-              {chain.hasIcon && (
-                <Box
-                  borderRadius="full"
-                  height={6}
-                  mr={{ base: '0', sm: 'sm' }}
-                  overflow="hidden"
-                  width={6}
-                >
-                  {chain.iconUrl && (
-                    <Img
-                      alt={chain.name ?? 'Chain icon'}
-                      height={6}
-                      src={chain.iconUrl}
-                      width={6}
-                    />
-                  )}
-                </Box>
-              )}
-              <Show above="sm">{chain.name}</Show>
-            </Button>
-            <Button
-              onClick={openAccountModal}
-              backgroundColor={'#00F5E0'}
-              color={'black'}
-              {...rest}
-              isDisabled={isSafeApp}
-            >
-              <CustomAvatar
-                address={account.address}
-                alt="Avatar"
-                ensImage={account.ensAvatar}
-                mr={{ base: '0', sm: 'sm' }}
-                rounded="full"
-                size={6}
-              />
-              <Show above="sm">{account.displayName}</Show>
-            </Button>
-          </HStack>
+          <Button
+            onClick={openAccountModal}
+            backgroundColor="#00F5E0"
+            color="black"
+            isDisabled={isSafeApp}
+            display="flex"
+            alignItems="center"
+            {...rest}
+          >
+            <CustomAvatar
+              address={account.address}
+              alt="Avatar"
+              ensImage={account.ensAvatar}
+              mr={{ base: 0, sm: 'sm' }}
+              rounded="full"
+              size={6}
+            />
+
+            {/* hide text on very small screens */}
+            <Show above="sm">{account.displayName}</Show>
+          </Button>
         )
       }}
     </ConnectButton.Custom>

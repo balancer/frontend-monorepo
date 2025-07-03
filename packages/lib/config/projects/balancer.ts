@@ -5,8 +5,8 @@ import { isProd } from '@repo/lib/config/app.config'
 
 export const ProjectConfigBalancer: ProjectConfig = {
   projectId: 'balancer',
-  projectName: 'Balancer',
-  projectUrl: 'https://balancer.fi',
+  projectName: 'AggTrade - Yeild Farming',
+  projectUrl: 'https://yield.aggtrade.xyz/',
   projectLogo: 'https://balancer.fi/images/icons/balancer.svg',
   supportedNetworks: [
     GqlChain.Mainnet,

@@ -79,25 +79,25 @@ export function AcceptPoliciesModal() {
               size="lg"
             >
               {showVeBal ? (
-                <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
-                  By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
-                  <Link as={NextLink} href="/terms-of-use">
+                <Box aria-label="Accept policies" color="#fff" fontSize="md" mt="-3px">
+                  By connecting my wallet, I agree to AggTrade - Yeild Farming&apos;s{' '}
+                  <Link as={NextLink} color={'#00F5E0'} href="/terms-of-use">
                     Terms of Use
                   </Link>
                   ,{' '}
-                  <Link as={NextLink} href="/risks">
+                  <Link as={NextLink} color={'#00F5E0'} href="/risks">
                     Risks
                   </Link>
                   ,{' '}
-                  <Link as={NextLink} href="/cookies-policy">
+                  <Link as={NextLink} color={'#00F5E0'} href="/cookies-policy">
                     Cookies Policy
                   </Link>
                   , use of{' '}
-                  <Link as={NextLink} href="/3rd-party-services">
+                  <Link as={NextLink} color={'#00F5E0'} href="/3rd-party-services">
                     Third-party services
                   </Link>{' '}
                   and{' '}
-                  <Link as={NextLink} href="/privacy-policy">
+                  <Link as={NextLink} color={'#00F5E0'} href="/privacy-policy">
                     Privacy Policy
                   </Link>
                   .
@@ -119,7 +119,7 @@ export function AcceptPoliciesModal() {
             isDisabled={!isChecked}
             onClick={handleClick}
             size="lg"
-            variant="secondary"
+            variant="primary"
             w="full"
           >
             Proceed

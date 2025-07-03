@@ -1,12 +1,12 @@
 'use client'
 
 import '@rainbow-me/rainbowkit/styles.css'
-import { RainbowKitProvider, Theme, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
 import { ReactQueryClientProvider } from '@repo/lib/shared/app/react-query.provider'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { useTheme } from '@chakra-ui/react'
-import { merge } from 'lodash'
+// import { merge } from 'lodash'
 import { UserSettingsProvider } from '../user/settings/UserSettingsProvider'
 import { AcceptPoliciesModal } from './AcceptPoliciesModal'
 import { BlockedAddressModal } from './BlockedAddressModal'
@@ -31,73 +31,81 @@ export function Web3Provider({ children }: PropsWithChildren) {
   */
   if (!isMounted) return null
 
-  const sharedConfig = {
-    fonts: {
-      body: fonts.body,
-    },
-    radii: {
-      connectButton: radii.md,
-      actionButton: radii.md,
-      menuButton: radii.md,
-      modal: radii.md,
-      modalMobile: radii.md,
-    },
-    shadows: {
-      connectButton: shadows.md,
-      dialog: shadows.xl,
-      profileDetailsAction: shadows.md,
-      selectedOption: shadows.md,
-      selectedWallet: shadows.md,
-      walletLogo: shadows.md,
-    },
-    colors: {
-      accentColor: colors.purple[500],
-      // accentColorForeground: '...',
-      // actionButtonBorder: '...',
-      // actionButtonBorderMobile: '...',
-      // actionButtonSecondaryBackground: '...',
-      // closeButton: '...',
-      // closeButtonBackground: '...',
-      // connectButtonBackground: '#000000',
-      // connectButtonBackgroundError: '...',
-      // connectButtonInnerBackground: '#000000',
-      // connectButtonText: '...',
-      // connectButtonTextError: '...',
-      // connectionIndicator: '...',
-      // downloadBottomCardBackground: '...',
-      // downloadTopCardBackground: '...',
-      // error: '...',
-      // generalBorder: '...',
-      // generalBorderDim: '...',
-      // menuItemBackground: '...',
-      // modalBackdrop: '...',
-      modalBackground: semanticTokens.colors.background.level0[colorModeKey],
-      // modalBorder: '...',
-      modalText: semanticTokens.colors.font.primary[colorModeKey],
-      // modalTextDim: '...',
-      // modalTextSecondary: '...',
-      // profileAction: '...',
-      // profileActionHover: '...',
-      // profileForeground: '...',
-      // selectedOptionBorder: '...',
-      // standby: '...',
-    },
-  }
+  // const sharedConfig = {
+  //   fonts: {
+  //     body: fonts.body,
+  //   },
+  //   radii: {
+  //     connectButton: radii.md,
+  //     actionButton: radii.md,
+  //     menuButton: radii.md,
+  //     modal: radii.md,
+  //     modalMobile: radii.md,
+  //   },
+  //   shadows: {
+  //     connectButton: shadows.md,
+  //     dialog: shadows.xl,
+  //     profileDetailsAction: shadows.md,
+  //     selectedOption: shadows.md,
+  //     selectedWallet: shadows.md,
+  //     walletLogo: shadows.md,
+  //   },
+  //   colors: {
+  //     accentColor: colors.purple[500],
+  //     // accentColorForeground: '...',
+  //     // actionButtonBorder: '...',
+  //     // actionButtonBorderMobile: '...',
+  //     // actionButtonSecondaryBackground: '...',
+  //     // closeButton: '...',
+  //     // closeButtonBackground: '...',
+  //     // connectButtonBackground: '#000000',
+  //     // connectButtonBackgroundError: '...',
+  //     // connectButtonInnerBackground: '#000000',
+  //     // connectButtonText: '...',
+  //     // connectButtonTextError: '...',
+  //     // connectionIndicator: '...',
+  //     // downloadBottomCardBackground: '...',
+  //     // downloadTopCardBackground: '...',
+  //     // error: '...',
+  //     // generalBorder: '...',
+  //     // generalBorderDim: '...',
+  //     // menuItemBackground: '...',
+  //     // modalBackdrop: '...',
+  //     modalBackground: semanticTokens.colors.background.level0[colorModeKey],
+  //     // modalBorder: '...',
+  //     modalText: semanticTokens.colors.font.primary[colorModeKey],
+  //     // modalTextDim: '...',
+  //     // modalTextSecondary: '...',
+  //     // profileAction: '...',
+  //     // profileActionHover: '...',
+  //     // profileForeground: '...',
+  //     // selectedOptionBorder: '...',
+  //     // standby: '...',
+  //   },
+  // }
 
-  const _lightTheme = merge(lightTheme(), {
-    ...sharedConfig,
-  } as Theme)
+  // const _lightTheme = merge(lightTheme(), {
+  //   ...sharedConfig,
+  // } as Theme)
 
-  const _darkTheme = merge(darkTheme(), {
-    ...sharedConfig,
-  } as Theme)
+  // const _darkTheme = merge(darkTheme(), {
+  //   ...sharedConfig,
+  // } as Theme)
 
-  const customTheme = colorMode === 'dark' ? _darkTheme : _lightTheme
+  // const customTheme = colorMode === 'dark' ? _darkTheme : _lightTheme
 
   return (
     <ReactQueryClientProvider>
       <WagmiProvider config={wagmiConfig}>
-        <RainbowKitProvider avatar={CustomAvatar} theme={customTheme}>
+        <RainbowKitProvider
+          avatar={CustomAvatar}
+          theme={darkTheme({
+            accentColor: '#00F5E0', // your green-cyan gradient
+            accentColorForeground: '#000',
+            borderRadius: 'small',
+            overlayBlur: 'small',
+          })}
+        >
           <UserAccountProvider>
             <UserSettingsProvider
               initAcceptedPolicies={undefined}

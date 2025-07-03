@@ -1,5 +1,6 @@
 'use client'
 
+import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import React from 'react'
 
 interface NavLinkProps {
@@ -47,7 +48,7 @@ function NavLink({ href, children, isActive }: NavLinkProps) {
 }
 
 const navItems = [
-  { href: 'https://spot.aggtrade.xyz/', label: 'Spot' },
+  { href: 'https://aggtrade.xyz/spot', label: 'Spot' },
   { href: 'https://perp.aggtrade.xyz/', label: 'Perps' },
   { href: 'https://lending.aggtrade.xyz/', label: 'Lend/Borrow' },
   { href: '#', label: 'Yield Farming' },
@@ -109,6 +110,8 @@ export default function AggtraderNavbar() {
           )
         })}
       </ul>
+
+      <ConnectWallet />
     </nav>
   )
 }

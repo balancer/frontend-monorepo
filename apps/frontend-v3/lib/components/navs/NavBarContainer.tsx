@@ -7,7 +7,6 @@ import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import AggtraderNavbar from '../AggtraderNavbar'
 
 export function NavBarContainer() {
   const { defaultAppLinks } = useNav()
@@ -37,7 +36,6 @@ export function NavBarContainer() {
               socialLinks={socialLinks}
             />
           }
-          navLogo={<NavLogo />}
         />
       </motion.div>
     </AnimatePresence>

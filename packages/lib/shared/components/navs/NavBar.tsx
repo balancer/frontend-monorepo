@@ -161,15 +161,15 @@ export function NavActions({
       //   el: hideDarkModeToggle ? null : <DarkModeToggle />,
       //   display: { base: 'none', lg: 'block' },
       // },
-      {
-        el: (
-          <ConnectWallet
-            connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'}
-            showCreateWalletButton={false}
-          />
-        ),
-        display: { base: 'block', lg: 'block' },
-      },
+      // {
+      //   el: (
+      //     <ConnectWallet
+      //       connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'}
+      //       showCreateWalletButton={false}
+      //     />
+      //   ),
+      //   display: { base: 'block', lg: 'block' },
+      // },
       {
         el: mobileNav,
         display: { base: 'block', lg: 'none' },
@@ -269,7 +269,7 @@ export function NavBar({
       {...rest}
     >
       <AggtraderNavbar />
-      <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
+      <HStack as="nav" justify="center" padding={{ base: 'sm', md: 'md' }}>
         <HStack
           animate="show"
           as={motion.div}
@@ -286,6 +286,8 @@ export function NavBar({
                   appLinks={appLinks}
                   customLinks={customLinks}
                   display={{ base: 'none', lg: 'flex' }}
+                  justifyContent={'center'}
+                  width={'100%'}
                 />
               )}
             </>
