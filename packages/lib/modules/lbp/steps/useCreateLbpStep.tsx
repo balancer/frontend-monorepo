@@ -91,38 +91,30 @@ export function useCreateLbpStep(): TransactionStep {
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
 
-  const isValidFormStates =
-    saleStructureForm.formState.isValid &&
-    projectInfoForm.formState.isValid &&
-    !!startTime &&
-    !!endTime
-
-  const createPoolInput = isValidFormStates
-    ? {
-        protocolVersion: 3 as const,
-        poolType: PoolType.LiquidityBootstrapping,
-        symbol: `${launchTokenSymbol}-${reserveTokenSymbol}-LBP`,
-        name: `${name} Liquidity Bootstrapping Pool`,
-        swapFeePercentage: parseUnits((fee / 100).toString(), 18),
-        chainId,
-        lbpParams: {
-          owner: owner || userAddress,
-          blockProjectTokenSwapsIn,
-          projectToken: launchTokenAddress as Address,
-          reserveToken: reserveTokenAddress as Address,
-          projectTokenStartWeight: parseUnits(`${projectTokenStartWeight / 100}`, 18),
-          reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight / 100}`, 18),
-          projectTokenEndWeight: parseUnits(`${projectTokenEndWeight / 100}`, 18),
-          reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight / 100}`, 18),
-          startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
-          endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
-        },
-      }
-    : undefined
+  const createPoolInput = {
+    protocolVersion: 3 as const,
+    poolType: PoolType.LiquidityBootstrapping,
+    symbol: `${launchTokenSymbol}-${reserveTokenSymbol}-LBP`,
+    name: `${name} Liquidity Bootstrapping Pool`,
+    swapFeePercentage: parseUnits('0.01', 18), // TODO: confirm default value?
+    chainId,
+    lbpParams: {
+      owner: owner || userAddress,
+      blockProjectTokenSwapsIn,
+      projectToken: launchTokenAddress as Address,
+      reserveToken: reserveTokenAddress as Address,
+      projectTokenStartWeight: parseUnits(`${projectTokenStartWeight / 100}`, 18),
+      reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight / 100}`, 18),
+      projectTokenEndWeight: parseUnits(`${projectTokenEndWeight / 100}`, 18),
+      reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight / 100}`, 18),
+      startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
+      endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
+    },
+  }
 
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput: createPoolInput as CreatePoolLiquidityBootstrappingInput,
-    enabled: isStepActivated && !!createPoolInput,
+    enabled: isStepActivated,
   })
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in create LBP gas estimation', {
