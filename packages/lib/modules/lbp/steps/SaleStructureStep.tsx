@@ -106,8 +106,6 @@ export function SaleStructureStep() {
           />
         </VStack>
 
-        <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
-
         {launchTokenIsValid && (
           <>
             <Divider />
