@@ -136,7 +136,7 @@ export function LbpVolumeTVLFeesCharts({
       grid: {
         left: '7%',
         right: '4%',
-        top: 0,
+        top: '10%',
         bottom: '10%',
       },
       series: [
