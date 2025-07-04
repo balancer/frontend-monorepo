@@ -111,7 +111,7 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'Swap fees',
-        value: `${fNum('feePercent', dynamicData.swapFee)} (${poolOwnerData?.editableText})`,
+        value: `${fNum('feePercent', dynamicData.swapFee, { hideSmallPercentage: false })} (${poolOwnerData?.editableText})`,
       },
       isStable(pool.type) && 'amp' in pool
         ? {
