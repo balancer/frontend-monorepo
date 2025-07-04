@@ -2,8 +2,7 @@ import { Box } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { usePoolCharts } from './PoolChartsProvider'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
-import { LbpPriceChart } from './LbpPriceChart'
+import { usePoolChartTabs } from './PoolChartTabsProvider'
 
 export function PoolCharts() {
   const { options, handleAxisMoved } = usePoolCharts()
@@ -24,15 +23,11 @@ export function PoolCharts() {
           }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
-          {activeTab.value === PoolChartTab.PRICE ? (
-            <LbpPriceChart />
-          ) : (
-            <ReactECharts
-              onEvents={{ updateAxisPointer: handleAxisMoved }}
-              option={options}
-              style={{ height: '100%', width: '100%' }}
-            />
-          )}
+          <ReactECharts
+            onEvents={{ updateAxisPointer: handleAxisMoved }}
+            option={options}
+            style={{ height: '100%', width: '100%' }}
+          />
         </motion.div>
       </AnimatePresence>
     </Box>
