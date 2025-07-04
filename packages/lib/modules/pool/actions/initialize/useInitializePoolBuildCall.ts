@@ -28,9 +28,6 @@ export function useInitializePoolBuildCall({
     if (!poolAddress) {
       throw new Error('Pool address is required but not available')
     }
-    if (!permit2Signature) {
-      throw new Error('Permit2 signature is required but not available')
-    }
 
     const initPoolDataProvider = new InitPoolDataProvider(initPoolInput.chainId, rpcUrl)
     const poolState = await initPoolDataProvider.getInitPoolData(
@@ -39,11 +36,21 @@ export function useInitializePoolBuildCall({
       protocolVersion
     )
 
-    const { callData, to, value } = initPool.buildCallWithPermit2(
-      initPoolInput,
-      poolState,
-      permit2Signature
-    )
+    let callData: `0x${string}`
+    let to: Address
+    let value: bigint
+
+    if (permit2Signature) {
+      const result = initPool.buildCallWithPermit2(initPoolInput, poolState, permit2Signature)
+      callData = result.callData
+      to = result.to
+      value = result.value
+    } else {
+      const result = initPool.buildCall(initPoolInput, poolState)
+      callData = result.callData
+      to = result.to
+      value = result.value
+    }
 
     return {
       chainId: initPoolInput.chainId,

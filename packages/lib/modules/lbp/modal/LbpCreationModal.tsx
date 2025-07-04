@@ -20,6 +20,7 @@ import { useLbpMetadata } from '../useLbpMetadata'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { getChainId } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 
 type Props = {
   isOpen: boolean
@@ -45,6 +46,7 @@ export function LbpCreationModal({
     undefined
   )
 
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const {
     saveMetadata,
     error: saveMetadataError,
@@ -119,7 +121,7 @@ export function LbpCreationModal({
         {isDesktop && (
           <DesktopStepTracker
             chain={selectedChain}
-            // isTxBatch={shouldBatchTransactions} // TODO
+            isTxBatch={shouldBatchTransactions}
             transactionSteps={transactionSteps}
           />
         )}
