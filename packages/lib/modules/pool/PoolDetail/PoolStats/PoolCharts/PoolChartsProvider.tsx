@@ -1,5 +1,5 @@
 import { ColorMode, theme as defaultTheme, useTheme as useChakraTheme } from '@chakra-ui/react'
-import { differenceInDays, format } from 'date-fns'
+import { addHours, differenceInDays, format } from 'date-fns'
 import {
   GetPoolSnapshotsDocument,
   GqlPoolSnapshotDataRange,
@@ -78,7 +78,8 @@ const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
 export const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
   nextTheme: ColorMode = 'dark',
-  theme: any // TODO: type this
+  theme: any, // TODO: type this
+  options: { useTimeRange: boolean } = { useTimeRange: false }
 ) => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
@@ -161,12 +162,17 @@ export const getDefaultPoolChartOptions = (
       extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
       formatter: (params: any) => {
         const data = Array.isArray(params) ? params[0] : params
+        const date = new Date(data.value[0] * 1000)
+        const formattedDate = format(date, 'MMM d')
+        const dateWithOneHourAdded = addHours(date, 1)
+        const formattedDateWithTimeRange = `${format(date, 'MMM d haaa')}-${format(dateWithOneHourAdded, 'haaa')}`
+
         return `
           <div style="padding: none; display: flex; flex-direction: column; justify-content: center;${
             toolTipTheme.container
           }">
             <div style="font-size: 0.85rem; font-weight: 500; color: ${toolTipTheme.text};">
-              ${format(new Date(data.value[0] * 1000), 'MMM d')}
+              ${options?.useTimeRange ? formattedDateWithTimeRange : formattedDate}
             </div>
             <div style="font-size: 14px; font-weight: 500; color: ${toolTipTheme.text};">
               ${currencyFormatter(data.value[1])}

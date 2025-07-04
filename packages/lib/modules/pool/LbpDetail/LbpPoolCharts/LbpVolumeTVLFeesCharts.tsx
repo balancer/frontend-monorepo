@@ -115,7 +115,14 @@ export function LbpVolumeTVLFeesCharts({
   }
 
   const chartData = getChartData()
-  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
+  const defaultChartOptions = getDefaultPoolChartOptions(
+    toCurrency,
+    nextTheme as ColorMode,
+    theme,
+    {
+      useTimeRange: true,
+    }
+  )
 
   const option = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[chartType as SupportedPoolChartTab] || {
