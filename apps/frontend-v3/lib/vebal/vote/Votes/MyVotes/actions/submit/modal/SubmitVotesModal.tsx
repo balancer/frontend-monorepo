@@ -1,5 +1,3 @@
-'use client'
-
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
@@ -70,18 +68,20 @@ export function SubmitVotesModal({
               isPoolGaugeExpired={isPoolGaugeExpired}
               nextChunksAllocation={nextChunksAllocation}
               previousChunksAllocation={previousChunksAllocation}
-              submittingVotes={submittingVotesChunk}
+              submittingVotes={submittingVotesChunk || []}
               timeLockedVotes={timeLockedVotes}
               totalInfo={totalInfo}
             />
           </AnimateHeightChange>
         </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={!!txHash}
-          returnAction={handleClose}
-          returnLabel="Return to votes"
-        />
+        {transactionSteps.currentStep && (
+          <ActionModalFooter
+            currentStep={transactionSteps.currentStep}
+            isSuccess={!!txHash}
+            returnAction={handleClose}
+            returnLabel="Return to votes"
+          />
+        )}
       </ModalContent>
     </Modal>
   )

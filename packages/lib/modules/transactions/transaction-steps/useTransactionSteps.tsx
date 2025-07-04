@@ -51,7 +51,8 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   const toast = useToast()
   useEffect(() => {
     if (!currentStep) return
-    async function handleTransactionCompletion() {
+
+    async function handleTransactionCompletion(currentStep: TransactionStep) {
       try {
         const onSuccessResult = await currentStep?.onSuccess?.()
         if (onSuccessResult !== Retry) {
@@ -70,8 +71,9 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
         if (currentTransaction) resetTransaction(currentTransaction)
       }
     }
+
     if (!isOnSuccessCalled(currentStep) && currentTransaction?.result.isSuccess) {
-      handleTransactionCompletion()
+      handleTransactionCompletion(currentStep)
     }
   }, [currentTransaction?.result.isSuccess, currentStep?.onSuccess])
 

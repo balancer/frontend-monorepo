@@ -51,7 +51,9 @@ export function Code() {
       const intervalId = setInterval(() => {
         if (currentIndex <= codeSnippet.length - 1) {
           const nextText = codeSnippet.slice(0, currentIndex + 1)
-          setDisplayedText(Prism.highlight(nextText, Prism.languages.solidity, 'solidity'))
+          setDisplayedText(
+            Prism.highlight(nextText, Prism.languages.solidity as Prism.Grammar, 'solidity')
+          )
           currentIndex++
         } else {
           clearInterval(intervalId)

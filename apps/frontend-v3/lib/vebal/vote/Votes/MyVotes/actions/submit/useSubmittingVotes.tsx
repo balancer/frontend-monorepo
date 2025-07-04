@@ -26,7 +26,7 @@ export function useSubmittingVotes() {
   const { previousChunksAllocation, nextChunksAllocation, submittingVotesChunk } = useMemo<{
     previousChunksAllocation: VotesChunksAllocation | undefined
     nextChunksAllocation: VotesChunksAllocation | undefined
-    submittingVotesChunk: SubmittingVote[]
+    submittingVotesChunk: SubmittingVote[] | undefined
   }>(() => {
     if (typeof currentStepVotesTransactionsIndex !== 'number') {
       return {
