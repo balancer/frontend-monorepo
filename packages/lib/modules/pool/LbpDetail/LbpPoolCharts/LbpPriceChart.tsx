@@ -1,5 +1,5 @@
 import { isAfter, isBefore } from 'date-fns'
-import { Divider, HStack, Text, VStack, Box } from '@chakra-ui/react'
+import { Divider, HStack, Text, VStack, Box, Heading } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
 import { max } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -48,9 +48,9 @@ export function PriceInfo() {
 
   return (
     <VStack alignItems="end" spacing="0.5">
-      <Text fontSize="24px" fontWeight="bold">
+      <Heading fontWeight="bold" size="h5">
         {`$${fNum('fiat', currentPrice, { forceThreeDecimals: true })}`}
-      </Text>
+      </Heading>
       {hasPrices && isBefore(currentTime, prices[0].timestamp) ? (
         <Text color="font.secondary" fontSize="12px">
           Start price

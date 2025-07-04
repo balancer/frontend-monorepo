@@ -10,6 +10,7 @@ import { LbpPriceChart, PriceInfo } from './LbpPriceChart'
 import { LbpPoolChartsProvider, useLbpPoolCharts } from './LbpPoolChartsProvider'
 import { LbpVolumeTVLFeesCharts } from './LbpVolumeTVLFeesCharts'
 import { AnimatePresence, motion } from 'framer-motion'
+import { VolTvlFeesInfo } from './VolTvlFeesInfo'
 
 export function LbpPoolChartsContainer() {
   return (
@@ -36,6 +37,7 @@ function PoolChartsContent() {
           size="xxs"
         />
         {activeTab.value === PoolChartTab.PRICE && <PriceInfo />}
+        {activeTab.value !== PoolChartTab.PRICE && <VolTvlFeesInfo chartType={activeTab.value} />}
       </HStack>
       <Box
         h={activeTab.value === PoolChartTab.PRICE ? '325px' : '340px'}
