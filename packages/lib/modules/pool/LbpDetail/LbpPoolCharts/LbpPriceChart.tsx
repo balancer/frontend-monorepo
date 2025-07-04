@@ -20,7 +20,7 @@ export function LbpPriceChart() {
       <Divider />
       <HStack mt="2" w="full">
         <Box bgGradient="linear(to-r, #B3AEF5, #EAA879)" height="2px" width="15px" />
-        <Text>Spot price</Text>
+        <Text fontSize="sm">Spot price</Text>
         <Box height="2px" overflow="hidden" position="relative" width="15px">
           <Box
             bgGradient="linear(to-r, #B3AEF5, #EAA879)"
@@ -34,7 +34,7 @@ export function LbpPriceChart() {
             }}
           />
         </Box>
-        <Text>Projected price with no buys</Text>
+        <Text fontSize="sm">Projected price with no buys</Text>
         <Text color="font.secondary" fontSize="sm" ml="auto">
           {salePeriodText}
         </Text>
