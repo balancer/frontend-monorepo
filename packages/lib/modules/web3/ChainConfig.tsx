@@ -23,6 +23,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { GqlChainValues } from '@repo/lib/config/networks'
+import { hyperEvm } from '../chains/custom/hyperevm'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.
   https://viem.sh/docs/clients/transports/fallback#fallback-transport
@@ -41,6 +42,7 @@ export const rpcFallbacks: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Mode]: 'https://mode.drpc.org',
   [GqlChain.Fraxtal]: 'https://fraxtal.drpc.org',
   [GqlChain.Sonic]: 'https://rpc.soniclabs.com',
+  [GqlChain.Hyperevm]: 'https://rpc.hyperliquid.xyz/evm',
 }
 
 const baseUrl = getBaseUrl()
@@ -64,6 +66,7 @@ export const rpcOverrides: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Mode]: getPrivateRpcUrl(GqlChain.Mode),
   [GqlChain.Fraxtal]: getPrivateRpcUrl(GqlChain.Fraxtal),
   [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic),
+  [GqlChain.Hyperevm]: getPrivateRpcUrl(GqlChain.Hyperevm),
 }
 
 const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
@@ -80,6 +83,7 @@ const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
   [GqlChain.Mode]: { iconUrl: '/images/chains/MODE.svg', ...mode },
   [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
   [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
+  [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEvm },
 } as const
 
 export const supportedNetworks = PROJECT_CONFIG.supportedNetworks

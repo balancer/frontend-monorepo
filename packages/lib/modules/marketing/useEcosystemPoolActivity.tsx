@@ -92,6 +92,10 @@ export const gradientMap: Partial<Record<GqlChain, { from: string; to: string }>
     from: '#D1B3FF',
     to: '#A384FF',
   },
+  [GqlChain.Hyperevm]: {
+    from: '#50D2C1',
+    to: '#072723',
+  },
 }
 
 function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
@@ -109,6 +113,7 @@ function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
     [GqlChain.Mode]: [],
     [GqlChain.Sepolia]: [],
     [GqlChain.Sonic]: [],
+    [GqlChain.Hyperevm]: [],
   }
 }
 
