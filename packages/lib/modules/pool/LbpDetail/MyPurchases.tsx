@@ -19,6 +19,7 @@ import {
   GqlPoolLiquidityBootstrappingV3,
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 export function MyPurchases({
   userPoolEvents,
@@ -28,11 +29,15 @@ export function MyPurchases({
   isLoading: boolean
 }) {
   const { pool, chain, myLiquiditySectionRef } = usePool()
+  const { priceFor } = useTokens()
+
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-  const projectToken = pool.poolTokens[lbpPool.projectTokenIndex]
+  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
 
   const userProjectTokenBalance = calculateBalance(userPoolEvents, projectToken.address as Address)
   const shareOfSale = userProjectTokenBalance.div(projectToken.balance)
+
+  const currentPrice = priceFor(projectToken.address as Address, chain)
 
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>
@@ -49,8 +54,10 @@ export function MyPurchases({
 
           <TokenRow
             abbreviated={false}
-            address={lbpPool.projectToken as Address}
+            address={projectToken.address as Address}
             chain={chain}
+            customUsdPrice={currentPrice}
+            logoURI={projectToken.logoURI || ''}
             pool={pool}
             value={userProjectTokenBalance}
           />

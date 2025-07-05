@@ -11,7 +11,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useLbpCreation } from '../LbpCreationProvider'
 
 export function LbpSummary() {
-  const { saleStructureForm, saleMarketCap } = useLbpForm()
+  const { saleStructureForm, saleMarketCap, launchToken } = useLbpForm()
   const { transactionSteps } = useLbpCreation()
   const { isMobile } = useBreakpoints()
   const {
@@ -36,6 +36,7 @@ export function LbpSummary() {
           <TokenRow
             address={launchTokenAddress as Address}
             chain={selectedChain}
+            customToken={launchToken}
             value={saleTokenAmount}
           />
           <Divider p="0" />

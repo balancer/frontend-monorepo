@@ -55,6 +55,7 @@ function TransactionDetails({
                   address={token.token?.address}
                   alt={token.token?.symbol || ''}
                   chain={token.token?.chain}
+                  logoURI={token.token?.logoURI}
                   size={24}
                 />
                 <Text>{fNum('token', token.amount)}</Text>

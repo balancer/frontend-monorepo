@@ -92,6 +92,9 @@ type TokenInputFooterProps = {
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
   priceMessage?: string
+  customUserBalance?: string
+  isDisabled?: boolean
+  customUsdPrice?: number
 }
 
 function TokenInputFooter({
@@ -101,6 +104,9 @@ function TokenInputFooter({
   hasPriceImpact,
   isLoadingPriceImpact,
   priceMessage,
+  customUserBalance,
+  isDisabled,
+  customUsdPrice,
 }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
@@ -113,18 +119,24 @@ function TokenInputFooter({
   const inputLabelColor = hasError ? 'input.fontHintError' : 'grayText'
 
   const balance = token ? balanceFor(token?.address) : undefined
-  const userBalance = token ? balance?.formatted || '0' : '0'
-  const usdValue = value && token ? usdValueForToken(token, value) : '0'
+  const userBalance = customUserBalance || (token ? balance?.formatted || '0' : '0')
+  const usdValue =
+    value && customUsdPrice
+      ? bn(value).times(customUsdPrice).toString()
+      : value && token
+        ? usdValueForToken(token, value)
+        : '0'
 
   const noBalance = !token || bn(userBalance).isZero()
   const _isNativeAsset = token && isNativeAsset(token.chain, token.address)
 
   const showPriceImpact = !isLoadingPriceImpact && hasPriceImpact && priceImpact
+  const hasDisabledInteraction = noBalance || _isNativeAsset || isDisabled
 
   function handleBalanceClick() {
     // We return for _isNativeAsset because you can't use your full native asset
     // balance, you need to save some for a swap.
-    if (noBalance || _isNativeAsset) return
+    if (hasDisabledInteraction) return
 
     if (value && bn(value).eq(userBalance)) {
       updateValue('')
@@ -152,9 +164,9 @@ function TokenInputFooter({
         <Skeleton h="full" w="12" />
       ) : (
         <HStack
-          _hover={noBalance || _isNativeAsset ? {} : { color: 'font.highlight' }}
+          _hover={hasDisabledInteraction ? {} : { color: 'font.highlight' }}
           color={inputLabelColor}
-          cursor={noBalance || _isNativeAsset ? 'default' : 'pointer'}
+          cursor={hasDisabledInteraction ? 'default' : 'pointer'}
           gap="xs"
           onClick={handleBalanceClick}
           title="Use wallet balance"
@@ -189,6 +201,8 @@ type Props = {
   isLoadingPriceImpact?: boolean
   priceMessage?: string
   disableBalanceValidation?: boolean
+  customUserBalance?: string
+  customUsdPrice?: number
 }
 
 export const TokenInput = forwardRef(
@@ -206,6 +220,8 @@ export const TokenInput = forwardRef(
       isLoadingPriceImpact = false,
       priceMessage,
       disableBalanceValidation = false,
+      customUserBalance,
+      customUsdPrice,
       ...inputProps
     }: InputProps & Props,
     ref
@@ -311,7 +327,10 @@ export const TokenInput = forwardRef(
           </InputGroup>
 
           <TokenInputFooter
+            customUsdPrice={customUsdPrice}
+            customUserBalance={customUserBalance}
             hasPriceImpact={hasPriceImpact}
+            isDisabled={inputProps.isDisabled}
             isLoadingPriceImpact={isLoadingPriceImpact}
             priceMessage={priceMessage}
             token={token}

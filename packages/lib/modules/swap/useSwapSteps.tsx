@@ -17,6 +17,8 @@ import { isNativeAsset } from '../tokens/token.helpers'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
+  isLbpSwap: boolean
+  isLbpProjectTokenBuy: boolean
   // TODO: remove this field once we refactor to use:
   // https://github.com/balancer/b-sdk/issues/462
   isPoolSwap: boolean
@@ -31,6 +33,8 @@ export function useSwapSteps({
   swapAction,
   tokenInInfo,
   tokenOutInfo,
+  isLbpSwap,
+  isLbpProjectTokenBuy,
 }: Params) {
   const chain = swapState.selectedChain
   const chainId = getChainId(chain)
@@ -47,18 +51,23 @@ export function useSwapSteps({
   const swapRequiresRelayer = handler.name === 'AuraBalSwapHandler'
 
   const humanAmountIn = swapState.tokenIn.amount
+
   const tokenInAmounts = useMemo(() => {
     if (!tokenInInfo) return [] as RawAmount[]
     return [
       {
         address: tokenInInfo.address as Address,
         rawAmount: parseUnits(humanAmountIn, tokenInInfo.decimals),
+        symbol: tokenInInfo.symbol,
       },
     ]
   }, [humanAmountIn, tokenInInfo])
 
-  const approvalActionType: ApprovalAction =
-    swapAction === OSwapAction.UNWRAP ? 'Unwrapping' : 'Swapping'
+  const approvalActionType: ApprovalAction = isLbpSwap
+    ? 'Buying'
+    : swapAction === OSwapAction.UNWRAP
+      ? 'Unwrapping'
+      : 'Swapping'
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
@@ -87,6 +96,8 @@ export function useSwapSteps({
     swapAction,
     tokenInInfo,
     tokenOutInfo,
+    isLbpSwap,
+    isLbpProjectTokenBuy,
   })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step

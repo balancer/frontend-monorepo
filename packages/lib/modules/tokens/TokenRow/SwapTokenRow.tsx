@@ -5,6 +5,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanAmount } from '@balancer/sdk'
 import { useSwap } from '../../swap/SwapProvider'
 import { slippageDiffLabel } from '@repo/lib/shared/utils/slippage'
+import { CustomToken } from '../token.types'
 
 export function ReceiptTokenOutRow({
   chain,
@@ -17,6 +18,7 @@ export function ReceiptTokenOutRow({
 }) {
   const { simulationQuery } = useSwap()
   const expectedTokenOut = simulationQuery?.data?.returnAmount as HumanAmount
+
   return (
     <SwapTokenRow
       chain={chain}
@@ -34,12 +36,14 @@ export function SwapTokenRow({
   chain,
   tokenAmount,
   tokenAddress,
+  customToken,
 }: {
   label: string
   chain: GqlChain
   tokenAmount: string
   tokenAddress: string
   rightLabel?: string
+  customToken?: CustomToken
 }) {
   return (
     <VStack align="start" spacing="md">
@@ -54,6 +58,7 @@ export function SwapTokenRow({
         abbreviated={false}
         address={tokenAddress as Address}
         chain={chain}
+        customToken={customToken}
         value={tokenAmount}
       />
     </VStack>

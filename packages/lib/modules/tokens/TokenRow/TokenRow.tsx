@@ -18,7 +18,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { Numberish, fNum, isZero } from '@repo/lib/shared/utils/numbers'
+import { Numberish, bn, fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/pool.types'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
@@ -26,14 +26,14 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
-import { ApiToken } from '../token.types'
+import { ApiToken, CustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 
 export type TokenInfoProps = {
   address: Address
   symbol?: string
   chain: GqlChain
-  token?: ApiToken
+  token?: ApiToken | CustomToken
   poolToken?: ApiToken
   pool?: Pool
   disabled?: boolean
@@ -86,7 +86,7 @@ function TokenInfo({
           address={address}
           alt={token?.symbol || address}
           chain={chain}
-          logoURI={logoURI}
+          logoURI={token?.logoURI || logoURI}
           overflow="visible"
           size={iconSize}
         />
@@ -135,6 +135,8 @@ export type TokenRowProps = {
   toggleTokenSelect?: () => void
   iconSize?: number
   logoURI?: string
+  customToken?: CustomToken
+  customUsdPrice?: number
 }
 
 export default function TokenRow({
@@ -156,12 +158,14 @@ export default function TokenRow({
   toggleTokenSelect,
   iconSize,
   logoURI,
+  customToken,
+  customUsdPrice,
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
-  const token = getToken(address, chain)
+  const token = customToken || getToken(address, chain)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
   const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
 
@@ -181,7 +185,9 @@ export default function TokenRow({
 
   useEffect(() => {
     if (value) {
-      if ((isBpt || isNestedBpt) && pool) {
+      if (customUsdPrice) {
+        setUsdValue(bn(customUsdPrice).times(value).toString())
+      } else if ((isBpt || isNestedBpt) && pool) {
         setUsdValue(usdValueForBpt(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))

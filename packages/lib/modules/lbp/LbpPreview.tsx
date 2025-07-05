@@ -96,7 +96,7 @@ export function LbpPreview() {
                 collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
                 endTime={saleStructureData.endTime}
                 endWeight={endWeight}
-                launchTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
+                launchTokenSeed={Number(saleStructureData.saleTokenAmount || 0)}
                 launchTokenSymbol={launchTokenMetadata?.symbol || ''}
                 onPriceChange={updatePriceStats}
                 startTime={saleStructureData.startTime}

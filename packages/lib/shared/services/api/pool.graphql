@@ -119,6 +119,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       lbpOwner
       description
       discord
+      isProjectTokenSwapInBlocked
       poolTokens {
         ...PoolTokens
       }
@@ -127,6 +128,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       projectTokenEndWeight
       projectTokenStartWeight
       reserveToken
+      reserveTokenIndex
       telegram
       startTime
       website
