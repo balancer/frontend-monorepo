@@ -62,8 +62,6 @@ export function useAddLiquiditySteps({
     simulationQuery,
   })
 
-  console.log({ signPermit2Step })
-
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
   const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
@@ -152,7 +150,6 @@ export function getApprovalAndAddSteps({
       [...tokenApprovalSteps, ...permit2ApprovalSteps]
     : tokenApprovalSteps
 
-  // TODO: UNDERSTAND THIS!!
   const shouldDisplayBatchTransactions =
     shouldBatchTransactions && hasSomePendingNestedTxInBatch(addLiquidityStep)
 

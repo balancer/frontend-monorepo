@@ -31,7 +31,7 @@ export function useCreateLbpSteps() {
       spenderAddress: getSpenderForCreatePool(selectedChain),
       chain: selectedChain,
       approvalAmounts: initAmounts,
-      actionType: 'AddLiquidity',
+      actionType: 'InitializePool',
       isPermit2: true,
       wethIsEth: isCollateralNativeAsset,
     })
@@ -49,18 +49,16 @@ export function useCreateLbpSteps() {
     usePermit2ApprovalSteps({
       chain: selectedChain,
       approvalAmounts: initAmounts,
-      actionType: 'AddLiquidity',
+      actionType: 'InitializePool',
       enabled: !shouldUseSignatures,
     })
 
   const initLbpStep = useInitializeLbpStep({ initPoolInput })
 
-  const isSignPermit2Loading = !signPermit2Step
-
   const isLoadingSteps =
     !initAmounts.length ||
+    !signPermit2Step ||
     isLoadingTokenApprovalSteps ||
-    isSignPermit2Loading ||
     isLoadingPermit2ApprovalSteps
 
   const steps = getApprovalAndCreateSteps({
