@@ -2,6 +2,7 @@ import { BuildTransactionLabels } from '../../web3/contracts/transactionLabels'
 
 export type ApprovalAction =
   | 'AddLiquidity'
+  | 'InitializePool'
   | 'RemoveLiquidity'
   | 'Locking'
   | 'Staking'

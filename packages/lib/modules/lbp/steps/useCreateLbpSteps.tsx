@@ -8,6 +8,10 @@ import { useInitializeLbpStep } from './useInitializeLbpStep'
 import { useSignPermit2InitializeStep } from '@repo/lib/modules/pool/actions/initialize/useSignPermit2InitializeStep'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
+import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
+import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 
 export function useCreateLbpSteps() {
   const createLbpStep = useCreateLbpStep()
@@ -16,6 +20,9 @@ export function useCreateLbpSteps() {
   const chainId = getNetworkConfig(selectedChain).chainId
   const helpers = new LiquidityActionHelpers()
   const isCollateralNativeAsset = helpers.isNativeAsset(collateralTokenAddress as Address)
+  const shouldBatchTransactions = useShouldBatchTransactions()
+  const { shouldUseSignatures } = useUserSettings()
+
   const initAmounts = useLbpInitAmounts(isCollateralNativeAsset)
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
@@ -23,7 +30,7 @@ export function useCreateLbpSteps() {
       spenderAddress: getSpenderForCreatePool(selectedChain),
       chain: selectedChain,
       approvalAmounts: initAmounts,
-      actionType: 'AddLiquidity',
+      actionType: 'InitializePool',
       isPermit2: true,
       wethIsEth: isCollateralNativeAsset,
     })
@@ -36,17 +43,36 @@ export function useCreateLbpSteps() {
   }
 
   const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput })
+  // If user chooses setting to not use signatures, use these approval txs
+  const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
+    usePermit2ApprovalSteps({
+      chain: selectedChain,
+      approvalAmounts: initAmounts,
+      actionType: 'InitializePool',
+      enabled: !shouldUseSignatures,
+    })
+
   const initLbpStep = useInitializeLbpStep({ initPoolInput })
-  const isLoadingSteps = !initAmounts.length || isLoadingTokenApprovalSteps || !signPermit2Step
+
+  const isLoadingSteps =
+    !initAmounts.length ||
+    !signPermit2Step ||
+    isLoadingTokenApprovalSteps ||
+    isLoadingPermit2ApprovalSteps
+
+  const steps = getApprovalAndAddSteps({
+    shouldUseSignatures,
+    signPermit2Step,
+    permit2ApprovalSteps,
+    tokenApprovalSteps,
+    shouldBatchTransactions,
+    isPermit2: true,
+    addLiquidityStep: initLbpStep,
+  })
 
   return {
     isLoadingSteps,
-    steps: [
-      createLbpStep,
-      ...tokenApprovalSteps,
-      ...(signPermit2Step ? [signPermit2Step] : []),
-      initLbpStep,
-    ],
+    steps: [createLbpStep, ...steps],
   }
 }
 
