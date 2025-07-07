@@ -1,36 +1,30 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
-import { useDisclosure } from '@chakra-ui/react'
 import { useCreateLbpSteps } from './steps/useCreateLbpSteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { Hash } from 'viem'
+import { isHash } from 'viem'
+import { useParams } from 'next/navigation'
 
 export type UseLbpCreationResponse = ReturnType<typeof useLbpCreationLogic>
 const LbpCreationContext = createContext<UseLbpCreationResponse | null>(null)
 
-export function useLbpCreationLogic(urlTxHash?: Hash) {
-  const previewModalDisclosure = useDisclosure()
-
+export function useLbpCreationLogic() {
   const { steps, isLoadingSteps } = useCreateLbpSteps()
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
   const initLbpTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
+  const { txHash } = useParams<{ txHash: string }>()
 
   return {
-    previewModalDisclosure,
     transactionSteps,
     lastTransaction: transactionSteps.lastTransaction,
     initLbpTxHash,
-    urlTxHash,
+    urlTxHash: isHash(txHash) ? txHash : undefined,
   }
 }
 
-type Props = PropsWithChildren<{
-  urlTxHash?: Hash
-}>
-
-export function LbpCreationProvider({ urlTxHash, children }: Props) {
-  const hook = useLbpCreationLogic(urlTxHash)
+export function LbpCreationProvider({ children }: PropsWithChildren) {
+  const hook = useLbpCreationLogic()
   return <LbpCreationContext.Provider value={hook}>{children}</LbpCreationContext.Provider>
 }
 

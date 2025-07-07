@@ -36,9 +36,9 @@ export function LbpCreationModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const { saleStructureForm, isLastStep: isLastConfigStep, resetLbpCreation } = useLbpForm()
+  const { saleStructureForm, resetLbpCreation } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
-  const { transactionSteps, initLbpTxHash, urlTxHash, previewModalDisclosure } = useLbpCreation()
+  const { transactionSteps, initLbpTxHash, urlTxHash } = useLbpCreation()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -64,19 +64,13 @@ export function LbpCreationModal({
   }
 
   const path = getPoolPath({
-    id: poolAddress as `0x${string}`,
+    id: poolAddress as Address,
     chain: selectedChain,
     type: GqlPoolType.LiquidityBootstrapping,
     protocolVersion: 3 as const,
   })
 
   const { redirectToPage: redirectToPoolPage } = useRedirect(path)
-
-  useEffect(() => {
-    // trigger modal open if user has begun pool creation process
-    if (poolAddress && isLastConfigStep) previewModalDisclosure.onOpen()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolAddress])
 
   useEffect(() => {
     const handleSaveMetadata = async () => {

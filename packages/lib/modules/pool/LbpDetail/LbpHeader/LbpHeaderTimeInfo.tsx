@@ -89,8 +89,8 @@ export function LbpHeaderTimeInfo() {
 
   // this will only be rendered for LBPs so we can be sure it is a liquidity bootstrapping pool
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-  const startTimeFormatted = format(secondsToMilliseconds(lbpPool.startTime), 'haaa MM/dd/yy')
-  const endTimeFormatted = format(secondsToMilliseconds(lbpPool.endTime), 'haaa MM/dd/yy')
+  const startTimeFormatted = format(secondsToMilliseconds(lbpPool.startTime), 'haaa, MM/dd/yy')
+  const endTimeFormatted = format(secondsToMilliseconds(lbpPool.endTime), 'haaa, MM/dd/yy')
   const currentTime = now()
 
   return (

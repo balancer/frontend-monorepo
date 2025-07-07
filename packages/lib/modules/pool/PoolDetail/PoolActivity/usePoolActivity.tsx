@@ -23,6 +23,7 @@ import { PaginationState } from '@repo/lib/shared/components/pagination/paginati
 import { usePoolActivityViewType } from '../PoolActivityViewType/usePoolActivityViewType'
 import { sortAlphabetically } from '@repo/lib/shared/utils/sorting'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export type PoolActivityResponse = ReturnType<typeof usePoolActivityLogic>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)
@@ -88,8 +89,12 @@ function usePoolActivityLogic() {
 
         if (item.__typename === 'GqlPoolAddRemoveEventV3') {
           item.tokens.forEach(token => {
+            const tokenInfo =
+              getToken(token.address, _chain) ||
+              (pool.poolTokens.find(token => token.address === token.address) as ApiToken)
+
             tokens.push({
-              token: getToken(token.address, _chain),
+              token: tokenInfo,
               amount: token.amount,
             })
           })
@@ -99,12 +104,20 @@ function usePoolActivityLogic() {
           item.__typename === 'GqlPoolSwapEventV3' ||
           item.__typename === 'GqlPoolSwapEventCowAmm'
         ) {
+          const tokenIn =
+            getToken(item.tokenIn.address, _chain) ||
+            (pool.poolTokens.find(token => token.address === item.tokenIn.address) as ApiToken)
+
+          const tokenOut =
+            getToken(item.tokenOut.address, _chain) ||
+            (pool.poolTokens.find(token => token.address === item.tokenOut.address) as ApiToken)
+
           tokens.push({
-            token: getToken(item.tokenIn.address, _chain),
+            token: tokenIn,
             amount: item.tokenIn.amount,
           })
           tokens.push({
-            token: getToken(item.tokenOut.address, _chain),
+            token: tokenOut,
             amount: item.tokenOut.amount,
           })
         }
