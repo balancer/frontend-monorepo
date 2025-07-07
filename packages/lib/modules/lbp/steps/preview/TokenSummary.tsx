@@ -45,7 +45,7 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
         </HStack>
       </CardHeader>
       <CardBody>
-        <Grid gap={0} templateColumns="1fr 1fr">
+        <Grid gap={{ base: 3, xl: 0 }} templateColumns={{ base: 'repeat(1, 1fr)', xl: '1fr 1fr' }}>
           <GridItem borderRightColor="background.level0" borderRightWidth="1px" pr="md">
             <HStack spacing="md">
               <Popover placement="top" trigger="click">

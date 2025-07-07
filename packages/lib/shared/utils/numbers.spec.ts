@@ -93,6 +93,7 @@ describe('fee Percent', () => {
     expect(fNum('feePercent', '0.0001')).toBe('0.01%')
     expect(fNum('feePercent', '0.00001')).toBe('<0.01%')
     expect(fNum('feePercent', '0.00009')).toBe('<0.01%')
+    expect(fNum('feePercent', '0.00009', { hideSmallPercentage: false })).toBe('0.009%')
     expect(fNum('feePercent', '0.000007595846919227514')).toBe('<0.01%')
   })
 })

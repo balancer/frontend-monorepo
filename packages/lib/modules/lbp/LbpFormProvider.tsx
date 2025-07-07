@@ -13,6 +13,7 @@ import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { LbpPrice, max, min } from './pool/usePriceInfo'
+import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -30,6 +31,7 @@ export function useLbpFormLogic() {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
       userActions: 'buy_and_sell',
+      fee: 1.0,
       startTime: '',
       endTime: '',
       collateralTokenAddress: '',
@@ -78,7 +80,7 @@ export function useLbpFormLogic() {
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
-  const [, setIsMetadataSent] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSent, false)
+  const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const resetLbpCreation = () => {
     saleStructureForm.resetToInitial()
@@ -86,16 +88,14 @@ export function useLbpFormLogic() {
     setPersistedStepIndex(0)
     setActiveStep(0)
     setPoolAddress(undefined)
-    setIsMetadataSent(false)
+    setIsMetadataSaved(false)
   }
 
   const { saleTokenAmount, launchTokenAddress, selectedChain } = saleStructureForm.watch()
 
   const launchTokenSeed = Number(saleTokenAmount || 0)
-  const { totalSupply: launchTokenTotalSupply } = useTokenMetadata(
-    launchTokenAddress,
-    selectedChain
-  )
+
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
 
   const [maxPrice, setMaxPrice] = useState(0)
   const [saleMarketCap, setSaleMarketCap] = useState('')
@@ -106,12 +106,21 @@ export function useLbpFormLogic() {
     const maxPrice = max(prices)
     const minSaleMarketCap = minPrice * launchTokenSeed
     const maxSaleMarketCap = maxPrice * launchTokenSeed
-    const minFdvMarketCap = minPrice * (launchTokenTotalSupply || 0)
-    const maxFdvMarketCap = maxPrice * (launchTokenTotalSupply || 0)
+    const minFdvMarketCap = minPrice * (launchTokenMetadata?.totalSupply || 0)
+    const maxFdvMarketCap = maxPrice * (launchTokenMetadata?.totalSupply || 0)
 
     setMaxPrice(maxPrice)
     setSaleMarketCap(`$${fNum('fiat', minSaleMarketCap)} - $${fNum('fiat', maxSaleMarketCap)}`)
     setFdvMarketCap(`$${fNum('fiat', minFdvMarketCap)} - $${fNum('fiat', maxFdvMarketCap)}`)
+  }
+
+  const launchToken: CustomToken = {
+    name: launchTokenMetadata.name || '',
+    chain: selectedChain,
+    address: launchTokenAddress as Address,
+    symbol: launchTokenMetadata.symbol || '',
+    logoURI: projectInfoForm.getValues().tokenIconUrl || '',
+    decimals: launchTokenMetadata.decimals || 0,
   }
 
   return {
@@ -129,6 +138,8 @@ export function useLbpFormLogic() {
     updatePriceStats,
     launchTokenSeed,
     resetLbpCreation,
+    launchTokenMetadata,
+    launchToken,
   }
 }
 

@@ -30,7 +30,7 @@ const defaultOptions: DefaultOptions = {
   },
 }
 
-export const apolloTestClient = new ApolloClient({
+export const apolloTestClient: ApolloClient<object> = new ApolloClient({
   cache,
   link,
   defaultOptions,

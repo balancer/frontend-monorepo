@@ -23,10 +23,19 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
 
   const form = useForm<TFieldValues>({
     ...(formOptions || {}),
-    defaultValues: persistedValues,
+    defaultValues: initialDefaultValues,
   })
 
   const { watch } = form
+
+  // Set persisted values after form initialization
+  useEffect(() => {
+    if (persistedValues !== initialDefaultValues) {
+      form.reset(persistedValues, { keepDefaultValues: true })
+      form.trigger()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const subscription = watch(value => setPersistedValues(value as DefaultValues<TFieldValues>))
@@ -34,9 +43,7 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
   }, [watch, setPersistedValues])
 
   const resetToInitial = useCallback(() => {
-    // First reset local storage to initial values
     setPersistedValues(initialDefaultValues)
-    // Then reset the form to use those initial values
     form.reset(initialDefaultValues)
   }, [form, initialDefaultValues, setPersistedValues])
 

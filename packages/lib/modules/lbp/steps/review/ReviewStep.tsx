@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { differenceInDays, differenceInHours, format, parseISO } from 'date-fns'
+import { differenceInDays, differenceInHours, format, isValid, parseISO } from 'date-fns'
 import { getChainName } from '@repo/lib/config/app.config'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLbpForm } from '../../LbpFormProvider'
@@ -34,6 +34,7 @@ export function ReviewStep() {
   const collateralToken = getToken(collateralTokenAddress, chain)
   const collateralTokenSeed = saleStructureData.collateralTokenAmount
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
+
   const saleStartTime = saleStructureData.startTime
   const saleEndTime = saleStructureData.endTime
   const daysDiff = differenceInDays(parseISO(saleEndTime), parseISO(saleStartTime))
@@ -47,7 +48,9 @@ export function ReviewStep() {
           <HStack spacing="5">
             <Circle bg="background.level4" color="font.secondary" shadow="lg" size={24}>
               <VStack>
-                <Image borderRadius="full" src={projectInfoData.tokenIconUrl} />
+                {projectInfoData.tokenIconUrl && (
+                  <Image borderRadius="full" src={projectInfoData.tokenIconUrl} />
+                )}
               </VStack>
             </Circle>
             <VStack alignItems="start">
@@ -87,16 +90,24 @@ export function ReviewStep() {
         </VStack>
       </Card>
 
-      <HStack w="full">
+      <HStack alignItems="stretch" w="full">
         {
           // FIXME: [JUANJO] use localized dates
         }
         <SimpleInfoCard
-          info={format(parseISO(saleStartTime), 'dd/MM/yyyy h:mmaaa')}
+          info={
+            isValid(parseISO(saleStartTime))
+              ? format(parseISO(saleStartTime), 'dd/MM/yyyy h:mmaaa')
+              : ''
+          }
           title="LBP start time"
         />
         <SimpleInfoCard
-          info={format(parseISO(saleEndTime), 'dd/MM/yyyy h:mmaaa')}
+          info={
+            isValid(parseISO(saleEndTime))
+              ? format(parseISO(saleEndTime), 'dd/MM/yyyy h:mmaaa')
+              : ''
+          }
           title="LBP end time"
         />
         <SimpleInfoCard
@@ -129,7 +140,10 @@ export function ReviewStep() {
         </CardBody>
       </Card>
 
-      <OtherSaleDetails launchTokenSymbol={launchTokenMetadata.symbol || ''} />
+      <OtherSaleDetails
+        fee={saleStructureData.fee}
+        launchTokenSymbol={launchTokenMetadata.symbol || ''}
+      />
 
       <LbpFormAction />
     </VStack>

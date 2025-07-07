@@ -1,12 +1,13 @@
 import { useReadContract } from 'wagmi'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { FeeDistributorStaticAbi } from '../../web3/contracts/abi/FeeDistributorStaticAbi'
-import networkConfigs from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 import { formatUnits } from 'viem'
 import { useTokens } from '../../tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const claimableVeBalRewardsTokens: string[] = [
   '0x7B50775383d3D6f0215A8F290f2C9e2eEBBEceb2', // bb-a-USD v1
@@ -20,6 +21,8 @@ export function useProtocolRewards() {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor, getToken } = useTokens()
 
+  const networkConfig = getNetworkConfig(GqlChain.Mainnet)
+
   const {
     data: protocolRewardsData = [],
     isLoading: isLoadingProtocolRewards,
@@ -27,8 +30,8 @@ export function useProtocolRewards() {
     refetch,
     status,
   } = useReadContract({
-    chainId: networkConfigs.MAINNET.chainId,
-    address: networkConfigs.MAINNET.contracts.feeDistributor,
+    chainId: networkConfig.chainId,
+    address: networkConfig.contracts.feeDistributor,
     abi: FeeDistributorStaticAbi,
     functionName: 'claimTokens',
     args: [userAddress, claimableVeBalRewardsTokens],
@@ -37,10 +40,9 @@ export function useProtocolRewards() {
       select: data => {
         return (data as bigint[]).map((clBalance, index) => {
           const tokenAddress = claimableVeBalRewardsTokens[index]
-          const tokenPrice = tokenAddress ? priceFor(tokenAddress, networkConfigs.MAINNET.chain) : 0
+          const tokenPrice = tokenAddress ? priceFor(tokenAddress, networkConfig.chain) : 0
           const decimals =
-            (tokenAddress && getToken(tokenAddress, networkConfigs.MAINNET.chain)?.decimals) ||
-            BPT_DECIMALS
+            (tokenAddress && getToken(tokenAddress, networkConfig.chain)?.decimals) || BPT_DECIMALS
           const humanBalance = formatUnits(clBalance, decimals)
           return {
             tokenAddress,

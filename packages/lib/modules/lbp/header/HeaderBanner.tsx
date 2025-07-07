@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, Heading, HStack, Stack, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LearnMoreModal } from './LearnMoreModal'
 import { FeatureLink } from './FeatureLink'
@@ -68,7 +68,12 @@ export function HeaderBanner() {
             </VStack>
           </VStack>
 
-          <HStack spacing={8}>
+          <Stack
+            direction={{ base: 'column', xl: 'row' }}
+            justifyContent="stretch"
+            spacing={8}
+            w="full"
+          >
             <RadialPattern
               circleCount={8}
               height={600}
@@ -85,7 +90,7 @@ export function HeaderBanner() {
             <FeatureLink description={fairPriceDescription} title="Fair price discovery" />
             <FeatureLink description={capitalEfficiencyDescription} title="Capital efficiency" />
             <FeatureLink description={immediateLiquidityDescription} title="Immediate liquidity" />
-          </HStack>
+          </Stack>
         </HStack>
       </NoisyCard>
 

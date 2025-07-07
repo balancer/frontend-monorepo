@@ -35,7 +35,7 @@ const networkOptions: ChainOption[] = [
     label: (
       <HStack>
         <Box
-          backgroundImage={`linear-gradient(to bottom, ${gradientMap[network].from}, ${gradientMap[network].to})`}
+          backgroundImage={`linear-gradient(to bottom, ${gradientMap[network]?.from || '#F7F7F7'}, ${gradientMap[network]?.to || '#A4C6EE'})`}
           borderRadius="50%"
           display="inline-block"
           height="2"

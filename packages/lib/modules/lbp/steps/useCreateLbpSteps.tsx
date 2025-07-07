@@ -1,5 +1,4 @@
 import { useCreateLbpStep } from './useCreateLbpStep'
-import { useSendMetadataStep } from './useSendMetadataStep'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { useLbpForm } from '../LbpFormProvider'
 import { getSpenderForCreatePool } from '@repo/lib/modules/tokens/token.helpers'
@@ -8,15 +7,16 @@ import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { useInitializeLbpStep } from './useInitializeLbpStep'
 import { useSignPermit2InitializeStep } from '@repo/lib/modules/pool/actions/initialize/useSignPermit2InitializeStep'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 
 export function useCreateLbpSteps() {
   const createLbpStep = useCreateLbpStep()
-  const sendMetadataStep = useSendMetadataStep()
   const { saleStructureForm } = useLbpForm()
-  const { selectedChain } = saleStructureForm.getValues()
+  const { selectedChain, collateralTokenAddress } = saleStructureForm.getValues()
   const chainId = getNetworkConfig(selectedChain).chainId
-
-  const initAmounts = useLbpInitAmounts()
+  const helpers = new LiquidityActionHelpers()
+  const isCollateralNativeAsset = helpers.isNativeAsset(collateralTokenAddress as Address)
+  const initAmounts = useLbpInitAmounts(isCollateralNativeAsset)
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
@@ -25,26 +25,24 @@ export function useCreateLbpSteps() {
       approvalAmounts: initAmounts,
       actionType: 'AddLiquidity',
       isPermit2: true,
+      wethIsEth: isCollateralNativeAsset,
     })
 
   const initPoolInput = {
     minBptAmountOut: 0n,
     chainId,
     amountsIn: initAmounts,
-    wethIsEth: false, // TODO
+    wethIsEth: isCollateralNativeAsset,
   }
 
   const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput })
   const initLbpStep = useInitializeLbpStep({ initPoolInput })
-
-  const isSignPermit2Loading = !signPermit2Step
-  const isLoadingSteps = !initAmounts.length || isLoadingTokenApprovalSteps || isSignPermit2Loading
+  const isLoadingSteps = !initAmounts.length || isLoadingTokenApprovalSteps || !signPermit2Step
 
   return {
     isLoadingSteps,
     steps: [
       createLbpStep,
-      sendMetadataStep,
       ...tokenApprovalSteps,
       ...(signPermit2Step ? [signPermit2Step] : []),
       initLbpStep,
@@ -52,7 +50,7 @@ export function useCreateLbpSteps() {
   }
 }
 
-function useLbpInitAmounts() {
+function useLbpInitAmounts(isCollateralNativeAsset: boolean) {
   const { saleStructureForm } = useLbpForm()
   const {
     selectedChain: chain,
@@ -62,11 +60,17 @@ function useLbpInitAmounts() {
     saleTokenAmount,
   } = saleStructureForm.watch()
 
+  let reserveTokenAddress = collateralTokenAddress
+  if (isCollateralNativeAsset) {
+    const { tokens } = getNetworkConfig(chain)
+    reserveTokenAddress = tokens.addresses.wNativeAsset
+  }
+
   const {
-    decimals: collateralTokenDecimals,
-    symbol: collateralTokenSymbol,
+    decimals: reserveTokenDecimals,
+    symbol: reserveTokenSymbol,
     isLoading: isLoadingCollateralToken,
-  } = useTokenMetadata(collateralTokenAddress, chain)
+  } = useTokenMetadata(reserveTokenAddress, chain)
   const {
     decimals: launchTokenDecimals,
     symbol: launchTokenSymbol,
@@ -74,20 +78,14 @@ function useLbpInitAmounts() {
   } = useTokenMetadata(launchTokenAddress, chain)
 
   if (
-    !collateralTokenDecimals ||
     !launchTokenDecimals ||
-    isLoadingCollateralToken ||
     isLoadingLaunchToken ||
-    !collateralTokenSymbol ||
-    !launchTokenSymbol
-  )
+    !launchTokenSymbol ||
+    !reserveTokenDecimals ||
+    isLoadingCollateralToken ||
+    !reserveTokenSymbol
+  ) {
     return []
-
-  const collateralTokenAmountIn = {
-    address: collateralTokenAddress as Address,
-    decimals: collateralTokenDecimals,
-    rawAmount: parseUnits(collateralTokenAmount, collateralTokenDecimals),
-    symbol: collateralTokenSymbol,
   }
 
   const launchTokenAmountIn = {
@@ -97,5 +95,12 @@ function useLbpInitAmounts() {
     symbol: launchTokenSymbol,
   }
 
-  return [collateralTokenAmountIn, launchTokenAmountIn]
+  const reserveTokenAmountIn = {
+    address: reserveTokenAddress as Address,
+    decimals: reserveTokenDecimals,
+    rawAmount: parseUnits(collateralTokenAmount, reserveTokenDecimals),
+    symbol: reserveTokenSymbol,
+  }
+
+  return [reserveTokenAmountIn, launchTokenAmountIn]
 }

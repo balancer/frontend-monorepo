@@ -22,7 +22,7 @@ export default defineConfig(() => {
     contracts: CONTRACTS,
     plugins: [
       etherscan({
-        apiKey: env.ETHERSCAN_API_KEY,
+        apiKey: env.ETHERSCAN_API_KEY || '<invalid>',
         chainId: 1,
         contracts: [
           {
@@ -83,7 +83,7 @@ export default defineConfig(() => {
         ],
       }),
       etherscan({
-        apiKey: env.ETHERSCAN_API_KEY,
+        apiKey: env.ETHERSCAN_API_KEY || '<invalid>',
         chainId: 8453,
         contracts: [
           {

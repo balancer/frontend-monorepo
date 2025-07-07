@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Modal,
   ModalBody,
@@ -165,7 +163,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
           </AnimateHeightChange>
         </ModalBody>
 
-        {showTransactionSteps ? (
+        {transactionSteps.currentStep && showTransactionSteps ? (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
             isSuccess={isSuccess}

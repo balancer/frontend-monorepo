@@ -205,15 +205,17 @@ export function VebalLockModal({
           </AnimateHeightChange>
         </ModalBody>
 
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={() => {
-            onClose(isSuccess, redirectPath)
-            router.push(redirectPath)
-          }}
-          returnLabel={returnLabel}
-        />
+        {transactionSteps.currentStep && (
+          <ActionModalFooter
+            currentStep={transactionSteps.currentStep}
+            isSuccess={isSuccess}
+            returnAction={() => {
+              onClose(isSuccess, redirectPath)
+              router.push(redirectPath)
+            }}
+            returnLabel={returnLabel}
+          />
+        )}
       </ModalContent>
     </Modal>
   )

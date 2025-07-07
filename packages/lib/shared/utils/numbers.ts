@@ -71,6 +71,7 @@ type FormatOpts = {
   abbreviated?: boolean
   forceThreeDecimals?: boolean
   canBeNegative?: boolean
+  hideSmallPercentage?: boolean
   decimals?: number
 }
 
@@ -140,8 +141,8 @@ function slippageFormat(slippage: Numberish): string {
 }
 
 // Formats a fee value as a percentage.
-function feePercentFormat(fee: Numberish): string {
-  if (isSmallPercentage(fee)) return SMALL_PERCENTAGE_LABEL
+function feePercentFormat(fee: Numberish, { hideSmallPercentage = true }: FormatOpts = {}): string {
+  if (hideSmallPercentage && isSmallPercentage(fee)) return SMALL_PERCENTAGE_LABEL
   return numeral(fee.toString()).format(FEE_FORMAT)
 }
 
@@ -222,7 +223,7 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
       return aprFormat(val, opts)
     case 'feePercent':
     case 'sharePercent':
-      return feePercentFormat(val)
+      return feePercentFormat(val, opts)
     case 'weight':
       return weightFormat(val, opts)
     case 'stakedPercentage':

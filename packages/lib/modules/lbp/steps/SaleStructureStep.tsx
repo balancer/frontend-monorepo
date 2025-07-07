@@ -23,14 +23,14 @@ import {
   UseFormTrigger,
 } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { isAddress } from 'viem'
+import { formatUnits, isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
-import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import { Clipboard, Edit } from 'react-feather'
+import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
+import { Clipboard, Edit, Percent } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -41,7 +41,7 @@ import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidatio
 import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
 import { CustomToken } from '../../tokens/token.types'
-import { Address } from 'viem'
+import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -55,10 +55,10 @@ export function SaleStructureStep() {
       setValue,
       trigger,
     },
-    projectInfoForm,
     setActiveStep,
     activeStepIndex,
     resetLbpCreation,
+    launchToken,
   } = useLbpForm()
   const saleStructureData = watch()
 
@@ -76,9 +76,7 @@ export function SaleStructureStep() {
   const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
   const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
 
-  const launchToken = getToken(launchTokenAddress, selectedChain)
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
-  const tokens = [launchToken, collateralToken].filter(item => item != undefined)
 
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
   const launchTokenIsValid = isAddress(launchTokenAddress) && !!launchTokenMetadata.symbol
@@ -88,111 +86,110 @@ export function SaleStructureStep() {
   }
 
   return (
-    <TokenBalancesProvider extTokens={tokens}>
-      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-        <VStack align="start" spacing="lg" w="full">
-          <Heading color="font.maxContrast" size="md">
-            Launch token details
-          </Heading>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+      <VStack align="start" spacing="lg" w="full">
+        <Heading color="font.maxContrast" size="md">
+          Launch token details
+        </Heading>
 
-          <VStack align="start" spacing="md" w="full">
-            <NetworkSelectInput chains={supportedChains} control={control} />
-            <LaunchTokenAddressInput
-              chainId={selectedChain}
+        <VStack align="start" spacing="md" w="full">
+          <NetworkSelectInput chains={supportedChains} control={control} />
+          <LaunchTokenAddressInput
+            chainId={selectedChain}
+            control={control}
+            errors={errors}
+            metadata={launchTokenMetadata}
+            resetForm={resetLbpCreation}
+            setFormValue={setValue}
+            triggerValidation={trigger}
+            value={launchTokenAddress}
+          />
+        </VStack>
+
+        {launchTokenIsValid && (
+          <>
+            <Divider />
+            <Heading color="font.maxContrast" size="md">
+              Sale period
+            </Heading>
+            <VStack align="start" spacing="sm" w="full">
+              <DateTimeInput
+                control={control}
+                errors={errors}
+                label="Start date and time"
+                name="startTime"
+              />
+              <DateTimeInput
+                control={control}
+                errors={errors}
+                label="End date and time"
+                min={saleStart}
+                name="endTime"
+              />
+              <Text color="font.secondary" fontSize="xs">
+                {saleStart && saleEnd
+                  ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
+                  : 'Suggested sale period: 5 days'}
+              </Text>
+            </VStack>
+            <Divider />
+            <Heading color="font.maxContrast" size="md">
+              LBP mechanism
+            </Heading>
+            <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+            <WeightAdjustmentTypeInput
+              collateralTokenSymbol={collateralToken?.symbol || ''}
+              control={control}
+              launchTokenSymbol={launchTokenMetadata.symbol || ''}
+              setValue={setValue}
+              watch={watch}
+            />
+            <UserActionsInput control={control} />
+            <FeeSelection
               control={control}
               errors={errors}
-              metadata={launchTokenMetadata}
-              resetForm={resetLbpCreation}
+              feeValue={saleStructureData.fee}
               setFormValue={setValue}
-              triggerValidation={trigger}
-              value={launchTokenAddress}
             />
-          </VStack>
-
-          {launchTokenIsValid && (
-            <>
-              <Divider />
-
+            <Divider />
+            <VStack align="start" spacing="sm" w="full">
               <Heading color="font.maxContrast" size="md">
-                Sale period
+                Seed initial pool liquidity
               </Heading>
+              <Text color="font.secondary">
+                The starting liquidity in the pool. The amounts and ratio will determine the
+                starting price, projected market cap and price curve.
+              </Text>
+            </VStack>
 
-              <VStack align="start" spacing="sm" w="full">
-                <DateTimeInput
-                  control={control}
-                  errors={errors}
-                  label="Start date and time"
-                  name="startTime"
-                />
-                <DateTimeInput
-                  control={control}
-                  errors={errors}
-                  label="End date and time"
-                  min={saleStart}
-                  name="endTime"
-                />
-                <Text color="font.secondary" fontSize="xs">
-                  {saleStart && saleEnd
-                    ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
-                    : 'Suggested sale period: 5 days'}
-                </Text>
-              </VStack>
+            <TokenInputsValidationProvider>
+              {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
+              <PriceImpactProvider>
+                {collateralToken && (
+                  <TokenBalancesProvider extTokens={[collateralToken]}>
+                    <SaleTokenAmountInput
+                      control={control}
+                      errors={errors}
+                      launchToken={launchToken}
+                      selectedChain={selectedChain}
+                    />
+                    <CollateralTokenAmountInput
+                      collateralTokenAddress={collateralTokenAddress}
+                      collateralTokenSymbol={collateralToken?.symbol || ''}
+                      control={control}
+                      errors={errors}
+                      selectedChain={selectedChain}
+                    />
+                  </TokenBalancesProvider>
+                )}
+              </PriceImpactProvider>
+            </TokenInputsValidationProvider>
+          </>
+        )}
 
-              <Divider />
-
-              <Heading color="font.maxContrast" size="md">
-                LBP mechanism
-              </Heading>
-              <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
-              <WeightAdjustmentTypeInput
-                collateralTokenSymbol={collateralToken?.symbol || ''}
-                control={control}
-                launchTokenSymbol={launchTokenMetadata.symbol || ''}
-                setValue={setValue}
-                watch={watch}
-              />
-              <UserActionsInput control={control} />
-
-              <Divider />
-
-              <VStack align="start" spacing="sm" w="full">
-                <Heading color="font.maxContrast" size="md">
-                  Seed initial pool liquidity
-                </Heading>
-                <Text color="font.secondary">
-                  The starting liquidity in the pool. The amounts and ratio will determine the
-                  starting price, projected market cap and price curve.
-                </Text>
-              </VStack>
-
-              <TokenInputsValidationProvider>
-                {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
-                <PriceImpactProvider>
-                  <SaleTokenAmountInput
-                    control={control}
-                    customIcon={projectInfoForm.watch('tokenIconUrl')}
-                    errors={errors}
-                    launchTokenAddress={launchTokenAddress}
-                    metadata={launchTokenMetadata}
-                    selectedChain={selectedChain}
-                  />
-
-                  <CollateralTokenAmountInput
-                    collateralTokenAddress={collateralTokenAddress}
-                    collateralTokenSymbol={collateralToken?.symbol || ''}
-                    control={control}
-                    errors={errors}
-                    selectedChain={selectedChain}
-                  />
-                </PriceImpactProvider>
-              </TokenInputsValidationProvider>
-            </>
-          )}
-
-          <LbpFormAction disabled={!isValid} />
-        </VStack>
-      </form>
-    </TokenBalancesProvider>
+        <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
+      </VStack>
+    </form>
   )
 }
 
@@ -251,7 +248,7 @@ function LaunchTokenAddressInput({
 
   useEffect(() => {
     if (value) triggerValidation('launchTokenAddress')
-  }, [metadata.symbol, value, triggerValidation])
+  }, [metadata.isLoading, value, triggerValidation])
 
   return (
     <VStack align="start" w="full">
@@ -354,7 +351,8 @@ function CollateralTokenAddressInput({
   control: Control<SaleStructureForm>
 }) {
   const chainConfig = getNetworkConfig(selectedChain)
-  const collateralTokens = chainConfig?.lbps?.collateralTokens
+  const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
+  const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || []), nativeAsset]
 
   return (
     <VStack align="start" w="full">
@@ -398,41 +396,100 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
   )
 }
 
+function FeeSelection({
+  control,
+  errors,
+  feeValue,
+  setFormValue,
+}: {
+  control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
+  feeValue: number
+  setFormValue: UseFormSetValue<SaleStructureForm>
+}) {
+  const [value, setValue] = useState('minimum')
+
+  useEffect(() => {
+    if (feeValue !== 1.0) setValue('custom')
+  }, [feeValue])
+
+  const isInRange = (fee: number) => {
+    if (fee < 1) return 'LBP swap fees must be set at or above 1.00%'
+    if (fee > 10) return 'LBP swap fees must be set at or below 10.00%'
+    return true
+  }
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
+      <RadioGroup
+        onChange={(value: string) => {
+          setValue(value)
+          if (value === 'minimum') setFormValue('fee', 1.0)
+        }}
+        value={value}
+      >
+        <Stack direction="row">
+          <Radio value="minimum">1.00%</Radio>
+          <Radio value="custom">Custom</Radio>
+        </Stack>
+      </RadioGroup>
+
+      {value === 'custom' && (
+        <InputGroup>
+          <Controller
+            control={control}
+            name="fee"
+            render={({ field }) => (
+              <InputWithError
+                error={errors[field.name]?.message}
+                info="Minimum fee: 1.00% - Maximum fee: 10.00%"
+                isInvalid={!!errors[field.name]}
+                onChange={e => field.onChange(e.target.value)}
+                step=".01"
+                type="number"
+                value={field.value}
+              />
+            )}
+            rules={{
+              required: 'Swap fee is required',
+              validate: isInRange,
+            }}
+          />
+          <InputRightElement>
+            <Percent size="20" />
+          </InputRightElement>
+        </InputGroup>
+      )}
+    </VStack>
+  )
+}
+
 function SaleTokenAmountInput({
   control,
   errors,
   selectedChain,
-  launchTokenAddress,
-  customIcon,
-  metadata,
+  launchToken,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
-  launchTokenAddress: string
-  customIcon?: string
-  metadata: TokenMetadata
+  launchToken: CustomToken
 }) {
-  const { balanceFor, isBalancesLoading } = useTokenBalances()
-  const balance = balanceFor(launchTokenAddress)
-
-  const customToken: CustomToken = {
-    chain: selectedChain,
-    address: launchTokenAddress as Address,
-    symbol: metadata.symbol || '',
-    logoURI: customIcon || '',
-    decimals: metadata.decimals || 0,
-  }
+  const { balanceData, isLoading } = useUserBalance({
+    chainId: getChainId(selectedChain),
+    token: launchToken.address,
+  })
 
   const haveEnoughAmount = (value: string) => {
-    if (isBalancesLoading) return true
+    if (isLoading) return true
 
-    if (!balance || balance.amount === 0n) {
-      return `Your wallet has no ${metadata.symbol}. You will need some to seed this pool and sell it during the LBP`
+    if (!balanceData || balanceData.value === 0n) {
+      return `Your wallet has no ${launchToken.symbol}. You will need some to seed this pool and sell it during the LBP`
     }
 
-    if (bn(balance.amount).shiftedBy(balance.decimals).lt(value)) {
-      return `Your wallet does not have enough ${metadata.symbol}`
+    if (bn(balanceData.value).shiftedBy(balanceData.decimals).lt(value)) {
+      return `Your wallet does not have enough ${launchToken.symbol}`
     }
 
     return true
@@ -446,9 +503,10 @@ function SaleTokenAmountInput({
         name="saleTokenAmount"
         render={({ field }) => (
           <TokenInput
-            address={launchTokenAddress}
-            apiToken={customToken}
+            address={launchToken.address}
+            apiToken={launchToken}
             chain={selectedChain}
+            customUserBalance={formatUnits(balanceData?.value || 0n, launchToken.decimals)}
             onChange={e => field.onChange(e.currentTarget.value)}
             priceMessage="Price: N/A"
             value={field.value}
