@@ -32,6 +32,8 @@ import {
   useReclAmmChart,
 } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
+import { ThumbsDown, ThumbsUp } from 'react-feather'
+import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -79,6 +81,8 @@ function PoolChartsContent({ ...props }: any) {
     isPoolWithinTargetRange,
     outOfRangeText: reclammOutOfRangeText,
     inRangeText: reclammInRangeText,
+    inRangeReadjustingText: reclammInRangeReadjustingText,
+    isPoolWithinRange,
   } = useReclAmmChart()
 
   const {
@@ -96,6 +100,25 @@ function PoolChartsContent({ ...props }: any) {
 
   const showReclammChart = activeTab.value === PoolChartTab.RECLAMM
   const showLiquidityProfileChart = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
+
+  const clpBadgeConfigs = {
+    liquidityProfile: {
+      bgColor: poolIsInRange ? 'green.400' : 'orange.300',
+      bodyText: poolIsInRange ? eclpInRangeText : eclpOutOfRangeText,
+      headerText: `CLP ${poolIsInRange ? 'in' : 'out of'} range`,
+      icon: poolIsInRange ? ThumbsUp : ThumbsDown,
+    },
+    reclamm: {
+      bgColor: isPoolWithinTargetRange ? 'green.400' : isPoolWithinRange ? 'orange.300' : 'red.400',
+      bodyText: isPoolWithinTargetRange
+        ? reclammInRangeText
+        : isPoolWithinRange
+          ? reclammInRangeReadjustingText
+          : reclammOutOfRangeText,
+      headerText: isPoolWithinTargetRange ? 'Pool in range' : 'Pool readjusting',
+      icon: isPoolWithinTargetRange ? ThumbsUp : WandIcon,
+    },
+  }
 
   return (
     <Card {...props}>
@@ -121,24 +144,8 @@ function PoolChartsContent({ ...props }: any) {
                   ml={{ base: undefined, md: 'auto' }}
                   spacing="0"
                 >
-                  {showLiquidityProfileChart && (
-                    <ClpBadge
-                      bgColor={poolIsInRange ? 'green.400' : 'orange.300'}
-                      bodyText={poolIsInRange ? eclpInRangeText : eclpOutOfRangeText}
-                      hasThumbsUp={poolIsInRange}
-                      headerText={`CLP ${poolIsInRange ? 'in' : 'out of'} range`}
-                    />
-                  )}
-                  {showReclammChart && (
-                    <ClpBadge
-                      bgColor={isPoolWithinTargetRange ? 'green.400' : 'orange.300'}
-                      bodyText={
-                        isPoolWithinTargetRange ? reclammInRangeText : reclammOutOfRangeText
-                      }
-                      hasThumbsUp={isPoolWithinTargetRange}
-                      headerText={isPoolWithinTargetRange ? 'Pool in range' : 'Pool readjusting'}
-                    />
-                  )}
+                  {showLiquidityProfileChart && <ClpBadge {...clpBadgeConfigs.liquidityProfile} />}
+                  {showReclammChart && <ClpBadge {...clpBadgeConfigs.reclamm} />}
                   {!showLiquidityProfileChart && !showReclammChart && (
                     <>
                       <Heading fontWeight="bold" size="h5">

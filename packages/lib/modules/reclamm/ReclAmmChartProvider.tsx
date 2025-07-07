@@ -118,12 +118,17 @@ export function useReclAmmChartLogic() {
       currentPriceValue = invert(currentPriceValue)
     }
 
+    const isPoolWithinRange =
+      (currentPriceValue > minPriceValue && currentPriceValue < lowerMarginValue) ||
+      (currentPriceValue > upperMarginValue && currentPriceValue < maxPriceValue)
+
     return {
       maxPriceValue,
       minPriceValue,
       lowerMarginValue,
       upperMarginValue,
       currentPriceValue,
+      isPoolWithinRange,
     }
   }, [reclAmmData])
 
@@ -376,9 +381,13 @@ export function useReclAmmChartLogic() {
   }, [currentChartData])
 
   const outOfRangeText =
-    'The current price is out of the set liquidity range for this Concentrated Liquidity Pool (CLP). When a CLP is not in range, liquidity is not routed through this pool and LPs do not earn swap fees.'
+    'The price has moved outside the range, so Liquidity Providers are not currently earning swap fees. The reCLAMM pool is automatically readjusting to center liquidity around the current price to maximize swap fees. '
+
+  const inRangeReadjustingText =
+    'The price is outside the target range but within the margin, so Liquidity Providers still earn swap fees. The reCLAMM pool is automatically readjusting to center liquidity around the current price to maximize swap fees.'
+
   const inRangeText =
-    'The current price is between the liquidity upper and lower bounds for this Concentrated Liquidity Pool (CLP). In range pools earn high swap fees.'
+    'The current price is between the target range for this Readjusting Concentrated Liquidity AMM (reCLAMM) pool. In range pools earn high swap fees.'
 
   return {
     options,
@@ -388,6 +397,8 @@ export function useReclAmmChartLogic() {
     toggleIsReversed,
     outOfRangeText,
     inRangeText,
+    inRangeReadjustingText,
+    isPoolWithinRange: currentChartData.isPoolWithinRange,
   }
 }
 

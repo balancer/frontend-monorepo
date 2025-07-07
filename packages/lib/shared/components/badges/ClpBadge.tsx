@@ -1,15 +1,16 @@
 import { HStack, Text, Icon, Box } from '@chakra-ui/react'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
-import { Info, ThumbsDown, ThumbsUp } from 'react-feather'
+import { ElementType } from 'react'
+import { Info } from 'react-feather'
 
 type ClpBadgeProps = {
-  hasThumbsUp: boolean
   bodyText: string
   headerText: string
   bgColor: string
+  icon: ElementType
 }
 
-export function ClpBadge({ hasThumbsUp, bodyText, headerText, bgColor }: ClpBadgeProps) {
+export function ClpBadge({ icon, bodyText, headerText, bgColor }: ClpBadgeProps) {
   return (
     <CustomPopover bodyText={bodyText} headerText={headerText} trigger="hover">
       <Box
@@ -25,7 +26,7 @@ export function ClpBadge({ hasThumbsUp, bodyText, headerText, bgColor }: ClpBadg
         zIndex="1"
       >
         <HStack>
-          <Icon as={hasThumbsUp ? ThumbsUp : ThumbsDown} />
+          {icon && <Icon as={icon} />}
           <Text color="black" fontSize="sm" fontWeight="bold">
             {headerText}
           </Text>
