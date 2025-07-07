@@ -368,8 +368,8 @@ export function PromoBanners() {
                           opacity: 1,
                         }}
                         bottom="24px"
-                        display={{ base: 'none', xl: 'block' }}
-                        fontSize="xs"
+                        display={{ base: 'none', lg: 'block' }}
+                        fontSize={{ base: '11px', xl: 'xs' }}
                         opacity="0"
                         position="absolute"
                         textAlign="center"
