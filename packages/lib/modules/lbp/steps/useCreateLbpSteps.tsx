@@ -9,10 +9,9 @@ import { useSignPermit2InitializeStep } from '@repo/lib/modules/pool/actions/ini
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
-import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
+import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 
 export function useCreateLbpSteps() {
   const createLbpStep = useCreateLbpStep()
@@ -61,60 +60,20 @@ export function useCreateLbpSteps() {
     isLoadingTokenApprovalSteps ||
     isLoadingPermit2ApprovalSteps
 
-  const steps = getApprovalAndCreateSteps({
+  const steps = getApprovalAndAddSteps({
     shouldUseSignatures,
     signPermit2Step,
     permit2ApprovalSteps,
-    initLbpStep,
     tokenApprovalSteps,
     shouldBatchTransactions,
+    isPermit2: true,
+    addLiquidityStep: initLbpStep,
   })
 
   return {
     isLoadingSteps,
     steps: [createLbpStep, ...steps],
   }
-}
-
-function getApprovalAndCreateSteps({
-  shouldUseSignatures,
-  signPermit2Step,
-  permit2ApprovalSteps,
-  initLbpStep,
-  tokenApprovalSteps,
-  shouldBatchTransactions,
-}: {
-  shouldUseSignatures: boolean
-  signPermit2Step?: TransactionStep
-  permit2ApprovalSteps: TransactionStep[]
-  tokenApprovalSteps: TransactionStep[]
-  initLbpStep: TransactionStep
-  shouldBatchTransactions: boolean
-}) {
-  const shouldUsePermit2Signatures = shouldUseSignatures && !!signPermit2Step
-  const shouldUsePermit2Transactions = !shouldUseSignatures && !!permit2ApprovalSteps
-
-  /*
-  Signatures are disabled so we need:
-  - Approve Permit2 as spender in tokenApprovalSteps
-  - Explicit Permit2 token approvals in permit2ApprovalSteps (as permit2 signatures are disabled)
- */
-  initLbpStep.nestedSteps = shouldUsePermit2Transactions
-    ? [...tokenApprovalSteps, ...permit2ApprovalSteps]
-    : tokenApprovalSteps
-
-  const shouldDisplayBatchTransactions =
-    shouldBatchTransactions && hasSomePendingNestedTxInBatch(initLbpStep)
-
-  if (shouldUsePermit2Signatures) {
-    return shouldDisplayBatchTransactions
-      ? [signPermit2Step, initLbpStep] // Hide token approvals when batching token approvals w/ permit2 sigs
-      : [...tokenApprovalSteps, signPermit2Step, initLbpStep]
-  }
-
-  return shouldDisplayBatchTransactions
-    ? [initLbpStep] // Hide all approvals when batching w/o permit2 sigs
-    : [...tokenApprovalSteps, ...permit2ApprovalSteps, initLbpStep]
 }
 
 function useLbpInitAmounts(isCollateralNativeAsset: boolean) {
