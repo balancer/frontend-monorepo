@@ -4,7 +4,7 @@ import { VStack, Text, Heading } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { PoolChartTab } from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import { getNowTimestampInSecs } from '@repo/lib/shared/utils/time'
-import { format, differenceInDays, fromUnixTime, secondsToMilliseconds } from 'date-fns'
+import { format, differenceInDays, secondsToMilliseconds, isBefore } from 'date-fns'
 
 export function VolTvlFeesInfo({ chartType }: { chartType: PoolChartTab }) {
   const { hourlyData } = useLbpPoolCharts()
@@ -31,8 +31,16 @@ export function VolTvlFeesInfo({ chartType }: { chartType: PoolChartTab }) {
     }
 
     const firstDataPoint = hourlyData[0]?.timestamp
+    const lastDataPoint = hourlyData[hourlyData.length - 1]?.timestamp
+    const isLastDataPointBeforeNow = isBefore(new Date(lastDataPoint), new Date(now))
+
     const daysFromStart = firstDataPoint
-      ? differenceInDays(fromUnixTime(now), fromUnixTime(firstDataPoint)) + 1
+      ? differenceInDays(
+          isLastDataPointBeforeNow
+            ? new Date(secondsToMilliseconds(lastDataPoint))
+            : new Date(secondsToMilliseconds(now)),
+          new Date(secondsToMilliseconds(firstDataPoint))
+        )
       : 0
 
     return {
