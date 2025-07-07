@@ -110,13 +110,12 @@ function getApprovalAndCreateSteps({
 
   if (shouldUsePermit2Signatures) {
     return shouldDisplayBatchTransactions
-      ? [signPermit2Step, initLbpStep] // Hide token approvals when batching
+      ? [signPermit2Step, initLbpStep] // Hide token approvals when batching token approvals w/ permit2 sigs
       : [...tokenApprovalSteps, signPermit2Step, initLbpStep]
   }
 
-  // if (shouldUsePermit2Transactions)
   return shouldDisplayBatchTransactions
-    ? [initLbpStep] // Hide all approvals when batching
+    ? [initLbpStep] // Hide all approvals when batching w/o permit2 sigs
     : [...tokenApprovalSteps, ...permit2ApprovalSteps, initLbpStep]
 }
 
