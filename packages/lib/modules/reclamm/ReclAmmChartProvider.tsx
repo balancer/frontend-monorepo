@@ -145,7 +145,7 @@ export function useReclAmmChartLogic() {
     } = currentChartData
 
     const totalGreenAndOrangeBars = 52
-    const baseOrangeBarCount = (totalGreenAndOrangeBars * (marginValue || 0)) / 100 / 2
+    const baseOrangeBarCount = Math.floor((totalGreenAndOrangeBars * (marginValue || 0)) / 100 / 2)
     const baseGreenBarCount = totalGreenAndOrangeBars - 2 * baseOrangeBarCount
     const baseGreyBarCount = 9
     const totalBars = 2 * baseGreyBarCount + 2 * baseOrangeBarCount + baseGreenBarCount
