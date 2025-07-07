@@ -13,6 +13,7 @@ import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { LbpPrice, max, min } from './pool/usePriceInfo'
+import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -93,10 +94,8 @@ export function useLbpFormLogic() {
   const { saleTokenAmount, launchTokenAddress, selectedChain } = saleStructureForm.watch()
 
   const launchTokenSeed = Number(saleTokenAmount || 0)
-  const { totalSupply: launchTokenTotalSupply } = useTokenMetadata(
-    launchTokenAddress,
-    selectedChain
-  )
+
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
 
   const [maxPrice, setMaxPrice] = useState(0)
   const [saleMarketCap, setSaleMarketCap] = useState('')
@@ -107,12 +106,21 @@ export function useLbpFormLogic() {
     const maxPrice = max(prices)
     const minSaleMarketCap = minPrice * launchTokenSeed
     const maxSaleMarketCap = maxPrice * launchTokenSeed
-    const minFdvMarketCap = minPrice * (launchTokenTotalSupply || 0)
-    const maxFdvMarketCap = maxPrice * (launchTokenTotalSupply || 0)
+    const minFdvMarketCap = minPrice * (launchTokenMetadata?.totalSupply || 0)
+    const maxFdvMarketCap = maxPrice * (launchTokenMetadata?.totalSupply || 0)
 
     setMaxPrice(maxPrice)
     setSaleMarketCap(`$${fNum('fiat', minSaleMarketCap)} - $${fNum('fiat', maxSaleMarketCap)}`)
     setFdvMarketCap(`$${fNum('fiat', minFdvMarketCap)} - $${fNum('fiat', maxFdvMarketCap)}`)
+  }
+
+  const launchToken: CustomToken = {
+    name: launchTokenMetadata.name || '',
+    chain: selectedChain,
+    address: launchTokenAddress as Address,
+    symbol: launchTokenMetadata.symbol || '',
+    logoURI: projectInfoForm.getValues().tokenIconUrl || '',
+    decimals: launchTokenMetadata.decimals || 0,
   }
 
   return {
@@ -130,6 +138,8 @@ export function useLbpFormLogic() {
     updatePriceStats,
     launchTokenSeed,
     resetLbpCreation,
+    launchTokenMetadata,
+    launchToken,
   }
 }
 
