@@ -4785,7 +4785,7 @@ export const gyroEclpPoolConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745)
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb847e40603aff979ff645f5a9a949d4ce80c3d01)
  */
 export const reClammPoolAbi = [
   {
@@ -4800,7 +4800,7 @@ export const reClammPoolAbi = [
           { name: 'symbol', internalType: 'string', type: 'string' },
           { name: 'version', internalType: 'string', type: 'string' },
           {
-            name: 'priceShiftDailyRate',
+            name: 'dailyPriceShiftExponent',
             internalType: 'uint256',
             type: 'uint256',
           },
@@ -4816,6 +4816,16 @@ export const reClammPoolAbi = [
             internalType: 'uint256',
             type: 'uint256',
           },
+          {
+            name: 'tokenAPriceIncludesRate',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'tokenBPriceIncludesRate',
+            internalType: 'bool',
+            type: 'bool',
+          },
         ],
       },
       { name: 'vault', internalType: 'contract IVault', type: 'address' },
@@ -4825,6 +4835,7 @@ export const reClammPoolAbi = [
   { type: 'error', inputs: [], name: 'AmountOutGreaterThanBalance' },
   { type: 'error', inputs: [], name: 'BalanceRatioExceedsTolerance' },
   { type: 'error', inputs: [], name: 'BaseOutOfBounds' },
+  { type: 'error', inputs: [], name: 'DailyPriceShiftExponentTooHigh' },
   { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
   {
     type: 'error',
@@ -4853,25 +4864,6 @@ export const reClammPoolAbi = [
   {
     type: 'error',
     inputs: [
-      {
-        name: 'fourthRootPriceRatioDelta',
-        internalType: 'uint256',
-        type: 'uint256',
-      },
-    ],
-    name: 'FourthRootPriceRatioDeltaBelowMin',
-  },
-  {
-    type: 'error',
-    inputs: [
-      { name: 'resolvedStartTime', internalType: 'uint256', type: 'uint256' },
-      { name: 'endTime', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'GradualUpdateTimeTravel',
-  },
-  {
-    type: 'error',
-    inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
       { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
     ],
@@ -4881,14 +4873,33 @@ export const reClammPoolAbi = [
   { type: 'error', inputs: [], name: 'InvalidExponent' },
   { type: 'error', inputs: [], name: 'InvalidInitialPrice' },
   { type: 'error', inputs: [], name: 'InvalidShortString' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'resolvedStartTime', internalType: 'uint256', type: 'uint256' },
+      { name: 'endTime', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidStartTime',
+  },
   { type: 'error', inputs: [], name: 'InvalidStartTime' },
-  { type: 'error', inputs: [], name: 'NegativeAmountOut' },
+  { type: 'error', inputs: [], name: 'InvalidToken' },
   { type: 'error', inputs: [], name: 'NotImplemented' },
-  { type: 'error', inputs: [], name: 'PoolCenterednessTooLow' },
   { type: 'error', inputs: [], name: 'PoolNotInitialized' },
   { type: 'error', inputs: [], name: 'PoolOutsideTargetRange' },
+  {
+    type: 'error',
+    inputs: [
+      {
+        name: 'fourthRootPriceRatioDelta',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    name: 'PriceRatioDeltaBelowMin',
+  },
+  { type: 'error', inputs: [], name: 'PriceRatioNotUpdating' },
   { type: 'error', inputs: [], name: 'PriceRatioUpdateDurationTooShort' },
-  { type: 'error', inputs: [], name: 'PriceShiftDailyRateTooHigh' },
+  { type: 'error', inputs: [], name: 'PriceRatioUpdateTooFast' },
   { type: 'error', inputs: [], name: 'ProductOutOfBounds' },
   { type: 'error', inputs: [], name: 'ReClammPoolBptRateUnsupported' },
   {
@@ -4901,11 +4912,6 @@ export const reClammPoolAbi = [
   },
   {
     type: 'error',
-    inputs: [{ name: 'value', internalType: 'uint256', type: 'uint256' }],
-    name: 'SafeCastOverflowedUintToInt',
-  },
-  {
-    type: 'error',
     inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
     name: 'SenderIsNotVault',
   },
@@ -4915,7 +4921,6 @@ export const reClammPoolAbi = [
     inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
     name: 'StringTooLong',
   },
-  { type: 'error', inputs: [], name: 'TokenBalanceTooLow' },
   { type: 'error', inputs: [], name: 'VaultIsNotLocked' },
   { type: 'error', inputs: [], name: 'VaultNotSet' },
   { type: 'error', inputs: [], name: 'WrongInitializationPrices' },
@@ -4957,6 +4962,25 @@ export const reClammPoolAbi = [
       },
     ],
     name: 'CenterednessMarginUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'dailyPriceShiftExponent',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'dailyPriceShiftBase',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'DailyPriceShiftExponentUpdated',
   },
   { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
   {
@@ -5002,25 +5026,6 @@ export const reClammPoolAbi = [
       },
     ],
     name: 'PriceRatioStateUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'priceShiftDailyRate',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'priceShiftDailyRateInSeconds',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'PriceShiftDailyRateUpdated',
   },
   {
     type: 'event',
@@ -5119,7 +5124,10 @@ export const reClammPoolAbi = [
     type: 'function',
     inputs: [],
     name: 'computeCurrentPoolCenteredness',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'bool', type: 'bool' },
+    ],
     stateMutability: 'view',
   },
   {
@@ -5130,6 +5138,20 @@ export const reClammPoolAbi = [
       { name: 'minPrice', internalType: 'uint256', type: 'uint256' },
       { name: 'maxPrice', internalType: 'uint256', type: 'uint256' },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'computeCurrentPriceRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'computeCurrentSpotPrice',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -5153,9 +5175,26 @@ export const reClammPoolAbi = [
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'computeInitialBalanceRatio',
-    outputs: [{ name: 'balanceRatio', internalType: 'uint256', type: 'uint256' }],
+    inputs: [
+      {
+        name: 'referenceToken',
+        internalType: 'contract IERC20',
+        type: 'address',
+      },
+      {
+        name: 'referenceAmountInRaw',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    name: 'computeInitialBalancesRaw',
+    outputs: [
+      {
+        name: 'initialBalancesRaw',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
     stateMutability: 'view',
   },
   {
@@ -5259,6 +5298,20 @@ export const reClammPoolAbi = [
         type: 'uint256[]',
       },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getDailyPriceShiftBase',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getDailyPriceShiftExponent',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -5401,13 +5454,6 @@ export const reClammPoolAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'getPriceShiftDailyRateInSeconds',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
     name: 'getRate',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'pure',
@@ -5441,12 +5487,22 @@ export const reClammPoolAbi = [
             type: 'uint256[]',
           },
           {
-            name: 'priceShiftDailyRateInSeconds',
+            name: 'dailyPriceShiftExponent',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'dailyPriceShiftBase',
             internalType: 'uint256',
             type: 'uint256',
           },
           {
             name: 'centerednessMargin',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'currentPriceRatio',
             internalType: 'uint256',
             type: 'uint256',
           },
@@ -5503,6 +5559,26 @@ export const reClammPoolAbi = [
             internalType: 'uint256[]',
             type: 'uint256[]',
           },
+          {
+            name: 'tokenAPriceIncludesRate',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'tokenBPriceIncludesRate',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'minSwapFeePercentage',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'maxSwapFeePercentage',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
           { name: 'initialMinPrice', internalType: 'uint256', type: 'uint256' },
           { name: 'initialMaxPrice', internalType: 'uint256', type: 'uint256' },
           {
@@ -5511,7 +5587,7 @@ export const reClammPoolAbi = [
             type: 'uint256',
           },
           {
-            name: 'initialPriceShiftDailyRate',
+            name: 'initialDailyPriceShiftExponent',
             internalType: 'uint256',
             type: 'uint256',
           },
@@ -5521,27 +5597,12 @@ export const reClammPoolAbi = [
             type: 'uint256',
           },
           {
-            name: 'minCenterednessMargin',
+            name: 'maxDailyPriceShiftExponent',
             internalType: 'uint256',
             type: 'uint256',
           },
           {
-            name: 'maxCenterednessMargin',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          {
-            name: 'minTokenBalanceScaled18',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          {
-            name: 'minPoolCenteredness',
-            internalType: 'uint256',
-            type: 'uint256',
-          },
-          {
-            name: 'maxPriceShiftDailyRate',
+            name: 'maxDailyPriceRatioUpdateRate',
             internalType: 'uint256',
             type: 'uint256',
           },
@@ -5551,7 +5612,12 @@ export const reClammPoolAbi = [
             type: 'uint256',
           },
           {
-            name: 'minFourthRootPriceRatioDelta',
+            name: 'minPriceRatioDelta',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'balanceRatioAndPriceTolerance',
             internalType: 'uint256',
             type: 'uint256',
           },
@@ -5622,6 +5688,16 @@ export const reClammPoolAbi = [
     inputs: [],
     name: 'isPoolWithinTargetRange',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'isPoolWithinTargetRangeUsingCurrentVirtualBalances',
+    outputs: [
+      { name: 'isWithinTargetRange', internalType: 'bool', type: 'bool' },
+      { name: 'virtualBalancesChanged', internalType: 'bool', type: 'bool' },
+    ],
     stateMutability: 'view',
   },
   {
@@ -5752,7 +5828,7 @@ export const reClammPoolAbi = [
       { name: 'pool', internalType: 'address', type: 'address' },
       { name: '', internalType: 'enum AddLiquidityKind', type: 'uint8' },
       { name: '', internalType: 'uint256[]', type: 'uint256[]' },
-      { name: 'minBptAmountOut', internalType: 'uint256', type: 'uint256' },
+      { name: 'exactBptAmountOut', internalType: 'uint256', type: 'uint256' },
       {
         name: 'balancesScaled18',
         internalType: 'uint256[]',
@@ -5784,7 +5860,7 @@ export const reClammPoolAbi = [
       { name: '', internalType: 'address', type: 'address' },
       { name: 'pool', internalType: 'address', type: 'address' },
       { name: '', internalType: 'enum RemoveLiquidityKind', type: 'uint8' },
-      { name: 'maxBptAmountIn', internalType: 'uint256', type: 'uint256' },
+      { name: 'exactBptAmountIn', internalType: 'uint256', type: 'uint256' },
       { name: '', internalType: 'uint256[]', type: 'uint256[]' },
       {
         name: 'balancesScaled18',
@@ -5979,10 +6055,19 @@ export const reClammPoolAbi = [
     type: 'function',
     inputs: [
       {
-        name: 'endFourthRootPriceRatio',
+        name: 'newDailyPriceShiftExponent',
         internalType: 'uint256',
         type: 'uint256',
       },
+    ],
+    name: 'setDailyPriceShiftExponent',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'endPriceRatio', internalType: 'uint256', type: 'uint256' },
       {
         name: 'priceRatioUpdateStartTime',
         internalType: 'uint256',
@@ -5994,7 +6079,7 @@ export const reClammPoolAbi = [
         type: 'uint256',
       },
     ],
-    name: 'setPriceRatioState',
+    name: 'startPriceRatioUpdate',
     outputs: [
       {
         name: 'actualPriceRatioUpdateStartTime',
@@ -6006,14 +6091,8 @@ export const reClammPoolAbi = [
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: 'newPriceShiftDailyRate',
-        internalType: 'uint256',
-        type: 'uint256',
-      },
-    ],
-    name: 'setPriceShiftDailyRate',
+    inputs: [],
+    name: 'stopPriceRatioUpdate',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -6069,14 +6148,14 @@ export const reClammPoolAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745)
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb847e40603aff979ff645f5a9a949d4ce80c3d01)
  */
 export const reClammPoolAddress = {
-  8453: '0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745',
+  1: '0xB847E40603AfF979FF645F5A9a949D4Ce80C3d01',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745)
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xb847e40603aff979ff645f5a9a949d4ce80c3d01)
  */
 export const reClammPoolConfig = {
   address: reClammPoolAddress,
