@@ -34,7 +34,7 @@ export function useGetComputeReclAmmData() {
       },
       {
         ...reclAmmPoolContract,
-        functionName: 'isPoolWithinTargetRange',
+        functionName: 'isPoolWithinTargetRangeUsingCurrentVirtualBalances', // first item in the array is 'isWithinTargetRange'
       },
     ],
   })
@@ -51,7 +51,7 @@ export function useGetComputeReclAmmData() {
       liveBalanceB: results.data?.[2]?.result?.[1],
     },
     centerednessMargin: results.data?.[3]?.result,
-    isPoolWithinTargetRange: results.data?.[4]?.result,
+    isPoolWithinTargetRange: results.data?.[4]?.result?.[0],
     tokenA: pool.poolTokens[0],
     tokenB: pool.poolTokens[1],
   }
