@@ -80,15 +80,9 @@ export default defineConfig(() => {
             name: 'GyroECLPPool',
             address: '0x2191Df821C198600499aA1f0031b1a7514D7A7D9',
           },
-        ],
-      }),
-      etherscan({
-        apiKey: env.ETHERSCAN_API_KEY || '<invalid>',
-        chainId: 8453,
-        contracts: [
           {
             name: 'ReClammPool',
-            address: '0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745',
+            address: '0xb847e40603aff979ff645f5a9a949d4ce80c3d01',
           },
         ],
       }),
