@@ -354,13 +354,29 @@ export function PromoBanners() {
                         _groupHover={{
                           color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500',
                           opacity: 1,
+                          transform: 'translateY(-6px)',
                         }}
                         color={colorMode === 'dark' ? 'font.secondary' : 'brown.400'}
                         opacity="0.8"
-                        transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic), box-shadow 0.15s var(--ease-out-cubic)"
+                        transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic), box-shadow 0.15s var(--ease-out-cubic)"
                       >
                         {item.iconElement}
                       </Box>
+                      <Text
+                        _groupHover={{
+                          color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500',
+                          opacity: 1,
+                        }}
+                        bottom="24px"
+                        display={{ base: 'none', xl: 'block' }}
+                        fontSize="xs"
+                        opacity="0"
+                        position="absolute"
+                        textAlign="center"
+                        transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic)"
+                      >
+                        {item.label}
+                      </Text>
                     </Flex>
                   </Center>
                 </Box>
