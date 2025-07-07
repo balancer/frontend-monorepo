@@ -77,16 +77,17 @@ export function useReclAmmChartLogic() {
 
     const vBalanceA = Number(virtualBalanceA)
     const vBalanceB = Number(virtualBalanceB)
+    const marginValue = Number(margin)
 
     const lowerMargin = calculateLowerMargin({
-      margin: Number(margin),
+      margin: marginValue,
       invariant: invariant.toNumber(),
       virtualBalanceA: vBalanceA,
       virtualBalanceB: vBalanceB,
     })
 
     const upperMargin = calculateUpperMargin({
-      margin: Number(margin),
+      margin: marginValue,
       invariant: invariant.toNumber(),
       virtualBalanceA: vBalanceA,
       virtualBalanceB: vBalanceB,
@@ -129,22 +130,35 @@ export function useReclAmmChartLogic() {
       upperMarginValue,
       currentPriceValue,
       isPoolWithinRange,
+      marginValue,
     }
   }, [reclAmmData])
 
   const options = useMemo(() => {
-    const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue, currentPriceValue } =
-      currentChartData
+    const {
+      maxPriceValue,
+      minPriceValue,
+      lowerMarginValue,
+      upperMarginValue,
+      currentPriceValue,
+      marginValue,
+    } = currentChartData
+
+    const totalGreenAndOrangeBars = 52
+    const baseOrangeBarCount = (totalGreenAndOrangeBars * (marginValue || 0)) / 100 / 2
+    const baseGreenBarCount = totalGreenAndOrangeBars - 2 * baseOrangeBarCount
+    const baseGreyBarCount = 9
+    const totalBars = 2 * baseGreyBarCount + 2 * baseOrangeBarCount + baseGreenBarCount
 
     const baseGreyBarConfig = {
-      count: 10,
+      count: baseGreyBarCount,
       value: isMobile ? 1 : 3,
       gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
       borderRadius: 20,
     }
 
     const baseOrangeBarConfig = {
-      count: 8,
+      count: baseOrangeBarCount,
       value: 100,
       gradientColors: ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)'],
       borderRadius: 20,
@@ -152,7 +166,7 @@ export function useReclAmmChartLogic() {
 
     const greenBarConfig = {
       name: 'Green',
-      count: 42,
+      count: baseGreenBarCount,
       value: 100,
       gradientColors: ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)'],
       borderRadius: 20,
@@ -284,19 +298,19 @@ export function useReclAmmChartLogic() {
           show: true,
           interval: 0,
           formatter: (value: string, index: number) => {
-            if (index === 10) {
+            if (index === baseGreyBarCount) {
               return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('clpPrice', minPriceValue) : 'N/A'}}`
             }
 
-            if (index === 18) {
+            if (baseGreenBarCount && index === baseGreyBarCount + baseOrangeBarCount) {
               return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('clpPrice', upperMarginValue) : 'N/A'}}`
             }
 
-            if (index === 60) {
+            if (baseGreenBarCount && index === totalBars - baseGreyBarCount - baseOrangeBarCount) {
               return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('clpPrice', lowerMarginValue) : 'N/A'}}`
             }
 
-            if (index === 68) {
+            if (index === totalBars - baseGreyBarCount) {
               return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('clpPrice', maxPriceValue) : 'N/A'}}`
             }
 
