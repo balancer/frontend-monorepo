@@ -2,12 +2,13 @@ import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { LabelFormatterParams, dividePrices, range } from '@repo/lib/shared/utils/chart.helper'
+import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Skeleton, Stack, Text, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { dividePrices, range } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
 type Props = {
   startDate: Date
