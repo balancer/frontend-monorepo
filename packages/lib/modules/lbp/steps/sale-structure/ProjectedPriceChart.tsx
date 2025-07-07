@@ -17,6 +17,7 @@ type Props = {
   prices: LbpPrice[]
   cutTime?: Date
   isLoading?: boolean
+  gridLeft?: string
 }
 
 export function ProjectedPriceChart({
@@ -26,6 +27,7 @@ export function ProjectedPriceChart({
   prices,
   cutTime,
   isLoading,
+  gridLeft,
 }: Props) {
   const { toCurrency } = useCurrency()
   const theme = useChakraTheme()
@@ -43,7 +45,7 @@ export function ProjectedPriceChart({
 
   const chartInfo: EChartsOption = {
     grid: {
-      left: '5%',
+      left: gridLeft || '10%',
       right: '4%',
       top: '10%',
       bottom: '10%',

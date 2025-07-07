@@ -74,6 +74,7 @@ export function ProjectedPrice({
       <CardBody>
         <ProjectedPriceChart
           endDate={parseISO(endTime)}
+          gridLeft="11%"
           onPriceChange={prices => {
             updateMaxPrice(prices)
             onPriceChange(prices)

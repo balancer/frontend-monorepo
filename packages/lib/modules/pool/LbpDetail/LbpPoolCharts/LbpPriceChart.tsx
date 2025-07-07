@@ -13,6 +13,7 @@ export function LbpPriceChart() {
       <ProjectedPriceChart
         cutTime={now}
         endDate={endTime}
+        gridLeft="7.5%"
         isLoading={isLoading}
         prices={prices}
         startDate={startTime}
