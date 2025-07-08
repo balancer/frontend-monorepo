@@ -156,6 +156,9 @@ export function useReclAmmChartLogic() {
     const baseGreyBarCount = 9
     const totalBars = 2 * baseGreyBarCount + 2 * baseOrangeBarCount + baseGreenBarCount
 
+    // for some reason the number of orange (or green) bars matters to echarts in the grid
+    const gridBottom = baseOrangeBarCount % 2 === 0 ? '19.5%' : '8%'
+
     const baseGreyBarConfig = {
       count: baseGreyBarCount,
       value: isMobile ? 1 : 3,
@@ -290,7 +293,7 @@ export function useReclAmmChartLogic() {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
-        bottom: isMobile ? '-20px' : '8%',
+        bottom: isMobile ? '-20px' : gridBottom,
         containLabel: true,
       },
       xAxis: {
