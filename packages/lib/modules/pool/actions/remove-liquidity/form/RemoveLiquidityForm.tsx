@@ -231,6 +231,7 @@ export function RemoveLiquidityForm() {
                       totalUSDValue={totalUSDValue}
                     />
                   }
+                  action="remove"
                   isDisabled={priceImpactQuery.isLoading && !priceImpactQuery.isSuccess}
                   setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 />
