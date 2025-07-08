@@ -150,7 +150,13 @@ export function PriceImpactAccordion({
           <VStack align="start" mt="md" spacing="md" w="full">
             {!avoidPriceImpactAlert && (
               <Alert status="error">
-                <PriceImpactIcon mt="1" priceImpactLevel={priceImpactLevel} size={24} />
+                <PriceImpactIcon
+                  alignSelf="start"
+                  color="font.dark"
+                  mt="1"
+                  priceImpactLevel={priceImpactLevel}
+                  size={24}
+                />
                 <Box ml="md">
                   <AlertTitle>
                     {isUnknownPriceImpact
