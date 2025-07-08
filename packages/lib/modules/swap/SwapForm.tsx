@@ -314,6 +314,7 @@ export function SwapForm({
               <PriceImpactAccordion
                 accordionButtonComponent={<SwapRate customTokenUsdPrice={customTokenUsdPrice} />}
                 accordionPanelComponent={<SwapDetails />}
+                action="swap"
                 isDisabled={!simulationQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
