@@ -163,6 +163,7 @@ type PartnerCard = {
 export type PromoItem = {
   id: number
   icon: string
+  label: string
   title: string
   description: string
   buttonText?: string
