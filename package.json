@@ -41,7 +41,7 @@
     "husky": "^9.1.7",
     "import-in-the-middle": "1.14.2",
     "lint-staged": "^13.2.3",
-    "prettier": "3.5.3",
+    "prettier": "3.6.2",
     "require-in-the-middle": "7.5.2",
     "sharp": "0.34.2",
     "stylelint": "16.14.1",

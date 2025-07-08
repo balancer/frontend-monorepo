@@ -20,7 +20,9 @@ export function Reliquary() {
 
   return (
     <VStack align="start" h="full" w="full">
-      {relics?.map(relic => <Relic chain={chain} key={relic.relicId} relic={relic} />)}
+      {relics?.map(relic => (
+        <Relic chain={chain} key={relic.relicId} relic={relic} />
+      ))}
     </VStack>
   )
 }
