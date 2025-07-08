@@ -174,7 +174,9 @@ export function useReclAmmChartLogic() {
     const totalBars = 2 * baseGreyBarCount + 2 * baseOrangeBarCount + baseGreenBarCount
 
     // for some reason the number of orange (or green) bars matters to echarts in the grid
-    const gridBottom = baseOrangeBarCount % 2 === 0 ? '19.5%' : '8%'
+    const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '8%'
+    const gridBottomMobile =
+      baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '24.5%' : '16%'
 
     const baseGreyBarConfig = {
       count: baseGreyBarCount,
@@ -302,7 +304,7 @@ export function useReclAmmChartLogic() {
       },
       withTopRightPadding: {
         ...baseRichProps,
-        padding: [100, paddingRight, 0, 0],
+        padding: [showMinMaxValues && !showTargetValues ? 0 : 100, paddingRight, 0, 0],
       },
     }
 
@@ -312,7 +314,7 @@ export function useReclAmmChartLogic() {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
-        bottom: isMobile ? '-20px' : gridBottom,
+        bottom: isMobile ? gridBottomMobile : gridBottomDesktop,
         containLabel: true,
       },
       xAxis: {
@@ -367,7 +369,7 @@ export function useReclAmmChartLogic() {
             },
             priceValueMobile: {
               ...richStyles.base,
-              padding: [110, 10, 0, 0],
+              padding: [showMinMaxValues && !showTargetValues ? 0 : 110, 10, 0, 0],
             },
           },
         },
@@ -377,7 +379,8 @@ export function useReclAmmChartLogic() {
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: dynamicXAxisNamePadding,
+          padding:
+            showMinMaxValues && !showTargetValues ? [0, 30, -85, 0] : dynamicXAxisNamePadding,
           color: secondaryFontColor,
         },
       },
