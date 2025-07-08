@@ -246,6 +246,7 @@ function AddLiquidityMainForm() {
                     totalUSDValue={totalUSDValue}
                   />
                 }
+                action="add"
                 avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!priceImpactQuery.data}
