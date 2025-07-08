@@ -4,7 +4,15 @@ import {
   GqlChain,
   LbpPriceChartDataFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { isAfter, isBefore, isSameHour, isWithinInterval, secondsToMilliseconds } from 'date-fns'
+import {
+  isAfter,
+  isBefore,
+  isSameHour,
+  isWithinInterval,
+  millisecondsToSeconds,
+  secondsToMilliseconds,
+  startOfHour,
+} from 'date-fns'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { now } from '@repo/lib/shared/utils/time'
@@ -14,19 +22,29 @@ export type LbpPrice = {
   projectTokenPrice: number
 }
 
+export type HourlyDataPoint = {
+  timestamp: number
+  tvl: number
+  fees: number
+  volume: number
+}
+
 export function usePriceInfo(chain: GqlChain, poolId: Address) {
   const apiResult = useQuery(GetLbpPriceInfoDocument, {
     variables: {
       poolId: poolId.toLowerCase(),
       chain,
+      dataPoints: 5000,
     },
   })
 
   const prices = apiResult.data?.prices ? toLbpPrices(apiResult.data.prices) : []
+  const hourlyData = apiResult.data?.prices ? aggregateToHourlyData(apiResult.data.prices) : []
 
   return {
     isLoading: apiResult.loading,
     prices,
+    hourlyData,
   }
 }
 
@@ -37,6 +55,37 @@ function toLbpPrices(apiPrices: LbpPriceChartDataFragment[]): LbpPrice[] {
       projectTokenPrice: bn(price.projectTokenPrice).times(price.reservePrice).toNumber(),
     }
   })
+}
+
+function aggregateToHourlyData(prices: LbpPriceChartDataFragment[]): HourlyDataPoint[] {
+  const hourlyDataMap = new Map<number, HourlyDataPoint>()
+
+  prices.forEach(price => {
+    const timestamp = secondsToMilliseconds(parseInt(price.timestamp.toString()))
+    const hourStart = millisecondsToSeconds(startOfHour(timestamp).getTime())
+    const volume = parseFloat(price.volume?.toString() || '0')
+    const fees = parseFloat(price.fees?.toString() || '0')
+    const tvl = parseFloat(price.tvl?.toString() || '0')
+
+    const existing = hourlyDataMap.get(hourStart)
+
+    if (existing) {
+      existing.volume += volume
+      existing.fees += fees
+      // Use the latest TVL for the hour
+      existing.tvl = tvl
+    } else {
+      hourlyDataMap.set(hourStart, {
+        timestamp: hourStart,
+        volume,
+        fees,
+        tvl,
+      })
+    }
+  })
+
+  // Convert map to array and sort by timestamp
+  return Array.from(hourlyDataMap.values()).sort((a, b) => a.timestamp - b.timestamp)
 }
 
 export function getCurrentPrice(prices: LbpPrice[]) {

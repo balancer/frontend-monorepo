@@ -11,7 +11,7 @@ import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/g
 import { now } from '@repo/lib/shared/utils/time'
 import { isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
 import { Top10Holdings } from './Top10Holdings'
-import { LbpPoolChartsContainer } from './LbpPoolChartsContainer'
+import { LbpPoolChartsContainer } from './LbpPoolCharts/LbpPoolChartsContainer'
 import { MyPurchases } from './MyPurchases'
 import { MyTransactions } from './MyTransactions'
 import { GetFundsWarning } from './GetFundsWarning'
