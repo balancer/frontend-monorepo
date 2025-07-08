@@ -223,11 +223,13 @@ export function useReclAmmChartLogic() {
       }
 
       const priceRange = maxPriceValue - minPriceValue
-      const pricePerBar = priceRange / 58 // 58 bars in the colored section (8 orange + 42 green + 8 orange)
+      const pricePerBar = priceRange / totalGreenAndOrangeBars
       const barsFromMin = (currentPriceValue - minPriceValue) / pricePerBar
 
-      // Add the initial 10 grey bars and round to nearest bar
-      const barIndex = Math.min(Math.max(0, Math.round(barsFromMin)), 57) + 10
+      // Round to nearest bar and add the grey bars
+      const barIndex =
+        Math.min(Math.max(0, Math.round(barsFromMin)), totalGreenAndOrangeBars - 1) +
+        baseGreyBarCount
 
       return barIndex
     }
