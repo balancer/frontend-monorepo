@@ -54,7 +54,7 @@ function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
           fontSize="xl"
           gap="xs"
           href={link.href}
-          isExternal
+          isExternal={link.isExternal}
           key={link.href}
           onClick={onClick}
           prefetch
