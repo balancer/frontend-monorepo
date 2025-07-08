@@ -13,8 +13,8 @@ const networkConfig: NetworkConfig = {
   chain: GqlChain.Avalanche,
   iconPath: '/images/chains/AVALANCHE.svg',
   blockExplorer: {
-    baseUrl: 'https://snowtrace.io',
-    name: 'Snowtrace',
+    baseUrl: 'https://snowscan.xyz',
+    name: 'Snowscan',
   },
   tokens: {
     addresses: {
