@@ -141,9 +141,12 @@ export function useReclAmmChartLogic() {
       lowerMarginValue,
       upperMarginValue,
       currentPriceValue,
-      marginValue,
+      marginValue, // is a true percentage
+      isPoolWithinRange,
     } = currentChartData
 
+    let showTargetValues = true
+    let showMinMaxValues = true
     const totalGreenAndOrangeBars = 52
 
     // always have a minimum of 1 orange bar
@@ -151,6 +154,20 @@ export function useReclAmmChartLogic() {
       marginValue && marginValue < 4
         ? 1
         : Math.floor((totalGreenAndOrangeBars * (marginValue || 0)) / 100 / 2)
+
+    // if the margin is very small or very big, show only the target values or min/max values depending on the pool state
+    if (marginValue && marginValue < 4) {
+      if (reclAmmData.isPoolWithinTargetRange) {
+        showTargetValues = true
+        showMinMaxValues = false
+      } else if (isPoolWithinRange) {
+        showTargetValues = false
+        showMinMaxValues = true
+      }
+    } else if (marginValue && marginValue > 92) {
+      showTargetValues = false
+      showMinMaxValues = true
+    }
 
     const baseGreenBarCount = totalGreenAndOrangeBars - 2 * baseOrangeBarCount
     const baseGreyBarCount = 9
@@ -307,19 +324,19 @@ export function useReclAmmChartLogic() {
           show: true,
           interval: 0,
           formatter: (value: string, index: number) => {
-            if (index === baseGreyBarCount) {
+            if (showMinMaxValues && index === baseGreyBarCount) {
               return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('clpPrice', minPriceValue) : 'N/A'}}`
             }
 
-            if (baseGreenBarCount && index === baseGreyBarCount + baseOrangeBarCount) {
+            if (showTargetValues && index === baseGreyBarCount + baseOrangeBarCount) {
               return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('clpPrice', upperMarginValue) : 'N/A'}}`
             }
 
-            if (baseGreenBarCount && index === totalBars - baseGreyBarCount - baseOrangeBarCount) {
+            if (showTargetValues && index === totalBars - baseGreyBarCount - baseOrangeBarCount) {
               return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('clpPrice', lowerMarginValue) : 'N/A'}}`
             }
 
-            if (index === totalBars - baseGreyBarCount) {
+            if (showMinMaxValues && index === totalBars - baseGreyBarCount) {
               return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('clpPrice', maxPriceValue) : 'N/A'}}`
             }
 
