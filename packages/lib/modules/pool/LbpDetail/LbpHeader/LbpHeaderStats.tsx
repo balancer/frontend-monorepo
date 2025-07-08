@@ -1,7 +1,11 @@
 import { Flex, Box } from '@chakra-ui/react'
+import { usePoolStats } from '@repo/lib/modules/lbp/pool/usePoolStats'
 import { AnimatedNumber } from '@repo/lib/shared/components/other/AnimatedNumber'
 import Stat from '@repo/lib/shared/components/other/Stat'
 import { safeToNumber } from '@repo/lib/shared/utils/numbers'
+import { usePool } from '../../PoolProvider'
+import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
+import { hasSaleStarted } from '@repo/lib/modules/lbp/pool/lbp.helpers'
 
 type StatItem = {
   label: string
@@ -11,31 +15,17 @@ type StatItem = {
 const IMAGE_TRANSFORM_ARRAY = ['rotate(180deg) scale(2)', 'rotate(180deg)', 'scale(1)']
 
 export function LbpHeaderStats() {
-  const stats: StatItem[] = [
-    {
-      label: 'Funds raised',
-      value: '86400',
-    },
-    {
-      label: 'Market cap',
-      value: '6400000',
-    },
-    {
-      label: 'FDV',
-      value: '12800000',
-    },
-    {
-      label: 'TVL',
-      value: '102300',
-    },
-    {
-      label: 'Total vol',
-      value: '163300',
-    },
-    {
-      label: 'Total fees',
-      value: '3270',
-    },
+  const { pool } = usePool()
+  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const stats = usePoolStats(lbpPool)
+
+  const statItems: StatItem[] = [
+    { label: 'Funds raised', value: hasSaleStarted(lbpPool) ? stats.fundsRaised : 0 },
+    { label: 'Market cap', value: hasSaleStarted(lbpPool) ? stats.marketCap : 0 },
+    { label: 'FDV', value: hasSaleStarted(lbpPool) ? stats.fdv : 0 },
+    { label: 'TVL', value: hasSaleStarted(lbpPool) ? stats.tvl : 0 },
+    { label: 'Total vol', value: hasSaleStarted(lbpPool) ? stats.totalVolume : 0 },
+    { label: 'Total fees', value: hasSaleStarted(lbpPool) ? stats.totalFees : 0 },
   ]
 
   const formatOptions = '$0,0.00a'
@@ -48,7 +38,7 @@ export function LbpHeaderStats() {
       justify="space-between"
       mt="3"
     >
-      {stats.map((stat, index) => (
+      {statItems.map((stat, index) => (
         <Box key={index}>
           <Stat
             imageTransform={IMAGE_TRANSFORM_ARRAY[index % IMAGE_TRANSFORM_ARRAY.length]}

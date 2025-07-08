@@ -17,13 +17,8 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShiftsChart'
 import { WeightsChart } from '../../lbp/steps/sale-structure/WeightsChart'
-import {
-  differenceInDays,
-  differenceInHours,
-  isAfter,
-  isBefore,
-  secondsToMilliseconds,
-} from 'date-fns'
+import { differenceInDays, differenceInHours, secondsToMilliseconds } from 'date-fns'
+import { isSaleOngoing } from '../../lbp/pool/lbp.helpers'
 
 const TABS_LIST: ButtonGroupOption[] = [
   { value: 'weight-shifts', label: 'Weight shifts' },
@@ -126,10 +121,10 @@ function LBPWeightsChart({ pool }: { pool: Pool }) {
   const startWeight = lbpPool.projectTokenStartWeight * 100
   const endWeight = lbpPool.projectTokenEndWeight * 100
   const now = new Date()
-  const isSaleOngoing = isAfter(now, startTime) && isBefore(now, endTime)
-  const daysDiff = differenceInDays(endTime, isSaleOngoing ? now : startTime)
-  const hoursDiff = differenceInHours(endTime, isSaleOngoing ? now : startTime) - daysDiff * 24
-  const salePeriodText = isSaleOngoing
+  const daysDiff = differenceInDays(endTime, isSaleOngoing(lbpPool) ? now : startTime)
+  const hoursDiff =
+    differenceInHours(endTime, isSaleOngoing(lbpPool) ? now : startTime) - daysDiff * 24
+  const salePeriodText = isSaleOngoing(lbpPool)
     ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
     : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
 

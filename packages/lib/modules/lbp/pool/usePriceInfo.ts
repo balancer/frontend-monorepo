@@ -22,6 +22,17 @@ export type LbpPrice = {
   projectTokenPrice: number
 }
 
+export type LbpSnapshot = {
+  timestamp: Date
+  projectTokenPrice: number
+  reserveTokenPrice: number
+  cumulativeVolume: number
+  cumulativeFees: number
+  tvl: number
+  projectTokenBalance: number
+  reserveTokenBalance: number
+}
+
 export type HourlyDataPoint = {
   timestamp: number
   tvl: number
@@ -38,21 +49,27 @@ export function usePriceInfo(chain: GqlChain, poolId: Address) {
     },
   })
 
-  const prices = apiResult.data?.prices ? toLbpPrices(apiResult.data.prices) : []
+  const snapshots = apiResult.data?.prices ? toLbpSnapshots(apiResult.data.prices) : []
   const hourlyData = apiResult.data?.prices ? aggregateToHourlyData(apiResult.data.prices) : []
 
   return {
     isLoading: apiResult.loading,
-    prices,
+    snapshots,
     hourlyData,
   }
 }
 
-function toLbpPrices(apiPrices: LbpPriceChartDataFragment[]): LbpPrice[] {
+function toLbpSnapshots(apiPrices: LbpPriceChartDataFragment[]): LbpSnapshot[] {
   return apiPrices.map(price => {
     return {
       timestamp: new Date(secondsToMilliseconds(price.timestamp)),
       projectTokenPrice: bn(price.projectTokenPrice).times(price.reservePrice).toNumber(),
+      reserveTokenPrice: price.reservePrice,
+      cumulativeVolume: price.cumulativeVolume,
+      cumulativeFees: price.cumulativeFees,
+      tvl: price.tvl,
+      projectTokenBalance: price.projectTokenBalance,
+      reserveTokenBalance: price.reserveTokenBalance,
     }
   })
 }
@@ -88,23 +105,27 @@ function aggregateToHourlyData(prices: LbpPriceChartDataFragment[]): HourlyDataP
   return Array.from(hourlyDataMap.values()).sort((a, b) => a.timestamp - b.timestamp)
 }
 
-export function getCurrentPrice(prices: LbpPrice[]) {
-  if (prices.length === 0) return 0
+export function getCurrentPrice(snapshots: LbpSnapshot[]) {
+  if (snapshots.length === 0) return 0
 
   const currentTime = now()
-  if (isBefore(currentTime, prices[0].timestamp)) return prices[0].projectTokenPrice
-  if (isAfter(currentTime, prices[prices.length - 1].timestamp)) {
-    return prices[prices.length - 1].projectTokenPrice
+  if (isBefore(currentTime, snapshots[0].timestamp)) return snapshots[0].projectTokenPrice
+  if (isAfter(currentTime, snapshots[snapshots.length - 1].timestamp)) {
+    return snapshots[snapshots.length - 1].projectTokenPrice
   }
 
-  for (let i = 0; i < prices.length; i++) {
-    if (isSameHour(currentTime, prices[i].timestamp)) return prices[i].projectTokenPrice
-    if (isSameHour(currentTime, prices[i + 1].timestamp)) return prices[i + 1].projectTokenPrice
+  for (let i = 0; i < snapshots.length; i++) {
+    if (isSameHour(currentTime, snapshots[i].timestamp)) return snapshots[i].projectTokenPrice
+    if (isSameHour(currentTime, snapshots[i + 1].timestamp))
+      return snapshots[i + 1].projectTokenPrice
     if (
-      isWithinInterval(currentTime, { start: prices[i].timestamp, end: prices[i + 1].timestamp })
+      isWithinInterval(currentTime, {
+        start: snapshots[i].timestamp,
+        end: snapshots[i + 1].timestamp,
+      })
     ) {
-      return bn(prices[i].projectTokenPrice)
-        .plus(prices[i + 1].projectTokenPrice)
+      return bn(snapshots[i].projectTokenPrice)
+        .plus(snapshots[i + 1].projectTokenPrice)
         .div(2)
         .toNumber()
     }
