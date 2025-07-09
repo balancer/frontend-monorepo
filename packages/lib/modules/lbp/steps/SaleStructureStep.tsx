@@ -34,7 +34,7 @@ import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { differenceInDays, differenceInHours, format, parseISO } from 'date-fns'
+import { addHours, differenceInDays, differenceInHours, format, parseISO } from 'date-fns'
 import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
@@ -117,6 +117,7 @@ export function SaleStructureStep() {
                 control={control}
                 errors={errors}
                 label="Start date and time"
+                min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
                 name="startTime"
               />
               <DateTimeInput
