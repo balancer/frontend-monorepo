@@ -85,10 +85,14 @@ export function SaleStructureStep() {
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
   const saleStart = saleStructureData.startTime
-  const saleStartsSoon = isBefore(parseISO(saleStructureData.startTime), addDays(now(), 1))
   const saleEnd = saleStructureData.endTime
-  const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
-  const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
+  const isSaleTimeValid = !!saleStart && !!saleEnd
+
+  const saleStartsSoon = isSaleTimeValid ? isBefore(parseISO(saleStart), addDays(now(), 1)) : false
+  const daysDiff = isSaleTimeValid ? differenceInDays(parseISO(saleEnd), parseISO(saleStart)) : 0
+  const hoursDiff = isSaleTimeValid
+    ? differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
+    : 0
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
 
@@ -185,8 +189,9 @@ export function SaleStructureStep() {
                 <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
                 <AlertDescription>
                   {saleStartsSoon && 'This sale is scheduled to start soon. '}
-                  {`The LBP will fail to launch unless you seed the initial liquidity before the
-                  scheduled start time at ${format(parseISO(saleStructureData.startTime), 'h:mmaaa, d MMMM yyyy')}.`}
+                  {saleStart &&
+                    `The LBP will fail to launch unless you seed the initial liquidity before the
+                  scheduled start time at ${format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.`}
                 </AlertDescription>
               </Alert>
             </VStack>
