@@ -183,7 +183,7 @@ function clpPriceFormat(val: Numberish): string {
   if (bn(val).lt(10)) return numeral(val.toString()).format('0.00')
   if (bn(val).lt(100)) return numeral(val.toString()).format('0.0')
 
-  return numeral(val.toString()).format('0')
+  return numeral(val.toString()).format('0,0')
 }
 
 // Sums an array of numbers safely using bignumber.js.
