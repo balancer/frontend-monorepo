@@ -6,7 +6,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpPoolCharts } from './LbpPoolChartsProvider'
 
 export function LbpPriceChart() {
-  const { prices, isLoading, startTime, endTime, now, salePeriodText } = useLbpPoolCharts()
+  const { snapshots, isLoading, startTime, endTime, now, salePeriodText } = useLbpPoolCharts()
 
   return (
     <VStack>
@@ -15,7 +15,7 @@ export function LbpPriceChart() {
         endDate={endTime}
         gridLeft="7.5%"
         isLoading={isLoading}
-        prices={prices}
+        prices={snapshots}
         startDate={startTime}
       />
       <Divider />
@@ -45,24 +45,24 @@ export function LbpPriceChart() {
 }
 
 export function PriceInfo() {
-  const { now: currentTime, currentPrice, hasPrices, prices } = useLbpPoolCharts()
+  const { now: currentTime, currentPrice, hasSnapshots, snapshots } = useLbpPoolCharts()
 
   return (
     <VStack alignItems="end" spacing="0.5">
       <Heading fontWeight="bold" size="h5">
         {`$${fNum('fiat', currentPrice, { forceThreeDecimals: true })}`}
       </Heading>
-      {hasPrices && isBefore(currentTime, prices[0].timestamp) ? (
+      {hasSnapshots && isBefore(currentTime, snapshots[0].timestamp) ? (
         <Text color="font.secondary" fontSize="12px">
           Start price
         </Text>
-      ) : hasPrices && isAfter(currentTime, prices[prices.length - 1].timestamp) ? (
+      ) : hasSnapshots && isAfter(currentTime, snapshots[snapshots.length - 1].timestamp) ? (
         <Text color="font.secondary" fontSize="12px">
           End price
         </Text>
-      ) : hasPrices ? (
+      ) : hasSnapshots ? (
         <Text color="font.error" fontSize="12px">
-          {`${percentageChange(max(prices), currentPrice)}%`}
+          {`${percentageChange(max(snapshots), currentPrice)}%`}
         </Text>
       ) : (
         <Text color="font.secondary" fontSize="12px">

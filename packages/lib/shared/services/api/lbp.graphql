@@ -13,6 +13,10 @@ fragment LBPPriceChartData on LBPPriceChartData {
   timestamp
   tvl
   volume
+  cumulativeVolume
+  cumulativeFees
+  projectTokenBalance
+  reserveTokenBalance
 }
 
 query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
