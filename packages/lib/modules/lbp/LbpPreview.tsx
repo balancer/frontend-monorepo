@@ -39,14 +39,15 @@ export function LbpPreview() {
         cardProps={{
           w: 'full',
           overflow: 'hidden',
+          rounded: 'xl',
         }}
       >
-        <VStack align="start" p="lg" spacing="lg" w="full">
+        <VStack align="start" p="lg" spacing="md" w="full">
           {!isLastStep && (
             <>
-              <Flex w="full">
+              <Flex alignItems="center" w="full">
                 <Heading color="font.maxContrast" size="md">
-                  LBP Preview
+                  LBP preview
                 </Heading>
 
                 <Spacer />
@@ -56,6 +57,7 @@ export function LbpPreview() {
                   color="font.link"
                   onClick={onOpen}
                   position="relative"
+                  right="-8px"
                   top="4px"
                   variant="ghost"
                 >

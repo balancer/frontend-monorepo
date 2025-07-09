@@ -12,7 +12,7 @@ export default function LBPCreatePage() {
       <Stack
         direction={{ base: 'column', xl: 'row' }}
         justifyContent="stretch"
-        spacing="md"
+        spacing="xl"
         w="full"
       >
         <LbpForm />

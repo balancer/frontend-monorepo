@@ -106,7 +106,7 @@ export function SaleStructureStep() {
           Launch token details
         </Heading>
 
-        <VStack align="start" spacing="md" w="full">
+        <VStack align="start" spacing="lg" w="full">
           <NetworkSelectInput chains={supportedChains} control={control} />
           <LaunchTokenAddressInput
             chainId={selectedChain}
