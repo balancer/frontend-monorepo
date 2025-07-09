@@ -11,6 +11,9 @@ import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.util
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useBreakpointValue } from '@chakra-ui/react'
 
+const GREEN = '#93F6D2'
+const ORANGE = 'rgb(253, 186, 116)'
+
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
 const ReclAmmChartContext = createContext<ReclAmmChartContextType | null>(null)
@@ -259,8 +262,10 @@ export function useReclAmmChartLogic() {
           return {
             value: segment.value,
             itemStyle: {
-              color: isCurrentPriceBar
-                ? '#93F6D2' // Solid color for current price bar
+              color: isCurrentPriceBar // Solid color for current price bar
+                ? isPoolWithinRange
+                  ? ORANGE
+                  : GREEN
                 : getGradientColor(segment.gradientColors),
               borderRadius: segment.borderRadius,
             },
@@ -289,13 +294,13 @@ export function useReclAmmChartLogic() {
       },
       current: {
         ...baseRichProps,
-        color: '#63F2BE',
+        color: isPoolWithinRange ? ORANGE : GREEN,
       },
       currentTriangle: {
         ...baseRichProps,
         fontSize: 10,
         lineHeight: 12,
-        color: '#63F2BE',
+        color: isPoolWithinRange ? ORANGE : GREEN,
       },
       withRightPadding: {
         ...baseRichProps,
