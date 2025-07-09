@@ -159,6 +159,8 @@ export function useReclAmmChartLogic() {
       isPoolWithinRange,
     } = currentChartData
 
+    const isPriceInTargetRange = isPoolWithinRange && !reclAmmData.isPoolWithinTargetRange
+
     let showTargetValues = true
     let showMinMaxValues = true
     const totalGreenAndOrangeBars = 52
@@ -263,7 +265,7 @@ export function useReclAmmChartLogic() {
             value: segment.value,
             itemStyle: {
               color: isCurrentPriceBar // Solid color for current price bar
-                ? isPoolWithinRange
+                ? isPriceInTargetRange
                   ? ORANGE
                   : GREEN
                 : getGradientColor(segment.gradientColors),
@@ -294,13 +296,13 @@ export function useReclAmmChartLogic() {
       },
       current: {
         ...baseRichProps,
-        color: isPoolWithinRange ? ORANGE : GREEN,
+        color: isPriceInTargetRange ? ORANGE : GREEN,
       },
       currentTriangle: {
         ...baseRichProps,
         fontSize: 10,
         lineHeight: 12,
-        color: isPoolWithinRange ? ORANGE : GREEN,
+        color: isPriceInTargetRange ? ORANGE : GREEN,
       },
       withRightPadding: {
         ...baseRichProps,
