@@ -189,7 +189,7 @@ export function PriceImpactAccordion({
               variant="subSection"
             >
               <CardBody>
-                <Text color="font.maxContrast" fontWeight="bold" mb="sm">
+                <Text color="font.maxContrast" fontWeight="bold" mb="xs">
                   Acknowledge potential loss to continue
                 </Text>
                 {isUnknownPriceImpact ? (
@@ -201,8 +201,8 @@ export function PriceImpactAccordion({
                 ) : (
                   <Text color="font.maxContrast" fontSize="sm">
                     I accept the potential high losses from this transaction of{' '}
-                    {priceImpact && fNum('priceImpact', priceImpact)}. I understand that this loss
-                    may be due to factors like high price impact and/or high swap fees.
+                    {priceImpact && fNum('priceImpact', priceImpact)}, which may be due to factors
+                    like high price impact and/or high swap fees.
                   </Text>
                 )}
               </CardBody>
