@@ -3,7 +3,7 @@ import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
-import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
+import { calculateLowerMargin, calculateUpperMargin, computeCenteredness } from './reclAmmMath'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
@@ -75,6 +75,8 @@ export function useReclAmmChartLogic() {
       bn(balanceB).plus(virtualBalanceB)
     )
 
+    const rBalanceA = Number(balanceA)
+    const rBalanceB = Number(balanceB)
     const vBalanceA = Number(virtualBalanceA)
     const vBalanceB = Number(virtualBalanceB)
     const marginValue = Number(margin)
@@ -123,6 +125,13 @@ export function useReclAmmChartLogic() {
       (currentPriceValue > minPriceValue && currentPriceValue < lowerMarginValue) ||
       (currentPriceValue > upperMarginValue && currentPriceValue < maxPriceValue)
 
+    const { poolCenteredness, isPoolAboveCenter } = computeCenteredness({
+      balanceA: rBalanceA,
+      balanceB: rBalanceB,
+      virtualBalanceA: vBalanceA,
+      virtualBalanceB: vBalanceB,
+    })
+
     return {
       maxPriceValue,
       minPriceValue,
@@ -131,6 +140,8 @@ export function useReclAmmChartLogic() {
       currentPriceValue,
       isPoolWithinRange,
       marginValue,
+      poolCenteredness,
+      isPoolAboveCenter,
     }
   }, [reclAmmData])
 
@@ -214,54 +225,15 @@ export function useReclAmmChartLogic() {
 
     // Calculate which bar the current price corresponds to
     const getCurrentPriceBarIndex = () => {
-      const {
-        minPriceValue,
-        maxPriceValue,
-        lowerMarginValue,
-        upperMarginValue,
-        currentPriceValue,
-      } = currentChartData
+      const { poolCenteredness = 0, isPoolAboveCenter = false } = currentChartData || {}
 
-      if (
-        minPriceValue === undefined ||
-        maxPriceValue === undefined ||
-        lowerMarginValue === undefined ||
-        upperMarginValue === undefined ||
-        currentPriceValue === undefined
-      ) {
-        return 50 // Default to middle if values are not available
+      const totalGreenAndOrangeBars = 2 * baseOrangeBarCount + baseGreenBarCount
+
+      if (isPoolAboveCenter) {
+        return Math.floor(poolCenteredness * totalGreenAndOrangeBars) + baseGreyBarCount
+      } else {
+        return Math.floor(((2 - poolCenteredness) / 2) * totalGreenAndOrangeBars) + baseGreyBarCount
       }
-
-      let min = 0
-      let max = 0
-      let totalBars = 1
-      let barsToAdd = 0
-
-      if (currentPriceValue > minPriceValue && currentPriceValue < upperMarginValue) {
-        min = minPriceValue
-        max = upperMarginValue
-        totalBars = baseOrangeBarCount
-        barsToAdd = baseGreyBarCount
-      } else if (currentPriceValue > upperMarginValue && currentPriceValue < lowerMarginValue) {
-        min = upperMarginValue
-        max = lowerMarginValue
-        totalBars = baseGreenBarCount
-        barsToAdd = baseGreyBarCount + baseOrangeBarCount
-      } else if (currentPriceValue > lowerMarginValue && currentPriceValue < maxPriceValue) {
-        min = lowerMarginValue
-        max = maxPriceValue
-        totalBars = baseOrangeBarCount
-        barsToAdd = baseGreyBarCount + baseOrangeBarCount + baseGreenBarCount
-      }
-
-      const priceRange = max - min
-      const pricePerBar = priceRange / totalBars
-      const barsFromMin = (currentPriceValue - min) / pricePerBar
-
-      // Round to nearest bar and add the grey bars
-      const barIndex = Math.min(Math.max(0, Math.round(barsFromMin)), totalBars - 1) + barsToAdd
-
-      return barIndex
     }
 
     const currentPriceBarIndex = getCurrentPriceBarIndex()
