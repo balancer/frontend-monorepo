@@ -17,12 +17,14 @@ import {
   AlertDescription,
   CardFooter,
   CardBody,
+  useColorModeValue,
   Link,
 } from '@chakra-ui/react'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
+import { CheckIcon } from '@chakra-ui/icons'
 
 interface PriceImpactAccordionProps {
   setNeedsToAcceptPIRisk: (value: boolean) => void
@@ -68,10 +70,12 @@ export function PriceImpactAccordion({
             unfavorable exchange rate. Also, the proposed route may have high swap fees.
             <br />
             <br />
-            To reduce price impact, try lowering your swap size or try this swap on an alternate
-            exchange like{' '}
+            To reduce price impact, lower your swap size or try{' '}
             <Link
-              color="font.dark"
+              _hover={{
+                color: '#fff',
+              }}
+              color="#000"
               fontSize="sm"
               href="https://swap.cow.fi/"
               isExternal
@@ -116,6 +120,8 @@ export function PriceImpactAccordion({
     }
   }
 
+  const borderColor = useColorModeValue('red.300', 'red.400')
+
   return (
     <Box w="full">
       <Accordion allowToggle variant="button" w="full">
@@ -147,9 +153,9 @@ export function PriceImpactAccordion({
       </Accordion>
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
-          <VStack align="start" mt="md" spacing="md" w="full">
+          <VStack align="start" gap="0" mt="md" spacing="0" w="full">
             {!avoidPriceImpactAlert && (
-              <Alert status="error">
+              <Alert roundedBottom="0" roundedTop="lg" status="error">
                 <PriceImpactIcon
                   alignSelf="start"
                   color="font.dark"
@@ -164,7 +170,7 @@ export function PriceImpactAccordion({
                       : `${getPriceImpactTitle(action)}`}
                   </AlertTitle>
                   <AlertDescription>
-                    <Text as="div" color="font.dark" fontSize="sm" whiteSpace="pre-line">
+                    <Text as="div" color="#000" fontSize="sm" whiteSpace="pre-line">
                       {isUnknownPriceImpact
                         ? 'The price impact cannot be calculated. Only proceed if you know exactly what you are doing.'
                         : getPriceImpactMessage(action)}
@@ -173,35 +179,54 @@ export function PriceImpactAccordion({
                 </Box>
               </Alert>
             )}
-            <Card variant="subSection">
+            <Card
+              bg="rgba(255,0,0,0.04)"
+              border="1px solid"
+              borderColor={borderColor}
+              py="md"
+              roundedBottom="lg"
+              roundedTop="0"
+              variant="subSection"
+            >
               <CardBody>
-                <Text fontWeight="bold" mb="sm">
+                <Text color="font.maxContrast" fontWeight="bold" mb="sm">
                   Acknowledge potential loss to continue
                 </Text>
                 {isUnknownPriceImpact ? (
-                  <Text color="grayText" fontSize="sm">
+                  <Text color="font.maxContrast" fontSize="sm">
                     I accept that the potential loss from this transaction is unknown. I understand
-                    that proceeding may result in losses if my transaction moves the market price
-                    unfavorably based on the current depth of the market.
+                    that proceeding may result in losses due to factors like high price impact
+                    and/or high swap fees.
                   </Text>
                 ) : (
-                  <Text color="grayText" fontSize="sm">
+                  <Text color="font.maxContrast" fontSize="sm">
                     I accept the potential high losses from this transaction of{' '}
-                    {priceImpact && fNum('priceImpact', priceImpact)}. I understand that this may be
-                    due to high price impact caused by the size of my transaction moving the market
-                    price unfavorably based on the current depth of the market.
+                    {priceImpact && fNum('priceImpact', priceImpact)}. I understand that this loss
+                    may be due to factors like high price impact and/or high swap fees.
                   </Text>
                 )}
               </CardBody>
               <CardFooter pt="md">
                 {!acceptPriceImpactRisk ? (
-                  <Button onClick={handleClick} variant="secondary" w="full">
+                  <Button onClick={handleClick} variant="maxContrast" w="full">
                     I accept {isUnknownPriceImpact ? 'unknown' : 'high'} potential losses
                   </Button>
                 ) : (
-                  <Button isDisabled variant="secondary" w="full">
-                    {isUnknownPriceImpact ? 'Unknown' : 'High'} potential losses accepted
-                  </Button>
+                  <HStack
+                    bg="background.level2"
+                    border="1px solid"
+                    borderColor="border.base"
+                    gap="md"
+                    height="40px"
+                    px="md"
+                    rounded="lg"
+                    w="full"
+                  >
+                    <CheckIcon color="font.maxContrast" />
+                    <Text color="font.maxContrast" fontSize="sm" fontWeight="bold">
+                      {isUnknownPriceImpact ? 'Unknown' : 'High'} potential losses accepted
+                    </Text>
+                  </HStack>
                 )}
               </CardFooter>
             </Card>
