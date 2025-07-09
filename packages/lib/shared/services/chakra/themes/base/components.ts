@@ -490,6 +490,14 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             shadow: 'none',
           },
         },
+        maxContrast: {
+          bg: 'font.maxContrast',
+          color: 'font.maxContrastOpposite',
+          shadow: '2xl',
+          _hover: {
+            shadow: '0',
+          },
+        },
         gold: {
           background: 'background.gold',
           color: 'white',
@@ -1040,7 +1048,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           letterSpacing: '-0.35px',
           fontSize: ['sm', 'md'],
           lineHeight: '1.3',
-          color: 'font.dark',
+          color: '#000',
           mr: '0',
           pb: 'xxs',
           button: {
@@ -1070,7 +1078,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         description: {
           letterSpacing: '-0.25px',
           fontWeight: 'medium',
-          color: 'font.dark',
+          color: '#000',
           lineHeight: '1.2',
           textWrap: 'pretty',
         },
