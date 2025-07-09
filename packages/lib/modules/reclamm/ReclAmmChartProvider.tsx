@@ -214,24 +214,52 @@ export function useReclAmmChartLogic() {
 
     // Calculate which bar the current price corresponds to
     const getCurrentPriceBarIndex = () => {
-      const { minPriceValue, maxPriceValue, currentPriceValue } = currentChartData
+      const {
+        minPriceValue,
+        maxPriceValue,
+        lowerMarginValue,
+        upperMarginValue,
+        currentPriceValue,
+      } = currentChartData
 
       if (
         minPriceValue === undefined ||
         maxPriceValue === undefined ||
+        lowerMarginValue === undefined ||
+        upperMarginValue === undefined ||
         currentPriceValue === undefined
       ) {
         return 50 // Default to middle if values are not available
       }
 
-      const priceRange = maxPriceValue - minPriceValue
-      const pricePerBar = priceRange / totalGreenAndOrangeBars
-      const barsFromMin = (currentPriceValue - minPriceValue) / pricePerBar
+      let min = 0
+      let max = 0
+      let totalBars = 1
+      let barsToAdd = 0
+
+      if (currentPriceValue > minPriceValue && currentPriceValue < upperMarginValue) {
+        min = minPriceValue
+        max = upperMarginValue
+        totalBars = baseOrangeBarCount
+        barsToAdd = baseGreyBarCount
+      } else if (currentPriceValue > upperMarginValue && currentPriceValue < lowerMarginValue) {
+        min = upperMarginValue
+        max = lowerMarginValue
+        totalBars = baseGreenBarCount
+        barsToAdd = baseGreyBarCount + baseOrangeBarCount
+      } else if (currentPriceValue > lowerMarginValue && currentPriceValue < maxPriceValue) {
+        min = lowerMarginValue
+        max = maxPriceValue
+        totalBars = baseOrangeBarCount
+        barsToAdd = baseGreyBarCount + baseOrangeBarCount + baseGreenBarCount
+      }
+
+      const priceRange = max - min
+      const pricePerBar = priceRange / totalBars
+      const barsFromMin = (currentPriceValue - min) / pricePerBar
 
       // Round to nearest bar and add the grey bars
-      const barIndex =
-        Math.min(Math.max(0, Math.round(barsFromMin)), totalGreenAndOrangeBars - 1) +
-        baseGreyBarCount
+      const barIndex = Math.min(Math.max(0, Math.round(barsFromMin)), totalBars - 1) + barsToAdd
 
       return barIndex
     }
