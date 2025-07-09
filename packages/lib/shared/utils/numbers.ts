@@ -176,9 +176,12 @@ function boostFormat(val: Numberish): string {
 }
 
 function clpPriceFormat(val: Numberish): string {
-  if (bn(val).lt(0.001)) return numeral(val.toString()).format('0.00000')
-  if (bn(val).lt(10)) return numeral(val.toString()).format('0.0000')
-  if (bn(val).lt(100)) return numeral(val.toString()).format('0.00')
+  if (bn(val).lt(0.001)) return numeral(val.toString()).format('0.000000')
+  if (bn(val).lt(0.01)) return numeral(val.toString()).format('0.00000')
+  if (bn(val).lt(0.1)) return numeral(val.toString()).format('0.0000')
+  if (bn(val).lt(1)) return numeral(val.toString()).format('0.000')
+  if (bn(val).lt(10)) return numeral(val.toString()).format('0.00')
+  if (bn(val).lt(100)) return numeral(val.toString()).format('0.0')
 
   return numeral(val.toString()).format('0')
 }
