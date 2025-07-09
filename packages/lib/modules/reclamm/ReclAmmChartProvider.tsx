@@ -228,12 +228,15 @@ export function useReclAmmChartLogic() {
       const { poolCenteredness = 0, isPoolAboveCenter = false } = currentChartData || {}
 
       const totalGreenAndOrangeBars = 2 * baseOrangeBarCount + baseGreenBarCount
+      let barIndex = 0
 
       if (isPoolAboveCenter) {
-        return Math.floor((poolCenteredness / 2) * totalGreenAndOrangeBars) + baseGreyBarCount
+        barIndex = Math.floor((poolCenteredness / 2) * totalGreenAndOrangeBars)
       } else {
-        return Math.floor(((2 - poolCenteredness) / 2) * totalGreenAndOrangeBars) + baseGreyBarCount
+        barIndex = Math.floor(((2 - poolCenteredness) / 2) * totalGreenAndOrangeBars)
       }
+
+      return (isReversed ? totalGreenAndOrangeBars - barIndex : barIndex) + baseGreyBarCount
     }
 
     const currentPriceBarIndex = getCurrentPriceBarIndex()
