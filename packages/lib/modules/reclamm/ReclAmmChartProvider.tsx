@@ -230,7 +230,7 @@ export function useReclAmmChartLogic() {
       const totalGreenAndOrangeBars = 2 * baseOrangeBarCount + baseGreenBarCount
 
       if (isPoolAboveCenter) {
-        return Math.floor(poolCenteredness * totalGreenAndOrangeBars) + baseGreyBarCount
+        return Math.floor((poolCenteredness / 2) * totalGreenAndOrangeBars) + baseGreyBarCount
       } else {
         return Math.floor(((2 - poolCenteredness) / 2) * totalGreenAndOrangeBars) + baseGreyBarCount
       }
