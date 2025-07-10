@@ -5,6 +5,9 @@ import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.t
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
 import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
+import { zeroAddress } from 'viem'
+
+const NOT_USED = zeroAddress
 
 const networkConfig: NetworkConfig = {
   chainId: hyperEvm.id,
@@ -18,7 +21,7 @@ const networkConfig: NetworkConfig = {
   },
   tokens: {
     addresses: {
-      bal: '0x0000000000000000000000000000000000000000',
+      bal: zeroAddress,
       wNativeAsset: '0x5555555555555555555555555555555555555555',
     },
     nativeAsset: {
@@ -38,17 +41,17 @@ const networkConfig: NetworkConfig = {
     },
   },
   contracts: {
-    multicall2: '0x0000000000000000000000000000000000000000',
+    multicall2: NOT_USED,
     multicall3: '0xcA11bde05977b3631167028862bE2a173976CA11',
     balancer: {
-      vaultV2: '0x0000000000000000000000000000000000000000',
+      vaultV2: NOT_USED,
       vaultV3: balancerV3Contracts.Vault[hyperEvm.id],
-      relayerV6: '0x0000000000000000000000000000000000000000',
-      minter: '0x0000000000000000000000000000000000000000',
+      relayerV6: NOT_USED,
+      minter: NOT_USED,
       router: balancerV3Contracts.Router[hyperEvm.id],
       compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[hyperEvm.id],
     },
-    veDelegationProxy: '0x0000000000000000000000000000000000000000',
+    veDelegationProxy: NOT_USED,
     permit2: PERMIT2[hyperEvm.id],
   },
   pools: convertHexToLowerCase({
