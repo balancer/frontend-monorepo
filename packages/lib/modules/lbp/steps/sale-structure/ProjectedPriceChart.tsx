@@ -1,11 +1,14 @@
-import { addHours, differenceInDays, format, isAfter, isBefore } from 'date-fns'
+import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
-import { Stack, Text } from '@chakra-ui/react'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { LbpPrice } from '../../pool/usePriceInfo'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { Skeleton, Stack, Text, useTheme as useChakraTheme } from '@chakra-ui/react'
+import { useTheme as useNextTheme } from 'next-themes'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { dividePrices, range } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
 type Props = {
   startDate: Date
@@ -13,10 +16,25 @@ type Props = {
   onPriceChange?: (prices: LbpPrice[]) => void
   prices: LbpPrice[]
   cutTime?: Date
+  isLoading?: boolean
+  gridLeft?: string
 }
 
-export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices, cutTime }: Props) {
+export function ProjectedPriceChart({
+  startDate,
+  endDate,
+  onPriceChange,
+  prices,
+  cutTime,
+  isLoading,
+  gridLeft,
+}: Props) {
+  const { toCurrency } = useCurrency()
+  const theme = useChakraTheme()
+  const { theme: nextTheme } = useNextTheme()
   const { isMobile } = useBreakpoints()
+
+  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -27,6 +45,8 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
 
   const chartInfo: EChartsOption = {
     grid: {
+      left: gridLeft || '10%',
+      right: '4%',
       top: '10%',
       bottom: '10%',
       containLabel: isMobile,
@@ -45,6 +65,8 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
           const daysDiff = differenceInDays(new Date(value), startDate)
           return `Day ${daysDiff}`
         },
+        color: theme.semanticTokens.colors.font.primary[colorMode],
+        opacity: 0.5,
       },
     },
     yAxis: {
@@ -55,19 +77,18 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
       axisTick: { show: false },
       axisLabel: {
         formatter: (value: number) => {
-          return `$${value}`
+          return toCurrency(value)
         },
+        color: theme.semanticTokens.colors.font.primary[colorMode],
+        opacity: 0.5,
       },
     },
     series: [
-      buildMarkline('top-markline', startDate, endDate, priceRange.max),
-      buildMarkline('middle-markline', startDate, endDate, priceRange.max / 2),
-      buildMarkline('bottom-markline', startDate, endDate, 0),
       {
         id: 'launch-token-price',
         name: '',
-        type: 'line' as const,
-        data: priceData.data,
+        type: 'line',
+        data: prices.map(item => [item.timestamp, item.projectTokenPrice]),
         lineStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
             { offset: 0, color: '#B3AEF5' },
@@ -76,28 +97,41 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
             { offset: 1, color: '#EAA879' },
           ]),
           width: 2,
-          join: 'round' as const,
-          cap: 'round' as const,
+          join: 'round',
+          cap: 'round',
         },
         showSymbol: false,
+        markLine: {
+          silent: true,
+          symbol: 'none',
+          data: [
+            { yAxis: priceRange.max },
+            { yAxis: 0 },
+            {
+              yAxis: priceRange.max / 2,
+            },
+          ],
+          lineStyle: {
+            type: 'dashed',
+            color: 'grey',
+            width: 1,
+          },
+          label: {
+            show: false,
+          },
+        },
       },
       {
         id: 'launch-token-price-after-cut-time',
         name: '',
-        type: 'line' as const,
+        type: 'line',
         data: priceData.dataAfterCutTime,
         lineStyle: {
           type: [2, 3],
-          color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-            { offset: 0, color: '#B3AEF5' },
-            { offset: 0.33, color: '#D7CBE7' },
-            { offset: 0.66, color: '#E5C8C8' },
-            { offset: 1, color: '#EAA879' },
-          ]),
           width: 2,
-          join: 'round' as const,
-          cap: 'round' as const,
+          color: 'rgb(63, 70, 80)', //TODO: update for light theme
         },
+        symbol: 'none',
         showSymbol: false,
       },
     ],
@@ -118,8 +152,8 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
         color: 'grey',
         type: 'dashed',
         width: 1,
-        cap: 'round' as const,
-        join: 'round' as const,
+        cap: 'round',
+        join: 'round',
       },
       label: {
         show: true,
@@ -152,83 +186,13 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
     })
   }
 
-  return prices.length > 0 ? (
+  return isLoading ? (
+    <Skeleton h="280px" w="full" />
+  ) : prices.length > 0 ? (
     <ReactECharts option={chartInfo} style={{ height: '280px', width: '100%' }} />
   ) : (
-    <Stack alignItems="center" h="full" justifyContent="center">
+    <Stack alignItems="center" h="280px" justifyContent="center">
       <Text fontSize="3xl">Missing data</Text>
     </Stack>
   )
-}
-
-export function interpolatePrices(
-  startWeight: number,
-  endWeight: number,
-  startDate: Date,
-  endDate: Date,
-  launchTokenSeed: number,
-  collateralTokenSeed: number,
-  collateralTokenPrice: number
-): LbpPrice[] {
-  const startTimestamp = bn(startDate.getTime())
-  const endTimestamp = bn(endDate.getTime())
-  const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
-  const interpolateLaunchTokenWeight = (timestamp: BigNumber) =>
-    bn(startWeight)
-      .plus(slope.times(timestamp.minus(startTimestamp)))
-      .toNumber()
-
-  const interpolatePrice = (timestamp: BigNumber) => {
-    const launchTokenWeight = interpolateLaunchTokenWeight(timestamp)
-    const collateralTokenWeight = 100 - launchTokenWeight
-    const spotPrice = bn(collateralTokenSeed)
-      .div(collateralTokenWeight)
-      .div(bn(launchTokenSeed).div(launchTokenWeight))
-
-    return spotPrice.times(collateralTokenPrice).toNumber()
-  }
-
-  const data = []
-
-  let currentPoint = startDate
-  while (addHours(currentPoint, 1) < endDate) {
-    const currentTimestamp = bn(currentPoint.getTime())
-    data.push({ timestamp: currentPoint, projectTokenPrice: interpolatePrice(currentTimestamp) })
-    currentPoint = addHours(currentPoint, 1)
-  }
-
-  data.push({ timestamp: endDate, projectTokenPrice: interpolatePrice(endTimestamp) })
-
-  return data
-}
-
-function range(values: number[]) {
-  return {
-    min: Math.min(...values),
-    max: Math.max(...values),
-  }
-}
-
-function dividePrices(
-  prices: LbpPrice[],
-  cutTime: Date | undefined
-): { data: number[][]; dataAfterCutTime: number[][] } {
-  const data: number[][] = []
-  const dataAfterCutTime: number[][] = []
-
-  prices.forEach(price => {
-    if (cutTime && isBefore(price.timestamp, cutTime)) {
-      data.push([price.timestamp.getTime(), price.projectTokenPrice])
-    } else {
-      dataAfterCutTime.push([price.timestamp.getTime(), price.projectTokenPrice])
-    }
-  })
-
-  if (cutTime && data.length > 0 && dataAfterCutTime.length > 0) {
-    const cutTimePrice = (data[data.length - 1][1] + dataAfterCutTime[0][1]) / 2
-    data.push([cutTime.getTime(), cutTimePrice])
-    dataAfterCutTime.unshift([cutTime.getTime(), cutTimePrice])
-  }
-
-  return { data, dataAfterCutTime }
 }

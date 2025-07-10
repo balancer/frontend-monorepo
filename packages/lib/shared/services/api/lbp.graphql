@@ -4,17 +4,23 @@ mutation CreateLBP($input: CreateLBPInput!) {
 
 fragment LBPPriceChartData on LBPPriceChartData {
   buyVolume
+  fees
   intervalTimestamp # deprecated
   projectTokenPrice # in reserve token
   reservePrice # in USD
   sellVolume
   swapCount
   timestamp
+  tvl
   volume
+  cumulativeVolume
+  cumulativeFees
+  projectTokenBalance
+  reserveTokenBalance
 }
 
-query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!) {
-  prices: lbpPriceChart(chain: $chain, id: $poolId) {
+query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
+  prices: lbpPriceChart(chain: $chain, id: $poolId, dataPoints: $dataPoints) {
     ...LBPPriceChartData
   }
 }

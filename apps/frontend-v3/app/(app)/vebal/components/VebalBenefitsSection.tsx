@@ -1,4 +1,4 @@
-import { SimpleGrid, Flex, Box, Heading, Stack, Text, Center, useColorMode } from '@chakra-ui/react'
+import { SimpleGrid, Flex, Box, Heading, Stack, Text } from '@chakra-ui/react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { VebalBenefitsVoteIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsVoteIcon'
 import { VebalBenefitsShareIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsShareIcon'
@@ -6,9 +6,9 @@ import { VebalBenefitsBribesIcon } from '@repo/lib/shared/components/icons/vebal
 import { VebalBenefitsSparklesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSparklesIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { SparkleIconWrapper } from '@repo/lib/shared/components/animations/SparkleIconWrapper'
+import { StoneIcon } from '@repo/lib/shared/components/StoneIcon'
 
 export function VebalBenefitsSection() {
-  const { colorMode } = useColorMode()
   const benefits = [
     {
       icon: (
@@ -29,6 +29,7 @@ export function VebalBenefitsSection() {
       title: 'Share protocol revenue',
       description:
         'veBAL holders earn a share of protocol revenue in proportion to their holdings.',
+      transformBackground: 'rotate(90deg)',
     },
     {
       icon: (
@@ -39,6 +40,7 @@ export function VebalBenefitsSection() {
       title: 'Earn weekly voting incentives',
       description:
         "veBAL holders can earn lucrative 'bribes' from 3rd parties for voting for their pools.",
+      transformBackground: 'rotate(180deg)',
     },
     {
       icon: (
@@ -49,6 +51,7 @@ export function VebalBenefitsSection() {
       title: 'Boost liquidity mining yield',
       description:
         'Liquidity Providers with veBAL can get up to a 2.5x boost on BAL liquidity incentives.',
+      transformBackground: 'rotate(-90deg)',
     },
   ]
 
@@ -134,47 +137,11 @@ export function VebalBenefitsSection() {
                   flexShrink={0}
                   justifyContent="center"
                 >
-                  <Box rounded="full" shadow="2xl">
-                    <Box rounded="full" shadow="md">
-                      <Box
-                        alignItems="center"
-                        color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
-                        display="flex"
-                        fontSize="xs"
-                        fontWeight="normal"
-                        h={{ base: 16, lg: 20, xl: 24 }}
-                        overflow="hidden"
-                        rounded="full"
-                        shadow="innerRockShadowSm"
-                        w={{ base: 16, lg: 20, xl: 24 }}
-                      >
-                        <Box
-                          h={{ base: 16, lg: 20, xl: 24 }}
-                          overflow="hidden"
-                          position="absolute"
-                          rounded="full"
-                          w={{ base: 16, lg: 20, xl: 24 }}
-                          zIndex="-1"
-                        >
-                          <Picture
-                            altText="Rock texture"
-                            defaultImgType="jpg"
-                            directory="/images/homepage/"
-                            height={24}
-                            imgAvif
-                            imgAvifDark
-                            imgJpg
-                            imgJpgDark
-                            imgName="stone"
-                            width={24}
-                          />
-                        </Box>
-                        <Center h="full" w="full">
-                          {benefit.icon}
-                        </Center>
-                      </Box>
-                    </Box>
-                  </Box>
+                  <StoneIcon
+                    icon={benefit.icon}
+                    sparkleSize={41}
+                    transformBackground={benefit.transformBackground}
+                  />
                 </Flex>
                 <Box>
                   <Heading

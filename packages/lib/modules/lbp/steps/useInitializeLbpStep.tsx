@@ -16,6 +16,7 @@ import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { useLocalStorage } from 'usehooks-ts'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
 
 export const initializeLbpStepId = 'initialize-lbp'
 
@@ -50,7 +51,7 @@ export function useInitializeLbpStep({
     rpcUrl,
     poolAddress: poolAddress as Address,
     poolType: PoolType.LiquidityBootstrapping,
-    enabled: isStepActivated && !isPoolInitialized,
+    enabled: isStepActivated && !isPoolInitialized && !!poolAddress,
     initPoolInput,
   })
 
@@ -85,6 +86,25 @@ export function useInitializeLbpStep({
           />
         )
       },
+      renderBatchAction: (currentStep: TransactionStep) => {
+        return (
+          <TransactionBatchButton
+            chainId={initPoolInput.chainId}
+            currentStep={currentStep}
+            id={initializeLbpStepId}
+            labels={labels}
+            onTransactionChange={setTransaction}
+          />
+        )
+      },
+      isBatchEnd: true,
+      batchableTxCall: buildCallDataQuery.data
+        ? {
+            data: buildCallDataQuery.data.data,
+            to: buildCallDataQuery.data.to,
+            value: buildCallDataQuery.data.value,
+          }
+        : undefined,
     }),
     /* eslint-disable react-hooks/exhaustive-deps */
     [transaction, labels, buildCallDataQuery.data, isPoolInitialized]

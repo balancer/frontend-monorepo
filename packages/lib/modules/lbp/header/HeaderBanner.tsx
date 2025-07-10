@@ -3,6 +3,9 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LearnMoreModal } from './LearnMoreModal'
 import { FeatureLink } from './FeatureLink'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
+import { LbpBenefitsScalesIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsScalesIcon'
+import { LbpBenefitsChartIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsChartIcon'
+import { LbpBenefitsLightningIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsLightningIcon'
 
 export function HeaderBanner() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -32,25 +35,33 @@ export function HeaderBanner() {
         cardProps={{
           w: 'full',
           overflow: 'hidden',
+          rounded: 'xl',
+          mb: 'xl',
         }}
       >
         <HStack
           alignItems={{ base: 'start', md: 'center' }}
-          flexDirection={{ base: 'column', md: 'row' }}
+          flexDirection={{ base: 'column', lg: 'row' }}
           justifyContent={{ base: 'start', lg: 'space-between' }}
-          p="8"
-          spacing={{ base: '40px', lg: undefined }}
+          p={{ base: 'lg', lg: 'xl' }}
+          spacing={{ base: 'md', lg: undefined }}
           w="full"
         >
-          <VStack pt="sm" spacing="30px" w={{ base: 'full', lg: undefined }}>
+          <VStack
+            alignItems="start"
+            pt="sm"
+            spacing="30px"
+            w={{ base: 'full', lg: undefined }}
+            zIndex={1}
+          >
             <VStack alignItems="start" spacing="ms">
               <Box maxW="290px">
-                <Heading as="h2" size="lg" sx={{ textWrap: 'nowrap' }} variant="special">
+                <Heading as="h1" size="lg" sx={{ textWrap: 'nowrap' }} variant="special">
                   Create an LBP token sale
                 </Heading>
               </Box>
 
-              <Text color="font.secondary" sx={{ textWrap: 'balance' }}>
+              <Text color="font.secondary" maxW="38ch" sx={{ textWrap: 'balance' }}>
                 A fair, transparent mechanism for price discovery that protects both project
                 creators and early supporters.
               </Text>
@@ -58,9 +69,12 @@ export function HeaderBanner() {
               <Button
                 _hover={{ color: 'font.linkHover' }}
                 color="font.link"
+                fontSize="md"
+                fontWeight="medium"
+                left={{ base: '-8px', md: '-12px' }}
                 onClick={onOpen}
                 position="relative"
-                top="4px"
+                top="-8px"
                 variant="ghost"
               >
                 Learn more
@@ -69,9 +83,9 @@ export function HeaderBanner() {
           </VStack>
 
           <Stack
-            direction={{ base: 'column', xl: 'row' }}
+            direction={{ base: 'column', md: 'row' }}
             justifyContent="stretch"
-            spacing={8}
+            spacing={{ base: 4, md: 2, lg: 4, xl: 8 }}
             w="full"
           >
             <RadialPattern
@@ -87,9 +101,36 @@ export function HeaderBanner() {
               width={1500}
             />
 
-            <FeatureLink description={fairPriceDescription} title="Fair price discovery" />
-            <FeatureLink description={capitalEfficiencyDescription} title="Capital efficiency" />
-            <FeatureLink description={immediateLiquidityDescription} title="Immediate liquidity" />
+            <RadialPattern
+              bottom="-500px"
+              circleCount={10}
+              height={800}
+              innerHeight={150}
+              innerWidth={150}
+              left="-400px"
+              position="absolute"
+              width={800}
+              zIndex={0}
+            />
+
+            <FeatureLink
+              description={fairPriceDescription}
+              icon={<LbpBenefitsScalesIcon />}
+              title="Fair price discovery"
+              transformBackground="rotate(0deg)"
+            />
+            <FeatureLink
+              description={capitalEfficiencyDescription}
+              icon={<LbpBenefitsChartIcon />}
+              title="Capital efficiency"
+              transformBackground="rotate(90deg)"
+            />
+            <FeatureLink
+              description={immediateLiquidityDescription}
+              icon={<LbpBenefitsLightningIcon />}
+              title="Immediate liquidity"
+              transformBackground="rotate(-90deg)"
+            />
           </Stack>
         </HStack>
       </NoisyCard>

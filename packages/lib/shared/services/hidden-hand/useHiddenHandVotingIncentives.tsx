@@ -3,8 +3,9 @@ import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { mins } from '@repo/lib/shared/utils/time'
 import {
   HiddenHandData,
-  HiddenHandIncentives,
+  HiddenHandResponse,
 } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
+import { RenameByT } from '../../utils/types.helpers'
 
 const HIDDEN_HAND_PROPOSAL_BALANCER_API_URL = 'https://api.hiddenhand.finance/proposal/balancer'
 
@@ -26,7 +27,9 @@ export function useHiddenHandVotingIncentives(timestamp?: number) {
   }
 }
 
-async function getHiddenHandVotingIncentives(timestamp?: number): Promise<HiddenHandData[]> {
+export type HiddenHandIncentives = RenameByT<{ bribes: 'incentives' }, HiddenHandData>
+
+async function getHiddenHandVotingIncentives(timestamp?: number): Promise<HiddenHandIncentives[]> {
   try {
     const res = await fetch(
       timestamp
@@ -37,13 +40,18 @@ async function getHiddenHandVotingIncentives(timestamp?: number): Promise<Hidden
       }
     )
 
-    const incentives = (await res.json()) as HiddenHandIncentives
+    const incentives = (await res.json()) as HiddenHandResponse
 
     if (incentives.error) {
       throw new Error('Invalid incentives response: ' + JSON.stringify(incentives))
     }
 
-    return incentives.data
+    return incentives.data.map(info => {
+      return {
+        ...info,
+        incentives: info.bribes,
+      }
+    })
   } catch (error) {
     console.error('Unable to fetch hidden hand incentives', error)
     throw error

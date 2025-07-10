@@ -9,6 +9,9 @@ import {
   IconButton,
   Heading,
   Divider,
+  Alert,
+  AlertIcon,
+  AlertDescription,
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
@@ -26,7 +29,7 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import { formatUnits, isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import { Clipboard, Edit, Percent } from 'react-feather'
+import { AlertTriangle, Clipboard, Edit, Percent } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
@@ -34,7 +37,15 @@ import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { differenceInDays, differenceInHours, format, parseISO } from 'date-fns'
+import {
+  addDays,
+  addHours,
+  differenceInDays,
+  differenceInHours,
+  format,
+  isBefore,
+  parseISO,
+} from 'date-fns'
 import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
@@ -42,6 +53,8 @@ import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
 import { CustomToken } from '../../tokens/token.types'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
+import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
+import { now } from '@repo/lib/shared/utils/time'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -72,6 +85,7 @@ export function SaleStructureStep() {
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
   const saleStart = saleStructureData.startTime
+  const saleStartsSoon = isBefore(parseISO(saleStructureData.startTime), addDays(now(), 1))
   const saleEnd = saleStructureData.endTime
   const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
   const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
@@ -92,7 +106,7 @@ export function SaleStructureStep() {
           Launch token details
         </Heading>
 
-        <VStack align="start" spacing="md" w="full">
+        <VStack align="start" spacing="lg" w="full">
           <NetworkSelectInput chains={supportedChains} control={control} />
           <LaunchTokenAddressInput
             chainId={selectedChain}
@@ -117,8 +131,15 @@ export function SaleStructureStep() {
                 control={control}
                 errors={errors}
                 label="Start date and time"
+                min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
                 name="startTime"
               />
+              {saleStartsSoon && (
+                <Text color="font.warning" fontSize="xs">
+                  This sale starts soon. Make sure to seed liquidity before this time or the LBP
+                  will fail to launch.
+                </Text>
+              )}
               <DateTimeInput
                 control={control}
                 errors={errors}
@@ -157,9 +178,17 @@ export function SaleStructureStep() {
                 Seed initial pool liquidity
               </Heading>
               <Text color="font.secondary">
-                The starting liquidity in the pool. The amounts and ratio will determine the
-                starting price, projected market cap and price curve.
+                The initial seed amounts and ratio set the starting price, projected market cap and
+                price curve.
               </Text>
+              <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
+                <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
+                <AlertDescription>
+                  {saleStartsSoon && 'This sale is scheduled to start soon. '}
+                  {`The LBP will fail to launch unless you seed the initial liquidity before the
+                  scheduled start time at ${format(parseISO(saleStructureData.startTime), 'h:mmaaa, d MMMM yyyy')}.`}
+                </AlertDescription>
+              </Alert>
             </VStack>
 
             <TokenInputsValidationProvider>

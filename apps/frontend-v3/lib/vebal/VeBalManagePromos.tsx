@@ -1,15 +1,13 @@
-import { Box, Heading, Link, Text, useColorMode } from '@chakra-ui/react'
+import { Box, Heading, Link, Text, Stack, SimpleGrid, Flex } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
-import { Stack, SimpleGrid, Flex, Center } from '@chakra-ui/react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { SparkleIconWrapper } from '@repo/lib/shared/components/animations/SparkleIconWrapper'
 import { VebalBenefitsSyncIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSyncIcon'
 import { VebalBenefitsSparklesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSparklesIcon'
+import { StoneIcon } from '@repo/lib/shared/components/StoneIcon'
 
 export function VeBalManagePromos() {
-  const { colorMode } = useColorMode()
-
   const gridItems = [
     {
       icon: (
@@ -39,6 +37,7 @@ export function VeBalManagePromos() {
         </SparkleIconWrapper>
       ),
       title: 'Claim veBAL incentives',
+      transformBackground: 'rotate(90deg)',
       description: (
         <Box as="span">
           Protocol revenue and incentives from holding veBAL and staking can be claimed on the{' '}
@@ -106,47 +105,11 @@ export function VeBalManagePromos() {
                   flexShrink={0}
                   justifyContent="center"
                 >
-                  <Box rounded="full" shadow="2xl">
-                    <Box rounded="full" shadow="md">
-                      <Box
-                        alignItems="center"
-                        color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
-                        display="flex"
-                        fontSize="xs"
-                        fontWeight="normal"
-                        h={{ base: 16, lg: 20, xl: 24 }}
-                        overflow="hidden"
-                        rounded="full"
-                        shadow="innerRockShadowSm"
-                        w={{ base: 16, lg: 20, xl: 24 }}
-                      >
-                        <Box
-                          h={{ base: 16, lg: 20, xl: 24 }}
-                          overflow="hidden"
-                          position="absolute"
-                          rounded="full"
-                          w={{ base: 16, lg: 20, xl: 24 }}
-                          zIndex="-1"
-                        >
-                          <Picture
-                            altText="Rock texture"
-                            defaultImgType="jpg"
-                            directory="/images/homepage/"
-                            height={24}
-                            imgAvif
-                            imgAvifDark
-                            imgJpg
-                            imgJpgDark
-                            imgName="stone"
-                            width={24}
-                          />
-                        </Box>
-                        <Center h="full" w="full">
-                          {item.icon}
-                        </Center>
-                      </Box>
-                    </Box>
-                  </Box>
+                  <StoneIcon
+                    icon={item.icon}
+                    sparkleSize={41}
+                    transformBackground={item.transformBackground}
+                  />
                 </Flex>
                 <Box>
                   <Heading

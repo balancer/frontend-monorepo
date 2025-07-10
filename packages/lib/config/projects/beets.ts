@@ -120,6 +120,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     {
       id: 0,
       icon: 'boosted',
+      label: 'Boosted Pools',
       title: '100% Boosted Pools on Balancer v3',
       description:
         'A simple, capital efficient strategy for LPs to get boosted yield. Partnering with leading lending protocols like Aave and Morpho.',
@@ -141,6 +142,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     {
       id: 1,
       icon: 'v3',
+      label: 'Balancer v3',
       title: 'Balancer v3 is live and thriving!',
       description:
         'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested on-chain since November.',
@@ -161,6 +163,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     {
       id: 2,
       icon: 'gyro',
+      label: 'Gyroscope',
       title: 'Superliquidity, made simple',
       description:
         'Next generation Gyroscope pools are now live on Balancer v3. Manage liquidity directly within the Balancer UI.',
@@ -181,6 +184,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     {
       id: 3,
       icon: 'hook',
+      label: 'StableSurge Hook',
       title: 'StableSurge Hook',
       description:
         'A dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',

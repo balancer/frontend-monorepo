@@ -1,4 +1,4 @@
-export interface HiddenHandIncentives {
+export interface HiddenHandResponse {
   error: boolean
   data: HiddenHandData[]
 }
@@ -13,12 +13,12 @@ export interface HiddenHandData {
   maxValuePerVote: number
   valuePerVote: number
   maxTotalValue: number
-  bribes: Bribe[]
+  bribes: Incentive[]
   efficiency: number
   poolId: string
 }
 
-export interface Bribe {
+export interface Incentive {
   symbol: string
   token: string
   amount: number
