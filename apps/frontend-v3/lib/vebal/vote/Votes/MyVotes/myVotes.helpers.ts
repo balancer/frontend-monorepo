@@ -69,22 +69,22 @@ export function calculateMyVoteRewardsValue(
   const poolVoteCount = bn(formatUnits(totalVotes, 18))
     .times(bn(votingPool.gaugeVotes?.votesNextPeriod || 0n).shiftedBy(-18))
     .minus(blacklistedVotes.shiftedBy(-18))
-
-  const incentivesInfo = votingPool?.votingIncentive?.bribes[0]
-  if (!incentivesInfo) return bn(0)
-
-  const incentiveTokenPrice = bn(
-    priceFor(incentivesInfo.token, getGqlChain(incentivesInfo.chainId))
-  )
-  const totalIncentives = incentiveTokenPrice.times(incentivesInfo.amount)
-
   const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
-  const maxValuePerVote = incentiveTokenPrice.times(incentivesInfo.maxTokensPerVote)
-  const expectedValuePerVote = bn(totalIncentives).div(newPoolVoteCount)
-  const valuePerVote = BigNumber.min(
-    maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
-    expectedValuePerVote
-  )
+
+  if (!votingPool?.votingIncentive?.incentives) return bn(0)
+
+  const valuePerVote = votingPool?.votingIncentive?.incentives.reduce((acc, incentive) => {
+    const incentiveTokenPrice = bn(priceFor(incentive.token, getGqlChain(incentive.chainId)))
+    const totalIncentives = incentiveTokenPrice.times(incentive.amount)
+    const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokensPerVote)
+    const expectedValuePerVote = bn(totalIncentives).div(newPoolVoteCount)
+    const valuePerVote = BigNumber.min(
+      maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
+      expectedValuePerVote
+    )
+
+    return acc.plus(valuePerVote)
+  }, bn(0))
 
   const rewardInUSD = valuePerVote.times(newUserVotes)
 
