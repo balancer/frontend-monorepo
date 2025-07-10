@@ -194,7 +194,7 @@ function BaseAprTooltip({
           </>
         ) : null}
       </TooltipAprItem>
-      {isMaBeetsPresent && (
+      {isMaBeetsPresent && !maBeetsRewardsDisplayed.isZero() && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
           apr={maBeetsRewardsDisplayed}
@@ -370,17 +370,19 @@ function BaseAprTooltip({
         <>
           <Divider />
           <Stack gap={0} roundedBottom="md">
-            <TooltipAprItem
-              {...basePopoverAprItemProps}
-              apr={maxMaBeetsRewardDisplayed}
-              displayValueFormatter={usedDisplayValueFormatter}
-              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
-              fontWeight={500}
-              pl={6}
-              pt={3}
-              title="Extra BEETS (max maturity boost)"
-              tooltipText={maBeetsRewardTooltipText}
-            />
+            {!maxMaBeetsRewardDisplayed.isZero() && (
+              <TooltipAprItem
+                {...basePopoverAprItemProps}
+                apr={maxMaBeetsRewardDisplayed}
+                displayValueFormatter={usedDisplayValueFormatter}
+                fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+                fontWeight={500}
+                pl={6}
+                pt={3}
+                title="Extra BEETS (max maturity boost)"
+                tooltipText={maBeetsRewardTooltipText}
+              />
+            )}
             <TooltipAprItem
               {...basePopoverAprItemProps}
               apr={maxMaBeetsVotingRewardDisplayed}
@@ -388,6 +390,7 @@ function BaseAprTooltip({
               fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
               fontWeight={500}
               pl={6}
+              pt={maxMaBeetsRewardDisplayed.isZero() ? 3 : 0}
               title="Extra Voting APR"
               tooltipText={maBeetsVotingRewardsTooltipText}
             />
