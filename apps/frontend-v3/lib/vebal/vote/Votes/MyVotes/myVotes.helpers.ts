@@ -71,12 +71,12 @@ export function calculateMyVoteRewardsValue(
     .minus(blacklistedVotes.shiftedBy(-18))
   const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
 
-  if (!votingPool?.votingIncentive?.bribes) return bn(0)
+  if (!votingPool?.votingIncentive?.incentives) return bn(0)
 
-  const valuePerVote = votingPool?.votingIncentive?.bribes.reduce((acc, bribe) => {
-    const incentiveTokenPrice = bn(priceFor(bribe.token, getGqlChain(bribe.chainId)))
-    const totalIncentives = incentiveTokenPrice.times(bribe.amount)
-    const maxValuePerVote = incentiveTokenPrice.times(bribe.maxTokensPerVote)
+  const valuePerVote = votingPool?.votingIncentive?.incentives.reduce((acc, incentive) => {
+    const incentiveTokenPrice = bn(priceFor(incentive.token, getGqlChain(incentive.chainId)))
+    const totalIncentives = incentiveTokenPrice.times(incentive.amount)
+    const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokensPerVote)
     const expectedValuePerVote = bn(totalIncentives).div(newPoolVoteCount)
     const valuePerVote = BigNumber.min(
       maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
