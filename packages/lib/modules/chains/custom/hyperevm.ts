@@ -17,7 +17,7 @@ export const hyperEvm = defineChain({
   blockExplorers: {
     default: {
       name: 'Hyperscan',
-      url: 'https://www.hyperscan.com/',
+      url: 'https://hyperevmscan.io/',
     },
   },
   contracts: {
