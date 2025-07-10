@@ -241,7 +241,7 @@ export function useReclAmmChartLogic() {
         barIndex = Math.floor(((2 - poolCenteredness) / 2) * totalGreenAndOrangeBars)
       }
 
-      return (isReversed ? totalGreenAndOrangeBars - barIndex : barIndex) + baseGreyBarCount
+      return (isReversed ? totalGreenAndOrangeBars - barIndex - 1 : barIndex) + baseGreyBarCount
     }
 
     const currentPriceBarIndex = getCurrentPriceBarIndex()
