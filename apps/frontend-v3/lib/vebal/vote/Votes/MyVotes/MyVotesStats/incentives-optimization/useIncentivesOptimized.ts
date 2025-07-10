@@ -24,9 +24,11 @@ export type OptimizedVotes = {
 type PoolInfo = {
   gaugeAddress: Address
   votes: BigNumber
-  incentivesAmount: number
-  incentivesTokenPrice: number
-  maxTokenPerVote: number
+  incentives: {
+    incentivesAmount: number
+    incentivesTokenPrice: number
+    maxTokenPerVote: number
+  }[]
   userVotes: BigNumber
   userPrct: BigNumber
 }
@@ -132,22 +134,27 @@ function extractVoteAmountAndIncentives(
   return votingPools
     .map(pool => {
       const voteAmount = totalVotes.shiftedBy(-18).times(bn(pool.gaugeVotes?.votesNextPeriod || 0n))
-      const incentivesInfo = pool.votingIncentive?.bribes[0]
-      const tokenPrice = incentivesInfo
-        ? priceFor(incentivesInfo.token, getGqlChain(incentivesInfo.chainId))
-        : 0
+      const incentives = !pool.votingIncentive?.bribes
+        ? []
+        : pool.votingIncentive.bribes.map(bribe => {
+            const tokenPrice = priceFor(bribe.token, getGqlChain(bribe.chainId))
+
+            return {
+              incentivesAmount: bribe.amount,
+              incentivesTokenPrice: tokenPrice,
+              maxTokenPerVote: bribe.maxTokensPerVote,
+            }
+          })
 
       return {
         gaugeAddress: pool.gauge.address as Address,
         votes: voteAmount,
-        incentivesAmount: incentivesInfo?.amount || 0,
-        incentivesTokenPrice: tokenPrice,
-        maxTokenPerVote: incentivesInfo?.maxTokensPerVote || 0,
+        incentives,
         userVotes: bn(0),
         userPrct: bn(0),
       }
     })
-    .filter(poolInfo => poolInfo.incentivesAmount !== 0)
+    .filter(poolInfo => poolInfo.incentives.length !== 0)
 }
 
 function buildPoolsWithPriorities(
@@ -169,16 +176,20 @@ function buildPoolsWithPriorities(
 }
 
 function incentivePerVote(pool: Element<PoolInfo>) {
-  if (!pool || pool.incentivesAmount === 0) return 0
+  if (!pool || pool.incentives.length === 0) return 0
 
-  const incentiveTokenPrice = bn(pool.incentivesTokenPrice)
-  const totalIncentives = incentiveTokenPrice.times(pool.incentivesAmount)
-  const maxValuePerVote = incentiveTokenPrice.times(pool.maxTokenPerVote)
-  const expectedValuePerVote = bn(totalIncentives).div(pool.votes.shiftedBy(-18))
-  const valuePerVote = BigNumber.min(
-    maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
-    expectedValuePerVote
-  )
+  const valuePerVote = pool.incentives.reduce((acc, bribe) => {
+    const incentiveTokenPrice = bn(bribe.incentivesTokenPrice)
+    const totalIncentives = incentiveTokenPrice.times(bribe.incentivesAmount)
+    const maxValuePerVote = incentiveTokenPrice.times(bribe.maxTokenPerVote)
+    const expectedValuePerVote = bn(totalIncentives).div(pool.votes.shiftedBy(-18))
+    const valuePerVote = BigNumber.min(
+      maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
+      expectedValuePerVote
+    )
+
+    return acc.plus(valuePerVote)
+  }, bn(0))
 
   return valuePerVote.toNumber()
 }
@@ -288,18 +299,20 @@ function sumTotalIncentives(
       .times(bn(vote.gaugeVotes?.userVotes || 0).div(10000))
       .shiftedBy(-18)
 
-    const incentiveInfo = vote.votingIncentive?.bribes[0]
-    if (!incentiveInfo) return acc
-    const incentiveTokenPrice = bn(
-      priceFor(incentiveInfo.token, getGqlChain(incentiveInfo.chainId))
-    )
-    const totalIncentives = incentiveTokenPrice.times(incentiveInfo.amount)
-    const maxValuePerVote = incentiveTokenPrice.times(incentiveInfo.maxTokensPerVote)
-    const expectedValuePerVote = bn(totalIncentives).div(poolVotes)
-    const valuePerVote = BigNumber.min(
-      maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
-      expectedValuePerVote
-    )
+    if (!vote.votingIncentive?.bribes) return acc
+
+    const valuePerVote = vote?.votingIncentive?.bribes.reduce((acc, bribe) => {
+      const incentiveTokenPrice = bn(priceFor(bribe.token, getGqlChain(bribe.chainId)))
+      const totalIncentives = incentiveTokenPrice.times(bribe.amount)
+      const maxValuePerVote = incentiveTokenPrice.times(bribe.maxTokensPerVote)
+      const expectedValuePerVote = bn(totalIncentives).div(poolVotes)
+      const valuePerVote = BigNumber.min(
+        maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
+        expectedValuePerVote
+      )
+
+      return acc.plus(valuePerVote)
+    }, bn(0))
 
     return acc.plus(userPoolVotes.times(valuePerVote))
   }, bn(0))
