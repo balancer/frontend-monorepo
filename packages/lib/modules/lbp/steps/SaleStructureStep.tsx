@@ -57,6 +57,11 @@ import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { now } from '@repo/lib/shared/utils/time'
 
+const validateStartTime = (value: string) => {
+  if (!value) return false
+  return isAfter(parseISO(value), addHours(now(), 1))
+}
+
 export function SaleStructureStep() {
   const { getToken } = useTokens()
 
@@ -88,8 +93,8 @@ export function SaleStructureStep() {
   const saleStart = saleStructureData.startTime
   const saleEnd = saleStructureData.endTime
 
-  const isStartTimeValid = saleStart ? isAfter(parseISO(saleStart), addHours(now(), 1)) : false
-  const saleStartsSoon = isStartTimeValid
+  const isSaleStartValid = validateStartTime(saleStart)
+  const saleStartsSoon = isSaleStartValid
     ? saleStart
       ? isBefore(parseISO(saleStart), addDays(now(), 1))
       : false
@@ -191,7 +196,7 @@ export function SaleStructureStep() {
                 The initial seed amounts and ratio set the starting price, projected market cap and
                 price curve.
               </Text>
-              {isStartTimeValid && saleStart && (
+              {isSaleStartValid && saleStart && (
                 <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
                   <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
                   <AlertDescription>
@@ -360,6 +365,14 @@ function DateTimeInput({
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
 
+  const isValidStartTime = (value: string | number) => {
+    if (typeof value !== 'string') return 'Start time must be string date format'
+    if (!validateStartTime(value)) {
+      return 'Start time must be at least 1 hour in the future'
+    }
+    return true
+  }
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">{label}</Text>
@@ -378,12 +391,7 @@ function DateTimeInput({
         )}
         rules={{
           required: 'Start date and time is required',
-          validate: (value: string | number) => {
-            if (typeof value === 'string' && !isAfter(parseISO(value), addHours(now(), 1))) {
-              return 'Start time must be at least 1 hour in the future'
-            }
-            return true
-          },
+          validate: { isValidStartTime },
         }}
       />
     </VStack>
