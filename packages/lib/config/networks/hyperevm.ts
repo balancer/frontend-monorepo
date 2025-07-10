@@ -13,7 +13,7 @@ const networkConfig: NetworkConfig = {
   chain: GqlChain.Hyperevm,
   iconPath: '/images/chains/HYPEREVM.svg',
   blockExplorer: {
-    baseUrl: 'https://www.hyperscan.com/',
+    baseUrl: 'https://hyperevmscan.io/',
     name: 'Hyperscan',
   },
   tokens: {
