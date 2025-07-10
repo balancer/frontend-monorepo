@@ -45,6 +45,7 @@ import {
   format,
   isBefore,
   parseISO,
+  isAfter,
 } from 'date-fns'
 import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
@@ -86,11 +87,16 @@ export function SaleStructureStep() {
 
   const saleStart = saleStructureData.startTime
   const saleEnd = saleStructureData.endTime
-  const isSaleTimeValid = !!saleStart && !!saleEnd
 
-  const saleStartsSoon = isSaleTimeValid ? isBefore(parseISO(saleStart), addDays(now(), 1)) : false
-  const daysDiff = isSaleTimeValid ? differenceInDays(parseISO(saleEnd), parseISO(saleStart)) : 0
-  const hoursDiff = isSaleTimeValid
+  const isStartTimeValid = saleStart ? isAfter(parseISO(saleStart), addHours(now(), 1)) : false
+  const saleStartsSoon = isStartTimeValid
+    ? saleStart
+      ? isBefore(parseISO(saleStart), addDays(now(), 1))
+      : false
+    : false
+  const areSaleTimesValid = !!saleStart && !!saleEnd
+  const daysDiff = areSaleTimesValid ? differenceInDays(parseISO(saleEnd), parseISO(saleStart)) : 0
+  const hoursDiff = areSaleTimesValid
     ? differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
     : 0
 
@@ -185,15 +191,16 @@ export function SaleStructureStep() {
                 The initial seed amounts and ratio set the starting price, projected market cap and
                 price curve.
               </Text>
-              <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
-                <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
-                <AlertDescription>
-                  {saleStartsSoon && 'This sale is scheduled to start soon. '}
-                  {saleStart &&
+              {isStartTimeValid && saleStart && (
+                <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
+                  <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
+                  <AlertDescription>
+                    {saleStartsSoon && 'This sale is scheduled to start soon. '}
                     `The LBP will fail to launch unless you seed the initial liquidity before the
-                  scheduled start time at ${format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.`}
-                </AlertDescription>
-              </Alert>
+                    scheduled start time at ${format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.`
+                  </AlertDescription>
+                </Alert>
+              )}
             </VStack>
 
             <TokenInputsValidationProvider>
@@ -371,6 +378,12 @@ function DateTimeInput({
         )}
         rules={{
           required: 'Start date and time is required',
+          validate: (value: string | number) => {
+            if (typeof value === 'string' && !isAfter(parseISO(value), addHours(now(), 1))) {
+              return 'Start time must be at least 1 hour in the future'
+            }
+            return true
+          },
         }}
       />
     </VStack>
