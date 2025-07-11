@@ -361,21 +361,21 @@ export function useReclAmmChartLogic() {
             // Determine if left or right orange by index
             const isLeft = data.segmentStartIndex < baseGreyBarCount + baseOrangeBarCount
             if (isLeft) {
-              return 'The lower margin (between the min price and lower target). When the current price is within this range, LPs continue to earn swap fees while the pool readjusts to recenter liquidity around the current price.'
+              return 'When the current price is within the lower margin, swaps route through the pool and LPs earn high swap fees. The pool will begin to automatically readjust and recenter the concentrated liquidity around the current price.'
             } else {
-              return 'The upper margin (between the high target and max price). When the current price is within this range, LPs continue to earn swap fees while the pool readjusts to recenter liquidity around the current price.'
+              return 'When the current price is within the upper margin, swaps route through the pool and LPs earn high swap fees. The pool will begin to automatically readjust and recenter the concentrated liquidity around the current price.'
             }
           }
           if (data.segmentType === 'green') {
-            return 'The concentrated liquidity of the pool. When the current price is anywhere within this range, LPs earn high swap fees.'
+            return 'The uniform concentrated liquidity of the pool. When the current price is anywhere within this range, swaps route through the pool and LPs earn high swap fees.'
           }
           if (data.segmentType === 'grey') {
             // Determine if left or right grey by index
             const isLeft = data.segmentStartIndex < baseGreyBarCount
             if (isLeft) {
-              return 'When the current price is out of range, it cannot access the concentrated liquidity, so LPs will not earn any swap fees. The pool will readjust to recenter liquidity around the current price.'
+              return 'When the current price is out of range, swaps will not route through the pool and LPs will not earn fees. The pool will automatically readjust and recenter the concentrated liquidity around the current price.'
             } else {
-              return 'When the current price is out of range, it cannot access the concentrated liquidity, so LPs will not earn any swap fees. The pool will readjust to recenter liquidity around the current price.'
+              return 'When the current price is out of range, swaps will not route through the pool and LPs will not earn fees. The pool will automatically readjust and recenter the concentrated liquidity around the current price.'
             }
           }
           return ''
