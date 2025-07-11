@@ -24,6 +24,8 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
+import { getPriceImpactLevel } from './price-impact.utils'
+
 import { CheckIcon } from '@chakra-ui/icons'
 
 interface PriceImpactAccordionProps {
@@ -64,44 +66,66 @@ export function PriceImpactAccordion({
       case 'swap':
         return (
           <>
-            This compares the value of the input tokens vs the output tokens, and includes price
-            impact and swap fees. The high loss is most likely because your swap size is large
-            relative to the market liquidity for this pair, resulting in a high price impact from an
-            unfavorable exchange rate. Also, the proposed route may have high swap fees.
-            <br />
-            <br />
-            To reduce price impact, lower your swap size or try{' '}
-            <Link
-              _hover={{
-                color: '#fff',
-              }}
-              color="#000"
-              fontSize="sm"
-              href="https://swap.cow.fi/"
-              isExternal
-              textDecor="underline"
-            >
-              CoW Swap
-            </Link>
-            .
+            <Text color="#000" fontSize="sm" pb="xs">
+              The value of output tokens is a lot less than the input tokens after price impact and
+              swap fees. This is likely because your swap size is large relative to the market
+              liquidity for this pair, resulting in a high price impact by unfavorably shifting the
+              exchange rate.
+            </Text>
+            <Text color="#000" fontSize="sm">
+              To reduce price impact, lower your swap size or try{' '}
+              <Link
+                _hover={{
+                  color: '#fff',
+                }}
+                color="#000"
+                fontSize="sm"
+                href="https://swap.cow.fi/"
+                isExternal
+                textDecor="underline"
+              >
+                CoW Swap
+              </Link>
+              .
+            </Text>
           </>
         )
       case 'add':
-        return "Adding custom amounts in ‘Flexible’ mode can cause high price impact, since the pool rebalances by “swapping” some of the excess token for the under-supplied token, which shifts the internal price.\n\nSwitch to 'Proportional' mode (if available) to avoid price impact. Or in 'Flexible' mode, add tokens closer to the pool’s current ratios."
+        return (
+          <>
+            <Text color="#000" fontSize="sm" pb="xs">
+              Adding custom amounts in ‘Flexible’ mode can cause high price impact, since the pool
+              rebalances by ‘swapping’ some of the excess token for the under-supplied token, which
+              unfavorably shifts the internal price.
+            </Text>
+            <Text color="#000" fontSize="sm">
+              To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Flexible’
+              mode, add tokens closer to the pool’s current ratios.
+            </Text>
+          </>
+        )
       case 'remove':
-        return "Removing liquidity as a single token can cause high price impact, since the pool rebalances by “swapping” some of non-selected token(s) to replace the removed token, which shifts the internal price. The higher the price impact, the less tokens you will receive.\n\nSwitch to 'Proportional' mode (if available) to avoid price impact. Or in 'Single token' mode, remove a smaller amount."
+        return (
+          <>
+            <Text color="#000" fontSize="sm" pb="xs">
+              Removing liquidity as a single token can cause high price impact, since the pool
+              rebalances by ‘swapping’ some of non-selected tokens to replace the removed token,
+              which unfavorably shifts the internal price.
+            </Text>
+            <Text color="#000" fontSize="sm">
+              To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Single
+              token’ mode, remove a smaller amount.
+            </Text>
+          </>
+        )
     }
   }
 
   function getPriceImpactTitle(action: 'swap' | 'add' | 'remove'): string {
-    switch (action) {
-      case 'swap':
-        return `Potential ‘Swap’ loss is high: ${priceImpact && fNum('priceImpact', priceImpact)}`
-      case 'add':
-        return `Potential ‘Add’ loss is high: ${priceImpact && fNum('priceImpact', priceImpact)}`
-      case 'remove':
-        return `Potential ‘Remove’ loss is high: ${priceImpact && fNum('priceImpact', priceImpact)}`
-    }
+    const label = action.charAt(0).toUpperCase() + action.slice(1)
+    const level = priceImpact != null ? getPriceImpactLevel(Number(priceImpact)) : priceImpactLevel
+    const extremely = level === 'max' ? 'extremely ' : ''
+    return `Potential ‘${label}’ loss is ${extremely}high: ${priceImpact && fNum('priceImpact', priceImpact)}`
   }
 
   useEffect(() => {
@@ -113,7 +137,7 @@ export function PriceImpactAccordion({
   }, [acceptPriceImpactRisk, hasToAcceptHighPriceImpact, isUnknownPriceImpact])
 
   const handleClick = () => {
-    if (priceImpactLevel === 'high' || isUnknownPriceImpact) {
+    if (priceImpactLevel === 'high') {
       setAcceptPriceImpactRisk(true)
     } else {
       acceptHighImpactDisclosure.onOpen()
@@ -166,13 +190,13 @@ export function PriceImpactAccordion({
                 <Box ml="md">
                   <AlertTitle>
                     {isUnknownPriceImpact
-                      ? 'Unknown price impact'
+                      ? 'Unknown potential losses'
                       : `${getPriceImpactTitle(action)}`}
                   </AlertTitle>
                   <AlertDescription>
                     <Text as="div" color="#000" fontSize="sm" whiteSpace="pre-line">
                       {isUnknownPriceImpact
-                        ? 'The price impact cannot be calculated. Only proceed if you know exactly what you are doing.'
+                        ? 'The potential losses from this transaction cannot be calculated at this time. This may include high price impact and/or high swap fees. Only proceed if you know exactly what you are doing.'
                         : getPriceImpactMessage(action)}
                     </Text>
                   </AlertDescription>
