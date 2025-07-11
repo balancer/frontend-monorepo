@@ -316,16 +316,29 @@ export default function PoolMyLiquidity() {
           <Divider />
           <VStack alignItems="flex-start" h={`${height - 270}px`} spacing="md" width="full">
             {activeTab.value === 'aura' && !totalBalanceUsd && pool.staking?.aura ? (
-              <HStack bg="aura.purple" justify="space-between" mb="3xl" p="2" rounded="md" w="full">
-                <Text color="white">Aura APR: {fNum('apr', pool.staking.aura.apr)}</Text>
+              <HStack
+                bg="aura.purple"
+                justify="space-between"
+                mb="3xl"
+                px="3"
+                py="2"
+                rounded="md"
+                w="full"
+              >
+                <Text color="white" fontSize="sm" fontWeight="bold">
+                  Aura APR: {fNum('apr', pool.staking.aura.apr)}
+                </Text>
                 <Button
                   color="white"
                   onClick={() => openRedirectModal(RedirectPartner.Aura)}
+                  size="xs"
                   variant="outline"
                 >
-                  <HStack>
-                    <Text>Learn more</Text>
-                    <ArrowUpRight size={16} />
+                  <HStack gap="1">
+                    <Text color="white" fontSize="sm" fontWeight="bold">
+                      Learn more
+                    </Text>
+                    <ArrowUpRight size={14} />
                   </HStack>
                 </Button>
               </HStack>
