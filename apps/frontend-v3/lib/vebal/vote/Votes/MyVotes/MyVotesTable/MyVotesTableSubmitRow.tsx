@@ -19,8 +19,14 @@ interface Props extends GridProps {
 }
 
 export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
-  const { hasChanges, hasExceededWeight, refetchAll, transactionSteps, hasExpiredGauges } =
-    useMyVotes()
+  const {
+    hasChanges,
+    hasExceededWeight,
+    refetchAll,
+    transactionSteps,
+    hasExpiredGauges,
+    hasNewVotes,
+  } = useMyVotes()
   const { allowChangeVotes } = useVotes()
 
   const submitBtn = useRef(null)
@@ -28,7 +34,8 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   // hasExpiredGauges - allow to submit votes if there are expired pool gauges, so user could "remove" these pools
-  const isDisabled = (!hasChanges && !hasExpiredGauges) || hasExceededWeight || !allowChangeVotes
+  const isDisabled =
+    (!hasChanges && !hasExpiredGauges && !hasNewVotes) || hasExceededWeight || !allowChangeVotes
 
   const handleClose = (anySuccess: boolean) => {
     if (anySuccess) {

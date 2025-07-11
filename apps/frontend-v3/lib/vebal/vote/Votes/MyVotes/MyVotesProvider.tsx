@@ -15,6 +15,7 @@ import {
   bpsToPercentage,
   calculateMyValuePerVote,
   calculateMyVoteRewardsValue,
+  calculateVotingPower,
   sharesToBps,
 } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
@@ -224,6 +225,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
 
   const hasExceededWeight = getExceededWeight(totalInfo.editVotes || bn(0)).gt(0)
   const hasUnallocatedWeight = getUnallocatedWeight(totalInfo.editVotes || bn(0)).gt(0)
+  const hasNewVotes = newVotesSinceLastVote(myVotes, slope, lockEnd)
 
   const clearAll = () => {
     setEditVotesWeights({})
@@ -237,7 +239,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         const newVoteWeight = editVotesWeights[vote.id] || 0
         const persistedVoteWeight = vote.gaugeVotes?.userVotes || 0
         if (bn(newVoteWeight).isZero() && bn(persistedVoteWeight).isZero()) return false
-        return newVoteWeight !== persistedVoteWeight
+        return newVoteWeight !== persistedVoteWeight || hasNewVotes
       })
       .map(vote => {
         const newVote = editVotesWeights[vote.id] || '0'
@@ -246,7 +248,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
           weight: newVote,
         }
       })
-  }, [myVotes, editVotesWeights])
+  }, [myVotes, editVotesWeights, hasNewVotes])
 
   const timeLockedVotes: SubmittingVote[] = useMemo<SubmittingVote[]>(() => {
     return votedPools
@@ -291,7 +293,25 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
     hasUnallocatedWeight,
     refetchAll,
     hasExpiredGauges,
+    hasNewVotes,
   }
+}
+
+function newVotesSinceLastVote(
+  myVotes: VotingPoolWithData[],
+  currentSlope: bigint,
+  lockEnd: number | undefined
+) {
+  if (!lockEnd) return false
+
+  const votingPower = calculateVotingPower(currentSlope, lockEnd)
+
+  const previousVotingPower = myVotes.reduce((acc, vote) => {
+    const votes = calculateVotingPower(vote.gaugeVotes?.userSlope || 0n, lockEnd)
+    return acc.plus(votes)
+  }, bn(0))
+
+  return votingPower.gt(previousVotingPower)
 }
 
 export const MyVotesContext = createContext<ReturnType<typeof useMyVotesLogic> | null>(null)

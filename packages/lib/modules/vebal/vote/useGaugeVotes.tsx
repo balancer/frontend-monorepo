@@ -21,6 +21,8 @@ export interface VotesData {
   votes: string
   votesNextPeriod: string
   userVotes: string
+  userSlope: bigint
+  userEndLock: bigint
   lastUserVoteTime: number
 }
 
@@ -32,6 +34,8 @@ function formatVotes(votesData: RawVotesData): VotesData {
     votes,
     votesNextPeriod,
     userVotes: votesData?.userVotes?.result?.power.toString() || '0', // 6000n = 60.00%
+    userSlope: votesData?.userVotes?.result?.slope || 0n,
+    userEndLock: votesData?.userVotes?.result?.end || 0n,
     lastUserVoteTime: Number(votesData?.lastUserVoteTime?.result) || 0,
   }
 }
