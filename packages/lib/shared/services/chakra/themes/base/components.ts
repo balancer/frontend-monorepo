@@ -181,6 +181,13 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
     },
+    Tooltip: {
+      baseStyle: {
+        letterSpacing: '-0.25px',
+        lineHeight: 'short',
+        p: 'sm',
+      },
+    },
     FormLabel: {
       baseStyle: {
         background: 'font.primary',
