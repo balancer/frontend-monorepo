@@ -169,7 +169,7 @@ export function UserSnapshotValues() {
             hasNoRewards ? (
               <Heading size="h4">&mdash;</Heading>
             ) : (
-              <HStack>
+              <HStack gap="xs">
                 <Heading size="h4">{toCurrency(poolMyStatsValues.myClaimableRewards)}</Heading>
                 <TokenStackPopover
                   chain={chain}
@@ -181,8 +181,10 @@ export function UserSnapshotValues() {
                 </TokenStackPopover>
                 <Tooltip label={isDisabled ? disabledReason : ''}>
                   <Button
+                    fontSize="sm"
                     isDisabled={isDisabled}
                     onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
+                    rounded="sm"
                     size="xxs"
                     variant="primary"
                     w="full"
