@@ -210,9 +210,9 @@ export function RemoveLiquidityForm() {
               {!simulationQuery.isError && !isV3LBP(pool) && (
                 <PriceImpactAccordion
                   accordionButtonComponent={
-                    <HStack>
+                    <HStack gap="xs">
                       <Text color="font.secondary" fontSize="sm" variant="secondary">
-                        Price impact:{' '}
+                        Potential losses:{' '}
                       </Text>
                       {isFetching ? (
                         <Skeleton h="16px" w="40px" />
@@ -240,7 +240,7 @@ export function RemoveLiquidityForm() {
                 <Card variant="modalSubSection">
                   <Stack w="full">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
-                      Price impact: 0.00%
+                      Potential losses: 0.00%
                     </Text>
                   </Stack>
                 </Card>
