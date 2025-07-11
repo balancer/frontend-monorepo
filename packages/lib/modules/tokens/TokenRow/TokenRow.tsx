@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   VStack,
+  Flex,
   Link,
 } from '@chakra-ui/react'
 import { Address } from 'viem'
@@ -267,6 +268,8 @@ export default function TokenRow({
                             <Box
                               _hover={{ opacity: 1 }}
                               opacity="0.5"
+                              position="relative"
+                              top="1px"
                               transition="opacity 0.2s var(--ease-out-cubic)"
                             >
                               <BullseyeIcon />
@@ -282,14 +285,24 @@ export default function TokenRow({
                       </>
                     ) : (
                       <>
-                        <Text fontSize="sm" fontWeight="medium" variant="secondary">
-                          N/A
-                        </Text>
+                        <Flex alignItems="center" height="24px">
+                          <Text
+                            fontSize="sm"
+                            fontWeight="medium"
+                            position="relative"
+                            top="1px"
+                            variant="secondary"
+                          >
+                            N/A
+                          </Text>
+                        </Flex>
                         <Popover trigger="hover">
                           <PopoverTrigger>
                             <Box
                               _hover={{ opacity: 1 }}
                               opacity="0.5"
+                              position="relative"
+                              top="1px"
                               transition="opacity 0.2s var(--ease-out-cubic)"
                             >
                               <BullseyeIcon />
