@@ -226,7 +226,7 @@ function AddLiquidityMainForm() {
                 accordionButtonComponent={
                   <HStack gap="xs">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
-                      Price impact:{' '}
+                      Potential losses:{' '}
                     </Text>
                     {isFetching ? (
                       <Skeleton h="16px" w="40px" />
