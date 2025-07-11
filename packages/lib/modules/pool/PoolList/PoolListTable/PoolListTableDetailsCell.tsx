@@ -1,7 +1,12 @@
-import { PoolCore } from '@repo/lib/modules/pool/pool.types'
+import { PoolCore, PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { HStack, Text } from '@chakra-ui/react'
 import { PoolVersionTag } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolVersionTag'
-import { isBoosted, isQuantAmmPool } from '@repo/lib/modules/pool/pool.helpers'
+import {
+  isBoosted,
+  isLiquidityBootstrapping,
+  isQuantAmmPool,
+  isV3Pool,
+} from '@repo/lib/modules/pool/pool.helpers'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import Image from 'next/image'
 import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'
@@ -9,6 +14,8 @@ import { usePoolsMetadata } from '../../metadata/PoolsMetadataProvider'
 import { Erc4626Metadata } from '../../metadata/getErc4626Metadata'
 import { Protocol } from '@repo/lib/modules/protocols/useProtocols'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
+import { LbpPoolListInfo } from '../../LbpDetail/LbpPoolListInfo'
+import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 function getPoolDisplayTypeLabel(pool: PoolCore, erc4626Metadata: Erc4626Metadata[]) {
   if (isBoosted(pool)) {
@@ -64,6 +71,9 @@ export function PoolListTableDetailsCell({ pool }: Props) {
       <PoolVersionTag isSmall pool={pool} />
       {getPoolDisplayTypeLabel(pool, erc4626Metadata)}
       <PoolHookTag onlyShowIcon pool={pool} />
+      {isV3Pool(pool) && isLiquidityBootstrapping(pool.type) && (isDev || isStaging) && (
+        <LbpPoolListInfo pool={pool as PoolListItem} />
+      )}
     </HStack>
   )
 }
