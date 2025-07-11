@@ -138,7 +138,9 @@ export function useTokensLogic(
   function usdValueForToken(token: ApiToken | CustomToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
-    return bn(amount).times(priceForToken(token)).toFixed()
+    return bn(amount)
+      .times(priceFor(token.address as Address, token.chain))
+      .toFixed()
   }
 
   function usdValueForBpt(address: string, chain: GqlChain, amount: Numberish) {
