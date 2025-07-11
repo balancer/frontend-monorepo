@@ -56,6 +56,7 @@ export function NoisyCard({
       <MotionBox
         _groupHover={{ opacity: 1 }}
         borderRadius="xl"
+        h="full"
         inset="-1px"
         opacity="0"
         position="absolute"
@@ -63,6 +64,7 @@ export function NoisyCard({
           background: gradient,
         }}
         transition="opacity 300ms"
+        w="full"
         zIndex="0"
       />
       <Box
