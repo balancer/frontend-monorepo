@@ -85,7 +85,7 @@ export function SaleStructureStep() {
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
   const saleStart = saleStructureData.startTime
-  const saleStartsSoon = isBefore(parseISO(saleStructureData.startTime), addDays(now(), 1))
+  const saleStartsSoon = isBefore(parseISO(saleStart), addDays(now(), 1))
   const saleEnd = saleStructureData.endTime
   const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
   const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
@@ -181,14 +181,16 @@ export function SaleStructureStep() {
                 The initial seed amounts and ratio set the starting price, projected market cap and
                 price curve.
               </Text>
-              <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
-                <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
-                <AlertDescription>
-                  {saleStartsSoon && 'This sale is scheduled to start soon. '}
-                  {`The LBP will fail to launch unless you seed the initial liquidity before the
-                  scheduled start time at ${format(parseISO(saleStructureData.startTime), 'h:mmaaa, d MMMM yyyy')}.`}
-                </AlertDescription>
-              </Alert>
+              {saleStart && (
+                <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
+                  <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
+                  <AlertDescription>
+                    {saleStartsSoon && 'This sale is scheduled to start soon. '}
+                    {`The LBP will fail to launch unless you seed the initial liquidity before the
+                  scheduled start time at ${format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.`}
+                  </AlertDescription>
+                </Alert>
+              )}
             </VStack>
 
             <TokenInputsValidationProvider>
