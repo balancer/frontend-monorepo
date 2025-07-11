@@ -58,13 +58,15 @@ export function PoolActionsPriceImpactDetails({
   const priceImpactTooltip =
     priceImpactLevel === 'unknown'
       ? 'The price impact cannot be calculated. This may be a temporary issue related to a pricing provider or unknown token. Only proceed if you understand and accept the risks.'
-      : 'In general, adding or removing liquidity in proportional amounts to the token weights of the pool incur low price impact. Adding custom token amounts (non-proportionally) causes the internal prices of the pool to change, as if you were swapping tokens, which incurs a higher price impact.'
+      : isAddLiquidity
+        ? 'Potential losses may arise from high price impact and/or high swap fees. Adding custom amounts in ‘Flexible’ mode can cause high price impact, since the pool rebalances by ‘swapping’ some of the excess token for the under-supplied token, which unfavorably shifts the internal price. To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Flexible’ mode, add tokens closer to the pool’s current ratios.'
+        : 'Potential losses may arise from high price impact and/or high swap fees. Removing liquidity as a single token can cause high price impact, since the pool rebalances by ‘swapping’ some of non-selected tokens to replace the removed token, which unfavorably shifts the internal price. To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Single token’ mode, remove a smaller amount.'
 
   return (
     <VStack align="start" fontSize="sm" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
         <Text color="grayText" fontSize="sm">
-          Price impact
+          Potential losses
         </Text>
         <HStack>
           {isLoading ? (
