@@ -78,6 +78,7 @@ export function RemoveLiquiditySummary({
           chain={pool.chain}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
+          pool={pool}
           tokens={shouldShowReceipt ? getTokensByChain(pool.chain) : undefined}
           totalUSDValue={shouldShowReceipt ? undefined : totalUSDValue}
         />
