@@ -1,4 +1,5 @@
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { Text } from '@chakra-ui/react'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { buildCowSwapUrl } from '../cow/cow.utils'
@@ -18,24 +19,28 @@ export function SwapSimulationError({ errorMessage }: Props) {
   if (errorMessage?.includes('Must contain at least 1 path')) {
     return (
       <ErrorAlert title={`Not enough liquidity on ${PROJECT_CONFIG.projectName}`}>
-        Your swap amount is too high to find a route through the available liquidity on{' '}
-        {PROJECT_CONFIG.projectName}. Try reducing your swap size
-        {showCowSwapLink && (
-          <>
-            {' '}
-            or try{' '}
-            <BalAlertLink
-              href={buildCowSwapUrl({
-                chain: selectedChain,
-                tokenInAddress: tokenIn.address,
-                tokenOutAddress: tokenOut.address,
-              })}
-            >
-              CoW Swap
-            </BalAlertLink>
-          </>
-        )}
-        .
+        <Text color="#000" fontSize="sm">
+          Your swap amount is too high to find a route through the available liquidity on{' '}
+          {PROJECT_CONFIG.projectName}. Reduce your swap size
+          {showCowSwapLink && (
+            <>
+              {' '}
+              or try{' '}
+              <BalAlertLink
+                color="#000"
+                fontSize="sm"
+                href={buildCowSwapUrl({
+                  chain: selectedChain,
+                  tokenInAddress: tokenIn.address,
+                  tokenOutAddress: tokenOut.address,
+                })}
+              >
+                CoW Swap
+              </BalAlertLink>
+            </>
+          )}
+          .
+        </Text>
       </ErrorAlert>
     )
   }

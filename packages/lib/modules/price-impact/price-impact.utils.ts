@@ -64,7 +64,7 @@ export function getPriceImpactColor(priceImpactLevel: PriceImpactLevel) {
     case 'unknown':
     case 'high':
     case 'max':
-      return 'red.400'
+      return 'font.error'
     case 'medium':
       return 'font.warning'
     case 'low':
