@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, PropsWithChildren, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
@@ -33,6 +33,7 @@ export function useReclAmmChartLogic() {
   const { isMobile } = useBreakpoints()
   const reclAmmData = useGetComputeReclAmmData()
   const [isReversed, setIsReversed] = useState(false)
+  const [chartInstance, setChartInstance] = useState<any>(null)
   const selectColor = useSelectColor()
   const { pool } = usePool()
 
@@ -199,6 +200,7 @@ export function useReclAmmChartLogic() {
       value: isMobile ? 1 : 3,
       gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
       borderRadius: 20,
+      segmentType: 'grey',
     }
 
     const baseOrangeBarConfig = {
@@ -206,6 +208,7 @@ export function useReclAmmChartLogic() {
       value: 100,
       gradientColors: ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)'],
       borderRadius: 20,
+      segmentType: 'orange',
     }
 
     const greenBarConfig = {
@@ -214,6 +217,7 @@ export function useReclAmmChartLogic() {
       value: 100,
       gradientColors: ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)'],
       borderRadius: 20,
+      segmentType: 'green',
     }
 
     const barSegmentsConfig = [
@@ -256,20 +260,47 @@ export function useReclAmmChartLogic() {
 
       allCategories.push(...segmentCategories)
 
+      // Create series data for this segment
       const segmentSeriesData = Array(segment.count)
         .fill(null)
         .map((_, i) => {
           const isCurrentPriceBar = segmentStartIndex + i === currentPriceBarIndex
 
+          // Define special bar styles based on position in segment
+          const isFirstInSegment = i === 0
+          const isLastInSegment = i === segment.count - 1
+          const isMiddleInSegment = !isFirstInSegment && !isLastInSegment
+
+          // All bars have full border radius by default
+          const barBorderRadius = segment.borderRadius
+
           return {
             value: segment.value,
             itemStyle: {
-              color: isCurrentPriceBar // Solid color for current price bar
+              color: isCurrentPriceBar
                 ? isPriceAdjusting
                   ? ORANGE
                   : GREEN
                 : getGradientColor(segment.gradientColors),
-              borderRadius: segment.borderRadius,
+              borderRadius: barBorderRadius,
+            },
+            // Store segment info for hover effects
+            segmentType: segment.segmentType,
+            segmentStartIndex,
+            segmentEndIndex: segmentStartIndex + segment.count - 1,
+            barIndex: segmentStartIndex + i,
+            isFirstInSegment,
+            isLastInSegment,
+            isMiddleInSegment,
+            // Define hover state styling
+            emphasis: {
+              itemStyle: {
+                color: isCurrentPriceBar
+                  ? isPriceAdjusting
+                    ? ORANGE
+                    : GREEN
+                  : getGradientColor(segment.gradientColors),
+              },
             },
           }
         })
@@ -319,7 +350,44 @@ export function useReclAmmChartLogic() {
     }
 
     return {
-      tooltip: { show: false },
+      tooltip: {
+        show: true,
+        trigger: 'item',
+        formatter: (params: any) => {
+          const { data } = params
+          // data.segmentType: 'orange', 'green', 'grey'
+          // data.segmentStartIndex, data.segmentEndIndex
+          if (data.segmentType === 'orange') {
+            // Determine if left or right orange by index
+            const isLeft = data.segmentStartIndex < baseGreyBarCount + baseOrangeBarCount
+            if (isLeft) {
+              return 'The lower margin (between the min price and lower target). When the current price is within this range, LPs continue to earn swap fees while the pool readjusts to recenter liquidity around the current price.'
+            } else {
+              return 'The upper margin (between the high target and max price). When the current price is within this range, LPs continue to earn swap fees while the pool readjusts to recenter liquidity around the current price.'
+            }
+          }
+          if (data.segmentType === 'green') {
+            return 'The concentrated liquidity of the pool. When the current price is anywhere within this range, LPs earn high swap fees.'
+          }
+          if (data.segmentType === 'grey') {
+            // Determine if left or right grey by index
+            const isLeft = data.segmentStartIndex < baseGreyBarCount
+            if (isLeft) {
+              return 'When the current price is out of range, it cannot access the concentrated liquidity, so LPs will not earn any swap fees. The pool will readjust to recenter liquidity around the current price.'
+            } else {
+              return 'When the current price is out of range, it cannot access the concentrated liquidity, so LPs will not earn any swap fees. The pool will readjust to recenter liquidity around the current price.'
+            }
+          }
+          return ''
+        },
+        backgroundColor: '#222',
+        textStyle: { color: '#fff', fontSize: 12 },
+        borderWidth: 0,
+        borderRadius: 4,
+        padding: 6,
+        extraCssText:
+          'max-width:200px; white-space:pre-line; word-break:break-word; word-wrap:break-word;',
+      },
       grid: {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
@@ -429,7 +497,11 @@ export function useReclAmmChartLogic() {
           type: 'bar',
           barWidth: '90%',
           barCategoryGap: '25%',
-          silent: true,
+          silent: false, // Enable interactions for hover effects
+          emphasis: {
+            focus: 'series', // Focus the entire series when hovering
+            scale: false, // Disable default scaling behavior
+          },
         },
       ],
     }
@@ -444,6 +516,249 @@ export function useReclAmmChartLogic() {
   const inRangeText =
     'The current price is between the target range for this Readjusting Concentrated Liquidity AMM (reCLAMM) pool. In range pools earn high swap fees.'
 
+  // Apply hover effects when chart instance is available and chart data is ready
+  useEffect(() => {
+    if (!chartInstance || !options.series || !options.series[0] || !options.series[0].data) return
+
+    // No need for segments config as we're handling border radius dynamically
+
+    // Extract series data from options
+    const seriesData = options.series[0].data || []
+
+    // Track current active segment to prevent flickering
+    let activeSegment: { segmentType: string; startIndex: number; endIndex: number } | null = null
+    let hoverTimer: number | null = null
+
+    // Pre-compute all the possible segment states for better performance
+    // This avoids recalculating during mouse events
+    const segmentStates: Record<string, any[]> = {}
+
+    seriesData.forEach((bar: any) => {
+      if (bar && bar.segmentType && ['green', 'orange', 'grey'].includes(bar.segmentType)) {
+        const segmentKey = `${bar.segmentType}-${bar.segmentStartIndex}-${bar.segmentEndIndex}`
+
+        if (!segmentStates[segmentKey]) {
+          const segmentBars: any[] = Array(bar.segmentEndIndex - bar.segmentStartIndex + 1)
+
+          for (let i = bar.segmentStartIndex; i <= bar.segmentEndIndex; i++) {
+            const isMiddleBar = i !== bar.segmentStartIndex && i !== bar.segmentEndIndex
+            const isFirstInSegment = i === bar.segmentStartIndex
+            const isLastInSegment = i === bar.segmentEndIndex
+            const isSingleBar = bar.segmentStartIndex === bar.segmentEndIndex
+
+            // Store hover border radius based on position (applied only during hover)
+            let hoverBorderRadius: number | number[] = 0
+            if (isSingleBar) hoverBorderRadius = 20
+            else if (isFirstInSegment) hoverBorderRadius = [20, 0, 0, 20] as number[]
+            else if (isLastInSegment) hoverBorderRadius = [0, 20, 20, 0] as number[]
+
+            segmentBars[i - bar.segmentStartIndex] = {
+              itemStyle: {
+                // Don't set borderRadius here - just store it for hover state
+                hoverBorderRadius, // Store the hover border radius but don't apply it yet
+                opacity: 1,
+              },
+              // Increase width for better overlap between bars - prevents flickering by ensuring bars touch
+              barWidth: isMiddleBar ? '120%' : '110%',
+            }
+          }
+          segmentStates[segmentKey] = segmentBars
+        }
+      }
+    })
+
+    // Apply hover effect to a specific segment
+    const applyHoverEffect = (
+      segmentType: string,
+      segmentStartIndex: number,
+      segmentEndIndex: number
+    ) => {
+      // Clear any pending timer
+      if (hoverTimer !== null) {
+        window.clearTimeout(hoverTimer)
+        hoverTimer = null
+      }
+
+      // Update active segment tracking
+      activeSegment = {
+        segmentType,
+        startIndex: segmentStartIndex,
+        endIndex: segmentEndIndex,
+      }
+
+      // Prepare a single update with all changes at once
+      const updatedSeriesData = chartInstance
+        .getOption()
+        .series[0].data.map((d: any, idx: number) => {
+          // Default: dim all bars to opacity 0.5
+          let update = {
+            ...d,
+            itemStyle: {
+              ...d.itemStyle,
+              opacity: 0.5,
+            },
+          }
+
+          // For bars in the hovered segment, apply the pre-computed state
+          if (idx >= segmentStartIndex && idx <= segmentEndIndex) {
+            const segmentKey = `${segmentType}-${segmentStartIndex}-${segmentEndIndex}`
+            const relativeIdx = idx - segmentStartIndex
+            const segmentStyle = segmentStates[segmentKey]?.[relativeIdx]
+
+            if (segmentStyle) {
+              update = {
+                ...d,
+                itemStyle: {
+                  ...d.itemStyle,
+                  // Apply the hover border radius only during hover
+                  borderRadius: segmentStyle.itemStyle.hoverBorderRadius,
+                  opacity: segmentStyle.itemStyle.opacity,
+                },
+                barWidth: segmentStyle.barWidth,
+              }
+            }
+          }
+
+          return update
+        })
+
+      // Make a single setOption call with all changes
+      chartInstance.setOption(
+        {
+          series: [
+            {
+              data: updatedSeriesData,
+            },
+          ],
+        },
+        false
+      )
+
+      // Highlight the hovered segment in a single dispatch
+      for (let i = segmentStartIndex; i <= segmentEndIndex; i++) {
+        chartInstance.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: i,
+        })
+      }
+    }
+
+    // Reset all hover effects
+    const resetHoverEffect = () => {
+      activeSegment = null
+
+      // Reset all bars to original state in a single update
+      const resetData = chartInstance.getOption().series[0].data.map((d: any, i: number) => {
+        const item = seriesData[i] as any
+        if (!item) return d
+
+        // Always restore full border radius when not hovering
+        const borderRadius = 20
+
+        return {
+          ...d,
+          itemStyle: {
+            ...d.itemStyle,
+            borderRadius,
+            opacity: 1,
+          },
+          barWidth: '90%',
+        }
+      })
+
+      // Single setOption call to reset everything
+      chartInstance.setOption(
+        {
+          series: [
+            {
+              data: resetData,
+            },
+          ],
+        },
+        false
+      )
+
+      // Single downplay action
+      chartInstance.dispatchAction({
+        type: 'downplay',
+        seriesIndex: 0,
+      })
+    }
+
+    // Setup event handlers for hover effects
+    const mouseoverHandler = (params: any) => {
+      if (!params || params.dataIndex === undefined) return
+
+      const barIndex = params.dataIndex
+      const barItem = seriesData[barIndex] as any
+      if (!barItem) return
+
+      // Only apply effects to bars within the same segment
+      const { segmentType, segmentStartIndex, segmentEndIndex } = barItem
+
+      // Apply gooey effect to green, orange, and grey segments
+      if (!['green', 'orange', 'grey'].includes(segmentType)) return
+
+      // Clear any pending reset timer
+      if (hoverTimer !== null) {
+        window.clearTimeout(hoverTimer)
+        hoverTimer = null
+      }
+
+      // Check if we're already hovering this segment
+      if (
+        activeSegment &&
+        activeSegment.segmentType === segmentType &&
+        activeSegment.startIndex === segmentStartIndex &&
+        activeSegment.endIndex === segmentEndIndex
+      ) {
+        // Already hovering this segment, no need to reapply
+        return
+      }
+
+      // Apply hover effect to the new segment
+      applyHoverEffect(segmentType, segmentStartIndex, segmentEndIndex)
+    }
+
+    // Handler for mouse leaving a bar - use small delay to prevent flickering
+    const mouseoutHandler = () => {
+      // Don't reset immediately - set a small delay to allow moving between bars
+      // without flickering
+      if (hoverTimer !== null) {
+        window.clearTimeout(hoverTimer)
+      }
+
+      hoverTimer = window.setTimeout(() => {
+        resetHoverEffect()
+        hoverTimer = null
+      }, 50) // Small delay to allow mouse to move between bars
+    }
+
+    // Handler for mouse leaving the entire chart area - immediate reset
+    const chartMouseoutHandler = () => {
+      if (hoverTimer !== null) {
+        window.clearTimeout(hoverTimer)
+        hoverTimer = null
+      }
+      resetHoverEffect()
+    }
+
+    // Register events on chart
+    chartInstance.on('mouseover', 'series.bar', mouseoverHandler)
+    chartInstance.on('mouseout', 'series.bar', mouseoutHandler)
+    chartInstance.on('globalout', chartMouseoutHandler)
+
+    // Cleanup event handlers on unmount
+    return () => {
+      if (chartInstance) {
+        chartInstance.off('mouseover', 'series.bar', mouseoverHandler)
+        chartInstance.off('mouseout', 'series.bar', mouseoutHandler)
+        chartInstance.off('globalout', chartMouseoutHandler)
+      }
+    }
+  }, [chartInstance, options])
+
   return {
     options,
     hasChartData: !!currentChartData,
@@ -454,6 +769,7 @@ export function useReclAmmChartLogic() {
     inRangeText,
     inRangeReadjustingText,
     isPoolWithinRange: currentChartData.isPoolWithinRange,
+    setChartInstance,
   }
 }
 
