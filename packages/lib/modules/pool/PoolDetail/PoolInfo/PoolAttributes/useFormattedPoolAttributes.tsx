@@ -18,6 +18,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { compact } from 'lodash'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { Pool } from '../../../pool.types'
@@ -90,7 +91,8 @@ export function useFormattedPoolAttributes() {
 
   const formattedPoolAttributes = useMemo((): FormattedPoolAttributes[] => {
     if (!pool) return []
-    const { name, symbol, createTime, dynamicData, type } = pool
+    const { name, symbol, createTime, dynamicData, type, chain } = pool
+    const networkConfig = getNetworkConfig(chain)
 
     const attributes = compact([
       {
@@ -107,7 +109,11 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'Protocol version',
-        value: isCowAmmPool(pool.type) ? 'Balancer CoW AMM' : `Balancer V${pool.protocolVersion}`,
+        value: isCowAmmPool(pool.type) ? 'Balancer CoW AMM' : `Balancer v${pool.protocolVersion}`,
+      },
+      {
+        title: 'Network',
+        value: networkConfig.shortName,
       },
       {
         title: 'Swap fees',
