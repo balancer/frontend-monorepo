@@ -86,7 +86,7 @@ function TokenInfo({
           address={address}
           alt={token?.symbol || address}
           chain={chain}
-          logoURI={token?.logoURI || logoURI}
+          logoURI={poolToken?.logoURI || token?.logoURI || logoURI}
           overflow="visible"
           size={iconSize}
         />
