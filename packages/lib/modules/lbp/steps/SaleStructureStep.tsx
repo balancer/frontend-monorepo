@@ -45,6 +45,7 @@ import {
   format,
   isBefore,
   parseISO,
+  isAfter,
 } from 'date-fns'
 import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
@@ -85,10 +86,33 @@ export function SaleStructureStep() {
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
   const saleStart = saleStructureData.startTime
-  const saleStartsSoon = isBefore(parseISO(saleStructureData.startTime), addDays(now(), 1))
   const saleEnd = saleStructureData.endTime
-  const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
-  const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
+
+  const validateSaleStart = (value: string | number) => {
+    if (typeof value !== 'string') return 'Start time must be type string'
+    if (!isAfter(parseISO(value), addHours(now(), 1))) {
+      return 'Start time must be at least 1 hour in the future'
+    }
+    return true
+  }
+
+  const validateSaleEnd = (value: string | number) => {
+    if (typeof value !== 'string') return 'End time must be type string'
+    if (!isAfter(parseISO(value), addDays(parseISO(saleStart), 1))) {
+      return 'End time must be at least 24 hours after start time'
+    }
+    return true
+  }
+
+  const isSaleStartValid = validateSaleStart(saleStart)
+
+  const saleStartsSoon =
+    isSaleStartValid && saleStart && isBefore(parseISO(saleStart), addDays(now(), 1))
+  const areSaleTimesValid = !!saleStart && !!saleEnd
+  const daysDiff = areSaleTimesValid ? differenceInDays(parseISO(saleEnd), parseISO(saleStart)) : 0
+  const hoursDiff = areSaleTimesValid
+    ? differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
+    : 0
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
 
@@ -133,6 +157,7 @@ export function SaleStructureStep() {
                 label="Start date and time"
                 min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
                 name="startTime"
+                validate={validateSaleStart}
               />
               {saleStartsSoon && (
                 <Text color="font.warning" fontSize="xs">
@@ -146,6 +171,7 @@ export function SaleStructureStep() {
                 label="End date and time"
                 min={saleStart}
                 name="endTime"
+                validate={validateSaleEnd}
               />
               <Text color="font.secondary" fontSize="xs">
                 {saleStart && saleEnd
@@ -181,14 +207,16 @@ export function SaleStructureStep() {
                 The initial seed amounts and ratio set the starting price, projected market cap and
                 price curve.
               </Text>
-              <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
-                <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
-                <AlertDescription>
-                  {saleStartsSoon && 'This sale is scheduled to start soon. '}
-                  {`The LBP will fail to launch unless you seed the initial liquidity before the
-                  scheduled start time at ${format(parseISO(saleStructureData.startTime), 'h:mmaaa, d MMMM yyyy')}.`}
-                </AlertDescription>
-              </Alert>
+              {isSaleStartValid && saleStart && (
+                <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
+                  <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
+                  <AlertDescription>
+                    {saleStartsSoon && 'This sale is scheduled to start soon. '}
+                    `The LBP will fail to launch unless you seed the initial liquidity before the
+                    scheduled start time at ${format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.`
+                  </AlertDescription>
+                </Alert>
+              )}
             </VStack>
 
             <TokenInputsValidationProvider>
@@ -339,12 +367,14 @@ function DateTimeInput({
   control,
   errors,
   min,
+  validate,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   min?: string
+  validate: (value: string | number) => string | true
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
 
@@ -366,6 +396,7 @@ function DateTimeInput({
         )}
         rules={{
           required: 'Start date and time is required',
+          validate,
         }}
       />
     </VStack>
