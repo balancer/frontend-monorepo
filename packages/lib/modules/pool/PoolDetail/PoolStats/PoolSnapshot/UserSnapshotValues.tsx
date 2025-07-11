@@ -16,6 +16,7 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
 import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -135,11 +136,23 @@ export function UserSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+          {/* <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             {`My potential weekly yield${
               poolMyStatsValues && !poolMyStatsValues.myLiquidity ? ' on $10k' : ''
             }`}
-          </Text>
+          </Text> */}
+
+          {poolMyStatsValues && !poolMyStatsValues.myLiquidity ? (
+            <LabelWithTooltip
+              label="My potential weekly yield on $10k"
+              tooltip="The amount you could earn each week if you added $10,000 to this pool at its current APR. If there is an APR range, the amount displayed is at the minimum APR."
+            />
+          ) : (
+            <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+              My potential weekly yield
+            </Text>
+          )}
+
           {poolMyStatsValues ? (
             <Heading size="h4">{toCurrency(poolMyStatsValues.myPotentialWeeklyYield)}</Heading>
           ) : (
