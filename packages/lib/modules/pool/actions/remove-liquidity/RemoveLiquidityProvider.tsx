@@ -47,13 +47,8 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   const [quotePriceImpact, setQuotePriceImpact] = useState<number>()
 
   const { pool, chainId, bptPrice, isLoading } = usePool()
-  const {
-    getToken,
-    usdValueForToken,
-    getNativeAssetToken,
-    getWrappedNativeAssetToken,
-    usdValueForBpt,
-  } = useTokens()
+  const { getToken, getNativeAssetToken, getWrappedNativeAssetToken, usdValueForAddress } =
+    useTokens()
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
@@ -130,7 +125,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
    * Queries
    */
 
-  const usdValueForHumanBptIn = usdValueForBpt(pool.address, chain, humanBptIn)
+  const usdValueForHumanBptIn = usdValueForAddress(pool.address, chain, humanBptIn)
 
   const enabled =
     !urlTxHash &&
@@ -231,7 +226,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
 
       const tokenUnits = amountOutForToken(token.address as Address)
 
-      return [tokenAddress, usdValueForToken(token, tokenUnits) as HumanAmount]
+      return [tokenAddress, usdValueForAddress(tokenAddress, pool.chain, tokenUnits) as HumanAmount]
     })
   )
 

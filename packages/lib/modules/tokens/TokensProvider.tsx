@@ -143,7 +143,7 @@ export function useTokensLogic(
       .toFixed()
   }
 
-  function usdValueForBpt(address: string, chain: GqlChain, amount: Numberish) {
+  function usdValueForAddress(address: string, chain: GqlChain, amount: Numberish) {
     if (amount === '') return '0'
     return bn(amount).times(priceFor(address, chain)).toFixed()
   }
@@ -201,7 +201,7 @@ export function useTokensLogic(
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
     priceForAddress,
-    usdValueForBpt,
+    usdValueForAddress,
     vebalBptToken,
   }
 }

@@ -161,7 +161,7 @@ export default function TokenRow({
   customToken,
   customUsdPrice,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+  const { getToken, usdValueForToken, usdValueForAddress } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
@@ -188,7 +188,7 @@ export default function TokenRow({
       if (customUsdPrice) {
         setUsdValue(bn(customUsdPrice).times(value).toString())
       } else if ((isBpt || isNestedBpt) && pool) {
-        setUsdValue(usdValueForBpt(address, chain, value))
+        setUsdValue(usdValueForAddress(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
       } else if (poolToken) {
