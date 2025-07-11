@@ -57,11 +57,6 @@ import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { now } from '@repo/lib/shared/utils/time'
 
-const validateStartTime = (value: string) => {
-  if (!value) return false
-  return isAfter(parseISO(value), addHours(now(), 1))
-}
-
 export function SaleStructureStep() {
   const { getToken } = useTokens()
 
@@ -93,12 +88,26 @@ export function SaleStructureStep() {
   const saleStart = saleStructureData.startTime
   const saleEnd = saleStructureData.endTime
 
-  const isSaleStartValid = validateStartTime(saleStart)
-  const saleStartsSoon = isSaleStartValid
-    ? saleStart
-      ? isBefore(parseISO(saleStart), addDays(now(), 1))
-      : false
-    : false
+  const validateSaleStart = (value: string | number) => {
+    if (typeof value !== 'string') return 'Start time must be type string'
+    if (!isAfter(parseISO(value), addHours(now(), 1))) {
+      return 'Start time must be at least 1 hour in the future'
+    }
+    return true
+  }
+
+  const validateSaleEnd = (value: string | number) => {
+    if (typeof value !== 'string') return 'End time must be type string'
+    if (!isAfter(parseISO(value), addDays(parseISO(saleStart), 1))) {
+      return 'End time must be at least 24 hours after start time'
+    }
+    return true
+  }
+
+  const isSaleStartValid = validateSaleStart(saleStart)
+
+  const saleStartsSoon =
+    isSaleStartValid && saleStart && isBefore(parseISO(saleStart), addDays(now(), 1))
   const areSaleTimesValid = !!saleStart && !!saleEnd
   const daysDiff = areSaleTimesValid ? differenceInDays(parseISO(saleEnd), parseISO(saleStart)) : 0
   const hoursDiff = areSaleTimesValid
@@ -148,6 +157,7 @@ export function SaleStructureStep() {
                 label="Start date and time"
                 min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
                 name="startTime"
+                validate={validateSaleStart}
               />
               {saleStartsSoon && (
                 <Text color="font.warning" fontSize="xs">
@@ -161,6 +171,7 @@ export function SaleStructureStep() {
                 label="End date and time"
                 min={saleStart}
                 name="endTime"
+                validate={validateSaleEnd}
               />
               <Text color="font.secondary" fontSize="xs">
                 {saleStart && saleEnd
@@ -356,22 +367,16 @@ function DateTimeInput({
   control,
   errors,
   min,
+  validate,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   min?: string
+  validate: (value: string | number) => string | true
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
-
-  const isValidStartTime = (value: string | number) => {
-    if (typeof value !== 'string') return 'Start time must be string date format'
-    if (!validateStartTime(value)) {
-      return 'Start time must be at least 1 hour in the future'
-    }
-    return true
-  }
 
   return (
     <VStack align="start" w="full">
@@ -391,7 +396,7 @@ function DateTimeInput({
         )}
         rules={{
           required: 'Start date and time is required',
-          validate: { isValidStartTime },
+          validate,
         }}
       />
     </VStack>
