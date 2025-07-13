@@ -3,16 +3,16 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
-import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
+import { AddressProvider, PERMIT2 } from '@balancer/sdk'
 import { zeroAddress } from 'viem'
+import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
 
 const NOT_USED = zeroAddress
 
 const networkConfig: NetworkConfig = {
   chainId: hyperEvm.id,
-  name: 'HyperEVM',
-  shortName: 'HyperEVM',
+  name: hyperEvm.name,
+  shortName: hyperEvm.name,
   chain: GqlChain.Hyperevm,
   iconPath: '/images/chains/HYPEREVM.svg',
   blockExplorer: {
@@ -42,14 +42,14 @@ const networkConfig: NetworkConfig = {
   },
   contracts: {
     multicall2: NOT_USED,
-    multicall3: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    multicall3: hyperEvm.contracts.multicall3.address,
     balancer: {
       vaultV2: NOT_USED,
-      vaultV3: balancerV3Contracts.Vault[hyperEvm.id],
+      vaultV3: AddressProvider.Vault(hyperEvm.id),
       relayerV6: NOT_USED,
       minter: NOT_USED,
-      router: balancerV3Contracts.Router[hyperEvm.id],
-      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[hyperEvm.id],
+      router: AddressProvider.Router(hyperEvm.id),
+      compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(hyperEvm.id),
     },
     veDelegationProxy: NOT_USED,
     permit2: PERMIT2[hyperEvm.id],
