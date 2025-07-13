@@ -16,7 +16,6 @@ import {
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
-// import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 
 // FIXME: [JUANJO] This is duplicated on rpc.ts
 const chainIdToDrpcName: Record<number, string | undefined> = {
