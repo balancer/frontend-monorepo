@@ -62,12 +62,12 @@ const networkConfig: NetworkConfig = {
   }),
   layerZeroChainId: 367,
   supportsVeBalSync: false,
-  lbps: {
-    collateralTokens: [
-      '0x5555555555555555555555555555555555555555', // wHYPE
-      '0x69f8AFbC9DE9fD819eC78eDc553488a6B4269938', // USDC
-    ],
-  },
+  // lbps: {
+  //   collateralTokens: [
+  //     '0x5555555555555555555555555555555555555555', // wHYPE
+  //     '0x69f8AFbC9DE9fD819eC78eDc553488a6B4269938', // USDC
+  //   ],
+  // },
 }
 
 export default networkConfig
