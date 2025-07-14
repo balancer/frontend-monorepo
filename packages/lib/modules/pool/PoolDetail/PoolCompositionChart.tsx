@@ -7,18 +7,28 @@ import {
   GqlPoolLiquidityBootstrappingV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
-import { VStack, Skeleton, Box, Divider, HStack, Text, Spacer } from '@chakra-ui/react'
+import {
+  VStack,
+  Skeleton,
+  Box,
+  Divider,
+  HStack,
+  Text,
+  Flex,
+  Spacer,
+  useColorMode,
+} from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useState } from 'react'
 import { isQuantAmmPool, isV3LBP } from '../pool.helpers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShiftsChart'
 import { WeightsChart } from '../../lbp/steps/sale-structure/WeightsChart'
 import { differenceInDays, differenceInHours, secondsToMilliseconds } from 'date-fns'
 import { isSaleOngoing } from '../../lbp/pool/lbp.helpers'
+import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 
 const TABS_LIST: ButtonGroupOption[] = [
   { value: 'weight-shifts', label: 'Weight shifts' },
@@ -31,28 +41,35 @@ interface CompositionViewProps {
   isMobile: boolean
   pool: Pool
   totalLiquidity: string
+  isQuantAmm: boolean
 }
 
-function CompositionView({
-  isMobile,
-  heightPx,
-  chain,
-  pool,
-  totalLiquidity,
-}: CompositionViewProps) {
+function CompositionView({ chain, pool, totalLiquidity, isQuantAmm }: CompositionViewProps) {
+  const { colorMode } = useColorMode()
   return (
     <>
-      <PoolZenGarden
-        poolType={pool.type}
-        sizePx={isMobile ? '300px' : `${heightPx}px`}
-        subdued={false} // Make it more visible
+      <RadialPattern
+        circleCount={8}
+        height={890}
+        innerHeight={240}
+        innerWidth={240}
+        left="calc(50% - 445px)"
+        opacity={colorMode === 'dark' ? 0.35 : 0.45}
+        pointerEvents="none"
+        position="absolute"
+        top={isQuantAmm ? 'calc(50% - 440px)' : 'calc(50% - 465px)'}
+        width={890}
+        zIndex={0}
       />
-      <PoolWeightChart
-        chain={chain}
-        displayTokens={getFlatCompositionTokens(pool)}
-        hasLegend
-        totalLiquidity={totalLiquidity}
-      />
+
+      <Flex h="full">
+        <PoolWeightChart
+          chain={chain}
+          displayTokens={getFlatCompositionTokens(pool)}
+          hasLegend
+          totalLiquidity={totalLiquidity}
+        />
+      </Flex>
     </>
   )
 }
@@ -74,6 +91,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
     isMobile,
     pool,
     totalLiquidity,
+    isQuantAmm,
   }
 
   return (
