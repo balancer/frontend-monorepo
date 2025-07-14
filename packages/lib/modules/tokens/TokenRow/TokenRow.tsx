@@ -183,8 +183,6 @@ export default function TokenRow({
     logoURI,
   }
 
-  console.log({ address, symbol })
-
   useEffect(() => {
     if (value) {
       if (customUsdPrice) {
