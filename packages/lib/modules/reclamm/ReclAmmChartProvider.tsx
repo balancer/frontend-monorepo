@@ -3,13 +3,16 @@ import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
-import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
+import { calculateLowerMargin, calculateUpperMargin, computeCenteredness } from './reclAmmMath'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
 import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useBreakpointValue } from '@chakra-ui/react'
+
+const GREEN = '#93F6D2'
+const ORANGE = 'rgb(253, 186, 116)'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -75,18 +78,21 @@ export function useReclAmmChartLogic() {
       bn(balanceB).plus(virtualBalanceB)
     )
 
+    const rBalanceA = Number(balanceA)
+    const rBalanceB = Number(balanceB)
     const vBalanceA = Number(virtualBalanceA)
     const vBalanceB = Number(virtualBalanceB)
+    const marginValue = Number(margin)
 
     const lowerMargin = calculateLowerMargin({
-      margin: Number(margin),
+      margin: marginValue,
       invariant: invariant.toNumber(),
       virtualBalanceA: vBalanceA,
       virtualBalanceB: vBalanceB,
     })
 
     const upperMargin = calculateUpperMargin({
-      margin: Number(margin),
+      margin: marginValue,
       invariant: invariant.toNumber(),
       virtualBalanceA: vBalanceA,
       virtualBalanceB: vBalanceB,
@@ -122,6 +128,13 @@ export function useReclAmmChartLogic() {
       (currentPriceValue > minPriceValue && currentPriceValue < lowerMarginValue) ||
       (currentPriceValue > upperMarginValue && currentPriceValue < maxPriceValue)
 
+    const { poolCenteredness, isPoolAboveCenter } = computeCenteredness({
+      balanceA: rBalanceA,
+      balanceB: rBalanceB,
+      virtualBalanceA: vBalanceA,
+      virtualBalanceB: vBalanceB,
+    })
+
     return {
       maxPriceValue,
       minPriceValue,
@@ -129,22 +142,67 @@ export function useReclAmmChartLogic() {
       upperMarginValue,
       currentPriceValue,
       isPoolWithinRange,
+      marginValue,
+      poolCenteredness,
+      isPoolAboveCenter,
     }
   }, [reclAmmData])
 
   const options = useMemo(() => {
-    const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue, currentPriceValue } =
-      currentChartData
+    const {
+      maxPriceValue,
+      minPriceValue,
+      lowerMarginValue,
+      upperMarginValue,
+      currentPriceValue,
+      marginValue, // is a true percentage
+      isPoolWithinRange,
+    } = currentChartData
+
+    const isPriceAdjusting = isPoolWithinRange && !reclAmmData.isPoolWithinTargetRange
+
+    let showTargetValues = true
+    let showMinMaxValues = true
+    const totalGreenAndOrangeBars = 52
+
+    // always have a minimum of 1 orange bar
+    const baseOrangeBarCount =
+      marginValue && marginValue < 4
+        ? 1
+        : Math.floor((totalGreenAndOrangeBars * (marginValue || 0)) / 100 / 2)
+
+    // if the margin is very small or very big, show only the target values or min/max values depending on the pool state
+    if (marginValue && marginValue < 4) {
+      if (reclAmmData.isPoolWithinTargetRange) {
+        showTargetValues = true
+        showMinMaxValues = false
+      } else if (isPoolWithinRange) {
+        showTargetValues = false
+        showMinMaxValues = true
+      }
+    } else if (marginValue && marginValue > 92) {
+      showTargetValues = false
+      showMinMaxValues = true
+    }
+
+    const baseGreenBarCount = totalGreenAndOrangeBars - 2 * baseOrangeBarCount
+    const baseGreyBarCount = 9
+    const totalBars = 2 * baseGreyBarCount + 2 * baseOrangeBarCount + baseGreenBarCount
+
+    // for some reason the number of orange (or green) bars matters to echarts in the grid
+    const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '8%'
+    const gridBottomMobile =
+      baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '24.5%' : '16%'
 
     const baseGreyBarConfig = {
-      count: 10,
+      count: baseGreyBarCount,
       value: isMobile ? 1 : 3,
       gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
       borderRadius: 20,
     }
 
     const baseOrangeBarConfig = {
-      count: 8,
+      count: baseOrangeBarCount,
       value: 100,
       gradientColors: ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)'],
       borderRadius: 20,
@@ -152,7 +210,7 @@ export function useReclAmmChartLogic() {
 
     const greenBarConfig = {
       name: 'Green',
-      count: 42,
+      count: baseGreenBarCount,
       value: 100,
       gradientColors: ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)'],
       borderRadius: 20,
@@ -172,24 +230,18 @@ export function useReclAmmChartLogic() {
 
     // Calculate which bar the current price corresponds to
     const getCurrentPriceBarIndex = () => {
-      const { minPriceValue, maxPriceValue, currentPriceValue } = currentChartData
+      const { poolCenteredness = 0, isPoolAboveCenter = false } = currentChartData || {}
 
-      if (
-        minPriceValue === undefined ||
-        maxPriceValue === undefined ||
-        currentPriceValue === undefined
-      ) {
-        return 50 // Default to middle if values are not available
+      const totalGreenAndOrangeBars = 2 * baseOrangeBarCount + baseGreenBarCount
+      let barIndex = 0
+
+      if (isPoolAboveCenter) {
+        barIndex = Math.floor((poolCenteredness / 2) * totalGreenAndOrangeBars)
+      } else {
+        barIndex = Math.floor(((2 - poolCenteredness) / 2) * totalGreenAndOrangeBars)
       }
 
-      const priceRange = maxPriceValue - minPriceValue
-      const pricePerBar = priceRange / 58 // 58 bars in the colored section (8 orange + 42 green + 8 orange)
-      const barsFromMin = (currentPriceValue - minPriceValue) / pricePerBar
-
-      // Add the initial 10 grey bars and round to nearest bar
-      const barIndex = Math.min(Math.max(0, Math.round(barsFromMin)), 57) + 10
-
-      return barIndex
+      return (isReversed ? totalGreenAndOrangeBars - barIndex - 1 : barIndex) + baseGreyBarCount
     }
 
     const currentPriceBarIndex = getCurrentPriceBarIndex()
@@ -212,8 +264,10 @@ export function useReclAmmChartLogic() {
           return {
             value: segment.value,
             itemStyle: {
-              color: isCurrentPriceBar
-                ? '#93F6D2' // Solid color for current price bar
+              color: isCurrentPriceBar // Solid color for current price bar
+                ? isPriceAdjusting
+                  ? ORANGE
+                  : GREEN
                 : getGradientColor(segment.gradientColors),
               borderRadius: segment.borderRadius,
             },
@@ -242,13 +296,13 @@ export function useReclAmmChartLogic() {
       },
       current: {
         ...baseRichProps,
-        color: '#63F2BE',
+        color: isPriceAdjusting ? ORANGE : GREEN,
       },
       currentTriangle: {
         ...baseRichProps,
         fontSize: 10,
         lineHeight: 12,
-        color: '#63F2BE',
+        color: isPriceAdjusting ? ORANGE : GREEN,
       },
       withRightPadding: {
         ...baseRichProps,
@@ -260,7 +314,7 @@ export function useReclAmmChartLogic() {
       },
       withTopRightPadding: {
         ...baseRichProps,
-        padding: [100, paddingRight, 0, 0],
+        padding: [showMinMaxValues && !showTargetValues ? 0 : 100, paddingRight, 0, 0],
       },
     }
 
@@ -270,7 +324,7 @@ export function useReclAmmChartLogic() {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
-        bottom: isMobile ? '-20px' : '8%',
+        bottom: isMobile ? gridBottomMobile : gridBottomDesktop,
         containLabel: true,
       },
       xAxis: {
@@ -284,20 +338,20 @@ export function useReclAmmChartLogic() {
           show: true,
           interval: 0,
           formatter: (value: string, index: number) => {
-            if (index === 10) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('clpPrice', minPriceValue) : 'N/A'}}`
+            if (showMinMaxValues && index === baseGreyBarCount) {
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('tokenRatio', minPriceValue) : 'N/A'}}`
             }
 
-            if (index === 18) {
-              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('clpPrice', upperMarginValue) : 'N/A'}}`
+            if (showTargetValues && index === baseGreyBarCount + baseOrangeBarCount) {
+              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('tokenRatio', upperMarginValue) : 'N/A'}}`
             }
 
-            if (index === 60) {
-              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('clpPrice', lowerMarginValue) : 'N/A'}}`
+            if (showTargetValues && index === totalBars - baseGreyBarCount - baseOrangeBarCount) {
+              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('tokenRatio', lowerMarginValue) : 'N/A'}}`
             }
 
-            if (index === 68) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('clpPrice', maxPriceValue) : 'N/A'}}`
+            if (showMinMaxValues && index === totalBars - baseGreyBarCount) {
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('tokenRatio', maxPriceValue) : 'N/A'}}`
             }
 
             return ''
@@ -325,7 +379,7 @@ export function useReclAmmChartLogic() {
             },
             priceValueMobile: {
               ...richStyles.base,
-              padding: [110, 10, 0, 0],
+              padding: [showMinMaxValues && !showTargetValues ? 0 : 110, 10, 0, 0],
             },
           },
         },
@@ -335,7 +389,8 @@ export function useReclAmmChartLogic() {
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: dynamicXAxisNamePadding,
+          padding:
+            showMinMaxValues && !showTargetValues ? [0, 30, -85, 0] : dynamicXAxisNamePadding,
           color: secondaryFontColor,
         },
       },
@@ -352,7 +407,7 @@ export function useReclAmmChartLogic() {
                 label: {
                   show: true,
                   position: 'top',
-                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? fNum('clpPrice', currentPriceValue) : 'N/A'}}\n{triangle|▼}`,
+                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? fNum('tokenRatio', currentPriceValue) : 'N/A'}}\n{triangle|▼}`,
                   rich: {
                     triangle: {
                       ...richStyles.currentTriangle,
