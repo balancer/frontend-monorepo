@@ -14,7 +14,8 @@ import { RemoveLiquidityReceiptResult } from '@repo/lib/modules/transactions/tra
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { allPoolTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export function RemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -41,7 +42,7 @@ export function RemoveLiquiditySummary({
   const shouldShowErrors = hasQuoteContext ? removeLiquidityTxSuccess : removeLiquidityTxHash
   const shouldShowReceipt = removeLiquidityTxHash && !isLoadingReceipt && receivedTokens.length > 0
 
-  const tokens = getUserReferenceTokens(pool)
+  const tokens = allPoolTokens(pool).map(token => ({ ...token, chain: pool.chain })) as ApiToken[]
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
