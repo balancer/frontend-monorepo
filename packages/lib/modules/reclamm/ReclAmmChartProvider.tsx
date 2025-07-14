@@ -339,19 +339,19 @@ export function useReclAmmChartLogic() {
           interval: 0,
           formatter: (value: string, index: number) => {
             if (showMinMaxValues && index === baseGreyBarCount) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('clpPrice', minPriceValue) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('tokenRatio', minPriceValue) : 'N/A'}}`
             }
 
             if (showTargetValues && index === baseGreyBarCount + baseOrangeBarCount) {
-              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('clpPrice', upperMarginValue) : 'N/A'}}`
+              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('tokenRatio', upperMarginValue) : 'N/A'}}`
             }
 
             if (showTargetValues && index === totalBars - baseGreyBarCount - baseOrangeBarCount) {
-              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('clpPrice', lowerMarginValue) : 'N/A'}}`
+              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('tokenRatio', lowerMarginValue) : 'N/A'}}`
             }
 
             if (showMinMaxValues && index === totalBars - baseGreyBarCount) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('clpPrice', maxPriceValue) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('tokenRatio', maxPriceValue) : 'N/A'}}`
             }
 
             return ''
@@ -407,7 +407,7 @@ export function useReclAmmChartLogic() {
                 label: {
                   show: true,
                   position: 'top',
-                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? fNum('clpPrice', currentPriceValue) : 'N/A'}}\n{triangle|▼}`,
+                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? fNum('tokenRatio', currentPriceValue) : 'N/A'}}\n{triangle|▼}`,
                   rich: {
                     triangle: {
                       ...richStyles.currentTriangle,

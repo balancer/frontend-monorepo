@@ -175,11 +175,11 @@ function boostFormat(val: Numberish): string {
   return numeral(val.toString()).format(BOOST_FORMAT)
 }
 
-function clpPriceFormat(val: Numberish): string {
+function tokenRatioFormat(val: Numberish): string {
   if (bn(val).lt(0.001)) return numeral(val.toString()).format('0.000000')
   if (bn(val).lt(0.01)) return numeral(val.toString()).format('0.00000')
-  if (bn(val).lt(0.1)) return numeral(val.toString()).format('0.0000')
-  if (bn(val).lt(1)) return numeral(val.toString()).format('0.000')
+  if (bn(val).lt(1.2)) return numeral(val.toString()).format('0.0000')
+  if (bn(val).lt(2)) return numeral(val.toString()).format('0.000')
   if (bn(val).lt(10)) return numeral(val.toString()).format('0.00')
   if (bn(val).lt(100)) return numeral(val.toString()).format('0.0')
 
@@ -211,7 +211,7 @@ type NumberFormat =
   | 'sharePercent'
   | 'stakedPercentage'
   | 'boost'
-  | 'clpPrice'
+  | 'tokenRatio'
 
 // General number formatting function.
 export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): string {
@@ -238,8 +238,8 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
       return slippageFormat(val)
     case 'boost':
       return boostFormat(val)
-    case 'clpPrice':
-      return clpPriceFormat(val)
+    case 'tokenRatio':
+      return tokenRatioFormat(val)
     default:
       throw new Error(`Number format not implemented: ${format}`)
   }
