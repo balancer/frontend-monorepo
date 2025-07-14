@@ -2,27 +2,25 @@ import * as WeightedMath from './weightedMath'
 
 const timeFix = 12464900 // Using the same constant as the Contract. The full value is 12464935.015039.
 
-export function calculatePoolCenteredness(params: {
+export function computeCenteredness(params: {
   balanceA: number
   balanceB: number
   virtualBalanceA: number
   virtualBalanceB: number
-}) {
-  if (params.balanceA === 0 || params.balanceB === 0) return 0
-  if (isAboveCenter(params)) {
-    return (params.balanceB * params.virtualBalanceA) / (params.balanceA * params.virtualBalanceB)
-  }
-  return (params.balanceA * params.virtualBalanceB) / (params.balanceB * params.virtualBalanceA)
-}
+}): { poolCenteredness: number; isPoolAboveCenter: boolean } {
+  if (params.balanceA === 0) return { poolCenteredness: 0, isPoolAboveCenter: false }
+  if (params.balanceB === 0) return { poolCenteredness: 0, isPoolAboveCenter: true }
 
-export function isAboveCenter(params: {
-  balanceA: number
-  balanceB: number
-  virtualBalanceA: number
-  virtualBalanceB: number
-}) {
-  if (params.balanceB === 0) return true
-  return params.balanceA / params.balanceB > params.virtualBalanceA / params.virtualBalanceB
+  const numerator = params.balanceA * params.virtualBalanceB
+  const denominator = params.balanceB * params.virtualBalanceA
+
+  if (numerator < denominator) {
+    return {
+      poolCenteredness: numerator / denominator,
+      isPoolAboveCenter: false,
+    }
+  }
+  return { poolCenteredness: denominator / numerator, isPoolAboveCenter: true }
 }
 
 export function calculateLowerMargin(params: {
@@ -190,7 +188,7 @@ export const recalculateVirtualBalances = (params: {
     }
   }
 
-  const poolCenteredness = calculatePoolCenteredness({
+  const { poolCenteredness, isPoolAboveCenter } = computeCenteredness({
     balanceA: params.balanceA,
     balanceB: params.balanceB,
     virtualBalanceA: params.oldVirtualBalanceA,
@@ -200,13 +198,6 @@ export const recalculateVirtualBalances = (params: {
   let newVirtualBalanceA = params.oldVirtualBalanceA
   let newVirtualBalanceB = params.oldVirtualBalanceB
   let newPriceRatio = params.currentPriceRatio
-
-  const isPoolAboveCenter = isAboveCenter({
-    balanceA: params.balanceA,
-    balanceB: params.balanceB,
-    virtualBalanceA: params.oldVirtualBalanceA,
-    virtualBalanceB: params.oldVirtualBalanceB,
-  })
 
   const isPriceRatioUpdating =
     params.simulationParams.simulationSeconds >= params.updateQ0Params.startTime &&
