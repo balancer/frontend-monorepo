@@ -132,6 +132,10 @@ query GetPools(
     poolTokens {
       ...PoolTokens
     }
+    lbpParams {
+      startTime
+      endTime
+    }
   }
   count: poolGetPoolsCount(
     first: $first
