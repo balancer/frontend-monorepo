@@ -61,8 +61,8 @@ function TokenInfo({
   iconSize = 40,
   logoURI,
 }: TokenInfoProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || poolToken?.symbol
-  const tokenName = isBpt ? pool?.name : token?.name || poolToken?.name
+  const tokenSymbol = isBpt ? 'LP token' : poolToken?.symbol || token?.symbol || symbol
+  const tokenName = isBpt ? pool?.name : poolToken?.name || token?.name
 
   const headingProps = {
     as: 'h6' as const,
@@ -182,6 +182,8 @@ export default function TokenRow({
     symbol,
     logoURI,
   }
+
+  console.log({ address, symbol })
 
   useEffect(() => {
     if (value) {
