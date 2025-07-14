@@ -226,7 +226,8 @@ const getDefaultPoolActivityChartOptions = (
       show: !sortedPoolEvents.length && !isLoading,
       textStyle: {
         color: 'grey',
-        fontSize: 20,
+        fontSize: 15,
+        fontWeight: 'bold',
       },
       text: 'No events to show',
       left: 'center',
