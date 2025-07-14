@@ -12,9 +12,9 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { RemoveLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export function RemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -32,7 +32,6 @@ export function RemoveLiquiditySummary({
     removeLiquidityTxSuccess,
   } = useRemoveLiquidity()
   const { isMobile } = useBreakpoints()
-  const { getTokensByChain } = useTokens()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const { slippage } = useUserSettings()
@@ -79,7 +78,7 @@ export function RemoveLiquiditySummary({
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
           pool={pool}
-          tokens={shouldShowReceipt ? getTokensByChain(pool.chain) : undefined}
+          tokens={shouldShowReceipt ? (pool.poolTokens as ApiToken[]) : undefined}
           totalUSDValue={shouldShowReceipt ? undefined : totalUSDValue}
         />
       </Card>

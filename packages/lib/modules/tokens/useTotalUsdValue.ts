@@ -6,7 +6,8 @@ import { HumanTokenAmount } from './token.types'
 import { ApiToken } from './token.types'
 
 export function useTotalUsdValue(tokens: ApiToken[]) {
-  const { usdValueForToken } = useTokens()
+  const { usdValueForTokenAddress } = useTokens()
+
   const calculateUsdAmountsIn = useCallback(
     (humanAmountsIn: HumanTokenAmount[]) =>
       humanAmountsIn.map(amountIn => {
@@ -14,9 +15,9 @@ export function useTotalUsdValue(tokens: ApiToken[]) {
 
         if (!token) return '0'
 
-        return usdValueForToken(token, amountIn.humanAmount)
+        return usdValueForTokenAddress(token.address, token.chain, amountIn.humanAmount)
       }),
-    [usdValueForToken, tokens]
+    [usdValueForTokenAddress, tokens]
   )
 
   function usdValueFor(humanAmountsIn: HumanTokenAmount[]) {
