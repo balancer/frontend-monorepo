@@ -8,7 +8,7 @@ import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
 import { Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import Image from 'next/image'
+import { SmartCircularImage } from '@repo/lib/shared/components/image/SmartCircularImage'
 
 type Props = {
   address?: Address | string
@@ -32,9 +32,10 @@ export function TokenIcon({
   border,
   weight,
   disablePopover,
-  overflow = 'hidden',
   ...rest
 }: Props) {
+  // TODO: fix this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [hasError, setHasError] = useState(false)
   const { getToken } = useTokens()
 
@@ -76,23 +77,13 @@ export function TokenIcon({
   const iconSrc = useMemo(() => getIconSrc(), [logoURI, token])
 
   const tokenImage = (
-    <div style={{ position: 'relative', width: size, height: size, overflow }}>
-      <Image
-        alt={alt}
-        height={size}
-        onError={() => !hasError && setHasError(true)}
-        src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
-        style={{
-          backgroundColor: 'var(--chakra-colors-background-level4)',
-          border: border,
-          borderRadius: '100%',
-          objectFit: 'cover',
-          overflow,
-        }}
-        width={size}
-        {...rest}
-      />
-    </div>
+    <SmartCircularImage
+      alt={alt}
+      border={border}
+      size={size}
+      src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
+      {...rest}
+    />
   )
 
   if (disablePopover) {
