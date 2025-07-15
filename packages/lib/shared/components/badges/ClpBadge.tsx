@@ -20,12 +20,14 @@ export function ClpBadge({ icon, bodyText, headerText, bgColor }: ClpBadgeProps)
         borderRadius="sm"
         color="black"
         cursor="pointer"
+        h="32px"
         mb={['6px', '4px', '0px']} // to prevent jittering on mobile
-        p="2"
+        px="2"
+        shadow="md"
         w="max-content"
         zIndex="1"
       >
-        <HStack>
+        <HStack h="full" justifyContent="center">
           {icon && <Icon as={icon} />}
           <Text color="black" fontSize="sm" fontWeight="bold">
             {headerText}
