@@ -69,8 +69,6 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     )
   }, [xMin, xMax, poolSpotPrice])
 
-  console.log({ poolSpotPrice, xMin, xMax })
-
   return {
     data,
     poolSpotPrice,
