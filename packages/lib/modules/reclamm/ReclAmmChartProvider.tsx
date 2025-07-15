@@ -359,24 +359,14 @@ export function useReclAmmChartLogic() {
           // data.segmentStartIndex, data.segmentEndIndex
           if (data.segmentType === 'orange') {
             // Determine if left or right orange by index
-            const isLeft = data.segmentStartIndex < baseGreyBarCount + baseOrangeBarCount
-            if (isLeft) {
-              return 'The lower margin is part of the uniform concentrated liquidity of the pool. When the current price is within this range, swaps continue to route through the pool and LPs earn swap fees. Also, the pool will begin to automatically readjust and recenter the concentrated liquidity around the current price.'
-            } else {
-              return 'The upper margin is part of the uniform concentrated liquidity of the pool. When the current price is within this range, swaps continue to route through the pool and LPs earn swap fees. Also, the pool will begin to automatically readjust and recenter the concentrated liquidity around the current price.'
-            }
+            return `The ${data.segmentStartIndex < baseGreyBarCount + baseOrangeBarCount ? 'lower' : 'upper'} margin is part of the uniform concentrated liquidity of the pool. When the current price is within this range, swaps continue to route through the pool and LPs earn swap fees. Also, the pool will begin to automatically readjust and recenter the concentrated liquidity around the current price.`
           }
           if (data.segmentType === 'green') {
             return 'This is part of the uniform concentrated liquidity of the pool. When the current price is anywhere within this range, swaps route through the pool and LPs earn swap fees that are likely to be higher compared to an otherwise equivalent weighted pool.'
           }
           if (data.segmentType === 'grey') {
             // Determine if left or right grey by index
-            const isLeft = data.segmentStartIndex < baseGreyBarCount
-            if (isLeft) {
-              return 'When the current price is below the minimum price of the concentrated liquidity range, swaps will not route through the pool and LPs will not earn fees. The pool will automatically readjust downwards to recenter the concentrated liquidity around the current price.'
-            } else {
-              return 'When the current price is above the maximum price of the concentrated liquidity range, swaps will not route through the pool and LPs will not earn fees. The pool will automatically readjust upwards to recenter the concentrated liquidity around the current price.'
-            }
+            return `When the current price is ${data.segmentStartIndex < baseGreyBarCount ? 'below the minimum' : 'above the maximum'} price of the concentrated liquidity range, swaps will not route through the pool and LPs will not earn fees. The pool will automatically readjust ${data.segmentStartIndex < baseGreyBarCount ? 'downwards' : 'upwards'} to recenter the concentrated liquidity around the current price.`
           }
           return ''
         },
