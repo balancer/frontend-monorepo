@@ -9,7 +9,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
 import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { useBreakpointValue } from '@chakra-ui/react'
+import { useBreakpointValue, useColorMode } from '@chakra-ui/react'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -32,6 +32,7 @@ export function useReclAmmChartLogic() {
   const [isReversed, setIsReversed] = useState(false)
   const selectColor = useSelectColor()
   const { pool } = usePool()
+  const { colorMode } = useColorMode()
 
   const dynamicXAxisNamePadding = useBreakpointValue({
     base: [0, 30, -128, 0],
@@ -193,17 +194,23 @@ export function useReclAmmChartLogic() {
     const gridBottomMobile =
       baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '24.5%' : '16%'
 
+    const isDarkMode = colorMode === 'dark'
+
     const baseGreyBarConfig = {
       count: baseGreyBarCount,
       value: isMobile ? 1 : 3,
-      gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
+      gradientColors: isDarkMode
+        ? ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)']
+        : ['rgba(160, 174, 192, 1)', 'rgba(160, 174, 192, 0.5)'],
       borderRadius: 20,
     }
 
     const baseOrangeBarConfig = {
       count: baseOrangeBarCount,
       value: 100,
-      gradientColors: ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)'],
+      gradientColors: isDarkMode
+        ? ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)']
+        : ['rgba(250, 144, 71, 1)', 'rgba(250, 144, 71, 0.5)'],
       borderRadius: 20,
     }
 
@@ -211,7 +218,9 @@ export function useReclAmmChartLogic() {
       name: 'Green',
       count: baseGreenBarCount,
       value: 100,
-      gradientColors: ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)'],
+      gradientColors: isDarkMode
+        ? ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)']
+        : ['rgba(0, 184, 130, 1)', 'rgba(0, 184, 130, 0.5)'],
       borderRadius: 20,
     }
 
