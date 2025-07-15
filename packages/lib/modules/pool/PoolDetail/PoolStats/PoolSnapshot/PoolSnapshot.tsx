@@ -1,16 +1,16 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, Card, CardProps, VStack, useColorMode } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { UserSnapshotValues } from './UserSnapshotValues'
 import { PoolSnapshotValues } from './PoolSnapshotValues'
 import { hasTotalBalance } from '../../../user-balance.helpers'
+import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -41,6 +41,7 @@ const TABS = [
 export function PoolSnapshot({ ...props }: CardProps) {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>(TABS[0])
   const { pool } = usePool()
+  const { colorMode } = useColorMode()
 
   function handleTabChanged(option: ButtonGroupOption) {
     setActiveTab(option)
@@ -59,7 +60,19 @@ export function PoolSnapshot({ ...props }: CardProps) {
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
       >
         <Box bottom={0} left={0} overflow="hidden" position="absolute" right={0} top={0}>
-          <ZenGarden sizePx="280px" subdued variant="circle" />
+          <RadialPattern
+            circleCount={8}
+            height={800}
+            innerHeight={150}
+            innerWidth={150}
+            left="calc(50% - 400px)"
+            opacity={colorMode === 'dark' ? 0.35 : 0.45}
+            pointerEvents="none"
+            position="absolute"
+            top="-180px"
+            width={800}
+            zIndex={0}
+          />
         </Box>
         <VStack
           align="flex-start"

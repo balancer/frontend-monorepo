@@ -10,6 +10,7 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { isCowAmmPool } from '../../../pool.helpers'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 
 type PoolStatsValues = {
   totalLiquidity: string
@@ -63,9 +64,10 @@ export function PoolSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            Swap vol (24h)
-          </Text>
+          <LabelWithTooltip
+            label="Swap vol (24h)"
+            tooltip="The swap volume routing through this pool over the last 24 hours. Unlike the daily chart, which tracks volume since the last UTC midnight, this number always reflects a full 24 hour period."
+          />
           {poolStatsValues ? (
             <Heading size="h4">{poolStatsValues.volume24h}</Heading>
           ) : (
@@ -106,9 +108,10 @@ export function PoolSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            Weekly incentives
-          </Text>
+          <LabelWithTooltip
+            label="Weekly incentives"
+            tooltip="The weekly liquidity mining incentives for this pool. It includes incentives from the Balancer Protocol (as determined by veBAL voting) and from unaffiliated third parties. Users must stake to get these."
+          />
           {poolStatsValues ? (
             <HStack>
               <Heading size="h4">

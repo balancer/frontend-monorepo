@@ -222,7 +222,7 @@ export function PoolWeightChart({
   }, [displayTokens, totalLiquidity, chain, colorMode])
 
   return (
-    <VStack>
+    <VStack justifyContent="center">
       <Box
         _groupHover={{ transform: 'translateY(0) scale(1.05)' }}
         height={`${chartSizeValues.boxHeight}`}

@@ -166,25 +166,26 @@ export function PoolComposition() {
             erc4626Metadata.map(metadata => (
               <Alert key={metadata.name} status="info">
                 <AlertIcon />
-                <AlertDescription>{metadata.description}</AlertDescription>
+                <AlertDescription fontSize="sm">{metadata.description}</AlertDescription>
               </Alert>
             ))}
           {isQuantAmmPool(pool.type) && (
             <Alert status="info">
               <AlertIcon />
               <AlertDescription>
-                <Text color="black">
+                <Text color="black" fontSize="sm">
                   Tokens in BTFs dynamically shift weights to capture appreciation.{' '}
                   <Link
                     alignItems="center"
                     color="black"
                     display="inline-flex"
+                    fontSize="sm"
                     href="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
                     <Box as="span">Learn more</Box>
-                    <Box as="span" ml={1}>
+                    <Box as="span" ml={0.5}>
                       <ArrowUpRight size={12} />
                     </Box>
                   </Link>

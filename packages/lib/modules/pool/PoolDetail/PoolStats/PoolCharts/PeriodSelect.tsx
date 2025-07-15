@@ -12,13 +12,23 @@ type Props = {
 function PeriodSelectContainer({ value, onChange }: Props) {
   const chakraStyles = getSelectStyles<PeriodOption>()
 
+  const customChakraStyles: typeof chakraStyles = {
+    ...chakraStyles,
+    option: (provided, state) => ({
+      ...chakraStyles.option?.(provided, state),
+      ...(state.isSelected && {
+        color: 'font.highlight',
+      }),
+    }),
+  }
+
   function handleChange(newOption: SingleValue<PeriodOption>) {
     if (newOption) onChange(newOption)
   }
 
   return (
     <Select<PeriodOption, false, GroupBase<PeriodOption>>
-      chakraStyles={chakraStyles}
+      chakraStyles={customChakraStyles}
       name="Chain"
       onChange={handleChange}
       options={poolChartPeriods}
