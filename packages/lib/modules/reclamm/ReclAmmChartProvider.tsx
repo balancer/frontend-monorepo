@@ -11,9 +11,6 @@ import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.util
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useBreakpointValue } from '@chakra-ui/react'
 
-const GREEN = '#93F6D2'
-const ORANGE = 'rgb(253, 186, 116)'
-
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
 const ReclAmmChartContext = createContext<ReclAmmChartContextType | null>(null)
@@ -43,6 +40,8 @@ export function useReclAmmChartLogic() {
   }) || [0, 24, -80, 0]
 
   const secondaryFontColor = selectColor('font', 'secondary')
+  const highlightFontColor = selectColor('font', 'highlight')
+  const warningFontColor = selectColor('font', 'warning')
 
   function toggleIsReversed() {
     setIsReversed(!isReversed)
@@ -266,8 +265,8 @@ export function useReclAmmChartLogic() {
             itemStyle: {
               color: isCurrentPriceBar // Solid color for current price bar
                 ? isPriceAdjusting
-                  ? ORANGE
-                  : GREEN
+                  ? warningFontColor
+                  : highlightFontColor
                 : getGradientColor(segment.gradientColors),
               borderRadius: segment.borderRadius,
             },
@@ -280,7 +279,7 @@ export function useReclAmmChartLogic() {
     const baseRichProps = {
       fontSize: 12,
       lineHeight: 13,
-      color: '#A0AEC0',
+      color: secondaryFontColor,
       align: 'center',
     }
 
@@ -290,19 +289,19 @@ export function useReclAmmChartLogic() {
       base: baseRichProps,
       triangle: {
         ...baseRichProps,
-        fontSize: 10,
+        fontSize: 9,
         lineHeight: 12,
         color: '#718096',
       },
       current: {
         ...baseRichProps,
-        color: isPriceAdjusting ? ORANGE : GREEN,
+        color: isPriceAdjusting ? warningFontColor : highlightFontColor,
       },
       currentTriangle: {
         ...baseRichProps,
-        fontSize: 10,
-        lineHeight: 12,
-        color: isPriceAdjusting ? ORANGE : GREEN,
+        fontSize: 8,
+        lineHeight: 14,
+        color: isPriceAdjusting ? warningFontColor : highlightFontColor,
       },
       withRightPadding: {
         ...baseRichProps,
@@ -310,7 +309,7 @@ export function useReclAmmChartLogic() {
       },
       withRightBottomPadding: {
         ...baseRichProps,
-        padding: [0, paddingRight, 10, 0],
+        padding: [0, paddingRight, 5, 0],
       },
       withTopRightPadding: {
         ...baseRichProps,
@@ -360,6 +359,7 @@ export function useReclAmmChartLogic() {
             triangle: {
               ...richStyles.triangle,
               ...richStyles.withRightBottomPadding,
+              fontSize: 9,
             },
             labelText: {
               ...richStyles.base,
