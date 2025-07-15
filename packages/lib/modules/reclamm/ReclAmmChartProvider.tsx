@@ -44,6 +44,7 @@ export function useReclAmmChartLogic() {
   }) || [0, 24, -80, 0]
 
   const secondaryFontColor = selectColor('font', 'secondary')
+  const borderColor = selectColor('background', 'level0')
 
   function toggleIsReversed() {
     setIsReversed(!isReversed)
@@ -283,6 +284,8 @@ export function useReclAmmChartLogic() {
                   : GREEN
                 : getGradientColor(segment.gradientColors),
               borderRadius: barBorderRadius,
+              borderColor,
+              borderWidth: 0.5,
             },
             // Store segment info for hover effects
             segmentType: segment.segmentType,
@@ -295,6 +298,8 @@ export function useReclAmmChartLogic() {
             // Define hover state styling
             emphasis: {
               itemStyle: {
+                borderColor,
+                borderWidth: 0.5,
                 color: isCurrentPriceBar
                   ? isPriceAdjusting
                     ? ORANGE
@@ -376,7 +381,7 @@ export function useReclAmmChartLogic() {
         borderRadius: 4,
         padding: 6,
         extraCssText:
-          'max-width:200px; white-space:pre-line; word-break:break-word; word-wrap:break-word;',
+          'max-width:222px; white-space:pre-line; word-break:break-word; word-wrap:break-word; line-height:1.3;',
       },
       grid: {
         left: isMobile ? '-7%' : '-3%',
@@ -485,8 +490,9 @@ export function useReclAmmChartLogic() {
             return value
           }),
           type: 'bar',
-          barWidth: '90%',
-          barCategoryGap: '25%',
+          barWidth: '100%',
+          barGap: '0',
+          animation: false,
           silent: false, // Enable interactions for hover effects
           emphasis: {
             focus: 'series', // Focus the entire series when hovering
