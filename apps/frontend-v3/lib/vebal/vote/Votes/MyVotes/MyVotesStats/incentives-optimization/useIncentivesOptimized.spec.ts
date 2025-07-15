@@ -192,6 +192,8 @@ function votingPool(gaugeAddress: Address, symbol: string): VotingPoolWithData {
       votes: '9591975004609171', // 0,96%
       votesNextPeriod: '9591975004609171', // 0,96%
       userVotes: '', // '500' = 5%
+      userSlope: 0n,
+      userEndLock: 0n,
       lastUserVoteTime: 0,
     },
     votingIncentive: incentivesWithAmount(0, 0),
