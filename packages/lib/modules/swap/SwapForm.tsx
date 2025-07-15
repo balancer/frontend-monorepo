@@ -44,6 +44,9 @@ import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ApiToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
 import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
+import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
+import { useContractWallet } from '../web3/wallets/useContractWallet'
+import { useIsSafeAccount } from '../web3/safe.hooks'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -206,6 +209,9 @@ export function SwapForm({
         icon: <Repeat size={16} />,
       }
 
+  const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
+  const isSafeAccount = useIsSafeAccount()
+
   return (
     <FadeInOnView>
       <Center
@@ -242,7 +248,12 @@ export function SwapForm({
               {isLbpSwap && <LbpSwapCard />}
               {/* an LBP swap is also a pool swap but not the other way around */}
               {isPoolSwap && !isLbpSwap && <PoolSwapCard />}
+
               <SafeAppAlert />
+              {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (
+                <ContractWalletAlert />
+              )}
+
               {!isPoolSwap && (
                 <ChainSelect
                   onChange={newValue => {
