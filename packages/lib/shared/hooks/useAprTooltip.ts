@@ -204,7 +204,7 @@ export function useAprTooltip({
     .plus(maxMaBeetsRewardDisplayed)
     .plus(maxMaBeetsVotingRewardDisplayed)
 
-  const isMaBeetsPresent = !maBeetsTotalAprDisplayed.isZero()
+  const isMaBeetsPresent = !maxMaBeetsVotingRewardDisplayed.isZero()
 
   const totalBase = aprItems
     .filter(item => TOTAL_BASE_APR_TYPES.includes(item.type))
