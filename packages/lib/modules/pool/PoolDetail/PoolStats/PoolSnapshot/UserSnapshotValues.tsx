@@ -13,7 +13,6 @@ import { usePool } from '../../../PoolProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { ClaimModal } from '../../../actions/claim/ClaimModal'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
 import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
@@ -61,13 +60,11 @@ export function UserSnapshotValues() {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
       const totalBalanceUsd = pool.userBalance.totalBalanceUsd
 
-      const stakedBalanceUsd = totalBalanceUsd
-        ? calcTotalStakedBalanceUsd(pool)
-        : POSSIBLE_STAKED_BALANCE_USD
-
       return {
         myLiquidity: totalBalanceUsd,
-        myPotentialWeeklyYield: bn(stakedBalanceUsd).times(bn(myAprRaw).div(52)).toFixed(2),
+        myPotentialWeeklyYield: bn(totalBalanceUsd || POSSIBLE_STAKED_BALANCE_USD)
+          .times(bn(myAprRaw).div(52))
+          .toFixed(2),
         myClaimableRewards: myClaimableRewards,
       }
     }
