@@ -37,7 +37,7 @@ export function useReclAmmChartLogic() {
   const dynamicXAxisNamePadding = useBreakpointValue({
     base: [0, 30, -128, 0],
     md: [0, 30, -128, 0],
-    lg: [0, 24, -80, 0],
+    lg: [0, 24, -75, 0],
   }) || [0, 24, -80, 0]
 
   const secondaryFontColor = selectColor('font', 'secondary')
