@@ -186,7 +186,7 @@ export function useReclAmmChartLogic() {
     const totalBars = 2 * baseGreyBarCount + 2 * baseOrangeBarCount + baseGreenBarCount
 
     // for some reason the number of orange (or green) bars matters to echarts in the grid
-    const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '3%'
+    const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '1%'
     const gridBottomMobile =
       baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '24.5%' : '16%'
 
