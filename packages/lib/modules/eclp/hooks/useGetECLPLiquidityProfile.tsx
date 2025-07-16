@@ -19,7 +19,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const tokenRateScalingFactorString = useMemo(() => {
     if (!tokenRates) return
 
-    return bn(tokenRates[0]).div(bn(tokenRates[1])).toFixed(4)
+    return bn(tokenRates[0]).div(bn(tokenRates[1])).toString()
   }, [tokenRates])
 
   const liquidityData = useMemo(
