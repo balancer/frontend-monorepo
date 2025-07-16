@@ -34,8 +34,6 @@ export function TokenIcon({
   disablePopover,
   ...rest
 }: Props) {
-  // TODO: fix this
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [hasError, setHasError] = useState(false)
   const { getToken } = useTokens()
 
@@ -80,6 +78,7 @@ export function TokenIcon({
     <SmartCircularImage
       alt={alt}
       border={border}
+      onError={() => !hasError && setHasError(true)}
       size={size}
       src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
       {...rest}
