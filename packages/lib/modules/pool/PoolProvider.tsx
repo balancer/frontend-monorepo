@@ -34,6 +34,7 @@ export function usePoolLogic({
   const { userAddress } = useUserAccount()
   const { priceFor, calcTotalUsdValue } = useTokens()
   const myLiquiditySectionRef = useRef<HTMLDivElement | null>(null)
+  const myLbpTransactionsSectionRef = useRef<HTMLDivElement | null>(null)
 
   useInvalidVariantRedirect(initialData.pool)
 
@@ -72,6 +73,7 @@ export function usePoolLogic({
     isLoadingOnchainData,
     isLoadingOnchainUserBalances,
     myLiquiditySectionRef,
+    myLbpTransactionsSectionRef,
     // TODO: we assume here that we never need to reload the entire pool.
     // this assumption may need to be questioned
     refetch,

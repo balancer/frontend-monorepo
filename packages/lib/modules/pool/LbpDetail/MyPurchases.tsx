@@ -1,15 +1,5 @@
 import TokenRow from '../../tokens/TokenRow/TokenRow'
-import {
-  Divider,
-  Card,
-  HStack,
-  Heading,
-  Text,
-  VStack,
-  Spacer,
-  Stack,
-  Skeleton,
-} from '@chakra-ui/react'
+import { Divider, Card, HStack, Heading, Text, VStack, Spacer, Skeleton } from '@chakra-ui/react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -20,6 +10,7 @@ import {
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { useState, useEffect } from 'react'
 
 export function MyPurchases({
   userPoolEvents,
@@ -28,8 +19,9 @@ export function MyPurchases({
   userPoolEvents: GetPoolEventsQuery['poolEvents'] | undefined
   isLoading: boolean
 }) {
-  const { pool, chain, myLiquiditySectionRef } = usePool()
+  const { pool, chain, myLbpTransactionsSectionRef } = usePool()
   const { priceFor } = useTokens()
+  const [height, setHeight] = useState(0)
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
@@ -39,19 +31,23 @@ export function MyPurchases({
 
   const currentPrice = priceFor(projectToken.address as Address, chain)
 
+  // keep this card the same height as the 'My Transactions' section (LBP)
+  useEffect(() => {
+    if (myLbpTransactionsSectionRef && myLbpTransactionsSectionRef.current) {
+      setHeight(myLbpTransactionsSectionRef.current.offsetHeight)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <Card h="fit-content" ref={myLiquiditySectionRef}>
+    <Card h={['fit-content', height]}>
       {isLoading && <Skeleton h="full" w="full" />}
       {!isLoading && (
-        <VStack spacing="md" width="full">
-          <Stack w="full">
-            <Heading backgroundClip="text" bg="font.special" fontWeight="bold" size="h5">
-              My purchases
-            </Heading>
-          </Stack>
-
+        <VStack align="start" h="full" spacing="md" width="full">
+          <Heading backgroundClip="text" bg="font.special" fontWeight="bold" size="h5">
+            My purchases
+          </Heading>
           <Divider />
-
           <TokenRow
             abbreviated={false}
             address={projectToken.address as Address}
@@ -61,9 +57,8 @@ export function MyPurchases({
             pool={pool}
             value={userProjectTokenBalance}
           />
-
+          <Spacer />
           <Divider />
-
           <HStack w="full">
             <Text fontSize="0.85rem" variant="secondary">
               My share of tokens sold
