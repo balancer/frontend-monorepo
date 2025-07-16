@@ -10,12 +10,12 @@ import { usePool } from '../PoolProvider'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { now } from '@repo/lib/shared/utils/time'
 import { isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
-import { Top10Holdings } from './Top10Holdings'
 import { LbpPoolChartsContainer } from './LbpPoolCharts/LbpPoolChartsContainer'
 import { MyPurchases } from './MyPurchases'
 import { MyTransactions } from './MyTransactions'
 import { GetFundsWarning } from './GetFundsWarning'
 import { useUserAccount } from '../../web3/UserAccountProvider'
+import { Top10Trades } from './Top10Trades'
 
 export function LbpDetail() {
   const { userPoolEvents, isLoadingUserPoolEvents, hasPoolEvents } = useUserPoolEvents()
@@ -39,7 +39,7 @@ export function LbpDetail() {
               <LbpPoolChartsContainer />
             </GridItem>
             <GridItem>
-              {isSaleFinished ? <Top10Holdings chain={pool.chain} /> : <LbpSwap />}
+              {isSaleFinished ? <Top10Trades chain={pool.chain} pool={lbpPool} /> : <LbpSwap />}
             </GridItem>
           </Grid>
 
