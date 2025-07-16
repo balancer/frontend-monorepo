@@ -235,7 +235,7 @@ export function PromoBanners() {
                             fontSize={{ base: 'xs', sm: 'sm', lg: 'md' }}
                             fontWeight="medium"
                             lineHeight="1.25"
-                            maxW="46ch"
+                            maxW="48ch"
                             opacity={colorMode === 'dark' ? '0.75' : '1'}
                             sx={{
                               textWrap: 'balance',

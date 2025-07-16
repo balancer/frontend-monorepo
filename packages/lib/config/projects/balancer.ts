@@ -192,12 +192,12 @@ export const ProjectConfigBalancer: ProjectConfig = {
       label: 'reCLAMM pools',
       title: 'New readjusting Concentrated Liquidity Pools',
       description:
-        'Maximize yield with reCLAMM pools: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
+        'Maximize capital efficiency with reCLAMMs: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
       buttonText: 'View pools',
       buttonLink: '/pools?poolTypes=RECLAMM',
       linkText: 'Learn more',
       linkURL:
-        'https://docs.balancer.fi/concepts/explore-available-balancer-pools/boosted-pool.html',
+        'https://medium.com/balancer-protocol/introducing-reclamms-self-readjusting-trustless-passive-lping-for-clamms-b5528429588e',
       linkExternal: true,
       bgImageActive: {
         directory: '/images/promos/promo-banner/',
