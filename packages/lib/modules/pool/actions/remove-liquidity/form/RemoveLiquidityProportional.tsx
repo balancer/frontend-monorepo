@@ -12,6 +12,8 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { WrappedOrUnderlyingSelectModal } from '@repo/lib/modules/tokens/WrappedOrUnderlyingSelectModal'
 import { useState } from 'react'
 import { getWrappedAndUnderlyingTokenFn } from '../../../pool-tokens.utils'
+import { isV3LBP } from '@repo/lib/modules/pool/pool.helpers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 type Props = { tokens: ApiToken[]; pool: Pool }
 export function RemoveLiquidityProportional({ tokens, pool }: Props) {
@@ -27,6 +29,8 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
   const [wrappedAndUnderlying, setWrappedAndUnderlying] = useState<ApiToken[] | undefined>()
   const nativeTokenSelectDisclosure = useDisclosure()
   const boostedTokenSelectDisclosure = useDisclosure()
+  const { priceFor } = useTokens()
+
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
 
   const nativeAssets = validTokens.filter(token =>
@@ -72,19 +76,27 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
           <Text fontSize="sm" fontWeight="bold">
             You&apos;re expected to get (if no slippage)
           </Text>
-          {tokens.map(
-            token =>
-              token && (
-                <TokenRow
-                  address={token.address as Address}
-                  chain={pool.chain}
-                  isLoading={isLoading}
-                  key={token.address}
-                  toggleTokenSelect={getToggleTokenCallback(token)}
-                  value={amountOutForToken(token.address as Address)}
-                />
-              )
-          )}
+          {tokens.map(token => {
+            const lbpProps = isV3LBP(pool)
+              ? {
+                  pool,
+                  logoURI: token.logoURI || '',
+                  customUsdPrice: priceFor(token.address as Address, pool.chain),
+                }
+              : {}
+
+            return (
+              <TokenRow
+                address={token.address as Address}
+                chain={pool.chain}
+                isLoading={isLoading}
+                key={token.address}
+                toggleTokenSelect={getToggleTokenCallback(token)}
+                value={amountOutForToken(token.address as Address)}
+                {...lbpProps}
+              />
+            )
+          })}
         </VStack>
       </Card>
       {!!validTokens.length && (

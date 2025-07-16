@@ -12,9 +12,12 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { RemoveLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { allPoolTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 export function RemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -32,7 +35,6 @@ export function RemoveLiquiditySummary({
     removeLiquidityTxSuccess,
   } = useRemoveLiquidity()
   const { isMobile } = useBreakpoints()
-  const { getTokensByChain } = useTokens()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const { slippage } = useUserSettings()
@@ -41,6 +43,21 @@ export function RemoveLiquiditySummary({
 
   const shouldShowErrors = hasQuoteContext ? removeLiquidityTxSuccess : removeLiquidityTxHash
   const shouldShowReceipt = removeLiquidityTxHash && !isLoadingReceipt && receivedTokens.length > 0
+
+  const tokens = allPoolTokens(pool)
+    .map(token => {
+      // also add native asset if wrapped native asset is in the pool
+      if (isWrappedNativeAsset(token.address, pool.chain)) {
+        const nativeAsset = getNetworkConfig(pool.chain).tokens.nativeAsset
+
+        return [
+          { ...token, chain: pool.chain },
+          { ...nativeAsset, chain: pool.chain },
+        ] as ApiToken[]
+      }
+      return { ...token, chain: pool.chain } as ApiToken
+    })
+    .flat()
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
@@ -78,7 +95,8 @@ export function RemoveLiquiditySummary({
           chain={pool.chain}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
-          tokens={shouldShowReceipt ? getTokensByChain(pool.chain) : undefined}
+          pool={pool}
+          tokens={shouldShowReceipt ? tokens : undefined}
           totalUSDValue={shouldShowReceipt ? undefined : totalUSDValue}
         />
       </Card>

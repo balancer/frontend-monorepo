@@ -40,7 +40,7 @@ function getPoolTypeText(pool: Pool) {
 export function useFormattedPoolAttributes() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
-  const { usdValueForBpt } = useTokens()
+  const { usdValueForTokenAddress } = useTokens()
 
   const isV2 = isV2Pool(pool)
   const isV3 = isV3Pool(pool)
@@ -144,7 +144,7 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'LP token price',
-        value: toCurrency(usdValueForBpt(pool.address, pool.chain, '1')),
+        value: toCurrency(usdValueForTokenAddress(pool.address, pool.chain, '1')),
       },
     ])
     if (shouldHideSwapFee(pool?.type)) {

@@ -62,8 +62,8 @@ function TokenInfo({
   iconSize = 40,
   logoURI,
 }: TokenInfoProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || poolToken?.symbol
-  const tokenName = isBpt ? pool?.name : token?.name || poolToken?.name
+  const tokenSymbol = isBpt ? 'LP token' : poolToken?.symbol || token?.symbol || symbol
+  const tokenName = isBpt ? pool?.name : poolToken?.name || token?.name
 
   const headingProps = {
     as: 'h6' as const,
@@ -87,7 +87,7 @@ function TokenInfo({
           address={address}
           alt={token?.symbol || address}
           chain={chain}
-          logoURI={token?.logoURI || logoURI}
+          logoURI={poolToken?.logoURI || token?.logoURI || logoURI}
           overflow="visible"
           size={iconSize}
         />
@@ -162,7 +162,7 @@ export default function TokenRow({
   customToken,
   customUsdPrice,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+  const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
@@ -189,7 +189,7 @@ export default function TokenRow({
       if (customUsdPrice) {
         setUsdValue(bn(customUsdPrice).times(value).toString())
       } else if ((isBpt || isNestedBpt) && pool) {
-        setUsdValue(usdValueForBpt(address, chain, value))
+        setUsdValue(usdValueForTokenAddress(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
       } else if (poolToken) {
