@@ -111,6 +111,14 @@ describe('shouldBlockAddLiquidity', () => {
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
     })
 
+    it('should block INVESTMENT / MANAGED pools', () => {
+      const pool = getApiPoolMock(sDAIWeighted)
+      pool.type = GqlPoolType.Investment
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
     it('should not block liquidity if all tokens are allowed', () => {
       const pool = getApiPoolMock(sDAIWeighted)
 

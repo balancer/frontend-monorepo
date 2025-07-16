@@ -342,6 +342,7 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) reasons.push('Adds are blocked for all V3 pools')
 
   if (isLBP(pool.type)) reasons.push('LBP pool')
+  if (isManaged(pool.type)) reasons.push('Managed pools are not compatible')
   if (pool.dynamicData.isPaused) reasons.push('Paused pool')
   if (pool.dynamicData.isInRecoveryMode) reasons.push('Pool in recovery')
 
