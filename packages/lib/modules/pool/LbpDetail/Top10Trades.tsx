@@ -1,4 +1,4 @@
-import { Card, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
+import { Card, Center, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
 import {
   GqlChain,
   GqlLbpTopTrade,
@@ -18,19 +18,25 @@ export function Top10Trades({
   const trades = pool.topTrades || []
 
   return (
-    <Card>
-      <VStack spacing="5" w="full">
+    <Card h="full">
+      <VStack h="full" spacing="5" w="full">
         <HStack w="full">
           <Text fontSize="lg" fontWeight="bold">
             Biggest transactions during the sale
           </Text>
         </HStack>
-        <VStack w="full">
-          {trades.map(
-            (trade, index) =>
-              trade && <Row chain={chain} key={trade.address + index} trade={trade} />
-          )}
-        </VStack>
+        {trades.length > 0 ? (
+          <VStack w="full">
+            {trades.map(
+              (trade, index) =>
+                trade && <Row chain={chain} key={trade.address + index} trade={trade} />
+            )}
+          </VStack>
+        ) : (
+          <Center h="full" w="full">
+            <Text>No data</Text>
+          </Center>
+        )}
       </VStack>
     </Card>
   )
