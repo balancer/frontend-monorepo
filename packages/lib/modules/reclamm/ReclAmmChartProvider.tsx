@@ -310,8 +310,8 @@ export function useReclAmmChartLogic() {
                 borderWidth: 0.5,
                 color: isCurrentPriceBar
                   ? isPriceAdjusting
-                    ? ORANGE
-                    : GREEN
+                    ? warningFontColor
+                    : highlightFontColor
                   : getGradientColor(segment.gradientColors),
               },
             },
