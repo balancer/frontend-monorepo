@@ -47,6 +47,7 @@ import {
   getPoolAddBlockedReason,
   calcUserShareOfPool,
   isFx,
+  isManaged,
 } from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
@@ -406,7 +407,7 @@ export default function PoolMyLiquidity() {
             </Tooltip>
             <Button
               flex="1"
-              isDisabled={!hasUnstakedBalance}
+              isDisabled={!hasUnstakedBalance || isManaged(pool.type)}
               maxW="120px"
               onClick={() => handleRemoveLiquidity()}
               variant={hasUnstakedBalance ? 'tertiary' : 'disabled'}
