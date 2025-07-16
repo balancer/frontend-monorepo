@@ -127,8 +127,8 @@ function PoolChartsContent({ ...props }: any) {
         ) : hasChartData ? (
           <NoisyCard {...COMMON_NOISY_CARD_PROPS}>
             <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
-              <Stack direction={{ base: 'column', md: 'row' }} w="full">
-                <HStack alignSelf="flex-start">
+              <Stack direction={{ base: 'column', md: 'row' }} w="full" wrap="wrap">
+                <HStack alignSelf="flex-start" wrap="wrap">
                   <ButtonGroup
                     currentOption={activeTab}
                     groupId="chart"
