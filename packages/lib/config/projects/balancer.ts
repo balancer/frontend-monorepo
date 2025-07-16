@@ -185,16 +185,16 @@ export const ProjectConfigBalancer: ProjectConfig = {
   promoItems: [
     {
       id: 0,
-      icon: 'boosted',
-      label: 'Boosted Pools',
-      title: '100% Boosted Pools on Balancer v3',
+      icon: 'reclamm',
+      label: 'reCLAMM pools',
+      title: 'New readjusting Concentrated Liquidity Pools',
       description:
-        'A simple, capital efficient strategy for LPs to get boosted yield. Partnering with leading lending protocols like Aave and Morpho.',
+        'Maximize capital efficiency with reCLAMMs: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
       buttonText: 'View pools',
-      buttonLink: '/pools?poolTags=BOOSTED',
+      buttonLink: '/pools?poolTypes=RECLAMM',
       linkText: 'Learn more',
       linkURL:
-        'https://docs.balancer.fi/concepts/explore-available-balancer-pools/boosted-pool.html',
+        'https://medium.com/balancer-protocol/introducing-reclamms-self-readjusting-trustless-passive-lping-for-clamms-b5528429588e',
       linkExternal: true,
       bgImageActive: {
         directory: '/images/promos/promo-banner/',
@@ -207,15 +207,16 @@ export const ProjectConfigBalancer: ProjectConfig = {
     },
     {
       id: 1,
-      icon: 'v3',
-      label: 'Balancer v3',
-      title: 'Balancer v3 is live and thriving!',
+      icon: 'boosted',
+      label: 'Boosted Pools',
+      title: '100% Boosted Pools on Balancer v3',
       description:
-        'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested on-chain since November.',
+        'A simple, capital efficient strategy for LPs to get boosted yield. Partnering with leading lending protocols like Aave and Morpho.',
       buttonText: 'View pools',
-      buttonLink: 'pools?protocolVersion=3',
+      buttonLink: '/pools?poolTags=BOOSTED',
       linkText: 'Learn more',
-      linkURL: 'https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html',
+      linkURL:
+        'https://docs.balancer.fi/concepts/explore-available-balancer-pools/boosted-pool.html',
       linkExternal: true,
       bgImageActive: {
         directory: '/images/promos/promo-banner/',
