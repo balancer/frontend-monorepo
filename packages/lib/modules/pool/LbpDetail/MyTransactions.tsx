@@ -40,7 +40,7 @@ type PoolEventRowProps = {
 
 type EventType = 'Buy' | 'Sell' | 'Seed' | 'Extract'
 
-const GRID_COLUMNS = '1fr 2fr 1fr 1fr'
+const GRID_COLUMNS = '1fr 4fr 1fr 3fr'
 
 export function MyTransactions({
   userPoolEvents,
