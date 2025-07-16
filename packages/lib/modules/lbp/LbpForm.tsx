@@ -18,10 +18,15 @@ import { SaleStructureStep } from './steps/SaleStructureStep'
 import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/review/ReviewStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useEffect } from 'react'
 
 export function LbpForm() {
   const { steps, activeStepIndex, activeStep } = useLbpForm()
   const { isMobile } = useBreakpoints()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [activeStepIndex])
 
   return (
     <VStack spacing="lg" w="full">
@@ -48,13 +53,9 @@ export function LbpForm() {
       <Divider />
 
       <VStack spacing="lg" w="full">
-        {activeStep.id === 'step1' ? (
-          <SaleStructureStep />
-        ) : activeStep.id === 'step2' ? (
-          <ProjectInfoStep />
-        ) : activeStep.id === 'step3' ? (
-          <ReviewStep />
-        ) : null}
+        {activeStep.id === 'step1' && <SaleStructureStep />}
+        {activeStep.id === 'step2' && <ProjectInfoStep />}
+        {activeStep.id === 'step3' && <ReviewStep />}
       </VStack>
     </VStack>
   )

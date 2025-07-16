@@ -47,13 +47,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   const [quotePriceImpact, setQuotePriceImpact] = useState<number>()
 
   const { pool, chainId, bptPrice, isLoading } = usePool()
-  const {
-    getToken,
-    usdValueForToken,
-    getNativeAssetToken,
-    getWrappedNativeAssetToken,
-    usdValueForBpt,
-  } = useTokens()
+  const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
@@ -130,7 +124,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
    * Queries
    */
 
-  const usdValueForHumanBptIn = usdValueForBpt(pool.address, chain, humanBptIn)
+  const usdValueForHumanBptIn = usdValueForTokenAddress(pool.address, chain, humanBptIn)
 
   const enabled =
     !urlTxHash &&
@@ -226,12 +220,14 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   const usdAmountOutMap: Record<Address, HumanAmount> = Object.fromEntries(
     quoteAmountsOut.map(tokenAmount => {
       const tokenAddress = getAddressForTokenAmount(tokenAmount)
-      const token = getToken(tokenAddress, pool.chain)
-      if (!token) return [tokenAddress, '0'] // Ignore BPT token addresses included in SDK amountsOut
+      const tokenUnits = amountOutForToken(tokenAddress)
 
-      const tokenUnits = amountOutForToken(token.address as Address)
+      if (tokenAddress === pool.address) return [tokenAddress, '0'] // Ignore BPT token addresses included in SDK amountsOut
 
-      return [tokenAddress, usdValueForToken(token, tokenUnits) as HumanAmount]
+      return [
+        tokenAddress,
+        usdValueForTokenAddress(tokenAddress, pool.chain, tokenUnits) as HumanAmount,
+      ]
     })
   )
 

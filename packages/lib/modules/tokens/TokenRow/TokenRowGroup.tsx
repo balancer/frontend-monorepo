@@ -8,6 +8,7 @@ import TokenRow from './TokenRow'
 import { useMemo } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 
 type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
@@ -18,6 +19,7 @@ export function TokenRowGroup({
   tokens = [],
   totalUSDValue,
   isLoading = false,
+  pool,
 }: {
   label: string
   amounts: HumanTokenAmountWithSymbol[]
@@ -25,6 +27,7 @@ export function TokenRowGroup({
   totalUSDValue?: string
   tokens?: ApiToken[]
   isLoading?: boolean
+  pool?: Pool
 }) {
   const { toCurrency } = useCurrency()
   const { usdValueFor } = useTotalUsdValue(tokens)
@@ -39,6 +42,8 @@ export function TokenRowGroup({
     amounts.forEach(amount => {
       if (!amount.tokenAddress) return
 
+      const symbol = pool?.poolTokens.find(token => token.address === amount.tokenAddress)?.symbol
+
       const key = amount.tokenAddress
 
       if (amountMap[key]) {
@@ -47,6 +52,7 @@ export function TokenRowGroup({
           humanAmount: bn(amountMap[key].humanAmount)
             .plus(bn(amount.humanAmount))
             .toString() as HumanAmount,
+          symbol: symbol || amount.symbol,
         }
       } else {
         amountMap[key] = { ...amount }
@@ -54,7 +60,7 @@ export function TokenRowGroup({
     })
 
     return Object.values(amountMap)
-  }, [amounts])
+  }, [amounts, pool?.poolTokens])
 
   const hasMultipleAmounts = aggregatedAmounts.length > 1
 
@@ -84,6 +90,7 @@ export function TokenRowGroup({
             chain={chain}
             isLoading={isLoading}
             key={amount.tokenAddress}
+            pool={pool}
             symbol={amount?.symbol}
             value={amount.humanAmount}
           />
