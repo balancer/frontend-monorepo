@@ -32,6 +32,7 @@ import {
   useReclAmmChart,
 } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
+import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedToggleButton'
 import { ThumbsDown, ThumbsUp } from 'react-feather'
 import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
 
@@ -78,11 +79,11 @@ function PoolChartsContent({ ...props }: any) {
   const {
     hasChartData: hasReclAmmChartData,
     isLoading: isLoadingReclAmmChartData,
-    isPoolWithinTargetRange,
     outOfRangeText: reclammOutOfRangeText,
     inRangeText: reclammInRangeText,
-    inRangeReadjustingText: reclammInRangeReadjustingText,
     isPoolWithinRange,
+    toggleIsReversed,
+    tokens,
   } = useReclAmmChart()
 
   const {
@@ -109,14 +110,10 @@ function PoolChartsContent({ ...props }: any) {
       icon: poolIsInRange ? ThumbsUp : ThumbsDown,
     },
     reclamm: {
-      bgColor: isPoolWithinTargetRange ? 'green.400' : isPoolWithinRange ? 'orange.300' : 'red.400',
-      bodyText: isPoolWithinTargetRange
-        ? reclammInRangeText
-        : isPoolWithinRange
-          ? reclammInRangeReadjustingText
-          : reclammOutOfRangeText,
-      headerText: isPoolWithinTargetRange ? 'Pool in range' : 'Pool readjusting',
-      icon: isPoolWithinTargetRange ? ThumbsUp : WandIcon,
+      bgColor: isPoolWithinRange ? 'green.400' : 'red.400',
+      bodyText: isPoolWithinRange ? reclammInRangeText : reclammOutOfRangeText,
+      headerText: isPoolWithinRange ? 'Pool in range' : 'Pool readjusting',
+      icon: isPoolWithinRange ? ThumbsUp : WandIcon,
     },
   }
 
@@ -137,6 +134,9 @@ function PoolChartsContent({ ...props }: any) {
                     options={tabsList}
                     size="xxs"
                   />
+                  {showReclammChart && (
+                    <ReversedToggleButton toggleIsReversed={toggleIsReversed} tokenPair={tokens} />
+                  )}
                   {showPoolCharts && <PeriodSelect />}
                 </HStack>
                 <VStack

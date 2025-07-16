@@ -9,7 +9,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
 import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { useBreakpointValue, useColorMode } from '@chakra-ui/react'
+import { useColorMode } from '@chakra-ui/react'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -34,12 +34,6 @@ export function useReclAmmChartLogic() {
   const selectColor = useSelectColor()
   const { pool } = usePool()
   const { colorMode } = useColorMode()
-
-  const dynamicXAxisNamePadding = useBreakpointValue({
-    base: [0, 30, -128, 0],
-    md: [0, 30, -128, 0],
-    lg: [0, 24, -75, 0],
-  }) || [0, 24, -80, 0]
 
   const secondaryFontColor = selectColor('font', 'secondary')
   const highlightFontColor = selectColor('font', 'highlight')
@@ -192,7 +186,7 @@ export function useReclAmmChartLogic() {
     const totalBars = 2 * baseGreyBarCount + 2 * baseOrangeBarCount + baseGreenBarCount
 
     // for some reason the number of orange (or green) bars matters to echarts in the grid
-    const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '8%'
+    const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '3%'
     const gridBottomMobile =
       baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '24.5%' : '16%'
 
@@ -454,16 +448,6 @@ export function useReclAmmChartLogic() {
               padding: [showMinMaxValues && !showTargetValues ? 0 : 110, 10, 0, 0],
             },
           },
-        },
-        name: `Price: ${tokens}`,
-        nameLocation: 'end',
-        nameGap: 5,
-        nameTextStyle: {
-          align: 'right',
-          verticalAlign: 'bottom',
-          padding:
-            showMinMaxValues && !showTargetValues ? [0, 30, -85, 0] : dynamicXAxisNamePadding,
-          color: secondaryFontColor,
         },
       },
       yAxis: {
@@ -774,6 +758,7 @@ export function useReclAmmChartLogic() {
     inRangeText,
     inRangeReadjustingText,
     isPoolWithinRange: currentChartData.isPoolWithinRange,
+    tokens,
     setChartInstance,
   }
 }
