@@ -1,12 +1,29 @@
 import { SVGProps } from 'react'
 
-export function WandIcon(props: SVGProps<SVGSVGElement>) {
+export function WandIcon({ size = 24, ...props }: { size?: number } & SVGProps<SVGSVGElement>) {
   return (
-    <svg fill="none" viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M1 3a1 1 0 0 1 1-1h1V1a1 1 0 0 1 1 0v1h2a1 1 0 0 1 0 2H4v1a1 1 0 0 1-1 0V4H2a1 1 0 0 1-1-1Zm11 10h-1v-1a1 1 0 0 0-1 0v1H9a1 1 0 1 0 0 1h1v1a1 1 0 1 0 1 0v-1h1a1 1 0 1 0 0-1Zm4-4h-1V8a1 1 0 0 0-1 0v1h-1a1 1 0 1 0 0 2h1v1a1 1 0 1 0 1 0v-1h1a1 1 0 1 0 0-2Zm-1-5L4 15a1 1 0 0 1-2 0l-2-1a1 1 0 0 1 0-2L11 1a1 1 0 0 1 2 0l2 1a1 1 0 0 1 0 2Zm-5 3L9 5l-8 8 2 1 7-7Zm4-4-2-1-2 2 1 2 3-3Z"
-        fill="#2D3748"
-      />
+    <svg
+      fill="none"
+      viewBox="0 0 216 194"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      height={size}
+      width={size}
+    >
+      <g
+        clip-path="url(#a)"
+        stroke="#000"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="16"
+      >
+        <path d="M184 97v48m-24-24h48M48 9v48M24 33h48m64 120v32m-16-16h32M112 49l32 32m6-70L10 151c-3 3-3 8 0 11l21 21c3 3 8 3 11 0L182 43c3-3 3-8 0-11l-21-21c-3-3-8-3-11 0Z" />
+      </g>
+      <defs>
+        <clipPath id="a">
+          <path d="M0 0h216v194H0z" fill="#fff" />
+        </clipPath>
+      </defs>
     </svg>
   )
 }
