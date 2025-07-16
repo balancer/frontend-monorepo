@@ -74,6 +74,8 @@ function PoolChartsContent({ ...props }: any) {
     poolIsInRange,
     outOfRangeText: eclpOutOfRangeText,
     inRangeText: eclpInRangeText,
+    toggleIsReversed: toggleIsReversedEclp,
+    tokens: tokensEclp,
   } = useEclpChart()
 
   const {
@@ -136,6 +138,12 @@ function PoolChartsContent({ ...props }: any) {
                   />
                   {showReclammChart && (
                     <ReversedToggleButton toggleIsReversed={toggleIsReversed} tokenPair={tokens} />
+                  )}
+                  {showLiquidityProfileChart && (
+                    <ReversedToggleButton
+                      toggleIsReversed={toggleIsReversedEclp}
+                      tokenPair={tokensEclp}
+                    />
                   )}
                   {showPoolCharts && <PeriodSelect />}
                 </HStack>
