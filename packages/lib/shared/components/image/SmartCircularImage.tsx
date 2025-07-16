@@ -1,7 +1,7 @@
 'use client'
 
 import { Box } from '@chakra-ui/react'
-import NextImage from 'next/image'
+import NextImage, { ImageProps } from 'next/image'
 import { useState, useEffect } from 'react'
 
 interface SmartCircularImageProps {
@@ -11,7 +11,13 @@ interface SmartCircularImageProps {
   border?: string
 }
 
-export function SmartCircularImage({ src, alt, size, border, ...rest }: SmartCircularImageProps) {
+export function SmartCircularImage({
+  src,
+  alt,
+  size,
+  border,
+  ...imageProps
+}: SmartCircularImageProps & ImageProps) {
   const [isCircular, setIsCircular] = useState<boolean | null>(null)
 
   // Function to detect if image is already circular
@@ -122,7 +128,7 @@ export function SmartCircularImage({ src, alt, size, border, ...rest }: SmartCir
           style={{
             objectFit: 'cover',
           }}
-          {...rest}
+          {...imageProps}
         />
       </Box>
     )
@@ -138,7 +144,7 @@ export function SmartCircularImage({ src, alt, size, border, ...rest }: SmartCir
             objectFit: 'contain',
             borderRadius: '50%',
           }}
-          {...rest}
+          {...imageProps}
         />
       </Box>
     )
