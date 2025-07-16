@@ -2,7 +2,6 @@ import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetE
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '../../pool/PoolProvider'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useBreakpointValue } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolActionableTokens } from '../../pool/pool-tokens.utils'
@@ -14,12 +13,6 @@ const EclpChartContext = createContext<EclpChartContextType | null>(null)
 
 export function useEclpChartLogic() {
   const { pool } = usePool()
-
-  const dynamicXAxisNamePadding = useBreakpointValue({
-    base: [0, 30, -56, 0],
-    md: [0, 30, -54, 0],
-    lg: [0, 24, -54, 0],
-  }) || [0, 24, -54, 0]
 
   const {
     data,
@@ -69,7 +62,7 @@ export function useEclpChartLogic() {
         left: '1%',
         right: '1%',
         top: '7%',
-        bottom: '15%',
+        bottom: '9%',
       },
       tooltip: {
         show: true,
@@ -92,15 +85,6 @@ export function useEclpChartLogic() {
       },
       xAxis: {
         type: 'value',
-        name: `Price: ${tokens}`,
-        nameLocation: 'end',
-        nameGap: 5,
-        nameTextStyle: {
-          align: 'right',
-          verticalAlign: 'bottom',
-          padding: dynamicXAxisNamePadding,
-          color: secondaryFontColor,
-        },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
         axisLabel: {
@@ -452,6 +436,7 @@ export function useEclpChartLogic() {
     isLoading,
     outOfRangeText,
     inRangeText,
+    tokens,
   }
 }
 
