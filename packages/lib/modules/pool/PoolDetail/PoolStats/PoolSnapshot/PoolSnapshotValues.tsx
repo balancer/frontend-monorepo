@@ -11,6 +11,7 @@ import { isCowAmmPool } from '../../../pool.helpers'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 type PoolStatsValues = {
   totalLiquidity: string
@@ -110,7 +111,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label="Weekly incentives"
-            tooltip="The weekly liquidity mining incentives for this pool. It includes incentives from the Balancer Protocol (as determined by veBAL voting) and from unaffiliated third parties. Users must stake to get these."
+            tooltip={`The weekly liquidity mining incentives for this pool. It includes incentives from ${isBalancer ? 'the Balancer Protocol (as determined by veBAL voting)' : 'Beets'} and from unaffiliated third parties. Users must stake to get these.`}
           />
           {poolStatsValues ? (
             <HStack>
