@@ -53,21 +53,50 @@ export function ProjectedPriceChart({
     },
     xAxis: {
       show: true,
-      type: 'value',
+      type: 'time',
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
       min: startDate.getTime(),
       max: endDate.getTime(),
-      interval: 24 * 60 * 60 * 1000,
       axisLabel: {
         formatter: (value: number) => {
-          const daysDiff = differenceInDays(new Date(value), startDate)
-          return `Day ${daysDiff}`
+          const totalDays = differenceInDays(endDate, startDate)
+          const date = new Date(value)
+
+          // Dynamic formatting based on date range
+          if (totalDays <= 7) {
+            // 5-7 days: Show "Apr 9" for each day
+            return format(date, 'MMM d')
+          } else if (totalDays <= 30) {
+            // 1-4 weeks: Show "Apr 9" with auto spacing
+            return format(date, 'MMM d')
+          } else if (totalDays <= 90) {
+            // 1-3 months: Show "Apr 9" with wider spacing
+            return format(date, 'MMM d')
+          } else if (totalDays <= 365) {
+            // 3-12 months: Show "Apr" for months
+            return format(date, 'MMM')
+          } else {
+            // > 1 year: Show "2024-04" for year-month
+            return format(date, 'yyyy-MM')
+          }
         },
+        interval: 'auto', // ECharts automatically prevents overlap
+        rotate: isMobile ? 45 : 0, // Rotate labels on mobile
+        fontSize: isMobile ? 10 : 12,
+        margin: 8,
         color: theme.semanticTokens.colors.font.primary[colorMode],
         opacity: 0.5,
       },
+      splitNumber: (() => {
+        const totalDays = differenceInDays(endDate, startDate)
+        if (totalDays <= 7) return Math.min(totalDays, 7)
+        if (totalDays <= 30) return 5
+        if (totalDays <= 90) return 6
+        if (totalDays <= 365) return 8
+        return 10
+      })(),
     },
     yAxis: {
       show: true,
