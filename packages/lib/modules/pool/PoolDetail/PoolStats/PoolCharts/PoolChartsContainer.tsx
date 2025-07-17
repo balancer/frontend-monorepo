@@ -81,8 +81,10 @@ function PoolChartsContent({ ...props }: any) {
   const {
     hasChartData: hasReclAmmChartData,
     isLoading: isLoadingReclAmmChartData,
+    isPoolWithinTargetRange,
     outOfRangeText: reclammOutOfRangeText,
     inRangeText: reclammInRangeText,
+    inRangeReadjustingText: reclammInRangeReadjustingText,
     isPoolWithinRange,
     toggleIsReversed: toggleIsReversedReclamm,
     tokens: tokensReclamm,
@@ -112,10 +114,14 @@ function PoolChartsContent({ ...props }: any) {
       icon: poolIsInRange ? ThumbsUp : ThumbsDown,
     },
     reclamm: {
-      bgColor: isPoolWithinRange ? 'green.400' : 'red.400',
-      bodyText: isPoolWithinRange ? reclammInRangeText : reclammOutOfRangeText,
-      headerText: isPoolWithinRange ? 'Pool in range' : 'Pool readjusting',
-      icon: isPoolWithinRange ? ThumbsUp : WandIcon,
+      bgColor: isPoolWithinTargetRange ? 'green.400' : isPoolWithinRange ? 'orange.300' : 'red.400',
+      bodyText: isPoolWithinTargetRange
+        ? reclammInRangeText
+        : isPoolWithinRange
+          ? reclammInRangeReadjustingText
+          : reclammOutOfRangeText,
+      headerText: isPoolWithinTargetRange ? 'Pool in range' : 'Pool readjusting',
+      icon: isPoolWithinTargetRange ? ThumbsUp : WandIcon,
     },
   }
 
