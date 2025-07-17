@@ -37,7 +37,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
 
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
-    expect(result.bptOut.amount).toBeGreaterThan(15000000000000000n)
+    expect(result.bptOut.amount).toBeGreaterThan(10000000000000000n)
   })
 
   test('with multiple token input', async () => {

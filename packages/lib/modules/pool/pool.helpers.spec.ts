@@ -105,8 +105,8 @@ describe('shouldBlockAddLiquidity', () => {
   describe('v2 pool with ERC4626 token', () => {
     it('should block liquidity if one of the tokens is not allowed', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-
       pool.poolTokens[0].isAllowed = false
+
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
     })
@@ -121,8 +121,8 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should not block liquidity if all tokens are allowed', () => {
       const pool = getApiPoolMock(sDAIWeighted)
-
       pool.poolTokens[0].isAllowed = true
+
       expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
   })
@@ -200,6 +200,14 @@ describe('shouldBlockAddLiquidity', () => {
     it('should block if pool token is not safe', () => {
       const pool = getApiPoolMock(usdcUsdtAaveBoosted)
       pool.poolTokens[0].priceRateProviderData!.summary = 'unsafe'
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool token is not allowed', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].isAllowed = false
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
