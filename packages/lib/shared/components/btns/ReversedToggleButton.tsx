@@ -4,7 +4,7 @@ import { Repeat } from 'react-feather'
 
 interface ReversedToggleButtonProps {
   toggleIsReversed: () => void
-  tokenPair?: string
+  tokenPair: string
 }
 
 export function ReversedToggleButton({ toggleIsReversed, tokenPair }: ReversedToggleButtonProps) {
@@ -14,10 +14,10 @@ export function ReversedToggleButton({ toggleIsReversed, tokenPair }: ReversedTo
       fontSize="xs"
       fontWeight="medium"
       height="28px !important"
-      minWidth={tokenPair ? 'auto' : '20px !important'}
+      minWidth="auto"
       ml={0.5}
       onClick={toggleIsReversed}
-      px={tokenPair ? '2' : '0 !important'}
+      px="2"
       py="0 !important"
       rounded="sm !important"
       shadow="md"
@@ -27,11 +27,9 @@ export function ReversedToggleButton({ toggleIsReversed, tokenPair }: ReversedTo
     >
       <Flex alignItems="center" gap="1.5">
         <Icon as={Repeat} />
-        {tokenPair && (
-          <Text fontSize="xs" fontWeight="medium">
-            {tokenPair}
-          </Text>
-        )}
+        <Text fontSize="xs" fontWeight="medium">
+          {tokenPair}
+        </Text>
       </Flex>
     </Button>
   )
