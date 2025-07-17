@@ -50,8 +50,10 @@ export function PoolWeights({
       </CardHeader>
       <CardBody>
         <WeightsChart
+          collateralTokenSymbol={collateralToken?.symbol || ''}
           endDate={parseISO(endTime)}
           endWeight={endWeight}
+          launchTokenSymbol={launchTokenMetadata.symbol || ''}
           startDate={parseISO(startTime)}
           startWeight={startWeight}
         />

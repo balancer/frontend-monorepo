@@ -20,12 +20,16 @@ export function WeightsChart({
   startDate,
   endDate,
   cutTime,
+  launchTokenSymbol,
+  collateralTokenSymbol,
 }: {
   startWeight: number
   endWeight: number
   startDate: Date
   endDate: Date
   cutTime?: Date
+  launchTokenSymbol: string
+  collateralTokenSymbol: string
 }) {
   const { isMobile } = useBreakpoints()
   const { data: launchTokenData, dataAfterCutTime: launchTokenDataAfterCutTime } = interpolateData(
@@ -44,6 +48,43 @@ export function WeightsChart({
       bottom: '10%',
       containLabel: isMobile ? true : false,
     },
+    tooltip: {
+      trigger: 'axis',
+      formatter: (params: any) => {
+        if (!params || params.length === 0) return ''
+
+        const timestamp = params[0].data[0]
+        const date = new Date(timestamp)
+        const formattedDate = format(date, 'MMM dd, yyyy h:mm a')
+
+        // Find the launch token weight (original data)
+        const launchWeight = params.find(
+          (p: any) =>
+            p.seriesId === 'launch-token-weight' ||
+            p.seriesId === 'launch-token-weight-after-cut-time'
+        )?.data[1]
+        const collateralWeight = launchWeight ? 100 - launchWeight : null
+
+        if (launchWeight !== undefined && collateralWeight !== null) {
+          return `
+            <div style="padding: 8px; background: #2D3748; border-radius: 4px; color: white; font-size: 12px;">
+              <div style="margin-bottom: 4px; font-weight: bold;">${formattedDate}</div>
+              <div style="display: flex; align-items: center; margin-bottom: 2px;">
+                <div style="width: 12px; height: 12px; background: linear-gradient(45deg, #B3AEF5, #EAA879); border-radius: 2px; margin-right: 6px;"></div>
+                ${launchTokenSymbol}: ${bn(launchWeight).toFixed(1)}%
+              </div>
+              <div style="display: flex; align-items: center;">
+                <div style="width: 12px; height: 12px; background: #93C6FF; border-radius: 2px; margin-right: 6px;"></div>
+                ${collateralTokenSymbol}: ${bn(collateralWeight).toFixed(1)}%
+              </div>
+            </div>
+          `
+        }
+
+        return ''
+      },
+    },
+
     xAxis: {
       show: true,
       type: 'value',

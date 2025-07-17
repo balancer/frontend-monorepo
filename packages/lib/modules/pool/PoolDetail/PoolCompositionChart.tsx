@@ -149,9 +149,11 @@ function LBPWeightsChart({ pool }: { pool: Pool }) {
   return (
     <>
       <WeightsChart
+        collateralTokenSymbol={lbpPool.poolTokens[lbpPool.reserveTokenIndex].symbol}
         cutTime={now}
         endDate={endTime}
         endWeight={endWeight}
+        launchTokenSymbol={lbpPool.poolTokens[lbpPool.projectTokenIndex].symbol}
         startDate={startTime}
         startWeight={startWeight}
       />
