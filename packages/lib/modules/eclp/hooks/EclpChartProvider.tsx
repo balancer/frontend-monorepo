@@ -30,7 +30,7 @@ export function useEclpChartLogic() {
   const tokens = useMemo(() => {
     const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
 
-    return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
+    return isReversed ? poolTokens.reverse().join(' / ') : poolTokens.join(' / ')
   }, [pool, isReversed])
 
   const secondaryFontColor = selectColor('font', 'secondary')
