@@ -84,8 +84,8 @@ function PoolChartsContent({ ...props }: any) {
     outOfRangeText: reclammOutOfRangeText,
     inRangeText: reclammInRangeText,
     isPoolWithinRange,
-    toggleIsReversed,
-    tokens,
+    toggleIsReversed: toggleIsReversedReclamm,
+    tokens: tokensReclamm,
   } = useReclAmmChart()
 
   const {
@@ -136,13 +136,12 @@ function PoolChartsContent({ ...props }: any) {
                     options={tabsList}
                     size="xxs"
                   />
-                  {showReclammChart && (
-                    <ReversedToggleButton toggleIsReversed={toggleIsReversed} tokenPair={tokens} />
-                  )}
-                  {showLiquidityProfileChart && (
+                  {(showReclammChart || showLiquidityProfileChart) && (
                     <ReversedToggleButton
-                      toggleIsReversed={toggleIsReversedEclp}
-                      tokenPair={tokensEclp}
+                      toggleIsReversed={
+                        showReclammChart ? toggleIsReversedReclamm : toggleIsReversedEclp
+                      }
+                      tokenPair={showReclammChart ? tokensReclamm : tokensEclp}
                     />
                   )}
                   {showPoolCharts && <PeriodSelect />}
