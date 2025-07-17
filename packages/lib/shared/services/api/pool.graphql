@@ -133,6 +133,10 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       startTime
       website
       x
+      topTrades {
+        address
+        value
+      }
     }
     ... on GqlPoolGyro {
       alpha
