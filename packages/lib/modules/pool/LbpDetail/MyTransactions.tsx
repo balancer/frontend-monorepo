@@ -40,7 +40,7 @@ type PoolEventRowProps = {
 
 type EventType = 'Buy' | 'Sell' | 'Seed' | 'Extract'
 
-const GRID_COLUMNS = '1fr 2fr 1fr 1fr'
+const GRID_COLUMNS = '1fr 4fr 1fr 3fr'
 
 export function MyTransactions({
   userPoolEvents,
@@ -51,7 +51,7 @@ export function MyTransactions({
 }) {
   const { toCurrency } = useCurrency()
 
-  const { chain, pool } = usePool()
+  const { chain, pool, myLbpTransactionsSectionRef } = usePool()
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
 
   const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
@@ -63,7 +63,7 @@ export function MyTransactions({
   }
 
   return (
-    <Card>
+    <Card maxH="400px" ref={myLbpTransactionsSectionRef}>
       {isLoading && <Skeleton h="full" w="full" />}
       {!isLoading && (
         <VStack alignItems="flex-start" h="full" spacing="md" w="full">
@@ -96,7 +96,7 @@ export function MyTransactions({
             <Divider mt="md" />
           </Box>
 
-          <Box overflowY="auto" w="full">
+          <Box maxH={{ base: '200px', md: '250px' }} overflowX="hidden" overflowY="auto" w="full">
             {!userPoolEvents || isEmpty(userPoolEvents) ? (
               <>
                 <Text variant="secondary">No recent transactions</Text>
