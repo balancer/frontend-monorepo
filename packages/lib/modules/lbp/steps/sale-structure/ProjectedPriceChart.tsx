@@ -51,6 +51,28 @@ export function ProjectedPriceChart({
       bottom: '10%',
       containLabel: isMobile,
     },
+    tooltip: {
+      trigger: 'axis',
+      formatter: (params: any) => {
+        if (!params || params.length === 0) return ''
+
+        const timestamp = params[0].data[0]
+        const price = params[0].data[1]
+        const date = new Date(timestamp)
+        const formattedDate = format(date, 'MMM dd, yyyy h:mm a')
+        const formattedPrice = toCurrency(price)
+
+        return `
+          <div style="padding: 8px; background: #2D3748; border-radius: 4px; color: white; font-size: 12px;">
+            <div style="margin-bottom: 4px; font-weight: bold;">${formattedDate}</div>
+            <div style="display: flex; align-items: center;">
+              <div style="width: 12px; height: 12px; background: linear-gradient(45deg, #B3AEF5, #EAA879); border-radius: 2px; margin-right: 6px;"></div>
+              Price: ${formattedPrice}
+            </div>
+          </div>
+        `
+      },
+    },
     xAxis: {
       show: true,
       type: 'time',
