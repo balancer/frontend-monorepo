@@ -23,7 +23,7 @@ export function ReversedToggleButton({ toggleIsReversed, tokenPair }: ReversedTo
       shadow="md"
       size="xs"
       variant="tertiary"
-      width={tokenPair ? 'auto' : '20px !important'}
+      width="auto"
     >
       <Flex alignItems="center" gap="1.5">
         <Icon as={Repeat} />
