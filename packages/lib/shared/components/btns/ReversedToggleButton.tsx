@@ -1,28 +1,36 @@
-import { Button } from '@chakra-ui/react'
+import { Button, Flex, Text } from '@chakra-ui/react'
 import { Icon } from '@chakra-ui/react'
 import { Repeat } from 'react-feather'
 
-export function ReversedToggleButton({ toggleIsReversed }: { toggleIsReversed: () => void }) {
+interface ReversedToggleButtonProps {
+  toggleIsReversed: () => void
+  tokenPair: string
+}
+
+export function ReversedToggleButton({ toggleIsReversed, tokenPair }: ReversedToggleButtonProps) {
   return (
     <Button
-      bottom={0}
       cursor="pointer"
       fontSize="xs"
       fontWeight="medium"
-      height="20px !important"
-      minWidth="20px !important"
+      height="28px !important"
+      minWidth="auto"
+      ml={0.5}
       onClick={toggleIsReversed}
-      p="0 !important"
-      position="absolute"
-      right={0}
+      px="2"
+      py="0 !important"
       rounded="sm !important"
       shadow="md"
       size="xs"
-      variant="primary"
-      width="20px !important"
-      zIndex={1}
+      variant="tertiary"
+      width="auto"
     >
-      <Icon as={Repeat} />
+      <Flex alignItems="center" gap="1.5">
+        <Icon as={Repeat} />
+        <Text fontSize="xs" fontWeight="medium">
+          {tokenPair}
+        </Text>
+      </Flex>
     </Button>
   )
 }

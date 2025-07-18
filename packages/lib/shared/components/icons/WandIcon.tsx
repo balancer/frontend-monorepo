@@ -11,11 +11,11 @@ export function WandIcon({ size = 24, ...props }: { size?: number } & SVGProps<S
       width={size}
     >
       <g
-        clip-path="url(#a)"
+        clipPath="url(#a)"
         stroke="#000"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="16"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="16"
       >
         <path d="M184 97v48m-24-24h48M48 9v48M24 33h48m64 120v32m-16-16h32M112 49l32 32m6-70L10 151c-3 3-3 8 0 11l21 21c3 3 8 3 11 0L182 43c3-3 3-8 0-11l-21-21c-3-3-8-3-11 0Z" />
       </g>

@@ -32,6 +32,7 @@ import {
   useReclAmmChart,
 } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
+import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedToggleButton'
 import { ThumbsDown, ThumbsUp } from 'react-feather'
 import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
 
@@ -73,6 +74,8 @@ function PoolChartsContent({ ...props }: any) {
     poolIsInRange,
     outOfRangeText: eclpOutOfRangeText,
     inRangeText: eclpInRangeText,
+    toggleIsReversed: toggleIsReversedEclp,
+    tokens: tokensEclp,
   } = useEclpChart()
 
   const {
@@ -83,6 +86,8 @@ function PoolChartsContent({ ...props }: any) {
     inRangeText: reclammInRangeText,
     inRangeReadjustingText: reclammInRangeReadjustingText,
     isPoolWithinRange,
+    toggleIsReversed: toggleIsReversedReclamm,
+    tokens: tokensReclamm,
   } = useReclAmmChart()
 
   const {
@@ -128,8 +133,8 @@ function PoolChartsContent({ ...props }: any) {
         ) : hasChartData ? (
           <NoisyCard {...COMMON_NOISY_CARD_PROPS}>
             <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
-              <Stack direction={{ base: 'column', md: 'row' }} w="full">
-                <HStack alignSelf="flex-start">
+              <Stack direction={{ base: 'column', md: 'row' }} w="full" wrap="wrap">
+                <HStack alignSelf="flex-start" wrap="wrap">
                   <ButtonGroup
                     currentOption={activeTab}
                     groupId="chart"
@@ -137,6 +142,14 @@ function PoolChartsContent({ ...props }: any) {
                     options={tabsList}
                     size="xxs"
                   />
+                  {(showReclammChart || showLiquidityProfileChart) && (
+                    <ReversedToggleButton
+                      toggleIsReversed={
+                        showReclammChart ? toggleIsReversedReclamm : toggleIsReversedEclp
+                      }
+                      tokenPair={showReclammChart ? tokensReclamm : tokensEclp}
+                    />
+                  )}
                   {showPoolCharts && <PeriodSelect />}
                 </HStack>
                 <VStack
