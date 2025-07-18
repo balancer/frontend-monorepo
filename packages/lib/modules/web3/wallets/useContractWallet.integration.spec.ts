@@ -29,7 +29,7 @@ describe('Smart contract wallets', () => {
   })
 
   it('should return true when contract wallet', async () => {
-    // Default test user for Anvil is has an underlying contract
+    // Default test user for Anvil has an underlying contract
     await connectWithDefaultUser()
 
     const { result } = testHook(() => useContractWallet())
