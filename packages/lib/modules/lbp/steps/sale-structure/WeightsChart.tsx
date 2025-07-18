@@ -3,7 +3,7 @@ import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
-import { Stack, Text } from '@chakra-ui/react'
+import { Stack, Text, useTheme } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 export function WeightsChart({
@@ -24,6 +24,8 @@ export function WeightsChart({
   collateralTokenSymbol: string
 }) {
   const { isMobile } = useBreakpoints()
+  const theme = useTheme()
+
   const { data: launchTokenData, dataAfterCutTime: launchTokenDataAfterCutTime } = interpolateData(
     startWeight,
     endWeight,
@@ -34,6 +36,12 @@ export function WeightsChart({
   const collateralTokenData = invertData(launchTokenData)
   const collateralTokenDataAfterCutTime = invertData(launchTokenDataAfterCutTime)
 
+  const toolTipTheme = {
+    heading: 'font-weight: bold; color: #E5D3BE',
+    container: `background: ${theme.colors.gray[800]};`,
+    text: theme.colors.gray[400],
+  }
+
   const chartInfo: EChartsOption = {
     grid: {
       top: '5%',
@@ -41,7 +49,18 @@ export function WeightsChart({
       containLabel: isMobile ? true : false,
     },
     tooltip: {
+      show: true,
+      showContent: true,
       trigger: 'axis',
+      confine: true,
+      axisPointer: {
+        animation: false,
+        type: 'shadow',
+        label: {
+          show: false,
+        },
+      },
+      extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
       formatter: (params: any) => {
         if (!params || params.length === 0) return ''
 
@@ -59,15 +78,17 @@ export function WeightsChart({
 
         if (launchWeight !== undefined && collateralWeight !== null) {
           return `
-            <div style="padding: 8px; background: #2D3748; border-radius: 4px; color: white; font-size: 12px;">
-              <div style="margin-bottom: 4px; font-weight: bold;">${formattedDate}</div>
-              <div style="display: flex; align-items: center; margin-bottom: 2px;">
-                <div style="width: 12px; height: 12px; background: linear-gradient(45deg, #B3AEF5, #EAA879); border-radius: 2px; margin-right: 6px;"></div>
-                ${launchTokenSymbol}: ${bn(launchWeight).toFixed(1)}%
+            <div style="width: 180px; padding: 8px; display: flex; flex-direction: column; justify-content: center;${toolTipTheme.container}">
+              <div style="font-size: 0.85rem; font-weight: 500; color: ${toolTipTheme.text}; margin-bottom: 8px;">
+                ${formattedDate}
+              </div>
+              <div style="display: flex; align-items: center; margin-bottom: 4px;">
+                <div style="width: 12px; height: 12px; background: linear-gradient(45deg, #B3AEF5, #EAA879); border-radius: 2px; margin-right: 8px;"></div>
+                <span style="font-size: 0.95rem; color: ${toolTipTheme.text};">${launchTokenSymbol}: ${bn(launchWeight).toFixed(1)}%</span>
               </div>
               <div style="display: flex; align-items: center;">
-                <div style="width: 12px; height: 12px; background: #93C6FF; border-radius: 2px; margin-right: 6px;"></div>
-                ${collateralTokenSymbol}: ${bn(collateralWeight).toFixed(1)}%
+                <div style="width: 12px; height: 12px; background: #93C6FF; border-radius: 2px; margin-right: 8px;"></div>
+                <span style="font-size: 0.95rem; color: ${toolTipTheme.text};">${collateralTokenSymbol}: ${bn(collateralWeight).toFixed(1)}%</span>
               </div>
             </div>
           `

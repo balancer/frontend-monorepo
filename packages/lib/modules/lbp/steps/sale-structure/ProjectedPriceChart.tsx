@@ -43,6 +43,12 @@ export function ProjectedPriceChart({
 
   const priceRange = range(prices.map(item => item.projectTokenPrice))
 
+  const toolTipTheme = {
+    heading: 'font-weight: bold; color: #E5D3BE',
+    container: `background: ${theme.colors.gray[800]};`,
+    text: theme.colors.gray[400],
+  }
+
   const chartInfo: EChartsOption = {
     grid: {
       left: gridLeft || '10%',
@@ -52,7 +58,18 @@ export function ProjectedPriceChart({
       containLabel: isMobile,
     },
     tooltip: {
+      show: true,
+      showContent: true,
       trigger: 'axis',
+      confine: true,
+      axisPointer: {
+        animation: false,
+        type: 'shadow',
+        label: {
+          show: false,
+        },
+      },
+      extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
       formatter: (params: any) => {
         if (!params || params.length === 0) return ''
 
@@ -63,14 +80,15 @@ export function ProjectedPriceChart({
         const formattedPrice = toCurrency(price)
 
         return `
-          <div style="padding: 8px; background: #2D3748; border-radius: 4px; color: white; font-size: 12px;">
-            <div style="margin-bottom: 4px; font-weight: bold;">${formattedDate}</div>
-            <div style="display: flex; align-items: center;">
-              <div style="width: 12px; height: 12px; background: linear-gradient(45deg, #B3AEF5, #EAA879); border-radius: 2px; margin-right: 6px;"></div>
-              Price: ${formattedPrice}
-            </div>
-          </div>
-        `
+  <div style="width: 150px; padding: 8px; display: flex; flex-direction: column; justify-content: center;${toolTipTheme.container}">
+      <div style="font-size: 0.85rem; font-weight: 500; color: ${toolTipTheme.text}; margin-bottom: 4px;">
+        ${formattedDate}
+      </div>
+      <div style="font-size: 0.95rem; font-weight: 500; color: ${toolTipTheme.text};">
+        Price: ${formattedPrice}
+      </div>
+    </div>
+  `
       },
     },
     xAxis: {
