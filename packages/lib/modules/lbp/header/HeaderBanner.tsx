@@ -23,7 +23,7 @@ export function HeaderBanner() {
   reducing initial capital requirements.
 `
   const immediateLiquidityDescription = `
-  Once the LBP concludes, you get inmmediate access to the funds raised. Further,
+  Once the LBP concludes, you get immediate access to the funds raised. Further,
   the new token holders can immediately trade their tokens, providing instant
   liquidity without lengthy lock-up periods. This gives early supporters flexibility
   in managing their positions.
