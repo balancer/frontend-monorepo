@@ -88,7 +88,7 @@ export function WeightAdjustmentTypeInput({
       />
 
       {weightAdjustment === 'custom' && (
-        <Stack mt="md" w="full">
+        <Stack gap="md" my="md" w="full">
           <WeightSlider
             collateralTokenSymbol={collateralTokenSymbol}
             customWeight={customStartWeight}

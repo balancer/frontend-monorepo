@@ -68,7 +68,9 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
                 </PopoverTrigger>
                 <PopoverContent>
                   <PopoverArrow bg="background.level3" />
-                  <PopoverHeader color="font.primary">Token logo URL</PopoverHeader>
+                  <PopoverHeader color="font.primary" fontWeight="bold">
+                    Add the token logo
+                  </PopoverHeader>
                   <PopoverBody>
                     <Controller
                       control={projectInfoForm.control}
@@ -83,8 +85,8 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
                         />
                       )}
                     />
-                    <Text color="font.secondary" fontSize="sm">
-                      Ideally SVG (or PNG / JPG)
+                    <Text color="font.secondary" fontSize="12px" pt="sm">
+                      It must be a URL to a PNG or JPG file
                     </Text>
                   </PopoverBody>
                 </PopoverContent>
@@ -97,26 +99,31 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
               </VStack>
             </HStack>
           </GridItem>
-          <GridItem borderLeftColor="background.level4" borderLeftWidth="1px" pl="md">
+          <GridItem
+            alignSelf="center"
+            borderLeftColor="background.level4"
+            borderLeftWidth="1px"
+            pl="md"
+          >
             <Grid templateColumns="1fr 1fr">
               <GridItem>
                 <VStack align="start">
-                  <Text color="font.secondary">Holders:</Text>
-                  <Text color="font.secondary">Total supply:</Text>
-                  <Text color="font.secondary">Creation date:</Text>
-                  <Text color="font.secondary">Creation wallet:</Text>
+                  <Text color="font.secondary" fontSize="sm">
+                    Total token supply:
+                  </Text>
+                  <Text color="font.secondary" fontSize="sm">
+                    My wallet balance:
+                  </Text>
                 </VStack>
               </GridItem>
               <GridItem>
                 <VStack align="start">
-                  <Text>???</Text>
-                  <Text>
+                  <Text fontSize="sm">
                     {launchTokenMetadata?.totalSupply
                       ? fNum('token', launchTokenMetadata?.totalSupply)
                       : '-'}
                   </Text>
-                  <Text>???</Text>
-                  <Text>???</Text>
+                  <Text fontSize="sm">TBD</Text>
                 </VStack>
               </GridItem>
             </Grid>

@@ -9,9 +9,11 @@ import {
   IconButton,
   Heading,
   Divider,
+  Box,
   Alert,
   AlertIcon,
   AlertDescription,
+  Button,
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
@@ -29,7 +31,7 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import { formatUnits, isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import { AlertTriangle, Clipboard, Edit, Percent } from 'react-feather'
+import { AlertTriangle, Edit, Percent } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
@@ -56,6 +58,7 @@ import { CustomToken } from '../../tokens/token.types'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { now } from '@repo/lib/shared/utils/time'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -91,7 +94,7 @@ export function SaleStructureStep() {
   const validateSaleStart = (value: string | number) => {
     if (typeof value !== 'string') return 'Start time must be type string'
     if (!isAfter(parseISO(value), addHours(now(), 1))) {
-      return 'Start time must be at least 1 hour in the future'
+      return 'Set the start time at least 1 hour ahead to ensure the pool is seeded before the sale begins.'
     }
     return true
   }
@@ -150,34 +153,38 @@ export function SaleStructureStep() {
             <Heading color="font.maxContrast" size="md">
               Sale period
             </Heading>
-            <VStack align="start" spacing="sm" w="full">
-              <DateTimeInput
-                control={control}
-                errors={errors}
-                label="Start date and time"
-                min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
-                name="startTime"
-                validate={validateSaleStart}
-              />
-              {saleStartsSoon && (
-                <Text color="font.warning" fontSize="xs">
-                  This sale starts soon. Make sure to seed liquidity before this time or the LBP
-                  will fail to launch.
+            <VStack align="start" gap="lg" w="full">
+              <VStack align="start" gap="sm" w="full">
+                <DateTimeInput
+                  control={control}
+                  errors={errors}
+                  label="Start date and time"
+                  min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
+                  name="startTime"
+                  validate={validateSaleStart}
+                />
+                {saleStartsSoon && (
+                  <Text color="font.warning" fontSize="sm">
+                    This sale starts soon. Make sure to seed liquidity before this time or the LBP
+                    will fail to launch.
+                  </Text>
+                )}
+              </VStack>
+              <VStack align="start" gap="sm" w="full">
+                <DateTimeInput
+                  control={control}
+                  errors={errors}
+                  label="End date and time"
+                  min={saleStart}
+                  name="endTime"
+                  validate={validateSaleEnd}
+                />
+                <Text color="font.secondary" fontSize="sm">
+                  {saleStart && saleEnd
+                    ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
+                    : 'Suggested sale period: 5 days'}
                 </Text>
-              )}
-              <DateTimeInput
-                control={control}
-                errors={errors}
-                label="End date and time"
-                min={saleStart}
-                name="endTime"
-                validate={validateSaleEnd}
-              />
-              <Text color="font.secondary" fontSize="xs">
-                {saleStart && saleEnd
-                  ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
-                  : 'Suggested sale period: 5 days'}
-              </Text>
+              </VStack>
             </VStack>
             <Divider />
             <Heading color="font.maxContrast" size="md">
@@ -199,7 +206,7 @@ export function SaleStructureStep() {
               setFormValue={setValue}
             />
             <Divider />
-            <VStack align="start" spacing="sm" w="full">
+            <VStack align="start" spacing="md" w="full">
               <Heading color="font.maxContrast" size="md">
                 Seed initial pool liquidity
               </Heading>
@@ -212,8 +219,8 @@ export function SaleStructureStep() {
                   <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
                   <AlertDescription>
                     {saleStartsSoon && 'This sale is scheduled to start soon. '}
-                    `The LBP will fail to launch unless you seed the initial liquidity before the
-                    scheduled start time at ${format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.`
+                    The LBP will fail to launch unless you seed the initial liquidity before the
+                    scheduled start time at {format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.
                   </AlertDescription>
                 </Alert>
               )}
@@ -337,21 +344,29 @@ function LaunchTokenAddressInput({
           }}
         />
 
-        <InputRightElement>
+        <InputRightElement w="max-content">
           {!locked ? (
-            <IconButton
+            <Button
               aria-label="paste"
-              icon={<Clipboard />}
+              h="28px"
+              letterSpacing="0.25px"
+              lineHeight="1"
+              mr="0.5"
               onClick={paste}
-              size="xs"
-              variant="link"
-            />
+              position="relative"
+              px="2"
+              right="3px"
+              rounded="sm"
+              size="sm"
+              variant="tertiary"
+            >
+              Paste
+            </Button>
           ) : (
             <IconButton
               aria-label="edit"
-              icon={<Edit />}
+              icon={<Edit size="16px" />}
               onClick={() => resetForm()}
-              size="xs"
               variant="link"
             />
           )}
@@ -445,7 +460,7 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
         name="userActions"
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
-            <Stack direction="row">
+            <Stack direction="row" gap="md">
               <Radio value="buy_and_sell">Buy & sell</Radio>
               <Radio value="buy_only">Buy only</Radio>
             </Stack>
@@ -489,37 +504,41 @@ function FeeSelection({
         }}
         value={value}
       >
-        <Stack direction="row">
+        <Stack direction="row" gap="md">
           <Radio value="minimum">1.00%</Radio>
           <Radio value="custom">Custom</Radio>
         </Stack>
       </RadioGroup>
 
       {value === 'custom' && (
-        <InputGroup>
-          <Controller
-            control={control}
-            name="fee"
-            render={({ field }) => (
-              <InputWithError
-                error={errors[field.name]?.message}
-                info="Minimum fee: 1.00% - Maximum fee: 10.00%"
-                isInvalid={!!errors[field.name]}
-                onChange={e => field.onChange(e.target.value)}
-                step=".01"
-                type="number"
-                value={field.value}
+        <Box w="full">
+          <FadeInOnView scaleUp={false}>
+            <InputGroup w="full">
+              <Controller
+                control={control}
+                name="fee"
+                render={({ field }) => (
+                  <InputWithError
+                    error={errors[field.name]?.message}
+                    info="Minimum fee: 1.00% - Maximum fee: 10.00%"
+                    isInvalid={!!errors[field.name]}
+                    onChange={e => field.onChange(e.target.value)}
+                    step=".01"
+                    type="number"
+                    value={field.value}
+                  />
+                )}
+                rules={{
+                  required: 'Swap fee is required',
+                  validate: isInRange,
+                }}
               />
-            )}
-            rules={{
-              required: 'Swap fee is required',
-              validate: isInRange,
-            }}
-          />
-          <InputRightElement>
-            <Percent size="20" />
-          </InputRightElement>
-        </InputGroup>
+              <InputRightElement>
+                <Percent size="20" />
+              </InputRightElement>
+            </InputGroup>
+          </FadeInOnView>
+        </Box>
       )}
     </VStack>
   )
