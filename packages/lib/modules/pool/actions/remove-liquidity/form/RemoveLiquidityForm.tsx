@@ -42,6 +42,9 @@ import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWi
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isBoosted, isV3LBP } from '../../../pool.helpers'
 import { SettingsAlert } from '@repo/lib/modules/user/settings/SettingsAlert'
+import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWallet'
+import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
+import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
@@ -137,6 +140,9 @@ export function RemoveLiquidityForm() {
 
   const isWarning = isSingleToken && isSingleTokenBalanceMoreThat25Percent
 
+  const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
+  const isSafeAccount = useIsSafeAccount()
+
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
@@ -149,6 +155,9 @@ export function RemoveLiquidityForm() {
           </CardHeader>
           <VStack align="start" spacing="md">
             <SafeAppAlert />
+            {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (
+              <ContractWalletAlert />
+            )}
             <SettingsAlert />
             {!requiresProportionalInput(pool) && !isV3LBP(pool) && (
               <HStack>

@@ -54,6 +54,9 @@ import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/Unb
 import { usePoolMetadata } from '../../../metadata/usePoolMetadata'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
 import { SettingsAlert } from '../../../../user/settings/SettingsAlert'
+import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWallet'
+import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
+import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -165,6 +168,9 @@ function AddLiquidityMainForm() {
     }
   }, [addLiquidityTxHash])
 
+  const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
+  const isSafeAccount = useIsSafeAccount()
+
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
       <Card>
@@ -195,6 +201,10 @@ function AddLiquidityMainForm() {
           )}
           <SettingsAlert />
           <SafeAppAlert />
+          {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (
+            <ContractWalletAlert />
+          )}
+
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             setFlexibleTab={setFlexibleTab}
