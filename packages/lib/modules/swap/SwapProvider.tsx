@@ -677,8 +677,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { isDisabled, disabledReason } = isDisabledWithReason(
     [!isConnected, LABELS.walletNotConnected],
     [!validAmountOut, 'Invalid amount out'],
-    [needsToAcceptHighPI, 'Accept high price impact first'],
-    [hasValidationErrors, 'Invalid input'],
+    [needsToAcceptHighPI, 'To continue, accept high potential losses from this swap above'],
+    [hasValidationErrors, 'Fix the invalid input to continue'],
     [simulationQuery.isError, 'Error fetching swap'],
     [simulationQuery.isLoading, 'Fetching swap...']
   )
