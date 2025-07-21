@@ -28,9 +28,9 @@ import {
   UseFormTrigger,
 } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { formatUnits, isAddress } from 'viem'
+import { formatUnits, isAddress, erc20Abi } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
-import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
 import { AlertTriangle, Edit, Percent } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
@@ -49,16 +49,17 @@ import {
   parseISO,
   isAfter,
 } from 'date-fns'
-import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
+import { TokenBalancesProvider } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
 import { CustomToken } from '../../tokens/token.types'
-import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { now } from '@repo/lib/shared/utils/time'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { useReadContract } from 'wagmi'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -555,19 +556,23 @@ function SaleTokenAmountInput({
   selectedChain: GqlChain
   launchToken: CustomToken
 }) {
-  const { balanceData, isLoading } = useUserBalance({
-    chainId: getChainId(selectedChain),
-    token: launchToken.address,
+  const { userAddress } = useUserAccount()
+
+  const { data: balance, isLoading: isBalanceLoading } = useReadContract({
+    address: launchToken.address,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: [userAddress],
   })
 
   const haveEnoughAmount = (value: string) => {
-    if (isLoading) return true
+    if (isBalanceLoading) return true
 
-    if (!balanceData || balanceData.value === 0n) {
+    if (!balance || balance === 0n) {
       return `Your wallet has no ${launchToken.symbol}. You will need some to seed this pool and sell it during the LBP`
     }
 
-    if (bn(balanceData.value).shiftedBy(balanceData.decimals).lt(value)) {
+    if (bn(balance).shiftedBy(launchToken.decimals).lt(value)) {
       return `Your wallet does not have enough ${launchToken.symbol}`
     }
 
@@ -585,7 +590,7 @@ function SaleTokenAmountInput({
             address={launchToken.address}
             apiToken={launchToken}
             chain={selectedChain}
-            customUserBalance={formatUnits(balanceData?.value || 0n, launchToken.decimals)}
+            customUserBalance={formatUnits(balance || 0n, launchToken.decimals)}
             onChange={e => field.onChange(e.currentTarget.value)}
             priceMessage="Price: N/A"
             value={field.value}
@@ -618,17 +623,32 @@ function CollateralTokenAmountInput({
   collateralTokenAddress: string
   collateralTokenSymbol: string
 }) {
-  const { balanceFor, isBalancesLoading } = useTokenBalances()
-  const balance = balanceFor(collateralTokenAddress)
+  const { userAddress } = useUserAccount()
+
+  const { data: balance, isLoading: isBalanceLoading } = useReadContract({
+    address: collateralTokenAddress as `0x${string}`,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: [userAddress],
+  })
+  const { data: collateralTokenDecimals } = useReadContract({
+    address: collateralTokenAddress as `0x${string}`,
+    abi: erc20Abi,
+    functionName: 'decimals',
+  })
 
   const haveEnoughAmount = (value: string) => {
-    if (isBalancesLoading) return true
+    if (isBalanceLoading) return true
 
-    if (!balance || balance.amount === 0n) {
+    if (!balance || balance === 0n) {
       return `Your wallet has no ${collateralTokenSymbol}. You need some to seed this pool.\nSuggested seed liquidity amount: $5k+`
     }
 
-    if (bn(balance.amount).shiftedBy(balance.decimals).lt(value)) {
+    if (
+      bn(balance)
+        .shiftedBy(collateralTokenDecimals || 0)
+        .lt(value)
+    ) {
       return `Your wallet does not have enough ${collateralTokenSymbol}`
     }
 
@@ -645,6 +665,7 @@ function CollateralTokenAmountInput({
           <TokenInput
             address={collateralTokenAddress}
             chain={selectedChain}
+            customUserBalance={formatUnits(balance || 0n, collateralTokenDecimals || 0)}
             onChange={e => field.onChange(e.currentTarget.value)}
             value={field.value}
           />

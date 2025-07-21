@@ -21,6 +21,10 @@ import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolIn
 import { getChainId } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { useIsUsingBigBlocks, useToggleBlockSize } from '../../chains/hyperevm'
+import { ChainId } from '@balancer/sdk'
+import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
+import { useUserAccount } from '../../web3/UserAccountProvider'
 
 type Props = {
   isOpen: boolean
@@ -37,9 +41,11 @@ export function LbpCreationModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
+  const { isConnected } = useUserAccount()
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { transactionSteps, initLbpTxHash, urlTxHash } = useLbpCreation()
+  const { data: isUsingBigBlocks } = useIsUsingBigBlocks()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -103,6 +109,14 @@ export function LbpCreationModal({
   }
 
   const isSuccess = !!isPoolInitialized && isMetadataSaved
+
+  const shouldUseBigBlocks = isConnected && chainId === ChainId.HYPER_EVM && !isUsingBigBlocks
+
+  const {
+    mutate: toggleBlockSize,
+    isPending: isToggleBlockSizePending,
+    error: toggleBlockSizeError,
+  } = useToggleBlockSize()
 
   return (
     <Modal
@@ -195,7 +209,30 @@ export function LbpCreationModal({
             </VStack>
           )}
         </ModalBody>
-        {!saveMetadataError && (
+
+        {shouldUseBigBlocks ? (
+          <VStack marginTop="2" paddingLeft="6" paddingRight="6" spacing="3" width="full">
+            <Button
+              isDisabled={isToggleBlockSizePending}
+              isLoading={isToggleBlockSizePending}
+              onClick={() => toggleBlockSize()}
+              size="lg"
+              variant="primary"
+              w="full"
+            >
+              <LabelWithIcon icon="sign">Switch to big blocks</LabelWithIcon>
+            </Button>
+            {toggleBlockSizeError ? (
+              <BalAlert content={toggleBlockSizeError.message} status="error" title="Error:" />
+            ) : (
+              <BalAlert
+                content={`HyperEVM requires your account use "big blocks" to deploy a contract.`}
+                status="info"
+                title="Information:"
+              />
+            )}
+          </VStack>
+        ) : !saveMetadataError ? (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
             isSuccess={isSuccess}
@@ -203,7 +240,8 @@ export function LbpCreationModal({
             returnLabel="View pool page"
             urlTxHash={urlTxHash}
           />
-        )}
+        ) : null}
+
         {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
       </ModalContent>
     </Modal>
