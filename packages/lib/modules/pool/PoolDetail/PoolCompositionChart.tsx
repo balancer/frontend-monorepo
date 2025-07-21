@@ -41,10 +41,10 @@ interface CompositionViewProps {
   isMobile: boolean
   pool: Pool
   totalLiquidity: string
-  isQuantAmm: boolean
+  hasTabs: boolean
 }
 
-function CompositionView({ chain, pool, totalLiquidity, isQuantAmm }: CompositionViewProps) {
+function CompositionView({ chain, pool, totalLiquidity, hasTabs }: CompositionViewProps) {
   const { colorMode } = useColorMode()
   return (
     <>
@@ -57,7 +57,7 @@ function CompositionView({ chain, pool, totalLiquidity, isQuantAmm }: Compositio
         opacity={colorMode === 'dark' ? 0.35 : 0.45}
         pointerEvents="none"
         position="absolute"
-        top={isQuantAmm ? 'calc(50% - 440px)' : 'calc(50% - 465px)'}
+        top={hasTabs ? 'calc(50% - 440px)' : 'calc(50% - 465px)'}
         width={890}
         zIndex={0}
       />
@@ -84,6 +84,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
   const compositionTokens = getCompositionTokens(pool)
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
   const heightPx = height - 35
+  const hasTabs = isQuantAmm || isV3LBP(pool)
 
   const compositionViewProps: CompositionViewProps = {
     chain,
@@ -91,13 +92,13 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
     isMobile,
     pool,
     totalLiquidity,
-    isQuantAmm,
+    hasTabs,
   }
 
   return (
     <NoisyCard
       cardProps={{
-        height: [isQuantAmm ? '395px' : '300px', `${heightPx}px`],
+        height: [hasTabs ? '395px' : '300px', `${heightPx}px`],
         overflow: 'hidden',
         position: 'relative',
       }}
@@ -105,7 +106,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
     >
       {isLoading ? (
         <Skeleton h="full" w="full" />
-      ) : isQuantAmm || isV3LBP(pool) ? (
+      ) : hasTabs ? (
         <VStack h="full" p={{ base: 'sm', md: 'md' }} spacing="md" w="full">
           <Box alignSelf="flex-start">
             <ButtonGroup
