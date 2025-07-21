@@ -168,12 +168,12 @@ export function LbpVolumeTVLFeesCharts({
   }, [chartType, chartData, defaultChartOptions])
 
   if (isLoading) {
-    return <Skeleton h="280px" w="full" />
+    return <Skeleton h="full" w="full" />
   }
 
   if (!hasHourlyData) {
     return (
-      <Stack alignItems="center" h="280px" justifyContent="center">
+      <Stack alignItems="center" h="full" justifyContent="center">
         <Text color="font.secondary" fontSize="lg">
           No {chartType.toLowerCase()} data available
         </Text>
