@@ -157,7 +157,7 @@ function TokenIconInput() {
   } = useLbpForm()
 
   const [iconUrl] = useDebounce(watch('tokenIconUrl'), defaultDebounceMs)
-  const { isChecking, error } = useCheckImageUrl(iconUrl, ['image/png', 'image/jpeg'])
+  const { isChecking, error } = useCheckImageUrl(iconUrl)
   useEffect(() => {
     if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
   }, [iconUrl, isChecking, error, trigger, dirtyFields])
