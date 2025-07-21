@@ -94,6 +94,9 @@ export default function Privacy() {
                         <Link href="risks#composable-pools">Composable Stable Pools</Link>
                       </li>
                       <li>
+                        <Link href="risks#lbp">LBP - Liquidity Bootstrapping Pools</Link>
+                      </li>
+                      <li>
                         <Link href="risks#boosted-pools">Boosted Pools</Link>
                       </li>
                       <li>
@@ -185,7 +188,7 @@ export default function Privacy() {
                 since May 2021, securing over $3b. It has also been forked by other teams across
                 different networks, including Beethoven X on Fantom, without issue.
               </p>
-              <h5>How does Balancer work to mitigate this risk?</h5>
+              <h5>How Balancer aims to mitigate this risk:</h5>
               <ul>
                 <li>
                   Development teams have engaged with top tier smart contract auditing firms to
@@ -320,7 +323,7 @@ export default function Privacy() {
                 since LPs may suffer losses when rebasing occurs.
               </p>
 
-              <h5>How does Balancer mitigate these risks?</h5>
+              <h5>How Balancer aims to mitigate this risk:</h5>
               <ul>
                 <li>
                   Since the Balancer protocol is permissionless, anyone can create a liquidity pool
@@ -566,7 +569,7 @@ export default function Privacy() {
                   </ul>
                 </li>
               </ul>
-              <h5>How does Balancer work to mitigate this risk?</h5>
+              <h5>How Balancer aims to mitigate this risk:</h5>
               <ul>
                 <li>
                   For known pool types, the Balancer App UI transparently displays pool attributes
@@ -680,7 +683,7 @@ export default function Privacy() {
                 This risk is particularly relevant for pools with volatile assets where token prices
                 are likely diverge over time.
               </p>
-              <h5>How does Balancer work to mitigate this risk?</h5>
+              <h5>How Balancer aims to mitigate this risk:</h5>
               <ul>
                 <li>
                   All AMMs either have impermanent loss or reduced yield to LPs. Balancer aims to
@@ -783,7 +786,7 @@ export default function Privacy() {
                 </li>
               </ul>
 
-              <h5>How does Balancer work to mitigate this risk?</h5>
+              <h5>How Balancer aims to mitigate this risk:</h5>
               <ul>
                 <li>
                   Since the Balancer smart contracts can be interacted with by any front-end UI,
@@ -1086,6 +1089,105 @@ export default function Privacy() {
                       frequently do not reflect true economic return. APR does not account for
                       losses resulting from the market making strategy. It is simply a measure of
                       fees earned over TVL on a 24h timeframe.
+                    </li>
+                  </ul>
+                </div>
+              </FadeInOnView>
+              <FadeInOnView>
+                <div className="subsection">
+                  <h4 className="anchor" id="lbp">
+                    LBP - Liquidity Bootstrapping Pools
+                  </h4>
+                  <p>
+                    Liquidity Bootstrapping Pools (LBPs) are pools that dynamically change token
+                    weighting over time. LBPs utilize weighted math with time-dependent weights,
+                    enabling fair market price discovery and promoting wider token distribution.
+                    Balancer users can create and join/exit LBPs, subject to applicable laws and
+                    regulations in their respective jurisdictions.
+                  </p>
+                  <p>
+                    Balancer is not involved with the projects that create LBPs. Each LBP is
+                    independently created and managed by its owner. Balancer OpCo has developed a
+                    user interface to access LBP smart contracts deployed on each blockchain where
+                    the Balancer Protocol is live.
+                  </p>
+                  <p>The use of LBPs presents certain risks, including but not limited to:</p>
+                  <p>For Creators (pool owners):</p>
+                  <ul>
+                    <li>
+                      Price Volatility: The LBP mechanism can lead to significant price
+                      fluctuations, especially if the initial price is set too high or the pool
+                      lacks sufficient liquidity.
+                    </li>
+                    <li>
+                      Parameter Risk: Incorrect parameters can result in a failed launch, with the
+                      token price not behaving as expected.
+                    </li>
+                    <li>
+                      Liquidity Risk: Low liquidity can lead to high price slippage and increased
+                      susceptibility to manipulation.
+                    </li>
+                    <li>
+                      Market Manipulation: Although designed for fair price discovery, LBPs are not
+                      immune to market manipulation, including wash trading and pump-and-dump
+                      schemes.
+                    </li>
+                  </ul>
+                  <p>For Liquidity Providers (participants):</p>
+                  <ul>
+                    <li>
+                      Amplified Impermanent Loss: Impermanent Loss (IL) can be amplified in LBPs due
+                      to dynamic price changes. As the new token's price decreases, LPs experience
+                      greater IL compared to traditional AMMs.
+                    </li>
+                    <li>
+                      Downward Price Pressure: The inherent design of LBPs exerts downward pressure
+                      on the token price. LPs should be aware that the token price may be lower when
+                      they withdraw their liquidity compared to when they entered.
+                    </li>
+                    <li>
+                      Project Risk: LBPs can be used for malicious purposes, including rug pulls and
+                      scams. LPs can lose their funds if the project team abandons the project or
+                      the token becomes worthless.
+                    </li>
+                    <li>
+                      Price Uncertainty: New tokens in LBPs lack historical price data, making it
+                      challenging to assess the token's true value and potential risks. Emotional
+                      decision-making and poor investment choices can exacerbate these challenges.
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>How Balancer aims to mitigate this risk:</h5>
+                  <ul>
+                    <li>
+                      Parameter Guidance: Balancer provides tools and guidance to help projects
+                      determine appropriate parameters for their LBPs, such as starting price,
+                      duration, and weight curve. This helps prevent drastic price fluctuations and
+                      ensures a smoother launch.
+                    </li>
+                    <li>
+                      Education and Resources: Balancer provides comprehensive documentation and
+                      educational resources to help users understand the risks associated with LBPs.
+                    </li>
+                  </ul>
+                  <h5>How can LPs mitigate these risks?</h5>
+                  <ul>
+                    <li>
+                      Conduct Thorough Research: Before providing liquidity, research the project,
+                      team, and tokenomics.
+                    </li>
+                    <li>
+                      Understand LBP Mechanics: Gain a thorough understanding of the LBP mechanism
+                      and its specific parameters, including the starting price, duration, and decay
+                      rate.
+                    </li>
+                    <li>
+                      Invest Responsibly: Do not invest more than you can afford to lose, especially
+                      in new and unproven projects.
+                    </li>
+                    <li>
+                      Monitor Pool Activity: Actively monitor the pool's liquidity and price action.
                     </li>
                   </ul>
                 </div>
