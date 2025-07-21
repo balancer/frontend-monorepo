@@ -1,50 +1,38 @@
-import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { isValidUrl } from '../utils/urls'
 
-export function useCheckImageUrl(url: string, allowed: string[]) {
-  const { isChecking, error, headers } = useCheckUrl(url)
-
-  if (isChecking || error) return { isChecking, error }
-  if (!headers || !headers.get('Content-Type')) return { isChecking, error: 'Invalid URL' }
-
-  if (!allowed.includes(headers.get('Content-Type') || '')) {
-    return { isChecking, error: `Invalid image format: ${allowed.join(',')} allowed` }
-  }
-
-  return { isChecking: false, error: undefined }
-}
-
-export function useCheckWebsiteUrl(url: string) {
-  const { isChecking, error } = useCheckUrl(url)
-
-  return { isChecking, error }
-}
-
-function useCheckUrl(url: string) {
+export function useCheckImageUrl(url: string) {
   const validUrlError = isValidUrl(url)
 
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: [url],
-    queryFn: async () => {
-      try {
-        return await fetch(url, { method: 'HEAD' })
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
-        throw new Error('Unreachable URL')
-      }
-    },
-    enabled: validUrlError === true,
-  })
+  const [isChecking, setChecking] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+  const [image] = useState<HTMLImageElement>(new Image())
+
+  image.onload = function () {
+    if (!image || image.width <= 0) {
+      setErrorMessage('Invalid image')
+    }
+    setChecking(false)
+  }
+
+  image.onerror = function () {
+    setErrorMessage('Unreachable URL or invalid image')
+    setChecking(false)
+  }
+
+  useEffect(() => {
+    if (validUrlError !== true) return
+
+    setErrorMessage(undefined)
+    setChecking(true)
+    image.src = url
+  }, [image, validUrlError, url])
 
   if (validUrlError !== true) return { isChecking: false, error: validUrlError }
-
-  if (isPending) return { isChecking: true, error: undefined }
-  if (isError) return { isChecking: false, error: error.message }
-  if (data.status < 200 || data.status > 400) return { isChecking: false, error: 'Unreachable URL' }
+  if (isChecking) return { isChecking: true, error: undefined }
 
   return {
     isChecking: false,
-    error: undefined,
-    headers: data.headers,
+    error: errorMessage,
   }
 }
