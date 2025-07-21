@@ -182,7 +182,7 @@ export function LbpVolumeTVLFeesCharts({
   }
 
   return (
-    <Box h="340px" overflow="hidden" position="relative" w="full">
+    <Box h="full" overflow="hidden" position="relative" w="full">
       <AnimatePresence mode="wait">
         <motion.div
           animate={{ x: '0%' }}

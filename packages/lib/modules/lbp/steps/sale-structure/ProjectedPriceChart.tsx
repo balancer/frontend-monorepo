@@ -258,7 +258,7 @@ export function ProjectedPriceChart({
   return isLoading ? (
     <Skeleton h="280px" w="full" />
   ) : prices.length > 0 ? (
-    <ReactECharts option={chartInfo} style={{ height: '280px', width: '100%' }} />
+    <ReactECharts option={chartInfo} style={{ height: '100%', width: '100%' }} />
   ) : (
     <Stack alignItems="center" h="280px" justifyContent="center">
       <Text fontSize="3xl">Missing data</Text>

@@ -9,7 +9,7 @@ export function LbpPriceChart() {
   const { snapshots, isLoading, startTime, endTime, now, salePeriodText } = useLbpPoolCharts()
 
   return (
-    <VStack>
+    <VStack h="full">
       <ProjectedPriceChart
         cutTime={now}
         endDate={endTime}
