@@ -1,5 +1,5 @@
 import { isAfter, isBefore } from 'date-fns'
-import { Divider, HStack, Text, VStack, Box, Heading } from '@chakra-ui/react'
+import { Divider, HStack, Text, VStack, Box, Heading, Stack } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
 import { max } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -19,27 +19,37 @@ export function LbpPriceChart() {
         startDate={startTime}
       />
       <Divider />
-      <HStack mt="2" w="full">
-        <Box bgGradient="linear(to-r, #B3AEF5, #EAA879)" height="2px" width="15px" />
-        <Text fontSize="sm">Spot price</Text>
-        <Box height="2px" overflow="hidden" position="relative" width="15px">
-          <Box
-            bgGradient="linear(to-r, #B3AEF5, #EAA879)"
-            inset="0"
-            position="absolute"
-            style={{
-              maskImage:
-                'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
-              WebkitMaskImage:
-                'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
-            }}
-          />
-        </Box>
-        <Text fontSize="sm">Projected price with no buys</Text>
-        <Text color="font.secondary" fontSize="sm" ml="auto">
+      <Stack
+        align="start"
+        direction={{ base: 'column', md: 'row' }}
+        mt="2"
+        spacing={{ base: 2, md: 4 }}
+        w="full"
+      >
+        <HStack>
+          <Box bgGradient="linear(to-r, #B3AEF5, #EAA879)" height="2px" width="15px" />
+          <Text fontSize="sm">Spot price</Text>
+        </HStack>
+        <HStack>
+          <Box height="2px" overflow="hidden" position="relative" width="15px">
+            <Box
+              bgGradient="linear(to-r, #B3AEF5, #EAA879)"
+              inset="0"
+              position="absolute"
+              style={{
+                maskImage:
+                  'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
+                WebkitMaskImage:
+                  'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
+              }}
+            />
+          </Box>
+          <Text fontSize="sm">Projected price with no buys</Text>
+        </HStack>
+        <Text color="font.secondary" fontSize="sm" ml={{ base: 0, md: 'auto' }}>
           {salePeriodText}
         </Text>
-      </HStack>
+      </Stack>
     </VStack>
   )
 }
