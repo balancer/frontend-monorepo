@@ -7,17 +7,7 @@ import {
   GqlPoolLiquidityBootstrappingV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
-import {
-  VStack,
-  Skeleton,
-  Box,
-  Divider,
-  HStack,
-  Text,
-  Flex,
-  Spacer,
-  useColorMode,
-} from '@chakra-ui/react'
+import { VStack, Skeleton, Box, Flex, useColorMode } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -25,10 +15,10 @@ import { useState } from 'react'
 import { isQuantAmmPool, isV3LBP } from '../pool.helpers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShiftsChart'
-import { WeightsChart } from '../../lbp/steps/sale-structure/WeightsChart'
 import { differenceInDays, differenceInHours, secondsToMilliseconds } from 'date-fns'
 import { isSaleOngoing } from '../../lbp/pool/lbp.helpers'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
+import { WeightsChartContainer } from '@repo/lib/modules/lbp/steps/sale-structure/WeightsChartContainer'
 
 const TABS_LIST: ButtonGroupOption[] = [
   { value: 'weight-shifts', label: 'Weight shifts' },
@@ -141,40 +131,24 @@ function LBPWeightsChart({ pool }: { pool: Pool }) {
   const endWeight = lbpPool.projectTokenEndWeight * 100
   const now = new Date()
   const daysDiff = differenceInDays(endTime, isSaleOngoing(lbpPool) ? now : startTime)
+
   const hoursDiff =
     differenceInHours(endTime, isSaleOngoing(lbpPool) ? now : startTime) - daysDiff * 24
+
   const salePeriodText = isSaleOngoing(lbpPool)
     ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
     : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
 
   return (
-    <>
-      <WeightsChart
-        collateralTokenSymbol={lbpPool.poolTokens[lbpPool.reserveTokenIndex].symbol}
-        cutTime={now}
-        endDate={endTime}
-        endWeight={endWeight}
-        launchTokenSymbol={lbpPool.poolTokens[lbpPool.projectTokenIndex].symbol}
-        startDate={startTime}
-        startWeight={startWeight}
-      />
-
-      <Divider />
-
-      <HStack mt="2" w="full">
-        <Text color="font.special" fontWeight="extrabold">
-          &mdash;
-        </Text>
-        <Text>{lbpPool.poolTokens[0].symbol}</Text>
-        <Text color="#93C6FF" fontWeight="extrabold">
-          &mdash;
-        </Text>
-        <Text>{lbpPool.poolTokens[1].symbol}</Text>
-        <Spacer />
-        <Text color="font.secondary" fontSize="sm">
-          {salePeriodText}
-        </Text>
-      </HStack>
-    </>
+    <WeightsChartContainer
+      collateralTokenSymbol={lbpPool.poolTokens[lbpPool.reserveTokenIndex].symbol}
+      cutTime={now}
+      endDate={endTime.toISOString()}
+      endWeight={endWeight}
+      launchTokenSymbol={lbpPool.poolTokens[lbpPool.projectTokenIndex].symbol}
+      salePeriodText={salePeriodText}
+      startDate={startTime.toISOString()}
+      startWeight={startWeight}
+    />
   )
 }

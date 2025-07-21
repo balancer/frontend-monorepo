@@ -1,21 +1,12 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Heading,
-  HStack,
-  Spacer,
-  Text,
-} from '@chakra-ui/react'
-import { WeightsChart } from '../sale-structure/WeightsChart'
-import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
+import { Card, CardBody, CardHeader, Heading, HStack, Spacer, Text } from '@chakra-ui/react'
+import { WeightsChartContainer } from '../sale-structure/WeightsChartContainer'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { differenceInDays, parseISO, differenceInHours } from 'date-fns'
 
 type Props = {
-  startTime: string
-  endTime: string
+  startDate: string
+  endDate: string
   startWeight: number
   endWeight: number
   launchTokenMetadata: ReturnType<typeof useTokenMetadata>
@@ -23,17 +14,17 @@ type Props = {
 }
 
 export function PoolWeights({
-  startTime,
-  endTime,
+  startDate,
+  endDate,
   startWeight,
   endWeight,
   launchTokenMetadata,
   collateralToken,
 }: Props) {
-  const daysDiff = differenceInDays(parseISO(endTime), parseISO(startTime))
-  const hoursDiff = differenceInHours(parseISO(endTime), parseISO(startTime)) - daysDiff * 24
+  const daysDiff = differenceInDays(parseISO(endDate), parseISO(startDate))
+  const hoursDiff = differenceInHours(parseISO(endDate), parseISO(startDate)) - daysDiff * 24
   const salePeriodText =
-    startTime && endTime
+    startDate && endDate
       ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
       : ''
 
@@ -49,31 +40,15 @@ export function PoolWeights({
         </HStack>
       </CardHeader>
       <CardBody>
-        <WeightsChart
+        <WeightsChartContainer
           collateralTokenSymbol={collateralToken?.symbol || ''}
-          endDate={parseISO(endTime)}
+          endDate={endDate}
           endWeight={endWeight}
           launchTokenSymbol={launchTokenMetadata.symbol || ''}
-          startDate={parseISO(startTime)}
+          salePeriodText={salePeriodText}
+          startDate={startDate}
           startWeight={startWeight}
         />
-
-        <Divider />
-
-        <HStack mt="2">
-          <Text color="font.special" fontWeight="extrabold">
-            &mdash;
-          </Text>
-          <Text>{launchTokenMetadata.symbol}</Text>
-          <Text color="#93C6FF" fontWeight="extrabold">
-            &mdash;
-          </Text>
-          <Text>{collateralToken?.symbol}</Text>
-          <Spacer />
-          <Text color="font.secondary" fontSize="sm">
-            {salePeriodText}
-          </Text>
-        </HStack>
       </CardBody>
     </Card>
   )
