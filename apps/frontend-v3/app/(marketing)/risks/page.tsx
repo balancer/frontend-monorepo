@@ -1093,109 +1093,105 @@ export default function Privacy() {
                   </ul>
                 </div>
               </FadeInOnView>
-               <FadeInOnView>
+              <FadeInOnView>
                 <div className="subsection">
                   <h4 className="anchor" id="lbp">
-                  LBP - Liquidity Bootstrapping Pools
+                    LBP - Liquidity Bootstrapping Pools
                   </h4>
                   <p>
-                  Liquidity Bootstrapping Pools (LBPs) are pools that dynamically change token 
-                  weighting over time. LBPs utilize weighted math with time-dependent weights, 
-                  enabling fair market price discovery and promoting wider token distribution. 
-                  Balancer users can create and join/exit LBPs, subject to applicable laws and 
-                  regulations in their respective jurisdictions.
+                    Liquidity Bootstrapping Pools (LBPs) are pools that dynamically change token
+                    weighting over time. LBPs utilize weighted math with time-dependent weights,
+                    enabling fair market price discovery and promoting wider token distribution.
+                    Balancer users can create and join/exit LBPs, subject to applicable laws and
+                    regulations in their respective jurisdictions.
                   </p>
                   <p>
-                  Balancer is not involved with the projects that create LBPs. Each LBP is 
-                  independently created and managed by its owner. Balancer OpCo has developed
-                  a user interface to access LBP smart contracts deployed on each blockchain 
-                  where the Balancer Protocol is live.
+                    Balancer is not involved with the projects that create LBPs. Each LBP is
+                    independently created and managed by its owner. Balancer OpCo has developed a
+                    user interface to access LBP smart contracts deployed on each blockchain where
+                    the Balancer Protocol is live.
                   </p>
-                  <p>
-                  The use of LBPs presents certain risks, including but not limited to:
-                  </p>
-                  <p>
-                  For Creators (pool owners):
-                  </p>
-                   <ul>
+                  <p>The use of LBPs presents certain risks, including but not limited to:</p>
+                  <p>For Creators (pool owners):</p>
+                  <ul>
                     <li>
-                    Price Volatility: The LBP mechanism can lead to significant price fluctuations,
-                    especially if the initial price is set too high or the pool lacks sufficient 
-                    liquidity.
+                      Price Volatility: The LBP mechanism can lead to significant price
+                      fluctuations, especially if the initial price is set too high or the pool
+                      lacks sufficient liquidity.
                     </li>
                     <li>
-                    Parameter Risk: Incorrect parameters can result in a failed launch, with the 
-                    token price not behaving as expected.
+                      Parameter Risk: Incorrect parameters can result in a failed launch, with the
+                      token price not behaving as expected.
                     </li>
                     <li>
-                    Liquidity Risk: Low liquidity can lead to high price slippage and increased 
-                    susceptibility to manipulation.
+                      Liquidity Risk: Low liquidity can lead to high price slippage and increased
+                      susceptibility to manipulation.
                     </li>
                     <li>
-                    Market Manipulation: Although designed for fair price discovery, LBPs are not 
-                    immune to market manipulation, including wash trading and pump-and-dump schemes.
+                      Market Manipulation: Although designed for fair price discovery, LBPs are not
+                      immune to market manipulation, including wash trading and pump-and-dump
+                      schemes.
                     </li>
-                   </ul>
-                  <p>
-                  For Liquidity Providers (participants):
-                  </p>
-                    <ul>
+                  </ul>
+                  <p>For Liquidity Providers (participants):</p>
+                  <ul>
                     <li>
-                    Amplified Impermanent Loss: Impermanent Loss (IL) can be amplified in LBPs due 
-                    to dynamic price changes. As the new token's price decreases, LPs experience greater
-                    IL compared to traditional AMMs.
-                    </li>
-                    <li>
-                    Downward Price Pressure: The inherent design of LBPs exerts downward pressure on 
-                    the token price. LPs should be aware that the token price may be lower when they 
-                    withdraw their liquidity compared to when they entered.
+                      Amplified Impermanent Loss: Impermanent Loss (IL) can be amplified in LBPs due
+                      to dynamic price changes. As the new token's price decreases, LPs experience
+                      greater IL compared to traditional AMMs.
                     </li>
                     <li>
-                    Project Risk: LBPs can be used for malicious purposes, including rug pulls and 
-                    scams. LPs can lose their funds if the project team abandons the project or the 
-                    token becomes worthless.
+                      Downward Price Pressure: The inherent design of LBPs exerts downward pressure
+                      on the token price. LPs should be aware that the token price may be lower when
+                      they withdraw their liquidity compared to when they entered.
                     </li>
                     <li>
-                    Price Uncertainty: New tokens in LBPs lack historical price data, making it 
-                    challenging to assess the token's true value and potential risks. Emotional 
-                    decision-making and poor investment choices can exacerbate these challenges.
+                      Project Risk: LBPs can be used for malicious purposes, including rug pulls and
+                      scams. LPs can lose their funds if the project team abandons the project or
+                      the token becomes worthless.
                     </li>
-                   </ul>
-                  </div>  
-              <h5>How Balancer aims to mitigate this risk:</h5>
-              <ul>
-                <li>
-                  Parameter Guidance: Balancer provides tools and guidance to help projects 
-                  determine appropriate parameters for their LBPs, such as starting price, 
-                  duration, and weight curve. This helps prevent drastic price fluctuations 
-                  and ensures a smoother launch.
-                </li>
-                <li>
-                  Education and Resources: Balancer provides comprehensive documentation and 
-                  educational resources to help users understand the risks associated with LBPs.
-                </li>
-                <li>
-              </ul>
-              <h5>How can LPs mitigate these risks?</h5>
-              <ul>
-                <li>
-                  Conduct Thorough Research: Before providing liquidity, research the project, 
-                  team, and tokenomics.
-                </li>
-                <li>
-                  Understand LBP Mechanics: Gain a thorough understanding of the LBP mechanism 
-                  and its specific parameters, including the starting price, duration, and decay rate.
-                </li>
-                <li>
-                  Invest Responsibly: Do not invest more than you can afford to lose, especially 
-                  in new and unproven projects.
-                </li>
-                <li>
-                  Monitor Pool Activity: Actively monitor the pool's liquidity and price action.
-                </li>
-              </ul>
-            </div>
-          </FadeInOnView>
+                    <li>
+                      Price Uncertainty: New tokens in LBPs lack historical price data, making it
+                      challenging to assess the token's true value and potential risks. Emotional
+                      decision-making and poor investment choices can exacerbate these challenges.
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>How Balancer aims to mitigate this risk:</h5>
+                  <ul>
+                    <li>
+                      Parameter Guidance: Balancer provides tools and guidance to help projects
+                      determine appropriate parameters for their LBPs, such as starting price,
+                      duration, and weight curve. This helps prevent drastic price fluctuations and
+                      ensures a smoother launch.
+                    </li>
+                    <li>
+                      Education and Resources: Balancer provides comprehensive documentation and
+                      educational resources to help users understand the risks associated with LBPs.
+                    </li>
+                  </ul>
+                  <h5>How can LPs mitigate these risks?</h5>
+                  <ul>
+                    <li>
+                      Conduct Thorough Research: Before providing liquidity, research the project,
+                      team, and tokenomics.
+                    </li>
+                    <li>
+                      Understand LBP Mechanics: Gain a thorough understanding of the LBP mechanism
+                      and its specific parameters, including the starting price, duration, and decay
+                      rate.
+                    </li>
+                    <li>
+                      Invest Responsibly: Do not invest more than you can afford to lose, especially
+                      in new and unproven projects.
+                    </li>
+                    <li>
+                      Monitor Pool Activity: Actively monitor the pool's liquidity and price action.
+                    </li>
+                  </ul>
+                </div>
+              </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
                   <h4 className="anchor" id="boosted-pools">
