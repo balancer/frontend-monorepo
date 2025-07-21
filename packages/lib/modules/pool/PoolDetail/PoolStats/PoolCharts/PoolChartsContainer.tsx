@@ -134,7 +134,7 @@ function PoolChartsContent({ ...props }: any) {
           <NoisyCard {...COMMON_NOISY_CARD_PROPS}>
             <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
               <Stack direction={{ base: 'column', md: 'row' }} w="full" wrap="wrap">
-                <HStack alignSelf="flex-start" wrap="wrap">
+                <HStack alignSelf="flex-start" gap="10px" wrap="wrap">
                   <ButtonGroup
                     currentOption={activeTab}
                     groupId="chart"
@@ -150,7 +150,11 @@ function PoolChartsContent({ ...props }: any) {
                       tokenPair={showReclammChart ? tokensReclamm : tokensEclp}
                     />
                   )}
-                  {showPoolCharts && <PeriodSelect />}
+                  {showPoolCharts && (
+                    <Box w="max-content">
+                      <PeriodSelect />
+                    </Box>
+                  )}
                 </HStack>
                 <VStack
                   alignItems={{ base: undefined, md: 'flex-end' }}
