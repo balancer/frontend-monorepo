@@ -60,18 +60,18 @@ export function usePriceInfo(chain: GqlChain, poolId: Address) {
 }
 
 function toLbpSnapshots(apiPrices: LbpPriceChartDataFragment[]): LbpSnapshot[] {
-  return apiPrices.map(price => {
-    return {
-      timestamp: new Date(secondsToMilliseconds(price.timestamp)),
-      projectTokenPrice: bn(price.projectTokenPrice).times(price.reservePrice).toNumber(),
-      reserveTokenPrice: price.reservePrice,
-      cumulativeVolume: price.cumulativeVolume,
-      cumulativeFees: price.cumulativeFees,
-      tvl: price.tvl,
-      projectTokenBalance: price.projectTokenBalance,
-      reserveTokenBalance: price.reserveTokenBalance,
-    }
-  })
+  return apiPrices.map(price => ({
+    timestamp: new Date(secondsToMilliseconds(price.timestamp)),
+    projectTokenPrice: bn(price.projectTokenPrice)
+      .times(price.reservePrice || 1) // reservePrice is 0 before the start so just use 1 then
+      .toNumber(),
+    reserveTokenPrice: price.reservePrice,
+    cumulativeVolume: price.cumulativeVolume,
+    cumulativeFees: price.cumulativeFees,
+    tvl: price.tvl,
+    projectTokenBalance: price.projectTokenBalance,
+    reserveTokenBalance: price.reserveTokenBalance,
+  }))
 }
 
 function aggregateToHourlyData(prices: LbpPriceChartDataFragment[]): HourlyDataPoint[] {
