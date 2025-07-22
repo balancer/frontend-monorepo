@@ -86,7 +86,7 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
                       )}
                     />
                     <Text color="font.secondary" fontSize="12px" pt="sm">
-                      It must be a URL to a PNG or JPG file
+                      Add a URL to an image file (e.g. SVG, PNG, JPG)
                     </Text>
                   </PopoverBody>
                 </PopoverContent>
