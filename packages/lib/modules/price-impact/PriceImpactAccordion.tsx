@@ -68,9 +68,9 @@ export function PriceImpactAccordion({
           <>
             <Text color="#000" fontSize="sm" pb="xs">
               The value of output tokens is a lot less than the input tokens after price impact and
-              swap fees. This is likely because your swap size is large relative to the market
-              liquidity for this pair, resulting in a high price impact by unfavorably shifting the
-              exchange rate.
+              swap fees (per Coingecko). This is likely because your swap size is large relative to
+              the market liquidity for this pair, resulting in a high price impact by unfavorably
+              shifting the exchange rate.
             </Text>
             <Text color="#000" fontSize="sm">
               To reduce price impact, lower your swap size or try{' '}
