@@ -7,11 +7,14 @@ export function PoolCreationModalFooter({ onReset }: { onReset: () => void }) {
         <Text
           _hover={{ textDecoration: 'underline' }}
           cursor="pointer"
+          fontSize="sm"
           onClick={() => {
             onReset()
           }}
+          pb="sm"
+          variant="secondary"
         >
-          Reset Progress
+          Abandon LBP and reset progress
         </Text>
       </HStack>
     </ModalFooter>
