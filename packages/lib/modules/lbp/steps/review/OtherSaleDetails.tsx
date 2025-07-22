@@ -15,15 +15,15 @@ export function OtherSaleDetails({
           Other sale details
         </Heading>
 
-        <VStack w="full">
-          <Text align="left" w="full">
+        <VStack gap="0" w="full">
+          <Text align="left" fontWeight="bold" w="full">
             Token creator rights
           </Text>
           <List
-            color="font.secondary"
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
+            variant="secondary"
             w="full"
           >
             <ListItem>Cancel sale (before start)</ListItem>
@@ -35,15 +35,15 @@ export function OtherSaleDetails({
           </List>
         </VStack>
 
-        <VStack w="full">
-          <Text align="left" w="full">
+        <VStack gap="0" w="full">
+          <Text align="left" fontWeight="bold" w="full">
             User rights
           </Text>
           <List
-            color="font.secondary"
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
+            variant="secondary"
             w="full"
           >
             <ListItem>{`Ability to buy and sell ${launchTokenSymbol} during the LBP`}</ListItem>
@@ -51,22 +51,22 @@ export function OtherSaleDetails({
           </List>
         </VStack>
 
-        <VStack w="full">
-          <Text align="left" w="full">
+        <VStack gap="0" w="full">
+          <Text align="left" fontWeight="bold" w="full">
             Fees
           </Text>
           <List
-            color="font.secondary"
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
+            variant="secondary"
             w="full"
           >
             <ListItem>
               Swap fees: {fNum('feePercent', fee / 100)}
-              <List color="font.secondary" listStylePosition="outside" listStyleType="disc" pl="md">
+              <List listStylePosition="outside" listStyleType="disc" pl="md" variant="secondary">
                 <ListItem>To you (LBP creator): {fNum('feePercent', fee / 200)}</ListItem>
-                <ListItem>To balancer protocol: {fNum('feePercent', fee / 200)}</ListItem>
+                <ListItem>To Balancer protocol: {fNum('feePercent', fee / 200)}</ListItem>
               </List>
             </ListItem>
           </List>

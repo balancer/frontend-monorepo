@@ -31,8 +31,8 @@ export function LbpSummary() {
       {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />}
 
       <Card variant="modalSubSection">
-        <VStack align="start">
-          <Text>Sale Token</Text>
+        <VStack align="start" gap="ms">
+          <Text fontWeight="bold">Sale token</Text>
           <TokenRow
             address={launchTokenAddress as Address}
             chain={selectedChain}
@@ -40,7 +40,7 @@ export function LbpSummary() {
             value={saleTokenAmount}
           />
           <Divider p="0" />
-          <Text>Collateral Token</Text>
+          <Text fontWeight="bold">Collateral token</Text>
           <TokenRow
             address={collateralTokenAddress as Address}
             chain={selectedChain}
@@ -50,7 +50,7 @@ export function LbpSummary() {
       </Card>
       <Card variant="modalSubSection">
         <VStack align="start">
-          <Text>Sale details</Text>
+          <Text fontWeight="bold">Sale details</Text>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Sale start</Text>
             <Text color="grayText">{formatDateTimeShort(new Date(startTime))}</Text>
@@ -96,6 +96,6 @@ const humanWeightShifts: Record<string, ReactNode> = {
 }
 
 const humanUserActions: Record<string, ReactNode> = {
-  buy_only: 'Users can Buy Only',
-  buy_and_sell: 'Users can Buy & Sell',
+  buy_only: 'Users can ‘Buy’ only',
+  buy_and_sell: 'Users can ‘Buy & Sell’',
 }
