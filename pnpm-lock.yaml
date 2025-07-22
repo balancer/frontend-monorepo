@@ -362,8 +362,8 @@ importers:
         specifier: workspace:*
         version: link:../../apps/beets-frontend-v3
       dotenv:
-        specifier: 16.4.7
-        version: 16.4.7
+        specifier: 17.2.0
+        version: 17.2.0
       frontend-v3:
         specifier: workspace:*
         version: link:../../apps/frontend-v3
@@ -4787,6 +4787,14 @@ packages:
 
   dotenv@16.4.7:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
+
+  dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
+
+  dotenv@17.2.0:
+    resolution: {integrity: sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==}
     engines: {node: '>=12'}
 
   draco3d@1.5.7:
@@ -10131,7 +10139,7 @@ snapshots:
       '@whatwg-node/fetch': 0.10.8
       chalk: 4.1.2
       debug: 4.4.1
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       graphql: 16.10.0
       graphql-request: 6.1.0(graphql@16.10.0)
       http-proxy-agent: 7.0.2
@@ -11548,7 +11556,7 @@ snapshots:
       '@babel/core': 7.28.0
       '@sentry/babel-plugin-component-annotate': 2.22.7
       '@sentry/cli': 2.39.1
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       find-up: 5.0.0
       glob: 9.3.5
       magic-string: 0.30.8
@@ -12044,7 +12052,7 @@ snapshots:
   '@typescript-eslint/project-service@8.34.0(typescript@5.8.3)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.34.0(typescript@5.8.3)
-      '@typescript-eslint/types': 8.34.0
+      '@typescript-eslint/types': 8.37.0
       debug: 4.4.1
       typescript: 5.8.3
     transitivePeerDependencies:
@@ -13992,6 +14000,10 @@ snapshots:
 
   dotenv@16.4.7: {}
 
+  dotenv@16.6.1: {}
+
+  dotenv@17.2.0: {}
+
   draco3d@1.5.7: {}
 
   dset@3.1.4: {}
@@ -15456,7 +15468,7 @@ snapshots:
 
   langbase@1.1.65(react@19.1.0)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       openai: 4.104.0(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.67)
       zod: 3.25.67
       zod-validation-error: 3.5.2(zod@3.25.67)
@@ -15468,7 +15480,7 @@ snapshots:
 
   langbase@1.1.65(react@19.1.0)(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       openai: 4.104.0(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.67)
       zod: 3.25.67
       zod-validation-error: 3.5.2(zod@3.25.67)
@@ -15480,7 +15492,7 @@ snapshots:
 
   langbase@1.1.65(react@19.1.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       openai: 4.104.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.67)
       zod: 3.25.67
       zod-validation-error: 3.5.2(zod@3.25.67)
