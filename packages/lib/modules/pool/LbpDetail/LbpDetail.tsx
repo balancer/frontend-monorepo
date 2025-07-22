@@ -16,25 +16,16 @@ import { MyTransactions } from './MyTransactions'
 import { GetFundsWarning } from './GetFundsWarning'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { Top10Trades } from './Top10Trades'
-import { useRef, useEffect, useState } from 'react'
 
 export function LbpDetail() {
   const { userPoolEvents, isLoadingUserPoolEvents, hasPoolEvents } = useUserPoolEvents()
   const { userAddress } = useUserAccount()
   const { pool } = usePool()
-  const myLbpSwapSectionRef = useRef<HTMLDivElement | null>(null)
-  const [height, setHeight] = useState(0)
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const isPoolOwner = lbpPool.lbpOwner.toLowerCase() === userAddress.toLowerCase()
   const isSaleFinished = isAfter(now(), secondsToMilliseconds(lbpPool.endTime))
   const fundsAvailable = Number(lbpPool.userBalance?.totalBalance) > 0
-
-  useEffect(() => {
-    if (myLbpSwapSectionRef && myLbpSwapSectionRef.current) {
-      setHeight(myLbpSwapSectionRef.current.offsetHeight)
-    }
-  }, [])
 
   return (
     <>
@@ -45,9 +36,9 @@ export function LbpDetail() {
 
           <Grid gap="4" templateColumns={{ base: '1fr', md: '2fr 1fr' }} w="full">
             <GridItem>
-              <LbpPoolChartsContainer height={height} />
+              <LbpPoolChartsContainer />
             </GridItem>
-            <GridItem ref={myLbpSwapSectionRef}>
+            <GridItem minH="400px">
               {isSaleFinished ? <Top10Trades chain={pool.chain} pool={lbpPool} /> : <LbpSwap />}
             </GridItem>
           </Grid>

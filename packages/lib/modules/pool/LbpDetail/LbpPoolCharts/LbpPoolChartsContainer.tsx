@@ -12,30 +12,22 @@ import { LbpVolumeTVLFeesCharts } from './LbpVolumeTVLFeesCharts'
 import { AnimatePresence, motion } from 'framer-motion'
 import { VolTvlFeesInfo } from './VolTvlFeesInfo'
 
-interface LbpPoolChartsContainerProps {
-  height?: number
-}
-
-export function LbpPoolChartsContainer({ height }: LbpPoolChartsContainerProps) {
+export function LbpPoolChartsContainer() {
   return (
     <PoolChartTabsProvider>
       <LbpPoolChartsProvider>
-        <PoolChartsContent height={height} />
+        <PoolChartsContent />
       </LbpPoolChartsProvider>
     </PoolChartTabsProvider>
   )
 }
 
-interface PoolChartsContentProps {
-  height?: number
-}
-
-function PoolChartsContent({ height }: PoolChartsContentProps) {
+function PoolChartsContent() {
   const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
   const { hourlyData, hasHourlyData, isLoading } = useLbpPoolCharts()
 
   return (
-    <Card h={height}>
+    <Card h="full">
       <HStack align="start" justifyContent="space-between" w="full">
         <ButtonGroup
           currentOption={activeTab}
