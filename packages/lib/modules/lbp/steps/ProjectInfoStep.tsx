@@ -50,17 +50,19 @@ export function ProjectInfoStep() {
 
         <NameInput />
         <DescriptionInput />
-        <TokenIconInput />
         <ProjectWebsiteUrlInput />
+        <TokenIconInput />
+        <ProjectOwnerInput />
+        <Divider />
+        <Heading color="font.maxContrast" size="md">
+          Social handles
+        </Heading>
         <ProjectXHandle />
         <ProjectTelegramHandle />
         <ProjectDiscordUrlInput />
-        <ProjectOwnerInput />
 
         <Divider />
-
         <Disclaimer />
-
         <LbpFormAction disabled={!isValid} />
       </VStack>
     </form>
@@ -83,7 +85,11 @@ function NameInput() {
       <HStack w="full">
         <Text color="font.primary">Project name</Text>
         <Spacer />
-        <Text color="font.secondary">{`${length}/${maxLength}`}</Text>
+        <Text
+          className="tabular-number"
+          color="font.secondary"
+          fontSize="sm"
+        >{`${length} / ${maxLength}`}</Text>
       </HStack>
       <Controller
         control={control}
@@ -122,7 +128,11 @@ function DescriptionInput() {
       <HStack w="full">
         <Text color="font.primary">Project description</Text>
         <Spacer />
-        <Text color="font.secondary">{`${length}/${maxLength}`}</Text>
+        <Text
+          className="tabular-number"
+          color="font.secondary"
+          fontSize="sm"
+        >{`${length} / ${maxLength}`}</Text>
       </HStack>
       <Controller
         control={control}
@@ -174,7 +184,7 @@ function TokenIconInput() {
               error={isChecking ? '' : errors.tokenIconUrl?.message}
               isInvalid={!isChecking && !!errors.tokenIconUrl}
               onChange={e => field.onChange(e.target.value)}
-              placeholder="https://yourdomain.com/token-icon.png"
+              placeholder="https://project-domain.com/token-icon.png"
               value={field.value}
             />
             {isChecking && (
@@ -212,7 +222,7 @@ function ProjectWebsiteUrlInput() {
             error={errors.websiteUrl?.message}
             isInvalid={!!errors.websiteUrl}
             onChange={e => field.onChange(e.target.value)}
-            placeholder="https://yourdomain.com"
+            placeholder="https://project-domain.com"
             value={field.value}
           />
         )}
@@ -244,7 +254,7 @@ function ProjectXHandle() {
             error={errors.xHandle?.message}
             isInvalid={!!errors.xHandle}
             onChange={e => field.onChange(e.target.value)}
-            placeholder="@yourhandle"
+            placeholder="@project-handle"
             value={field.value}
           />
         )}
@@ -275,7 +285,7 @@ function ProjectTelegramHandle() {
             error={errors.telegramHandle?.message}
             isInvalid={!!errors.telegramHandle}
             onChange={e => field.onChange(e.target.value)}
-            placeholder="@yourhandle"
+            placeholder="@project-handle"
             value={field.value}
           />
         )}
@@ -330,7 +340,7 @@ function ProjectOwnerInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Project owner (optional)</Text>
+      <Text color="font.primary">Project owner wallet address (optional)</Text>
       <Controller
         control={control}
         name="owner"
@@ -363,14 +373,16 @@ function Disclaimer() {
       render={({ field }) => (
         <Checkbox
           color="font.primary"
+          fontWeight="medium"
           isChecked={field.value}
           onChange={field.onChange}
-          pl="md"
           size="lg"
         >
           {'I accept the'}
           <Button
             as={NextLink}
+            fontSize="lg"
+            fontWeight="medium"
             href={'/risks'}
             px="0.3em"
             target="_blank"
@@ -382,6 +394,8 @@ function Disclaimer() {
           {'and'}
           <Button
             as={NextLink}
+            fontSize="lg"
+            fontWeight="medium"
             href={'/terms-of-use'}
             px="0.3em"
             target="_blank"
@@ -390,7 +404,7 @@ function Disclaimer() {
           >
             Terms of Use
           </Button>
-          {'for creating and LBP.'}
+          {'for creating and LBP'}
         </Checkbox>
       )}
       rules={{ required: 'Conditions must be accepted' }}

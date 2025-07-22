@@ -250,7 +250,7 @@ export function SaleStructureStep() {
             </TokenInputsValidationProvider>
           </>
         )}
-
+        <Divider />
         <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
       </VStack>
     </form>
