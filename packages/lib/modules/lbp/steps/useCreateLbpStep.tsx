@@ -20,7 +20,6 @@ import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLbpWeights } from '../useLbpWeights'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
-import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 
 export const createLbpStepId = 'create-lbp'
 
@@ -42,7 +41,7 @@ export function useCreateLbpStep(): TransactionStep {
   )
 
   const { userAddress } = useUserAccount()
-  const { saleStructureForm, projectInfoForm } = useLbpForm()
+  const { saleStructureForm, projectInfoForm, isCollateralNativeAsset } = useLbpForm()
   const {
     launchTokenAddress,
     collateralTokenAddress,
@@ -54,14 +53,11 @@ export function useCreateLbpStep(): TransactionStep {
   } = saleStructureForm.watch()
 
   const { tokens, chainId } = getNetworkConfig(selectedChain)
-  const wrappedNativeAssetAddress = tokens.addresses.wNativeAsset
-  const helpers = new LiquidityActionHelpers()
-  const isCollateralNativeAsset = helpers.isNativeAsset(collateralTokenAddress as Address)
 
   // pool must be created with wrapped native asset
   let reserveTokenAddress = collateralTokenAddress
   if (isCollateralNativeAsset) {
-    reserveTokenAddress = wrappedNativeAssetAddress
+    reserveTokenAddress = tokens.addresses.wNativeAsset
   }
 
   const { name, owner } = projectInfoForm.watch()

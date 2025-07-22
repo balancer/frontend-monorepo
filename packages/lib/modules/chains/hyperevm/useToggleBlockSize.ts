@@ -13,9 +13,9 @@ export function useToggleBlockSize() {
   async function toggleBlockSize() {
     if (!walletClient) throw new Error('Wallet client not found')
 
-    // Create and approve agent that will execute the evmUserModify action
-    const privateKey = generatePrivateKey()
-    const account = privateKeyToAccount(privateKey)
+    // Create arbitrary wallet
+    const agentPrivateKey = generatePrivateKey()
+    const account = privateKeyToAccount(agentPrivateKey)
 
     const transport = new hl.HttpTransport()
     const userExchangeClient = new hl.ExchangeClient({
@@ -23,15 +23,16 @@ export function useToggleBlockSize() {
       transport,
     })
 
+    // Approve arbitrary wallet to execute orders on behalf of the user
     await userExchangeClient.approveAgent({
       agentAddress: account.address,
       // no name agent always prunes the last no name agent so we do not have to worry about agent cap?
       agentName: '', // https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/nonces-and-api-wallets#api-wallet-pruning
     })
 
-    // Agent is authorized to execute orders on behalf of the user
+    // Execute block toggle using agent wallet
     const agentExchangeClient = new hl.ExchangeClient({
-      wallet: privateKey,
+      wallet: agentPrivateKey,
       transport,
     })
 

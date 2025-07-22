@@ -14,6 +14,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -91,7 +92,12 @@ export function useLbpFormLogic() {
     setIsMetadataSaved(false)
   }
 
-  const { saleTokenAmount, launchTokenAddress, selectedChain } = saleStructureForm.watch()
+  const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } =
+    saleStructureForm.watch()
+
+  const { tokens } = getNetworkConfig(selectedChain)
+  const isCollateralNativeAsset =
+    collateralTokenAddress.toLowerCase() === tokens.nativeAsset.address.toLowerCase()
 
   const launchTokenSeed = Number(saleTokenAmount || 0)
 
@@ -140,6 +146,7 @@ export function useLbpFormLogic() {
     resetLbpCreation,
     launchTokenMetadata,
     launchToken,
+    isCollateralNativeAsset,
   }
 }
 
