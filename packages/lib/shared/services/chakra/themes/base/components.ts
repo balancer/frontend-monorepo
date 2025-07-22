@@ -893,6 +893,26 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
     },
+    List: {
+      baseStyle: {
+        item: {
+          color: 'font.primary',
+          fontWeight: 'medium',
+          letterSpacing: '-0.25px',
+          lineHeight: '1.3',
+          fontSize: ['sm', 'md'],
+          textWrap: 'pretty',
+          pb: 'xs',
+        },
+      },
+      variants: {
+        secondary: {
+          item: {
+            color: 'font.secondary',
+          },
+        },
+      },
+    },
     Checkbox: {
       baseStyle: {
         control: {
