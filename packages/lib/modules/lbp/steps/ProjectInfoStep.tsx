@@ -184,7 +184,7 @@ function TokenIconInput() {
               error={isChecking ? '' : errors.tokenIconUrl?.message}
               isInvalid={!isChecking && !!errors.tokenIconUrl}
               onChange={e => field.onChange(e.target.value)}
-              placeholder="https://project-domain.com/token-icon.png"
+              placeholder="https://project-name.com/token.svg"
               value={field.value}
             />
             {isChecking && (
@@ -222,7 +222,7 @@ function ProjectWebsiteUrlInput() {
             error={errors.websiteUrl?.message}
             isInvalid={!!errors.websiteUrl}
             onChange={e => field.onChange(e.target.value)}
-            placeholder="https://project-domain.com"
+            placeholder="https://project-name.com"
             value={field.value}
           />
         )}

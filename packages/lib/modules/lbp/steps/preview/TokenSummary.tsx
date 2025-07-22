@@ -80,7 +80,7 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
                           error={projectInfoForm.formState.errors.tokenIconUrl?.message}
                           isInvalid={!!projectInfoForm.formState.errors.tokenIconUrl}
                           onChange={e => field.onChange(e.target.value)}
-                          placeholder="https://yourdomain.com/token-icon.svg"
+                          placeholder="https://project-name.com/token.svg"
                           value={field.value}
                         />
                       )}
