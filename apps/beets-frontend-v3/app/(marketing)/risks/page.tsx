@@ -29,7 +29,7 @@ export default function Privacy() {
             <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Beets</h1>
               <p>
-                <em>Last Updated: May 2024</em>
+                <em>Last Updated: July 2025</em>
               </p>
               <p>
                 <em>
@@ -121,6 +121,14 @@ export default function Privacy() {
                           Concentrated Liquidity Pools
                         </Link>
                       </li>
+                      <li>
+                        <Link href="risks#reclamm">
+                          ReCLAMM - Readjusting Concentrated Liquidity AMM
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="risks#btf">Blockchain Traded Funds</Link>
+                      </li>
                     </ul>
                   </li>
                   <li>
@@ -129,25 +137,7 @@ export default function Privacy() {
                     </Link>
                     <ul>
                       <li>
-                        <Link href="risks#arbitrum">Arbitrum</Link>
-                      </li>
-                      <li>
                         <Link href="risks#optimism">Optimism</Link>
-                      </li>
-                      <li>
-                        <Link href="risks#base">Base</Link>
-                      </li>
-                      <li>
-                        <Link href="risks#polygon">Polygon PoS</Link>
-                      </li>
-                      <li>
-                        <Link href="risks#polygon-zkevm">Polygon zkEVM</Link>
-                      </li>
-                      <li>
-                        <Link href="risks#gnosis">Gnosis chain</Link>
-                      </li>
-                      <li>
-                        <Link href="risks#avalanche">Avalanche</Link>
                       </li>
                     </ul>
                   </li>
@@ -190,7 +180,7 @@ export default function Privacy() {
                 failure—i.e. hack the vault, get all the tokens of the protocol. This Balancer Vault
                 architecture was heavily audited prior to launch and has now been battle-tested
                 since May 2021, securing over $3b. It has also been forked by other teams across
-                different networks, including Beethoven X on Fantom, without issue.
+                different networks, including Beets on Sonic, without issue.
               </p>
               <h5>How does Balancer work to mitigate this risk?</h5>
               <ul>
@@ -1229,79 +1219,220 @@ export default function Privacy() {
                       .
                     </li>
                   </ul>
-                  <p>
-                    Other risks:
-                    <ul>
-                      <li>
-                        The Balancer UI allows people to manage their liquidity in certain Gyroscope
-                        pools. This is not an endorsement of their products or of the the safety of
-                        their smart contracts. The Gyroscope GYD system and E-CLPs have been audited
-                        several times. You can review the{' '}
-                        <a href="https://docs.gyro.finance/gyroscope-protocol/audit-reports">
-                          audit reports here
-                        </a>
-                        .
-                      </li>
-                      <li>
-                        Some concentrated liquidity pools also contain Gyroscope&rsquo;s Gyro
-                        Dollars (GYD). Here are some of the{' '}
-                        <a href="https://docs.gyro.finance/gyroscope-protocol/risks">
-                          risks of using GYD
-                        </a>
-                        .
-                      </li>
-                    </ul>
-                  </p>
-                </div>
-              </FadeInOnView>
-
-              <Divider />
-              <FadeInOnView>
-                <div className="subsection">
-                  <h3 className="anchor" id="network-risks">
-                    Network risks (L2s and Sidechains)
-                  </h3>
-                  <p>
-                    Sidechains and Layer 2 networks can offer advantages over Ethereum Mainnet, like
-                    faster transaction times and lower fees. However, they come with their own set
-                    of risks and trade-offs.
-                  </p>
-                  <p>
-                    For example, sidechains and Layer 2 networks often have a different security
-                    models. They may rely on a smaller set of validators or different consensus
-                    mechanisms, which could potentially make them more susceptible to attacks or
-                    centralization risks.
-                  </p>
-                  <p>
-                    In addition, there are bridging risks when user&rsquo;s move funds between
-                    networks. Asset bridges rely on smart contracts to facilitate transfers between
-                    Ethereum Mainnet and Layer 2/sidechains. These contracts may have
-                    vulnerabilities, which could expose users&apos; funds to risks during the
-                    bridging process.
-                  </p>
-                  <p>
-                    This list of networks below is not updated regularly and may not reflect all
-                    networks supported by this UI.
-                  </p>
-                </div>
-              </FadeInOnView>
-              <FadeInOnView>
-                <div className="subsection">
-                  <h4 className="anchor" id="arbitrum">
-                    Arbitrum One risks
-                  </h4>
-                  <p>
-                    <a href="https://arbitrum.io/">Arbitrum</a> is a Layer 2 scaling solution for
-                    Ethereum that uses Optimistic Rollups to improve transaction throughput and
-                    reduce fees.
-                  </p>
-                  <p>
-                    View the risks of using Arbitrum on{' '}
-                    <a href="https://l2beat.com/scaling/projects/arbitrum">L2Beat</a>.
-                  </p>
+                  <p>Other risks:</p>
+                  <ul>
+                    <li>
+                      The Balancer UI allows people to manage their liquidity in certain Gyroscope
+                      pools. This is not an endorsement of their products or of the the safety of
+                      their smart contracts. The Gyroscope GYD system and E-CLPs have been audited
+                      several times. You can review the{' '}
+                      <a href="https://docs.gyro.finance/gyroscope-protocol/audit-reports">
+                        audit reports here
+                      </a>
+                      .
+                    </li>
+                    <li>
+                      Some concentrated liquidity pools also contain Gyroscope&rsquo;s Gyro Dollars
+                      (GYD). Here are some of the{' '}
+                      <a href="https://docs.gyro.finance/gyroscope-protocol/risks">
+                        risks of using GYD
+                      </a>
+                      .
+                    </li>
+                  </ul>
                 </div>
               </FadeInOnView>
             </FadeInOnView>
+            <FadeInOnView>
+              <div className="subsection">
+                <h4 className="anchor" id="reclamm">
+                  ReCLAMMs
+                </h4>
+                <p>
+                  ReCLAMM (Readjusting Concentrated Liquidity AMM) is a novel pool type built on
+                  Balancer, designed to offer concentrated liquidity with self-readjusting price
+                  ranges and fungible liquidity. While they aim to reduce the active management
+                  burden for LPs, higher swap fees and better capital efficiency when in range, they
+                  introduce specific risk.
+                </p>
+                <ul>
+                  <li>
+                    <b>Impermanent Loss and Parametrization Risk</b>: ReCLAMMs' self-readjusting
+                    ranges aim to keep liquidity active, but impermanent loss remains a core risk
+                    that in this case can be potentially exacerbated by suboptimal range, margin and
+                    “daily price shift exponent” adjustments. The efficacy of the parameters in the
+                    mechanism which replaces manual LP intervention, introduces risks, including
+                    (but not limited to): potential for miscalculation, inefficient capital
+                    utilization, or exploitability if rebalancing patterns are predictable.
+                  </li>
+                  <li>
+                    <b>Path Dependency Risk</b>: Unlike traditional CFMM (Constant Function Market
+                    Makers) where “impermanent” loss can revert by the return of the asset to its
+                    original ratio, path-dependant pools are affected by the sequence of price
+                    change, meaning the losses incurred to the asset in one side of the pool during
+                    certain price fluctuations can become “permanent”.
+                  </li>
+                  <li>
+                    <b>Low liquidity and price manipulation</b>: ReCLAMM is not suitable for great
+                    volatility and assets with low liquidity that can be easily exploitable, for the
+                    reasons and risks detailed above, where the pool can easily fall out of range
+                    and losses can become permanent.
+                  </li>
+                  <li>
+                    <b>Admin Parametrization</b>: By changing the sensitivity and behavior of the
+                    pool after deployment, the price range can be narrowed or widened, even if the
+                    price range can’t be set directly. The pool admin can: 1) change the
+                    centeredness margin (the threshold for updates); 2) change the daily price shift
+                    exponent (the speed of updates); and 3) initiate an update to the price interval
+                    (i.e., the distance, or ratio, between the minimum and maximum price bounds), or
+                    simply stop an ongoing update. All of these changes will update the virtual
+                    balances and potentially slightly change the price.
+                  </li>
+                </ul>
+              </div>
+            </FadeInOnView>
+            <FadeInOnView>
+              <div className="subsection">
+                <h4 className="anchor" id="btf">
+                  Blockchain Traded Funds
+                </h4>
+
+                <p>
+                  Blockchain Traded Funds (or Temporal Function Market Making - TFMM) tackles
+                  impermanent loss in traditional AMMs by continuously adjusting weights within the
+                  pool, rather than relying on token allocations. This dynamic rebalancing process
+                  allows the protocol to respond more effectively to market conditions, thereby
+                  mitigating IL risk associated with market price fluctuations. These rules are
+                  programmed to respond to specific market conditions, allowing for real-time
+                  adjustments without requiring manual intervention, by analyzing market data and
+                  applying the appropriate parameters for capital allocation within the fund, thus
+                  enabling effective risk management and optimization of returns.
+                </p>
+
+                <p>
+                  The Beets UI allows users to manage liquidity in certain QuantAMM pools (TFMM).
+                  This is not an endorsement of their products or the safety of their smart
+                  contracts. Users interacting with TFMM pools should be aware of the risks below.
+                  Please also refer to the General risks section.
+                </p>
+
+                <ul>
+                  <li>
+                    <b>Market volatility</b>: run directional strategies. These are not market
+                    neutral. The dynamic nature of the TFMM may not always respond adequately to
+                    extreme market volatility or adverse conditions, potentially leading to losses
+                    if market prices deviate significantly from expected trends.
+                  </li>
+                  <li>
+                    <b>MEV</b> - Change weights is equivalent to changing the price offered for
+                    swaps by the pool. This mechanism to expose a rebalance opportunity has been
+                    studied however there is an inherent multiblock MEV opportunity. This is
+                    mitigated by design choices (see mitigation section)
+                  </li>
+                  <li>
+                    <b>Strategy Automation</b> - Strategies require periodic triggering, if this
+                    triggering is not performed the strategy will not update weight trajectories
+                  </li>
+                  <li>
+                    <b>Strategy Parameterization</b> - It is expected behaviour that a periodic
+                    update will not occur if a variable in the strategy calculation means that the
+                    strategy is not mathematically possible to run. E.g. a divide by 0 situation.
+                  </li>
+                  <li>
+                    <b>Oracle risks</b>: reliance on oracles for price feeds introduces risk in
+                    terms of potential inaccuracies in data, which could adversely impact the
+                    rebalancing processes and overall fund performance. Additionally, infrastructure
+                    issues such as high gas costs could affect the efficiency of operations within
+                    the protocol. See more on oracle risks on the rate provider subsection.
+                  </li>
+                  <li>
+                    <b>Sub-optimal arbitrage</b> TFMM changes the weights within the TFMM pricing
+                    formula. At any one block TFMM is a standard CFMM pool. For actual NAV/Market
+                    value to be rebalanced to the target weights arbitrageurs have to take the
+                    immediate small arbitrage profit so that the holdings of the pool are inline
+                    with the weights. If there are no arbitrageurs, holdings will not be rebalanced.
+                    The more aggressive the arbitrage the more efficient the rebalancing.
+                  </li>
+                </ul>
+
+                <p>How QuantAMM mitigates these risks:</p>
+                <ul>
+                  <li>
+                    <b>Market Volatility</b> - given the nature of BTFs in so that they are not
+                    reliant trade volumes, back test simulations are provided to give visibility on
+                    simulated behaviour under different market conditions. Given the BTF strategies
+                    rely on “historical memory” of price changes, historical performance and
+                    simulations are not indicative of future performance.
+                  </li>
+                  <li>
+                    <b>Pool Tuning</b> - Strategy parameters are fixed on creation mitigating the
+                    possibility of parameter manipulation.
+                  </li>
+                  <li>
+                    <b>Strategy automation</b> - Chainlink automation is used to trigger
+                  </li>
+                  <li>
+                    Future updates to TFMM may include increased monitoring of performance metrics,
+                    enhanced simulation testing, or improved user interfaces to minimize the chance
+                    of errors in parameter settings.
+                  </li>
+                  <li>
+                    Chainlink oracles are primarily used to mitigate oracle risk and any additional
+                    pool creation requires approval from the protocol team.
+                  </li>
+                  <li>
+                    Implement necessary fixes once identified, updating smart contracts, adjusting
+                    parameters or improving risk disclosures.
+                  </li>
+                  <li>
+                    <b>Sub-optimal arbitrage</b> - This is a relatively small risk given at any one
+                    block arbitrageurs are faced with a standard balancer pool so they can price and
+                    take the arbitrage opportunity without any additional new invariant prediction
+                    work. Balancer has also integrated BTFs in the smart order router also
+                    increasing the likelihood of being exposed to traders. Work has already begun on
+                    DEX aggregator integration and when there is a minimal amount of TVL in the pool
+                    aggregators will expose the pool for further volumes.
+                  </li>
+                </ul>
+                <p>
+                  Before interacting with any QuantAMM Blockchain Traded Funds, users must read and
+                  accept QuantAMM&rsquo;s <a href="https://www.quantamm.fi/tos">Terms of Service</a>
+                  .
+                </p>
+              </div>
+            </FadeInOnView>
+
+            <Divider />
+            <FadeInOnView>
+              <div className="subsection">
+                <h3 className="anchor" id="network-risks">
+                  Network risks (L2s and Sidechains)
+                </h3>
+                <p>
+                  Sidechains and Layer 2 networks can offer advantages over Ethereum Mainnet, like
+                  faster transaction times and lower fees. However, they come with their own set of
+                  risks and trade-offs.
+                </p>
+                <p>
+                  For example, sidechains and Layer 2 networks often have a different security
+                  models. They may rely on a smaller set of validators or different consensus
+                  mechanisms, which could potentially make them more susceptible to attacks or
+                  centralization risks.
+                </p>
+                <p>
+                  In addition, there are bridging risks when user&rsquo;s move funds between
+                  networks. Asset bridges rely on smart contracts to facilitate transfers between
+                  Ethereum Mainnet and Layer 2/sidechains. These contracts may have vulnerabilities,
+                  which could expose users&apos; funds to risks during the bridging process.
+                </p>
+                <p>
+                  This list of networks below is not updated regularly and may not reflect all
+                  networks supported by this UI.
+                </p>
+              </div>
+            </FadeInOnView>
+          </FadeInOnView>
+          <FadeInOnView>
             <div className="subsection">
               <h4 className="anchor" id="optimism">
                 Optimism risks
@@ -1321,107 +1452,13 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 className="anchor" id="base">
-                Base Chain risks
-              </h4>
-              <p>
-                <a href="https://www.base.org/">Base</a> is an Optimistic Rollup that has been
-                developed on the Ethereum network by Coinbase. It utilizes OP Stack technology from
-                Optimism.
-              </p>
-              <p>
-                View the risks of using Base on{' '}
-                <a href="https://l2beat.com/scaling/projects/base">L2Beat</a>.
-              </p>
-            </div>
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
-              <h4 className="anchor" id="polygon">
-                Polygon PoS risks
-              </h4>
-              <p>
-                <a href="https://polygon.technology/">Polygon PoS</a> is Proof-of-Stake (PoS)
-                sidechain scaling solution that runs in parallel to Ethereum Mainnet. Its validators
-                are solely responsible for validating Polygon transactions. It does not derive
-                security from Ethereum Mainnet.
-              </p>
-              <p>
-                Polygon is subject to the same risks of other PoS chains. In particular, it has a
-                smaller pool of capital and validator set to gain consensus compared to Ethereum
-                Mainnet.
-              </p>
-            </div>
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
-              <h4 className="anchor" id="polygon-zkevm">
-                Polygon zkEVM risks
-              </h4>
-              <p>
-                <a href="https://polygon.technology/polygon-zkevm">Polygon zkEVM</a> is a
-                EVM-compatible ZK Rollup built by Polygon Labs. Polygon zkEVM harnesses the power of
-                ZK proofs to reduce transaction costs and massively increase throughput, all while
-                inheriting the security of Ethereum L1.
-              </p>
-              <p>
-                View the risks of using Polygon zkEVM on{' '}
-                <a href="https://l2beat.com/scaling/projects/polygonzkevm">L2Beat</a>.
-              </p>
-            </div>
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
-              {' '}
-              <h4 className="anchor" id="gnosis">
-                Gnosis chain risks
-              </h4>
-              <p>
-                <a href="https://www.gnosis.io/">Gnosis Chain</a>, formerly known as xDai Chain, is
-                a sidechain for Ethereum focused on providing fast, stable, and cost-effective
-                transactions. It uses a PoS consensus mechanism and is secured by a set of
-                independent validators. It does not derive security from Ethereum Mainnet.
-              </p>
-              <p>
-                The Gnosis chain is subject to the same risks of other PoS chains. In particular, it
-                has a smaller pool of capital and validator set to gain consensus compared to
-                Ethereum Mainnet.
-              </p>
-            </div>
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
-              <h4 className="anchor" id="avalanche">
-                Avalanche risks
-              </h4>
-              <p>
-                <a href="https://www.avax.network/">Avalanche</a> is a Layer 1 blockchain that is
-                completely independent from the Ethereum blockchain. It&apos;s actually a
-                heterogeneous network of blockchains which allows separate chains to be created for
-                different applications.
-              </p>
-              <p>
-                A Subnet is a sovereign network which defines its own rules regarding its membership
-                and token economics. The security of assets within a specific subnet is directly
-                tied to the security and integrity of its validators.{' '}
-              </p>
-              <p>
-                Since Avalanche is independent from Ethereum, user&apos;s may face additional risks
-                around briding assets.{' '}
-              </p>
-            </div>
-
-            <Divider />
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
               <p>
                 Navigating these challenges calls for active engagement and open communication
                 within the community. Sharing insights, feedback, or concerns can contribute to
                 building a safer and more inclusive environment for all. Please feel free to reach
                 out with any questions, suggestions or propose changes for this page directly via
                 the{' '}
-                <a href="https://github.com/balancer/frontend-monorepo/blob/main/apps/frontend-v3/app/(marketing)/risks/page.tsx">
+                <a href="https://github.com/balancer/frontend-monorepo/blob/main/apps/beets-frontend-v3/app/(marketing)/risks/page.tsx">
                   Balancer Github
                 </a>
                 .
