@@ -186,7 +186,7 @@ export default function Privacy() {
                 failure—i.e. hack the vault, get all the tokens of the protocol. This Balancer Vault
                 architecture was heavily audited prior to launch and has now been battle-tested
                 since May 2021, securing over $3b. It has also been forked by other teams across
-                different networks, including Beethoven X on Fantom, without issue.
+                different networks, including Beets on Sonic, without issue.
               </p>
               <h5>How Balancer aims to mitigate this risk:</h5>
               <ul>
