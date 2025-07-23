@@ -29,14 +29,7 @@ export function LbpDeleteAndRestartModal() {
 
   return (
     <>
-      <Button
-        _hover={{ color: 'font.linkHover' }}
-        onClick={onOpen}
-        position="relative"
-        right="-8px"
-        top="4px"
-        variant="ghost"
-      >
+      <Button _hover={{ color: 'font.linkHover' }} ml="2" mt="2" onClick={onOpen} variant="ghost">
         <HStack>
           <Icon as={Trash2} color="font.secondary" size={16} />
           <Text color="font.secondary">Delete & restart</Text>
