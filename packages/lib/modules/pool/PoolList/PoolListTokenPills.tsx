@@ -37,13 +37,7 @@ function NestedTokenPill({
     return (
       token && (
         <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={nestedZIndices[i]}>
-          <TokenIcon
-            address={token.address}
-            alt={token.symbol}
-            chain={chain}
-            logoURI={token.logoURI}
-            size={iconSize}
-          />
+          <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
         </Box>
       )
     )
@@ -89,7 +83,6 @@ function WeightedTokenPills({
                     address={token.address}
                     alt={token.symbol}
                     chain={chain}
-                    logoURI={token.logoURI}
                     size={iconSize}
                   />
                   <HStack gap={['xs', '1.5']}>
@@ -195,7 +188,6 @@ function StableTokenPills({
                     address={token.address}
                     alt={token.symbol}
                     chain={chain}
-                    logoURI={token.logoURI}
                     size={iconSize}
                   />
                   {tokens.length < 5 && (
