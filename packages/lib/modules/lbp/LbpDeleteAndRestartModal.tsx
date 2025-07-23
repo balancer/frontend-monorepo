@@ -16,10 +16,11 @@ import {
 } from '@chakra-ui/react'
 import { Trash2 } from 'react-feather'
 import { useLbpForm } from './LbpFormProvider'
+import { getChainName } from '@repo/lib/config/app.config'
 
 export function LbpDeleteAndRestartModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { resetLbpCreation } = useLbpForm()
+  const { resetLbpCreation, saleStructureForm } = useLbpForm()
 
   const handleDeleteAndRestart = () => {
     resetLbpCreation()
@@ -49,11 +50,13 @@ export function LbpDeleteAndRestartModal() {
           <ModalBody pb="lg">
             <VStack>
               <Text color="font.primary">
-                LBPs typically start with an uneven ratio (like 90:10) heavily weighted toward the
-                project token, with a high initial price, and gradually shift over a predetermined
-                time period.
+                {`You have begun the process of creating a new LBP on the ${getChainName(
+                  saleStructureForm.getValues('selectedChain')
+                )} network.`}
+                <br />
+                Are you sure you want to delete all progress and start again from scratch?
               </Text>
-              <HStack gap="ms" w="full">
+              <HStack gap="ms" mt="md" w="full">
                 <Button
                   display="flex"
                   gap="1"
