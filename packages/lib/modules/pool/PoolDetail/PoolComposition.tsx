@@ -1,9 +1,7 @@
 'use client'
 
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
   Box,
   Card,
   Divider,
@@ -164,16 +162,20 @@ export function PoolComposition() {
           </HStack>
           {isBoosted(pool) &&
             erc4626Metadata.map(metadata => (
-              <Alert key={metadata.name} status="info">
-                <AlertIcon />
-                <AlertDescription fontSize="sm">{metadata.description}</AlertDescription>
-              </Alert>
+              <BalAlert
+                content={
+                  <Text color="font.dark" fontSize="sm">
+                    {metadata.description}
+                  </Text>
+                }
+                key={metadata.name}
+                status="info"
+              />
             ))}
           {isQuantAmmPool(pool.type) && (
-            <Alert status="info">
-              <AlertIcon />
-              <AlertDescription>
-                <Text color="black" fontSize="sm">
+            <BalAlert
+              content={
+                <Text color="font.dark" fontSize="sm" position="relative" top="2px">
                   Tokens in BTFs dynamically shift weights to capture appreciation.{' '}
                   <Link
                     alignItems="center"
@@ -190,8 +192,9 @@ export function PoolComposition() {
                     </Box>
                   </Link>
                 </Text>
-              </AlertDescription>
-            </Alert>
+              }
+              status="info"
+            />
           )}
           <Divider />
           <CardContent
