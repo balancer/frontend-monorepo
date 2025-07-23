@@ -12,6 +12,10 @@ const defaultStyles = <T>(): ChakraStylesConfig<T> => ({
     background: 'background.level3',
     zIndex: 9,
   }),
+  valueContainer: provided => ({
+    ...provided,
+    paddingLeft: '10px',
+  }),
   control: provided => ({
     ...provided,
     background: 'transparent',

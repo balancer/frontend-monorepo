@@ -1073,7 +1073,7 @@ export default function Privacy() {
                     protocol since a portion of their funds will be exposed to the risks of that
                     protocol. Some of the risks of the underlying protocol may include smart
                     contract bugs, economic attack vulnerabilities and counterparty risk from the
-                    protocol&rsquo;s borrowers. Underlaying protocols may also use{' '}
+                    protocol&rsquo;s borrowers. Underlying protocols may also use{' '}
                     <Link href="risks#oracles">
                       <span>Oracles</span>
                     </Link>{' '}

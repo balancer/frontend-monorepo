@@ -42,7 +42,7 @@ export function ReviewStep() {
     differenceInHours(parseISO(saleEndTime), parseISO(saleStartTime)) - daysDiff * 24
 
   return (
-    <VStack align="start" w="full">
+    <VStack align="start" gap="ms" w="full">
       <Card>
         <VStack alignItems="start" spacing="6">
           <HStack spacing="5">
@@ -65,8 +65,12 @@ export function ReviewStep() {
             <Text fontWeight="bold" w="full">{`Project name: ${projectInfoData.name}`}</Text>
             <Text variant="secondary" w="full">{`Network: ${getChainName(chain)}`}</Text>
           </VStack>
-
-          <Text variant="secondary">{projectInfoData.description}</Text>
+          <VStack alignItems="start" w="full">
+            <Text fontWeight="bold" variant="secondary">
+              Project description:
+            </Text>
+            <Text variant="secondary">{projectInfoData.description}</Text>
+          </VStack>
 
           <HStack spacing="4" w={{ base: 'full', lg: 'auto' }}>
             <SocialLink
@@ -74,11 +78,13 @@ export function ReviewStep() {
               socialNetwork="website"
               title={projectInfoData.websiteUrl}
             />
-            <SocialLink
-              href={`https://twitter.com/${projectInfoData.xHandle}`}
-              socialNetwork="x"
-              title={projectInfoData.xHandle}
-            />
+            {projectInfoData.xHandle && (
+              <SocialLink
+                href={`https://twitter.com/${projectInfoData.xHandle}`}
+                socialNetwork="x"
+                title={projectInfoData.xHandle}
+              />
+            )}
             {projectInfoData.discordUrl && (
               <SocialLink
                 href={projectInfoData.discordUrl}
@@ -90,7 +96,7 @@ export function ReviewStep() {
         </VStack>
       </Card>
 
-      <HStack alignItems="stretch" w="full">
+      <HStack alignItems="stretch" gap="ms" w="full">
         {
           // FIXME: [JUANJO] use localized dates
         }
@@ -118,10 +124,10 @@ export function ReviewStep() {
 
       <Card>
         <CardHeader>
-          <Heading size="md">Seed Liquidity</Heading>
+          <Heading size="md">Seed liquidity</Heading>
         </CardHeader>
         <CardBody>
-          <VStack w="full">
+          <VStack gap="md" w="full">
             <TokenInfo
               amount={Number(launchTokenSeed || 0)}
               iconURL={projectInfoData.tokenIconUrl}

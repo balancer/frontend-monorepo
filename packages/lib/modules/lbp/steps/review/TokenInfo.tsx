@@ -15,13 +15,13 @@ export function TokenInfo({
   value?: number
 }) {
   return (
-    <HStack spacing="5" w="full">
-      <Circle bg="background.level4" color="font.secondary" shadow="lg" size={16}>
+    <HStack spacing="md" w="full">
+      <Circle bg="background.level4" color="font.secondary" shadow="lg" size={12}>
         <VStack>
           <Image borderRadius="full" src={iconURL || undefined} />
         </VStack>
       </Circle>
-      <VStack w="full">
+      <VStack gap="xxs" w="full">
         <HStack alignItems="start" w="full">
           <Text fontWeight="bold">{symbol}</Text>
           <Spacer />
