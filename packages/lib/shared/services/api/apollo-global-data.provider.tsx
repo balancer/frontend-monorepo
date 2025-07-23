@@ -7,7 +7,10 @@
  * prior to the useQuery call, ensuring the data is already present on the first
  * client render pass.
  */
-import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
+import {
+  getApolloServerClient,
+  getApolloServerClientWithOptions,
+} from '@repo/lib/shared/services/api/apollo-server.client'
 import {
   GetProtocolStatsDocument,
   GetTokenPricesDocument,
@@ -34,12 +37,13 @@ export const revalidate = 60
 
 export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) {
   const client = getApolloServerClient()
+  const clientWithCacheBusting = getApolloServerClientWithOptions({ bustCache: true })
 
   const tokensQueryVariables = {
     chains: PROJECT_CONFIG.supportedNetworks,
   }
 
-  const { data: tokensQueryData } = await client.query({
+  const { data: tokensQueryData } = await clientWithCacheBusting.query({
     query: GetTokensDocument,
     variables: tokensQueryVariables,
     context: {
