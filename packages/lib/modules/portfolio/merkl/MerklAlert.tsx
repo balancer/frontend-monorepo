@@ -1,6 +1,7 @@
 import { Box, Text, Flex, Alert, Button, HStack, Link } from '@chakra-ui/react'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { ArrowUpRight } from 'react-feather'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function MerklAlert() {
   return (
@@ -24,7 +25,7 @@ function MerklTitle() {
           <LightbulbIcon height="24" width="24" />
         </Box>
         <Text color="font.dark" fontWeight="medium">
-          You may have additional claimable Merkl rewards from your Balancer activity
+          {`You may have additional claimable Merkl rewards from your ${PROJECT_CONFIG.projectName} activity`}
         </Text>
       </HStack>
       <Button
