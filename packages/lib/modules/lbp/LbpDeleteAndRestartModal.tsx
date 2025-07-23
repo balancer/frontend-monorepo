@@ -45,9 +45,7 @@ export function LbpDeleteAndRestartModal() {
               <Text color="font.primary">
                 {`You have begun the process of creating a new LBP on the ${getChainName(
                   saleStructureForm.getValues('selectedChain')
-                )} network.`}
-                <br />
-                Are you sure you want to delete all progress and start again from scratch?
+                )} network. Are you sure you want to delete all progress and start again from scratch?`}
               </Text>
               <HStack gap="ms" mt="md" w="full">
                 <Button
