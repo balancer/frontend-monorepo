@@ -12,25 +12,34 @@ import {
   HStack,
   Button,
   useDisclosure,
+  Icon,
 } from '@chakra-ui/react'
-import NextLink from 'next/link'
-import { getDiscordLink } from '@repo/lib/shared/utils/links'
+import { Trash2 } from 'react-feather'
+import { useLbpForm } from './LbpFormProvider'
 
 export function LbpDeleteAndRestartModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { resetLbpCreation } = useLbpForm()
+
+  const handleDeleteAndRestart = () => {
+    resetLbpCreation()
+    onClose()
+  }
 
   return (
     <>
       <Button
         _hover={{ color: 'font.linkHover' }}
-        color="font.link"
         onClick={onOpen}
         position="relative"
         right="-8px"
         top="4px"
         variant="ghost"
       >
-        Delete & restart
+        <HStack>
+          <Icon as={Trash2} color="font.secondary" size={16} />
+          <Text color="font.secondary">Delete & restart</Text>
+        </HStack>
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
         <SuccessOverlay />
@@ -46,25 +55,21 @@ export function LbpDeleteAndRestartModal() {
               </Text>
               <HStack gap="ms" w="full">
                 <Button
-                  as={NextLink}
                   display="flex"
                   gap="1"
-                  href="https://docs.balancer.fi/concepts/explore-available-balancer-pools/liquidity-bootstrapping-pool.html"
                   minWidth="184px"
+                  onClick={handleDeleteAndRestart}
                   size="md"
-                  target="_blank"
                   variant="secondary"
                 >
                   Delete and start over
                 </Button>
                 <Button
-                  as={NextLink}
                   display="flex"
                   gap="1"
-                  href={getDiscordLink() || ''}
                   minWidth="184px"
+                  onClick={onClose}
                   size="md"
-                  target="_blank"
                   variant="tertiary"
                 >
                   Continue set up
