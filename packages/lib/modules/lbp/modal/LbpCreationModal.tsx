@@ -110,7 +110,12 @@ export function LbpCreationModal({
 
   const isSuccess = !!isPoolInitialized && isMetadataSaved
 
-  const shouldUseBigBlocks = isConnected && chainId === ChainId.HYPER_EVM && !isUsingBigBlocks
+  const isHyperEvm = chainId === ChainId.HYPER_EVM
+  const shouldUseBigBlocks =
+    isConnected && isHyperEvm && !isUsingBigBlocks && transactionSteps.currentStepIndex === 0 // big blocks only necessary to deploy pool contract
+  const shouldUseSmallBlocks =
+    isConnected && isHyperEvm && isUsingBigBlocks && transactionSteps.currentStepIndex > 0 // small blocks faster for non contract deployment txs
+  const shouldToggleBlockSize = shouldUseBigBlocks || shouldUseSmallBlocks
 
   const {
     mutate: toggleBlockSize,
@@ -210,7 +215,7 @@ export function LbpCreationModal({
           )}
         </ModalBody>
 
-        {shouldUseBigBlocks ? (
+        {shouldToggleBlockSize ? (
           <VStack marginTop="2" paddingLeft="6" paddingRight="6" spacing="3" width="full">
             <Button
               isDisabled={isToggleBlockSizePending}
@@ -220,13 +225,19 @@ export function LbpCreationModal({
               variant="primary"
               w="full"
             >
-              <LabelWithIcon icon="sign">Switch to big blocks</LabelWithIcon>
+              <LabelWithIcon icon="sign">
+                Switch to {shouldUseBigBlocks ? 'big' : 'small'} blocks
+              </LabelWithIcon>
             </Button>
             {toggleBlockSizeError ? (
               <BalAlert content={toggleBlockSizeError.message} status="error" title="Error:" />
             ) : (
               <BalAlert
-                content={`HyperEVM requires your account use "big blocks" to deploy a contract.`}
+                content={
+                  shouldUseBigBlocks
+                    ? `HyperEVM requires your account use big blocks configuration to deploy a contract`
+                    : `Your HyperEvm account is currently using big blocks. Switch to small blocks for faster transaction processing`
+                }
                 status="info"
                 title="Information:"
               />
