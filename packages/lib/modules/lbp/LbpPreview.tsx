@@ -2,6 +2,7 @@ import { VStack, Heading, Button, Flex, Spacer, useDisclosure, HStack } from '@c
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
+import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
 import { LearnMoreModal } from './header/LearnMoreModal'
 import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
@@ -49,9 +50,8 @@ export function LbpPreview() {
                 <Heading color="font.maxContrast" size="md">
                   LBP preview
                 </Heading>
-
                 <Spacer />
-
+                <LbpDeleteAndRestartModal />
                 <Button
                   _hover={{ color: 'font.linkHover' }}
                   color="font.link"
