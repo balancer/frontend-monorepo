@@ -4,8 +4,8 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 export type SaleStructureForm = {
   selectedChain: GqlChain
   launchTokenAddress: string
-  startTime: string
-  endTime: string
+  startDateTime: string
+  endDateTime: string
   collateralTokenAddress: string
   weightAdjustmentType: 'linear_90_10' | 'linear_90_50' | 'custom'
   customStartWeight: number

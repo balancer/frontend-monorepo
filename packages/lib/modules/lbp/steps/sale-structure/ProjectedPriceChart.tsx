@@ -12,8 +12,8 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { dividePrices, range } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
 type Props = {
-  startDate: Date
-  endDate: Date
+  startDateTime: Date
+  endDateTime: Date
   onPriceChange?: (prices: LbpPrice[]) => void
   prices: LbpPrice[]
   cutTime?: Date
@@ -22,8 +22,8 @@ type Props = {
 }
 
 export function ProjectedPriceChart({
-  startDate,
-  endDate,
+  startDateTime,
+  endDateTime,
   onPriceChange,
   prices,
   cutTime,
@@ -98,10 +98,10 @@ export function ProjectedPriceChart({
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
-      min: startDate.getTime(),
-      max: endDate.getTime(),
+      min: startDateTime.getTime(),
+      max: endDateTime.getTime(),
       axisLabel: {
-        formatter: (value: number) => formatDateAxisLabel(value, startDate, endDate),
+        formatter: (value: number) => formatDateAxisLabel(value, startDateTime, endDateTime),
         interval: 'auto', // ECharts automatically prevents overlap
         rotate: isMobile ? 45 : 0, // Rotate labels on mobile
         fontSize: isMobile ? 10 : 12,
@@ -110,7 +110,8 @@ export function ProjectedPriceChart({
         opacity: 0.5,
       },
       splitNumber: (() => {
-        const totalDays = differenceInDays(endDate, startDate)
+        const totalDays = differenceInDays(endDateTime, startDateTime)
+
         if (totalDays <= 7) return Math.min(totalDays, 7)
         if (totalDays <= 30) return 5
         if (totalDays <= 90) return 6
@@ -186,9 +187,10 @@ export function ProjectedPriceChart({
     ],
   }
 
-  if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
+  if (cutTime && isAfter(cutTime, startDateTime) && isBefore(cutTime, endDateTime)) {
     const percentage =
-      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+      (cutTime.getTime() - startDateTime.getTime()) /
+      (endDateTime.getTime() - startDateTime.getTime())
 
     chartInfo.series.push({
       id: 'cut-time',
