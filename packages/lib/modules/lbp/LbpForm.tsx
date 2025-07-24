@@ -31,6 +31,7 @@ export function LbpForm() {
 
   return (
     <VStack align="start" spacing="lg" w="full">
+      <Divider />
       <Stepper index={activeStepIndex} orientation={isMobile ? 'vertical' : 'horizontal'} w="full">
         {steps.map(step => (
           <Step key={step.id}>
