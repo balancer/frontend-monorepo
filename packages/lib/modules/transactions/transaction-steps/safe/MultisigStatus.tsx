@@ -16,7 +16,7 @@ type MultisigProps = {
   safeTxHash: Hex
   details: GatewayTransactionDetails
   chainId: SupportedChainId
-  currentStep: TransactionStep
+  currentStep?: TransactionStep
 }
 export function MultisigStatus({ chainId, safeTxHash, details, currentStep }: MultisigProps) {
   if (details.detailedExecutionInfo?.type !== 'MULTISIG') return null
@@ -27,7 +27,7 @@ export function MultisigStatus({ chainId, safeTxHash, details, currentStep }: Mu
   const isCancelled = safeTxStatus === TransactionStatus.CANCELLED
   const isFailed = safeTxStatus === TransactionStatus.FAILED
 
-  const isTxBatch = hasSomePendingNestedTxInBatch(currentStep)
+  const isTxBatch = currentStep ? hasSomePendingNestedTxInBatch(currentStep) : false
 
   return (
     <Card backgroundColor="font.special" variant="modalSubSection">

@@ -124,7 +124,7 @@ export function TransactionBatchButton({
     on successful submission to chain, add tx to recent transactions cache
     this is an edge case where de don't show the toast and don't call useOnTransactionConfirmation
     because we only get the txHash once the Safe tx is confirmed
-  */
+   */
   useOnTransactionSubmission({
     labels,
     hash: txHash,

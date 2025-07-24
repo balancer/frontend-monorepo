@@ -13,6 +13,9 @@ import { ensureError } from '@repo/lib/shared/utils/errors'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { getTransactionButtonLabel } from './transaction-button.helpers'
 import { useIsSafeAccount } from '../../web3/safe.hooks'
+import { MultisigStatus } from './safe/MultisigStatus'
+import SafeAppsSDK, { GatewayTransactionDetails } from '@safe-global/safe-apps-sdk'
+import { useInterval } from 'usehooks-ts'
 
 interface Props {
   step: {
@@ -24,10 +27,10 @@ interface Props {
 export function TransactionStepButton({ step }: Props) {
   const { chainId, simulation, labels, executeAsync } = step
   const [executionError, setExecutionError] = useState<Error>()
+  const [safeTxDetails, setSafeTxDetails] = useState<GatewayTransactionDetails | undefined>()
   const { isConnected } = useUserAccount()
   const isSafeAccount = useIsSafeAccount()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
-  const isTransactButtonVisible = isConnected
   const transactionState = getTransactionState(step)
   const isButtonLoading =
     transactionState === TransactionState.Loading ||
@@ -70,12 +73,24 @@ export function TransactionStepButton({ step }: Props) {
     })
   }
 
+  const safeTxHash = step.execution.data
+  const safeAppsSdk = new SafeAppsSDK()
+  useInterval(() => {
+    if (safeTxHash) {
+      safeAppsSdk.txs.getBySafeTxHash(safeTxHash).then(tx => setSafeTxDetails(tx))
+    }
+  }, 5000)
+
   return (
     <VStack width="full">
       {transactionState === TransactionState.Error && <TransactionError step={step} />}
-      {!isTransactButtonVisible && <ConnectWallet width="full" />}
-      {isTransactButtonVisible && shouldChangeNetwork && <NetworkSwitchButton chainId={chainId} />}
-      {!shouldChangeNetwork && isTransactButtonVisible && (
+      {!isConnected && <ConnectWallet width="full" />}
+      {isConnected && shouldChangeNetwork && <NetworkSwitchButton chainId={chainId} />}
+      {safeTxHash && safeTxDetails?.txStatus && (
+        <MultisigStatus chainId={chainId} details={safeTxDetails} safeTxHash={safeTxHash} />
+      )}
+
+      {!shouldChangeNetwork && isConnected && (
         <Button
           isDisabled={isButtonDisabled}
           isLoading={isButtonLoading}
