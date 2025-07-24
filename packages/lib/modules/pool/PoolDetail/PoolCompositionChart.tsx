@@ -15,7 +15,6 @@ import {
   HStack,
   Text,
   Flex,
-  Spacer,
   useColorMode,
   Link,
 } from '@chakra-ui/react'
@@ -35,7 +34,6 @@ import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-
 import { GroupBase, OptionBase, Select, chakraComponents } from 'chakra-react-select'
 import { ArrowUpRight } from 'react-feather'
 import { WeightsChartContainer } from '@repo/lib/modules/lbp/steps/sale-structure/WeightsChartContainer'
-
 
 const TABS_LIST: ButtonGroupOption[] = [
   { value: 'weight-shifts', label: 'Weight shifts' },
