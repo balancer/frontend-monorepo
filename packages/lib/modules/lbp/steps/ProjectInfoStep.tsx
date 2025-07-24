@@ -55,7 +55,7 @@ export function ProjectInfoStep() {
         <ProjectOwnerInput />
         <Divider />
         <Heading color="font.maxContrast" size="md">
-          Social handles
+          Social accounts
         </Heading>
         <ProjectXHandle />
         <ProjectTelegramHandle />
@@ -245,7 +245,7 @@ function ProjectXHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">X / Twitter handle (optional)</Text>
+      <Text color="font.primary">X / Twitter username (optional)</Text>
       <Controller
         control={control}
         name="xHandle"
@@ -276,7 +276,7 @@ function ProjectTelegramHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Telegram handle (optional)</Text>
+      <Text color="font.primary">Telegram username (optional)</Text>
       <Controller
         control={control}
         name="telegramHandle"
@@ -307,7 +307,7 @@ function ProjectDiscordUrlInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Discord URL (optional)</Text>
+      <Text color="font.primary">Discord community URL (optional)</Text>
       <Controller
         control={control}
         name="discordUrl"
