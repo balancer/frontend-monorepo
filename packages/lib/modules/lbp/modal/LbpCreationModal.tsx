@@ -13,7 +13,6 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
-import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
 import { useLbpMetadata } from '../useLbpMetadata'
@@ -204,7 +203,6 @@ export function LbpCreationModal({
             urlTxHash={urlTxHash}
           />
         )}
-        {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
       </ModalContent>
     </Modal>
   )
