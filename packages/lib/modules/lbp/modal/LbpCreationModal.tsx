@@ -25,6 +25,8 @@ import { useIsUsingBigBlocks, useToggleBlockSize } from '../../chains/hyperevm'
 import { ChainId } from '@balancer/sdk'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { useUserAccount } from '../../web3/UserAccountProvider'
+import { ExternalLink } from 'react-feather'
+import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 
 type Props = {
   isOpen: boolean
@@ -115,7 +117,7 @@ export function LbpCreationModal({
     isConnected && isHyperEvm && !isUsingBigBlocks && transactionSteps.currentStepIndex === 0 // big blocks only necessary to deploy pool contract
   const shouldUseSmallBlocks =
     isConnected && isHyperEvm && isUsingBigBlocks && transactionSteps.currentStepIndex > 0 // small blocks faster for non contract deployment txs
-  const shouldToggleBlockSize = shouldUseBigBlocks || shouldUseSmallBlocks
+  const shouldToggleBlockSize = shouldUseBigBlocks || shouldUseSmallBlocks ? true : false
 
   const {
     mutate: toggleBlockSize,
@@ -234,12 +236,22 @@ export function LbpCreationModal({
             ) : (
               <BalAlert
                 content={
-                  shouldUseBigBlocks
-                    ? `HyperEVM requires your account use big blocks configuration to deploy a contract`
-                    : `Your HyperEvm account is currently using big blocks. Switch to small blocks for faster transaction processing`
+                  <Text color="font.primaryGradient">
+                    {shouldUseBigBlocks
+                      ? `The HyperEVM network requires your account switch to using big blocks to deploy contracts.`
+                      : `Your HyperEvm account is using big blocks. Switch to small blocks for faster transaction speeds.`}{' '}
+                    <BalAlertLink
+                      alignItems="center"
+                      display="inline-flex"
+                      href="https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm/dual-block-architecture"
+                      isExternal
+                    >
+                      <span>See more information</span>
+                      <ExternalLink size={16} style={{ marginLeft: 2, verticalAlign: 'middle' }} />
+                    </BalAlertLink>
+                  </Text>
                 }
                 status="info"
-                title="Information:"
               />
             )}
           </VStack>
