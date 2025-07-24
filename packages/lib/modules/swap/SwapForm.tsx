@@ -214,14 +214,7 @@ export function SwapForm({
 
   return (
     <FadeInOnView>
-      <Center
-        h="full"
-        left={['-12px', '0']}
-        maxW="lg"
-        mx="auto"
-        position="relative"
-        w={['100vw', 'full']}
-      >
+      <Center h="full" maxW="lg" mx="auto" position="relative" w="full">
         <Card rounded="xl">
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
             <span>

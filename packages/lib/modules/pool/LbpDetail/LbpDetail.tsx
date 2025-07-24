@@ -20,8 +20,8 @@ import { Top10Trades } from './Top10Trades'
 export function LbpDetail() {
   const { userPoolEvents, isLoadingUserPoolEvents, hasPoolEvents } = useUserPoolEvents()
   const { userAddress } = useUserAccount()
-
   const { pool } = usePool()
+
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const isPoolOwner = lbpPool.lbpOwner.toLowerCase() === userAddress.toLowerCase()
   const isSaleFinished = isAfter(now(), secondsToMilliseconds(lbpPool.endTime))
@@ -38,7 +38,7 @@ export function LbpDetail() {
             <GridItem>
               <LbpPoolChartsContainer />
             </GridItem>
-            <GridItem>
+            <GridItem minH="400px">
               {isSaleFinished ? <Top10Trades chain={pool.chain} pool={lbpPool} /> : <LbpSwap />}
             </GridItem>
           </Grid>

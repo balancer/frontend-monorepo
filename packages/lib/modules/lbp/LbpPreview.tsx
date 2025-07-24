@@ -86,10 +86,10 @@ export function LbpPreview() {
 
               <PoolWeights
                 collateralToken={getToken(collateralTokenAddress, chain)}
-                endTime={saleStructureData.endTime}
+                endDate={saleStructureData.endTime}
                 endWeight={endWeight}
                 launchTokenMetadata={launchTokenMetadata}
-                startTime={saleStructureData.startTime}
+                startDate={saleStructureData.startTime}
                 startWeight={startWeight}
               />
 

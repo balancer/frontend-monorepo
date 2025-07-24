@@ -1,4 +1,5 @@
 import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
+import { formatDateAxisLabel } from './chart-helpers'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -43,6 +44,12 @@ export function ProjectedPriceChart({
 
   const priceRange = range(prices.map(item => item.projectTokenPrice))
 
+  const toolTipTheme = {
+    heading: 'font-weight: bold; color: #E5D3BE',
+    container: `background: ${theme.colors.gray[800]};`,
+    text: theme.colors.gray[400],
+  }
+
   const chartInfo: EChartsOption = {
     grid: {
       left: gridLeft || '10%',
@@ -51,23 +58,65 @@ export function ProjectedPriceChart({
       bottom: '10%',
       containLabel: isMobile,
     },
+    tooltip: {
+      show: true,
+      showContent: true,
+      trigger: 'axis',
+      confine: true,
+      axisPointer: {
+        animation: false,
+        type: 'shadow',
+        label: {
+          show: false,
+        },
+      },
+      extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
+      formatter: (params: any) => {
+        if (!params || params.length === 0) return ''
+
+        const timestamp = params[0].data[0]
+        const price = params[0].data[1]
+        const date = new Date(timestamp)
+        const formattedDate = format(date, 'MMM dd, yyyy h:mm a')
+        const formattedPrice = toCurrency(price)
+
+        return `
+  <div style="width: 150px; padding: 8px; display: flex; flex-direction: column; justify-content: center;${toolTipTheme.container}">
+      <div style="font-size: 0.85rem; font-weight: 500; color: ${toolTipTheme.text}; margin-bottom: 4px;">
+        ${formattedDate}
+      </div>
+      <div style="font-size: 0.95rem; font-weight: 500; color: ${toolTipTheme.text};">
+        Price: ${formattedPrice}
+      </div>
+    </div>
+  `
+      },
+    },
     xAxis: {
       show: true,
-      type: 'value',
+      type: 'time',
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
       min: startDate.getTime(),
       max: endDate.getTime(),
-      interval: 24 * 60 * 60 * 1000,
       axisLabel: {
-        formatter: (value: number) => {
-          const daysDiff = differenceInDays(new Date(value), startDate)
-          return `Day ${daysDiff}`
-        },
+        formatter: (value: number) => formatDateAxisLabel(value, startDate, endDate),
+        interval: 'auto', // ECharts automatically prevents overlap
+        rotate: isMobile ? 45 : 0, // Rotate labels on mobile
+        fontSize: isMobile ? 10 : 12,
+        margin: 8,
         color: theme.semanticTokens.colors.font.primary[colorMode],
         opacity: 0.5,
       },
+      splitNumber: (() => {
+        const totalDays = differenceInDays(endDate, startDate)
+        if (totalDays <= 7) return Math.min(totalDays, 7)
+        if (totalDays <= 30) return 5
+        if (totalDays <= 90) return 6
+        if (totalDays <= 365) return 8
+        return 10
+      })(),
     },
     yAxis: {
       show: true,
@@ -187,11 +236,11 @@ export function ProjectedPriceChart({
   }
 
   return isLoading ? (
-    <Skeleton h="280px" w="full" />
+    <Skeleton h="full" w="full" />
   ) : prices.length > 0 ? (
-    <ReactECharts option={chartInfo} style={{ height: '280px', width: '100%' }} />
+    <ReactECharts option={chartInfo} style={{ height: '100%', width: '100%' }} />
   ) : (
-    <Stack alignItems="center" h="280px" justifyContent="center">
+    <Stack alignItems="center" h="full" justifyContent="center">
       <Text fontSize="3xl">Missing data</Text>
     </Stack>
   )
