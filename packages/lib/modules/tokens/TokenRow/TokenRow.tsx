@@ -19,7 +19,8 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { Numberish, bn, fNum, isZero } from '@repo/lib/shared/utils/numbers'
+import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { formatTokenAmount, formatUsdValue } from '@repo/lib/shared/utils/tokenDisplay'
 import { Pool } from '../../pool/pool.types'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
@@ -237,12 +238,10 @@ export default function TokenRow({
             ) : (
               <>
                 <Heading {...headingProps} title={value.toString()}>
-                  {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
+                  {formatTokenAmount(amount, showZeroAmountAsDash)}
                 </Heading>
                 <Text {...subTextProps}>
-                  {showZeroAmountAsDash && usdValue && isZero(usdValue)
-                    ? '-'
-                    : toCurrency(usdValue ?? '0', { abbreviated })}
+                  {formatUsdValue(usdValue, showZeroAmountAsDash, toCurrency, { abbreviated })}
                 </Text>
               </>
             )}

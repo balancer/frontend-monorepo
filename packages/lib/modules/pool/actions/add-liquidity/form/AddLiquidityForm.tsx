@@ -35,7 +35,6 @@ import {
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
@@ -48,6 +47,7 @@ import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
+import { formatBalanceDisplay } from '@repo/lib/shared/utils/formatBalanceDisplay'
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
@@ -97,7 +97,6 @@ function AddLiquidityMainForm() {
 
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
-  const { toCurrency } = useCurrency()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
@@ -261,9 +260,7 @@ function AddLiquidityMainForm() {
                     Total
                   </Text>
                   <Text fontSize="md" fontWeight="700" lineHeight="16px">
-                    {totalUSDValue !== '0'
-                      ? toCurrency(totalUSDValue, { abbreviated: false })
-                      : '-'}
+                    {formatBalanceDisplay(totalUSDValue, 'fiat', { abbreviated: false })}
                   </Text>
                 </VStack>
               </Card>

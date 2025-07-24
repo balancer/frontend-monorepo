@@ -81,7 +81,7 @@ function getTabs(isVeBalPool: boolean) {
 
 export default function PoolMyLiquidity() {
   const { pool, chain, isLoadingOnchainUserBalances, myLiquiditySectionRef } = usePool()
-  const { toCurrency } = useCurrency()
+  const { formatCurrencyBalance } = useCurrency()
   const { isConnected, isConnecting } = useUserAccount()
   const router = useRouter()
   const partnerRedirectDisclosure = useDisclosure()
@@ -306,7 +306,9 @@ export default function PoolMyLiquidity() {
                 <Skeleton h="5" w="12" />
               ) : (
                 <Heading fontWeight="bold" size="h6">
-                  {toCurrency(totalBalanceUsd)}
+                  <span aria-label={totalBalanceUsd === 0 ? '0' : undefined}>
+                    {formatCurrencyBalance(totalBalanceUsd)}
+                  </span>
                 </Heading>
               )}
               <Text fontSize="0.85rem" variant="secondary">

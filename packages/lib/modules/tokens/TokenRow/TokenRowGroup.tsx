@@ -29,7 +29,7 @@ export function TokenRowGroup({
   isLoading?: boolean
   pool?: Pool
 }) {
-  const { toCurrency } = useCurrency()
+  const { formatCurrencyBalance } = useCurrency()
   const { usdValueFor } = useTotalUsdValue(tokens)
 
   const _totalUSDValue = usdValueFor(amounts)
@@ -75,7 +75,9 @@ export function TokenRowGroup({
         ) : (
           hasMultipleAmounts && (
             <Text fontSize="sm" fontWeight="bold">
-              {toCurrency(usdValue, { abbreviated: false })}
+              <span aria-label={parseFloat(usdValue) === 0 ? '0' : undefined}>
+                {formatCurrencyBalance(usdValue, { abbreviated: false })}
+              </span>
             </Text>
           )
         )}
@@ -91,6 +93,7 @@ export function TokenRowGroup({
             isLoading={isLoading}
             key={amount.tokenAddress}
             pool={pool}
+            showZeroAmountAsDash={true}
             symbol={amount?.symbol}
             value={amount.humanAmount}
           />
