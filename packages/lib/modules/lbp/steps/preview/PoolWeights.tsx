@@ -34,7 +34,7 @@ export function PoolWeights({
         <HStack>
           <Heading size="sm">LBP pool weight shifts</Heading>
           <Spacer />
-          <Text color="font.secondary" fontWeight="bold">
+          <Text color="font.secondary" fontWeight="bold" letterSpacing="-0.04rem">
             Standard linear
           </Text>
         </HStack>
