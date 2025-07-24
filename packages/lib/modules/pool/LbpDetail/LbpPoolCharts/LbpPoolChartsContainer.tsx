@@ -27,8 +27,8 @@ function PoolChartsContent() {
   const { hourlyData, hasHourlyData, isLoading } = useLbpPoolCharts()
 
   return (
-    <Card>
-      <HStack align="start" h="full" justifyContent="space-between" w="full">
+    <Card h="full">
+      <HStack align="start" justifyContent="space-between" w="full">
         <ButtonGroup
           currentOption={activeTab}
           groupId="chart"
@@ -39,12 +39,7 @@ function PoolChartsContent() {
         {activeTab.value === PoolChartTab.PRICE && <PriceInfo />}
         {activeTab.value !== PoolChartTab.PRICE && <VolTvlFeesInfo chartType={activeTab.value} />}
       </HStack>
-      <Box
-        h={activeTab.value === PoolChartTab.PRICE ? '325px' : '340px'}
-        overflow="hidden"
-        position="relative"
-        w="full"
-      >
+      <Box h="full" overflow="hidden" position="relative" w="full">
         <AnimatePresence mode="wait">
           {activeTab.value === PoolChartTab.PRICE ? (
             <motion.div
