@@ -19,6 +19,7 @@ import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/review/ReviewStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
+import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
 
 export function LbpForm() {
   const { steps, activeStepIndex, activeStep } = useLbpForm()
@@ -29,7 +30,7 @@ export function LbpForm() {
   }, [activeStepIndex])
 
   return (
-    <VStack spacing="lg" w="full">
+    <VStack align="start" spacing="lg" w="full">
       <Stepper index={activeStepIndex} orientation={isMobile ? 'vertical' : 'horizontal'} w="full">
         {steps.map(step => (
           <Step key={step.id}>
@@ -57,6 +58,7 @@ export function LbpForm() {
         {activeStep.id === 'step2' && <ProjectInfoStep />}
         {activeStep.id === 'step3' && <ReviewStep />}
       </VStack>
+      <LbpDeleteAndRestartModal />
     </VStack>
   )
 }

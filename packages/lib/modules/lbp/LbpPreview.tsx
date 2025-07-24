@@ -1,7 +1,8 @@
-import { VStack, Heading, Button, Flex, Spacer, useDisclosure, HStack } from '@chakra-ui/react'
+import { VStack, Heading, Flex, Spacer, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
+import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
 import { LearnMoreModal } from './header/LearnMoreModal'
 import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
@@ -12,7 +13,6 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
 
 export function LbpPreview() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const { getToken, priceFor } = useTokens()
 
   const {
@@ -49,22 +49,10 @@ export function LbpPreview() {
                 <Heading color="font.maxContrast" size="md">
                   LBP preview
                 </Heading>
-
                 <Spacer />
-
-                <Button
-                  _hover={{ color: 'font.linkHover' }}
-                  color="font.link"
-                  onClick={onOpen}
-                  position="relative"
-                  right="-8px"
-                  top="4px"
-                  variant="ghost"
-                >
-                  Get help
-                </Button>
+                <LbpDeleteAndRestartModal />
+                <LearnMoreModal buttonLabel="Get help" />
               </Flex>
-
               <TokenSummary
                 chain={chain}
                 launchTokenMetadata={launchTokenMetadata}
@@ -108,8 +96,6 @@ export function LbpPreview() {
           )}
         </VStack>
       </NoisyCard>
-
-      <LearnMoreModal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }
