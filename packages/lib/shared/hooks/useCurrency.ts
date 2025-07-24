@@ -3,7 +3,7 @@
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useFxRates } from './FxRatesProvider'
 import { symbolForCurrency } from '../utils/currencies'
-import { Numberish, bn, fNum } from '../utils/numbers'
+import { Numberish, bn, fNum, ZERO_VALUE_DASH, isZero } from '../utils/numbers'
 
 type CurrencyOpts = {
   withSymbol?: boolean
@@ -58,5 +58,13 @@ export function useCurrency() {
     return withSymbol ? symbol + formattedAmount : formattedAmount
   }
 
-  return { toCurrency, formatCurrency, parseCurrency }
+  // Formats currency balance with en-dash for zero values
+  function formatCurrencyBalance(usdVal: Numberish, options: CurrencyOpts = {}): string {
+    if (isZero(usdVal)) {
+      return ZERO_VALUE_DASH
+    }
+    return toCurrency(usdVal, options)
+  }
+
+  return { toCurrency, formatCurrency, parseCurrency, formatCurrencyBalance }
 }
