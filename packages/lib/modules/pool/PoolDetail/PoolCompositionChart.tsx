@@ -17,6 +17,7 @@ import {
   Flex,
   Spacer,
   useColorMode,
+  Link,
 } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -29,11 +30,96 @@ import { WeightsChart } from '../../lbp/steps/sale-structure/WeightsChart'
 import { differenceInDays, differenceInHours, secondsToMilliseconds } from 'date-fns'
 import { isSaleOngoing } from '../../lbp/pool/lbp.helpers'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
+import NextLink from 'next/link'
+import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
+import { GroupBase, OptionBase, Select, chakraComponents } from 'chakra-react-select'
+import { ArrowUpRight } from 'react-feather'
 
 const TABS_LIST: ButtonGroupOption[] = [
   { value: 'weight-shifts', label: 'Weight shifts' },
   { value: 'composition', label: 'Composition' },
 ]
+
+type BTFTimeOption = {
+  value: string
+  label: string
+} & OptionBase
+
+const BTF_TIME_OPTIONS: BTFTimeOption[] = [{ value: '7d', label: '7 days' }]
+
+function BTFTimeSelector({ pool, chain }: { pool: Pool; chain: GqlChain }) {
+  const chakraStyles = getSelectStyles<BTFTimeOption>()
+  const baseUrl = 'https://quantamm.fi'
+  const learnMoreUrl = pool && chain ? `${baseUrl}/factsheet/${pool.id}` : baseUrl
+
+  const customChakraStyles: typeof chakraStyles = {
+    ...chakraStyles,
+    option: (provided, state) => ({
+      ...chakraStyles.option?.(provided, state),
+      ...(state.isSelected && {
+        color: 'font.highlight',
+      }),
+    }),
+    menu: (provided, state) => ({
+      ...chakraStyles.menu?.(provided, state),
+      w: '160px',
+    }),
+    menuList: (provided, state) => ({
+      ...chakraStyles.menuList?.(provided, state),
+      padding: 0,
+      mt: '2',
+    }),
+  }
+
+  const customComponents = {
+    MenuList: ({ children, ...props }: any) => {
+      return (
+        <chakraComponents.MenuList {...props}>
+          {children}
+          <Divider borderColor="border.base" my={2} />
+          <Box pb={2} px={2}>
+            <Text color="font.secondary" fontSize="sm" lineHeight="1.4">
+              View weight shifts over longer periods on{' '}
+              <Link
+                _hover={{ textDecoration: 'none' }}
+                alignItems="center"
+                as={NextLink}
+                color="font.link"
+                display="flex"
+                fontSize="sm"
+                href={learnMoreUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+                textDecoration="underline"
+              >
+                QuantAMM
+                <ArrowUpRight size={12} />
+              </Link>
+            </Text>
+          </Box>
+        </chakraComponents.MenuList>
+      )
+    },
+  }
+
+  return (
+    <Box maxW="max-content">
+      <Select<BTFTimeOption, false, GroupBase<BTFTimeOption>>
+        chakraStyles={customChakraStyles}
+        components={customComponents}
+        menuPortalTarget={document.body}
+        name="BTFTimeSelector"
+        // onChange={handleChange} // No other options for now
+        options={BTF_TIME_OPTIONS}
+        size="sm"
+        styles={{
+          menuPortal: base => ({ ...base, zIndex: 9999 }),
+        }}
+        value={BTF_TIME_OPTIONS[0]}
+      />
+    </Box>
+  )
+}
 
 interface CompositionViewProps {
   chain: GqlChain
@@ -107,7 +193,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
         <Skeleton h="full" w="full" />
       ) : isQuantAmm || isV3LBP(pool) ? (
         <VStack h="full" p={{ base: 'sm', md: 'md' }} spacing="md" w="full">
-          <Box alignSelf="flex-start">
+          <HStack alignSelf="flex-start" gap="ms" w="full">
             <ButtonGroup
               currentOption={activeTab}
               groupId="composition-chart"
@@ -115,7 +201,10 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
               options={TABS_LIST}
               size="xxs"
             />
-          </Box>
+            {isQuantAmm && activeTab.value === 'weight-shifts' && (
+              <BTFTimeSelector chain={chain} pool={pool} />
+            )}
+          </HStack>
           {activeTab.value === 'weight-shifts' && isQuantAmm ? (
             <PoolWeightShiftsChart />
           ) : activeTab.value === 'weight-shifts' && isV3LBP(pool) ? (
