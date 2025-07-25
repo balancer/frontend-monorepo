@@ -94,27 +94,14 @@ export function useReclAmmChartLogic() {
       virtualBalanceB: vBalanceB,
     })
 
-    // reclamm will use underlying for tokens with a rate provider so we need to scale back here
-    const rateProviderScaleBackFactor = bn(pool.poolTokens[0].priceRate).div(
-      pool.poolTokens[1].priceRate
-    )
+    let minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
+    let maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
 
-    let minPriceValue = rateProviderScaleBackFactor
-      .times(bn(virtualBalanceB).pow(2).div(invariant))
-      .toNumber()
-    let maxPriceValue = rateProviderScaleBackFactor
-      .times(bn(invariant).div(bn(virtualBalanceA).pow(2)))
-      .toNumber()
+    let lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
+    let upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
 
-    let lowerMarginValue = rateProviderScaleBackFactor
-      .times(bn(invariant).div(bn(lowerMargin).pow(2)))
-      .toNumber()
-    let upperMarginValue = rateProviderScaleBackFactor
-      .times(bn(invariant).div(bn(upperMargin).pow(2)))
-      .toNumber()
-
-    let currentPriceValue = rateProviderScaleBackFactor
-      .times(bn(bn(balanceB).plus(virtualBalanceB)).div(bn(balanceA).plus(virtualBalanceA)))
+    let currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
+      .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
 
     if (isReversed) {
@@ -124,14 +111,13 @@ export function useReclAmmChartLogic() {
       const invertedMaxPriceValue = invert(minPriceValue)
       const invertedLowerMarginValue = invert(upperMarginValue)
       const invertedUpperMarginValue = invert(lowerMarginValue)
-      const invertedCurrentPriceValue = invert(currentPriceValue)
 
       // Swap min/max and lower/upper
       minPriceValue = invertedMinPriceValue
       maxPriceValue = invertedMaxPriceValue
       lowerMarginValue = invertedLowerMarginValue
       upperMarginValue = invertedUpperMarginValue
-      currentPriceValue = invertedCurrentPriceValue
+      currentPriceValue = invert(currentPriceValue)
     }
 
     const isPoolWithinRange =
