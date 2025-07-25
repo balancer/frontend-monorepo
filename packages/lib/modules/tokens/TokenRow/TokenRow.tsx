@@ -20,7 +20,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { formatTokenAmount, formatUsdValue } from '@repo/lib/shared/utils/tokenDisplay'
+import { formatFalsyValueAsDash } from '@repo/lib/shared/utils/tokenDisplay'
 import { Pool } from '../../pool/pool.types'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
@@ -156,7 +156,7 @@ export default function TokenRow({
   isNestedPoolToken,
   pool,
   abbreviated = true,
-  showZeroAmountAsDash = false,
+  showZeroAmountAsDash = true,
   toggleTokenSelect,
   iconSize,
   logoURI,
@@ -238,10 +238,24 @@ export default function TokenRow({
             ) : (
               <>
                 <Heading {...headingProps} title={value.toString()}>
-                  {formatTokenAmount(amount, showZeroAmountAsDash)}
+                  {formatFalsyValueAsDash(amount?.toString(), val => fNum('token', val), {
+                    showZeroAsDash: showZeroAmountAsDash,
+                  })}
                 </Heading>
                 <Text {...subTextProps}>
-                  {formatUsdValue(usdValue, showZeroAmountAsDash, toCurrency, { abbreviated })}
+                  {formatFalsyValueAsDash(
+                    usdValue?.toString(),
+                    (val, options) =>
+                      toCurrency(val, {
+                        abbreviated: options?.abbreviated ?? abbreviated,
+                        noDecimals: false,
+                        withSymbol: true,
+                      }),
+                    {
+                      abbreviated,
+                      showZeroAsDash: showZeroAmountAsDash,
+                    }
+                  )}
                 </Text>
               </>
             )}

@@ -61,6 +61,7 @@ import {
 import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
+import { formatFalsyValueAsDash } from '@repo/lib/shared/utils/tokenDisplay'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -81,7 +82,7 @@ function getTabs(isVeBalPool: boolean) {
 
 export default function PoolMyLiquidity() {
   const { pool, chain, isLoadingOnchainUserBalances, myLiquiditySectionRef } = usePool()
-  const { formatCurrencyBalance } = useCurrency()
+  const { toCurrency } = useCurrency()
   const { isConnected, isConnecting } = useUserAccount()
   const router = useRouter()
   const partnerRedirectDisclosure = useDisclosure()
@@ -308,7 +309,16 @@ export default function PoolMyLiquidity() {
                 <Skeleton h="5" w="12" />
               ) : (
                 <Heading fontWeight="bold" size="h6">
-                  {formatCurrencyBalance(totalBalanceUsd)}
+                  {formatFalsyValueAsDash(
+                    totalBalanceUsd,
+                    (val, options) =>
+                      toCurrency(val, {
+                        abbreviated: options?.abbreviated ?? false,
+                        noDecimals: false,
+                        withSymbol: true,
+                      }),
+                    { showZeroAsDash: true }
+                  )}
                 </Heading>
               )}
               <Text fontSize="0.85rem" variant="secondary">
