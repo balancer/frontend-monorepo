@@ -29,6 +29,15 @@ describe('tokenDisplay utilities', () => {
         expect(formatTokenAmount('0.00', true)).toBe(ZERO_VALUE_DASH)
       })
 
+      it('should return dash for empty string when showZeroAmountAsDash is true', () => {
+        expect(formatTokenAmount('', true)).toBe(ZERO_VALUE_DASH)
+      })
+
+      it('should return dash for null/undefined-like empty values', () => {
+        // Test the size(amount) === 0 condition
+        expect(formatTokenAmount('', true)).toBe(ZERO_VALUE_DASH)
+      })
+
       it('should return the amount as-is for non-zero values', () => {
         expect(formatTokenAmount('100.5', true)).toBe('100.5')
         expect(formatTokenAmount('0.001', true)).toBe('0.001')
@@ -117,6 +126,23 @@ describe('tokenDisplay utilities', () => {
         const result = formatUsdValue(undefined, true, mockFormatCurrency)
 
         expect(result).toBe(ZERO_VALUE_DASH)
+        expect(mockFormatCurrency).not.toHaveBeenCalled()
+      })
+
+      it('should return dash for empty string when showZeroAmountAsDash is true', () => {
+        const result = formatUsdValue('', true, mockFormatCurrency)
+
+        expect(result).toBe(ZERO_VALUE_DASH)
+        expect(mockFormatCurrency).not.toHaveBeenCalled()
+      })
+
+      it('should return dash for null-like values when showZeroAmountAsDash is true', () => {
+        // Test the size(usdValue) === 0 condition for various empty-like values
+        const result1 = formatUsdValue('', true, mockFormatCurrency)
+        const result2 = formatUsdValue(undefined, true, mockFormatCurrency)
+
+        expect(result1).toBe(ZERO_VALUE_DASH)
+        expect(result2).toBe(ZERO_VALUE_DASH)
         expect(mockFormatCurrency).not.toHaveBeenCalled()
       })
 

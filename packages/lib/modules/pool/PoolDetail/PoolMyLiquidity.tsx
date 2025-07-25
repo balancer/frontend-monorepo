@@ -29,7 +29,7 @@ import {
   getXavePoolLink,
 } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, ZERO_VALUE_DASH } from '@repo/lib/shared/utils/numbers'
 import {
   getUserTotalBalanceInt,
   getUserWalletBalanceInt,
@@ -227,7 +227,9 @@ export default function PoolMyLiquidity() {
   const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
   const hasGaugeStakedBalance = bn(calcGaugeStakedBalance(pool)).gt(0)
   const shareOfPool = calcUserShareOfPool(pool)
-  const shareofPoolLabel = bn(shareOfPool).gt(0) ? fNum('sharePercent', shareOfPool) : <>&mdash;</>
+  const shareofPoolLabel = bn(shareOfPool).gt(0)
+    ? fNum('sharePercent', shareOfPool)
+    : ZERO_VALUE_DASH
   const chainId = getChainId(chain)
 
   const options = useMemo(() => {
@@ -352,6 +354,7 @@ export default function PoolMyLiquidity() {
                       address={poolToken.address as Address}
                       chain={chain}
                       pool={pool}
+                      showZeroAmountAsDash
                       value={tokenBalanceFor(poolToken.address)}
                       {...(poolToken.hasNestedPool && {
                         isNestedBpt: true,
@@ -368,6 +371,7 @@ export default function PoolMyLiquidity() {
                               iconSize={35}
                               isNestedPoolToken
                               key={`nested-pool-${nestedPoolToken.address}`}
+                              showZeroAmountAsDash
                               value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
                             />
                           )
