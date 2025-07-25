@@ -5,11 +5,13 @@ import {
   avalancheTokenBalances,
   baseTokenBalances,
   gnosisTokenBalances,
+  hyperEVMTokenBalances,
   mainnetTokenBalances,
   polygonTokenBalances,
   sonicTokenBalances,
 } from './fork-default-balances'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
 
 export type TokenBalance = {
   tokenAddress: Address
@@ -40,6 +42,7 @@ const defaultForkBalances: TokenBalancesByChain = {
   [sonic.id]: sonicTokenBalances,
   [polygon.id]: polygonTokenBalances,
   [avalanche.id]: avalancheTokenBalances,
+  [hyperEvm.id]: hyperEVMTokenBalances,
 }
 
 const isBeets = PROJECT_CONFIG.projectId === 'beets'

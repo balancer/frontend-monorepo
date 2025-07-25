@@ -14,6 +14,7 @@ import {
   sonic,
 } from 'viem/chains'
 import { GqlChain } from '../services/api/generated/graphql'
+import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
 
 const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Mainnet]: 'ethereum',
@@ -29,6 +30,7 @@ const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Mode]: 'mode',
   [GqlChain.Zkevm]: 'polygon-zkevm',
   [GqlChain.Sonic]: 'sonic',
+  [GqlChain.Hyperevm]: 'hyperliquid',
 }
 
 const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
@@ -45,6 +47,7 @@ const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [mode.id]: 'mode',
   [polygonZkEvm.id]: 'polygon-zkevm',
   [sonic.id]: 'sonic',
+  [hyperEvm.id]: 'hyperliquid',
 }
 
 export function drpcUrl(chain: GqlChain, privateKey: string) {
