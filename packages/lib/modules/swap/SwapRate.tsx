@@ -32,8 +32,15 @@ export function SwapRate({ customTokenUsdPrice }: { customTokenUsdPrice?: number
       ? effectivePriceReversedValue
       : effectivePriceValue
 
-  const tokenInUsdValue = tokenOutInfo ? usdValueForToken(tokenInInfo, 1) : customTokenUsdPrice
-  const tokenOutUsdValue = tokenInInfo ? usdValueForToken(tokenOutInfo, 1) : customTokenUsdPrice
+  // Use custom token USD price if available, otherwise use standard token pricing
+  const tokenInUsdValue =
+    isLbpSwap && lbpToken && tokenInInfo && lbpToken.address === tokenInInfo.address
+      ? usdValueForToken(tokenInInfo, 1)
+      : customTokenUsdPrice
+  const tokenOutUsdValue =
+    isLbpSwap && lbpToken && tokenOutInfo && lbpToken.address === tokenOutInfo.address
+      ? usdValueForToken(tokenOutInfo, 1)
+      : customTokenUsdPrice
 
   const tokenOutSymbol =
     isLbpSwap && lbpToken && tokenInInfo ? lbpToken.symbol : tokenOutInfo?.symbol
