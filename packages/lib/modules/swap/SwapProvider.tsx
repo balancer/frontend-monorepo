@@ -259,6 +259,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ? { ...swapState.tokenOut, address: emptyAddress }
         : swapState.tokenOut,
     })
+    // Reset price impact when tokens change
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function setTokenOut(tokenAddress: Address) {
@@ -275,6 +278,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ? { ...swapState.tokenIn, address: emptyAddress }
         : swapState.tokenIn,
     })
+    // Reset price impact when tokens change
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function switchTokens() {
@@ -287,6 +293,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     })
     setTokenInAmount('', { userTriggered: false })
     setTokenOutAmount('', { userTriggered: false })
+    // Reset price impact when tokens are switched
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function setTokenInAmount(
