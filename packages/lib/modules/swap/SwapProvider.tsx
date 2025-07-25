@@ -241,6 +241,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   function setSelectedChain(_selectedChain: GqlChain) {
     const defaultTokenState = getDefaultTokenState(_selectedChain)
     swapStateVar(defaultTokenState)
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function setTokenIn(tokenAddress: Address) {
@@ -257,6 +259,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ? { ...swapState.tokenOut, address: emptyAddress }
         : swapState.tokenOut,
     })
+    // Reset price impact when tokens change
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function setTokenOut(tokenAddress: Address) {
@@ -273,6 +278,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ? { ...swapState.tokenIn, address: emptyAddress }
         : swapState.tokenIn,
     })
+    // Reset price impact when tokens change
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function switchTokens() {
@@ -285,6 +293,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     })
     setTokenInAmount('', { userTriggered: false })
     setTokenOutAmount('', { userTriggered: false })
+    // Reset price impact when tokens are switched
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function setTokenInAmount(
@@ -462,7 +473,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function calcPriceImpact() {
-    if (!bn(tokenInUsd).isZero() && !bn(tokenOutUsd).isZero()) {
+    // Only calculate price impact if both tokens are selected
+    if (isTokenInSet && isTokenOutSet && !bn(tokenInUsd).isZero() && !bn(tokenOutUsd).isZero()) {
       setPriceImpact(calcMarketPriceImpact(tokenInUsd, tokenOutUsd))
     } else if (simulationQuery.data) {
       setPriceImpact(undefined)
@@ -677,8 +689,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { isDisabled, disabledReason } = isDisabledWithReason(
     [!isConnected, LABELS.walletNotConnected],
     [!validAmountOut, 'Invalid amount out'],
-    [needsToAcceptHighPI, 'Accept high price impact first'],
-    [hasValidationErrors, 'Invalid input'],
+    [needsToAcceptHighPI, 'To continue, accept high potential losses from this swap above'],
+    [hasValidationErrors, 'Fix the invalid input to continue'],
     [simulationQuery.isError, 'Error fetching swap'],
     [simulationQuery.isLoading, 'Fetching swap...']
   )

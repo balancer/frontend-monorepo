@@ -34,7 +34,7 @@ export const FEE_FORMAT = '0.[0000]%'
 export const WEIGHT_FORMAT = '(%0,0)'
 export const WEIGHT_FORMAT_ONE_DECIMAL = '(%0,0.0)'
 export const WEIGHT_FORMAT_TWO_DECIMALS = '(%0,0.00)'
-export const PRICE_IMPACT_FORMAT = '0.00%'
+export const PRICE_IMPACT_FORMAT = '0,0.00%'
 export const INTEGER_PERCENTAGE_FORMAT = '0%'
 export const BOOST_FORMAT = '0.000'
 
