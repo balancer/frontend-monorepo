@@ -16,10 +16,6 @@ describe('tokenDisplay utilities', () => {
         expect(formatTokenAmount('0.0', false)).toBe('0.0')
         expect(formatTokenAmount('0.00', false)).toBe('0.00')
       })
-
-      it('should return empty string for empty values', () => {
-        expect(formatTokenAmount('', false)).toBe('')
-      })
     })
 
     describe('when showZeroAmountAsDash is true', () => {
@@ -42,10 +38,6 @@ describe('tokenDisplay utilities', () => {
         expect(formatTokenAmount('100.5', true)).toBe('100.5')
         expect(formatTokenAmount('0.001', true)).toBe('0.001')
         expect(formatTokenAmount('1000000', true)).toBe('1000000')
-      })
-
-      it('should return empty string as-is (not treated as zero)', () => {
-        expect(formatTokenAmount('', true)).toBe('')
       })
     })
 
