@@ -94,14 +94,27 @@ export function useReclAmmChartLogic() {
       virtualBalanceB: vBalanceB,
     })
 
-    let minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
-    let maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
+    // reclamm will use underlying for tokens with a rate provider so we need to scale back here
+    const rateProviderScaleBackFactor = bn(pool.poolTokens[0].priceRate).div(
+      pool.poolTokens[1].priceRate
+    )
 
-    let lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
-    let upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
+    let minPriceValue = rateProviderScaleBackFactor
+      .times(bn(virtualBalanceB).pow(2).div(invariant))
+      .toNumber()
+    let maxPriceValue = rateProviderScaleBackFactor
+      .times(bn(invariant).div(bn(virtualBalanceA).pow(2)))
+      .toNumber()
 
-    let currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
-      .div(bn(balanceA).plus(virtualBalanceA))
+    let lowerMarginValue = rateProviderScaleBackFactor
+      .times(bn(invariant).div(bn(lowerMargin).pow(2)))
+      .toNumber()
+    let upperMarginValue = rateProviderScaleBackFactor
+      .times(bn(invariant).div(bn(upperMargin).pow(2)))
+      .toNumber()
+
+    let currentPriceValue = rateProviderScaleBackFactor
+      .times(bn(bn(balanceB).plus(virtualBalanceB)).div(bn(balanceA).plus(virtualBalanceA)))
       .toNumber()
 
     if (isReversed) {
