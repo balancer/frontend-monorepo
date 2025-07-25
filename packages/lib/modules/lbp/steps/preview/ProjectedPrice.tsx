@@ -16,8 +16,8 @@ import { LbpPrice, max } from '../../pool/usePriceInfo'
 import { interpolatePrices } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
 type Props = {
-  startTime: string
-  endTime: string
+  startDateTime: string
+  endDateTime: string
   startWeight: number
   endWeight: number
   launchTokenSymbol: string
@@ -28,8 +28,8 @@ type Props = {
 }
 
 export function ProjectedPrice({
-  startTime,
-  endTime,
+  startDateTime,
+  endDateTime,
   startWeight,
   endWeight,
   launchTokenSymbol,
@@ -43,18 +43,19 @@ export function ProjectedPrice({
     setMaxPrice(fNum('fiat', max(prices)))
   }
 
-  const daysDiff = differenceInDays(parseISO(endTime), parseISO(startTime))
-  const hoursDiff = differenceInHours(parseISO(endTime), parseISO(startTime)) - daysDiff * 24
+  const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
+  const hoursDiff =
+    differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
   const salePeriodText =
-    startTime && endTime
+    startDateTime && endDateTime
       ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
       : ''
 
   const prices = interpolatePrices(
     startWeight,
     endWeight,
-    parseISO(startTime),
-    parseISO(endTime),
+    parseISO(startDateTime),
+    parseISO(endDateTime),
     launchTokenSeed,
     collateralTokenSeed,
     collateralTokenPrice
@@ -73,14 +74,14 @@ export function ProjectedPrice({
       </CardHeader>
       <CardBody>
         <ProjectedPriceChart
-          endDate={parseISO(endTime)}
+          endDateTime={parseISO(endDateTime)}
           gridLeft="11%"
           onPriceChange={prices => {
             updateMaxPrice(prices)
             onPriceChange(prices)
           }}
           prices={prices}
-          startDate={parseISO(startTime)}
+          startDateTime={parseISO(startDateTime)}
         />
 
         <Divider />

@@ -5,8 +5,8 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { differenceInDays, parseISO, differenceInHours } from 'date-fns'
 
 type Props = {
-  startDate: string
-  endDate: string
+  startDateTime: string
+  endDateTime: string
   startWeight: number
   endWeight: number
   launchTokenMetadata: ReturnType<typeof useTokenMetadata>
@@ -14,17 +14,18 @@ type Props = {
 }
 
 export function PoolWeights({
-  startDate,
-  endDate,
+  startDateTime,
+  endDateTime,
   startWeight,
   endWeight,
   launchTokenMetadata,
   collateralToken,
 }: Props) {
-  const daysDiff = differenceInDays(parseISO(endDate), parseISO(startDate))
-  const hoursDiff = differenceInHours(parseISO(endDate), parseISO(startDate)) - daysDiff * 24
+  const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
+  const hoursDiff =
+    differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
   const salePeriodText =
-    startDate && endDate
+    startDateTime && endDateTime
       ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
       : ''
 
@@ -42,11 +43,11 @@ export function PoolWeights({
       <CardBody>
         <WeightsChartContainer
           collateralTokenSymbol={collateralToken?.symbol || ''}
-          endDate={endDate}
+          endDateTime={endDateTime}
           endWeight={endWeight}
           launchTokenSymbol={launchTokenMetadata.symbol || ''}
           salePeriodText={salePeriodText}
-          startDate={startDate}
+          startDateTime={startDateTime}
           startWeight={startWeight}
         />
       </CardBody>

@@ -74,22 +74,22 @@ export function LbpPreview() {
 
               <PoolWeights
                 collateralToken={getToken(collateralTokenAddress, chain)}
-                endDate={saleStructureData.endTime}
+                endDateTime={saleStructureData.endDateTime}
                 endWeight={endWeight}
                 launchTokenMetadata={launchTokenMetadata}
-                startDate={saleStructureData.startTime}
+                startDateTime={saleStructureData.startDateTime}
                 startWeight={startWeight}
               />
 
               <ProjectedPrice
                 collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
                 collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
-                endTime={saleStructureData.endTime}
+                endDateTime={saleStructureData.endDateTime}
                 endWeight={endWeight}
                 launchTokenSeed={Number(saleStructureData.saleTokenAmount || 0)}
                 launchTokenSymbol={launchTokenMetadata?.symbol || ''}
                 onPriceChange={updatePriceStats}
-                startTime={saleStructureData.startTime}
+                startDateTime={saleStructureData.startDateTime}
                 startWeight={startWeight}
               />
             </>

@@ -6,17 +6,18 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpPoolCharts } from './LbpPoolChartsProvider'
 
 export function LbpPriceChart() {
-  const { snapshots, isLoading, startTime, endTime, now, salePeriodText } = useLbpPoolCharts()
+  const { snapshots, isLoading, startDateTime, endDateTime, now, salePeriodText } =
+    useLbpPoolCharts()
 
   return (
     <VStack h="full">
       <ProjectedPriceChart
         cutTime={now}
-        endDate={endTime}
+        endDateTime={endDateTime}
         gridLeft="7.5%"
         isLoading={isLoading}
         prices={snapshots}
-        startDate={startTime}
+        startDateTime={startDateTime}
       />
       <Divider />
       <Stack

@@ -35,8 +35,8 @@ export function ReviewStep() {
   const collateralTokenSeed = saleStructureData.collateralTokenAmount
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
 
-  const saleStartTime = saleStructureData.startTime
-  const saleEndTime = saleStructureData.endTime
+  const saleStartTime = saleStructureData.startDateTime
+  const saleEndTime = saleStructureData.endDateTime
   const daysDiff = differenceInDays(parseISO(saleEndTime), parseISO(saleStartTime))
   const hoursDiff =
     differenceInHours(parseISO(saleEndTime), parseISO(saleStartTime)) - daysDiff * 24

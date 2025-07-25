@@ -10,16 +10,16 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 export function WeightsChart({
   startWeight,
   endWeight,
-  startDate,
-  endDate,
+  startDateTime,
+  endDateTime,
   cutTime,
   launchTokenSymbol,
   collateralTokenSymbol,
 }: {
   startWeight: number
   endWeight: number
-  startDate: Date
-  endDate: Date
+  startDateTime: Date
+  endDateTime: Date
   cutTime?: Date
   launchTokenSymbol: string
   collateralTokenSymbol: string
@@ -30,8 +30,8 @@ export function WeightsChart({
   const { data: launchTokenData, dataAfterCutTime: launchTokenDataAfterCutTime } = interpolateData(
     startWeight,
     endWeight,
-    startDate,
-    endDate,
+    startDateTime,
+    endDateTime,
     cutTime
   )
   const collateralTokenData = invertData(launchTokenData)
@@ -105,17 +105,17 @@ export function WeightsChart({
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
-      min: startDate.getTime(),
-      max: endDate.getTime(),
+      min: startDateTime.getTime(),
+      max: endDateTime.getTime(),
       axisLabel: {
-        formatter: (value: number) => formatDateAxisLabel(value, startDate, endDate),
+        formatter: (value: number) => formatDateAxisLabel(value, startDateTime, endDateTime),
         interval: 'auto', // ECharts automatically prevents overlap
         rotate: isMobile ? 45 : 0, // Rotate labels on mobile
         fontSize: isMobile ? 10 : 12,
         margin: 8,
       },
       splitNumber: (() => {
-        const totalDays = differenceInDays(endDate, startDate)
+        const totalDays = differenceInDays(endDateTime, startDateTime)
         if (totalDays <= 7) return Math.min(totalDays, 7)
         if (totalDays <= 30) return 5
         if (totalDays <= 90) return 6
@@ -241,9 +241,10 @@ export function WeightsChart({
     ],
   }
 
-  if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
+  if (cutTime && isAfter(cutTime, startDateTime) && isBefore(cutTime, endDateTime)) {
     const percentage =
-      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+      (cutTime.getTime() - startDateTime.getTime()) /
+      (endDateTime.getTime() - startDateTime.getTime())
 
     chartInfo.series.push({
       id: 'cut-time',
@@ -280,7 +281,7 @@ export function WeightsChart({
     })
   }
 
-  const enoughData = startWeight && endWeight && isValid(startDate) && isValid(endDate)
+  const enoughData = startWeight && endWeight && isValid(startDateTime) && isValid(endDateTime)
 
   return enoughData ? (
     <ReactECharts option={chartInfo} style={{ height: '350px', width: '100%' }} />
@@ -294,12 +295,12 @@ export function WeightsChart({
 function interpolateData(
   startWeight: number,
   endWeight: number,
-  startDate: Date,
-  endDate: Date,
+  startDateTime: Date,
+  endDateTime: Date,
   cutTime?: Date
 ) {
-  const startTimestamp = bn(startDate.getTime())
-  const endTimestamp = bn(endDate.getTime())
+  const startTimestamp = bn(startDateTime.getTime())
+  const endTimestamp = bn(endDateTime.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
   const interpolate = (timestamp: BigNumber) =>
     bn(startWeight)
@@ -309,8 +310,8 @@ function interpolateData(
   const data = []
   const dataAfterCutTime = []
 
-  let currentPoint = startDate
-  while (addHours(currentPoint, 1) < endDate) {
+  let currentPoint = startDateTime
+  while (addHours(currentPoint, 1) < endDateTime) {
     const currentTimestamp = bn(currentPoint.getTime())
     if (!cutTime || isBefore(currentPoint, cutTime)) {
       data.push([currentPoint.getTime(), interpolate(currentTimestamp)])
@@ -321,9 +322,9 @@ function interpolateData(
   }
 
   if (!cutTime || isBefore(currentPoint, cutTime)) {
-    data.push([endDate.getTime(), interpolate(endTimestamp)])
+    data.push([endDateTime.getTime(), interpolate(endTimestamp)])
   } else {
-    dataAfterCutTime.push([endDate.getTime(), interpolate(endTimestamp)])
+    dataAfterCutTime.push([endDateTime.getTime(), interpolate(endTimestamp)])
   }
 
   return { data, dataAfterCutTime }

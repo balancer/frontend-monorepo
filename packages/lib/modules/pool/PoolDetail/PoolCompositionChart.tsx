@@ -125,15 +125,15 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
 // FIXME: [JUANJO] we can maybe merge this one with the one on the pool creation page
 function LBPWeightsChart({ pool }: { pool: Pool }) {
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-  const startTime = new Date(secondsToMilliseconds(lbpPool.startTime))
-  const endTime = new Date(secondsToMilliseconds(lbpPool.endTime))
+  const startDateTime = new Date(secondsToMilliseconds(lbpPool.startTime))
+  const endDateTime = new Date(secondsToMilliseconds(lbpPool.endTime))
   const startWeight = lbpPool.projectTokenStartWeight * 100
   const endWeight = lbpPool.projectTokenEndWeight * 100
   const now = new Date()
-  const daysDiff = differenceInDays(endTime, isSaleOngoing(lbpPool) ? now : startTime)
+  const daysDiff = differenceInDays(endDateTime, isSaleOngoing(lbpPool) ? now : startDateTime)
 
   const hoursDiff =
-    differenceInHours(endTime, isSaleOngoing(lbpPool) ? now : startTime) - daysDiff * 24
+    differenceInHours(endDateTime, isSaleOngoing(lbpPool) ? now : startDateTime) - daysDiff * 24
 
   const salePeriodText = isSaleOngoing(lbpPool)
     ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
@@ -143,11 +143,11 @@ function LBPWeightsChart({ pool }: { pool: Pool }) {
     <WeightsChartContainer
       collateralTokenSymbol={lbpPool.poolTokens[lbpPool.reserveTokenIndex].symbol}
       cutTime={now}
-      endDate={endTime.toISOString()}
+      endDateTime={endDateTime.toISOString()}
       endWeight={endWeight}
       launchTokenSymbol={lbpPool.poolTokens[lbpPool.projectTokenIndex].symbol}
       salePeriodText={salePeriodText}
-      startDate={startTime.toISOString()}
+      startDateTime={startDateTime.toISOString()}
       startWeight={startWeight}
     />
   )

@@ -46,8 +46,8 @@ export function useCreateLbpStep(): TransactionStep {
   const {
     launchTokenAddress,
     collateralTokenAddress,
-    startTime,
-    endTime,
+    startDateTime,
+    endDateTime,
     selectedChain,
     userActions,
     fee,
@@ -92,7 +92,7 @@ export function useCreateLbpStep(): TransactionStep {
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
 
   const createPoolInput =
-    startTime && endTime
+    startDateTime && endDateTime
       ? {
           protocolVersion: 3 as const,
           poolType: PoolType.LiquidityBootstrapping,
@@ -109,8 +109,8 @@ export function useCreateLbpStep(): TransactionStep {
             reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight / 100}`, 18),
             projectTokenEndWeight: parseUnits(`${projectTokenEndWeight / 100}`, 18),
             reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight / 100}`, 18),
-            startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
-            endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
+            startTime: BigInt(Math.floor(new Date(startDateTime).getTime() / 1000)),
+            endTime: BigInt(Math.floor(new Date(endDateTime).getTime() / 1000)),
           },
         }
       : undefined

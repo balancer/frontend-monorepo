@@ -88,8 +88,8 @@ export function SaleStructureStep() {
   const launchTokenAddress = saleStructureData.launchTokenAddress
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
-  const saleStart = saleStructureData.startTime
-  const saleEnd = saleStructureData.endTime
+  const saleStart = saleStructureData.startDateTime
+  const saleEnd = saleStructureData.endDateTime
 
   const validateSaleStart = (value: string | number) => {
     if (typeof value !== 'string') return 'Start time must be type string'
@@ -160,7 +160,7 @@ export function SaleStructureStep() {
                   errors={errors}
                   label="Start date and time"
                   min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
-                  name="startTime"
+                  name="startDateTime"
                   validate={validateSaleStart}
                 />
                 {saleStartsSoon && (
@@ -176,7 +176,7 @@ export function SaleStructureStep() {
                   errors={errors}
                   label="End date and time"
                   min={saleStart}
-                  name="endTime"
+                  name="endDateTime"
                   validate={validateSaleEnd}
                 />
                 <Text color="font.secondary" fontSize="sm">
