@@ -23,15 +23,18 @@ export function TokenSelectInput({
   defaultTokenAddress,
 }: Props) {
   const { getToken } = useTokens()
-  const tokenOptions = tokenAddresses.map(tokenAddress => ({
-    label: (
-      <HStack>
-        <TokenIcon address={tokenAddress} alt={tokenAddress} chain={chain} size={24} />
-        <Text>{getToken(tokenAddress, chain)?.symbol}</Text>
-      </HStack>
-    ),
-    value: tokenAddress,
-  }))
+
+  const tokenOptions = tokenAddresses.map(tokenAddress => {
+    return {
+      label: (
+        <HStack>
+          <TokenIcon address={tokenAddress} alt={tokenAddress} chain={chain} size={24} />
+          <Text>{getToken(tokenAddress, chain)?.symbol}</Text>
+        </HStack>
+      ),
+      value: tokenAddress,
+    }
+  })
 
   useEffect(() => {
     if (defaultTokenAddress) {

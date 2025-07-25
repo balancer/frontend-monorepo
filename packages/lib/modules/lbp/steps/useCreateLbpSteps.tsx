@@ -7,7 +7,6 @@ import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { useInitializeLbpStep } from './useInitializeLbpStep'
 import { useSignPermit2InitializeStep } from '@repo/lib/modules/pool/actions/initialize/useSignPermit2InitializeStep'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
@@ -15,11 +14,9 @@ import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liqui
 
 export function useCreateLbpSteps() {
   const createLbpStep = useCreateLbpStep()
-  const { saleStructureForm } = useLbpForm()
-  const { selectedChain, collateralTokenAddress } = saleStructureForm.getValues()
+  const { saleStructureForm, isCollateralNativeAsset } = useLbpForm()
+  const { selectedChain } = saleStructureForm.getValues()
   const chainId = getNetworkConfig(selectedChain).chainId
-  const helpers = new LiquidityActionHelpers()
-  const isCollateralNativeAsset = helpers.isNativeAsset(collateralTokenAddress as Address)
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { shouldUseSignatures } = useUserSettings()
 
