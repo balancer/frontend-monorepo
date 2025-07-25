@@ -306,9 +306,7 @@ export default function PoolMyLiquidity() {
                 <Skeleton h="5" w="12" />
               ) : (
                 <Heading fontWeight="bold" size="h6">
-                  <span aria-label={totalBalanceUsd === 0 ? '0' : undefined}>
-                    {formatCurrencyBalance(totalBalanceUsd)}
-                  </span>
+                  {formatCurrencyBalance(totalBalanceUsd)}
                 </Heading>
               )}
               <Text fontSize="0.85rem" variant="secondary">

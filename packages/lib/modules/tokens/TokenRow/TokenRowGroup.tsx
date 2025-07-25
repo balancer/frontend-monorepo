@@ -75,9 +75,7 @@ export function TokenRowGroup({
         ) : (
           hasMultipleAmounts && (
             <Text fontSize="sm" fontWeight="bold">
-              <span aria-label={parseFloat(usdValue) === 0 ? '0' : undefined}>
-                {formatCurrencyBalance(usdValue, { abbreviated: false })}
-              </span>
+              {formatCurrencyBalance(usdValue, { abbreviated: false })}
             </Text>
           )
         )}
@@ -93,7 +91,7 @@ export function TokenRowGroup({
             isLoading={isLoading}
             key={amount.tokenAddress}
             pool={pool}
-            showZeroAmountAsDash={true}
+            showZeroAmountAsDash
             symbol={amount?.symbol}
             value={amount.humanAmount}
           />
