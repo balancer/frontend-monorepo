@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import {
   Accordion,
   AccordionItem,
@@ -25,7 +26,8 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
 import { getPriceImpactLevel } from './price-impact.utils'
-
+import { useSwap } from '../swap/SwapProvider'
+import { buildCowSwapUrl } from '../cow/cow.utils'
 import { CheckIcon } from '@chakra-ui/icons'
 
 interface PriceImpactAccordionProps {
@@ -60,6 +62,8 @@ export function PriceImpactAccordion({
   } = usePriceImpact()
 
   const isUnknownPriceImpact = cannotCalculatePriceImpact || priceImpactLevel === 'unknown'
+  const { tokenIn, tokenOut, selectedChain } = useSwap()
+  const showCowSwapLink = PROJECT_CONFIG.cowSupportedNetworks.includes(selectedChain)
 
   function getPriceImpactMessage(action: 'swap' | 'add' | 'remove'): ReactNode {
     switch (action) {
@@ -73,20 +77,32 @@ export function PriceImpactAccordion({
               shifting the exchange rate.
             </Text>
             <Text color="#000" fontSize="sm">
-              To reduce price impact, lower your swap size or try{' '}
-              <Link
-                _hover={{
-                  color: '#fff',
-                }}
-                color="#000"
-                fontSize="sm"
-                href="https://swap.cow.fi/"
-                isExternal
-                textDecor="underline"
-              >
-                CoW Swap
-              </Link>
-              .
+              To reduce price impact, lower your swap size
+              {showCowSwapLink ? (
+                <>
+                  {' '}
+                  or try{' '}
+                  <Link
+                    _hover={{
+                      color: '#fff',
+                    }}
+                    color="#000"
+                    fontSize="sm"
+                    href={buildCowSwapUrl({
+                      chain: selectedChain,
+                      tokenInAddress: tokenIn.address,
+                      tokenOutAddress: tokenOut.address,
+                    })}
+                    isExternal
+                    textDecor="underline"
+                  >
+                    CoW Swap
+                  </Link>
+                  .
+                </>
+              ) : (
+                ' or try another exchange.'
+              )}
             </Text>
           </>
         )
