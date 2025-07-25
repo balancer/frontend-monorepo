@@ -473,7 +473,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function calcPriceImpact() {
-    if (!bn(tokenInUsd).isZero() && !bn(tokenOutUsd).isZero()) {
+    // Only calculate price impact if both tokens are selected
+    if (isTokenInSet && isTokenOutSet && !bn(tokenInUsd).isZero() && !bn(tokenOutUsd).isZero()) {
       setPriceImpact(calcMarketPriceImpact(tokenInUsd, tokenOutUsd))
     } else if (simulationQuery.data) {
       setPriceImpact(undefined)
