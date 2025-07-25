@@ -6,7 +6,6 @@ import { TokenIcon } from './TokenIcon'
 import { useTokens } from './TokensProvider'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
 import { useEffect } from 'react'
-import { getNativeAssetAddress } from '@repo/lib/config/app.config'
 
 type Props = {
   value: string
@@ -26,14 +25,11 @@ export function TokenSelectInput({
   const { getToken } = useTokens()
 
   const tokenOptions = tokenAddresses.map(tokenAddress => {
-    const isHyperEvmNativeAsset =
-      chain === GqlChain.Hyperevm && tokenAddress === getNativeAssetAddress(chain)
-    const tokenSymbol = getToken(tokenAddress, chain)?.symbol
     return {
       label: (
         <HStack>
           <TokenIcon address={tokenAddress} alt={tokenAddress} chain={chain} size={24} />
-          <Text>{isHyperEvmNativeAsset ? 'HYPE' : tokenSymbol}</Text>
+          <Text>{getToken(tokenAddress, chain)?.symbol}</Text>
         </HStack>
       ),
       value: tokenAddress,

@@ -21,8 +21,7 @@ import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolIn
 import { getChainId } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
-import { useIsUsingBigBlocks, useToggleBlockSize } from '../../chains/hyperevm'
-import { ChainId } from '@balancer/sdk'
+import { useIsUsingBigBlocks, useToggleBlockSize, useIsHyperEvm } from '../../chains/hyperevm'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ExternalLink } from 'react-feather'
@@ -112,12 +111,12 @@ export function LbpCreationModal({
 
   const isSuccess = !!isPoolInitialized && isMetadataSaved
 
-  const isHyperEvm = chainId === ChainId.HYPER_EVM
+  const isHyperEvm = useIsHyperEvm()
   const shouldUseBigBlocks =
     isConnected && isHyperEvm && !isUsingBigBlocks && transactionSteps.currentStepIndex === 0 // big blocks only necessary to deploy pool contract
   const shouldUseSmallBlocks =
-    isConnected && isHyperEvm && isUsingBigBlocks && transactionSteps.currentStepIndex > 0 // small blocks faster for non contract deployment txs
-  const shouldToggleBlockSize = shouldUseBigBlocks || shouldUseSmallBlocks ? true : false
+    isConnected && isHyperEvm && !!isUsingBigBlocks && transactionSteps.currentStepIndex > 0 // small blocks faster for non contract deployment txs
+  const shouldToggleBlockSize = shouldUseBigBlocks || shouldUseSmallBlocks
 
   const {
     mutate: toggleBlockSize,

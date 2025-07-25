@@ -1,5 +1,3 @@
-'use client'
-
 import { useIsUsingBigBlocks } from './useIsUsingBigBlocks'
 import * as hl from '@nktkas/hyperliquid'
 import { useMutation } from '@tanstack/react-query'
