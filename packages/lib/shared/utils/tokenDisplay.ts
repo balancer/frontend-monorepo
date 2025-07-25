@@ -7,11 +7,6 @@ import { isZero, ZERO_VALUE_DASH } from './numbers'
  * @returns Formatted display string
  */
 export function formatTokenAmount(amount: string, showZeroAmountAsDash: boolean = false): string {
-  // Handle empty/falsy values first
-  if (!amount) {
-    return '0'
-  }
-
   if (isZero(amount) && showZeroAmountAsDash) {
     return ZERO_VALUE_DASH
   }
@@ -33,7 +28,7 @@ export function formatUsdValue(
   formatCurrency: (value: string, options?: any) => string,
   options?: any
 ): string {
-  if (showZeroAmountAsDash && usdValue && isZero(usdValue)) {
+  if (showZeroAmountAsDash && isZero(usdValue ?? '0')) {
     return ZERO_VALUE_DASH
   }
   return formatCurrency(usdValue ?? '0', options)

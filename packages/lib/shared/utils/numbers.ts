@@ -18,28 +18,6 @@ BigInt.prototype.toJSON = function () {
 export const MAX_BIGINT = BigInt(MAX_UINT256)
 export const MAX_BIGNUMBER = bn(MAX_UINT256)
 
-// Dash symbol used for zero balances and empty values
-export const ZERO_VALUE_DASH = '-'
-
-// Display labels for small amounts
-export const SMALL_AMOUNT_LABEL = '<0.001'
-export const SMALL_PERCENTAGE_LABEL = '<0.01%'
-
-// Thresholds for display formatting
-export const AMOUNT_LOWER_THRESHOLD = 0.001
-export const PERCENTAGE_LOWER_THRESHOLD = 0.0001
-export const USD_LOWER_THRESHOLD = 0.009
-
-// APR display thresholds
-export const APR_UPPER_THRESHOLD = 1_000_000
-export const APR_LOWER_THRESHOLD = 0.0000001
-
-// BigNumber processing threshold
-export const BN_LOWER_THRESHOLD = 0.000001
-
-// Fiat formatting threshold
-export const FIAT_CENTS_THRESHOLD = '100000'
-
 export const INTEGER_FORMAT = '0,0'
 export const FIAT_FORMAT_A = '0,0.00a'
 export const FIAT_FORMAT_3_DECIMALS = '0,0.000a'
@@ -59,6 +37,29 @@ export const WEIGHT_FORMAT_TWO_DECIMALS = '(%0,0.00)'
 export const PRICE_IMPACT_FORMAT = '0.00%'
 export const INTEGER_PERCENTAGE_FORMAT = '0%'
 export const BOOST_FORMAT = '0.000'
+
+// Do not display APR values greater than this amount; they are likely to be nonsensical
+// These can arise from pools with extremely low balances (e.g., completed LBPs)
+export const APR_UPPER_THRESHOLD = 1_000_000
+export const APR_LOWER_THRESHOLD = 0.0000001
+
+// Do not display bn values lower than this amount; they are likely to generate NaN results
+export const BN_LOWER_THRESHOLD = 0.000001
+
+// Display <0.001 for small amounts
+export const AMOUNT_LOWER_THRESHOLD = 0.001
+export const SMALL_AMOUNT_LABEL = '<0.001'
+// Display <0.01% for small percentages)
+export const PERCENTAGE_LOWER_THRESHOLD = 0.0001
+export const SMALL_PERCENTAGE_LABEL = '<0.01%'
+
+// fiat value threshold for displaying the fiat format without cents
+export const FIAT_CENTS_THRESHOLD = '100000'
+
+export const USD_LOWER_THRESHOLD = 0.009
+
+// Dash symbol used for zero balances and empty values
+export const ZERO_VALUE_DASH = '-'
 
 const NUMERAL_DECIMAL_LIMIT = 9
 

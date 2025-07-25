@@ -17,9 +17,8 @@ describe('tokenDisplay utilities', () => {
         expect(formatTokenAmount('0.00', false)).toBe('0.00')
       })
 
-      it('should return "0" for empty/falsy values', () => {
-        expect(formatTokenAmount('', false)).toBe('0')
-        expect(formatTokenAmount(undefined as any, false)).toBe('0')
+      it('should return empty string for empty values', () => {
+        expect(formatTokenAmount('', false)).toBe('')
       })
     })
 
@@ -36,9 +35,8 @@ describe('tokenDisplay utilities', () => {
         expect(formatTokenAmount('1000000', true)).toBe('1000000')
       })
 
-      it('should return "0" for empty/falsy values', () => {
-        expect(formatTokenAmount('', true)).toBe('0')
-        expect(formatTokenAmount(undefined as any, true)).toBe('0')
+      it('should return empty string as-is (not treated as zero)', () => {
+        expect(formatTokenAmount('', true)).toBe('')
       })
     })
 
@@ -115,13 +113,11 @@ describe('tokenDisplay utilities', () => {
         expect(mockFormatCurrency).toHaveBeenCalledWith('100', { abbreviated: true })
       })
 
-      it('should call formatCurrency for undefined values', () => {
-        mockFormatCurrency.mockReturnValue('$0.00')
-
+      it('should return dash for undefined values (treated as zero)', () => {
         const result = formatUsdValue(undefined, true, mockFormatCurrency)
 
-        expect(result).toBe('$0.00')
-        expect(mockFormatCurrency).toHaveBeenCalledWith('0', undefined)
+        expect(result).toBe(ZERO_VALUE_DASH)
+        expect(mockFormatCurrency).not.toHaveBeenCalled()
       })
 
       it('should call formatCurrency for very small positive values', () => {
