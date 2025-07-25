@@ -241,6 +241,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   function setSelectedChain(_selectedChain: GqlChain) {
     const defaultTokenState = getDefaultTokenState(_selectedChain)
     swapStateVar(defaultTokenState)
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
   }
 
   function setTokenIn(tokenAddress: Address) {
