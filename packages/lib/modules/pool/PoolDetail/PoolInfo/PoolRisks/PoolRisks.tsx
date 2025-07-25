@@ -34,7 +34,9 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
             key={`pool-risk-${risk.path.replaceAll('//', '')}`}
             target="_blank"
           >
-            <ListItem mb="6px">{risk.title}</ListItem>
+            <ListItem color="link" mb="6px">
+              {risk.title}
+            </ListItem>
           </Link>
         ))}
       </UnorderedList>
