@@ -9,6 +9,7 @@ import { useMemo } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { formatFalsyValueAsDash } from '@repo/lib/shared/utils/tokenDisplay'
 
 type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
@@ -29,7 +30,7 @@ export function TokenRowGroup({
   isLoading?: boolean
   pool?: Pool
 }) {
-  const { formatCurrencyBalance } = useCurrency()
+  const { toCurrency } = useCurrency()
   const { usdValueFor } = useTotalUsdValue(tokens)
 
   const _totalUSDValue = usdValueFor(amounts)
@@ -75,7 +76,7 @@ export function TokenRowGroup({
         ) : (
           hasMultipleAmounts && (
             <Text fontSize="sm" fontWeight="bold">
-              {formatCurrencyBalance(usdValue, { abbreviated: false })}
+              {formatFalsyValueAsDash(usdValue, toCurrency, { abbreviated: false })}
             </Text>
           )
         )}

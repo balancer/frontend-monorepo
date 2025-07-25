@@ -1,40 +1,36 @@
-import { isZero, ZERO_VALUE_DASH } from './numbers'
+import { ZERO_VALUE_DASH, Numberish, isZero } from './numbers'
 
 /**
- * Formats a token amount for display, showing dash for zero values when enabled
- * @param amount - The formatted token amount string
- * @param showZeroAmountAsDash - Whether to show dash for zero amounts
- * @returns Formatted display string
+ * Formats any value for display, showing dash for falsy values (0, '0', '', undefined)
+ * @param value - The value to format (string, number, or undefined)
+ * @param formatter - Optional formatter function for non-falsy values
+ * @param options - Options to pass to the formatter function
+ * @returns Formatted display string or dash for falsy values
  */
-export function formatTokenAmount(amount: string, showZeroAmountAsDash: boolean = false): string {
-  // Handle empty/falsy values first
-  if (!amount) {
-    return '0'
-  }
-
-  if (isZero(amount) && showZeroAmountAsDash) {
-    return ZERO_VALUE_DASH
-  }
-
-  return amount
-}
-
-/**
- * Formats a USD value for display, showing dash for zero values when enabled
- * @param usdValue - The USD value string
- * @param showZeroAmountAsDash - Whether to show dash for zero amounts
- * @param formatCurrency - Function to format the currency value
- * @param options - Options to pass to the currency formatter
- * @returns Formatted display string
- */
-export function formatUsdValue(
-  usdValue: string | undefined,
-  showZeroAmountAsDash: boolean = false,
-  formatCurrency: (value: string, options?: any) => string,
+export function formatFalsyValueAsDash(
+  value: Numberish | undefined,
+  formatter?: (value: Numberish, options?: any) => string,
   options?: any
 ): string {
-  if (showZeroAmountAsDash && usdValue && isZero(usdValue)) {
+  // Convert to string for falsy checks, default to empty string for undefined
+  const stringValue = value?.toString() ?? ''
+
+  // Handle undefined and empty string - always return dash
+  if (value === undefined || stringValue === '') {
     return ZERO_VALUE_DASH
   }
-  return formatCurrency(usdValue ?? '0', options)
+
+  // Handle zero values - respect showZeroAsDash option
+  if (isZero(stringValue)) {
+    const showZeroAsDash = options?.showZeroAsDash ?? false
+    return showZeroAsDash ? ZERO_VALUE_DASH : stringValue
+  }
+
+  // If formatter is provided, use it to format the value
+  if (formatter && value) {
+    return formatter(value, options)
+  }
+
+  // Otherwise return the string representation of the value
+  return stringValue
 }
