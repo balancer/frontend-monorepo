@@ -9,7 +9,7 @@ export const useIsUsingBigBlocks = () => {
   const publicClient = usePublicClient()
   const { address } = useAccount()
 
-  return useQuery({
+  const { data: isUsingBigBlocks, refetch: refetchIsUsingBigBlocks } = useQuery({
     queryKey: ['isUsingBigBlocks', publicClient?.chain.id, address],
     queryFn: async () => {
       if (!publicClient || !address) return false
@@ -25,4 +25,6 @@ export const useIsUsingBigBlocks = () => {
     refetchInterval: 5000, // Refetch every 5 seconds
     refetchOnWindowFocus: true, // Refetch when user returns to tab
   })
+
+  return { isUsingBigBlocks, refetchIsUsingBigBlocks }
 }

@@ -4,11 +4,11 @@ import { useMutation } from '@tanstack/react-query'
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import { useWalletClient } from 'wagmi'
 
-export function useToggleBlockSize() {
-  const { data: isUsingBigBlocks, refetch: refetchIsUsingBigBlocks } = useIsUsingBigBlocks()
+export function useSetUsingBigBlocks() {
+  const { refetchIsUsingBigBlocks } = useIsUsingBigBlocks()
   const { data: walletClient } = useWalletClient()
 
-  async function toggleBlockSize() {
+  async function setUsingBigBlocksFn(usingBigBlocks: boolean) {
     if (!walletClient) throw new Error('Wallet client not found')
 
     // Create arbitrary wallet
@@ -35,12 +35,16 @@ export function useToggleBlockSize() {
     })
 
     await agentExchangeClient.evmUserModify({
-      usingBigBlocks: !isUsingBigBlocks,
+      usingBigBlocks,
     })
   }
 
-  return useMutation({
-    mutationFn: toggleBlockSize,
+  const {
+    mutate: setUsingBigBlocks,
+    isPending: isSetUsingBigBlocksPending,
+    error: setUsingBigBlocksError,
+  } = useMutation({
+    mutationFn: setUsingBigBlocksFn,
     onSuccess: () => {
       refetchIsUsingBigBlocks()
     },
@@ -48,4 +52,6 @@ export function useToggleBlockSize() {
       console.error(error)
     },
   })
+
+  return { setUsingBigBlocks, isSetUsingBigBlocksPending, setUsingBigBlocksError }
 }

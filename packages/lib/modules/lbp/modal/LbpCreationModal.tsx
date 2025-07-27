@@ -21,7 +21,7 @@ import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolIn
 import { getChainId } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
-import { useIsUsingBigBlocks, useToggleBlockSize, useIsHyperEvm } from '../../chains/hyperevm'
+import { useIsUsingBigBlocks, useSetUsingBigBlocks, useIsHyperEvm } from '../../chains/hyperevm'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ExternalLink } from 'react-feather'
@@ -46,7 +46,7 @@ export function LbpCreationModal({
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { transactionSteps, initLbpTxHash, urlTxHash } = useLbpCreation()
-  const { data: isUsingBigBlocks } = useIsUsingBigBlocks()
+  const { isUsingBigBlocks } = useIsUsingBigBlocks()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -118,11 +118,8 @@ export function LbpCreationModal({
     isConnected && isHyperEvm && !!isUsingBigBlocks && transactionSteps.currentStepIndex > 0 // small blocks faster for non contract deployment txs
   const shouldToggleBlockSize = shouldUseBigBlocks || shouldUseSmallBlocks
 
-  const {
-    mutate: toggleBlockSize,
-    isPending: isToggleBlockSizePending,
-    error: toggleBlockSizeError,
-  } = useToggleBlockSize()
+  const { setUsingBigBlocks, isSetUsingBigBlocksPending, setUsingBigBlocksError } =
+    useSetUsingBigBlocks()
 
   return (
     <Modal
@@ -219,9 +216,9 @@ export function LbpCreationModal({
         {shouldToggleBlockSize ? (
           <VStack marginTop="2" paddingLeft="6" paddingRight="6" spacing="3" width="full">
             <Button
-              isDisabled={isToggleBlockSizePending}
-              isLoading={isToggleBlockSizePending}
-              onClick={() => toggleBlockSize()}
+              isDisabled={isSetUsingBigBlocksPending}
+              isLoading={isSetUsingBigBlocksPending}
+              onClick={() => setUsingBigBlocks(shouldUseBigBlocks)}
               size="lg"
               variant="primary"
               w="full"
@@ -230,8 +227,8 @@ export function LbpCreationModal({
                 Switch to {shouldUseBigBlocks ? 'big' : 'small'} blocks
               </LabelWithIcon>
             </Button>
-            {toggleBlockSizeError ? (
-              <BalAlert content={toggleBlockSizeError.message} status="error" title="Error:" />
+            {setUsingBigBlocksError ? (
+              <BalAlert content={setUsingBigBlocksError.message} status="error" title="Error:" />
             ) : (
               <BalAlert
                 content={
