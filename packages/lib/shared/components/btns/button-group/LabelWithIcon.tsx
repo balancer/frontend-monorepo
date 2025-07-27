@@ -4,7 +4,7 @@ import { SignIcon } from '../../icons/SignIcon'
 import { GasIcon } from '../../icons/GasIcon'
 
 type Props = {
-  icon: 'sign' | 'gas'
+  icon: 'sign' | 'gas' | 'external-link'
 }
 
 export function LabelWithIcon({ children, icon }: PropsWithChildren<Props>) {
@@ -15,7 +15,8 @@ export function LabelWithIcon({ children, icon }: PropsWithChildren<Props>) {
           {children}
         </Text>
       </HStack>
-      {icon === 'sign' ? <SignIcon size={16} /> : <GasIcon size={16} />}
+      {icon === 'sign' && <SignIcon size={16} />}
+      {icon === 'gas' && <GasIcon size={16} />}
     </HStack>
   )
 }
