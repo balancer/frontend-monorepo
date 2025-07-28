@@ -74,7 +74,7 @@ export function TransactionStepButton({ step }: Props) {
 
   const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
   const isSafeApp = useIsSafeApp()
-  const safeTxHash = isSafeApp ? step.execution.data : undefined // FIXME: should we also allow this for wc to Safe account?
+  const safeTxHash = isSafeApp ? step.execution.data : undefined
   const safeAppsSdk = new SafeAppsSDK()
   useEffect(() => {
     if (safeTxHash) {

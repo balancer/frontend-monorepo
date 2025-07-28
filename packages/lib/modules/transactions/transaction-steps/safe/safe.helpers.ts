@@ -3,17 +3,33 @@ import {
   GatewayTransactionDetails,
   TransactionStatus as SafeTransactionStatus,
 } from '@safe-global/safe-apps-sdk'
-import { arbitrum, gnosis, mainnet, sepolia } from 'viem/chains'
+import {
+  arbitrum,
+  avalanche,
+  base,
+  gnosis,
+  mainnet,
+  optimism,
+  polygon,
+  polygonZkEvm,
+  sepolia,
+  sonic,
+} from 'viem/chains'
 import { SafeAppTx, TransactionState, TransactionStep, TxCall } from '../lib'
 import { TransactionStatus as BalancerTransactionStatus } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { Address } from 'viem'
 
 const SAFE_CHAIN_PREFIX: Record<SupportedChainId, string> = {
-  //TODO: Add the rest of the chains
   [mainnet.id]: 'eth',
   [gnosis.id]: 'gno',
   [sepolia.id]: 'sep',
   [arbitrum.id]: 'arb',
+  [polygon.id]: 'matic',
+  [polygonZkEvm.id]: 'zkevm',
+  [optimism.id]: 'oeth',
+  [base.id]: 'base',
+  [sonic.id]: 'sonic',
+  [avalanche.id]: 'avax',
 }
 
 export function getSafeWebUrl(chainId: number, safeAddress: Address, safeTxId: string): string {
