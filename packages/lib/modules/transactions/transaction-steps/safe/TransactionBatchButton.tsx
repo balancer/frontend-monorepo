@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-'use client'
-
 import { Button, VStack } from '@chakra-ui/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
@@ -12,7 +10,7 @@ import SafeAppsSDK, { GatewayTransactionDetails } from '@safe-global/safe-apps-s
 import { noop } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useInterval } from 'usehooks-ts'
-import { Hex } from 'viem'
+import { Address, Hex } from 'viem'
 import { useWaitForTransactionReceipt } from 'wagmi'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
 import { useOnTransactionSubmission } from '../../../web3/contracts/useOnTransactionSubmission'
@@ -28,6 +26,7 @@ import {
   isSafeTxWaitingForExecution,
   mapSafeTxStatusToBalancerTxState,
 } from './safe.helpers'
+import { useRecentTransactions } from '../../RecentTransactionsProvider'
 
 type Props = {
   labels: TransactionLabels
@@ -105,13 +104,30 @@ export function TransactionBatchButton({
     }
   }
 
+  const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
   useInterval(() => {
     if (safeTxHash) {
       safeAppsSdk.txs.getBySafeTxHash(safeTxHash).then(tx => {
         setSafeTxDetails(tx)
 
-        if (tx.txHash) {
-          setTxHash(tx.txHash as Hex)
+        if (tx.txHash) setTxHash(tx.txHash as Hex)
+
+        if (!isTxTracked(safeTxHash)) {
+          addTrackedTransaction(
+            {
+              hash: safeTxHash,
+              type: 'safe',
+              status: 'confirming',
+              chain: getGqlChain(chainId),
+              init: 'Safe wallet multisignature',
+              label: labels.init,
+              description: labels.description,
+              timestamp: Date.now(),
+              safeTxId: tx.txId,
+              safeTxAddress: tx.safeAddress as Address,
+            },
+            false
+          )
         }
       })
     }
@@ -148,12 +164,7 @@ export function TransactionBatchButton({
       {sendCallsError && <TransactionError error={sendCallsError} />}
       {shouldChangeNetwork && <SwitchNetworkAlert chainName={networkSwitchButtonProps.name} />}
       {safeTxHash && safeTxDetails?.txStatus && (
-        <MultisigStatus
-          chainId={chainId}
-          currentStep={currentStep}
-          details={safeTxDetails}
-          safeTxHash={safeTxHash}
-        />
+        <MultisigStatus chainId={chainId} currentStep={currentStep} details={safeTxDetails} />
       )}
 
       {shouldShowTxButton && (

@@ -26,6 +26,7 @@ export function useOnTransactionSubmission({
       trackEvent(AnalyticsEvent.TransactionSubmitted)
       addTrackedTransaction({
         hash,
+        type: 'normal',
         chain,
         label: labels.confirming || 'Confirming transaction',
         description: labels.description,

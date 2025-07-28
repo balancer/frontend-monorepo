@@ -1,5 +1,3 @@
-'use client'
-
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { Button, useToast, VStack } from '@chakra-ui/react'
@@ -8,14 +6,15 @@ import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useC
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { TransactionTimeoutError } from '@repo/lib/shared/components/errors/TransactionTimeoutError'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { getTransactionButtonLabel } from './transaction-button.helpers'
-import { useIsSafeAccount } from '../../web3/safe.hooks'
+import { useIsSafeAccount, useIsSafeApp } from '../../web3/safe.hooks'
 import { MultisigStatus } from './safe/MultisigStatus'
 import SafeAppsSDK, { GatewayTransactionDetails } from '@safe-global/safe-apps-sdk'
-import { useInterval } from 'usehooks-ts'
+import { useRecentTransactions } from '../RecentTransactionsProvider'
+import { Address } from 'viem'
 
 interface Props {
   step: {
@@ -73,13 +72,35 @@ export function TransactionStepButton({ step }: Props) {
     })
   }
 
-  const safeTxHash = step.execution.data
+  const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
+  const isSafeApp = useIsSafeApp()
+  const safeTxHash = isSafeApp ? step.execution.data : undefined // FIXME: should we also allow this for wc to Safe account?
   const safeAppsSdk = new SafeAppsSDK()
-  useInterval(() => {
+  useEffect(() => {
     if (safeTxHash) {
-      safeAppsSdk.txs.getBySafeTxHash(safeTxHash).then(tx => setSafeTxDetails(tx))
+      safeAppsSdk.txs.getBySafeTxHash(safeTxHash).then(tx => {
+        setSafeTxDetails(tx)
+        if (!isTxTracked(safeTxHash)) {
+          addTrackedTransaction(
+            {
+              hash: safeTxHash,
+              type: 'safe',
+              status: 'confirming',
+              chain: getGqlChain(chainId),
+              init: 'Safe wallet multisignature',
+              label: labels.init,
+              description: labels.description,
+              timestamp: Date.now(),
+              safeTxId: tx.txId,
+              safeTxAddress: tx.safeAddress as Address,
+            },
+            false
+          )
+        }
+      })
     }
-  }, 5000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [safeTxHash])
 
   return (
     <VStack width="full">
@@ -87,7 +108,7 @@ export function TransactionStepButton({ step }: Props) {
       {!isConnected && <ConnectWallet width="full" />}
       {isConnected && shouldChangeNetwork && <NetworkSwitchButton chainId={chainId} />}
       {safeTxHash && safeTxDetails?.txStatus && (
-        <MultisigStatus chainId={chainId} details={safeTxDetails} safeTxHash={safeTxHash} />
+        <MultisigStatus chainId={chainId} details={safeTxDetails} />
       )}
 
       {!shouldChangeNetwork && isConnected && (
