@@ -124,9 +124,9 @@ export function safeStatusToBalancerStatus(
   ) {
     return 'confirming'
   } else if (safeTxStatus === SafeTransactionStatus.CANCELLED) {
-    return 'reverted'
-  } else if (safeTxStatus === SafeTransactionStatus.FAILED) {
     return 'rejected'
+  } else if (safeTxStatus === SafeTransactionStatus.FAILED) {
+    return 'reverted'
   } else if (safeTxStatus === SafeTransactionStatus.SUCCESS) {
     return 'confirmed'
   } else {
