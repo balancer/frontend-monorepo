@@ -43,7 +43,7 @@ export type TransactionStatus =
 
 export type SafeTransactionStatus = SafeTxStatus
 
-export type TransactionType = 'normal' | 'safe'
+export type TransactionType = 'standard' | 'safe'
 
 export type TrackedTransaction = {
   hash: Hash
@@ -86,7 +86,7 @@ export function useRecentTransactionsLogic() {
   const waitForUnconfirmedTransactions = useCallback(
     async (transactions: Record<string, TrackedTransaction>) => {
       const unconfirmedTransactions = Object.values(transactions).filter(
-        tx => tx.type === 'normal' && tx.status === 'confirming'
+        tx => tx.type === 'standard' && tx.status === 'confirming'
       )
 
       const updatePayload = {
@@ -178,7 +178,7 @@ export function useRecentTransactionsLogic() {
             addTrackedTransaction(
               {
                 hash: tx.txHash as Hash,
-                type: 'normal',
+                type: 'standard',
                 status: 'confirmed',
                 chain: safeTrackedTx.chain,
                 init: safeTrackedTx.label,
