@@ -3,29 +3,40 @@ import {
   GatewayTransactionDetails,
   TransactionStatus as SafeTransactionStatus,
 } from '@safe-global/safe-apps-sdk'
-import { Hex } from 'viem'
-import { arbitrum, gnosis, mainnet, sepolia } from 'viem/chains'
+import {
+  arbitrum,
+  avalanche,
+  base,
+  gnosis,
+  mainnet,
+  optimism,
+  polygon,
+  polygonZkEvm,
+  sepolia,
+  sonic,
+} from 'viem/chains'
 import { SafeAppTx, TransactionState, TransactionStep, TxCall } from '../lib'
-import { TrackedTransactionStatus } from '@repo/lib/modules/web3/contracts/useOnTransactionConfirmation'
+import { TransactionStatus as BalancerTransactionStatus } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
+import { Address } from 'viem'
 
 const SAFE_CHAIN_PREFIX: Record<SupportedChainId, string> = {
-  //TODO: Add the rest of the chains
   [mainnet.id]: 'eth',
   [gnosis.id]: 'gno',
   [sepolia.id]: 'sep',
   [arbitrum.id]: 'arb',
+  [polygon.id]: 'matic',
+  [polygonZkEvm.id]: 'zkevm',
+  [optimism.id]: 'oeth',
+  [base.id]: 'base',
+  [sonic.id]: 'sonic',
+  [avalanche.id]: 'avax',
 }
 
-export function getSafeWebUrl(
-  chainId: number,
-  safeTxHash: Hex,
-  details: GatewayTransactionDetails
-): string {
+export function getSafeWebUrl(chainId: number, safeAddress: Address, safeTxId: string): string {
   const chainShortName = SAFE_CHAIN_PREFIX[chainId]
   const baseSafeUrl = 'https://app.safe.global/transactions/tx?safe='
-  const safeAddress = details.safeAddress
 
-  return `${baseSafeUrl}/${chainShortName}:${safeAddress}&id=multisig_${safeAddress}_${safeTxHash}`
+  return `${baseSafeUrl}/${chainShortName}:${safeAddress}&id=${safeTxId}`
 }
 
 export function isMultisig(details: GatewayTransactionDetails): boolean {
@@ -104,13 +115,23 @@ export function isSafeTxWaitingForConfirmations(safeTxStatus?: SafeTransactionSt
   return safeTxStatus === SafeTransactionStatus.AWAITING_CONFIRMATIONS
 }
 
-export function mapSafeTxStatusToBalancerTrackedStatus(
+export function safeStatusToBalancerStatus(
   safeTxStatus?: SafeTransactionStatus
-): TrackedTransactionStatus {
-  if (!safeTxStatus) return
-  if (isSafeTxSuccess(safeTxStatus)) return 'success'
-  if (isSafeTxRejected(safeTxStatus)) return 'reverted'
-  return
+): BalancerTransactionStatus {
+  if (
+    safeTxStatus === SafeTransactionStatus.AWAITING_CONFIRMATIONS ||
+    safeTxStatus === SafeTransactionStatus.AWAITING_EXECUTION
+  ) {
+    return 'confirming'
+  } else if (safeTxStatus === SafeTransactionStatus.CANCELLED) {
+    return 'rejected'
+  } else if (safeTxStatus === SafeTransactionStatus.FAILED) {
+    return 'reverted'
+  } else if (safeTxStatus === SafeTransactionStatus.SUCCESS) {
+    return 'confirmed'
+  } else {
+    return 'unknown'
+  }
 }
 
 export function mapSafeTxStatusToBalancerTxState(
