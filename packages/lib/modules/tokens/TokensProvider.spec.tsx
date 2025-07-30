@@ -1,7 +1,5 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-import { Address } from 'viem'
 import {
   defaultGetTokenPricesQueryMock,
   defaultGetTokensQueryMock,
@@ -28,30 +26,4 @@ test('fetches tokens', async () => {
   await waitFor(() => expect(result.current.tokens.length).toBeGreaterThan(0))
 
   expect(result.current.tokens).toEqual(defaultTokenListMock)
-})
-
-test('gets tokens by token address', async () => {
-  const result = testUseTokens()
-
-  const tokenAddresses = ['0xba100000625a3754423978a60c9317c58a424e3d' as Address]
-
-  expect(result.current.getTokensByTokenAddress(tokenAddresses, GqlChain.Mainnet))
-    .toMatchInlineSnapshot(`
-      {
-        "0xba100000625a3754423978a60c9317c58a424e3d": {
-          "__typename": "GqlToken",
-          "address": "0xba100000625a3754423978a60c9317c58a424e3d",
-          "chain": "MAINNET",
-          "chainId": 1,
-          "decimals": 18,
-          "isBufferAllowed": true,
-          "isErc4626": false,
-          "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xba100000625a3754423978a60c9317c58a424e3d.png",
-          "name": "Balancer",
-          "priority": 0,
-          "symbol": "BAL",
-          "tradable": true,
-        },
-      }
-    `)
 })

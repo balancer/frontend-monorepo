@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import {
   GetTokenPricesDocument,
   GetTokenPricesQuery,
@@ -15,10 +13,9 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
 import { useQuery } from '@apollo/client'
-import { Dictionary, zipObject } from 'lodash'
 import { createContext, PropsWithChildren, useCallback } from 'react'
 import { Address } from 'viem'
-import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
+//import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import {
   getNativeAssetAddress,
   getWrappedNativeAssetAddress,
@@ -40,13 +37,13 @@ export function useTokensLogic(
   initTokenPricesData: GetTokenPricesQuery,
   variables: GetTokensQueryVariables
 ) {
-  const skipQuery = useSkipInitialQuery(variables)
+  //  const skipQuery = useSkipInitialQuery(variables)
   const pollInterval = mins(3).toMs()
 
   // skip initial fetch on mount so that initialData is used
   const { data: tokensData } = useQuery(GetTokensDocument, {
     variables,
-    skip: skipQuery,
+    //skip: skipQuery,
   })
   const {
     data: tokenPricesData,
@@ -108,33 +105,6 @@ export function useTokensLogic(
     [prices]
   )
 
-  function getTokensByTokenAddress(
-    tokenAddresses: Address[],
-    chain: GqlChain
-  ): Dictionary<GqlToken> {
-    return zipObject(
-      tokenAddresses,
-      tokenAddresses.map(t => getToken(t, chain) as GqlToken)
-    )
-  }
-
-  function priceForToken(token: ApiToken | CustomToken): number {
-    const price = getPricesForChain(token.chain).find(price =>
-      isSameAddress(price.address, token.address)
-    )
-    if (!price) return 0
-
-    return price.price
-  }
-
-  // this also fetches the price for a bpt
-  function priceForAddress(address: string, chain: GqlChain): number {
-    const price = getPricesForChain(chain).find(price => isSameAddress(price.address, address))
-    if (!price) return 0
-
-    return price.price
-  }
-
   function usdValueForToken(token: ApiToken | CustomToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
@@ -149,13 +119,10 @@ export function useTokensLogic(
   }
 
   function priceFor(address: string, chain: GqlChain): number {
-    const token = getToken(address, chain)
+    const price = getPricesForChain(chain).find(price => isSameAddress(price.address, address))
+    if (!price) return 0
 
-    if (token) {
-      return priceForToken(token)
-    } else {
-      return priceForAddress(address, chain)
-    }
+    return price.price
   }
 
   const calcWeightForBalance = useCallback(
@@ -169,6 +136,7 @@ export function useTokensLogic(
 
       return bn(tokenPrice).times(tokenBalance).div(totalLiquidity).toString()
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
 
@@ -178,6 +146,7 @@ export function useTokensLogic(
         return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
       }, bn(0))
       .toString()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const vebalBptToken = tokens.find(
@@ -192,15 +161,12 @@ export function useTokensLogic(
     getNativeAssetToken,
     getWrappedNativeAssetToken,
     priceFor,
-    priceForToken,
     getTokensByChain,
-    getTokensByTokenAddress,
     usdValueForToken,
     calcWeightForBalance,
     calcTotalUsdValue,
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
-    priceForAddress,
     usdValueForTokenAddress,
     vebalBptToken,
   }
