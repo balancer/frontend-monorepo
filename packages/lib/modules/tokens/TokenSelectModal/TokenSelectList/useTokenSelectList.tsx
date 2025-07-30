@@ -17,12 +17,6 @@ export function useTokenSelectList(
   const { usdValueForToken } = useTokens()
   const { balanceFor } = useTokenBalances()
 
-  const symbolMatch = (token: ApiToken, searchTerm: string) =>
-    token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
-
-  const nameMatch = (token: ApiToken, searchTerm: string) =>
-    token.name.toLowerCase().includes(searchTerm.toLowerCase())
-
   const getFilteredTokens = useCallback(() => {
     let filteredTokens = tokens
 
@@ -70,4 +64,16 @@ export function useTokenSelectList(
   return {
     orderedTokens,
   }
+}
+
+function symbolMatch(token: ApiToken, searchTerm: string) {
+  return normalize(token.symbol).includes(normalize(searchTerm))
+}
+
+function nameMatch(token: ApiToken, searchTerm: string) {
+  return normalize(token.name).includes(normalize(searchTerm))
+}
+
+function normalize(term: string) {
+  return term.toLowerCase().replaceAll('₮', 't')
 }
