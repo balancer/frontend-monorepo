@@ -122,7 +122,7 @@ export default function Privacy() {
                   </li>
                   <li>
                     <Link href="risks#network-risks">
-                      <h6>Layer 2 network risks</h6>
+                      <h6>Network risks (L2s and Sidechains)</h6>
                     </Link>
                     <ul>
                       <li>
@@ -145,6 +145,9 @@ export default function Privacy() {
                       </li>
                       <li>
                         <Link href="risks#avalanche">Avalanche</Link>
+                      </li>
+                      <li>
+                        <Link href="risks#hyperevm">Hyper EVM</Link>
                       </li>
                     </ul>
                   </li>
@@ -1779,7 +1782,68 @@ export default function Privacy() {
                 around briding assets.{' '}
               </p>
             </div>
-
+            <FadeInOnView>
+              <div className="subsection">
+                <h4 className="anchor" id="hyperevm">
+                  Hyper EVM risks
+                </h4>
+                <p>
+                  <a href="https://hyperfoundation.org/">Hyper EVM</a> is a standalone Layer 1 chain
+                  with its own consensus mechanism, not directly on Ethereum mainnet like typical L2
+                  rollups.
+                </p>
+                <p>
+                  HyperEVM is integrated with HyperCore, the main Hyperliquid blockchain. Smart
+                  contracts on HyperEVM can directly access HyperCore’s native order books. It
+                  allows developers to deploy Ethereum-compatible smart contracts, including DeFi
+                  applications like liquidity pools, interacting via <b>precompiles</b>. While this
+                  offers novel use cases, it also means the operation of dApps may depend on the
+                  performance and security of both layers.
+                </p>
+                <p>Specific risks include:</p>
+                <ul>
+                  <li>
+                    Incorrect data reads from HyperCore, such as wrong prices, affecting pool
+                    pricing and leading to arbitrage opportunities or losses.
+                  </li>
+                  <li>
+                    Failed write operations causing desynchronization between pool state and
+                    HyperCore, potentially locking assets.
+                  </li>
+                  <li>
+                    Gas exhaustion due to invalid precompile calls, impacting pool operations under
+                    high gas price conditions.
+                  </li>
+                </ul>
+                <p>
+                  While HyperBFT's one-block finality aims to minimize such risks, predictable
+                  transaction ordering or network conditions could still enable these attacks,
+                  particularly in high-frequency trading scenarios common in liquidity pools.
+                </p>
+                <p>
+                  <b>Native Gas Token (HYPE):</b> Transactions on Hyper EVM use HYPE for gas fees
+                  (not ETH). Users should be aware of price volatility and liquidity considerations
+                  related to this token.
+                </p>
+                <p>
+                  <b>Dual-Block Architecture:</b> HyperEVM splits throughput across two block types:
+                  a) Small blocks for fast transaction processing and quick confirmations; and b)
+                  Large blocks for complex or high-value transactions, such as contract deployments.
+                  This architecture is designed to optimize speed and capacity, but also introduces
+                  unique technical dynamics that may impact transaction settlement.
+                </p>
+                <p>
+                  <b>Timing-Based Attacks:</b> write operations from HyperEVM to HyperCore may be
+                  delayed onchain to prevent latency advantages. However, it introduces risks of MEV
+                  attacks, exploiting price movements.
+                </p>
+                <p>
+                  <b>Early Stage and Unknown Vulnerabilities:</b> HyperEVM launched on mainnet in
+                  February 2025 and users interacting may consider undiscovered bugs into the risk
+                  profile.
+                </p>
+              </div>
+            </FadeInOnView>
             <Divider />
           </FadeInOnView>
           <FadeInOnView>
