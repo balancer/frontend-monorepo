@@ -118,7 +118,14 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.Reclamm]: [GqlPoolType.Reclamm],
 }
 
-export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED', 'RWA'] as const
+export const poolTagFilters = [
+  'INCENTIVIZED',
+  'VE8020',
+  'POINTS',
+  'BOOSTED',
+  'RWA',
+  'DYNAMIC_ECLP',
+] as const
 export type PoolTagType = (typeof poolTagFilters)[number]
 
 export const poolHookTagFilters = [
