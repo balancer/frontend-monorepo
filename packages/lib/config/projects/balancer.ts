@@ -42,7 +42,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   merklRewardsChains: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Mode],
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
-    hidePoolTags: [],
+    hidePoolTags: ['DYNAMIC_ECLP'],
     hidePoolTypes: [GqlPoolType.Fx, ...(isProd ? [GqlPoolType.LiquidityBootstrapping] : [])],
     hideProtocolVersion: [],
     showPoolName: false,
