@@ -50,7 +50,7 @@ const BTF_TIME_OPTIONS: BTFTimeOption[] = [{ value: '7d', label: '7 days' }]
 function BTFTimeSelector({ pool, chain }: { pool: Pool; chain: GqlChain }) {
   const chakraStyles = getSelectStyles<BTFTimeOption>()
   const baseUrl = 'https://quantamm.fi'
-  const learnMoreUrl = pool && chain ? `${baseUrl}/factsheet/${pool.id}` : baseUrl
+  const analyticsUrl = pool && chain ? `${baseUrl}/product-explorer/${chain}/${pool.id}` : baseUrl
 
   const customChakraStyles: typeof chakraStyles = {
     ...chakraStyles,
@@ -87,7 +87,7 @@ function BTFTimeSelector({ pool, chain }: { pool: Pool; chain: GqlChain }) {
                 color="font.link"
                 display="flex"
                 fontSize="sm"
-                href={learnMoreUrl}
+                href={analyticsUrl}
                 rel="noopener noreferrer"
                 target="_blank"
                 textDecoration="underline"
