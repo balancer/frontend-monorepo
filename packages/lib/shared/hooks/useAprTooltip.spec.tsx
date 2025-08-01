@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js'
 import { GqlPoolAprItem, GqlPoolAprItemType, GqlChain } from '../services/api/generated/graphql'
 import { getApiPoolMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/api-mocks'
 import { boostedCoinshiftUsdcUsdl } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
+import { act } from '@testing-library/react'
 
 const defaultNumberFormatter = (value: string) => bn(bn(value).toFixed(4, BigNumber.ROUND_HALF_UP))
 
@@ -76,7 +77,7 @@ it('When the pool has BAL staking incentives (outside the veBAL system)', () => 
   expect(result.current.hasVeBalBoost).toBeFalsy()
 })
 
-it('When the pool has BAL staking incentives (inside the veBAL system)', () => {
+it('When the pool has BAL staking incentives (inside the veBAL system)', async () => {
   const aprItems: GqlPoolAprItem[] = [
     {
       __typename: 'GqlPoolAprItem',
@@ -101,7 +102,7 @@ it('When the pool has BAL staking incentives (inside the veBAL system)', () => {
     },
   ]
 
-  const result = testUseAprTooltip({ aprItems })
+  const result = await act(() => testUseAprTooltip({ aprItems }))
 
   expect(result.current.hasVeBalBoost).toBeFalsy()
 })

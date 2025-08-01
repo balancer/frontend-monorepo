@@ -1,6 +1,4 @@
-'use client'
-
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
@@ -28,24 +26,16 @@ export function PoolSnapshotValues() {
 
   const { tokens, weeklyRewards, weeklyRewardsByToken } = useGetPoolRewards(pool)
 
-  const poolStatsValues: PoolStatsValues | undefined = useMemo(() => {
-    if (pool) {
-      return {
-        totalLiquidity: toCurrency(tvl, {
-          abbreviated: false,
-        }),
-        volume24h: toCurrency(pool.dynamicData.volume24h, {
-          abbreviated: false,
-        }),
+  const poolStatsValues: PoolStatsValues | undefined = pool
+    ? {
+        totalLiquidity: toCurrency(tvl, { abbreviated: false }),
+        volume24h: toCurrency(pool.dynamicData.volume24h, { abbreviated: false }),
         income24h: isCowAmmPool(pool.type)
           ? toCurrency(pool.dynamicData.surplus24h, { abbreviated: false, noDecimals: true })
           : toCurrency(pool.dynamicData.fees24h, { abbreviated: false, noDecimals: true }),
         weeklyRewards: weeklyRewards ? toCurrency(weeklyRewards.toString()) : 'N/A',
       }
-    }
-    return undefined
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool, tvl, weeklyRewards])
+    : undefined
 
   const incomeLabel = isCowAmmPool(pool.type) ? 'Surplus (24h)' : 'Fees (24h)'
 

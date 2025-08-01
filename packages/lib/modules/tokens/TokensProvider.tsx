@@ -2,10 +2,7 @@
 
 import {
   GetTokenPricesDocument,
-  GetTokenPricesQuery,
   GetTokensDocument,
-  GetTokensQuery,
-  GetTokensQueryVariables,
   GqlChain,
   GqlToken,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -15,7 +12,6 @@ import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
 import { useQuery } from '@apollo/client'
 import { createContext, PropsWithChildren, useCallback } from 'react'
 import { Address } from 'viem'
-//import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import {
   getNativeAssetAddress,
   getWrappedNativeAssetAddress,
@@ -26,34 +22,31 @@ import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { PoolToken } from '../pool/pool.types'
 import { ApiToken, CustomToken } from './token.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type UseTokensResult = ReturnType<typeof useTokensLogic>
 export const TokensContext = createContext<UseTokensResult | null>(null)
 
 export type GetTokenFn = (address: string, chain: GqlChain) => ApiToken | undefined
 
-export function useTokensLogic(
-  initTokenData: GetTokensQuery,
-  initTokenPricesData: GetTokenPricesQuery,
-  variables: GetTokensQueryVariables
-) {
-  //  const skipQuery = useSkipInitialQuery(variables)
-  const pollInterval = mins(3).toMs()
+const POLL_INTERVAL = mins(3).toMs()
+const SUPPORTED_CHAINS = {
+  chains: PROJECT_CONFIG.supportedNetworks,
+}
 
-  // skip initial fetch on mount so that initialData is used
-  const { data: tokensData } = useQuery(GetTokensDocument, {
-    variables,
-    //skip: skipQuery,
+export function useTokensLogic() {
+  const { data: tokensData, loading: isLoadingTokens } = useQuery(GetTokensDocument, {
+    variables: SUPPORTED_CHAINS,
   })
+  const tokens = tokensData?.tokens || []
+
   const {
     data: tokenPricesData,
     loading: isLoadingTokenPrices,
     startPolling,
     stopPolling,
   } = useQuery(GetTokenPricesDocument, {
-    variables,
-    // The server provides us with an initial data set, but we immediately reload the potentially
-    // stale data to ensure the prices we show are up to date. Every 3 mins, we requery token prices
+    variables: SUPPORTED_CHAINS,
     /*
       FIXME: if we use initialFetchPolicy: no-cache in development, the query never finishes (isLoadingTokenPrices is always true)
 
@@ -64,18 +57,12 @@ export function useTokensLogic(
     */
     initialFetchPolicy: isDev ? undefined : 'no-cache',
     nextFetchPolicy: 'cache-and-network',
-    pollInterval,
+    pollInterval: POLL_INTERVAL,
     notifyOnNetworkStatusChange: true,
   })
+  const prices = tokenPricesData?.tokenPrices || []
 
-  const tokens = tokensData?.tokens || initTokenData.tokens
-  const prices = tokenPricesData?.tokenPrices || initTokenPricesData.tokenPrices
-
-  /*
-    It can return undefined when the token address belongs to a pool token (not included in the provided tokens)
-    // TODO: should we avoid calling getToken with pool tokens?
-   */
-  function getToken(address: string, chain: GqlChain | number): ApiToken | undefined {
+  const getToken = (address: string, chain: GqlChain | number): ApiToken | undefined => {
     const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
     return tokens.find(token => isSameAddress(token.address, address) && token[chainKey] === chain)
   }
@@ -88,22 +75,12 @@ export function useTokensLogic(
     return getToken(getWrappedNativeAssetAddress(chain), chain)
   }
 
-  const getTokensByChain = useCallback(
-    (chain: number | GqlChain): GqlToken[] => {
-      const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
-      const result = tokens.filter(token => token[chainKey] === chain)
-      // Limit to 10 tokens in Anvil fork to avoid Swap performance issues
-      return shouldUseAnvilFork ? result.slice(0, 10) : result
-    },
-    [tokens]
-  )
-
-  const getPricesForChain = useCallback(
-    (chain: GqlChain): GetTokenPricesQuery['tokenPrices'] => {
-      return prices.filter(price => price.chain === chain)
-    },
-    [prices]
-  )
+  const getTokensByChain = (chain: number | GqlChain): GqlToken[] => {
+    const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
+    const result = tokens.filter(token => token[chainKey] === chain)
+    // Limit to 10 tokens in Anvil fork to avoid Swap performance issues
+    return shouldUseAnvilFork ? result.slice(0, 10) : result
+  }
 
   function usdValueForToken(token: ApiToken | CustomToken | undefined, amount: Numberish) {
     if (!token) return '0'
@@ -118,36 +95,36 @@ export function useTokensLogic(
     return bn(amount).times(priceFor(address, chain)).toFixed()
   }
 
-  function priceFor(address: string, chain: GqlChain): number {
-    const price = getPricesForChain(chain).find(price => isSameAddress(price.address, address))
+  const priceFor = (address: string, chain: GqlChain): number => {
+    const chainPrices = prices.filter(price => price.chain === chain)
+    const price = chainPrices.find(price => isSameAddress(price.address, address))
     if (!price) return 0
 
     return price.price
   }
 
-  const calcWeightForBalance = useCallback(
-    (
-      tokenAddress: Address | string,
-      tokenBalance: string,
-      totalLiquidity: string,
-      chain: GqlChain
-    ): string => {
-      const tokenPrice = priceFor(tokenAddress, chain)
+  const calcWeightForBalance = (
+    tokenAddress: Address | string,
+    tokenBalance: string,
+    totalLiquidity: string,
+    chain: GqlChain
+  ): string => {
+    const tokenPrice = priceFor(tokenAddress, chain)
 
-      return bn(tokenPrice).times(tokenBalance).div(totalLiquidity).toString()
+    return bn(tokenPrice).times(tokenBalance).div(totalLiquidity).toString()
+  }
+
+  const calcTotalUsdValue = useCallback(
+    (poolTokens: PoolToken[], chain: GqlChain) => {
+      return poolTokens
+        .reduce((total, token) => {
+          return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
+        }, bn(0))
+        .toString()
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [prices]
   )
-
-  const calcTotalUsdValue = useCallback((poolTokens: PoolToken[], chain: GqlChain) => {
-    return poolTokens
-      .reduce((total, token) => {
-        return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
-      }, bn(0))
-      .toString()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const vebalBptToken = tokens.find(
     t => t.address === mainnetNetworkConfig.tokens.addresses.veBalBpt
@@ -157,32 +134,24 @@ export function useTokensLogic(
     tokens,
     prices,
     isLoadingTokenPrices,
+    isLoadingTokens,
     getToken,
     getNativeAssetToken,
     getWrappedNativeAssetToken,
     priceFor,
     getTokensByChain,
     usdValueForToken,
+    usdValueForTokenAddress,
     calcWeightForBalance,
     calcTotalUsdValue,
-    startTokenPricePolling: () => startPolling(pollInterval),
+    startTokenPricePolling: () => startPolling(POLL_INTERVAL),
     stopTokenPricePolling: stopPolling,
-    usdValueForTokenAddress,
     vebalBptToken,
   }
 }
 
-export function TokensProvider({
-  children,
-  tokensData,
-  tokenPricesData,
-  variables,
-}: PropsWithChildren & {
-  tokensData: GetTokensQuery
-  tokenPricesData: GetTokenPricesQuery
-  variables: GetTokensQueryVariables
-}) {
-  const tokens = useTokensLogic(tokensData, tokenPricesData, variables)
+export function TokensProvider({ children }: PropsWithChildren) {
+  const tokens = useTokensLogic()
 
   return <TokensContext.Provider value={tokens}>{children}</TokensContext.Provider>
 }
