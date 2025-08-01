@@ -10,7 +10,6 @@ import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
 import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useColorMode } from '@chakra-ui/react'
-import { zeroAddress } from 'viem'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -105,19 +104,22 @@ export function useReclAmmChartLogic() {
       .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
 
-    const poolTokenA = pool.poolTokens[0]
-    const poolTokenB = pool.poolTokens[1]
+    // only scale back if token has rate but not an erc4626
+    const tokenA = pool.poolTokens[0]
+    const tokenB = pool.poolTokens[1]
+    const defaultRate = '1'
+    const tokenAHasRate = tokenA.priceRate !== defaultRate
+    const tokenBHasRate = tokenB.priceRate !== defaultRate
+    const shouldScaleBackTokenA = tokenAHasRate && !tokenA.isErc4626
+    const shouldScaleBackTokenB = tokenBHasRate && !tokenB.isErc4626
+    const shouldScaleBackPrices = shouldScaleBackTokenA || shouldScaleBackTokenB
 
-    const rateProviderScaleBackFactor = bn(poolTokenA.priceRate).div(poolTokenB.priceRate)
+    if (shouldScaleBackPrices) {
+      // to scale back we use price * tokenARate / tokenBRate
+      const tokenARate = shouldScaleBackTokenA ? tokenA.priceRate : defaultRate
+      const tokenBRate = shouldScaleBackTokenB ? tokenB.priceRate : defaultRate
+      const rateProviderScaleBackFactor = bn(tokenARate).div(tokenBRate)
 
-    const poolHasRateProvider =
-      poolTokenA.priceRateProvider !== zeroAddress || poolTokenB.priceRateProvider !== zeroAddress
-
-    const poolHasErc4626 = poolTokenA.isErc4626 || poolTokenB.isErc4626
-
-    // Naive solution: only scale back if pool has no erc4626. does not handle if one token is erc4626 and the other is not :(
-    if (poolHasRateProvider && !poolHasErc4626) {
-      console.log('scaling back price values...')
       minPriceValue = rateProviderScaleBackFactor.times(minPriceValue).toNumber()
       maxPriceValue = rateProviderScaleBackFactor.times(maxPriceValue).toNumber()
       lowerMarginValue = rateProviderScaleBackFactor.times(lowerMarginValue).toNumber()
