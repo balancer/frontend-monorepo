@@ -58,6 +58,9 @@ export const FIAT_CENTS_THRESHOLD = '100000'
 
 export const USD_LOWER_THRESHOLD = 0.009
 
+// Dash symbol used for zero balances and empty values
+export const ZERO_VALUE_DASH = '-'
+
 const NUMERAL_DECIMAL_LIMIT = 9
 
 export type Numberish = string | number | bigint | BigNumber
