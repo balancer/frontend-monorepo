@@ -6,6 +6,7 @@ import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { Address } from 'viem'
 import { aGqlPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
+import { act } from '@testing-library/react'
 
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
   const batchRelayerService = BatchRelayerService.create(
@@ -24,6 +25,7 @@ function testBuildUnstakeCallData(amount: bigint, userAddress: Address = default
       userAddress,
     })
   )
+
   return result
 }
 describe('useBuildUnstakeCallData', () => {
@@ -38,8 +40,8 @@ describe('useBuildUnstakeCallData', () => {
     expect(result.current).toEqual([])
   })
 
-  test('generates a valid unstake call data', () => {
-    const result = testBuildUnstakeCallData(10n)
+  test('generates a valid unstake call data', async () => {
+    const result = await act(() => testBuildUnstakeCallData(10n))
 
     expect(result.current).toEqual([
       '0x65ca48040000000000000000000000002d42910d826e5500579d121596e98a6eb33c0a1b000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266000000000000000000000000000000000000000000000000000000000000000a',

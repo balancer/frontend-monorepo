@@ -20,13 +20,18 @@ import { getCompositionTokens } from '../pool-tokens.utils'
 const totalSupplyAbi = parseAbi(['function totalSupply() view returns (uint256)'])
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
-  const { priceFor } = useTokens()
+  const { priceFor, isLoadingTokenPrices } = useTokens()
 
-  const { isLoading, poolTokenBalances, totalSupply, nestedPoolData, refetch } =
-    usePoolOnchainData(pool)
+  const {
+    isLoading: isLoadingPool,
+    poolTokenBalances,
+    totalSupply,
+    nestedPoolData,
+    refetch,
+  } = usePoolOnchainData(pool)
 
   const clone = enrichPool({
-    isLoading,
+    isLoading: isLoadingTokenPrices || isLoadingPool,
     pool,
     priceFor,
     poolTokenBalances,
@@ -34,7 +39,7 @@ export function usePoolEnrichWithOnChainData(pool: Pool) {
     nestedPoolData,
   })
 
-  return { isLoading, pool: clone, refetch }
+  return { isLoading: isLoadingTokenPrices || isLoadingPool, pool: clone, refetch }
 }
 
 /*

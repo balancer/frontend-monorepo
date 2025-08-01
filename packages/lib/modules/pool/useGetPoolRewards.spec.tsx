@@ -4,6 +4,7 @@ import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { Pool } from './pool.types'
 import { useGetPoolRewards } from './useGetPoolRewards'
 import { GqlPoolStakingGaugeReward } from '@repo/lib/shared/services/api/generated/graphql'
+import { waitFor } from '@testing-library/react'
 
 function getPoolWithStakingGaugeRewards() {
   const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
@@ -51,9 +52,11 @@ function testUseGetPoolRewards(pool: Pool) {
 }
 
 describe('useGetPoolRewards', () => {
-  test('when pool has BAL rewards', () => {
+  test('when pool has BAL rewards', async () => {
     const pool = getPoolWithStakingGaugeRewards()
     const result = testUseGetPoolRewards(pool)
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     expect(result.current.tokens).toMatchObject([
       {
@@ -68,9 +71,11 @@ describe('useGetPoolRewards', () => {
     expect(result.current.weeklyRewards).toBe(627.6721349308701)
   })
 
-  test('calculates potential weekly yield when', () => {
+  test('calculates potential weekly yield when', async () => {
     const pool = getPoolWithStakingGaugeRewards()
     const result = testUseGetPoolRewards(pool)
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     // When totalUsdValueIn is small enough
     const totalUsdValueIn = '100'
@@ -82,9 +87,11 @@ describe('useGetPoolRewards', () => {
     expect(result.current.calculatePotentialYield(1000000000)).toBe('627.6721349308701')
   })
 
-  test('calculates weeklyRewardsByToken correctly', () => {
+  test('calculates weeklyRewardsByToken correctly', async () => {
     const pool = getPoolWithMultipleStakingGaugeRewards()
     const result = testUseGetPoolRewards(pool)
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     // Check that weeklyRewardsByToken contains the expected token addresses
     expect(Object.keys(result.current.weeklyRewardsByToken)).toContain(
