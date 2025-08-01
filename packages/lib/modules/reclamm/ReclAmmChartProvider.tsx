@@ -104,6 +104,29 @@ export function useReclAmmChartLogic() {
       .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
 
+    // only scale back if token has rate but not an erc4626
+    const tokenA = pool.poolTokens[0]
+    const tokenB = pool.poolTokens[1]
+    const defaultRate = '1'
+    const tokenAHasRate = tokenA.priceRate !== defaultRate
+    const tokenBHasRate = tokenB.priceRate !== defaultRate
+    const shouldScaleBackTokenA = tokenAHasRate && !tokenA.isErc4626
+    const shouldScaleBackTokenB = tokenBHasRate && !tokenB.isErc4626
+    const shouldScaleBackPrices = shouldScaleBackTokenA || shouldScaleBackTokenB
+
+    if (shouldScaleBackPrices) {
+      // to scale back we use price * tokenARate / tokenBRate
+      const tokenARate = shouldScaleBackTokenA ? tokenA.priceRate : defaultRate
+      const tokenBRate = shouldScaleBackTokenB ? tokenB.priceRate : defaultRate
+      const rateProviderScaleBackFactor = bn(tokenARate).div(tokenBRate)
+
+      minPriceValue = rateProviderScaleBackFactor.times(minPriceValue).toNumber()
+      maxPriceValue = rateProviderScaleBackFactor.times(maxPriceValue).toNumber()
+      lowerMarginValue = rateProviderScaleBackFactor.times(lowerMarginValue).toNumber()
+      upperMarginValue = rateProviderScaleBackFactor.times(upperMarginValue).toNumber()
+      currentPriceValue = rateProviderScaleBackFactor.times(currentPriceValue).toNumber()
+    }
+
     if (isReversed) {
       const invert = (value: number) => (value === 0 ? 0 : 1 / value)
 
@@ -111,13 +134,14 @@ export function useReclAmmChartLogic() {
       const invertedMaxPriceValue = invert(minPriceValue)
       const invertedLowerMarginValue = invert(upperMarginValue)
       const invertedUpperMarginValue = invert(lowerMarginValue)
+      const invertedCurrentPriceValue = invert(currentPriceValue)
 
       // Swap min/max and lower/upper
       minPriceValue = invertedMinPriceValue
       maxPriceValue = invertedMaxPriceValue
       lowerMarginValue = invertedLowerMarginValue
       upperMarginValue = invertedUpperMarginValue
-      currentPriceValue = invert(currentPriceValue)
+      currentPriceValue = invertedCurrentPriceValue
     }
 
     const isPoolWithinRange =
