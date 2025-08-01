@@ -12,7 +12,7 @@ export function FeaturedPool1SVG() {
       <g className="path1">
         <path
           d="M16 56.01C16 26.1 39.86 1.78 69.58 1.03c.47-.01.95-.02 1.42-.02s.95.01 1.42.02c38 .75 68.58 31.79 68.58 69.98 0 38.19-30.58 69.23-68.58 69.98 29.72-.75 53.58-25.07 53.58-54.98 0-5.2-.72-10.23-2.07-15-6.4-22.65-26.95-39.36-51.51-39.98-.47-.01-.95-.02-1.42-.02s-.95.01-1.42.02C48.15 31.78 31 49.4 31 71.01c0 21.61 17.15 39.23 38.58 39.98-24.56-.62-45.11-17.33-51.51-39.98-1.35-4.77-2.07-9.8-2.07-15Z"
-          fill="url(#a)"
+          fill="url(#1a)"
           stroke="currentColor"
           strokeWidth=".5"
         />
@@ -20,7 +20,7 @@ export function FeaturedPool1SVG() {
       <g className="path2">
         <path
           d="M126 85.99c0 29.91-23.86 54.23-53.58 54.98-.47.01-.95.02-1.42.02s-.95-.01-1.42-.02C31.58 140.22 1 109.18 1 70.99 1 32.8 31.58 1.76 69.58 1.01 39.86 1.76 16 26.08 16 55.99c0 5.2.72 10.23 2.07 15 6.4 22.65 26.95 39.36 51.51 39.98.47.01.95.02 1.42.02s.95-.01 1.42-.02C93.85 110.22 111 92.6 111 70.99c0-21.61-17.15-39.23-38.58-39.98 24.56.62 45.11 17.33 51.51 39.98 1.35 4.77 2.07 9.8 2.07 15Z"
-          fill="url(#b)"
+          fill="url(#1b)"
           stroke="currentColor"
           strokeWidth=".5"
         />
@@ -28,25 +28,25 @@ export function FeaturedPool1SVG() {
       <defs>
         <linearGradient
           gradientUnits="userSpaceOnUse"
-          id="a"
+          id="1a"
           x1="130.65"
           x2="25.99"
           y1="108.55"
           y2="24.21"
         >
-          <stop stopColor="#C4E8FD" />
-          <stop offset="1" stopColor="#07A5FF" />
+          <stop stopColor="#D1F5EA" />
+          <stop offset="1" stopColor="#23A27A" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
-          id="b"
+          id="1b"
           x1="116.01"
           x2="11.35"
           y1="117.79"
           y2="33.45"
         >
-          <stop stopColor="#EDF2F7" />
-          <stop offset="1" stopColor="#88ABCC" />
+          <stop stopColor="#3D7598" />
+          <stop offset="1" stopColor="#BDD6E5" />
         </linearGradient>
       </defs>
     </svg>

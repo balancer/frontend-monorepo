@@ -1,6 +1,6 @@
 'use client'
 
-import { BoxProps, Card, Box, Text, HStack } from '@chakra-ui/react'
+import { BoxProps, Card, Box, Text, HStack, useColorMode } from '@chakra-ui/react'
 import { FeaturePoolCard } from './FeaturePoolCard'
 import { GetFeaturedPoolsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolCarousel } from './PoolCarousel'
@@ -53,6 +53,8 @@ export function FeaturedPools({
     }
   }
 
+  const { colorMode } = useColorMode()
+
   return (
     <>
       <PoolCarousel
@@ -76,16 +78,20 @@ export function FeaturedPools({
           <Text
             color="font.secondary"
             fontSize="11px"
+            opacity="0.75"
             position="relative"
-            px="4"
-            py="1.5"
-            top="-2px"
+            textShadow={
+              colorMode === 'dark'
+                ? '0px 1px 1px rgba(0, 0, 0, 0.9)'
+                : '0px 1px 1px rgba(0, 0, 0, 0.15)'
+            }
+            top="7px"
             variant="eyebrow"
           >
-            Featured pools
+            New / Trending pools
           </Text>
         </Box>
-        <HStack gap="md" pt="2" w="full">
+        <HStack gap="md" pt="13px" w="full">
           {featuredPools.slice(0, 3).map((featured, index) => {
             return (
               <FeaturePoolCard
