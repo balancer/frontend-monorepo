@@ -91,6 +91,7 @@ export function FeaturedPool2SVG() {
         />
       </g>
       <defs>
+        {/* Top */}
         <linearGradient
           gradientUnits="userSpaceOnUse"
           id="2a"
@@ -99,9 +100,10 @@ export function FeaturedPool2SVG() {
           y1="26.27"
           y2="98.8"
         >
-          <stop stopColor="#FFE8A8" />
-          <stop offset="1" stopColor="#FFBC03" />
+          <stop stopColor="#FFFCCC" />
+          <stop offset="1" stopColor="#FFEE00" />
         </linearGradient>
+        {/* Left */}
         <linearGradient
           gradientUnits="userSpaceOnUse"
           id="2b"
@@ -110,9 +112,10 @@ export function FeaturedPool2SVG() {
           y1="44.37"
           y2="126.22"
         >
-          <stop stopColor="#2AB9F7" />
-          <stop offset="1" stopColor="#A85BF7" />
+          <stop stopColor="#EB8B47" />
+          <stop offset="1" stopColor="#FAE2D1" />
         </linearGradient>
+        {/* Right */}
         <linearGradient
           gradientUnits="userSpaceOnUse"
           id="2c"
@@ -121,8 +124,8 @@ export function FeaturedPool2SVG() {
           y1="116.5"
           y2="108.07"
         >
-          <stop stopColor="#E3F7B9" />
-          <stop offset="1" stopColor="#A4DB2E" />
+          <stop stopColor="#286ABF" />
+          <stop offset="1" stopColor="#D1E1F5" />
         </linearGradient>
       </defs>
     </svg>
