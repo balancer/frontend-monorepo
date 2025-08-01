@@ -15,6 +15,7 @@ import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvid
 import { useQuery } from '@apollo/client'
 import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
@@ -128,16 +129,18 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
-      <DefaultPageContainer py="0" rounded="2xl">
-        <FadeInOnView animateOnce={false}>
-          <Box>
-            {!featuredPoolsLoading && featuredPools.length > 0 && (
-              <FeaturedPools featuredPools={featuredPools} />
-            )}
-            {featuredPoolsLoading && <Skeleton height="200px" width="100%" />}
-          </Box>
-        </FadeInOnView>
-      </DefaultPageContainer>
+      {isBalancer && (
+        <DefaultPageContainer py="0" rounded="2xl">
+          <FadeInOnView animateOnce={false}>
+            <Box>
+              {!featuredPoolsLoading && featuredPools.length > 0 && (
+                <FeaturedPools featuredPools={featuredPools} />
+              )}
+              {featuredPoolsLoading && <Skeleton height="200px" width="100%" />}
+            </Box>
+          </FadeInOnView>
+        </DefaultPageContainer>
+      )}
       <DefaultPageContainer mb="3xl" py="0" rounded="2xl">
         <FeaturedPartners />
       </DefaultPageContainer>
