@@ -10,6 +10,7 @@ import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
 import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useColorMode } from '@chakra-ui/react'
+import { zeroAddress } from 'viem'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -104,6 +105,26 @@ export function useReclAmmChartLogic() {
       .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
 
+    const poolTokenA = pool.poolTokens[0]
+    const poolTokenB = pool.poolTokens[1]
+
+    const rateProviderScaleBackFactor = bn(poolTokenA.priceRate).div(poolTokenB.priceRate)
+
+    const poolHasRateProvider =
+      poolTokenA.priceRateProvider !== zeroAddress || poolTokenB.priceRateProvider !== zeroAddress
+
+    const poolHasErc4626 = poolTokenA.isErc4626 || poolTokenB.isErc4626
+
+    // Naive solution: only scale back if pool has no erc4626. does not handle if one token is erc4626 and the other is not :(
+    if (poolHasRateProvider && !poolHasErc4626) {
+      console.log('scaling back price values...')
+      minPriceValue = rateProviderScaleBackFactor.times(minPriceValue).toNumber()
+      maxPriceValue = rateProviderScaleBackFactor.times(maxPriceValue).toNumber()
+      lowerMarginValue = rateProviderScaleBackFactor.times(lowerMarginValue).toNumber()
+      upperMarginValue = rateProviderScaleBackFactor.times(upperMarginValue).toNumber()
+      currentPriceValue = rateProviderScaleBackFactor.times(currentPriceValue).toNumber()
+    }
+
     if (isReversed) {
       const invert = (value: number) => (value === 0 ? 0 : 1 / value)
 
@@ -111,13 +132,14 @@ export function useReclAmmChartLogic() {
       const invertedMaxPriceValue = invert(minPriceValue)
       const invertedLowerMarginValue = invert(upperMarginValue)
       const invertedUpperMarginValue = invert(lowerMarginValue)
+      const invertedCurrentPriceValue = invert(currentPriceValue)
 
       // Swap min/max and lower/upper
       minPriceValue = invertedMinPriceValue
       maxPriceValue = invertedMaxPriceValue
       lowerMarginValue = invertedLowerMarginValue
       upperMarginValue = invertedUpperMarginValue
-      currentPriceValue = invert(currentPriceValue)
+      currentPriceValue = invertedCurrentPriceValue
     }
 
     const isPoolWithinRange =
