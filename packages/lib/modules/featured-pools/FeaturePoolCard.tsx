@@ -8,11 +8,11 @@ import { VStack, Text, Box, HStack, Image } from '@chakra-ui/react'
 import { poolClickHandler, poolMouseEnterHandler, getPoolTypeLabel } from '../pool/pool.utils'
 import { PoolName } from '../pool/PoolName'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { motion } from 'framer-motion'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo, ReactNode } from 'react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 
 interface Props {
   pool: FeaturedPool
@@ -55,7 +55,6 @@ export function FeaturePoolCard({
   pool,
   chain,
   featuredReason,
-  bgSize = '500px',
   isSmall = false,
   isCarousel = false,
   carouselDirection = 'left',
@@ -188,12 +187,21 @@ export function FeaturePoolCard({
 
         <Box
           _groupHover={{ transformOrigin: '50%', transform: 'scale(1.03)' }}
-          opacity={{ base: '0', md: '1' }}
+          opacity={{ base: '0.5', md: '0.5' }}
           position="relative"
           top="-50%"
           transition="transform 0.2s var(--ease-out-cubic)"
         >
-          <PoolZenGarden repetitions={10} sizePx={bgSize} subdued={isSmall} />
+          <RadialPattern
+            circleCount={9}
+            height={800}
+            innerHeight={200}
+            innerWidth={200}
+            left="calc(50% - 400px)"
+            position="absolute"
+            top="calc(50% - 408px)"
+            width={800}
+          />
         </Box>
       </Box>
     </NoisyCard>
