@@ -23,12 +23,7 @@ export const ProjectConfigBeets: ProjectConfig = {
   options: {
     poolDisplayType: PoolDisplayType.Name,
     hidePoolTags: ['RWA', 'VE8020'],
-    hidePoolTypes: [
-      GqlPoolType.LiquidityBootstrapping,
-      GqlPoolType.CowAmm,
-      GqlPoolType.Fx,
-      GqlPoolType.Reclamm,
-    ],
+    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
     hideProtocolVersion: ['cow'],
     showPoolName: true,
     showVeBal: false,
