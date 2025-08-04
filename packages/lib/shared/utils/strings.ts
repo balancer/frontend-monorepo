@@ -28,7 +28,7 @@ export function isValidTwitterHandle(handle: string): string | true {
   return regex.test(handle) ? true : 'Invalid X / Twitter handle'
 }
 
-export function isValidTelegramHandle(handle: string | undefined): string | true {
+export function isValidTelegramHandle(handle: string): string | true {
   if (!handle) return true
   const regex = /^@[A-Za-z0-9_]{5,32}$/
   return regex.test(handle) ? true : 'Invalid Telegram handle'

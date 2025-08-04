@@ -4,6 +4,7 @@ import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLbpForm } from './LbpFormProvider'
 import { normalizeUrl } from '@repo/lib/shared/utils/urls'
+import { normalizeHandle } from '@repo/lib/shared/utils/links'
 
 export function useLbpMetadata() {
   const [createLbp, { error, reset }] = useMutation(CreateLbpDocument)
@@ -34,9 +35,9 @@ export function useLbpMetadata() {
             description,
             website: normalizeUrl(websiteUrl),
             tokenLogo: normalizeUrl(tokenIconUrl),
-            telegram: telegramHandle,
+            telegram: telegramHandle ? normalizeHandle(telegramHandle) : undefined,
             discord: discordUrl ? normalizeUrl(discordUrl) : undefined,
-            x: xHandle,
+            x: normalizeHandle(xHandle),
           },
         },
       },
