@@ -37,12 +37,7 @@ export function TokenIcon({
   const [hasError, setHasError] = useState(false)
   const { getToken } = useTokens()
 
-  const token = useMemo(() => {
-    if (address && chain) {
-      return getToken(address, chain)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, chain])
+  const token = address && chain ? getToken(address, chain) : undefined
 
   const fallbackSVG = createAvatar(identicon, {
     seed: address || 'unknown',
