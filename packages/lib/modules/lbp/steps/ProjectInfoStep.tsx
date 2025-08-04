@@ -260,7 +260,8 @@ function ProjectXHandle() {
           />
         )}
         rules={{
-          validate: (value: string) => isValidTwitterHandle(normalizeHandle(value)),
+          validate: (value: string | undefined) =>
+            isValidTwitterHandle(normalizeHandle(value || '')),
         }}
       />
     </VStack>
