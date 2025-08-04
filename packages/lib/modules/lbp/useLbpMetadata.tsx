@@ -3,6 +3,7 @@ import { CreateLbpDocument } from '@repo/lib/shared/services/api/generated/graph
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLbpForm } from './LbpFormProvider'
+import { normalizeUrl } from '@repo/lib/shared/utils/urls'
 
 export function useLbpMetadata() {
   const [createLbp, { error, reset }] = useMutation(CreateLbpDocument)
@@ -31,10 +32,10 @@ export function useLbpMetadata() {
           metadata: {
             lbpName: name,
             description,
-            website: websiteUrl,
-            tokenLogo: tokenIconUrl,
+            website: normalizeUrl(websiteUrl),
+            tokenLogo: normalizeUrl(tokenIconUrl),
             telegram: telegramHandle,
-            discord: discordUrl,
+            discord: discordUrl ? normalizeUrl(discordUrl) : undefined,
             x: xHandle,
           },
         },
