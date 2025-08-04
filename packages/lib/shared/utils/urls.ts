@@ -17,10 +17,15 @@ export function isValidUrl(maybeUrl?: string): string | true {
   let url
 
   try {
-    url = new URL(maybeUrl)
+    url = new URL(normalizeUrl(maybeUrl))
   } catch {
     return 'Invalid URL'
   }
 
   return url.protocol === 'http:' || url.protocol === 'https:' ? true : 'Invalid URL'
+}
+
+export function normalizeUrl(url: string) {
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return 'https://' + url
+  return url
 }
