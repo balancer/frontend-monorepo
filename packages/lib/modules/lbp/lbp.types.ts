@@ -21,7 +21,7 @@ export type ProjectInfoForm = {
   description: string
   tokenIconUrl: string
   websiteUrl: string
-  xHandle: string
+  xHandle?: string
   telegramHandle?: string
   discordUrl?: string
   owner: string

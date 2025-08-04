@@ -37,7 +37,7 @@ export function useLbpMetadata() {
             tokenLogo: normalizeUrl(tokenIconUrl),
             telegram: telegramHandle ? normalizeHandle(telegramHandle) : undefined,
             discord: discordUrl ? normalizeUrl(discordUrl) : undefined,
-            x: normalizeHandle(xHandle),
+            x: xHandle ? normalizeHandle(xHandle) : undefined,
           },
         },
       },
