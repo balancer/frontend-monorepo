@@ -26,6 +26,7 @@ import { useDebounce } from 'use-debounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { useCheckImageUrl } from '@repo/lib/shared/hooks/url.hooks'
 import { useEffect } from 'react'
+import { normalizeHandle } from '@repo/lib/shared/utils/links'
 
 export function ProjectInfoStep() {
   const {
@@ -259,7 +260,7 @@ function ProjectXHandle() {
           />
         )}
         rules={{
-          validate: isValidTwitterHandle,
+          validate: (value: string) => isValidTwitterHandle(normalizeHandle(value)),
         }}
       />
     </VStack>
@@ -290,7 +291,8 @@ function ProjectTelegramHandle() {
           />
         )}
         rules={{
-          validate: isValidTelegramHandle,
+          validate: (value: string | undefined) =>
+            isValidTelegramHandle(normalizeHandle(value || '')),
         }}
       />
     </VStack>
