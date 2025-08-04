@@ -344,3 +344,8 @@ export function getRandomInt(min: number, max: number): number {
 export const safeToNumber = (val: string | number | undefined | null): number => {
   return isValidNumber(val) ? toNumber(val) : 0
 }
+
+// take the reciprocal of a number
+export function invert(value: number): number {
+  return value === 0 ? 0 : 1 / value
+}
