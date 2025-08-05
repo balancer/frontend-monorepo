@@ -24,7 +24,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
-  keyValue: number
+  keyValue: string
   veBalBoostMap: Record<string, string>
 }
 

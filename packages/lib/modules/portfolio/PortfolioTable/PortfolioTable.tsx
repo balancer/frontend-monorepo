@@ -150,10 +150,10 @@ export function PortfolioTable() {
                   {...rowProps(options.showVeBal, hasStakingBoost)}
                 />
               )}
-              renderTableRow={({ item, index }) => {
+              renderTableRow={({ item }) => {
                 return (
                   <PortfolioTableRow
-                    keyValue={index}
+                    keyValue={item.id}
                     pool={item}
                     veBalBoostMap={veBalBoostMap}
                     {...rowProps(options.showVeBal, hasStakingBoost)}
