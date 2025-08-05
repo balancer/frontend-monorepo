@@ -11,6 +11,7 @@ import { ProjectedPrice } from './steps/preview/ProjectedPrice'
 import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
+import { Address } from 'viem'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
@@ -55,6 +56,7 @@ export function LbpPreview() {
               </Flex>
               <TokenSummary
                 chain={chain}
+                launchTokenAddress={launchTokenAddress as Address}
                 launchTokenMetadata={launchTokenMetadata}
                 projectInfoForm={projectInfoForm}
               />

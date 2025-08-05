@@ -15,24 +15,34 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { Plus } from 'react-feather'
+import { AlertTriangle, Plus } from 'react-feather'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { ProjectInfoForm } from '../../lbp.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
+import { Address, formatUnits } from 'viem'
+import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
+import { getChainId } from '@repo/lib/config/app.config'
 
 type Props = {
   chain: GqlChain
   projectInfoForm: UseFormReturn<ProjectInfoForm>
+  launchTokenAddress: Address
   launchTokenMetadata: ReturnType<typeof useTokenMetadata>
 }
 
-export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Props) {
+export function TokenSummary({
+  chain,
+  projectInfoForm,
+  launchTokenAddress,
+  launchTokenMetadata,
+}: Props) {
   const tokenIconURL = projectInfoForm.watch('tokenIconUrl')
   const hasIconErrors = projectInfoForm.formState.errors.tokenIconUrl !== undefined
 
@@ -118,12 +128,13 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
               </GridItem>
               <GridItem>
                 <VStack align="start">
-                  <Text fontSize="sm">
+                  <Text color="font.secondary" fontSize="sm">
                     {launchTokenMetadata?.totalSupply
                       ? fNum('token', launchTokenMetadata?.totalSupply)
-                      : '-'}
+                      : '—'}
                   </Text>
-                  <Text fontSize="sm">TBD</Text>
+
+                  <BalanceInfo chain={chain} tokenAddress={launchTokenAddress} />
                 </VStack>
               </GridItem>
             </Grid>
@@ -131,5 +142,45 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
         </Grid>
       </CardBody>
     </Card>
+  )
+}
+
+type BalanceInfoProps = {
+  chain: GqlChain
+  tokenAddress: Address
+}
+
+function BalanceInfo({ chain, tokenAddress }: BalanceInfoProps) {
+  const { balanceData, isLoading: isLoadingBalance } = useUserBalance({
+    chainId: getChainId(chain),
+    token: tokenAddress,
+  })
+
+  return (
+    <>
+      {tokenAddress && !isLoadingBalance && balanceData ? (
+        <HStack>
+          <Text color={balanceData?.value ? 'font.secondary' : 'font.error'} fontSize="sm">
+            {fNum('token', formatUnits(balanceData.value, balanceData.decimals))}
+          </Text>
+          {balanceData.value === 0n && (
+            <Tooltip
+              backgroundColor="#484d57"
+              hasArrow
+              label={`You’ll need some tokens in your wallet in order to seed liquidity
+                      in the pool before the start time of the LBP or it will fail to launch.`}
+              placement="top"
+              textColor="font.secondary"
+            >
+              <AlertTriangle color="#f48975" size="16" />
+            </Tooltip>
+          )}
+        </HStack>
+      ) : (
+        <Text color="font.secondary" fontSize="sm">
+          —
+        </Text>
+      )}
+    </>
   )
 }
