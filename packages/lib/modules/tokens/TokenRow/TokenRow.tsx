@@ -162,7 +162,7 @@ export default function TokenRow({
   customToken,
   customUsdPrice,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
+  const { getToken, usdValueForToken, usdValueForTokenAddress, prices, tokens } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
@@ -200,7 +200,7 @@ export default function TokenRow({
       setAmount(fNum('token', value, { abbreviated }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [value, prices, tokens])
 
   const headingProps = {
     as: 'h6' as const,
