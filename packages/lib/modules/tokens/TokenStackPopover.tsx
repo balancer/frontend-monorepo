@@ -67,7 +67,7 @@ export function TokenStackPopover({
         </PopoverHeader>
         <PopoverBody py="sm">
           <VStack align="flex-start" spacing="xs">
-            {tokens.map(token => {
+            {tokens.map((token, i) => {
               const tokenAddress = token?.address as Address
               const balance = rewardsByToken[tokenAddress] || '0'
 
@@ -76,7 +76,7 @@ export function TokenStackPopover({
                   abbreviated
                   address={tokenAddress}
                   chain={chain}
-                  key={tokenAddress}
+                  key={tokenAddress + i}
                   symbol={token?.symbol}
                   value={balance}
                 />

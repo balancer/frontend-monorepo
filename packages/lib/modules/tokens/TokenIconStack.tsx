@@ -40,7 +40,7 @@ export function TokenIconStack({
             borderColor="background.base"
             borderRadius="100%"
             height={`${size + 4}px`}
-            key={tokenAddress}
+            key={tokenAddress + i}
             ml={i > 0 ? getNestingMargin() : 0}
             width={`${size + 4}px`}
             zIndex={9 - i}
@@ -50,6 +50,7 @@ export function TokenIconStack({
               alt={token?.symbol || tokenAddress}
               chain={chain}
               disablePopover={disablePopover}
+              logoURI={token?.logoURI}
               size={size}
             />
           </Box>
