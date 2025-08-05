@@ -27,6 +27,7 @@ query GetTokens($chains: [GqlChain!]!) {
     isErc4626
     isBufferAllowed
     coingeckoId
+    types
   }
 }
 

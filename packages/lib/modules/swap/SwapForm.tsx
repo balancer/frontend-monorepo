@@ -1,7 +1,7 @@
 'use client'
 
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlTokenType } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanAmount } from '@balancer/sdk'
 import {
   Card,
@@ -212,6 +212,10 @@ export function SwapForm({
   const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
   const isSafeAccount = useIsSafeAccount()
 
+  const swapableTokens = tokens.filter(
+    token => token.types && !token.types.includes(GqlTokenType.Bpt)
+  )
+
   return (
     <FadeInOnView>
       <Center h="full" maxW="lg" mx="auto" position="relative" w="full">
@@ -369,7 +373,7 @@ export function SwapForm({
           onClose={tokenSelectDisclosure.onClose}
           onOpen={tokenSelectDisclosure.onOpen}
           onTokenSelect={handleTokenSelect}
-          tokens={tokens}
+          tokens={swapableTokens}
         />
       )}
       <SwapPreviewModal
