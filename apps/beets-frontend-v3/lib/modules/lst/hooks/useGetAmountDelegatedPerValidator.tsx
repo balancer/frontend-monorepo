@@ -65,12 +65,12 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stakeRequests, isLoading])
 
-  const amountDelegatedPerValidator = validatorIds.map(validatorId => ({
-    validatorId,
-    amountDelegated: amountResults[validatorId]?.result ?? 0n,
-  })).filter(
-    validator => ["13", "14", "24", "29", "30"].includes(validator.validatorId)
-  )
+  const amountDelegatedPerValidator = validatorIds
+    .map(validatorId => ({
+      validatorId,
+      amountDelegated: amountResults[validatorId]?.result ?? 0n,
+    }))
+    .filter(validator => ['13', '14', '24', '29', '30'].includes(validator.validatorId))
 
   function chooseValidatorsForUnstakeAmount(unstakeAmountShares: bigint) {
     const unstakeAmountAssets = (unstakeAmountShares * rate) / 10n ** 18n
