@@ -7,9 +7,12 @@ test('Swap 1 ETH to USDC)', async ({ page }) => {
 
   await impersonate(page, defaultAnvilAccount)
 
-  await page.getByRole('button', { name: 'Select token' }).first().click()
-  await page.getByText('USDC').click()
+  await page.getByRole('button', { name: 'ETH ETH' }).click()
+  await page.getByText('Wrapped Ether').click()
 
+  await page.getByRole('button', { name: 'Select token' }).last().click()
+
+  await page.getByText('USDCUSDC').click()
   await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('0.1')
 
   await page.getByRole('button', { name: 'Next', exact: true }).click()
