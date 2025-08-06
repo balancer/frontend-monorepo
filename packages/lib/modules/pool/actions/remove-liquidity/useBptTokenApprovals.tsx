@@ -7,6 +7,7 @@ import { Address } from 'viem'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { SdkQueryRemoveLiquidityOutput } from './remove-liquidity.types'
 import { NestedProportionalQueryRemoveLiquidityOutput } from './handlers/NestedProportionalRemoveLiquidity.handler'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 /*
   Only used by useRemoveLiquiditySteps to get the BPT approval when removing V3 liquidity when signatures are disabled (or when using a Safe account)
@@ -16,6 +17,7 @@ export function useBptTokenApprovals(
   simulationQuery: RemoveLiquiditySimulationQueryResult
 ): { isLoadingTokenApprovalSteps: boolean; tokenApprovalSteps: TransactionStep[] } {
   const isSafeAccount = useIsSafeAccount()
+  const { shouldUseSignatures } = useUserSettings()
   const { spenderAddress, rawAmount } = getSimulationQueryData(simulationQuery)
 
   const bptAmount: RawAmount = {
@@ -30,7 +32,7 @@ export function useBptTokenApprovals(
       chain: pool.chain,
       approvalAmounts: [bptAmount],
       actionType: 'RemoveLiquidity',
-      enabled: isSafeAccount,
+      enabled: !shouldUseSignatures || isSafeAccount,
     })
 
   return { isLoadingTokenApprovalSteps, tokenApprovalSteps }

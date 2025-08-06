@@ -14,7 +14,7 @@ describe('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
   const handler = selectAddLiquidityHandler(v3Pool) as BoostedUnbalancedAddLiquidityV3Handler
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '1', tokenAddress: usdcAddress, symbol: 'USDC' },
+    { humanAmount: '0', tokenAddress: usdcAddress, symbol: 'USDC' },
     { humanAmount: '1', tokenAddress: usdtAddress, symbol: 'USDT' },
   ]
 
