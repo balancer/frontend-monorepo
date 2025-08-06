@@ -1,3 +1,5 @@
+import { hasWhitespace } from './strings'
+
 export function getBaseUrl() {
   if (typeof window === 'undefined') {
     return 'http://localhost:3000'
@@ -13,6 +15,7 @@ export function getBaseUrl() {
 
 export function isValidUrl(maybeUrl?: string): string | true {
   if (!maybeUrl) return true
+  if (hasWhitespace(maybeUrl)) return 'URLs containing whitespace are not allowed'
 
   let url
 

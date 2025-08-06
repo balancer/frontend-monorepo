@@ -33,3 +33,7 @@ export function isValidTelegramHandle(handle: string): string | true {
   const regex = /^@[A-Za-z0-9_]{5,32}$/
   return regex.test(handle) ? true : 'Invalid Telegram handle'
 }
+
+export function hasWhitespace(s: string) {
+  return /\s/g.test(s)
+}

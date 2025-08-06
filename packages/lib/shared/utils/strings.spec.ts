@@ -1,4 +1,4 @@
-import { isValidTelegramHandle, isValidTwitterHandle } from './strings'
+import { hasWhitespace, isValidTelegramHandle, isValidTwitterHandle } from './strings'
 
 describe('Twitter handle validation', () => {
   it('should allow no handle', () => {
@@ -53,5 +53,16 @@ describe('Telegram handle validation', () => {
 
   it('should not allow invalid chars', () => {
     expect(isValidTelegramHandle('@a?')).not.toBe(true)
+  })
+})
+
+describe('Whitespace check', () => {
+  it('should return true if string has whitespace', () => {
+    expect(hasWhitespace('a b')).toBe(true)
+    expect(hasWhitespace('a\tb')).toBe(true)
+  })
+
+  it('should return false for strings without whitespace', () => {
+    expect(hasWhitespace('abc')).toBe(false)
   })
 })
