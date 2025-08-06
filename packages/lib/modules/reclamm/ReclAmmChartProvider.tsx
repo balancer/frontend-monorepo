@@ -130,10 +130,12 @@ export function useReclAmmChartLogic() {
 
     if (isReversed) {
       // Swap min/max and lower/upper
+      const nonReversedMinPrice = minPriceValue
       minPriceValue = invert(maxPriceValue)
-      maxPriceValue = invert(minPriceValue)
+      maxPriceValue = invert(nonReversedMinPrice)
+      const nonReversedLowerMargin = lowerMarginValue
       lowerMarginValue = invert(upperMarginValue)
-      upperMarginValue = invert(lowerMarginValue)
+      upperMarginValue = invert(nonReversedLowerMargin)
       currentPriceValue = invert(currentPriceValue)
     }
 
