@@ -130,11 +130,17 @@ export function useReclAmmChartLogic() {
 
     if (isReversed) {
       // Swap min/max and lower/upper
-      minPriceValue = invert(maxPriceValue)
-      maxPriceValue = invert(minPriceValue)
-      lowerMarginValue = invert(upperMarginValue)
-      upperMarginValue = invert(lowerMarginValue)
-      currentPriceValue = invert(currentPriceValue)
+      const minPriceInverted = invert(maxPriceValue)
+      const maxPriceInverted = invert(minPriceValue)
+      const lowerMarginInverted = invert(upperMarginValue)
+      const upperMarginInverted = invert(lowerMarginValue)
+      const currentPriceInverted = invert(currentPriceValue)
+
+      minPriceValue = minPriceInverted
+      maxPriceValue = maxPriceInverted
+      lowerMarginValue = lowerMarginInverted
+      upperMarginValue = upperMarginInverted
+      currentPriceValue = currentPriceInverted
     }
 
     const isPoolWithinRange =
