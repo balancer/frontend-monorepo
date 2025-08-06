@@ -40,12 +40,26 @@ pnpm dev:bal
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## dev with turbopack
+## Developing on a local fork
 
-By default, we use turbo mode for better DX with faster compile times and faster HMR:
+1. Create a `.env.local` file in the root of project:
 
-```bash
-pnpm dev
+```
+ETHEREUM_RPC_URL=xxx
+BASE_RPC_URL=xxx
+GNOSIS_RPC_URL=xxx
+```
+
+2. Start local anvil fork
+
+```
+make fork-ethereum
+```
+
+2. Run the development server in fork mode:
+
+```
+pnpm dev:bal:fork
 ```
 
 ### Sentry does not work with turbopack yet
