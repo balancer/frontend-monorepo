@@ -1,4 +1,4 @@
-import { impersonate, setForkBalances } from '@/helpers/e2e.helpers'
+import { impersonate } from '@/helpers/e2e.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
