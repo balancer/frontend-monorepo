@@ -122,7 +122,7 @@ export function SmartCircularImage({
     return (
       <Box {...containerProps} bg="transparent" overflow="visible">
         <NextImage
-          alt={alt}
+          alt={alt || 'unknown'}
           fill
           src={src}
           style={{
@@ -137,7 +137,7 @@ export function SmartCircularImage({
     return (
       <Box {...containerProps} overflow="hidden">
         <NextImage
-          alt={alt}
+          alt={alt || 'unknown'}
           fill
           src={src}
           style={{
