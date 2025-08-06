@@ -23,13 +23,15 @@ export default function LstProvidersLayout({ children }: PropsWithChildren) {
 
   return (
     <TransactionStateProvider>
-      <TokenBalancesProvider initTokens={stakingTokens}>
-        <TokenInputsValidationProvider>
-          <LstProvider>
-            <PriceImpactProvider>{children}</PriceImpactProvider>
-          </LstProvider>
-        </TokenInputsValidationProvider>
-      </TokenBalancesProvider>
+      {stakingTokens.length > 0 && (
+        <TokenBalancesProvider initTokens={stakingTokens}>
+          <TokenInputsValidationProvider>
+            <LstProvider>
+              <PriceImpactProvider>{children}</PriceImpactProvider>
+            </LstProvider>
+          </TokenInputsValidationProvider>
+        </TokenBalancesProvider>
+      )}
     </TransactionStateProvider>
   )
 }
