@@ -56,7 +56,7 @@ GNOSIS_RPC_URL=xxx
 make fork-ethereum
 ```
 
-2. Run the development server in fork mode:
+3. Run the development server in fork mode:
 
 ```
 pnpm dev:bal:fork
