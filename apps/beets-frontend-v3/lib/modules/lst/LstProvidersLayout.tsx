@@ -10,7 +10,7 @@ import { LstProvider } from './LstProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
 export default function LstProvidersLayout({ children }: PropsWithChildren) {
-  const { tokens } = useTokens()
+  const { tokens, isLoadingTokens } = useTokens()
 
   const stakingTokens = tokens.filter(
     t =>
@@ -19,7 +19,7 @@ export default function LstProvidersLayout({ children }: PropsWithChildren) {
       t.address === sonicNetworkConfig.tokens.stakedAsset?.address
   )
 
-  if (stakingTokens.length === 0) throw new Error('Staking tokens not found')
+  if (!isLoadingTokens && stakingTokens.length === 0) throw new Error('Staking tokens not found')
 
   return (
     <TransactionStateProvider>
