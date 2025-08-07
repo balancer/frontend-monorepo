@@ -13,6 +13,7 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { memo, ReactNode } from 'react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
+import { usePoolTextures } from '@repo/lib/shared/components/imgs/FeaturedPoolSvgs'
 
 interface Props {
   pool: FeaturedPool
@@ -62,6 +63,7 @@ export function FeaturePoolCard({
   graphic,
 }: Props) {
   const router = useRouter()
+  const { rockTexture } = usePoolTextures()
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
@@ -138,6 +140,7 @@ export function FeaturePoolCard({
                     transform: 'translateX(-50%, -50%) scale(1.5)',
                   }}
                   background="background.level2"
+                  backgroundImage={`url(${rockTexture})`}
                   height="44px"
                   left="50%"
                   position="absolute"
