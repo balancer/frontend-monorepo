@@ -46,14 +46,36 @@ pnpm build
 
 ### Testing
 
-To test all apps and packages, run:
+To run unit tests:
 
 ```
 pnpm test:unit
-// or
+```
+
+To run integration tests:
+
+```
 pnpm test:integration
-// or
-pnpm test:e2e
+```
+
+To run e2e tests with playwright UI:
+
+1. Start a local anvil fork:
+
+```
+make fork-ethereum
+```
+
+2. Start the local development server in fork mode:
+
+```
+pnpm dev:bal:fork
+```
+
+3. Start the playwright UI:
+
+```
+pnpm test:e2e:dev:ui
 ```
 
 ### Install a package
