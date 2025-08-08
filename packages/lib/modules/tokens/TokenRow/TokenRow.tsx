@@ -29,6 +29,8 @@ import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
 import { ApiToken, CustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
+import { AlertTriangle } from 'react-feather'
+import { Tooltip } from '@chakra-ui/react'
 
 export type TokenInfoProps = {
   address: Address
@@ -216,6 +218,13 @@ export default function TokenRow({
     variant: 'secondary',
   }
 
+  console.log('showZeroAmountAsDash', showZeroAmountAsDash)
+  console.log('isZero(usdValue)', isZero(usdValue ?? '0'))
+  console.log('usdValue', usdValue)
+
+  const isTokenPriceMissing = showZeroAmountAsDash && usdValue && isZero(usdValue)
+  const isAnyTokenPriceMissing = true
+
   return (
     <VStack align="start" spacing="md" w="full">
       {label && typeof label === 'string' ? <Text color="grayText">{label}</Text> : label}
@@ -240,9 +249,11 @@ export default function TokenRow({
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
                 <Text {...subTextProps}>
-                  {showZeroAmountAsDash && usdValue && isZero(usdValue)
-                    ? '-'
-                    : toCurrency(usdValue ?? '0', { abbreviated })}
+                  {isTokenPriceMissing ? (
+                    <MissingTokenPriceWarning message="The price of this token currently cannot be accessed. This may be due to our pricing provider, Coingecko, being down or not knowing it." />
+                  ) : (
+                    toCurrency(usdValue ?? '0', { abbreviated })
+                  )}
                 </Text>
               </>
             )}
@@ -257,7 +268,11 @@ export default function TokenRow({
               ) : (
                 <>
                   <Heading {...headingProps}>
-                    {fNum('weight', actualWeight, { abbreviated: false })}
+                    {isAnyTokenPriceMissing ? (
+                      <MissingTokenPriceWarning message="Current weight percentages cannot be calculated since the price of one or more tokens are unknown." />
+                    ) : (
+                      fNum('weight', actualWeight, { abbreviated: false })
+                    )}
                   </Heading>
                   <HStack align="center" spacing="xs">
                     {targetWeight ? (
@@ -324,5 +339,16 @@ export default function TokenRow({
         </HStack>
       </HStack>
     </VStack>
+  )
+}
+
+function MissingTokenPriceWarning({ message }: { message: string }) {
+  return (
+    <HStack color="font.warning" spacing="xs">
+      <Text color="font.warning">—</Text>
+      <Tooltip label={message} placement="top">
+        <AlertTriangle size={16} />
+      </Tooltip>
+    </HStack>
   )
 }

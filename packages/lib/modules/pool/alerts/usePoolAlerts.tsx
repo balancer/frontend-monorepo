@@ -19,6 +19,7 @@ import { BalAlertProps } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useHook } from '../../hooks/useHook'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { Address } from 'viem'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 export type PoolAlert = {
   identifier: string
@@ -30,6 +31,7 @@ export function usePoolAlerts(pool: Pool) {
   const [poolAlerts, setPoolAlerts] = useState<PoolAlert[]>([])
   const { hooks } = useHook(pool)
   const poolMetadata = usePoolMetadata(pool)
+  const { priceFor } = useTokens()
 
   const getNetworkPoolAlerts = (pool: Pool): PoolAlert[] => {
     const networkPoolsIssues = getNetworkConfig(pool.chain).pools?.issues
@@ -68,6 +70,19 @@ export function usePoolAlerts(pool: Pool) {
     const hook = pool.hook
 
     const alerts: PoolAlert[] = []
+
+    const tokensWithoutPrice = poolTokens
+      .filter(token => !priceFor(token.address, pool.chain))
+      .map(token => token.symbol)
+
+    if (tokensWithoutPrice.length > 0) {
+      alerts.push({
+        identifier: 'tokensWithoutPrice',
+        content: `This amount does not include the value of ${tokensWithoutPrice.join(', ')} tokens since the current price cannot be accessed.`,
+        status: 'warning',
+        isSoftWarning: false,
+      })
+    }
 
     poolTokens?.forEach(token => {
       if (isV2Pool(pool) && !token.isAllowed) {

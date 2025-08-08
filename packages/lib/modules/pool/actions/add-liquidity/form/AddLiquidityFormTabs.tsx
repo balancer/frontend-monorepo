@@ -23,50 +23,65 @@ const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 function PoolWeightsInfo() {
   const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
 
-  return (
-    <BalAlert
-      content={
-        <BalAlertContent
-          description={
-            <Box
-              as="span"
-              color="black"
-              fontSize="sm"
-              fontWeight="medium"
-              sx={{ textWrap: 'balance' }}
-            >
-              Proportional adds avoid price impact by matching the current ratio of each token's USD
-              value within the pool:
-            </Box>
-          }
-          forceColumnMode
-        >
-          <UnorderedList>
-            <ListItem
-              color="font.black"
-              fontSize="sm"
-              fontWeight="medium"
-              position="relative"
-              top="-4px"
-            >
-              {compositionTokens
-                .map(
-                  token =>
-                    `${token.symbol}: ${fNum('weight', poolTokensWithActualWeights[token.address], {
-                      abbreviated: false,
-                    })}`
-                )
-                .join(', ')}
-            </ListItem>
-          </UnorderedList>
-        </BalAlertContent>
-      }
-      mb="sm"
-      p="sm"
-      pb="xxs !important"
-      status="info"
-    />
-  )
+  const isAnyTokenPriceMissing = true
+
+  if (isAnyTokenPriceMissing) {
+    return (
+      <BalAlert
+        content={`Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool. However, for some reason, the price of {LIQD} currently cannot be accessed. This may be due to the pricing provider, Coingecko, being down or not knowing one of the tokens. Only proceed if you know exactly what you are doing.`}
+        status="warning"
+      />
+    )
+  } else {
+    return (
+      <BalAlert
+        content={
+          <BalAlertContent
+            description={
+              <Box
+                as="span"
+                color="black"
+                fontSize="sm"
+                fontWeight="medium"
+                sx={{ textWrap: 'balance' }}
+              >
+                Proportional adds avoid price impact by matching the current ratio of each token's
+                USD value within the pool:
+              </Box>
+            }
+            forceColumnMode
+          >
+            <UnorderedList>
+              <ListItem
+                color="font.black"
+                fontSize="sm"
+                fontWeight="medium"
+                position="relative"
+                top="-4px"
+              >
+                {compositionTokens
+                  .map(
+                    token =>
+                      `${token.symbol}: ${fNum(
+                        'weight',
+                        poolTokensWithActualWeights[token.address],
+                        {
+                          abbreviated: false,
+                        }
+                      )}`
+                  )
+                  .join(', ')}
+              </ListItem>
+            </UnorderedList>
+          </BalAlertContent>
+        }
+        mb="sm"
+        p="sm"
+        pb="xxs !important"
+        status="info"
+      />
+    )
+  }
 }
 
 function OutOfRangeWarning() {

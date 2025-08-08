@@ -10,6 +10,7 @@ import { useGetPoolRewards } from '../../../useGetPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { PoolTotalLiquidityValue } from '../../PoolTotalLiquidityValue'
 
 type PoolStatsValues = {
   totalLiquidity: string
@@ -47,7 +48,7 @@ export function PoolSnapshotValues() {
             TVL
           </Text>
           {poolStatsValues ? (
-            <Heading size="h4">{poolStatsValues.totalLiquidity}</Heading>
+            <PoolTotalLiquidityValue totalLiquidity={poolStatsValues.totalLiquidity} />
           ) : (
             <Skeleton height="28px" w="100px" />
           )}
