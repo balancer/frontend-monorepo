@@ -1,4 +1,14 @@
-import { Box, Grid, GridItem, GridProps, HStack, Text, Image } from '@chakra-ui/react'
+import {
+  Box,
+  Grid,
+  GridItem,
+  GridProps,
+  HStack,
+  Text,
+  Image,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react'
 import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -17,6 +27,8 @@ import { isDev, isStaging } from '@repo/lib/config/app.config'
 import { isAfter, secondsToMilliseconds } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
+import { usePoolTags } from '../../tags/PoolTagsProvider'
+import { PoolTag } from '../../tags/getPoolTags'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -37,6 +49,9 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
   const hasPoints = pool.tags?.some(tag => tag === 'POINTS')
 
   const isV3LBP = isV3Pool(pool) && isLiquidityBootstrapping(pool.type)
+
+  const { getPoolTags } = usePoolTags()
+  const poolTags = getPoolTags(pool)
 
   return (
     <FadeInOnView>
@@ -109,13 +124,20 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                   textProps={{ fontWeight: 'medium', textAlign: 'right' }}
                 />
                 {hasPoints && (
-                  <Image
-                    alt="points"
-                    h="15px"
-                    ml="0.5"
-                    src="/images/icons/pool-points.svg"
-                    w="10px"
-                  />
+                  <Tooltip
+                    backgroundColor="background.level4"
+                    hasArrow
+                    label={<PointsInfo tags={poolTags} />}
+                    textColor="font.secondary"
+                  >
+                    <Image
+                      alt="points"
+                      h="15px"
+                      ml="0.5"
+                      src="/images/icons/pool-points.svg"
+                      w="10px"
+                    />
+                  </Tooltip>
                 )}
               </HStack>
             </GridItem>
@@ -154,4 +176,23 @@ function lbpTooltipText(pool: PoolListItem) {
   }
 
   return ''
+}
+
+function PointsInfo({ tags }: { tags: PoolTag[] }) {
+  const points = tags.filter(tag => tag.id.startsWith('points_'))
+
+  return (
+    <VStack>
+      {points.map(item => (
+        <HStack key={item.id}>
+          <Image alt={item.name} h={4} src={item.iconUrl} w={4} />
+          <Text color="font.secondary">{`${item.name} ${item.value ? ' - ' + formatPointsValue(item.value) : ''}`}</Text>
+        </HStack>
+      ))}
+    </VStack>
+  )
+}
+
+function formatPointsValue(value: string) {
+  return value + (!value.endsWith('x') ? 'x' : '')
 }

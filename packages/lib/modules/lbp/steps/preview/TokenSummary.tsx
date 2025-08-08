@@ -165,7 +165,7 @@ function BalanceInfo({ chain, tokenAddress }: BalanceInfoProps) {
           </Text>
           {balanceData.value === 0n && (
             <Tooltip
-              backgroundColor="#484d57"
+              backgroundColor="background.level4"
               hasArrow
               label={`You’ll need some tokens in your wallet in order to seed liquidity
                       in the pool before the start time of the LBP or it will fail to launch.`}
