@@ -132,11 +132,9 @@ export function PoolComposition() {
     if (protocolNames.length === 1) protocols = protocolNames[0]
     if (protocolNames.length > 1)
       protocols =
-        protocolNames.slice(0, -1).join(', ') +
-        `${protocolNames.length > 2 ? ',' : ''} and ` +
-        protocolNames[protocolNames.length - 1]
+        protocolNames.slice(0, -1).join(', ') + ` and ` + protocolNames[protocolNames.length - 1]
 
-    return `This Boosted pool uses wrapped ${protocols} tokens to generate yield from lending on ${protocolNames.length === 1 ? 'that' : 'those'} protocol. This results in continuous appreciation of the pool's total value over time.`
+    return `This Boosted pool uses wrapped ${protocols} tokens to generate yield from lending on ${protocolNames.length === 1 ? 'that protocol' : 'those protocols'}. This results in continuous appreciation of the pool's total value over time.`
   }
 
   useLayoutEffect(() => {
