@@ -2,7 +2,7 @@
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
-import { Pool } from '../pool.types'
+import { Pool, PoolListItem } from '../pool.types'
 import { PoolTag } from './getPoolTags'
 
 export type UsePoolTagsResult = ReturnType<typeof usePoolTagsLogic>
@@ -11,7 +11,7 @@ export const PoolTagsContext = createContext<UsePoolTagsResult | null>(null)
 export function usePoolTagsLogic(tags: PoolTag[] | undefined) {
   const hasTags = !!tags
 
-  function getPoolTags(pool: Pool): PoolTag[] {
+  function getPoolTags(pool: Pool | PoolListItem): PoolTag[] {
     if (!tags) return []
     return tags.filter(
       _tag => pool.tags?.map(tag => tag?.toLowerCase()).includes(_tag.id) && _tag.id !== 'points' // remove 'points' tag as that is only used on the pool list page
