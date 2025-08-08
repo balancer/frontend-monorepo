@@ -58,13 +58,5 @@ export function useCurrency() {
     return withSymbol ? symbol + formattedAmount : formattedAmount
   }
 
-  // Formats currency balance with en-dash for zero values
-  function formatCurrencyBalance(usdVal: Numberish, options: CurrencyOpts = {}): string {
-    if (isZero(usdVal)) {
-      return ZERO_VALUE_DASH
-    }
-    return toCurrency(usdVal, options)
-  }
-
-  return { toCurrency, formatCurrency, parseCurrency, formatCurrencyBalance }
+  return { toCurrency, formatCurrency, parseCurrency }
 }
