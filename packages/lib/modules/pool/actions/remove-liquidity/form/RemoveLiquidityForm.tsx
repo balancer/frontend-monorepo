@@ -45,6 +45,7 @@ import { SettingsAlert } from '@repo/lib/modules/user/settings/SettingsAlert'
 import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
@@ -153,6 +154,11 @@ export function RemoveLiquidityForm() {
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
+          <BalAlert
+            content={`The price of {LIQD} currently cannot be accessed. This may be due to the pricing provider, Coingecko, being down or not knowing one of the tokens. Only interact with this pool if you know exactly what you are doing.`}
+            mb="sm"
+            status="warning"
+          />
           <VStack align="start" spacing="md">
             <SafeAppAlert />
             {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (
