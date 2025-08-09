@@ -179,6 +179,7 @@ export function FeaturePoolCard({
                   MemoizedMainAprTooltip={MemoizedMainAprTooltip}
                   noOfLines={1}
                   pool={pool}
+                  showUnderlying={true}
                 />
               </HStack>
               <Text fontSize="sm" fontWeight="medium" mb="0.5" variant="secondary">
