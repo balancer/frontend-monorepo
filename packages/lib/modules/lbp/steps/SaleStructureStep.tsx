@@ -174,8 +174,9 @@ export function SaleStructureStep() {
                 Seed initial pool liquidity
               </Heading>
               <Text color="font.secondary">
-                The initial seed amounts and ratio set the starting price, projected market cap and
-                price curve.
+                The initial seed amounts and their ratio set the starting price, projected market
+                cap and price curve. The stats and charts in the preview show the impact of your
+                choices.
               </Text>
               {saleStart && isSaleStartValid(saleStart) && (
                 <Alert
@@ -290,6 +291,7 @@ function LaunchTokenAddressInput({
           render={({ field }) => (
             <InputWithError
               error={errors.launchTokenAddress?.message}
+              info="First create the token on the chosen network, if you haven't already."
               isDisabled={locked}
               isInvalid={!!errors.launchTokenAddress}
               onChange={e => field.onChange(e.target.value)}
@@ -725,6 +727,9 @@ function CollateralTokenAmountInput({
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
+      <Text fontSize="sm" pt="xs" variant="secondary">
+        Add $5k+ of the collateral token to ensure a smooth start.
+      </Text>
       {errors.collateralTokenAmount && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full" whiteSpace="pre-wrap">
           {errors.collateralTokenAmount.message}
