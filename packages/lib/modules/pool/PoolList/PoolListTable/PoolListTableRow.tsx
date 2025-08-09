@@ -185,7 +185,7 @@ function PointsInfo({ tags }: { tags: PoolTag[] }) {
     <VStack>
       {points.map(item => (
         <HStack key={item.id}>
-          <Image alt={item.name} h={4} src={item.iconUrl} w={4} />
+          <Image alt={item.name} borderRadius="full" h={4} src={item.iconUrl} w={4} />
           <Text color="font.secondary">{`${item.name} ${item.value ? ' - ' + formatPointsValue(item.value) : ''}`}</Text>
         </HStack>
       ))}
