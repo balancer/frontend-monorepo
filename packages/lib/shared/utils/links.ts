@@ -7,3 +7,9 @@ export function getDiscordLink() {
 
   return socialLinks.find(link => link.iconType === 'discord')?.href
 }
+
+export function normalizeHandle(handle: string) {
+  if (!handle) return ''
+  if (!handle.startsWith('@')) return '@' + handle
+  return handle
+}
