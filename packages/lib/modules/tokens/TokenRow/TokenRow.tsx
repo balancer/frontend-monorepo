@@ -31,6 +31,7 @@ import { ApiToken, CustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 import { AlertTriangle } from 'react-feather'
 import { Tooltip } from '@chakra-ui/react'
+import { usePoolTokenPriceWarnings } from '../../pool/usePoolTokenPriceWarnings'
 
 export type TokenInfoProps = {
   address: Address
@@ -218,12 +219,8 @@ export default function TokenRow({
     variant: 'secondary',
   }
 
-  console.log('showZeroAmountAsDash', showZeroAmountAsDash)
-  console.log('isZero(usdValue)', isZero(usdValue ?? '0'))
-  console.log('usdValue', usdValue)
-
+  const { isAnyTokenWithoutPrice, tokenPriceTip } = usePoolTokenPriceWarnings()
   const isTokenPriceMissing = showZeroAmountAsDash && usdValue && isZero(usdValue)
-  const isAnyTokenPriceMissing = true
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -250,7 +247,7 @@ export default function TokenRow({
                 </Heading>
                 <Text {...subTextProps}>
                   {isTokenPriceMissing ? (
-                    <MissingTokenPriceWarning message="The price of this token currently cannot be accessed. This may be due to our pricing provider, Coingecko, being down or not knowing it." />
+                    <MissingTokenPriceWarning message={tokenPriceTip} />
                   ) : (
                     toCurrency(usdValue ?? '0', { abbreviated })
                   )}
@@ -268,7 +265,7 @@ export default function TokenRow({
               ) : (
                 <>
                   <Heading {...headingProps}>
-                    {isAnyTokenPriceMissing ? (
+                    {isAnyTokenWithoutPrice ? (
                       <MissingTokenPriceWarning message="Current weight percentages cannot be calculated since the price of one or more tokens are unknown." />
                     ) : (
                       fNum('weight', actualWeight, { abbreviated: false })

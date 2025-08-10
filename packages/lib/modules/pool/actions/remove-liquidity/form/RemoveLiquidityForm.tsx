@@ -46,6 +46,7 @@ import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWal
 import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
@@ -144,6 +145,8 @@ export function RemoveLiquidityForm() {
   const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
   const isSafeAccount = useIsSafeAccount()
 
+  const { isAnyTokenWithoutPrice, removeLiquidityWarning } = usePoolTokenPriceWarnings()
+
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
@@ -154,11 +157,9 @@ export function RemoveLiquidityForm() {
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
-          <BalAlert
-            content={`The price of {LIQD} currently cannot be accessed. This may be due to the pricing provider, Coingecko, being down or not knowing one of the tokens. Only interact with this pool if you know exactly what you are doing.`}
-            mb="sm"
-            status="warning"
-          />
+          {isAnyTokenWithoutPrice && (
+            <BalAlert content={removeLiquidityWarning} mb="sm" status="warning" />
+          )}
           <VStack align="start" spacing="md">
             <SafeAppAlert />
             {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (

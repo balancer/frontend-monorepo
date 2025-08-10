@@ -17,21 +17,16 @@ import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWith
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
+import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 function PoolWeightsInfo() {
   const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
+  const { isAnyTokenWithoutPrice, addLiquidityWarning } = usePoolTokenPriceWarnings()
 
-  const isAnyTokenPriceMissing = true
-
-  if (isAnyTokenPriceMissing) {
-    return (
-      <BalAlert
-        content={`Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool. However, for some reason, the price of {LIQD} currently cannot be accessed. This may be due to the pricing provider, Coingecko, being down or not knowing one of the tokens. Only proceed if you know exactly what you are doing.`}
-        status="warning"
-      />
-    )
+  if (isAnyTokenWithoutPrice) {
+    return <BalAlert content={addLiquidityWarning} status="warning" />
   } else {
     return (
       <BalAlert
