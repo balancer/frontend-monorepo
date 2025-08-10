@@ -54,15 +54,14 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
           </Heading>
         </VStack>
         <VStack alignItems="flex-end">
-          <Heading fontWeight="bold" size="h5">
-            {totalLiquidity ? (
-              <PoolTotalLiquidityValue
-                totalLiquidity={toCurrency(totalLiquidity, { abbreviated: false })}
-              />
-            ) : (
-              <Skeleton height="24px" w="75px" />
-            )}
-          </Heading>
+          {totalLiquidity ? (
+            <PoolTotalLiquidityValue
+              size="h5"
+              totalLiquidity={toCurrency(totalLiquidity, { abbreviated: false })}
+            />
+          ) : (
+            <Skeleton height="24px" w="75px" />
+          )}
         </VStack>
       </HStack>
       <Divider />

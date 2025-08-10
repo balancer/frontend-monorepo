@@ -48,7 +48,7 @@ export function PoolSnapshotValues() {
             TVL
           </Text>
           {poolStatsValues ? (
-            <PoolTotalLiquidityValue totalLiquidity={poolStatsValues.totalLiquidity} />
+            <PoolTotalLiquidityValue size="h4" totalLiquidity={poolStatsValues.totalLiquidity} />
           ) : (
             <Skeleton height="28px" w="100px" />
           )}
