@@ -31,7 +31,7 @@ import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
 import { ArrowUpRight } from 'react-feather'
 import { PoolCompositionChart } from './PoolCompositionChart'
-import { PoolTotalLiquidityValue } from './PoolTotalLiquidityValue'
+import { PoolTotalLiquidityDisplay } from './PoolTotalLiquidityDisplay'
 import { formatStringsToSentenceList } from '../usePoolTokenPriceWarnings'
 
 type CardContentProps = {
@@ -55,7 +55,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
         </VStack>
         <VStack alignItems="flex-end">
           {totalLiquidity ? (
-            <PoolTotalLiquidityValue
+            <PoolTotalLiquidityDisplay
               size="h5"
               totalLiquidity={toCurrency(totalLiquidity, { abbreviated: false })}
             />
