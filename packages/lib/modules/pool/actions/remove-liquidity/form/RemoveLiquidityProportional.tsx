@@ -60,6 +60,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
     }
 
     const wrappedAndUnderlying = getWrappedAndUnderlyingTokenFn(token, pool, () => undefined)()
+
     if (wrappedAndUnderlying) {
       return () => {
         setWrappedAndUnderlying(wrappedAndUnderlying)
