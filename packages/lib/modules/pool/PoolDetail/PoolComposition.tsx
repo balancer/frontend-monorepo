@@ -31,7 +31,8 @@ import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
 import { ArrowUpRight } from 'react-feather'
 import { PoolCompositionChart } from './PoolCompositionChart'
-import { Erc4626Metadata } from '../metadata/getErc4626Metadata'
+import { PoolTotalLiquidityDisplay } from './PoolTotalLiquidityDisplay'
+import { formatStringsToSentenceList } from '../usePoolTokenPriceWarnings'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -53,13 +54,14 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
           </Heading>
         </VStack>
         <VStack alignItems="flex-end">
-          <Heading fontWeight="bold" size="h5">
-            {totalLiquidity ? (
-              toCurrency(totalLiquidity, { abbreviated: false })
-            ) : (
-              <Skeleton height="24px" w="75px" />
-            )}
-          </Heading>
+          {totalLiquidity ? (
+            <PoolTotalLiquidityDisplay
+              size="h5"
+              totalLiquidity={toCurrency(totalLiquidity, { abbreviated: false })}
+            />
+          ) : (
+            <Skeleton height="24px" w="75px" />
+          )}
         </VStack>
       </HStack>
       <Divider />
@@ -74,6 +76,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                 address={poolToken.address as Address}
                 chain={chain}
                 pool={pool}
+                showZeroAmountAsDash={true}
                 targetWeight={poolToken.weight || undefined}
                 value={poolToken.balance}
                 {...(poolToken.hasNestedPool && {
@@ -125,17 +128,9 @@ export function PoolComposition() {
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
   const erc4626Metadata = getErc4626Metadata(pool)
 
-  function getBoostedInfoAlertMsg(erc4626Metadata: Erc4626Metadata[]) {
-    const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
-
-    let protocols = ''
-    if (protocolNames.length === 1) protocols = protocolNames[0]
-    if (protocolNames.length > 1)
-      protocols =
-        protocolNames.slice(0, -1).join(', ') + ` and ` + protocolNames[protocolNames.length - 1]
-
-    return `This Boosted pool uses wrapped ${protocols} tokens to generate yield from lending on ${protocolNames.length === 1 ? 'that protocol' : 'those protocols'}. This results in continuous appreciation of the pool's total value over time.`
-  }
+  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
+  const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
+  const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${protocolNames.length === 1 ? 'that protocol' : 'those protocols'}. This results in continuous appreciation of the pool's total value over time.`
 
   useLayoutEffect(() => {
     if (cardRef.current) {
@@ -177,7 +172,7 @@ export function PoolComposition() {
             <BalAlert
               content={
                 <Text color="font.dark" fontSize="sm">
-                  {getBoostedInfoAlertMsg(erc4626Metadata)}
+                  {boostedWarningMsg}
                 </Text>
               }
               status="info"
