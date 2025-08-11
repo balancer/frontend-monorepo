@@ -220,7 +220,7 @@ export default function TokenRow({
   }
 
   const { isAnyTokenWithoutPrice, tokenPriceTip } = usePoolTokenPriceWarnings()
-  const isTokenPriceMissing = showZeroAmountAsDash && usdValue && isZero(usdValue)
+  const isTokenPriceMissing = usdValue && isZero(usdValue)
 
   return (
     <VStack align="start" spacing="md" w="full">
