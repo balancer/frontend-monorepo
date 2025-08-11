@@ -22,8 +22,9 @@ import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 function PoolWeightsInfo() {
+  const { pool } = usePool()
   const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
-  const { isAnyTokenWithoutPrice, addLiquidityWarning } = usePoolTokenPriceWarnings()
+  const { isAnyTokenWithoutPrice, addLiquidityWarning } = usePoolTokenPriceWarnings(pool)
 
   if (isAnyTokenWithoutPrice) {
     return <BalAlert content={addLiquidityWarning} status="warning" />

@@ -145,7 +145,7 @@ export function RemoveLiquidityForm() {
   const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
   const isSafeAccount = useIsSafeAccount()
 
-  const { isAnyTokenWithoutPrice, removeLiquidityWarning } = usePoolTokenPriceWarnings()
+  const { isAnyTokenWithoutPrice, removeLiquidityWarning } = usePoolTokenPriceWarnings(pool)
 
   return (
     <TokenBalancesProvider extTokens={validTokens}>

@@ -219,7 +219,7 @@ export default function TokenRow({
     variant: 'secondary',
   }
 
-  const { isAnyTokenWithoutPrice, tokenPriceTip } = usePoolTokenPriceWarnings()
+  const { isAnyTokenWithoutPrice, tokenPriceTip } = usePoolTokenPriceWarnings(pool)
   const isTokenPriceMissing = usdValue && isZero(usdValue)
 
   return (

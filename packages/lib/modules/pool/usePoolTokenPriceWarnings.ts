@@ -1,9 +1,19 @@
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { usePool } from './PoolProvider'
+import { Pool } from './pool.types'
 
-export function usePoolTokenPriceWarnings() {
+export function usePoolTokenPriceWarnings(pool?: Pool) {
   const { priceFor } = useTokens()
-  const { pool } = usePool()
+
+  if (!pool)
+    return {
+      isAnyTokenWithoutPrice: false,
+      poolWarning: '',
+      totalLiquidityTip: '',
+      addLiquidityWarning: '',
+      removeLiquidityWarning: '',
+      tokenPriceTip: '',
+      tokenWeightTip: '',
+    }
 
   const tokensWithoutPrice = pool.poolTokens
     .filter(token => !priceFor(token.address, pool.chain))

@@ -31,7 +31,7 @@ export function usePoolAlerts(pool: Pool) {
   const [poolAlerts, setPoolAlerts] = useState<PoolAlert[]>([])
   const { hooks } = useHook(pool)
   const poolMetadata = usePoolMetadata(pool)
-  const { isAnyTokenWithoutPrice, poolWarning } = usePoolTokenPriceWarnings()
+  const { isAnyTokenWithoutPrice, poolWarning } = usePoolTokenPriceWarnings(pool)
 
   const getNetworkPoolAlerts = (pool: Pool): PoolAlert[] => {
     const networkPoolsIssues = getNetworkConfig(pool.chain).pools?.issues
