@@ -13,19 +13,18 @@ export function getBaseUrl() {
   return `${protocol}//${hostname}${port ? ':' + port : ''}`
 }
 
+const WEB_URL =
+  /^(https?:\/\/)?([a-zA-Z0-9\p{L}](?:[a-zA-Z0-9\p{L}-]{0,61}[a-zA-Z0-9\p{L}])?\.)+[a-zA-Z\p{L}]{2,}(?:\/[\p{L}\p{N}\p{P}\p{S}\p{M}\-._~!$&'()*+,;=:@%]*)*\/?(?:\?[\p{L}\p{N}\p{P}\p{S}\p{M}\-._~!$&'()*+,;=:@%/?]*)?$/u
+
 export function isValidUrl(maybeUrl?: string): string | true {
   if (!maybeUrl) return true
   if (hasWhitespace(maybeUrl)) return 'URLs containing whitespace are not allowed'
 
-  let url
-
-  try {
-    url = new URL(normalizeUrl(maybeUrl))
-  } catch {
-    return 'Invalid URL'
+  if (!WEB_URL.test(normalizeUrl(maybeUrl))) {
+    return 'Invalid web URL'
   }
 
-  return url.protocol === 'http:' || url.protocol === 'https:' ? true : 'Invalid URL'
+  return true
 }
 
 export function normalizeUrl(url: string) {
