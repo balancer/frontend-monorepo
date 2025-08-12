@@ -245,13 +245,11 @@ export default function TokenRow({
                 <Heading {...headingProps} title={value.toString()}>
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
-                <Text {...subTextProps}>
-                  {isTokenPriceMissing ? (
-                    <MissingTokenPriceWarning message={tokenPriceTip} />
-                  ) : (
-                    toCurrency(usdValue ?? '0', { abbreviated })
-                  )}
-                </Text>
+                {isTokenPriceMissing ? (
+                  <MissingTokenPriceWarning message={tokenPriceTip} />
+                ) : (
+                  <Text {...subTextProps}>{toCurrency(usdValue ?? '0', { abbreviated })}</Text>
+                )}
               </>
             )}
           </VStack>
