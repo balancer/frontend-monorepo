@@ -175,7 +175,11 @@ export default function TokenRow({
   const token = customToken || getToken(address, chain)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
   const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
-  const isTokenPriceMissing = token?.address ? address in tokensWithoutPrice : false
+  const priceCheckAddress = token?.address ?? poolToken?.address ?? address
+
+  const isTokenPriceMissing =
+    !!priceCheckAddress &&
+    Object.keys(tokensWithoutPrice ?? {}).some(a => isSameAddress(a as Address, priceCheckAddress))
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {

@@ -16,33 +16,38 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
       tokensWithoutPrice: {},
     }
 
-  const tokensWithoutPrice = pool.poolTokens
-    .filter(token => !priceFor(token.address, pool.chain))
-    .reduce(
-      (acc, token) => {
-        acc[token.address] = token.symbol
-        return acc
-      },
-      {} as Record<string, string>
-    )
+  const tokensWithoutPrice: Record<string, string> = Object.fromEntries(
+    pool.poolTokens
+      .filter(token => !priceFor(token.address, pool.chain))
+      .map(token => [token.address, token.symbol])
+  )
 
-  const isAnyTokenWithoutPrice = Object.keys(tokensWithoutPrice).length > 0
+  const missingSymbols = Object.values(tokensWithoutPrice)
+  const isAnyTokenWithoutPrice = missingSymbols.length > 0
+  const formattedTokensWithoutPrice = formatStringsToSentenceList(missingSymbols)
+  const tokenNoun = missingSymbols.length === 1 ? 'token' : 'tokens'
 
-  const formattedTokensWithoutPrice = formatStringsToSentenceList(Object.values(tokensWithoutPrice))
-
-  const poolWarning = `This pool's total value does not include the value of ${formattedTokensWithoutPrice} tokens since the current price cannot be accessed.`
+  const poolWarning = isAnyTokenWithoutPrice
+    ? `This pool's total value does not include the value of ${formattedTokensWithoutPrice} ${tokenNoun} since the current price cannot be accessed.`
+    : ''
 
   const tokenPriceTip =
-    'The price of this token currently cannot be accessed. This may be due to our pricing provider, Coingecko, being down or not knowing it.'
+    'The price of this token currently cannot be accessed. This may be due to our pricing provider, CoinGecko, being down or not listing it.'
 
   const tokenWeightTip =
     'Current weight percentages cannot be calculated since the price of one or more tokens are unknown.'
 
-  const totalLiquidityTip = `This amount does not include the value of ${formattedTokensWithoutPrice} tokens since the current price cannot be accessed.`
+  const totalLiquidityTip = isAnyTokenWithoutPrice
+    ? `This amount does not include the value of ${formattedTokensWithoutPrice} ${tokenNoun} since the current price cannot be accessed.`
+    : ''
 
-  const addLiquidityWarning = `Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool. However, for some reason, the price of ${formattedTokensWithoutPrice} currently cannot be accessed. This may be due to the pricing provider, Coingecko, being down or not knowing one of the tokens. Only proceed if you know exactly what you are doing.`
+  const addLiquidityWarning = isAnyTokenWithoutPrice
+    ? `Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool. However, the price of ${formattedTokensWithoutPrice} ${tokenNoun} currently cannot be accessed. This may be due to the pricing provider, CoinGecko being down or not listing one of the tokens. Only proceed if you know exactly what you are doing.`
+    : ''
 
-  const removeLiquidityWarning = `The price of ${formattedTokensWithoutPrice} currently cannot be accessed. This may be due to the pricing provider, Coingecko, being down or not knowing one of the tokens. Only interact with this pool if you know exactly what you are doing.`
+  const removeLiquidityWarning = isAnyTokenWithoutPrice
+    ? `The price of ${formattedTokensWithoutPrice} ${tokenNoun} currently cannot be accessed. This may be due to the pricing provider, CoinGecko being down or not listing one of the tokens. Only interact with this pool if you know exactly what you are doing.`
+    : ''
 
   return {
     isAnyTokenWithoutPrice,
