@@ -18,7 +18,6 @@ import { usePoolForm } from './PoolFormProvider'
 import { ChooseTypeStep } from './steps/ChooseTypeStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
-// import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
 
 export function PoolForm() {
   const { steps, activeStepIndex, activeStep } = usePoolForm()
@@ -64,7 +63,6 @@ export function PoolForm() {
       <VStack spacing="lg" w="full">
         {activeStep.id === 'step1' && <ChooseTypeStep />}
       </VStack>
-      {/* <LbpDeleteAndRestartModal /> */}
     </VStack>
   )
 }

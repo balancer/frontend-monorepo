@@ -7,12 +7,12 @@ import { PoolPreview } from '@repo/lib/modules/pool/actions/create/PoolPreview'
 
 export default function BuildPage() {
   return (
-    <VStack spacing="lg">
+    <VStack paddingX="2xl" spacing="lg">
       <HeaderBanner />
       <Stack
         direction={{ base: 'column', xl: 'row' }}
         justifyContent="stretch"
-        spacing="xl"
+        spacing="2xl"
         w="full"
       >
         <PoolForm />
