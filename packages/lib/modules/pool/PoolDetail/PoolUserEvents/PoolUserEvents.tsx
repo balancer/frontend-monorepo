@@ -22,7 +22,7 @@ import {
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
+import { secondsToMilliseconds } from 'date-fns'
 import { ArrowUpRight } from 'react-feather'
 import { PoolEventItem } from '../../usePoolEvents'
 import { calcTotalStakedBalance, getUserTotalBalance } from '../../user-balance.helpers'
@@ -31,6 +31,7 @@ import { isEmpty } from 'lodash'
 import { BoostText } from './BoostText'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { formatDistanceToNowAbbr } from '@repo/lib/shared/utils/time'
 
 type PoolEventRowProps = {
   poolEvent: PoolEventItem
@@ -91,9 +92,7 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
       <GridItem area="time" mr="sm">
         <HStack gap="1" justifyContent="flex-end">
           <Text color="grayText">
-            {formatDistanceToNow(new Date(secondsToMilliseconds(poolEvent.timestamp)), {
-              addSuffix: true,
-            })}
+            {formatDistanceToNowAbbr(new Date(secondsToMilliseconds(poolEvent.timestamp)))}
           </Text>
           <Link color="grayText" href={txUrl} target="_blank">
             <ArrowUpRight size={16} />

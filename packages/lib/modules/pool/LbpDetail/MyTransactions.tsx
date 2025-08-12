@@ -20,7 +20,7 @@ import {
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
+import { secondsToMilliseconds } from 'date-fns'
 import { ArrowRight, ArrowUpRight } from 'react-feather'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isEmpty } from 'lodash'
@@ -28,6 +28,7 @@ import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { usePool } from '../PoolProvider'
 import { PoolEventItem } from '../usePoolEvents'
 import { Address } from 'viem'
+import { formatDistanceToNowAbbr } from '@repo/lib/shared/utils/time'
 
 type PoolEventRowProps = {
   poolEvent: PoolEventItem
@@ -206,9 +207,7 @@ function PoolEventRow({
       <GridItem area="time" mr="sm">
         <HStack gap="1" justifyContent="flex-end">
           <Text color="grayText" textAlign="right">
-            {formatDistanceToNow(new Date(secondsToMilliseconds(poolEvent.timestamp)), {
-              addSuffix: true,
-            })}
+            {formatDistanceToNowAbbr(new Date(secondsToMilliseconds(poolEvent.timestamp)))}
           </Text>
           <Link color="grayText" href={txUrl} isExternal>
             <ArrowUpRight size={16} />
