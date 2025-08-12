@@ -34,7 +34,7 @@ export function createWalletConnectConnector({ index, walletConnectProjectId }: 
     qrModalOptions: {
       themeMode: 'light',
       themeVariables: {
-        '--wcm-z-index': '9999999',
+        '--wcm-z-index': '10000000000',
       },
     },
   }
