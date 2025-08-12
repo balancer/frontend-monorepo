@@ -2,9 +2,9 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { Pool } from './pool.types'
 
 export function usePoolTokenPriceWarnings(pool?: Pool) {
-  const { priceFor } = useTokens()
+  const { priceFor, isLoadingTokenPrices } = useTokens()
 
-  if (!pool)
+  if (!pool || isLoadingTokenPrices)
     return {
       isAnyTokenWithoutPrice: false,
       poolWarning: '',
