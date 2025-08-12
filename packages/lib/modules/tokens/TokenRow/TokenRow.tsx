@@ -169,9 +169,13 @@ export default function TokenRow({
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
+  const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice } =
+    usePoolTokenPriceWarnings(pool)
+
   const token = customToken || getToken(address, chain)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
   const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
+  const isTokenPriceMissing = token?.address ? address in tokensWithoutPrice : false
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {
@@ -218,9 +222,6 @@ export default function TokenRow({
     lineHeight: '24px',
     variant: 'secondary',
   }
-
-  const { isAnyTokenWithoutPrice, tokenPriceTip } = usePoolTokenPriceWarnings(pool)
-  const isTokenPriceMissing = usdValue && isZero(usdValue)
 
   return (
     <VStack align="start" spacing="md" w="full">

@@ -13,15 +13,22 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
       removeLiquidityWarning: '',
       tokenPriceTip: '',
       tokenWeightTip: '',
+      tokensWithoutPrice: {},
     }
 
   const tokensWithoutPrice = pool.poolTokens
     .filter(token => !priceFor(token.address, pool.chain))
-    .map(token => token.symbol)
+    .reduce(
+      (acc, token) => {
+        acc[token.address] = token.symbol
+        return acc
+      },
+      {} as Record<string, string>
+    )
 
-  const isAnyTokenWithoutPrice = tokensWithoutPrice.length > 0
+  const isAnyTokenWithoutPrice = Object.keys(tokensWithoutPrice).length > 0
 
-  const formattedTokensWithoutPrice = formatStringsToSentenceList(tokensWithoutPrice)
+  const formattedTokensWithoutPrice = formatStringsToSentenceList(Object.values(tokensWithoutPrice))
 
   const poolWarning = `This pool's total value does not include the value of ${formattedTokensWithoutPrice} tokens since the current price cannot be accessed.`
   const tokenPriceTip =
@@ -40,6 +47,7 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
     removeLiquidityWarning,
     tokenPriceTip,
     tokenWeightTip,
+    tokensWithoutPrice,
   }
 }
 
