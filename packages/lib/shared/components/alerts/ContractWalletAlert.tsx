@@ -1,10 +1,12 @@
 import { HStack, Text, Link, VStack, UnorderedList, ListItem } from '@chakra-ui/react'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ArrowUpRight } from 'react-feather'
+import { useSafeAppLink } from '@repo/lib/modules/web3/safe.hooks'
 
 export function ContractWalletAlert() {
+  const safeAppLink = useSafeAppLink()
+
   return (
     <BalAlert
       content={
@@ -15,10 +17,7 @@ export function ContractWalletAlert() {
           </Text>
           <VStack pt="3">
             <UnorderedList w="full">
-              <WalletLink
-                href={`https://app.safe.global/share/safe-app?appUrl=https://${PROJECT_CONFIG.projectId}.fi/pools`}
-                name={'Safe{wallet}'}
-              />
+              <WalletLink href={safeAppLink} name={'Safe{wallet}'} />
               <WalletLink href="https://console.fireblocks.io/v2/web3" name="Fireblocks" />
               <WalletLink href="https://app-v2.augustdigital.io/" name="August Digital" />
               <WalletLink href="https://dashboard.porto.xyz/" name="Porto by Anchorage Digital" />
