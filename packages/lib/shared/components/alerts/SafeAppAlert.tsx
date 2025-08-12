@@ -5,10 +5,12 @@ import { BalAlertContent } from './BalAlertContent'
 import { useWalletConnectMetadata } from '@repo/lib/modules/web3/wallet-connect/useWalletConnectMetadata'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { useSafeAppLink } from '@repo/lib/modules/web3/safe.hooks'
 
 export function SafeAppAlert() {
   const { isMobile } = useBreakpoints()
   const { isSafeAccountViaWalletConnect } = useWalletConnectMetadata()
+  const safeAppLink = useSafeAppLink()
 
   const {
     options: { isOnSafeAppList },
@@ -18,7 +20,7 @@ export function SafeAppAlert() {
     ? {
         description: `For a better experience, use the ${PROJECT_CONFIG.projectName} Safe app with your Safe wallet.`,
         title: `Consider using the ${PROJECT_CONFIG.projectName} Safe web app`,
-        href: `https://app.safe.global/share/safe-app?appUrl=https://${PROJECT_CONFIG.projectId}.fi/pools`,
+        href: safeAppLink,
         buttonLabel: 'Open app',
       }
     : {
