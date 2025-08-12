@@ -169,9 +169,17 @@ export default function TokenRow({
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
+  const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice } =
+    usePoolTokenPriceWarnings(pool)
+
   const token = customToken || getToken(address, chain)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
   const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
+  const priceCheckAddress = token?.address ?? poolToken?.address ?? address
+
+  const isTokenPriceMissing =
+    !!priceCheckAddress &&
+    Object.keys(tokensWithoutPrice ?? {}).some(a => isSameAddress(a as Address, priceCheckAddress))
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {
@@ -219,9 +227,6 @@ export default function TokenRow({
     variant: 'secondary',
   }
 
-  const { isAnyTokenWithoutPrice, tokenPriceTip } = usePoolTokenPriceWarnings(pool)
-  const isTokenPriceMissing = usdValue && isZero(usdValue)
-
   return (
     <VStack align="start" spacing="md" w="full">
       {label && typeof label === 'string' ? <Text color="grayText">{label}</Text> : label}
@@ -245,13 +250,11 @@ export default function TokenRow({
                 <Heading {...headingProps} title={value.toString()}>
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
-                <Text {...subTextProps}>
-                  {isTokenPriceMissing ? (
-                    <MissingTokenPriceWarning message={tokenPriceTip} />
-                  ) : (
-                    toCurrency(usdValue ?? '0', { abbreviated })
-                  )}
-                </Text>
+                {isTokenPriceMissing ? (
+                  <MissingTokenPriceWarning message={tokenPriceTip} />
+                ) : (
+                  <Text {...subTextProps}>{toCurrency(usdValue ?? '0', { abbreviated })}</Text>
+                )}
               </>
             )}
           </VStack>
