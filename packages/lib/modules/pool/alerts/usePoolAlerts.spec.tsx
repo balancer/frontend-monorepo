@@ -17,12 +17,6 @@ describe('Creates pool alerts for', () => {
     expect(result.current.poolAlerts).toMatchInlineSnapshot(`
       [
         {
-          "content": "This pool's total value does not include the value of MTLSTR and EGX tokens since the current price cannot be accessed.",
-          "identifier": "tokensWithoutPrice",
-          "isSoftWarning": false,
-          "status": "warning",
-        },
-        {
           "content": "The token MTLSTR is currently not supported.",
           "identifier": "TokenNotAllowed-MTLSTR",
           "isSoftWarning": false,
