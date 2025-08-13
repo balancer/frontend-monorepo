@@ -17,7 +17,7 @@ import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { capitalize } from 'lodash'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { poolTypes, protocolOptions } from '../helpers'
+import { POOL_TYPES, PROTOCOLS } from '../constants'
 import { usePoolForm } from '../PoolFormProvider'
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { type SubmitHandler, Controller, Control } from 'react-hook-form'
@@ -32,6 +32,7 @@ export function ChooseTypeStep() {
       watch,
       setValue,
       formState: { isValid },
+      trigger,
     },
     setActiveStep,
     activeStepIndex,
@@ -47,6 +48,7 @@ export function ChooseTypeStep() {
 
   const handleChooseProtocol = (protocolId: ProjectConfig['projectId']) => {
     setValue('protocol', protocolId)
+    trigger('protocol')
   }
 
   const onSubmit: SubmitHandler<PoolConfig> = () => {
@@ -83,7 +85,7 @@ function ChooseProtocol({
     <VStack align="start" spacing="md" w="full">
       <Text color="font.primary">Choose protocol</Text>
       <SimpleGrid columns={3} spacing="md" w="full">
-        {protocolOptions.map(({ id, name, imageSrc }) => (
+        {PROTOCOLS.map(({ id, name, imageSrc }) => (
           <Card
             backgroundColor={selectedProtocol === id ? 'rgba(0, 211, 149, 0.05)' : 'transparent'}
             border={selectedProtocol === id ? '2px solid' : '1px solid'}
@@ -121,7 +123,7 @@ function ChooseNetwork({
         render={({ field }) => (
           <SimpleGrid columns={2} spacing="md" w="full">
             {networkOptions.map(network => (
-              <Card padding="0">
+              <Card key={network} padding="0">
                 <Checkbox
                   flexDirection="row-reverse"
                   gap="md"
@@ -161,7 +163,7 @@ function ChoosePoolType({ control }: { control: Control<PoolConfig> }) {
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack spacing={3}>
-              {poolTypes.map(poolType => (
+              {POOL_TYPES.map(poolType => (
                 <Radio key={poolType.value} size="lg" value={poolType.value}>
                   <Text
                     color="font.primary"

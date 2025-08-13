@@ -2,7 +2,7 @@ import { PoolType } from '@balancer/sdk'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 
-export const poolTypes = [
+export const POOL_TYPES = [
   { label: 'Weighted', value: PoolType.Weighted, maxTokens: 8 },
   { label: 'Stable', value: PoolType.Stable, maxTokens: 5 },
   { label: 'Stable Surge', value: PoolType.StableSurge, maxTokens: 5 },
@@ -10,7 +10,7 @@ export const poolTypes = [
   { label: 'reClamm', value: PoolType.ReClamm, maxTokens: 2 },
 ]
 
-export const protocolOptions = [
+export const PROTOCOLS = [
   {
     id: ProjectConfigBalancer.projectId,
     name: ProjectConfigBalancer.projectName,
