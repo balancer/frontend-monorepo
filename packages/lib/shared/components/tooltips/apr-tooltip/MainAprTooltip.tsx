@@ -16,7 +16,7 @@ import StarsIcon from '../../icons/StarsIcon'
 import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { FeaturedPool } from '@repo/lib/modules/pool/PoolProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { isLBP, isQuantAmmPool } from '@repo/lib/modules/pool/pool.helpers'
+import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
 import { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/graphql'
 import StarIcon from '../../icons/StarIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -138,12 +138,15 @@ function MainAprTooltip({
   id,
   ...props
 }: Props) {
-  const canBeNegative = isQuantAmmPool(pool.type)
-  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, vebalBoost, canBeNegative)
-  const isAprNegative = bn(aprToShow).lt(0)
+  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, vebalBoost, true)
+  const isAprNegative = bn(aprToShow.replace('%', '')).lt(0)
 
   // hoverColor here is used for the text and therefore can use a semantic token
-  const hoverColor = isLBP(pool.type) ? 'inherit' : isAprNegative ? 'font.error' : 'font.highlight'
+  const hoverColor = isLBP(pool.type)
+    ? 'inherit'
+    : isAprNegative
+      ? 'font.warning'
+      : 'font.highlight'
 
   const customPopoverContent = isLBP(pool.type) ? (
     <PopoverContent p="md">
@@ -176,7 +179,7 @@ function MainAprTooltip({
             >
               {!onlySparkles && (
                 <Text
-                  color={isOpen ? hoverColor : 'font.primary'}
+                  color={isOpen || isAprNegative ? hoverColor : 'font.primary'}
                   noOfLines={2}
                   textAlign="left"
                   textDecoration={isLBP(pool.type) ? 'line-through' : 'none'}
@@ -188,7 +191,7 @@ function MainAprTooltip({
                 </Text>
               )}
               <SparklesIcon
-                hoverColor={isAprNegative ? 'red' : 'green'} // hoverColor here is used for the icon and therefore needs to be a color
+                hoverColor={isAprNegative ? '#f97316' : 'green'} // hoverColor here is used for the icon and therefore needs to be a color
                 id={id}
                 isOpen={isOpen}
                 pool={pool}
