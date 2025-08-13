@@ -32,8 +32,6 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
   const { priceFor } = useTokens()
 
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
-  const isInRecoveryMode = pool.dynamicData.isInRecoveryMode
-  const poolTokens = isInRecoveryMode ? (pool.poolTokens as ApiToken[]) : tokens // can only withdraw top level tokens in recovery mode
 
   const nativeAssets = validTokens.filter(token =>
     isNativeOrWrappedNative(token.address as Address, token.chain)
@@ -62,7 +60,6 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
     }
 
     const wrappedAndUnderlying = getWrappedAndUnderlyingTokenFn(token, pool, () => undefined)()
-
     if (wrappedAndUnderlying) {
       return () => {
         setWrappedAndUnderlying(wrappedAndUnderlying)
@@ -79,7 +76,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
           <Text fontSize="sm" fontWeight="bold">
             You&apos;re expected to get (if no slippage)
           </Text>
-          {poolTokens.map(token => {
+          {tokens.map(token => {
             const lbpProps = isV3LBP(pool)
               ? {
                   pool,
@@ -94,9 +91,9 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
                 chain={pool.chain}
                 isLoading={isLoading}
                 key={token.address}
+                toggleTokenSelect={getToggleTokenCallback(token)}
                 value={amountOutForToken(token.address as Address)}
                 {...lbpProps}
-                {...(!isInRecoveryMode ? { toggleTokenSelect: getToggleTokenCallback(token) } : {})}
               />
             )
           })}
