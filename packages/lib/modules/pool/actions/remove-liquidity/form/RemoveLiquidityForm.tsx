@@ -45,6 +45,8 @@ import { SettingsAlert } from '@repo/lib/modules/user/settings/SettingsAlert'
 import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
@@ -143,6 +145,8 @@ export function RemoveLiquidityForm() {
   const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
   const isSafeAccount = useIsSafeAccount()
 
+  const { isAnyTokenWithoutPrice, removeLiquidityWarning } = usePoolTokenPriceWarnings(pool)
+
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
@@ -153,6 +157,9 @@ export function RemoveLiquidityForm() {
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
+          {isAnyTokenWithoutPrice && (
+            <BalAlert content={removeLiquidityWarning} mb="sm" status="warning" />
+          )}
           <VStack align="start" spacing="md">
             <SafeAppAlert />
             {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (

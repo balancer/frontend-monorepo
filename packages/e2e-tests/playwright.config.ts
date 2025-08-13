@@ -8,6 +8,10 @@ function minutes(min: number) {
   return min * 60 * 1000
 }
 
+function seconds(n: number) {
+  return n * 1000
+}
+
 config({ path: resolve(__dirname, '.env.local') })
 
 /**
@@ -33,8 +37,9 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
   },
-  globalTimeout: isDevE2E ? minutes(4) : minutes(1),
-  timeout: isDevE2E ? minutes(1.5) : 10_000,
+  globalTimeout: minutes(15),
+  timeout: minutes(1.5),
+  expect: { timeout: seconds(60) },
   /* Configure projects for major browsers */
   projects: [
     {

@@ -1,4 +1,16 @@
-import { sub, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
+import {
+  sub,
+  millisecondsToSeconds,
+  secondsToMilliseconds,
+  isAfter,
+  differenceInYears,
+  format,
+  differenceInDays,
+  differenceInMonths,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInSeconds,
+} from 'date-fns'
 
 export const oneSecondInMs = 1000
 export const oneMinInMs = 60 * oneSecondInMs
@@ -173,4 +185,26 @@ export function alignUtcWithLocalDay(unixTimestamp: number) {
 // Using a specialized function so it can be mocked when testing manually
 export function now() {
   return new Date()
+}
+
+export function formatDistanceToNowAbbr(d: Date) {
+  if (isAfter(d, now())) return undefined
+
+  const yearsDiff = Math.abs(differenceInYears(d, now()))
+  if (yearsDiff > 0) return format(d, 'LLL d, y')
+
+  const daysDiff = Math.abs(differenceInDays(d, now()))
+  const monthsDiff = Math.abs(differenceInMonths(d, now())) || 1
+  if (daysDiff > 30) return `${monthsDiff}mo ago`
+
+  const hoursDiff = Math.abs(differenceInHours(d, now()))
+  if (hoursDiff > 24) return `${daysDiff}d ago`
+
+  const minsDiff = Math.abs(differenceInMinutes(d, now()))
+  if (minsDiff > 60) return `${hoursDiff}h ago`
+
+  const secondsDiff = Math.abs(differenceInSeconds(d, now()))
+  if (secondsDiff > 60) return `${minsDiff}m ago`
+
+  return `${secondsDiff}s ago`
 }

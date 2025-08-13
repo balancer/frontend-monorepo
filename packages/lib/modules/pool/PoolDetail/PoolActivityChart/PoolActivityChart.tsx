@@ -1,5 +1,3 @@
-'use client'
-
 import ReactECharts from 'echarts-for-react'
 import { Box, Divider, HStack, Skeleton, Text, useTheme } from '@chakra-ui/react'
 import { usePoolActivityChart } from './usePoolActivityChart'
@@ -45,7 +43,7 @@ export function PoolActivityChart() {
       {chartOption && (
         <Box>
           <motion.div
-            animate={{ height: chartHeight, opacity: isExpanded ? [0, 1] : 1 }}
+            animate={{ height: chartHeight, opacity: [0, 1] }}
             initial={{ height: 90 }}
             transition={{ duration: 0.2, ease: easeOut }}
           >
@@ -58,13 +56,10 @@ export function PoolActivityChart() {
           </motion.div>
         </Box>
       )}
-      {isExpanded && (
-        <AnimateOpacity>
-          <Divider mb="4" pt="2" />
-        </AnimateOpacity>
-      )}
+
       {!isLoading && isExpanded && (
         <AnimateOpacity>
+          <Divider mb="4" pt="2" />
           <HStack px={['1', '2']} spacing="4">
             {legendTabs.map((tab, index) => (
               <HStack alignItems="center" gap="2" key={index}>

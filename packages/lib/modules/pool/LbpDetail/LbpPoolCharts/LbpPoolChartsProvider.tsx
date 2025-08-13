@@ -20,12 +20,13 @@ export function useLbpPoolChartsLogic() {
   const { pool } = usePool()
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-  const startTime = new Date(secondsToMilliseconds(lbpPool.startTime))
-  const endTime = new Date(secondsToMilliseconds(lbpPool.endTime))
+  const startDateTime = new Date(secondsToMilliseconds(lbpPool.startTime))
+  const endDateTime = new Date(secondsToMilliseconds(lbpPool.endTime))
   const now = new Date()
-  const isSaleOngoing = isAfter(now, startTime) && isBefore(now, endTime)
-  const daysDiff = differenceInDays(endTime, isSaleOngoing ? now : startTime)
-  const hoursDiff = differenceInHours(endTime, isSaleOngoing ? now : startTime) - daysDiff * 24
+  const isSaleOngoing = isAfter(now, startDateTime) && isBefore(now, endDateTime)
+  const daysDiff = differenceInDays(endDateTime, isSaleOngoing ? now : startDateTime)
+  const hoursDiff =
+    differenceInHours(endDateTime, isSaleOngoing ? now : startDateTime) - daysDiff * 24
   const salePeriodText = isSaleOngoing
     ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
     : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
@@ -41,8 +42,8 @@ export function useLbpPoolChartsLogic() {
     snapshots,
     hourlyData: hourlyData || [],
     isLoading,
-    startTime,
-    endTime,
+    startDateTime,
+    endDateTime,
     now,
     isSaleOngoing,
     daysDiff,

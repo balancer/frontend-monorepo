@@ -3,7 +3,6 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { GatewayTransactionDetails, TransactionStatus } from '@safe-global/safe-apps-sdk'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
-import { Hex } from 'viem'
 import {
   getRemainingSignaturesLabel,
   getSafeWebUrl,
@@ -11,14 +10,14 @@ import {
   hasSomePendingNestedTxInBatch,
 } from './safe.helpers'
 import { TransactionStep } from '../lib'
+import { Address } from 'viem'
 
 type MultisigProps = {
-  safeTxHash: Hex
   details: GatewayTransactionDetails
   chainId: SupportedChainId
-  currentStep: TransactionStep
+  currentStep?: TransactionStep
 }
-export function MultisigStatus({ chainId, safeTxHash, details, currentStep }: MultisigProps) {
+export function MultisigStatus({ chainId, details, currentStep }: MultisigProps) {
   if (details.detailedExecutionInfo?.type !== 'MULTISIG') return null
   const safeTxStatus = details.txStatus
 
@@ -27,7 +26,7 @@ export function MultisigStatus({ chainId, safeTxHash, details, currentStep }: Mu
   const isCancelled = safeTxStatus === TransactionStatus.CANCELLED
   const isFailed = safeTxStatus === TransactionStatus.FAILED
 
-  const isTxBatch = hasSomePendingNestedTxInBatch(currentStep)
+  const isTxBatch = currentStep ? hasSomePendingNestedTxInBatch(currentStep) : false
 
   return (
     <Card backgroundColor="font.special" variant="modalSubSection">
@@ -53,7 +52,7 @@ export function MultisigStatus({ chainId, safeTxHash, details, currentStep }: Mu
       </VStack>
       <Button
         as={NextLink}
-        href={getSafeWebUrl(chainId, safeTxHash, details)}
+        href={getSafeWebUrl(chainId, details.safeAddress as Address, details.txId)}
         rightIcon={<ArrowUpRight size="14" />}
         target="_blank"
         variant="secondary"

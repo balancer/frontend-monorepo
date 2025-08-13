@@ -59,6 +59,7 @@ function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputS
 
   return tokenConfig ? (
     <Button
+      aria-label={tokenConfig.label}
       cursor={onToggleTokenClicked ? 'pointer' : 'default'}
       onClick={() => onToggleTokenClicked?.()}
       variant={tokenConfig.variant}

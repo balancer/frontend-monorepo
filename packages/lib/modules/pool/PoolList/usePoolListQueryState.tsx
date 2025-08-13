@@ -163,6 +163,8 @@ export function usePoolListQueryState() {
         return 'Boosted'
       case 'RWA':
         return 'RWA'
+      case 'DYNAMIC_ECLP':
+        return 'Dynamic Gyro CLP'
       default:
         return (poolTag as string).toLowerCase().replace('_', ' ')
     }

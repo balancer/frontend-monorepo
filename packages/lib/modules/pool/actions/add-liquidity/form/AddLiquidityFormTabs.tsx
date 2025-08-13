@@ -17,56 +17,67 @@ import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWith
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
+import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 function PoolWeightsInfo() {
+  const { pool } = usePool()
   const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
+  const { isAnyTokenWithoutPrice, addLiquidityWarning } = usePoolTokenPriceWarnings(pool)
 
-  return (
-    <BalAlert
-      content={
-        <BalAlertContent
-          description={
-            <Box
-              as="span"
-              color="black"
-              fontSize="sm"
-              fontWeight="medium"
-              sx={{ textWrap: 'balance' }}
-            >
-              Proportional adds avoid price impact by matching the current ratio of each token's USD
-              value within the pool:
-            </Box>
-          }
-          forceColumnMode
-        >
-          <UnorderedList>
-            <ListItem
-              color="font.black"
-              fontSize="sm"
-              fontWeight="medium"
-              position="relative"
-              top="-4px"
-            >
-              {compositionTokens
-                .map(
-                  token =>
-                    `${token.symbol}: ${fNum('weight', poolTokensWithActualWeights[token.address], {
-                      abbreviated: false,
-                    })}`
-                )
-                .join(', ')}
-            </ListItem>
-          </UnorderedList>
-        </BalAlertContent>
-      }
-      mb="sm"
-      p="sm"
-      pb="xxs !important"
-      status="info"
-    />
-  )
+  if (isAnyTokenWithoutPrice) {
+    return <BalAlert content={addLiquidityWarning} status="warning" />
+  } else {
+    return (
+      <BalAlert
+        content={
+          <BalAlertContent
+            description={
+              <Box
+                as="span"
+                color="black"
+                fontSize="sm"
+                fontWeight="medium"
+                sx={{ textWrap: 'balance' }}
+              >
+                Proportional adds avoid price impact by matching the current ratio of each token's
+                USD value within the pool:
+              </Box>
+            }
+            forceColumnMode
+          >
+            <UnorderedList>
+              <ListItem
+                color="font.black"
+                fontSize="sm"
+                fontWeight="medium"
+                position="relative"
+                top="-4px"
+              >
+                {compositionTokens
+                  .map(
+                    token =>
+                      `${token.symbol}: ${fNum(
+                        'weight',
+                        poolTokensWithActualWeights[token.address],
+                        {
+                          abbreviated: false,
+                        }
+                      )}`
+                  )
+                  .join(', ')}
+              </ListItem>
+            </UnorderedList>
+          </BalAlertContent>
+        }
+        mb="sm"
+        p="sm"
+        pb="xxs !important"
+        status="info"
+      />
+    )
+  }
 }
 
 function OutOfRangeWarning() {

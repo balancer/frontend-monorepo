@@ -23,16 +23,6 @@ export function useAsyncEffect(
   }, deps)
 }
 
-/**
- * Runs the effect once on mount, after the specified duration. Cleans up on unmount.
- */
-export function useTimeout(effect: () => void, duration: number) {
-  useEffect(() => {
-    const timeout = setTimeout(effect, duration)
-    return () => clearTimeout(timeout)
-  }, [])
-}
-
 export function useInterval(callback: () => void, delay: number) {
   const savedCallback = useRef<(() => void) | undefined>(undefined)
 

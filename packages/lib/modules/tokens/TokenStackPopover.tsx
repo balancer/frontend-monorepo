@@ -15,6 +15,7 @@ import TokenRow from './TokenRow/TokenRow'
 import { Address } from 'viem'
 import { Numberish } from '@repo/lib/shared/utils/numbers'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { hasDefinedValues } from '@repo/lib/shared/utils/array'
 
 type RewardsByToken = {
   [address: string]: Numberish
@@ -37,7 +38,7 @@ export function TokenStackPopover({
 }: TokenStackPopoverProps) {
   const { isMobile } = useBreakpoints()
 
-  if (!tokens || tokens.length === 0) {
+  if (!hasDefinedValues(tokens)) {
     return <>{children}</>
   }
 
@@ -67,7 +68,7 @@ export function TokenStackPopover({
         </PopoverHeader>
         <PopoverBody py="sm">
           <VStack align="flex-start" spacing="xs">
-            {tokens.map(token => {
+            {tokens.map((token, i) => {
               const tokenAddress = token?.address as Address
               const balance = rewardsByToken[tokenAddress] || '0'
 
@@ -76,7 +77,7 @@ export function TokenStackPopover({
                   abbreviated
                   address={tokenAddress}
                   chain={chain}
-                  key={tokenAddress}
+                  key={tokenAddress + i}
                   symbol={token?.symbol}
                   value={balance}
                 />

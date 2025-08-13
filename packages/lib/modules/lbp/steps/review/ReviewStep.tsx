@@ -19,6 +19,7 @@ import { LbpFormAction } from '../../LbpFormAction'
 import { TokenInfo } from './TokenInfo'
 import { SocialLink } from './SocialLink'
 import { OtherSaleDetails } from './OtherSaleDetails'
+import { normalizeUrl } from '@repo/lib/shared/utils/urls'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
@@ -35,8 +36,8 @@ export function ReviewStep() {
   const collateralTokenSeed = saleStructureData.collateralTokenAmount
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
 
-  const saleStartTime = saleStructureData.startTime
-  const saleEndTime = saleStructureData.endTime
+  const saleStartTime = saleStructureData.startDateTime
+  const saleEndTime = saleStructureData.endDateTime
   const daysDiff = differenceInDays(parseISO(saleEndTime), parseISO(saleStartTime))
   const hoursDiff =
     differenceInHours(parseISO(saleEndTime), parseISO(saleStartTime)) - daysDiff * 24
@@ -49,7 +50,7 @@ export function ReviewStep() {
             <Circle bg="background.level4" color="font.secondary" shadow="lg" size={24}>
               <VStack>
                 {projectInfoData.tokenIconUrl && (
-                  <Image borderRadius="full" src={projectInfoData.tokenIconUrl} />
+                  <Image borderRadius="full" src={normalizeUrl(projectInfoData.tokenIconUrl)} />
                 )}
               </VStack>
             </Circle>
@@ -130,7 +131,7 @@ export function ReviewStep() {
           <VStack gap="md" w="full">
             <TokenInfo
               amount={Number(launchTokenSeed || 0)}
-              iconURL={projectInfoData.tokenIconUrl}
+              iconURL={normalizeUrl(projectInfoData.tokenIconUrl)}
               name={launchTokenMetadata.name || ''}
               symbol={launchTokenMetadata.symbol || ''}
             />

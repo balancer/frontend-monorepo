@@ -18,7 +18,7 @@ export interface RadialPatternProps extends BoxProps {
   children?: React.ReactNode
 }
 
-const MotionBox = motion(Box)
+const MotionBox = motion.create(Box)
 
 function Circle({
   progress,

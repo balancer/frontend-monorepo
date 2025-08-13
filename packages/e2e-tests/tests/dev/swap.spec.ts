@@ -1,4 +1,5 @@
-import { impersonate, setForkBalances } from '@/helpers/e2e.helpers'
+import { impersonate } from '@/helpers/e2e.helpers'
+import { button, clickButton, isButtonVisible } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
@@ -6,14 +7,22 @@ test('Swap 1 ETH to USDC)', async ({ page }) => {
   await page.goto('http://localhost:3000/swap/ethereum/ETH')
 
   await impersonate(page, defaultAnvilAccount)
+  await expect(button(page, 'Connect wallet')).not.toBeVisible()
 
-  await page.getByRole('button', { name: 'Select token' }).click()
-  await page.getByText('USD Coin').click()
+  await clickButton(page, 'ETH')
+  await page.getByText('Wrapped Ether').click()
 
+  await clickButton(page, 'Select token')
+  await page.getByText('USDCUSDC').click()
   await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('0.1')
 
-  await page.getByRole('button', { name: 'Next', exact: true }).click()
-  await page.getByRole('button', { name: 'Swap' }).click()
+  await clickButton(page, 'Next')
+
+  if (await isButtonVisible(page, 'Approve WETH to swap')) {
+    await clickButton(page, 'Approve WETH to swap')
+  }
+
+  await clickButton(page, 'Swap')
   await expect(page.getByText('Transaction confirmed')).toBeVisible()
 
   await page.getByRole('button', { name: 'Swap again' }).click()

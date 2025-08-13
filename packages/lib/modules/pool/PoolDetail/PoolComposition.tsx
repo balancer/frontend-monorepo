@@ -1,9 +1,7 @@
 'use client'
 
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
   Box,
   Card,
   Divider,
@@ -33,6 +31,8 @@ import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
 import { ArrowUpRight } from 'react-feather'
 import { PoolCompositionChart } from './PoolCompositionChart'
+import { PoolTotalLiquidityDisplay } from './PoolTotalLiquidityDisplay'
+import { formatStringsToSentenceList } from '../usePoolTokenPriceWarnings'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -54,13 +54,14 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
           </Heading>
         </VStack>
         <VStack alignItems="flex-end">
-          <Heading fontWeight="bold" size="h5">
-            {totalLiquidity ? (
-              toCurrency(totalLiquidity, { abbreviated: false })
-            ) : (
-              <Skeleton height="24px" w="75px" />
-            )}
-          </Heading>
+          {totalLiquidity ? (
+            <PoolTotalLiquidityDisplay
+              size="h5"
+              totalLiquidity={toCurrency(totalLiquidity, { abbreviated: false })}
+            />
+          ) : (
+            <Skeleton height="24px" w="75px" />
+          )}
         </VStack>
       </HStack>
       <Divider />
@@ -75,6 +76,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                 address={poolToken.address as Address}
                 chain={chain}
                 pool={pool}
+                showZeroAmountAsDash={true}
                 targetWeight={poolToken.weight || undefined}
                 value={poolToken.balance}
                 {...(poolToken.hasNestedPool && {
@@ -126,6 +128,10 @@ export function PoolComposition() {
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
   const erc4626Metadata = getErc4626Metadata(pool)
 
+  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
+  const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
+  const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${protocolNames.length === 1 ? 'that protocol' : 'those protocols'}. This results in continuous appreciation of the pool's total value over time.`
+
   useLayoutEffect(() => {
     if (cardRef.current) {
       setHeight(cardRef.current.offsetHeight)
@@ -162,18 +168,20 @@ export function PoolComposition() {
             </Heading>
             <PoolTypeTag pool={pool} />
           </HStack>
-          {isBoosted(pool) &&
-            erc4626Metadata.map(metadata => (
-              <Alert key={metadata.name} status="info">
-                <AlertIcon />
-                <AlertDescription fontSize="sm">{metadata.description}</AlertDescription>
-              </Alert>
-            ))}
+          {isBoosted(pool) && (
+            <BalAlert
+              content={
+                <Text color="font.dark" fontSize="sm">
+                  {boostedWarningMsg}
+                </Text>
+              }
+              status="info"
+            />
+          )}
           {isQuantAmmPool(pool.type) && (
-            <Alert status="info">
-              <AlertIcon />
-              <AlertDescription>
-                <Text color="black" fontSize="sm">
+            <BalAlert
+              content={
+                <Text color="font.dark" fontSize="sm" position="relative" top="2px">
                   Tokens in BTFs dynamically shift weights to capture appreciation.{' '}
                   <Link
                     alignItems="center"
@@ -190,8 +198,9 @@ export function PoolComposition() {
                     </Box>
                   </Link>
                 </Text>
-              </AlertDescription>
-            </Alert>
+              }
+              status="info"
+            />
           )}
           <Divider />
           <CardContent

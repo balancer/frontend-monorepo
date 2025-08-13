@@ -18,7 +18,7 @@ type Props = PropsWithChildren<{
 
 // Layout shared by standard swap page (/swap) and pool swap page (/poolid/swap)
 export default function SwapLayout({ props, children }: Props) {
-  const { getTokensByChain } = useTokens()
+  const { getTokensByChain, isLoadingTokens } = useTokens()
 
   const chain = props.pathParams.chain
   const initChain = chain ? getChainSlug(chain as ChainSlug) : PROJECT_CONFIG.defaultNetwork
@@ -34,11 +34,13 @@ export default function SwapLayout({ props, children }: Props) {
       <Permit2SignatureProvider>
         <RelayerSignatureProvider>
           <TokenInputsValidationProvider>
-            <TokenBalancesProvider initTokens={initTokens}>
-              <PriceImpactProvider>
-                <SwapProvider params={props}>{children}</SwapProvider>
-              </PriceImpactProvider>
-            </TokenBalancesProvider>
+            {!isLoadingTokens && (
+              <TokenBalancesProvider initTokens={initTokens}>
+                <PriceImpactProvider>
+                  <SwapProvider params={props}>{children}</SwapProvider>
+                </PriceImpactProvider>
+              </TokenBalancesProvider>
+            )}
           </TokenInputsValidationProvider>
         </RelayerSignatureProvider>
       </Permit2SignatureProvider>

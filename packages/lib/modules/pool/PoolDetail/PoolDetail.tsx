@@ -20,6 +20,7 @@ import { PoolActivity } from './PoolActivity/PoolActivity'
 import { PoolBanners } from './PoolBanners/PoolBanners'
 import { useUserPoolEvents } from '../useUserPoolEvents'
 import { hasTotalBalance } from '@repo/lib/modules/pool/user-balance.helpers'
+import { PoolQuantAMMBanner } from './PoolBanners/PoolQuantAMMBanner'
 
 export function PoolDetail() {
   const { pool } = usePool()
@@ -74,6 +75,7 @@ export function PoolDetail() {
                 />
               </Stack>
             )}
+            <PoolQuantAMMBanner />
             <PoolActivity />
             <PoolComposition />
             <PoolBanners />

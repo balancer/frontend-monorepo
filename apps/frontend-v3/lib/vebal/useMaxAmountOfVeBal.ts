@@ -7,10 +7,9 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 
 export function useMaxAmountOfVeBAL() {
-  const { vebalBptToken } = useTokens()
+  const { vebalBptToken, isLoadingTokens } = useTokens()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { mainnetLockedInfo: lockedInfo, isLoading: isLockInfoLoading } = useVebalLockData()
-  const isLoading = isBalancesLoading || isLockInfoLoading
 
   const lockedBPTAmount = lockedInfo.hasExistingLock ? lockedInfo.lockedAmount : 0
   const bptAmount = vebalBptToken
@@ -47,7 +46,7 @@ export function useMaxAmountOfVeBAL() {
   }
 
   return {
-    isMaxAmountLoading: isLoading,
+    isMaxAmountLoading: isLoadingTokens || isBalancesLoading || isLockInfoLoading,
     maxAmount,
     calculateCurrentVeBalPercentage,
     isSmallerThanCurrentBalance,

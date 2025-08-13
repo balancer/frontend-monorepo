@@ -20,8 +20,8 @@ export function LbpSummary() {
     launchTokenAddress,
     saleTokenAmount,
     selectedChain,
-    startTime,
-    endTime,
+    startDateTime,
+    endDateTime,
     weightAdjustmentType,
     userActions,
   } = saleStructureForm.getValues()
@@ -53,11 +53,11 @@ export function LbpSummary() {
           <Text fontWeight="bold">Sale details</Text>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Sale start</Text>
-            <Text color="grayText">{formatDateTimeShort(new Date(startTime))}</Text>
+            <Text color="grayText">{formatDateTimeShort(new Date(startDateTime))}</Text>
           </HStack>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Sale end</Text>
-            <Text color="grayText">{formatDateTimeShort(new Date(endTime))}</Text>
+            <Text color="grayText">{formatDateTimeShort(new Date(endDateTime))}</Text>
           </HStack>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Dynamic weight shifts</Text>

@@ -7,8 +7,8 @@ type WeightsChartContainerProps = {
   endWeight: number
   launchTokenSymbol: string
   startWeight: number
-  startDate: string
-  endDate: string
+  startDateTime: string
+  endDateTime: string
   salePeriodText: string
   cutTime?: Date
 }
@@ -18,8 +18,8 @@ export function WeightsChartContainer({
   endWeight,
   launchTokenSymbol,
   startWeight,
-  startDate,
-  endDate,
+  startDateTime,
+  endDateTime,
   salePeriodText,
   cutTime,
 }: WeightsChartContainerProps) {
@@ -28,10 +28,10 @@ export function WeightsChartContainer({
       <WeightsChart
         collateralTokenSymbol={collateralTokenSymbol}
         cutTime={cutTime}
-        endDate={parseISO(endDate)}
+        endDateTime={parseISO(endDateTime)}
         endWeight={endWeight}
         launchTokenSymbol={launchTokenSymbol}
-        startDate={parseISO(startDate)}
+        startDateTime={parseISO(startDateTime)}
         startWeight={startWeight}
       />
       <Divider />

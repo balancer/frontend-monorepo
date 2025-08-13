@@ -62,15 +62,16 @@ export class RecoveryRemoveLiquidityHandler {
     const buildCallParams = {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
-      recipient: account,
       wethIsEth: false, // assuming we don't want to withdraw the native asset over the wrapped native asset for now.
       protocolVersion,
       userData: '0x' as Hex,
     }
 
     const { callData, to, value } = removeLiquidity.buildCall(
-      // sender should now be passed for V3 pools
-      protocolVersion !== 3 ? { ...buildCallParams, sender: account } : buildCallParams
+      // sender and recipient should not be passed for V3 pools
+      protocolVersion !== 3
+        ? { ...buildCallParams, sender: account, recipient: account }
+        : buildCallParams
     )
 
     return {

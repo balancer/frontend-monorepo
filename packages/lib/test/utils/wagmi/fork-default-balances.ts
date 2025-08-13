@@ -146,3 +146,15 @@ export const avalancheTokenBalances: TokenBalance[] = [
     decimals: 6,
   },
 ]
+
+export const hyperEVMTokenBalances: TokenBalance[] = [
+  //pools/hyperevm/v3/0xb2ba1dc0af7ebc7eb9b398d1cf43bc360afedf6f
+  {
+    tokenAddress: '0x1ecd15865d7f8019d546f76d095d9c93cc34edfa', // LIQD
+    value: '100',
+  },
+  {
+    tokenAddress: '0x5555555555555555555555555555555555555555', // WHYPE
+    value: '100',
+  },
+]

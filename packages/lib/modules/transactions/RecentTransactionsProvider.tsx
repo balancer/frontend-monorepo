@@ -17,11 +17,15 @@ import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { Address } from 'viem'
 
 export type RecentTransactionsResponse = ReturnType<typeof useRecentTransactionsLogic>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
 const NUM_RECENT_TRANSACTIONS = 20
 const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
+import SafeAppsSDK from '@safe-global/safe-apps-sdk'
+import { safeStatusToBalancerStatus } from './transaction-steps/safe/safe.helpers'
+import { useInterval } from 'usehooks-ts'
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain
@@ -39,8 +43,11 @@ export type TransactionStatus =
 
 export type SafeTransactionStatus = SafeTxStatus
 
+export type TransactionType = 'standard' | 'safe'
+
 export type TrackedTransaction = {
   hash: Hash
+  type: TransactionType
   label?: string
   description?: string
   status: TransactionStatus
@@ -50,11 +57,13 @@ export type TrackedTransaction = {
   chain: GqlChain
   duration?: number | null
   poolId?: string
+  safeTxId?: string
+  safeTxAddress?: Address
 }
 
 type UpdateTrackedTransaction = Pick<
   TrackedTransaction,
-  'label' | 'description' | 'status' | 'duration'
+  'label' | 'description' | 'status' | 'duration' | 'safeTxId' | 'safeTxAddress'
 >
 
 const TransactionStatusToastStatusMapping: Record<TransactionStatus, AlertStatus> = {
@@ -77,7 +86,7 @@ export function useRecentTransactionsLogic() {
   const waitForUnconfirmedTransactions = useCallback(
     async (transactions: Record<string, TrackedTransaction>) => {
       const unconfirmedTransactions = Object.values(transactions).filter(
-        tx => tx.status === 'confirming'
+        tx => tx.type === 'standard' && tx.status === 'confirming'
       )
 
       const updatePayload = {
@@ -146,13 +155,51 @@ export function useRecentTransactionsLogic() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function handleTransactionAdded(trackedTransaction: TrackedTransaction) {
+  useInterval(() => {
+    const safeAppsSdk = new SafeAppsSDK()
+
+    const unconfirmedTransactions = Object.values(transactions).filter(
+      tx => tx.type === 'safe' && tx.status === 'confirming'
+    )
+
+    unconfirmedTransactions.forEach(safeTrackedTx => {
+      safeAppsSdk.txs.getBySafeTxHash(safeTrackedTx.hash).then(tx => {
+        updateTrackedTransaction(safeTrackedTx.hash, {
+          status: safeStatusToBalancerStatus(tx.txStatus),
+        })
+
+        if (
+          tx.txHash &&
+          !isTxTracked(tx.txHash as Hash) &&
+          safeStatusToBalancerStatus(tx.txStatus) === 'confirmed'
+        ) {
+          addTrackedTransaction(
+            {
+              hash: tx.txHash as Hash,
+              type: 'standard',
+              status: 'confirmed',
+              chain: safeTrackedTx.chain,
+              init: safeTrackedTx.label,
+              description: safeTrackedTx.description,
+              timestamp: Date.now(),
+            },
+            false
+          )
+        }
+      })
+    })
+  }, 5000)
+
+  function addTrackedTransaction(
+    trackedTransaction: TrackedTransaction,
+    showToast: boolean = true
+  ) {
     // add a toast for this transaction, rather than emitting a new toast
     // on updates for the same transaction, we will modify the same toast
     // using updateTrackedTransaction.
     let toastId: ToastId | undefined = undefined
     // Edge case: if the transaction is confirmed we don't show the toast
-    if (trackedTransaction.status !== 'confirmed') {
+    if (trackedTransaction.status !== 'confirmed' && showToast) {
       toastId = toast({
         title: trackedTransaction.label,
         description: trackedTransaction.description,
@@ -244,16 +291,22 @@ export function useRecentTransactionsLogic() {
     localStorage.setItem(RECENT_TRANSACTIONS_KEY, JSON.stringify(customUpdate || transactions))
   }
 
-  function addTrackedTransaction(trackedTransaction: TrackedTransaction) {
-    handleTransactionAdded(trackedTransaction)
-  }
-
   function clearTransactions() {
     updateLocalStorage({})
     setTransactions({})
   }
 
-  return { transactions, addTrackedTransaction, updateTrackedTransaction, clearTransactions }
+  function isTxTracked(txHash: Hash) {
+    return !!transactions[txHash]
+  }
+
+  return {
+    transactions,
+    addTrackedTransaction,
+    updateTrackedTransaction,
+    clearTransactions,
+    isTxTracked,
+  }
 }
 
 export function RecentTransactionsProvider({ children }: { children: ReactNode }) {

@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Button,
   HStack,
@@ -25,9 +24,10 @@ import {
 } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { isEmpty, orderBy } from 'lodash'
 import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'react-feather'
-import { getChainShortName } from '@repo/lib/config/app.config'
-import { formatDistanceToNow } from 'date-fns'
+import { getChainId, getChainShortName } from '@repo/lib/config/app.config'
 import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
+import { getSafeWebUrl } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
+import { formatDistanceToNowAbbr } from '../../utils/time'
 
 function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
@@ -72,7 +72,6 @@ function TransactionIcon({ status }: { status: TransactionStatus }) {
 }
 
 function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
-  // TODO? Add another description so it would always fit in the default width of 320px (ln 71) without truncation (ln 46)
   const label =
     transaction.description &&
     transaction.init &&
@@ -80,8 +79,17 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
       ? transaction.description
       : transaction.init
 
+  const txLink =
+    transaction.type === 'safe' && transaction.safeTxAddress && transaction.safeTxId
+      ? getSafeWebUrl(
+          getChainId(transaction.chain),
+          transaction.safeTxAddress,
+          transaction.safeTxId
+        )
+      : getBlockExplorerTxUrl(transaction.hash, transaction.chain)
+
   return (
-    <HStack align="start" key={transaction.hash} py="sm" w="full">
+    <HStack align="start" key={transaction.hash} py="sm" w="95%">
       <TransactionIcon status={transaction.status} />
       <VStack align="start" spacing="none" w="full">
         <Tooltip fontSize="sm" label={label}>
@@ -92,15 +100,9 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
         <HStack fontSize="xs" spacing="xs">
           <Text color="grayText">
             {transaction.chain ? getChainShortName(transaction.chain) : 'Unknown'},&nbsp;
-            {formatDistanceToNow(new Date(transaction.timestamp), {
-              addSuffix: true,
-            })}
+            {formatDistanceToNowAbbr(new Date(transaction.timestamp))}
           </Text>
-          <Link
-            color="grayText"
-            href={getBlockExplorerTxUrl(transaction.hash, transaction.chain)}
-            target="_blank"
-          >
+          <Link color="grayText" href={txLink} target="_blank">
             <ArrowUpRight size={16} />
           </Link>
         </HStack>

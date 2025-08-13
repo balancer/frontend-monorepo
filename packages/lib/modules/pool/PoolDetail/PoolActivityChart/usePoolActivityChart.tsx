@@ -48,8 +48,8 @@ const getDefaultPoolActivityChartOptions = (
   return {
     grid: {
       left: isExpanded ? (isMobile ? '15%' : '60') : '2.5%',
-      right: '10',
-      top: '7.5%',
+      right: '40', // Smallest margin for worst case scenario (big ball at the edge)
+      top: '40',
       bottom: isExpanded ? '10.5%' : '50%',
       containLabel: false,
     },
@@ -84,13 +84,6 @@ const getDefaultPoolActivityChartOptions = (
         },
       },
       axisLine: { show: false },
-      // TODO: is this needed?
-      // splitArea: {
-      //   show: false,
-      //   areaStyle: {
-      //     color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'],
-      //   },
-      // },
       min: minDate,
       max: maxDate,
     },

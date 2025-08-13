@@ -28,6 +28,7 @@ export function SuccessActions({
       <Divider />
       <HStack justify="space-between" w="full">
         <Button
+          aria-label={returnLabel}
           leftIcon={<CornerDownLeft size="14" />}
           onClick={returnAction}
           size="xs"

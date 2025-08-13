@@ -11,6 +11,7 @@ import { ProjectedPrice } from './steps/preview/ProjectedPrice'
 import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
+import { Address } from 'viem'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
@@ -55,6 +56,7 @@ export function LbpPreview() {
               </Flex>
               <TokenSummary
                 chain={chain}
+                launchTokenAddress={launchTokenAddress as Address}
                 launchTokenMetadata={launchTokenMetadata}
                 projectInfoForm={projectInfoForm}
               />
@@ -74,22 +76,22 @@ export function LbpPreview() {
 
               <PoolWeights
                 collateralToken={getToken(collateralTokenAddress, chain)}
-                endDate={saleStructureData.endTime}
+                endDateTime={saleStructureData.endDateTime}
                 endWeight={endWeight}
                 launchTokenMetadata={launchTokenMetadata}
-                startDate={saleStructureData.startTime}
+                startDateTime={saleStructureData.startDateTime}
                 startWeight={startWeight}
               />
 
               <ProjectedPrice
                 collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
                 collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
-                endTime={saleStructureData.endTime}
+                endDateTime={saleStructureData.endDateTime}
                 endWeight={endWeight}
                 launchTokenSeed={Number(saleStructureData.saleTokenAmount || 0)}
                 launchTokenSymbol={launchTokenMetadata?.symbol || ''}
                 onPriceChange={updatePriceStats}
-                startTime={saleStructureData.startTime}
+                startDateTime={saleStructureData.startDateTime}
                 startWeight={startWeight}
               />
             </>

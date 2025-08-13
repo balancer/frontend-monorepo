@@ -59,6 +59,7 @@ import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { now } from '@repo/lib/shared/utils/time'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { useInterval } from 'usehooks-ts'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -88,34 +89,8 @@ export function SaleStructureStep() {
   const launchTokenAddress = saleStructureData.launchTokenAddress
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
-  const saleStart = saleStructureData.startTime
-  const saleEnd = saleStructureData.endTime
-
-  const validateSaleStart = (value: string | number) => {
-    if (typeof value !== 'string') return 'Start time must be type string'
-    if (!isAfter(parseISO(value), addHours(now(), 1))) {
-      return 'Set the start time at least 1 hour ahead to ensure the pool is seeded before the sale begins.'
-    }
-    return true
-  }
-
-  const validateSaleEnd = (value: string | number) => {
-    if (typeof value !== 'string') return 'End time must be type string'
-    if (!isAfter(parseISO(value), addDays(parseISO(saleStart), 1))) {
-      return 'End time must be at least 24 hours after start time'
-    }
-    return true
-  }
-
-  const isSaleStartValid = validateSaleStart(saleStart)
-
-  const saleStartsSoon =
-    isSaleStartValid && saleStart && isBefore(parseISO(saleStart), addDays(now(), 1))
-  const areSaleTimesValid = !!saleStart && !!saleEnd
-  const daysDiff = areSaleTimesValid ? differenceInDays(parseISO(saleEnd), parseISO(saleStart)) : 0
-  const hoursDiff = areSaleTimesValid
-    ? differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
-    : 0
+  const saleStart = saleStructureData.startDateTime
+  const saleEnd = saleStructureData.endDateTime
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
 
@@ -150,43 +125,31 @@ export function SaleStructureStep() {
         {launchTokenIsValid && (
           <>
             <Divider />
+
             <Heading color="font.maxContrast" size="md">
               Sale period
             </Heading>
             <VStack align="start" gap="lg" w="full">
               <VStack align="start" gap="sm" w="full">
-                <DateTimeInput
+                <SaleStartInput
                   control={control}
                   errors={errors}
-                  label="Start date and time"
-                  min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
-                  name="startTime"
-                  validate={validateSaleStart}
+                  triggerValidation={trigger}
+                  value={saleStart}
                 />
-                {saleStartsSoon && (
-                  <Text color="font.warning" fontSize="sm">
-                    This sale starts soon. Make sure to seed liquidity before this time or the LBP
-                    will fail to launch.
-                  </Text>
-                )}
               </VStack>
               <VStack align="start" gap="sm" w="full">
-                <DateTimeInput
+                <SaleEndInput
                   control={control}
                   errors={errors}
-                  label="End date and time"
-                  min={saleStart}
-                  name="endTime"
-                  validate={validateSaleEnd}
+                  saleStart={saleStart}
+                  value={saleEnd}
                 />
-                <Text color="font.secondary" fontSize="sm">
-                  {saleStart && saleEnd
-                    ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
-                    : 'Suggested sale period: 5 days'}
-                </Text>
               </VStack>
             </VStack>
+
             <Divider />
+
             <Heading color="font.maxContrast" size="md">
               LBP mechanism
             </Heading>
@@ -215,11 +178,14 @@ export function SaleStructureStep() {
                 cap and price curve. The stats and charts in the preview show the impact of your
                 choices.
               </Text>
-              {isSaleStartValid && saleStart && (
-                <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
-                  <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
+              {saleStart && isSaleStartValid(saleStart) && (
+                <Alert
+                  status={saleStartsSoon(saleStart) ? 'warning' : 'info'}
+                  variant="WideOnDesktop"
+                >
+                  <AlertIcon as={saleStartsSoon(saleStart) ? AlertTriangle : LightbulbIcon} />
                   <AlertDescription color="#000" fontSize="sm">
-                    {saleStartsSoon && 'This sale is scheduled to start soon. '}
+                    {saleStartsSoon(saleStart) && 'This sale is scheduled to start soon. '}
                     The LBP will fail to launch unless you seed the initial liquidity before the
                     scheduled start time at {format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.
                   </AlertDescription>
@@ -375,6 +341,111 @@ function LaunchTokenAddressInput({
         </InputRightElement>
       </InputGroup>
     </VStack>
+  )
+}
+
+function SaleStartInput({
+  control,
+  errors,
+  value,
+  triggerValidation,
+}: {
+  control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
+  value: string
+  triggerValidation: UseFormTrigger<SaleStructureForm>
+}) {
+  useEffect(() => {
+    if (value) triggerValidation('startDateTime')
+  }, [value, triggerValidation])
+
+  useInterval(() => {
+    if (value) triggerValidation('startDateTime')
+  }, 5000)
+
+  return (
+    <>
+      <DateTimeInput
+        control={control}
+        errors={errors}
+        label="Start date and time"
+        min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
+        name="startDateTime"
+        validate={isSaleStartValid}
+      />
+      {saleStartsSoon(value) && !errors['startDateTime'] && (
+        <Text color="font.warning" fontSize="sm">
+          This sale starts soon. Make sure to seed liquidity before this time or the LBP will fail
+          to launch.
+        </Text>
+      )}
+    </>
+  )
+}
+
+function isSaleStartValid(value: string | number) {
+  if (typeof value !== 'string') return 'Start time must be type string'
+
+  if (isBefore(parseISO(value), now())) {
+    return `This start date is already in the past.
+              Set it at least 1 hour ahead to ensure the pool is seeded
+              before the sale begins.`
+  }
+
+  if (!isAfter(parseISO(value), addHours(now(), 1))) {
+    return 'Set the start time at least 1 hour ahead to ensure the pool is seeded before the sale begins.'
+  }
+
+  return true
+}
+
+function saleStartsSoon(saleStart: string) {
+  return (
+    saleStart && isSaleStartValid(saleStart) && isBefore(parseISO(saleStart), addDays(now(), 1))
+  )
+}
+
+function SaleEndInput({
+  control,
+  errors,
+  value,
+  saleStart,
+}: {
+  control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
+  value: string
+  saleStart: string
+}) {
+  const validateSaleEnd = (value: string | number) => {
+    if (typeof value !== 'string') return 'End time must be type string'
+    if (!isAfter(parseISO(value), addDays(parseISO(saleStart), 1))) {
+      return 'End time must be at least 24 hours after start time'
+    }
+    return true
+  }
+
+  const areSaleTimesValid = !!saleStart && !!value
+  const daysDiff = areSaleTimesValid ? differenceInDays(parseISO(value), parseISO(saleStart)) : 0
+  const hoursDiff = areSaleTimesValid
+    ? differenceInHours(parseISO(value), parseISO(saleStart)) - daysDiff * 24
+    : 0
+
+  return (
+    <>
+      <DateTimeInput
+        control={control}
+        errors={errors}
+        label="End date and time"
+        min={saleStart}
+        name="endDateTime"
+        validate={validateSaleEnd}
+      />
+      <Text color="font.secondary" fontSize="sm">
+        {saleStart && value
+          ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
+          : 'Suggested sale period: 5 days'}
+      </Text>
+    </>
   )
 }
 
