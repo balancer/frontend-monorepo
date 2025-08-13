@@ -210,7 +210,7 @@ export function SaleStructureStep() {
               <Heading color="font.maxContrast" size="md">
                 Seed initial pool liquidity
               </Heading>
-              <Text color="font.secondary">
+              <Text color="font.secondary" fontSize="sm">
                 The initial seed amounts and their ratio set the starting price, projected market
                 cap and price curve. The stats and charts in the preview show the impact of your
                 choices.
@@ -218,7 +218,7 @@ export function SaleStructureStep() {
               {isSaleStartValid && saleStart && (
                 <Alert status={saleStartsSoon ? 'warning' : 'info'} variant="WideOnDesktop">
                   <AlertIcon as={saleStartsSoon ? AlertTriangle : LightbulbIcon} />
-                  <AlertDescription>
+                  <AlertDescription color="#000" fontSize="sm">
                     {saleStartsSoon && 'This sale is scheduled to start soon. '}
                     The LBP will fail to launch unless you seed the initial liquidity before the
                     scheduled start time at {format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.
