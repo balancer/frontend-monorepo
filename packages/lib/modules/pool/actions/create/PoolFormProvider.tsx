@@ -18,7 +18,12 @@ export type PoolConfig = {
 export type UsePoolFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolFormContext = createContext<UsePoolFormResult | null>(null)
 
-const steps = [{ id: 'step1', title: 'Pool type' }]
+const steps = [
+  { id: 'step1', title: 'Type' },
+  { id: 'step2', title: 'Tokens' },
+  { id: 'step3', title: 'Details' },
+  { id: 'step4', title: 'Fund' },
+]
 
 export function usePoolFormLogic() {
   const poolConfigForm = usePersistentForm<PoolConfig>(LS_KEYS.PoolCreation.Config, {

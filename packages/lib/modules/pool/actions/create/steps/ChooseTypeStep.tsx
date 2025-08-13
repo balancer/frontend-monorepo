@@ -9,6 +9,7 @@ import {
   RadioGroup,
   Stack,
   Radio,
+  Divider,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
@@ -21,10 +22,17 @@ import { usePoolForm } from '../PoolFormProvider'
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { type SubmitHandler, Controller, Control } from 'react-hook-form'
 import { type PoolConfig } from '../PoolFormProvider'
+import { PoolFormAction } from '../PoolFormAction'
 
 export function ChooseTypeStep() {
   const {
-    poolConfigForm: { handleSubmit, control, watch, setValue },
+    poolConfigForm: {
+      handleSubmit,
+      control,
+      watch,
+      setValue,
+      formState: { isValid },
+    },
     setActiveStep,
     activeStepIndex,
   } = usePoolForm()
@@ -57,6 +65,8 @@ export function ChooseTypeStep() {
         />
         <ChooseNetwork control={control} networkOptions={networkOptions} />
         <ChoosePoolType control={control} />
+        <Divider />
+        <PoolFormAction disabled={!isValid} />
       </VStack>
     </form>
   )

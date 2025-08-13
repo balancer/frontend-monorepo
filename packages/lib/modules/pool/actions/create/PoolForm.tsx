@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { usePoolForm } from './PoolFormProvider'
 import { ChooseTypeStep } from './steps/ChooseTypeStep'
+import { ChooseTokensStep } from './steps/ChooseTokensStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
 
@@ -62,6 +63,7 @@ export function PoolForm() {
 
       <VStack spacing="lg" w="full">
         {activeStep.id === 'step1' && <ChooseTypeStep />}
+        {activeStep.id === 'step2' && <ChooseTokensStep />}
       </VStack>
     </VStack>
   )
