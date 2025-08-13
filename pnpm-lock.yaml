@@ -480,8 +480,8 @@ importers:
         specifier: 5.80.7
         version: 5.80.7(react@19.1.0)
       '@tanstack/react-query-devtools':
-        specifier: 5.62.11
-        version: 5.62.11(@tanstack/react-query@5.80.7(react@19.1.0))(react@19.1.0)
+        specifier: 5.84.2
+        version: 5.84.2(@tanstack/react-query@5.80.7(react@19.1.0))(react@19.1.0)
       '@vercel/speed-insights':
         specifier: 1.1.0
         version: 1.1.0(next@15.3.2(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
@@ -4217,13 +4217,13 @@ packages:
   '@tanstack/query-core@5.80.7':
     resolution: {integrity: sha512-s09l5zeUKC8q7DCCCIkVSns8zZrK4ZDT6ryEjxNBFi68G4z2EBobBS7rdOY3r6W1WbUDpc1fe5oY+YO/+2UVUg==}
 
-  '@tanstack/query-devtools@5.62.9':
-    resolution: {integrity: sha512-b1NZzDLVf6laJsB1Cfm3ieuYzM+WqoO8qpm9v+3Etwd+Ph4zkhUMiT+wcWj5AhEPsXiRodKYiiW048VDNdBxNg==}
+  '@tanstack/query-devtools@5.84.0':
+    resolution: {integrity: sha512-fbF3n+z1rqhvd9EoGp5knHkv3p5B2Zml1yNRjh7sNXklngYI5RVIWUrUjZ1RIcEoscarUb0+bOvIs5x9dwzOXQ==}
 
-  '@tanstack/react-query-devtools@5.62.11':
-    resolution: {integrity: sha512-i0vKgdM4ORRzqduz7UeUF52UhLrvRp4sNY/DnLsd5NqNyiKct3a0bLQMWE2fqjF5tEExQ0d0xY60ILXW/T62xA==}
+  '@tanstack/react-query-devtools@5.84.2':
+    resolution: {integrity: sha512-ojJ66QoW9noqK35Lsmfqpfucj6wuOxLL2TYwEwpvU+iUQ5R/7TKpapWvpy9kZyNSl0mxv5mpS+ImfR8aL8/x3g==}
     peerDependencies:
-      '@tanstack/react-query': ^5.62.11
+      '@tanstack/react-query': ^5.84.2
       react: ^18 || ^19
 
   '@tanstack/react-query@5.80.7':
@@ -15328,11 +15328,11 @@ snapshots:
 
   '@tanstack/query-core@5.80.7': {}
 
-  '@tanstack/query-devtools@5.62.9': {}
+  '@tanstack/query-devtools@5.84.0': {}
 
-  '@tanstack/react-query-devtools@5.62.11(@tanstack/react-query@5.80.7(react@19.1.0))(react@19.1.0)':
+  '@tanstack/react-query-devtools@5.84.2(@tanstack/react-query@5.80.7(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@tanstack/query-devtools': 5.62.9
+      '@tanstack/query-devtools': 5.84.0
       '@tanstack/react-query': 5.80.7(react@19.1.0)
       react: 19.1.0
 
