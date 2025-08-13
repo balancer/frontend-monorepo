@@ -286,7 +286,9 @@ export function WeightsChart({
     <ReactECharts option={chartInfo} style={{ height: '350px', width: '100%' }} />
   ) : (
     <Stack alignItems="center" h="350px" justifyContent="center">
-      <Text fontSize="3xl">Missing data</Text>
+      <Text color="font.secondary" fontStyle="italic" textAlign="center" w="55%">
+        Enter a valid token contract and set the time period to see the chart.
+      </Text>
     </Stack>
   )
 }
