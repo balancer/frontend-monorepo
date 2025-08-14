@@ -15,8 +15,8 @@ export type PoolConfig = {
   network: GqlChain
   poolType: PoolType
 }
-export type UsePoolFormResult = ReturnType<typeof usePoolFormLogic>
-export const PoolFormContext = createContext<UsePoolFormResult | null>(null)
+export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
+export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 const steps = [
   { id: 'step1', title: 'Type' },
@@ -61,7 +61,10 @@ export function usePoolFormLogic() {
 
 export function PoolFormProvider({ children }: PropsWithChildren) {
   const hook = usePoolFormLogic()
-  return <PoolFormContext.Provider value={hook}>{children}</PoolFormContext.Provider>
+  return (
+    <PoolCreationFormContext.Provider value={hook}>{children}</PoolCreationFormContext.Provider>
+  )
 }
 
-export const usePoolForm = (): UsePoolFormResult => useMandatoryContext(PoolFormContext, 'PoolForm')
+export const usePoolCreationForm = (): UsePoolCreationFormResult =>
+  useMandatoryContext(PoolCreationFormContext, 'PoolCreationForm')

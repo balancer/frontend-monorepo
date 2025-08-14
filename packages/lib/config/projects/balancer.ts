@@ -24,16 +24,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
     // testnets only in dev mode
     ...(isProd ? [] : [GqlChain.Sepolia]),
   ],
-  supportedNetworksV3: [
-    GqlChain.Mainnet,
-    GqlChain.Arbitrum,
-    GqlChain.Avalanche,
-    GqlChain.Base,
-    GqlChain.Gnosis,
-    GqlChain.Hyperevm,
-    // testnets only in dev mode
-    ...(isProd ? [] : [GqlChain.Sepolia]),
-  ],
   variantConfig: {
     [PartnerVariant.cow]: {
       banners: {

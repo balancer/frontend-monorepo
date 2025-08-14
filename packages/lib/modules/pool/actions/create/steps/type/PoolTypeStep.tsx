@@ -1,12 +1,9 @@
 import { VStack, Heading, Divider, Box } from '@chakra-ui/react'
-import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
-import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
-import { usePoolForm } from '../../PoolFormProvider'
-import { ProjectConfig } from '@repo/lib/config/config.types'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { type SubmitHandler } from 'react-hook-form'
-import { type PoolConfig } from '../../PoolFormProvider'
-import { PoolFormAction } from '../../PoolFormAction'
-import { ChooseProtocol } from './ChooseProtocol'
+import { type PoolConfig } from '../../PoolCreationFormProvider'
+import { PoolCreationFormAction } from '../../PoolCreationFormAction'
+// import { ChooseProtocol } from './ChooseProtocol'
 import { ChooseNetwork } from './ChooseNetwork'
 import { ChoosePoolType } from './ChoosePoolType'
 
@@ -15,27 +12,11 @@ export function PoolTypeStep() {
     poolConfigForm: {
       handleSubmit,
       control,
-      watch,
-      setValue,
       formState: { isValid },
-      trigger,
     },
     setActiveStep,
     activeStepIndex,
-  } = usePoolForm()
-  const poolConfig = watch()
-
-  const { supportedNetworksV3: supportedNetworksBalancer } = ProjectConfigBalancer
-  const { supportedNetworks: supportedNetworksBeets } = ProjectConfigBeets
-  const networkOptions =
-    poolConfig.protocol === ProjectConfigBalancer.projectId
-      ? supportedNetworksBalancer
-      : supportedNetworksBeets
-
-  const handleChooseProtocol = (protocolId: ProjectConfig['projectId']) => {
-    setValue('protocol', protocolId)
-    trigger('protocol')
-  }
+  } = usePoolCreationForm()
 
   const onSubmit: SubmitHandler<PoolConfig> = () => {
     setActiveStep(activeStepIndex + 1)
@@ -47,14 +28,11 @@ export function PoolTypeStep() {
         <Heading color="font.maxContrast" size="md">
           Pool type
         </Heading>
-        <ChooseProtocol
-          handleChooseProtocol={handleChooseProtocol}
-          selectedProtocol={poolConfig.protocol}
-        />
-        <ChooseNetwork control={control} networkOptions={networkOptions} />
+        {/* <ChooseProtocol /> */}
+        <ChooseNetwork control={control} />
         <ChoosePoolType control={control} />
         <Divider />
-        <PoolFormAction disabled={!isValid} />
+        <PoolCreationFormAction disabled={!isValid} />
       </VStack>
     </Box>
   )

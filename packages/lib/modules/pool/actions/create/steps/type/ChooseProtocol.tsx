@@ -2,14 +2,21 @@ import { ProjectConfig } from '@repo/lib/config/config.types'
 import { VStack, Text, SimpleGrid, Card } from '@chakra-ui/react'
 import { PROTOCOLS } from '@repo/lib/modules/pool/actions/create/constants'
 import Image from 'next/image'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
-export function ChooseProtocol({
-  handleChooseProtocol,
-  selectedProtocol,
-}: {
-  selectedProtocol: ProjectConfig['projectId']
-  handleChooseProtocol: (protocolId: ProjectConfig['projectId']) => void
-}) {
+// TODO: Protocol selection part of OG designs, but maybe remove after discussion with pon?
+export function ChooseProtocol() {
+  const {
+    poolConfigForm: { watch, setValue, trigger },
+  } = usePoolCreationForm()
+
+  const poolConfig = watch()
+  const selectedProtocol = poolConfig.protocol
+
+  const handleChooseProtocol = (protocolId: ProjectConfig['projectId']) => {
+    setValue('protocol', protocolId)
+    trigger('protocol')
+  }
   return (
     <VStack align="start" spacing="md" w="full">
       <Text color="font.primary">Choose protocol</Text>

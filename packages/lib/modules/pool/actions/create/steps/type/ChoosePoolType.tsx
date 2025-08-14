@@ -1,5 +1,5 @@
 import { Control } from 'react-hook-form'
-import { PoolConfig } from '../../PoolFormProvider'
+import { PoolConfig } from '../../PoolCreationFormProvider'
 import { VStack, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react'
 import { Controller } from 'react-hook-form'
 import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'

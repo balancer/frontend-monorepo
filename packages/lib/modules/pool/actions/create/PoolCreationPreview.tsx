@@ -1,13 +1,13 @@
 import { VStack, Heading, Flex, Card, CardHeader, HStack, Text, CardBody } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { usePoolForm } from './PoolFormProvider'
+import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { capitalize } from 'lodash'
 
-export function PoolPreview() {
+export function PoolCreationPreview() {
   const {
     poolConfigForm: { watch },
-  } = usePoolForm()
+  } = usePoolCreationForm()
   const { network, protocol, poolType } = watch()
 
   return (

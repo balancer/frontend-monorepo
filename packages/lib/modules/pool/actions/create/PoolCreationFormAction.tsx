@@ -4,11 +4,11 @@ import { Button, HStack, IconButton, useDisclosure } from '@chakra-ui/react'
 import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { usePoolForm } from './PoolFormProvider'
+import { usePoolCreationForm } from './PoolCreationFormProvider'
 
-export function PoolFormAction({ disabled }: { disabled?: boolean }) {
+export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
-  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolForm()
+  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationForm()
   const previewModalDisclosure = useDisclosure()
 
   return isConnected ? (
