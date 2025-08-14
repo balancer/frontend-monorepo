@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Stepper,
   Step,
@@ -15,8 +13,8 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { usePoolForm } from './PoolFormProvider'
-import { ChooseTypeStep } from './steps/ChooseTypeStep'
-import { ChooseTokensStep } from './steps/ChooseTokensStep'
+import { PoolTypeStep } from './steps/type/PoolTypeStep'
+import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
 
@@ -62,8 +60,8 @@ export function PoolForm() {
       <Divider />
 
       <VStack spacing="lg" w="full">
-        {activeStep.id === 'step1' && <ChooseTypeStep />}
-        {activeStep.id === 'step2' && <ChooseTokensStep />}
+        {activeStep.id === 'step1' && <PoolTypeStep />}
+        {activeStep.id === 'step2' && <PoolTokensStep />}
       </VStack>
     </VStack>
   )

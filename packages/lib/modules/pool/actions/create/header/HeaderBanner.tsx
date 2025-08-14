@@ -108,11 +108,13 @@ export function HeaderBanner() {
             title="Capital efficiency"
             transformBackground="rotate(90deg)"
           />
+
           <FeatureLink
             description={accessToHooksDescription}
             title="Access to hooks"
             transformBackground="rotate(0deg)"
           />
+
           <FeatureLink
             description={immediateLiquidityDescription}
             title="Immediate liquidity"
