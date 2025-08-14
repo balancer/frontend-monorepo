@@ -73,7 +73,7 @@ export function TooltipAprItem({
                   position: 'absolute',
                   width: '100%',
                 }}
-                color={valueFontColor ?? fontColor}
+                color={apr.gte(0) ? (valueFontColor ?? fontColor) : 'font.warning'}
                 fontSize="sm"
                 fontWeight={fontWeight}
                 opacity={aprOpacity}
@@ -93,7 +93,7 @@ export function TooltipAprItem({
           </Popover>
         ) : (
           <Text
-            color={valueFontColor ?? fontColor}
+            color={apr.gte(0) ? (valueFontColor ?? fontColor) : 'font.warning'}
             fontSize="sm"
             fontWeight={fontWeight}
             opacity={aprOpacity}
