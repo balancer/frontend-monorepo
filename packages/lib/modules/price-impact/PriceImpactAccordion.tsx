@@ -65,7 +65,7 @@ export function PriceImpactAccordion({
   const { tokenIn, tokenOut, selectedChain } = useSwap()
   const showCowSwapLink = PROJECT_CONFIG.cowSupportedNetworks.includes(selectedChain)
 
-  function getPriceImpactMessage(action: 'swap' | 'add' | 'remove'): ReactNode {
+  function PriceImpactMessage({ action }: { action: 'swap' | 'add' | 'remove' }) {
     switch (action) {
       case 'swap':
         return (
@@ -210,11 +210,15 @@ export function PriceImpactAccordion({
                       : `${getPriceImpactTitle(action)}`}
                   </AlertTitle>
                   <AlertDescription>
-                    <Text as="div" color="#000" fontSize="sm" whiteSpace="pre-line">
-                      {isUnknownPriceImpact
-                        ? 'The potential losses from this transaction cannot be calculated at this time. This may include high price impact and/or high swap fees. Only proceed if you know exactly what you are doing.'
-                        : getPriceImpactMessage(action)}
-                    </Text>
+                    {isUnknownPriceImpact ? (
+                      <Text as="div" color="#000" fontSize="sm" whiteSpace="pre-line">
+                        'The potential losses from this transaction cannot be calculated at this
+                        time. This may include high price impact and/or high swap fees. Only proceed
+                        if you know exactly what you are doing.'
+                      </Text>
+                    ) : (
+                      <PriceImpactMessage action={action} />
+                    )}
                   </AlertDescription>
                 </Box>
               </Alert>
