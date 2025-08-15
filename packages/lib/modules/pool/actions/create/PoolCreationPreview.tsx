@@ -3,12 +3,13 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { capitalize } from 'lodash'
+import { PoolType } from '@balancer/sdk'
 
 export function PoolCreationPreview() {
   const {
     poolConfigForm: { watch },
   } = usePoolCreationForm()
-  const { network, protocol, poolType } = watch()
+  const { network, protocol, poolType, weightedPoolStructure } = watch()
 
   return (
     <>
@@ -45,7 +46,10 @@ export function PoolCreationPreview() {
                 </HStack>
                 <HStack align="start" spacing="md" w="full">
                   <Text color="font.secondary">Pool type</Text>
-                  <Text fontWeight="semibold">{capitalize(poolType)}</Text>
+                  <Text fontWeight="semibold">
+                    {capitalize(poolType)}
+                    {poolType === PoolType.Weighted && `: ${weightedPoolStructure}`}
+                  </Text>
                 </HStack>
               </VStack>
             </CardBody>
