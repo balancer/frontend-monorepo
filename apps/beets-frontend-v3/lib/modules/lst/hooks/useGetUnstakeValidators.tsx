@@ -5,7 +5,7 @@ import { parseUnits } from 'viem'
 
 interface ApiValidatorResponse {
   data: Array<{
-    withdrawalAmount: number
+    withdrawalAmount: string
     validatorId: string
   }>
 }
