@@ -22,3 +22,5 @@ export const PROTOCOLS = [
     imageSrc: ProjectConfigBeets.projectLogo,
   },
 ]
+
+export const WEIGHTED_POOL_STRUCTURES = ['2-token: 50/50', '2-token: 80/20', 'custom']

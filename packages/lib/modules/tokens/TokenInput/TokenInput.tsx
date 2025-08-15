@@ -46,7 +46,11 @@ type TokenConfigProps = {
   showIcon: boolean
 }
 
-function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputSelectorProps) {
+export function TokenInputSelector({
+  token,
+  weight,
+  onToggleTokenClicked,
+}: TokenInputSelectorProps) {
   const [tokenConfig, setTokenConfig] = useState<TokenConfigProps | undefined>(undefined)
 
   useEffect(() => {
