@@ -27,7 +27,6 @@ export function selectRemoveLiquidityHandler(
   // }
 
   if (shouldUseRecoveryRemoveLiquidity(pool)) {
-    console.log('Recovery handler')
     return new RecoveryRemoveLiquidityHandler(pool)
   }
 
