@@ -21,13 +21,12 @@ export function useGetUnstakeValidators(
   unstakeEnabled: boolean
 ) {
   const [validators, setValidators] = useState<ValidatorUnstakeData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
   const { chooseValidatorsForUnstakeAmount } = useGetAmountDelegatedPerValidator(chain)
 
   const fetchValidators = useCallback(async () => {
     if (!sharesAmount || !unstakeEnabled) {
-      setIsLoading(false)
       return
     }
 
