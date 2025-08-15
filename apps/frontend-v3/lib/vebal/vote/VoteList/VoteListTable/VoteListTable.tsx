@@ -51,6 +51,8 @@ export function VoteListTable({ voteList, count, loading }: Props) {
       alignItems="flex-start"
       left={{ base: '-4px', sm: '0' }}
       mb="2xl"
+      overflowX={{ base: 'auto', '2xl': 'hidden' }}
+      overflowY="hidden"
       p={{ base: '0', sm: '0' }}
       position="relative"
       pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }} // fixing right padding for horizontal scroll on mobile

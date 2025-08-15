@@ -6,7 +6,13 @@ import { PoolChartsContainer } from './PoolCharts/PoolChartsContainer'
 
 export function PoolStatsLayout() {
   return (
-    <Stack direction={{ base: 'column', md: 'row' }} justifyContent="stretch" spacing="md" w="full">
+    <Stack
+      direction={{ base: 'column', md: 'row' }}
+      h={{ md: '484px' }}
+      justifyContent="stretch"
+      spacing="md"
+      w="full"
+    >
       <PoolSnapshot w={{ base: 'full', md: 'md' }} />
       <PoolChartsContainer />
     </Stack>

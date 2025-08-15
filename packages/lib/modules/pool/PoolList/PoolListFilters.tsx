@@ -491,7 +491,7 @@ export function PoolListFilters() {
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" spacing="none" w="full">
+      <HStack gap="0" justify="end" pr={{ base: 'md', xl: '0' }} spacing="none" w="full">
         <PoolListSearch />
         <Popover
           isLazy

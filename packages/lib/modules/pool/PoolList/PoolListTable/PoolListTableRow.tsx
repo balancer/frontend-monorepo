@@ -113,8 +113,12 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                 </Text>
               </TooltipWithTouch>
             </GridItem>
-            <GridItem justifySelf="end" pr={{ base: 'md', xl: '0' }}>
-              <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '12px' : '0'}>
+            <GridItem justifySelf="end" pr={{ base: 'md', lg: 'sm', xl: '0' }}>
+              <HStack
+                gap="xxs"
+                mr={needsMarginForPoints && !hasPoints ? '12px' : '0'}
+                pr={{ base: '0', sm: 'sm', lg: '0' }}
+              >
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
                   chain={pool.chain}

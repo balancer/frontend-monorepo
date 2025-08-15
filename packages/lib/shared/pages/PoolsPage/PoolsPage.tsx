@@ -111,7 +111,12 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
           </DefaultPageContainer>
         </Noise>
       </Box>
-      <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '54px']}>
+      <DefaultPageContainer
+        noVerticalPadding
+        pb="xl"
+        pr={{ base: '0 !important', xl: 'md !important' }}
+        pt={['lg', '54px']}
+      >
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
             <PoolList />
