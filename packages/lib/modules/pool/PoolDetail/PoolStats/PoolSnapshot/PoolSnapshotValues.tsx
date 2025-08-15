@@ -87,7 +87,7 @@ export function PoolSnapshotValues() {
             pool={pool}
             poolId={pool.id}
             textProps={{
-              fontSize: '2xl',
+              fontSize: ['xl', 'xl', '2xl'],
               fontWeight: 'bold',
               lineHeight: '28px',
             }}
