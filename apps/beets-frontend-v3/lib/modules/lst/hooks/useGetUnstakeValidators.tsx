@@ -64,9 +64,7 @@ export function useGetUnstakeValidators(
   }, [sharesAmount, unstakeEnabled, chooseValidatorsForUnstakeAmount])
 
   useEffect(() => {
-    if (unstakeEnabled && sharesAmount && sharesAmount !== '0') {
-      fetchValidators()
-    }
+    fetchValidators()
   }, [sharesAmount, unstakeEnabled, fetchValidators])
 
   return {
