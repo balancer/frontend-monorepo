@@ -66,6 +66,11 @@ export function usePriceImpactLogic() {
     }
   }, [priceImpactLevel])
 
+  function resetPriceImpact() {
+    setPriceImpact(undefined)
+    setPriceImpactLevel('low')
+  }
+
   return {
     priceImpactLevel,
     priceImpactColor,
@@ -77,6 +82,7 @@ export function usePriceImpactLogic() {
     PriceImpactIcon,
     setPriceImpact,
     setPriceImpactLevel,
+    resetPriceImpact,
   }
 }
 

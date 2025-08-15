@@ -311,12 +311,15 @@ export function SwapForm({
                     })}
                 />
               </VStack>
-              <PriceImpactAccordion
-                accordionButtonComponent={<SwapRate customTokenUsdPrice={customTokenUsdPrice} />}
-                accordionPanelComponent={<SwapDetails />}
-                isDisabled={!simulationQuery.data}
-                setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
-              />
+              {!simulationQuery.isError && (
+                <PriceImpactAccordion
+                  accordionButtonComponent={<SwapRate customTokenUsdPrice={customTokenUsdPrice} />}
+                  accordionPanelComponent={<SwapDetails />}
+                  action="swap"
+                  isDisabled={!simulationQuery.data}
+                  setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
+                />
+              )}
               {simulationQuery.isError ? (
                 <SwapSimulationError errorMessage={simulationQuery.error?.message} />
               ) : null}
