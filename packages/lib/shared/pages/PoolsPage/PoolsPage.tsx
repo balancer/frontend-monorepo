@@ -129,16 +129,14 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
-      {isBalancer && (
+      {!isBalancer && (
         <DefaultPageContainer py="0" rounded="2xl">
-          <FadeInOnView animateOnce={false}>
-            <Box>
-              {!featuredPoolsLoading && featuredPools.length > 0 && (
-                <FeaturedPools featuredPools={featuredPools} />
-              )}
-              {featuredPoolsLoading && <Skeleton height="200px" width="100%" />}
-            </Box>
-          </FadeInOnView>
+          <Box>
+            {!featuredPoolsLoading && featuredPools.length > 0 && (
+              <FeaturedPools featuredPools={featuredPools} />
+            )}
+            {featuredPoolsLoading && <Skeleton height="200px" width="100%" />}
+          </Box>
         </DefaultPageContainer>
       )}
       <DefaultPageContainer mb="3xl" py="0" rounded="2xl">

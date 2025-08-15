@@ -61,7 +61,9 @@ export function FeaturedPartners() {
                     }}
                     key={partnerCard.title}
                   >
-                    <PartnerCard {...partnerCard} />
+                    <FadeInOnView animateOnce={false}>
+                      <PartnerCard {...partnerCard} />
+                    </FadeInOnView>
                   </Box>
                 ))}
               </Flex>

@@ -88,8 +88,8 @@ export function FeaturedPool1SVG() {
           y1="108.55"
           y2="24.21"
         >
-          <stop stopColor="#D1F5EA" stopOpacity="0.7" />
-          <stop offset="1" stopColor="#23A27A" stopOpacity="0.7" />
+          <stop stopColor="#9EFFE0" stopOpacity="0.7" />
+          <stop offset="1" stopColor="#017953" stopOpacity="0.7" />
         </linearGradient>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -139,7 +139,7 @@ export function FeaturedPool2SVG() {
           y2="98.8"
         >
           <stop stopColor="#FFFCCC" stopOpacity="0.7" />
-          <stop offset="1" stopColor="#FFEE00" stopOpacity="0.7" />
+          <stop offset="1" stopColor="#FFD900" stopOpacity="0.7" />
         </linearGradient>
         {/* Left */}
         <linearGradient
@@ -150,7 +150,7 @@ export function FeaturedPool2SVG() {
           y1="44.37"
           y2="126.22"
         >
-          <stop stopColor="#EB8B47" stopOpacity="0.7" />
+          <stop stopColor="#FF6A00" stopOpacity="0.7" />
           <stop offset="1" stopColor="#FAE2D1" stopOpacity="0.7" />
         </linearGradient>
         {/* Right */}
@@ -162,8 +162,8 @@ export function FeaturedPool2SVG() {
           y1="116.5"
           y2="108.07"
         >
-          <stop stopColor="#286ABF" stopOpacity="0.7" />
-          <stop offset="1" stopColor="#D1E1F5" stopOpacity="0.7" />
+          <stop stopColor="#0050B6" stopOpacity="0.7" />
+          <stop offset="1" stopColor="#85BAFF" stopOpacity="0.7" />
         </linearGradient>
         <SvgShadowFilter id={`shadow-filter-${id}`} />
       </defs>
@@ -257,8 +257,8 @@ export function FeaturedPool3SVG() {
           y1="-98"
           y2="105"
         >
-          <stop stopColor="#B1CDEC" stopOpacity="0.7" />
-          <stop offset="1" stopColor="#3868BE" stopOpacity="0.7" />
+          <stop stopColor="#85BAFF" stopOpacity="0.7" />
+          <stop offset="1" stopColor="#0050B6" stopOpacity="0.7" />
         </linearGradient>
         <SvgShadowFilter id={`shadow-filter-${id}`} />
       </defs>

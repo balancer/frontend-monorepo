@@ -124,7 +124,7 @@ export function FeaturePoolCard({
                 {featuredReason}
               </Text>
             </Box>
-            <FadeInOnView>
+            <FadeInOnView animateOnce={false}>
               <Box position="relative">
                 <Box
                   _groupHover={{ transform: 'scale(1.1) rotate(60deg)' }}
