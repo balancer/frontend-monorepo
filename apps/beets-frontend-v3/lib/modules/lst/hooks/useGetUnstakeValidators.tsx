@@ -35,7 +35,6 @@ export function useGetUnstakeValidators(
 
     try {
       const amountScaled = parseUnits(sharesAmount, 18).toString()
-      console.log({ amountScaled })
       const apiUrl = `https://sts-helper.vercel.app/api/unstake-recommendation?amount=${amountScaled}`
 
       const response = await fetch(apiUrl)
@@ -45,8 +44,6 @@ export function useGetUnstakeValidators(
       }
 
       const responseData: ApiValidatorResponse = await response.json()
-
-      console.log({ responseData })
 
       const transformedData: ValidatorUnstakeData[] = responseData.data.map(item => ({
         validatorId: item.validatorId,
