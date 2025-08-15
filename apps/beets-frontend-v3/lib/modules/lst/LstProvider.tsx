@@ -56,7 +56,8 @@ export function useLstLogic() {
   const lstStakeTxHash = stakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstStakeTxConfirmed = stakeTransactionSteps.lastTransactionConfirmed
 
-  const { step: unstakeStep } = useLstUnstakeStep(amountShares, CHAIN, isUnstakeTab)
+  const [unstakeEnabled, setUnstakeEnabled] = useState(false)
+  const { step: unstakeStep } = useLstUnstakeStep(amountShares, CHAIN, isUnstakeTab, unstakeEnabled)
   const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
   const lstUnstakeTxHash = unstakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstUnstakeTxConfirmed = unstakeTransactionSteps.lastTransactionConfirmed
@@ -137,6 +138,8 @@ export function useLstLogic() {
     isRateLoading,
     amountWithdraw,
     setAmountWithdraw,
+    unstakeEnabled,
+    setUnstakeEnabled,
   }
 }
 

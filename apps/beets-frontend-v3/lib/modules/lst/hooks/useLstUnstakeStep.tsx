@@ -12,16 +12,20 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { parseUnits } from 'viem'
 import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useGetUserWithdraws } from './useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './useGetUserNumWithdraws'
-import { useGetAmountDelegatedPerValidator } from './useGetAmountDelegatedPerValidator'
+import { useGetUnstakeValidators } from './useGetUnstakeValidators'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
-export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled: boolean) {
+export function useLstUnstakeStep(
+  sharesAmount: string,
+  chain: GqlChain,
+  enabled: boolean,
+  unstakeEnabled: boolean
+) {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
@@ -32,9 +36,7 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
   )
 
   const { refetch: refetchWithdrawals } = useGetUserWithdraws(chain, userNumWithdraws, enabled)
-  const { chooseValidatorsForUnstakeAmount } = useGetAmountDelegatedPerValidator(chain)
-
-  const validators = chooseValidatorsForUnstakeAmount(parseUnits(sharesAmount, 18))
+  const { validators } = useGetUnstakeValidators(sharesAmount, chain, unstakeEnabled)
 
   function onSuccess() {
     refetchBalances()
