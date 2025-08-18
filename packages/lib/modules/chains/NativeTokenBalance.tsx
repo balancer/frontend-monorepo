@@ -1,5 +1,3 @@
-'use client'
-
 import { Text } from '@chakra-ui/react'
 import React from 'react'
 import { getNativeAsset } from '@repo/lib/config/app.config'
@@ -16,7 +14,7 @@ interface NativeTokenBalanceProps extends Omit<React.ComponentProps<typeof Text>
 }
 
 export function NativeTokenBalance({ chain, ...props }: NativeTokenBalanceProps) {
-  const { userAddress, chainId } = useUserAccount()
+  const { userAddress, chainId, isConnected } = useUserAccount()
   const nativeAsset = getNativeAsset(chain)
   const networkConfig = getNetworkConfig(chain)
   const connectedChain = chainId ? getGqlChain(chainId) : undefined
@@ -25,7 +23,7 @@ export function NativeTokenBalance({ chain, ...props }: NativeTokenBalanceProps)
     chainId: networkConfig.chainId,
     address: userAddress,
     query: {
-      enabled: !!userAddress,
+      enabled: isConnected,
       staleTime: 30_000,
     },
   })
