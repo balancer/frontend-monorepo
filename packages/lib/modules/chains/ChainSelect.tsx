@@ -10,6 +10,7 @@ import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { SelectInput, SelectOption } from '@repo/lib/shared/components/inputs/SelectInput'
+import { NativeTokenBalance } from './NativeTokenBalance'
 
 type Props = {
   value: GqlChain
@@ -33,9 +34,10 @@ function DropdownIndicator({
 export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supportedNetworks }: Props) {
   const networkOptions: SelectOption[] = chains.map(chain => ({
     label: (
-      <HStack>
+      <HStack w="full">
         <NetworkIcon chain={chain} size={6} />
         <Text>{getChainShortName(chain)}</Text>
+        <NativeTokenBalance chain={chain} />
       </HStack>
     ),
     value: chain,
