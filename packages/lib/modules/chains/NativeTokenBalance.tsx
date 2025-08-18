@@ -12,9 +12,10 @@ import { getGqlChain } from '@repo/lib/config/app.config'
 
 interface NativeTokenBalanceProps {
   chain: GqlChain
+  fontColor?: string
 }
 
-export function NativeTokenBalance({ chain }: NativeTokenBalanceProps) {
+export function NativeTokenBalance({ chain, fontColor }: NativeTokenBalanceProps) {
   const { userAddress, chainId } = useUserAccount()
   const nativeAsset = getNativeAsset(chain)
   const networkConfig = getNetworkConfig(chain)
@@ -37,7 +38,10 @@ export function NativeTokenBalance({ chain }: NativeTokenBalanceProps) {
 
   return (
     <Text
-      color={connectedChain && connectedChain === chain ? 'font.primary' : 'font.secondary'}
+      color={
+        fontColor ||
+        (connectedChain && connectedChain === chain ? 'font.primary' : 'font.secondary')
+      }
       fontSize="sm"
       ml="auto"
     >

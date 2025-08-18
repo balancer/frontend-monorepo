@@ -4,7 +4,12 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Box, HStack, Text } from '@chakra-ui/react'
-import { GroupBase, chakraComponents, DropdownIndicatorProps } from 'chakra-react-select'
+import {
+  GroupBase,
+  chakraComponents,
+  DropdownIndicatorProps,
+  SingleValueProps,
+} from 'chakra-react-select'
 import { ChevronDown, Globe } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
@@ -31,6 +36,18 @@ function DropdownIndicator({
   )
 }
 
+function SingleValue({ ...props }: SingleValueProps<SelectOption, false, GroupBase<SelectOption>>) {
+  return (
+    <chakraComponents.SingleValue {...props}>
+      <HStack align="center" spacing="xs">
+        <NetworkIcon chain={props.data.value} size={5} />
+        <Text fontSize="sm">{getChainShortName(props.data.value)}</Text>
+        <NativeTokenBalance chain={props.data.value} fontColor="font.secondary" />
+      </HStack>
+    </chakraComponents.SingleValue>
+  )
+}
+
 export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supportedNetworks }: Props) {
   const networkOptions: SelectOption[] = chains.map(chain => ({
     label: (
@@ -51,6 +68,7 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
         isSearchable={false}
         onChange={onChange}
         options={networkOptions}
+        SingleValue={SingleValue}
         value={value}
       />
     </Box>
