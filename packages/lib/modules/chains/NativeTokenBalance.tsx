@@ -8,15 +8,17 @@ import { useBalance } from 'wagmi'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { formatUnits } from 'viem'
+import { getGqlChain } from '@repo/lib/config/app.config'
 
 interface NativeTokenBalanceProps {
   chain: GqlChain
 }
 
 export function NativeTokenBalance({ chain }: NativeTokenBalanceProps) {
-  const { userAddress } = useUserAccount()
+  const { userAddress, chainId } = useUserAccount()
   const nativeAsset = getNativeAsset(chain)
   const networkConfig = getNetworkConfig(chain)
+  const connectedChain = chainId ? getGqlChain(chainId) : undefined
 
   const { data: balance } = useBalance({
     chainId: networkConfig.chainId,
@@ -34,7 +36,11 @@ export function NativeTokenBalance({ chain }: NativeTokenBalanceProps) {
   const formattedBalance = fNum('token', formatUnits(balance.value, nativeAsset.decimals))
 
   return (
-    <Text color="gray.500" fontSize="sm" ml="auto">
+    <Text
+      color={connectedChain && connectedChain === chain ? 'font.primary' : 'font.secondary'}
+      fontSize="sm"
+      ml="auto"
+    >
       {formattedBalance} {nativeAsset.symbol}
     </Text>
   )
