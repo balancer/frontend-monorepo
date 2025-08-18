@@ -19,7 +19,7 @@ import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { useEffect } from 'react'
-import { PoolCreationPreview } from '@repo/lib/modules/pool/actions/create/PoolCreationPreview'
+import { PoolCreationPreview } from '@repo/lib/modules/pool/actions/create/preview/PoolCreationPreview'
 
 export function PoolCreationForm() {
   const { steps, activeStepIndex, activeStep } = usePoolCreationForm()

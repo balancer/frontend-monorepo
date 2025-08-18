@@ -5,8 +5,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { Address } from 'viem'
-import { TokenType } from '@balancer/sdk'
-import { zeroAddress } from 'viem'
+import { PoolType } from '@balancer/sdk'
 import { useState } from 'react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { WeightedPoolStructure } from '../../constants'
@@ -18,7 +17,7 @@ export function ChoosePoolTokens() {
   const {
     poolConfigForm: { watch, setValue },
   } = usePoolCreationForm()
-  const { network, poolTokens, weightedPoolStructure } = watch()
+  const { network, poolTokens, weightedPoolStructure, poolType } = watch()
 
   const { getTokensByChain } = useTokens()
   const tokens = getTokensByChain(network)
@@ -31,11 +30,8 @@ export function ChoosePoolTokens() {
     newPoolTokens[selectedTokenIndex] = {
       ...existingPoolToken,
       config: {
+        ...existingPoolToken.config,
         address: tokenData.address as Address,
-        tokenType: TokenType.STANDARD,
-        rateProvider: zeroAddress,
-        paysYieldFees: false,
-        weight: '',
       },
       data: tokenData,
     }
@@ -72,7 +68,7 @@ export function ChoosePoolTokens() {
               />
             </HStack>
           </VStack>
-          {token?.config?.weight && (
+          {poolType === PoolType.Weighted && (
             <VStack align="start" spacing="md">
               <Text>Weight</Text>
               <Box position="relative" w="20">
