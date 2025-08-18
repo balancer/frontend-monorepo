@@ -48,6 +48,7 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
       <SelectInput
         DropdownIndicator={DropdownIndicator}
         id="chain-select"
+        isSearchable={false}
         onChange={onChange}
         options={networkOptions}
         value={value}
