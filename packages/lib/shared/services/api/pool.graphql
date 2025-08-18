@@ -226,20 +226,18 @@ query GetPoolTokensDynamicData($addresses: [String!]!) {
 query GetPoolEvents(
   $first: Int
   $skip: Int
-  $poolIdIn: [String!]!
+  $poolId: String
   $chainIn: [GqlChain!]!
-  $range: GqlPoolEventsDataRange
-  $typeIn: [GqlPoolEventType]
+  $type: GqlPoolEventType
   $userAddress: String
 ) {
   poolEvents(
     first: $first
     skip: $skip
     where: {
-      poolIdIn: $poolIdIn
+      poolId: $poolId
       chainIn: $chainIn
-      range: $range
-      typeIn: $typeIn
+      type: $type
       userAddress: $userAddress
     }
   ) {
