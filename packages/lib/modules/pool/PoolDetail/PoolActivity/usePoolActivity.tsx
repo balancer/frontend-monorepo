@@ -68,11 +68,11 @@ function usePoolActivityLogic() {
   }, [activeTab?.value])
 
   const { loading, data: response } = usePoolEvents({
-    poolIdIn: [poolId] as string[],
+    poolId: poolId as string,
     chainIn: [_chain],
     first: MAX_EVENTS,
     skip: 0,
-    typeIn: toEventType(activeTab?.value),
+    type: toEventType(activeTab?.value),
   })
 
   const count = response?.poolEvents.length ?? 0
@@ -284,9 +284,9 @@ export const usePoolActivity = (): PoolActivityResponse =>
   useMandatoryContext(PoolActivityContext, 'PoolActivity')
 
 function toEventType(activeTab: string | undefined) {
-  if (activeTab === 'swaps') return [GqlPoolEventType.Swap]
-  if (activeTab === 'adds') return [GqlPoolEventType.Add]
-  if (activeTab === 'removes') return [GqlPoolEventType.Remove]
+  if (activeTab === 'swaps') return GqlPoolEventType.Swap
+  if (activeTab === 'adds') return GqlPoolEventType.Add
+  if (activeTab === 'removes') return GqlPoolEventType.Remove
 
-  return []
+  return undefined
 }
