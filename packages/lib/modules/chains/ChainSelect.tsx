@@ -41,7 +41,7 @@ function SingleValue({ ...props }: SingleValueProps<SelectOption, false, GroupBa
     <chakraComponents.SingleValue {...props}>
       <HStack align="center" spacing="xs">
         <NetworkIcon chain={props.data.value} size={5} />
-        <Text fontSize="sm">{getChainShortName(props.data.value)}</Text>
+        <Text>{getChainShortName(props.data.value)}</Text>
         <NativeTokenBalance chain={props.data.value} fontColor="font.secondary" />
       </HStack>
     </chakraComponents.SingleValue>
