@@ -37,6 +37,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 type TokenInputSelectorProps = {
   token: ApiToken | CustomToken | undefined
   weight?: string
+  showWeight?: boolean
   onToggleTokenClicked?: () => void
 }
 
@@ -50,6 +51,7 @@ export function TokenInputSelector({
   token,
   weight,
   onToggleTokenClicked,
+  showWeight = true,
 }: TokenInputSelectorProps) {
   const [tokenConfig, setTokenConfig] = useState<TokenSelectorConfigProps | undefined>(undefined)
   const DEFAULT_TOKEN_LABEL = 'Select token'
@@ -84,7 +86,7 @@ export function TokenInputSelector({
           </Text>
         )}
       </HStack>
-      {weight && (
+      {weight && showWeight && (
         <Text fontSize="sm" fontWeight="normal" ml="sm">
           {fNum('weight', weight)}
         </Text>

@@ -23,4 +23,14 @@ export const PROTOCOLS = [
   },
 ]
 
-export const WEIGHTED_POOL_STRUCTURES = ['2-token: 50/50', '2-token: 80/20', 'custom']
+export enum WeightedPoolStructure {
+  FiftyFifty = '50/50',
+  EightyTwenty = '80/20',
+  Custom = 'custom',
+}
+
+export const WEIGHTED_POOL_STRUCTURES = [
+  WeightedPoolStructure.FiftyFifty,
+  WeightedPoolStructure.EightyTwenty,
+  WeightedPoolStructure.Custom,
+] as const

@@ -4,12 +4,16 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { capitalize } from 'lodash'
 import { PoolType } from '@balancer/sdk'
+import { WeightedPoolStructure } from './constants'
 
 export function PoolCreationPreview() {
   const {
     poolConfigForm: { watch },
   } = usePoolCreationForm()
   const { network, protocol, poolType, weightedPoolStructure } = watch()
+
+  const isWeightedPool = poolType === PoolType.Weighted
+  const isCustomWeightedPool = weightedPoolStructure === WeightedPoolStructure.Custom
 
   return (
     <>
@@ -48,7 +52,8 @@ export function PoolCreationPreview() {
                   <Text color="font.secondary">Pool type</Text>
                   <Text fontWeight="semibold">
                     {capitalize(poolType)}
-                    {poolType === PoolType.Weighted && `: ${weightedPoolStructure}`}
+                    {isWeightedPool &&
+                      `: ${!isCustomWeightedPool ? '2-token' : ''} ${weightedPoolStructure}`}
                   </Text>
                 </HStack>
               </VStack>

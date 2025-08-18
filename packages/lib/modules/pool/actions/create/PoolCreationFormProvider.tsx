@@ -12,6 +12,7 @@ import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { TokenConfig, TokenType } from '@balancer/sdk'
 import { zeroAddress } from 'viem'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { WeightedPoolStructure } from './constants'
 
 export type PoolCreationToken = {
   config: TokenConfig & { weight?: string }
@@ -24,7 +25,7 @@ export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
   poolType: PoolType
-  weightedPoolStructure: '2-token: 50/50' | '2-token: 80/20' | 'custom'
+  weightedPoolStructure: WeightedPoolStructure
   poolTokens: PoolCreationToken[]
 }
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
@@ -54,7 +55,7 @@ export function usePoolFormLogic() {
     protocol: ProjectConfigBalancer.projectId,
     network: GqlChain.Mainnet,
     poolType: PoolType.Weighted,
-    weightedPoolStructure: '2-token: 50/50',
+    weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
     poolTokens: [initialTokenConfig, initialTokenConfig],
   })
 
