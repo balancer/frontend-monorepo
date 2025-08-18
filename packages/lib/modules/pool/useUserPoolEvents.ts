@@ -15,7 +15,7 @@ export function useUserPoolEvents() {
   } = usePoolEvents(
     {
       chainIn: [chain],
-      poolIdIn: [pool.id],
+      poolId: pool.id,
       userAddress,
     },
     {
