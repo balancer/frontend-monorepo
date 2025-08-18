@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useGetAmountDelegatedPerValidator } from '@/lib/modules/lst/hooks/useGetAmountDelegatedPerValidator'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState, useEffect, useCallback } from 'react'
@@ -5,7 +6,7 @@ import { parseUnits } from 'viem'
 
 interface ApiValidatorResponse {
   data: Array<{
-    withdrawalAmount: string
+    withdrawalAmount: bigint
     validatorId: string
   }>
 }
@@ -30,12 +31,13 @@ export function useGetUnstakeValidators(
       return
     }
 
+    const amountScaled = parseUnits(sharesAmount, 18)
+
     setIsLoading(true)
     setError(null)
 
     try {
-      const amountScaled = parseUnits(sharesAmount, 18).toString()
-      const apiUrl = `https://sts-helper.vercel.app/api/unstake-recommendation?amount=${amountScaled}`
+      const apiUrl = `https://sts-helper.vercel.app/api/unstake-recommendation?amount=${amountScaled.toString()}`
 
       const response = await fetch(apiUrl)
 
@@ -45,9 +47,13 @@ export function useGetUnstakeValidators(
 
       const responseData: ApiValidatorResponse = await response.json()
 
+      if (!responseData.data || responseData.data.length === 0) {
+        throw new Error('No data received from API')
+      }
+
       const transformedData: ValidatorUnstakeData[] = responseData.data.map(item => ({
         validatorId: item.validatorId,
-        unstakeAmountShares: parseUnits(item.withdrawalAmount.toString(), 18),
+        unstakeAmountShares: item.withdrawalAmount,
       }))
 
       setValidators(transformedData)
@@ -55,7 +61,7 @@ export function useGetUnstakeValidators(
     } catch (err) {
       // Fallback to chooseValidatorsForUnstakeAmount when API fails
       console.error('Failed to fetch validators from API, using fallback:', err)
-      const fallbackValidators = chooseValidatorsForUnstakeAmount(parseUnits(sharesAmount, 18))
+      const fallbackValidators = chooseValidatorsForUnstakeAmount(amountScaled)
       setValidators(fallbackValidators)
       setError(err as Error)
     } finally {
@@ -65,7 +71,7 @@ export function useGetUnstakeValidators(
 
   useEffect(() => {
     fetchValidators()
-  }, [sharesAmount, unstakeEnabled, fetchValidators])
+  }, [sharesAmount, unstakeEnabled])
 
   return {
     validators: validators,
