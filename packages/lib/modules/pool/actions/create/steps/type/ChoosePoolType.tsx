@@ -1,9 +1,9 @@
 import { type Control, Controller } from 'react-hook-form'
-import { PoolConfig } from '../../PoolCreationFormProvider'
+import { PoolCreationConfig } from '../../PoolCreationFormProvider'
 import { VStack, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react'
 import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
 
-export function ChoosePoolType({ control }: { control: Control<PoolConfig> }) {
+export function ChoosePoolType({ control }: { control: Control<PoolCreationConfig> }) {
   return (
     <VStack align="start" spacing="md" w="full">
       <Text color="font.primary">Choose a pool type</Text>

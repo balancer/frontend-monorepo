@@ -1,9 +1,9 @@
 import { type Control, Controller } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES } from '../../constants'
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
-import { type PoolConfig } from '../../PoolCreationFormProvider'
+import { type PoolCreationConfig } from '../../PoolCreationFormProvider'
 
-export function ChooseWeightedStructure({ control }: { control: Control<PoolConfig> }) {
+export function ChooseWeightedStructure({ control }: { control: Control<PoolCreationConfig> }) {
   return (
     <VStack align="start" spacing="md" w="full">
       <Heading color="font.maxContrast" size="md">

@@ -2,7 +2,7 @@ import { VStack, Box } from '@chakra-ui/react'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { type SubmitHandler } from 'react-hook-form'
-import { type PoolConfig } from '../../PoolCreationFormProvider'
+import { type PoolCreationConfig } from '../../PoolCreationFormProvider'
 import { ChooseWeightedStructure } from './ChooseWeightedStructure'
 import { ChoosePoolTokens } from './ChoosePoolTokens'
 
@@ -17,7 +17,7 @@ export function PoolTokensStep() {
     activeStepIndex,
   } = usePoolCreationForm()
 
-  const onSubmit: SubmitHandler<PoolConfig> = () => {
+  const onSubmit: SubmitHandler<PoolCreationConfig> = () => {
     setActiveStep(activeStepIndex + 1)
   }
 

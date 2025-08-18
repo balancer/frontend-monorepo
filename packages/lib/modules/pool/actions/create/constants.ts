@@ -6,8 +6,8 @@ export const POOL_TYPES = [
   { label: 'Weighted', value: PoolType.Weighted, maxTokens: 8 },
   { label: 'Stable', value: PoolType.Stable, maxTokens: 5 },
   { label: 'Stable Surge', value: PoolType.StableSurge, maxTokens: 5 },
-  { label: 'Gyro Elliptic CLP', value: PoolType.GyroE, maxTokens: 2 },
-  { label: 'reClamm', value: PoolType.ReClamm, maxTokens: 2 },
+  // { label: 'Gyro Elliptic CLP', value: PoolType.GyroE, maxTokens: 2 },
+  // { label: 'reClamm', value: PoolType.ReClamm, maxTokens: 2 },
 ]
 
 export const PROTOCOLS = [

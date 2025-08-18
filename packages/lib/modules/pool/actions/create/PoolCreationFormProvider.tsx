@@ -11,15 +11,21 @@ import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { TokenConfig, TokenType } from '@balancer/sdk'
 import { zeroAddress } from 'viem'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
-export type TokenConfigExtended = TokenConfig & { amount: string; weight: string }
+export type PoolCreationToken = {
+  config: TokenConfig & { weight?: string }
+  data?: ApiToken // initially undefined
+  amount: string
+  weight?: string // only for weighted pool type
+}
 
-export type PoolConfig = {
+export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
   poolType: PoolType
   weightedPoolStructure: '2-token: 50/50' | '2-token: 80/20' | 'custom'
-  tokenConfigs: TokenConfigExtended[]
+  poolTokens: PoolCreationToken[]
 }
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -31,22 +37,25 @@ const steps = [
   { id: 'step4', title: 'Fund' },
 ]
 
-export const initialTokenConfig: TokenConfigExtended = {
-  address: zeroAddress,
-  rateProvider: zeroAddress,
-  paysYieldFees: false,
-  tokenType: TokenType.STANDARD,
+export const initialTokenConfig: PoolCreationToken = {
+  config: {
+    address: zeroAddress, // TODO: validate config.address != zeroAddress
+    rateProvider: zeroAddress,
+    paysYieldFees: false,
+    tokenType: TokenType.STANDARD,
+    weight: '',
+  },
+  data: undefined,
   amount: '',
-  weight: '', // only used for weighted pools
 }
 
 export function usePoolFormLogic() {
-  const poolConfigForm = usePersistentForm<PoolConfig>(LS_KEYS.PoolCreation.Config, {
+  const poolConfigForm = usePersistentForm<PoolCreationConfig>(LS_KEYS.PoolCreation.Config, {
     protocol: ProjectConfigBalancer.projectId,
     network: GqlChain.Mainnet,
     poolType: PoolType.Weighted,
     weightedPoolStructure: '2-token: 50/50',
-    tokenConfigs: [initialTokenConfig, initialTokenConfig],
+    poolTokens: [initialTokenConfig, initialTokenConfig],
   })
 
   const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(
