@@ -4,12 +4,18 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Box, HStack, Text } from '@chakra-ui/react'
-import { GroupBase, chakraComponents, DropdownIndicatorProps } from 'chakra-react-select'
+import {
+  GroupBase,
+  chakraComponents,
+  DropdownIndicatorProps,
+  SingleValueProps,
+} from 'chakra-react-select'
 import { ChevronDown, Globe } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { SelectInput, SelectOption } from '@repo/lib/shared/components/inputs/SelectInput'
+import { NativeTokenBalance } from './NativeTokenBalance'
 
 type Props = {
   value: GqlChain
@@ -30,12 +36,25 @@ function DropdownIndicator({
   )
 }
 
+function SingleValue({ ...props }: SingleValueProps<SelectOption, false, GroupBase<SelectOption>>) {
+  return (
+    <chakraComponents.SingleValue {...props}>
+      <HStack align="center" spacing="xs">
+        <NetworkIcon chain={props.data.value} size={5} />
+        <Text>{getChainShortName(props.data.value)}</Text>
+        <NativeTokenBalance chain={props.data.value} color="font.secondary" fontSize="xs" pr="1" />
+      </HStack>
+    </chakraComponents.SingleValue>
+  )
+}
+
 export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supportedNetworks }: Props) {
   const networkOptions: SelectOption[] = chains.map(chain => ({
     label: (
-      <HStack>
+      <HStack w="full">
         <NetworkIcon chain={chain} size={6} />
         <Text>{getChainShortName(chain)}</Text>
+        <NativeTokenBalance chain={chain} />
       </HStack>
     ),
     value: chain,
@@ -46,8 +65,10 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
       <SelectInput
         DropdownIndicator={DropdownIndicator}
         id="chain-select"
+        isSearchable={false}
         onChange={onChange}
         options={networkOptions}
+        SingleValue={SingleValue}
         value={value}
       />
     </Box>
