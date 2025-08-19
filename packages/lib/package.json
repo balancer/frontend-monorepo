@@ -69,7 +69,7 @@
     "react-error-boundary": "6.0.0",
     "react-feather": "^2.0.10",
     "react-hook-form": "7.58.0",
-    "react-hotkeys-hook": "^4.4.1",
+    "react-hotkeys-hook": "^5.1.0",
     "react-swipeable": "7.0.2",
     "react-use-measure": "^2.1.1",
     "react-virtuoso": "4.12.7",
