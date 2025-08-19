@@ -74,9 +74,8 @@ export function useGetUnstakeValidators(
   }, [sharesAmount, unstakeEnabled])
 
   return {
-    validators: validators,
+    validators,
     isLoading,
     error,
-    refetch: fetchValidators,
   }
 }
