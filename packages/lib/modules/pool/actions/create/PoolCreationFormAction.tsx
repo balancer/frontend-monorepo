@@ -5,15 +5,25 @@ import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { usePoolTokenWeights } from './steps/tokens/usePoolTokenWeights'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
   const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationForm()
   const previewModalDisclosure = useDisclosure()
+  const { isTotalWeightTooHigh } = usePoolTokenWeights()
 
   return isConnected ? (
-    <VStack spacing="xl" w="full">
+    <VStack spacing="lg" w="full">
       <Divider />
+      {isTotalWeightTooHigh && (
+        <BalAlert
+          content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
+          status="error"
+          title="Token weights must tally 100%"
+        />
+      )}
       <HStack spacing="md" w="full">
         {!isFirstStep && (
           <IconButton

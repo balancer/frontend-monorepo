@@ -1,4 +1,4 @@
-import { VStack, Heading, Text, useDisclosure, HStack, Box, Button } from '@chakra-ui/react'
+import { VStack, Heading, Text, useDisclosure, HStack, Button } from '@chakra-ui/react'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -7,11 +7,11 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { Address } from 'viem'
 import { PoolType } from '@balancer/sdk'
 import { useState } from 'react'
-import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
 import { DEFAULT_TOKEN, POOL_TYPES } from '../../constants'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { TotalWeightDisplay, TokenWeightInput, InvalidWeightInputAlert } from './PoolTokenWeights'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -42,12 +42,6 @@ export function ChoosePoolTokens() {
     setSelectedTokenIndex(null)
   }
 
-  function handleWeightChange(index: number, value: string) {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens[index].config.weight = value
-    setValue('poolTokens', newPoolTokens)
-  }
-
   const handleRemoveToken = (index: number) => {
     const newPoolTokens = [...poolTokens]
     newPoolTokens.splice(index, 1)
@@ -65,54 +59,65 @@ export function ChoosePoolTokens() {
   const maxTokens = POOL_TYPES[poolType].maxTokens
   const isAtMaxTokens = poolTokens.length === maxTokens
   const isWeightedPool = poolType === PoolType.Weighted
+  const isCustomWeightedPool = weightedPoolStructure === WeightedPoolStructure.Custom
 
   return (
-    <VStack align="start" spacing="xl" w="full">
-      <Heading color="font.maxContrast" size="md">
-        Choose pool tokens
-      </Heading>
-      <BalAlert
-        content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
-        status="info"
-        title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
-      />
-      {poolTokens.map((token, index) => (
-        <HStack w="full">
-          <VStack align="start" key={index} spacing="md" w="full">
-            <Text>Token {index + 1}</Text>
-            <HStack w="full">
-              <TokenInputSelector
-                onToggleTokenClicked={() => {
-                  setSelectedTokenIndex(index)
-                  tokenSelectDisclosure.onOpen()
-                }}
-                showWeight={false}
-                token={token?.data}
-                weight={token?.config?.weight}
-              />
-            </HStack>
-          </VStack>
+    <>
+      <VStack align="start" spacing="xl" w="full">
+        <VStack align="start" spacing="sm">
+          <Heading color="font.maxContrast" size="md">
+            Choose pool tokens
+          </Heading>
+          {isCustomWeightedPool && (
+            <BalAlert
+              content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
+              status="info"
+              title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
+            />
+          )}
+        </VStack>
 
-          <VStack align="start" spacing="md">
-            <Text visibility={isWeightedPool ? 'visible' : 'hidden'}>Weight</Text>
-            <HStack>
-              {isWeightedPool && (
-                <TokenWeightInput
-                  handleWeightChange={(value: string) => handleWeightChange(index, value)}
-                  isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-                  tokenWeightValue={token?.config?.weight}
+        {poolTokens.map((token, index) => {
+          const isInvalidWeight = !!token.config.weight && Number(token.config.weight) < 1
+          return (
+            <VStack key={index} spacing="sm" w="full">
+              <HStack align="end" w="full">
+                <VStack align="start" spacing="sm" w="full">
+                  <Text>Token {index + 1}</Text>
+                  <TokenInputSelector
+                    onToggleTokenClicked={() => {
+                      setSelectedTokenIndex(index)
+                      tokenSelectDisclosure.onOpen()
+                    }}
+                    showWeight={false}
+                    token={token?.data}
+                    weight={token?.config?.weight}
+                  />
+                </VStack>
+
+                {isWeightedPool && (
+                  <TokenWeightInput
+                    index={index}
+                    isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                    isInvalid={isInvalidWeight}
+                    tokenWeightValue={token?.config?.weight}
+                  />
+                )}
+
+                <RemoveTokenButton
+                  isDisabled={poolTokens.length <= 2}
+                  onClick={() => handleRemoveToken(index)}
                 />
-              )}
-              <RemoveTokenButton
-                isDisabled={poolTokens.length <= 2}
-                onClick={() => handleRemoveToken(index)}
-              />
-            </HStack>
-          </VStack>
-        </HStack>
-      ))}
+              </HStack>
+              {isInvalidWeight && <InvalidWeightInputAlert />}
+            </VStack>
+          )
+        })}
 
-      {!isAtMaxTokens && <AddTokenButton onClick={handleAddToken} />}
+        <AddTokenButton isDisabled={isAtMaxTokens} onClick={handleAddToken} />
+
+        {isCustomWeightedPool && <TotalWeightDisplay />}
+      </VStack>
 
       <TokenSelectModal
         chain={network}
@@ -123,47 +128,13 @@ export function ChoosePoolTokens() {
         onTokenSelect={handleTokenSelect}
         tokens={tokens}
       />
-    </VStack>
+    </>
   )
 }
 
-function TokenWeightInput({
-  tokenWeightValue,
-  isDisabled,
-  handleWeightChange,
-}: {
-  tokenWeightValue: string | undefined
-  isDisabled: boolean
-  handleWeightChange: (value: string) => void
-}) {
+function AddTokenButton({ isDisabled, onClick }: { isDisabled: boolean; onClick: () => void }) {
   return (
-    <Box position="relative" w="20">
-      <InputWithError
-        isDisabled={isDisabled}
-        name="weight"
-        onChange={e => {
-          handleWeightChange(e.target.value)
-        }}
-        placeholder="0"
-        value={tokenWeightValue}
-      />
-      <Text
-        color="font.secondary"
-        opacity={isDisabled ? 0.3 : 1}
-        position="absolute"
-        right="3"
-        top="2.5"
-        zIndex={1}
-      >
-        %
-      </Text>
-    </Box>
-  )
-}
-
-function AddTokenButton({ onClick }: { onClick: () => void }) {
-  return (
-    <Button onClick={onClick} variant="secondary">
+    <Button isDisabled={isDisabled} onClick={onClick} variant="secondary">
       <HStack spacing="sm">
         <PlusCircle size={20} />
         <Text color="font.dark">Add token</Text>
