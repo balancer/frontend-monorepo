@@ -9,10 +9,14 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import { TokenConfig, TokenType } from '@balancer/sdk'
-import { zeroAddress } from 'viem'
+import { TokenConfig } from '@balancer/sdk'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { WeightedPoolStructure } from './constants'
+import {
+  WeightedPoolStructure,
+  POOL_CONFIGURATION_STEPS,
+  DEFAULT_TOKEN,
+  SupportedPoolTypes,
+} from './constants'
 
 export type PoolCreationToken = {
   config: TokenConfig & { weight?: string }
@@ -24,31 +28,12 @@ export type PoolCreationToken = {
 export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
-  poolType: PoolType
+  poolType: SupportedPoolTypes
   weightedPoolStructure: WeightedPoolStructure
   poolTokens: PoolCreationToken[]
 }
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
-
-const steps = [
-  { id: 'step1', title: 'Type' },
-  { id: 'step2', title: 'Tokens' },
-  { id: 'step3', title: 'Details' },
-  { id: 'step4', title: 'Fund' },
-]
-
-export const initialTokenConfig: PoolCreationToken = {
-  config: {
-    address: zeroAddress, // TODO: validate config.address != zeroAddress
-    rateProvider: zeroAddress,
-    paysYieldFees: false,
-    tokenType: TokenType.STANDARD,
-    weight: '',
-  },
-  data: undefined,
-  amount: '',
-}
 
 export function usePoolFormLogic() {
   const poolConfigForm = usePersistentForm<PoolCreationConfig>(LS_KEYS.PoolCreation.Config, {
@@ -56,7 +41,7 @@ export function usePoolFormLogic() {
     network: GqlChain.Mainnet,
     poolType: PoolType.Weighted,
     weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
-    poolTokens: [initialTokenConfig, initialTokenConfig],
+    poolTokens: [DEFAULT_TOKEN, DEFAULT_TOKEN],
   })
 
   const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(
@@ -65,18 +50,18 @@ export function usePoolFormLogic() {
   )
   const { activeStep: activeStepIndex, setActiveStep } = useSteps({
     index: persistedStepIndex,
-    count: steps.length,
+    count: POOL_CONFIGURATION_STEPS.length,
   })
-  const isLastStep = activeStepIndex === steps.length - 1
+  const isLastStep = activeStepIndex === POOL_CONFIGURATION_STEPS.length - 1
   const isFirstStep = activeStepIndex === 0
-  const activeStep = steps[activeStepIndex]
+  const activeStep = POOL_CONFIGURATION_STEPS[activeStepIndex]
 
   useEffect(() => {
     setPersistedStepIndex(activeStepIndex)
   }, [activeStepIndex, setPersistedStepIndex])
 
   return {
-    steps,
+    steps: POOL_CONFIGURATION_STEPS,
     activeStepIndex,
     setActiveStep,
     isLastStep,
