@@ -37,7 +37,7 @@ export function useGetUnstakeValidators(
     setError(null)
 
     try {
-      const apiUrl = `https://sts-helper.vercel.app/api/unstake-recommendation?amount=${amountScaled.toString()}`
+      const apiUrl = `https://sts-helper.beets-ftm-node.com/api/unstake-recommendation?amount=${amountScaled.toString()}`
 
       const response = await fetch(apiUrl)
 
