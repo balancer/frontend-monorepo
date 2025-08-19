@@ -39,6 +39,8 @@ export function LstUnstakeModal({
     if (isOpen) {
       stopTokenPricePolling() // stop polling for token prices when modal is opened to prevent unwanted re-renders
       setUnstakeEnabled(true) // enable query for unstake api
+    } else {
+      setUnstakeEnabled(false) // disable query for unstake api
     }
   }, [isOpen])
 
