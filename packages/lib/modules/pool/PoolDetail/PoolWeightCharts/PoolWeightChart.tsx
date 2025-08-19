@@ -72,6 +72,22 @@ export const DEFAULT_POOL_WEIGHT_CHART_COLORS: PoolWeightChartColorDef[] = [
     from: '#30CEF0',
     to: '#02A2FE',
   },
+  {
+    from: '#9C68AA',
+    to: '#C03BE4',
+  },
+  {
+    from: '#FFBD91',
+    to: '#FF957B',
+  },
+  {
+    from: '#30CEF0',
+    to: '#02A2FE',
+  },
+  {
+    from: '#30CEF0',
+    to: '#02A2FE',
+  },
 ]
 
 const defaultColor: PoolWeightChartColorDef = {
