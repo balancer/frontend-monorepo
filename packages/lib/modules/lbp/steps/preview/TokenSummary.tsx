@@ -29,6 +29,7 @@ import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { Address, formatUnits } from 'viem'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { getChainId } from '@repo/lib/config/app.config'
+import { normalizeUrl } from '@repo/lib/shared/utils/urls'
 
 type Props = {
   chain: GqlChain
@@ -69,7 +70,7 @@ export function TokenSummary({
                   >
                     <VStack>
                       {tokenIconURL && !hasIconErrors ? (
-                        <Image borderRadius="full" src={tokenIconURL} />
+                        <Image borderRadius="full" src={normalizeUrl(tokenIconURL)} />
                       ) : (
                         <Plus />
                       )}
@@ -165,7 +166,7 @@ function BalanceInfo({ chain, tokenAddress }: BalanceInfoProps) {
           </Text>
           {balanceData.value === 0n && (
             <Tooltip
-              backgroundColor="#484d57"
+              backgroundColor="background.level4"
               hasArrow
               label={`You’ll need some tokens in your wallet in order to seed liquidity
                       in the pool before the start time of the LBP or it will fail to launch.`}

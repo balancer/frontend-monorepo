@@ -30,7 +30,7 @@ import { usePortfolioSorting } from './usePortfolioSorting'
 
 const rowProps = (addExtraColumn: boolean, needsLastColumnWider: boolean) => ({
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(140px, max-content) minmax(100px, max-content) 126px ${addExtraColumn ? '120px' : ''} ${needsLastColumnWider ? '150px' : 'minmax(100px, max-content)'}`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(140px, max-content) minmax(100px, max-content) 126px ${addExtraColumn ? '120px' : ''} ${needsLastColumnWider ? '160px' : 'minmax(100px, max-content)'}`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 })

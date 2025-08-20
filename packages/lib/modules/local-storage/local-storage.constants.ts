@@ -21,4 +21,9 @@ export const LS_KEYS = {
     PoolAddress: 'lbpConfig.poolAddress',
     IsMetadataSaved: 'lbpConfig.isMetadataSaved',
   },
+  PoolCreation: {
+    Config: 'poolCreation.config',
+    StepIndex: 'poolCreation.stepIndex',
+    PoolAddress: 'poolCreation.poolAddress',
+  },
 }

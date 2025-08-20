@@ -26,6 +26,7 @@ const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
 import SafeAppsSDK from '@safe-global/safe-apps-sdk'
 import { safeStatusToBalancerStatus } from './transaction-steps/safe/safe.helpers'
 import { useInterval } from 'usehooks-ts'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain
@@ -173,6 +174,7 @@ export function useRecentTransactionsLogic() {
           !isTxTracked(tx.txHash as Hash) &&
           safeStatusToBalancerStatus(tx.txStatus) === 'confirmed'
         ) {
+          trackEvent(AnalyticsEvent.TransactionSubmitted)
           addTrackedTransaction(
             {
               hash: tx.txHash as Hash,

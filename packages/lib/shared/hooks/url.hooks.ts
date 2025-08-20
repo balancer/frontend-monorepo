@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { isValidUrl } from '../utils/urls'
+import { isValidUrl, normalizeUrl } from '../utils/urls'
 
 export function useCheckImageUrl(url: string) {
   const validUrlError = isValidUrl(url)
@@ -25,7 +25,7 @@ export function useCheckImageUrl(url: string) {
 
     setErrorMessage(undefined)
     setChecking(true)
-    image.src = url
+    image.src = normalizeUrl(url)
   }, [image, validUrlError, url])
 
   if (validUrlError !== true) return { isChecking: false, error: validUrlError }

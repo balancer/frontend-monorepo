@@ -30,6 +30,9 @@ import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
 import { ApiToken, CustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
+import { AlertTriangle } from 'react-feather'
+import { Tooltip } from '@chakra-ui/react'
+import { usePoolTokenPriceWarnings } from '../../pool/usePoolTokenPriceWarnings'
 
 export type TokenInfoProps = {
   address: Address
@@ -167,9 +170,17 @@ export default function TokenRow({
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
+  const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice } =
+    usePoolTokenPriceWarnings(pool)
+
   const token = customToken || getToken(address, chain)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
   const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
+  const priceCheckAddress = token?.address ?? poolToken?.address ?? address
+
+  const isTokenPriceMissing =
+    !!priceCheckAddress &&
+    Object.keys(tokensWithoutPrice ?? {}).some(a => isSameAddress(a as Address, priceCheckAddress))
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {
@@ -242,21 +253,25 @@ export default function TokenRow({
                     showZeroAsDash: showZeroAmountAsDash,
                   })}
                 </Heading>
-                <Text {...subTextProps}>
-                  {formatFalsyValueAsDash(
-                    usdValue?.toString(),
-                    (val, options) =>
-                      toCurrency(val, {
-                        abbreviated: options?.abbreviated ?? abbreviated,
-                        noDecimals: false,
-                        withSymbol: true,
-                      }),
-                    {
-                      abbreviated,
-                      showZeroAsDash: showZeroAmountAsDash,
-                    }
-                  )}
-                </Text>
+                {isTokenPriceMissing ? (
+                  <MissingTokenPriceWarning message={tokenPriceTip} />
+                ) : (
+                  <Text {...subTextProps}>
+                    {formatFalsyValueAsDash(
+                      usdValue?.toString(),
+                      (val, options) =>
+                        toCurrency(val, {
+                          abbreviated: options?.abbreviated ?? abbreviated,
+                          noDecimals: false,
+                          withSymbol: true,
+                        }),
+                      {
+                        abbreviated,
+                        showZeroAsDash: showZeroAmountAsDash,
+                      }
+                    )}
+                  </Text>
+                )}
               </>
             )}
           </VStack>
@@ -270,7 +285,11 @@ export default function TokenRow({
               ) : (
                 <>
                   <Heading {...headingProps}>
-                    {fNum('weight', actualWeight, { abbreviated: false })}
+                    {isAnyTokenWithoutPrice ? (
+                      <MissingTokenPriceWarning message="Current weight percentages cannot be calculated since the price of one or more tokens are unknown." />
+                    ) : (
+                      fNum('weight', actualWeight, { abbreviated: false })
+                    )}
                   </Heading>
                   <HStack align="center" spacing="xs">
                     {targetWeight ? (
@@ -337,5 +356,16 @@ export default function TokenRow({
         </HStack>
       </HStack>
     </VStack>
+  )
+}
+
+function MissingTokenPriceWarning({ message }: { message: string }) {
+  return (
+    <HStack color="font.warning" spacing="xs">
+      <Text color="font.warning">—</Text>
+      <Tooltip label={message} placement="top">
+        <AlertTriangle size={16} />
+      </Tooltip>
+    </HStack>
   )
 }

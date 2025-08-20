@@ -7,6 +7,7 @@ import {
   GroupBase,
   SingleValue,
   DropdownIndicatorProps,
+  SingleValueProps,
 } from 'chakra-react-select'
 import { ComponentType, ReactNode, useEffect, useState } from 'react'
 
@@ -24,6 +25,8 @@ type Props = {
   DropdownIndicator?: ComponentType<
     DropdownIndicatorProps<SelectOption, false, GroupBase<SelectOption>>
   >
+  isSearchable?: boolean
+  SingleValue?: ComponentType<SingleValueProps<SelectOption, false, GroupBase<SelectOption>>>
 }
 
 export function SelectInput({
@@ -33,6 +36,8 @@ export function SelectInput({
   options,
   defaultValue,
   DropdownIndicator,
+  isSearchable = true,
+  SingleValue,
 }: Props) {
   const defaultOption = defaultValue
     ? options.find(option => option.value === defaultValue)
@@ -41,7 +46,10 @@ export function SelectInput({
 
   const chakraStyles = getSelectStyles<SelectOption>()
 
-  const components = DropdownIndicator ? { DropdownIndicator } : undefined
+  const components = {
+    ...(DropdownIndicator && { DropdownIndicator }),
+    ...(SingleValue && { SingleValue }),
+  }
 
   function handleChange(newOption: SingleValue<SelectOption>) {
     if (newOption) onChange(newOption.value)
@@ -55,6 +63,7 @@ export function SelectInput({
       chakraStyles={chakraStyles}
       components={components}
       id={id}
+      isSearchable={isSearchable}
       menuPortalTarget={document.body}
       name="Chain"
       onChange={handleChange}

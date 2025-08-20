@@ -90,7 +90,6 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
           <TransactionBatchButton
             chainId={chainId}
             currentStep={currentStep}
-            id={removeLiquidityStepId}
             labels={labels}
             onTransactionChange={setTransaction}
           />

@@ -71,7 +71,7 @@ export function DeadlineDayTooltip({
               {title}
             </Text>
             <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
-              {format(day.setHours(deadline.getHours()), 'Haaa zzzz, d LLLL yyyy')}
+              {format(day.setHours(deadline.getHours()), 'haaa zzzz, d LLLL yyyy')}
             </Text>
 
             <ReminderButton alignSelf="start" onClick={() => setIsCalendarReminderOpen(true)}>

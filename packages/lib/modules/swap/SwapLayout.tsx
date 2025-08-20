@@ -34,11 +34,13 @@ export default function SwapLayout({ props, children }: Props) {
       <Permit2SignatureProvider>
         <RelayerSignatureProvider>
           <TokenInputsValidationProvider>
-            <TokenBalancesProvider initTokens={initTokens}>
-              <PriceImpactProvider>
-                {!isLoadingTokens && <SwapProvider params={props}>{children}</SwapProvider>}
-              </PriceImpactProvider>
-            </TokenBalancesProvider>
+            {!isLoadingTokens && (
+              <TokenBalancesProvider initTokens={initTokens}>
+                <PriceImpactProvider>
+                  <SwapProvider params={props}>{children}</SwapProvider>
+                </PriceImpactProvider>
+              </TokenBalancesProvider>
+            )}
           </TokenInputsValidationProvider>
         </RelayerSignatureProvider>
       </Permit2SignatureProvider>

@@ -28,7 +28,7 @@ import {
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { isCowAmmPool, isQuantAmmPool, isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
+import { isCowAmmPool, isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
 import { ReactNode } from 'react'
 
 interface Props {
@@ -103,11 +103,9 @@ function BaseAprTooltip({
   const colorMode = useThemeColorMode()
 
   const isVebal = isVebalPool(poolId)
-  const isQuantAmm = isQuantAmmPool(poolType)
 
   const usedDisplayValueFormatter =
-    displayValueFormatter ||
-    (isQuantAmm ? defaultDisplayValueFormatterWithCanBeNegative : defaultDisplayValueFormatter)
+    displayValueFormatter || defaultDisplayValueFormatterWithCanBeNegative
 
   const usedNumberFormatter = numberFormatter || defaultNumberFormatter
 

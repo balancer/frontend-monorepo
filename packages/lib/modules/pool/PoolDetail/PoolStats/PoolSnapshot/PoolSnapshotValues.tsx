@@ -10,6 +10,7 @@ import { useGetPoolRewards } from '../../../useGetPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { PoolTotalLiquidityDisplay } from '../../PoolTotalLiquidityDisplay'
 
 type PoolStatsValues = {
   totalLiquidity: string
@@ -19,12 +20,17 @@ type PoolStatsValues = {
 }
 
 export function PoolSnapshotValues() {
-  const { chain, pool, tvl } = usePool()
+  const { chain, pool, tvl, isLoading: isLoadingPool } = usePool()
   const { toCurrency } = useCurrency()
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
-  const { tokens, weeklyRewards, weeklyRewardsByToken } = useGetPoolRewards(pool)
+  const {
+    tokens,
+    weeklyRewards,
+    weeklyRewardsByToken,
+    isLoading: isLoadingTokens,
+  } = useGetPoolRewards(pool)
 
   const poolStatsValues: PoolStatsValues | undefined = pool
     ? {
@@ -46,10 +52,13 @@ export function PoolSnapshotValues() {
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             TVL
           </Text>
-          {poolStatsValues ? (
-            <Heading size="h4">{poolStatsValues.totalLiquidity}</Heading>
-          ) : (
+          {isLoadingPool && !Number(tvl) ? ( // Only show loading state when we have no TVL
             <Skeleton height="28px" w="100px" />
+          ) : (
+            <PoolTotalLiquidityDisplay
+              size="h4"
+              totalLiquidity={poolStatsValues?.totalLiquidity || ''}
+            />
           )}
         </VStack>
       </FadeInOnView>
@@ -106,7 +115,11 @@ export function PoolSnapshotValues() {
           {poolStatsValues ? (
             <HStack>
               <Heading size="h4">
-                {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
+                {isLoadingTokens ? (
+                  <Skeleton height="8" width="28" />
+                ) : (
+                  poolStatsValues.weeklyRewards
+                )}
               </Heading>
               <TokenStackPopover
                 chain={chain}
@@ -114,7 +127,13 @@ export function PoolSnapshotValues() {
                 rewardsByToken={weeklyRewardsByToken}
                 tokens={tokens}
               >
-                <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
+                <TokenIconStack
+                  chain={chain}
+                  disablePopover
+                  isLoading={isLoadingTokens}
+                  size={20}
+                  tokens={tokens}
+                />
               </TokenStackPopover>
             </HStack>
           ) : (

@@ -91,7 +91,6 @@ export function useInitializeLbpStep({
           <TransactionBatchButton
             chainId={initPoolInput.chainId}
             currentStep={currentStep}
-            id={initializeLbpStepId}
             labels={labels}
             onTransactionChange={setTransaction}
           />

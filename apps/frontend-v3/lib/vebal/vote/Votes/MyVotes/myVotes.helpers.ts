@@ -1,6 +1,6 @@
 import { oneDayInMs, startOfDayUtc, toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { bn, MAX_BIGNUMBER, Numberish } from '@repo/lib/shared/utils/numbers'
-import { formatDistanceToNow, millisecondsToSeconds, nextThursday } from 'date-fns'
+import { millisecondsToSeconds, nextThursday } from 'date-fns'
 import { SortingBy } from './myVotes.types'
 import BigNumber from 'bignumber.js'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -35,11 +35,6 @@ export function isVotingTimeLocked(lastVoteTime: number) {
 export function votingTimeLockedEndDate(lastVoteTime: number) {
   const lastUserVoteTime = toJsTimestamp(lastVoteTime)
   return new Date(lastUserVoteTime + WEIGHT_VOTE_DELAY)
-}
-
-export function remainingVoteLockTime(lastVoteTime: number): string {
-  const lastUserVoteTime = toJsTimestamp(lastVoteTime)
-  return formatDistanceToNow(lastUserVoteTime + WEIGHT_VOTE_DELAY)
 }
 
 export function getExceededWeight(weight: Numberish) {
