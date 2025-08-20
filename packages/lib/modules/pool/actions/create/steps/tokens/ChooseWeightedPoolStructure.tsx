@@ -1,28 +1,38 @@
+import { useEffect } from 'react'
 import { type Control, Controller } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
 import { type PoolCreationConfig, usePoolCreationForm } from '../../PoolCreationFormProvider'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationConfig> }) {
-  const {
-    poolConfigForm: { watch, setValue },
-  } = usePoolCreationForm()
+  const { poolTokens, updatePoolTokens, weightedPoolStructure, isWeightedPool } =
+    usePoolCreationForm()
 
-  const poolTokens = watch('poolTokens')
+  const WEIGHTED_STRUCTURE_MAP = {
+    [WeightedPoolStructure.Custom]: poolTokens.map(token => ({ ...token, weight: '' })),
+    [WeightedPoolStructure.FiftyFifty]: poolTokens
+      .map(token => ({ ...token, weight: '50' }))
+      .slice(0, 2),
+    [WeightedPoolStructure.EightyTwenty]: poolTokens
+      .map((token, index) => ({
+        ...token,
+        weight: index === 0 ? '80' : '20',
+      }))
+      .slice(0, 2),
+  } as const
 
   function updatePoolTokenWeights(weightedStructure: WeightedPoolStructure) {
-    const newWeights = weightedStructure.split('/')
-
-    if (weightedStructure !== WeightedPoolStructure.Custom) {
-      setValue(
-        'poolTokens',
-        poolTokens.map((token, index) => ({
-          ...token,
-          config: { ...token.config, weight: newWeights[index] },
-        }))
-      )
-    }
+    const newPoolTokens = WEIGHTED_STRUCTURE_MAP[weightedStructure]
+    updatePoolTokens(newPoolTokens)
   }
+
+  useEffect(() => {
+    // sets token weights on only first render
+    if (isWeightedPool && weightedPoolStructure !== WeightedPoolStructure.Custom) {
+      updatePoolTokenWeights(weightedPoolStructure)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <VStack align="start" spacing="md" w="full">

@@ -9,7 +9,7 @@ import { PoolType } from '@balancer/sdk'
 import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
-import { INITIAL_TOKEN_CONFIG, POOL_TYPES, RateProviderOption } from '../../constants'
+import { POOL_TYPES } from '../../constants'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import {
   TotalWeightDisplay,
@@ -17,16 +17,19 @@ import {
   InvalidWeightInputAlert,
 } from './ConfigureTokenWeight'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
-import { TokenType } from '@balancer/sdk'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
   const tokenSelectDisclosure = useDisclosure()
-
   const {
-    poolConfigForm: { watch, setValue },
+    network,
+    poolTokens,
+    weightedPoolStructure,
+    poolType,
+    updatePoolToken,
+    removePoolToken,
+    addPoolToken,
   } = usePoolCreationForm()
-  const { network, poolTokens, weightedPoolStructure, poolType } = watch()
 
   const { getTokensByChain } = useTokens()
   const tokens = getTokensByChain(network)
@@ -35,37 +38,15 @@ export function ChoosePoolTokens() {
     if (!tokenData || selectedTokenIndex === null) return
 
     const existingPoolToken = poolTokens[selectedTokenIndex]
+    const verifiedRateProviderAddress = tokenData?.priceRateProviderData?.address as Address
 
-    const rateProviderAddress = tokenData?.priceRateProviderData?.address as Address
-
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens[selectedTokenIndex] = {
+    updatePoolToken(selectedTokenIndex, {
       ...existingPoolToken,
-      config: {
-        ...existingPoolToken.config,
-        address: tokenData.address as Address,
-        rateProvider: rateProviderAddress ? rateProviderAddress : zeroAddress,
-        tokenType: rateProviderAddress ? TokenType.TOKEN_WITH_RATE : TokenType.STANDARD,
-      },
+      address: tokenData.address as Address,
+      rateProvider: verifiedRateProviderAddress ? verifiedRateProviderAddress : zeroAddress,
       data: tokenData,
-      rateProviderOption: rateProviderAddress
-        ? RateProviderOption.Verified
-        : RateProviderOption.Null,
-    }
-    setValue('poolTokens', newPoolTokens)
+    })
     setSelectedTokenIndex(null)
-  }
-
-  const handleRemoveToken = (index: number) => {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens.splice(index, 1)
-    setValue('poolTokens', newPoolTokens)
-  }
-
-  const handleAddToken = () => {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens.push(INITIAL_TOKEN_CONFIG)
-    setValue('poolTokens', newPoolTokens)
   }
 
   const maxTokens = POOL_TYPES[poolType].maxTokens
@@ -73,7 +54,7 @@ export function ChoosePoolTokens() {
   const isWeightedPool = poolType === PoolType.Weighted
   const isCustomWeightedPool = weightedPoolStructure === WeightedPoolStructure.Custom
   const currentTokenAddress = selectedTokenIndex
-    ? poolTokens[selectedTokenIndex].config.address
+    ? poolTokens[selectedTokenIndex].address
     : undefined
 
   return (
@@ -93,7 +74,7 @@ export function ChoosePoolTokens() {
         </VStack>
         <VStack align="start" spacing="xl" w="full">
           {poolTokens.map((token, index) => {
-            const isInvalidWeight = !!token.config.weight && Number(token.config.weight) < 1
+            const isInvalidWeight = !!token.weight && Number(token.weight) < 1
             const verifiedRateProviderAddress = token?.data?.priceRateProviderData?.address
 
             return (
@@ -116,13 +97,13 @@ export function ChoosePoolTokens() {
                       index={index}
                       isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
                       isInvalid={isInvalidWeight}
-                      tokenWeightValue={token?.config?.weight}
+                      tokenWeightValue={token?.weight}
                     />
                   )}
 
                   <RemoveTokenButton
                     isDisabled={poolTokens.length <= 2}
-                    onClick={() => handleRemoveToken(index)}
+                    onClick={() => removePoolToken(index)}
                   />
                 </HStack>
                 {isInvalidWeight && <InvalidWeightInputAlert />}
@@ -134,7 +115,9 @@ export function ChoosePoolTokens() {
               </VStack>
             )
           })}
-          <AddTokenButton isDisabled={isAtMaxTokens} onClick={handleAddToken} />
+          {(!isWeightedPool || isCustomWeightedPool) && (
+            <AddTokenButton isDisabled={isAtMaxTokens} onClick={() => addPoolToken()} />
+          )}
 
           {isCustomWeightedPool && <TotalWeightDisplay />}
         </VStack>

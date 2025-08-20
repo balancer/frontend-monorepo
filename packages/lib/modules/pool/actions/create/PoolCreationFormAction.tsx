@@ -6,18 +6,23 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { usePoolTokenWeights } from './steps/tokens/usePoolTokenWeights'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
-  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationForm()
+  const {
+    activeStepIndex,
+    setActiveStep,
+    isLastStep,
+    isFirstStep,
+    isTotalWeightTooHigh,
+    isWeightedPool,
+  } = usePoolCreationForm()
   const previewModalDisclosure = useDisclosure()
-  const { isTotalWeightTooHigh } = usePoolTokenWeights()
 
   return isConnected ? (
     <VStack spacing="lg" w="full">
       <Divider />
-      {isTotalWeightTooHigh && (
+      {isWeightedPool && isTotalWeightTooHigh && (
         <BalAlert
           content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
           status="error"

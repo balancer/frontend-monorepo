@@ -12,13 +12,12 @@ import {
 } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
-import { RATE_PROVIDER_OPTIONS, RateProviderOption } from '../../constants'
+import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
 import { usePoolCreationForm, PoolCreationConfig } from '../../PoolCreationFormProvider'
 import { Address, zeroAddress, isAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
 import { Control, Controller, FieldErrors, UseFormSetValue } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { TokenType } from '@balancer/sdk'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 
 export function ConfigureTokenRateProvider({
@@ -29,36 +28,41 @@ export function ConfigureTokenRateProvider({
   tokenIndex: number
 }) {
   const {
+    poolTokens,
+    network,
+    updatePoolToken,
     poolConfigForm: {
-      watch,
       setValue,
       control,
       formState: { errors },
     },
   } = usePoolCreationForm()
-  const { poolTokens, network } = watch()
-  const rateProviderOption = poolTokens[tokenIndex].rateProviderOption
-  const isCustomRateProvider = rateProviderOption === RateProviderOption.Custom
-  const rateProviderOptionMap = {
-    [RateProviderOption.Null]: zeroAddress,
-    [RateProviderOption.Verified]: verifiedRateProviderAddress as Address,
-    [RateProviderOption.Custom]: '' as const, // to be updated by user input
-  }
-
-  const handleRateProviderOptionChange = (value: RateProviderOption) => {
-    const newTokenType =
-      value === RateProviderOption.Null ? TokenType.STANDARD : TokenType.TOKEN_WITH_RATE
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens[tokenIndex].config.rateProvider = rateProviderOptionMap[value]
-    newPoolTokens[tokenIndex].rateProviderOption = value
-    newPoolTokens[tokenIndex].config.tokenType = newTokenType
-
-    setValue('poolTokens', newPoolTokens)
-  }
 
   if (!verifiedRateProviderAddress) {
     return <Text color="font.secondary">No rate provider is required for this token</Text>
   }
+
+  const currentRateProvider = poolTokens[tokenIndex].rateProvider
+
+  let rateProviderRadioValue = RateProviderOption.Null
+  if (currentRateProvider === verifiedRateProviderAddress)
+    rateProviderRadioValue = RateProviderOption.Verified
+  if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProviderAddress)
+    rateProviderRadioValue = RateProviderOption.Custom
+
+  const handleRateProviderOptionChange = (value: RateProviderOption) => {
+    let rateProvider: Address | '' = zeroAddress
+
+    if (value === RateProviderOption.Verified) {
+      rateProvider = verifiedRateProviderAddress as Address
+    } else if (value === RateProviderOption.Custom) {
+      rateProvider = '' // to be updated by user input
+    }
+
+    updatePoolToken(tokenIndex, { rateProvider })
+  }
+
+  const isCustomRateProvider = rateProviderRadioValue === RateProviderOption.Custom
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -67,9 +71,9 @@ export function ConfigureTokenRateProvider({
           <Text>Rate Provider</Text>
           <InfoIconPopover />
         </HStack>
-        <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderOption}>
+        <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>
           <Stack spacing={3}>
-            {RATE_PROVIDER_OPTIONS.map(({ label, value }) => (
+            {RATE_PROVIDER_RADIO_OPTIONS.map(({ label, value }) => (
               <HStack key={value} spacing="xs">
                 <Radio size="lg" value={value}>
                   <Text>{label}</Text>
@@ -114,7 +118,7 @@ function CustomRateProviderInput({
 }) {
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
-    setValue(`poolTokens.${tokenIndex}.config.rateProvider`, clipboardText as Address)
+    setValue(`poolTokens.${tokenIndex}.rateProvider`, clipboardText as Address)
   }
 
   return (
@@ -126,11 +130,11 @@ function CustomRateProviderInput({
       <InputGroup>
         <Controller
           control={control}
-          name={`poolTokens.${tokenIndex}.config.rateProvider`}
+          name={`poolTokens.${tokenIndex}.rateProvider`}
           render={({ field }) => (
             <InputWithError
-              error={errors.poolTokens?.[tokenIndex]?.config?.rateProvider?.message}
-              isInvalid={!!errors.poolTokens?.[0]?.config?.rateProvider}
+              error={errors.poolTokens?.[tokenIndex]?.rateProvider?.message}
+              isInvalid={!!errors.poolTokens?.[tokenIndex]?.rateProvider}
               onChange={e => field.onChange(e.target.value)}
               placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
               value={field.value}

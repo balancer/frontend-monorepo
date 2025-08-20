@@ -3,7 +3,6 @@ import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { PoolCreationToken } from './PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
-import { TokenType } from '@balancer/sdk'
 
 export const POOL_CONFIGURATION_STEPS = [
   { id: 'step1', title: 'Type' },
@@ -60,7 +59,7 @@ export enum RateProviderOption {
   Null = 'null',
 }
 
-export const RATE_PROVIDER_OPTIONS = [
+export const RATE_PROVIDER_RADIO_OPTIONS = [
   {
     label: 'Add the verified rate provider for this token: ',
     value: RateProviderOption.Verified,
@@ -76,14 +75,10 @@ export const RATE_PROVIDER_OPTIONS = [
 ] as const
 
 export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
-  config: {
-    address: zeroAddress, // TODO: validate config.address != zeroAddress
-    rateProvider: zeroAddress,
-    paysYieldFees: false,
-    tokenType: TokenType.STANDARD,
-    weight: '50',
-  },
+  address: undefined,
+  rateProvider: zeroAddress,
+  paysYieldFees: false,
   data: undefined,
   amount: '',
-  rateProviderOption: RateProviderOption.Null,
+  weight: '',
 }

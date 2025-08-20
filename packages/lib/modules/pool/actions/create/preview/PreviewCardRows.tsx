@@ -64,7 +64,7 @@ export function IdentifyTokenCell({
     <HStack gap="3">
       <TokenIcon address={address} alt={address || ''} chain={chain} size={36} />
       <VStack align="start" spacing="0">
-        <Text>{symbol}</Text>
+        <Text fontWeight="semibold">{symbol}</Text>
         <Text color="font.secondary" fontSize="sm">
           {name}
         </Text>

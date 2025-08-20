@@ -2,7 +2,6 @@ import { VStack, Card, HStack, Text, CardBody, Divider, Icon } from '@chakra-ui/
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { TokenType } from '@balancer/sdk'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { CheckCircle, XCircle } from 'react-feather'
 import { PoolCreationConfig } from '../PoolCreationFormProvider'
@@ -10,17 +9,11 @@ import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from '.
 import { zeroAddress } from 'viem'
 
 export function PoolTokensCard() {
-  const {
-    poolConfigForm: { watch },
-  } = usePoolCreationForm()
-  const { poolTokens } = watch()
-
+  const { poolTokens } = usePoolCreationForm()
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
-  const hasRateProviders = poolTokens.some(
-    token => token.config.tokenType === TokenType.TOKEN_WITH_RATE
-  )
+  const hasRateProviders = poolTokens.some(token => token.rateProvider !== zeroAddress)
 
   return (
     <Card>
@@ -28,9 +21,7 @@ export function PoolTokensCard() {
       <CardBody>
         <VStack spacing="md">
           {poolTokens.map((token, idx) => {
-            if (token.config.address === zeroAddress) return <DefaultDataRow key={idx} />
-            if (!token.data) return null
-
+            if (!token.address || !token.data) return <DefaultDataRow key={idx} />
             const { address, chain, symbol, name } = token.data
 
             return (
@@ -73,14 +64,14 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationConfig['pool
       />
 
       {poolTokens
-        .filter(token => token.config.tokenType === TokenType.TOKEN_WITH_RATE)
+        .filter(token => token.rateProvider !== zeroAddress)
         .map(token => {
           const { data } = token
           if (!data) return null
 
           const { address, chain, symbol, priceRateProviderData } = data
           const { reviewed, address: verifiedRateProviderAddress } = priceRateProviderData || {}
-          const chosenRateProviderAddress = token.config.rateProvider
+          const chosenRateProviderAddress = token.rateProvider
 
           const rateProviderHasBeenReviewed =
             reviewed &&

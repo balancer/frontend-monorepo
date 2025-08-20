@@ -2,17 +2,30 @@ import { VStack, Heading, Card, CardHeader, HStack, Text, CardBody } from '@chak
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { capitalize } from 'lodash'
-import { PoolType } from '@balancer/sdk'
 import { WeightedPoolStructure } from '../constants'
 
 export function PoolTypeCard() {
-  const {
-    poolConfigForm: { watch },
-  } = usePoolCreationForm()
-  const { network, protocol, poolType, weightedPoolStructure } = watch()
+  const { network, protocol, poolType, weightedPoolStructure, isWeightedPool } =
+    usePoolCreationForm()
 
-  const isWeightedPool = poolType === PoolType.Weighted
   const isCustomWeightedPool = weightedPoolStructure === WeightedPoolStructure.Custom
+
+  const POOL_TYPE_INFO = [
+    {
+      label: 'Protocol',
+      value: capitalize(protocol),
+    },
+    {
+      label: 'Network',
+      value: capitalize(network),
+    },
+    {
+      label: 'Pool type',
+      value:
+        capitalize(poolType) +
+        (isWeightedPool && `: ${!isCustomWeightedPool ? '2-token' : ''} ${weightedPoolStructure}`),
+    },
+  ]
 
   return (
     <Card>
@@ -24,22 +37,14 @@ export function PoolTypeCard() {
       </CardHeader>
       <CardBody>
         <VStack spacing="sm">
-          <HStack align="start" spacing="lg" w="full">
-            <Text color="font.secondary">Protocol</Text>
-            <Text fontWeight="semibold">{capitalize(protocol)}</Text>
-          </HStack>
-          <HStack align="start" spacing="lg" w="full">
-            <Text color="font.secondary">Network</Text>
-            <Text fontWeight="semibold">{capitalize(network)}</Text>
-          </HStack>
-          <HStack align="start" spacing="md" w="full">
-            <Text color="font.secondary">Pool type</Text>
-            <Text fontWeight="semibold">
-              {capitalize(poolType)}
-              {isWeightedPool &&
-                `: ${!isCustomWeightedPool ? '2-token' : ''} ${weightedPoolStructure}`}
-            </Text>
-          </HStack>
+          {POOL_TYPE_INFO.map(({ label, value }) => (
+            <HStack align="start" key={label} spacing="lg" w="full">
+              <Text color="font.secondary" w="20">
+                {label}
+              </Text>
+              <Text fontWeight="semibold">{value}</Text>
+            </HStack>
+          ))}
         </VStack>
       </CardBody>
     </Card>

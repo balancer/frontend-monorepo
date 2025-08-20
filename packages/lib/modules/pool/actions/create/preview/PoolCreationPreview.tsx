@@ -6,26 +6,24 @@ import { PoolTokensInWalletCard } from './PoolTokensInWalletCard'
 
 export function PoolCreationPreview() {
   return (
-    <>
-      <NoisyCard
-        cardProps={{
-          w: 'full',
-          overflow: 'hidden',
-          rounded: 'xl',
-        }}
-      >
-        <VStack align="start" p="lg" spacing="lg" w="full">
-          <Flex alignItems="center" w="full">
-            <Heading color="font.maxContrast" size="md">
-              Pool preview
-            </Heading>
-          </Flex>
+    <NoisyCard
+      cardProps={{
+        w: 'full',
+        overflow: 'hidden',
+        rounded: 'xl',
+      }}
+    >
+      <VStack align="start" p="lg" spacing="lg" w="full">
+        <Flex alignItems="center" w="full">
+          <Heading color="font.maxContrast" size="md">
+            Pool preview
+          </Heading>
+        </Flex>
 
-          <PoolTypeCard />
-          <PoolTokensCard />
-          <PoolTokensInWalletCard />
-        </VStack>
-      </NoisyCard>
-    </>
+        <PoolTypeCard />
+        <PoolTokensCard />
+        <PoolTokensInWalletCard />
+      </VStack>
+    </NoisyCard>
   )
 }

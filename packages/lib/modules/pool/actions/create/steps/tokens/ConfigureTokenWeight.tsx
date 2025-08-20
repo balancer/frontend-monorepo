@@ -1,8 +1,7 @@
-import { usePoolCreationConfig } from '../../usePoolCreationConfig'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { Text, HStack, Divider, Icon, Box, VStack } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { usePoolTokenWeights } from './usePoolTokenWeights'
 
 export function TokenWeightInput({
   tokenWeightValue,
@@ -15,7 +14,7 @@ export function TokenWeightInput({
   isInvalid: boolean
   index: number
 }) {
-  const { updatePoolTokenConfig } = usePoolCreationConfig()
+  const { updatePoolToken } = usePoolCreationForm()
 
   return (
     <VStack align="start" spacing="sm">
@@ -26,7 +25,7 @@ export function TokenWeightInput({
           isInvalid={isInvalid}
           name="weight"
           onChange={e => {
-            updatePoolTokenConfig(index, { weight: e.target.value })
+            updatePoolToken(index, { weight: e.target.value })
           }}
           placeholder="0"
           value={tokenWeightValue}
@@ -47,7 +46,15 @@ export function TokenWeightInput({
 }
 
 export function TotalWeightDisplay() {
-  const { totalWeight, isInvalidTotalWeight, totalWeightColor } = usePoolTokenWeights()
+  const { totalWeight, isTotalWeightTooLow, isTotalWeightTooHigh } = usePoolCreationForm()
+
+  const isInvalidTotalWeight = isTotalWeightTooLow || isTotalWeightTooHigh
+
+  const totalWeightColor = isTotalWeightTooLow
+    ? 'font.warning'
+    : isTotalWeightTooHigh
+      ? 'font.error'
+      : 'font.maxContrast'
 
   return (
     <>
