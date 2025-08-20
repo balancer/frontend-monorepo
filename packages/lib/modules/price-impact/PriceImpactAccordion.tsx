@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import {
   Accordion,
   AccordionItem,
@@ -26,8 +25,6 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
 import { getPriceImpactLevel } from './price-impact.utils'
-import { useSwap } from '../swap/SwapProvider'
-import { buildCowSwapUrl } from '../cow/cow.utils'
 import { CheckIcon } from '@chakra-ui/icons'
 
 interface PriceImpactAccordionProps {
@@ -39,6 +36,7 @@ interface PriceImpactAccordionProps {
   cannotCalculatePriceImpact?: boolean
   avoidPriceImpactAlert?: boolean
   action: 'swap' | 'add' | 'remove'
+  cowLink?: string
 }
 
 export function PriceImpactAccordion({
@@ -49,6 +47,7 @@ export function PriceImpactAccordion({
   cannotCalculatePriceImpact = false,
   avoidPriceImpactAlert = false,
   action,
+  cowLink,
 }: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
   const {
@@ -62,8 +61,6 @@ export function PriceImpactAccordion({
   } = usePriceImpact()
 
   const isUnknownPriceImpact = cannotCalculatePriceImpact || priceImpactLevel === 'unknown'
-  const { tokenIn, tokenOut, selectedChain } = useSwap()
-  const showCowSwapLink = PROJECT_CONFIG.cowSupportedNetworks.includes(selectedChain)
 
   function PriceImpactMessage({ action }: { action: 'swap' | 'add' | 'remove' }) {
     switch (action) {
@@ -78,7 +75,7 @@ export function PriceImpactAccordion({
             </Text>
             <Text color="#000" fontSize="sm">
               To reduce price impact, lower your swap size
-              {showCowSwapLink ? (
+              {cowLink ? (
                 <>
                   {' '}
                   or try{' '}
@@ -88,11 +85,7 @@ export function PriceImpactAccordion({
                     }}
                     color="#000"
                     fontSize="sm"
-                    href={buildCowSwapUrl({
-                      chain: selectedChain,
-                      tokenInAddress: tokenIn.address,
-                      tokenOutAddress: tokenOut.address,
-                    })}
+                    href={cowLink}
                     isExternal
                     textDecor="underline"
                   >
