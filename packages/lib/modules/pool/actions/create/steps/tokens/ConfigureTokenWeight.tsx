@@ -1,4 +1,4 @@
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { usePoolCreationConfig } from '../../usePoolCreationConfig'
 import { Text, HStack, Divider, Icon, Box, VStack } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
@@ -15,16 +15,7 @@ export function TokenWeightInput({
   isInvalid: boolean
   index: number
 }) {
-  const {
-    poolConfigForm: { watch, setValue },
-  } = usePoolCreationForm()
-  const { poolTokens } = watch()
-
-  function handleWeightChange(value: string) {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens[index].config.weight = value
-    setValue('poolTokens', newPoolTokens)
-  }
+  const { updatePoolTokenConfig } = usePoolCreationConfig()
 
   return (
     <VStack align="start" spacing="sm">
@@ -35,7 +26,7 @@ export function TokenWeightInput({
           isInvalid={isInvalid}
           name="weight"
           onChange={e => {
-            handleWeightChange(e.target.value)
+            updatePoolTokenConfig(index, { weight: e.target.value })
           }}
           placeholder="0"
           value={tokenWeightValue}

@@ -1,17 +1,12 @@
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { usePoolCreationConfig } from '../../usePoolCreationConfig'
 
 export function usePoolTokenWeights() {
-  const {
-    poolConfigForm: { watch },
-  } = usePoolCreationForm()
-  const { poolTokens } = watch()
+  const { poolTokens } = usePoolCreationConfig()
 
   const totalWeight = poolTokens.reduce((acc, token) => acc + Number(token.config.weight), 0)
-
   const isAllValidWeightInputs = poolTokens.every(token => token.config.weight)
   const isTotalWeightTooLow = isAllValidWeightInputs && totalWeight < 100
   const isTotalWeightTooHigh = totalWeight > 100
-
   const isInvalidTotalWeight = isTotalWeightTooLow || isTotalWeightTooHigh
 
   const totalWeightColor = isTotalWeightTooLow

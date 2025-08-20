@@ -28,7 +28,7 @@ export type PoolCreationToken = {
     paysYieldFees: boolean
     tokenType: TokenType
     weight?: string
-  } // matches TokenConfig struct sent on chain
+  }
   data?: ApiToken // token data from the API
   amount: string // human amount input
   rateProviderOption: RateProviderOption // for rate provider radio group
