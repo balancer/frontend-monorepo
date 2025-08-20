@@ -119,7 +119,7 @@ export function ChoosePoolTokens() {
             <AddTokenButton isDisabled={isAtMaxTokens} onClick={() => addPoolToken()} />
           )}
 
-          {isCustomWeightedPool && <TotalWeightDisplay />}
+          {isWeightedPool && isCustomWeightedPool && <TotalWeightDisplay />}
         </VStack>
       </VStack>
 

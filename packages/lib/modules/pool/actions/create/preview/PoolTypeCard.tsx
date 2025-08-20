@@ -23,7 +23,9 @@ export function PoolTypeCard() {
       label: 'Pool type',
       value:
         capitalize(poolType) +
-        (isWeightedPool && `: ${!isCustomWeightedPool ? '2-token' : ''} ${weightedPoolStructure}`),
+        (isWeightedPool
+          ? `: ${!isCustomWeightedPool ? '2-token' : ''} ${weightedPoolStructure}`
+          : ''),
     },
   ]
 

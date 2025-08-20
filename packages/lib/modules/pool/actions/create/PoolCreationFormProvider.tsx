@@ -31,7 +31,7 @@ export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
   poolType: SupportedPoolTypes
-  weightedPoolStructure: WeightedPoolStructure
+  weightedPoolStructure?: WeightedPoolStructure
   poolTokens: PoolCreationToken[]
 }
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
@@ -43,7 +43,6 @@ export function usePoolFormLogic() {
     protocol: ProjectConfigBalancer.projectId,
     network: GqlChain.Mainnet,
     poolType: PoolType.Weighted,
-    weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
     poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
   })
 

@@ -28,11 +28,11 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
 
   useEffect(() => {
     // sets token weights on only first render
-    if (isWeightedPool && weightedPoolStructure !== WeightedPoolStructure.Custom) {
-      updatePoolTokenWeights(weightedPoolStructure)
+    if (isWeightedPool && !weightedPoolStructure) {
+      updatePoolTokens(WEIGHTED_STRUCTURE_MAP[WeightedPoolStructure.FiftyFifty])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isWeightedPool, weightedPoolStructure])
 
   return (
     <VStack align="start" spacing="md" w="full">
