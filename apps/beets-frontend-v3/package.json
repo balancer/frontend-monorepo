@@ -30,6 +30,7 @@
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
     "@sentry/nextjs": "8.50.0",
+    "@tanstack/react-query": "5.80.7",
     "date-fns": "^4.1.0",
     "framer-motion": "12.9.7",
     "lodash": "^4.17.21",

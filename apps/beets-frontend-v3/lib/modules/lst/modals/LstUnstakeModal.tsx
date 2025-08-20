@@ -31,14 +31,16 @@ export function LstUnstakeModal({
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { stopTokenPricePolling } = useTokens()
-  const { unstakeTransactionSteps, chain, lstUnstakeTxHash } = useLst()
+  const { unstakeTransactionSteps, chain, lstUnstakeTxHash, setUnstakeEnabled } = useLst()
 
   useResetStepIndexOnOpen(isOpen, unstakeTransactionSteps)
 
   useEffect(() => {
     if (isOpen) {
-      // stop polling for token prices when modal is opened to prevent unwanted re-renders
-      stopTokenPricePolling()
+      stopTokenPricePolling() // stop polling for token prices when modal is opened to prevent unwanted re-renders
+      setUnstakeEnabled(true) // enable query for unstake api
+    } else {
+      setUnstakeEnabled(false) // disable query for unstake api
     }
   }, [isOpen])
 
