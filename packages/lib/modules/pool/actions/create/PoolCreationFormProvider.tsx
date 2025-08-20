@@ -31,7 +31,7 @@ export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
   poolType: SupportedPoolTypes
-  weightedPoolStructure?: WeightedPoolStructure
+  weightedPoolStructure: WeightedPoolStructure
   poolTokens: PoolCreationToken[]
 }
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
@@ -39,12 +39,17 @@ export const PoolCreationFormContext = createContext<UsePoolCreationFormResult |
 
 export function usePoolFormLogic() {
   ////// POOL CREATION FORM DATA //////
-  const poolConfigForm = usePersistentForm<PoolCreationConfig>(LS_KEYS.PoolCreation.Config, {
-    protocol: ProjectConfigBalancer.projectId,
-    network: GqlChain.Mainnet,
-    poolType: PoolType.Weighted,
-    poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
-  })
+  const poolConfigForm = usePersistentForm<PoolCreationConfig>(
+    LS_KEYS.PoolCreation.Config,
+    {
+      protocol: ProjectConfigBalancer.projectId,
+      network: GqlChain.Mainnet,
+      poolType: PoolType.Weighted,
+      weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
+      poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
+    },
+    { mode: 'all' }
+  )
 
   const { poolTokens, poolType, weightedPoolStructure, protocol, network } = poolConfigForm.watch()
 
@@ -87,13 +92,6 @@ export function usePoolFormLogic() {
     setPersistedStepIndex(activeStepIndex)
   }, [activeStepIndex, setPersistedStepIndex])
 
-  ////// WEIGHTED POOL HELPERS //////
-  const isWeightedPool = poolType === PoolType.Weighted
-  const totalWeight = poolTokens.reduce((acc, token) => acc + Number(token.weight), 0)
-  const isAllValidWeightInputs = poolTokens.every(token => token.weight)
-  const isTotalWeightTooLow = isAllValidWeightInputs && totalWeight < 100
-  const isTotalWeightTooHigh = totalWeight > 100
-
   return {
     steps: POOL_CONFIGURATION_STEPS,
     activeStepIndex,
@@ -111,10 +109,6 @@ export function usePoolFormLogic() {
     updatePoolTokens,
     removePoolToken,
     addPoolToken,
-    isWeightedPool,
-    totalWeight,
-    isTotalWeightTooLow,
-    isTotalWeightTooHigh,
   }
 }
 

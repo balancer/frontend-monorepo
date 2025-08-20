@@ -2,13 +2,11 @@ import { VStack, Heading, Card, CardHeader, HStack, Text, CardBody } from '@chak
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { capitalize } from 'lodash'
-import { WeightedPoolStructure } from '../constants'
+import { useValidatePoolConfig } from '../useValidatePoolConfig'
 
 export function PoolTypeCard() {
-  const { network, protocol, poolType, weightedPoolStructure, isWeightedPool } =
-    usePoolCreationForm()
-
-  const isCustomWeightedPool = weightedPoolStructure === WeightedPoolStructure.Custom
+  const { network, protocol, poolType, weightedPoolStructure } = usePoolCreationForm()
+  const { isWeightedPool, isCustomWeightedPool } = useValidatePoolConfig()
 
   const POOL_TYPE_INFO = [
     {

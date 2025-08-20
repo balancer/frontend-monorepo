@@ -6,18 +6,14 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { useValidatePoolConfig } from './useValidatePoolConfig'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
-  const {
-    activeStepIndex,
-    setActiveStep,
-    isLastStep,
-    isFirstStep,
-    isTotalWeightTooHigh,
-    isWeightedPool,
-  } = usePoolCreationForm()
+  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationForm()
   const previewModalDisclosure = useDisclosure()
+
+  const { isWeightedPool, isTotalWeightTooHigh } = useValidatePoolConfig()
 
   return isConnected ? (
     <VStack spacing="lg" w="full">

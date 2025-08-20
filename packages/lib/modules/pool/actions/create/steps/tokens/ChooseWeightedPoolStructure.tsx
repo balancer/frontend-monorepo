@@ -3,10 +3,13 @@ import { type Control, Controller } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
 import { type PoolCreationConfig, usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationConfig> }) {
-  const { poolTokens, updatePoolTokens, weightedPoolStructure, isWeightedPool } =
+  const { poolTokens, updatePoolTokens, weightedPoolStructure, poolConfigForm } =
     usePoolCreationForm()
+
+  const { isWeightedPool } = useValidatePoolConfig()
 
   const WEIGHTED_STRUCTURE_MAP = {
     [WeightedPoolStructure.Custom]: poolTokens.map(token => ({ ...token, weight: '' })),
@@ -24,12 +27,13 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
   function updatePoolTokenWeights(weightedStructure: WeightedPoolStructure) {
     const newPoolTokens = WEIGHTED_STRUCTURE_MAP[weightedStructure]
     updatePoolTokens(newPoolTokens)
+    poolConfigForm.trigger('poolTokens')
   }
 
   useEffect(() => {
     // sets token weights on only first render
-    if (isWeightedPool && !weightedPoolStructure) {
-      updatePoolTokens(WEIGHTED_STRUCTURE_MAP[WeightedPoolStructure.FiftyFifty])
+    if (isWeightedPool && weightedPoolStructure !== WeightedPoolStructure.Custom) {
+      updatePoolTokens(WEIGHTED_STRUCTURE_MAP[weightedPoolStructure])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isWeightedPool, weightedPoolStructure])

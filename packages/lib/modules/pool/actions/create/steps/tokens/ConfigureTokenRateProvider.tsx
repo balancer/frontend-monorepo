@@ -35,6 +35,7 @@ export function ConfigureTokenRateProvider({
       setValue,
       control,
       formState: { errors },
+      trigger,
     },
   } = usePoolCreationForm()
 
@@ -60,6 +61,8 @@ export function ConfigureTokenRateProvider({
     }
 
     updatePoolToken(tokenIndex, { rateProvider })
+    // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above
+    trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
   const isCustomRateProvider = rateProviderRadioValue === RateProviderOption.Custom
@@ -95,6 +98,7 @@ export function ConfigureTokenRateProvider({
           chainName={getChainName(network)}
           control={control}
           errors={errors}
+          isCustomRateProvider={isCustomRateProvider}
           setValue={setValue}
           tokenIndex={tokenIndex}
         />
@@ -109,12 +113,14 @@ function CustomRateProviderInput({
   errors,
   setValue,
   chainName,
+  isCustomRateProvider,
 }: {
   tokenIndex: number
   control: Control<PoolCreationConfig>
   errors: FieldErrors<PoolCreationConfig>
   setValue: UseFormSetValue<PoolCreationConfig>
   chainName: string
+  isCustomRateProvider: boolean
 }) {
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
@@ -122,53 +128,54 @@ function CustomRateProviderInput({
   }
 
   return (
-    <VStack align="start" spacing="sm" w="full">
-      <HStack spacing="xs">
-        <Text>Rate provider contract address on {chainName}</Text>
-        <InfoIconPopover />
-      </HStack>
-      <InputGroup>
-        <Controller
-          control={control}
-          name={`poolTokens.${tokenIndex}.rateProvider`}
-          render={({ field }) => (
-            <InputWithError
-              error={errors.poolTokens?.[tokenIndex]?.rateProvider?.message}
-              isInvalid={!!errors.poolTokens?.[tokenIndex]?.rateProvider}
-              onChange={e => field.onChange(e.target.value)}
-              placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
-              value={field.value}
-            />
-          )}
-          rules={{
-            required: 'Token address is required',
-            validate: (value: string) => {
-              if (!isAddress(value)) return 'This is an invalid rate provider address format'
+    <VStack align="start" spacing="md" w="full">
+      <VStack align="start" spacing="sm" w="full">
+        <HStack spacing="xs">
+          <Text>Rate provider contract address on {chainName}</Text>
+          <InfoIconPopover />
+        </HStack>
+        <InputGroup>
+          <Controller
+            control={control}
+            name={`poolTokens.${tokenIndex}.rateProvider`}
+            render={({ field }) => (
+              <InputWithError
+                error={errors.poolTokens?.[tokenIndex]?.rateProvider?.message}
+                isInvalid={!!errors.poolTokens?.[tokenIndex]?.rateProvider}
+                onChange={e => field.onChange(e.target.value)}
+                placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
+                value={field.value}
+              />
+            )}
+            rules={{
+              validate: (value: string) => {
+                if (!isCustomRateProvider) return true
+                if (!isAddress(value)) return 'This is an invalid rate provider address format'
+                return true
+              },
+            }}
+          />
 
-              return true
-            },
-          }}
-        />
-
-        <InputRightElement w="max-content">
-          <Button
-            aria-label="paste"
-            h="28px"
-            letterSpacing="0.25px"
-            lineHeight="1"
-            mr="0.5"
-            onClick={paste}
-            position="relative"
-            px="2"
-            right="3px"
-            rounded="sm"
-            size="sm"
-            variant="tertiary"
-          >
-            Paste
-          </Button>
-        </InputRightElement>
-      </InputGroup>
+          <InputRightElement w="max-content">
+            <Button
+              aria-label="paste"
+              h="28px"
+              letterSpacing="0.25px"
+              lineHeight="1"
+              mr="0.5"
+              onClick={paste}
+              position="relative"
+              px="2"
+              right="3px"
+              rounded="sm"
+              size="sm"
+              variant="tertiary"
+            >
+              Paste
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </VStack>
 
       <BalAlert
         content="All new Rate Provider contracts must be reviewed and approved before LPs can interact with the pool on the Balancer.fi UI. Learn more."
