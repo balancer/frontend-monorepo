@@ -226,7 +226,7 @@ function AddLiquidityMainForm() {
                 accordionButtonComponent={
                   <HStack gap="xs">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
-                      Price impact:{' '}
+                      Potential losses:{' '}
                     </Text>
                     {isFetching ? (
                       <Skeleton h="16px" w="40px" />
@@ -246,6 +246,7 @@ function AddLiquidityMainForm() {
                     totalUSDValue={totalUSDValue}
                   />
                 }
+                action="add"
                 avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!priceImpactQuery.data}
