@@ -2,6 +2,7 @@ import { VStack, Heading, Flex } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolTypeCard } from './PoolTypeCard'
 import { PoolTokensCard } from './PoolTokensCard'
+import { PoolTokensInWalletCard } from './PoolTokensInWalletCard'
 
 export function PoolCreationPreview() {
   return (
@@ -22,6 +23,7 @@ export function PoolCreationPreview() {
 
           <PoolTypeCard />
           <PoolTokensCard />
+          <PoolTokensInWalletCard />
         </VStack>
       </NoisyCard>
     </>

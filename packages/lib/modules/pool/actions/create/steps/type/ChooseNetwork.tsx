@@ -8,8 +8,18 @@ import { capitalize } from 'lodash'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export function ChooseNetwork({ control }: { control: Control<PoolCreationConfig> }) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const updateNetworkParam = (network: GqlChain) => {
+    const params = new URLSearchParams(searchParams)
+    params.set('network', network)
+    router.push(`?${params.toString()}`)
+  }
+
   let networkOptions: GqlChain[]
 
   if (PROJECT_CONFIG.projectId === ProjectConfigBalancer.projectId) {
@@ -46,6 +56,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationConfig
                   onChange={e => {
                     if (e.target.checked) {
                       field.onChange(network)
+                      updateNetworkParam(network)
                     }
                   }}
                   padding="sm"

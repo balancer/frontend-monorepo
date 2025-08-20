@@ -30,7 +30,7 @@ export function PoolCreationForm() {
   }, [activeStepIndex])
 
   return (
-    <VStack paddingX="2xl" spacing="lg">
+    <VStack paddingX="lg" spacing="lg">
       <HeaderBanner />
       <Stack
         direction={{ base: 'column', xl: 'row' }}

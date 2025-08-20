@@ -15,8 +15,8 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationConfi
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack spacing={3}>
-              {poolTypesKeys.map(poolType => (
-                <Radio key={poolType} size="lg" value={poolType}>
+              {poolTypesKeys.map(poolTypeKey => (
+                <Radio key={poolTypeKey} size="lg" value={poolTypeKey}>
                   <Text
                     color="font.primary"
                     textDecoration="underline"
@@ -24,7 +24,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationConfi
                     textDecorationThickness="1px"
                     textUnderlineOffset="3px"
                   >
-                    {POOL_TYPES[poolType].label}
+                    {POOL_TYPES[poolTypeKey].label}
                   </Text>
                 </Radio>
               ))}

@@ -18,7 +18,7 @@ export function PoolTypeCard() {
     <Card>
       <CardHeader>
         <HStack justify="space-between" w="full">
-          <Heading size="sm">Pool Type</Heading>
+          <Heading size="md">Pool Type</Heading>
           <NetworkIcon bg="background.level4" chain={network} shadow="lg" size={8} />
         </HStack>
       </CardHeader>

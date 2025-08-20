@@ -346,7 +346,10 @@ export function getPriceRateForToken(token: ApiToken, pool: Pool) {
 export function getPriceRateRatio(pool: Pool) {
   const priceRates = getPoolActionableTokens(pool).map(
     (
-      token: ApiToken & { priceRate?: string; priceRateProviderData?: GqlPriceRateProviderData }
+      token: ApiToken & {
+        priceRate?: string
+        priceRateProviderData?: GqlPriceRateProviderData | null
+      }
     ) => {
       return token.useUnderlyingForAddRemove ? token.priceRate : '1'
     }

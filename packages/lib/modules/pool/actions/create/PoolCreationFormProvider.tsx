@@ -9,20 +9,29 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import { TokenConfig } from '@balancer/sdk'
+import { TokenType } from '@balancer/sdk'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import {
   WeightedPoolStructure,
   POOL_CONFIGURATION_STEPS,
-  DEFAULT_TOKEN,
+  INITIAL_TOKEN_CONFIG,
   SupportedPoolTypes,
+  RateProviderOption,
 } from './constants'
+import { Address } from 'viem'
 
 export type PoolCreationToken = {
-  config: TokenConfig & { weight?: string }
-  data?: ApiToken // initially undefined
-  amount: string
-  weight?: string // only for weighted pool type
+  config: {
+    // config keys match TokenConfig struct sent on chain
+    address: Address
+    rateProvider: Address | ''
+    paysYieldFees: boolean
+    tokenType: TokenType
+    weight?: string
+  } // matches TokenConfig struct sent on chain
+  data?: ApiToken // token data from the API
+  amount: string // human amount input
+  rateProviderOption: RateProviderOption // for rate provider radio group
 }
 
 export type PoolCreationConfig = {
@@ -41,7 +50,7 @@ export function usePoolFormLogic() {
     network: GqlChain.Mainnet,
     poolType: PoolType.Weighted,
     weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
-    poolTokens: [DEFAULT_TOKEN, DEFAULT_TOKEN],
+    poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
   })
 
   const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(

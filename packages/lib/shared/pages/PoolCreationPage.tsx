@@ -8,13 +8,17 @@ import { PoolFormProvider } from '@repo/lib/modules/pool/actions/create/PoolCrea
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useSearchParams } from 'next/navigation'
 
 export default function PoolCreationPage() {
   const { getTokensByChain, isLoadingTokens } = useTokens()
+  const searchParams = useSearchParams()
 
-  // TODO: pattern match the way swap page uses url path params to get chain
-  const initChain = PROJECT_CONFIG.defaultNetwork
-  const initTokens = getTokensByChain(initChain)
+  // the ChooseNetwork component updates params with the selected network
+  const networkParam = searchParams.get('network')
+  const selectedNetwork = networkParam ? (networkParam as GqlChain) : PROJECT_CONFIG.defaultNetwork
+  const initTokens = getTokensByChain(selectedNetwork)
 
   if (!initTokens) return null
 

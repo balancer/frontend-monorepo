@@ -54,14 +54,36 @@ export const WEIGHTED_POOL_STRUCTURES = [
   WeightedPoolStructure.Custom,
 ] as const
 
-export const DEFAULT_TOKEN: PoolCreationToken = {
+export enum RateProviderOption {
+  Verified = 'verified',
+  Custom = 'custom',
+  Null = 'null',
+}
+
+export const RATE_PROVIDER_OPTIONS = [
+  {
+    label: 'Add the verified rate provider for this token: ',
+    value: RateProviderOption.Verified,
+  },
+  {
+    label: 'Add custom rate provider',
+    value: RateProviderOption.Custom,
+  },
+  {
+    label: 'No rate provider',
+    value: RateProviderOption.Null,
+  },
+] as const
+
+export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   config: {
     address: zeroAddress, // TODO: validate config.address != zeroAddress
     rateProvider: zeroAddress,
     paysYieldFees: false,
     tokenType: TokenType.STANDARD,
-    weight: '',
+    weight: '50',
   },
   data: undefined,
   amount: '',
+  rateProviderOption: RateProviderOption.Null,
 }

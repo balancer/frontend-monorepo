@@ -4,14 +4,20 @@ import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/Toke
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { Address } from 'viem'
+import { Address, zeroAddress } from 'viem'
 import { PoolType } from '@balancer/sdk'
 import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
-import { DEFAULT_TOKEN, POOL_TYPES } from '../../constants'
+import { INITIAL_TOKEN_CONFIG, POOL_TYPES, RateProviderOption } from '../../constants'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { TotalWeightDisplay, TokenWeightInput, InvalidWeightInputAlert } from './PoolTokenWeights'
+import {
+  TotalWeightDisplay,
+  TokenWeightInput,
+  InvalidWeightInputAlert,
+} from './ConfigureTokenWeight'
+import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
+import { TokenType } from '@balancer/sdk'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -29,14 +35,22 @@ export function ChoosePoolTokens() {
     if (!tokenData || selectedTokenIndex === null) return
 
     const existingPoolToken = poolTokens[selectedTokenIndex]
+
+    const rateProviderAddress = tokenData?.priceRateProviderData?.address as Address
+
     const newPoolTokens = [...poolTokens]
     newPoolTokens[selectedTokenIndex] = {
       ...existingPoolToken,
       config: {
         ...existingPoolToken.config,
         address: tokenData.address as Address,
+        rateProvider: rateProviderAddress ? rateProviderAddress : zeroAddress,
+        tokenType: rateProviderAddress ? TokenType.TOKEN_WITH_RATE : TokenType.STANDARD,
       },
       data: tokenData,
+      rateProviderOption: rateProviderAddress
+        ? RateProviderOption.Verified
+        : RateProviderOption.Null,
     }
     setValue('poolTokens', newPoolTokens)
     setSelectedTokenIndex(null)
@@ -50,20 +64,21 @@ export function ChoosePoolTokens() {
 
   const handleAddToken = () => {
     const newPoolTokens = [...poolTokens]
-    newPoolTokens.push(DEFAULT_TOKEN)
+    newPoolTokens.push(INITIAL_TOKEN_CONFIG)
     setValue('poolTokens', newPoolTokens)
   }
-
-  const currentToken = selectedTokenIndex ? poolTokens[selectedTokenIndex] : undefined
 
   const maxTokens = POOL_TYPES[poolType].maxTokens
   const isAtMaxTokens = poolTokens.length === maxTokens
   const isWeightedPool = poolType === PoolType.Weighted
   const isCustomWeightedPool = weightedPoolStructure === WeightedPoolStructure.Custom
+  const currentTokenAddress = selectedTokenIndex
+    ? poolTokens[selectedTokenIndex].config.address
+    : undefined
 
   return (
     <>
-      <VStack align="start" spacing="xl" w="full">
+      <VStack align="start" spacing="md" w="full">
         <VStack align="start" spacing="sm">
           <Heading color="font.maxContrast" size="md">
             Choose pool tokens
@@ -76,52 +91,58 @@ export function ChoosePoolTokens() {
             />
           )}
         </VStack>
+        <VStack align="start" spacing="xl" w="full">
+          {poolTokens.map((token, index) => {
+            const isInvalidWeight = !!token.config.weight && Number(token.config.weight) < 1
+            const verifiedRateProviderAddress = token?.data?.priceRateProviderData?.address
 
-        {poolTokens.map((token, index) => {
-          const isInvalidWeight = !!token.config.weight && Number(token.config.weight) < 1
-          return (
-            <VStack key={index} spacing="sm" w="full">
-              <HStack align="end" w="full">
-                <VStack align="start" spacing="sm" w="full">
-                  <Text>Token {index + 1}</Text>
-                  <TokenInputSelector
-                    onToggleTokenClicked={() => {
-                      setSelectedTokenIndex(index)
-                      tokenSelectDisclosure.onOpen()
-                    }}
-                    showWeight={false}
-                    token={token?.data}
-                    weight={token?.config?.weight}
+            return (
+              <VStack align="start" key={index} spacing="md" w="full">
+                <HStack align="end" w="full">
+                  <VStack align="start" spacing="sm" w="full">
+                    <Text>Token {index + 1}</Text>
+                    <TokenInputSelector
+                      onToggleTokenClicked={() => {
+                        setSelectedTokenIndex(index)
+                        tokenSelectDisclosure.onOpen()
+                      }}
+                      showWeight={false}
+                      token={token?.data}
+                    />
+                  </VStack>
+
+                  {isWeightedPool && (
+                    <TokenWeightInput
+                      index={index}
+                      isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                      isInvalid={isInvalidWeight}
+                      tokenWeightValue={token?.config?.weight}
+                    />
+                  )}
+
+                  <RemoveTokenButton
+                    isDisabled={poolTokens.length <= 2}
+                    onClick={() => handleRemoveToken(index)}
                   />
-                </VStack>
+                </HStack>
+                {isInvalidWeight && <InvalidWeightInputAlert />}
 
-                {isWeightedPool && (
-                  <TokenWeightInput
-                    index={index}
-                    isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-                    isInvalid={isInvalidWeight}
-                    tokenWeightValue={token?.config?.weight}
-                  />
-                )}
-
-                <RemoveTokenButton
-                  isDisabled={poolTokens.length <= 2}
-                  onClick={() => handleRemoveToken(index)}
+                <ConfigureTokenRateProvider
+                  tokenIndex={index}
+                  verifiedRateProviderAddress={verifiedRateProviderAddress}
                 />
-              </HStack>
-              {isInvalidWeight && <InvalidWeightInputAlert />}
-            </VStack>
-          )
-        })}
+              </VStack>
+            )
+          })}
+          <AddTokenButton isDisabled={isAtMaxTokens} onClick={handleAddToken} />
 
-        <AddTokenButton isDisabled={isAtMaxTokens} onClick={handleAddToken} />
-
-        {isCustomWeightedPool && <TotalWeightDisplay />}
+          {isCustomWeightedPool && <TotalWeightDisplay />}
+        </VStack>
       </VStack>
 
       <TokenSelectModal
         chain={network}
-        currentToken={currentToken?.config?.address}
+        currentToken={currentTokenAddress}
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
