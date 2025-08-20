@@ -309,16 +309,9 @@ export default function PoolMyLiquidity() {
                 <Skeleton h="5" w="12" />
               ) : (
                 <Heading fontWeight="bold" size="h6">
-                  {formatFalsyValueAsDash(
-                    totalBalanceUsd,
-                    (val, options) =>
-                      toCurrency(val, {
-                        abbreviated: options?.abbreviated ?? false,
-                        noDecimals: false,
-                        withSymbol: true,
-                      }),
-                    { showZeroAsDash: true }
-                  )}
+                  {formatFalsyValueAsDash(totalBalanceUsd, toCurrency, {
+                    showZeroAmountAsDash: true,
+                  })}
                 </Heading>
               )}
               <Text fontSize="0.85rem" variant="secondary">

@@ -262,16 +262,9 @@ function AddLiquidityMainForm() {
                     Total
                   </Text>
                   <Text fontSize="md" fontWeight="700" lineHeight="16px">
-                    {formatFalsyValueAsDash(
-                      totalUSDValue,
-                      (val, options) =>
-                        toCurrency(val, {
-                          abbreviated: options?.abbreviated ?? false,
-                          noDecimals: false,
-                          withSymbol: true,
-                        }),
-                      { showZeroAsDash: true }
-                    )}
+                    {formatFalsyValueAsDash(totalUSDValue, toCurrency, {
+                      showZeroAmountAsDash: true,
+                    })}
                   </Text>
                 </VStack>
               </Card>

@@ -13,11 +13,18 @@ describe('formatFalsyValueAsDash', () => {
     expect(formatFalsyValueAsDash(100.5)).toBe('100.5')
   })
 
-  it('respects showZeroAsDash option', () => {
-    expect(formatFalsyValueAsDash('0', undefined, { showZeroAsDash: false })).toBe('0')
-    expect(formatFalsyValueAsDash('0', undefined, { showZeroAsDash: true })).toBe(ZERO_VALUE_DASH)
-    expect(formatFalsyValueAsDash(0, undefined, { showZeroAsDash: false })).toBe('0')
-    expect(formatFalsyValueAsDash(0, undefined, { showZeroAsDash: true })).toBe(ZERO_VALUE_DASH)
+  it('respects showZeroAmountAsDash option', () => {
+    expect(formatFalsyValueAsDash('0', undefined, { showZeroAmountAsDash: false })).toBe('0')
+
+    expect(formatFalsyValueAsDash('0', undefined, { showZeroAmountAsDash: true })).toBe(
+      ZERO_VALUE_DASH
+    )
+
+    expect(formatFalsyValueAsDash(0, undefined, { showZeroAmountAsDash: false })).toBe('0')
+
+    expect(formatFalsyValueAsDash(0, undefined, { showZeroAmountAsDash: true })).toBe(
+      ZERO_VALUE_DASH
+    )
   })
 
   it('uses formatter when provided', () => {

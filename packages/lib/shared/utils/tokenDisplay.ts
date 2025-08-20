@@ -20,10 +20,10 @@ export function formatFalsyValueAsDash(
     return ZERO_VALUE_DASH
   }
 
-  // Handle zero values - respect showZeroAsDash option
+  // Handle zero values - respect showZeroAmountAsDash option
   if (isZero(stringValue)) {
-    const showZeroAsDash = options?.showZeroAsDash ?? false
-    return showZeroAsDash ? ZERO_VALUE_DASH : stringValue
+    const showZeroAmountAsDash = options?.showZeroAmountAsDash ?? false
+    return showZeroAmountAsDash ? ZERO_VALUE_DASH : stringValue
   }
 
   // If formatter is provided, use it to format the value

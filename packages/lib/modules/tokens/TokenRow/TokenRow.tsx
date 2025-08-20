@@ -209,7 +209,7 @@ export default function TokenRow({
         setUsdValue(usdValueForToken(poolToken, value))
       }
 
-      setAmount(fNum('token', value, { abbreviated }))
+      setAmount(value.toString())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, prices, tokens])
@@ -249,27 +249,18 @@ export default function TokenRow({
             ) : (
               <>
                 <Heading {...headingProps} title={value.toString()}>
-                  {formatFalsyValueAsDash(amount?.toString(), val => fNum('token', val), {
-                    showZeroAsDash: showZeroAmountAsDash,
+                  {formatFalsyValueAsDash(amount, val => fNum('token', val), {
+                    showZeroAmountAsDash,
                   })}
                 </Heading>
                 {isTokenPriceMissing ? (
                   <MissingTokenPriceWarning message={tokenPriceTip} />
                 ) : (
                   <Text {...subTextProps}>
-                    {formatFalsyValueAsDash(
-                      usdValue?.toString(),
-                      (val, options) =>
-                        toCurrency(val, {
-                          abbreviated: options?.abbreviated ?? abbreviated,
-                          noDecimals: false,
-                          withSymbol: true,
-                        }),
-                      {
-                        abbreviated,
-                        showZeroAsDash: showZeroAmountAsDash,
-                      }
-                    )}
+                    {formatFalsyValueAsDash(usdValue, toCurrency, {
+                      abbreviated,
+                      showZeroAmountAsDash,
+                    })}
                   </Text>
                 )}
               </>
