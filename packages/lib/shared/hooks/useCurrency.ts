@@ -3,7 +3,7 @@
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useFxRates } from './FxRatesProvider'
 import { symbolForCurrency } from '../utils/currencies'
-import { Numberish, bn, fNum, ZERO_VALUE_DASH, isZero } from '../utils/numbers'
+import { Numberish, bn, fNum } from '../utils/numbers'
 
 type CurrencyOpts = {
   withSymbol?: boolean
