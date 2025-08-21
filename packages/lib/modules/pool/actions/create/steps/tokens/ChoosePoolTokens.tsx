@@ -96,10 +96,12 @@ export function ChoosePoolTokens() {
                     isInvalid={isInvalidWeight}
                   />
 
-                  <RemoveTokenButton
-                    isDisabled={poolTokens.length <= 2}
-                    onClick={() => removePoolToken(index)}
-                  />
+                  {poolTokens.length > 2 && (
+                    <RemoveTokenButton
+                      isDisabled={poolTokens.length <= 2}
+                      onClick={() => removePoolToken(index)}
+                    />
+                  )}
                 </HStack>
 
                 <InvalidWeightInputAlert message={errors?.poolTokens?.[index]?.weight?.message} />
