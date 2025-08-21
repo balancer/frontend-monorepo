@@ -4,13 +4,6 @@ import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { PoolCreationToken } from './PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 
-export const POOL_CONFIGURATION_STEPS = [
-  { id: 'step1', title: 'Type' },
-  { id: 'step2', title: 'Tokens' },
-  { id: 'step3', title: 'Details' },
-  { id: 'step4', title: 'Fund' },
-]
-
 export type SupportedPoolTypes = PoolType.Stable | PoolType.Weighted | PoolType.StableSurge
 // | PoolType.GyroE
 // | PoolType.ReClamm

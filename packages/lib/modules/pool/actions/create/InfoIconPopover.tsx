@@ -1,22 +1,36 @@
-import { IconButton } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverTrigger,
+  Box,
+  PopoverContent,
+  Text,
+  PlacementWithLogical,
+} from '@chakra-ui/react'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 
-// TODO: ask pon about messages to display that are not shown in figma designs
+interface InfoIconPopoverProps {
+  message: string
+  placement?: PlacementWithLogical
+}
 
-export function InfoIconPopover() {
+export function InfoIconPopover({ message, placement = 'top-start' }: InfoIconPopoverProps) {
   return (
-    <IconButton
-      _hover={{
-        opacity: '1',
-      }}
-      aria-label="Token info"
-      color="grayText"
-      h="24px"
-      icon={<InfoIcon />}
-      isRound
-      opacity="0.5"
-      size="xs"
-      variant="link"
-    />
+    <Popover placement={placement} trigger="hover">
+      <PopoverTrigger>
+        <Box
+          _hover={{ opacity: 1 }}
+          cursor="pointer"
+          opacity="0.5"
+          transition="opacity 0.2s var(--ease-out-cubic)"
+        >
+          <InfoIcon />
+        </Box>
+      </PopoverTrigger>
+      <PopoverContent maxW="300px" p="sm" w="auto">
+        <Text fontSize="sm" variant="secondary">
+          {message}
+        </Text>
+      </PopoverContent>
+    </Popover>
   )
 }

@@ -1,21 +1,20 @@
-'use client'
-
 import { Button, HStack, IconButton, useDisclosure, Divider, VStack } from '@chakra-ui/react'
 import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { usePoolCreationForm } from './PoolCreationFormProvider'
+import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useValidatePoolConfig } from './useValidatePoolConfig'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const { isConnected } = useUserAccount()
-  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationForm()
-  const previewModalDisclosure = useDisclosure()
-
+  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const { isWeightedPool, isTotalWeightTooHigh } = useValidatePoolConfig()
+  const previewModalDisclosure = useDisclosure()
+  const { isConnected } = useUserAccount()
 
-  return isConnected ? (
+  if (!isConnected) return <ConnectWallet variant="primary" w="full" />
+
+  return (
     <VStack spacing="lg" w="full">
       <Divider />
       {isWeightedPool && isTotalWeightTooHigh && (
@@ -41,6 +40,8 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             if (isLastStep) {
               previewModalDisclosure.onOpen()
             } else {
+              console.log('activeStepIndex', activeStepIndex)
+              console.log('adding plus 1!!!')
               setActiveStep(activeStepIndex + 1)
             }
           }}
@@ -52,7 +53,5 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         </Button>
       </HStack>
     </VStack>
-  ) : (
-    <ConnectWallet variant="primary" w="full" />
   )
 }

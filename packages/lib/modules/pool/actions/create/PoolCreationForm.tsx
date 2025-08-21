@@ -13,16 +13,17 @@ import {
   Text,
   Stack,
 } from '@chakra-ui/react'
-import { usePoolCreationForm } from './PoolCreationFormProvider'
+import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { PoolTypeStep } from './steps/type/PoolTypeStep'
 import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
+import { PoolDetailsStep } from './steps/details/PoolDetailsStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { useEffect } from 'react'
 import { PoolCreationPreview } from '@repo/lib/modules/pool/actions/create/preview/PoolCreationPreview'
 
 export function PoolCreationForm() {
-  const { steps, activeStepIndex, activeStep } = usePoolCreationForm()
+  const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
 
   useEffect(() => {
@@ -73,6 +74,7 @@ export function PoolCreationForm() {
           <VStack spacing="lg" w="full">
             {activeStep.id === 'step1' && <PoolTypeStep />}
             {activeStep.id === 'step2' && <PoolTokensStep />}
+            {activeStep.id === 'step3' && <PoolDetailsStep />}
           </VStack>
         </VStack>
         {!isMobile && <PoolCreationPreview />}

@@ -8,7 +8,7 @@ export function PoolTypeCard() {
   const { network, protocol, poolType, weightedPoolStructure } = usePoolCreationForm()
   const { isWeightedPool, isCustomWeightedPool } = useValidatePoolConfig()
 
-  const POOL_TYPE_INFO = [
+  const cardInformationRows = [
     {
       label: 'Protocol',
       value: capitalize(protocol),
@@ -37,7 +37,7 @@ export function PoolTypeCard() {
       </CardHeader>
       <CardBody>
         <VStack spacing="sm">
-          {POOL_TYPE_INFO.map(({ label, value }) => (
+          {cardInformationRows.map(({ label, value }) => (
             <HStack align="start" key={label} spacing="lg" w="full">
               <Text color="font.secondary" w="20">
                 {label}

@@ -14,7 +14,7 @@ import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants
 import { usePoolCreationForm, PoolCreationConfig } from '../../PoolCreationFormProvider'
 import { Address, zeroAddress, isAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
-import { Control, Controller, FieldErrors, UseFormSetValue } from 'react-hook-form'
+import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
@@ -32,7 +32,6 @@ export function ConfigureTokenRateProvider({
     network,
     updatePoolToken,
     poolConfigForm: {
-      setValue,
       control,
       formState: { errors },
       trigger,
@@ -76,7 +75,7 @@ export function ConfigureTokenRateProvider({
       <VStack align="start" w="full">
         <HStack spacing="xs">
           <Text>Rate Provider</Text>
-          <InfoIconPopover />
+          <InfoIconPopover message="Tokens that accrue yield over time should use a rate provider" />
         </HStack>
         <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>
           <Stack spacing={3}>
@@ -103,7 +102,6 @@ export function ConfigureTokenRateProvider({
           control={control}
           errors={errors}
           isCustomRateProvider={isCustomRateProvider}
-          setValue={setValue}
           tokenIndex={tokenIndex}
         />
       )}
@@ -118,20 +116,19 @@ function CustomRateProviderInput({
   tokenIndex,
   control,
   errors,
-  setValue,
   chainName,
   isCustomRateProvider,
 }: {
   tokenIndex: number
   control: Control<PoolCreationConfig>
   errors: FieldErrors<PoolCreationConfig>
-  setValue: UseFormSetValue<PoolCreationConfig>
   chainName: string
   isCustomRateProvider: boolean
 }) {
+  const { updatePoolToken } = usePoolCreationForm()
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
-    setValue(`poolTokens.${tokenIndex}.rateProvider`, clipboardText as Address)
+    updatePoolToken(tokenIndex, { rateProvider: clipboardText as Address })
   }
 
   return (
@@ -139,7 +136,7 @@ function CustomRateProviderInput({
       <VStack align="start" spacing="sm" w="full">
         <HStack spacing="xs">
           <Text>Rate provider contract address on {chainName}</Text>
-          <InfoIconPopover />
+          <InfoIconPopover message="The contract you enter must have a function named getRate" />
         </HStack>
         <InputGroup>
           <Controller

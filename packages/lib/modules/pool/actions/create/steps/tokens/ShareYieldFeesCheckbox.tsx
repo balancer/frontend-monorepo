@@ -16,7 +16,10 @@ export function ShareYieldFeesCheckbox({
     <>
       <HStack spacing="xs">
         <Text>Yield fees from interest bearing assets</Text>
-        <InfoIconPopover />
+        <InfoIconPopover
+          message="To properly align incentives, we reccomend sharing yield fees with Balancer"
+          placement="right-start"
+        />
       </HStack>
       <Checkbox
         isChecked={paysYieldFees}

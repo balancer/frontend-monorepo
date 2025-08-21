@@ -1,7 +1,5 @@
 import { VStack, Heading, Box } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { type SubmitHandler } from 'react-hook-form'
-import { type PoolCreationConfig } from '../../PoolCreationFormProvider'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { ChooseNetwork } from './ChooseNetwork'
 import { ChoosePoolType } from './ChoosePoolType'
@@ -9,20 +7,13 @@ import { ChoosePoolType } from './ChoosePoolType'
 export function PoolTypeStep() {
   const {
     poolConfigForm: {
-      handleSubmit,
       control,
       formState: { isValid },
     },
-    setActiveStep,
-    activeStepIndex,
   } = usePoolCreationForm()
 
-  const onSubmit: SubmitHandler<PoolCreationConfig> = () => {
-    setActiveStep(activeStepIndex + 1)
-  }
-
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+    <Box as="form" style={{ width: '100%' }}>
       <VStack align="start" spacing="xl" w="full">
         <Heading color="font.maxContrast" size="md">
           Pool type

@@ -1,30 +1,22 @@
-import { useSteps } from '@chakra-ui/react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
-import { useEffect } from 'react'
 import { PoolType } from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import {
-  WeightedPoolStructure,
-  POOL_CONFIGURATION_STEPS,
-  INITIAL_TOKEN_CONFIG,
-  SupportedPoolTypes,
-} from './constants'
+import { WeightedPoolStructure, INITIAL_TOKEN_CONFIG, SupportedPoolTypes } from './constants'
 import { Address } from 'viem'
 
 export type PoolCreationToken = {
   address: Address | undefined
-  rateProvider: Address | '' // we can infer TokenType based on if zero address or contract address
+  rateProvider: Address | '' // infer TokenType based on if RP is zero address or contract address
   paysYieldFees: boolean
-  weight?: string
-  data?: ApiToken // token data from the API
+  weight?: string // human weight input
   amount: string // human amount input
+  data?: ApiToken
 }
 
 export type PoolCreationConfig = {
@@ -34,11 +26,11 @@ export type PoolCreationConfig = {
   weightedPoolStructure: WeightedPoolStructure
   poolTokens: PoolCreationToken[]
 }
+
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 export function usePoolFormLogic() {
-  ////// POOL CREATION FORM DATA //////
   const poolConfigForm = usePersistentForm<PoolCreationConfig>(
     LS_KEYS.PoolCreation.Config,
     {
@@ -75,30 +67,7 @@ export function usePoolFormLogic() {
     poolConfigForm.setValue('poolTokens', newPoolTokens)
   }
 
-  ////// CONFIGURATION STEP TRACKING //////
-  const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(
-    LS_KEYS.PoolCreation.StepIndex,
-    0
-  )
-  const { activeStep: activeStepIndex, setActiveStep } = useSteps({
-    index: persistedStepIndex,
-    count: POOL_CONFIGURATION_STEPS.length,
-  })
-  const isLastStep = activeStepIndex === POOL_CONFIGURATION_STEPS.length - 1
-  const isFirstStep = activeStepIndex === 0
-  const activeStep = POOL_CONFIGURATION_STEPS[activeStepIndex]
-
-  useEffect(() => {
-    setPersistedStepIndex(activeStepIndex)
-  }, [activeStepIndex, setPersistedStepIndex])
-
   return {
-    steps: POOL_CONFIGURATION_STEPS,
-    activeStepIndex,
-    setActiveStep,
-    isLastStep,
-    isFirstStep,
-    activeStep,
     poolConfigForm,
     poolTokens,
     poolType,
