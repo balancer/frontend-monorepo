@@ -85,6 +85,7 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationConfig['pool
                 <BlockExplorerLink
                   address={chosenRateProviderAddress || undefined}
                   chain={chain}
+                  fontSize="md"
                 />,
               ]}
               key={address}

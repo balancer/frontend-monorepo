@@ -88,6 +88,7 @@ export function ConfigureTokenRateProvider({
                   <BlockExplorerLink
                     address={verifiedRateProviderAddress as Address}
                     chain={network}
+                    fontSize="md"
                   />
                 )}
               </HStack>

@@ -74,18 +74,20 @@ export function TokenInputSelector({
       variant={tokenConfig.variant}
       width="full"
     >
-      <HStack spacing="sm">
-        {tokenConfig && tokenConfig.showIcon && (
-          <Box>
-            <TokenIcon alt={tokenConfig.label} logoURI={token?.logoURI} size={22} />
-          </Box>
-        )}
-        {tokenConfig && tokenConfig.label && (
-          <Text color={tokenSymbolColor} fontWeight="bold">
-            {tokenConfig.label}
-          </Text>
-        )}
-      </HStack>
+      {tokenConfig && (
+        <HStack spacing="sm">
+          {tokenConfig.showIcon && (
+            <Box>
+              <TokenIcon alt={tokenConfig.label} logoURI={token?.logoURI} size={22} />
+            </Box>
+          )}
+          {tokenConfig.label && (
+            <Text color={tokenSymbolColor} fontWeight="bold">
+              {tokenConfig.label}
+            </Text>
+          )}
+        </HStack>
+      )}
       {weight && showWeight && (
         <Text fontSize="sm" fontWeight="normal" ml="sm">
           {fNum('weight', weight)}
