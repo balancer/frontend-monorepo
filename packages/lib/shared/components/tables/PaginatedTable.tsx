@@ -51,7 +51,7 @@ export function PaginatedTable<T>({
 
   return (
     <>
-      <VStack className="hide-scrollbar" gap="0" overflowX="scroll" w="full">
+      <VStack gap="0" w="full">
         <TableHeader />
         <Divider />
         <Box position="relative" w="full">

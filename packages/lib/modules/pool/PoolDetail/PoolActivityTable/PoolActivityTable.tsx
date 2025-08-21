@@ -31,7 +31,7 @@ export function PoolActivityTable() {
 
   return (
     <>
-      <Box className="hide-scrollbar" overflowX="auto" w="full">
+      <Box overflowX={{ base: 'auto', '2xl': 'hidden' }} overflowY="hidden" w="full">
         <Box minWidth="800px">
           <PaginatedTable
             alignItems="flex-start"

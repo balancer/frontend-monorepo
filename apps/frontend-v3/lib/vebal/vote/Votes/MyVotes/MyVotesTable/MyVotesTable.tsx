@@ -98,6 +98,8 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
     <Card
       alignItems="flex-start"
       left={{ base: '-4px', sm: '0' }}
+      overflowX={{ base: 'auto', '2xl': 'hidden' }}
+      overflowY="hidden"
       p={{ base: '0', sm: '0' }}
       position="relative"
       pr={{ base: 'md' }}

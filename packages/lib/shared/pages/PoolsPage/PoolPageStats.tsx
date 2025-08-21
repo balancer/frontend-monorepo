@@ -64,7 +64,14 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
   const formatOptions = '$0,0.00a'
 
   return (
-    <Flex direction="row" flexWrap="wrap" gap={{ base: 'sm', lg: 'ms' }} mt="3">
+    <Flex
+      direction="row"
+      flexWrap="wrap"
+      gap={{ base: 'sm', lg: 'ms' }}
+      mt="3"
+      pr="md"
+      w={{ base: 'full', sm: 'auto' }}
+    >
       <Box flex="1">
         <Stat
           label="TVL"
@@ -88,7 +95,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
           }
         />
       </Box>
-      <Box flex={{ base: '1 1 40%', sm: '1' }}>
+      <Box flex={{ base: '1', sm: '1' }}>
         <Popover
           modifiers={[{ name: 'offset', options: { offset: [0, -24] } }]}
           placement="top"
