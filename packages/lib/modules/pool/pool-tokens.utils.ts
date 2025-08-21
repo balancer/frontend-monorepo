@@ -1,8 +1,4 @@
-import {
-  GqlNestedPool,
-  GqlPoolBase,
-  GqlPriceRateProviderData,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlNestedPool, GqlPoolBase } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool, TokenCore } from './pool.types'
 import { PoolToken, PoolCore } from './pool.types'
 import { isBoosted, isV3Pool } from './pool.helpers'
@@ -344,16 +340,9 @@ export function getPriceRateForToken(token: ApiToken, pool: Pool) {
 
 // for use with ECLPs
 export function getPriceRateRatio(pool: Pool) {
-  const priceRates = getPoolActionableTokens(pool).map(
-    (
-      token: ApiToken & {
-        priceRate?: string
-        priceRateProviderData?: GqlPriceRateProviderData | null
-      }
-    ) => {
-      return token.useUnderlyingForAddRemove ? token.priceRate : '1'
-    }
-  )
+  const priceRates = getPoolActionableTokens(pool).map((token: ApiToken) => {
+    return token.useUnderlyingForAddRemove ? token.priceRate : '1'
+  })
   return bn(priceRates[0] || '1').div(priceRates[1] || '1')
 }
 

@@ -40,8 +40,6 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             if (isLastStep) {
               previewModalDisclosure.onOpen()
             } else {
-              console.log('activeStepIndex', activeStepIndex)
-              console.log('adding plus 1!!!')
               setActiveStep(activeStepIndex + 1)
             }
           }}

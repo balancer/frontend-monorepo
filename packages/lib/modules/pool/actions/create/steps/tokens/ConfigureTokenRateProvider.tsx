@@ -59,10 +59,10 @@ export function ConfigureTokenRateProvider({
       rateProvider = '' // to be updated by user input
     }
 
-    const paysYieldFees = value !== RateProviderOption.Null // start paysYieldFees true if using any rate provider
+    const paysYieldFees = value !== RateProviderOption.Null
 
     updatePoolToken(tokenIndex, { rateProvider, paysYieldFees })
-    // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above
+    // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above)
     trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 

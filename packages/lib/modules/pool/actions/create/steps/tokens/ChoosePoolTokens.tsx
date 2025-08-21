@@ -90,11 +90,13 @@ export function ChoosePoolTokens() {
                     />
                   </VStack>
 
-                  <TokenWeightInput
-                    index={index}
-                    isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-                    isInvalid={isInvalidWeight}
-                  />
+                  {isWeightedPool && (
+                    <TokenWeightInput
+                      index={index}
+                      isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                      isInvalid={isInvalidWeight}
+                    />
+                  )}
 
                   {poolTokens.length > 2 && (
                     <RemoveTokenButton

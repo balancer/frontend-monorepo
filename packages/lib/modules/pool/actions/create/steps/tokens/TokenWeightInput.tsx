@@ -13,15 +13,13 @@ export function TokenWeightInput({
   isInvalid: boolean
   index: number
 }) {
-  const { isWeightedPool } = useValidatePoolConfig()
-
   const {
     poolConfigForm: { control },
   } = usePoolCreationForm()
+  const { isWeightedPool } = useValidatePoolConfig()
 
   return (
-    // Using hidden so validation runs if user starts weighted pool but goes back to switch to another pool type
-    <VStack align="start" hidden={!isWeightedPool} spacing="sm">
+    <VStack align="start" spacing="sm">
       <Text>Weight</Text>
       <Box position="relative" w="20">
         <Controller
