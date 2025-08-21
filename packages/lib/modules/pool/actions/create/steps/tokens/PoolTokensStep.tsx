@@ -20,13 +20,13 @@ export function PoolTokensStep() {
 
   const { isWeightedPool } = useValidatePoolConfig()
 
-  const onSubmit: SubmitHandler<PoolCreationConfig> = () => {
-    setActiveStep(activeStepIndex + 1)
-  }
-
   const { isPoolTokensStepValid } = useValidatePoolConfig()
 
   const isNextButtonDisabled = !isPoolTokensStepValid || !isFormValid
+
+  const onSubmit: SubmitHandler<PoolCreationConfig> = () => {
+    setActiveStep(activeStepIndex + 1)
+  }
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>

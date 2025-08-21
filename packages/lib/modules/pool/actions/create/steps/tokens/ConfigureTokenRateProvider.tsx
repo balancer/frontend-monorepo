@@ -1,6 +1,5 @@
 import {
   Text,
-  IconButton,
   HStack,
   VStack,
   RadioGroup,
@@ -11,7 +10,6 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
 import { usePoolCreationForm, PoolCreationConfig } from '../../PoolCreationFormProvider'
 import { Address, zeroAddress, isAddress } from 'viem'
@@ -19,6 +17,8 @@ import { getChainName } from '@repo/lib/config/app.config'
 import { Control, Controller, FieldErrors, UseFormSetValue } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
+import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
+import { InfoIconPopover } from '../../InfoIconPopover'
 
 export function ConfigureTokenRateProvider({
   tokenIndex,
@@ -43,7 +43,7 @@ export function ConfigureTokenRateProvider({
     return <Text color="font.secondary">No rate provider is required for this token</Text>
   }
 
-  const currentRateProvider = poolTokens[tokenIndex].rateProvider
+  const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
 
   let rateProviderRadioValue = RateProviderOption.Null
   if (currentRateProvider === verifiedRateProviderAddress)
@@ -60,12 +60,16 @@ export function ConfigureTokenRateProvider({
       rateProvider = '' // to be updated by user input
     }
 
-    updatePoolToken(tokenIndex, { rateProvider })
+    const paysYieldFees = value !== RateProviderOption.Null // start paysYieldFees true if using any rate provider
+
+    updatePoolToken(tokenIndex, { rateProvider, paysYieldFees })
     // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above
     trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
   const isCustomRateProvider = rateProviderRadioValue === RateProviderOption.Custom
+  const isVerifiedRateProvider = rateProviderRadioValue === RateProviderOption.Verified
+  const showYieldFeesToggle = isCustomRateProvider || isVerifiedRateProvider
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -102,6 +106,9 @@ export function ConfigureTokenRateProvider({
           setValue={setValue}
           tokenIndex={tokenIndex}
         />
+      )}
+      {showYieldFeesToggle && (
+        <ShareYieldFeesCheckbox paysYieldFees={paysYieldFees} tokenIndex={tokenIndex} />
       )}
     </VStack>
   )
@@ -182,23 +189,5 @@ function CustomRateProviderInput({
         status="warning"
       />
     </VStack>
-  )
-}
-
-function InfoIconPopover() {
-  return (
-    <IconButton
-      _hover={{
-        opacity: '1',
-      }}
-      aria-label="Token info"
-      color="grayText"
-      h="24px"
-      icon={<InfoIcon />}
-      isRound
-      opacity="0.5"
-      size="xs"
-      variant="link"
-    />
   )
 }

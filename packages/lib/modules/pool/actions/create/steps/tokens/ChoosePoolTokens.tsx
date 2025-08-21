@@ -1,13 +1,4 @@
-import {
-  VStack,
-  Heading,
-  Text,
-  useDisclosure,
-  HStack,
-  Button,
-  Divider,
-  Icon,
-} from '@chakra-ui/react'
+import { VStack, Heading, Text, useDisclosure, HStack, Button, Icon } from '@chakra-ui/react'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -22,6 +13,7 @@ import { TokenWeightInput } from './TokenWeightInput'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
 import { AlertTriangle } from 'react-feather'
 import { useValidatePoolConfig } from '../../useValidatePoolConfig'
+import { TotalWeightDisplay } from './TotalWeightDisplay'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -48,14 +40,13 @@ export function ChoosePoolTokens() {
   function handleTokenSelect(tokenData: ApiToken) {
     if (!tokenData || selectedTokenIndex === null) return
 
-    const existingPoolToken = poolTokens[selectedTokenIndex]
     const verifiedRateProviderAddress = tokenData?.priceRateProviderData?.address as Address
 
     updatePoolToken(selectedTokenIndex, {
-      ...existingPoolToken,
       address: tokenData.address as Address,
-      rateProvider: verifiedRateProviderAddress ? verifiedRateProviderAddress : zeroAddress,
+      rateProvider: verifiedRateProviderAddress ? verifiedRateProviderAddress : zeroAddress, // default to using rate provider if exists in our DB
       data: tokenData,
+      paysYieldFees: !!verifiedRateProviderAddress, // defaults to true if rate provider exists in our DB
     })
     setSelectedTokenIndex(null)
   }
@@ -157,36 +148,6 @@ function RemoveTokenButton({ onClick, isDisabled }: { onClick: () => void; isDis
     <Button color="font.secondary" isDisabled={isDisabled} onClick={onClick} variant="unstyled">
       <Trash2 size={16} />
     </Button>
-  )
-}
-
-function TotalWeightDisplay() {
-  const { totalWeight, isTotalWeightTooLow, isTotalWeightTooHigh } = useValidatePoolConfig()
-
-  const isInvalidTotalWeight = isTotalWeightTooLow || isTotalWeightTooHigh
-
-  let totalWeightColor = 'font.maxContrast'
-  if (isTotalWeightTooLow) totalWeightColor = 'font.warning'
-  if (isTotalWeightTooHigh) totalWeightColor = 'font.error'
-
-  return (
-    <>
-      <Divider />
-      <HStack justify="space-between" w="full">
-        <Text color={totalWeightColor} fontWeight="bold">
-          Total
-        </Text>
-        <HStack>
-          {isInvalidTotalWeight && (
-            <Icon as={AlertTriangle} boxSize="18px" color={totalWeightColor} />
-          )}
-          <Text color={totalWeightColor} fontWeight="bold">
-            {totalWeight}
-          </Text>
-          <Text color="font.secondary">%</Text>
-        </HStack>
-      </HStack>
-    </>
   )
 }
 
