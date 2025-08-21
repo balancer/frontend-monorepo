@@ -11,11 +11,11 @@ export function ContractWalletAlert() {
     <BalAlert
       content={
         <BalAlertContent forceColumnMode title={'Are you using a smart contract wallet?'}>
-          <Text color="black" lineHeight="shorter">
-            We couldn't detect your wallet type. For the popular smart contract wallets listed
-            below, view the tips for help.
+          <Text color="black" fontSize="sm" lineHeight="shorter">
+            If you are using one of the popular smart contract wallets listed below, view the tips
+            for help.
           </Text>
-          <VStack pt="3">
+          <VStack pl="3" pt="1">
             <UnorderedList w="full">
               <WalletLink href={safeAppLink} name={'Safe{wallet}'} />
               <WalletLink href="https://console.fireblocks.io/v2/web3" name="Fireblocks" />
@@ -32,10 +32,12 @@ export function ContractWalletAlert() {
 
 function WalletLink({ href, name }: { href: string; name: string }) {
   return (
-    <ListItem color="black">
+    <ListItem color="black" pb="xxs">
       <Link href={href} isExternal>
         <HStack gap="xs">
-          <Text color="black">{name}</Text>
+          <Text color="black" fontSize="sm">
+            {name}
+          </Text>
           <ArrowUpRight size="12" />
         </HStack>
       </Link>

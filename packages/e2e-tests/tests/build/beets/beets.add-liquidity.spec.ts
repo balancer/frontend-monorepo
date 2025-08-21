@@ -8,6 +8,6 @@ test('Beets: can add proportionally in Staked Sonic Symphony', async ({ page }) 
 
   await page.getByRole('button', { name: 'Add liquidity' }).click({ timeout: 20000 })
 
-  await page.getByText('Flexible').click()
+  await page.getByText('Flexible', { exact: true }).click()
   await page.getByPlaceholder('0.00').first().click()
 })

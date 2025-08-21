@@ -1,11 +1,10 @@
-import { addWeeks, endOfWeek, nextThursday, startOfWeek } from 'date-fns'
+import { addWeeks, endOfWeek, startOfWeek } from 'date-fns'
 import { VotingDeadlineContainer } from './VotingDeadlineContainer'
 import { StaticCalendar } from './StaticCalendar'
+import { nextVotingDeadline } from './deadline'
 
 export function VotingDeadlineCalendar() {
-  const nowWithoutTime = new Date().setUTCHours(0, 0, 0, 0)
-  const deadline = nextThursday(nowWithoutTime)
-
+  const deadline = nextVotingDeadline()
   const startDate = startOfWeek(deadline)
   const endDate = endOfWeek(addWeeks(deadline, 1))
 

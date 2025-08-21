@@ -58,8 +58,8 @@ export function PriceImpactAcceptModal({
         <ModalBody>
           <VStack align="start" spacing="md" w="full">
             <Text>
-              You are at risk of losing money due to the high price impact. To acknowledge and
-              accept this risk, type the following to proceed:
+              You are at risk of losing money due to high price impact and/or high swap fees. To
+              acknowledge and accept this risk, type the following to proceed:
             </Text>
             <Code>{INPUT_TEXT}</Code>
             <Input onChange={debouncedChangeHandler} placeholder={INPUT_TEXT} />

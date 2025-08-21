@@ -13,7 +13,6 @@ import { useInterval } from 'usehooks-ts'
 import { Address, Hex } from 'viem'
 import { useWaitForTransactionReceipt } from 'wagmi'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
-import { useOnTransactionSubmission } from '../../../web3/contracts/useOnTransactionSubmission'
 import { SwitchNetworkAlert, useChainSwitch } from '../../../web3/useChainSwitch'
 import { ManagedResult, TransactionLabels, TransactionStep } from '../lib'
 import { getTransactionButtonLabel } from '../transaction-button.helpers'
@@ -36,18 +35,20 @@ type Props = {
 }
 
 export function TransactionBatchButton({
-  id,
   labels,
   chainId,
   currentStep,
   onTransactionChange,
-}: { id: string } & Props) {
+}: Props) {
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
+  const { minConfirmations } = useNetworkConfig()
+
   const [safeTxHash, setSafeTxHash] = useState<Hex | undefined>()
   const [txHash, setTxHash] = useState<Hex | undefined>()
   const [isLoading, setIsLoading] = useState(false)
   const [sendCallsError, setSendCallsError] = useState<Error>()
-  const { minConfirmations } = useNetworkConfig()
+  const [receiptReceived, setReceiptReceived] = useState<boolean>(false)
+
   /*
     More info about GatewayTransactionDetails:
     https://github.com/safe-global/safe-apps-sdk/tree/main/packages/safe-apps-sdk#retrieving-transactions-status
@@ -70,6 +71,7 @@ export function TransactionBatchButton({
   useEffect(() => {
     if (!chainId) return
     if (!transactionStatusQuery.isSuccess) return
+    if (receiptReceived) return
 
     const successFullTransaction: ManagedResult = {
       chainId,
@@ -85,7 +87,8 @@ export function TransactionBatchButton({
       isSafeTxLoading: false,
     }
     onTransactionChange(successFullTransaction)
-  }, [id, transactionStatusQuery])
+    setReceiptReceived(true)
+  }, [transactionStatusQuery])
 
   const txBatch = buildTxBatch(currentStep)
 
@@ -136,18 +139,6 @@ export function TransactionBatchButton({
   const shouldShowTxButton =
     !shouldChangeNetwork && !isSafeTxCancelled(safeTxStatus) && !isSafeTxSuccess(safeTxStatus)
 
-  /*
-    on successful submission to chain, add tx to recent transactions cache
-    this is an edge case where de don't show the toast and don't call useOnTransactionConfirmation
-    because we only get the txHash once the Safe tx is confirmed
-   */
-  useOnTransactionSubmission({
-    labels,
-    hash: txHash,
-    chain: getGqlChain(chainId),
-    isConfirmed: isSafeTxSuccess(safeTxStatus), // this will prevent the toast to be shown
-  })
-
   function getButtonLabel() {
     if (sendCallsError) return labels.init
     if (isSafeTxWaitingForConfirmations(safeTxStatus)) return 'Awaiting multisig confirmations'
@@ -163,7 +154,7 @@ export function TransactionBatchButton({
     <VStack width="full">
       {sendCallsError && <TransactionError error={sendCallsError} />}
       {shouldChangeNetwork && <SwitchNetworkAlert chainName={networkSwitchButtonProps.name} />}
-      {safeTxHash && safeTxDetails?.txStatus && (
+      {safeTxHash && safeTxStatus && (
         <MultisigStatus chainId={chainId} currentStep={currentStep} details={safeTxDetails} />
       )}
 

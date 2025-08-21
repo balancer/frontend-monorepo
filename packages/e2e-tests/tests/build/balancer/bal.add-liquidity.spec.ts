@@ -11,7 +11,7 @@ test('Balancer: can add liquidity to random pool', async ({ page }) => {
   await expect(page.getByText('This pool does not support')).toBeVisible()
 
   // Form works for flexible tab
-  await expect(page.getByText('Flexible')).toBeVisible()
+  await expect(page.getByText('Flexible', { exact: true })).toBeVisible()
   await page.getByPlaceholder('0.00').first().click()
   await page.getByPlaceholder('0.00').first().fill('1')
   await page.getByRole('button', { name: 'Connect' }).nth(2).click()

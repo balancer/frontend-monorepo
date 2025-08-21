@@ -7,6 +7,7 @@ import {
   RemoveLiquidityQueryOutput,
 } from '@balancer/sdk'
 import { constructRemoveBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
+import { shouldUseRecoveryRemoveLiquidity } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { isBoosted, isV3WithNestedActionsPool } from '@repo/lib/modules/pool/pool.helpers'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ensureError } from '@repo/lib/shared/utils/errors'
@@ -67,7 +68,9 @@ async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): 
     })
   }
 
-  if (isBoosted(pool)) return PermitHelper.signRemoveLiquidityBoostedApproval(baseParams)
+  if (isBoosted(pool) && !shouldUseRecoveryRemoveLiquidity(pool)) {
+    return PermitHelper.signRemoveLiquidityBoostedApproval(baseParams)
+  }
 
   return PermitHelper.signRemoveLiquidityApproval(baseParams)
 }

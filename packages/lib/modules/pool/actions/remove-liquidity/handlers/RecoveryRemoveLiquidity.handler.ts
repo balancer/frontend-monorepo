@@ -55,6 +55,7 @@ export class RecoveryRemoveLiquidityHandler {
     account,
     slippagePercent,
     queryOutput,
+    permit,
   }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
     const removeLiquidity = new RemoveLiquidity()
     const protocolVersion = queryOutput.sdkQueryOutput.protocolVersion
@@ -67,12 +68,14 @@ export class RecoveryRemoveLiquidityHandler {
       userData: '0x' as Hex,
     }
 
-    const { callData, to, value } = removeLiquidity.buildCall(
-      // sender and recipient should not be passed for V3 pools
+    const paramsPerVersion = // sender and recipient should not be passed for V3 pools
       protocolVersion !== 3
         ? { ...buildCallParams, sender: account, recipient: account }
         : buildCallParams
-    )
+
+    const { callData, to, value } = permit
+      ? removeLiquidity.buildCallWithPermit(paramsPerVersion, permit)
+      : removeLiquidity.buildCall(paramsPerVersion)
 
     return {
       account,
