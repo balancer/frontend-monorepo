@@ -11,32 +11,26 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
 
   const { isWeightedPool } = useValidatePoolConfig()
 
-  const structureTokenWeightsMap = {
-    [WeightedPoolStructure.Custom]: poolTokens.map(token => ({ ...token, weight: '' })),
-    [WeightedPoolStructure.FiftyFifty]: poolTokens
-      .map(token => ({ ...token, weight: '50' }))
-      .slice(0, 2),
-    [WeightedPoolStructure.EightyTwenty]: poolTokens
-      .map((token, index) => ({
-        ...token,
-        weight: index === 0 ? '80' : '20',
-      }))
-      .slice(0, 2),
-  } as const
-
   function updatePoolTokenWeights(weightedStructure: WeightedPoolStructure) {
-    const newPoolTokens = structureTokenWeightsMap[weightedStructure]
-    updatePoolTokens(newPoolTokens)
-    poolConfigForm.trigger('poolTokens')
+    if (weightedStructure === WeightedPoolStructure.FiftyFifty) {
+      updatePoolTokens(poolTokens.map(token => ({ ...token, weight: '50' })).slice(0, 2))
+    }
+
+    if (weightedStructure === WeightedPoolStructure.EightyTwenty) {
+      updatePoolTokens(
+        poolTokens
+          .map((token, index) => ({ ...token, weight: index === 0 ? '80' : '20' }))
+          .slice(0, 2)
+      )
+    }
+
+    if (weightedStructure !== WeightedPoolStructure.Custom) poolConfigForm.trigger('poolTokens')
   }
 
   useEffect(() => {
-    // sets token weights on only first render
-    if (isWeightedPool && weightedPoolStructure !== WeightedPoolStructure.Custom) {
-      updatePoolTokens(structureTokenWeightsMap[weightedPoolStructure])
-    }
+    if (isWeightedPool) updatePoolTokenWeights(weightedPoolStructure)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isWeightedPool, weightedPoolStructure])
+  }, [])
 
   return (
     <VStack align="start" spacing="md" w="full">

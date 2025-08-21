@@ -38,6 +38,8 @@ export function ConfigureTokenRateProvider({
     },
   } = usePoolCreationForm()
 
+  if (!poolTokens[tokenIndex].address) return null
+
   if (!verifiedRateProviderAddress) {
     return <Text color="font.secondary">No rate provider is required for this token</Text>
   }

@@ -17,7 +17,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationConfig
   const updateNetworkParam = (network: GqlChain) => {
     const params = new URLSearchParams(searchParams)
     params.set('network', network)
-    router.push(`?${params.toString()}`)
+    router.replace(`?${params.toString()}`, { scroll: false })
   }
 
   let networkOptions: GqlChain[]

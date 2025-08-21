@@ -22,7 +22,7 @@ export function CardHeaderRow({ columnNames }: { columnNames: string[] }) {
           </Heading>
 
           {columnNames.slice(1).map(name => (
-            <Text align={'right'} color="font.secondary" fontSize="sm" key={name}>
+            <Text color="font.secondary" fontSize="sm" key={name} textAlign="right">
               {name}
             </Text>
           ))}
@@ -38,9 +38,9 @@ export function CardDataRow({ data }: { data: ReactNode[] }) {
     <SimpleGrid alignItems="center" columns={4} spacing={5} w="full">
       {data.map((item, index) => (
         <Box
-          alignItems={index === 0 ? 'left' : 'right'}
           gridColumn={index === 0 ? 'span 2' : ''}
           key={index}
+          textAlign={index === 0 ? 'left' : 'right'}
         >
           {item}
         </Box>

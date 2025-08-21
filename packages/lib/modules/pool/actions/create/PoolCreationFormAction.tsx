@@ -8,7 +8,6 @@ import { useValidatePoolConfig } from './useValidatePoolConfig'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
-  const { isWeightedPool, isTotalWeightTooHigh } = useValidatePoolConfig()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
 
@@ -17,13 +16,9 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   return (
     <VStack spacing="lg" w="full">
       <Divider />
-      {isWeightedPool && isTotalWeightTooHigh && (
-        <BalAlert
-          content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
-          status="error"
-          title="Token weights must tally 100%"
-        />
-      )}
+
+      <InvalidTotalWeightAlert />
+
       <HStack spacing="md" w="full">
         {!isFirstStep && (
           <IconButton
@@ -52,4 +47,28 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
       </HStack>
     </VStack>
   )
+}
+
+function InvalidTotalWeightAlert() {
+  const { isWeightedPool, isTotalWeightTooHigh, isTotalWeightTooLow } = useValidatePoolConfig()
+
+  if (!isWeightedPool) return null
+
+  if (isTotalWeightTooLow)
+    return (
+      <BalAlert
+        content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
+        status="warning"
+        title="Token weights must tally 100%"
+      />
+    )
+
+  if (isTotalWeightTooHigh)
+    return (
+      <BalAlert
+        content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
+        status="error"
+        title="Token weights must tally 100%"
+      />
+    )
 }

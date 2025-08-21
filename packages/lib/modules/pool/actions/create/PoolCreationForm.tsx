@@ -40,7 +40,7 @@ export function PoolCreationForm() {
         w="full"
       >
         <VStack align="start" spacing="lg" w="full">
-          <VStack align="start" spacing="md">
+          <VStack align="start" spacing="md" w="full">
             <Text color="font.secondary" fontWeight="medium" size="sm">
               STEPS
             </Text>
@@ -50,7 +50,7 @@ export function PoolCreationForm() {
               w="full"
             >
               {steps.map(step => (
-                <Step key={step.id}>
+                <Step key={step.id} w="full">
                   <StepIndicator>
                     <StepStatus
                       active={<StepNumber />}
@@ -63,7 +63,7 @@ export function PoolCreationForm() {
                     <StepTitle>{step.title}</StepTitle>
                   </Box>
 
-                  <StepSeparator />
+                  <StepSeparator w="full" />
                 </Step>
               ))}
             </Stepper>
@@ -71,11 +71,9 @@ export function PoolCreationForm() {
 
           <Divider />
 
-          <VStack spacing="lg" w="full">
-            {activeStep.id === 'step1' && <PoolTypeStep />}
-            {activeStep.id === 'step2' && <PoolTokensStep />}
-            {activeStep.id === 'step3' && <PoolDetailsStep />}
-          </VStack>
+          {activeStep.id === 'step1' && <PoolTypeStep />}
+          {activeStep.id === 'step2' && <PoolTokensStep />}
+          {activeStep.id === 'step3' && <PoolDetailsStep />}
         </VStack>
         {!isMobile && <PoolCreationPreview />}
       </Stack>

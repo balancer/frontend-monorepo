@@ -1,7 +1,7 @@
 import { Divider, HStack, Text } from '@chakra-ui/react'
 import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 import { AlertTriangle } from 'react-feather'
-import { Icon } from '@chakra-ui/icons'
+import { Icon } from '@chakra-ui/react'
 
 export function TotalWeightDisplay() {
   const { totalWeight, isTotalWeightTooLow, isTotalWeightTooHigh } = useValidatePoolConfig()

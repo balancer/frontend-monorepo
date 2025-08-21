@@ -80,6 +80,7 @@ export function ChoosePoolTokens() {
                 <HStack align="end" w="full">
                   <VStack align="start" spacing="sm" w="full">
                     <Text>Token {index + 1}</Text>
+
                     <TokenInputSelector
                       onToggleTokenClicked={() => {
                         setSelectedTokenIndex(index)

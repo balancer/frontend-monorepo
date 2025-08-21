@@ -20,8 +20,6 @@ export default function PoolCreationPage() {
   const selectedNetwork = networkParam ? (networkParam as GqlChain) : PROJECT_CONFIG.defaultNetwork
   const initTokens = getTokensByChain(selectedNetwork)
 
-  if (!initTokens) return null
-
   return (
     <DefaultPageContainer minH="100vh">
       <TransactionStateProvider>
