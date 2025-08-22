@@ -25,7 +25,7 @@ export type Params = {
   lpToken?: string
   enabled?: boolean
   wethIsEth?: boolean
-  shouldUseCompositeLiquidityRouterBoosted?: boolean
+  router?: Address
 }
 
 /**
@@ -50,7 +50,7 @@ export function usePermit2ApprovalSteps({
   enabled = false,
   lpToken,
   wethIsEth,
-  shouldUseCompositeLiquidityRouterBoosted = false,
+  router,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getTransaction, setTransactionFn } = useStepsTransactionState()
@@ -63,9 +63,7 @@ export function usePermit2ApprovalSteps({
   const networkConfig = getNetworkConfig(chain)
   const permit2Address = networkConfig.contracts.permit2
   const permitExpiry = get24HoursFromNowInSecs() * 3 // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
-  const spenderAddress = shouldUseCompositeLiquidityRouterBoosted
-    ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted!
-    : networkConfig.contracts.balancer.router!
+  const spenderAddress = router || networkConfig.contracts.balancer.router!
 
   // Unwraps of wrapped native assets do not require approval
   const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'
