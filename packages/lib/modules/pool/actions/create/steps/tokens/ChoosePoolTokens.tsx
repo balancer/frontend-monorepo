@@ -9,11 +9,11 @@ import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { TokenWeightInput } from './TokenWeightInput'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
 import { AlertTriangle } from 'react-feather'
 import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
+import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -28,6 +28,7 @@ export function ChoosePoolTokens() {
     addPoolToken,
     poolConfigForm: {
       formState: { errors },
+      control,
     },
   } = usePoolCreationForm()
 
@@ -92,10 +93,19 @@ export function ChoosePoolTokens() {
                   </VStack>
 
                   {isWeightedPool && (
-                    <TokenWeightInput
-                      index={index}
+                    <NumberInput
+                      control={control}
                       isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
                       isInvalid={isInvalidWeight}
+                      isPercentage
+                      label="Weight"
+                      name={`poolTokens.${index}.weight`}
+                      validate={value => {
+                        if (!isWeightedPool) return true
+                        if (Number(value) < 1) return 'Minimum weight for each token is 1%'
+                        if (Number(value) > 100) return 'Maximum weight for a token is 99%'
+                        return true
+                      }}
                     />
                   )}
 
