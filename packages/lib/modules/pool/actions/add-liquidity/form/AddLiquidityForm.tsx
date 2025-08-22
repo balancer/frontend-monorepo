@@ -59,12 +59,10 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
-  const { validTokens, slippage, wantsProportional } = useAddLiquidity()
-
-  const bufferPercentage = wantsProportional ? slippage : '0'
+  const { validTokens } = useAddLiquidity()
 
   return (
-    <TokenBalancesProvider bufferPercentage={bufferPercentage} extTokens={validTokens}>
+    <TokenBalancesProvider extTokens={validTokens}>
       <AddLiquidityMainForm />
     </TokenBalancesProvider>
   )
