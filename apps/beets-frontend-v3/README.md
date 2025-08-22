@@ -63,7 +63,7 @@ pnpm dev:beets:webpack
 
 ## Testing
 
-See [TESTING.md](./test/TESTING.md).
+See [TESTING.md](../../packages/lib/test/TESTING.md).
 
 ## Developing in Windows
 
