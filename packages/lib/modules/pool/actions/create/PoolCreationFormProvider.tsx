@@ -9,6 +9,8 @@ import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { WeightedPoolStructure, INITIAL_TOKEN_CONFIG, SupportedPoolTypes } from './constants'
 import { Address } from 'viem'
+import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
+import { useLocalStorage } from 'usehooks-ts'
 
 export type PoolCreationToken = {
   address: Address | undefined
@@ -31,6 +33,13 @@ export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 export function usePoolFormLogic() {
+  const [, setPoolAddress] = useLocalStorage<Address | undefined>(
+    LS_KEYS.PoolCreation.PoolAddress,
+    undefined
+  )
+
+  const { resetSteps } = usePoolCreationFormSteps()
+
   const poolConfigForm = usePersistentForm<PoolCreationConfig>(
     LS_KEYS.PoolCreation.Config,
     {
@@ -67,6 +76,12 @@ export function usePoolFormLogic() {
     poolConfigForm.setValue('poolTokens', newPoolTokens)
   }
 
+  const resetPoolCreationForm = () => {
+    setPoolAddress(undefined)
+    poolConfigForm.resetToInitial()
+    resetSteps()
+  }
+
   return {
     poolConfigForm,
     poolTokens,
@@ -78,6 +93,7 @@ export function usePoolFormLogic() {
     updatePoolTokens,
     removePoolToken,
     addPoolToken,
+    resetPoolCreationForm,
   }
 }
 

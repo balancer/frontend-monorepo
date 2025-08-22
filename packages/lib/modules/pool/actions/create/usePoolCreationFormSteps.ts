@@ -15,16 +15,26 @@ export function usePoolCreationFormSteps() {
   const isFirstStep = activeStepIndex === 0
   const activeStep = steps[activeStepIndex]
 
-  const setActiveStep = (step: number) => {
-    setActiveStepIndex(step)
+  const nextStep = () => {
+    setActiveStepIndex(activeStepIndex + 1)
+  }
+
+  const previousStep = () => {
+    setActiveStepIndex(activeStepIndex - 1)
+  }
+
+  const resetSteps = () => {
+    setActiveStepIndex(0)
   }
 
   return {
     steps,
     activeStepIndex,
-    setActiveStep,
     isLastStep,
     isFirstStep,
     activeStep,
+    previousStep,
+    nextStep,
+    resetSteps,
   }
 }

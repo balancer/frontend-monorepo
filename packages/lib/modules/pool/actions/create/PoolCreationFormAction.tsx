@@ -7,7 +7,7 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useValidatePoolConfig } from './useValidatePoolConfig'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
+  const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
 
@@ -24,7 +24,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
           <IconButton
             aria-label="Back"
             icon={<ChevronLeftIcon h="8" w="8" />}
-            onClick={() => setActiveStep(activeStepIndex - 1)}
+            onClick={previousStep}
             size="lg"
           />
         )}
@@ -35,7 +35,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             if (isLastStep) {
               previewModalDisclosure.onOpen()
             } else {
-              setActiveStep(activeStepIndex + 1)
+              nextStep()
             }
           }}
           size="lg"
