@@ -37,40 +37,58 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 type TokenInputSelectorProps = {
   token: ApiToken | CustomToken | undefined
   weight?: string
+  showWeight?: boolean
   onToggleTokenClicked?: () => void
 }
 
-type TokenConfigProps = {
+type TokenSelectorConfigProps = {
   label: string
   variant: string
   showIcon: boolean
 }
 
-function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputSelectorProps) {
-  const [tokenConfig, setTokenConfig] = useState<TokenConfigProps | undefined>(undefined)
+export function TokenInputSelector({
+  token,
+  weight,
+  onToggleTokenClicked,
+  showWeight = true,
+}: TokenInputSelectorProps) {
+  const [tokenConfig, setTokenConfig] = useState<TokenSelectorConfigProps | undefined>(undefined)
+  const DEFAULT_TOKEN_LABEL = 'Select token'
 
   useEffect(() => {
     if (token) {
       setTokenConfig({ label: token.symbol, variant: 'tertiary', showIcon: true })
     } else if (onToggleTokenClicked) {
-      setTokenConfig({ label: 'Select token', variant: 'secondary', showIcon: false })
+      setTokenConfig({ label: DEFAULT_TOKEN_LABEL, variant: 'secondary', showIcon: false })
     }
   }, [token])
+  const tokenSymbolColor = tokenConfig?.label === DEFAULT_TOKEN_LABEL ? 'font.dark' : 'font.primary'
 
   return tokenConfig ? (
     <Button
       aria-label={tokenConfig.label}
       cursor={onToggleTokenClicked ? 'pointer' : 'default'}
+      justifyContent="space-between"
       onClick={() => onToggleTokenClicked?.()}
       variant={tokenConfig.variant}
+      width="full"
     >
-      {tokenConfig && tokenConfig.showIcon && (
-        <Box mr="sm">
-          <TokenIcon alt={tokenConfig.label} logoURI={token?.logoURI} size={22} />
-        </Box>
+      {tokenConfig && (
+        <HStack spacing="sm">
+          {tokenConfig.showIcon && (
+            <Box>
+              <TokenIcon alt={tokenConfig.label} logoURI={token?.logoURI} size={22} />
+            </Box>
+          )}
+          {tokenConfig.label && (
+            <Text color={tokenSymbolColor} fontWeight="bold">
+              {tokenConfig.label}
+            </Text>
+          )}
+        </HStack>
       )}
-      {tokenConfig && tokenConfig.label}
-      {weight && (
+      {weight && showWeight && (
         <Text fontSize="sm" fontWeight="normal" ml="sm">
           {fNum('weight', weight)}
         </Text>

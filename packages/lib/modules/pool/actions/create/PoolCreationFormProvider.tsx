@@ -1,61 +1,99 @@
-import { useSteps } from '@chakra-ui/react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
-import { useEffect } from 'react'
 import { PoolType } from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { WeightedPoolStructure, INITIAL_TOKEN_CONFIG, SupportedPoolTypes } from './constants'
+import { Address } from 'viem'
+import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
+import { useLocalStorage } from 'usehooks-ts'
 
-export type PoolConfig = {
+export type PoolCreationToken = {
+  address: Address | undefined
+  rateProvider: Address | '' // infer TokenType based on if RP is zero address or contract address
+  paysYieldFees: boolean
+  weight?: string // human weight input
+  amount: string // human amount input
+  data?: ApiToken
+}
+
+export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
-  poolType: PoolType
+  poolType: SupportedPoolTypes
+  weightedPoolStructure: WeightedPoolStructure
+  poolTokens: PoolCreationToken[]
 }
+
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
-const steps = [
-  { id: 'step1', title: 'Type' },
-  { id: 'step2', title: 'Tokens' },
-  { id: 'step3', title: 'Details' },
-  { id: 'step4', title: 'Fund' },
-]
-
 export function usePoolFormLogic() {
-  const poolConfigForm = usePersistentForm<PoolConfig>(LS_KEYS.PoolCreation.Config, {
-    protocol: ProjectConfigBalancer.projectId,
-    network: GqlChain.Mainnet,
-    poolType: PoolType.Weighted,
-  })
-
-  const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(
-    LS_KEYS.PoolCreation.StepIndex,
-    0
+  const [, setPoolAddress] = useLocalStorage<Address | undefined>(
+    LS_KEYS.PoolCreation.PoolAddress,
+    undefined
   )
-  const { activeStep: activeStepIndex, setActiveStep } = useSteps({
-    index: persistedStepIndex,
-    count: steps.length,
-  })
-  const isLastStep = activeStepIndex === steps.length - 1
-  const isFirstStep = activeStepIndex === 0
-  const activeStep = steps[activeStepIndex]
 
-  useEffect(() => {
-    setPersistedStepIndex(activeStepIndex)
-  }, [activeStepIndex, setPersistedStepIndex])
+  const { resetSteps } = usePoolCreationFormSteps()
+
+  const poolConfigForm = usePersistentForm<PoolCreationConfig>(
+    LS_KEYS.PoolCreation.Config,
+    {
+      protocol: ProjectConfigBalancer.projectId,
+      network: GqlChain.Mainnet,
+      poolType: PoolType.Weighted,
+      weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
+      poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
+    },
+    { mode: 'all' }
+  )
+
+  const { poolTokens, poolType, weightedPoolStructure, protocol, network } = poolConfigForm.watch()
+
+  const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
+    const newPoolTokens = [...poolTokens]
+    newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
+    poolConfigForm.setValue('poolTokens', newPoolTokens)
+  }
+
+  const updatePoolTokens = (updates: PoolCreationToken[]) => {
+    poolConfigForm.setValue('poolTokens', updates)
+  }
+
+  const addPoolToken = () => {
+    const newPoolTokens = [...poolTokens]
+    newPoolTokens.push(INITIAL_TOKEN_CONFIG)
+    poolConfigForm.setValue('poolTokens', newPoolTokens)
+  }
+
+  const removePoolToken = (index: number) => {
+    const newPoolTokens = [...poolTokens]
+    newPoolTokens.splice(index, 1)
+    poolConfigForm.setValue('poolTokens', newPoolTokens)
+  }
+
+  const resetPoolCreationForm = () => {
+    setPoolAddress(undefined)
+    poolConfigForm.resetToInitial()
+    resetSteps()
+  }
 
   return {
-    steps,
-    activeStepIndex,
-    setActiveStep,
-    isLastStep,
-    isFirstStep,
-    activeStep,
     poolConfigForm,
+    poolTokens,
+    poolType,
+    weightedPoolStructure,
+    protocol,
+    network,
+    updatePoolToken,
+    updatePoolTokens,
+    removePoolToken,
+    addPoolToken,
+    resetPoolCreationForm,
   }
 }
 

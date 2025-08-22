@@ -1,10 +1,11 @@
-import { Control } from 'react-hook-form'
-import { PoolConfig } from '../../PoolCreationFormProvider'
+import { type Control, Controller } from 'react-hook-form'
+import { PoolCreationConfig } from '../../PoolCreationFormProvider'
 import { VStack, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react'
-import { Controller } from 'react-hook-form'
-import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
+import { POOL_TYPES, SupportedPoolTypes } from '@repo/lib/modules/pool/actions/create/constants'
 
-export function ChoosePoolType({ control }: { control: Control<PoolConfig> }) {
+export function ChoosePoolType({ control }: { control: Control<PoolCreationConfig> }) {
+  const poolTypesKeys = Object.keys(POOL_TYPES) as SupportedPoolTypes[]
+
   return (
     <VStack align="start" spacing="md" w="full">
       <Text color="font.primary">Choose a pool type</Text>
@@ -14,8 +15,8 @@ export function ChoosePoolType({ control }: { control: Control<PoolConfig> }) {
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack spacing={3}>
-              {POOL_TYPES.map(poolType => (
-                <Radio key={poolType.value} size="lg" value={poolType.value}>
+              {poolTypesKeys.map(poolTypeKey => (
+                <Radio key={poolTypeKey} size="lg" value={poolTypeKey}>
                   <Text
                     color="font.primary"
                     textDecoration="underline"
@@ -23,7 +24,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolConfig> }) {
                     textDecorationThickness="1px"
                     textUnderlineOffset="3px"
                   >
-                    {poolType.label}
+                    {POOL_TYPES[poolTypeKey].label}
                   </Text>
                 </Radio>
               ))}
