@@ -13,6 +13,13 @@ import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@ta
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
 import { isPoolSurgingError } from '../utils/error-filters'
+import { BaseError, decodeErrorResult } from 'viem'
+import {
+  balancerBatchRouterAbiExtended,
+  balancerCompositeLiquidityRouterBoostedAbiExtended,
+  balancerCompositeLiquidityRouterNestedAbiExtended,
+  balancerRouterAbiExtended,
+} from '@balancer/sdk'
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -21,11 +28,15 @@ export const queryClient = new QueryClient({
       const sentryMeta = query?.meta as SentryMetadata
       if (shouldIgnore(error.message, error.stack)) return
       if (shouldIgnoreEdgeCaseError(error, sentryMeta)) return
+
       console.log('Sentry capturing query error', {
         meta: sentryMeta,
         error,
         queryKey: query.queryKey,
       })
+      if (error.message.includes('unknown reason')) {
+        console.log('Decoded reason: ', decodeError(error))
+      }
 
       const sentryContext = sentryMeta?.context as ScopeContext
       if (sentryContext?.extra && !getTenderlyUrl(sentryMeta)) {
@@ -58,6 +69,33 @@ export const queryClient = new QueryClient({
     },
   }),
 })
+
+type InternalErrorType = {
+  data: string
+}
+
+// This ABI is constructed as an aggregate of multiple ABIs using the same technique as
+// https://github.com/balancer/b-sdk/blob/797540471ad486e4789ee54d4ea47a9833479c39/src/abi/index.ts#L55
+// More ABIs could be added but bear in mind that it would make the probability of collisions
+// higher (as a workaround we could always comment those not used when debugging)
+const megazordBalancerAbi = [
+  ...balancerRouterAbiExtended,
+  ...balancerBatchRouterAbiExtended,
+  ...balancerCompositeLiquidityRouterBoostedAbiExtended,
+  ...balancerCompositeLiquidityRouterNestedAbiExtended,
+]
+
+function decodeError(e: Error) {
+  const internalError = (e as BaseError).walk() as unknown
+  const internalErrorData = (internalError as InternalErrorType).data as `0x${string}`
+
+  if (internalErrorData === '0x') return 'Unable to find underlying reason'
+
+  return decodeErrorResult({
+    abi: megazordBalancerAbi,
+    data: internalErrorData,
+  })
+}
 
 export function ReactQueryClientProvider({ children }: { children: ReactNode | ReactNode[] }) {
   const shouldShowReactQueryDevtools = false
