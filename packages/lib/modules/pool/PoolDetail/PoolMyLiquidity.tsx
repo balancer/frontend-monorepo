@@ -29,7 +29,6 @@ import {
   getXavePoolLink,
 } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { bn, fNum, ZERO_VALUE_DASH } from '@repo/lib/shared/utils/numbers'
 import {
   getUserTotalBalanceInt,
   getUserWalletBalanceInt,
@@ -61,7 +60,7 @@ import {
 import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
-import { formatFalsyValueAsDash } from '@repo/lib/shared/utils/tokenDisplay'
+import { bn, fNum, ZERO_VALUE_DASH, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 
 function getTabs(isVeBalPool: boolean) {
   return [

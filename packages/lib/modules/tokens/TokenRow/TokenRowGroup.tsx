@@ -6,10 +6,9 @@ import { HumanTokenAmount } from '../token.types'
 import { useTotalUsdValue } from '../useTotalUsdValue'
 import TokenRow from './TokenRow'
 import { useMemo } from 'react'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { formatFalsyValueAsDash } from '@repo/lib/shared/utils/tokenDisplay'
+import { bn, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 
 type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 

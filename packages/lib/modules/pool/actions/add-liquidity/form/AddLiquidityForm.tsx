@@ -21,7 +21,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 import {
   ProportionalTransactionSettings,
   TransactionSettings,
@@ -47,7 +47,6 @@ import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
-import { formatFalsyValueAsDash } from '@repo/lib/shared/utils/tokenDisplay'
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
