@@ -515,7 +515,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     tokenInInfo:
       isLbpSwap && !isLbpProjectTokenBuy && lbpToken ? (lbpToken as ApiToken) : tokenInInfo,
     tokenOutInfo,
-    isPoolSwap: !!isPoolSwap,
     isLbpSwap: !!isLbpSwap,
     isLbpProjectTokenBuy: !!isLbpProjectTokenBuy,
   })

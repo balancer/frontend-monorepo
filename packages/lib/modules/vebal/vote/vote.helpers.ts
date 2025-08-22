@@ -28,9 +28,7 @@ export function voteToPool(vote: VotingPoolWithData): VotingPool {
       token =>
         ({
           ...token,
-          // FIXME: API returns null chain for some hardcoded pools (pending API fix)
-          // Use the token's chain if it exists, otherwise default to the vote's chain
-          chain: token.chain || vote.chain,
+          chain: token.chain,
           chainId: token.chainId || getChainId(vote.chain),
         }) as ApiToken
     ),

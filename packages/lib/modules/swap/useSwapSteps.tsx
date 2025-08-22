@@ -1,27 +1,24 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { useMemo } from 'react'
 import { Address, parseUnits } from 'viem'
-import { useShouldSignRelayerApproval } from '../relayer/signRelayerApproval.hooks'
 import { useApproveRelayerStep } from '../relayer/useApproveRelayerStep'
 import { useRelayerMode } from '../relayer/useRelayerMode'
-import { ApprovalAction } from '../tokens/approvals/approval-labels'
 import { RawAmount } from '../tokens/approvals/approval-rules'
 import { useTokenApprovalSteps } from '../tokens/approvals/useTokenApprovalSteps'
 import { useSignRelayerStep } from '../transactions/transaction-steps/useSignRelayerStep'
 import { orderRouteVersion } from './swap.helpers'
-import { OSwapAction } from './swap.types'
+import { OSwapAction, SdkSimulateSwapResponse, SwapAction } from './swap.types'
 import { useSignPermit2SwapStep } from './usePermit2SwapStep'
 import { SwapStepParams, useSwapStep } from './useSwapStep'
 import { permit2Address } from '../tokens/approvals/permit2/permit2.helpers'
 import { isNativeAsset } from '../tokens/token.helpers'
+import { useUserSettings } from '../user/settings/UserSettingsProvider'
+import { usePermit2ApprovalSteps } from '../tokens/approvals/permit2/usePermit2ApprovalSteps'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
   isLbpSwap: boolean
   isLbpProjectTokenBuy: boolean
-  // TODO: remove this field once we refactor to use:
-  // https://github.com/balancer/b-sdk/issues/462
-  isPoolSwap: boolean
 }
 
 export function useSwapSteps({
@@ -43,38 +40,31 @@ export function useSwapSteps({
   const isPermit2 = orderRouteVersion(simulationQuery) === 3
 
   const relayerMode = useRelayerMode()
-  const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
   const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
     useApproveRelayerStep(chainId)
   const signRelayerStep = useSignRelayerStep(swapState.selectedChain)
+  const swapRequiresRelayer =
+    relayerMode !== 'no-relayer-needed' && handler.name === 'AuraBalSwapHandler'
 
-  const swapRequiresRelayer = handler.name === 'AuraBalSwapHandler'
-
-  const humanAmountIn = swapState.tokenIn.amount
+  const { shouldUseSignatures } = useUserSettings()
 
   const tokenInAmounts = useMemo(() => {
     if (!tokenInInfo) return [] as RawAmount[]
     return [
       {
         address: tokenInInfo.address as Address,
-        rawAmount: parseUnits(humanAmountIn, tokenInInfo.decimals),
+        rawAmount: parseUnits(swapState.tokenIn.amount, tokenInInfo.decimals),
         symbol: tokenInInfo.symbol,
       },
     ]
-  }, [humanAmountIn, tokenInInfo])
-
-  const approvalActionType: ApprovalAction = isLbpSwap
-    ? 'Buying'
-    : swapAction === OSwapAction.UNWRAP
-      ? 'Unwrapping'
-      : 'Swapping'
+  }, [swapState.tokenIn.amount, tokenInInfo])
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
       spenderAddress: isPermit2 ? permit2Address(chain) : vaultAddress,
       chain,
       approvalAmounts: tokenInAmounts,
-      actionType: approvalActionType,
+      actionType: approvalActionType(isLbpSwap, swapAction),
       isPermit2,
       wethIsEth,
       enabled: hasSimulationQuery,
@@ -87,6 +77,19 @@ export function useSwapSteps({
     simulationQuery,
     isPermit2,
   })
+  const isSignPermit2Loading = isPermit2 && !signPermit2Step
+
+  // If the user has selected to not use signatures, we allow them to do permit2
+  // approvals with transactions.
+  const queryData = simulationQuery.data as SdkSimulateSwapResponse
+  const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
+    usePermit2ApprovalSteps({
+      chain,
+      approvalAmounts: tokenInAmounts,
+      actionType: approvalActionType(isLbpSwap, swapAction),
+      enabled: isPermit2 && !shouldUseSignatures && hasSimulationQuery,
+      router: queryData?.router,
+    })
 
   const swapStep = useSwapStep({
     handler,
@@ -100,38 +103,54 @@ export function useSwapSteps({
     isLbpProjectTokenBuy,
   })
 
-  const isSignPermit2Loading = isPermit2 && !signPermit2Step
-
   // native tokenIn does not require permit2 signature
   const isNativeTokenIn = tokenInInfo && isNativeAsset(tokenInInfo?.address, chain)
 
   const steps = useMemo(() => {
-    const swapSteps =
-      isPermit2 && signPermit2Step && !isNativeTokenIn ? [signPermit2Step, swapStep] : [swapStep]
+    const stepList = []
 
     if (swapRequiresRelayer) {
-      if (relayerMode === 'approveRelayer') {
-        return [approveRelayerStep, ...tokenApprovalSteps, ...swapSteps]
-      } else if (shouldSignRelayerApproval) {
-        return [signRelayerStep, ...tokenApprovalSteps, ...swapSteps]
-      }
+      if (relayerMode === 'approveRelayer') stepList.push(approveRelayerStep)
+      else stepList.push(signRelayerStep)
     }
-    return [...tokenApprovalSteps, ...swapSteps]
+
+    stepList.push(...tokenApprovalSteps)
+
+    if (isPermit2 && signPermit2Step && !isNativeTokenIn) {
+      if (shouldUseSignatures) stepList.push(signPermit2Step)
+      else stepList.push(...permit2ApprovalSteps)
+    }
+
+    stepList.push(swapStep)
+
+    return stepList
   }, [
     swapRequiresRelayer,
     tokenApprovalSteps,
     isPermit2,
     swapStep,
     signPermit2Step,
+    permit2ApprovalSteps,
     relayerMode,
-    shouldSignRelayerApproval,
     approveRelayerStep,
     signRelayerStep,
     isNativeTokenIn,
+    shouldUseSignatures,
   ])
 
   return {
-    isLoadingSteps: isLoadingTokenApprovalSteps || isLoadingRelayerApproval || isSignPermit2Loading,
+    isLoadingSteps:
+      isLoadingTokenApprovalSteps ||
+      isLoadingRelayerApproval ||
+      isSignPermit2Loading ||
+      isLoadingPermit2ApprovalSteps,
     steps,
   }
+}
+
+function approvalActionType(isLBP: boolean, swapAction: SwapAction) {
+  if (isLBP) return 'Buying'
+  else if (swapAction === OSwapAction.UNWRAP) return 'Unwrapping'
+
+  return 'Swapping'
 }
