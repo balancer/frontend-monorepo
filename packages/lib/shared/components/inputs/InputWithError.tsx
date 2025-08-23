@@ -1,14 +1,31 @@
 'use client'
 
-import { Input, InputProps, Text, VStack } from '@chakra-ui/react'
+import { HStack, Input, InputProps, Text, VStack } from '@chakra-ui/react'
+import { BalPopover } from '../popover/BalPopover'
+import { InfoIcon } from '../icons/InfoIcon'
 
-export function InputWithError({
-  error,
-  info,
-  ...props
-}: { error?: string; info?: string } & InputProps) {
+type InputWithErrorProps = {
+  error?: string
+  info?: string
+  label?: string
+  tooltip?: string
+} & InputProps
+
+export function InputWithError({ error, info, label, tooltip, ...props }: InputWithErrorProps) {
   return (
-    <VStack w="full">
+    <VStack align="start" w="full">
+      {label && (
+        <HStack>
+          <Text textAlign="start" w="full">
+            {label}
+          </Text>
+          {tooltip && (
+            <BalPopover text={tooltip}>
+              <InfoIcon />
+            </BalPopover>
+          )}
+        </HStack>
+      )}
       <Input {...props} />
 
       {error && (

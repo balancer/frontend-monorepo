@@ -1,13 +1,24 @@
-import { Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  PlacementWithLogical,
+} from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
 type BalPopoverProps = {
   text: string
+  placement?: PlacementWithLogical
 }
 
-export function BalPopover({ children, text }: PropsWithChildren<BalPopoverProps>) {
+export function BalPopover({
+  children,
+  text,
+  placement = 'right',
+}: PropsWithChildren<BalPopoverProps>) {
   return (
-    <Popover trigger="hover">
+    <Popover placement={placement} trigger="hover">
       <PopoverTrigger>{children}</PopoverTrigger>
 
       <PopoverContent maxW="300px" p="sm" w="auto">

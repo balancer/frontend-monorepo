@@ -17,6 +17,7 @@ import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { PoolTypeStep } from './steps/type/PoolTypeStep'
 import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
 import { PoolDetailsStep } from './steps/details/PoolDetailsStep'
+import { PoolFundStep } from './steps/fund/PoolFundStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { useEffect } from 'react'
@@ -74,6 +75,7 @@ export function PoolCreationForm() {
           {activeStep.id === 'step1' && <PoolTypeStep />}
           {activeStep.id === 'step2' && <PoolTokensStep />}
           {activeStep.id === 'step3' && <PoolDetailsStep />}
+          {activeStep.id === 'step4' && <PoolFundStep />}
         </VStack>
         {!isMobile && <PoolCreationPreview />}
       </Stack>

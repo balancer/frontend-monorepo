@@ -7,22 +7,20 @@ import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 
 export function PoolTokensStep() {
   const {
-    poolConfigForm: {
-      control,
-      formState: { isValid: isFormValid },
-    },
+    isFormStateValid,
+    poolConfigForm: { control },
   } = usePoolCreationForm()
 
   const { isPoolTokensStepValid, isWeightedPool } = useValidatePoolConfig()
 
-  const isNextButtonDisabled = !isPoolTokensStepValid || !isFormValid
+  const isDisabled = !isPoolTokensStepValid || !isFormStateValid
 
   return (
     <Box style={{ width: '100%' }}>
       <VStack align="start" spacing="xl" w="full">
         {isWeightedPool && <ChooseWeightedPoolStructure control={control} />}
         <ChoosePoolTokens />
-        <PoolCreationFormAction disabled={isNextButtonDisabled} />
+        <PoolCreationFormAction disabled={isDisabled} />
       </VStack>
     </Box>
   )
