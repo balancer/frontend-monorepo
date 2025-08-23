@@ -128,19 +128,20 @@ function CustomRateProviderInput({
   chainName: string
   isCustomRateProvider: boolean
 }) {
-  const { updatePoolToken } = usePoolCreationForm()
+  const {
+    updatePoolToken,
+    poolConfigForm: { trigger },
+  } = usePoolCreationForm()
+
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
     updatePoolToken(tokenIndex, { rateProvider: clipboardText as Address })
+    trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
   return (
     <VStack align="start" spacing="md" w="full">
       <VStack align="start" spacing="sm" w="full">
-        <HStack spacing="xs">
-          <Text>Rate provider contract address on {chainName}</Text>
-          <InfoIconPopover message="The contract you enter must have a function named getRate" />
-        </HStack>
         <InputGroup>
           <Controller
             control={control}
@@ -149,8 +150,10 @@ function CustomRateProviderInput({
               <InputWithError
                 error={errors.poolTokens?.[tokenIndex]?.rateProvider?.message}
                 isInvalid={!!errors.poolTokens?.[tokenIndex]?.rateProvider}
+                label={`Rate provider contract address on ${chainName}`}
                 onChange={e => field.onChange(e.target.value)}
                 placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
+                tooltip="The contract you enter must have a function named getRate"
                 value={field.value}
               />
             )}
@@ -176,6 +179,7 @@ function CustomRateProviderInput({
               right="3px"
               rounded="sm"
               size="sm"
+              top="29px"
               variant="tertiary"
             >
               Paste

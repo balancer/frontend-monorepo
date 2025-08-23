@@ -24,9 +24,11 @@ export type PoolCreationToken = {
 export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
-  poolType: SupportedPoolTypes
   weightedPoolStructure: WeightedPoolStructure
+  poolType: SupportedPoolTypes
   poolTokens: PoolCreationToken[]
+  poolName: string
+  poolSymbol: string
 }
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
@@ -45,14 +47,17 @@ export function usePoolFormLogic() {
     {
       protocol: ProjectConfigBalancer.projectId,
       network: GqlChain.Mainnet,
-      poolType: PoolType.Weighted,
       weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
+      poolType: PoolType.Weighted,
       poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
+      poolName: '',
+      poolSymbol: '',
     },
     { mode: 'all' }
   )
 
-  const { poolTokens, poolType, weightedPoolStructure, protocol, network } = poolConfigForm.watch()
+  const { poolTokens, poolType, weightedPoolStructure, protocol, network, poolName, poolSymbol } =
+    poolConfigForm.watch()
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const newPoolTokens = [...poolTokens]
@@ -84,11 +89,14 @@ export function usePoolFormLogic() {
 
   return {
     poolConfigForm,
+    isFormStateValid: poolConfigForm.formState.isValid,
     poolTokens,
     poolType,
     weightedPoolStructure,
     protocol,
     network,
+    poolName,
+    poolSymbol,
     updatePoolToken,
     updatePoolTokens,
     removePoolToken,
