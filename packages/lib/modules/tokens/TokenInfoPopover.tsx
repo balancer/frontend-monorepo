@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
   Text,
   Tooltip,
+  Link,
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { CopyTokenAddressButton } from './CopyTokenAddressButton'
@@ -67,14 +68,13 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
                 <Tooltip label="View on Coingecko">
                   <IconButton
                     aria-label="View on Coingecko"
-                    as="a"
+                    as={Link}
                     h="6"
                     href={coingeckoUrl}
                     icon={<CoingeckoIcon height={15} width={15} />}
+                    isExternal
                     isRound
-                    rel="noopener noreferrer"
                     size="xs"
-                    target="_blank"
                     variant="ghost"
                     w="6"
                   />
@@ -83,15 +83,14 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
               <Tooltip label={`View on ${getBlockExplorerName(chain)}`}>
                 <IconButton
                   aria-label="View on block explorer"
-                  as="a"
+                  as={Link}
                   color="grayText"
                   h="6"
                   href={getBlockExplorerTokenUrl(tokenAddress, chain)}
                   icon={<ExternalLink size={12} />}
+                  isExternal
                   isRound
-                  rel="noopener noreferrer"
                   size="xs"
-                  target="_blank"
                   variant="ghost"
                   w="6"
                 />

@@ -164,7 +164,7 @@ const getDefaultPoolActivityChartOptions = (
             </div>
             <a style="width:100%;display:flex;align-items:center;justify-content:space-between;font-size: 0.75rem; font-weight: 500; color: ${
               toolTipTheme.text
-            };" href=${txLink} target="_blank" rel="noopener noreferrer">
+            };" href=${txLink} target="_blank" rel="noopener">
             <span style="margin-right:4px;">
                     Tx: ${format(new Date(timestamp * 1000), 'MMM d, h:mma')
                       .replace('AM', 'am')
@@ -176,7 +176,7 @@ const getDefaultPoolActivityChartOptions = (
             <div style="width:100%;display:flex;align-items:center;justify-content:space-between;font-size: 0.75rem; line-height:1;font-weight: 500; margin-top:4px; color: ${
               toolTipTheme.text
             };">
-                <a style="display:flex;align-items:center;" href=${addressLink} target="_blank" rel="noopener noreferrer">
+                <a style="display:flex;align-items:center;" href=${addressLink} target="_blank" rel="noopener">
                   <span style="font-size: 0.75rem; margin-right:4px;">By: ${abbreviateAddress(
                     userAddress
                   )}</span>

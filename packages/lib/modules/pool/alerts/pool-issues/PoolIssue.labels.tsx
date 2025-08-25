@@ -83,8 +83,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://medium.com/renproject/moving-on-from-alameda-da62a823ce93"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           sunset
         </Link>{' '}
@@ -94,8 +93,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://x.com/renprotocol/status/1595807696296751104"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           bridge all ren assets
         </Link>{' '}

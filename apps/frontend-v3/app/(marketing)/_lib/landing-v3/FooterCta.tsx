@@ -114,7 +114,7 @@ export function FooterCta() {
               as={Link}
               href="https://docs.balancer.fi"
               initial={{ opacity: 0 }}
-              rel="noopener noreferrer"
+              rel="noopener"
               rightIcon={<ArrowUpRight size="16px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
@@ -129,7 +129,7 @@ export function FooterCta() {
               as={Link}
               href="https://github.com/balancer/scaffold-balancer-v3"
               initial={{ opacity: 0 }}
-              rel="noopener noreferrer"
+              rel="noopener"
               rightIcon={<ArrowUpRight size="16px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"

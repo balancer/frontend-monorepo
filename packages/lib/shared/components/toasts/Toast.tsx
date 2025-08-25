@@ -12,8 +12,8 @@ import {
   CircularProgressLabel,
   Text,
   Tooltip,
+  Link,
 } from '@chakra-ui/react'
-import Link from 'next/link'
 import { useRef } from 'react'
 import { ArrowUpRight, Check, X } from 'react-feather'
 
@@ -86,11 +86,10 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
                 h="6"
                 href={linkUrl}
                 icon={<ArrowUpRight size={12} strokeWidth={3} />}
+                isExternal
                 position="absolute"
-                rel="noopener noreferrer"
                 right="8"
                 size="xs"
-                target="_blank"
                 top="xs"
                 w="6"
               />
