@@ -6,9 +6,9 @@ import { HumanTokenAmount } from '../token.types'
 import { useTotalUsdValue } from '../useTotalUsdValue'
 import TokenRow from './TokenRow'
 import { useMemo } from 'react'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { bn, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 
 type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
@@ -75,7 +75,7 @@ export function TokenRowGroup({
         ) : (
           hasMultipleAmounts && (
             <Text fontSize="sm" fontWeight="bold">
-              {toCurrency(usdValue, { abbreviated: false })}
+              {formatFalsyValueAsDash(usdValue, toCurrency, { abbreviated: false })}
             </Text>
           )
         )}
@@ -91,6 +91,7 @@ export function TokenRowGroup({
             isLoading={isLoading}
             key={amount.tokenAddress}
             pool={pool}
+            showZeroAmountAsDash
             symbol={amount?.symbol}
             value={amount.humanAmount}
           />

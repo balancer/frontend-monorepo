@@ -20,7 +20,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 import {
   ProportionalTransactionSettings,
   TransactionSettings,
@@ -34,7 +34,6 @@ import {
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
@@ -56,6 +55,7 @@ import { SettingsAlert } from '../../../../user/settings/SettingsAlert'
 import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -96,12 +96,12 @@ function AddLiquidityMainForm() {
 
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
-  const { toCurrency } = useCurrency()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
   const poolMetadata = usePoolMetadata(pool)
   const { calculatePotentialYield } = useGetPoolRewards(pool)
+  const { toCurrency } = useCurrency()
 
   const setFlexibleTab = () => {
     setTabIndex(0)
@@ -261,9 +261,9 @@ function AddLiquidityMainForm() {
                     Total
                   </Text>
                   <Text fontSize="md" fontWeight="700" lineHeight="16px">
-                    {totalUSDValue !== '0'
-                      ? toCurrency(totalUSDValue, { abbreviated: false })
-                      : '-'}
+                    {formatFalsyValueAsDash(totalUSDValue, toCurrency, {
+                      showZeroAmountAsDash: true,
+                    })}
                   </Text>
                 </VStack>
               </Card>

@@ -19,7 +19,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { Numberish, bn, fNum, isZero } from '@repo/lib/shared/utils/numbers'
+import { Numberish, bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/pool.types'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
@@ -158,7 +158,7 @@ export default function TokenRow({
   isNestedPoolToken,
   pool,
   abbreviated = true,
-  showZeroAmountAsDash = false,
+  showZeroAmountAsDash = true,
   toggleTokenSelect,
   iconSize,
   logoURI,
@@ -208,7 +208,7 @@ export default function TokenRow({
         setUsdValue(usdValueForToken(poolToken, value))
       }
 
-      setAmount(fNum('token', value, { abbreviated }))
+      setAmount(value.toString())
     }
   }, [value, prices, tokens])
 
@@ -247,12 +247,19 @@ export default function TokenRow({
             ) : (
               <>
                 <Heading {...headingProps} title={value.toString()}>
-                  {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
+                  {formatFalsyValueAsDash(amount, val => fNum('token', val), {
+                    showZeroAmountAsDash,
+                  })}
                 </Heading>
                 {isTokenPriceMissing ? (
                   <MissingTokenPriceWarning message={tokenPriceTip} />
                 ) : (
-                  <Text {...subTextProps}>{toCurrency(usdValue ?? '0', { abbreviated })}</Text>
+                  <Text {...subTextProps}>
+                    {formatFalsyValueAsDash(usdValue, toCurrency, {
+                      abbreviated,
+                      showZeroAmountAsDash,
+                    })}
+                  </Text>
                 )}
               </>
             )}
