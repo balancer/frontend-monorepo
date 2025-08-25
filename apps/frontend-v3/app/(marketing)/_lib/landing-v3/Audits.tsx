@@ -13,7 +13,6 @@ import {
   IconButton,
   Heading,
 } from '@chakra-ui/react'
-import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ArrowUpRight } from 'react-feather'
@@ -30,7 +29,7 @@ const MotionBox = motion(Box)
 
 function AuditCard({ href, logo }: { href: string; logo: ReactNode }) {
   return (
-    <NextLink href={href} rel="noopener noreferrer" target="_blank">
+    <Link href={href} isExternal>
       <MotionBox
         minH="200px"
         overflow="hidden"
@@ -63,7 +62,7 @@ function AuditCard({ href, logo }: { href: string; logo: ReactNode }) {
           w="50px"
         />
       </MotionBox>
-    </NextLink>
+    </Link>
   )
 }
 
@@ -102,8 +101,9 @@ export function Audits() {
               />
             </VStack>
             <Button
-              as={NextLink}
+              as={Link}
               href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits"
+              isExternal
               rightIcon={<ArrowUpRight size="16px" />}
               variant="secondary"
             >

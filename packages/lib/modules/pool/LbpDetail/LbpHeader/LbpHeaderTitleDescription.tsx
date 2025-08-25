@@ -57,13 +57,7 @@ export function LbpHeaderTitleDescription() {
         {lbpPool.description}
       </Text>
       <HStack mt="auto">
-        <Button
-          as="a"
-          href={lbpPool.website || ''}
-          rel="noopener noreferrer"
-          target="_blank"
-          variant="tertiary"
-        >
+        <Button as={Link} href={lbpPool.website || ''} isExternal variant="tertiary">
           <HStack gap="xxs">
             <Text>View project</Text>
             <ArrowUpRight size={12} />

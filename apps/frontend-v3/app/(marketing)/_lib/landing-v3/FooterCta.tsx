@@ -1,7 +1,6 @@
 'use client'
 
-import { Box, Button, Center, HStack, VStack } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { Box, Button, Center, HStack, VStack, Link } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
@@ -112,9 +111,10 @@ export function FooterCta() {
           <HStack justifyContent="center" ref={ref} spacing="md">
             <MotionButton
               animate={shouldAnimate ? { opacity: 1 } : {}}
-              as={NextLink}
+              as={Link}
               href="https://docs.balancer.fi"
               initial={{ opacity: 0 }}
+              rel="noopener"
               rightIcon={<ArrowUpRight size="16px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
@@ -126,9 +126,10 @@ export function FooterCta() {
             </MotionButton>
             <MotionButton
               animate={shouldAnimate ? { opacity: 1 } : {}}
-              as={NextLink}
+              as={Link}
               href="https://github.com/balancer/scaffold-balancer-v3"
               initial={{ opacity: 0 }}
+              rel="noopener"
               rightIcon={<ArrowUpRight size="16px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"

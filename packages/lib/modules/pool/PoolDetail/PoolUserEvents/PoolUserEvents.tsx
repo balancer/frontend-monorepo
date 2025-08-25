@@ -94,7 +94,7 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
           <Text color="grayText">
             {formatDistanceToNowAbbr(new Date(secondsToMilliseconds(poolEvent.timestamp)))}
           </Text>
-          <Link color="grayText" href={txUrl} target="_blank">
+          <Link color="grayText" href={txUrl} isExternal>
             <ArrowUpRight size={16} />
           </Link>
         </HStack>

@@ -13,7 +13,6 @@ import {
   VStack,
   Link,
 } from '@chakra-ui/react'
-import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../other/Picture'
 
@@ -125,13 +124,7 @@ export function VebalPartnerRedirectModal({ partner, redirectUrl, isOpen, onClos
         </ModalBody>
 
         <ModalFooter pb="lg">
-          <Button
-            as={NextLink}
-            href={redirectUrl ?? info.url}
-            target="_blank"
-            variant="primary"
-            w="full"
-          >
+          <Button as={Link} href={redirectUrl ?? info.url} isExternal variant="primary" w="full">
             <HStack>
               <span>Go to {info.shortName}</span>
               <ArrowUpRight size={16} />

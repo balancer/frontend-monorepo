@@ -15,6 +15,7 @@ import {
   Text,
   VStack,
   chakra,
+  Link,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -271,12 +272,7 @@ export function LandingBeetsData({
           <GridItem bg="rgba(0, 0, 0, 0.2)">
             <ChainDataCard
               button={
-                <Button
-                  as={NextLink}
-                  href="https://ftm.beets.fi/pools"
-                  target="_blank"
-                  variant="primary"
-                >
+                <Button as={Link} href="https://ftm.beets.fi/pools" isExternal variant="primary">
                   Fantom Pools
                 </Button>
               }

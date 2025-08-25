@@ -1,7 +1,6 @@
 import { ErrorAlert } from './ErrorAlert'
 import { AlertProps, Text } from '@chakra-ui/react'
-import { BalAlertLink } from '../alerts/BalAlertLink'
-import { getDiscordLink } from '../../utils/links'
+import { DiscordLink } from '@repo/lib/shared/components/links/DiscordLink'
 
 type Props = AlertProps & {
   error: Error
@@ -27,8 +26,7 @@ export function UnbalancedNestedAddError({ error }: Props) {
     <ErrorAlert title="Unbalanced amounts">
       <Text color="black" variant="secondary">
         Your input(s) are either too large or would excessively unbalance the pool, please try
-        smaller/more proportional amounts or report the issue in{' '}
-        <BalAlertLink href={getDiscordLink()}>our discord</BalAlertLink>.
+        smaller/more proportional amounts or report the issue in <DiscordLink />.
       </Text>
     </ErrorAlert>
   )

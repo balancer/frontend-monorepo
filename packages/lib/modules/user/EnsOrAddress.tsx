@@ -30,7 +30,7 @@ export function EnsOrAddress({
   })
 
   return (
-    <Link href={getBlockExplorerAddressUrl(userAddress, chain)} target="_blank">
+    <Link href={getBlockExplorerAddressUrl(userAddress, chain)} isExternal>
       <HStack>
         <Image
           alt={name || userAddress}

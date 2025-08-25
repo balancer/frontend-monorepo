@@ -102,7 +102,7 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
             {transaction.chain ? getChainShortName(transaction.chain) : 'Unknown'},&nbsp;
             {formatDistanceToNowAbbr(new Date(transaction.timestamp))}
           </Text>
-          <Link color="grayText" href={txLink} target="_blank">
+          <Link color="grayText" href={txLink} isExternal>
             <ArrowUpRight size={16} />
           </Link>
         </HStack>

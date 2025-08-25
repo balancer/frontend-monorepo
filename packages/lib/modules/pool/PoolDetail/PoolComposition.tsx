@@ -189,8 +189,7 @@ export function PoolComposition() {
                     display="inline-flex"
                     fontSize="sm"
                     href="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
-                    rel="noopener noreferrer"
-                    target="_blank"
+                    isExternal
                   >
                     <Box as="span">Learn more</Box>
                     <Box as="span" ml={0.5}>

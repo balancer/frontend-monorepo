@@ -90,7 +90,7 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
-          target="_blank"
+          isExternal
         >
           <Box as="span" fontSize="lg" fontWeight="thin">
             Spearbit
@@ -104,7 +104,7 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
-          target="_blank"
+          isExternal
         >
           <Box as="span" fontSize="lg" fontWeight="thin">
             Trail of Bits
@@ -125,7 +125,7 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://sonicscan.org/token/0xe5da20f15420ad15de0fa650600afc998bbe3955"
-          target="_blank"
+          isExternal
         >
           <Box as="span" fontSize="lg" fontWeight="thin">
             0xE5DA20F15420aD15DE0fa650600aFc998bbE3955

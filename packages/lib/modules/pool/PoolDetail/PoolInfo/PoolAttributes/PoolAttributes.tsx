@@ -27,7 +27,7 @@ export function PoolAttributes() {
                   <Text variant={{ base: 'primary', md: 'secondary' }}>{attribute.title}:</Text>
                 </Box>
                 {attribute.link ? (
-                  <Link href={attribute.link} target="_blank" variant="link">
+                  <Link href={attribute.link} isExternal variant="link">
                     <HStack gap="xxs">
                       <Text color="link">{attribute.value}</Text>
                       <ArrowUpRight size={12} />

@@ -34,8 +34,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://forum.balancer.fi/t/vulnerability-disclosure/3179"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           vulnerability
         </Link>
@@ -44,8 +43,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://app.balancer.fi/#/ethereum/pool/0xa13a9247ea42d743238089903570127dda72fe4400000000000000000000035d"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           upgraded pool{' '}
         </Link>
@@ -85,8 +83,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://medium.com/renproject/moving-on-from-alameda-da62a823ce93"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           sunset
         </Link>{' '}
@@ -96,8 +93,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://x.com/renprotocol/status/1595807696296751104"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           bridge all ren assets
         </Link>{' '}

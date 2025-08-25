@@ -1,8 +1,7 @@
 'use client'
 
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { Button, Flex, Box, Center, useColorModeValue } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { Button, Flex, Box, Center, useColorModeValue, Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 
 export function CowPoolBanner() {
@@ -61,17 +60,16 @@ export function CowPoolBanner() {
           </Box>
           <Button
             _hover={{ bg: '#E2F8BF' }}
-            as={NextLink}
+            as={Link}
             bg="#BCEC79"
             color="#194D05"
             flex="1"
             h={{ base: '32px', sm: '40px', md: '48px' }}
             href="https://cow.fi/cow-amm"
-            rel="noopener noreferrer"
+            isExternal
             role="group"
             rounded="full"
             size="lg"
-            target="_blank"
             w="max-content"
           >
             How it works

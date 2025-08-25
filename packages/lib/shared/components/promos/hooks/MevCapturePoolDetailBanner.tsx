@@ -1,8 +1,16 @@
 'use client'
 
-import React from 'react'
-import { Stack, Heading, Button, Flex, Box, Center, Text, useColorMode } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import {
+  Stack,
+  Heading,
+  Button,
+  Flex,
+  Box,
+  Center,
+  Text,
+  useColorMode,
+  Link,
+} from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../../other/Picture'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
@@ -144,20 +152,20 @@ export function MevCapturePoolDetailBanner() {
                 bg: colorMode === 'dark' ? '#000' : '#fff',
                 color: colorMode === 'dark' ? '#fff' : '#000',
               }}
-              as={NextLink}
+              as={Link}
               borderColor="font.maxContrast"
               color="font.maxContrast"
-              cursor="hand"
+              cursor="pointer"
               flex="1"
               gap="xs"
               h={{ base: '32px', sm: '40px', lg: '48px' }}
               href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
+              isExternal
               maxW="132px"
               py="sm"
               role="group"
               rounded="full"
               size="md"
-              target="_blank"
               variant="outline"
               w="132px"
             >

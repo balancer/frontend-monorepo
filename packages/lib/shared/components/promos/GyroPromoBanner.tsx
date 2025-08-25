@@ -135,7 +135,7 @@ export function GyroPromoBanner() {
                   bg: colorMode === 'dark' ? '#000' : '#fff',
                   color: colorMode === 'dark' ? '#fff' : '#000',
                 }}
-                as={NextLink}
+                as={Link}
                 borderColor="font.maxContrast"
                 color="font.maxContrast"
                 cursor="hand"
@@ -148,7 +148,7 @@ export function GyroPromoBanner() {
                 role="group"
                 rounded="full"
                 size="md"
-                target="_blank"
+                isExternal
                 variant="outline"
                 w="128px"
               >

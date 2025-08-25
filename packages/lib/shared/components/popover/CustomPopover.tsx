@@ -52,7 +52,7 @@ export function CustomPopover({
       )}
       {footerUrl && (
         <PopoverFooter>
-          <Link href={footerUrl} target="_blank" variant="link">
+          <Link href={footerUrl} isExternal variant="link">
             <HStack gap="xxs">
               <Text color="link">Learn more</Text>
               <ArrowUpRight size={12} />

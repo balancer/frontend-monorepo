@@ -29,7 +29,6 @@ import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShi
 import { differenceInDays, differenceInHours, secondsToMilliseconds } from 'date-fns'
 import { isSaleOngoing } from '../../lbp/pool/lbp.helpers'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
-import NextLink from 'next/link'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { GroupBase, OptionBase, Select, chakraComponents } from 'chakra-react-select'
 import { ArrowUpRight } from 'react-feather'
@@ -83,13 +82,12 @@ function BTFTimeSelector({ pool, chain }: { pool: Pool; chain: GqlChain }) {
               <Link
                 _hover={{ textDecoration: 'none' }}
                 alignItems="center"
-                as={NextLink}
+                as={Link}
                 color="font.link"
                 display="flex"
                 fontSize="sm"
                 href={analyticsUrl}
-                rel="noopener noreferrer"
-                target="_blank"
+                isExternal
                 textDecoration="underline"
               >
                 QuantAMM

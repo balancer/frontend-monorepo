@@ -1,7 +1,16 @@
 'use client'
 
-import { Button, Heading, Flex, Box, Center, Text, Stack, useColorMode } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import {
+  Button,
+  Heading,
+  Flex,
+  Box,
+  Center,
+  Text,
+  Stack,
+  useColorMode,
+  Link,
+} from '@chakra-ui/react'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
@@ -133,7 +142,7 @@ export function StableSurgePromoBanner() {
                 bg: colorMode === 'dark' ? '#000' : '#fff',
                 color: colorMode === 'dark' ? '#fff' : '#000',
               }}
-              as={NextLink}
+              as={Link}
               borderColor="font.maxContrast"
               color="font.maxContrast"
               cursor="hand"
@@ -141,12 +150,12 @@ export function StableSurgePromoBanner() {
               gap="xs"
               h={{ base: '32px', sm: '40px', lg: '48px' }}
               href="https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219"
+              isExternal
               maxW="132px"
               py="sm"
               role="group"
               rounded="full"
               size="md"
-              target="_blank"
               variant="outline"
               w="132px"
             >
