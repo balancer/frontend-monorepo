@@ -99,7 +99,6 @@ export function TransactionStepButton({ step }: Props) {
         }
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [safeTxHash])
 
   return (

@@ -46,7 +46,6 @@ export function PoolDetail() {
       router.prefetch(`${pathname}/stake`)
       router.prefetch(`${pathname}/unstake`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
   return (

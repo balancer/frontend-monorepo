@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { useSetErc20Balance } from '@repo/lib/test/anvil/useSetErc20Balance'
 import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'

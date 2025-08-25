@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { bn, fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'

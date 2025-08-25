@@ -107,7 +107,6 @@ export function useManagedSendTransaction({
         })
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionStatusQuery.error])
 
   // on successful submission to chain, add tx to cache

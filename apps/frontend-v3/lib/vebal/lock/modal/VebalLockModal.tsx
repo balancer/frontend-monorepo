@@ -96,7 +96,6 @@ export function VebalLockModal({
       isIncreasedLockAmount,
       mainnetLockedInfo,
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, userAddress, isIncreasedLockAmount])
 
   const { transactionSteps, lockTxHash } = useBuildLockSteps(buildLockStepsArgs)

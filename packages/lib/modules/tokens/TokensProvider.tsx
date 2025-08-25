@@ -122,7 +122,7 @@ export function useTokensLogic() {
         }, bn(0))
         .toString()
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [prices]
   )
 

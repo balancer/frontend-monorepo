@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useShouldSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'

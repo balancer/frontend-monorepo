@@ -64,7 +64,6 @@ export function ClaimModal({
       setQuoteRewards(rewards)
       setQuoteTotalUsd(totalClaimableUsd)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rewards])
 
   const noQuoteRewards = quoteRewards.length === 0

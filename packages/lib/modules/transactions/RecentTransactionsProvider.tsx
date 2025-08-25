@@ -139,7 +139,7 @@ export function useRecentTransactionsLogic() {
       }
       updateLocalStorage(updatePayload)
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [publicClient]
   )
 
@@ -153,7 +153,6 @@ export function useRecentTransactionsLogic() {
       // on load
       waitForUnconfirmedTransactions(recentTransactions)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useInterval(() => {

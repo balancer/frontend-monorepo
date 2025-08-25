@@ -66,7 +66,6 @@ export function TokenIcon({
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const iconSrc = useMemo(() => getIconSrc(), [logoURI, token])
 
   const tokenImage = (

@@ -26,7 +26,6 @@ export function useUserPoolEvents() {
   useEffect(() => {
     startPolling(120000)
     return () => stopPolling()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const userPoolEvents = userPoolEventsData?.poolEvents

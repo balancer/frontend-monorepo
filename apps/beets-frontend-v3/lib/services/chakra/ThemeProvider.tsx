@@ -20,7 +20,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
       setTheme(theme)
       setColorMode(theme)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return null

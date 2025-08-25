@@ -169,7 +169,6 @@ export function AddLiquidityFormTabs({
     if (!isLoading && isDisabledFlexibleTab) {
       setProportionalTab()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDisabledFlexibleTab, isLoading])
 
   const isProportional = tabIndex === 1

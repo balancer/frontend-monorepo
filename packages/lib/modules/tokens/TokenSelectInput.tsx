@@ -40,7 +40,6 @@ export function TokenSelectInput({
     if (defaultTokenAddress) {
       onChange(defaultTokenAddress)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

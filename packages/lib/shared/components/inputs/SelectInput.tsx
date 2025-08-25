@@ -55,7 +55,6 @@ export function SelectInput({
     if (newOption) onChange(newOption.value)
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setOptionValue(options.find(option => option.value === value)), [value])
 
   return (

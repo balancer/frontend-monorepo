@@ -63,7 +63,6 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
     }
 
     return {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stakeRequests, isLoading])
 
   const amountDelegatedPerValidator = validatorIds

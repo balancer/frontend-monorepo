@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'

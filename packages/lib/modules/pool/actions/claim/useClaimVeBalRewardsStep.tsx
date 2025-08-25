@@ -64,7 +64,7 @@ export function useClaimVeBalRewardsStep({
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimVeBalRewardsStepId} {...props} />,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [transaction, userAddress]
   )
 }

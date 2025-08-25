@@ -250,7 +250,6 @@ export function PoolWeightChart({
         },
       ],
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayTokens, totalLiquidity, chain, colorMode])
 
   return (

@@ -19,7 +19,6 @@ export function NetworkIcon({ chain, size = 12, ...rest }: { chain: GqlChain } &
     if (shortName && iconPath) {
       setNetworkConfig({ iconPath, shortName })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shortName])
 
   return (

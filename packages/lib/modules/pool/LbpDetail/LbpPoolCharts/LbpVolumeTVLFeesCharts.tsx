@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react'
 import ReactECharts from 'echarts-for-react'
 import { HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'

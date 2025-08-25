@@ -129,12 +129,10 @@ function LstForm() {
       setDisclosure(unstakeModalDisclosure)
       setAmountShares('')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab])
 
   useEffect(() => {
     setActiveTab(tabs[0])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function onModalClose() {

@@ -73,7 +73,6 @@ function MigrationButton({
     if (isConfirmed) {
       refetchBalances()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed])
 
   return (
@@ -157,7 +156,6 @@ function ApproveButton({
     if (isConfirmed) {
       refetchAllowances()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed])
 
   return (
@@ -225,7 +223,6 @@ export function LzBeetsMigrateModal() {
     if (hasBalance && !isOpen && shouldShow) {
       onOpen()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBalance, isOpen, shouldShow])
 
   function handleClose() {
