@@ -3,7 +3,7 @@ import { PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const beetsSupportedNetworks = [GqlChain.Optimism, GqlChain.Sonic]
-//  as const satisifies GqlChain[]
+//  as const satisfies GqlChain[]
 
 export const ProjectConfigBeets: ProjectConfig = {
   projectId: 'beets',
