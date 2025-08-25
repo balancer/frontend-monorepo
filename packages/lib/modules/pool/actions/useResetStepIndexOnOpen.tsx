@@ -12,6 +12,5 @@ export function useResetStepIndexOnOpen(
 ) {
   useEffect(() => {
     if (isOpen) transactionSteps.setCurrentStepIndex(0)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 }

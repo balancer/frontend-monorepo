@@ -36,7 +36,6 @@ export function MyPurchases({
     if (myLbpTransactionsSectionRef && myLbpTransactionsSectionRef.current) {
       setHeight(myLbpTransactionsSectionRef.current.offsetHeight)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

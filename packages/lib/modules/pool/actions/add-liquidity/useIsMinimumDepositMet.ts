@@ -4,7 +4,7 @@ import { isSameAddress } from '@balancer/sdk'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useGetMinimumWrapAmount } from '@repo/lib/shared/hooks/useGetMinimumWrapAmount'
-import { bn } from '@repo/lib/shared/utils/numbers' /* eslint-disable react-hooks/exhaustive-deps */
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
 import { getCompositionTokens } from '../../pool-tokens.utils'

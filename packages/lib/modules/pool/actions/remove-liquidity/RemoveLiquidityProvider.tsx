@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'

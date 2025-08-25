@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'

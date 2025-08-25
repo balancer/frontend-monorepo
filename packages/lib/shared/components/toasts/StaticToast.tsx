@@ -34,7 +34,6 @@ export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
         toastIdRef.current = undefined
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   useEffect(() => {
@@ -45,7 +44,6 @@ export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
         toastIdRef.current = undefined
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -53,7 +51,6 @@ export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
       // rerender
       toast.update(toastIdRef.current, { ...defaultProps, ...props, render: children })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children])
 
   return null

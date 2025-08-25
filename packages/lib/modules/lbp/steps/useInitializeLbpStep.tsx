@@ -105,7 +105,7 @@ export function useInitializeLbpStep({
           }
         : undefined,
     }),
-    /* eslint-disable react-hooks/exhaustive-deps */
+
     [transaction, labels, buildCallDataQuery.data, isPoolInitialized]
   )
 }

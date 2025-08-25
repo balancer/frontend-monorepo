@@ -486,7 +486,6 @@ export function usePoolChartsLogic() {
         },
       ],
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab.value, defaultChartOptions, processedChartData])
 
   const handleAxisMoved = useCallback(

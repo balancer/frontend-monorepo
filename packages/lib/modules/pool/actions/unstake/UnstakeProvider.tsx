@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { HumanTokenAmount } from '@repo/lib/modules/tokens/token.types'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { HumanAmount, isSameAddress } from '@balancer/sdk'

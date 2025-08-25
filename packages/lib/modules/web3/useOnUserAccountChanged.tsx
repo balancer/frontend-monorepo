@@ -14,6 +14,5 @@ export function useOnUserAccountChanged(callback: () => void) {
       callback()
     }
     setPrevUserAddress(userAddress)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAddress])
 }

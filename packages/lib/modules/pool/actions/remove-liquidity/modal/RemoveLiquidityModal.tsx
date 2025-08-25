@@ -60,7 +60,6 @@ export function RemoveLiquidityModal({
       // stop polling for token prices when modal is opened to prevent unwanted re-renders
       stopTokenPricePolling()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   useEffect(() => {

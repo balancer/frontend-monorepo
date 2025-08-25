@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { Box, HStack, Text, VStack, useTheme } from '@chakra-ui/react'
 import { useMemo, useRef } from 'react'
 import ReactECharts from 'echarts-for-react'

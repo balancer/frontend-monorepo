@@ -26,7 +26,6 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   useEffect(() => {
     // trigger modal open if user has begun pool creation process
     if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolAddress])
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />

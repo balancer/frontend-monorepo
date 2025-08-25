@@ -112,7 +112,6 @@ export function useManagedErc20Transaction({
   // if parent changes args, update here
   useEffect(() => {
     setWriteArgs(args)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(args)])
 
   const managedWriteAsync = async (

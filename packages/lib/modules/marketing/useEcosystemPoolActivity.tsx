@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'

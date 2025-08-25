@@ -40,7 +40,6 @@ export function LstWithdraw() {
     } else {
       setWithdrawalsView(withdrawalsDataOrdered.slice(skip, first + skip))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skip, withdrawalsData])
 
   const rowProps = {

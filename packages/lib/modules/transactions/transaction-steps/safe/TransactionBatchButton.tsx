@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, VStack } from '@chakra-ui/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'

@@ -29,7 +29,6 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
 
   useEffect(() => {
     if (isWeightedPool) updatePoolTokenWeights(weightedPoolStructure)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

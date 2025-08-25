@@ -420,7 +420,6 @@ export function useEclpChartLogic() {
         },
       ],
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, poolSpotPrice])
 
   const outOfRangeText =

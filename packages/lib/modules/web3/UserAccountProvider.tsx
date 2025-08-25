@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
 import { emptyAddress } from './contracts/wagmi-helpers'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'

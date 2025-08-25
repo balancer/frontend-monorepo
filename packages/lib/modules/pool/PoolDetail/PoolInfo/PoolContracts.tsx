@@ -154,7 +154,6 @@ export function PoolContracts({ ...props }: CardProps) {
     }
 
     return contracts
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool, hasGaugeAddress])
 
   const rateProviders = useMemo(() => {

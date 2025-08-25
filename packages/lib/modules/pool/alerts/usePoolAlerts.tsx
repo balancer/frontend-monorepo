@@ -299,7 +299,6 @@ export function usePoolAlerts(pool: Pool) {
     const poolAlerts = getPoolAlerts(pool)
 
     setPoolAlerts([...networkPoolAlerts, ...tokenPoolAlerts, ...userAlerts, ...poolAlerts])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool])
 
   return {

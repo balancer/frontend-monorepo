@@ -123,7 +123,6 @@ export default function PoolMyLiquidity() {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
       setHeight(myLiquiditySectionRef.current.offsetHeight)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handleTabChanged(option: ButtonGroupOption) {
@@ -235,7 +234,6 @@ export default function PoolMyLiquidity() {
       ...tab,
       disabled: tab.value !== 'total' && !canStake,
     }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs, pool])
 
   function openRedirectModal(partner: RedirectPartner) {

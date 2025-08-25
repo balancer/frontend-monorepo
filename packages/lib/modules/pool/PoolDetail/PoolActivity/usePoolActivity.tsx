@@ -147,7 +147,6 @@ function usePoolActivityLogic() {
     )
 
     return data
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, isExpanded])
 
   const pagination: PaginationState = useMemo(

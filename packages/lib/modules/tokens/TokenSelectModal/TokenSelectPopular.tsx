@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'

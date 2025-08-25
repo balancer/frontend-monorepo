@@ -204,7 +204,6 @@ export function FeaturedPoolWeightChart({
         },
       ],
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayTokens, colorMode])
 
   return (

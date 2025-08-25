@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Permit2, PublicWalletClient } from '@balancer/sdk'
 import { useToast } from '@chakra-ui/react'
 import {

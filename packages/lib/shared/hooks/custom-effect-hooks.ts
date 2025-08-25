@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { DependencyList, useEffect, useRef } from 'react'
 
 export function useEffectOnce(effect: () => void) {
