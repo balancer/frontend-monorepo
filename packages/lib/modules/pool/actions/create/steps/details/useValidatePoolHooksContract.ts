@@ -4,13 +4,15 @@ import { usePublicClient } from 'wagmi'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
 export const useValidatePoolHooksContract = (address: Address | undefined) => {
-  const publicClient = usePublicClient()
   const {
     poolConfigForm: { setValue },
   } = usePoolCreationForm()
+  const publicClient = usePublicClient()
+
+  const chainId = publicClient?.chain?.id
 
   const { data: isValidPoolHooksContract } = useQuery({
-    queryKey: ['validatePoolHooksContract', address],
+    queryKey: ['validatePoolHooksContract', address, chainId],
     queryFn: async (): Promise<boolean> => {
       try {
         if (!publicClient) throw new Error('No public client for validatePoolHooks')
@@ -32,7 +34,7 @@ export const useValidatePoolHooksContract = (address: Address | undefined) => {
         return false
       }
     },
-    enabled: !!address && isAddress(address),
+    enabled: !!address && isAddress(address) && !!chainId,
   })
 
   return { isValidPoolHooksContract }
