@@ -1,4 +1,4 @@
-import { Address, createPublicClient, createTestClient, http, isAddress, parseUnits } from 'viem'
+import { Address, createPublicClient, createTestClient, http, isAddress } from 'viem'
 import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
@@ -58,10 +58,8 @@ export async function setTokenBalances({
 }: SetBalancesParams) {
   async function setChainBalances(tokenBalances: TokenBalance[], chainId: number) {
     for (const tokenBalance of tokenBalances) {
-      const value = parseUnits(tokenBalance.value, tokenBalance.decimals ?? 18)
       await setBalance.mutateAsync({
-        ...tokenBalance,
-        value,
+        balance: tokenBalance,
         wagmiConfig,
         address: impersonatedAddress,
         chainId,
