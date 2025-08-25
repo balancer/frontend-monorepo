@@ -248,7 +248,7 @@ const getDefaultPoolActivityChartOptions = (
             </div>
             <a style="width:100%;display:flex;align-items:center;font-size: 0.75rem; padding-top:4px;font-weight: 500; color: ${
               toolTipTheme.text
-            };" href=${txLink} target="_blank" rel="noopener noreferrer">
+            };" href="${txLink}" target="_blank" rel="noopener noreferrer">
             <span style="margin-right:4px;">
                     Tx: ${format(new Date(timestamp * 1000), 'MMM d, h:mma')
                       .replace('AM', 'am')

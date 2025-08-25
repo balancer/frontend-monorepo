@@ -155,7 +155,7 @@ export function MevCapturePoolDetailBanner() {
               as={Link}
               borderColor="font.maxContrast"
               color="font.maxContrast"
-              cursor="hand"
+              cursor="pointer"
               flex="1"
               gap="xs"
               h={{ base: '32px', sm: '40px', lg: '48px' }}
