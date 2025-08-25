@@ -223,13 +223,13 @@ function AddLiquidityMainForm() {
                 accordionButtonComponent={
                   <HStack gap="xs">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
-                      Potential losses:{' '}
+                      {wantsProportional ? 'Max slippage:' : 'Potential losses:'}
                     </Text>
                     {isFetching ? (
                       <Skeleton h="16px" w="40px" />
                     ) : (
                       <Text color={priceImpactColor} fontSize="sm" variant="secondary">
-                        {priceImpactLabel}
+                        {wantsProportional ? fNum('slippage', slippage) : priceImpactLabel}
                       </Text>
                     )}
                   </HStack>
@@ -246,7 +246,7 @@ function AddLiquidityMainForm() {
                 action="add"
                 avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
-                isDisabled={!priceImpactQuery.data}
+                isDisabled={!wantsProportional && !priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
