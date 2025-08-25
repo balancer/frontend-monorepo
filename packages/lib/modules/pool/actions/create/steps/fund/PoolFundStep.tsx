@@ -1,17 +1,16 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, Heading, VStack } from '@chakra-ui/react'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { PoolDetails } from './PoolDetails'
-import { PoolSettings } from './PoolSettings'
 
-export function PoolDetailsStep() {
+export function PoolFundStep() {
   const { isFormStateValid } = usePoolCreationForm()
 
   return (
     <Box as="form" style={{ width: '100%' }}>
       <VStack align="start" spacing="xl" w="full">
-        <PoolDetails />
-        <PoolSettings />
+        <Heading color="font.maxContrast" size="md">
+          Seed initial pool liquidity
+        </Heading>
         <PoolCreationFormAction disabled={!isFormStateValid} />
       </VStack>
     </Box>

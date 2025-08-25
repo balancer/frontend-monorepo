@@ -11,6 +11,7 @@ import { WeightedPoolStructure, INITIAL_TOKEN_CONFIG, SupportedPoolTypes } from 
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
+import { zeroAddress } from 'viem'
 
 export type PoolCreationToken = {
   address: Address | undefined
@@ -24,9 +25,18 @@ export type PoolCreationToken = {
 export type PoolCreationConfig = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
-  poolType: SupportedPoolTypes
   weightedPoolStructure: WeightedPoolStructure
+  poolType: SupportedPoolTypes
   poolTokens: PoolCreationToken[]
+  name: string
+  symbol: string
+  swapFeeManager: Address | ''
+  pauseManager: Address | ''
+  swapFeePercentage: string
+  amplificationParameter: string
+  poolHooksContract: Address | ''
+  enableDonation: boolean
+  disableUnbalancedLiquidity: boolean
 }
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
@@ -45,14 +55,38 @@ export function usePoolFormLogic() {
     {
       protocol: ProjectConfigBalancer.projectId,
       network: GqlChain.Mainnet,
-      poolType: PoolType.Weighted,
       weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
+      poolType: PoolType.Weighted,
       poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
+      name: '',
+      symbol: '',
+      swapFeeManager: zeroAddress,
+      pauseManager: zeroAddress,
+      swapFeePercentage: '',
+      amplificationParameter: '',
+      poolHooksContract: zeroAddress,
+      enableDonation: false,
+      disableUnbalancedLiquidity: false,
     },
     { mode: 'all' }
   )
 
-  const { poolTokens, poolType, weightedPoolStructure, protocol, network } = poolConfigForm.watch()
+  const {
+    poolTokens,
+    poolType,
+    weightedPoolStructure,
+    protocol,
+    network,
+    name,
+    symbol,
+    swapFeeManager,
+    pauseManager,
+    swapFeePercentage,
+    poolHooksContract,
+    enableDonation,
+    disableUnbalancedLiquidity,
+    amplificationParameter,
+  } = poolConfigForm.watch()
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const newPoolTokens = [...poolTokens]
@@ -84,11 +118,21 @@ export function usePoolFormLogic() {
 
   return {
     poolConfigForm,
+    isFormStateValid: poolConfigForm.formState.isValid,
     poolTokens,
     poolType,
     weightedPoolStructure,
     protocol,
     network,
+    name,
+    symbol,
+    swapFeeManager,
+    pauseManager,
+    swapFeePercentage,
+    amplificationParameter,
+    poolHooksContract,
+    enableDonation,
+    disableUnbalancedLiquidity,
     updatePoolToken,
     updatePoolTokens,
     removePoolToken,

@@ -15,6 +15,7 @@ interface NumberInputProps {
   label: string
   isPercentage: boolean
   validate: (value: number) => string | true
+  width?: string
 }
 
 export function NumberInput({
@@ -25,11 +26,12 @@ export function NumberInput({
   isPercentage,
   validate,
   name,
+  width = '20',
 }: NumberInputProps) {
   return (
     <VStack align="start" spacing="sm">
       <Text>{label}</Text>
-      <Box position="relative" w="20">
+      <Box position="relative" w={width}>
         <Controller
           control={control}
           name={name}
