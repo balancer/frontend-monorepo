@@ -4,11 +4,11 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { CheckCircle, XCircle } from 'react-feather'
-import { PoolCreationConfig } from '../PoolCreationFormProvider'
+import { type PoolCreationConfig } from '../constants'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { zeroAddress } from 'viem'
 
-export function PoolTokensCard() {
+export function PreviewPoolTokens({ isBeforeStep }: { isBeforeStep: boolean }) {
   const { poolTokens } = usePoolCreationForm()
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
@@ -16,7 +16,7 @@ export function PoolTokensCard() {
   const hasRateProviders = poolTokens.some(token => token.rateProvider !== zeroAddress)
 
   return (
-    <Card>
+    <Card opacity={isBeforeStep ? 0.5 : 1}>
       <CardHeaderRow columnNames={['Tokens', 'Price', 'Market Cap']} />
       <CardBody>
         <VStack spacing="md">

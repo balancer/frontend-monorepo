@@ -6,6 +6,7 @@ interface PoolCreationCheckboxProps {
   title?: string
   tooltip?: string
   isChecked: boolean
+  isDisabled?: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -14,6 +15,7 @@ export function PoolCreationCheckbox({
   label,
   tooltip,
   isChecked,
+  isDisabled,
   onChange,
 }: PoolCreationCheckboxProps) {
   return (
@@ -24,7 +26,7 @@ export function PoolCreationCheckbox({
           {tooltip && <InfoIconPopover message={tooltip} placement="right-start" />}
         </HStack>
       )}
-      <Checkbox isChecked={isChecked} onChange={onChange} size="lg">
+      <Checkbox disabled={isDisabled} isChecked={isChecked} onChange={onChange} size="lg">
         <Text>{label}</Text>
       </Checkbox>
     </>

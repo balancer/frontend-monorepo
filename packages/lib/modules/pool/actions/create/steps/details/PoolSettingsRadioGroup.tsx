@@ -5,6 +5,7 @@ import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
+import { PoolSettingsOption } from './PoolSettings'
 
 export interface PoolSettingsRadioGroupProps {
   title: string
@@ -15,8 +16,7 @@ export interface PoolSettingsRadioGroupProps {
     | 'swapFeePercentage'
     | 'poolHooksContract'
     | 'amplificationParameter'
-  options: { label: string; value: string | undefined; reccomendation?: string }[]
-  isCustom: boolean
+  options: PoolSettingsOption[]
   isPercentage?: boolean
   errorMsg?: string
   customInputLabel: string
@@ -29,8 +29,7 @@ export function PoolSettingsRadioGroup({
   tooltip,
   name,
   options,
-  isCustom,
-  customInputType = 'address',
+  customInputType,
   errorMsg,
   customInputLabel,
   validate,
@@ -45,6 +44,8 @@ export function PoolSettingsRadioGroup({
     setValue(name, clipboardText)
     trigger(name)
   }
+
+  const radioGroupOptions = [...options, { label: 'Custom', value: '' }]
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -61,35 +62,75 @@ export function PoolSettingsRadioGroup({
         control={control}
         name={name}
         render={({ field }) => {
-          const predefinedValues = options.slice(0, -1).map(option => option.value)
-          const isCustomValue = !predefinedValues.includes(field.value)
-          const radioValue = isCustomValue ? options[options.length - 1].value : field.value
+          const predefinedValues = options.map(option => option.value)
+          const isCustomOptionSelected = !predefinedValues.includes(field.value)
+          const radioValue = isCustomOptionSelected ? '' : field.value
 
           return (
-            <RadioGroup onChange={field.onChange} value={radioValue}>
+            <RadioGroup onChange={field.onChange} value={radioValue} w="full">
               <Stack spacing={4}>
-                {options.map((option, index) => {
+                {radioGroupOptions.map(option => {
+                  const isCustomOption = option.value === ''
+
                   return (
-                    <Radio key={option.value} size="lg" value={option.value}>
-                      <HStack>
-                        <Text
-                          color="font.primary"
-                          {...(index === options.length - 1 && {
-                            textDecoration: 'underline',
-                            textDecorationStyle: 'dotted',
-                            textDecorationThickness: '1px',
-                            textUnderlineOffset: '3px',
-                          })}
-                        >
-                          {option.label}
-                        </Text>
-                        {option.reccomendation && (
-                          <Text color="font.secondary" fontSize="sm">
-                            {option.reccomendation}
+                    <VStack align="start" key={option.value} w="full">
+                      <Radio
+                        isDisabled={!option.value && option.value !== ''}
+                        size="lg"
+                        value={option.value}
+                      >
+                        <HStack>
+                          <Text
+                            color="font.primary"
+                            {...(isCustomOption && {
+                              textDecoration: 'underline',
+                              textDecorationStyle: 'dotted',
+                              textDecorationThickness: '1px',
+                              textUnderlineOffset: '3px',
+                            })}
+                          >
+                            {option.label}
                           </Text>
-                        )}
-                      </HStack>
-                    </Radio>
+                          {option.detail && option.detail}
+                        </HStack>
+                      </Radio>
+                      {isCustomOption &&
+                        isCustomOptionSelected &&
+                        (customInputType === 'address' ? (
+                          <VStack align="start" spacing="sm" w="full">
+                            <InputGroup>
+                              <Controller
+                                control={control}
+                                name={name}
+                                render={({ field }) => (
+                                  <InputWithError
+                                    error={errorMsg}
+                                    isInvalid={!!errorMsg}
+                                    label={customInputLabel}
+                                    onChange={e => field.onChange(e.target.value)}
+                                    pasteFn={handlePaste}
+                                    placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
+                                    tooltip="TODO"
+                                    value={field.value}
+                                  />
+                                )}
+                                rules={{ validate }}
+                              />
+                            </InputGroup>
+                          </VStack>
+                        ) : (
+                          <NumberInput
+                            control={control}
+                            isDisabled={false}
+                            isInvalid={false}
+                            isPercentage={!!isPercentage}
+                            label={customInputLabel}
+                            name={name}
+                            validate={value => validate(value.toString())}
+                            width="32"
+                          />
+                        ))}
+                    </VStack>
                   )
                 })}
               </Stack>
@@ -97,41 +138,6 @@ export function PoolSettingsRadioGroup({
           )
         }}
       />
-      {isCustom &&
-        (customInputType === 'address' ? (
-          <VStack align="start" spacing="sm" w="full">
-            <InputGroup>
-              <Controller
-                control={control}
-                name={name}
-                render={({ field }) => (
-                  <InputWithError
-                    error={errorMsg}
-                    isInvalid={!!errorMsg}
-                    label={customInputLabel}
-                    onChange={e => field.onChange(e.target.value)}
-                    pasteFn={handlePaste}
-                    placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
-                    tooltip="TODO"
-                    value={field.value}
-                  />
-                )}
-                rules={{ validate }}
-              />
-            </InputGroup>
-          </VStack>
-        ) : (
-          <NumberInput
-            control={control}
-            isDisabled={false}
-            isInvalid={false}
-            isPercentage={!!isPercentage}
-            label={customInputLabel}
-            name={name}
-            validate={value => validate(value.toString())}
-            width="32"
-          />
-        ))}
     </VStack>
   )
 }

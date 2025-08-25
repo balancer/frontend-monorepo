@@ -4,7 +4,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { capitalize } from 'lodash'
 import { useValidatePoolConfig } from '../useValidatePoolConfig'
 
-export function PoolTypeCard() {
+export function PreviewPoolType() {
   const { network, protocol, poolType, weightedPoolStructure } = usePoolCreationForm()
   const { isWeightedPool, isCustomWeightedPool } = useValidatePoolConfig()
 

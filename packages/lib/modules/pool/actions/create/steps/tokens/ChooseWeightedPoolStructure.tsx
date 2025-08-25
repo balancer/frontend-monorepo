@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 import { type Control, Controller } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
-import { type PoolCreationConfig, usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { type PoolCreationConfig } from '../../constants'
 import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationConfig> }) {

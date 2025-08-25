@@ -2,6 +2,7 @@ import { VStack, Heading, Text, HStack } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { MAX_POOL_NAME_LENGTH, MAX_POOL_SYMBOL_LENGTH } from '../../constants'
 
 export function PoolDetails() {
   const { poolTokens } = usePoolCreationForm()
@@ -13,8 +14,8 @@ export function PoolDetails() {
     return data.symbol
   })
 
-  const suggestedPoolName = tokenSymbols.join(' / ') + ' – Balancer v3'
-  const suggestedPoolSymbol = 'B3-' + tokenSymbols.join('-').replace(/% /g, '-')
+  const suggestedPoolName = tokenSymbols.join(' / ')
+  const suggestedPoolSymbol = tokenSymbols.join('-').replace(/% /g, '-')
 
   return (
     <VStack align="start" spacing="xl" w="full">
@@ -24,6 +25,7 @@ export function PoolDetails() {
 
       <InputWithSuggestion
         label="Pool name"
+        maxLength={MAX_POOL_NAME_LENGTH}
         name="name"
         placeholder="Enter pool name"
         suggestedValue={suggestedPoolName}
@@ -32,6 +34,7 @@ export function PoolDetails() {
 
       <InputWithSuggestion
         label="Pool symbol"
+        maxLength={MAX_POOL_SYMBOL_LENGTH}
         name="symbol"
         placeholder="Enter pool symbol"
         suggestedValue={suggestedPoolSymbol}
@@ -47,6 +50,8 @@ interface InputWithSuggestionProps {
   placeholder: string
   tooltip: string
   suggestedValue: string
+  maxLength: number
+  validate?: (value: string) => string | true
 }
 
 function InputWithSuggestion({
@@ -55,6 +60,7 @@ function InputWithSuggestion({
   placeholder,
   tooltip,
   suggestedValue,
+  maxLength,
 }: InputWithSuggestionProps) {
   const {
     poolConfigForm: { control, setValue, trigger },
@@ -65,8 +71,9 @@ function InputWithSuggestion({
       <Controller
         control={control}
         name={name}
-        render={({ field }) => (
+        render={({ field, fieldState: { error } }) => (
           <InputWithError
+            error={error?.message}
             label={label}
             onChange={e => field.onChange(e.target.value)}
             placeholder={placeholder}
@@ -75,7 +82,12 @@ function InputWithSuggestion({
           />
         )}
         rules={{
-          required: `${label} is required`,
+          required: `Pool ${label} is required`,
+          validate: value => {
+            if (value.length < 5) return `${label} must be 4 characters or more`
+            if (value.length > maxLength) return `${label} must be ${maxLength} characters or less`
+            return true
+          },
         }}
       />
       <HStack spacing="xs">

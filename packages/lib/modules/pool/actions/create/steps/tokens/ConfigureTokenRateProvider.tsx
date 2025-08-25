@@ -1,7 +1,11 @@
 import { Text, HStack, VStack, RadioGroup, Stack, Radio, InputGroup } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
-import { usePoolCreationForm, PoolCreationConfig } from '../../PoolCreationFormProvider'
+import {
+  RATE_PROVIDER_RADIO_OPTIONS,
+  RateProviderOption,
+  type PoolCreationConfig,
+} from '../../constants'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { Address, zeroAddress, isAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
