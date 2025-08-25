@@ -24,14 +24,15 @@ export function PoolDetails() {
 
       <InputWithSuggestion
         label="Pool name"
-        name="poolName"
+        name="name"
         placeholder="Enter pool name"
         suggestedValue={suggestedPoolName}
         tooltip="The name for the pool token"
       />
+
       <InputWithSuggestion
         label="Pool symbol"
-        name="poolSymbol"
+        name="symbol"
         placeholder="Enter pool symbol"
         suggestedValue={suggestedPoolSymbol}
         tooltip="The symbol for the pool token"
@@ -42,7 +43,7 @@ export function PoolDetails() {
 
 interface InputWithSuggestionProps {
   label: string
-  name: 'poolName' | 'poolSymbol'
+  name: 'name' | 'symbol'
   placeholder: string
   tooltip: string
   suggestedValue: string

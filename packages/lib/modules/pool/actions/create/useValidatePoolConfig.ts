@@ -10,7 +10,7 @@ export function useValidatePoolConfig() {
   const isWeightedPool = poolType === PoolType.Weighted
   const isCustomWeightedPool =
     isWeightedPool && weightedPoolStructure === WeightedPoolStructure.Custom
-  const isStablePool = poolType === PoolType.Stable
+  const isStablePool = poolType === PoolType.Stable || poolType === PoolType.StableSurge
   const isStableSurgePool = poolType === PoolType.StableSurge
 
   const maxTokenCount = POOL_TYPES[poolType].maxTokens
