@@ -9,10 +9,12 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
 export function ChooseNetwork({ control }: { control: Control<PoolCreationConfig> }) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { resetPoolCreationForm } = usePoolCreationForm()
 
   const updateNetworkParam = (network: GqlChain) => {
     const params = new URLSearchParams(searchParams)
@@ -55,6 +57,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationConfig
                   justifyContent="space-between"
                   onChange={e => {
                     if (e.target.checked) {
+                      resetPoolCreationForm()
                       field.onChange(network)
                       updateNetworkParam(network)
                     }
