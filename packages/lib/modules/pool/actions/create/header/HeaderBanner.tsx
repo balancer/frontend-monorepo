@@ -1,9 +1,8 @@
-import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
+import { Box, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { FeatureLink } from './FeatureLink'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { ArrowUpRight } from 'react-feather'
-import Link from 'next/link'
 
 export function HeaderBanner() {
   const capitalEfficiencyDescription = `
@@ -55,8 +54,7 @@ export function HeaderBanner() {
             </Text>
             <Link
               href="https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html"
-              rel="noopener noreferrer"
-              target="_blank"
+              isExternal
             >
               <HStack
                 _hover={{ cursor: 'pointer', color: 'font.linkHover' }}

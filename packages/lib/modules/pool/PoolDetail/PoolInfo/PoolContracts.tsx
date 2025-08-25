@@ -215,7 +215,7 @@ export function PoolContracts({ ...props }: CardProps) {
               </Text>
             </GridItem>
             <GridItem>
-              <Link href={contract.explorerLink} target="_blank" variant="link">
+              <Link href={contract.explorerLink} isExternal variant="link">
                 <HStack gap="xxs">
                   <Text color="link">{abbreviateAddress(contract.address)}</Text>
                   <ArrowUpRight size={12} />
@@ -248,8 +248,8 @@ export function PoolContracts({ ...props }: CardProps) {
                       <HStack key={hook.address}>
                         <Link
                           href={getBlockExplorerAddressUrl(hook.address, chain)}
+                          isExternal
                           key={hook.address}
-                          target="_blank"
                           variant="link"
                         >
                           <HStack gap="xxs">
@@ -308,8 +308,8 @@ export function PoolContracts({ ...props }: CardProps) {
                       />
                       <Link
                         href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
+                        isExternal
                         key={provider.rateProviderAddress}
-                        target="_blank"
                         variant="link"
                       >
                         <HStack gap="xxs">
@@ -364,8 +364,8 @@ export function PoolContracts({ ...props }: CardProps) {
                       />
                       <Link
                         href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
+                        isExternal
                         key={erc4626Token.address}
-                        target="_blank"
                         variant="link"
                       >
                         <HStack gap="xxs">

@@ -38,8 +38,8 @@ export function LandingSectionContainer({
               as={NextLink}
               href={button.href}
               minWidth="160px"
-              target={button.isExternal ? '_blank' : undefined}
               variant="primary"
+              {...(button.isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               {button.text}
             </Button>

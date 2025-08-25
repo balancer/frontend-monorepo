@@ -34,8 +34,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://forum.balancer.fi/t/vulnerability-disclosure/3179"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           vulnerability
         </Link>
@@ -44,8 +43,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://app.balancer.fi/#/ethereum/pool/0xa13a9247ea42d743238089903570127dda72fe4400000000000000000000035d"
-          rel="noreferrer"
-          target="blank"
+          isExternal
         >
           upgraded pool{' '}
         </Link>

@@ -87,6 +87,7 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
                 href={linkUrl}
                 icon={<ArrowUpRight size={12} strokeWidth={3} />}
                 position="absolute"
+                rel="noopener noreferrer"
                 right="8"
                 size="xs"
                 target="_blank"

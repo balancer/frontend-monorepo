@@ -12,13 +12,13 @@ import {
   Text,
   Center,
   Stack,
+  Link,
 } from '@chakra-ui/react'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ReactNode } from 'react'
 import { ArrowUpRight } from 'react-feather'
-import NextLink from 'next/link'
 import { SandBg } from './shared/SandBg'
 import Image from 'next/image'
 
@@ -73,14 +73,13 @@ export function VideoBox({
   const video = videos[id]
 
   return (
-    <NextLink href={video.url} rel="noopener noreferrer" role="group" target="_blank">
+    <Link href={video.url} isExternal role="group">
       <Box
         background="background.level0"
         overflow="hidden"
         position="relative"
         rounded="md"
         shadow="md"
-        target="_blank"
         {...props}
       >
         {feature && (
@@ -120,7 +119,7 @@ export function VideoBox({
           {label}
         </Box>
       </Box>
-    </NextLink>
+    </Link>
   )
 }
 
@@ -161,8 +160,9 @@ export function Videos() {
               text="Balancer v3 video tutorials"
             />
             <Button
-              as={NextLink}
+              as={Link}
               href="https://github.com/balancer/scaffold-balancer-v3"
+              isExternal
               rightIcon={<ArrowUpRight size="16px" />}
               variant="secondary"
             >

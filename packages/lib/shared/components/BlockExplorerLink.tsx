@@ -21,7 +21,7 @@ export function BlockExplorerLink({ chain, transactionHash, address, fontSize = 
   const text = address ? abbreviateAddress(address) : 'View on ' + getBlockExplorerName(chain)
 
   return (
-    <Link href={href} target="_blank">
+    <Link href={href} isExternal>
       <HStack color="grayText" spacing="xs">
         <Text fontSize={fontSize} variant="secondary">
           {text}

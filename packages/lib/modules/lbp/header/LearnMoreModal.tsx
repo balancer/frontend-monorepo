@@ -14,8 +14,8 @@ import {
   HStack,
   Button,
   useDisclosure,
+  Link,
 } from '@chakra-ui/react'
-import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { getDiscordLink } from '@repo/lib/shared/utils/links'
 
@@ -74,13 +74,13 @@ export function LearnMoreModal({ buttonLabel }: { buttonLabel: string }) {
               </List>
               <HStack gap="ms" w="full">
                 <Button
-                  as={NextLink}
+                  as={Link}
                   display="flex"
                   gap="1"
                   href="https://docs.balancer.fi/concepts/explore-available-balancer-pools/liquidity-bootstrapping-pool.html"
+                  isExternal
                   minWidth="184px"
                   size="md"
-                  target="_blank"
                   variant="secondary"
                 >
                   View LBP docs
@@ -88,13 +88,13 @@ export function LearnMoreModal({ buttonLabel }: { buttonLabel: string }) {
                 </Button>
 
                 <Button
-                  as={NextLink}
+                  as={Link}
                   display="flex"
                   gap="1"
                   href={getDiscordLink() || ''}
+                  isExternal
                   minWidth="184px"
                   size="md"
-                  target="_blank"
                   variant="tertiary"
                 >
                   Get help on Discord

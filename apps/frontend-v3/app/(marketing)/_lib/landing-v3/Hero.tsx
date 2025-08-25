@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Button, Center, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
-import NextLink from 'next/link'
 import Image from 'next/image'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { ArrowUpRight } from 'react-feather'
@@ -146,9 +145,10 @@ export function Hero() {
                       }
                     : {}
                 }
-                as={NextLink}
+                as={Link}
                 href="https://docs.balancer.fi"
                 initial={{ opacity: 0 }}
+                rel="noopener noreferrer"
                 rightIcon={<ArrowUpRight size="16px" />}
                 size="lg"
                 target="_blank"
@@ -167,9 +167,10 @@ export function Hero() {
                       }
                     : {}
                 }
-                as={NextLink}
+                as={Link}
                 href="https://github.com/balancer/scaffold-balancer-v3"
                 initial={{ opacity: 0 }}
+                rel="noopener noreferrer"
                 rightIcon={<ArrowUpRight size="16px" />}
                 size="lg"
                 target="_blank"
@@ -182,12 +183,13 @@ export function Hero() {
             <HStack alignItems="center" mt="xl" spacing="md">
               <MotionBox
                 animate={shouldAnimate ? { opacity: 1 } : {}}
-                as={NextLink}
+                as={Link}
                 h="56px"
                 href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
                 initial={{ opacity: 0 }}
                 overflow="hidden"
                 position="relative"
+                rel="noopener noreferrer"
                 rounded="lg"
                 shadow="md"
                 target="_blank"

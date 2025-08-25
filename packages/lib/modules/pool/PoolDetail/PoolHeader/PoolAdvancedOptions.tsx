@@ -68,12 +68,7 @@ export function PoolAdvancedOptions() {
                 {isCowPool ? (
                   <HStack>
                     <CowIcon size={20} />
-                    <Link
-                      as={NextLink}
-                      href={buildCowSwapUrlFromPool(pool)}
-                      target="_blank"
-                      variant="nav"
-                    >
+                    <Link href={buildCowSwapUrlFromPool(pool)} isExternal variant="nav">
                       Swap pool tokens on CoW Swap
                     </Link>
                   </HStack>
