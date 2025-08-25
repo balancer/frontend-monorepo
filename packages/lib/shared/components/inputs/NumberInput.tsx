@@ -14,8 +14,9 @@ interface NumberInputProps {
   isInvalid: boolean
   label: string
   isPercentage: boolean
-  validate: (value: number) => string | true
+  validate: (value: number) => string | boolean
   width?: string
+  error?: string
 }
 
 export function NumberInput({
@@ -27,6 +28,7 @@ export function NumberInput({
   validate,
   name,
   width = '20',
+  error,
 }: NumberInputProps) {
   return (
     <VStack align="start" spacing="sm">
@@ -64,6 +66,12 @@ export function NumberInput({
           rules={{ validate }}
         />
       </Box>
+
+      {error && (
+        <Text color="font.error" fontSize="sm" textAlign="start" w="full">
+          {error}
+        </Text>
+      )}
     </VStack>
   )
 }

@@ -18,10 +18,9 @@ export interface PoolSettingsRadioGroupProps {
     | 'amplificationParameter'
   options: PoolSettingsOption[]
   isPercentage?: boolean
-  errorMsg?: string
   customInputLabel: string
   customInputType: 'number' | 'address'
-  validate: (value: string) => string | true
+  validate: (value: string) => string | boolean
 }
 
 export function PoolSettingsRadioGroup({
@@ -30,13 +29,18 @@ export function PoolSettingsRadioGroup({
   name,
   options,
   customInputType,
-  errorMsg,
   customInputLabel,
   validate,
   isPercentage,
 }: PoolSettingsRadioGroupProps) {
   const {
-    poolConfigForm: { control, setValue, trigger },
+    poolConfigForm: {
+      control,
+      setValue,
+      trigger,
+      resetField,
+      formState: { errors },
+    },
   } = usePoolCreationForm()
 
   const handlePaste = async () => {
@@ -45,7 +49,8 @@ export function PoolSettingsRadioGroup({
     trigger(name)
   }
 
-  const radioGroupOptions = [...options, { label: 'Custom', value: '' }]
+  const optionsPlusCustom = [...options, { label: 'Custom', value: '' }]
+  const validationErrors = errors[name]
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -62,23 +67,30 @@ export function PoolSettingsRadioGroup({
         control={control}
         name={name}
         render={({ field }) => {
-          const predefinedValues = options.map(option => option.value)
-          const isCustomOptionSelected = !predefinedValues.includes(field.value)
-          const radioValue = isCustomOptionSelected ? '' : field.value
+          const reccommendedOptions = options.map(option => option.value)
+          const isCustomOptionSelected = !reccommendedOptions.includes(field.value)
+          const selectedRadioGroupValue = isCustomOptionSelected ? '' : field.value
 
           return (
-            <RadioGroup onChange={field.onChange} value={radioValue} w="full">
+            <RadioGroup
+              onChange={value => {
+                if (value === '') {
+                  resetField(name, { defaultValue: '' })
+                } else {
+                  field.onChange(value)
+                }
+              }}
+              value={selectedRadioGroupValue}
+              w="full"
+            >
               <Stack spacing={4}>
-                {radioGroupOptions.map(option => {
+                {optionsPlusCustom.map(option => {
                   const isCustomOption = option.value === ''
+                  const isOptionDisabled = !option.value && option.value !== ''
 
                   return (
                     <VStack align="start" key={option.value} w="full">
-                      <Radio
-                        isDisabled={!option.value && option.value !== ''}
-                        size="lg"
-                        value={option.value}
-                      >
+                      <Radio isDisabled={isOptionDisabled} size="lg" value={option.value}>
                         <HStack>
                           <Text
                             color="font.primary"
@@ -104,8 +116,8 @@ export function PoolSettingsRadioGroup({
                                 name={name}
                                 render={({ field }) => (
                                   <InputWithError
-                                    error={errorMsg}
-                                    isInvalid={!!errorMsg}
+                                    error={validationErrors?.message}
+                                    isInvalid={!!validationErrors}
                                     label={customInputLabel}
                                     onChange={e => field.onChange(e.target.value)}
                                     pasteFn={handlePaste}
@@ -121,6 +133,7 @@ export function PoolSettingsRadioGroup({
                         ) : (
                           <NumberInput
                             control={control}
+                            error={validationErrors?.message}
                             isDisabled={false}
                             isInvalid={false}
                             isPercentage={!!isPercentage}

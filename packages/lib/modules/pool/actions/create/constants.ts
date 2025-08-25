@@ -1,10 +1,9 @@
-import { PoolType } from '@balancer/sdk'
+import { PoolType, STABLE_POOL_CONSTRAINTS } from '@balancer/sdk'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
-import { zeroAddress } from 'viem'
+import { zeroAddress, Address } from 'viem'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { type ProjectConfig } from '@repo/lib/config/config.types'
-import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type SupportedPoolTypes = PoolType.Stable | PoolType.Weighted | PoolType.StableSurge
@@ -90,7 +89,20 @@ export const SWAP_FEE_PERCENTAGE_OPTIONS: Record<
   [PoolType.StableSurge]: STABLE_SWAP_FEE_PERCENTAGE_OPTIONS,
 }
 
+const MIN_SWAP_FEE_WEIGHTED = '0.001'
+const MIN_SWAP_FEE_STABLE = '0.0001'
+export const MAX_SWAP_FEE_PERCENTAGE = '10'
+
+export const MIN_SWAP_FEE_PERCENTAGE = {
+  [PoolType.Weighted]: MIN_SWAP_FEE_WEIGHTED,
+  [PoolType.Stable]: MIN_SWAP_FEE_STABLE,
+  [PoolType.StableSurge]: MIN_SWAP_FEE_STABLE,
+}
+
 export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
+
+export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
+export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 
 export type PoolCreationToken = {
   address: Address | undefined

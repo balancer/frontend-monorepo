@@ -1,12 +1,20 @@
 import { VStack, Heading, Text } from '@chakra-ui/react'
-import { zeroAddress } from 'viem'
+import { zeroAddress, isAddress } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useAccount } from 'wagmi'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
+import { useValidatePoolHooksContract } from './useValidatePoolHooksContract'
+import {
+  SWAP_FEE_PERCENTAGE_OPTIONS,
+  AMPLIFICATION_PARAMETER_OPTIONS,
+  MIN_SWAP_FEE_PERCENTAGE,
+  MAX_SWAP_FEE_PERCENTAGE,
+  MIN_AMPLIFICATION_PARAMETER,
+  MAX_AMPLIFICATION_PARAMETER,
+} from '../../constants'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -18,9 +26,10 @@ export type PoolSettingsOption = {
 
 export function PoolSettings() {
   const { address } = useAccount()
-  const { network, poolType } = usePoolCreationForm()
-
+  const { network, poolType, poolHooksContract } = usePoolCreationForm()
   const { isStablePool } = useValidatePoolConfig()
+
+  const { isValidPoolHooksContract } = useValidatePoolHooksContract(poolHooksContract as Address)
 
   const swapFeeManagerOptions: PoolSettingsOption[] = [
     { label: 'Delegate to the balancer DAO', value: zeroAddress },
@@ -67,7 +76,10 @@ export function PoolSettings() {
         options={swapFeeManagerOptions}
         title="Swap fee manager"
         tooltip="TODO"
-        validate={() => true}
+        validate={value => {
+          if (!isAddress(value)) return 'Invalid address'
+          return true
+        }}
       />
 
       <PoolSettingsRadioGroup
@@ -77,7 +89,10 @@ export function PoolSettings() {
         options={pauseManagerOptions}
         title="Pause manager"
         tooltip="TODO"
-        validate={() => true}
+        validate={value => {
+          if (!isAddress(value)) return 'Invalid address'
+          return true
+        }}
       />
 
       <PoolSettingsRadioGroup
@@ -88,7 +103,14 @@ export function PoolSettings() {
         options={swapFeePercentageOptions}
         title="Swap fee percentage"
         tooltip="TODO"
-        validate={() => true}
+        validate={value => {
+          if (
+            Number(value) < Number(MIN_SWAP_FEE_PERCENTAGE[poolType]) ||
+            Number(value) > Number(MAX_SWAP_FEE_PERCENTAGE)
+          )
+            return `Value must be between ${MIN_SWAP_FEE_PERCENTAGE[poolType]} and ${MAX_SWAP_FEE_PERCENTAGE}`
+          return true
+        }}
       />
 
       {isStablePool && (
@@ -99,7 +121,14 @@ export function PoolSettings() {
           options={amplificationParameterOptions}
           title="Amplification parameter"
           tooltip="TODO"
-          validate={() => true}
+          validate={value => {
+            if (
+              Number(value) < MIN_AMPLIFICATION_PARAMETER ||
+              Number(value) > MAX_AMPLIFICATION_PARAMETER
+            )
+              return `Value must be between ${MIN_AMPLIFICATION_PARAMETER} and ${MAX_AMPLIFICATION_PARAMETER}`
+            return true
+          }}
         />
       )}
 
@@ -110,7 +139,13 @@ export function PoolSettings() {
         options={poolHooksOptions}
         title="Pool hooks"
         tooltip="TODO"
-        validate={() => true}
+        validate={value => {
+          if (value === '') return false
+          if (value === zeroAddress) return true
+          if (value && !isAddress(value)) return 'Invalid address'
+          if (value && !isValidPoolHooksContract) return 'Invalid pool hooks contract'
+          return true
+        }}
       />
 
       <LiquidityManagement />
