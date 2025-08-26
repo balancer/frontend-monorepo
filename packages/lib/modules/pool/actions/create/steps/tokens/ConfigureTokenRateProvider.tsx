@@ -3,7 +3,7 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import {
   RATE_PROVIDER_RADIO_OPTIONS,
   RateProviderOption,
-  type PoolCreationConfig,
+  type PoolCreationForm,
 } from '../../constants'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { Address, zeroAddress, isAddress } from 'viem'
@@ -25,7 +25,7 @@ export function ConfigureTokenRateProvider({
     poolTokens,
     network,
     updatePoolToken,
-    poolConfigForm: {
+    poolCreationForm: {
       control,
       formState: { errors },
       trigger,
@@ -117,14 +117,14 @@ function CustomRateProviderInput({
   isCustomRateProvider,
 }: {
   tokenIndex: number
-  control: Control<PoolCreationConfig>
-  errors: FieldErrors<PoolCreationConfig>
+  control: Control<PoolCreationForm>
+  errors: FieldErrors<PoolCreationForm>
   chainName: string
   isCustomRateProvider: boolean
 }) {
   const {
     updatePoolToken,
-    poolConfigForm: { trigger },
+    poolCreationForm: { trigger },
   } = usePoolCreationForm()
 
   async function paste() {

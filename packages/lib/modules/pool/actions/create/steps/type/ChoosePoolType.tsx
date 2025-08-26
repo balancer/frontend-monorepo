@@ -1,5 +1,5 @@
 import { type Control, Controller } from 'react-hook-form'
-import { type PoolCreationConfig } from '../../constants'
+import { type PoolCreationForm } from '../../constants'
 import { VStack, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react'
 import {
   POOL_TYPES,
@@ -8,10 +8,10 @@ import {
 } from '@repo/lib/modules/pool/actions/create/constants'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
-export function ChoosePoolType({ control }: { control: Control<PoolCreationConfig> }) {
+export function ChoosePoolType({ control }: { control: Control<PoolCreationForm> }) {
   const poolTypesKeys = Object.keys(POOL_TYPES) as SupportedPoolTypes[]
   const {
-    poolConfigForm: { setValue },
+    poolCreationForm: { setValue },
   } = usePoolCreationForm()
 
   return (

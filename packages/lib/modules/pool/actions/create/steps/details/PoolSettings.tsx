@@ -23,9 +23,8 @@ export function PoolSettings() {
   const { network, poolType, poolHooksContract } = usePoolCreationForm()
   const { isStablePool } = useValidatePoolConfig()
 
-  const { isValidHooksContract, isPendingHooksContractValidation } = useValidatePoolHooksContract(
-    poolHooksContract as Address
-  )
+  const { isValidHooksContract, isPendingHooksContractValidation } =
+    useValidatePoolHooksContract(poolHooksContract)
 
   const poolManagerOptions: PoolSettingsOption[] = [
     { label: 'Delegate to the balancer DAO', value: zeroAddress },

@@ -6,12 +6,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 
 export function LiquidityManagement() {
-  const {
-    enableDonation,
-    disableUnbalancedLiquidity,
-    poolConfigForm: { setValue },
-  } = usePoolCreationForm()
-
+  const { enableDonation, disableUnbalancedLiquidity, poolCreationForm } = usePoolCreationForm()
   const { isStableSurgePool } = useValidatePoolConfig()
 
   return (
@@ -28,12 +23,12 @@ export function LiquidityManagement() {
         isChecked={!disableUnbalancedLiquidity}
         isDisabled={isStableSurgePool} // stable surge pool factory only allows `disableUnbalancedLiquidity: false`
         label="Allow unbalanced joins and removes"
-        onChange={e => setValue('disableUnbalancedLiquidity', !e.target.checked)}
+        onChange={e => poolCreationForm.setValue('disableUnbalancedLiquidity', !e.target.checked)}
       />
       <PoolCreationCheckbox
         isChecked={enableDonation}
         label="Allow donations"
-        onChange={e => setValue('enableDonation', e.target.checked)}
+        onChange={e => poolCreationForm.setValue('enableDonation', e.target.checked)}
       />
     </VStack>
   )

@@ -4,7 +4,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { CheckCircle, XCircle } from 'react-feather'
-import { type PoolCreationConfig } from '../constants'
+import { type PoolCreationForm } from '../constants'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { zeroAddress, Address } from 'viem'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
@@ -65,7 +65,7 @@ function MarketCapValue({ address, chain, tokenUsdValue }: MarketCapValueProps) 
   return <Text align="right">{marketCap ? toCurrency(marketCap, { abbreviated: true }) : '—'}</Text>
 }
 
-function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationConfig['poolTokens'] }) {
+function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTokens'] }) {
   return (
     <>
       <Divider />

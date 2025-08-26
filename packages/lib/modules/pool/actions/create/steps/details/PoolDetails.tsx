@@ -10,8 +10,8 @@ export function PoolDetails() {
   const tokenSymbols = poolTokens.map(token => {
     const { data, weight } = token
     if (!data) return ''
-    if (weight) return weight + '% ' + data.symbol
-    return data.symbol
+    if (!weight) return data.symbol
+    return weight + '% ' + data.symbol
   })
 
   const suggestedPoolName = tokenSymbols.join(' / ')
@@ -51,7 +51,6 @@ interface InputWithSuggestionProps {
   tooltip: string
   suggestedValue: string
   maxLength: number
-  validate?: (value: string) => string | true
 }
 
 function InputWithSuggestion({
@@ -62,14 +61,12 @@ function InputWithSuggestion({
   suggestedValue,
   maxLength,
 }: InputWithSuggestionProps) {
-  const {
-    poolConfigForm: { control, setValue, trigger },
-  } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
 
   return (
     <VStack align="start" spacing="sm" w="full">
       <Controller
-        control={control}
+        control={poolCreationForm.control}
         name={name}
         render={({ field, fieldState: { error } }) => (
           <InputWithError
@@ -99,8 +96,8 @@ function InputWithSuggestion({
           cursor="pointer"
           fontSize="sm"
           onClick={() => {
-            setValue(name, suggestedValue)
-            trigger(name)
+            poolCreationForm.setValue(name, suggestedValue)
+            poolCreationForm.trigger(name)
           }}
           textDecoration="underline"
           textDecorationStyle="dotted"

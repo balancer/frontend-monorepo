@@ -1,5 +1,5 @@
 import { Control } from 'react-hook-form'
-import { type PoolCreationConfig } from '../../constants'
+import { type PoolCreationForm } from '../../constants'
 import { VStack, Text, SimpleGrid, Card, Checkbox, HStack } from '@chakra-ui/react'
 import { Controller } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -11,7 +11,7 @@ import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
-export function ChooseNetwork({ control }: { control: Control<PoolCreationConfig> }) {
+export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { resetPoolCreationForm } = usePoolCreationForm()

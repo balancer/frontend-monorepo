@@ -4,8 +4,8 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import {
   INITIAL_TOKEN_CONFIG,
-  INITIAL_POOL_CREATION_CONFIG,
-  type PoolCreationConfig,
+  INITIAL_POOL_CREATION_FORM,
+  type PoolCreationForm,
   type PoolCreationToken,
 } from './constants'
 import { Address } from 'viem'
@@ -23,9 +23,9 @@ export function usePoolFormLogic() {
 
   const { resetSteps } = usePoolCreationFormSteps()
 
-  const poolConfigForm = usePersistentForm<PoolCreationConfig>(
+  const poolCreationForm = usePersistentForm<PoolCreationForm>(
     LS_KEYS.PoolCreation.Config,
-    INITIAL_POOL_CREATION_CONFIG,
+    INITIAL_POOL_CREATION_FORM,
     { mode: 'all' }
   )
 
@@ -44,39 +44,39 @@ export function usePoolFormLogic() {
     enableDonation,
     disableUnbalancedLiquidity,
     amplificationParameter,
-  } = poolConfigForm.watch()
+  } = poolCreationForm.watch()
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const newPoolTokens = [...poolTokens]
     newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
-    poolConfigForm.setValue('poolTokens', newPoolTokens)
+    poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
 
   const updatePoolTokens = (updates: PoolCreationToken[]) => {
-    poolConfigForm.setValue('poolTokens', updates)
+    poolCreationForm.setValue('poolTokens', updates)
   }
 
   const addPoolToken = () => {
     const newPoolTokens = [...poolTokens]
     newPoolTokens.push(INITIAL_TOKEN_CONFIG)
-    poolConfigForm.setValue('poolTokens', newPoolTokens)
+    poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
 
   const removePoolToken = (index: number) => {
     const newPoolTokens = [...poolTokens]
     newPoolTokens.splice(index, 1)
-    poolConfigForm.setValue('poolTokens', newPoolTokens)
+    poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
 
   const resetPoolCreationForm = () => {
     setPoolAddress(undefined)
-    poolConfigForm.resetToInitial()
+    poolCreationForm.resetToInitial()
     resetSteps()
   }
 
   return {
-    poolConfigForm,
-    isFormStateValid: poolConfigForm.formState.isValid,
+    poolCreationForm,
+    isFormStateValid: poolCreationForm.formState.isValid,
     poolTokens,
     poolType,
     weightedPoolStructure,

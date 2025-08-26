@@ -113,7 +113,7 @@ export type PoolCreationToken = {
   data?: ApiToken
 }
 
-export type PoolCreationConfig = {
+export type PoolCreationForm = {
   protocol: ProjectConfig['projectId']
   network: GqlChain
   weightedPoolStructure: WeightedPoolStructure
@@ -139,7 +139,7 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   weight: '',
 }
 
-export const INITIAL_POOL_CREATION_CONFIG: PoolCreationConfig = {
+export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   protocol: ProjectConfigBalancer.projectId,
   network: GqlChain.Mainnet,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,

@@ -26,7 +26,7 @@ export function ChoosePoolTokens() {
     updatePoolToken,
     removePoolToken,
     addPoolToken,
-    poolConfigForm: {
+    poolCreationForm: {
       formState: { errors },
       control,
     },

@@ -7,7 +7,7 @@ import { ChoosePoolType } from './ChoosePoolType'
 export function PoolTypeStep() {
   const {
     isFormStateValid,
-    poolConfigForm: { control },
+    poolCreationForm: { control },
   } = usePoolCreationForm()
 
   return (

@@ -7,7 +7,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 // TODO: Protocol selection part of OG designs, but maybe remove after discussion with pon?
 export function ChooseProtocol() {
   const {
-    poolConfigForm: { watch, setValue, trigger },
+    poolCreationForm: { watch, setValue, trigger },
   } = usePoolCreationForm()
 
   const poolConfig = watch()

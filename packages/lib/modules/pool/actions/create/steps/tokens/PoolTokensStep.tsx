@@ -8,7 +8,7 @@ import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 export function PoolTokensStep() {
   const {
     isFormStateValid,
-    poolConfigForm: { control },
+    poolCreationForm: { control },
   } = usePoolCreationForm()
 
   const { isPoolTokensStepValid, isWeightedPool } = useValidatePoolConfig()

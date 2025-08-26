@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 
 export const useValidatePoolHooksContract = (address: string) => {
-  const { poolConfigForm } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
 
   const enabled = isAddress(address) && address !== zeroAddress
 
@@ -23,7 +23,7 @@ export const useValidatePoolHooksContract = (address: string) => {
    */
   useEffect(() => {
     if (hookFlags?.enableHookAdjustedAmounts) {
-      poolConfigForm.setValue('disableUnbalancedLiquidity', true)
+      poolCreationForm.setValue('disableUnbalancedLiquidity', true)
     }
   }, [hookFlags])
 
@@ -31,7 +31,7 @@ export const useValidatePoolHooksContract = (address: string) => {
 
   // must trigger validation manually after on chain response
   useEffect(() => {
-    if (isValidHooksContract) poolConfigForm.trigger('poolHooksContract')
+    if (isValidHooksContract) poolCreationForm.trigger('poolHooksContract')
   }, [isValidHooksContract])
 
   return { isValidHooksContract, isPendingHooksContractValidation }

@@ -34,7 +34,7 @@ export function PoolSettingsRadioGroup({
   isPercentage,
 }: PoolSettingsRadioGroupProps) {
   const {
-    poolConfigForm: { control, setValue, trigger, resetField, formState },
+    poolCreationForm: { control, setValue, trigger, resetField, formState },
   } = usePoolCreationForm()
 
   const handlePaste = async () => {
