@@ -1,7 +1,16 @@
 'use client'
 
-import { Button, Heading, Flex, Box, Center, Text, Stack, useColorMode } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import {
+  Button,
+  Heading,
+  Flex,
+  Box,
+  Center,
+  Text,
+  Stack,
+  useColorMode,
+  Link,
+} from '@chakra-ui/react'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 import { usePool } from '../../../modules/pool/PoolProvider'
@@ -21,17 +30,16 @@ export function QuantAMMPromoBanner() {
       color: isDarkMode ? '#000' : '#000',
       borderColor: isDarkMode ? 'transparent' : '#000',
     },
-    as: NextLink,
+    as: Link,
     border: '1px solid',
     borderColor: isDarkMode ? '#fff' : '#000',
     cursor: 'pointer',
     flex: '1',
     h: { base: '32px', sm: '40px', lg: '48px' },
+    isExternal: true,
     py: 'sm',
-    rel: 'noopener noreferrer',
     rounded: 'full',
     size: 'md',
-    target: '_blank',
     transition: 'all 0.3s var(--cubic)',
     w: '145px',
   }

@@ -14,7 +14,6 @@ import {
   LinkProps,
 } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
-import NextLink from 'next/link'
 import { ReactNode } from 'react'
 
 interface MaBeetsRedirectModalProps extends LinkProps {
@@ -52,15 +51,11 @@ export function MaBeetsRedirectModal({
           <Text color="font.secondary">
             BEETS are live on Sonic! Visit the Fantom App to migrate your BEETS and maBEETS relics
             to sonic.
-            {/*  <Link href="https://ma.beets.fi" target="_blank">
-              https://ma.beets.fi
-            </Link>
-            . */}
           </Text>
 
           <Text color="font.secondary" mt="md">
             For more information, refer to the migration guide at{' '}
-            <Link href="https://docs.beets.fi/sonic#mabeets-and-beets" target="_blank">
+            <Link href="https://docs.beets.fi/sonic#mabeets-and-beets" isExternal>
               https://docs.beets.fi/sonic#mabeets-and-beets
             </Link>
             .
@@ -69,10 +64,10 @@ export function MaBeetsRedirectModal({
 
         <ModalFooter>
           <Button
-            as={NextLink}
+            as={Link}
             href="https://ma.beets.fi"
+            isExternal
             mr="md"
-            target="_blank"
             variant="primary"
             w="full"
           >
@@ -82,9 +77,9 @@ export function MaBeetsRedirectModal({
             </HStack>
           </Button>
           <Button
-            as={NextLink}
+            as={Link}
             href="https://ftm.beets.fi/mabeets"
-            target="_blank"
+            isExternal
             variant="tertiary"
             w="full"
           >

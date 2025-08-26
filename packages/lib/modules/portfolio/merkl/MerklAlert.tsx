@@ -39,11 +39,11 @@ function MerklTitle() {
         color="font.dark"
         cursor="pointer"
         href="https://app.merkl.xyz/"
+        isExternal
         ml={{ base: '32px', md: 'ms' }}
         rightIcon={<ArrowUpRight size="14" />}
         role="group"
         size="xs"
-        target="_blank"
         variant="outline"
         width="120px"
       >

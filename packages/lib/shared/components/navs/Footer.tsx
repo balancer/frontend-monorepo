@@ -54,14 +54,13 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
             <VStack align="start" spacing={{ base: 'xs', lg: 'sm' }}>
               {section.links.map(link => (
                 <Link
-                  as={NextLink}
+                  as={link.isExternal ? Link : NextLink}
                   flex="auto"
                   flexBasis="row"
                   href={link.href}
                   key={link.href}
-                  rel={link.isExternal ? 'noopener noreferrer' : undefined}
-                  target={link.isExternal ? '_blank' : '_self'}
                   variant="nav"
+                  {...(link.isExternal ? { isExternal: true } : {})}
                 >
                   <HStack gap="xxs">
                     <Box

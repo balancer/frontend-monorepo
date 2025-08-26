@@ -91,14 +91,14 @@ export function LandingBeetsStakedSonic() {
                 <HStack gap="md">
                   <Link
                     href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
+                    isExternal
                     mr="md"
-                    target="_blank"
                   >
                     <SpearbitLogo color="#25f2d0" height="36px" width="176px" />
                   </Link>
                   <Link
                     href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
-                    target="_blank"
+                    isExternal
                   >
                     <TrailOfBitsLogo color="#ffffff" height="67px" width="110px" />
                   </Link>
