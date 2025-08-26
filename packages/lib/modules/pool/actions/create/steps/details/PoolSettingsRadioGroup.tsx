@@ -34,13 +34,7 @@ export function PoolSettingsRadioGroup({
   isPercentage,
 }: PoolSettingsRadioGroupProps) {
   const {
-    poolConfigForm: {
-      control,
-      setValue,
-      trigger,
-      resetField,
-      formState: { errors },
-    },
+    poolConfigForm: { control, setValue, trigger, resetField, formState },
   } = usePoolCreationForm()
 
   const handlePaste = async () => {
@@ -50,7 +44,7 @@ export function PoolSettingsRadioGroup({
   }
 
   const optionsPlusCustom = [...options, { label: 'Custom', value: '' }]
-  const validationErrors = errors[name]
+  const errors = formState.errors[name]
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -58,6 +52,7 @@ export function PoolSettingsRadioGroup({
         <Text textAlign="start" w="full">
           {title}
         </Text>
+
         <BalPopover text={tooltip}>
           <InfoIcon />
         </BalPopover>
@@ -67,8 +62,8 @@ export function PoolSettingsRadioGroup({
         control={control}
         name={name}
         render={({ field }) => {
-          const reccommendedOptions = options.map(option => option.value)
-          const isCustomOptionSelected = !reccommendedOptions.includes(field.value)
+          const recommendedOptions = options.map(option => option.value)
+          const isCustomOptionSelected = !recommendedOptions.includes(field.value)
           const selectedRadioGroupValue = isCustomOptionSelected ? '' : field.value
 
           return (
@@ -116,8 +111,8 @@ export function PoolSettingsRadioGroup({
                                 name={name}
                                 render={({ field }) => (
                                   <InputWithError
-                                    error={validationErrors?.message}
-                                    isInvalid={!!validationErrors}
+                                    error={errors?.message}
+                                    isInvalid={!!errors}
                                     label={customInputLabel}
                                     onChange={e => field.onChange(e.target.value)}
                                     pasteFn={handlePaste}
@@ -133,7 +128,7 @@ export function PoolSettingsRadioGroup({
                         ) : (
                           <NumberInput
                             control={control}
-                            error={validationErrors?.message}
+                            error={errors?.message}
                             isDisabled={false}
                             isInvalid={false}
                             isPercentage={!!isPercentage}

@@ -7,7 +7,7 @@ import {
   SupportedPoolTypes,
 } from './constants'
 
-export class PoolCreationValidator {
+export class PoolSettingsValidator {
   static poolHooksContract = (
     value: string,
     isValidPoolHooksContract: boolean | undefined,

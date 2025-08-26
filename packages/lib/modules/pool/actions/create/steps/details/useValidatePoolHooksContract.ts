@@ -1,124 +1,38 @@
-import { useQuery } from '@tanstack/react-query'
 import { Address, isAddress, zeroAddress } from 'viem'
-import { usePublicClient } from 'wagmi'
+import { useReadContract } from 'wagmi'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { useEffect } from 'react'
+import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 
-export const useValidatePoolHooksContract = (address: Address | undefined) => {
-  const {
-    poolConfigForm: { setValue },
-  } = usePoolCreationForm()
-  const publicClient = usePublicClient()
+export const useValidatePoolHooksContract = (address: string) => {
+  const { poolConfigForm } = usePoolCreationForm()
 
-  const chainId = publicClient?.chain?.id
+  const enabled = isAddress(address) && address !== zeroAddress
 
-  const enabled = !!address && isAddress(address) && address !== zeroAddress && !!chainId
-
-  const { data: isValidPoolHooksContract, isLoading: isLoadingPoolHooksContract } = useQuery({
-    queryKey: ['validatePoolHooksContract', address, chainId],
-    queryFn: async (): Promise<boolean> => {
-      try {
-        if (!publicClient) throw new Error('No public client for validatePoolHooks')
-
-        const hookFlags = (await publicClient.readContract({
-          address: address as Address,
-          abi: HooksAbi,
-          functionName: 'getHookFlags',
-          args: [],
-        })) as HookFlags
-
-        if (hookFlags.enableHookAdjustedAmounts) {
-          setValue('disableUnbalancedLiquidity', true)
-        }
-
-        return !!hookFlags
-      } catch (error) {
-        console.error(error)
-        return false
-      }
-    },
-    enabled,
+  const { data: hookFlags, isPending: isPendingHooksContractValidation } = useReadContract({
+    address: address as Address,
+    abi: reClammPoolAbi,
+    functionName: 'getHookFlags',
+    args: [],
+    query: { enabled },
   })
 
-  return { isValidPoolHooksContract, isLoadingPoolHooksContract }
-}
+  /**
+   * At the smart contract level, if `enableHookAdjustedAmounts` is set to true
+   * `disableUnbalancedLiquidity` must be set to true or pool registration will revert
+   */
+  useEffect(() => {
+    if (hookFlags?.enableHookAdjustedAmounts) {
+      poolConfigForm.setValue('disableUnbalancedLiquidity', true)
+    }
+  }, [hookFlags])
 
-export interface HookFlags {
-  enableHookAdjustedAmounts: boolean
-  shouldCallBeforeInitialize: boolean
-  shouldCallAfterInitialize: boolean
-  shouldCallComputeDynamicSwapFee: boolean
-  shouldCallBeforeSwap: boolean
-  shouldCallAfterSwap: boolean
-  shouldCallBeforeAddLiquidity: boolean
-  shouldCallAfterAddLiquidity: boolean
-  shouldCallBeforeRemoveLiquidity: boolean
-  shouldCallAfterRemoveLiquidity: boolean
-}
+  const isValidHooksContract = !!hookFlags
 
-const HooksAbi = [
-  {
-    inputs: [],
-    name: 'getHookFlags',
-    outputs: [
-      {
-        components: [
-          {
-            internalType: 'bool',
-            name: 'enableHookAdjustedAmounts',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallBeforeInitialize',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallAfterInitialize',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallComputeDynamicSwapFee',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallBeforeSwap',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallAfterSwap',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallBeforeAddLiquidity',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallAfterAddLiquidity',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallBeforeRemoveLiquidity',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'shouldCallAfterRemoveLiquidity',
-            type: 'bool',
-          },
-        ],
-        internalType: 'struct HookFlags',
-        name: 'hookFlags',
-        type: 'tuple',
-      },
-    ],
-    stateMutability: 'pure',
-    type: 'function',
-  },
-]
+  // must trigger validation manually after on chain response
+  useEffect(() => {
+    if (isValidHooksContract) poolConfigForm.trigger('poolHooksContract')
+  }, [isValidHooksContract])
+
+  return { isValidHooksContract, isPendingHooksContractValidation }
+}

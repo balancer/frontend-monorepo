@@ -82,9 +82,9 @@ function InputWithSuggestion({
           />
         )}
         rules={{
-          required: `Pool ${label} is required`,
+          required: `${label} is required`,
           validate: value => {
-            if (value.length < 5) return `${label} must be 4 characters or more`
+            if (value.length < 4) return `${label} must be 4 characters or more`
             if (value.length > maxLength) return `${label} must be ${maxLength} characters or less`
             return true
           },

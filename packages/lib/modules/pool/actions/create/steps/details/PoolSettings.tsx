@@ -10,8 +10,7 @@ import { useValidatePoolHooksContract } from './useValidatePoolHooksContract'
 import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useEffect } from 'react'
-import { PoolCreationValidator } from '../../validators'
+import { PoolSettingsValidator } from '../../validators'
 
 export type PoolSettingsOption = {
   label: string
@@ -21,28 +20,14 @@ export type PoolSettingsOption = {
 
 export function PoolSettings() {
   const { address } = useAccount()
-  const {
-    network,
-    poolType,
-    poolHooksContract,
-    poolConfigForm: { trigger },
-  } = usePoolCreationForm()
+  const { network, poolType, poolHooksContract } = usePoolCreationForm()
   const { isStablePool } = useValidatePoolConfig()
 
-  const { isValidPoolHooksContract, isLoadingPoolHooksContract } = useValidatePoolHooksContract(
+  const { isValidHooksContract, isPendingHooksContractValidation } = useValidatePoolHooksContract(
     poolHooksContract as Address
   )
 
-  const swapFeeManagerOptions: PoolSettingsOption[] = [
-    { label: 'Delegate to the balancer DAO', value: zeroAddress },
-    {
-      label: 'My connected wallet:',
-      value: address,
-      detail: <ConnectedWalletLink address={address} network={network} />,
-    },
-  ]
-
-  const pauseManagerOptions: PoolSettingsOption[] = [
+  const poolManagerOptions: PoolSettingsOption[] = [
     { label: 'Delegate to the balancer DAO', value: zeroAddress },
     {
       label: 'My connected wallet:',
@@ -65,10 +50,6 @@ export function PoolSettings() {
     value => ({ label: value, value })
   )
 
-  useEffect(() => {
-    if (isValidPoolHooksContract) trigger('poolHooksContract')
-  }, [isValidPoolHooksContract])
-
   return (
     <VStack align="start" spacing="lg" w="full">
       <Heading color="font.maxContrast" size="md">
@@ -79,20 +60,20 @@ export function PoolSettings() {
         customInputLabel="Custom swap fee manager address"
         customInputType="address"
         name="swapFeeManager"
-        options={swapFeeManagerOptions}
+        options={poolManagerOptions}
         title="Swap fee manager"
         tooltip="TODO"
-        validate={value => PoolCreationValidator.swapFeeManager(value)}
+        validate={address => PoolSettingsValidator.swapFeeManager(address)}
       />
 
       <PoolSettingsRadioGroup
         customInputLabel="Custom pause manager address"
         customInputType="address"
         name="pauseManager"
-        options={pauseManagerOptions}
+        options={poolManagerOptions}
         title="Pause manager"
         tooltip="TODO"
-        validate={value => PoolCreationValidator.pauseManager(value)}
+        validate={address => PoolSettingsValidator.pauseManager(address)}
       />
 
       <PoolSettingsRadioGroup
@@ -103,7 +84,7 @@ export function PoolSettings() {
         options={swapFeePercentageOptions}
         title="Swap fee percentage"
         tooltip="TODO"
-        validate={value => PoolCreationValidator.swapFeePercentage(value, poolType)}
+        validate={value => PoolSettingsValidator.swapFeePercentage(value, poolType)}
       />
 
       {isStablePool && (
@@ -114,7 +95,7 @@ export function PoolSettings() {
           options={amplificationParameterOptions}
           title="Amplification parameter"
           tooltip="TODO"
-          validate={value => PoolCreationValidator.amplificationParameter(value)}
+          validate={value => PoolSettingsValidator.amplificationParameter(value)}
         />
       )}
 
@@ -125,11 +106,11 @@ export function PoolSettings() {
         options={poolHooksOptions}
         title="Pool hooks"
         tooltip="TODO"
-        validate={value =>
-          PoolCreationValidator.poolHooksContract(
-            value,
-            isValidPoolHooksContract,
-            isLoadingPoolHooksContract
+        validate={address =>
+          PoolSettingsValidator.poolHooksContract(
+            address,
+            isValidHooksContract,
+            isPendingHooksContractValidation
           )
         }
       />
