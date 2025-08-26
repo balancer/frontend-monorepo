@@ -20,6 +20,7 @@ import { useHook } from '../../hooks/useHook'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { Address } from 'viem'
 import { usePoolTokenPriceWarnings } from '../usePoolTokenPriceWarnings'
+import { recoveryModeAlert } from '../actions/recovery-mode/RecoveryMode'
 
 export type PoolAlert = {
   identifier: string
@@ -266,12 +267,7 @@ export function usePoolAlerts(pool: Pool) {
         isSoftWarning: false,
       })
     } else if (pool.dynamicData.isPaused) {
-      alerts.push({
-        identifier: 'poolIsPaused',
-        content: 'This pool is paused',
-        status: 'warning',
-        isSoftWarning: false,
-      })
+      alerts.push(recoveryModeAlert(pool))
     } else if (pool.dynamicData.isInRecoveryMode) {
       alerts.push({
         identifier: 'poolIsInRecoveryMode',
