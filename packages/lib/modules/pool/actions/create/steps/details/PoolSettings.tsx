@@ -17,6 +17,7 @@ import {
 } from '../../constants'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useEffect } from 'react'
 
 export type PoolSettingsOption = {
   label: string
@@ -26,7 +27,12 @@ export type PoolSettingsOption = {
 
 export function PoolSettings() {
   const { address } = useAccount()
-  const { network, poolType, poolHooksContract } = usePoolCreationForm()
+  const {
+    network,
+    poolType,
+    poolHooksContract,
+    poolConfigForm: { trigger },
+  } = usePoolCreationForm()
   const { isStablePool } = useValidatePoolConfig()
 
   const { isValidPoolHooksContract, isLoadingPoolHooksContract } = useValidatePoolHooksContract(
@@ -65,12 +71,15 @@ export function PoolSettings() {
     value => ({ label: value, value })
   )
 
+  useEffect(() => {
+    if (isValidPoolHooksContract) trigger('poolHooksContract')
+  }, [isValidPoolHooksContract])
+
   const validatePoolHooksContract = (value: string) => {
     if (value === '') return false
     if (value === zeroAddress) return true
     if (isLoadingPoolHooksContract) return true
     if (value && !isAddress(value)) return 'Invalid address'
-
     if (value && !isValidPoolHooksContract) return 'Invalid pool hooks contract'
     return true
   }
