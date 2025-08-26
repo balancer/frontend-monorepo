@@ -1,5 +1,5 @@
 import { VStack, Heading, Text } from '@chakra-ui/react'
-import { zeroAddress, isAddress } from 'viem'
+import { zeroAddress } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useAccount } from 'wagmi'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
@@ -7,17 +7,11 @@ import { LiquidityManagement } from './LiquidityManagement'
 import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { useValidatePoolHooksContract } from './useValidatePoolHooksContract'
-import {
-  SWAP_FEE_PERCENTAGE_OPTIONS,
-  AMPLIFICATION_PARAMETER_OPTIONS,
-  MIN_SWAP_FEE_PERCENTAGE,
-  MAX_SWAP_FEE_PERCENTAGE,
-  MIN_AMPLIFICATION_PARAMETER,
-  MAX_AMPLIFICATION_PARAMETER,
-} from '../../constants'
+import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useEffect } from 'react'
+import { PoolCreationValidator } from '../../validators'
 
 export type PoolSettingsOption = {
   label: string
@@ -75,38 +69,6 @@ export function PoolSettings() {
     if (isValidPoolHooksContract) trigger('poolHooksContract')
   }, [isValidPoolHooksContract])
 
-  const validatePoolHooksContract = (value: string) => {
-    if (value === '') return false
-    if (value === zeroAddress) return true
-    if (isLoadingPoolHooksContract) return true
-    if (value && !isAddress(value)) return 'Invalid address'
-    if (value && !isValidPoolHooksContract) return 'Invalid pool hooks contract'
-    return true
-  }
-
-  const validatePoolManagerAddress = (value: string) => {
-    if (!isAddress(value)) return 'Invalid address'
-    return true
-  }
-
-  const validateSwapFeePercentage = (value: string) => {
-    if (
-      Number(value) < Number(MIN_SWAP_FEE_PERCENTAGE[poolType]) ||
-      Number(value) > Number(MAX_SWAP_FEE_PERCENTAGE)
-    )
-      return `Value must be between ${MIN_SWAP_FEE_PERCENTAGE[poolType]} and ${MAX_SWAP_FEE_PERCENTAGE}`
-    return true
-  }
-
-  const validateAmplificationParameter = (value: string) => {
-    if (
-      Number(value) < Number(MIN_AMPLIFICATION_PARAMETER) ||
-      Number(value) > Number(MAX_AMPLIFICATION_PARAMETER)
-    )
-      return `Value must be between ${MIN_AMPLIFICATION_PARAMETER} and ${MAX_AMPLIFICATION_PARAMETER}`
-    return true
-  }
-
   return (
     <VStack align="start" spacing="lg" w="full">
       <Heading color="font.maxContrast" size="md">
@@ -120,7 +82,7 @@ export function PoolSettings() {
         options={swapFeeManagerOptions}
         title="Swap fee manager"
         tooltip="TODO"
-        validate={value => validatePoolManagerAddress(value)}
+        validate={value => PoolCreationValidator.swapFeeManager(value)}
       />
 
       <PoolSettingsRadioGroup
@@ -130,7 +92,7 @@ export function PoolSettings() {
         options={pauseManagerOptions}
         title="Pause manager"
         tooltip="TODO"
-        validate={value => validatePoolManagerAddress(value)}
+        validate={value => PoolCreationValidator.pauseManager(value)}
       />
 
       <PoolSettingsRadioGroup
@@ -141,7 +103,7 @@ export function PoolSettings() {
         options={swapFeePercentageOptions}
         title="Swap fee percentage"
         tooltip="TODO"
-        validate={value => validateSwapFeePercentage(value)}
+        validate={value => PoolCreationValidator.swapFeePercentage(value, poolType)}
       />
 
       {isStablePool && (
@@ -152,7 +114,7 @@ export function PoolSettings() {
           options={amplificationParameterOptions}
           title="Amplification parameter"
           tooltip="TODO"
-          validate={value => validateAmplificationParameter(value)}
+          validate={value => PoolCreationValidator.amplificationParameter(value)}
         />
       )}
 
@@ -163,7 +125,13 @@ export function PoolSettings() {
         options={poolHooksOptions}
         title="Pool hooks"
         tooltip="TODO"
-        validate={value => validatePoolHooksContract(value)}
+        validate={value =>
+          PoolCreationValidator.poolHooksContract(
+            value,
+            isValidPoolHooksContract,
+            isLoadingPoolHooksContract
+          )
+        }
       />
 
       <LiquidityManagement />
