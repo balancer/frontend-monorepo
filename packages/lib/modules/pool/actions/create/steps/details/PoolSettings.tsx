@@ -29,7 +29,9 @@ export function PoolSettings() {
   const { network, poolType, poolHooksContract } = usePoolCreationForm()
   const { isStablePool } = useValidatePoolConfig()
 
-  const { isValidPoolHooksContract } = useValidatePoolHooksContract(poolHooksContract as Address)
+  const { isValidPoolHooksContract, isLoadingPoolHooksContract } = useValidatePoolHooksContract(
+    poolHooksContract as Address
+  )
 
   const swapFeeManagerOptions: PoolSettingsOption[] = [
     { label: 'Delegate to the balancer DAO', value: zeroAddress },
@@ -63,6 +65,39 @@ export function PoolSettings() {
     value => ({ label: value, value })
   )
 
+  const validatePoolHooksContract = (value: string) => {
+    if (value === '') return false
+    if (value === zeroAddress) return true
+    if (isLoadingPoolHooksContract) return true
+    if (value && !isAddress(value)) return 'Invalid address'
+
+    if (value && !isValidPoolHooksContract) return 'Invalid pool hooks contract'
+    return true
+  }
+
+  const validatePoolManagerAddress = (value: string) => {
+    if (!isAddress(value)) return 'Invalid address'
+    return true
+  }
+
+  const validateSwapFeePercentage = (value: string) => {
+    if (
+      Number(value) < Number(MIN_SWAP_FEE_PERCENTAGE[poolType]) ||
+      Number(value) > Number(MAX_SWAP_FEE_PERCENTAGE)
+    )
+      return `Value must be between ${MIN_SWAP_FEE_PERCENTAGE[poolType]} and ${MAX_SWAP_FEE_PERCENTAGE}`
+    return true
+  }
+
+  const validateAmplificationParameter = (value: string) => {
+    if (
+      Number(value) < Number(MIN_AMPLIFICATION_PARAMETER) ||
+      Number(value) > Number(MAX_AMPLIFICATION_PARAMETER)
+    )
+      return `Value must be between ${MIN_AMPLIFICATION_PARAMETER} and ${MAX_AMPLIFICATION_PARAMETER}`
+    return true
+  }
+
   return (
     <VStack align="start" spacing="lg" w="full">
       <Heading color="font.maxContrast" size="md">
@@ -76,10 +111,7 @@ export function PoolSettings() {
         options={swapFeeManagerOptions}
         title="Swap fee manager"
         tooltip="TODO"
-        validate={value => {
-          if (!isAddress(value)) return 'Invalid address'
-          return true
-        }}
+        validate={value => validatePoolManagerAddress(value)}
       />
 
       <PoolSettingsRadioGroup
@@ -89,10 +121,7 @@ export function PoolSettings() {
         options={pauseManagerOptions}
         title="Pause manager"
         tooltip="TODO"
-        validate={value => {
-          if (!isAddress(value)) return 'Invalid address'
-          return true
-        }}
+        validate={value => validatePoolManagerAddress(value)}
       />
 
       <PoolSettingsRadioGroup
@@ -103,14 +132,7 @@ export function PoolSettings() {
         options={swapFeePercentageOptions}
         title="Swap fee percentage"
         tooltip="TODO"
-        validate={value => {
-          if (
-            Number(value) < Number(MIN_SWAP_FEE_PERCENTAGE[poolType]) ||
-            Number(value) > Number(MAX_SWAP_FEE_PERCENTAGE)
-          )
-            return `Value must be between ${MIN_SWAP_FEE_PERCENTAGE[poolType]} and ${MAX_SWAP_FEE_PERCENTAGE}`
-          return true
-        }}
+        validate={value => validateSwapFeePercentage(value)}
       />
 
       {isStablePool && (
@@ -121,14 +143,7 @@ export function PoolSettings() {
           options={amplificationParameterOptions}
           title="Amplification parameter"
           tooltip="TODO"
-          validate={value => {
-            if (
-              Number(value) < MIN_AMPLIFICATION_PARAMETER ||
-              Number(value) > MAX_AMPLIFICATION_PARAMETER
-            )
-              return `Value must be between ${MIN_AMPLIFICATION_PARAMETER} and ${MAX_AMPLIFICATION_PARAMETER}`
-            return true
-          }}
+          validate={value => validateAmplificationParameter(value)}
         />
       )}
 
@@ -139,13 +154,7 @@ export function PoolSettings() {
         options={poolHooksOptions}
         title="Pool hooks"
         tooltip="TODO"
-        validate={value => {
-          if (value === '') return false
-          if (value === zeroAddress) return true
-          if (value && !isAddress(value)) return 'Invalid address'
-          if (value && !isValidPoolHooksContract) return 'Invalid pool hooks contract'
-          return true
-        }}
+        validate={value => validatePoolHooksContract(value)}
       />
 
       <LiquidityManagement />

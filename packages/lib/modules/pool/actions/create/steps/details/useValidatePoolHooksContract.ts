@@ -11,19 +11,21 @@ export const useValidatePoolHooksContract = (address: Address | undefined) => {
 
   const chainId = publicClient?.chain?.id
 
-  const { data: isValidPoolHooksContract } = useQuery({
+  const enabled = !!address && isAddress(address) && address !== zeroAddress && !!chainId
+
+  const { data: isValidPoolHooksContract, isLoading: isLoadingPoolHooksContract } = useQuery({
     queryKey: ['validatePoolHooksContract', address, chainId],
     queryFn: async (): Promise<boolean> => {
       try {
         if (!publicClient) throw new Error('No public client for validatePoolHooks')
-        if (address === zeroAddress || !address) return true
+
         const hookFlags = (await publicClient.readContract({
           address: address as Address,
           abi: HooksAbi,
           functionName: 'getHookFlags',
           args: [],
         })) as HookFlags
-        console.log('getHookFlags()', hookFlags)
+
         if (hookFlags.enableHookAdjustedAmounts) {
           setValue('disableUnbalancedLiquidity', true)
         }
@@ -34,10 +36,10 @@ export const useValidatePoolHooksContract = (address: Address | undefined) => {
         return false
       }
     },
-    enabled: !!address && isAddress(address) && !!chainId,
+    enabled,
   })
 
-  return { isValidPoolHooksContract }
+  return { isValidPoolHooksContract, isLoadingPoolHooksContract }
 }
 
 export interface HookFlags {
