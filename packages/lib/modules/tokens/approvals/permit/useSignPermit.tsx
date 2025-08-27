@@ -27,11 +27,8 @@ export function useSignPermit({
 }: RemoveLiquidityPermitParams) {
   const toast = useToast()
   const { userAddress } = useUserAccount()
-
   const { setSignPermitState, setPermitSignature, signPermitState } = usePermitSignature()
-
   const [error, setError] = useState<string | undefined>()
-
   const { sdkClient, isLoading } = useSdkWalletClient()
 
   useEffect(() => {
