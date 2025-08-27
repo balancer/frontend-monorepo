@@ -2,7 +2,7 @@ import { Card, CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { useValidatePoolConfig } from '../useValidatePoolConfig'
+import { validatePoolType } from '../validatePoolCreationForm'
 
 export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) {
   const {
@@ -16,8 +16,10 @@ export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) 
     poolHooksContract,
     disableUnbalancedLiquidity,
     enableDonation,
+    poolType,
   } = usePoolCreationForm()
-  const { isStablePool } = useValidatePoolConfig()
+
+  const isStablePool = validatePoolType.isStablePool(poolType)
 
   function formatPoolManager(manager: string) {
     if (manager === zeroAddress) return 'Balancer DAO'

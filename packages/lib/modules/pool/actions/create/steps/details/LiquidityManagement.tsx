@@ -3,11 +3,13 @@ import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { useValidatePoolConfig } from '../../useValidatePoolConfig'
+import { validatePoolType } from '../../validatePoolCreationForm'
 
 export function LiquidityManagement() {
-  const { enableDonation, disableUnbalancedLiquidity, poolCreationForm } = usePoolCreationForm()
-  const { isStableSurgePool } = useValidatePoolConfig()
+  const { poolType, enableDonation, disableUnbalancedLiquidity, poolCreationForm } =
+    usePoolCreationForm()
+
+  const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
 
   return (
     <VStack align="start" spacing="md" w="full">

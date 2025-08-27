@@ -4,13 +4,13 @@ import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { type PoolCreationForm } from '../../constants'
-import { useValidatePoolConfig } from '../../useValidatePoolConfig'
+import { validatePoolType } from '../../validatePoolCreationForm'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationForm> }) {
-  const { poolTokens, updatePoolTokens, weightedPoolStructure, poolCreationForm } =
+  const { poolTokens, updatePoolTokens, weightedPoolStructure, poolCreationForm, poolType } =
     usePoolCreationForm()
 
-  const { isWeightedPool } = useValidatePoolConfig()
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 
   function updatePoolTokenWeights(weightedStructure: WeightedPoolStructure) {
     if (weightedStructure === WeightedPoolStructure.FiftyFifty) {

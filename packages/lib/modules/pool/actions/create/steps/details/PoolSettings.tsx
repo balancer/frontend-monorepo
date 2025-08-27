@@ -4,13 +4,12 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useAccount } from 'wagmi'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
-import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { useValidatePoolHooksContract } from './useValidatePoolHooksContract'
 import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { PoolSettingsValidator } from '../../validators'
+import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
 
 export type PoolSettingsOption = {
   label: string
@@ -21,7 +20,7 @@ export type PoolSettingsOption = {
 export function PoolSettings() {
   const { address } = useAccount()
   const { network, poolType, poolHooksContract } = usePoolCreationForm()
-  const { isStablePool } = useValidatePoolConfig()
+  const isStablePool = validatePoolType.isStablePool(poolType)
 
   const { isValidHooksContract, isPendingHooksContractValidation } =
     useValidatePoolHooksContract(poolHooksContract)
@@ -62,7 +61,7 @@ export function PoolSettings() {
         options={poolManagerOptions}
         title="Swap fee manager"
         tooltip="TODO"
-        validate={address => PoolSettingsValidator.swapFeeManager(address)}
+        validate={validatePoolSettings.swapFeeManager}
       />
 
       <PoolSettingsRadioGroup
@@ -72,7 +71,7 @@ export function PoolSettings() {
         options={poolManagerOptions}
         title="Pause manager"
         tooltip="TODO"
-        validate={address => PoolSettingsValidator.pauseManager(address)}
+        validate={validatePoolSettings.pauseManager}
       />
 
       <PoolSettingsRadioGroup
@@ -83,7 +82,7 @@ export function PoolSettings() {
         options={swapFeePercentageOptions}
         title="Swap fee percentage"
         tooltip="TODO"
-        validate={value => PoolSettingsValidator.swapFeePercentage(value, poolType)}
+        validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
 
       {isStablePool && (
@@ -94,7 +93,7 @@ export function PoolSettings() {
           options={amplificationParameterOptions}
           title="Amplification parameter"
           tooltip="TODO"
-          validate={value => PoolSettingsValidator.amplificationParameter(value)}
+          validate={validatePoolSettings.amplificationParameter}
         />
       )}
 
@@ -105,9 +104,9 @@ export function PoolSettings() {
         options={poolHooksOptions}
         title="Pool hooks"
         tooltip="TODO"
-        validate={address =>
-          PoolSettingsValidator.poolHooksContract(
-            address,
+        validate={() =>
+          validatePoolSettings.poolHooksContract(
+            poolHooksContract,
             isValidHooksContract,
             isPendingHooksContractValidation
           )

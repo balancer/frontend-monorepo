@@ -14,23 +14,16 @@ import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink
 import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
 import { InfoIconPopover } from '../../InfoIconPopover'
 
+interface ConfigureTokenRateProviderProps {
+  tokenIndex: number
+  verifiedRateProviderAddress: string | undefined
+}
+
 export function ConfigureTokenRateProvider({
   tokenIndex,
   verifiedRateProviderAddress,
-}: {
-  verifiedRateProviderAddress: string | undefined
-  tokenIndex: number
-}) {
-  const {
-    poolTokens,
-    network,
-    updatePoolToken,
-    poolCreationForm: {
-      control,
-      formState: { errors },
-      trigger,
-    },
-  } = usePoolCreationForm()
+}: ConfigureTokenRateProviderProps) {
+  const { poolTokens, network, updatePoolToken, poolCreationForm } = usePoolCreationForm()
 
   if (!poolTokens[tokenIndex].address) return null
 
@@ -59,7 +52,7 @@ export function ConfigureTokenRateProvider({
 
     updatePoolToken(tokenIndex, { rateProvider, paysYieldFees })
     // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above)
-    trigger(`poolTokens.${tokenIndex}.rateProvider`)
+    poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
   const isCustomRateProvider = rateProviderRadioValue === RateProviderOption.Custom
@@ -96,8 +89,8 @@ export function ConfigureTokenRateProvider({
       {isCustomRateProvider && (
         <CustomRateProviderInput
           chainName={getChainName(network)}
-          control={control}
-          errors={errors}
+          control={poolCreationForm.control}
+          errors={poolCreationForm.formState.errors}
           isCustomRateProvider={isCustomRateProvider}
           tokenIndex={tokenIndex}
         />
@@ -109,28 +102,27 @@ export function ConfigureTokenRateProvider({
   )
 }
 
+interface CustomRateProviderInputProps {
+  tokenIndex: number
+  control: Control<PoolCreationForm>
+  errors: FieldErrors<PoolCreationForm>
+  chainName: string
+  isCustomRateProvider: boolean
+}
+
 function CustomRateProviderInput({
   tokenIndex,
   control,
   errors,
   chainName,
   isCustomRateProvider,
-}: {
-  tokenIndex: number
-  control: Control<PoolCreationForm>
-  errors: FieldErrors<PoolCreationForm>
-  chainName: string
-  isCustomRateProvider: boolean
-}) {
-  const {
-    updatePoolToken,
-    poolCreationForm: { trigger },
-  } = usePoolCreationForm()
+}: CustomRateProviderInputProps) {
+  const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
 
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
     updatePoolToken(tokenIndex, { rateProvider: clipboardText as Address })
-    trigger(`poolTokens.${tokenIndex}.rateProvider`)
+    poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
   return (

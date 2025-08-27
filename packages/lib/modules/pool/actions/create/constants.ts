@@ -48,6 +48,8 @@ export const WEIGHTED_POOL_STRUCTURES = [
   WeightedPoolStructure.Custom,
 ] as const
 
+export const REQUIRED_TOTAL_WEIGHT = 100
+
 export enum RateProviderOption {
   Verified = 'verified',
   Custom = 'custom',

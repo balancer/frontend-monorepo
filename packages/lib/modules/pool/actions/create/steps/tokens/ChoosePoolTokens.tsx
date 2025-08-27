@@ -11,9 +11,9 @@ import { PlusCircle, Trash2 } from 'react-feather'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
 import { AlertTriangle } from 'react-feather'
-import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
+import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -26,14 +26,17 @@ export function ChoosePoolTokens() {
     updatePoolToken,
     removePoolToken,
     addPoolToken,
-    poolCreationForm: {
-      formState: { errors },
-      control,
-    },
+    poolCreationForm,
   } = usePoolCreationForm()
 
-  const { isWeightedPool, isCustomWeightedPool, isAtMaxTokenCount, maxTokenCount } =
-    useValidatePoolConfig()
+  const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
+    poolType,
+    weightedPoolStructure
+  )
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+
+  const maxTokens = validatePoolTokens.maxTokens(poolType)
+  const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
   const { getTokensByChain } = useTokens()
   const tokens = getTokensByChain(network)
@@ -67,7 +70,7 @@ export function ChoosePoolTokens() {
             <BalAlert
               content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
               status="info"
-              title={`Add up to ${maxTokenCount} tokens in ${poolType} pools`}
+              title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
             />
           )}
         </VStack>
@@ -75,6 +78,8 @@ export function ChoosePoolTokens() {
           {poolTokens.map((token, index) => {
             const isInvalidWeight = !!token.weight && Number(token.weight) < 1
             const verifiedRateProviderAddress = token?.data?.priceRateProviderData?.address
+            const tokenWeightErrorMsg =
+              poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
 
             return (
               <VStack align="start" key={index} spacing="md" w="full">
@@ -94,18 +99,13 @@ export function ChoosePoolTokens() {
 
                   {isWeightedPool && (
                     <NumberInput
-                      control={control}
+                      control={poolCreationForm.control}
                       isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
                       isInvalid={isInvalidWeight}
                       isPercentage
                       label="Weight"
                       name={`poolTokens.${index}.weight`}
-                      validate={value => {
-                        if (!isWeightedPool) return true
-                        if (Number(value) < 1) return 'Minimum weight for each token is 1%'
-                        if (Number(value) > 100) return 'Maximum weight for a token is 99%'
-                        return true
-                      }}
+                      validate={value => validatePoolTokens.singleTokenWeight(value, poolType)}
                     />
                   )}
 
@@ -117,7 +117,7 @@ export function ChoosePoolTokens() {
                   )}
                 </HStack>
 
-                <InvalidWeightInputAlert message={errors?.poolTokens?.[index]?.weight?.message} />
+                {isWeightedPool && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
 
                 <ConfigureTokenRateProvider
                   tokenIndex={index}
@@ -127,7 +127,7 @@ export function ChoosePoolTokens() {
             )
           })}
           {(!isWeightedPool || isCustomWeightedPool) && (
-            <AddTokenButton isDisabled={isAtMaxTokenCount} onClick={() => addPoolToken()} />
+            <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
           )}
 
           {isWeightedPool && isCustomWeightedPool && <TotalWeightDisplay />}
@@ -167,9 +167,7 @@ function RemoveTokenButton({ onClick, isDisabled }: { onClick: () => void; isDis
 }
 
 function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
-  const { isWeightedPool } = useValidatePoolConfig()
-
-  if (!isWeightedPool || !message) return null
+  if (!message) return null
 
   return (
     <HStack spacing="sm" w="full">
