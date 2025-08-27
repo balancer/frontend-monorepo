@@ -20,7 +20,7 @@ import { useHook } from '../../hooks/useHook'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { Address } from 'viem'
 import { usePoolTokenPriceWarnings } from '../usePoolTokenPriceWarnings'
-import { recoveryModeAlert } from '../actions/recovery-mode/RecoveryMode'
+import { recoveryModeAlert } from '../actions/recovery-mode/RecoveryModeAlert'
 
 export type PoolAlert = {
   identifier: string

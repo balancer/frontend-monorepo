@@ -50,8 +50,7 @@ export function useManagedSendTransaction({
   })
 
   // make a copy here so we can adjust the data below
-  let estimateGasQuery
-  estimateGasQuery = estimateGasQueryOriginal
+  let estimateGasQuery = estimateGasQueryOriginal
 
   // increase gas limit here to make sure v3 boosted pool transactions have enough gas
   if (estimateGasQueryOriginal.data) {
