@@ -1,5 +1,4 @@
 'use client'
-/* eslint-disable react-hooks/exhaustive-deps */
 
 import {
   Badge,
@@ -22,6 +21,7 @@ import {
   Text,
   useColorModeValue,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
@@ -49,7 +49,6 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
-import Link from 'next/link'
 import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
@@ -491,7 +490,7 @@ export function PoolListFilters() {
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" spacing="none" w="full">
+      <HStack gap="0" justify="end" pr={{ base: 'md', xl: '0' }} spacing="none" w="full">
         <PoolListSearch />
         <Popover
           isLazy
@@ -617,9 +616,8 @@ export function PoolListFilters() {
           display="flex"
           gap="2"
           href={poolCreatorUrl}
+          isExternal
           ml="ms"
-          rel=""
-          target="_blank"
           variant="tertiary"
         >
           <Icon as={Plus} boxSize={4} />

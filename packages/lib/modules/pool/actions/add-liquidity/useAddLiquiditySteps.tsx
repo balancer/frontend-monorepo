@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useShouldSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
@@ -16,6 +15,7 @@ import { TransactionStep } from '@repo/lib/modules/transactions/transaction-step
 import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
@@ -64,13 +64,16 @@ export function useAddLiquiditySteps({
 
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
+  const networkConfig = getNetworkConfig(chain)
   const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
     usePermit2ApprovalSteps({
       chain: pool.chain,
       approvalAmounts: inputAmounts,
       actionType: 'AddLiquidity',
       enabled: isPermit2 && !shouldUseSignatures,
-      shouldUseCompositeLiquidityRouterBoosted: isBoosted(pool),
+      router: isBoosted(pool)
+        ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted
+        : networkConfig.contracts.balancer.router,
     })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step

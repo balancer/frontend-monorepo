@@ -283,6 +283,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
           default: tokens.colors.light.text.maxContrast,
           _dark: tokens.colors.dark.text.maxContrast,
         },
+        maxContrastOpposite: {
+          default: tokens.colors.light.text.maxContrastOpposite,
+          _dark: tokens.colors.dark.text.maxContrastOpposite,
+        },
         highlight: {
           default: tokens.colors.light.text.highlight,
           _dark: tokens.colors.dark.text.highlight,

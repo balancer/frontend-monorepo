@@ -23,9 +23,10 @@ export type RecentTransactionsResponse = ReturnType<typeof useRecentTransactions
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
 const NUM_RECENT_TRANSACTIONS = 20
 const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
-import { useQuery } from '@tanstack/react-query'
 import SafeAppsSDK from '@safe-global/safe-apps-sdk'
 import { safeStatusToBalancerStatus } from './transaction-steps/safe/safe.helpers'
+import { useInterval } from 'usehooks-ts'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain
@@ -138,7 +139,7 @@ export function useRecentTransactionsLogic() {
       }
       updateLocalStorage(updatePayload)
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [publicClient]
   )
 
@@ -152,49 +153,43 @@ export function useRecentTransactionsLogic() {
       // on load
       waitForUnconfirmedTransactions(recentTransactions)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useQuery({
-    queryKey: ['safeTxStatus'],
-    queryFn: () => {
-      const safeAppsSdk = new SafeAppsSDK()
+  useInterval(() => {
+    const safeAppsSdk = new SafeAppsSDK()
 
-      const unconfirmedTransactions = Object.values(transactions).filter(
-        tx => tx.type === 'safe' && tx.status === 'confirming'
-      )
+    const unconfirmedTransactions = Object.values(transactions).filter(
+      tx => tx.type === 'safe' && tx.status === 'confirming'
+    )
 
-      unconfirmedTransactions.forEach(safeTrackedTx => {
-        safeAppsSdk.txs.getBySafeTxHash(safeTrackedTx.hash).then(tx => {
-          updateTrackedTransaction(safeTrackedTx.hash, {
-            status: safeStatusToBalancerStatus(tx.txStatus),
-          })
-
-          if (
-            tx.txHash &&
-            !isTxTracked(tx.txHash as Hash) &&
-            safeStatusToBalancerStatus(tx.txStatus) === 'confirmed'
-          ) {
-            addTrackedTransaction(
-              {
-                hash: tx.txHash as Hash,
-                type: 'standard',
-                status: 'confirmed',
-                chain: safeTrackedTx.chain,
-                init: safeTrackedTx.label,
-                description: safeTrackedTx.description,
-                timestamp: Date.now(),
-              },
-              false
-            )
-          }
+    unconfirmedTransactions.forEach(safeTrackedTx => {
+      safeAppsSdk.txs.getBySafeTxHash(safeTrackedTx.hash).then(tx => {
+        updateTrackedTransaction(safeTrackedTx.hash, {
+          status: safeStatusToBalancerStatus(tx.txStatus),
         })
-      })
 
-      return unconfirmedTransactions.map(tx => tx.hash)
-    },
-    refetchInterval: 5000,
-  })
+        if (
+          tx.txHash &&
+          !isTxTracked(tx.txHash as Hash) &&
+          safeStatusToBalancerStatus(tx.txStatus) === 'confirmed'
+        ) {
+          trackEvent(AnalyticsEvent.TransactionSubmitted)
+          addTrackedTransaction(
+            {
+              hash: tx.txHash as Hash,
+              type: 'standard',
+              status: 'confirmed',
+              chain: safeTrackedTx.chain,
+              init: safeTrackedTx.label,
+              description: safeTrackedTx.description,
+              timestamp: Date.now(),
+            },
+            false
+          )
+        }
+      })
+    })
+  }, 5000)
 
   function addTrackedTransaction(
     trackedTransaction: TrackedTransaction,

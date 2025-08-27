@@ -51,7 +51,6 @@ export function UserSnapshotValues() {
   const boost = useMemo(() => {
     if (isEmpty(veBalBoostMap)) return
     return veBalBoostMap[pool.id]
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [veBalBoostMap])
 
   const myAprRaw = getTotalAprRaw(pool.dynamicData.aprItems, boost)
@@ -68,7 +67,6 @@ export function UserSnapshotValues() {
         myClaimableRewards: myClaimableRewards,
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [veBalBoostMap, pool])
 
   function onModalClose() {

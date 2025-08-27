@@ -5,7 +5,6 @@ import {
   CardProps,
   Divider,
   Heading,
-  Link,
   ListItem,
   Text,
   UnorderedList,
@@ -14,6 +13,7 @@ import {
 import { usePool } from '../../../PoolProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolRisks, risksTitle } from './usePoolRisks'
+import Link from 'next/link'
 
 interface RisksListProps {
   textVariant?: string

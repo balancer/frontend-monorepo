@@ -1,7 +1,6 @@
-import { Button, Card, HStack, Text, VStack } from '@chakra-ui/react'
+import { Button, Card, HStack, Text, VStack, Link } from '@chakra-ui/react'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { GatewayTransactionDetails, TransactionStatus } from '@safe-global/safe-apps-sdk'
-import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import {
   getRemainingSignaturesLabel,
@@ -51,10 +50,10 @@ export function MultisigStatus({ chainId, details, currentStep }: MultisigProps)
         {isCancelled && <Text color="grayText">The transaction was cancelled</Text>}
       </VStack>
       <Button
-        as={NextLink}
+        as={Link}
         href={getSafeWebUrl(chainId, details.safeAddress as Address, details.txId)}
+        isExternal
         rightIcon={<ArrowUpRight size="14" />}
-        target="_blank"
         variant="secondary"
       >
         {isTxBatch ? 'View transaction bundle in Safe App' : 'View transaction in Safe App'}

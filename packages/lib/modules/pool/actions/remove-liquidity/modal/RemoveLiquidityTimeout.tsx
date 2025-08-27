@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { HStack, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useCountdown } from 'usehooks-ts'

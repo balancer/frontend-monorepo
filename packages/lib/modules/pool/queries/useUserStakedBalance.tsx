@@ -69,7 +69,6 @@ export function useUserStakedBalance(pools: Pool[] = []) {
         }
       })
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stakedPoolBalances, contracts, poolByStaking, userAddress, isFetching])
 
   const stakedBalancesByPoolId = groupBy(stakedBalances, 'poolId')

@@ -21,8 +21,8 @@ export function VeBalManagePromos() {
           Sync your veBAL balance to L2s to maximize veBAL boosted liquidity incentives. Sync on the{' '}
           <Link
             href="https://app.balancer.fi/#/ethereum/vebal"
+            isExternal
             style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'baseline' }}
-            target="_blank"
           >
             legacy site
             <ArrowUpRight size={12} style={{ marginLeft: 2 }} />

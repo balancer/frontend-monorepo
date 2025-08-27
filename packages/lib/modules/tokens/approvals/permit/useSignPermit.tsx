@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
@@ -28,11 +27,8 @@ export function useSignPermit({
 }: RemoveLiquidityPermitParams) {
   const toast = useToast()
   const { userAddress } = useUserAccount()
-
   const { setSignPermitState, setPermitSignature, signPermitState } = usePermitSignature()
-
   const [error, setError] = useState<string | undefined>()
-
   const { sdkClient, isLoading } = useSdkWalletClient()
 
   useEffect(() => {
@@ -41,7 +37,7 @@ export function useSignPermit({
     } else {
       setSignPermitState(SignatureState.Ready)
     }
-  }, [setSignPermitState, sdkClient])
+  }, [isLoading])
 
   async function signPermit() {
     if (!queryOutput) throw new Error('No input provided for permit signature')

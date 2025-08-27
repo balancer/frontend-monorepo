@@ -61,6 +61,8 @@ export function PoolListTable({ pools, count, loading }: Props) {
     <Card
       alignItems="flex-start"
       left={{ base: '-4px', sm: '0' }}
+      overflowX={{ base: 'auto', '2xl': 'hidden' }}
+      overflowY="hidden"
       p={{ base: '0', sm: '0' }}
       position="relative"
       // fixing right padding for horizontal scroll on mobile

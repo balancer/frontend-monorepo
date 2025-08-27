@@ -9,6 +9,7 @@ import { useGetStakedSonicData } from './useGetStakedSonicData'
 import { useMemo } from 'react'
 import { sfcAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { zeroAddress } from 'viem'
+import { ValidatorUnstakeData } from '@/lib/modules/lst/hooks/useGetUnstakeValidators'
 
 type Result = {
   [key: string]: {
@@ -62,15 +63,16 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
     }
 
     return {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stakeRequests, isLoading])
 
-  const amountDelegatedPerValidator = validatorIds.map(validatorId => ({
-    validatorId,
-    amountDelegated: amountResults[validatorId]?.result ?? 0n,
-  }))
+  const amountDelegatedPerValidator = validatorIds
+    .map(validatorId => ({
+      validatorId,
+      amountDelegated: amountResults[validatorId]?.result ?? 0n,
+    }))
+    .filter(validator => ['13', '14', '24', '29', '30'].includes(validator.validatorId))
 
-  function chooseValidatorsForUnstakeAmount(unstakeAmountShares: bigint) {
+  function chooseValidatorsForUnstakeAmount(unstakeAmountShares: bigint): ValidatorUnstakeData[] {
     const unstakeAmountAssets = (unstakeAmountShares * rate) / 10n ** 18n
 
     // choose the validator with the most amount delegated

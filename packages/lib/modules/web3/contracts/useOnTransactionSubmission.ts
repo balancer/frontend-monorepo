@@ -36,6 +36,5 @@ export function useOnTransactionSubmission({
         poolId: labels.poolId,
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hash])
 }

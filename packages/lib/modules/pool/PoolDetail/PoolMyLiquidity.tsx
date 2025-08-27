@@ -29,7 +29,6 @@ import {
   getXavePoolLink,
 } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import {
   getUserTotalBalanceInt,
   getUserWalletBalanceInt,
@@ -61,6 +60,7 @@ import {
 import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
+import { bn, fNum, ZERO_VALUE_DASH, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -123,7 +123,6 @@ export default function PoolMyLiquidity() {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
       setHeight(myLiquiditySectionRef.current.offsetHeight)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handleTabChanged(option: ButtonGroupOption) {
@@ -227,7 +226,9 @@ export default function PoolMyLiquidity() {
   const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
   const hasGaugeStakedBalance = bn(calcGaugeStakedBalance(pool)).gt(0)
   const shareOfPool = calcUserShareOfPool(pool)
-  const shareofPoolLabel = bn(shareOfPool).gt(0) ? fNum('sharePercent', shareOfPool) : <>&mdash;</>
+  const shareofPoolLabel = bn(shareOfPool).gt(0)
+    ? fNum('sharePercent', shareOfPool)
+    : ZERO_VALUE_DASH
   const chainId = getChainId(chain)
 
   const options = useMemo(() => {
@@ -235,7 +236,6 @@ export default function PoolMyLiquidity() {
       ...tab,
       disabled: tab.value !== 'total' && !canStake,
     }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs, pool])
 
   function openRedirectModal(partner: RedirectPartner) {
@@ -306,7 +306,9 @@ export default function PoolMyLiquidity() {
                 <Skeleton h="5" w="12" />
               ) : (
                 <Heading fontWeight="bold" size="h6">
-                  {toCurrency(totalBalanceUsd)}
+                  {formatFalsyValueAsDash(totalBalanceUsd, toCurrency, {
+                    showZeroAmountAsDash: true,
+                  })}
                 </Heading>
               )}
               <Text fontSize="0.85rem" variant="secondary">
@@ -352,6 +354,7 @@ export default function PoolMyLiquidity() {
                       address={poolToken.address as Address}
                       chain={chain}
                       pool={pool}
+                      showZeroAmountAsDash
                       value={tokenBalanceFor(poolToken.address)}
                       {...(poolToken.hasNestedPool && {
                         isNestedBpt: true,
@@ -368,6 +371,7 @@ export default function PoolMyLiquidity() {
                               iconSize={35}
                               isNestedPoolToken
                               key={`nested-pool-${nestedPoolToken.address}`}
+                              showZeroAmountAsDash
                               value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
                             />
                           )

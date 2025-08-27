@@ -97,6 +97,17 @@ function NavLinks({
           <Box as={motion.div} variants={fadeIn}>
             <Link
               as={NextLink}
+              color={linkColorFor('/create')}
+              href="/create"
+              prefetch
+              variant="nav"
+            >
+              Create
+            </Link>
+          </Box>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link
+              as={NextLink}
               color={linkColorFor('/debug/pools')}
               href="/debug/pools"
               prefetch
@@ -186,7 +197,6 @@ export function NavActions({
     }
 
     return defaultActions
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, isConnected])
 
   return (

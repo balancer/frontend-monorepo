@@ -36,6 +36,7 @@ query GetPools(
       canUseBufferForSwaps
       useWrappedForAddRemove
       useUnderlyingForAddRemove
+      logoURI
       nestedPool {
         id
         address
@@ -50,6 +51,7 @@ query GetPools(
           canUseBufferForSwaps
           useWrappedForAddRemove
           useUnderlyingForAddRemove
+          logoURI
         }
       }
     }

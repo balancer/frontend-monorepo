@@ -91,7 +91,6 @@ export function useInitializeLbpStep({
           <TransactionBatchButton
             chainId={initPoolInput.chainId}
             currentStep={currentStep}
-            id={initializeLbpStepId}
             labels={labels}
             onTransactionChange={setTransaction}
           />
@@ -106,7 +105,7 @@ export function useInitializeLbpStep({
           }
         : undefined,
     }),
-    /* eslint-disable react-hooks/exhaustive-deps */
+
     [transaction, labels, buildCallDataQuery.data, isPoolInitialized]
   )
 }

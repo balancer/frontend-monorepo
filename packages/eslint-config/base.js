@@ -70,6 +70,8 @@ const baseConfig = [
       // Disable the 'no-explicit-any' rule to prevent warnings about using 'any' type
       '@typescript-eslint/no-explicit-any': 'off',
       'react/jsx-sort-props': ['error', { ignoreCase: true }],
+      // Disable react-hooks/exhaustive-deps rule
+      'react-hooks/exhaustive-deps': 'off',
     },
   },
 ]

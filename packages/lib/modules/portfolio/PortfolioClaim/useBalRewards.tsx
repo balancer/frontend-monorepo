@@ -104,7 +104,6 @@ export function useBalTokenRewards(pools: ClaimablePool[]) {
         }
       })
       .filter(Boolean) as BalTokenReward[]
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [claimableTokensData])
 
   return {

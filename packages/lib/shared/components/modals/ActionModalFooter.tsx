@@ -1,10 +1,9 @@
 'use client'
 
-import { Button, Divider, HStack, ModalFooter, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, ModalFooter, VStack, Link } from '@chakra-ui/react'
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnimatePresence, motion } from 'framer-motion'
-import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
@@ -28,6 +27,7 @@ export function SuccessActions({
       <Divider />
       <HStack justify="space-between" w="full">
         <Button
+          aria-label={returnLabel}
           leftIcon={<CornerDownLeft size="14" />}
           onClick={returnAction}
           size="xs"
@@ -48,9 +48,9 @@ export function SuccessActions({
         <Button
           as={Link}
           href={getDiscordLink()}
+          isExternal
           leftIcon={<MessageSquare size="14" />}
           size="xs"
-          target="_blank"
           variant="ghost"
         >
           Ask questions

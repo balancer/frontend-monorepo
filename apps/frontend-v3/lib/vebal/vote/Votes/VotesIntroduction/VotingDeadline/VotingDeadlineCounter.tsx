@@ -31,7 +31,7 @@ export function VotingDeadlineCounter() {
       <VStack spacing="md">
         <HStack justify="space-between" w="full">
           <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
-            {format(deadline, 'EEEE, Haaa zzzz')}
+            {format(deadline, 'EEEE, haaa zzzz')}
           </Text>
           <ReminderButton onClick={() => setIsCalendarReminderOpen(true)}>
             Get reminders

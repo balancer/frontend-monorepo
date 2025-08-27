@@ -35,7 +35,6 @@ export function SearchInput({
 
   useEffect(() => {
     if (autoFocus) setFocus(SEARCH)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFocus])
 
   return (

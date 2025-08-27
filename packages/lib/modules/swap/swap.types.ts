@@ -47,6 +47,7 @@ export interface SdkSimulateSwapResponse extends SimulateSwapResponse {
   queryOutput: ExactInQueryOutput | ExactOutQueryOutput
   protocolVersion: number
   hopCount: number
+  router: Address
 }
 
 export interface SimulateSinglePoolSwapResponse extends SimulateSwapResponse {

@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
@@ -244,7 +242,10 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
     [!isConnected, LABELS.walletNotConnected],
     [Number(humanBptIn) === 0, 'You must specify a valid bpt in'],
     [isZero(totalAmountsOut), 'Amount to remove cannot be zero'],
-    [needsToAcceptHighPI, 'Accept high price impact first'],
+    [
+      needsToAcceptHighPI,
+      'To continue, accept high potential losses from this remove transaction above',
+    ],
     [simulationQuery.isLoading, 'Fetching quote...'],
     [simulationQuery.isError, 'Error fetching quote'],
     [priceImpactQuery.isLoading, 'Fetching price impact...'],

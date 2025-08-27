@@ -1,4 +1,9 @@
-import { GetTokensQuery, GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetTokensQuery,
+  GqlChain,
+  GqlToken,
+  GqlPriceRateProviderData,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, HumanAmount } from '@balancer/sdk'
 
 export type TokenBase = Pick<GqlToken, 'address' | 'name' | 'symbol' | 'decimals' | 'chainId'>
@@ -52,6 +57,8 @@ export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
   useWrappedForAddRemove?: boolean
   useUnderlyingForAddRemove?: boolean
   weight?: string
+  priceRate?: string
+  priceRateProviderData?: GqlPriceRateProviderData | null
 }
 
 export type CustomToken = {

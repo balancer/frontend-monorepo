@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Accordion,
   AccordionItem,
@@ -17,12 +16,15 @@ import {
   AlertDescription,
   CardFooter,
   CardBody,
+  useColorModeValue,
+  Link,
 } from '@chakra-ui/react'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
-import { getPriceImpactExceedsLabel } from './price-impact.utils'
+import { getPriceImpactLevel } from './price-impact.utils'
+import { CheckIcon } from '@chakra-ui/icons'
 
 interface PriceImpactAccordionProps {
   setNeedsToAcceptPIRisk: (value: boolean) => void
@@ -32,7 +34,10 @@ interface PriceImpactAccordionProps {
   // Unknown price impact due to limitations in ABA priceImpact calculation
   cannotCalculatePriceImpact?: boolean
   avoidPriceImpactAlert?: boolean
+  action: 'swap' | 'add' | 'remove'
+  cowLink?: string
 }
+
 export function PriceImpactAccordion({
   setNeedsToAcceptPIRisk,
   accordionButtonComponent,
@@ -40,6 +45,8 @@ export function PriceImpactAccordion({
   isDisabled,
   cannotCalculatePriceImpact = false,
   avoidPriceImpactAlert = false,
+  action,
+  cowLink,
 }: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
   const {
@@ -54,6 +61,81 @@ export function PriceImpactAccordion({
 
   const isUnknownPriceImpact = cannotCalculatePriceImpact || priceImpactLevel === 'unknown'
 
+  function PriceImpactMessage({ action }: { action: 'swap' | 'add' | 'remove' }) {
+    switch (action) {
+      case 'swap':
+        return (
+          <>
+            <Text color="#000" fontSize="sm" pb="xs">
+              The value of output tokens is a lot less than the input tokens after price impact and
+              swap fees (per Coingecko). This is likely because your swap size is large relative to
+              the market liquidity for this pair, resulting in a high price impact by unfavorably
+              shifting the exchange rate.
+            </Text>
+            <Text color="#000" fontSize="sm">
+              To reduce price impact, lower your swap size
+              {cowLink ? (
+                <>
+                  {' '}
+                  or try{' '}
+                  <Link
+                    _hover={{
+                      color: '#fff',
+                    }}
+                    color="#000"
+                    fontSize="sm"
+                    href={cowLink}
+                    isExternal
+                    textDecor="underline"
+                  >
+                    CoW Swap
+                  </Link>
+                  .
+                </>
+              ) : (
+                ' or try another exchange.'
+              )}
+            </Text>
+          </>
+        )
+      case 'add':
+        return (
+          <>
+            <Text color="#000" fontSize="sm" pb="xs">
+              Adding custom amounts in ‘Flexible’ mode can cause high price impact, since the pool
+              rebalances by ‘swapping’ some of the excess token for the under-supplied token, which
+              unfavorably shifts the internal price.
+            </Text>
+            <Text color="#000" fontSize="sm">
+              To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Flexible’
+              mode, add tokens closer to the pool’s current ratios.
+            </Text>
+          </>
+        )
+      case 'remove':
+        return (
+          <>
+            <Text color="#000" fontSize="sm" pb="xs">
+              Removing liquidity as a single token can cause high price impact, since the pool
+              rebalances by ‘swapping’ some of non-selected tokens to replace the removed token,
+              which unfavorably shifts the internal price.
+            </Text>
+            <Text color="#000" fontSize="sm">
+              To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Single
+              token’ mode, remove a smaller amount.
+            </Text>
+          </>
+        )
+    }
+  }
+
+  function getPriceImpactTitle(action: 'swap' | 'add' | 'remove'): string {
+    const label = action.charAt(0).toUpperCase() + action.slice(1)
+    const level = priceImpact != null ? getPriceImpactLevel(Number(priceImpact)) : priceImpactLevel
+    const extremely = level === 'max' ? 'extremely ' : ''
+    return `Potential ‘${label}’ loss is ${extremely}high: ${priceImpact && fNum('priceImpact', priceImpact)}`
+  }
+
   useEffect(() => {
     if ((hasToAcceptHighPriceImpact || isUnknownPriceImpact) && !acceptPriceImpactRisk) {
       setNeedsToAcceptPIRisk(true)
@@ -63,12 +145,14 @@ export function PriceImpactAccordion({
   }, [acceptPriceImpactRisk, hasToAcceptHighPriceImpact, isUnknownPriceImpact])
 
   const handleClick = () => {
-    if (priceImpactLevel === 'high' || isUnknownPriceImpact) {
+    if (priceImpactLevel === 'high') {
       setAcceptPriceImpactRisk(true)
     } else {
       acceptHighImpactDisclosure.onOpen()
     }
   }
+
+  const borderColor = useColorModeValue('red.300', 'red.400')
 
   return (
     <Box w="full">
@@ -101,55 +185,84 @@ export function PriceImpactAccordion({
       </Accordion>
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
-          <VStack align="start" mt="md" spacing="md" w="full">
+          <VStack align="start" gap="0" mt="md" spacing="0" w="full">
             {!avoidPriceImpactAlert && (
-              <Alert status="error">
-                <PriceImpactIcon mt="1" priceImpactLevel={priceImpactLevel} size={24} />
+              <Alert roundedBottom="0" roundedTop="lg" status="error">
+                <PriceImpactIcon
+                  alignSelf="start"
+                  color="font.dark"
+                  mt="1"
+                  priceImpactLevel={priceImpactLevel}
+                  size={24}
+                />
                 <Box ml="md">
                   <AlertTitle>
                     {isUnknownPriceImpact
-                      ? 'Unknown price impact'
-                      : `Price impact is high: Exceeds ${getPriceImpactExceedsLabel(priceImpactLevel)}`}
+                      ? 'Unknown potential losses'
+                      : `${getPriceImpactTitle(action)}`}
                   </AlertTitle>
                   <AlertDescription>
-                    <Text color="font.dark" fontSize="sm">
-                      {isUnknownPriceImpact
-                        ? 'The price impact cannot be calculated. Only proceed if you know exactly what you are doing.'
-                        : 'The higher the price impact, the worse exchange rate you get for this swap.'}
-                    </Text>
+                    {isUnknownPriceImpact ? (
+                      <Text as="div" color="#000" fontSize="sm" whiteSpace="pre-line">
+                        'The potential losses from this transaction cannot be calculated at this
+                        time. This may include high price impact and/or high swap fees. Only proceed
+                        if you know exactly what you are doing.'
+                      </Text>
+                    ) : (
+                      <PriceImpactMessage action={action} />
+                    )}
                   </AlertDescription>
                 </Box>
               </Alert>
             )}
-            <Card variant="subSection">
+            <Card
+              bg="rgba(255,0,0,0.04)"
+              border="1px solid"
+              borderColor={borderColor}
+              py="md"
+              roundedBottom="lg"
+              roundedTop="0"
+              variant="subSection"
+            >
               <CardBody>
-                <Text fontWeight="bold" mb="sm">
-                  Price impact acknowledgement
+                <Text color="font.maxContrast" fontWeight="bold" mb="xs">
+                  Acknowledge potential loss to continue
                 </Text>
                 {isUnknownPriceImpact ? (
-                  <Text color="grayText" fontSize="sm">
-                    I accept that the price impact of this transaction is unknown. I understand that
-                    proceeding may result in losses if my transaction moves the market price
-                    unfavorably based on the current depth of the market.
+                  <Text color="font.maxContrast" fontSize="sm">
+                    I accept that the potential loss from this transaction is unknown. I understand
+                    that proceeding may result in losses due to factors like high price impact
+                    and/or high swap fees.
                   </Text>
                 ) : (
-                  <Text color="grayText" fontSize="sm">
-                    I accept the high price impact of{' '}
-                    {priceImpact && fNum('priceImpact', priceImpact)}. I understand that this may
-                    result in losses, since the size of my swap is likely to move the market price
-                    unfavorably based on the current depth of the market.
+                  <Text color="font.maxContrast" fontSize="sm">
+                    I accept the potential high losses from this transaction of{' '}
+                    {priceImpact && fNum('priceImpact', priceImpact)}, which may be due to factors
+                    like high price impact and/or high swap fees.
                   </Text>
                 )}
               </CardBody>
               <CardFooter pt="md">
                 {!acceptPriceImpactRisk ? (
-                  <Button onClick={handleClick} variant="secondary" w="full">
-                    I accept {isUnknownPriceImpact ? 'unknown' : 'high'} price impact
+                  <Button onClick={handleClick} variant="maxContrast" w="full">
+                    I accept {isUnknownPriceImpact ? 'unknown' : 'high'} potential losses
                   </Button>
                 ) : (
-                  <Button isDisabled variant="secondary" w="full">
-                    {isUnknownPriceImpact ? 'Unknown' : 'High'} price impact accepted
-                  </Button>
+                  <HStack
+                    bg="background.level2"
+                    border="1px solid"
+                    borderColor="border.base"
+                    gap="md"
+                    height="40px"
+                    px="md"
+                    rounded="lg"
+                    w="full"
+                  >
+                    <CheckIcon color="font.maxContrast" />
+                    <Text color="font.maxContrast" fontSize="sm" fontWeight="bold">
+                      {isUnknownPriceImpact ? 'Unknown' : 'High'} potential losses accepted
+                    </Text>
+                  </HStack>
                 )}
               </CardFooter>
             </Card>

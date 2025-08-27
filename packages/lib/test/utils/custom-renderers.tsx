@@ -5,11 +5,6 @@ import { RemoveLiquidityProvider } from '@repo/lib/modules/pool/actions/remove-l
 import { BaseVariant } from '@repo/lib/modules/pool/pool.types'
 import { PoolProvider } from '@repo/lib/modules/pool/PoolProvider'
 import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
-import {
-  defaultGetTokenPricesQueryMock,
-  defaultGetTokensQueryMock,
-  defaultGetTokensQueryVariablesMock,
-} from '@repo/lib/modules/tokens/__mocks__/token.builders'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { TokensProvider } from '@repo/lib/modules/tokens/TokensProvider'
 import { RecentTransactionsProvider } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
@@ -71,11 +66,7 @@ function GlobalProviders({ children }: PropsWithChildren) {
         <AppRouterContextProviderMock router={defaultRouterOptions}>
           <ApolloProvider client={apolloTestClient}>
             <UserAccountProvider>
-              <TokensProvider
-                tokenPricesData={defaultGetTokenPricesQueryMock}
-                tokensData={defaultGetTokensQueryMock}
-                variables={defaultGetTokensQueryVariablesMock}
-              >
+              <TokensProvider>
                 <UserSettingsProvider
                   initAcceptedPolicies={undefined}
                   initCurrency="USD"

@@ -5,7 +5,7 @@ import { ReactElement } from 'react'
 
 interface StoneIconProps extends BoxProps {
   sparkleSize: number
-  icon: ReactElement
+  icon?: ReactElement
   transformBackground?: string
   boxSize?: ResponsiveValue<number | string>
 }

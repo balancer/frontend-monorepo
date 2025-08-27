@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -45,6 +44,8 @@ import { SettingsAlert } from '@repo/lib/modules/user/settings/SettingsAlert'
 import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
@@ -143,6 +144,8 @@ export function RemoveLiquidityForm() {
   const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
   const isSafeAccount = useIsSafeAccount()
 
+  const { isAnyTokenWithoutPrice, removeLiquidityWarning } = usePoolTokenPriceWarnings(pool)
+
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
@@ -153,6 +156,9 @@ export function RemoveLiquidityForm() {
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
+          {isAnyTokenWithoutPrice && (
+            <BalAlert content={removeLiquidityWarning} mb="sm" status="warning" />
+          )}
           <VStack align="start" spacing="md">
             <SafeAppAlert />
             {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (
@@ -219,9 +225,9 @@ export function RemoveLiquidityForm() {
               {!simulationQuery.isError && !isV3LBP(pool) && (
                 <PriceImpactAccordion
                   accordionButtonComponent={
-                    <HStack>
+                    <HStack gap="xs">
                       <Text color="font.secondary" fontSize="sm" variant="secondary">
-                        Price impact:{' '}
+                        Potential losses:{' '}
                       </Text>
                       {isFetching ? (
                         <Skeleton h="16px" w="40px" />
@@ -240,6 +246,7 @@ export function RemoveLiquidityForm() {
                       totalUSDValue={totalUSDValue}
                     />
                   }
+                  action="remove"
                   isDisabled={priceImpactQuery.isLoading && !priceImpactQuery.isSuccess}
                   setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 />
@@ -248,7 +255,7 @@ export function RemoveLiquidityForm() {
                 <Card variant="modalSubSection">
                   <Stack w="full">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
-                      Price impact: 0.00%
+                      Potential losses: 0.00%
                     </Text>
                   </Stack>
                 </Card>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { DependencyList, useEffect, useRef } from 'react'
 
 export function useEffectOnce(effect: () => void) {
@@ -21,16 +20,6 @@ export function useAsyncEffect(
 
     return cleanup
   }, deps)
-}
-
-/**
- * Runs the effect once on mount, after the specified duration. Cleans up on unmount.
- */
-export function useTimeout(effect: () => void, duration: number) {
-  useEffect(() => {
-    const timeout = setTimeout(effect, duration)
-    return () => clearTimeout(timeout)
-  }, [])
 }
 
 export function useInterval(callback: () => void, delay: number) {

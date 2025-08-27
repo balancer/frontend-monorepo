@@ -67,7 +67,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
       isComplete,
       renderAction: () => <SignPermitButton />,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [signPermitState, isLoading, isConnected, shouldChangeNetwork]
   )
 }

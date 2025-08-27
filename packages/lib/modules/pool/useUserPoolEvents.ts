@@ -15,7 +15,7 @@ export function useUserPoolEvents() {
   } = usePoolEvents(
     {
       chainIn: [chain],
-      poolIdIn: [pool.id],
+      poolId: pool.id,
       userAddress,
     },
     {
@@ -26,7 +26,6 @@ export function useUserPoolEvents() {
   useEffect(() => {
     startPolling(120000)
     return () => stopPolling()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const userPoolEvents = userPoolEventsData?.poolEvents

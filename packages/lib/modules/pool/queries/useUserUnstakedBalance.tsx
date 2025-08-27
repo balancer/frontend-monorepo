@@ -63,7 +63,6 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
         }
       })
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, unstakedPoolBalances, pools, userAddress, isFetching])
 
   const unstakedBalanceByPoolId = keyBy(balances, 'poolId')

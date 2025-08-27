@@ -1,7 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { HumanAmount, isSameAddress } from '@balancer/sdk'
@@ -205,8 +203,11 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
       'You need to input one or more valid token amounts in the fields above',
     ],
     [!isMinimumDepositMet, 'Minimum deposit not met for a Boosted Pool'],
-    [hasValidationErrors, 'Errors in token inputs'],
-    [needsToAcceptHighPI, 'Accept high price impact first'],
+    [hasValidationErrors, 'Fix the errors in token inputs'],
+    [
+      needsToAcceptHighPI,
+      'To continue, accept high potential losses from this add transaction above',
+    ],
     [
       isUnbalancedAddErrorMessage(priceImpactQuery.error) && !supportsNestedActions(pool),
       'Unbalanced join',

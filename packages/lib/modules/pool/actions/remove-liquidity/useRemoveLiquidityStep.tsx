@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   ManagedResult,
@@ -90,7 +89,6 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
           <TransactionBatchButton
             chainId={chainId}
             currentStep={currentStep}
-            id={removeLiquidityStepId}
             labels={labels}
             onTransactionChange={setTransaction}
           />

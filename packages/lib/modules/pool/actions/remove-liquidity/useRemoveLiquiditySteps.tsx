@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useShouldSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
@@ -39,6 +38,7 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
 
   // Only used for v3 pools + Safe account scenario
   // Standard permit signatures are not supported by Safe accounts (signer != owner) so we use an Approval BPT Tx step instead
+  // Also used when not allowing signatures in settings
   const { isLoadingTokenApprovalSteps, tokenApprovalSteps } = useBptTokenApprovals(
     pool,
     simulationQuery

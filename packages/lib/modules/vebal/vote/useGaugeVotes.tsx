@@ -144,7 +144,6 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
       userVotesQuery.refetch(),
       lastUserVotesQuery.refetch(),
     ])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     gaugeWeightThisPeriodQuery.refetch,
     gaugeWeightNextPeriodQuery.refetch,

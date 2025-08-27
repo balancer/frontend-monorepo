@@ -30,7 +30,7 @@ import { usePortfolioSorting } from './usePortfolioSorting'
 
 const rowProps = (addExtraColumn: boolean, needsLastColumnWider: boolean) => ({
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(140px, max-content) minmax(100px, max-content) 126px ${addExtraColumn ? '120px' : ''} ${needsLastColumnWider ? '150px' : 'minmax(100px, max-content)'}`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(140px, max-content) minmax(100px, max-content) 126px ${addExtraColumn ? '120px' : ''} ${needsLastColumnWider ? '160px' : 'minmax(100px, max-content)'}`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 })
@@ -128,6 +128,8 @@ export function PortfolioTable() {
           <Card
             alignItems="flex-start"
             left={{ base: '-4px', sm: '0' }}
+            overflowX={{ base: 'auto', '2xl': 'hidden' }}
+            overflowY="hidden"
             p={{ base: '0', sm: '0' }}
             position="relative"
             // fixing right padding for horizontal scroll on mobile
@@ -150,10 +152,10 @@ export function PortfolioTable() {
                   {...rowProps(options.showVeBal, hasStakingBoost)}
                 />
               )}
-              renderTableRow={({ item, index }) => {
+              renderTableRow={({ item }) => {
                 return (
                   <PortfolioTableRow
-                    keyValue={index}
+                    keyValue={item.id}
                     pool={item}
                     veBalBoostMap={veBalBoostMap}
                     {...rowProps(options.showVeBal, hasStakingBoost)}

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Connector, useConnect } from 'wagmi'
 import { useEffect } from 'react'
 

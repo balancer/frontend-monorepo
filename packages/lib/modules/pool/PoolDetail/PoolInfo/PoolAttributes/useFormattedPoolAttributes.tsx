@@ -151,7 +151,6 @@ export function useFormattedPoolAttributes() {
       return attributes.filter(a => a?.title !== 'Swap fees')
     }
     return attributes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool, poolOwnerData])
 
   return formattedPoolAttributes

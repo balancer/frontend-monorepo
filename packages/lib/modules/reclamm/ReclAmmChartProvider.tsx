@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin, computeCenteredness } from './reclAmmMath'
@@ -25,6 +24,8 @@ function getGradientColor(colorStops: string[]) {
     colorStops: colorStops.map((color, index) => ({ offset: index, color })),
   }
 }
+
+const DEFAULT_PRICE_RATE = '1'
 
 export function useReclAmmChartLogic() {
   const { isMobile } = useBreakpoints()
@@ -104,20 +105,41 @@ export function useReclAmmChartLogic() {
       .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
 
+    // only scale back if token has rate but not an erc4626
+    const tokenA = pool.poolTokens[0]
+    const tokenB = pool.poolTokens[1]
+    const tokenAHasRate = tokenA.priceRate !== DEFAULT_PRICE_RATE
+    const tokenBHasRate = tokenB.priceRate !== DEFAULT_PRICE_RATE
+    const shouldScaleBackTokenA = tokenAHasRate && !tokenA.isErc4626
+    const shouldScaleBackTokenB = tokenBHasRate && !tokenB.isErc4626
+    const shouldScaleBackPrices = shouldScaleBackTokenA || shouldScaleBackTokenB
+
+    if (shouldScaleBackPrices) {
+      // to scale back we use price * tokenARate / tokenBRate
+      const tokenARate = shouldScaleBackTokenA ? tokenA.priceRate : DEFAULT_PRICE_RATE
+      const tokenBRate = shouldScaleBackTokenB ? tokenB.priceRate : DEFAULT_PRICE_RATE
+      const rateProviderScaleBackFactor = bn(tokenARate).div(tokenBRate)
+
+      minPriceValue = rateProviderScaleBackFactor.times(minPriceValue).toNumber()
+      maxPriceValue = rateProviderScaleBackFactor.times(maxPriceValue).toNumber()
+      lowerMarginValue = rateProviderScaleBackFactor.times(lowerMarginValue).toNumber()
+      upperMarginValue = rateProviderScaleBackFactor.times(upperMarginValue).toNumber()
+      currentPriceValue = rateProviderScaleBackFactor.times(currentPriceValue).toNumber()
+    }
+
     if (isReversed) {
-      const invert = (value: number) => (value === 0 ? 0 : 1 / value)
-
-      const invertedMinPriceValue = invert(maxPriceValue)
-      const invertedMaxPriceValue = invert(minPriceValue)
-      const invertedLowerMarginValue = invert(upperMarginValue)
-      const invertedUpperMarginValue = invert(lowerMarginValue)
-
       // Swap min/max and lower/upper
-      minPriceValue = invertedMinPriceValue
-      maxPriceValue = invertedMaxPriceValue
-      lowerMarginValue = invertedLowerMarginValue
-      upperMarginValue = invertedUpperMarginValue
-      currentPriceValue = invert(currentPriceValue)
+      const minPriceInverted = invert(maxPriceValue)
+      const maxPriceInverted = invert(minPriceValue)
+      const lowerMarginInverted = invert(upperMarginValue)
+      const upperMarginInverted = invert(lowerMarginValue)
+      const currentPriceInverted = invert(currentPriceValue)
+
+      minPriceValue = minPriceInverted
+      maxPriceValue = maxPriceInverted
+      lowerMarginValue = lowerMarginInverted
+      upperMarginValue = upperMarginInverted
+      currentPriceValue = currentPriceInverted
     }
 
     const isPoolWithinRange =

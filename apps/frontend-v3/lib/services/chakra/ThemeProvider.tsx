@@ -17,7 +17,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return balTheme
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const theme = useMemo(() => getTheme(), [isCowPath, isCowVariant])
 
   // Avoid hydration error in turbopack mode

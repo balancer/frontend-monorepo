@@ -7,7 +7,7 @@ import { calcPotentialYieldFor } from './pool.utils'
 import { oneWeekInSecs } from '@repo/lib/shared/utils/time'
 
 export function useGetPoolRewards(pool: Pool) {
-  const { priceFor, getToken } = useTokens()
+  const { priceFor, getToken, isLoadingTokens, isLoadingTokenPrices } = useTokens()
 
   const currentRewards = pool.staking?.gauge?.rewards || []
 
@@ -45,6 +45,7 @@ export function useGetPoolRewards(pool: Pool) {
   }
 
   return {
+    isLoading: isLoadingTokens || isLoadingTokenPrices,
     tokens,
     weeklyRewards,
     weeklyRewardsByToken,

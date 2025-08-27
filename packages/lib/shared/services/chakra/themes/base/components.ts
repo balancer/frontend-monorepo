@@ -138,6 +138,50 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
     },
+    NumberInput: {
+      baseStyle: {
+        field: {
+          shadow: 'input.innerBase',
+          border: '1px solid',
+          color: 'input.fontDefault',
+          fontWeight: 'medium',
+          px: '3',
+          '::placeholder': {
+            color: 'input.fontPlaceholder',
+          },
+          _hover: {
+            bg: 'input.bgHover',
+            borderColor: 'input.borderHover',
+          },
+          _focus: {
+            border: '1px solid',
+            bg: 'input.bgFocus',
+            borderColor: 'input.borderFocus',
+            color: 'white',
+          },
+          _focusVisible: {
+            color: 'input.fontFocus',
+            border: '1px solid',
+            borderColor: 'input.borderFocus',
+            shadow: 'input.innerFocus',
+          },
+          _invalid: {
+            border: '1px solid',
+            borderColor: 'input.borderError',
+            bg: 'input.bgError',
+            shadow: 'input.innerError',
+            color: 'input.fontError',
+          },
+          _disabled: {
+            shadow: 'none',
+            _hover: {
+              bg: 'input.bgHoverDisabled',
+              border: 'input.borderDefault',
+            },
+          },
+        },
+      },
+    },
     Textarea: {
       baseStyle: {
         shadow: 'input.innerBase',
@@ -488,6 +532,14 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           _active: {
             background: 'background.level2',
             shadow: 'none',
+          },
+        },
+        maxContrast: {
+          bg: 'font.maxContrast',
+          color: 'font.maxContrastOpposite',
+          shadow: '2xl',
+          _hover: {
+            shadow: '0',
           },
         },
         gold: {
@@ -1040,7 +1092,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           letterSpacing: '-0.35px',
           fontSize: ['sm', 'md'],
           lineHeight: '1.3',
-          color: 'font.dark',
+          color: '#000',
           mr: '0',
           pb: 'xxs',
           button: {
@@ -1070,7 +1122,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         description: {
           letterSpacing: '-0.25px',
           fontWeight: 'medium',
-          color: 'font.dark',
+          color: '#000',
           lineHeight: '1.2',
           textWrap: 'pretty',
         },
