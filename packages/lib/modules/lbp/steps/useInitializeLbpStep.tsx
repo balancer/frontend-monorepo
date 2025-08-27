@@ -68,6 +68,12 @@ export function useInitializeLbpStep({
       stepType: 'initializePool',
       labels,
       transaction,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+        estimatedGas: (transaction?.simulation?.data as bigint) || undefined,
+        gasPrice: undefined,
+      },
       isComplete,
       onSuccess: () => {
         refetchIsPoolInitialized()

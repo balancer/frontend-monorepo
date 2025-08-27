@@ -102,6 +102,12 @@ export function useClaimAndUnstakeStep({
       id: claimAndUnstakeStepId,
       stepType: 'claimAndUnstake',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+        estimatedGas: transaction?.simulation.data as bigint | undefined,
+        gasPrice: undefined,
+      },
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
       onSuccess,

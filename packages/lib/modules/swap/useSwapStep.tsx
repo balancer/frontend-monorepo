@@ -103,6 +103,12 @@ export function useSwapStep({
       id: swapStepId,
       stepType: 'swap',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+        estimatedGas: transaction?.simulation.data as bigint | undefined,
+        gasPrice: undefined,
+      },
       transaction,
       isComplete,
       onActivated: () => setIsBuildQueryEnabled(true),

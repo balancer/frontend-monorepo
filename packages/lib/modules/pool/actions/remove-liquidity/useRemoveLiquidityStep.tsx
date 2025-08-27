@@ -66,6 +66,12 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       id: removeLiquidityStepId,
       stepType: 'removeLiquidity',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+        estimatedGas: transaction?.simulation.data as bigint | undefined,
+        gasPrice: undefined,
+      },
       transaction,
       isComplete,
       renderAction: () => {

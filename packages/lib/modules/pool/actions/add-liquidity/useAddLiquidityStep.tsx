@@ -66,6 +66,12 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       id: addLiquidityStepId,
       stepType: 'addLiquidity',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+        estimatedGas: transaction?.simulation.data as bigint | undefined,
+        gasPrice: undefined,
+      },
       transaction,
       isComplete,
       onActivated: () => setIsStepActivated(true),
