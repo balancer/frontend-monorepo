@@ -134,7 +134,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
-      {!isBalancer && (
+      {isBalancer && (
         <DefaultPageContainer py="0" rounded="2xl">
           <Box>
             {!featuredPoolsLoading && featuredPools.length > 0 && (
