@@ -7,7 +7,8 @@ import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 export const useValidatePoolHooksContract = (address: string) => {
   const { poolCreationForm } = usePoolCreationForm()
 
-  const enabled = isAddress(address) && address !== zeroAddress
+  const isZeroAddress = address === zeroAddress
+  const enabled = isAddress(address) && !isZeroAddress
 
   const { data: hookFlags, isPending: isPendingHooksContractValidation } = useReadContract({
     address: address as Address,
@@ -27,12 +28,5 @@ export const useValidatePoolHooksContract = (address: string) => {
     }
   }, [hookFlags])
 
-  const isValidHooksContract = !!hookFlags
-
-  // must trigger validation manually after on chain response
-  useEffect(() => {
-    if (isValidHooksContract) poolCreationForm.trigger('poolHooksContract')
-  }, [isValidHooksContract])
-
-  return { isValidHooksContract, isPendingHooksContractValidation }
+  return { isValidHooksContract: !!hookFlags, isPendingHooksContractValidation }
 }

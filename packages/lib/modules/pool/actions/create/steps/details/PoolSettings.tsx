@@ -104,9 +104,9 @@ export function PoolSettings() {
         options={poolHooksOptions}
         title="Pool hooks"
         tooltip="TODO"
-        validate={() =>
+        validate={address =>
           validatePoolSettings.poolHooksContract(
-            poolHooksContract,
+            address,
             isValidHooksContract,
             isPendingHooksContractValidation
           )

@@ -1,9 +1,11 @@
-import { isAddress, zeroAddress } from 'viem'
+import { isAddress } from 'viem'
 import {
   MIN_SWAP_FEE_PERCENTAGE,
   MAX_SWAP_FEE_PERCENTAGE,
   MIN_AMPLIFICATION_PARAMETER,
   MAX_AMPLIFICATION_PARAMETER,
+  MAX_POOL_NAME_LENGTH,
+  MAX_POOL_SYMBOL_LENGTH,
   WeightedPoolStructure,
   SupportedPoolTypes,
   POOL_TYPES,
@@ -104,15 +106,30 @@ export const validatePoolSettings = {
   },
 
   poolHooksContract: (
-    value: string,
-    isValidPoolHooksContract: boolean | undefined,
-    isLoadingPoolHooksContract: boolean
+    address: string,
+    isValidPoolHooksContract: boolean,
+    isValidationPending: boolean
   ) => {
-    if (value === '') return false
-    if (value === zeroAddress) return true
-    if (isLoadingPoolHooksContract) return true
-    if (value && !isAddress(value)) return 'Invalid address'
-    if (value && !isValidPoolHooksContract) return 'Invalid pool hooks contract'
+    if (address === '') return false
+    if (isValidationPending) return true
+    if (!isAddress(address)) return 'Invalid address'
+    if (!isValidPoolHooksContract) return 'Invalid hooks contract address'
+    return true
+  },
+}
+
+export const validatePoolDetails = {
+  name: (name: string) => {
+    if (name.length < 3) return 'Pool name must be 3 characters or more'
+    if (name.length > MAX_POOL_NAME_LENGTH)
+      return `Pool name must be ${MAX_POOL_NAME_LENGTH} characters or less`
+    return true
+  },
+
+  symbol: (symbol: string) => {
+    if (symbol.length < 3) return 'Pool symbol must be 3 characters or more'
+    if (symbol.length > MAX_POOL_SYMBOL_LENGTH)
+      return `Pool symbol must be ${MAX_POOL_SYMBOL_LENGTH} characters or less`
     return true
   },
 }

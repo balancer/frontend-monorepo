@@ -2,7 +2,7 @@ import { VStack, Heading, Text, HStack } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { MAX_POOL_NAME_LENGTH, MAX_POOL_SYMBOL_LENGTH } from '../../constants'
+import { validatePoolDetails } from '../../validatePoolCreationForm'
 
 export function PoolDetails() {
   const { poolTokens } = usePoolCreationForm()
@@ -25,20 +25,20 @@ export function PoolDetails() {
 
       <InputWithSuggestion
         label="Pool name"
-        maxLength={MAX_POOL_NAME_LENGTH}
         name="name"
         placeholder="Enter pool name"
         suggestedValue={suggestedPoolName}
         tooltip="The name for the pool token"
+        validate={validatePoolDetails.name}
       />
 
       <InputWithSuggestion
         label="Pool symbol"
-        maxLength={MAX_POOL_SYMBOL_LENGTH}
         name="symbol"
         placeholder="Enter pool symbol"
         suggestedValue={suggestedPoolSymbol}
         tooltip="The symbol for the pool token"
+        validate={validatePoolDetails.symbol}
       />
     </VStack>
   )
@@ -50,7 +50,7 @@ interface InputWithSuggestionProps {
   placeholder: string
   tooltip: string
   suggestedValue: string
-  maxLength: number
+  validate: (value: string) => string | true
 }
 
 function InputWithSuggestion({
@@ -59,7 +59,7 @@ function InputWithSuggestion({
   placeholder,
   tooltip,
   suggestedValue,
-  maxLength,
+  validate,
 }: InputWithSuggestionProps) {
   const { poolCreationForm } = usePoolCreationForm()
 
@@ -80,11 +80,7 @@ function InputWithSuggestion({
         )}
         rules={{
           required: `${label} is required`,
-          validate: value => {
-            if (value.length < 4) return `${label} must be 4 characters or more`
-            if (value.length > maxLength) return `${label} must be ${maxLength} characters or less`
-            return true
-          },
+          validate,
         }}
       />
       <HStack spacing="xs">
