@@ -40,7 +40,7 @@ export function useSignPermit({
     } else {
       setSignPermitState(SignatureState.Ready)
     }
-  }, [setSignPermitState, sdkClient])
+  }, [isLoading])
 
   async function signPermit() {
     if (!queryOutput) throw new Error('No input provided for permit signature')
