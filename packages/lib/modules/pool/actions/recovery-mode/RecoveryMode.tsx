@@ -1,25 +1,126 @@
-import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
-import { Pool } from '../../pool.types'
-import { AlertStatus } from '@chakra-ui/react'
+import { Box, Card, CardBody, CardFooter, CardHeader, Text, VStack } from '@chakra-ui/react'
+import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { usePool } from '../../PoolProvider'
+import { useRecoveryModeStep } from './useRecoveryModeStep'
+import {
+  TransactionStepsResponse,
+  useTransactionSteps,
+} from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
+import { useRecoveryModeChangedReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { Pool, ProtocolVersion } from '../../pool.types'
+import { TransactionHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { ActionFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
+import { usePoolRedirect } from '../../pool.hooks'
+import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
+import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
+import { zeroAddress } from 'viem'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 
-export function recoveryModeAlert(pool: Pool) {
-  const isV3 = pool.protocolVersion === 3
-  const content = isV3
-    ? 'Liquidity can’t be removed unless recovery mode is enabled. You may trigger recovery or wait for someone else to do it.'
-    : 'Liquidity can’t be removed until Balancer governance authorized recovery mode after assessing the situation.'
+export function RecoveryMode() {
+  const { isDesktop } = useBreakpoints()
+  const { userAddress } = useUserAccount()
+  const { pool, isLoading: isPoolLoading, chain } = usePool()
+  const { redirectToPoolPage } = usePoolRedirect(pool)
+  const enableRecoveryModeStep = useRecoveryModeStep()
 
-  return {
-    identifier: 'poolIsPaused',
-    title: 'This pool is paused',
-    content,
-    status: 'warning' as AlertStatus,
-    isSoftWarning: false,
-    action: isV3 ? (
-      <BalAlertButton onClick={openRecoveryActionModal}>Enable recovery mode</BalAlertButton>
-    ) : undefined,
-  }
+  const isLoading = isPoolLoading
+  const transactionSteps = useTransactionSteps([enableRecoveryModeStep], isLoading)
+  const txHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
+
+  const receiptProps = useRecoveryModeChangedReceipt({
+    chain,
+    txHash,
+    userAddress,
+    protocolVersion: pool.protocolVersion as ProtocolVersion,
+    txReceipt: transactionSteps.lastTransaction?.result,
+  })
+
+  const isSuccess = !!txHash && !!receiptProps.data && receiptProps.enabled
+
+  return (
+    <Box maxW="lg" mx="auto" pb="2xl" w="full">
+      {isDesktop && (
+        <DesktopStepTracker
+          chain={pool.chain}
+          extraStyles={{ position: 'relative', top: '115px', left: '600px' }}
+          isTxBatch={false}
+          transactionSteps={transactionSteps}
+        />
+      )}
+
+      <Card width="xl">
+        <CardHeader>
+          <TransactionHeader
+            chain={pool.chain}
+            isReceiptLoading={receiptProps.isLoading}
+            label="Enable recovery mode"
+            txHash={txHash}
+          />
+        </CardHeader>
+
+        <CardBody>
+          <RecoveryModeBody isMobile={!isDesktop} pool={pool} transactionSteps={transactionSteps} />
+        </CardBody>
+
+        <CardFooter>
+          <ActionFooter
+            currentStep={transactionSteps.currentStep}
+            isSuccess={isSuccess}
+            returnAction={redirectToPoolPage}
+            returnLabel="Return to pool"
+          />
+        </CardFooter>
+      </Card>
+    </Box>
+  )
 }
 
-function openRecoveryActionModal() {
-  alert('Opening the recovery modal')
+type BodyProps = {
+  isMobile: boolean
+  pool: Pool
+  transactionSteps: TransactionStepsResponse
+}
+
+function RecoveryModeBody({ isMobile, pool, transactionSteps }: BodyProps) {
+  const pausedBy =
+    pool.pauseManager === zeroAddress || !pool.pauseManager
+      ? 'Balancer Governance'
+      : abbreviateAddress(pool.pauseManager)
+
+  return (
+    <AnimateHeightChange spacing="ms">
+      {isMobile && <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+
+      <VStack p="ms">
+        <Text fontWeight="bold" w="full">
+          {`This Balancer v3 pool has been paused by ${pausedBy}`}
+        </Text>
+        <Text color="font.secondary">
+          Pool pausing in Balancer is a critical emergency mechanism designed to protect user funds
+          during security incidents, external protocol issues or vulnerabilities. Pausing a pool is
+          typically a temporary first step to assess the situation before unpausing or enabling
+          recovery mode.
+        </Text>
+
+        <Text fontWeight="bold" w="full">
+          About recovery mode
+        </Text>
+        <Text color="font.secondary">
+          After a pool is paused, recovery mode can be enabled by anyone in Balancer v3. This
+          guarantees user funds cannot be permanently locked by governance. In recovery mode, only
+          proportional withdrawals are allowed, enabling simple, safe exits.
+        </Text>
+
+        <Text fontWeight="bold" w="full">
+          Enabling recovery mode is permissionless
+        </Text>
+        <Text color="font.secondary">
+          Recovery mode can be enabled by anyone after a pool is paused. You can activate it or wait
+          for another user.
+        </Text>
+      </VStack>
+    </AnimateHeightChange>
+  )
 }
