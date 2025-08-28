@@ -138,50 +138,6 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
     },
-    NumberInput: {
-      baseStyle: {
-        field: {
-          shadow: 'input.innerBase',
-          border: '1px solid',
-          color: 'input.fontDefault',
-          fontWeight: 'medium',
-          px: '3',
-          '::placeholder': {
-            color: 'input.fontPlaceholder',
-          },
-          _hover: {
-            bg: 'input.bgHover',
-            borderColor: 'input.borderHover',
-          },
-          _focus: {
-            border: '1px solid',
-            bg: 'input.bgFocus',
-            borderColor: 'input.borderFocus',
-            color: 'white',
-          },
-          _focusVisible: {
-            color: 'input.fontFocus',
-            border: '1px solid',
-            borderColor: 'input.borderFocus',
-            shadow: 'input.innerFocus',
-          },
-          _invalid: {
-            border: '1px solid',
-            borderColor: 'input.borderError',
-            bg: 'input.bgError',
-            shadow: 'input.innerError',
-            color: 'input.fontError',
-          },
-          _disabled: {
-            shadow: 'none',
-            _hover: {
-              bg: 'input.bgHoverDisabled',
-              border: 'input.borderDefault',
-            },
-          },
-        },
-      },
-    },
     Textarea: {
       baseStyle: {
         shadow: 'input.innerBase',
@@ -534,14 +490,6 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             shadow: 'none',
           },
         },
-        maxContrast: {
-          bg: 'font.maxContrast',
-          color: 'font.maxContrastOpposite',
-          shadow: '2xl',
-          _hover: {
-            shadow: '0',
-          },
-        },
         gold: {
           background: 'background.gold',
           color: 'white',
@@ -711,7 +659,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
       baseStyle: {
         content: {
           bg: 'background.level3',
-          shadow: '3xl',
+          boxShadow: '3xl !important',
           border: '1px solid',
           borderColor: 'border.base',
         },
@@ -719,6 +667,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           bg: 'background.level3',
           borderColor: 'background.level3',
           color: 'background.level3',
+          '--popper-arrow-shadow-color': '#fff',
+          _dark: {
+            '--popper-arrow-shadow-color': 'border.base',
+          },
         },
         closeButton: {
           color: 'font.primary',
@@ -1092,7 +1044,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           letterSpacing: '-0.35px',
           fontSize: ['sm', 'md'],
           lineHeight: '1.3',
-          color: '#000',
+          color: 'font.dark',
           mr: '0',
           pb: 'xxs',
           button: {
@@ -1122,7 +1074,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         description: {
           letterSpacing: '-0.25px',
           fontWeight: 'medium',
-          color: '#000',
+          color: 'font.dark',
           lineHeight: '1.2',
           textWrap: 'pretty',
         },
