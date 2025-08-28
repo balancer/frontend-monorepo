@@ -19,7 +19,7 @@ const STEP_ID = 'enable-recovery'
 
 export function useRecoveryModeStep() {
   const { userAddress } = useUserAccount()
-  const { pool, chainId } = usePool()
+  const { pool, chainId, refetch } = usePool()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const labels: TransactionLabels = {
@@ -51,6 +51,7 @@ export function useRecoveryModeStep() {
     labels,
     transaction,
     isComplete: () => isTransactionSuccess(transaction),
+    onSuccess: refetch,
     renderAction: () => {
       return (
         <ManagedSendTransactionButton
