@@ -62,8 +62,6 @@ export function useApproveMinterStep(
     details: {
       gasless: false,
       type: 'Gas transaction',
-      estimatedGas: undefined, // This step doesn't have transaction data
-      gasPrice: undefined,
     },
     isComplete: () => isConnected && hasMinterApproval,
     renderAction: () => <ManagedTransactionButton id={approveMinterStepId} {...props} />,

@@ -71,8 +71,6 @@ export function useInitializeLbpStep({
       details: {
         gasless: false,
         type: 'Gas transaction',
-        estimatedGas: (transaction?.simulation?.data as bigint) || undefined,
-        gasPrice: undefined,
       },
       isComplete,
       onSuccess: () => {

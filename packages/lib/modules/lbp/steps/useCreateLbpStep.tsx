@@ -130,8 +130,6 @@ export function useCreateLbpStep(): TransactionStep {
       details: {
         gasless: false,
         type: 'Gas transaction',
-        estimatedGas: (transaction?.simulation?.data as bigint) || undefined,
-        gasPrice: undefined,
       },
       isComplete: () => isTransactionSuccess(transaction) || !!poolAddress,
       onActivated: () => setIsStepActivated(true),

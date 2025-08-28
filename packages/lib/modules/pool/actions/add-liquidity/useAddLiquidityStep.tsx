@@ -69,8 +69,6 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       details: {
         gasless: false,
         type: 'Gas transaction',
-        estimatedGas: transaction?.simulation.data as bigint | undefined,
-        gasPrice: undefined,
       },
       transaction,
       isComplete,

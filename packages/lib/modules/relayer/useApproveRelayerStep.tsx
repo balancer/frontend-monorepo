@@ -66,8 +66,6 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
     details: {
       gasless: false,
       type: 'Gas transaction',
-      estimatedGas: undefined, // This step doesn't have transaction data
-      gasPrice: undefined,
     },
     isComplete: () => isConnected && hasApprovedRelayer,
     renderAction: () => <ManagedTransactionButton id={approveRelayerStepId} {...props} />,

@@ -91,9 +91,6 @@ export type StepDetails = {
   type?: 'Gas transaction' | 'Free signature' | 'Offchain action'
   // Token symbols of the tokens inside a batch approval (i.e. permit2)
   batchApprovalTokens?: string[]
-  // Gas estimation for this step
-  estimatedGas?: bigint
-  gasPrice?: string
 }
 
 export type TxCall = {
