@@ -27,12 +27,18 @@ export function usePoolCreationFormSteps() {
     setActiveStepIndex(0)
   }
 
+  const isBeforeStep = (stepTitle: string) => {
+    const stepIndex = steps.findIndex(step => step.title === stepTitle)
+    return activeStepIndex < stepIndex
+  }
+
   return {
     steps,
     activeStepIndex,
     isLastStep,
     isFirstStep,
     activeStep,
+    isBeforeStep,
     previousStep,
     nextStep,
     resetSteps,

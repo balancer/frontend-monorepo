@@ -1,33 +1,16 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
-import { PoolType } from '@balancer/sdk'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
-import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { WeightedPoolStructure, INITIAL_TOKEN_CONFIG, SupportedPoolTypes } from './constants'
+import {
+  INITIAL_TOKEN_CONFIG,
+  INITIAL_POOL_CREATION_FORM,
+  type PoolCreationForm,
+  type PoolCreationToken,
+} from './constants'
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
-
-export type PoolCreationToken = {
-  address: Address | undefined
-  rateProvider: Address | '' // infer TokenType based on if RP is zero address or contract address
-  paysYieldFees: boolean
-  weight?: string // human weight input
-  amount: string // human amount input
-  data?: ApiToken
-}
-
-export type PoolCreationConfig = {
-  protocol: ProjectConfig['projectId']
-  network: GqlChain
-  poolType: SupportedPoolTypes
-  weightedPoolStructure: WeightedPoolStructure
-  poolTokens: PoolCreationToken[]
-}
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -40,55 +23,74 @@ export function usePoolFormLogic() {
 
   const { resetSteps } = usePoolCreationFormSteps()
 
-  const poolConfigForm = usePersistentForm<PoolCreationConfig>(
+  const poolCreationForm = usePersistentForm<PoolCreationForm>(
     LS_KEYS.PoolCreation.Config,
-    {
-      protocol: ProjectConfigBalancer.projectId,
-      network: GqlChain.Mainnet,
-      poolType: PoolType.Weighted,
-      weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
-      poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
-    },
+    INITIAL_POOL_CREATION_FORM,
     { mode: 'all' }
   )
 
-  const { poolTokens, poolType, weightedPoolStructure, protocol, network } = poolConfigForm.watch()
-
-  const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
-    poolConfigForm.setValue('poolTokens', newPoolTokens)
-  }
-
-  const updatePoolTokens = (updates: PoolCreationToken[]) => {
-    poolConfigForm.setValue('poolTokens', updates)
-  }
-
-  const addPoolToken = () => {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens.push(INITIAL_TOKEN_CONFIG)
-    poolConfigForm.setValue('poolTokens', newPoolTokens)
-  }
-
-  const removePoolToken = (index: number) => {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens.splice(index, 1)
-    poolConfigForm.setValue('poolTokens', newPoolTokens)
-  }
-
-  const resetPoolCreationForm = () => {
-    setPoolAddress(undefined)
-    poolConfigForm.resetToInitial()
-    resetSteps()
-  }
-
-  return {
-    poolConfigForm,
+  const {
     poolTokens,
     poolType,
     weightedPoolStructure,
     protocol,
     network,
+    name,
+    symbol,
+    swapFeeManager,
+    pauseManager,
+    swapFeePercentage,
+    poolHooksContract,
+    enableDonation,
+    disableUnbalancedLiquidity,
+    amplificationParameter,
+  } = poolCreationForm.watch()
+
+  const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
+    const newPoolTokens = [...poolTokens]
+    newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
+    poolCreationForm.setValue('poolTokens', newPoolTokens)
+  }
+
+  const updatePoolTokens = (updates: PoolCreationToken[]) => {
+    poolCreationForm.setValue('poolTokens', updates)
+  }
+
+  const addPoolToken = () => {
+    const newPoolTokens = [...poolTokens]
+    newPoolTokens.push(INITIAL_TOKEN_CONFIG)
+    poolCreationForm.setValue('poolTokens', newPoolTokens)
+  }
+
+  const removePoolToken = (index: number) => {
+    const newPoolTokens = [...poolTokens]
+    newPoolTokens.splice(index, 1)
+    poolCreationForm.setValue('poolTokens', newPoolTokens)
+  }
+
+  const resetPoolCreationForm = () => {
+    setPoolAddress(undefined)
+    poolCreationForm.resetToInitial()
+    resetSteps()
+  }
+
+  return {
+    poolCreationForm,
+    isFormStateValid: poolCreationForm.formState.isValid,
+    poolTokens,
+    poolType,
+    weightedPoolStructure,
+    protocol,
+    network,
+    name,
+    symbol,
+    swapFeeManager,
+    pauseManager,
+    swapFeePercentage,
+    amplificationParameter,
+    poolHooksContract,
+    enableDonation,
+    disableUnbalancedLiquidity,
     updatePoolToken,
     updatePoolTokens,
     removePoolToken,

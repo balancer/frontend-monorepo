@@ -2,14 +2,15 @@ import { useEffect } from 'react'
 import { type Control, Controller } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
-import { type PoolCreationConfig, usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { useValidatePoolConfig } from '../../useValidatePoolConfig'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { type PoolCreationForm } from '../../constants'
+import { validatePoolType } from '../../validatePoolCreationForm'
 
-export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationConfig> }) {
-  const { poolTokens, updatePoolTokens, weightedPoolStructure, poolConfigForm } =
+export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationForm> }) {
+  const { poolTokens, updatePoolTokens, weightedPoolStructure, poolCreationForm, poolType } =
     usePoolCreationForm()
 
-  const { isWeightedPool } = useValidatePoolConfig()
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 
   function updatePoolTokenWeights(weightedStructure: WeightedPoolStructure) {
     if (weightedStructure === WeightedPoolStructure.FiftyFifty) {
@@ -24,7 +25,7 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
       )
     }
 
-    if (weightedStructure !== WeightedPoolStructure.Custom) poolConfigForm.trigger('poolTokens')
+    if (weightedStructure !== WeightedPoolStructure.Custom) poolCreationForm.trigger('poolTokens')
   }
 
   useEffect(() => {

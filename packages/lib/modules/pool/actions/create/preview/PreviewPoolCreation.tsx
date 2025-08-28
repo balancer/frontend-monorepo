@@ -1,14 +1,17 @@
 import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { PoolTypeCard } from './PoolTypeCard'
-import { PoolTokensCard } from './PoolTokensCard'
-import { PoolTokensInWalletCard } from './PoolTokensInWalletCard'
+import { PreviewPoolType } from './PreviewPoolType'
+import { PreviewPoolTokens } from './PreviewPoolTokens'
+import { PreviewPoolTokensInWallet } from './PreviewPoolTokensInWallet'
+import { PreviewPoolDetails } from './PreviewPoolDetails'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { Icon } from '@chakra-ui/react'
 import { Trash2 } from 'react-feather'
+import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 
-export function PoolCreationPreview() {
+export function PreviewPoolCreation() {
   const { resetPoolCreationForm } = usePoolCreationForm()
+  const { isBeforeStep } = usePoolCreationFormSteps()
 
   return (
     <NoisyCard
@@ -31,9 +34,10 @@ export function PoolCreationPreview() {
           </HStack>
         </HStack>
 
-        <PoolTypeCard />
-        <PoolTokensCard />
-        <PoolTokensInWalletCard />
+        <PreviewPoolType />
+        <PreviewPoolTokens isBeforeStep={isBeforeStep('Tokens')} />
+        <PreviewPoolTokensInWallet isBeforeStep={isBeforeStep('Tokens')} />
+        <PreviewPoolDetails isBeforeStep={isBeforeStep('Details')} />
       </VStack>
     </NoisyCard>
   )

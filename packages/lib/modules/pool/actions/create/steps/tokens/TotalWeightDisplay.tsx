@@ -1,10 +1,14 @@
 import { Divider, HStack, Text } from '@chakra-ui/react'
-import { useValidatePoolConfig } from '../../useValidatePoolConfig'
 import { AlertTriangle } from 'react-feather'
 import { Icon } from '@chakra-ui/react'
+import { validatePoolTokens } from '../../validatePoolCreationForm'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
 export function TotalWeightDisplay() {
-  const { totalWeight, isTotalWeightTooLow, isTotalWeightTooHigh } = useValidatePoolConfig()
+  const { poolTokens } = usePoolCreationForm()
+  const isTotalWeightTooLow = validatePoolTokens.isTotalWeightTooLow(poolTokens)
+  const isTotalWeightTooHigh = validatePoolTokens.isTotalWeightTooHigh(poolTokens)
+  const totalWeight = validatePoolTokens.totalWeight(poolTokens)
 
   const isInvalidTotalWeight = isTotalWeightTooLow || isTotalWeightTooHigh
 
