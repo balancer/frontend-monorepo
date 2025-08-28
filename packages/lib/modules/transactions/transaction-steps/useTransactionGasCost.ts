@@ -14,7 +14,8 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
   const { usdValueForTokenAddress } = useTokens()
 
   const estimatedGas = useMemo(() => {
-    return (transaction?.simulation?.data as bigint) || 0n
+    const data = transaction?.simulation?.data
+    return typeof data === 'bigint' ? data : 0n
   }, [transaction?.simulation?.data])
 
   const totalGasCost = useMemo(() => {
@@ -23,6 +24,7 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
     const networkConfig = chain ? getNetworkConfig(chain) : undefined
     const cost = parseUnits(gasPrice, 9) * estimatedGas
     const formattedCost = formatUnits(cost, 18)
+
     const costUsd =
       chain &&
       usdValueForTokenAddress(
