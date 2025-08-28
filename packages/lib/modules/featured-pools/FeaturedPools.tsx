@@ -88,7 +88,7 @@ export function FeaturedPools({
             top="7px"
             variant="eyebrow"
           >
-            New / Trending pools
+            New / Interesting pools
           </Text>
         </Box>
         <HStack gap="md" pt="13px" w="full">

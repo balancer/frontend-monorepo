@@ -64,7 +64,7 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
             }
             variant="eyebrow"
           >
-            New / Trending pools
+            New / Interesting pools
           </Text>
         </Box>
         <Box cursor="pointer" h="full" left="0" onClick={prev} pos="absolute" top="0" w="8" />
