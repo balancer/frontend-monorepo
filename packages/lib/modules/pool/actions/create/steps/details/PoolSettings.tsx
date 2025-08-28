@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { useCustomPoolHooksContract } from './useCustomPoolHooksContract'
+import { usePoolHooksContract } from './usePoolHooksContract'
 import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
@@ -22,8 +22,8 @@ export function PoolSettings() {
   const { address } = useAccount()
   const { network, poolType, poolHooksContract, poolCreationForm } = usePoolCreationForm()
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
-  const { isValidHooksContract, isPendingHooksContractValidation } =
-    useCustomPoolHooksContract(poolHooksContract)
+  const { isValidHooksContract, isValidHooksContractPending } =
+    usePoolHooksContract(poolHooksContract)
 
   const poolManagerOptions: PoolSettingsOption[] = [
     { label: 'Delegate to the balancer DAO', value: zeroAddress },
@@ -124,7 +124,7 @@ export function PoolSettings() {
           validatePoolSettings.poolHooksContract(
             address,
             isValidHooksContract,
-            isPendingHooksContractValidation
+            isValidHooksContractPending
           )
         }
       />

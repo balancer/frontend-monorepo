@@ -5,7 +5,7 @@ import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolType } from '../../validatePoolCreationForm'
 import { useEffect } from 'react'
-import { useCustomPoolHooksContract } from './useCustomPoolHooksContract'
+import { usePoolHooksContract } from './usePoolHooksContract'
 
 export function LiquidityManagement() {
   const {
@@ -16,7 +16,7 @@ export function LiquidityManagement() {
     poolCreationForm,
   } = usePoolCreationForm()
 
-  const { hookFlags } = useCustomPoolHooksContract(poolHooksContract)
+  const { hookFlags } = usePoolHooksContract(poolHooksContract)
   const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
 
   useEffect(() => {

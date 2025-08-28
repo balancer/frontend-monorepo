@@ -57,6 +57,14 @@ export const validatePoolTokens = {
     const isValidTotalWeight = validatePoolTokens.isValidTotalWeight(poolTokens)
     return !isWeightedPool || isValidTotalWeight
   },
+
+  rateProvider: (address: string, isValidationPending: boolean, isValidRateProvider: boolean) => {
+    if (address === '') return false
+    if (isValidationPending) return true
+    if (!isAddress(address)) return 'Invalid address'
+    if (!isValidRateProvider) return 'Invalid rate provider address'
+    return true
+  },
 }
 
 export const validatePoolType = {

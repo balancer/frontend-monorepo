@@ -6,6 +6,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { PoolSettingsOption } from './PoolSettings'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export interface PoolSettingsRadioGroupProps {
   title: string
@@ -105,7 +106,7 @@ export function PoolSettingsRadioGroup({
                       {isCustomOption &&
                         isCustomOptionSelected &&
                         (customInputType === 'address' ? (
-                          <VStack align="start" spacing="sm" w="full">
+                          <VStack align="start" spacing="md" w="full">
                             <InputGroup>
                               <Controller
                                 control={control}
@@ -125,6 +126,12 @@ export function PoolSettingsRadioGroup({
                                 rules={{ validate }}
                               />
                             </InputGroup>
+                            <BalAlert
+                              content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
+                              status="warning"
+                              title="Unrecognized contract"
+                              w="full"
+                            />
                           </VStack>
                         ) : (
                           <NumberInput

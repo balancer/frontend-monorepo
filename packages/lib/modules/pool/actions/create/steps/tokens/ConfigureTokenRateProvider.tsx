@@ -6,13 +6,15 @@ import {
   type PoolCreationForm,
 } from '../../constants'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { Address, zeroAddress, isAddress } from 'viem'
+import { Address, zeroAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
 import { InfoIconPopover } from '../../InfoIconPopover'
+import { useRateProvider } from './useRateProvider'
+import { validatePoolTokens } from '../../validatePoolCreationForm'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -115,15 +117,20 @@ function CustomRateProviderInput({
   control,
   errors,
   chainName,
-  isCustomRateProvider,
 }: CustomRateProviderInputProps) {
   const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
+
+  const { rate, isRatePending } = useRateProvider(
+    poolCreationForm.getValues(`poolTokens.${tokenIndex}.rateProvider`)
+  )
 
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
     updatePoolToken(tokenIndex, { rateProvider: clipboardText as Address })
     poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
+
+  const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -134,8 +141,8 @@ function CustomRateProviderInput({
             name={`poolTokens.${tokenIndex}.rateProvider`}
             render={({ field }) => (
               <InputWithError
-                error={errors.poolTokens?.[tokenIndex]?.rateProvider?.message}
-                isInvalid={!!errors.poolTokens?.[tokenIndex]?.rateProvider}
+                error={rateProviderErrors?.message}
+                isInvalid={!!rateProviderErrors}
                 label={`Rate provider contract address on ${chainName}`}
                 onChange={e => field.onChange(e.target.value)}
                 pasteFn={paste}
@@ -145,11 +152,8 @@ function CustomRateProviderInput({
               />
             )}
             rules={{
-              validate: (value: string) => {
-                if (!isCustomRateProvider) return true
-                if (!isAddress(value)) return 'This is an invalid rate provider address format'
-                return true
-              },
+              validate: (address: string) =>
+                validatePoolTokens.rateProvider(address, isRatePending, !!rate),
             }}
           />
         </InputGroup>
