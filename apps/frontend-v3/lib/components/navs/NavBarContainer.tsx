@@ -29,7 +29,7 @@ export function NavBarContainer() {
         <NavBar
           allowCreateWallet={allowCreateWallet}
           appLinks={allAppLinks}
-          customLinks={!isBalancer ? <BuildNavLink key="build-nav-link" /> : undefined}
+          customLinks={isBalancer ? <BuildNavLink key="build-nav-link" /> : undefined}
           mobileNav={
             <MobileNav
               appLinks={allAppLinks}
