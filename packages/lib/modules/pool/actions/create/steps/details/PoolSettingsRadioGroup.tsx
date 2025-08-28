@@ -10,6 +10,7 @@ import { PoolSettingsOption } from './PoolSettings'
 export interface PoolSettingsRadioGroupProps {
   title: string
   tooltip: string
+  isDisabled?: boolean
   name:
     | 'swapFeeManager'
     | 'pauseManager'
@@ -32,6 +33,7 @@ export function PoolSettingsRadioGroup({
   customInputLabel,
   validate,
   isPercentage,
+  isDisabled,
 }: PoolSettingsRadioGroupProps) {
   const {
     poolCreationForm: { control, setValue, trigger, resetField, formState },
@@ -81,11 +83,10 @@ export function PoolSettingsRadioGroup({
               <Stack spacing={4}>
                 {optionsPlusCustom.map(option => {
                   const isCustomOption = option.value === ''
-                  const isOptionDisabled = !option.value && option.value !== ''
 
                   return (
                     <VStack align="start" key={option.value} w="full">
-                      <Radio isDisabled={isOptionDisabled} size="lg" value={option.value}>
+                      <Radio isDisabled={isDisabled} size="lg" value={option.value}>
                         <HStack>
                           <Text
                             color="font.primary"

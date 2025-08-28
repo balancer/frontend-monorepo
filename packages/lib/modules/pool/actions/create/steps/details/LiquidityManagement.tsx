@@ -4,12 +4,33 @@ import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolType } from '../../validatePoolCreationForm'
+import { useEffect } from 'react'
+import { useCustomPoolHooksContract } from './useCustomPoolHooksContract'
 
 export function LiquidityManagement() {
-  const { poolType, enableDonation, disableUnbalancedLiquidity, poolCreationForm } =
-    usePoolCreationForm()
+  const {
+    poolType,
+    enableDonation,
+    disableUnbalancedLiquidity,
+    poolHooksContract,
+    poolCreationForm,
+  } = usePoolCreationForm()
 
+  const { hookFlags } = useCustomPoolHooksContract(poolHooksContract)
   const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
+
+  useEffect(() => {
+    // if contract has this flag set to true, enforce `disableUnbalancedLiquidity: true` to avoid tx revert
+    if (hookFlags?.enableHookAdjustedAmounts) {
+      poolCreationForm.setValue('disableUnbalancedLiquidity', true)
+    }
+    // the stable surge pool factory only supports `disableUnbalancedLiquidity: false`
+    if (isStableSurgePool) {
+      poolCreationForm.setValue('disableUnbalancedLiquidity', false)
+    }
+  }, [hookFlags, isStableSurgePool])
+
+  const isDisabled = isStableSurgePool || hookFlags?.enableHookAdjustedAmounts
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -23,7 +44,7 @@ export function LiquidityManagement() {
       </HStack>
       <PoolCreationCheckbox
         isChecked={!disableUnbalancedLiquidity}
-        isDisabled={isStableSurgePool} // stable surge pool factory only allows `disableUnbalancedLiquidity: false`
+        isDisabled={isDisabled}
         label="Allow unbalanced joins and removes"
         onChange={e => poolCreationForm.setValue('disableUnbalancedLiquidity', !e.target.checked)}
       />

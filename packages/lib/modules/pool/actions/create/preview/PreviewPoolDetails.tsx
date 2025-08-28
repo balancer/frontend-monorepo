@@ -3,6 +3,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { validatePoolType } from '../validatePoolCreationForm'
+import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 
 export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) {
   const {
@@ -19,6 +20,8 @@ export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) 
     poolType,
   } = usePoolCreationForm()
 
+  const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
+
   const isStablePool = validatePoolType.isStablePool(poolType)
 
   function formatPoolManager(manager: string) {
@@ -28,7 +31,16 @@ export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) 
 
   function formatPoolHook(hook: string) {
     if (hook === zeroAddress) return 'None'
-    return <BlockExplorerLink address={hook as `0x${string}`} chain={network} fontSize="md" />
+    const hookMetadata = poolHooksWhitelist.find(h => h.value.toLowerCase() === hook.toLowerCase())
+
+    return (
+      <BlockExplorerLink
+        address={hook as `0x${string}`}
+        chain={network}
+        customLabel={hookMetadata?.label}
+        fontSize="md"
+      />
+    )
   }
 
   const poolDetailsMap = {

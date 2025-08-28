@@ -1,15 +1,16 @@
 import { VStack, Heading, Text } from '@chakra-ui/react'
-import { zeroAddress } from 'viem'
+import { zeroAddress, Address } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useAccount } from 'wagmi'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { useValidatePoolHooksContract } from './useValidatePoolHooksContract'
+import { useCustomPoolHooksContract } from './useCustomPoolHooksContract'
 import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
-import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
+import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
+import { useEffect } from 'react'
 
 export type PoolSettingsOption = {
   label: string
@@ -19,11 +20,10 @@ export type PoolSettingsOption = {
 
 export function PoolSettings() {
   const { address } = useAccount()
-  const { network, poolType, poolHooksContract } = usePoolCreationForm()
-  const isStablePool = validatePoolType.isStablePool(poolType)
-
+  const { network, poolType, poolHooksContract, poolCreationForm } = usePoolCreationForm()
+  const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
   const { isValidHooksContract, isPendingHooksContractValidation } =
-    useValidatePoolHooksContract(poolHooksContract)
+    useCustomPoolHooksContract(poolHooksContract)
 
   const poolManagerOptions: PoolSettingsOption[] = [
     { label: 'Delegate to the balancer DAO', value: zeroAddress },
@@ -42,11 +42,26 @@ export function PoolSettings() {
     })),
   ]
 
-  const poolHooksOptions: PoolSettingsOption[] = [{ label: 'No hooks', value: zeroAddress }]
+  const poolHooksOptions: PoolSettingsOption[] = [
+    { label: 'No hooks', value: zeroAddress },
+    ...(poolHooksWhitelist || []),
+  ]
 
   const amplificationParameterOptions: PoolSettingsOption[] = AMPLIFICATION_PARAMETER_OPTIONS.map(
     value => ({ label: value, value })
   )
+
+  const isStablePool = validatePoolType.isStablePool(poolType)
+  const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
+
+  useEffect(() => {
+    if (isStableSurgePool && poolHooksWhitelist) {
+      const stableSurgeHookMetadata = poolHooksWhitelist.find(hook => hook.label === 'StableSurge')
+      if (stableSurgeHookMetadata) {
+        poolCreationForm.setValue('poolHooksContract', stableSurgeHookMetadata.value)
+      }
+    }
+  }, [isStableSurgePool, poolHooksWhitelist])
 
   return (
     <VStack align="start" spacing="lg" w="full">
@@ -100,6 +115,7 @@ export function PoolSettings() {
       <PoolSettingsRadioGroup
         customInputLabel="Custom pool hooks address"
         customInputType="address"
+        isDisabled={isStableSurgePool}
         name="poolHooksContract"
         options={poolHooksOptions}
         title="Pool hooks"
