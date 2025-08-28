@@ -68,7 +68,15 @@ type Props = {
   urlTxHash?: string
 }
 
-export function ActionModalFooter({
+export function ActionModalFooter(props: Props) {
+  return (
+    <ModalFooter>
+      <ActionFooter {...props} />
+    </ModalFooter>
+  )
+}
+
+export function ActionFooter({
   isSuccess,
   currentStep,
   returnLabel,
@@ -77,42 +85,37 @@ export function ActionModalFooter({
 }: Props) {
   // Avoid animations when displaying a historic receipt
   if (urlTxHash) {
-    return (
-      <ModalFooter>
-        <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />
-      </ModalFooter>
-    )
+    return <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />
   }
+
   return (
-    <ModalFooter>
-      <AnimatePresence initial={false} mode="wait">
-        {isSuccess ? (
-          <motion.div
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            key="footer"
-            style={{ width: '100%' }}
-            transition={{ duration: 0.3 }}
-          >
-            <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />
-          </motion.div>
-        ) : (
-          <motion.div
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            key="action"
-            style={{ width: '100%' }}
-            transition={{ duration: 0.3 }}
-          >
-            <VStack w="full">
-              {currentStep && <RenderActionButton currentStep={currentStep} key={currentStep.id} />}
-            </VStack>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </ModalFooter>
+    <AnimatePresence initial={false} mode="wait">
+      {isSuccess ? (
+        <motion.div
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          key="footer"
+          style={{ width: '100%' }}
+          transition={{ duration: 0.3 }}
+        >
+          <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />
+        </motion.div>
+      ) : (
+        <motion.div
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          key="action"
+          style={{ width: '100%' }}
+          transition={{ duration: 0.3 }}
+        >
+          <VStack w="full">
+            {currentStep && <RenderActionButton currentStep={currentStep} key={currentStep.id} />}
+          </VStack>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 
