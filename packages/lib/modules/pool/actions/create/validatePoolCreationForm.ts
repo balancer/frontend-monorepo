@@ -60,7 +60,7 @@ export const validatePoolTokens = {
 
   rateProvider: (address: string, isValidationPending: boolean, isValidRateProvider: boolean) => {
     if (address === '') return false
-    if (isValidationPending) return true
+    if (isValidationPending) return 'Validating rate provider contract...'
     if (!isAddress(address)) return 'Invalid address'
     if (!isValidRateProvider) return 'Invalid rate provider address'
     return true
@@ -119,7 +119,7 @@ export const validatePoolSettings = {
     isValidationPending: boolean
   ) => {
     if (address === '') return false
-    if (isValidationPending) return true
+    if (isValidationPending) return 'Validating pool hooks contract...'
     if (!isAddress(address)) return 'Invalid address'
     if (!isValidPoolHooksContract) return 'Invalid hooks contract address'
     return true

@@ -63,6 +63,12 @@ export function PoolSettings() {
     }
   }, [isStableSurgePool, poolHooksWhitelist])
 
+  useEffect(() => {
+    if (poolHooksContract !== zeroAddress && !isValidHooksContractPending) {
+      poolCreationForm.trigger('poolHooksContract')
+    }
+  }, [poolHooksContract, isValidHooksContractPending])
+
   return (
     <VStack align="start" spacing="lg" w="full">
       <Heading color="font.maxContrast" size="md">

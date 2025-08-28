@@ -15,6 +15,7 @@ import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { useRateProvider } from './useRateProvider'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
+import { useEffect } from 'react'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -118,11 +119,11 @@ function CustomRateProviderInput({
   errors,
   chainName,
 }: CustomRateProviderInputProps) {
-  const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
+  const { updatePoolToken, poolCreationForm, poolTokens } = usePoolCreationForm()
+  const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
+  const rateProvider = poolTokens[tokenIndex].rateProvider
 
-  const { rate, isRatePending } = useRateProvider(
-    poolCreationForm.getValues(`poolTokens.${tokenIndex}.rateProvider`)
-  )
+  const { rate, isRatePending } = useRateProvider(rateProvider)
 
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
@@ -130,7 +131,11 @@ function CustomRateProviderInput({
     poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
-  const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
+  useEffect(() => {
+    if (rateProvider !== zeroAddress && !isRatePending) {
+      poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
+    }
+  }, [rateProvider, isRatePending, rate])
 
   return (
     <VStack align="start" spacing="md" w="full">
