@@ -14,7 +14,7 @@ const linkGroups = {
       href: 'https://github.com/balancer/scaffold-balancer-v3',
       isExternal: true,
     },
-    { label: 'Code & contracts', href: 'https://github.com/balancer', isExternal: true },
+    { label: 'Code & Contracts', href: 'https://github.com/balancer', isExternal: true },
     {
       label: 'Data & Analytics',
       href: 'https://docs.balancer.fi/data-and-analytics/data-and-analytics/subgraph.html',
