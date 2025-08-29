@@ -54,16 +54,12 @@ export const ProjectConfigBalancer: ProjectConfig = {
   links: {
     appLinks: [{ href: '/vebal', label: 'veBAL' }],
     ecosystemLinks: [
-      { label: 'Build', href: 'https://balancer.fi/build' },
+      { label: 'Pool creator', href: 'https://pool-creator.balancer.fi/' },
       { label: 'Blog', href: 'https://medium.com/balancer-protocol' },
       { label: 'Docs', href: 'https://docs.balancer.fi/' },
       { label: 'Governance', href: 'https://vote.balancer.fi/#/' },
       { label: 'Analytics', href: 'https://dune.com/balancer' },
       { label: 'Forum', href: 'https://forum.balancer.fi/' },
-      {
-        label: 'Grants',
-        href: 'https://grants.balancer.community',
-      },
     ],
     socialLinks: [
       {
@@ -107,7 +103,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
             href: 'https://github.com/balancer/scaffold-balancer-v3',
             isExternal: true,
           },
-          { label: 'Grants', href: 'https://grants.balancer.community', isExternal: true },
+          { label: 'Code & Contracts', href: 'https://github.com/balancer/', isExternal: true },
           { label: 'v2 Docs', href: 'https://docs-v2.balancer.fi', isExternal: true },
         ],
       },

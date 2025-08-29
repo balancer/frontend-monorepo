@@ -711,7 +711,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
       baseStyle: {
         content: {
           bg: 'background.level3',
-          shadow: '3xl',
+          boxShadow: '3xl !important',
           border: '1px solid',
           borderColor: 'border.base',
         },
@@ -719,6 +719,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           bg: 'background.level3',
           borderColor: 'background.level3',
           color: 'background.level3',
+          '--popper-arrow-shadow-color': '#fff',
+          _dark: {
+            '--popper-arrow-shadow-color': 'border.base',
+          },
         },
         closeButton: {
           color: 'font.primary',
