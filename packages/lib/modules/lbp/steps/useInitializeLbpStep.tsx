@@ -68,6 +68,10 @@ export function useInitializeLbpStep({
       stepType: 'initializePool',
       labels,
       transaction,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+      },
       isComplete,
       onSuccess: () => {
         refetchIsPoolInitialized()

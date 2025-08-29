@@ -63,6 +63,10 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
     id: approveRelayerStepId,
     stepType: 'approveBatchRelayer',
     labels,
+    details: {
+      gasless: false,
+      type: 'Gas transaction',
+    },
     isComplete: () => isConnected && hasApprovedRelayer,
     renderAction: () => <ManagedTransactionButton id={approveRelayerStepId} {...props} />,
     onSuccess: () => refetch(),

@@ -11,6 +11,7 @@ import { Check } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
 import { indexToLetter } from '@repo/lib/shared/labels'
 import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
+import { useTransactionGasCost } from '../useTransactionGasCost'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
@@ -26,7 +27,9 @@ export function Step(props: StepProps) {
         <Text color={color} fontWeight="bold" mt={isActive ? -0.3 : 0}>
           {shouldDisplayAsTxBatch ? 'Safe transaction bundle' : title}
         </Text>
-        {!shouldDisplayAsTxBatch && <NestedInfo color={color} details={props.step.details} />}
+        {!shouldDisplayAsTxBatch && (
+          <NestedInfo color={color} details={props.step.details} transaction={transaction} />
+        )}
         {shouldDisplayAsTxBatch && (
           <TransactionBatchSteps
             color={color}
@@ -80,12 +83,34 @@ export function StepIndicator({
   )
 }
 
-function NestedInfo({ color, details }: { color: string; details?: StepDetails }) {
+function NestedInfo({
+  color,
+  details,
+  transaction,
+}: {
+  color: string
+  details?: StepDetails
+  transaction?: ManagedResult
+}) {
+  const gasCostData = useTransactionGasCost(transaction)
+
+  console.log({
+    estimatedGas: gasCostData?.estimatedGas,
+    hasTransaction: !!transaction,
+    totalGasCost: gasCostData?.formatted,
+  })
+
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
-      <Text color={color} fontSize="sm" lineHeight="1">
-        {details?.type || (details?.gasless ? 'Free signature' : 'Gas transaction')}
-      </Text>
+      {gasCostData ? (
+        <Text color={color} fontSize="sm" lineHeight="1">
+          Estimated gas: {gasCostData.costUsd}
+        </Text>
+      ) : (
+        <Text color={color} fontSize="sm" lineHeight="1">
+          {details?.type || (details?.gasless ? 'Free signature' : 'Gas transaction')}
+        </Text>
+      )}
 
       {details?.batchApprovalTokens &&
         details.batchApprovalTokens.length > 1 &&

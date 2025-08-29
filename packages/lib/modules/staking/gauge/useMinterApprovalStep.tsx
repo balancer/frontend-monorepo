@@ -59,6 +59,10 @@ export function useApproveMinterStep(
     id: approveMinterStepId,
     stepType: 'minterApproval',
     labels,
+    details: {
+      gasless: false,
+      type: 'Gas transaction',
+    },
     isComplete: () => isConnected && hasMinterApproval,
     renderAction: () => <ManagedTransactionButton id={approveMinterStepId} {...props} />,
     onSuccess: () => refetch(),
