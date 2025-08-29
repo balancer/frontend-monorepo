@@ -3,23 +3,28 @@ import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
-import { PoolCreationRisks } from './PoolCreationRisks'
-import { validatePoolTokens } from '../../validatePoolCreationForm'
+import { PoolCreationRiskCheckboxes } from './PoolCreationRiskCheckboxes'
+import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
 import { PoolTokenWeightsCard } from './PoolTokenWeightsCard'
 
 export function PoolFundStep() {
-  const { isFormStateValid, poolTokens, network, updatePoolToken, poolCreationForm } =
+  const { isFormStateValid, poolTokens, network, updatePoolToken, poolCreationForm, poolType } =
     usePoolCreationForm()
   const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
 
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+
   const isTokenAmountsValid = validatePoolTokens.isValidTokenAmounts(poolTokens)
-  const hasAcceptedRisks = hasAcceptedTokenWeightsRisk && hasAcceptedPoolCreationRisk
+
+  const hasAcceptedRisks = isWeightedPool
+    ? hasAcceptedTokenWeightsRisk && hasAcceptedPoolCreationRisk
+    : hasAcceptedPoolCreationRisk
 
   const isDisabled = !isFormStateValid || !isTokenAmountsValid || !hasAcceptedRisks
 
   return (
     <Box as="form" style={{ width: '100%' }}>
-      <VStack align="start" spacing="xl" w="full">
+      <VStack align="start" spacing="lg" w="full">
         <Heading color="font.maxContrast" size="md">
           Seed initial pool liquidity
         </Heading>
@@ -37,8 +42,8 @@ export function PoolFundStep() {
             </VStack>
           )
         })}
-        <PoolTokenWeightsCard />
-        <PoolCreationRisks />
+        {isWeightedPool && <PoolTokenWeightsCard />}
+        <PoolCreationRiskCheckboxes />
         <PoolCreationFormAction disabled={isDisabled} />
       </VStack>
     </Box>

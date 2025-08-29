@@ -1,23 +1,27 @@
 import { Checkbox, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { validatePoolType } from '../../validatePoolCreationForm'
 
-export function PoolCreationRisks() {
-  const { poolCreationForm } = usePoolCreationForm()
+export function PoolCreationRiskCheckboxes() {
+  const { poolCreationForm, poolType } = usePoolCreationForm()
   const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 
   return (
     <>
-      <Checkbox
-        alignItems="flex-start"
-        isChecked={hasAcceptedTokenWeightsRisk}
-        onChange={e => poolCreationForm.setValue('hasAcceptedTokenWeightsRisk', e.target.checked)}
-        size="lg"
-      >
-        <Text lineHeight="1" sx={{ textWrap: 'pretty' }}>
-          I understand that I will likely get rekt if the USD values of each token are not
-          proportional to the token weights.
-        </Text>
-      </Checkbox>
+      {isWeightedPool && (
+        <Checkbox
+          alignItems="flex-start"
+          isChecked={hasAcceptedTokenWeightsRisk}
+          onChange={e => poolCreationForm.setValue('hasAcceptedTokenWeightsRisk', e.target.checked)}
+          size="lg"
+        >
+          <Text lineHeight="1" sx={{ textWrap: 'pretty' }}>
+            I understand that I will likely get rekt if the USD values of each token are not
+            proportional to the token weights.
+          </Text>
+        </Checkbox>
+      )}
       <Checkbox
         isChecked={hasAcceptedPoolCreationRisk}
         onChange={e => poolCreationForm.setValue('hasAcceptedPoolCreationRisk', e.target.checked)}
