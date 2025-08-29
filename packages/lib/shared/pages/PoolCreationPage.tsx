@@ -10,6 +10,8 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useSearchParams } from 'next/navigation'
+import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 export default function PoolCreationPage() {
   const { getTokensByChain, isLoadingTokens } = useTokens()
@@ -24,13 +26,17 @@ export default function PoolCreationPage() {
     <DefaultPageContainer minH="100vh">
       <TransactionStateProvider>
         {!isLoadingTokens && (
-          <TokenBalancesProvider initTokens={initTokens}>
-            <PoolFormProvider>
-              <Permit2SignatureProvider>
-                <PoolCreationForm />
-              </Permit2SignatureProvider>
-            </PoolFormProvider>
-          </TokenBalancesProvider>
+          <TokenInputsValidationProvider>
+            <TokenBalancesProvider initTokens={initTokens}>
+              <PriceImpactProvider>
+                <PoolFormProvider>
+                  <Permit2SignatureProvider>
+                    <PoolCreationForm />
+                  </Permit2SignatureProvider>
+                </PoolFormProvider>
+              </PriceImpactProvider>
+            </TokenBalancesProvider>
+          </TokenInputsValidationProvider>
         )}
       </TransactionStateProvider>
     </DefaultPageContainer>
