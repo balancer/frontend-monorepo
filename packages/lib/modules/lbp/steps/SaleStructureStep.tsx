@@ -173,9 +173,10 @@ export function SaleStructureStep() {
               <Heading color="font.maxContrast" size="md">
                 Seed initial pool liquidity
               </Heading>
-              <Text color="font.secondary">
-                The initial seed amounts and ratio set the starting price, projected market cap and
-                price curve.
+              <Text color="font.secondary" fontSize="sm">
+                The initial seed amounts and their ratio set the starting price, projected market
+                cap and price curve. The stats and charts in the preview show the impact of your
+                choices.
               </Text>
               {saleStart && isSaleStartValid(saleStart) && (
                 <Alert
@@ -183,7 +184,7 @@ export function SaleStructureStep() {
                   variant="WideOnDesktop"
                 >
                   <AlertIcon as={saleStartsSoon(saleStart) ? AlertTriangle : LightbulbIcon} />
-                  <AlertDescription>
+                  <AlertDescription color="#000" fontSize="sm">
                     {saleStartsSoon(saleStart) && 'This sale is scheduled to start soon. '}
                     The LBP will fail to launch unless you seed the initial liquidity before the
                     scheduled start time at {format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.
@@ -290,6 +291,7 @@ function LaunchTokenAddressInput({
           render={({ field }) => (
             <InputWithError
               error={errors.launchTokenAddress?.message}
+              info="First create the token on the chosen network, if you haven't already."
               isDisabled={locked}
               isInvalid={!!errors.launchTokenAddress}
               onChange={e => field.onChange(e.target.value)}
@@ -725,6 +727,9 @@ function CollateralTokenAmountInput({
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
+      <Text fontSize="sm" pt="xs" variant="secondary">
+        Add $5k+ of the collateral token to ensure a smooth start.
+      </Text>
       {errors.collateralTokenAmount && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full" whiteSpace="pre-wrap">
           {errors.collateralTokenAmount.message}
