@@ -73,6 +73,7 @@ export function BuildNavLink() {
         <PopoverContent
           _focus={{ borderColor: 'transparent !important' }}
           ref={popoverRef}
+          rounded="xl"
           w="fit-content"
         >
           <PopoverArrow bg="background.level3" />

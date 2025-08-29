@@ -34,14 +34,22 @@ const linkGroups = {
   'In the docs': [
     {
       label: 'v3 core concepts',
-      href: 'https://docs.balancer.fi/concepts/balancer-v3',
+      href: 'https://docs.balancer.fi/concepts/core-concepts/introduction.html',
       isExternal: true,
     },
-    { label: 'Build an AMM', href: 'https://docs.balancer.fi/build/amm', isExternal: true },
-    { label: 'Build a hook', href: 'https://docs.balancer.fi/build/hooks', isExternal: true },
+    {
+      label: 'Build an AMM',
+      href: 'https://docs.balancer.fi/build/build-an-amm/create-custom-amm-with-novel-invariant.html',
+      isExternal: true,
+    },
+    {
+      label: 'Build a hook',
+      href: 'https://docs.balancer.fi/build/build-a-hook/extend-existing-pool-type.html',
+      isExternal: true,
+    },
     {
       label: 'Build a router',
-      href: 'https://docs.balancer.fi/build/sdk-and-router',
+      href: 'https://docs.balancer.fi/build/build-a-router/create-custom-router.html',
       isExternal: true,
     },
     {
