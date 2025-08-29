@@ -20,6 +20,8 @@ export function getTokens(colors: any, primaryTextColor: string) {
           specialSecondary: colors.gradient.sunsetLight,
           highlight: colors.green['500'],
           gold: colors.gradient.goldLight,
+          blue: '#3088F0',
+          orange: ' #EAA879',
         },
         border: {
           base: '#FFFFFF',
@@ -107,6 +109,8 @@ export function getTokens(colors: any, primaryTextColor: string) {
           specialSecondary: colors.gradient.sunsetDark,
           highlight: colors.green['400'],
           gold: colors.gradient.goldDark,
+          blue: '#3088F0',
+          orange: ' #EAA879',
         },
         // Border colors
         border: {
