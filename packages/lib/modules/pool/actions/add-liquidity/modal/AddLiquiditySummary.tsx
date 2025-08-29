@@ -1,5 +1,3 @@
-'use client'
-
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { Box, Divider, Card, VStack, Button, Text } from '@chakra-ui/react'
@@ -17,9 +15,15 @@ import { isVebalPool } from '../../../pool.helpers'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useRouter } from 'next/navigation'
+import {
+  ADD_LIQUIDITY_DESCRIPTION,
+  SlippageOptions,
+  SlippageSelector,
+} from '../../SlippageSelector'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -37,6 +41,7 @@ export function AddLiquiditySummary({
     addLiquidityTxHash,
     addLiquidityTxSuccess,
     slippage,
+    wantsProportional,
   } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
@@ -44,9 +49,16 @@ export function AddLiquiditySummary({
   const router = useRouter()
 
   // Order amountsIn like the form inputs which uses the tokens array.
+  const [selectedSlippage, setSelectedSlippage] = useState(0)
   const amountsIn = tokens
     .map(token => humanAmountsIn.find(amount => amount.tokenAddress === token?.address))
-    .filter(Boolean) as HumanTokenAmountWithAddress[]
+    .filter(Boolean)
+    .map(amount => ({
+      ...amount,
+      humanAmount: bn(amount?.humanAmount || 0)
+        .times(1 - selectedSlippage)
+        .toString(),
+    })) as HumanTokenAmountWithAddress[]
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -71,6 +83,15 @@ export function AddLiquiditySummary({
     )
   }
 
+  const addingInputTokenLabel = wantsProportional
+    ? "You're adding at most"
+    : "You're adding  (exactly)"
+
+  const calculateSlippage = (value: SlippageOptions) => {
+    if (value === 'zero') setSelectedSlippage(Number(slippage) / 100)
+    else if (value === 'max') setSelectedSlippage(0)
+  }
+
   return (
     <AnimateHeightChange spacing="ms">
       {isMobile && hasQuoteContext && (
@@ -82,7 +103,16 @@ export function AddLiquiditySummary({
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
           isLoading={isLoadingTokens}
-          label={shouldShowReceipt || !hasQuoteContext ? 'You added' : "You're adding"}
+          label={shouldShowReceipt || !hasQuoteContext ? 'You added' : addingInputTokenLabel}
+          rightElement={
+            wantsProportional && (
+              <SlippageSelector
+                description={ADD_LIQUIDITY_DESCRIPTION}
+                onChange={calculateSlippage}
+                selectedIndex={1}
+              />
+            )
+          }
           tokens={tokens}
           totalUSDValue={hasQuoteContext ? totalUSDValue : undefined}
         />
