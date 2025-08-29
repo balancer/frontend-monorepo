@@ -27,12 +27,9 @@ export function BuildNavLink() {
 
     const handleClickOutside = (event: MouseEvent) => {
       if (!isOpen) return
-
       const target = event.target as Node
       const isClickInsideTrigger = triggerRef.current?.contains(target)
       const isClickInsidePopover = popoverRef.current?.contains(target)
-
-      // Close if click is outside both trigger and popover content
       if (!isClickInsideTrigger && !isClickInsidePopover) {
         onClose()
       }
