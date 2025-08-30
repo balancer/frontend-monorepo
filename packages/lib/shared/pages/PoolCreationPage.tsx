@@ -4,7 +4,7 @@ import { PoolCreationForm } from '@repo/lib/modules/pool/actions/create/PoolCrea
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
-import { PoolFormProvider } from '@repo/lib/modules/pool/actions/create/PoolCreationFormProvider'
+import { PoolCreationFormProvider } from '@repo/lib/modules/pool/actions/create/PoolCreationFormProvider'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -29,11 +29,11 @@ export default function PoolCreationPage() {
           <TokenInputsValidationProvider>
             <TokenBalancesProvider initTokens={initTokens}>
               <PriceImpactProvider>
-                <PoolFormProvider>
+                <PoolCreationFormProvider>
                   <Permit2SignatureProvider>
                     <PoolCreationForm />
                   </Permit2SignatureProvider>
-                </PoolFormProvider>
+                </PoolCreationFormProvider>
               </PriceImpactProvider>
             </TokenBalancesProvider>
           </TokenInputsValidationProvider>

@@ -99,7 +99,7 @@ export function usePoolFormLogic() {
   }
 }
 
-export function PoolFormProvider({ children }: PropsWithChildren) {
+export function PoolCreationFormProvider({ children }: PropsWithChildren) {
   const hook = usePoolFormLogic()
   return (
     <PoolCreationFormContext.Provider value={hook}>{children}</PoolCreationFormContext.Provider>

@@ -10,6 +10,7 @@ import { PoolTokenWeightsCard } from './PoolTokenWeightsCard'
 export function PoolFundStep() {
   const { isFormStateValid, poolTokens, network, updatePoolToken, poolCreationForm, poolType } =
     usePoolCreationForm()
+
   const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
 
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
