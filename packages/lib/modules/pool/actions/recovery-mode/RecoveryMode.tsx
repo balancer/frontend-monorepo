@@ -1,4 +1,14 @@
-import { Box, Card, CardBody, CardFooter, CardHeader, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  HStack,
+  Link,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { usePool } from '../../PoolProvider'
@@ -17,6 +27,8 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { zeroAddress } from 'viem'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
+import { ArrowUpRight } from 'react-feather'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 export function RecoveryMode() {
   const { isDesktop } = useBreakpoints()
@@ -85,18 +97,26 @@ type BodyProps = {
 
 function RecoveryModeBody({ isMobile, pool, transactionSteps }: BodyProps) {
   const pausedBy =
-    pool.pauseManager === zeroAddress || !pool.pauseManager
-      ? 'Balancer Governance'
-      : abbreviateAddress(pool.pauseManager)
+    pool.pauseManager === zeroAddress || !pool.pauseManager ? (
+      <Text fontWeight="bold">Balancer Governance</Text>
+    ) : (
+      <Link href={getBlockExplorerAddressUrl(pool.pauseManager, pool.chain)} isExternal>
+        <HStack gap="xss">
+          <Text color="link">{abbreviateAddress(pool.pauseManager)}</Text>
+          <ArrowUpRight size="12" />
+        </HStack>
+      </Link>
+    )
 
   return (
     <AnimateHeightChange spacing="ms">
       {isMobile && <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
 
       <VStack p="ms">
-        <Text fontWeight="bold" w="full">
-          {`This Balancer v3 pool has been paused by ${pausedBy}`}
-        </Text>
+        <HStack w="full">
+          <Text fontWeight="bold">{`This Balancer v3 pool has been paused by`}</Text>
+          {pausedBy}
+        </HStack>
         <Text color="font.secondary">
           Pool pausing in Balancer is a critical emergency mechanism designed to protect user funds
           during security incidents, external protocol issues or vulnerabilities. Pausing a pool is
