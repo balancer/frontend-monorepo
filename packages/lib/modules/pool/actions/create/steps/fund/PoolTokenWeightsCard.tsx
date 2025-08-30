@@ -6,7 +6,7 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 const WEIGHT_DEVIATION_TOLERANCE = 3
 
-export function PoolTokenWeightsCard() {
+export function PoolTokenWeightsCard({ variant = 'level3' }: { variant?: string }) {
   const { poolTokens } = usePoolCreationForm()
   const { usdValueForTokenAddress } = useTokens()
 
@@ -45,7 +45,7 @@ export function PoolTokenWeightsCard() {
         />
       )}
 
-      <Card shadow="md">
+      <Card shadow="sm" variant={variant}>
         <CardBody>
           <VStack spacing="sm">
             <WeightsPercentageLabels

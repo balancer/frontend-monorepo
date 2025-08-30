@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { parseUnits, zeroAddress } from 'viem'
@@ -23,20 +23,12 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 const CREATE_POOL_STEP_ID = 'create-pool'
 
-const labels: TransactionLabels = {
-  init: 'Create pool',
-  title: 'Create pool',
-  confirming: 'Confirming pool creation...',
-  confirmed: 'Pool creation confirmed!',
-  tooltip: 'Create pool',
-}
-
 export function useCreatePoolStep(): TransactionStep {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const [isStepActivated, setIsStepActivated] = useState(false)
 
   const [poolAddress, setPoolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.LbpConfig.PoolAddress,
+    LS_KEYS.PoolCreation.PoolAddress,
     undefined
   )
 
@@ -57,8 +49,17 @@ export function useCreatePoolStep(): TransactionStep {
   } = usePoolCreationForm()
 
   const chainId = getChainId(network)
+  const chainName = getChainName(network)
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
   const isStablePool = validatePoolType.isStablePool(poolType)
+
+  const labels: TransactionLabels = {
+    init: `Deploy pool on ${chainName}`,
+    title: `Deploy pool on ${chainName}`,
+    confirming: 'Confirming pool creation...',
+    confirmed: 'Pool creation confirmed!',
+    tooltip: `Deploy pool on ${chainName}`,
+  }
 
   if (!swapFeeManager || !pauseManager || !poolHooksContract) {
     throw new Error('Missing config for create pool input')
@@ -78,7 +79,6 @@ export function useCreatePoolStep(): TransactionStep {
     disableUnbalancedLiquidity,
     ...(isStablePool && { amplificationParameter: BigInt(amplificationParameter) }),
     tokens: poolTokens.map(({ address, rateProvider, weight, paysYieldFees }) => {
-      if (!address || !rateProvider) throw new Error('Missing token config for create pool input')
       return {
         address,
         tokenType: rateProvider === zeroAddress ? TokenType.STANDARD : TokenType.TOKEN_WITH_RATE,
@@ -111,6 +111,8 @@ export function useCreatePoolStep(): TransactionStep {
   useEffect(() => {
     if (receiptProps.poolAddress) setPoolAddress(receiptProps.poolAddress)
   }, [receiptProps.poolAddress, setPoolAddress])
+
+  console.log('poolAddress', poolAddress)
 
   return useMemo(
     () => ({

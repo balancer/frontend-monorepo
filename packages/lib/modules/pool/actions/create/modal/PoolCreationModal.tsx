@@ -14,7 +14,7 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import {
@@ -48,8 +48,8 @@ export function PoolCreationModal({
   const { isDesktop } = useBreakpoints()
   const { isConnected } = useUserAccount()
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreation()
-  const { isUsingBigBlocks } = useIsUsingBigBlocks()
   const { network, poolType, resetPoolCreationForm } = usePoolCreationForm()
+  const { isUsingBigBlocks } = useIsUsingBigBlocks()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -117,7 +117,7 @@ export function PoolCreationModal({
         )}
         <TransactionModalHeader
           chain={network}
-          label={'Preview: Create an LBP'}
+          label={`Create pool on ${getChainName(network)}`}
           txHash={initPoolTxHash}
         />
         <ModalCloseButton />
