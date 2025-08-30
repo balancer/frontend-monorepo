@@ -130,6 +130,8 @@ export type PoolCreationForm = {
   poolHooksContract: Address | ''
   enableDonation: boolean
   disableUnbalancedLiquidity: boolean
+  hasAcceptedTokenWeightsRisk: boolean
+  hasAcceptedPoolCreationRisk: boolean
 }
 
 export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
@@ -156,4 +158,6 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   poolHooksContract: zeroAddress,
   enableDonation: false,
   disableUnbalancedLiquidity: false,
+  hasAcceptedTokenWeightsRisk: false,
+  hasAcceptedPoolCreationRisk: false,
 }

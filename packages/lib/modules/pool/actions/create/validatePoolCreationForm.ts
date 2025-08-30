@@ -58,6 +58,10 @@ export const validatePoolTokens = {
     return !isWeightedPool || isValidTotalWeight
   },
 
+  isValidTokenAmounts: (poolTokens: PoolCreationToken[]) => {
+    return poolTokens.every(token => Number(token.amount) > 0)
+  },
+
   rateProvider: (address: string, isValidationPending: boolean, isValidRateProvider: boolean) => {
     if (address === '') return false
     if (isValidationPending) return 'Validating rate provider contract...'
