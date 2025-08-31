@@ -20,7 +20,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const nextBtn = useRef(null)
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.LbpConfig.PoolAddress,
+    LS_KEYS.PoolCreation.Address,
     undefined
   )
 

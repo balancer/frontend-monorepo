@@ -52,7 +52,7 @@ export function PoolCreationModal({
   const { isUsingBigBlocks } = useIsUsingBigBlocks()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.LbpConfig.PoolAddress,
+    LS_KEYS.PoolCreation.Address,
     undefined
   )
 

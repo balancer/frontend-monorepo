@@ -29,7 +29,7 @@ export function PoolFundStep() {
         <Heading color="font.maxContrast" size="md">
           Seed initial pool liquidity
         </Heading>
-        <InitializePoolTips />
+        <SeedPoolTips />
         {poolTokens.map((token, idx) => {
           return (
             <VStack align="start" key={idx} spacing="sm" w="full">
@@ -51,7 +51,7 @@ export function PoolFundStep() {
   )
 }
 
-function InitializePoolTips() {
+function SeedPoolTips() {
   return (
     <BalAlert
       content={

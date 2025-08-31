@@ -28,7 +28,7 @@ export function useCreatePoolStep(): TransactionStep {
   const [isStepActivated, setIsStepActivated] = useState(false)
 
   const [poolAddress, setPoolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.PoolCreation.PoolAddress,
+    LS_KEYS.PoolCreation.Address,
     undefined
   )
 
@@ -111,8 +111,6 @@ export function useCreatePoolStep(): TransactionStep {
   useEffect(() => {
     if (receiptProps.poolAddress) setPoolAddress(receiptProps.poolAddress)
   }, [receiptProps.poolAddress, setPoolAddress])
-
-  console.log('poolAddress', poolAddress)
 
   return useMemo(
     () => ({

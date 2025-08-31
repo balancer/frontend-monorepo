@@ -35,9 +35,11 @@ export function PoolTokenWeightsCard({ variant = 'level3' }: { variant?: string 
     return Math.abs(weight - usdWeight) < WEIGHT_DEVIATION_TOLERANCE
   })
 
+  const showRektAlert = !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
+
   return (
     <VStack spacing="md" w="full">
-      {!isAllWeightsCloseToTarget && (
+      {showRektAlert && (
         <BalAlert
           content="If your deposit amounts don’t match the target pool weights, you risk losing funds to arbitrageurs. To avoid this, seed the pool with amounts in proportion to the target weights."
           status="error"

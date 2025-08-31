@@ -5,13 +5,17 @@ import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { PoolTokenWeightsCard } from '../steps/fund/PoolTokenWeightsCard'
+import { validatePoolType } from '../validatePoolCreationForm'
 
 export function PoolSummary() {
+  const { poolType } = usePoolCreationForm()
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+
   return (
     <VStack spacing="md">
       <PoolTitleCard />
       <PoolTokenAmountsCard />
-      <PoolTokenWeightsCard variant="modalSubSection" />
+      {isWeightedPool && <PoolTokenWeightsCard variant="modalSubSection" />}
       <PoolDetailsCard />
     </VStack>
   )
@@ -26,10 +30,10 @@ function PoolTitleCard() {
         <Text color="font.secondary">{symbol}</Text>
         <HStack>
           <NetworkIcon bg="background.level4" chain={network} shadow="lg" size={8} />
-          {poolTokens.map(token => (
+          {poolTokens.map((token, idx) => (
             <Card
               bg="background.level4"
-              key={token.address}
+              key={idx}
               paddingY="sm"
               rounded="full"
               variant="subSection"
