@@ -26,6 +26,9 @@ export const ADD_LIQUIDITY_DESCRIPTION = `
   on-chain. Slippage tolerance is the maximum change in price you are willing
   to accept.`
 
+export const SWAP_DESCRIPTION = `
+  No description yet`
+
 export function SlippageSelector({ description, onChange, selectedIndex }: Props) {
   const [selected, setSelected] = useState(OPTIONS[selectedIndex])
 
