@@ -15,6 +15,10 @@ import {
 import { PoolType } from '@balancer/sdk'
 
 export const validatePoolTokens = {
+  isValidTokens: (poolTokens: PoolCreationToken[]) => {
+    return poolTokens.every(token => token.address)
+  },
+
   maxTokens: (poolType: SupportedPoolTypes) => {
     return POOL_TYPES[poolType].maxTokens
   },

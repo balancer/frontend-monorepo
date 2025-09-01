@@ -20,12 +20,9 @@ import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolIn
 import { getChainId } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
-import { useIsUsingBigBlocks, useSetUsingBigBlocks, useIsHyperEvm } from '../../chains/hyperevm'
-import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
-import { useUserAccount } from '../../web3/UserAccountProvider'
-import { ExternalLink } from 'react-feather'
-import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
+import { ToggleHyperBlockSize } from '@repo/lib/modules/pool/actions/create/modal/ToggleHyperBlockSize'
+import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 
 type Props = {
   isOpen: boolean
@@ -42,11 +39,9 @@ export function LbpCreationModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const { isConnected } = useUserAccount()
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { transactionSteps, initLbpTxHash, urlTxHash } = useLbpCreation()
-  const { isUsingBigBlocks } = useIsUsingBigBlocks()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -111,15 +106,13 @@ export function LbpCreationModal({
 
   const isSuccess = !!isPoolInitialized && isMetadataSaved
 
-  const isHyperEvm = useIsHyperEvm()
-  const shouldUseBigBlocks =
-    isConnected && isHyperEvm && !isUsingBigBlocks && transactionSteps.currentStepIndex === 0 // big blocks only necessary to deploy pool contract
-  const shouldUseSmallBlocks =
-    isConnected && isHyperEvm && !!isUsingBigBlocks && transactionSteps.currentStepIndex > 0 // small blocks faster for non contract deployment txs
-  const shouldToggleBlockSize = shouldUseBigBlocks || shouldUseSmallBlocks
-
-  const { setUsingBigBlocks, isSetUsingBigBlocksPending, setUsingBigBlocksError } =
-    useSetUsingBigBlocks()
+  const {
+    shouldUseBigBlocks,
+    shouldToggleBlockSize,
+    setUsingBigBlocks,
+    isSetUsingBigBlocksPending,
+    setUsingBigBlocksError,
+  } = useHyperEvm({ isContractDeploymentStep: transactionSteps.currentStepIndex === 0 })
 
   return (
     <Modal
@@ -214,43 +207,12 @@ export function LbpCreationModal({
         </ModalBody>
 
         {shouldToggleBlockSize ? (
-          <VStack marginTop="2" paddingLeft="6" paddingRight="6" spacing="3" width="full">
-            <Button
-              isDisabled={isSetUsingBigBlocksPending}
-              isLoading={isSetUsingBigBlocksPending}
-              onClick={() => setUsingBigBlocks(shouldUseBigBlocks)}
-              size="lg"
-              variant="primary"
-              w="full"
-            >
-              <LabelWithIcon icon="sign">
-                Switch to {shouldUseBigBlocks ? 'big' : 'small'} blocks
-              </LabelWithIcon>
-            </Button>
-            {setUsingBigBlocksError ? (
-              <BalAlert content={setUsingBigBlocksError.message} status="error" title="Error:" />
-            ) : (
-              <BalAlert
-                content={
-                  <Text color="font.primaryGradient">
-                    {shouldUseBigBlocks
-                      ? `The HyperEVM network requires your account switch to using big blocks to deploy contracts.`
-                      : `Your HyperEvm account is using big blocks. Switch to small blocks for faster transaction speeds.`}{' '}
-                    <BalAlertLink
-                      alignItems="center"
-                      display="inline-flex"
-                      href="https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm/dual-block-architecture"
-                      isExternal
-                    >
-                      <span>See more information</span>
-                      <ExternalLink size={16} style={{ marginLeft: 2, verticalAlign: 'middle' }} />
-                    </BalAlertLink>
-                  </Text>
-                }
-                status="info"
-              />
-            )}
-          </VStack>
+          <ToggleHyperBlockSize
+            isSetUsingBigBlocksPending={isSetUsingBigBlocksPending}
+            setUsingBigBlocks={setUsingBigBlocks}
+            setUsingBigBlocksError={setUsingBigBlocksError}
+            shouldUseBigBlocks={shouldUseBigBlocks}
+          />
         ) : !saveMetadataError ? (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
