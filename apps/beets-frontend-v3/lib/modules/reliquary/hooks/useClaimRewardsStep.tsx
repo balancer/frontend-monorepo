@@ -8,7 +8,6 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -27,11 +26,6 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
     tooltip: 'tooltip',
   }
 
-  const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (Claim relic incentives transaction)',
-    {}
-  )
-
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
@@ -40,7 +34,6 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
     functionName: 'harvest',
     args: relicId && userAddress ? [BigInt(relicId), userAddress] : null,
     enabled: isConnected && !!relicId && !!userAddress,
-    txSimulationMeta,
     onTransactionChange: setTransaction,
   }
 

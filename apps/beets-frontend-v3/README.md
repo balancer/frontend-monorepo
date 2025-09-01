@@ -46,21 +46,6 @@ By default, we use turbo mode for better DX with faster compile times and faster
 pnpm dev:beets
 ```
 
-### Sentry does not work with turbopack yet
-
-This is not a real issue as we don't normally use sentry in dev mode. The only downside is that you
-will see a sentry warning in the console when using turbopack mode.
-
-For build mode, we will always use webpack which works with Sentry as expected.
-
-Context: https://github.com/getsentry/sentry-javascript/issues/8105#issuecomment-2577559235
-
-You can explicitly run with webpack mode with:
-
-```bash
-pnpm dev:beets:webpack
-```
-
 ## Testing
 
 See [Testing instructions](../../README.md#testing).

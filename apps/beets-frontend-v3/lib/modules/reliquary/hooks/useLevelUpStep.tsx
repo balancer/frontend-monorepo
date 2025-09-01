@@ -9,7 +9,6 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -29,11 +28,6 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     tooltip: 'tooltip',
   }
 
-  const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (Level up transaction)',
-    {}
-  )
-
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
@@ -42,7 +36,6 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     functionName: 'updatePosition',
     args: relicId ? [relicId] : null,
     enabled: isConnected && !!relicId,
-    txSimulationMeta,
     onTransactionChange: setTransaction,
   }
 
