@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, HStack, Link, Text, VStack, Flex } from '@chakra-ui/react'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
 import { BeetsIconCircular } from '@repo/lib/shared/components/icons/logos/BeetsIconCircular'
