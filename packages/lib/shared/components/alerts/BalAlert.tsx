@@ -22,6 +22,7 @@ export type BalAlertProps = {
   isNavAlert?: boolean
   onClose?: MouseEventHandler
   ssr?: boolean
+  action?: ReactNode
 } & Omit<AlertProps, 'status' | 'children' | 'content'>
 
 export function BalAlert({
@@ -33,6 +34,7 @@ export function BalAlert({
   isNavAlert = false,
   ssr = false, // Use true whe rendering alerts on the server side
   onClose,
+  action,
   ...rest
 }: BalAlertProps) {
   const iconSize = {
@@ -65,6 +67,7 @@ export function BalAlert({
       )}
 
       {learnMoreLink && <BalAlertButtonLink href={learnMoreLink}>More</BalAlertButtonLink>}
+      {action}
       {isSoftWarning && (
         <CloseButton
           _hover={{

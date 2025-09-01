@@ -15,8 +15,8 @@ import RecentTransactions from '../other/RecentTransactions'
 import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
-import { ImpersonateAccount } from '@repo/lib/modules/web3/impersonation/ImpersonateAccount'
 import { ArrowUpRight } from 'react-feather'
+import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
 
 type Props = {
   mobileNav?: ReactNode
@@ -123,8 +123,6 @@ function NavLinks({
           </Box>
         </>
       )}
-      {/* Display impersonate form only for E2E dev tests */}
-      {shouldUseAnvilFork && <ImpersonateAccount />}
     </HStack>
   )
 }
@@ -185,6 +183,13 @@ export function NavActions({
         display: { base: 'block', lg: 'none' },
       },
     ]
+
+    if (shouldUseAnvilFork) {
+      defaultActions.push({
+        el: <DevToolsDrawerButton />,
+        display: { base: 'block', lg: 'block' },
+      })
+    }
 
     if (isConnected) {
       return [

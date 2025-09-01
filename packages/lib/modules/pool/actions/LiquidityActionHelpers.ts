@@ -32,7 +32,6 @@ import {
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import { Pool } from '../pool.types'
 import {
-  isAffectedByCspIssue,
   isComposableStableV1,
   isCowAmmPool,
   isGyro,
@@ -249,10 +248,6 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
   if (isComposableStableV1(pool)) return true
 
   if (pool.dynamicData.isInRecoveryMode) return true
-
-  if (pool.dynamicData.isInRecoveryMode && pool.dynamicData.isPaused) return true
-
-  if (pool.dynamicData.isInRecoveryMode && isAffectedByCspIssue(pool)) return true
 
   return false
 }

@@ -25,6 +25,7 @@ export function usePoolEnrichWithOnChainData(pool: Pool) {
   const {
     isLoading: isLoadingPool,
     poolTokenBalances,
+    isPoolInRecoveryMode,
     totalSupply,
     nestedPoolData,
     refetch,
@@ -35,6 +36,7 @@ export function usePoolEnrichWithOnChainData(pool: Pool) {
     pool,
     priceFor,
     poolTokenBalances,
+    isPoolInRecoveryMode,
     totalSupply,
     nestedPoolData,
   })
@@ -82,6 +84,13 @@ function useV3PoolOnchainData(pool: Pool) {
         functionName: 'totalSupply',
         args: [],
       },
+      {
+        chainId,
+        abi: vaultExtensionAbi_V3,
+        address: vaultAddress,
+        functionName: 'getPoolConfig',
+        args: [pool.address as Address],
+      },
     ],
   })
 
@@ -115,6 +124,7 @@ function useV3PoolOnchainData(pool: Pool) {
   return {
     ...v3Query,
     poolTokenBalances: v3Query.data?.[0][2],
+    isPoolInRecoveryMode: v3Query.data?.[2].isPoolInRecoveryMode,
     totalSupply: v3Query.data?.[1],
     nestedPoolData: v3QueryNestedPools.data,
   }
@@ -150,6 +160,7 @@ function useV2PoolOnchainData(pool: Pool) {
   return {
     ...v2Query,
     poolTokenBalances: v2Query.data?.[0][1],
+    isPoolInRecoveryMode: undefined,
     totalSupply: v2Query.data?.[1],
     nestedPoolData: undefined, // v2 pools w/ nested pools will not be supported
   }
@@ -192,6 +203,7 @@ function useCowPoolOnchainData(pool: Pool) {
     ...cowQuery,
     totalSupply: cowQuery.data?.at(-1),
     poolTokenBalances: cowQuery.data?.slice(0, -1),
+    isPoolInRecoveryMode: undefined,
     nestedPoolData: undefined, // TODO: add support for v1 pools w/ nested pools when needed
   }
 }
@@ -201,6 +213,7 @@ type Params = {
   pool: Pool
   priceFor: (address: string, chain: GqlChain) => number
   poolTokenBalances: readonly bigint[] | undefined
+  isPoolInRecoveryMode: boolean | undefined
   totalSupply: bigint | undefined
   nestedPoolData: any // TODO: how to type this?
 }
@@ -210,6 +223,7 @@ function enrichPool({
   pool,
   priceFor,
   poolTokenBalances,
+  isPoolInRecoveryMode,
   totalSupply,
   nestedPoolData,
 }: Params) {
@@ -275,6 +289,8 @@ function enrichPool({
       })
     })
   }
+
+  if (isPoolInRecoveryMode !== undefined) clone.dynamicData.isInRecoveryMode = isPoolInRecoveryMode
 
   return clone
 }
