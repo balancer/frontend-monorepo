@@ -1,9 +1,7 @@
-import { withSentryConfig } from '@sentry/nextjs'
-import { sentryOptions } from './sentry.config'
 import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
-const nextConfig: NextConfig = {
+const config: NextConfig = {
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false }
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
@@ -51,9 +49,6 @@ const nextConfig: NextConfig = {
     return redirects
   },
 }
-
-// Avoid sentry setup in CI
-const config = process.env.CI === 'true' ? nextConfig : withSentryConfig(nextConfig, sentryOptions)
 
 export default config
 

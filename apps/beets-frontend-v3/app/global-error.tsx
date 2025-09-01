@@ -1,8 +1,6 @@
 'use client'
 
-import * as Sentry from '@sentry/nextjs'
 import { default as NextError } from 'next/error'
-import { useEffect } from 'react'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 /**
@@ -24,11 +22,6 @@ export default function GlobalError({
 }) {
   const showResetButton = isDev || isStaging
   const href = typeof window === 'undefined' ? undefined : window.location.href
-
-  useEffect(() => {
-    Sentry.captureException(error)
-  }, [error])
-
   const title = error.digest ? `Something went wrong (${error.digest})` : 'Something went wrong'
 
   return (

@@ -8,7 +8,6 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -52,11 +51,6 @@ export function useLstUnstakeStep(
     tooltip: 'tooltip',
   }
 
-  const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (LST unstaking transaction)',
-    {}
-  )
-
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
@@ -68,7 +62,6 @@ export function useLstUnstakeStep(
       validators.map(validator => validator.unstakeAmountShares),
     ],
     enabled: isConnected && !!sharesAmount && enabled,
-    txSimulationMeta,
     onTransactionChange: setTransaction,
   }
 
