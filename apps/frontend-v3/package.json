@@ -39,7 +39,7 @@
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
     "@repo/test": "workspace:*",
-    "@sentry/nextjs": "8.50.0",
+    "@sentry/nextjs": "10.8.0",
     "@tanstack/react-query": "5.80.7",
     "@vercel/speed-insights": "1.1.0",
     "bignumber.js": "9.3.1",
