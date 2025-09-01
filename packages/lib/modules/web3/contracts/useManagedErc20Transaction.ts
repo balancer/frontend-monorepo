@@ -11,7 +11,12 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { captureWagmiExecutionError } from '@repo/lib/shared/utils/query-errors'
 import { useEffect, useState } from 'react'
 import { Address, ContractFunctionArgs, ContractFunctionName } from 'viem'
-import { useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import {
+  useEstimateGas,
+  useSimulateContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi'
 import { useTxHash } from '../safe.hooks'
 import { useChainSwitch } from '../useChainSwitch'
 import { usdtAbi } from './abi/UsdtAbi'
@@ -54,7 +59,7 @@ export function useManagedErc20Transaction({
   const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7'
   const isUsdt = isSameAddress(tokenAddress, usdtAddress)
 
-  const simulateQuery = useSimulateContract({
+  const txConfig = {
     /*
       USDTs ABI does not exactly follow the erc20ABI so we need its explicit ABI to avoid errors (e.g. calling approve)
       More info: https://github.com/wevm/wagmi/issues/2749#issuecomment-1638200817
@@ -64,10 +69,23 @@ export function useManagedErc20Transaction({
     functionName: functionName as ContractFunctionName<any, WriteAbiMutability>,
     // This any is 'safe'. The type provided to any is the same type for args that is inferred via the functionName
     args: writeArgs as any,
+  }
+
+  const simulateQuery = useSimulateContract({
+    ...txConfig,
     chainId,
     query: {
       enabled: enabled && !shouldChangeNetwork,
       meta: simulationMeta,
+      // In chains like polygon, we don't want background refetches while waiting for min block confirmations
+      ...onlyExplicitRefetch,
+    },
+  })
+
+  const estimateGasQuery = useEstimateGas({
+    ...txConfig,
+    query: {
+      enabled: !!txConfig && !shouldChangeNetwork,
       // In chains like polygon, we don't want background refetches while waiting for min block confirmations
       ...onlyExplicitRefetch,
     },
@@ -89,7 +107,7 @@ export function useManagedErc20Transaction({
 
   const bundle = {
     chainId,
-    simulation: simulateQuery as TransactionSimulation,
+    simulation: estimateGasQuery as TransactionSimulation,
     execution: writeQuery as TransactionExecution,
     result: transactionStatusQuery,
     isSafeTxLoading,
