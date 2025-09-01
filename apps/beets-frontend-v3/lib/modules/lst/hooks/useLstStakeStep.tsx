@@ -8,7 +8,6 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -33,11 +32,6 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
     tooltip: 'tooltip',
   }
 
-  const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (LST staking transaction)',
-    {}
-  )
-
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
@@ -47,7 +41,6 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
     args: [],
     value: parseUnits(humanAmount, BPT_DECIMALS),
     enabled: bn(humanAmount).gte(0.01) && isConnected && enabled,
-    txSimulationMeta,
     onTransactionChange: setTransaction,
   }
 

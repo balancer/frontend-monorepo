@@ -1,42 +1,32 @@
-import {
-  Text,
-  HStack,
-  VStack,
-  RadioGroup,
-  Stack,
-  Radio,
-  InputGroup,
-  InputRightElement,
-  Button,
-} from '@chakra-ui/react'
+import { Text, HStack, VStack, RadioGroup, Stack, Radio, InputGroup } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
-import { usePoolCreationForm, PoolCreationConfig } from '../../PoolCreationFormProvider'
-import { Address, zeroAddress, isAddress } from 'viem'
+import {
+  RATE_PROVIDER_RADIO_OPTIONS,
+  RateProviderOption,
+  type PoolCreationForm,
+} from '../../constants'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { Address, zeroAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
 import { InfoIconPopover } from '../../InfoIconPopover'
+import { useRateProvider } from './useRateProvider'
+import { validatePoolTokens } from '../../validatePoolCreationForm'
+import { useEffect } from 'react'
+
+interface ConfigureTokenRateProviderProps {
+  tokenIndex: number
+  verifiedRateProviderAddress: string | undefined
+}
 
 export function ConfigureTokenRateProvider({
   tokenIndex,
   verifiedRateProviderAddress,
-}: {
-  verifiedRateProviderAddress: string | undefined
-  tokenIndex: number
-}) {
-  const {
-    poolTokens,
-    network,
-    updatePoolToken,
-    poolConfigForm: {
-      control,
-      formState: { errors },
-      trigger,
-    },
-  } = usePoolCreationForm()
+}: ConfigureTokenRateProviderProps) {
+  const { poolTokens, network, updatePoolToken, poolCreationForm } = usePoolCreationForm()
 
   if (!poolTokens[tokenIndex].address) return null
 
@@ -65,7 +55,7 @@ export function ConfigureTokenRateProvider({
 
     updatePoolToken(tokenIndex, { rateProvider, paysYieldFees })
     // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above)
-    trigger(`poolTokens.${tokenIndex}.rateProvider`)
+    poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
   const isCustomRateProvider = rateProviderRadioValue === RateProviderOption.Custom
@@ -102,8 +92,8 @@ export function ConfigureTokenRateProvider({
       {isCustomRateProvider && (
         <CustomRateProviderInput
           chainName={getChainName(network)}
-          control={control}
-          errors={errors}
+          control={poolCreationForm.control}
+          errors={poolCreationForm.formState.errors}
           isCustomRateProvider={isCustomRateProvider}
           tokenIndex={tokenIndex}
         />
@@ -115,72 +105,62 @@ export function ConfigureTokenRateProvider({
   )
 }
 
+interface CustomRateProviderInputProps {
+  tokenIndex: number
+  control: Control<PoolCreationForm>
+  errors: FieldErrors<PoolCreationForm>
+  chainName: string
+  isCustomRateProvider: boolean
+}
+
 function CustomRateProviderInput({
   tokenIndex,
   control,
   errors,
   chainName,
-  isCustomRateProvider,
-}: {
-  tokenIndex: number
-  control: Control<PoolCreationConfig>
-  errors: FieldErrors<PoolCreationConfig>
-  chainName: string
-  isCustomRateProvider: boolean
-}) {
-  const { updatePoolToken } = usePoolCreationForm()
+}: CustomRateProviderInputProps) {
+  const { updatePoolToken, poolCreationForm, poolTokens } = usePoolCreationForm()
+  const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
+  const rateProvider = poolTokens[tokenIndex].rateProvider
+
+  const { rate, isRatePending } = useRateProvider(rateProvider)
+
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
     updatePoolToken(tokenIndex, { rateProvider: clipboardText as Address })
+    poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
+
+  useEffect(() => {
+    if (rateProvider !== zeroAddress && !isRatePending) {
+      poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
+    }
+  }, [rateProvider, isRatePending, rate])
 
   return (
     <VStack align="start" spacing="md" w="full">
       <VStack align="start" spacing="sm" w="full">
-        <HStack spacing="xs">
-          <Text>Rate provider contract address on {chainName}</Text>
-          <InfoIconPopover message="The contract you enter must have a function named getRate" />
-        </HStack>
         <InputGroup>
           <Controller
             control={control}
             name={`poolTokens.${tokenIndex}.rateProvider`}
             render={({ field }) => (
               <InputWithError
-                error={errors.poolTokens?.[tokenIndex]?.rateProvider?.message}
-                isInvalid={!!errors.poolTokens?.[tokenIndex]?.rateProvider}
+                error={rateProviderErrors?.message}
+                isInvalid={!!rateProviderErrors}
+                label={`Rate provider contract address on ${chainName}`}
                 onChange={e => field.onChange(e.target.value)}
+                pasteFn={paste}
                 placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
+                tooltip="The contract you enter must have a function named getRate"
                 value={field.value}
               />
             )}
             rules={{
-              validate: (value: string) => {
-                if (!isCustomRateProvider) return true
-                if (!isAddress(value)) return 'This is an invalid rate provider address format'
-                return true
-              },
+              validate: (address: string) =>
+                validatePoolTokens.rateProvider(address, isRatePending, !!rate),
             }}
           />
-
-          <InputRightElement w="max-content">
-            <Button
-              aria-label="paste"
-              h="28px"
-              letterSpacing="0.25px"
-              lineHeight="1"
-              mr="0.5"
-              onClick={paste}
-              position="relative"
-              px="2"
-              right="3px"
-              rounded="sm"
-              size="sm"
-              variant="tertiary"
-            >
-              Paste
-            </Button>
-          </InputRightElement>
         </InputGroup>
       </VStack>
 

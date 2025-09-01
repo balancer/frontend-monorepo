@@ -4,11 +4,13 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { CheckCircle, XCircle } from 'react-feather'
-import { PoolCreationConfig } from '../PoolCreationFormProvider'
+import { type PoolCreationForm } from '../constants'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
-import { zeroAddress } from 'viem'
+import { zeroAddress, Address } from 'viem'
+import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function PoolTokensCard() {
+export function PreviewPoolTokens({ isBeforeStep }: { isBeforeStep: boolean }) {
   const { poolTokens } = usePoolCreationForm()
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
@@ -16,7 +18,7 @@ export function PoolTokensCard() {
   const hasRateProviders = poolTokens.some(token => token.rateProvider !== zeroAddress)
 
   return (
-    <Card>
+    <Card opacity={isBeforeStep ? 0.5 : 1}>
       <CardHeaderRow columnNames={['Tokens', 'Price', 'Market Cap']} />
       <CardBody>
         <VStack spacing="md">
@@ -24,16 +26,18 @@ export function PoolTokensCard() {
             if (!token.address || !token.data) return <DefaultDataRow key={idx} />
             const { address, chain, symbol, name } = token.data
 
+            const tokenUsdValue = usdValueForTokenAddress(address, chain, '1')
+
             return (
               <CardDataRow
                 data={[
                   <IdentifyTokenCell address={address} chain={chain} name={name} symbol={symbol} />,
-                  <Text align="right">
-                    {toCurrency(usdValueForTokenAddress(address, chain, '1'), {
-                      abbreviated: false,
-                    })}
-                  </Text>,
-                  <Text align="right">???</Text>,
+                  <Text align="right">{toCurrency(tokenUsdValue, { abbreviated: false })}</Text>,
+                  <MarketCapValue
+                    address={address as Address}
+                    chain={chain}
+                    tokenUsdValue={Number(tokenUsdValue)}
+                  />,
                 ]}
                 key={address}
               />
@@ -46,7 +50,22 @@ export function PoolTokensCard() {
   )
 }
 
-function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationConfig['poolTokens'] }) {
+interface MarketCapValueProps {
+  address: Address
+  chain: GqlChain
+  tokenUsdValue: number
+}
+
+function MarketCapValue({ address, chain, tokenUsdValue }: MarketCapValueProps) {
+  const { toCurrency } = useCurrency()
+  const { totalSupply } = useTokenMetadata(address, chain)
+
+  const marketCap = totalSupply ? totalSupply * tokenUsdValue : 0
+
+  return <Text align="right">{marketCap ? toCurrency(marketCap, { abbreviated: true }) : '—'}</Text>
+}
+
+function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTokens'] }) {
   return (
     <>
       <Divider />

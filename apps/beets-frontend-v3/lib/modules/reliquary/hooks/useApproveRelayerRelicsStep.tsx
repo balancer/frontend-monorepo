@@ -1,7 +1,6 @@
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
-import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useState } from 'react'
 import {
   TransactionStep,
@@ -38,16 +37,6 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
     tooltip: 'Approve the relayer for all relics.',
   }
 
-  const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation: Approving Relayer for all relics',
-    {
-      reliquaryAddress,
-      userAddress,
-      relayerAddress,
-      chainId,
-    }
-  )
-
   const props: ManagedTransactionInput = {
     contractAddress: reliquaryAddress || '0x',
     contractId: 'beets.reliquary',
@@ -56,7 +45,6 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
     chainId,
     args: [relayerAddress, true],
     enabled: !!userAddress && !isLoading,
-    txSimulationMeta,
     onTransactionChange: setTransaction,
   }
 

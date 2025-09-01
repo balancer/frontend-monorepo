@@ -12,12 +12,28 @@ import { FeaturedPartners } from './FeaturedPartners'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
+import { useQuery } from '@apollo/client'
+import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
 }
 
 export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
+  const { supportedNetworks } = PROJECT_CONFIG
+
+  const { data: featuredPoolsData, loading: featuredPoolsLoading } = useQuery(
+    GetFeaturedPoolsDocument,
+    {
+      variables: { chains: supportedNetworks },
+      fetchPolicy: 'cache-and-network',
+    }
+  )
+
+  const featuredPools = featuredPoolsData?.featuredPools || []
+
   const { protocolData } = useProtocolStats()
 
   return (
@@ -103,11 +119,6 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 {children}
               </Box>
             </FadeInOnView>
-            {/* <FadeInOnView animateOnce={false}>
-            <Box pt="20" pb="4">
-              <FeaturedPools featuredPools={featuredPools} />
-            </Box>
-          </FadeInOnView> */}
           </DefaultPageContainer>
         </Noise>
       </Box>
@@ -123,6 +134,16 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
+      {isBalancer && (featuredPools.length > 0 || featuredPoolsLoading) && (
+        <DefaultPageContainer py="0" rounded="2xl">
+          <Box>
+            {!featuredPoolsLoading && featuredPools.length > 0 && (
+              <FeaturedPools featuredPools={featuredPools} />
+            )}
+            {featuredPoolsLoading && <Skeleton height="327px" width="100%" />}
+          </Box>
+        </DefaultPageContainer>
+      )}
       <DefaultPageContainer mb="3xl" py="0" rounded="2xl">
         <FeaturedPartners />
       </DefaultPageContainer>

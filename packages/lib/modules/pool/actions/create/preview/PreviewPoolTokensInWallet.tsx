@@ -6,9 +6,9 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { formatUnits } from 'viem'
 
-export function PoolTokensInWalletCard() {
+export function PreviewPoolTokensInWallet({ isBeforeStep }: { isBeforeStep: boolean }) {
   return (
-    <Card>
+    <Card opacity={isBeforeStep ? 0.5 : 1}>
       <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token Value', '%']} />
       <CardBody>
         <VStack spacing="md">

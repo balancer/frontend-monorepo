@@ -4,7 +4,8 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { useValidatePoolConfig } from './useValidatePoolConfig'
+import { validatePoolTokens, validatePoolType } from './validatePoolCreationForm'
+import { usePoolCreationForm } from './PoolCreationFormProvider'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
@@ -50,7 +51,11 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 }
 
 function InvalidTotalWeightAlert() {
-  const { isWeightedPool, isTotalWeightTooHigh, isTotalWeightTooLow } = useValidatePoolConfig()
+  const { poolTokens, poolType } = usePoolCreationForm()
+
+  const isTotalWeightTooLow = validatePoolTokens.isTotalWeightTooLow(poolTokens)
+  const isTotalWeightTooHigh = validatePoolTokens.isTotalWeightTooHigh(poolTokens)
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 
   if (!isWeightedPool) return null
 

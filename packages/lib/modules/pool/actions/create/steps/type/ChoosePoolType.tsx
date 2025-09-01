@@ -1,10 +1,18 @@
 import { type Control, Controller } from 'react-hook-form'
-import { PoolCreationConfig } from '../../PoolCreationFormProvider'
+import { type PoolCreationForm } from '../../constants'
 import { VStack, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react'
-import { POOL_TYPES, SupportedPoolTypes } from '@repo/lib/modules/pool/actions/create/constants'
+import {
+  POOL_TYPES,
+  SupportedPoolTypes,
+  SWAP_FEE_PERCENTAGE_OPTIONS,
+} from '@repo/lib/modules/pool/actions/create/constants'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
-export function ChoosePoolType({ control }: { control: Control<PoolCreationConfig> }) {
+export function ChoosePoolType({ control }: { control: Control<PoolCreationForm> }) {
   const poolTypesKeys = Object.keys(POOL_TYPES) as SupportedPoolTypes[]
+  const {
+    poolCreationForm: { setValue },
+  } = usePoolCreationForm()
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -13,7 +21,13 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationConfi
         control={control}
         name="poolType"
         render={({ field }) => (
-          <RadioGroup onChange={field.onChange} value={field.value}>
+          <RadioGroup
+            onChange={(value: SupportedPoolTypes) => {
+              setValue('swapFeePercentage', SWAP_FEE_PERCENTAGE_OPTIONS[value][0].value)
+              field.onChange(value)
+            }}
+            value={field.value}
+          >
             <Stack spacing={3}>
               {poolTypesKeys.map(poolTypeKey => (
                 <Radio key={poolTypeKey} size="lg" value={poolTypeKey}>

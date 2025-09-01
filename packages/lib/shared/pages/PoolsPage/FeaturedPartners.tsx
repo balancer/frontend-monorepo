@@ -36,7 +36,7 @@ export function FeaturedPartners() {
         position="relative"
         shadow="innerBase"
       >
-        <Box opacity="0.6">
+        <Box opacity="0.5">
           <RadialPattern
             circleCount={20}
             height={1500}
@@ -61,7 +61,9 @@ export function FeaturedPartners() {
                     }}
                     key={partnerCard.title}
                   >
-                    <PartnerCard {...partnerCard} />
+                    <FadeInOnView animateOnce={false}>
+                      <PartnerCard {...partnerCard} />
+                    </FadeInOnView>
                   </Box>
                 ))}
               </Flex>
