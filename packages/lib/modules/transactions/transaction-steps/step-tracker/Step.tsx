@@ -94,12 +94,6 @@ function NestedInfo({
 }) {
   const gasCostData = useTransactionGasCost(transaction)
 
-  console.log({
-    estimatedGas: gasCostData?.estimatedGas,
-    hasTransaction: !!transaction,
-    totalGasCost: gasCostData?.formatted,
-  })
-
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
       {gasCostData ? (
