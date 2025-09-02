@@ -3,11 +3,23 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { validatePoolType } from '../../validatePoolCreationForm'
 
 const WEIGHT_DEVIATION_TOLERANCE = 3
 
-export function PoolTokenWeightsCard({ variant = 'level3' }: { variant?: string }) {
-  const { poolTokens } = usePoolCreationForm()
+const WEIGHT_COLORS = [
+  'orange.300',
+  'blue.300',
+  'green.400',
+  'red.300',
+  'purple.300',
+  'teal.300',
+  'pink.300',
+  'yellow.300',
+]
+
+export function SeedAmountProportions({ variant = 'level3' }: { variant?: string }) {
+  const { poolTokens, poolType } = usePoolCreationForm()
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {
@@ -25,8 +37,6 @@ export function PoolTokenWeightsCard({ variant = 'level3' }: { variant?: string 
     usdWeight: totalInputUsdValue ? (token.inputUsdValue * 100) / totalInputUsdValue : 0,
   }))
 
-  const weightColors = ['background.orange', 'background.blue']
-
   const targetWeights = poolTokens.map(t => Number(t.weight))
   const usdWeights = tokenAmountToUsdWithWeights.map(t => t.usdWeight)
 
@@ -35,7 +45,10 @@ export function PoolTokenWeightsCard({ variant = 'level3' }: { variant?: string 
     return Math.abs(weight - usdWeight) < WEIGHT_DEVIATION_TOLERANCE
   })
 
-  const showRektAlert = !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+
+  const showRektAlert =
+    isWeightedPool && !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
 
   return (
     <VStack spacing="md" w="full">
@@ -49,36 +62,34 @@ export function PoolTokenWeightsCard({ variant = 'level3' }: { variant?: string 
 
       <Card shadow="sm" variant={variant}>
         <CardBody>
-          <VStack spacing="sm">
+          <VStack spacing="md">
             <WeightsPercentageLabels
-              colors={weightColors}
               tokens={tokenAmountToUsdWithWeights.map(t => ({
                 symbol: t.symbol,
                 weight: t.usdWeight,
               }))}
             />
 
-            <VStack spacing="md" w="full">
-              <WeightsBarChart
-                colors={weightColors}
-                height="8px"
-                weights={tokenAmountToUsdWithWeights.map(t => t.usdWeight)}
-              />
-
-              <WeightsBarChart
-                colors={weightColors}
-                height="4px"
-                opacity={0.5}
-                weights={poolTokens.map(t => Number(t.weight))}
-              />
-            </VStack>
-
-            <WeightsPercentageLabels
-              colors={weightColors}
-              icon={<BullseyeIcon />}
-              textColor="font.secondary"
-              tokens={poolTokens.map(t => ({ weight: Number(t.weight) }))}
+            <WeightsBarChart
+              height="8px"
+              weights={tokenAmountToUsdWithWeights.map(t => t.usdWeight)}
             />
+
+            {isWeightedPool && (
+              <>
+                <WeightsBarChart
+                  height="5px"
+                  opacity={0.5}
+                  weights={poolTokens.map(t => Number(t.weight))}
+                />
+
+                <WeightsPercentageLabels
+                  showIcon={true}
+                  textColor="font.secondary"
+                  tokens={poolTokens.map(t => ({ weight: Number(t.weight) }))}
+                />
+              </>
+            )}
           </VStack>
         </CardBody>
       </Card>
@@ -88,12 +99,11 @@ export function PoolTokenWeightsCard({ variant = 'level3' }: { variant?: string 
 
 interface WeightsBarChartProps {
   weights: number[]
-  colors: string[]
   height: string
   opacity?: number
 }
 
-function WeightsBarChart({ weights, colors, height, opacity }: WeightsBarChartProps) {
+function WeightsBarChart({ weights, height, opacity }: WeightsBarChartProps) {
   const allZeroWeights = weights.every(weight => weight === 0)
 
   return (
@@ -101,10 +111,11 @@ function WeightsBarChart({ weights, colors, height, opacity }: WeightsBarChartPr
       {weights.map((weight, idx) => {
         const isFirst = idx === 0
         const isLast = idx === weights.length - 1
+        const color = WEIGHT_COLORS[idx % WEIGHT_COLORS.length]
 
         return (
           <Box
-            bg={allZeroWeights ? 'background.level0' : colors[idx % colors.length]}
+            bg={allZeroWeights ? 'background.level0' : color}
             borderBottomLeftRadius={isFirst ? 'sm' : 'none'}
             borderBottomRightRadius={isLast ? 'sm' : 'none'}
             borderTopLeftRadius={isFirst ? 'sm' : 'none'}
@@ -121,22 +132,20 @@ function WeightsBarChart({ weights, colors, height, opacity }: WeightsBarChartPr
 
 interface WeightsPercentageLabelsProps {
   tokens: Array<{ symbol?: string; weight: number }>
-  colors: string[]
-  icon?: React.ReactNode
+  showIcon?: boolean
   textColor?: string
 }
 
-function WeightsPercentageLabels({
-  tokens,
-  colors,
-  icon,
-  textColor,
-}: WeightsPercentageLabelsProps) {
+function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercentageLabelsProps) {
+  const isMoreThanTwoTokens = tokens.length > 2
+
   return (
     <HStack justify="space-between" spacing={0.5} w="full">
       {tokens.map((token, idx) => {
         const isFirst = idx === 0
         const isLast = idx === tokens.length - 1
+
+        const color = WEIGHT_COLORS[idx % WEIGHT_COLORS.length]
         return (
           <HStack
             align="center"
@@ -144,15 +153,17 @@ function WeightsPercentageLabels({
             key={idx}
             spacing="xs"
           >
-            {isFirst && (
-              <Box bg={colors[idx % colors.length]} borderRadius="full" h="8px" w="8px" />
+            {(!isLast || isMoreThanTwoTokens) && (
+              <Box bg={color} borderRadius="full" h="8px" w="8px" />
             )}
-            {icon && icon}
+            {showIcon && <BullseyeIcon />}
             <Text color={textColor}>
               {token.symbol ? `${token.symbol}: ` : ''}
               {token.weight ? token.weight.toFixed(2) : '0.00'}%
             </Text>
-            {isLast && <Box bg={colors[idx % colors.length]} borderRadius="full" h="8px" w="8px" />}
+            {!isMoreThanTwoTokens && isLast && (
+              <Box bg={color} borderRadius="full" h="8px" w="8px" />
+            )}
           </HStack>
         )
       })}

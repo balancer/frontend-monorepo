@@ -4,18 +4,14 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { PoolTokenWeightsCard } from '../steps/fund/PoolTokenWeightsCard'
-import { validatePoolType } from '../validatePoolCreationForm'
+import { SeedAmountProportions } from '../steps/fund/SeedAmountProportions'
 
 export function PoolSummary() {
-  const { poolType } = usePoolCreationForm()
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-
   return (
     <VStack spacing="md">
       <PoolTitleCard />
       <PoolTokenAmountsCard />
-      {isWeightedPool && <PoolTokenWeightsCard variant="modalSubSection" />}
+      <SeedAmountProportions variant="modalSubSection" />
       <PoolDetailsCard />
     </VStack>
   )

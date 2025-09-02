@@ -5,7 +5,7 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { PoolCreationRiskCheckboxes } from './PoolCreationRiskCheckboxes'
 import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
-import { PoolTokenWeightsCard } from './PoolTokenWeightsCard'
+import { SeedAmountProportions } from './SeedAmountProportions'
 
 export function PoolFundStep() {
   const { isFormStateValid, poolTokens, network, updatePoolToken, poolCreationForm, poolType } =
@@ -43,7 +43,7 @@ export function PoolFundStep() {
             </VStack>
           )
         })}
-        {isWeightedPool && <PoolTokenWeightsCard />}
+        <SeedAmountProportions />
         <PoolCreationRiskCheckboxes />
         <PoolCreationFormAction disabled={isDisabled} />
       </VStack>
