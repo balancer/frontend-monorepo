@@ -35,7 +35,7 @@ import { getVeBalManagePath } from '../../../vebal-navigation'
 export function MyVotes() {
   const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort, shouldResubmitVotes } =
     useVotes()
-  const { sortedMyVotes, loading: myVotesLoading, hasExpiredGauges } = useMyVotes()
+  const { sortedMyVotes, loading: myVotesLoading, hasExpiredGauges, hasNewVotes } = useMyVotes()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected } = useUserAccount()
 
@@ -224,6 +224,26 @@ export function MyVotes() {
                       >
                         <AlertTitle>You have votes on an expired pool gauge</AlertTitle>
                         <AlertDescription>Reallocate these to avoid wasting votes</AlertDescription>
+                      </Stack>
+                    </Alert>
+                  </GridItem>
+                )}
+
+                {hasNewVotes && (
+                  <GridItem colSpan={4} mt="md" w="full">
+                    <Alert status="warning" variant="WideOnDesktop">
+                      <AlertIcon as={AlertTriangle} />
+                      <Stack
+                        alignItems="baseline"
+                        direction={{ base: 'column', lg: 'row' }}
+                        gap={{ base: '0', lg: 'sm' }}
+                      >
+                        <AlertTitle>Resubmit your votes to use your full voting power</AlertTitle>
+                        <AlertDescription>
+                          Votes on pools are set at the time of vote. Since you've added new veBAL
+                          since you original vote, you have addtional voting power that is not being
+                          used. Resubmit you votes below.
+                        </AlertDescription>
                       </Stack>
                     </Alert>
                   </GridItem>
