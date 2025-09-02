@@ -98,7 +98,7 @@ function NestedInfo({
     <Box mb="0" mt="0" p="0.5" pl="0">
       {gasCostData ? (
         <Text color={color} fontSize="sm" lineHeight="1">
-          {gasCostData.isActual ? 'Gas cost' : 'Estimated gas'}: {gasCostData.costUsd}
+          {gasCostData.isActual ? 'Final gas' : 'Estimated gas'}: {gasCostData.costUsd}
         </Text>
       ) : (
         <Text color={color} fontSize="sm" lineHeight="1">
