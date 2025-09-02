@@ -9,17 +9,15 @@ import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesPro
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 export default function PoolCreationPage() {
   const { getTokensByChain, isLoadingTokens } = useTokens()
-  const searchParams = useSearchParams()
+  const params = useParams()
 
-  // the ChooseNetwork component updates params with the selected network
-  const networkParam = searchParams.get('network')
-  const selectedNetwork = networkParam ? (networkParam as GqlChain) : PROJECT_CONFIG.defaultNetwork
+  const selectedNetwork = (params.network as GqlChain) || PROJECT_CONFIG.defaultNetwork
   const initTokens = getTokensByChain(selectedNetwork)
 
   return (

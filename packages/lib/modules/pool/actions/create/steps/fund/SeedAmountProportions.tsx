@@ -5,7 +5,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { validatePoolType } from '../../validatePoolCreationForm'
 
-const WEIGHT_DEVIATION_TOLERANCE = 3
+const WEIGHT_DEVIATION_TOLERANCE = 5
 
 const WEIGHT_COLORS = [
   'orange.300',
