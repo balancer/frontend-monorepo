@@ -14,12 +14,44 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
   const { toCurrency } = useCurrency()
   const { usdValueForTokenAddress } = useTokens()
 
+  const actualGasData = useMemo(() => {
+    if (transaction?.result?.data?.gasUsed && transaction?.result?.data?.effectiveGasPrice) {
+      const gasUsed = transaction.result.data.gasUsed
+      const effectiveGasPrice = transaction.result.data.effectiveGasPrice
+      const l1Fee = (transaction.result.data as any).l1Fee || 0n // cast as any because l1Fee is not available on all chains
+
+      const networkConfig = chain ? getNetworkConfig(chain) : undefined
+      const totalGasCost = gasUsed * effectiveGasPrice + l1Fee
+      const formattedCost = formatUnits(totalGasCost, 18)
+
+      const costUsd =
+        chain &&
+        usdValueForTokenAddress(
+          networkConfig?.tokens?.nativeAsset?.address as Address,
+          chain,
+          formattedCost
+        )
+
+      return {
+        cost: totalGasCost.toString(),
+        formatted: formattedCost,
+        symbol: networkConfig?.tokens?.nativeAsset?.symbol || 'ETH',
+        gasUsed: gasUsed.toString(),
+        gasPrice: effectiveGasPrice.toString(),
+        l1Fee: l1Fee.toString(),
+        costUsd: costUsd ? toCurrency(costUsd) : undefined,
+        isActual: true,
+      }
+    }
+    return null
+  }, [transaction?.result?.data, chain, toCurrency, usdValueForTokenAddress])
+
   const estimatedGas = useMemo(() => {
     const data = transaction?.simulation?.data
     return typeof data === 'bigint' ? data : 0n
   }, [transaction?.simulation?.data])
 
-  const totalGasCost = useMemo(() => {
+  const estimatedGasCost = useMemo(() => {
     if (!transaction || !estimatedGas || estimatedGas === 0n || !gasPrice) return
 
     const networkConfig = chain ? getNetworkConfig(chain) : undefined
@@ -41,8 +73,11 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
       estimatedGas: estimatedGas.toString(),
       gasPrice,
       costUsd: costUsd ? toCurrency(costUsd) : undefined,
+      isActual: false,
     }
   }, [transaction, estimatedGas, gasPrice, chain])
+
+  const totalGasCost = actualGasData || estimatedGasCost
 
   return totalGasCost
 }
