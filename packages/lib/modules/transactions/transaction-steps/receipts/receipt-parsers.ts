@@ -26,6 +26,7 @@ export type ParseReceipt =
   | typeof parseLstStakeReceipt
   | typeof parseLstWithdrawReceipt
   | typeof parsePoolCreationReceipt
+  | typeof parseRecoveryModeChangedReceipt
 
 export function parseAddLiquidityReceipt({
   chain,
@@ -159,6 +160,19 @@ export function parsePoolCreationReceipt({ receiptLogs }: ParseProps) {
   const poolAddress = logs[0]?.args?.pool
   return {
     poolAddress,
+  }
+}
+
+export function parseRecoveryModeChangedReceipt({ receiptLogs }: ParseProps) {
+  const logs = parseEventLogs({
+    abi: [
+      parseAbiItem('event PoolRecoveryModeStateChanged(address indexed pool, bool recoveryMode)'),
+    ],
+    logs: receiptLogs,
+  })
+
+  return {
+    enabled: logs[0]?.args?.recoveryMode || false,
   }
 }
 

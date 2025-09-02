@@ -34,7 +34,7 @@ export const queryClient = new QueryClient({
         error,
         queryKey: query.queryKey,
       })
-      if (error.message.includes('unknown reason')) {
+      if (error.message.includes('unknown reason') || error.message.includes('custom error')) {
         console.log('Decoded reason: ', decodeError(error))
       }
 
