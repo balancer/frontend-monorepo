@@ -5,9 +5,10 @@ import { useGasPriceQuery } from '@repo/lib/shared/hooks/useGasPrice'
 import { ManagedResult } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useTransactionGasCost(transaction?: ManagedResult) {
-  const chain = transaction ? getGqlChain(transaction.chainId) : undefined
+  const chain = transaction ? getGqlChain(transaction.chainId) : PROJECT_CONFIG.defaultNetwork
 
   const { gasPrice } = useGasPriceQuery(chain!)
   const { toCurrency } = useCurrency()
