@@ -10,6 +10,7 @@ import { VoteExceededTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteExcee
 import { VoteTimeLockedTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteTimeLockedTooltip'
 import { VoteExpiredTooltip } from '@bal/lib/vebal/vote/VoteExpiredTooltip'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
+import { VoteUnderpoweredTooltip } from './VoteUnderpoweredTooltip'
 
 interface Props {
   timeLocked?: boolean
@@ -19,6 +20,7 @@ interface Props {
   weight: BigNumber
   variant: 'primary' | 'secondary'
   isGaugeExpired?: boolean
+  isGaugeUnderpowered?: boolean
 }
 
 export function VoteWeight({
@@ -29,6 +31,7 @@ export function VoteWeight({
   skipTotalWarnings = false,
   timeLockedEndDate,
   isGaugeExpired,
+  isGaugeUnderpowered = false,
 }: Props) {
   const exceededWeight = getExceededWeight(weight)
   const unallocatedWeight = getUnallocatedWeight(weight)
@@ -38,18 +41,13 @@ export function VoteWeight({
 
   function getFontColor() {
     if (total) {
-      if (showExceededWarning) {
-        return 'red.400'
-      }
-      if (showUnallocatedWarning) {
-        return 'font.warning'
-      }
+      if (showExceededWarning) return 'red.400'
+      if (showUnallocatedWarning) return 'font.warning'
+
       return 'font.maxContrast'
     }
 
-    if (isGaugeExpired) {
-      return 'font.warning'
-    }
+    if (isGaugeExpired || isGaugeUnderpowered) return 'font.warning'
 
     return variant === 'secondary' ? 'font.secondary' : undefined
   }
@@ -73,6 +71,7 @@ export function VoteWeight({
           </HStack>
         </VoteExpiredTooltip>
       )}
+      {isGaugeUnderpowered && <VoteUnderpoweredTooltip isTimelocked={!!timeLocked} usePortal />}
     </HStack>
   )
 }
