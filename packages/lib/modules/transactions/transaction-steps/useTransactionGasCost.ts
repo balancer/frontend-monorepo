@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Address, formatUnits, parseUnits } from 'viem'
+import { Address, formatUnits } from 'viem'
 import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useGasPriceQuery } from '@repo/lib/shared/hooks/useGasPrice'
 import { ManagedResult } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -10,7 +10,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 export function useTransactionGasCost(transaction?: ManagedResult) {
   const chain = transaction ? getGqlChain(transaction.chainId) : PROJECT_CONFIG.defaultNetwork
 
-  const { gasPrice } = useGasPriceQuery(chain!)
+  const { data: gasPrice } = useGasPriceQuery(chain)
   const { toCurrency } = useCurrency()
   const { usdValueForTokenAddress } = useTokens()
 
@@ -23,7 +23,7 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
     if (!transaction || !estimatedGas || estimatedGas === 0n || !gasPrice) return
 
     const networkConfig = chain ? getNetworkConfig(chain) : undefined
-    const cost = parseUnits(gasPrice, 9) * estimatedGas
+    const cost = gasPrice * estimatedGas
     const formattedCost = formatUnits(cost, 18)
 
     const costUsd =
