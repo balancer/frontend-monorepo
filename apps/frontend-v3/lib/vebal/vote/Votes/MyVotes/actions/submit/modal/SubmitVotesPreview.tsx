@@ -18,7 +18,8 @@ import { GainBadge } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared
 import { MyIncentivesTooltip } from '../../../MyVotesStats/shared/MyIncentivesTooltip'
 
 interface Props {
-  submittingVotes: SubmittingVote[]
+  changedVotes: SubmittingVote[]
+  unchangedVotes: SubmittingVote[]
   timeLockedVotes: SubmittingVote[]
   totalInfo: MyVotesTotalInfo
   previousChunksAllocation: VotesChunksAllocation | undefined
@@ -27,7 +28,8 @@ interface Props {
 }
 
 export function SubmitVotesPreview({
-  submittingVotes,
+  changedVotes,
+  unchangedVotes,
   timeLockedVotes,
   totalInfo,
   previousChunksAllocation,
@@ -52,12 +54,12 @@ export function SubmitVotesPreview({
             </Text>
           </HStack>
 
-          {submittingVotes.length > 0 && (
+          {changedVotes.length > 0 && (
             <>
               <Divider />
 
               <VStack p="md" spacing="sm" w="full">
-                {submittingVotes.map(({ vote, weight }) => {
+                {changedVotes.map(({ vote, weight }) => {
                   const isExpired = isPoolGaugeExpired?.(vote)
 
                   return (
@@ -94,37 +96,21 @@ export function SubmitVotesPreview({
             </>
           )}
 
-          {timeLockedVotes.length > 0 && (
+          {(timeLockedVotes.length > 0 || unchangedVotes.length > 0) && (
             <>
               <Divider />
-
               <VStack p="md" spacing="sm" w="full">
-                {timeLockedVotes.map(({ vote, weight }) => {
-                  return (
-                    <HStack justifyContent="space-between" key={vote.id} spacing="sm" w="full">
-                      <HStack spacing="xs">
-                        <NetworkIcon chain={vote.chain} size={6} />
+                <Text fontSize="sm" fontWeight={700} variant="secondary" w="full">
+                  Unchanged votes
+                </Text>
 
-                        <VotingListTokenPills
-                          h={['32px', '36px']}
-                          iconSize={20}
-                          nameSize="sm"
-                          p={['xxs', 'sm']}
-                          pr={[1.5, 'ms']}
-                          vote={vote}
-                        />
-                      </HStack>
-                      <VoteWeight
-                        timeLocked
-                        timeLockedEndDate={votingTimeLockedEndDate(
-                          vote.gaugeVotes?.lastUserVoteTime ?? 0
-                        )}
-                        variant="secondary"
-                        weight={bn(weight)}
-                      />
-                    </HStack>
-                  )
-                })}
+                {timeLockedVotes.map(({ vote, weight }) => (
+                  <UnchangedVote key={vote.id} timelocked={true} vote={vote} weight={weight} />
+                ))}
+
+                {unchangedVotes.map(({ vote, weight }) => (
+                  <UnchangedVote key={vote.id} timelocked={false} vote={vote} weight={weight} />
+                ))}
               </VStack>
             </>
           )}
@@ -221,5 +207,36 @@ export function SubmitVotesPreview({
         )}
       </HStack>
     </VStack>
+  )
+}
+
+type UnchangedVoteProps = {
+  vote: VotingPoolWithData
+  weight: string
+  timelocked: boolean
+}
+
+function UnchangedVote({ vote, weight, timelocked }: UnchangedVoteProps) {
+  return (
+    <HStack justifyContent="space-between" spacing="sm" w="full">
+      <HStack spacing="xs">
+        <NetworkIcon chain={vote.chain} size={6} />
+
+        <VotingListTokenPills
+          h={['32px', '36px']}
+          iconSize={20}
+          nameSize="sm"
+          p={['xxs', 'sm']}
+          pr={[1.5, 'ms']}
+          vote={vote}
+        />
+      </HStack>
+      <VoteWeight
+        timeLocked={timelocked}
+        timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
+        variant="secondary"
+        weight={bn(weight)}
+      />
+    </HStack>
   )
 }
