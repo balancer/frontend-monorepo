@@ -32,7 +32,7 @@ export function GasPriceCard({ chain }: { chain: GqlChain }) {
       <HStack spacing="xs">
         <GasIcon size={16} />
         <Text color={gasPriceColor} fontSize="xs" fontWeight="bold">
-          {gasPrice ? gasPrice.toString() : '-'}
+          {!gasPrice ? '-' : gasPrice === '0' ? '<1' : gasPrice}
         </Text>
       </HStack>
     </Box>
