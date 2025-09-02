@@ -106,7 +106,8 @@ export function ChoosePoolTokens() {
                       label="Weight"
                       name={`poolTokens.${index}.weight`}
                       validate={weight => {
-                        const poolType = poolCreationForm.getValues('poolType') // getValues() grabs poolType from LS but watch() is tricked by default values
+                        // getValues() grabs poolType from LS but watch() is tricked by initial default values
+                        const poolType = poolCreationForm.getValues('poolType')
                         const isWeightedPool = validatePoolType.isWeightedPool(poolType)
                         if (!isWeightedPool) return true
                         if (weight < 1) return 'Minimum weight for each token is 1%'

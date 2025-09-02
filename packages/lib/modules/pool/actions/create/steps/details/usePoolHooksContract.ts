@@ -8,11 +8,7 @@ export const usePoolHooksContract = (address: string | undefined, network: GqlCh
   const isZeroAddress = address === zeroAddress
   const enabled = !!address && isAddress(address) && !isZeroAddress
 
-  const {
-    data: hookFlags,
-    isLoading: isValidHooksContractLoading,
-    isError: isValidHooksContractError,
-  } = useReadContract({
+  const { data: hookFlags } = useReadContract({
     address: address as Address,
     abi: reClammPoolAbi,
     functionName: 'getHookFlags',
@@ -21,5 +17,5 @@ export const usePoolHooksContract = (address: string | undefined, network: GqlCh
     query: { enabled },
   })
 
-  return { hookFlags, isValidHooksContractLoading, isValidHooksContractError }
+  return { hookFlags }
 }
