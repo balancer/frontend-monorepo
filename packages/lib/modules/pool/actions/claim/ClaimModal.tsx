@@ -24,6 +24,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { useRouter } from 'next/navigation'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 type Props = {
   isOpen: boolean
@@ -103,6 +104,9 @@ export function ClaimModal({
                   totalUSDValue={quoteTotalUsd}
                 />
               </Card>
+            )}
+            {claimTxHash && (
+              <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
             )}
           </AnimateHeightChange>
         </ModalBody>

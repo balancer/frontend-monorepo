@@ -4,10 +4,12 @@ import { VStack, Card } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useUnstake } from './UnstakeProvider'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 export function UnstakePreview() {
   const { pool } = usePool()
-  const { unstakeTxHash, quoteAmountOut, rewardAmounts, totalClaimableUsd } = useUnstake()
+  const { unstakeTxHash, quoteAmountOut, rewardAmounts, totalClaimableUsd, transactionSteps } =
+    useUnstake()
 
   return (
     <VStack spacing="sm" w="full">
@@ -29,6 +31,9 @@ export function UnstakePreview() {
           totalUSDValue={totalClaimableUsd}
         />
       </Card>
+      {unstakeTxHash && (
+        <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
+      )}
     </VStack>
   )
 }
