@@ -6,16 +6,15 @@ import {
   type PoolCreationForm,
 } from '../../constants'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { Address, zeroAddress } from 'viem'
+import { Address, parseAbi, zeroAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
 import { InfoIconPopover } from '../../InfoIconPopover'
-import { useRateProvider } from './useRateProvider'
-import { validatePoolTokens } from '../../validatePoolCreationForm'
-import { useEffect } from 'react'
+import { usePublicClient } from 'wagmi'
+import { getChainId } from '@repo/lib/config/app.config'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -119,11 +118,8 @@ function CustomRateProviderInput({
   errors,
   chainName,
 }: CustomRateProviderInputProps) {
-  const { updatePoolToken, poolCreationForm, poolTokens } = usePoolCreationForm()
+  const { updatePoolToken, poolCreationForm, network } = usePoolCreationForm()
   const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
-  const rateProvider = poolTokens[tokenIndex].rateProvider
-
-  const { rate, isRatePending } = useRateProvider(rateProvider)
 
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
@@ -131,11 +127,27 @@ function CustomRateProviderInput({
     poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
   }
 
-  useEffect(() => {
-    if (rateProvider !== zeroAddress && !isRatePending) {
-      poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
+  const publicClient = usePublicClient({ chainId: getChainId(network) })
+
+  const validateRateProvider = async (address: string) => {
+    if (address === '') return false
+    try {
+      if (!publicClient) return 'missing public client for rate provider validation'
+      const rate = await publicClient.readContract({
+        address: address as Address,
+        abi: parseAbi(['function getRate() external view returns (uint256)']),
+        functionName: 'getRate',
+        args: [],
+      })
+      if (!rate) return 'invalid rate provider address'
+      return true
+    } catch (error) {
+      if (error && typeof error === 'object' && 'shortMessage' in error) {
+        return (error as any).shortMessage
+      }
+      return 'unexpected error validating rate provider address'
     }
-  }, [rateProvider, isRatePending, rate])
+  }
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -157,8 +169,7 @@ function CustomRateProviderInput({
               />
             )}
             rules={{
-              validate: (address: string) =>
-                validatePoolTokens.rateProvider(address, isRatePending, !!rate),
+              validate: validateRateProvider,
             }}
           />
         </InputGroup>

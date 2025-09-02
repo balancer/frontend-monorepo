@@ -23,6 +23,7 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ToggleHyperBlockSize } from '@repo/lib/modules/pool/actions/create/modal/ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 type Props = {
   isOpen: boolean
@@ -112,7 +113,10 @@ export function LbpCreationModal({
     setUsingBigBlocks,
     isSetUsingBigBlocksPending,
     setUsingBigBlocksError,
-  } = useHyperEvm({ isContractDeploymentStep: transactionSteps.currentStepIndex === 0 })
+  } = useHyperEvm({
+    isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
+    isHyperEvm: selectedChain === GqlChain.Hyperevm,
+  })
 
   return (
     <Modal

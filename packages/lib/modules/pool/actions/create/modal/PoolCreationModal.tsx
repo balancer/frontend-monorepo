@@ -21,6 +21,7 @@ import { PoolType } from '@balancer/sdk'
 import { PoolSummary } from './PoolSummary'
 import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 type Props = {
   isOpen: boolean
@@ -79,7 +80,10 @@ export function PoolCreationModal({
     setUsingBigBlocks,
     isSetUsingBigBlocksPending,
     setUsingBigBlocksError,
-  } = useHyperEvm({ isContractDeploymentStep: transactionSteps.currentStepIndex === 0 })
+  } = useHyperEvm({
+    isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
+    isHyperEvm: network === GqlChain.Hyperevm,
+  })
 
   return (
     <Modal

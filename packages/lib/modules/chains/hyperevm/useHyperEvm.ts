@@ -7,12 +7,16 @@ import { useAccount } from 'wagmi'
 import { ChainId } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
 
-export function useHyperEvm({ isContractDeploymentStep }: { isContractDeploymentStep: boolean }) {
+export function useHyperEvm({
+  isHyperEvm,
+  isContractDeploymentStep,
+}: {
+  isHyperEvm: boolean
+  isContractDeploymentStep: boolean
+}) {
   const { data: walletClient } = useWalletClient()
   const { address } = useAccount()
   const publicClient = usePublicClient()
-
-  const isHyperEvm = publicClient?.chain?.id === ChainId.HYPER_EVM
 
   const { data: isUsingBigBlocks, refetch: refetchIsUsingBigBlocks } = useQuery({
     queryKey: ['isUsingBigBlocks', publicClient?.chain.id, address],
@@ -81,7 +85,6 @@ export function useHyperEvm({ isContractDeploymentStep }: { isContractDeployment
   const shouldToggleBlockSize = shouldUseSmallBlocks || shouldUseBigBlocks
 
   return {
-    isHyperEvm,
     isUsingBigBlocks,
     setUsingBigBlocks,
     isSetUsingBigBlocksPending,
