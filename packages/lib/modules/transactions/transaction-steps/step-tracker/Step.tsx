@@ -19,6 +19,7 @@ import { SMALL_AMOUNT_LABEL } from '@repo/lib/shared/utils/numbers'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
+  const step = props.step
   const { color, isActive, title } = getStepSettings(props, transaction)
   const variant = isActive ? 'special' : 'secondary'
 
@@ -36,6 +37,7 @@ export function Step(props: StepProps) {
           <NestedInfo
             color={color}
             details={props.step.details}
+            step={step}
             transaction={transaction}
             variant={variant}
           />
@@ -98,27 +100,36 @@ function NestedInfo({
   details,
   transaction,
   variant,
+  step,
 }: {
   color: string
   details?: StepDetails
   transaction?: ManagedResult
   variant?: string
+  step: TransactionStep
 }) {
   const gasCostData = useTransactionGasCost(transaction)
 
   const isSmallAmount = gasCostData && gasCostData.costUsd?.replace('$', '') === SMALL_AMOUNT_LABEL
+  const textProps = {
+    fontSize: 'sm',
+    lineHeight: '1.2',
+    variant,
+  }
 
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
       <HStack align="start" gap="xxs">
         {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
-          <Text fontSize="sm" lineHeight="1.2" variant={variant}>
+          <Text {...textProps}>
             {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
             {!isSmallAmount && '~'}
             {gasCostData.costUsd}
           </Text>
+        ) : step.isComplete() ? (
+          <Text {...textProps}>Previously approved</Text>
         ) : (
-          <Text fontSize="sm" lineHeight="1.2" variant={variant}>
+          <Text {...textProps}>
             {details?.type || (details?.gasless ? 'Signature: Free' : 'Gas transaction')}
           </Text>
         )}
