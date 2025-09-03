@@ -20,19 +20,25 @@ import { SMALL_AMOUNT_LABEL } from '@repo/lib/shared/utils/numbers'
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
   const { color, isActive, title } = getStepSettings(props, transaction)
+  const variant = isActive ? 'special' : 'secondary'
 
   const shouldDisplayAsTxBatch =
     props.isTxBatch && props.step.isBatchEnd && hasSomePendingNestedTxInBatch(props.step)
 
   return (
-    <HStack alignItems="flex-start">
+    <HStack alignItems="center">
       <StepIndicator transaction={transaction} {...props} />
       <VStack alignItems="start" spacing="0">
-        <Text color={color} fontWeight="bold" mt={isActive ? -0.3 : 0}>
+        <Text fontWeight="bold" mt={isActive ? -0.3 : 0} variant={variant}>
           {shouldDisplayAsTxBatch ? 'Safe transaction bundle' : title}
         </Text>
         {!shouldDisplayAsTxBatch && (
-          <NestedInfo color={color} details={props.step.details} transaction={transaction} />
+          <NestedInfo
+            color={color}
+            details={props.step.details}
+            transaction={transaction}
+            variant={variant}
+          />
         )}
         {shouldDisplayAsTxBatch && (
           <TransactionBatchSteps
@@ -91,10 +97,12 @@ function NestedInfo({
   color,
   details,
   transaction,
+  variant,
 }: {
   color: string
   details?: StepDetails
   transaction?: ManagedResult
+  variant?: string
 }) {
   const gasCostData = useTransactionGasCost(transaction)
 
@@ -102,28 +110,28 @@ function NestedInfo({
 
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
-      <HStack align="start">
+      <HStack align="start" gap="xxs">
         {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
-          <Text color={color} fontSize="sm" lineHeight="1">
+          <Text fontSize="sm" lineHeight="1" variant={variant}>
             {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
             {!isSmallAmount && '~'}
             {gasCostData.costUsd}
           </Text>
         ) : (
-          <Text color={color} fontSize="sm" lineHeight="1">
+          <Text fontSize="sm" lineHeight="1" variant={variant}>
             {details?.type || (details?.gasless ? 'Signature: Free' : 'Gas transaction')}
           </Text>
         )}
         {transaction?.result.data && (
           <Link
+            color="font.secondary"
             href={getBlockExplorerTxUrl(
               transaction?.result?.data?.transactionHash,
               getGqlChain(transaction?.result?.data?.chainId)
             )}
             isExternal
-            variant="link"
           >
-            <ArrowUpRight size={12} />
+            <ArrowUpRight size={14} />
           </Link>
         )}
       </HStack>
@@ -133,7 +141,7 @@ function NestedInfo({
         details.batchApprovalTokens.map((token, index) => (
           <HStack key={token} mt={index === 0 ? '2' : '1'}>
             <SubStepIndicator color={color} label={indexToLetter(index)} />
-            <Text color={color} fontSize="sm">
+            <Text fontSize="sm" variant={variant}>
               {token}
             </Text>
           </HStack>
