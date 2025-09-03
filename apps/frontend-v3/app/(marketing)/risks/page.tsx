@@ -867,7 +867,7 @@ export default function Privacy() {
                   </h4>
                   <p>
                     Weighted Pools use{' '}
-                    <a href="https://docs.balancer.fi/reference/math/weighted-math.html">
+                    <a href="https://docs.balancer.fi/concepts/explore-available-balancer-pools/weighted-pool/weighted-math.html#weighted-math">
                       Weighted math
                     </a>
                     , which makes them great for general cases, including tokens that don&apos;t
@@ -1407,7 +1407,7 @@ export default function Privacy() {
                       concentrated liquidity pools. But unlike Uniswap, a 2-CLP effectively offers a
                       &lsquo;single tick&rsquo;, where liquidity is distributed evenly across a
                       single active trading range. Learn more about{' '}
-                      <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/2-clps">
+                      <a href="https://docs.gyro.finance/pools/2-clps.html">
                         2-CLP&rsquo;s and their risks
                       </a>
                       .
@@ -1417,7 +1417,7 @@ export default function Privacy() {
                       support three assets and are functionally best understood as an extension of
                       2-CLPs. As a high-level summary, they amplify the benefits of 2-CLPs. Learn
                       more about{' '}
-                      <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/3-clps">
+                      <a href="https://docs.gyro.finance/pools/3-clps.html">
                         3-CLP&rsquo;s and their risks
                       </a>
                       .
@@ -1427,7 +1427,7 @@ export default function Privacy() {
                       concentrated liquidity for two assets. They provide a new type of concentrated
                       liquidity that allows highly flexible and asymmetric liquidity profiles in a
                       single pool position. Learn more about{' '}
-                      <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/e-clps">
+                      <a href="https://docs.gyro.finance/pools/e-clps.html">
                         E-CLP&rsquo;s and their risks
                       </a>
                       .
@@ -1436,7 +1436,7 @@ export default function Privacy() {
                       <em>Rehype E-CLPs:</em> Arguably the most capital efficient pools, these
                       E-CLPs combine asymmetric concentrated liquidity with auto-rehypothecation to
                       lending markets. Learn more about{' '}
-                      <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/rehype-e-clps">
+                      <a href="https://docs.gyro.finance/pools/rehype-clps.html">
                         Rehype E-CLP&rsquo;s and their risks
                       </a>
                       .
@@ -1449,7 +1449,7 @@ export default function Privacy() {
                       pools. This is not an endorsement of their products or of the the safety of
                       their smart contracts. The Gyroscope GYD system and E-CLPs have been audited
                       several times. You can review the{' '}
-                      <a href="https://docs.gyro.finance/gyroscope-protocol/audit-reports">
+                      <a href="https://docs.gyro.finance/audit-reports.html">
                         audit reports here
                       </a>
                       .
@@ -1457,7 +1457,7 @@ export default function Privacy() {
                     <li>
                       Some concentrated liquidity pools also contain Gyroscope&rsquo;s Gyro Dollars
                       (GYD). Here are some of the{' '}
-                      <a href="https://docs.gyro.finance/gyroscope-protocol/risks">
+                      <a href="https://docs.gyro.finance/gyd/sgyd/risks.html">
                         risks of using GYD
                       </a>
                       .
@@ -1622,7 +1622,7 @@ export default function Privacy() {
                   <p>
                     Before interacting with any QuantAMM Blockchain Traded Funds, users must read
                     and accept QuantAMM&rsquo;s{' '}
-                    <a href="https://www.quantamm.fi/tos">Terms of Service</a>.
+                    <a href="https://www.quantamm.fi/tos">Terms of Use</a>.
                   </p>
                 </div>
               </FadeInOnView>
@@ -1735,6 +1735,11 @@ export default function Privacy() {
                 EVM-compatible ZK Rollup built by Polygon Labs. Polygon zkEVM harnesses the power of
                 ZK proofs to reduce transaction costs and massively increase throughput, all while
                 inheriting the security of Ethereum L1.
+              </p>
+              <p> 
+                Note: Polygon has announced 
+                <a href="https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020">zkEVM will 
+                be deprecated by 2026</a>, recommending users to migrate liquidity to Polygon PoS.
               </p>
               <p>
                 View the risks of using Polygon zkEVM on{' '}
