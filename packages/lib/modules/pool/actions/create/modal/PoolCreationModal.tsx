@@ -82,7 +82,7 @@ export function PoolCreationModal({
     setUsingBigBlocksError,
   } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvm: network === GqlChain.Hyperevm,
+    isHyperEvmTx: network === GqlChain.Hyperevm,
   })
 
   return (

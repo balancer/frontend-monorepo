@@ -8,15 +8,17 @@ import { ChainId } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
 
 export function useHyperEvm({
-  isHyperEvm,
+  isHyperEvmTx,
   isContractDeploymentStep,
 }: {
-  isHyperEvm: boolean
+  isHyperEvmTx: boolean
   isContractDeploymentStep: boolean
 }) {
   const { data: walletClient } = useWalletClient()
   const { address } = useAccount()
   const publicClient = usePublicClient()
+
+  const enabled = isHyperEvmTx && publicClient?.chain.id === ChainId.HYPER_EVM
 
   const { data: isUsingBigBlocks, refetch: refetchIsUsingBigBlocks } = useQuery({
     queryKey: ['isUsingBigBlocks', publicClient?.chain.id, address],
@@ -30,7 +32,7 @@ export function useHyperEvm({
       })
       return isUsingBigBlocks
     },
-    enabled: isHyperEvm,
+    enabled,
     refetchInterval: 5000, // Refetch every 5 seconds
     refetchOnWindowFocus: true, // Refetch when user returns to tab
   })
@@ -80,8 +82,8 @@ export function useHyperEvm({
     },
   })
 
-  const shouldUseBigBlocks = isHyperEvm && !isUsingBigBlocks && isContractDeploymentStep // big blocks only necessary to deploy pool contract
-  const shouldUseSmallBlocks = isHyperEvm && !!isUsingBigBlocks && !isContractDeploymentStep // small blocks faster for non contract deployment txs
+  const shouldUseBigBlocks = enabled && !isUsingBigBlocks && isContractDeploymentStep // big blocks only necessary to deploy pool contract
+  const shouldUseSmallBlocks = enabled && !!isUsingBigBlocks && !isContractDeploymentStep // small blocks faster for non contract deployment txs
   const shouldToggleBlockSize = shouldUseSmallBlocks || shouldUseBigBlocks
 
   return {

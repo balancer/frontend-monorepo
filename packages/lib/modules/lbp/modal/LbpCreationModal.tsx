@@ -115,7 +115,7 @@ export function LbpCreationModal({
     setUsingBigBlocksError,
   } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvm: selectedChain === GqlChain.Hyperevm,
+    isHyperEvmTx: selectedChain === GqlChain.Hyperevm,
   })
 
   return (
