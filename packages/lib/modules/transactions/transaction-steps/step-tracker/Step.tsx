@@ -5,13 +5,17 @@ import {
   HStack,
   Text,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import { StepProps, getStepSettings } from './getStepSettings'
-import { Check } from 'react-feather'
+import { ArrowUpRight, Check } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
 import { indexToLetter } from '@repo/lib/shared/labels'
 import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
 import { useTransactionGasCost } from '../useTransactionGasCost'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { getGqlChain } from '@repo/lib/config/app.config'
+import { SMALL_AMOUNT_LABEL } from '@repo/lib/shared/utils/numbers'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
@@ -94,17 +98,35 @@ function NestedInfo({
 }) {
   const gasCostData = useTransactionGasCost(transaction)
 
+  const isSmallAmount = gasCostData && gasCostData.costUsd?.replace('$', '') === SMALL_AMOUNT_LABEL
+
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
-      {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
-        <Text color={color} fontSize="sm" lineHeight="1">
-          {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: ~'}: {gasCostData.costUsd}
-        </Text>
-      ) : (
-        <Text color={color} fontSize="sm" lineHeight="1">
-          {details?.type || (details?.gasless ? 'Signature: Free' : 'Gas transaction')}
-        </Text>
-      )}
+      <HStack align="start">
+        {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
+          <Text color={color} fontSize="sm" lineHeight="1">
+            {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
+            {!isSmallAmount && '~'}
+            {gasCostData.costUsd}
+          </Text>
+        ) : (
+          <Text color={color} fontSize="sm" lineHeight="1">
+            {details?.type || (details?.gasless ? 'Signature: Free' : 'Gas transaction')}
+          </Text>
+        )}
+        {transaction?.result.data && (
+          <Link
+            href={getBlockExplorerTxUrl(
+              transaction?.result?.data?.transactionHash,
+              getGqlChain(transaction?.result?.data?.chainId)
+            )}
+            isExternal
+            variant="link"
+          >
+            <ArrowUpRight size={12} />
+          </Link>
+        )}
+      </HStack>
 
       {details?.batchApprovalTokens &&
         details.batchApprovalTokens.length > 1 &&
