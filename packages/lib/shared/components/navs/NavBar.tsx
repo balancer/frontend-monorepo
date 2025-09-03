@@ -98,7 +98,7 @@ function NavLinks({
             <Link
               as={NextLink}
               color={linkColorFor('/create')}
-              href="/create"
+              href="/create/MAINNET"
               prefetch
               variant="nav"
             >

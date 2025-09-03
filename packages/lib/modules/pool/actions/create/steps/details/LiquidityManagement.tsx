@@ -14,9 +14,10 @@ export function LiquidityManagement() {
     disableUnbalancedLiquidity,
     poolHooksContract,
     poolCreationForm,
+    network,
   } = usePoolCreationForm()
 
-  const { hookFlags } = usePoolHooksContract(poolHooksContract)
+  const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
   const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
 
   useEffect(() => {

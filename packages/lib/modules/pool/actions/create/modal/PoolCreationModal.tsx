@@ -1,11 +1,8 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
-import { RefObject, useRef, useEffect } from 'react'
+import { RefObject, useRef } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { useLbpForm } from '../LbpFormProvider'
-import { LbpSummary } from './LbpSummary'
-import { useLbpCreation } from '../LbpCreationProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
@@ -15,13 +12,14 @@ import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
-import { useLbpMetadata } from '../useLbpMetadata'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
-import { getChainId } from '@repo/lib/config/app.config'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
-import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
-import { ToggleHyperBlockSize } from '@repo/lib/modules/pool/actions/create/modal/ToggleHyperBlockSize'
+import { usePoolCreation } from './PoolCreationProvider'
+import { usePoolCreationForm } from '../PoolCreationFormProvider'
+import { PoolType } from '@balancer/sdk'
+import { PoolSummary } from './PoolSummary'
+import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -32,7 +30,7 @@ type Props = {
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
-export function LbpCreationModal({
+export function PoolCreationModal({
   isOpen,
   onClose,
   finalFocusRef,
@@ -40,72 +38,41 @@ export function LbpCreationModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const { saleStructureForm, resetLbpCreation } = useLbpForm()
-  const { selectedChain } = saleStructureForm.getValues()
-  const { transactionSteps, initLbpTxHash, urlTxHash } = useLbpCreation()
+  const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreation()
+  const { network, poolType, resetPoolCreationForm } = usePoolCreationForm()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.LbpConfig.PoolAddress,
+    LS_KEYS.PoolCreation.Address,
     undefined
   )
 
   const shouldBatchTransactions = useShouldBatchTransactions()
-  const {
-    saveMetadata,
-    error: saveMetadataError,
-    isMetadataSaved,
-    reset: resetSaveMetadata,
-  } = useLbpMetadata()
 
-  const hasAttemptedSaveMetadata = useRef(false)
-  const chainId = getChainId(selectedChain)
+  const chainId = getChainId(network)
   const { data: isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()
-    resetLbpCreation()
-    resetSaveMetadata()
+    resetPoolCreationForm()
     onClose()
+  }
+
+  const poolTypeToGqlPoolType = {
+    [PoolType.Stable]: GqlPoolType.Stable,
+    [PoolType.StableSurge]: GqlPoolType.Stable,
+    [PoolType.Weighted]: GqlPoolType.Weighted,
   }
 
   const path = getPoolPath({
     id: poolAddress as Address,
-    chain: selectedChain,
-    type: GqlPoolType.LiquidityBootstrapping,
+    chain: network,
+    type: poolTypeToGqlPoolType[poolType as keyof typeof poolTypeToGqlPoolType],
     protocolVersion: 3 as const,
   })
 
   const { redirectToPage: redirectToPoolPage } = useRedirect(path)
 
-  useEffect(() => {
-    const handleSaveMetadata = async () => {
-      if (isPoolInitialized && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
-        hasAttemptedSaveMetadata.current = true
-        try {
-          await saveMetadata()
-        } catch (error) {
-          console.error('Error saving metadata:', error)
-        }
-      }
-    }
-    handleSaveMetadata()
-  }, [isPoolInitialized, isMetadataSaved, saveMetadata])
-
-  if (saveMetadataError && !transactionSteps.steps.some(step => step.id === 'save-metadata')) {
-    transactionSteps.steps.push({
-      id: 'save-metadata',
-      stepType: 'sendLbpMetadata' as const,
-      details: {
-        gasless: true,
-        type: 'Offchain action',
-      },
-      labels: { init: 'Save metadata', title: 'Save metadata', tooltip: 'Save metadata' },
-      isComplete: () => isMetadataSaved,
-      renderAction: () => undefined,
-    })
-  }
-
-  const isSuccess = !!isPoolInitialized && isMetadataSaved
+  const isSuccess = !!isPoolInitialized
 
   const {
     shouldUseBigBlocks,
@@ -115,7 +82,7 @@ export function LbpCreationModal({
     setUsingBigBlocksError,
   } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvmTx: selectedChain === GqlChain.Hyperevm,
+    isHyperEvmTx: network === GqlChain.Hyperevm,
   })
 
   return (
@@ -129,24 +96,24 @@ export function LbpCreationModal({
       trapFocus={!isSuccess}
       {...rest}
     >
-      <SuccessOverlay startAnimation={!!initLbpTxHash} />
+      <SuccessOverlay startAnimation={!!initPoolTxHash} />
 
       <ModalContent>
         {isDesktop && (
           <DesktopStepTracker
-            chain={selectedChain}
+            chain={network}
             isTxBatch={shouldBatchTransactions}
             transactionSteps={transactionSteps}
           />
         )}
         <TransactionModalHeader
-          chain={selectedChain}
-          label={'Preview: Create an LBP'}
-          txHash={initLbpTxHash}
+          chain={network}
+          label={`Create pool on ${getChainName(network)}`}
+          txHash={initPoolTxHash}
         />
         <ModalCloseButton />
         <ModalBody>
-          <LbpSummary />
+          <PoolSummary />
 
           {isSuccess && (
             <VStack width="full">
@@ -184,30 +151,6 @@ export function LbpCreationModal({
               </Button>
             </VStack>
           )}
-
-          {!!saveMetadataError && (
-            <VStack marginTop="4" spacing="3" width="full">
-              <BalAlert
-                content="The pool has been created and seeded onchain. However, there was an error syncing the metadata to the Balancer API. Your pool will not display on the Balancer UI until the sync is completed."
-                status="error"
-                title="Error syncing metadata"
-              />
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                onClick={saveMetadata}
-                size="lg"
-                variant="secondary"
-                w="full"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    Retry sync metadata
-                  </Text>
-                </HStack>
-              </Button>
-            </VStack>
-          )}
         </ModalBody>
 
         {shouldToggleBlockSize ? (
@@ -217,7 +160,7 @@ export function LbpCreationModal({
             setUsingBigBlocksError={setUsingBigBlocksError}
             shouldUseBigBlocks={shouldUseBigBlocks}
           />
-        ) : !saveMetadataError ? (
+        ) : (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
             isSuccess={isSuccess}
@@ -225,9 +168,7 @@ export function LbpCreationModal({
             returnLabel="View pool page"
             urlTxHash={urlTxHash}
           />
-        ) : null}
-
-        {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
+        )}
       </ModalContent>
     </Modal>
   )

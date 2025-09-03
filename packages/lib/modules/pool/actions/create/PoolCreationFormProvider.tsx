@@ -17,14 +17,14 @@ export const PoolCreationFormContext = createContext<UsePoolCreationFormResult |
 
 export function usePoolFormLogic() {
   const [, setPoolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.PoolCreation.PoolAddress,
+    LS_KEYS.PoolCreation.Address,
     undefined
   )
 
   const { resetSteps } = usePoolCreationFormSteps()
 
   const poolCreationForm = usePersistentForm<PoolCreationForm>(
-    LS_KEYS.PoolCreation.Config,
+    LS_KEYS.PoolCreation.Form,
     INITIAL_POOL_CREATION_FORM,
     { mode: 'all' }
   )
@@ -99,7 +99,7 @@ export function usePoolFormLogic() {
   }
 }
 
-export function PoolFormProvider({ children }: PropsWithChildren) {
+export function PoolCreationFormProvider({ children }: PropsWithChildren) {
   const hook = usePoolFormLogic()
   return (
     <PoolCreationFormContext.Provider value={hook}>{children}</PoolCreationFormContext.Provider>

@@ -22,7 +22,8 @@ export interface PoolSettingsRadioGroupProps {
   isPercentage?: boolean
   customInputLabel: string
   customInputType: 'number' | 'address'
-  validate: (value: string) => string | boolean
+  validate?: (value: string) => string | boolean
+  validateAsync?: (value: string) => Promise<string | boolean>
 }
 
 export function PoolSettingsRadioGroup({
@@ -33,6 +34,7 @@ export function PoolSettingsRadioGroup({
   customInputType,
   customInputLabel,
   validate,
+  validateAsync,
   isPercentage,
   isDisabled,
 }: PoolSettingsRadioGroupProps) {
@@ -123,7 +125,7 @@ export function PoolSettingsRadioGroup({
                                     value={field.value}
                                   />
                                 )}
-                                rules={{ validate }}
+                                rules={{ validate: validateAsync ? validateAsync : validate }}
                               />
                             </InputGroup>
                             <BalAlert
@@ -142,7 +144,7 @@ export function PoolSettingsRadioGroup({
                             isPercentage={!!isPercentage}
                             label={customInputLabel}
                             name={name}
-                            validate={value => validate(value.toString())}
+                            validate={value => (validate ? validate(value.toString()) : true)}
                             width="32"
                           />
                         ))}
