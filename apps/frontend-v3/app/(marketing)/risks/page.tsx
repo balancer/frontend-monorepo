@@ -1738,8 +1738,7 @@ export default function Privacy() {
               </p>
               <p> 
                 Note: Polygon has announced 
-                <a href="https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020">zkEVM will 
-                be deprecated by 2026</a>, recommending users to migrate liquidity to Polygon PoS.
+                <a href="https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020">zkEVM will be deprecated by 2026</a>, recommending users to migrate liquidity to Polygon PoS.
               </p>
               <p>
                 View the risks of using Polygon zkEVM on{' '}
