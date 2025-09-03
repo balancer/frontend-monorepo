@@ -18,6 +18,7 @@ export function GasCostSummaryCard({ chain, transactionSteps }: GasCostSummaryCa
   const { toCurrency } = useCurrency()
 
   const networkConfig = chain ? getNetworkConfig(chain) : undefined
+  const hasMoreThanOneTransaction = transactionSteps.filter(step => step.transaction).length > 1
 
   const totalGasCost = useMemo(() => {
     let totalGasCost = 0n
@@ -48,7 +49,7 @@ export function GasCostSummaryCard({ chain, transactionSteps }: GasCostSummaryCa
     return totalCostUsd
   }, [transactionSteps, usdValueForTokenAddress, networkConfig])
 
-  return (
+  return hasMoreThanOneTransaction ? (
     <Card px="md" variant="modalSubSection">
       <HStack color="font.secondary" w="full">
         <GasIcon size={18} />
@@ -60,5 +61,5 @@ export function GasCostSummaryCard({ chain, transactionSteps }: GasCostSummaryCa
         </Text>
       </HStack>
     </Card>
-  )
+  ) : null
 }
