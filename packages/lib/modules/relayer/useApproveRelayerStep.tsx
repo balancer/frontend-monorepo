@@ -19,7 +19,7 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
   step: TransactionStep
 } {
   const { userAddress, isConnected } = useUserAccount()
-  const [, setTransaction] = useState<ManagedResult | undefined>()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const config = getNetworkConfig(chainId)
 
@@ -67,7 +67,8 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
       gasless: false,
       type: 'Gas transaction',
     },
-    isComplete: () => isConnected && hasApprovedRelayer,
+    isComplete: () =>
+      (isConnected && hasApprovedRelayer) || (transaction?.result.isSuccess ?? false),
     renderAction: () => <ManagedTransactionButton id={approveRelayerStepId} {...props} />,
     onSuccess: () => refetch(),
   }
