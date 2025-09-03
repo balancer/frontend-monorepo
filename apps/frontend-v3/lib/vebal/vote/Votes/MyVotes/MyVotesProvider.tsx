@@ -72,6 +72,7 @@ export function useMyVotesLogic() {
   } = useVotes()
   const filtersState = useMyVotesFiltersState()
   const { lastLockTimestamp } = useVebalUserData()
+  const [selectedVotes, setSelectedVotes] = useState<Address[]>([])
 
   const myVotes = useMemo(() => {
     return uniqBy([...votedPools, ...selectedVotingPools], vote => vote.id)
@@ -261,8 +262,16 @@ export function useMyVotesLogic() {
 
   const changedVotes = submittingVotes.filter(vote => isVoteChanged(vote, lastLockTimestamp))
   const unchangedVotes = submittingVotes.filter(vote => !isVoteChanged(vote, lastLockTimestamp))
+  const selectableVotes = changedVotes.filter(vote => {
+    const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
+    return previousWeight === vote.weight
+  })
+  const submittableVotes = changedVotes.filter(vote => {
+    const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
+    return previousWeight !== vote.weight || selectedVotes.includes(vote.vote.id as Address)
+  })
 
-  const { steps, isLoadingSteps } = useSubmitVotesAllSteps({ votes: changedVotes })
+  const { steps, isLoadingSteps } = useSubmitVotesAllSteps({ votes: submittableVotes })
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
   const txHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
 
@@ -295,6 +304,10 @@ export function useMyVotesLogic() {
     refetchAll,
     hasExpiredGauges,
     hasNewVotes,
+    selectableVotes,
+    selectedVotes,
+    setSelectedVotes,
+    submittableVotes,
   }
 }
 
