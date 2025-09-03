@@ -36,15 +36,13 @@ export function VoteTimeLockedTooltip({ timeLockedEndDate, usePortal }: Props) {
 
   return (
     <Popover trigger="hover">
-      <>
-        <PopoverTrigger>
-          <HStack color="orange.300">
-            <TimeLockIcon height="16px" width="16px" />
-          </HStack>
-        </PopoverTrigger>
+      <PopoverTrigger>
+        <HStack color="orange.300">
+          <TimeLockIcon height="16px" width="16px" />
+        </HStack>
+      </PopoverTrigger>
 
-        {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
-      </>
+      {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
     </Popover>
   )
 }

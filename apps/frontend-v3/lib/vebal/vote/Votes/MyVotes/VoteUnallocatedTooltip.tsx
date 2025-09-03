@@ -34,15 +34,13 @@ export function VoteUnallocatedTooltip({ usePortal, unallocatedWeight }: Props) 
 
   return (
     <Popover trigger="hover">
-      <>
-        <PopoverTrigger>
-          <HStack color="font.warning">
-            <AlertIcon height="16px" width="16px" />
-          </HStack>
-        </PopoverTrigger>
+      <PopoverTrigger>
+        <HStack color="font.warning">
+          <AlertIcon height="16px" width="16px" />
+        </HStack>
+      </PopoverTrigger>
 
-        {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
-      </>
+      {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
     </Popover>
   )
 }
