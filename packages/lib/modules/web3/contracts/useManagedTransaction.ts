@@ -8,7 +8,12 @@ import {
   TransactionLabels,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from 'viem'
-import { useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import {
+  useEstimateGas,
+  useSimulateContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi'
 import { useChainSwitch } from '../useChainSwitch'
 import { AbiMap } from './AbiMap'
 import { TransactionExecution, TransactionSimulation, WriteAbiMutability } from './contract.types'
@@ -56,12 +61,16 @@ export function useManagedTransaction({
   const { minConfirmations } = useNetworkConfig()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
 
-  const simulateQuery = useSimulateContract({
+  const txConfig = {
     abi: AbiMap[contractId] as Abi,
     address: contractAddress as Address,
     functionName: functionName as ContractFunctionName<any, WriteAbiMutability>,
     // This any is 'safe'. The type provided to any is the same type for args that is inferred via the functionName
     args: args as any,
+  }
+
+  const simulateQuery = useSimulateContract({
+    ...txConfig,
     chainId,
     query: {
       enabled: enabled && !shouldChangeNetwork,
@@ -70,6 +79,15 @@ export function useManagedTransaction({
       ...onlyExplicitRefetch,
     },
     value,
+  })
+
+  const estimateGasQuery = useEstimateGas({
+    ...txConfig,
+    query: {
+      enabled: !!txConfig && !shouldChangeNetwork,
+      // In chains like polygon, we don't want background refetches while waiting for min block confirmations
+      ...onlyExplicitRefetch,
+    },
   })
 
   const { mockedTxHash, setMockedTxHash } = useMockedTxHash()
@@ -90,7 +108,7 @@ export function useManagedTransaction({
 
   const bundle = {
     chainId,
-    simulation: simulateQuery as TransactionSimulation,
+    simulation: estimateGasQuery as TransactionSimulation,
     execution: writeQuery as TransactionExecution,
     result: transactionStatusQuery,
     isSafeTxLoading,
