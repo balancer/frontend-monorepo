@@ -21,7 +21,7 @@ export function Step(props: StepProps) {
   const transaction = props.step.transaction
   const step = props.step
   const { color, isActive, title } = getStepSettings(props, transaction)
-  const variant = isActive ? 'special' : 'secondary'
+  const variant = isActive && !props.lastTransactionConfirmed ? 'special' : 'secondary'
 
   const shouldDisplayAsTxBatch =
     props.isTxBatch && props.step.isBatchEnd && hasSomePendingNestedTxInBatch(props.step)
