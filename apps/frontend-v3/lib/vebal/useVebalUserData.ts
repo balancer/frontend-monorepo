@@ -6,7 +6,7 @@ import {
 import { useQuery } from '@apollo/client'
 import { useVeBALBalance } from './vote/useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { secondsToMilliseconds } from 'framer-motion'
 
 export function useVebalUserData() {
   const { userAddress } = useUserAccount()
@@ -30,7 +30,7 @@ export function useVebalUserData() {
   const snapshots = apiResponse.data?.veBalGetUser.lockSnapshots
   const lastLockTimestamp =
     snapshots && snapshots.length > 0
-      ? bn(calculateLastLock(snapshots).timestamp).times(1000).toNumber()
+      ? secondsToMilliseconds(calculateLastLock(snapshots).timestamp)
       : undefined
 
   return {
