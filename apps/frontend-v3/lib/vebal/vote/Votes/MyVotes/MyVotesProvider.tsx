@@ -266,10 +266,26 @@ export function useMyVotesLogic() {
     const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
     return previousWeight === vote.weight
   })
-  const submittableVotes = changedVotes.filter(vote => {
-    const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
-    return previousWeight !== vote.weight || selectedVotes.includes(vote.vote.id as Address)
-  })
+  const submittableVotes = changedVotes
+    .filter(vote => {
+      const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
+      return previousWeight !== vote.weight || selectedVotes.includes(vote.vote.id as Address)
+    })
+    .sort((a, b) => {
+      // Sending vote increases before decreases can reject the tx as each vote
+      // is sequentially processed and there is a check so the percentage is not
+      // bigger than 100%. Sorting the votes this way solves the problem.
+      const previousWeightA = a.vote.gaugeVotes?.userVotes || '0'
+      const previousWeightB = b.vote.gaugeVotes?.userVotes || '0'
+      const diffA = Number(a.weight) - Number(previousWeightA)
+      const diffB = Number(b.weight) - Number(previousWeightB)
+
+      if (diffA < 0 && diffB >= 0) return 1
+      if (diffB < 0 && diffA >= 0) return -1
+
+      return Number(a.weight) - Number(b.weight)
+    })
+    .reverse()
 
   const { steps, isLoadingSteps } = useSubmitVotesAllSteps({ votes: submittableVotes })
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)

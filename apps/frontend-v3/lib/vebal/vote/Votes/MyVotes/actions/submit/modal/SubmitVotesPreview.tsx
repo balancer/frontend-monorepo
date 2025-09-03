@@ -88,7 +88,11 @@ export function SubmitVotesPreview({
                           </Badge>
                         )}
                       </HStack>
-                      <VoteWeight variant="primary" weight={bn(weight)} />
+                      <VoteWeight
+                        previousWeight={bn(vote.gaugeVotes?.userVotes || 0)}
+                        variant="primary"
+                        weight={bn(weight)}
+                      />
                     </HStack>
                   )
                 })}
