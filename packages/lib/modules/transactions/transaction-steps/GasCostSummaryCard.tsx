@@ -49,9 +49,9 @@ export function GasCostSummaryCard({ chain, transactionSteps }: GasCostSummaryCa
   }, [transactionSteps, usdValueForTokenAddress, networkConfig])
 
   return (
-    <Card p="ms" variant="modalSubSection">
+    <Card px="md" variant="modalSubSection">
       <HStack color="font.secondary" w="full">
-        <GasIcon size={16} />
+        <GasIcon size={18} />
         <Text color="font.secondary" fontSize="sm">
           Total final gas cost
         </Text>

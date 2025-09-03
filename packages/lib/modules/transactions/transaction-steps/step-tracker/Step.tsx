@@ -29,7 +29,7 @@ export function Step(props: StepProps) {
     <HStack alignItems="center">
       <StepIndicator transaction={transaction} {...props} />
       <VStack alignItems="start" spacing="0">
-        <Text fontWeight="bold" mt={isActive ? -0.3 : 0} variant={variant}>
+        <Text fontWeight="bold" lineHeight="1.2" mt={isActive ? -0.3 : 0} variant={variant}>
           {shouldDisplayAsTxBatch ? 'Safe transaction bundle' : title}
         </Text>
         {!shouldDisplayAsTxBatch && (
@@ -112,13 +112,13 @@ function NestedInfo({
     <Box mb="0" mt="0" p="0.5" pl="0">
       <HStack align="start" gap="xxs">
         {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
-          <Text fontSize="sm" lineHeight="1" variant={variant}>
+          <Text fontSize="sm" lineHeight="1.2" variant={variant}>
             {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
             {!isSmallAmount && '~'}
             {gasCostData.costUsd}
           </Text>
         ) : (
-          <Text fontSize="sm" lineHeight="1" variant={variant}>
+          <Text fontSize="sm" lineHeight="1.2" variant={variant}>
             {details?.type || (details?.gasless ? 'Signature: Free' : 'Gas transaction')}
           </Text>
         )}
