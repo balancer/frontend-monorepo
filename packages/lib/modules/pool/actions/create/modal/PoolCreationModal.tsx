@@ -6,7 +6,6 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
@@ -17,11 +16,11 @@ import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { usePoolCreation } from './PoolCreationProvider'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { PoolType } from '@balancer/sdk'
 import { PoolSummary } from './PoolSummary'
 import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { getGqlPoolType } from '../helpers'
 
 type Props = {
   isOpen: boolean
@@ -57,16 +56,10 @@ export function PoolCreationModal({
     onClose()
   }
 
-  const poolTypeToGqlPoolType = {
-    [PoolType.Stable]: GqlPoolType.Stable,
-    [PoolType.StableSurge]: GqlPoolType.Stable,
-    [PoolType.Weighted]: GqlPoolType.Weighted,
-  }
-
   const path = getPoolPath({
     id: poolAddress as Address,
     chain: network,
-    type: poolTypeToGqlPoolType[poolType as keyof typeof poolTypeToGqlPoolType],
+    type: getGqlPoolType(poolType),
     protocolVersion: 3 as const,
   })
 
