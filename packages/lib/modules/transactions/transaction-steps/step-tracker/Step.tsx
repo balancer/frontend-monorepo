@@ -98,11 +98,11 @@ function NestedInfo({
     <Box mb="0" mt="0" p="0.5" pl="0">
       {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
         <Text color={color} fontSize="sm" lineHeight="1">
-          {gasCostData.isActual ? 'Final gas' : 'Estimated gas'}: {gasCostData.costUsd}
+          {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: ~'}: {gasCostData.costUsd}
         </Text>
       ) : (
         <Text color={color} fontSize="sm" lineHeight="1">
-          {details?.type || (details?.gasless ? 'Free signature' : 'Gas transaction')}
+          {details?.type || (details?.gasless ? 'Signature: Free' : 'Gas transaction')}
         </Text>
       )}
 
