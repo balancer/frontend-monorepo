@@ -71,6 +71,7 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
       (isConnected && hasApprovedRelayer) || (transaction?.result.isSuccess ?? false),
     renderAction: () => <ManagedTransactionButton id={approveRelayerStepId} {...props} />,
     onSuccess: () => refetch(),
+    transaction,
   }
 
   return {
