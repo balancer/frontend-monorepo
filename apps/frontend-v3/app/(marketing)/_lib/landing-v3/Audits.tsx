@@ -82,7 +82,7 @@ export function Audits() {
             <VStack align="start" spacing="lg">
               <BlurIn delay={0.4}>
                 <Text
-                  background="font.specialSecondary"
+                  background="font.special"
                   backgroundClip="text"
                   fontSize="sm"
                   variant="eyebrow"
@@ -104,7 +104,7 @@ export function Audits() {
               as={Link}
               href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits"
               isExternal
-              rightIcon={<ArrowUpRight size="16px" />}
+              rightIcon={<ArrowUpRight size="14px" />}
               variant="secondary"
             >
               View reports

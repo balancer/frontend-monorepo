@@ -9,7 +9,6 @@ import { useEffect } from 'react'
 import { useRef } from 'react'
 import { useState } from 'react'
 import { ArrowUpRight } from 'react-feather'
-import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/BalancerIconAnimated'
 import { MotionButtonProps } from './types'
 
 const MotionButton = motion(Button) as React.FC<MotionButtonProps>
@@ -92,12 +91,8 @@ export function FooterCta() {
           progress={patternProgress}
           top="calc(50% - 300px)"
           width={600}
-        >
-          <Center color="background.level0" h="80px" position="relative" w="80px">
-            <BalancerLogoAnimated iconColor="currentColor" noShadow size={100} />
-          </Center>
-        </RadialPattern>
-        <VStack position="relative" pt="md" spacing="3xl">
+        ></RadialPattern>
+        <VStack position="relative" pt="md" spacing="xl">
           <WordsPullUp
             as="h2"
             color="font.primary"
@@ -115,7 +110,7 @@ export function FooterCta() {
               href="https://docs.balancer.fi"
               initial={{ opacity: 0 }}
               rel="noopener"
-              rightIcon={<ArrowUpRight size="16px" />}
+              rightIcon={<ArrowUpRight size="14px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
@@ -130,7 +125,7 @@ export function FooterCta() {
               href="https://github.com/balancer/scaffold-balancer-v3"
               initial={{ opacity: 0 }}
               rel="noopener"
-              rightIcon={<ArrowUpRight size="16px" />}
+              rightIcon={<ArrowUpRight size="14px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}

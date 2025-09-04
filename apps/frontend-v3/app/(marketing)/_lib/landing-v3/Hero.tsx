@@ -149,7 +149,7 @@ export function Hero() {
                 href="https://docs.balancer.fi"
                 initial={{ opacity: 0 }}
                 rel="noopener"
-                rightIcon={<ArrowUpRight size="16px" />}
+                rightIcon={<ArrowUpRight size="14px" />}
                 size="lg"
                 target="_blank"
                 transition={{ duration: 2, delay: 1.2 }}
@@ -171,7 +171,7 @@ export function Hero() {
                 href="https://github.com/balancer/scaffold-balancer-v3"
                 initial={{ opacity: 0 }}
                 rel="noopener"
-                rightIcon={<ArrowUpRight size="16px" />}
+                rightIcon={<ArrowUpRight size="14px" />}
                 size="lg"
                 target="_blank"
                 transition={{ duration: 2, delay: 1.2 }}

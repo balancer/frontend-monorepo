@@ -35,7 +35,7 @@ import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 
 const videos = {
   createCustomAMMs: {
-    title: 'Create Custom AMMs on Balancer v3',
+    title: '',
     url: 'https://youtu.be/oJAXQCMVdfA?si=Vnusjr2rzGVLI4Lm',
     src: createCustomAMMsSrc,
   },
@@ -96,16 +96,21 @@ export function VideoBox({
               _groupHover={{ opacity: 0.5 }}
               bg="background.base"
               h="full"
-              opacity={0.8}
+              opacity={0}
               position="absolute"
-              transition="opacity 0.4s ease-in-out"
+              transition="opacity 0.2s var(--ease-out-cubic)"
               w="full"
             />
           </>
         )}
         {bgVariant && <SandBg variant={bgVariant} />}
         <Center h="full" position="absolute" w="full">
-          <PlayVideoButton size={62} />
+          <Box
+            _groupHover={{ transform: 'scale(1.1)' }}
+            transition="opacity 0.3s var(--ease-out-cubic)"
+          >
+            <PlayVideoButton size={62} />
+          </Box>
         </Center>
         <Box
           bottom="0"
@@ -163,7 +168,7 @@ export function Videos() {
               as={Link}
               href="https://github.com/balancer/scaffold-balancer-v3"
               isExternal
-              rightIcon={<ArrowUpRight size="16px" />}
+              rightIcon={<ArrowUpRight size="14px" />}
               variant="secondary"
             >
               Prototype on v3
@@ -222,7 +227,7 @@ export function Videos() {
           </Card>
         </VStack>
       </DefaultPageContainer>
-      <Box minH="500px" position="absolute" w="full" zIndex={1}>
+      <Box minH="500px" position="absolute" w="full" zIndex={-1}>
         <Box bottom={0} h="500px" left={0} position="absolute" top={0} w="100vw">
           <RadialPattern
             circleCount={8}
