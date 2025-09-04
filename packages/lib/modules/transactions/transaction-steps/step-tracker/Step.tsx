@@ -111,6 +111,7 @@ function NestedInfo({
   const gasCostData = useTransactionGasCost(transaction)
 
   const isSmallAmount = gasCostData && gasCostData.costUsd?.replace('$', '') === SMALL_AMOUNT_LABEL
+
   const textProps = {
     fontSize: 'sm',
     lineHeight: '1.2',
