@@ -6,7 +6,7 @@ import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { validatePoolTokens, validatePoolType } from './validatePoolCreationForm'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
-import { PoolCreationProvider } from './modal/PoolCreationProvider'
+import { PoolCreationTransactionsProvider } from './modal/PoolCreationTransactionsProvider'
 import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
@@ -67,14 +67,14 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
       </VStack>
 
       {isLastStep && (
-        <PoolCreationProvider>
+        <PoolCreationTransactionsProvider>
           <PoolCreationModal
             finalFocusRef={nextBtn}
             isOpen={previewModalDisclosure.isOpen}
             onClose={previewModalDisclosure.onClose}
             onOpen={previewModalDisclosure.onOpen}
           />
-        </PoolCreationProvider>
+        </PoolCreationTransactionsProvider>
       )}
     </>
   )

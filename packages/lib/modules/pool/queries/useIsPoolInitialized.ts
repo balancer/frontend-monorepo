@@ -3,7 +3,7 @@ import { Address, parseAbi } from 'viem'
 import { balancerV3Contracts } from '@balancer/sdk'
 
 export function useIsPoolInitialized(chainId: number, poolAddress: Address | undefined) {
-  return useReadContract({
+  const { data: isPoolInitialized, refetch: refetchIsPoolInitialized } = useReadContract({
     chainId,
     abi: parseAbi(['function isPoolInitialized(address) view returns (bool)']),
     address: balancerV3Contracts.Vault[chainId as keyof typeof balancerV3Contracts.Vault],
@@ -11,4 +11,6 @@ export function useIsPoolInitialized(chainId: number, poolAddress: Address | und
     args: poolAddress ? [poolAddress] : undefined,
     query: { enabled: !!poolAddress },
   })
+
+  return { isPoolInitialized: !!isPoolInitialized, refetchIsPoolInitialized }
 }

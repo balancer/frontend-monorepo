@@ -5,19 +5,21 @@ import { type Address } from 'viem'
 import { type TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { usePermit2Signature } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 
+type Params = {
+  initPoolInput: InitPoolInputV3
+  rpcUrl: string
+  poolAddress: Address | undefined
+  poolType: PoolType
+  enabled: boolean
+}
+
 export function useInitializePoolBuildCall({
   rpcUrl,
   poolAddress,
   poolType,
   enabled,
   initPoolInput,
-}: {
-  initPoolInput: InitPoolInputV3
-  rpcUrl: string
-  poolAddress: Address
-  poolType: PoolType
-  enabled: boolean
-}) {
+}: Params) {
   const { userAddress, isConnected } = useUserAccount()
   const protocolVersion = 3
 
@@ -25,9 +27,7 @@ export function useInitializePoolBuildCall({
   const initPool = new InitPool()
 
   const queryFn = async (): Promise<TransactionConfig> => {
-    if (!poolAddress) {
-      throw new Error('Pool address is required but not available')
-    }
+    if (!poolAddress) throw new Error('missing pool address for init pool build call')
 
     const initPoolDataProvider = new InitPoolDataProvider(initPoolInput.chainId, rpcUrl)
     const poolState = await initPoolDataProvider.getInitPoolData(
