@@ -5,24 +5,27 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
-import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
-import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
-import { useLocalStorage } from 'usehooks-ts'
-import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
-import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
-import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
-import { getChainId, getChainName } from '@repo/lib/config/app.config'
+import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
+import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
+import { getChainName } from '@repo/lib/config/app.config'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
-import { usePoolCreationTransactions } from './PoolCreationTransactionsProvider'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { PoolSummary } from './PoolSummary'
 import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { getChainId } from '@repo/lib/config/app.config'
+import { usePoolCreationTransactions } from './usePoolCreationTransactions'
+import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { getGqlPoolType } from '../helpers'
+import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
+import { useCreatePoolInput } from './useCreatePoolInput'
+import { useLocalStorage } from 'usehooks-ts'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { usePoolCreationForm } from '../PoolCreationFormProvider'
+import { useInitializePoolInput } from './useInitializePoolInput'
 
-type Props = {
+type PoolCreationModalProps = {
   isOpen: boolean
   onClose(): void
   onOpen(): void
@@ -34,20 +37,25 @@ export function PoolCreationModal({
   onClose,
   finalFocusRef,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
-  const initialFocusRef = useRef(null)
-  const { isDesktop } = useBreakpoints()
-  const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions()
-  const { network, poolType, resetPoolCreationForm } = usePoolCreationForm()
-
-  const [poolAddress] = useLocalStorage<Address | undefined>(
+}: PoolCreationModalProps & Omit<ModalProps, 'children'>) {
+  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.PoolCreation.Address,
     undefined
   )
 
-  const shouldBatchTransactions = useShouldBatchTransactions()
-
+  const { network, poolType, resetPoolCreationForm } = usePoolCreationForm()
   const chainId = getChainId(network)
+
+  const createPoolInput = useCreatePoolInput(chainId)
+  const initPoolInput = useInitializePoolInput(chainId)
+
+  const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
+    poolAddress,
+    setPoolAddress,
+    createPoolInput,
+    initPoolInput,
+  })
+
   const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
 
   const handleReset = () => {
@@ -56,16 +64,18 @@ export function PoolCreationModal({
     onClose()
   }
 
-  const path = getPoolPath({
+  const poolPath = getPoolPath({
     id: poolAddress as Address,
     chain: network,
     type: getGqlPoolType(poolType),
     protocolVersion: 3 as const,
   })
 
-  const { redirectToPage: redirectToPoolPage } = useRedirect(path)
+  const initialFocusRef = useRef(null)
+  const { isDesktop } = useBreakpoints()
+  const shouldBatchTransactions = useShouldBatchTransactions()
 
-  const isSuccess = !!isPoolInitialized
+  const { redirectToPage: redirectToPoolPage } = useRedirect(poolPath)
 
   const {
     shouldUseBigBlocks,
@@ -86,7 +96,7 @@ export function PoolCreationModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
-      trapFocus={!isSuccess}
+      trapFocus={!isPoolInitialized}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!initPoolTxHash} />
@@ -106,15 +116,15 @@ export function PoolCreationModal({
         />
         <ModalCloseButton />
         <ModalBody>
-          <PoolSummary />
+          <PoolSummary transactionSteps={transactionSteps} />
 
-          {isSuccess && (
+          {isPoolInitialized && (
             <VStack width="full">
               <Button
                 isDisabled={false}
                 isLoading={false}
                 marginTop="4"
-                onClick={() => window.open(path, '_blank')}
+                onClick={() => window.open(poolPath, '_blank')}
                 size="lg"
                 variant="primary"
                 w="full"
@@ -156,7 +166,7 @@ export function PoolCreationModal({
         ) : (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
-            isSuccess={isSuccess}
+            isSuccess={isPoolInitialized}
             returnAction={redirectToPoolPage}
             returnLabel="View pool page"
             urlTxHash={urlTxHash}

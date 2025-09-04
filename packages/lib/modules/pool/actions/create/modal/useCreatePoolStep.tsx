@@ -3,14 +3,9 @@ import {
   TransactionLabels,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { useState } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
-import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { getChainId, getChainName } from '@repo/lib/config/app.config'
+import { getGqlChain, getChainName } from '@repo/lib/config/app.config'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { validatePoolType } from '../validatePoolCreationForm'
-import { parseUnits, zeroAddress } from 'viem'
-import { TokenType, CreatePoolInput } from '@balancer/sdk'
+import { CreatePoolInput } from '@balancer/sdk'
 import { useCreatePoolBuildCall } from '@repo/lib/modules/pool/actions/create/useCreatePoolBuildCall'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
@@ -20,38 +15,28 @@ import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { Address } from 'viem'
 
 const CREATE_POOL_STEP_ID = 'create-pool'
 
-export function useCreatePoolStep(): TransactionStep {
+type Params = {
+  createPoolInput: CreatePoolInput
+  poolAddress: Address | undefined
+  setPoolAddress: (poolAddress: Address) => void
+}
+
+export function useCreatePoolStep({
+  createPoolInput,
+  poolAddress,
+  setPoolAddress,
+}: Params): TransactionStep {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const [isStepActivated, setIsStepActivated] = useState(false)
 
-  const [poolAddress, setPoolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.PoolCreation.Address,
-    undefined
-  )
-
   const { userAddress } = useUserAccount()
-  const {
-    poolType,
-    symbol,
-    name,
-    swapFeePercentage,
-    network,
-    swapFeeManager,
-    poolHooksContract,
-    enableDonation,
-    disableUnbalancedLiquidity,
-    poolTokens,
-    pauseManager,
-    amplificationParameter,
-  } = usePoolCreationForm()
-
-  const chainId = getChainId(network)
-  const chainName = getChainName(network)
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-  const isStablePool = validatePoolType.isStablePool(poolType)
+  const { chainId } = createPoolInput
+  const chainName = getChainName(chainId)
+  const chain = getGqlChain(chainId)
 
   const labels: TransactionLabels = {
     init: `Deploy pool on ${chainName}`,
@@ -60,34 +45,6 @@ export function useCreatePoolStep(): TransactionStep {
     confirmed: 'Pool creation confirmed!',
     tooltip: `Deploy pool on ${chainName}`,
   }
-
-  if (!swapFeeManager || !pauseManager || !poolHooksContract) {
-    throw new Error('Missing config for create pool input')
-  }
-
-  const createPoolInput = {
-    chainId,
-    protocolVersion: 3 as const,
-    poolType,
-    name,
-    symbol,
-    swapFeePercentage: parseUnits(swapFeePercentage, 16),
-    swapFeeManager,
-    pauseManager,
-    enableDonation,
-    poolHooksContract,
-    disableUnbalancedLiquidity,
-    ...(isStablePool && { amplificationParameter: BigInt(amplificationParameter) }),
-    tokens: poolTokens.map(({ address, rateProvider, weight, paysYieldFees }) => {
-      return {
-        address,
-        tokenType: rateProvider === zeroAddress ? TokenType.STANDARD : TokenType.TOKEN_WITH_RATE,
-        rateProvider,
-        paysYieldFees,
-        ...(isWeightedPool && weight ? { weight: parseUnits(weight, 16) } : {}),
-      }
-    }),
-  } as CreatePoolInput
 
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput,
@@ -103,7 +60,7 @@ export function useCreatePoolStep(): TransactionStep {
 
   const receiptProps = usePoolCreationReceipt({
     txHash: transaction?.result?.data?.transactionHash,
-    chain: network,
+    chain,
     userAddress: userAddress,
     protocolVersion: 3 as const,
   })

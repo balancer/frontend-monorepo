@@ -5,15 +5,23 @@ import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { SeedAmountProportions } from '../steps/fund/SeedAmountProportions'
+import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
+import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
+import { TransactionStepsResponse } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
-export function PoolSummary() {
+export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
+  const { isMobile } = useBreakpoints()
+  const { network } = usePoolCreationForm()
+
   return (
-    <VStack spacing="md">
+    <AnimateHeightChange spacing="sm" w="full">
+      {isMobile && <MobileStepTracker chain={network} transactionSteps={transactionSteps} />}
       <PoolTitleCard />
       <PoolTokenAmountsCard />
       <SeedAmountProportions variant="modalSubSection" />
       <PoolDetailsCard />
-    </VStack>
+    </AnimateHeightChange>
   )
 }
 

@@ -1,0 +1,49 @@
+import { usePoolCreationForm } from '../PoolCreationFormProvider'
+import { TokenType, CreatePoolInput } from '@balancer/sdk'
+import { validatePoolType } from '../validatePoolCreationForm'
+import { parseUnits, zeroAddress } from 'viem'
+
+export function useCreatePoolInput(chainId: number) {
+  const {
+    poolType,
+    symbol,
+    name,
+    swapFeePercentage,
+    swapFeeManager,
+    poolHooksContract,
+    enableDonation,
+    disableUnbalancedLiquidity,
+    poolTokens,
+    pauseManager,
+    amplificationParameter,
+  } = usePoolCreationForm()
+
+  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+  const isStablePool = validatePoolType.isStablePool(poolType)
+
+  const createPoolInput = {
+    chainId,
+    protocolVersion: 3 as const,
+    poolType,
+    name,
+    symbol,
+    swapFeePercentage: parseUnits(swapFeePercentage, 16),
+    swapFeeManager,
+    pauseManager,
+    enableDonation,
+    poolHooksContract,
+    disableUnbalancedLiquidity,
+    ...(isStablePool && { amplificationParameter: BigInt(amplificationParameter) }),
+    tokens: poolTokens.map(({ address, rateProvider, weight, paysYieldFees }) => {
+      return {
+        address,
+        tokenType: rateProvider === zeroAddress ? TokenType.STANDARD : TokenType.TOKEN_WITH_RATE,
+        rateProvider,
+        paysYieldFees,
+        ...(isWeightedPool && weight ? { weight: parseUnits(weight, 16) } : {}),
+      }
+    }),
+  } as CreatePoolInput // TODO: solve type complaint for inputs allowing empty strings ""
+
+  return createPoolInput
+}
