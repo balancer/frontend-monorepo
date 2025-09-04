@@ -1449,17 +1449,12 @@ export default function Privacy() {
                       pools. This is not an endorsement of their products or of the the safety of
                       their smart contracts. The Gyroscope GYD system and E-CLPs have been audited
                       several times. You can review the{' '}
-                      <a href="https://docs.gyro.finance/audit-reports.html">
-                        audit reports here
-                      </a>
-                      .
+                      <a href="https://docs.gyro.finance/audit-reports.html">audit reports here</a>.
                     </li>
                     <li>
                       Some concentrated liquidity pools also contain Gyroscope&rsquo;s Gyro Dollars
                       (GYD). Here are some of the{' '}
-                      <a href="https://docs.gyro.finance/gyd/sgyd/risks.html">
-                        risks of using GYD
-                      </a>
+                      <a href="https://docs.gyro.finance/gyd/sgyd/risks.html">risks of using GYD</a>
                       .
                     </li>
                   </ul>
@@ -1736,9 +1731,12 @@ export default function Privacy() {
                 ZK proofs to reduce transaction costs and massively increase throughput, all while
                 inheriting the security of Ethereum L1.
               </p>
-              <p> 
-                Note: Polygon has announced 
-                <a href="https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020">zkEVM will be deprecated by 2026</a>, recommending users to migrate liquidity to Polygon PoS.
+              <p>
+                Note: Polygon has announced
+                <a href="https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020">
+                  zkEVM will be deprecated by 2026
+                </a>
+                , recommending users to migrate liquidity to Polygon PoS.
               </p>
               <p>
                 View the risks of using Polygon zkEVM on{' '}
