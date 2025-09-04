@@ -11,14 +11,23 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
+import { useLocalStorage } from 'usehooks-ts'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 
 export function useCreateLbpSteps() {
+  const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
+    LS_KEYS.LbpConfig.PoolAddress,
+    undefined
+  )
+
   const createLbpStep = useCreateLbpStep()
   const { saleStructureForm, isCollateralNativeAsset } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const chainId = getNetworkConfig(selectedChain).chainId
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { shouldUseSignatures } = useUserSettings()
+  const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
 
   const initAmounts = useLbpInitAmounts(isCollateralNativeAsset)
 
@@ -39,7 +48,10 @@ export function useCreateLbpSteps() {
     wethIsEth: isCollateralNativeAsset,
   }
 
-  const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput })
+  const signPermit2Step = useSignPermit2InitializeStep({
+    initPoolInput,
+    isComplete: isPoolInitialized,
+  })
   // If user chooses setting to not use signatures, use these approval txs
   const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
     usePermit2ApprovalSteps({

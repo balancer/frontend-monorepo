@@ -14,7 +14,7 @@ import { Address } from 'viem'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
-import { usePoolCreation } from './PoolCreationProvider'
+import { usePoolCreationTransactions } from './PoolCreationTransactionsProvider'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { PoolSummary } from './PoolSummary'
 import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
@@ -37,7 +37,7 @@ export function PoolCreationModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreation()
+  const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions()
   const { network, poolType, resetPoolCreationForm } = usePoolCreationForm()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
@@ -48,7 +48,7 @@ export function PoolCreationModal({
   const shouldBatchTransactions = useShouldBatchTransactions()
 
   const chainId = getChainId(network)
-  const { data: isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+  const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()
@@ -116,13 +116,13 @@ export function PoolCreationModal({
                 marginTop="4"
                 onClick={() => window.open(path, '_blank')}
                 size="lg"
-                variant="secondary"
+                variant="primary"
                 w="full"
                 width="full"
               >
                 <HStack justifyContent="center" spacing="sm" width="100%">
                   <Text color="font.primaryGradient" fontWeight="bold">
-                    View LBP page
+                    View pool page
                   </Text>
                 </HStack>
               </Button>
@@ -132,13 +132,13 @@ export function PoolCreationModal({
                 marginTop="2"
                 onClick={handleReset}
                 size="lg"
-                variant="primary"
+                variant="secondary"
                 w="full"
                 width="full"
               >
                 <HStack justifyContent="center" spacing="sm" width="100%">
                   <Text color="font.primaryGradient" fontWeight="bold">
-                    Create another LBP
+                    Create another pool
                   </Text>
                 </HStack>
               </Button>
