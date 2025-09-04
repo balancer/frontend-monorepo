@@ -8,12 +8,7 @@ import {
   TransactionLabels,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from 'viem'
-import {
-  useEstimateGas,
-  useSimulateContract,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from 'wagmi'
+import { useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { useChainSwitch } from '../useChainSwitch'
 import { AbiMap } from './AbiMap'
 import { TransactionExecution, TransactionSimulation, WriteAbiMutability } from './contract.types'
@@ -24,6 +19,8 @@ import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { useMockedTxHash } from '@repo/lib/modules/web3/contracts/useMockedTxHash'
+import { useTenderlyGasEstimate } from '@repo/lib/modules/web3/useTenderlyGasEstimate'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 /**
  * Allows to skip transaction confirmation step in the wallet and go directly to success state
@@ -60,6 +57,7 @@ export function useManagedTransaction({
 }: ManagedTransactionInput) {
   const { minConfirmations } = useNetworkConfig()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
+  const { userAddress } = useUserAccount()
 
   const txConfig = {
     abi: AbiMap[contractId] as Abi,
@@ -81,13 +79,10 @@ export function useManagedTransaction({
     value,
   })
 
-  const estimateGasQuery = useEstimateGas({
+  const estimateGasQuery = useTenderlyGasEstimate({
     ...txConfig,
-    query: {
-      enabled: !!txConfig && !shouldChangeNetwork,
-      // In chains like polygon, we don't want background refetches while waiting for min block confirmations
-      ...onlyExplicitRefetch,
-    },
+    chainId,
+    from: userAddress,
   })
 
   const { mockedTxHash, setMockedTxHash } = useMockedTxHash()
