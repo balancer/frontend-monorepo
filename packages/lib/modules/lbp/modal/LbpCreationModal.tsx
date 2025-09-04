@@ -5,7 +5,6 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useLbpForm } from '../LbpFormProvider'
 import { LbpSummary } from './LbpSummary'
-import { useLbpCreation } from '../LbpCreationProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
@@ -24,6 +23,9 @@ import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/Pool
 import { ToggleHyperBlockSize } from '@repo/lib/modules/pool/actions/create/modal/ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useCreateLbpInput } from '../useCreateLbpInput'
+import { useInitializeLbpInput } from '../useInitializeLbpInput'
+import { usePoolCreationTransactions } from '@repo/lib/modules/pool/actions/create/modal/usePoolCreationTransactions'
 
 type Props = {
   isOpen: boolean
@@ -38,16 +40,24 @@ export function LbpCreationModal({
   finalFocusRef,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
+  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
+    LS_KEYS.LbpConfig.PoolAddress,
+    undefined
+  )
+
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
-  const { transactionSteps, initLbpTxHash, urlTxHash } = useLbpCreation()
 
-  const [poolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.LbpConfig.PoolAddress,
-    undefined
-  )
+  const createPoolInput = useCreateLbpInput()
+  const initPoolInput = useInitializeLbpInput()
+  const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
+    poolAddress,
+    setPoolAddress,
+    createPoolInput,
+    initPoolInput,
+  })
 
   const shouldBatchTransactions = useShouldBatchTransactions()
   const {
@@ -129,7 +139,7 @@ export function LbpCreationModal({
       trapFocus={!isSuccess}
       {...rest}
     >
-      <SuccessOverlay startAnimation={!!initLbpTxHash} />
+      <SuccessOverlay startAnimation={!!initPoolTxHash} />
 
       <ModalContent>
         {isDesktop && (
@@ -142,11 +152,11 @@ export function LbpCreationModal({
         <TransactionModalHeader
           chain={selectedChain}
           label={'Preview: Create an LBP'}
-          txHash={initLbpTxHash}
+          txHash={initPoolTxHash}
         />
         <ModalCloseButton />
         <ModalBody>
-          <LbpSummary />
+          <LbpSummary transactionSteps={transactionSteps} />
 
           {isSuccess && (
             <VStack width="full">
