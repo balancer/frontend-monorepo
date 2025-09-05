@@ -45,7 +45,7 @@ export function PoolFundStep() {
             </VStack>
           )
         })}
-        <SeedAmountProportions />
+        <SeedAmountProportions displayAlert />
         <PoolCreationRiskCheckboxes />
         <PoolCreationFormAction disabled={isDisabled} />
       </VStack>
