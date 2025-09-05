@@ -28,9 +28,6 @@ export function LearnMoreModal({ buttonLabel }: { buttonLabel: string }) {
         _hover={{ color: 'font.linkHover' }}
         color="font.link"
         onClick={onOpen}
-        position="relative"
-        right="-8px"
-        top="4px"
         variant="ghost"
       >
         {buttonLabel}

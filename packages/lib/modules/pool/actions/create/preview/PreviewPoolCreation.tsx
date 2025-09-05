@@ -8,6 +8,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
 import { getGqlPoolType } from '../helpers'
+import { LearnMoreModal } from '@repo/lib/modules/lbp/header/LearnMoreModal'
 
 export function PreviewPoolCreation() {
   const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
@@ -21,17 +22,18 @@ export function PreviewPoolCreation() {
         rounded: 'xl',
       }}
     >
-      <VStack align="start" p="lg" spacing="lg" w="full">
-        <HStack alignItems="end" justifyContent="space-between" w="full">
+      <VStack align="start" p="lg" spacing="md" w="full">
+        <HStack alignItems="center" justifyContent="space-between" w="full">
           <Heading color="font.maxContrast" size="md">
             Pool preview
           </Heading>
-          <HStack cursor="pointer" spacing="sm" zIndex={1}>
+          <HStack cursor="pointer" spacing="xs" zIndex={1}>
             <RestartPoolCreationModal
               handleRestart={resetPoolCreationForm}
               network={network}
               poolType={getGqlPoolType(poolType)}
             />
+            <LearnMoreModal buttonLabel="Get help" />
           </HStack>
         </HStack>
 

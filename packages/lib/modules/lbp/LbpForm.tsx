@@ -19,12 +19,9 @@ import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/review/ReviewStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
-import { RestartPoolCreationModal } from '../pool/actions/create/modal/RestartPoolCreationModal'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function LbpForm() {
-  const { steps, activeStepIndex, activeStep, resetLbpCreation, saleStructureForm } = useLbpForm()
-  const { selectedChain } = saleStructureForm.watch()
+  const { steps, activeStepIndex, activeStep } = useLbpForm()
   const { isMobile } = useBreakpoints()
 
   useEffect(() => {
@@ -60,11 +57,6 @@ export function LbpForm() {
         {activeStep.id === 'step2' && <ProjectInfoStep />}
         {activeStep.id === 'step3' && <ReviewStep />}
       </VStack>
-      <RestartPoolCreationModal
-        handleRestart={resetLbpCreation}
-        network={selectedChain}
-        poolType={GqlPoolType.LiquidityBootstrapping}
-      />
     </VStack>
   )
 }
