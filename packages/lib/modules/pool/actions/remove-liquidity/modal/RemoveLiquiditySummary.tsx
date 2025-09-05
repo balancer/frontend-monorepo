@@ -18,6 +18,7 @@ import { allPoolTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 export function RemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -101,6 +102,9 @@ export function RemoveLiquiditySummary({
         />
       </Card>
 
+      {shouldShowReceipt && (
+        <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
+      )}
       {!shouldShowReceipt && hasQuoteContext && (
         <CardPopAnim key="price-impact-details">
           <Card variant="modalSubSection">

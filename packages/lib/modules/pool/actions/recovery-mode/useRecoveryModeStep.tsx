@@ -50,6 +50,10 @@ export function useRecoveryModeStep() {
     stepType: 'enableRecovery',
     labels,
     transaction,
+    details: {
+      gasless: false,
+      type: 'Gas transaction',
+    },
     isComplete: () => isTransactionSuccess(transaction),
     onSuccess: refetch,
     renderAction: () => {

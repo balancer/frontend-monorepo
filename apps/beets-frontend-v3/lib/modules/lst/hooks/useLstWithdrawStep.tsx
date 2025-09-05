@@ -70,6 +70,7 @@ export function useLstWithdrawStep(
     onDeactivated: noop,
     onSuccess,
     renderAction: () => <ManagedTransactionButton id="withdrawLst" {...props} />,
+    transaction,
   }
 
   return { step }

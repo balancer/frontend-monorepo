@@ -45,6 +45,7 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
     stepType: 'claimRelicReward',
     isComplete,
     renderAction: () => <ManagedTransactionButton id="claimRelicReward" {...props} />,
+    transaction,
   }
 
   return { step }

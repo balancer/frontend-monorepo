@@ -103,6 +103,10 @@ export function useSwapStep({
       id: swapStepId,
       stepType: 'swap',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+      },
       transaction,
       isComplete,
       onActivated: () => setIsBuildQueryEnabled(true),

@@ -9,6 +9,7 @@ import { ReactNode } from 'react'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useLbpCreation } from '../LbpCreationProvider'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 export function LbpSummary() {
   const { saleStructureForm, saleMarketCap, launchToken } = useLbpForm()
@@ -73,6 +74,7 @@ export function LbpSummary() {
           </HStack>
         </VStack>
       </Card>
+      <GasCostSummaryCard chain={selectedChain} transactionSteps={transactionSteps.steps} />
     </AnimateHeightChange>
   )
 }

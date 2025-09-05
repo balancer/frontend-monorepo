@@ -48,6 +48,7 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     isComplete,
     onSuccess: () => refetch(),
     renderAction: () => <ManagedTransactionButton id="levelUp" {...props} />,
+    transaction,
   }
 
   return { step }

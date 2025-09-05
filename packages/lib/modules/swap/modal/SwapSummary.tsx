@@ -13,6 +13,7 @@ import { slippageDiffLabel } from '@repo/lib/shared/utils/slippage'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 export function SwapSummary({
   isLoading: isLoadingReceipt,
@@ -100,6 +101,9 @@ export function SwapSummary({
         />
       </Card>
 
+      {shouldShowReceipt && (
+        <GasCostSummaryCard chain={selectedChain} transactionSteps={transactionSteps.steps} />
+      )}
       {!shouldShowReceipt && !isWrapComplete && (
         <>
           <CardPopAnim key="swap-details">

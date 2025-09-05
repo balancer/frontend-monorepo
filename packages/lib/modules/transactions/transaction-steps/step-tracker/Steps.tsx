@@ -9,7 +9,7 @@ type Props = {
 }
 
 export function Steps({ transactionSteps, isTxBatch }: Props) {
-  const { steps, currentStepIndex, isLastStep } = transactionSteps
+  const { steps, currentStepIndex, isLastStep, lastTransactionConfirmed } = transactionSteps
   const colorMode = useThemeColorMode()
 
   return (
@@ -23,6 +23,7 @@ export function Steps({ transactionSteps, isTxBatch }: Props) {
               index={index}
               isLastStep={isLastStep(index)}
               isTxBatch={isTxBatch}
+              lastTransactionConfirmed={lastTransactionConfirmed}
               step={step}
             />
           </div>
