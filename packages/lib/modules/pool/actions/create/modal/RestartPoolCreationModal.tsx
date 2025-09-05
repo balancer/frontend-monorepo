@@ -16,13 +16,14 @@ import {
 } from '@chakra-ui/react'
 import { Trash2 } from 'react-feather'
 import { getChainName } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 
 type Props = {
   modalTitle?: string
   triggerTitle?: string
   abandonAfterCreation?: React.ReactNode
-  poolType: string
+  poolType: GqlPoolType
   network: GqlChain
   handleRestart: () => void
   isAbsolutePosition?: boolean
@@ -44,14 +45,14 @@ export function RestartPoolCreationModal({
       <Button
         _hover={{ color: 'font.linkHover', cursor: 'pointer' }}
         onClick={onOpen}
+        size="xs"
+        variant="ghost"
         {...(isAbsolutePosition && {
           position: 'absolute',
           right: '-274px',
           top: '420px',
           width: '250px',
         })}
-        size="xs"
-        variant="ghost"
       >
         <HStack>
           <Icon as={Trash2} color="font.secondary" size={16} />
@@ -69,7 +70,7 @@ export function RestartPoolCreationModal({
                 abandonAfterCreation
               ) : (
                 <Text color="font.primary">
-                  {`You have begun the process of creating a new ${poolType} pool on the ${getChainName(
+                  {`You have begun the process of creating a new ${getPoolTypeLabel(poolType)} pool on the ${getChainName(
                     network
                   )} network. Are you sure you want to delete all progress and start again from scratch?`}
                 </Text>

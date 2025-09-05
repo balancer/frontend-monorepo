@@ -132,7 +132,7 @@ export function PoolCreationModal({
               isAbsolutePosition
               modalTitle="Abandon pool set up"
               network={network}
-              poolType={poolType}
+              poolType={getGqlPoolType(poolType)}
               triggerTitle="Abandon pool set up"
             />
           </VStack>

@@ -6,6 +6,8 @@ import { PoolType } from '@balancer/sdk'
 import { parseUnits } from 'viem'
 import { Address } from 'viem'
 import { useUserAccount } from '../web3/UserAccountProvider'
+import { millisecondsToSeconds } from 'date-fns'
+import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 
 export function useCreateLbpInput() {
   const { saleStructureForm, projectInfoForm, isCollateralNativeAsset } = useLbpForm()
@@ -45,19 +47,19 @@ export function useCreateLbpInput() {
     poolType: PoolType.LiquidityBootstrapping as const,
     symbol: `${launchTokenSymbol}-${reserveTokenSymbol}-LBP`,
     name: `${name} Liquidity Bootstrapping Pool`,
-    swapFeePercentage: parseUnits((fee / 100).toString(), 18),
+    swapFeePercentage: parseUnits(`${fee}`, PERCENTAGE_DECIMALS),
     chainId,
     lbpParams: {
       owner: (owner as Address) || userAddress,
       blockProjectTokenSwapsIn,
       projectToken: launchTokenAddress as Address,
       reserveToken: reserveTokenAddress as Address,
-      projectTokenStartWeight: parseUnits(`${projectTokenStartWeight / 100}`, 18),
-      reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight / 100}`, 18),
-      projectTokenEndWeight: parseUnits(`${projectTokenEndWeight / 100}`, 18),
-      reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight / 100}`, 18),
-      startTime: BigInt(Math.floor(new Date(startDateTime).getTime() / 1000)),
-      endTime: BigInt(Math.floor(new Date(endDateTime).getTime() / 1000)),
+      projectTokenStartWeight: parseUnits(`${projectTokenStartWeight}`, PERCENTAGE_DECIMALS),
+      reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight}`, PERCENTAGE_DECIMALS),
+      projectTokenEndWeight: parseUnits(`${projectTokenEndWeight}`, PERCENTAGE_DECIMALS),
+      reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight}`, PERCENTAGE_DECIMALS),
+      startTime: BigInt(millisecondsToSeconds(new Date(startDateTime).getTime())),
+      endTime: BigInt(millisecondsToSeconds(new Date(endDateTime).getTime())),
     },
   }
 }

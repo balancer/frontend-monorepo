@@ -7,6 +7,7 @@ import { PreviewPoolDetails } from './PreviewPoolDetails'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
+import { getGqlPoolType } from '../helpers'
 
 export function PreviewPoolCreation() {
   const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
@@ -29,7 +30,7 @@ export function PreviewPoolCreation() {
             <RestartPoolCreationModal
               handleRestart={resetPoolCreationForm}
               network={network}
-              poolType={poolType}
+              poolType={getGqlPoolType(poolType)}
             />
           </HStack>
         </HStack>
