@@ -38,6 +38,21 @@ const nextConfig: NextConfig = {
         destination: '/pools',
         permanent: true,
       },
+      {
+        source: '/swap',
+        destination: 'https://balancer.fi/swap',
+        permanent: true,
+      },
+      {
+        source: '/portfolio',
+        destination: 'https://balancer.fi/portfolio',
+        permanent: true,
+      },
+      {
+        source: '/vebal',
+        destination: 'https://balancer.fi/vebal',
+        permanent: true,
+      },
     ]
 
     return redirects

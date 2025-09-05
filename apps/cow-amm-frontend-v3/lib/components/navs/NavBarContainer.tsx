@@ -5,9 +5,8 @@ import { NavBar } from '@repo/lib/shared/components/navs/NavBar'
 import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
-import { BalancerLogoType } from '../imgs/BalancerLogoType'
-import { BuildNavLink } from './BuildNavLink'
-import { PROJECT_CONFIG, isBalancer } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { CowAmmLogoType } from 'lib/components/imgs/CowAmmLogoType'
 
 export function NavBarContainer() {
   const { defaultAppLinks } = useNav()
@@ -17,7 +16,12 @@ export function NavBarContainer() {
     options: { allowCreateWallet },
   } = PROJECT_CONFIG
 
-  const allAppLinks = [...defaultAppLinks, ...appLinks]
+  const allAppLinks = [...defaultAppLinks, ...appLinks].map((link, index) => ({
+    ...link,
+    isExternal: index > 0 || link.isExternal,
+  }))
+
+  console.log({ allAppLinks })
 
   return (
     <AnimatePresence>
@@ -29,12 +33,11 @@ export function NavBarContainer() {
         <NavBar
           allowCreateWallet={allowCreateWallet}
           appLinks={allAppLinks}
-          customLinks={isBalancer ? <BuildNavLink key="build-nav-link" /> : undefined}
           mobileNav={
             <MobileNav
               appLinks={allAppLinks}
               ecosystemLinks={ecosystemLinks}
-              LogoType={BalancerLogoType}
+              LogoType={CowAmmLogoType}
               socialLinks={socialLinks}
             />
           }
