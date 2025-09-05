@@ -2,10 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { encodeFunctionData } from 'viem'
 import type { Abi, Address, ContractFunctionName, AbiStateMutability } from 'viem'
 
-const TENDERLY_ACCOUNT_SLUG = process.env.NEXT_PUBLIC_TENDERLY_ACCOUNT_SLUG!
-const TENDERLY_PROJECT_SLUG = process.env.NEXT_PUBLIC_TENDERLY_PROJECT_SLUG!
-const TENDERLY_ACCESS_KEY = process.env.NEXT_PUBLIC_TENDERLY_ACCESS_KEY!
-
 export type TxConfig = {
   abi: Abi
   address: Address
@@ -28,30 +24,27 @@ export function useTenderlyGasEstimate(txConfig?: TxConfig) {
         args: txConfig.args ?? [],
       })
 
-      const response = await fetch(
-        `https://api.tenderly.co/api/v1/account/${TENDERLY_ACCOUNT_SLUG}/project/${TENDERLY_PROJECT_SLUG}/simulate`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Access-Key': TENDERLY_ACCESS_KEY,
-          },
-          body: JSON.stringify({
-            from: txConfig.from,
-            to: txConfig.address,
-            input: data,
-            value: txConfig.value,
-            gas: 8000000,
-            gas_price: 0,
-            estimate_gas: true,
-            simulation_type: 'quick',
-            network_id: txConfig.chainId?.toString() || '1',
-          }),
-        }
-      )
+      const response = await fetch('/api/tenderly/gas-estimate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: txConfig.from,
+          to: txConfig.address,
+          input: data,
+          value: txConfig.value?.toString() || '0',
+          chainId: txConfig.chainId,
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to estimate gas')
+      }
 
       const json = await response.json()
-      return BigInt(json.transaction.gas_used)
+      return BigInt(json.gasUsed)
     },
     enabled: !!txConfig,
   })
