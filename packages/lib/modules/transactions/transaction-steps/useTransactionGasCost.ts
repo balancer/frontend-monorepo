@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
 import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useGasPriceQuery } from '@repo/lib/shared/hooks/useGasPrice'
@@ -14,46 +13,43 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
   const { toCurrency } = useCurrency()
   const { usdValueForTokenAddress } = useTokens()
 
-  const actualGasData = useMemo(() => {
-    if (transaction?.result?.data?.gasUsed && transaction?.result?.data?.effectiveGasPrice) {
-      const gasUsed = transaction.result.data.gasUsed
-      const effectiveGasPrice = transaction.result.data.effectiveGasPrice
-      const l1Fee = (transaction.result.data as any).l1Fee || 0n // cast as any because l1Fee is not available on all chains
+  let actualGasData = null
 
-      const networkConfig = chain ? getNetworkConfig(chain) : undefined
-      const totalGasCost = gasUsed * effectiveGasPrice + l1Fee
-      const formattedCost = formatUnits(totalGasCost, 18)
+  if (transaction?.result?.data?.gasUsed && transaction?.result?.data?.effectiveGasPrice) {
+    const gasUsed = transaction.result.data.gasUsed
+    const effectiveGasPrice = transaction.result.data.effectiveGasPrice
+    const l1Fee = (transaction.result.data as any).l1Fee || 0n // cast as any because l1Fee is not available on all chains
 
-      const costUsd =
-        chain &&
-        usdValueForTokenAddress(
-          networkConfig?.tokens?.nativeAsset?.address as Address,
-          chain,
-          formattedCost
-        )
+    const networkConfig = chain ? getNetworkConfig(chain) : undefined
+    const totalGasCost = gasUsed * effectiveGasPrice + l1Fee
+    const formattedCost = formatUnits(totalGasCost, 18)
 
-      return {
-        cost: totalGasCost.toString(),
-        formatted: formattedCost,
-        symbol: networkConfig?.tokens?.nativeAsset?.symbol || 'ETH',
-        gasUsed: gasUsed.toString(),
-        gasPrice: effectiveGasPrice.toString(),
-        l1Fee: l1Fee.toString(),
-        costUsd: costUsd ? toCurrency(costUsd) : undefined,
-        isActual: true,
-      }
+    const costUsd =
+      chain &&
+      usdValueForTokenAddress(
+        networkConfig?.tokens?.nativeAsset?.address as Address,
+        chain,
+        formattedCost
+      )
+
+    actualGasData = {
+      cost: totalGasCost.toString(),
+      formatted: formattedCost,
+      symbol: networkConfig?.tokens?.nativeAsset?.symbol || 'ETH',
+      gasUsed: gasUsed.toString(),
+      gasPrice: effectiveGasPrice.toString(),
+      l1Fee: l1Fee.toString(),
+      costUsd: costUsd ? toCurrency(costUsd) : undefined,
+      isActual: true,
     }
-    return null
-  }, [transaction?.result?.data, chain, toCurrency, usdValueForTokenAddress])
+  }
 
-  const estimatedGas = useMemo(() => {
-    const data = transaction?.simulation?.data
-    return typeof data === 'bigint' ? data : 0n
-  }, [transaction?.simulation?.data])
+  const data = transaction?.simulation?.data
+  const estimatedGas = typeof data === 'bigint' ? data : 0n
 
-  const estimatedGasCost = useMemo(() => {
-    if (!transaction || !estimatedGas || estimatedGas === 0n || !gasPrice) return
+  let estimatedGasCost = undefined
 
+  if (transaction && estimatedGas && estimatedGas !== 0n && gasPrice) {
     const networkConfig = chain ? getNetworkConfig(chain) : undefined
     const cost = gasPrice * estimatedGas
     const formattedCost = formatUnits(cost, 18)
@@ -66,7 +62,7 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
         formattedCost
       )
 
-    return {
+    estimatedGasCost = {
       cost: cost.toString(),
       formatted: formattedCost,
       symbol: networkConfig?.tokens?.nativeAsset?.symbol || 'ETH',
@@ -75,7 +71,7 @@ export function useTransactionGasCost(transaction?: ManagedResult) {
       costUsd: costUsd ? toCurrency(costUsd) : undefined,
       isActual: false,
     }
-  }, [transaction, estimatedGas, gasPrice, chain])
+  }
 
   const totalGasCost = actualGasData || estimatedGasCost
 
