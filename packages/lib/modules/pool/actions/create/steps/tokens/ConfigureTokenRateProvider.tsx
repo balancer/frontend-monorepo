@@ -36,10 +36,12 @@ export function ConfigureTokenRateProvider({
   const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
 
   let rateProviderRadioValue = RateProviderOption.Null
-  if (currentRateProvider === verifiedRateProviderAddress)
+  if (currentRateProvider === verifiedRateProviderAddress) {
     rateProviderRadioValue = RateProviderOption.Verified
-  if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProviderAddress)
+  }
+  if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProviderAddress) {
     rateProviderRadioValue = RateProviderOption.Custom
+  }
 
   const handleRateProviderOptionChange = (value: RateProviderOption) => {
     let rateProvider: Address | '' = zeroAddress
