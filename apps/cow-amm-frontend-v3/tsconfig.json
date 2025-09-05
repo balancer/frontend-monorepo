@@ -10,7 +10,6 @@
       }
     ],
     "paths": {
-      "@bal/*": ["./*"],
       "@repo/*": ["../../packages/*"]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
