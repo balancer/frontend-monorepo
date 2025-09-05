@@ -1,4 +1,16 @@
-import { Card, Text, HStack, VStack } from '@chakra-ui/react'
+import {
+  Card,
+  Text,
+  HStack,
+  VStack,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Box,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -9,13 +21,14 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { TransactionStepsResponse } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
   const { network } = usePoolCreationForm()
 
   return (
-    <AnimateHeightChange spacing="sm" w="full">
+    <AnimateHeightChange spacing={3} w="full">
       {isMobile && <MobileStepTracker chain={network} transactionSteps={transactionSteps} />}
       <PoolTitleCard />
       <PoolTokenAmountsCard />
@@ -106,15 +119,36 @@ function PoolTokenAmountsCard() {
 
 function PoolDetailsCard() {
   const { swapFeePercentage } = usePoolCreationForm()
+  const { isOpen, onToggle } = useDisclosure()
 
   return (
-    <Card variant="modalSubSection">
-      <VStack align="start" spacing="md">
-        <HStack justify="space-between" w="full">
-          <Text color="font.secondary">Swap fee percentage: {swapFeePercentage}%</Text>
-          <Text color="font.secondary">Details</Text>
-        </HStack>
-      </VStack>
-    </Card>
+    <Accordion allowToggle variant="button" w="full">
+      <AccordionItem
+        bg="background.level3"
+        border="1px solid"
+        borderColor="transparent"
+        borderRadius="md"
+        shadow="md"
+        w="full"
+      >
+        <AccordionButton onClick={onToggle} pl="sm" pr="sm" py={3}>
+          <Box as="span" flex="1" textAlign="left">
+            <HStack justify="space-between" w="full">
+              {!isOpen && (
+                <Text color="font.secondary">Swap fee percentage: {swapFeePercentage}%</Text>
+              )}
+              <Text color="font.secondary">Details</Text>
+            </HStack>
+          </Box>
+          <AccordionIcon />
+        </AccordionButton>
+
+        <AccordionPanel p="ms">
+          <VStack align="start" spacing="sm" w="full">
+            <PoolDetailsContent />
+          </VStack>
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
   )
 }
