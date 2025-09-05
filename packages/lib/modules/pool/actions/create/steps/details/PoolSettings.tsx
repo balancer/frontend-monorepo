@@ -1,6 +1,7 @@
 import { VStack, Heading, Text } from '@chakra-ui/react'
 import { zeroAddress, Address, isAddress } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+// eslint-disable-next-line no-restricted-imports
 import { useAccount } from 'wagmi'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
