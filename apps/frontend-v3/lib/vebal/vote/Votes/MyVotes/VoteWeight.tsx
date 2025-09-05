@@ -10,6 +10,9 @@ import { VoteExceededTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteExcee
 import { VoteTimeLockedTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteTimeLockedTooltip'
 import { VoteExpiredTooltip } from '@bal/lib/vebal/vote/VoteExpiredTooltip'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
+import { VoteUnderpoweredTooltip } from './VoteUnderpoweredTooltip'
+import { ArrowRight } from 'react-feather'
+import { BigNumber } from 'bignumber.js'
 
 interface Props {
   timeLocked?: boolean
@@ -19,6 +22,8 @@ interface Props {
   weight: BigNumber
   variant: 'primary' | 'secondary'
   isGaugeExpired?: boolean
+  isGaugeUnderpowered?: boolean
+  previousWeight?: BigNumber
 }
 
 export function VoteWeight({
@@ -29,6 +34,8 @@ export function VoteWeight({
   skipTotalWarnings = false,
   timeLockedEndDate,
   isGaugeExpired,
+  isGaugeUnderpowered = false,
+  previousWeight,
 }: Props) {
   const exceededWeight = getExceededWeight(weight)
   const unallocatedWeight = getUnallocatedWeight(weight)
@@ -38,30 +45,32 @@ export function VoteWeight({
 
   function getFontColor() {
     if (total) {
-      if (showExceededWarning) {
-        return 'red.400'
-      }
-      if (showUnallocatedWarning) {
-        return 'font.warning'
-      }
+      if (showExceededWarning) return 'red.400'
+      if (showUnallocatedWarning) return 'font.warning'
+
       return 'font.maxContrast'
     }
 
-    if (isGaugeExpired) {
-      return 'font.warning'
-    }
+    if (isGaugeExpired || isGaugeUnderpowered) return 'font.warning'
 
     return variant === 'secondary' ? 'font.secondary' : undefined
   }
 
   const fontColor = getFontColor()
 
-  return (
-    <HStack>
-      {timeLocked && <VoteTimeLockedTooltip timeLockedEndDate={timeLockedEndDate} usePortal />}
+  const weightText =
+    previousWeight && !previousWeight.isEqualTo(weight) ? (
+      <ModifiedWeight current={weight} previous={previousWeight} />
+    ) : (
       <Text color={fontColor} fontWeight={700}>
         {fNum('apr', bpsToPercentage(weight))}
       </Text>
+    )
+
+  return (
+    <HStack>
+      {timeLocked && <VoteTimeLockedTooltip timeLockedEndDate={timeLockedEndDate} usePortal />}
+      {weightText}
       {showExceededWarning && <VoteExceededTooltip exceededWeight={exceededWeight} usePortal />}
       {showUnallocatedWarning && (
         <VoteUnallocatedTooltip unallocatedWeight={unallocatedWeight} usePortal />
@@ -73,6 +82,23 @@ export function VoteWeight({
           </HStack>
         </VoteExpiredTooltip>
       )}
+      {isGaugeUnderpowered && <VoteUnderpoweredTooltip isTimelocked={!!timeLocked} usePortal />}
+    </HStack>
+  )
+}
+
+function ModifiedWeight({ previous, current }: { previous: BigNumber; current: BigNumber }) {
+  return (
+    <HStack>
+      <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+        {fNum('apr', bpsToPercentage(previous))}
+      </Text>
+      <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+        <ArrowRight size={14} />
+      </Text>
+      <Text fontSize="md" fontWeight="700" lineHeight="16px">
+        {fNum('apr', bpsToPercentage(current))}
+      </Text>
     </HStack>
   )
 }

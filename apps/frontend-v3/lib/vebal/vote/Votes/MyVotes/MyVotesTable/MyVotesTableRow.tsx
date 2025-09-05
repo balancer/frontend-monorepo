@@ -52,7 +52,7 @@ interface Props extends GridProps {
 
 export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest }: Props) {
   const { userAddress } = useUserAccount()
-
+  const { lastLockTimestamp } = useVebalUserData()
   const { editVotesWeights, onEditVotesChange } = useMyVotes()
   const {
     votingPools,
@@ -73,9 +73,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
 
   const timeLocked = isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0)
 
-  const onRemove = () => {
-    toggleVotingPool(vote)
-  }
+  const onRemove = () => toggleVotingPool(vote)
 
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
@@ -106,6 +104,10 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
     blacklistedVotes[vote.gauge.address as Address],
     priceFor
   )
+
+  const voteTimestamp = (vote.gaugeVotes?.lastUserVoteTime || 0) * 1000
+  const isGaugeUnderpowered =
+    !!voteTimestamp && !!lastLockTimestamp && voteTimestamp < lastLockTimestamp
 
   return (
     <FadeInOnView>
@@ -167,6 +169,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeight
               isGaugeExpired={isGaugeExpired}
+              isGaugeUnderpowered={isGaugeUnderpowered}
               timeLocked={timeLocked}
               timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
               variant="primary"

@@ -1099,6 +1099,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           color: '#000',
           mr: '0',
           pb: 'xxs',
+          textWrap: 'pretty',
           button: {
             height: '28px',
             fontSize: 'sm',
