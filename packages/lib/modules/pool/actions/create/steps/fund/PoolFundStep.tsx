@@ -6,6 +6,7 @@ import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { PoolCreationRiskCheckboxes } from './PoolCreationRiskCheckboxes'
 import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
 import { SeedAmountProportions } from './SeedAmountProportions'
+import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 
 export function PoolFundStep() {
   const { isFormStateValid, poolTokens, network, updatePoolToken, poolCreationForm, poolType } =
@@ -14,14 +15,15 @@ export function PoolFundStep() {
   const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
 
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-
-  const isTokenAmountsValid = validatePoolTokens.isValidTokenAmounts(poolTokens)
+  const { hasValidationErrors } = useTokenInputsValidation()
+  const isTokenAmountsValid =
+    validatePoolTokens.isValidTokenAmounts(poolTokens) && !hasValidationErrors
 
   const hasAcceptedRisks = isWeightedPool
     ? hasAcceptedTokenWeightsRisk && hasAcceptedPoolCreationRisk
     : hasAcceptedPoolCreationRisk
 
-  const isDisabled = !isFormStateValid || !isTokenAmountsValid || !hasAcceptedRisks
+  const isDisabled = !isFormStateValid || !hasAcceptedRisks || !isTokenAmountsValid
 
   return (
     <Box as="form" style={{ width: '100%' }}>
@@ -43,7 +45,7 @@ export function PoolFundStep() {
             </VStack>
           )
         })}
-        <SeedAmountProportions />
+        <SeedAmountProportions displayAlert />
         <PoolCreationRiskCheckboxes />
         <PoolCreationFormAction disabled={isDisabled} />
       </VStack>

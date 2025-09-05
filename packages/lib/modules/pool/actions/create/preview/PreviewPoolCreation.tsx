@@ -1,16 +1,17 @@
-import { VStack, Heading, HStack, Text } from '@chakra-ui/react'
+import { VStack, Heading, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PreviewPoolType } from './PreviewPoolType'
 import { PreviewPoolTokens } from './PreviewPoolTokens'
 import { PreviewPoolTokensInWallet } from './PreviewPoolTokensInWallet'
 import { PreviewPoolDetails } from './PreviewPoolDetails'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { Icon } from '@chakra-ui/react'
-import { Trash2 } from 'react-feather'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
+import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
+import { getGqlPoolType } from '../helpers'
+import { LearnMoreModal } from '@repo/lib/modules/lbp/header/LearnMoreModal'
 
 export function PreviewPoolCreation() {
-  const { resetPoolCreationForm } = usePoolCreationForm()
+  const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
   const { isBeforeStep } = usePoolCreationFormSteps()
 
   return (
@@ -21,16 +22,18 @@ export function PreviewPoolCreation() {
         rounded: 'xl',
       }}
     >
-      <VStack align="start" p="lg" spacing="lg" w="full">
-        <HStack alignItems="end" justifyContent="space-between" w="full">
+      <VStack align="start" p="lg" spacing="md" w="full">
+        <HStack alignItems="center" justifyContent="space-between" w="full">
           <Heading color="font.maxContrast" size="md">
             Pool preview
           </Heading>
-          <HStack cursor="pointer" onClick={resetPoolCreationForm} spacing="sm" zIndex={1}>
-            <Icon as={Trash2} color="font.secondary" />
-            <Text color="font.secondary" size="sm">
-              Delete & restart
-            </Text>
+          <HStack cursor="pointer" spacing="xs" zIndex={1}>
+            <RestartPoolCreationModal
+              handleRestart={resetPoolCreationForm}
+              network={network}
+              poolType={getGqlPoolType(poolType)}
+            />
+            <LearnMoreModal buttonLabel="Get help" />
           </HStack>
         </HStack>
 

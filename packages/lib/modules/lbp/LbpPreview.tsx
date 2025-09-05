@@ -2,7 +2,7 @@ import { VStack, Heading, Flex, Spacer, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
+import { RestartPoolCreationModal } from '../pool/actions/create/modal/RestartPoolCreationModal'
 import { LearnMoreModal } from './header/LearnMoreModal'
 import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
@@ -12,12 +12,14 @@ import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
 import { Address } from 'viem'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
 
   const {
     saleStructureForm: { watch },
+    resetLbpCreation,
   } = useLbpForm()
   const saleStructureData = watch()
 
@@ -51,7 +53,11 @@ export function LbpPreview() {
                   LBP preview
                 </Heading>
                 <Spacer />
-                <LbpDeleteAndRestartModal />
+                <RestartPoolCreationModal
+                  handleRestart={resetLbpCreation}
+                  network={chain}
+                  poolType={GqlPoolType.LiquidityBootstrapping}
+                />
                 <LearnMoreModal buttonLabel="Get help" />
               </Flex>
               <TokenSummary

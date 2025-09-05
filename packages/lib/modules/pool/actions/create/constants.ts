@@ -74,6 +74,8 @@ export const RATE_PROVIDER_RADIO_OPTIONS = [
 export const MAX_POOL_NAME_LENGTH = 32
 export const MAX_POOL_SYMBOL_LENGTH = 26
 
+export const PERCENTAGE_DECIMALS = 16
+
 const STABLE_SWAP_FEE_PERCENTAGE_OPTIONS = [
   { value: '0.01', tip: 'Best for super stable pairs' },
   { value: '0.05', tip: 'Best for stable-ish pairs' },
