@@ -20,7 +20,7 @@
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "stylelint '**/*.css' --fix",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
-    "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/bal/bal.theme.ts",
+    "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/cow/cow.theme.ts",
     "postinstall": "pnpm run gen:theme-typings",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
