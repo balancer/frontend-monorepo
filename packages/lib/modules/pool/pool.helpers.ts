@@ -306,6 +306,10 @@ export function hasStableSurgeHook(pool: Pool): boolean {
   return hasHookType(pool, GqlHookType.StableSurge)
 }
 
+export function hasHyperSurgeHook(pool: Pool): boolean {
+  return hasHookType(pool, GqlHookType.HyperSurge)
+}
+
 export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
   const nestedHooks = pool.poolTokens.flatMap(token =>
     token.nestedPool ? token.nestedPool.hook : []

@@ -63,6 +63,18 @@ export function PoolSettings() {
     }
   }, [isStableSurgePool, poolHooksWhitelist])
 
+  const isHyperSurgePool = validatePoolType.isHyperSurgePool(poolType)
+
+  useEffect(() => {
+    if (isHyperSurgePool && poolHooksWhitelist) {
+      const hyperSurgeHookMetadata = poolHooksWhitelist.find(hook => hook.label === 'HyperSurge')
+      if (hyperSurgeHookMetadata) {
+        poolCreationForm.setValue('poolHooksContract', hyperSurgeHookMetadata.value)
+      }
+    }
+  }, [isHyperSurgePool, poolHooksWhitelist])
+
+
   const publicClient = usePublicClient({ chainId: getChainId(network) })
 
   const validateHooksContract = async (address: string) => {
@@ -141,7 +153,7 @@ export function PoolSettings() {
       <PoolSettingsRadioGroup
         customInputLabel="Custom pool hooks address"
         customInputType="address"
-        isDisabled={isStableSurgePool}
+        isDisabled={isStableSurgePool || isHyperSurgePool}
         name="poolHooksContract"
         options={poolHooksOptions}
         title="Pool hooks"

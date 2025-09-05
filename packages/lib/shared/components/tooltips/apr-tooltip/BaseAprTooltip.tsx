@@ -75,6 +75,8 @@ function getDynamicSwapFeesLabel(hookType: GqlHookType) {
       return 'MEV Capture hook'
     case GqlHookType.StableSurge:
       return 'Stable Surge hook'
+    case GqlHookType.HyperSurge:
+      return 'Hyper Surge hook'
     default:
       return 'Dynamic Swap Fees '
   }

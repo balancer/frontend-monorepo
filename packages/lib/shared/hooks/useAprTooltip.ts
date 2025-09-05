@@ -48,6 +48,8 @@ export const dynamicSwapFeesTooltipText: Record<SupportedHookType, string> = {
     'The MEV captured and shared to all LPs proportionately by the ‘MEV Capture’ hook used in this pool.',
   [GqlHookType.StableSurge]:
     'Additional swap fees from the directional fee StableSurge hook that dynamically adjusts to protect stable-asset pegs during volatility. These fees auto-compound and are shared with LPs proportionately.',
+  [GqlHookType.HyperSurge]:
+    'Additional swap fees from the HyperSurge hook that dynamically adjusts to charge noise traders beneficially and penalise arbitrageurs. These fees auto-compound and are shared with LPs proportionately.',  
 }
 
 // Types that must be added to the total base

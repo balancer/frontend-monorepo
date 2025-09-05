@@ -62,7 +62,7 @@ export function useRemoveLiquidityPriceImpactQuery({
       ...params,
       chainId,
       blockNumber,
-      hasStableSurgeHook: hasStableSurgeHook(pool),
+      hasStableSurgeHook: hasStableSurgeHook(pool),//TODO CH
     }),
     ...onlyExplicitRefetch,
   })

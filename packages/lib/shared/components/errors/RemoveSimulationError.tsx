@@ -31,7 +31,7 @@ export function RemoveSimulationError({
   function goToProportionalMode() {
     goToProportionalRemoves()
   }
-
+  //TODO CH
   if (isPoolSurgingError(error.message, hasStableSurgeHook(pool))) {
     const errorTitle = 'Pool is surging'
     const errorMessage =

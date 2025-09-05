@@ -1,4 +1,4 @@
-import { hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
+import { hasHyperSurgeHook, hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ErrorWithOptionalShortMessage } from '../components/errors/GenericError'
 
@@ -57,6 +57,7 @@ export function isPausedErrorMessage(errorMessage: string): boolean {
 export function isUnbalancedAddError(error: Error | null, pool: Pool): boolean {
   if (!error) return false
   if (isPoolSurgingError(error.message, hasStableSurgeHook(pool))) return true
+  //TODO CH
   if (
     isInvariantRatioSimulationErrorMessage(error.message) ||
     isInvariantRatioPIErrorMessage(error.message) ||
@@ -109,6 +110,13 @@ export function isWrapWithTooSmallAmount(errorMessage?: string): boolean {
 export function isPoolSurgingError(errorMessage: string, hasStableSurgeHook: boolean): boolean {
   return (
     hasStableSurgeHook &&
+    (isAfterAddUnbalancedHookError(errorMessage) || isSingleRemoveHookError(errorMessage))
+  )
+}
+
+export function isPoolDeviatedError(errorMessage: string, hasHyperSurgeHook: boolean): boolean {
+  return (
+    hasHyperSurgeHook &&
     (isAfterAddUnbalancedHookError(errorMessage) || isSingleRemoveHookError(errorMessage))
   )
 }

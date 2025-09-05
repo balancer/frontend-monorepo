@@ -196,5 +196,27 @@ export const ProjectConfigBeets: ProjectConfig = {
         imgName: 'bg-inactive',
       },
     },
+
+    {
+      id: 4,
+      icon: 'hook',
+      label: 'HyperSurge Hook',
+      title: 'HyperSurge Hook',
+      description:
+        'Bi-directional dynamic surge swap fees for pools with volatile assets. Incentivise noise trading while charging arbitrage traders',
+      buttonText: 'View pools',
+      buttonLink: '/pools?poolHookTags=HOOKS_HYPERSURGE',
+      linkText: 'Learn more',
+      linkURL: 'https://medium.com/balancer-protocol/TODO',
+      linkExternal: true,
+      bgImageActive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-active3',
+      },
+      bgImageInactive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-inactive3',
+      },
+    },
   ],
 }

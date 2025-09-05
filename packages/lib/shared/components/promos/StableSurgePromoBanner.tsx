@@ -15,6 +15,7 @@ import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 
+//TODO CH hyper surge banner? 
 export function StableSurgePromoBanner() {
   const { colorMode } = useColorMode()
   return (
