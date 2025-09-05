@@ -11,21 +11,13 @@ export function InvalidTotalWeightAlert() {
 
   if (!isWeightedPool) return null
 
-  if (isTotalWeightTooLow)
+  if (isTotalWeightTooLow || isTotalWeightTooHigh) {
     return (
       <BalAlert
         content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
-        status="warning"
+        status={isTotalWeightTooLow ? 'warning' : 'error'}
         title="Token weights must tally 100%"
       />
     )
-
-  if (isTotalWeightTooHigh)
-    return (
-      <BalAlert
-        content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
-        status="error"
-        title="Token weights must tally 100%"
-      />
-    )
+  }
 }

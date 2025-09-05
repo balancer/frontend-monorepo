@@ -20,6 +20,7 @@ import { ReviewStep } from './steps/review/ReviewStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
 import { RestartPoolCreationModal } from '../pool/actions/create/modal/RestartPoolCreationModal'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function LbpForm() {
   const { steps, activeStepIndex, activeStep, resetLbpCreation, saleStructureForm } = useLbpForm()
@@ -62,7 +63,7 @@ export function LbpForm() {
       <RestartPoolCreationModal
         handleRestart={resetLbpCreation}
         network={selectedChain}
-        poolType="Liquidity Bootstrapping"
+        poolType={GqlPoolType.LiquidityBootstrapping}
       />
     </VStack>
   )

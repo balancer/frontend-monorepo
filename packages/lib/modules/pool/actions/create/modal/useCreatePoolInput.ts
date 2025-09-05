@@ -2,6 +2,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { TokenType, CreatePoolInput } from '@balancer/sdk'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { parseUnits, zeroAddress } from 'viem'
+import { PERCENTAGE_DECIMALS } from '../constants'
 
 export function useCreatePoolInput(chainId: number) {
   const {
@@ -27,7 +28,7 @@ export function useCreatePoolInput(chainId: number) {
     poolType,
     name,
     symbol,
-    swapFeePercentage: parseUnits(swapFeePercentage, 16),
+    swapFeePercentage: parseUnits(swapFeePercentage, PERCENTAGE_DECIMALS),
     swapFeeManager,
     pauseManager,
     enableDonation,
@@ -40,7 +41,7 @@ export function useCreatePoolInput(chainId: number) {
         tokenType: rateProvider === zeroAddress ? TokenType.STANDARD : TokenType.TOKEN_WITH_RATE,
         rateProvider,
         paysYieldFees,
-        ...(isWeightedPool && weight ? { weight: parseUnits(weight, 16) } : {}),
+        ...(isWeightedPool && weight ? { weight: parseUnits(weight, PERCENTAGE_DECIMALS) } : {}),
       }
     }),
   } as CreatePoolInput // TODO: solve type complaint for inputs allowing empty strings ""

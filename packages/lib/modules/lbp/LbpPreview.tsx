@@ -12,6 +12,7 @@ import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
 import { Address } from 'viem'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
@@ -55,7 +56,7 @@ export function LbpPreview() {
                 <RestartPoolCreationModal
                   handleRestart={resetLbpCreation}
                   network={chain}
-                  poolType="Liquidity Bootstrapping"
+                  poolType={GqlPoolType.LiquidityBootstrapping}
                 />
                 <LearnMoreModal buttonLabel="Get help" />
               </Flex>
