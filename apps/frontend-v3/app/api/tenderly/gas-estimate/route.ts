@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server'
+import { ensureError, SentryError } from '@repo/lib/shared/utils/errors'
 
 const TENDERLY_ACCOUNT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_ACCOUNT_SLUG
 const TENDERLY_PROJECT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_PROJECT_SLUG
@@ -78,8 +79,13 @@ export async function POST(request: NextRequest) {
     return Response.json({
       gasUsed: data.transaction.gas_used,
     })
-  } catch (error) {
-    console.error('Error in tenderly gas estimate:', error)
+  } catch (err) {
+    const error = ensureError(err)
+
+    throw new SentryError('Error in tenderly gas estimate', {
+      cause: error,
+    })
+
     return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 })
   }
 }
