@@ -6,4 +6,8 @@ export const isBalancer = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigBa
 export const isBeets = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigBeets.projectId
 export const isCowAmm = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigCowAmm.projectId
 
-export const PROJECT_CONFIG = isBeets ? ProjectConfigBeets : ProjectConfigBalancer
+export const PROJECT_CONFIG = isBeets
+  ? ProjectConfigBeets
+  : isCowAmm
+    ? ProjectConfigCowAmm
+    : ProjectConfigBalancer
