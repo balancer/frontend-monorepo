@@ -116,8 +116,9 @@ export function getCurrentPrice(snapshots: LbpSnapshot[]) {
 
   for (let i = 0; i < snapshots.length; i++) {
     if (isSameHour(currentTime, snapshots[i].timestamp)) return snapshots[i].projectTokenPrice
-    if (isSameHour(currentTime, snapshots[i + 1].timestamp))
+    if (isSameHour(currentTime, snapshots[i + 1].timestamp)) {
       return snapshots[i + 1].projectTokenPrice
+    }
     if (
       isWithinInterval(currentTime, {
         start: snapshots[i].timestamp,

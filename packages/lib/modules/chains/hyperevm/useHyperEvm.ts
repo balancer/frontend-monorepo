@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
 import { useWalletClient } from 'wagmi'
 import { usePublicClient } from 'wagmi'
+// eslint-disable-next-line no-restricted-imports
 import { useAccount } from 'wagmi'
 import { ChainId } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'

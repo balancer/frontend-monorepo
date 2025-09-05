@@ -4,7 +4,7 @@ import { Pool } from './pool.types'
 export function usePoolTokenPriceWarnings(pool?: Pool) {
   const { priceFor, isLoadingTokenPrices } = useTokens()
 
-  if (!pool || isLoadingTokenPrices)
+  if (!pool || isLoadingTokenPrices) {
     return {
       isAnyTokenWithoutPrice: false,
       poolWarning: '',
@@ -15,6 +15,7 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
       tokenWeightTip: '',
       tokensWithoutPrice: {},
     }
+  }
 
   const tokensWithoutPrice: Record<string, string> = Object.fromEntries(
     pool.poolTokens
