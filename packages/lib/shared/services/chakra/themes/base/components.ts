@@ -563,6 +563,24 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             color: 'font.gold',
           },
         },
+        danger: {
+          background: 'red.400',
+          color: 'font.dark',
+          shadow: 'md',
+          _hover: {
+            background: '#E67A66',
+            shadow: 'lg',
+          },
+          _active: {
+            background: '#D96B57',
+            shadow: 'sm',
+          },
+          _disabled: {
+            background: '#F48975',
+            opacity: 0.6,
+            shadow: 'none',
+          },
+        },
         solid: {
           color: 'text-body',
           bg: 'background.level2',

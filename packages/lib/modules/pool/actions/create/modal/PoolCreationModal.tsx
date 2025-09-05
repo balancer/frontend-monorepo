@@ -24,6 +24,7 @@ import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useInitializePoolInput } from './useInitializePoolInput'
+import { RestartPoolCreationModal } from './RestartPoolCreationModal'
 
 type PoolCreationModalProps = {
   isOpen: boolean
@@ -103,11 +104,38 @@ export function PoolCreationModal({
 
       <ModalContent>
         {isDesktop && (
-          <DesktopStepTracker
-            chain={network}
-            isTxBatch={shouldBatchTransactions}
-            transactionSteps={transactionSteps}
-          />
+          <VStack>
+            <DesktopStepTracker
+              chain={network}
+              isTxBatch={shouldBatchTransactions}
+              transactionSteps={transactionSteps}
+            />
+            <RestartPoolCreationModal
+              abandonAfterCreation={
+                poolAddress ? (
+                  <VStack align="start" spacing="md">
+                    <Text>
+                      You have deployed a v3 {poolType} pool but have not seeded it with liquidity.
+                      Pool address:
+                    </Text>
+                    <Text color="font.link">{poolAddress}</Text>
+                    <Text>
+                      Although it has been created on the {getChainName(network)} network, it will
+                      not appear on the Balancer UI and it will not be accessible to liquidity
+                      providers if you abandon it now.
+                    </Text>
+                    <Text>Are you sure you want to abandon it and delete all associated data?</Text>
+                  </VStack>
+                ) : undefined
+              }
+              handleRestart={handleReset}
+              isAbsolutePosition
+              modalTitle="Abandon pool set up"
+              network={network}
+              poolType={poolType}
+              triggerTitle="Abandon pool set up"
+            />
+          </VStack>
         )}
         <TransactionModalHeader
           chain={network}

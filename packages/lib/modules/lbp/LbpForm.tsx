@@ -19,10 +19,11 @@ import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/review/ReviewStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
-import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
+import { RestartPoolCreationModal } from '../pool/actions/create/modal/RestartPoolCreationModal'
 
 export function LbpForm() {
-  const { steps, activeStepIndex, activeStep } = useLbpForm()
+  const { steps, activeStepIndex, activeStep, resetLbpCreation, saleStructureForm } = useLbpForm()
+  const { selectedChain } = saleStructureForm.watch()
   const { isMobile } = useBreakpoints()
 
   useEffect(() => {
@@ -58,7 +59,11 @@ export function LbpForm() {
         {activeStep.id === 'step2' && <ProjectInfoStep />}
         {activeStep.id === 'step3' && <ReviewStep />}
       </VStack>
-      <LbpDeleteAndRestartModal />
+      <RestartPoolCreationModal
+        handleRestart={resetLbpCreation}
+        network={selectedChain}
+        poolType="Liquidity Bootstrapping"
+      />
     </VStack>
   )
 }
