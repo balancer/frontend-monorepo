@@ -18,11 +18,12 @@ import { Trash2 } from 'react-feather'
 import { getChainName } from '@repo/lib/config/app.config'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
+import { Address } from 'viem'
 
 type Props = {
   modalTitle?: string
   triggerTitle?: string
-  abandonAfterCreation?: React.ReactNode
+  poolAddress?: Address | undefined
   poolType: GqlPoolType
   network: GqlChain
   handleRestart: () => void
@@ -35,10 +36,13 @@ export function RestartPoolCreationModal({
   poolType,
   network,
   handleRestart,
-  abandonAfterCreation,
+  poolAddress,
   isAbsolutePosition,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const chainName = getChainName(network)
+  const poolTypeName = getPoolTypeLabel(poolType)
 
   return (
     <>
@@ -49,7 +53,7 @@ export function RestartPoolCreationModal({
         variant="ghost"
         {...(isAbsolutePosition && {
           position: 'absolute',
-          right: '-274px',
+          right: '-240px',
           top: '420px',
           width: '250px',
         })}
@@ -66,13 +70,23 @@ export function RestartPoolCreationModal({
           <ModalCloseButton />
           <ModalBody pb="lg">
             <VStack>
-              {abandonAfterCreation ? (
-                abandonAfterCreation
+              {poolAddress ? (
+                <VStack align="start" spacing="md">
+                  <Text>
+                    You have deployed a v3 {poolType} pool but have not seeded it with liquidity.
+                    Pool address:
+                  </Text>
+                  <Text color="font.link">{poolAddress}</Text>
+                  <Text>
+                    Although it has been created on the {getChainName(network)} network, it will not
+                    appear on the Balancer UI and it will not be accessible to liquidity providers
+                    if you abandon it now.
+                  </Text>
+                  <Text>Are you sure you want to abandon it and delete all associated data?</Text>
+                </VStack>
               ) : (
                 <Text color="font.primary">
-                  {`You have begun the process of creating a new ${getPoolTypeLabel(poolType)} pool on the ${getChainName(
-                    network
-                  )} network. Are you sure you want to delete all progress and start again from scratch?`}
+                  {`You have begun the process of creating a new ${poolTypeName} pool on the ${chainName} network. Are you sure you want to delete all progress and start again from scratch?`}
                 </Text>
               )}
               <HStack gap="ms" mt="md" w="full">
@@ -88,7 +102,7 @@ export function RestartPoolCreationModal({
                   size="lg"
                   variant="danger"
                 >
-                  {abandonAfterCreation ? 'Abandon set up' : 'Delete and start over'}
+                  {poolAddress ? 'Abandon set up' : 'Delete and start over'}
                 </Button>
                 <Button
                   display="flex"
