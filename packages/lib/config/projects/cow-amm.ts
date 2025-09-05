@@ -44,7 +44,7 @@ export const ProjectConfigCowAmm: ProjectConfig = {
     isOnSafeAppList: true,
   },
   links: {
-    appLinks: [{ href: '/vebal', label: 'veBAL' }],
+    appLinks: [{ href: '/vebal', label: 'veBAL', isExternal: true }],
     ecosystemLinks: [
       { label: 'Pool creator', href: 'https://pool-creator.balancer.fi/cow' },
       { label: 'Blog', href: 'https://medium.com/balancer-protocol' },
@@ -88,7 +88,7 @@ export const ProjectConfigCowAmm: ProjectConfig = {
       {
         title: 'Build on Balancer',
         links: [
-          { label: 'Home', href: '/' },
+          { label: 'Balancer Home', href: 'https://balancer.fi', isExternal: true },
           { label: 'v3 Docs', href: 'https://docs.balancer.fi', isExternal: true },
           {
             label: 'Prototype on v3',
@@ -103,9 +103,9 @@ export const ProjectConfigCowAmm: ProjectConfig = {
         title: 'Use Balancer protocol',
         links: [
           { label: 'Explore pools', href: '/pools' },
-          { label: 'Swap tokens', href: '/swap' },
-          { label: 'View portfolio', href: '/portfolio' },
-          { label: 'Get veBAL', href: '/vebal' },
+          { label: 'Swap tokens', href: '/swap', isExternal: true },
+          { label: 'View portfolio', href: '/portfolio', isExternal: true },
+          { label: 'Get veBAL', href: '/vebal', isExternal: true },
           {
             label: 'Create an LBP',
             href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
