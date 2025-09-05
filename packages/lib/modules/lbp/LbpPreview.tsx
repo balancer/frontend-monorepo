@@ -2,7 +2,7 @@ import { VStack, Heading, Flex, Spacer, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
+import { RestartPoolCreationModal } from '../pool/actions/create/modal/RestartPoolCreationModal'
 import { LearnMoreModal } from './header/LearnMoreModal'
 import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
@@ -18,6 +18,7 @@ export function LbpPreview() {
 
   const {
     saleStructureForm: { watch },
+    resetLbpCreation,
   } = useLbpForm()
   const saleStructureData = watch()
 
@@ -51,7 +52,11 @@ export function LbpPreview() {
                   LBP preview
                 </Heading>
                 <Spacer />
-                <LbpDeleteAndRestartModal />
+                <RestartPoolCreationModal
+                  handleRestart={resetLbpCreation}
+                  network={chain}
+                  poolType="Liquidity Bootstrapping"
+                />
                 <LearnMoreModal buttonLabel="Get help" />
               </Flex>
               <TokenSummary
