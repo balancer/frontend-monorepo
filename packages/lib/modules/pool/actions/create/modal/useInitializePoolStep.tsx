@@ -19,11 +19,11 @@ import { TransactionBatchButton } from '@repo/lib/modules/transactions/transacti
 export const initializePoolStepId = 'initialize-pool'
 
 const labels: TransactionLabels = {
-  init: 'Initialize pool',
-  title: 'Initialize pool',
-  confirming: 'Confirming initialization...',
-  confirmed: 'Initialization confirmed!',
-  tooltip: 'Initialize pool',
+  init: 'Seed pool liquidity',
+  title: 'Seed pool liquidity',
+  confirming: 'Confirming seed pool liquidity...',
+  confirmed: 'Seed pool liquidity confirmed!',
+  tooltip: 'Seed pool liquidity',
 }
 
 type Params = {
