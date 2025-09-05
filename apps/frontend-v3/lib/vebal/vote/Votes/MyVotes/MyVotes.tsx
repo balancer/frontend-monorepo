@@ -231,18 +231,13 @@ export function MyVotes() {
 
                 {hasNewVotes && (
                   <GridItem colSpan={4} mt="md" w="full">
-                    <Alert status="warning" variant="WideOnDesktop">
+                    <Alert status="warning">
                       <AlertIcon as={AlertTriangle} />
-                      <Stack
-                        alignItems="baseline"
-                        direction={{ base: 'column', lg: 'row' }}
-                        gap={{ base: '0', lg: 'sm' }}
-                      >
+                      <Stack alignItems="baseline" gap="0">
                         <AlertTitle>Resubmit your votes to use your full voting power</AlertTitle>
-                        <AlertDescription>
-                          Votes on pools are set at the time of vote. Since you've added new veBAL
-                          since you original vote, you have addtional voting power that is not being
-                          used. Resubmit you votes below.
+                        <AlertDescription fontSize="sm">
+                          Votes are set at the time you cast them. Since you've added more veBAL
+                          afterward, that extra voting power is not being fully utilized.
                         </AlertDescription>
                       </Stack>
                     </Alert>
