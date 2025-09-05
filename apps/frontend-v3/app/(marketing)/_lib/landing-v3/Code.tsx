@@ -123,12 +123,12 @@ export function Code() {
                   <VStack alignItems="start" px={{ base: 'md', lg: '0' }} spacing="lg">
                     <BlurIn delay={0.4}>
                       <Text
-                        background="font.specialSecondary"
+                        background="font.special"
                         backgroundClip="text"
                         fontSize="sm"
                         variant="eyebrow"
                       >
-                        SIMPLICITY
+                        Simplicity
                       </Text>
                     </BlurIn>
                     <WordsPullUp
