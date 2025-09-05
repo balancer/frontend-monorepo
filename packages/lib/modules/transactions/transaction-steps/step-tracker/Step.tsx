@@ -124,7 +124,7 @@ function NestedInfo({
         {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
           <Text {...textProps}>
             {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
-            {!isSmallAmount && '~'}
+            {(!isSmallAmount || !gasCostData.isActual) && '~'}
             {gasCostData.costUsd}
           </Text>
         ) : step.isComplete() ? (
