@@ -12,7 +12,7 @@ import {
   Button,
   VStack,
   ModalFooter,
-  Box,
+  Text,
   Link,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
@@ -78,7 +78,14 @@ export function AcceptPoliciesModal() {
               size="lg"
             >
               {showVeBal ? (
-                <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
+                <Text
+                  aria-label="Accept policies"
+                  color="font.primary"
+                  fontSize="md"
+                  lineHeight="1.4"
+                  mt="-4px"
+                  pl="0.5"
+                >
                   By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
                   <Link as={NextLink} href="/terms-of-use">
                     Terms of Use
@@ -100,15 +107,15 @@ export function AcceptPoliciesModal() {
                     Privacy Policy
                   </Link>
                   .
-                </Box>
+                </Text>
               ) : (
-                <Box color="font.primary" fontSize="md" mt="-3px">
+                <Text color="font.primary" fontSize="md" lineHeight="1.4" mt="-4px" pl="0.5">
                   By connecting my wallet, I agree to Beets&apos;{' '}
                   <Link as={NextLink} href="/terms-of-service">
                     Terms of Service
                   </Link>
                   .
-                </Box>
+                </Text>
               )}
             </Checkbox>
           </VStack>
