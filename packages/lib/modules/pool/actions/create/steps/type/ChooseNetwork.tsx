@@ -1,5 +1,5 @@
 import { Control } from 'react-hook-form'
-import { type PoolCreationForm } from '../../constants'
+import { PoolCreationForm } from '../../types'
 import { VStack, Text, SimpleGrid, Card, Checkbox, HStack } from '@chakra-ui/react'
 import { Controller } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

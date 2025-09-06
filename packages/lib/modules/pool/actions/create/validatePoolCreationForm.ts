@@ -7,11 +7,10 @@ import {
   MAX_POOL_NAME_LENGTH,
   MAX_POOL_SYMBOL_LENGTH,
   WeightedPoolStructure,
-  SupportedPoolTypes,
   POOL_TYPES,
   REQUIRED_TOTAL_WEIGHT,
-  type PoolCreationToken,
 } from './constants'
+import { PoolCreationToken, SupportedPoolTypes } from './types'
 import { PoolType } from '@balancer/sdk'
 
 export const validatePoolTokens = {
