@@ -36,7 +36,12 @@ export const ProjectConfigCowAmm: ProjectConfig = {
     isOnSafeAppList: true,
   },
   links: {
-    appLinks: [{ href: '/vebal', label: 'veBAL', isExternal: true }],
+    appLinks: [
+      { href: '/pools', label: 'Pools' },
+      { href: 'https://balancer.fi/swap', label: 'Swap', isExternal: true },
+      { href: 'https://balancer.fi/portfolio', label: 'Portfolio', isExternal: true },
+      { href: 'https://balancer.fi/vebal', label: 'veBAL', isExternal: true },
+    ],
     ecosystemLinks: [
       { label: 'Pool creator', href: 'https://pool-creator.balancer.fi/cow' },
       { label: 'Blog', href: 'https://medium.com/balancer-protocol' },
