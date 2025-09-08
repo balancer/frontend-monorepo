@@ -1,5 +1,6 @@
 'use client'
 
+// eslint-disable-next-line no-restricted-imports
 import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
 import { emptyAddress } from './contracts/wagmi-helpers'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'

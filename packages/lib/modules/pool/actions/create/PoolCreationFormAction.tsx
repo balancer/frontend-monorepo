@@ -89,7 +89,7 @@ function InvalidTotalWeightAlert() {
 
   if (!isWeightedPool) return null
 
-  if (isTotalWeightTooLow)
+  if (isTotalWeightTooLow) {
     return (
       <BalAlert
         content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
@@ -97,8 +97,9 @@ function InvalidTotalWeightAlert() {
         title="Token weights must tally 100%"
       />
     )
+  }
 
-  if (isTotalWeightTooHigh)
+  if (isTotalWeightTooHigh) {
     return (
       <BalAlert
         content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
@@ -106,4 +107,5 @@ function InvalidTotalWeightAlert() {
         title="Token weights must tally 100%"
       />
     )
+  }
 }
