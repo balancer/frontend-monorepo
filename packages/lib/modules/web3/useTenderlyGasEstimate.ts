@@ -44,7 +44,9 @@ export function useTenderlyGasEstimate(txConfig?: TxConfig) {
       }
 
       const json = await response.json()
-      return BigInt(json.gasUsed)
+      const gasUsed = json.gasUsed
+
+      return gasUsed ? BigInt(gasUsed) : '0'
     },
     enabled: !!txConfig,
   })

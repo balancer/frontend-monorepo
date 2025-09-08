@@ -1,8 +1,8 @@
 import type { NextRequest } from 'next/server'
 
-const TENDERLY_ACCOUNT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_ACCOUNT_SLUG!
-const TENDERLY_PROJECT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_PROJECT_SLUG!
-const TENDERLY_ACCESS_KEY = process.env.NEXT_PRIVATE_TENDERLY_ACCESS_KEY!
+const TENDERLY_ACCOUNT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_ACCOUNT_SLUG
+const TENDERLY_PROJECT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_PROJECT_SLUG
+const TENDERLY_ACCESS_KEY = process.env.NEXT_PRIVATE_TENDERLY_ACCESS_KEY
 
 const ALLOWED_ORIGINS = [
   ...(process.env.NEXT_PRIVATE_ALLOWED_ORIGINS || '').split(','),
@@ -30,8 +30,9 @@ export async function POST(request: NextRequest) {
   }
 
   if (!TENDERLY_ACCOUNT_SLUG || !TENDERLY_PROJECT_SLUG || !TENDERLY_ACCESS_KEY) {
-    return new Response(JSON.stringify({ error: 'Tenderly configuration is missing' }), {
-      status: 500,
+    return Response.json({
+      gasUsed: undefined,
+      error: 'Tenderly configuration is missing',
     })
   }
 
@@ -67,10 +68,10 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorData = await response.json()
-      return new Response(
-        JSON.stringify({ error: errorData.message || 'Tenderly simulation failed' }),
-        { status: response.status }
-      )
+      return Response.json({
+        gasUsed: undefined,
+        error: errorData.message || 'Tenderly simulation failed',
+      })
     }
 
     const data = await response.json()
@@ -80,6 +81,10 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error in tenderly gas estimate:', error)
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 })
+
+    return Response.json({
+      gasUsed: undefined,
+      error: 'Internal server error',
+    })
   }
 }

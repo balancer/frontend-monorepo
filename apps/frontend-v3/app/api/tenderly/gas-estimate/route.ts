@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-import { ensureError, SentryError } from '@repo/lib/shared/utils/errors'
+import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
 
 const TENDERLY_ACCOUNT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_ACCOUNT_SLUG
 const TENDERLY_PROJECT_SLUG = process.env.NEXT_PRIVATE_TENDERLY_PROJECT_SLUG
@@ -31,8 +31,9 @@ export async function POST(request: NextRequest) {
   }
 
   if (!TENDERLY_ACCOUNT_SLUG || !TENDERLY_PROJECT_SLUG || !TENDERLY_ACCESS_KEY) {
-    return new Response(JSON.stringify({ error: 'Tenderly configuration is missing' }), {
-      status: 500,
+    return Response.json({
+      gasUsed: undefined,
+      error: 'Tenderly configuration is missing',
     })
   }
 
@@ -68,10 +69,10 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorData = await response.json()
-      return new Response(
-        JSON.stringify({ error: errorData.message || 'Tenderly simulation failed' }),
-        { status: response.status }
-      )
+      return Response.json({
+        gasUsed: undefined,
+        error: errorData.message || 'Tenderly simulation failed',
+      })
     }
 
     const data = await response.json()
@@ -81,11 +82,11 @@ export async function POST(request: NextRequest) {
     })
   } catch (err) {
     const error = ensureError(err)
+    captureError(error, { extra: { message: 'Error in tenderly gas estimate' } })
 
-    throw new SentryError('Error in tenderly gas estimate', {
-      cause: error,
+    return Response.json({
+      gasUsed: undefined,
+      error: 'Internal server error',
     })
-
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 })
   }
 }
