@@ -1,5 +1,5 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
-import { PartnerVariant, PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
+import { PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isProd } from '@repo/lib/config/app.config'
 
@@ -16,14 +16,6 @@ export const ProjectConfigCowAmm: ProjectConfig = {
     GqlChain.Gnosis,
     GqlChain.Polygon,
   ],
-  variantConfig: {
-    [PartnerVariant.cow]: {
-      banners: {
-        headerSrc: '/images/partners/cow-header.svg',
-        footerSrc: '/images/partners/cow-footer.svg',
-      },
-    },
-  },
   corePoolId: '',
   defaultNetwork: GqlChain.Gnosis,
   ensNetwork: GqlChain.Mainnet,
