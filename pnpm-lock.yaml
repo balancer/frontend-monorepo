@@ -7,6 +7,15 @@ settings:
 overrides:
   '@types/react': 19.1.3
   '@types/react-dom': 19.1.3
+  lint-staged>chalk: 5.3.0
+  log-symbols>chalk: 5.3.0
+  boxen>chalk: 5.3.0
+  strip-ansi: 7.1.0
+  color-convert: 2.0.1
+  color-name: 1.1.4
+  is-core-module: 2.13.1
+  error-ex: 1.3.2
+  has-ansi: 5.0.1
 
 importers:
 
@@ -4433,8 +4442,8 @@ packages:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
 
-  chalk@5.4.1:
-    resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
+  chalk@5.3.0:
+    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
   change-case-all@1.0.15:
@@ -4548,15 +4557,9 @@ packages:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
-  color-convert@1.9.3:
-    resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
-
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
     engines: {node: '>=7.0.0'}
-
-  color-name@1.1.3:
-    resolution: {integrity: sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==}
 
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
@@ -5965,9 +5968,8 @@ packages:
     resolution: {integrity: sha512-ZYvCgrefwqoQ6yTyYUbQu64HsITZ3NfKX1lzaEYdkTDcfKzzCI/wthRRYKkdjHKFVgNiXKAKm65Zo1pk2as/QQ==}
     hasBin: true
 
-  is-core-module@2.16.1:
-    resolution: {integrity: sha512-UfoeMA6fIJ8wTYFEUjelnaGI67v6+N7qXJEvQuIGa99l4xsCruSYOVSQ0uPANn4dAzm8lkYPaKLrrijLq7x23w==}
-    engines: {node: '>= 0.4'}
+  is-core-module@2.13.1:
+    resolution: {integrity: sha512-hHrIjvZsftOsvKSn2TRYl63zvxsgE0K+0mYMoH6gD4omR5IWB2KynivBQczo3+wF1cCkjzvptnI9Q0sPU66ilw==}
 
   is-data-view@1.0.2:
     resolution: {integrity: sha512-RKtWF8pGmS87i2D6gqQu/l7EYRlVdfzemCJN/P3UOs//x1QE7mfhvzHIApBTRf7axvT6DMGwSwBXYCT0nfB9xw==}
@@ -13617,7 +13619,7 @@ snapshots:
 
   ansi-styles@3.2.1:
     dependencies:
-      color-convert: 1.9.3
+      color-convert: 2.0.1
 
   ansi-styles@4.3.0:
     dependencies:
@@ -13823,7 +13825,7 @@ snapshots:
     dependencies:
       ansi-align: 3.0.1
       camelcase: 7.0.1
-      chalk: 5.4.1
+      chalk: 5.3.0
       cli-boxes: 3.0.0
       string-width: 5.1.2
       type-fest: 2.19.0
@@ -14008,7 +14010,7 @@ snapshots:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
 
-  chalk@5.4.1: {}
+  chalk@5.3.0: {}
 
   change-case-all@1.0.15:
     dependencies:
@@ -14160,13 +14162,13 @@ snapshots:
   cliui@6.0.0:
     dependencies:
       string-width: 4.2.3
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
       wrap-ansi: 6.2.0
 
   cliui@8.0.1:
     dependencies:
       string-width: 4.2.3
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
       wrap-ansi: 7.0.0
 
   clone@1.0.4: {}
@@ -14175,15 +14177,9 @@ snapshots:
 
   clsx@2.1.1: {}
 
-  color-convert@1.9.3:
-    dependencies:
-      color-name: 1.1.3
-
   color-convert@2.0.1:
     dependencies:
       color-name: 1.1.4
-
-  color-name@1.1.3: {}
 
   color-name@1.1.4: {}
 
@@ -15743,7 +15739,7 @@ snapshots:
       run-async: 2.4.1
       rxjs: 7.8.2
       string-width: 4.2.3
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
       through: 2.3.8
       wrap-ansi: 6.2.0
     transitivePeerDependencies:
@@ -15827,7 +15823,7 @@ snapshots:
     dependencies:
       ci-info: 3.9.0
 
-  is-core-module@2.16.1:
+  is-core-module@2.13.1:
     dependencies:
       hasown: 2.0.2
 
@@ -16195,7 +16191,7 @@ snapshots:
 
   lint-staged@16.1.2:
     dependencies:
-      chalk: 5.4.1
+      chalk: 5.3.0
       commander: 14.0.0
       debug: 4.4.1
       lilconfig: 3.1.3
@@ -16270,12 +16266,12 @@ snapshots:
 
   log-symbols@4.1.0:
     dependencies:
-      chalk: 4.1.2
+      chalk: 5.3.0
       is-unicode-supported: 0.1.0
 
   log-symbols@5.1.0:
     dependencies:
-      chalk: 5.4.1
+      chalk: 5.3.0
       is-unicode-supported: 1.3.0
 
   log-update@4.0.0:
@@ -16799,12 +16795,12 @@ snapshots:
       is-interactive: 1.0.0
       is-unicode-supported: 0.1.0
       log-symbols: 4.1.0
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
       wcwidth: 1.0.1
 
   ora@7.0.1:
     dependencies:
-      chalk: 5.4.1
+      chalk: 5.3.0
       cli-cursor: 4.0.0
       cli-spinners: 2.9.2
       is-interactive: 2.0.0
@@ -17470,19 +17466,19 @@ snapshots:
 
   resolve@1.22.10:
     dependencies:
-      is-core-module: 2.16.1
+      is-core-module: 2.13.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
   resolve@1.22.8:
     dependencies:
-      is-core-module: 2.16.1
+      is-core-module: 2.13.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
   resolve@2.0.0-next.5:
     dependencies:
-      is-core-module: 2.16.1
+      is-core-module: 2.13.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -17934,7 +17930,7 @@ snapshots:
     dependencies:
       emoji-regex: 8.0.0
       is-fullwidth-code-point: 3.0.0
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
 
   string-width@5.1.2:
     dependencies:
@@ -18165,7 +18161,7 @@ snapshots:
       lodash.truncate: 4.4.2
       slice-ansi: 4.0.0
       string-width: 4.2.3
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
 
   tapable@2.2.3: {}
 
@@ -18487,7 +18483,7 @@ snapshots:
   update-notifier@6.0.2:
     dependencies:
       boxen: 7.1.1
-      chalk: 5.4.1
+      chalk: 5.3.0
       configstore: 6.0.0
       has-yarn: 3.0.0
       import-lazy: 4.0.0
@@ -18986,13 +18982,13 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       string-width: 4.2.3
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
 
   wrap-ansi@7.0.0:
     dependencies:
       ansi-styles: 4.3.0
       string-width: 4.2.3
-      strip-ansi: 6.0.1
+      strip-ansi: 7.1.0
 
   wrap-ansi@8.1.0:
     dependencies:
