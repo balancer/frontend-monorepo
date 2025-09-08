@@ -8,7 +8,9 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
 export default function VeBALManageLayout({ children }: PropsWithChildren) {
-  const { vebalBptToken } = useTokens()
+  const { vebalBptToken, isLoadingTokens } = useTokens()
+
+  if (isLoadingTokens) return undefined
 
   if (!vebalBptToken) throw new Error('vebalBptToken not found')
 
