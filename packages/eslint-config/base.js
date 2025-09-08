@@ -72,6 +72,40 @@ const baseConfig = [
       'react/jsx-sort-props': ['error', { ignoreCase: true }],
       // Disable react-hooks/exhaustive-deps rule
       'react-hooks/exhaustive-deps': 'off',
+      curly: ['error', 'multi-line'],
+      'react/react-in-jsx-scope': 'off',
+      'no-console': 'off',
+      'max-len': [
+        'warn',
+        {
+          code: 120,
+          ignoreComments: true,
+          ignoreUrls: true,
+          ignoreTemplateLiterals: true,
+          ignoreStrings: true,
+        },
+      ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['wagmi'],
+              importNames: ['useAccount'],
+              message: 'Use useUserAccount instead to avoid hydration issues',
+            },
+            {
+              group: ['wagmi/dist'],
+              message: 'Invalid import: remove dist from import path',
+            },
+            {
+              group: ['react-dom/test-utils'],
+              importNames: ['act'],
+              message: "Invalid import: import from '@testing-library/react' instead",
+            },
+          ],
+        },
+      ],
     },
   },
 ]

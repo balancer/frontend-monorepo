@@ -1,16 +1,17 @@
 import { VStack, Heading, Text } from '@chakra-ui/react'
-import { zeroAddress, Address } from 'viem'
+import { zeroAddress, Address, isAddress } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { useAccount } from 'wagmi'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { usePoolHooksContract } from './usePoolHooksContract'
 import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
+import { usePublicClient } from 'wagmi'
+import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
+import { getChainId } from '@repo/lib/config/app.config'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 export type PoolSettingsOption = {
   label: string
@@ -19,18 +20,16 @@ export type PoolSettingsOption = {
 }
 
 export function PoolSettings() {
-  const { address } = useAccount()
-  const { network, poolType, poolHooksContract, poolCreationForm } = usePoolCreationForm()
+  const { userAddress } = useUserAccount()
+  const { network, poolType, poolCreationForm } = usePoolCreationForm()
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
-  const { isValidHooksContract, isValidHooksContractPending } =
-    usePoolHooksContract(poolHooksContract)
 
   const poolManagerOptions: PoolSettingsOption[] = [
     { label: 'Delegate to the balancer DAO', value: zeroAddress },
     {
       label: 'My connected wallet:',
-      value: address,
-      detail: <ConnectedWalletLink address={address} network={network} />,
+      value: userAddress,
+      detail: <BlockExplorerLink address={userAddress} chain={network} fontSize="md" />,
     },
   ]
 
@@ -63,11 +62,31 @@ export function PoolSettings() {
     }
   }, [isStableSurgePool, poolHooksWhitelist])
 
-  useEffect(() => {
-    if (poolHooksContract !== zeroAddress && !isValidHooksContractPending) {
-      poolCreationForm.trigger('poolHooksContract')
+  const publicClient = usePublicClient({ chainId: getChainId(network) })
+
+  const validateHooksContract = async (address: string) => {
+    if (address === '') return false
+    if (address === zeroAddress) return true
+    if (!isAddress(address)) return 'Invalid address format'
+
+    try {
+      if (!publicClient) return 'missing public client for hooks validation'
+      const hookFlags = await publicClient.readContract({
+        address: address as Address,
+        abi: reClammPoolAbi,
+        functionName: 'getHookFlags',
+        args: [],
+      })
+      if (!hookFlags) return 'Invalid hooks contract address'
+      return true
+    } catch (error) {
+      if (error && typeof error === 'object' && 'shortMessage' in error) {
+        return (error as any).shortMessage
+      }
+      console.error(error)
+      return 'Unexpected error validating hooks contract address'
     }
-  }, [poolHooksContract, isValidHooksContractPending])
+  }
 
   return (
     <VStack align="start" spacing="lg" w="full">
@@ -126,26 +145,10 @@ export function PoolSettings() {
         options={poolHooksOptions}
         title="Pool hooks"
         tooltip="TODO"
-        validate={address =>
-          validatePoolSettings.poolHooksContract(
-            address,
-            isValidHooksContract,
-            isValidHooksContractPending
-          )
-        }
+        validateAsync={validateHooksContract}
       />
 
       <LiquidityManagement />
     </VStack>
   )
-}
-
-interface ConnectedWalletLinkProps {
-  address: Address | undefined
-  network: GqlChain
-}
-
-function ConnectedWalletLink({ address, network }: ConnectedWalletLinkProps) {
-  if (!address) return <Text>None</Text>
-  return <BlockExplorerLink address={address} chain={network} fontSize="md" />
 }

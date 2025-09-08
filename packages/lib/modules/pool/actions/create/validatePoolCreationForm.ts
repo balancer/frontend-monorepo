@@ -15,19 +15,16 @@ import {
 import { PoolType } from '@balancer/sdk'
 
 export const validatePoolTokens = {
+  isValidTokens: (poolTokens: PoolCreationToken[]) => {
+    return poolTokens.every(token => token.address)
+  },
+
   maxTokens: (poolType: SupportedPoolTypes) => {
     return POOL_TYPES[poolType].maxTokens
   },
 
   isAtMaxTokens: (poolType: SupportedPoolTypes, tokens: PoolCreationToken[]) => {
     return tokens.length === validatePoolTokens.maxTokens(poolType)
-  },
-
-  singleTokenWeight: (weight: number, poolType: SupportedPoolTypes) => {
-    if (!validatePoolType.isWeightedPool(poolType)) return true
-    if (weight < 1) return 'Minimum weight for each token is 1%'
-    if (weight > 99) return 'Maximum weight for a token is 99%'
-    return true
   },
 
   totalWeight: (poolTokens: PoolCreationToken[]) => {
@@ -58,12 +55,8 @@ export const validatePoolTokens = {
     return !isWeightedPool || isValidTotalWeight
   },
 
-  rateProvider: (address: string, isValidationPending: boolean, isValidRateProvider: boolean) => {
-    if (address === '') return false
-    if (isValidationPending) return 'Validating rate provider contract...'
-    if (!isAddress(address)) return 'Invalid address'
-    if (!isValidRateProvider) return 'Invalid rate provider address'
-    return true
+  isValidTokenAmounts: (poolTokens: PoolCreationToken[]) => {
+    return poolTokens.every(token => Number(token.amount) > 0)
   },
 }
 
@@ -101,27 +94,17 @@ export const validatePoolSettings = {
 
   swapFeePercentage: (value: string, poolType: SupportedPoolTypes) => {
     const numValue = Number(value)
-    if (numValue < MIN_SWAP_FEE_PERCENTAGE[poolType] || numValue > MAX_SWAP_FEE_PERCENTAGE)
+    if (numValue < MIN_SWAP_FEE_PERCENTAGE[poolType] || numValue > MAX_SWAP_FEE_PERCENTAGE) {
       return `Value must be between ${MIN_SWAP_FEE_PERCENTAGE[poolType]} and ${MAX_SWAP_FEE_PERCENTAGE}`
+    }
     return true
   },
 
   amplificationParameter: (value: string) => {
     const numValue = Number(value)
-    if (numValue < MIN_AMPLIFICATION_PARAMETER || numValue > MAX_AMPLIFICATION_PARAMETER)
+    if (numValue < MIN_AMPLIFICATION_PARAMETER || numValue > MAX_AMPLIFICATION_PARAMETER) {
       return `Value must be between ${MIN_AMPLIFICATION_PARAMETER} and ${MAX_AMPLIFICATION_PARAMETER}`
-    return true
-  },
-
-  poolHooksContract: (
-    address: string,
-    isValidPoolHooksContract: boolean,
-    isValidationPending: boolean
-  ) => {
-    if (address === '') return false
-    if (isValidationPending) return 'Validating pool hooks contract...'
-    if (!isAddress(address)) return 'Invalid address'
-    if (!isValidPoolHooksContract) return 'Invalid hooks contract address'
+    }
     return true
   },
 }
@@ -129,15 +112,17 @@ export const validatePoolSettings = {
 export const validatePoolDetails = {
   name: (name: string) => {
     if (name.length < 3) return 'Pool name must be 3 characters or more'
-    if (name.length > MAX_POOL_NAME_LENGTH)
+    if (name.length > MAX_POOL_NAME_LENGTH) {
       return `Pool name must be ${MAX_POOL_NAME_LENGTH} characters or less`
+    }
     return true
   },
 
   symbol: (symbol: string) => {
     if (symbol.length < 3) return 'Pool symbol must be 3 characters or more'
-    if (symbol.length > MAX_POOL_SYMBOL_LENGTH)
+    if (symbol.length > MAX_POOL_SYMBOL_LENGTH) {
       return `Pool symbol must be ${MAX_POOL_SYMBOL_LENGTH} characters or less`
+    }
     return true
   },
 }

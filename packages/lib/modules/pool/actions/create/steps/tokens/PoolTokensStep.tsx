@@ -10,8 +10,8 @@ export function PoolTokensStep() {
 
   const isValidTokenWeights = validatePoolTokens.isValidTokenWeights(poolType, poolTokens)
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-
-  const isDisabled = !isValidTokenWeights || !isFormStateValid
+  const isValidTokens = validatePoolTokens.isValidTokens(poolTokens)
+  const isDisabled = !isValidTokenWeights || !isFormStateValid || !isValidTokens
 
   return (
     <Box style={{ width: '100%' }}>

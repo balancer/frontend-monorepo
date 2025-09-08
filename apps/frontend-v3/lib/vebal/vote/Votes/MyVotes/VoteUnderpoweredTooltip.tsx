@@ -7,26 +7,28 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 
-import { bpsToPercentage } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
-
-interface Props {
-  unallocatedWeight: BigNumber
+type Props = {
   usePortal?: boolean
+  isTimelocked: boolean
 }
 
-export function VoteUnallocatedTooltip({ usePortal, unallocatedWeight }: Props) {
+export function VoteUnderpoweredTooltip({ usePortal, isTimelocked }: Props) {
+  const title = isTimelocked
+    ? 'Resubmit your votes to utilize your full voting power once your timelock is over'
+    : 'Resubmit your votes to utilize your full voting power'
+
   const popoverContent = (
     <PopoverContent bg="background.level3" minWidth={['100px']} p="sm" shadow="3xl">
       <VStack alignItems="start" spacing="sm" width="full">
         <Text color="font.secondary" fontSize="sm" fontWeight={700}>
-          {fNum('apr', bpsToPercentage(unallocatedWeight))} votes unallocated
+          {title}
         </Text>
         <Text color="font.secondary" fontSize="sm">
-          Since you’re not utilizing all of your votes, you are likely missing out on vote
-          incentives.
+          Your pool gauge was set at the time of your last vote and decays linearly until your veBAL
+          expiry. You have acquired new veBAL since your last vote. Re-vote to update the gauge with
+          your full veBAL voting power.
         </Text>
       </VStack>
     </PopoverContent>
