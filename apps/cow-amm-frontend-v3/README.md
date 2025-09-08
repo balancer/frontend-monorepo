@@ -38,29 +38,7 @@ Then, run the development server:
 pnpm dev:bal
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Developing on a local fork
-
-1. Create a `.env.local` file in the root of project:
-
-```
-ETHEREUM_RPC_URL=xxx
-BASE_RPC_URL=xxx
-GNOSIS_RPC_URL=xxx
-```
-
-2. Start local anvil fork
-
-```
-make fork-ethereum
-```
-
-3. Run the development server in fork mode:
-
-```
-pnpm dev:bal:fork
-```
+Open [http://localhost:3002](http://localhost:3002) with your browser to see the result.
 
 ### Sentry does not work with turbopack yet
 
@@ -76,7 +54,7 @@ more context.
 You can explicitly run with webpack mode with:
 
 ```bash
-pnpm dev:webpack
+pnpm dev:cow-amm:webpack
 ```
 
 ## Testing
