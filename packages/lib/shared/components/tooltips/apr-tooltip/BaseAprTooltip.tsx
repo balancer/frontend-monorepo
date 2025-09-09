@@ -336,7 +336,7 @@ function BaseAprTooltip({
               fontWeight={500}
               pl={6}
               pt={3}
-              title="Extra BAL (veBAL boost)"
+              title="Extra BAL (at 2.5x veBAL boost)"
               tooltipText={extraBalTooltipText}
             />
             <Divider />
