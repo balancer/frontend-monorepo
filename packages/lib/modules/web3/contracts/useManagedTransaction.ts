@@ -8,7 +8,12 @@ import {
   TransactionLabels,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from 'viem'
-import { useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import {
+  useSimulateContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+  useEstimateGas,
+} from 'wagmi'
 import { useChainSwitch } from '../useChainSwitch'
 import { AbiMap } from './AbiMap'
 import { TransactionExecution, TransactionSimulation, WriteAbiMutability } from './contract.types'
@@ -42,6 +47,7 @@ export interface ManagedTransactionInput {
   enabled: boolean
   value?: bigint
   onTransactionChange: (transaction: ManagedResult) => void
+  wantsTenderlyGasEstimate?: boolean
 }
 
 export function useManagedTransaction({
@@ -54,6 +60,7 @@ export function useManagedTransaction({
   txSimulationMeta,
   enabled = true,
   value,
+  wantsTenderlyGasEstimate = false,
 }: ManagedTransactionInput) {
   const { minConfirmations } = useNetworkConfig()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -79,11 +86,20 @@ export function useManagedTransaction({
     value,
   })
 
-  const estimateGasQuery = useTenderlyGasEstimate({
+  const useEstimateGasHook = wantsTenderlyGasEstimate ? useTenderlyGasEstimate : useEstimateGas
+
+  const useEstimateGasProps = {
     ...txConfig,
     chainId,
     from: userAddress,
-  })
+    query: {
+      enabled: !!txConfig && !shouldChangeNetwork,
+      // In chains like polygon, we don't want background refetches while waiting for min block confirmations
+      ...onlyExplicitRefetch,
+    },
+  }
+
+  const estimateGasQuery = useEstimateGasHook(useEstimateGasProps)
 
   const { mockedTxHash, setMockedTxHash } = useMockedTxHash()
 
