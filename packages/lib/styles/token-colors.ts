@@ -1,5 +1,7 @@
 import { Address } from 'viem'
 import { GqlChain } from '../shared/services/api/generated/graphql'
+import { getGqlChain } from '../config/app.config'
+import { getRandomInt } from '../shared/utils/numbers'
 
 export type TokenColorDef = {
   from: string
@@ -102,12 +104,23 @@ const DEFAULT_TOKEN_COLORS: TokenColorDef[] = [
 
 const defaultColor: TokenColorDef = { from: '#30CEF0', to: '#02A2FE' }
 
-export function getTokenColor(chain: GqlChain, address: Address, i: number): TokenColorDef {
+export function getTokenColor(
+  chain: GqlChain | number,
+  address: Address,
+  i?: number
+): TokenColorDef {
   const normalizedAddress = address.toLowerCase() as Address
-  return tokenColors[chain][normalizedAddress] || DEFAULT_TOKEN_COLORS[i] || defaultColor
+  const normalizedChain = typeof chain === 'number' ? getGqlChain(chain) : chain
+  const defaultColorIndex = i === undefined ? getRandomInt(0, 15) : i
+
+  return (
+    tokenColors[normalizedChain][normalizedAddress] ||
+    DEFAULT_TOKEN_COLORS[defaultColorIndex] ||
+    defaultColor
+  )
 }
 
-export function getCssTokenColor(chain: GqlChain, address: Address, i: number) {
+export function getCssTokenColor(chain: GqlChain | number, address: Address, i: number) {
   const color = getTokenColor(chain, address, i)
   return `linear-gradient(180deg, ${color.from} 0%, ${color.to} 100%)`
 }
