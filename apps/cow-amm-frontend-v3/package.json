@@ -17,15 +17,9 @@
     "lint:fix": "eslint . --fix --max-warnings 0 --cache",
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level warn",
     "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
-    "stylelint": "stylelint '**/*.css'",
-    "stylelint:fix": "stylelint '**/*.css' --fix",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/cow/cow.theme.ts",
-    "postinstall": "pnpm run gen:theme-typings",
-    "test:unit": "vitest run",
-    "test:unit:watch": "vitest",
-    "test:integration": "vitest run -c ./vitest.config.integration.ts",
-    "test:integration:watch": "vitest -c ./vitest.config.integration.ts"
+    "postinstall": "pnpm run gen:theme-typings"
   },
   "dependencies": {
     "@apollo/client": "3.13.8",
