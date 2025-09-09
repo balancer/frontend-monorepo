@@ -13,11 +13,9 @@ export interface VotesChunksAllocation {
 }
 
 export function useSubmittingVotes() {
-  const { transactionSteps, submittingVotes } = useMyVotes()
+  const { transactionSteps, submittableVotes } = useMyVotes()
 
-  const submittingVotesChunks = useMemo(() => {
-    return chunkVotes(submittingVotes)
-  }, [submittingVotes])
+  const submittingVotesChunks = chunkVotes(submittableVotes)
 
   const currentStepVotesTransactionsIndex = transactionSteps.currentStep?.id
     ? getVotesTransactionsStepIndex(transactionSteps.currentStep.id)

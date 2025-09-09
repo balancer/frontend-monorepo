@@ -35,15 +35,13 @@ export function VoteExceededTooltip({ usePortal, exceededWeight }: Props) {
 
   return (
     <Popover trigger="hover">
-      <>
-        <PopoverTrigger>
-          <HStack color="red.400">
-            <AlertIcon height="16px" width="16px" />
-          </HStack>
-        </PopoverTrigger>
+      <PopoverTrigger>
+        <HStack color="red.400">
+          <AlertIcon height="16px" width="16px" />
+        </HStack>
+      </PopoverTrigger>
 
-        {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
-      </>
+      {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
     </Popover>
   )
 }

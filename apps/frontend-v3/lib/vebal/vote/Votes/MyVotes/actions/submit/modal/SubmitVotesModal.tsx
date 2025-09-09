@@ -30,7 +30,7 @@ export function SubmitVotesModal({
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
   const initialFocusRef = useRef(null)
-  const { transactionSteps, txHash, totalInfo, timeLockedVotes } = useMyVotes()
+  const { transactionSteps, txHash, totalInfo, timeLockedVotes, unchangedVotes } = useMyVotes()
   const { isPoolGaugeExpired } = useVotes()
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
@@ -65,12 +65,13 @@ export function SubmitVotesModal({
           <AnimateHeightChange spacing="sm">
             {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
             <SubmitVotesPreview
+              changedVotes={submittingVotesChunk || []}
               isPoolGaugeExpired={isPoolGaugeExpired}
               nextChunksAllocation={nextChunksAllocation}
               previousChunksAllocation={previousChunksAllocation}
-              submittingVotes={submittingVotesChunk || []}
               timeLockedVotes={timeLockedVotes}
               totalInfo={totalInfo}
+              unchangedVotes={unchangedVotes}
             />
           </AnimateHeightChange>
         </ModalBody>

@@ -264,9 +264,9 @@ export function WeightsChart({
         show: true,
         position: percentage < 0.8 ? 'right' : 'left',
         formatter: (value: LabelFormatterParams) => {
-          if (value.data[1] === 100)
+          if (value.data[1] === 100) {
             return `{labelFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
-          else return ''
+          } else return ''
         },
         rich: {
           labelFormat: {

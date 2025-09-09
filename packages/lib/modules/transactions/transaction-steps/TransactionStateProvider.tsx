@@ -19,8 +19,9 @@ export function useTransactionStateLogic() {
 
   const updateOnSuccessCalled = (step: TransactionStep, value: boolean) => {
     const txHash = getTransactionHash(step)
-    if (!txHash)
+    if (!txHash) {
       throw new Error(`Transaction hash is required to get transaction hash from step ${step}`)
+    }
 
     setOnSuccessCalled(prevState => ({
       ...prevState,

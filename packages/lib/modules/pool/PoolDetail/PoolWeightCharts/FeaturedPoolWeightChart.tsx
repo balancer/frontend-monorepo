@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, VStack, useTheme } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -12,13 +10,15 @@ import Image from 'next/image'
 import { useMemo, useRef } from 'react'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import PoolWeightChartLegend from './PoolWeightChartLegend'
+import { getTokenColor, TokenColorDef } from '@repo/lib/styles/token-colors'
+import { Address } from 'viem'
 
 interface PoolWeightChartProps {
   displayTokens: ApiToken[]
   chain: GqlChain
   hasLegend?: boolean
   isSmall?: boolean
-  colors?: PoolWeightChartColorDef[]
+  colors?: TokenColorDef[]
 }
 
 export interface ChartSizeValues {
@@ -30,42 +30,6 @@ export interface ChartSizeValues {
   haloWidth: string
   haloHeigth: string
 }
-
-export interface PoolWeightChartColorDef {
-  from: string
-  to: string
-}
-
-export const DEFAULT_POOL_WEIGHT_CHART_COLORS: PoolWeightChartColorDef[] = [
-  {
-    from: '#1E4CF1',
-    to: '#00FFAA',
-  },
-  {
-    from: '#B2C4DB',
-    to: '#FDFDFD',
-  },
-  {
-    from: '#EF4A2B',
-    to: '#F48975',
-  },
-  {
-    from: '#FFD600',
-    to: '#F48975',
-  },
-  {
-    from: '#9C68AA',
-    to: '#C03BE4',
-  },
-  {
-    from: '#FFBD91',
-    to: '#FF957B',
-  },
-  {
-    from: '#30CEF0',
-    to: '#02A2FE',
-  },
-]
 
 const smallSize: ChartSizeValues = {
   chartHeight: '140px',
@@ -142,7 +106,6 @@ export function FeaturedPoolWeightChart({
   chain,
   hasLegend,
   isSmall,
-  colors = DEFAULT_POOL_WEIGHT_CHART_COLORS,
 }: PoolWeightChartProps) {
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
@@ -192,11 +155,11 @@ export function FeaturedPoolWeightChart({
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 1,
-                  color: colors[i].from,
+                  color: getTokenColor(chain, token.address as Address, i).from,
                 },
                 {
                   offset: 0,
-                  color: colors[i].to,
+                  color: getTokenColor(chain, token.address as Address, i).to,
                 },
               ]),
             },
@@ -291,7 +254,7 @@ export function FeaturedPoolWeightChart({
           />
         </Box>
       </Box>
-      {hasLegend && <PoolWeightChartLegend colors={colors} displayTokens={displayTokens} />}
+      {hasLegend && <PoolWeightChartLegend displayTokens={displayTokens} />}
     </VStack>
   )
 }
