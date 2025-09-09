@@ -1,5 +1,3 @@
-'use client'
-
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
@@ -14,14 +12,15 @@ import * as echarts from 'echarts/core'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { PoolToken } from '../../pool.types'
+import { getTokenColor } from '@repo/lib/styles/token-colors'
+import { Address } from 'viem'
 
-export interface PoolWeightChartProps {
+interface PoolWeightChartProps {
   displayTokens: PoolToken[]
   chain: GqlChain
   totalLiquidity: string
   hasLegend?: boolean
   isSmall?: boolean
-  colors?: PoolWeightChartColorDef[]
 }
 
 export interface ChartSizeValues {
@@ -32,83 +31,6 @@ export interface ChartSizeValues {
   haloLeft: string
   haloWidth: string
   haloHeight: string
-}
-
-export interface PoolWeightChartColorDef {
-  from: string
-  to: string
-}
-
-export const DEFAULT_POOL_WEIGHT_CHART_COLORS: PoolWeightChartColorDef[] = [
-  {
-    from: '#1E4CF1',
-    to: '#00FFAA',
-  },
-  {
-    from: '#B2C4DB',
-    to: '#FDFDFD',
-  },
-  {
-    from: '#EF4A2B',
-    to: '#F48975',
-  },
-  {
-    from: '#FFD600',
-    to: '#F48975',
-  },
-  {
-    from: '#9C68AA',
-    to: '#C03BE4',
-  },
-  {
-    from: '#FFBD91',
-    to: '#FF957B',
-  },
-  {
-    from: '#30CEF0',
-    to: '#02A2FE',
-  },
-  {
-    from: '#FFDD00',
-    to: '#FFF5B2',
-  },
-  {
-    from: '#FF07A4',
-    to: '#FF9EDB',
-  },
-  {
-    from: '#039241',
-    to: '#96FDC3',
-  },
-  {
-    from: '#001B7D',
-    to: '#1448FF',
-  },
-  {
-    from: '#871500',
-    to: '#F02600',
-  },
-  {
-    from: '#EA6200',
-    to: '#FFB885',
-  },
-  {
-    from: '#AAAAAA',
-    to: '#666666',
-  },
-  {
-    from: '#D4FF00',
-    to: '#EEFF99',
-  },
-  {
-    from: '#510A94',
-    to: '#8614F0',
-  },
-]
-
-const defaultColor: PoolWeightChartColorDef = {
-  from: '#30CEF0',
-  to: '#02A2FE',
 }
 
 const smallSize: ChartSizeValues = {
@@ -186,7 +108,6 @@ export function PoolWeightChart({
   chain,
   hasLegend,
   isSmall,
-  colors = DEFAULT_POOL_WEIGHT_CHART_COLORS,
   totalLiquidity,
 }: PoolWeightChartProps) {
   const chartSizeValues = isSmall ? smallSize : normalSize
@@ -238,11 +159,11 @@ export function PoolWeightChart({
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 1,
-                  color: colors[i]?.from || defaultColor.from,
+                  color: getTokenColor(chain, token.address as Address, i).from,
                 },
                 {
                   offset: 0,
-                  color: colors[i]?.to || defaultColor.to,
+                  color: getTokenColor(chain, token.address as Address, i).to,
                 },
               ]),
             },
@@ -337,7 +258,7 @@ export function PoolWeightChart({
           />
         </Box>
       </Box>
-      {hasLegend && <PoolWeightChartLegend colors={colors} displayTokens={displayTokens} />}
+      {hasLegend && <PoolWeightChartLegend displayTokens={displayTokens} />}
     </VStack>
   )
 }
