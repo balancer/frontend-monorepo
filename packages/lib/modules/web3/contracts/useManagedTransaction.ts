@@ -47,7 +47,6 @@ export interface ManagedTransactionInput {
   enabled: boolean
   value?: bigint
   onTransactionChange: (transaction: ManagedResult) => void
-  wantsTenderlyGasEstimate?: boolean
 }
 
 export function useManagedTransaction({
@@ -60,7 +59,6 @@ export function useManagedTransaction({
   txSimulationMeta,
   enabled = true,
   value,
-  wantsTenderlyGasEstimate = false,
 }: ManagedTransactionInput) {
   const { minConfirmations } = useNetworkConfig()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -86,7 +84,8 @@ export function useManagedTransaction({
     value,
   })
 
-  const useEstimateGasHook = wantsTenderlyGasEstimate ? useTenderlyGasEstimate : useEstimateGas
+  // use tenderly gas estimate only on ethereum mainnet
+  const useEstimateGasHook = chainId === 1 ? useTenderlyGasEstimate : useEstimateGas
 
   const useEstimateGasProps = {
     ...txConfig,
