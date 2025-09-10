@@ -2,12 +2,15 @@ import { ProjectConfigBeets } from './projects/beets'
 import { ProjectConfigBalancer } from './projects/balancer'
 import { ProjectConfigCowAmm } from './projects/cow-amm'
 
-export const isBalancer = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigBalancer.projectId
-export const isBeets = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigBeets.projectId
-export const isCowAmm = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigCowAmm.projectId
+const PROJECT_CONFIGS = {
+  [ProjectConfigBalancer.projectId]: ProjectConfigBalancer,
+  [ProjectConfigBeets.projectId]: ProjectConfigBeets,
+  [ProjectConfigCowAmm.projectId]: ProjectConfigCowAmm,
+}
 
-export const PROJECT_CONFIG = isBeets
-  ? ProjectConfigBeets
-  : isCowAmm
-    ? ProjectConfigCowAmm
-    : ProjectConfigBalancer
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
+
+export const isBalancer = projectId === ProjectConfigBalancer.projectId
+export const isBeets = projectId === ProjectConfigBeets.projectId
+export const isCowAmm = projectId === ProjectConfigCowAmm.projectId
+export const PROJECT_CONFIG = projectId ? PROJECT_CONFIGS[projectId] : ProjectConfigBalancer
