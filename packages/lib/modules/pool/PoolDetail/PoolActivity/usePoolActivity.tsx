@@ -92,7 +92,7 @@ function usePoolActivityLogic() {
           item.tokens.forEach(token => {
             const tokenInfo =
               getToken(token.address, _chain) ||
-              (pool.poolTokens.find(token => token.address === token.address) as ApiToken)
+              (pool.poolTokens.find(poolToken => poolToken.address === token.address) as ApiToken)
 
             tokens.push({
               token: tokenInfo,
