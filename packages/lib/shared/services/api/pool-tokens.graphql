@@ -71,6 +71,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
       decimals
       balance
       balanceUSD
+      chain
       symbol
       weight
       isErc4626
