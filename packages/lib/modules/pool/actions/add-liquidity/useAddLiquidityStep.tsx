@@ -66,6 +66,10 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       id: addLiquidityStepId,
       stepType: 'addLiquidity',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+      },
       transaction,
       isComplete,
       onActivated: () => setIsStepActivated(true),

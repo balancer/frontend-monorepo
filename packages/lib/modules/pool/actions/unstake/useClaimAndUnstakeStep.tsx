@@ -102,6 +102,10 @@ export function useClaimAndUnstakeStep({
       id: claimAndUnstakeStepId,
       stepType: 'claimAndUnstake',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+      },
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
       onSuccess,

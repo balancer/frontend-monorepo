@@ -6,10 +6,11 @@ import { usePool } from '../../PoolProvider'
 import { useStake } from './StakeProvider'
 import StakeAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/StakeAprTooltip'
 import { useGetPoolRewards } from '../../useGetPoolRewards'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 export function StakePreview() {
   const { pool } = usePool()
-  const { stakeTxHash, quoteAmountIn, quoteAmountInUsd } = useStake()
+  const { stakeTxHash, quoteAmountIn, quoteAmountInUsd, transactionSteps } = useStake()
   const { weeklyRewards } = useGetPoolRewards(pool)
 
   return (
@@ -33,6 +34,9 @@ export function StakePreview() {
       </Card>
 
       <StakeAprTooltip pool={pool} totalUsdValue={quoteAmountInUsd} weeklyRewards={weeklyRewards} />
+      {stakeTxHash && (
+        <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
+      )}
     </VStack>
   )
 }

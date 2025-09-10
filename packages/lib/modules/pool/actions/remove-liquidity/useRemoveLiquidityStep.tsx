@@ -66,6 +66,10 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       id: removeLiquidityStepId,
       stepType: 'removeLiquidity',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+      },
       transaction,
       isComplete,
       renderAction: () => {

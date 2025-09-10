@@ -14,6 +14,7 @@ import { AddLiquidityReceiptResult } from '@repo/lib/modules/transactions/transa
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { StakingOptions } from './StakingOptions'
 import { isVebalPool } from '../../../pool.helpers'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useMemo } from 'react'
@@ -96,30 +97,33 @@ export function AddLiquiditySummary({
       </Card>
 
       {shouldShowReceipt ? (
-        <CardPopAnim key="staking-options">
-          {isVebalPool(pool.id) ? (
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="md" w="full">
-                <Text>Get extra incentives with veBAL</Text>
-                <Button
-                  onClick={() => router.push('/vebal/manage')}
-                  size="lg"
-                  variant="primary"
-                  w="full"
-                >
-                  Lock to get veBAL
-                </Button>
-              </VStack>
-            </Card>
-          ) : (
-            pool.staking && (
-              <Box pt="sm">
-                <Divider mb="md" />
-                <StakingOptions />
-              </Box>
-            )
-          )}
-        </CardPopAnim>
+        <>
+          <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
+          <CardPopAnim key="staking-options">
+            {isVebalPool(pool.id) ? (
+              <Card variant="modalSubSection">
+                <VStack align="start" spacing="md" w="full">
+                  <Text>Get extra incentives with veBAL</Text>
+                  <Button
+                    onClick={() => router.push('/vebal/manage')}
+                    size="lg"
+                    variant="primary"
+                    w="full"
+                  >
+                    Lock to get veBAL
+                  </Button>
+                </VStack>
+              </Card>
+            ) : (
+              pool.staking && (
+                <Box pt="sm">
+                  <Divider mb="md" />
+                  <StakingOptions />
+                </Box>
+              )
+            )}
+          </CardPopAnim>
+        </>
       ) : hasQuoteContext ? (
         <CardPopAnim key="price-impact-details">
           <Card p="ms" variant="modalSubSection">
