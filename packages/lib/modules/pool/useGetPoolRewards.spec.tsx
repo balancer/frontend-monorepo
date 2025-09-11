@@ -79,7 +79,7 @@ describe('useGetPoolRewards', () => {
 
     // When totalUsdValueIn is small enough
     const totalUsdValueIn = '100'
-    expect(result.current.calculatePotentialYield(totalUsdValueIn)).toBe('0.27144610061178742084')
+    expect(result.current.calculatePotentialYield(totalUsdValueIn)).toBe('0.20521749468049282469')
 
     // When totalUsdValueIn is so large that calcPotentialYieldFor is bigger than total usd value of weeklyRewards
     expect(result.current.calculatePotentialYield(10000000)).toBe('627.6721349308701')

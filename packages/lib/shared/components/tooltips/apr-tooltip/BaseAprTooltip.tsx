@@ -111,7 +111,7 @@ function BaseAprTooltip({
 
   const {
     totalBaseDisplayed,
-    extraBalAprDisplayed,
+    extraBalApr,
     yieldBearingTokensAprDisplayed,
     stakingIncentivesAprDisplayed,
     merklIncentivesAprDisplayed,
@@ -122,7 +122,6 @@ function BaseAprTooltip({
     isSwapFeePresent,
     isYieldPresent,
     isStakingPresent,
-    maxVeBalDisplayed,
     yieldBearingTokensDisplayed,
     stakingIncentivesDisplayed,
     subitemPopoverAprItemProps,
@@ -155,6 +154,8 @@ function BaseAprTooltip({
     : typeof totalBaseText === 'function'
       ? totalBaseText(hasVeBalBoost)
       : totalBaseText
+
+  const boostLabel = !vebalBoost ? '2.5x' : `${vebalBoost}x`
 
   const popoverContent = customPopoverContent || (
     <PopoverContent
@@ -330,19 +331,19 @@ function BaseAprTooltip({
           <Stack gap={0} roundedBottom="md">
             <TooltipAprItem
               {...basePopoverAprItemProps}
-              apr={extraBalAprDisplayed}
+              apr={extraBalApr}
               displayValueFormatter={usedDisplayValueFormatter}
               fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
               fontWeight={500}
               pl={6}
               pt={3}
-              title="Extra BAL (at 2.5x veBAL boost)"
+              title={`Extra BAL (at ${boostLabel} veBAL boost)`}
               tooltipText={extraBalTooltipText}
             />
             <Divider />
             <TooltipAprItem
               {...basePopoverAprItemProps}
-              apr={maxVeBalDisplayed}
+              apr={maxVeBal}
               backgroundColor="background.level3"
               boxBackground={balRewardGradient}
               displayValueFormatter={usedDisplayValueFormatter}
