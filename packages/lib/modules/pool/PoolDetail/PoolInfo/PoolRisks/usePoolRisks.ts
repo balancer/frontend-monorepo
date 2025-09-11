@@ -17,6 +17,7 @@ import {
   isV3LBP,
 } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export enum RiskKey {
   General = 'general',
@@ -60,7 +61,7 @@ export enum RiskKey {
 }
 
 export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
-  [RiskKey.General]: 'General Balancer protocol risks',
+  [RiskKey.General]: `General ${PROJECT_CONFIG.projectName} protocol risks`,
   [RiskKey.Weighted]: 'Weighted pool risks',
   [RiskKey.Stable]: 'Stable pool risks',
   [RiskKey.ComposableStable]: 'Composable stable pool risks',
@@ -89,74 +90,169 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
 }
 
 export type Risk = {
-  title: string
+  title: string | undefined
   path: string
 }
 
-function getLink(key: RiskKey, title?: string): Risk {
-  return {
-    title: title || RISK_TITLES[key] || `Unknown Risk Title - ${key}`,
-    path: `/risks#${key}`,
-  }
+export interface RiskDefinition {
+  key: RiskKey
+  title: string | undefined
+  path: string
+  condition: (pool: GqlPoolElement) => boolean
 }
 
-// Pool type risks
-const weightedRisks = getLink(RiskKey.Weighted)
-const stableRisks = getLink(RiskKey.Stable)
-// const composableRisks = getLink(
-//   RiskKey.ComposableStable,
-//   // Explicit title because RiskKey.ComposableStable and RiskKey.MetaStable share the same key (hash)
-//   'Composable Stable pool risks'
-// )
-const metaStableRisks = getLink(RiskKey.ComposableStable, RISK_TITLES[RiskKey.MetaStable])
-const boostedRisks = getLink(RiskKey.Boosted)
-const clpRisks = getLink(RiskKey.Clp)
-const arbitrumRisks = getLink(RiskKey.Arbitrum)
-const polygonRisks = getLink(RiskKey.Polygon)
-const zkevmRisks = getLink(RiskKey.Zkevm)
-const optimismRisks = getLink(RiskKey.Optimism)
-const gnosisRisks = getLink(RiskKey.Gnosis)
-const baseRisks = getLink(RiskKey.Base)
-const avalancheRisks = getLink(RiskKey.Avalanche)
-const hyperEvmRisks = getLink(RiskKey.HyperEVM)
-const mutableRisks = getLink(RiskKey.Mutable)
-const nestedPoolRisks = getLink(RiskKey.NestedPool)
-const hookRisks = getLink(RiskKey.Hook)
-const stableSurgeHookRisks = getLink(RiskKey.StableSurgeHook)
-const mevCaptureHookRisks = getLink(RiskKey.MEVCaptureHook)
-const quantAmmWeightedRisks = getLink(RiskKey.QuantAmmWeighted)
-const reclAmmRisks = getLink(RiskKey.ReclAmm)
-const liquidityBootstrappingPoolRisks = getLink(RiskKey.LiquidityBootstrappingPool)
+// Risk condition definitions
+const RISK_CONDITIONS: RiskDefinition[] = [
+  {
+    key: RiskKey.Weighted,
+    title: RISK_TITLES[RiskKey.Weighted],
+    path: `/risks#${RiskKey.Weighted}`,
+    condition: pool => isWeighted(pool.type),
+  },
+  {
+    key: RiskKey.Stable,
+    title: RISK_TITLES[RiskKey.Stable],
+    path: `/risks#${RiskKey.Stable}`,
+    condition: pool => isStable(pool.type),
+  },
+  {
+    key: RiskKey.MetaStable,
+    title: RISK_TITLES[RiskKey.MetaStable],
+    path: `/risks#${RiskKey.MetaStable}`,
+    condition: pool => isMetaStable(pool.type),
+  },
+  {
+    key: RiskKey.Clp,
+    title: RISK_TITLES[RiskKey.Clp],
+    path: `/risks#${RiskKey.Clp}`,
+    condition: pool => isGyro(pool.type),
+  },
+  {
+    key: RiskKey.Boosted,
+    title: RISK_TITLES[RiskKey.Boosted],
+    path: `/risks#${RiskKey.Boosted}`,
+    condition: pool => !!isBoosted(pool),
+  },
+  {
+    key: RiskKey.QuantAmmWeighted,
+    title: RISK_TITLES[RiskKey.QuantAmmWeighted],
+    path: `/risks#${RiskKey.QuantAmmWeighted}`,
+    condition: pool => isQuantAmmPool(pool.type),
+  },
+  {
+    key: RiskKey.ReclAmm,
+    title: RISK_TITLES[RiskKey.ReclAmm],
+    path: `/risks#${RiskKey.ReclAmm}`,
+    condition: pool => isReclAmm(pool.type),
+  },
+  {
+    key: RiskKey.LiquidityBootstrappingPool,
+    title: RISK_TITLES[RiskKey.LiquidityBootstrappingPool],
+    path: `/risks#${RiskKey.LiquidityBootstrappingPool}`,
+    condition: pool => isV3LBP(pool),
+  },
+
+  // Network risks
+  {
+    key: RiskKey.Arbitrum,
+    title: RISK_TITLES[RiskKey.Arbitrum],
+    path: `/risks#${RiskKey.Arbitrum}`,
+    condition: pool => pool.chain === GqlChain.Arbitrum,
+  },
+  {
+    key: RiskKey.Optimism,
+    title: RISK_TITLES[RiskKey.Optimism],
+    path: `/risks#${RiskKey.Optimism}`,
+    condition: pool => pool.chain === GqlChain.Optimism,
+  },
+  {
+    key: RiskKey.Polygon,
+    title: RISK_TITLES[RiskKey.Polygon],
+    path: `/risks#${RiskKey.Polygon}`,
+    condition: pool => pool.chain === GqlChain.Polygon,
+  },
+  {
+    key: RiskKey.Zkevm,
+    title: RISK_TITLES[RiskKey.Zkevm],
+    path: `/risks#${RiskKey.Zkevm}`,
+    condition: pool => pool.chain === GqlChain.Zkevm,
+  },
+  {
+    key: RiskKey.Gnosis,
+    title: RISK_TITLES[RiskKey.Gnosis],
+    path: `/risks#${RiskKey.Gnosis}`,
+    condition: pool => pool.chain === GqlChain.Gnosis,
+  },
+  {
+    key: RiskKey.Base,
+    title: RISK_TITLES[RiskKey.Base],
+    path: `/risks#${RiskKey.Base}`,
+    condition: pool => pool.chain === GqlChain.Base,
+  },
+  {
+    key: RiskKey.Avalanche,
+    title: RISK_TITLES[RiskKey.Avalanche],
+    path: `/risks#${RiskKey.Avalanche}`,
+    condition: pool => pool.chain === GqlChain.Avalanche,
+  },
+  {
+    key: RiskKey.HyperEVM,
+    title: RISK_TITLES[RiskKey.HyperEVM],
+    path: `/risks#${RiskKey.HyperEVM}`,
+    condition: pool => pool.chain === GqlChain.Hyperevm,
+  },
+
+  // Hook risks
+  {
+    key: RiskKey.Hook,
+    title: RISK_TITLES[RiskKey.Hook],
+    path: `/risks#${RiskKey.Hook}`,
+    condition: pool => hasHooks(pool),
+  },
+  {
+    key: RiskKey.StableSurgeHook,
+    title: RISK_TITLES[RiskKey.StableSurgeHook],
+    path: `/risks#${RiskKey.StableSurgeHook}`,
+    condition: pool => hasHookType(pool, GqlHookType.StableSurge),
+  },
+  {
+    key: RiskKey.MEVCaptureHook,
+    title: RISK_TITLES[RiskKey.MEVCaptureHook],
+    path: `/risks#${RiskKey.MEVCaptureHook}`,
+    condition: pool => hasHookType(pool, GqlHookType.MevTax),
+  },
+
+  // Feature risks
+  {
+    key: RiskKey.NestedPool,
+    title: RISK_TITLES[RiskKey.NestedPool],
+    path: `/risks#${RiskKey.NestedPool}`,
+    condition: pool => hasNestedPools(pool),
+  },
+  {
+    key: RiskKey.Mutable,
+    title: RISK_TITLES[RiskKey.Mutable],
+    path: `/risks#${RiskKey.Mutable}`,
+    condition: pool => isMutable(pool),
+  },
+]
 
 export function getPoolRisks(pool: GqlPoolElement): Risk[] {
-  const result: Risk[] = []
+  const applicableRisks = RISK_CONDITIONS.filter(risk => risk.condition(pool))
 
-  if (isWeighted(pool.type)) result.push(weightedRisks)
-  if (isStable(pool.type)) result.push(stableRisks)
-  //   if (isComposableStable(pool.poolType)) result.push(composableRisks)
-  if (isMetaStable(pool.type)) result.push(metaStableRisks)
-  if (isGyro(pool.type)) result.push(clpRisks)
-  if (isBoosted(pool)) result.push(boostedRisks)
-  if (isQuantAmmPool(pool.type)) result.push(quantAmmWeightedRisks)
-  if (isReclAmm(pool.type)) result.push(reclAmmRisks)
-  if (isV3LBP(pool)) result.push(liquidityBootstrappingPoolRisks)
-  if (pool.chain === GqlChain.Arbitrum) result.push(arbitrumRisks)
-  if (pool.chain === GqlChain.Optimism) result.push(optimismRisks)
-  if (pool.chain === GqlChain.Polygon) result.push(polygonRisks)
-  if (pool.chain === GqlChain.Zkevm) result.push(zkevmRisks)
-  if (pool.chain === GqlChain.Gnosis) result.push(gnosisRisks)
-  if (pool.chain === GqlChain.Base) result.push(baseRisks)
-  if (pool.chain === GqlChain.Avalanche) result.push(avalancheRisks)
-  if (pool.chain === GqlChain.Hyperevm) result.push(hyperEvmRisks)
-  if (hasNestedPools(pool)) result.push(nestedPoolRisks)
-  if (hasHooks(pool)) result.push(hookRisks)
-  if (hasHookType(pool, GqlHookType.StableSurge)) result.push(stableSurgeHookRisks)
-  if (hasHookType(pool, GqlHookType.MevTax)) result.push(mevCaptureHookRisks)
-  if (isMutable(pool)) result.push(mutableRisks)
+  // Always add general risk
+  const generalRisk: Risk = {
+    title: RISK_TITLES[RiskKey.General],
+    path: `/risks#${RiskKey.General}`,
+  }
 
-  result.push(getLink(RiskKey.General))
-
-  return result
+  return [
+    generalRisk,
+    ...applicableRisks.map(risk => ({
+      title: risk.title,
+      path: risk.path,
+    })),
+  ]
 }
 
 function isMutable(pool: GqlPoolElement) {
