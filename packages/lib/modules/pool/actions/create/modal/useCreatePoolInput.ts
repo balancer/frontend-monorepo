@@ -3,6 +3,7 @@ import { TokenType, CreatePoolInput } from '@balancer/sdk'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { parseUnits, zeroAddress } from 'viem'
 import { PERCENTAGE_DECIMALS } from '../constants'
+import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
 
 export function useCreatePoolInput(chainId: number) {
   const {
@@ -22,6 +23,11 @@ export function useCreatePoolInput(chainId: number) {
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
   const isStablePool = validatePoolType.isStablePool(poolType)
 
+  const chain = getGqlChain(chainId)
+  const { tokens } = getNetworkConfig(chain)
+  const nativeAsset = tokens.nativeAsset.address
+  const wNativeAsset = tokens.addresses.wNativeAsset
+
   const createPoolInput = {
     chainId,
     protocolVersion: 3 as const,
@@ -37,7 +43,7 @@ export function useCreatePoolInput(chainId: number) {
     ...(isStablePool && { amplificationParameter: BigInt(amplificationParameter) }),
     tokens: poolTokens.map(({ address, rateProvider, weight, paysYieldFees }) => {
       return {
-        address,
+        address: address === nativeAsset ? wNativeAsset : address,
         tokenType: rateProvider === zeroAddress ? TokenType.STANDARD : TokenType.TOKEN_WITH_RATE,
         rateProvider,
         paysYieldFees,
