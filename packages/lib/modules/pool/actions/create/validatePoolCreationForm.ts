@@ -79,6 +79,10 @@ export const validatePoolType = {
   isStableSurgePool: (poolType: SupportedPoolTypes) => {
     return poolType === PoolType.StableSurge
   },
+
+  isHyperSurgePool: (poolType: SupportedPoolTypes) => {
+    return poolType === PoolType.HyperSurge
+  }
 }
 
 export const validatePoolSettings = {

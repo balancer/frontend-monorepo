@@ -19,6 +19,7 @@ export function LiquidityManagement() {
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
   const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
+  const isHyperSurgePool = validatePoolType.isHyperSurgePool(poolType)
 
   useEffect(() => {
     // if contract has this flag set to true, enforce `disableUnbalancedLiquidity: true` to avoid tx revert
@@ -26,12 +27,12 @@ export function LiquidityManagement() {
       poolCreationForm.setValue('disableUnbalancedLiquidity', true)
     }
     // the stable surge pool factory only supports `disableUnbalancedLiquidity: false`
-    if (isStableSurgePool) {
+    if (isStableSurgePool || isHyperSurgePool) {
       poolCreationForm.setValue('disableUnbalancedLiquidity', false)
     }
-  }, [hookFlags, isStableSurgePool])
+  }, [hookFlags, isStableSurgePool, isHyperSurgePool, poolCreationForm])
 
-  const isDisabled = isStableSurgePool || hookFlags?.enableHookAdjustedAmounts
+  const isDisabled = isStableSurgePool || isHyperSurgePool || hookFlags?.enableHookAdjustedAmounts
 
   return (
     <VStack align="start" spacing="md" w="full">

@@ -53,6 +53,7 @@ export enum RiskKey {
   NestedPool = 'nested-pools',
   Hook = 'hooks-risk',
   StableSurgeHook = 'stablesurge-hook',
+  HyperSurgeHook = 'hypersurge-hook',
   MEVCaptureHook = 'mevcapture-hook',
   QuantAmmWeighted = 'btf',
   ReclAmm = 'reclamm',
@@ -82,6 +83,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.NestedPool]: 'Nested pool risks',
   [RiskKey.Hook]: 'Hook risks',
   [RiskKey.StableSurgeHook]: 'StableSurge hook risks',
+  [RiskKey.HyperSurgeHook]: 'HyperSurge hook risks',
   [RiskKey.MEVCaptureHook]: 'MEV Capture hook risks',
   [RiskKey.QuantAmmWeighted]: 'BTF pool risks',
   [RiskKey.ReclAmm]: 'reCLAMM pool risks',
@@ -123,6 +125,7 @@ const mutableRisks = getLink(RiskKey.Mutable)
 const nestedPoolRisks = getLink(RiskKey.NestedPool)
 const hookRisks = getLink(RiskKey.Hook)
 const stableSurgeHookRisks = getLink(RiskKey.StableSurgeHook)
+const hyperSurgeHookRisks = getLink(RiskKey.HyperSurgeHook)
 const mevCaptureHookRisks = getLink(RiskKey.MEVCaptureHook)
 const quantAmmWeightedRisks = getLink(RiskKey.QuantAmmWeighted)
 const reclAmmRisks = getLink(RiskKey.ReclAmm)
@@ -151,6 +154,7 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (hasNestedPools(pool)) result.push(nestedPoolRisks)
   if (hasHooks(pool)) result.push(hookRisks)
   if (hasHookType(pool, GqlHookType.StableSurge)) result.push(stableSurgeHookRisks)
+  if (hasHookType(pool, GqlHookType.HyperSurge)) result.push(hyperSurgeHookRisks)
   if (hasHookType(pool, GqlHookType.MevTax)) result.push(mevCaptureHookRisks)
   if (isMutable(pool)) result.push(mutableRisks)
 

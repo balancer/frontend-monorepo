@@ -58,7 +58,7 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
       ...params,
       chainId,
       blockNumber,
-      hasStableSurgeHook: hasStableSurgeHook(pool),
+      hasStableSurgeHook: hasStableSurgeHook(pool),//TODO CH
     }),
     ...onlyExplicitRefetch,
   })

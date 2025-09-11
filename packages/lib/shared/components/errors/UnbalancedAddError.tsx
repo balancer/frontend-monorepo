@@ -78,7 +78,9 @@ export function getErrorLabels(
   } else if (isPoolSurgingError(error.message, !!pool && hasStableSurgeHook(pool))) {
     errorTitle = 'Pool is surging'
     errorMessage = 'Flexible adds are disabled when a pool with stable surge hook is surging.'
-  } else if (isInvariantRatioAboveMinSimulationErrorMessage(error.message)) {
+  } 
+  //TODO CH
+  else if (isInvariantRatioAboveMinSimulationErrorMessage(error.message)) {
     errorTitle = 'Amount is below pool limits'
   } else if (isInvariantRatioPIErrorMessage(error.message)) {
     errorTitle = 'Unknown price impact'

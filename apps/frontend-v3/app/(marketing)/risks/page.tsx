@@ -103,6 +103,9 @@ export default function Privacy() {
                         <Link href="risks#stablesurge-hook">StableSurge Hook</Link>
                       </li>
                       <li>
+                        <Link href="risks#hypersurge-hook">HyperSurge Hook</Link>
+                      </li>
+                      <li>
                         <Link href="risks#mevcapture-hook">MEV Capture Hook</Link>
                       </li>
                       <li>
@@ -1330,7 +1333,66 @@ export default function Privacy() {
                   </ul>
                 </div>
               </FadeInOnView>
-
+              <FadeInOnView>
+                <div className="subsection">
+                  <h4 className="anchor" id="hypersurge-hook">
+                    HyperSurge Hook
+                  </h4>
+                  <p>
+                    If a pool’s implied price deviates beyond a configured threshold from an external reference,
+                    a surge is initiated, resulting in an increasing tax on trades that push the pool further away
+                    from that reference. Conversely, liquidity providers who maintain exposure in the pool earn an
+                    increased fee, which can lead to higher returns on their position during periods of volatility.
+                  </p>
+                  <p>
+                    The directional fee nature of the HyperSurge hook only charges the increased fee on the side
+                    that worsens the deviation (often referred to as &quot;noise&quot;), while trades that bring
+                    the pool closer to the external reference (i.e., arbitrage that improves alignment) are
+                    charged the base fee or a separately tuned, typically lower, fee schedule. This aligns the
+                    incentives of liquidity providers and the project entity, which inherently wants its token to
+                    track its intended price as closely as possible.
+                  </p>
+                  <p>
+                    HyperSurge introduces oracle-anchored, dynamic swap fees designed to protect price alignment,
+                    but it may also impact the risk profile of a pool. Please also refer to the{" "}
+                    <Link href="risks#hooks-risk">
+                      <span>Hooks</span>
+                    </Link>{" "}
+                    risk section and other{" "}
+                    <Link href="risks#general">
+                      <span>General</span>
+                    </Link>{" "}
+                    risks.
+                  </p>
+                  <p>
+                    HyperSurge pools rely on external price oracles for volatile assets, which is an evolving
+                    design space under active experimentation. LPs are free to join at their own risk, but these
+                    pools can leak real value (permanent loss), and the APR shown in calculations may not be an
+                    accurate reflection of realized returns.
+                  </p>
+                  <ul>
+                    <li>
+                      Dynamic fee volatility (two directions): fees are not fixed and can change significantly
+                      based on deviation from the external reference, market volatility, and the specific
+                      configuration of HyperSurge parameters. You may encounter unexpectedly high fees—especially
+                      during market stress or when the pool is far off-target. While fees can be lower at times,
+                      there is no guarantee of consistency, and fees can ramp quickly.
+                    </li>
+                    <li>
+                      Parameter sensitivity: the performance of HyperSurge depends on correct configuration of its
+                      thresholds, caps, and maximum fees for both &quot;noise&quot; and &quot;arbitrage&quot;
+                      directions. Misconfiguration can over-tax beneficial arbitrage (slowing convergence),
+                      under-tax harmful trades (weakening defense), or even lead to instability. Changes to these
+                      parameters can significantly alter the pool&apos;s behavior.
+                    </li>
+                    <li>
+                      Rate provider / oracle risk: inaccurate, stale, or manipulated oracle data can lead to
+                      inappropriate fee adjustments and potential losses. Missing prices may cause the system to
+                      reject swaps. 
+                    </li>
+                  </ul>
+                </div>
+              </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
                   <h4 className="anchor" id="mevcapture-hook">

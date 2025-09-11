@@ -130,6 +130,7 @@ export type PoolTagType = (typeof poolTagFilters)[number]
 
 export const poolHookTagFilters = [
   'HOOKS_STABLESURGE',
+  'HOOKS_HYPERSURGE',
   'HOOKS_MEVCAPTURE',
   'HOOKS_EXITFEE',
   'HOOKS_FEETAKING',

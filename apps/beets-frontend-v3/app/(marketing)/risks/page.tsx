@@ -1164,7 +1164,82 @@ export default function Privacy() {
                   </ul>
                 </div>
               </FadeInOnView>
-
+              <FadeInOnView>
+                <div className="subsection">
+                  <h4 className="anchor" id="hypersurge-hook">
+                    HyperSurge Hook
+                  </h4>
+                  <p>
+                    HyperSurge introduces dynamic, directional swap fees based on the pool’s deviation from an
+                    external reference price. When trades push the pool further from the external price
+                    (“noise”), the hook escalates fees on that direction; when trades bring the pool back
+                    toward the reference price (“arbitrage”), a separate parameter set applies. In both cases,
+                    liquidity providers who remain in the pool earn higher fees during volatile conditions.
+                  </p>
+                  <p>
+                    Unlike StableSurge, which measures internal balance imbalance only, HyperSurge measures
+                    the <em>max pairwise</em> deviation between pool-implied prices and an external oracle
+                    and then ramps fees linearly from a configurable threshold up to a cap. The arbitrage
+                    direction intentionally uses the <em>pre-trade</em> deviation to discourage free rides on
+                    large gaps while still allowing fees to decay as the pool converges to the oracle.
+                  </p>
+                  <p>
+                    HyperSurge’s oracle-anchored, two-sided design can strengthen peg defense, but it also
+                    changes the risk profile of a pool. Please also refer to the{" "}
+                    <Link href="risks#hooks-risk">
+                      <span>Hooks</span>
+                    </Link>{" "}
+                    risk section and other{" "}
+                    <Link href="risks#general">
+                      <span>General</span>
+                    </Link>{" "}
+                    risks.
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Dynamic fee volatility (two regimes):</strong> Fees can change abruptly based on
+                      whether a trade increases (“noise”) or decreases (“arbitrage”) deviation, and on how far
+                      deviation sits between the threshold and the cap. Sudden market moves or thin liquidity
+                      can produce unexpectedly high fees in either regime. While fees may also be lower at times,
+                      they are not guaranteed to be stable and can ramp quickly.
+                    </li>
+                    <li>
+                      <strong>Oracle/provider risk:</strong> The hook relies on external price data. Inaccurate,
+                      stale, or manipulated oracle values can cause inappropriate fee spikes or insufficient
+                      protection, potentially leading to losses. If a price is unavailable (e.g., zero),
+                      HyperSurge falls back to the pool’s static fee, which removes surge protection until
+                      pricing resumes. 
+                    </li>
+                    <li>
+                      <strong>Parameter sensitivity & dual-track tuning:</strong> Pool behavior depends on
+                      six key parameters (threshold, cap deviation, and max surge fee for each of the noise and
+                      arbitrage directions). Misconfiguration can over-tax beneficial arbitrage (reducing
+                      convergence), under-tax harmful noise (weakening defense), or create narrow/no-arb windows.
+                      Changes to any parameter can materially alter pool behavior.
+                    </li>
+                    <li>
+                      <strong>Mapping & configuration risk:</strong> Each token must be correctly mapped to its
+                      external price index and precision. Wrong pair indices, bad divisors, or missing prices can
+                      degrade protection, misprice fees, or revert configuration changes.
+                    </li>
+                    <li>
+                      <strong>Cross-asset spillover (max-pair deviation):</strong> The hook taxes based on the
+                      <em>largest</em> pairwise deviation across all tokens. An extreme outlier in one token can
+                      elevate fees for trades that involve different tokens, affecting UX and execution quality.
+                    </li>
+                    <li>
+                      <strong>Liquidity management constraints:</strong> Proportional adds/removes are allowed,
+                      but non-proportional changes that <em>worsen</em> deviation and end above the threshold
+                      are blocked. This can interfere with LP strategies that depend on targeted rebalancing.
+                    </li>
+                    <li>
+                      <strong>MEV & classification edges:</strong> Fee classification (noise vs. arbitrage) and
+                      size depend on pre/post-trade deviations. Around thresholds, rapid sequences of swaps or
+                      MEV can flip classification and fees in short windows, impacting execution costs.
+                    </li>
+                  </ul>
+                </div>
+              </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
                   <h4 className="anchor" id="concentrated-liquidity-pools">

@@ -60,6 +60,7 @@ export function PoolCreationModal({
   const poolTypeToGqlPoolType = {
     [PoolType.Stable]: GqlPoolType.Stable,
     [PoolType.StableSurge]: GqlPoolType.Stable,
+    [PoolType.HyperSurge]: GqlPoolType.Weighted,
     [PoolType.Weighted]: GqlPoolType.Weighted,
   }
 

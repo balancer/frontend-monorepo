@@ -19,6 +19,7 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   [PoolType.Weighted]: { label: 'Weighted', maxTokens: 8 },
   [PoolType.Stable]: { label: 'Stable', maxTokens: 5 },
   [PoolType.StableSurge]: { label: 'Stable Surge', maxTokens: 5 },
+  [PoolType.HyperSurge]: { label: 'Hyper Surge', maxTokens: 8 },
   // [PoolType.GyroE]: { label: 'Gyro Elliptic CLP', maxTokens: 2 },
   // [PoolType.ReClamm]: { label: 'reClamm', maxTokens: 2 },
 }
@@ -89,6 +90,10 @@ export const SWAP_FEE_PERCENTAGE_OPTIONS: Record<
   ],
   [PoolType.Stable]: STABLE_SWAP_FEE_PERCENTAGE_OPTIONS,
   [PoolType.StableSurge]: STABLE_SWAP_FEE_PERCENTAGE_OPTIONS,
+  [PoolType.HyperSurge]: [//TODO CH check
+    { value: '0.30', tip: 'Best for most hyper surge pairs' },
+    { value: '1.00', tip: 'Best for exotic pairs' },
+  ],
 }
 
 const MIN_SWAP_FEE_WEIGHTED = 0.001
@@ -99,6 +104,7 @@ export const MIN_SWAP_FEE_PERCENTAGE = {
   [PoolType.Weighted]: MIN_SWAP_FEE_WEIGHTED,
   [PoolType.Stable]: MIN_SWAP_FEE_STABLE,
   [PoolType.StableSurge]: MIN_SWAP_FEE_STABLE,
+  [PoolType.HyperSurge]: MIN_SWAP_FEE_WEIGHTED,
 }
 
 export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
