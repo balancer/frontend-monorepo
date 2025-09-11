@@ -919,7 +919,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         control: {
           border: '1px solid',
           bg: 'background.level0',
-          borderColor: 'border.base',
+          borderColor: 'font.secondary',
           _checked: {
             bg: 'background.highlight',
             borderColor: 'border.highlight',
@@ -946,6 +946,14 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             borderColor: 'border.base',
             opacity: '0.5',
           },
+        },
+        label: {
+          color: 'font.primary',
+          fontWeight: 'medium',
+          letterSpacing: '-0.25px',
+          lineHeight: '1.3',
+          fontSize: ['sm', 'md'],
+          textWrap: 'pretty',
         },
       },
     },
@@ -974,7 +982,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         control: {
           border: '1px solid',
           bg: 'background.level0',
-          borderColor: 'border.base',
+          borderColor: 'font.secondary',
           _checked: {
             bg: 'background.highlight',
             borderColor: 'border.highlight',
@@ -1001,6 +1009,14 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             borderColor: 'border.base',
             opacity: '0.5',
           },
+        },
+        label: {
+          color: 'font.primary',
+          fontWeight: 'medium',
+          letterSpacing: '-0.25px',
+          lineHeight: '1.3',
+          fontSize: ['sm', 'md'],
+          textWrap: 'pretty',
         },
       },
     },
