@@ -192,9 +192,9 @@ export function getTotalAprRaw(aprItems: GqlPoolAprItem[], vebalBoost?: string):
 const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Weighted]: 'Weighted',
   [GqlPoolType.Element]: 'Element',
-  [GqlPoolType.Gyro]: 'Gyro 2-CLP',
-  [GqlPoolType.Gyro3]: 'Gyro 3-CLP',
-  [GqlPoolType.Gyroe]: 'Gyro E-CLP',
+  [GqlPoolType.Gyro]: '2-CLP',
+  [GqlPoolType.Gyro3]: '3-CLP',
+  [GqlPoolType.Gyroe]: 'E-CLP',
   [GqlPoolType.Investment]: 'Managed',
   [GqlPoolType.LiquidityBootstrapping]: 'LBP',
   [GqlPoolType.MetaStable]: 'Stable',
