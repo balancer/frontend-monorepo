@@ -35,7 +35,7 @@ export type SentryMetadata = {
 }
 
 type EdgeCasePoolMetaParams = {
-  hasStableSurgeHook?: boolean
+  hasSurgeHook?: boolean
 }
 
 type AddMetaParams = AddLiquidityParams & {

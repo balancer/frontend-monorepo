@@ -10,7 +10,7 @@ import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
 import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
 import { sentryMetaForRemoveLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
 import { Address } from 'viem'
-import { hasStableSurgeHook } from '../../../pool.helpers'
+import { hasSurgeHook } from '../../../pool.helpers'
 import { usePool } from '../../../PoolProvider'
 
 export type RemoveLiquiditySimulationQueryResult = ReturnType<
@@ -66,7 +66,7 @@ export function useRemoveLiquiditySimulationQuery({
     meta: sentryMetaForRemoveLiquidityHandler('Error in remove liquidity simulation query', {
       ...params,
       chainId,
-      hasStableSurgeHook: hasStableSurgeHook(pool),
+      hasSurgeHook: hasSurgeHook(pool),
     }),
     ...onlyExplicitRefetch,
   })

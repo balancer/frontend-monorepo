@@ -303,8 +303,9 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
-export function hasStableSurgeHook(pool: Pool): boolean {
+export function hasSurgeHook(pool: Pool): boolean {
   return hasHookType(pool, GqlHookType.StableSurge)
+  // TODO: add more surge hook types
 }
 
 export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {

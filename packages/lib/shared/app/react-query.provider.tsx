@@ -112,7 +112,7 @@ export function ReactQueryClientProvider({ children }: { children: ReactNode | R
  */
 function shouldIgnoreEdgeCaseError(error: Error, sentryMeta: SentryMetadata): boolean {
   const metaParams = sentryMeta?.context?.extra?.params as Record<string, any>
-  const hasStableSurgeHook = metaParams?.hasStableSurgeHook
-  if (isPoolSurgingError(error.message, hasStableSurgeHook)) return true
+  const hasSurgeHook = metaParams?.hasSurgeHook
+  if (isPoolSurgingError(error.message, hasSurgeHook)) return true
   return false
 }
