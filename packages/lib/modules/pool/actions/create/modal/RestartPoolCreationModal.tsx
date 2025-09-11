@@ -54,7 +54,7 @@ export function RestartPoolCreationModal({
         {...(isAbsolutePosition && {
           position: 'absolute',
           right: '-240px',
-          top: '420px',
+          top: '-40px',
           width: '250px',
         })}
       >

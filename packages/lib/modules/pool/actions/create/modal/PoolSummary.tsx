@@ -45,26 +45,29 @@ function PoolTitleCard() {
     <Card variant="modalSubSection">
       <VStack align="start" spacing="md">
         <Text color="font.secondary">{symbol}</Text>
-        <HStack>
+        <HStack flexWrap="wrap" gap="sm">
           <NetworkIcon bg="background.level4" chain={network} shadow="lg" size={8} />
+
           {poolTokens.map((token, idx) => (
-            <Card
-              bg="background.level4"
-              key={idx}
-              paddingY="sm"
-              rounded="full"
-              variant="subSection"
-            >
-              <HStack key={token.address}>
-                <TokenIcon
-                  address={token.address}
-                  alt={token.address || ''}
-                  chain={network}
-                  size={20}
-                />
-                <Text>{token.data?.symbol}</Text>
-              </HStack>
-            </Card>
+            <Box flexShrink={0} key={idx}>
+              <Card
+                bg="background.level4"
+                key={idx}
+                paddingY="sm"
+                rounded="full"
+                variant="subSection"
+              >
+                <HStack key={token.address}>
+                  <TokenIcon
+                    address={token.address}
+                    alt={token.address || ''}
+                    chain={network}
+                    size={20}
+                  />
+                  <Text>{token.data?.symbol}</Text>
+                </HStack>
+              </Card>
+            </Box>
           ))}
         </HStack>
       </VStack>
