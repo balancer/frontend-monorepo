@@ -20,7 +20,7 @@ import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
 import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export function AcceptPoliciesModal() {
@@ -29,10 +29,8 @@ export function AcceptPoliciesModal() {
   const { isBlocked, isLoading, isConnected, userAddress } = useUserAccount()
   const [isChecked, setIsChecked] = useState(false)
   const { disconnect } = useDisconnect()
-  const {
-    projectName,
-    options: { showVeBal },
-  } = PROJECT_CONFIG
+
+  const { projectName } = PROJECT_CONFIG
 
   const isAddressInAcceptedPolicies =
     acceptedPolicies.includes(userAddress.toLowerCase()) ||
@@ -77,7 +75,7 @@ export function AcceptPoliciesModal() {
               onChange={e => setIsChecked(e.target.checked)}
               size="lg"
             >
-              {showVeBal ? (
+              {isBalancer ? (
                 <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
                   By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
                   <Link as={NextLink} href="/terms-of-use">
@@ -101,9 +99,17 @@ export function AcceptPoliciesModal() {
                   </Link>
                   .
                 </Box>
-              ) : (
+              ) : isBeets ? (
                 <Box color="font.primary" fontSize="md" mt="-3px">
                   By connecting my wallet, I agree to Beets&apos;{' '}
+                  <Link as={NextLink} href="/terms-of-service">
+                    Terms of Service
+                  </Link>
+                  .
+                </Box>
+              ) : (
+                <Box color="font.primary" fontSize="md" mt="-3px">
+                  By connecting my wallet, I agree to Cow&apos;s{' '}
                   <Link as={NextLink} href="/terms-of-service">
                     Terms of Service
                   </Link>

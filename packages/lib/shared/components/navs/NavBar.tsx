@@ -17,6 +17,7 @@ import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
+import { isCowAmm } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   mobileNav?: ReactNode
@@ -81,7 +82,7 @@ function NavLinks({
         </Box>
       ))}
       {customLinks}
-      {(isDev || isStaging) && (
+      {!isCowAmm && (isDev || isStaging) && (
         <>
           <Box as={motion.div} variants={fadeIn}>
             <Link
