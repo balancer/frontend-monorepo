@@ -31,6 +31,7 @@ import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 import { PoolMetadata } from './metadata/getPoolsMetadata'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /**
  * METHODS
@@ -340,7 +341,6 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   const reasons: string[] = []
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) reasons.push('Adds are blocked for all V3 pools')
-
   if (isLBP(pool.type)) reasons.push('LBP pool')
   if (isManaged(pool.type)) reasons.push('Managed pools are not compatible')
   if (pool.dynamicData.isPaused) reasons.push('Paused pool')
@@ -348,6 +348,12 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
 
   // reason for blocking in custom scenarios eg. maBEETS
   if (isMaBeetsPool(pool.id)) reasons.push('Please manage your liquidity on the maBEETS page')
+
+  if (isNotSupported(pool)) {
+    reasons.push(
+      `This pool type is not currently supported in the ${PROJECT_CONFIG.projectName} UI`
+    )
+  }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
 
