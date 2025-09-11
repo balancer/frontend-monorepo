@@ -18,6 +18,10 @@ export function useTenderlyGasEstimate(txConfig?: TxConfig) {
     queryFn: async () => {
       if (!txConfig) throw new Error('txConfig is required')
 
+      if (process.env.NODE_ENV === 'test') {
+        return '0'
+      }
+
       const data = encodeFunctionData({
         abi: txConfig.abi,
         functionName: txConfig.functionName,
