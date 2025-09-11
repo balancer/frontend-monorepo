@@ -40,8 +40,9 @@ export function useInitializeLbpInput() {
   const isMissingDecimal = !launchTokenDecimals || !reserveTokenDecimals
   const isMissingSymbol = !launchTokenSymbol || !reserveTokenSymbol
 
-  if (isLoading || isMissingDecimal || isMissingSymbol)
+  if (isLoading || isMissingDecimal || isMissingSymbol) {
     return { amountsIn: [], minBptAmountOut, chainId, wethIsEth }
+  }
 
   const launchTokenAmountIn: InputAmountWithSymbol = {
     address: launchTokenAddress as Address,
