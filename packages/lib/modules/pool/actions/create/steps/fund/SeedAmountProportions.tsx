@@ -18,7 +18,9 @@ const WEIGHT_COLORS = [
   'yellow.300',
 ]
 
-export function SeedAmountProportions({ variant = 'level3' }: { variant?: string }) {
+type Props = { variant?: string; displayAlert?: boolean }
+
+export function SeedAmountProportions({ variant = 'level3', displayAlert = false }: Props) {
   const { poolTokens, poolType } = usePoolCreationForm()
   const { usdValueForTokenAddress } = useTokens()
 
@@ -47,12 +49,12 @@ export function SeedAmountProportions({ variant = 'level3' }: { variant?: string
 
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 
-  const showRektAlert =
+  const isGoingToGetRekt =
     isWeightedPool && !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
 
   return (
     <VStack spacing="md" w="full">
-      {showRektAlert && (
+      {displayAlert && isGoingToGetRekt && (
         <BalAlert
           content="If your deposit amounts don’t match the target pool weights, you risk losing funds to arbitrageurs. To avoid this, seed the pool with amounts in proportion to the target weights."
           status="error"
@@ -60,7 +62,13 @@ export function SeedAmountProportions({ variant = 'level3' }: { variant?: string
         />
       )}
 
-      <Card shadow="sm" variant={variant}>
+      <Card
+        bg={isGoingToGetRekt ? '#EB3C3C0D' : 'background.level2'}
+        border="1px solid"
+        borderColor={isGoingToGetRekt ? 'red.400' : 'transparent'}
+        shadow="sm"
+        variant={variant}
+      >
         <CardBody>
           <VStack spacing="md">
             <WeightsPercentageLabels

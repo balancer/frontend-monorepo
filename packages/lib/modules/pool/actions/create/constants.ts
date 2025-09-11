@@ -1,19 +1,21 @@
 import { PoolType, STABLE_POOL_CONSTRAINTS } from '@balancer/sdk'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
-import { zeroAddress, Address } from 'viem'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { type ProjectConfig } from '@repo/lib/config/config.types'
+import { zeroAddress } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { SupportedPoolTypes, PoolTypeDetails, PoolCreationToken, PoolCreationForm } from './types'
 
-export type SupportedPoolTypes = PoolType.Stable | PoolType.Weighted | PoolType.StableSurge
-// | PoolType.GyroE
-// | PoolType.ReClamm
+export const PERCENTAGE_DECIMALS = 16
+export const MAX_POOL_NAME_LENGTH = 32
+export const MAX_POOL_SYMBOL_LENGTH = 26
+export const MAX_SWAP_FEE_PERCENTAGE = 10
+export const REQUIRED_TOTAL_WEIGHT = 100
+export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
+export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
+export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 
-type PoolTypeDetails = {
-  label: string
-  maxTokens: number
-}
+const MIN_SWAP_FEE_WEIGHTED = 0.001
+const MIN_SWAP_FEE_STABLE = 0.0001
 
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   [PoolType.Weighted]: { label: 'Weighted', maxTokens: 8 },
@@ -48,8 +50,6 @@ export const WEIGHTED_POOL_STRUCTURES = [
   WeightedPoolStructure.Custom,
 ] as const
 
-export const REQUIRED_TOTAL_WEIGHT = 100
-
 export enum RateProviderOption {
   Verified = 'verified',
   Custom = 'custom',
@@ -71,9 +71,6 @@ export const RATE_PROVIDER_RADIO_OPTIONS = [
   },
 ] as const
 
-export const MAX_POOL_NAME_LENGTH = 32
-export const MAX_POOL_SYMBOL_LENGTH = 26
-
 const STABLE_SWAP_FEE_PERCENTAGE_OPTIONS = [
   { value: '0.01', tip: 'Best for super stable pairs' },
   { value: '0.05', tip: 'Best for stable-ish pairs' },
@@ -91,47 +88,10 @@ export const SWAP_FEE_PERCENTAGE_OPTIONS: Record<
   [PoolType.StableSurge]: STABLE_SWAP_FEE_PERCENTAGE_OPTIONS,
 }
 
-const MIN_SWAP_FEE_WEIGHTED = 0.001
-const MIN_SWAP_FEE_STABLE = 0.0001
-export const MAX_SWAP_FEE_PERCENTAGE = 10
-
 export const MIN_SWAP_FEE_PERCENTAGE = {
   [PoolType.Weighted]: MIN_SWAP_FEE_WEIGHTED,
   [PoolType.Stable]: MIN_SWAP_FEE_STABLE,
   [PoolType.StableSurge]: MIN_SWAP_FEE_STABLE,
-}
-
-export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
-
-export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
-export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
-
-export type PoolCreationToken = {
-  address: Address | undefined
-  rateProvider: Address | '' // infer TokenType based on if RP is zero address or contract address
-  paysYieldFees: boolean
-  weight?: string // human weight input
-  amount: string // human amount input
-  data?: ApiToken
-}
-
-export type PoolCreationForm = {
-  protocol: ProjectConfig['projectId']
-  network: GqlChain
-  weightedPoolStructure: WeightedPoolStructure
-  poolType: SupportedPoolTypes
-  poolTokens: PoolCreationToken[]
-  name: string
-  symbol: string
-  swapFeeManager: Address | ''
-  pauseManager: Address | ''
-  swapFeePercentage: string
-  amplificationParameter: string
-  poolHooksContract: Address | ''
-  enableDonation: boolean
-  disableUnbalancedLiquidity: boolean
-  hasAcceptedTokenWeightsRisk: boolean
-  hasAcceptedPoolCreationRisk: boolean
 }
 
 export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {

@@ -6,6 +6,21 @@ import { validatePoolType } from '../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 
 export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) {
+  return (
+    <Card opacity={isBeforeStep ? 0.5 : 1}>
+      <CardHeader>
+        <Heading size="md">Details</Heading>
+      </CardHeader>
+      <CardBody>
+        <VStack spacing="md">
+          <PoolDetailsContent isBeforeStep={isBeforeStep} />
+        </VStack>
+      </CardBody>
+    </Card>
+  )
+}
+
+export function PoolDetailsContent({ isBeforeStep }: { isBeforeStep?: boolean }) {
   const {
     network,
     name,
@@ -55,21 +70,10 @@ export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) 
     'Allow donations': enableDonation ? 'Yes' : 'No',
   }
 
-  return (
-    <Card opacity={isBeforeStep ? 0.5 : 1}>
-      <CardHeader>
-        <Heading size="md">Details</Heading>
-      </CardHeader>
-      <CardBody>
-        <VStack spacing="md">
-          {Object.entries(poolDetailsMap).map(([label, value]) => (
-            <HStack align="start" justify="space-between" key={label} spacing="lg" w="full">
-              <Text color="font.secondary">{label}</Text>
-              <Box color="font.secondary">{isBeforeStep ? '—' : value}</Box>
-            </HStack>
-          ))}
-        </VStack>
-      </CardBody>
-    </Card>
-  )
+  return Object.entries(poolDetailsMap).map(([label, value]) => (
+    <HStack align="start" justify="space-between" key={label} spacing="lg" w="full">
+      <Text color="font.secondary">{label}</Text>
+      <Box color="font.secondary">{isBeforeStep ? '—' : value}</Box>
+    </HStack>
+  ))
 }

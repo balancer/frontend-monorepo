@@ -2,12 +2,8 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import {
-  INITIAL_TOKEN_CONFIG,
-  INITIAL_POOL_CREATION_FORM,
-  type PoolCreationForm,
-  type PoolCreationToken,
-} from './constants'
+import { INITIAL_TOKEN_CONFIG, INITIAL_POOL_CREATION_FORM } from './constants'
+import { type PoolCreationForm, type PoolCreationToken } from './types'
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'

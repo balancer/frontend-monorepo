@@ -10,47 +10,45 @@ import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { useInitializePoolBuildCall } from '@repo/lib/modules/pool/actions/initialize/useInitializePoolBuildCall'
-import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { type Address } from 'viem'
 import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
-import { useLocalStorage } from 'usehooks-ts'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
 
-export const initializeLbpStepId = 'initialize-lbp'
+export const initializePoolStepId = 'initialize-pool'
 
 const labels: TransactionLabels = {
-  init: 'Initialize pool',
-  title: 'Initialize pool',
-  confirming: 'Confirming initialization...',
-  confirmed: 'Initialization confirmed!',
-  tooltip: 'Initialize pool',
+  init: 'Seed pool liquidity',
+  title: 'Seed pool liquidity',
+  confirming: 'Confirming seed pool liquidity...',
+  confirmed: 'Seed pool liquidity confirmed!',
+  tooltip: 'Seed pool liquidity',
 }
 
-export function useInitializeLbpStep({
-  initPoolInput,
-}: {
+type Params = {
   initPoolInput: InitPoolInputV3
-}): TransactionStep {
+  poolAddress: Address | undefined
+  poolType: PoolType
+}
+
+export function useInitializePoolStep({
+  initPoolInput,
+  poolAddress,
+  poolType,
+}: Params): TransactionStep {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const [isStepActivated, setIsStepActivated] = useState(false)
-  const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.LbpConfig.PoolAddress,
-    undefined
-  )
-  const rpcUrl = getRpcUrl(initPoolInput.chainId)
-  const { buildTenderlyUrl } = useTenderly({ chainId: initPoolInput.chainId })
 
-  const { data: isPoolInitialized, refetch: refetchIsPoolInitialized } = useIsPoolInitialized(
-    initPoolInput.chainId,
-    poolAddress
-  )
+  const { chainId } = initPoolInput
+  const rpcUrl = getRpcUrl(chainId)
+  const { buildTenderlyUrl } = useTenderly({ chainId })
+  const { isPoolInitialized, refetchIsPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
 
   const buildCallDataQuery = useInitializePoolBuildCall({
     rpcUrl,
-    poolAddress: poolAddress as Address,
-    poolType: PoolType.LiquidityBootstrapping,
+    poolAddress,
+    poolType,
     enabled: isStepActivated && !isPoolInitialized && !!poolAddress,
     initPoolInput,
   })
@@ -64,14 +62,10 @@ export function useInitializeLbpStep({
 
   return useMemo(
     () => ({
-      id: initializeLbpStepId,
+      id: initializePoolStepId,
       stepType: 'initializePool',
       labels,
       transaction,
-      details: {
-        gasless: false,
-        type: 'Gas transaction',
-      },
       isComplete,
       onSuccess: () => {
         refetchIsPoolInitialized()
@@ -83,7 +77,7 @@ export function useInitializeLbpStep({
         return (
           <ManagedSendTransactionButton
             gasEstimationMeta={gasEstimationMeta}
-            id={initializeLbpStepId}
+            id={initializePoolStepId}
             labels={labels}
             onTransactionChange={setTransaction}
             txConfig={buildCallDataQuery.data}

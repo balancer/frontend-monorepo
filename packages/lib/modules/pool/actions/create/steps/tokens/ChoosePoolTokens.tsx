@@ -39,7 +39,13 @@ export function ChoosePoolTokens() {
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
   const { getTokensByChain } = useTokens()
-  const tokens = getTokensByChain(network)
+  const allTokens = getTokensByChain(network)
+
+  // Filter out already selected tokens
+  const selectedTokenAddresses = poolTokens.map(token => token.address?.toLowerCase())
+  const tokens = allTokens.filter(
+    token => !selectedTokenAddresses.includes(token.address.toLowerCase())
+  )
 
   function handleTokenSelect(tokenData: ApiToken) {
     if (!tokenData || selectedTokenIndex === null) return
