@@ -9,11 +9,11 @@ import {
   Text,
   UnorderedList,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolRisks, risksTitle } from './usePoolRisks'
-import Link from 'next/link'
 
 interface RisksListProps {
   textVariant?: string
@@ -21,23 +21,27 @@ interface RisksListProps {
 
 export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
   const { pool } = usePool()
-  const risks = getPoolRisks(pool as GqlPoolElement)
+  const riskGroups = getPoolRisks(pool as GqlPoolElement)
+
   return (
     <VStack alignItems="flex-start" gap="xs">
-      <Text mb="0" variant={textVariant}>
-        {risksTitle()}
-      </Text>
-      <UnorderedList mb="0.5" ml="5">
-        {risks.map(risk => (
-          <Link
-            href={risk.path}
-            key={`pool-risk-${risk.path.replaceAll('//', '')}`}
-            target="_blank"
-          >
-            <ListItem color="link" mb="6px">
-              {risk.title}
-            </ListItem>
-          </Link>
+      <Text variant={textVariant}>{risksTitle()}</Text>
+      <UnorderedList ml="5">
+        {riskGroups.map(group => (
+          <ListItem key={group.category}>
+            <Text fontWeight="bold">{group.title}</Text>
+            <UnorderedList ml="3">
+              {group.risks.map(risk => (
+                <Link
+                  href={risk.path}
+                  isExternal
+                  key={`pool-risk-${risk.path.replaceAll('//', '')}`}
+                >
+                  <ListItem color="link">{risk.title}</ListItem>
+                </Link>
+              ))}
+            </UnorderedList>
+          </ListItem>
         ))}
       </UnorderedList>
     </VStack>

@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query'
 import { sentryMetaForRemoveLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
 import { useBlockNumber } from 'wagmi'
 import { usePool } from '../../../PoolProvider'
-import { hasStableSurgeHook } from '../../../pool.helpers'
+import { hasSurgeHook } from '../../../pool.helpers'
 
 type Params = {
   handler: RemoveLiquidityHandler
@@ -62,7 +62,7 @@ export function useRemoveLiquidityPriceImpactQuery({
       ...params,
       chainId,
       blockNumber,
-      hasStableSurgeHook: hasStableSurgeHook(pool),
+      hasSurgeHook: hasSurgeHook(pool),
     }),
     ...onlyExplicitRefetch,
   })

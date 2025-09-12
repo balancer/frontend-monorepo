@@ -13,7 +13,7 @@ import { sentryMetaForAddLiquidityHandler } from '@repo/lib/shared/utils/query-e
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
 import { isInvariantRatioPIErrorMessage } from '@repo/lib/shared/utils/error-filters'
-import { hasStableSurgeHook } from '../../../pool.helpers'
+import { hasSurgeHook } from '../../../pool.helpers'
 
 type Params = {
   handler: AddLiquidityHandler
@@ -58,7 +58,7 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
       ...params,
       chainId,
       blockNumber,
-      hasStableSurgeHook: hasStableSurgeHook(pool),
+      hasSurgeHook: hasSurgeHook(pool),
     }),
     ...onlyExplicitRefetch,
   })
