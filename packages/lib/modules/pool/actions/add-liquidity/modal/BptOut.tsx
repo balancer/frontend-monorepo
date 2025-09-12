@@ -4,11 +4,7 @@ import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { BptRow } from '@repo/lib/modules/tokens/TokenRow/BptRow'
-import {
-  ADD_LIQUIDITY_DESCRIPTION,
-  SlippageOptions,
-  SlippageSelector,
-} from '../../SlippageSelector'
+import { FLEXIBLE_ADD_DESCRIPTION, SlippageOptions, SlippageSelector } from '../../SlippageSelector'
 import { Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
@@ -81,9 +77,10 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
       rightElement={
         !wantsProportional && (
           <SlippageSelector
-            description={ADD_LIQUIDITY_DESCRIPTION}
+            description={FLEXIBLE_ADD_DESCRIPTION}
             onChange={calculateSlippage}
             selectedIndex={0}
+            title="Slippage on 'flexible' adds"
           />
         )
       }

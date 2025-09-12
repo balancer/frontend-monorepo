@@ -19,7 +19,7 @@ import { useMemo, useState } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useRouter } from 'next/navigation'
 import {
-  ADD_LIQUIDITY_DESCRIPTION,
+  PROPORTIONAL_ADD_DESCRIPTION,
   SlippageOptions,
   SlippageSelector,
 } from '../../SlippageSelector'
@@ -107,9 +107,10 @@ export function AddLiquiditySummary({
           rightElement={
             wantsProportional && (
               <SlippageSelector
-                description={ADD_LIQUIDITY_DESCRIPTION}
+                description={PROPORTIONAL_ADD_DESCRIPTION}
                 onChange={calculateSlippage}
                 selectedIndex={1}
+                title="Slippage on 'proportional' adds"
               />
             )
           }

@@ -16,9 +16,10 @@ import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import {
+  EXACT_IN_SWAP_DESCRIPTION,
+  EXACT_OUT_SWAP_DESCRIPTION,
   SlippageOptions,
   SlippageSelector,
-  SWAP_DESCRIPTION,
 } from '../../pool/actions/SlippageSelector'
 import { useState } from 'react'
 import { useUserSettings } from '../../user/settings/UserSettingsProvider'
@@ -99,9 +100,10 @@ export function SwapSummary({
       slippageDiffLabel(receivedToken.humanAmount || '0', expectedTokenOut)
     ) : swapType === GqlSorSwapType.ExactIn ? (
       <SlippageSelector
-        description={SWAP_DESCRIPTION}
+        description={EXACT_IN_SWAP_DESCRIPTION}
         onChange={calculateSlippage}
         selectedIndex={0}
+        title="Slippage on 'exact in' swaps"
       />
     ) : undefined
   }
@@ -130,9 +132,10 @@ export function SwapSummary({
           rightElement={
             swapType === GqlSorSwapType.ExactOut && (
               <SlippageSelector
-                description={SWAP_DESCRIPTION}
+                description={EXACT_OUT_SWAP_DESCRIPTION}
                 onChange={calculateSlippage}
                 selectedIndex={1}
+                title="Slippage on 'exact out' swaps"
               />
             )
           }
