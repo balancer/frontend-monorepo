@@ -21,10 +21,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
-import {
-  ProportionalTransactionSettings,
-  TransactionSettings,
-} from '@repo/lib/modules/user/settings/TransactionSettings'
+import { TransactionSettings } from '@repo/lib/modules/user/settings/TransactionSettings'
 import { usePool } from '../../../PoolProvider'
 import {
   hasNoLiquidity,
@@ -87,7 +84,6 @@ function AddLiquidityMainForm() {
     wNativeAsset,
     previewModalDisclosure,
     slippage,
-    setProportionalSlippage,
     setWantsProportional,
     wantsProportional,
   } = useAddLiquidity()
@@ -174,16 +170,8 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
-            {wantsProportional ? (
-              <ProportionalTransactionSettings
-                pool={pool}
-                setSlippage={setProportionalSlippage}
-                size="sm"
-                slippage={slippage}
-              />
-            ) : (
-              <TransactionSettings size="xs" />
-            )}
+
+            <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
