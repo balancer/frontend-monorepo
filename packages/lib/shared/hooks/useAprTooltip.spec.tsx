@@ -36,13 +36,13 @@ describe('useAprTooltip', () => {
     expect(totalBaseDisplayed.toFixed()).toBe('0.0266')
     expect(fNum('apr', totalBaseDisplayed)).toBe('2.66%') // 0.07 + 1.91 + 0.68 = 2.66
 
-    const extraBalApr = result.current.extraBalAprDisplayed
-    expect(extraBalApr.toFixed()).toBe('0.0225')
-    expect(fNum('apr', extraBalApr)).toBe('2.25%')
+    const extraBalApr = result.current.extraBalApr
+    expect(extraBalApr.toFixed(4)).toBe('0.0287')
+    expect(fNum('apr', extraBalApr)).toBe('2.87%')
 
-    const maxVeBalApr = result.current.maxVeBalDisplayed
-    expect(maxVeBalApr.toFixed()).toBe('0.0491')
-    expect(fNum('apr', maxVeBalApr)).toBe('4.91%')
+    const maxVeBalApr = result.current.maxVeBal
+    expect(maxVeBalApr.toFixed(4)).toBe('0.0553')
+    expect(fNum('apr', maxVeBalApr)).toBe('5.53%')
   })
 })
 

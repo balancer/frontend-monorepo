@@ -162,7 +162,7 @@ function MainAprTooltip({
       chain={pool.chain}
       customPopoverContent={customPopoverContent}
       hookType={isPool(pool) ? pool.hook?.type : undefined}
-      maxVeBalText="Total max veBAL APR"
+      maxVeBalText="Total APR with veBAL boost"
       poolType={pool.type}
       totalBaseText={hasVeBalBoost => `Total ${hasVeBalBoost ? 'base' : ''} APR`}
       totalBaseVeBalText="Total base APR"
