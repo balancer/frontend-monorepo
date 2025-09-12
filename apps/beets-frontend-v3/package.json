@@ -40,7 +40,7 @@
     "react-countdown": "^2.3.6",
     "react-dom": "19.1.0",
     "react-feather": "^2.0.10",
-    "react-use-measure": "^2.1.1",
+    "react-use-measure": "^2.1.7",
     "tinycolor2": "^1.6.0",
     "viem": "2.31.6"
   },
