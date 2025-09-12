@@ -3,10 +3,18 @@ import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { useState } from 'react'
 import { Address, isAddress } from 'viem'
 import { useImpersonateAccount } from './useImpersonateAccount'
+import { useUserAccount } from '../UserAccountProvider'
+import { useDisconnect } from 'wagmi'
 
 export function ImpersonateAccount() {
   const [impersonatedAddress, setImpersonatedAddress] = useState<string>(defaultAnvilAccount)
   const { impersonateAccount } = useImpersonateAccount()
+  const { userAddress, isConnected } = useUserAccount()
+  const { disconnect } = useDisconnect()
+
+  const impersonated = isConnected && impersonatedAddress === userAddress
+  const impersonate = () =>
+    impersonateAccount({ impersonatedAddress: impersonatedAddress as Address })
 
   return (
     <VStack>
@@ -21,11 +29,9 @@ export function ImpersonateAccount() {
         <Button
           aria-label="Impersonate button"
           disabled={!isAddress(impersonatedAddress)}
-          onClick={() =>
-            impersonateAccount({ impersonatedAddress: impersonatedAddress as Address })
-          }
+          onClick={!impersonated ? impersonate : () => disconnect()}
         >
-          Connect
+          {!impersonated ? 'Connect' : 'Disconnect'}
         </Button>
       </HStack>
     </VStack>
