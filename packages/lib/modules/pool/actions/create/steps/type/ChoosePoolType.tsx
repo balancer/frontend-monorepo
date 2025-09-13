@@ -1,7 +1,9 @@
 import { type Control, Controller } from 'react-hook-form'
 import { PoolCreationForm, SupportedPoolTypes } from '../../types'
 import { VStack, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react'
-import { POOL_TYPES, SWAP_FEE_PERCENTAGE_OPTIONS } from '../../constants'
+import { POOL_TYPES } from '../../constants'
+import { getSwapFeePercentageOptions } from '../../helpers'
+
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
 export function ChoosePoolType({ control }: { control: Control<PoolCreationForm> }) {
@@ -19,7 +21,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
         render={({ field }) => (
           <RadioGroup
             onChange={(value: SupportedPoolTypes) => {
-              setValue('swapFeePercentage', SWAP_FEE_PERCENTAGE_OPTIONS[value][0].value)
+              setValue('swapFeePercentage', getSwapFeePercentageOptions(value)[0].value)
               field.onChange(value)
             }}
             value={field.value}

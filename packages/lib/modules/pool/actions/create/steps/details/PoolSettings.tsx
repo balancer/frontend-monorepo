@@ -4,7 +4,9 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
+import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
+import { getSwapFeePercentageOptions } from '../../helpers'
+
 import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
@@ -34,7 +36,7 @@ export function PoolSettings() {
   ]
 
   const swapFeePercentageOptions: PoolSettingsOption[] = [
-    ...SWAP_FEE_PERCENTAGE_OPTIONS[poolType].map(option => ({
+    ...getSwapFeePercentageOptions(poolType).map(option => ({
       label: `${option.value}%`,
       value: option.value,
       detail: <Text color="font.secondary">{option.tip}</Text>,

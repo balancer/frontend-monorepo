@@ -11,9 +11,12 @@ export type ExtendedInitPoolInputV3 = Omit<InitPoolInputV3, 'amountsIn'> & {
   amountsIn: InputAmountWithSymbol[]
 }
 
-export type SupportedPoolTypes = PoolType.Stable | PoolType.Weighted | PoolType.StableSurge
+export type SupportedPoolTypes =
+  | PoolType.Stable
+  | PoolType.Weighted
+  | PoolType.StableSurge
+  | PoolType.ReClamm
 // | PoolType.GyroE
-// | PoolType.ReClamm
 
 export type PoolTypeDetails = {
   label: string
