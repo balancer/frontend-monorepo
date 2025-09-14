@@ -7,6 +7,7 @@ import { type PoolCreationForm, type PoolCreationToken } from './types'
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
+import { PoolType } from '@balancer/sdk'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -41,6 +42,11 @@ export function usePoolFormLogic() {
     disableUnbalancedLiquidity,
     amplificationParameter,
   } = poolCreationForm.watch()
+
+  const isReClamm = poolType === PoolType.ReClamm
+  const isStablePool = poolType === PoolType.Stable
+  const isStableSurgePool = poolType === PoolType.StableSurge
+  const isWeightedPool = poolType === PoolType.Weighted
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const newPoolTokens = [...poolTokens]
@@ -87,6 +93,10 @@ export function usePoolFormLogic() {
     poolHooksContract,
     enableDonation,
     disableUnbalancedLiquidity,
+    isReClamm,
+    isStablePool,
+    isStableSurgePool,
+    isWeightedPool,
     updatePoolToken,
     updatePoolTokens,
     removePoolToken,
