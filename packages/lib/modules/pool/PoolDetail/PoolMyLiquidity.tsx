@@ -1,5 +1,3 @@
-'use client'
-
 import TokenRow from '../../tokens/TokenRow/TokenRow'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -73,6 +71,7 @@ import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/Ba
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -502,6 +501,20 @@ function StakeButton({ pool }: StakeButtonProps) {
 
   const stakeOnBalancer = () => router.push(`${pathname}/stake`)
   const stakeOnAura = () => auraDisclosure.onOpen()
+
+  if (!isBalancer) {
+    return (
+      <Button
+        flex="1"
+        isDisabled={!(canStake && hasUnstakedBalance)}
+        maxW="120px"
+        onClick={() => router.push(`${pathname}/stake`)}
+        variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
+      >
+        Stake
+      </Button>
+    )
+  }
 
   return (
     <>
