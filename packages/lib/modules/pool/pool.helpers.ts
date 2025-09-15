@@ -13,7 +13,7 @@ import {
   HookFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isTooSmallToRemoveUsd } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
@@ -21,7 +21,11 @@ import { BPT_DECIMALS } from './pool.constants'
 import { isNotMainnet } from '../chains/chain.utils'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
-import { getUserTotalBalanceInt } from './user-balance.helpers'
+import {
+  getUserTotalBalanceInt,
+  getUserWalletBalance,
+  getUserWalletBalanceUsd,
+} from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
@@ -390,6 +394,26 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
       }
     }
   }
+
+  return reasons
+}
+
+export function shouldBlockRemoveLiquidity(pool: Pool) {
+  const reasons = getPoolRemoveBlockedReason(pool)
+  return reasons.length > 0
+}
+
+export function getPoolRemoveBlockedReason(pool: Pool): string[] {
+  if (pool.chain === GqlChain.Sepolia) return []
+
+  const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
+  const hasTooSmallBalance = isTooSmallToRemoveUsd(getUserWalletBalanceUsd(pool))
+
+  const reasons: string[] = []
+
+  if (isManaged(pool.type)) reasons.push('Managed pools are not compatible')
+  if (!hasUnstakedBalance) reasons.push('No unstaked balance to remove')
+  if (hasTooSmallBalance) reasons.push('Balance too small to remove')
 
   return reasons
 }
