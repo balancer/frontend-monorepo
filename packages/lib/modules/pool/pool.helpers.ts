@@ -340,14 +340,13 @@ export function shouldBlockAddLiquidity(pool: Pool, metadata?: PoolMetadata) {
 export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): string[] {
   // we allow the metadata to override the default behavior
   if (metadata?.allowAddLiquidity === true) return []
-
   if (pool.chain === GqlChain.Sepolia) return []
 
   const reasons: string[] = []
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) reasons.push('Adds are blocked for all V3 pools')
   if (isLBP(pool.type)) reasons.push('LBP pool')
-  if (isManaged(pool.type)) reasons.push('Managed pools are not compatible')
+  if (isManaged(pool.type)) reasons.push('Managed pools are not supported. Seek help in Discord.')
   if (pool.dynamicData.isPaused) reasons.push('Paused pool')
   if (pool.dynamicData.isInRecoveryMode) reasons.push('Pool in recovery')
 
@@ -361,7 +360,6 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
-
   if (pool.hook?.reviewData?.summary === 'unsafe') reasons.push('Unsafe hook')
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
@@ -411,9 +409,9 @@ export function getPoolRemoveBlockedReason(pool: Pool): string[] {
 
   const reasons: string[] = []
 
-  if (isManaged(pool.type)) reasons.push('Managed pools are not compatible')
-  if (!hasUnstakedBalance) reasons.push('No unstaked balance to remove')
-  if (hasTooSmallBalance) reasons.push('Balance too small to remove')
+  if (isManaged(pool.type)) reasons.push('Managed pools are not supported. Seek help in Discord.')
+  if (!hasUnstakedBalance) reasons.push("You don't have any unstaked balance to remove")
+  if (hasTooSmallBalance) reasons.push('Your balance is too small to remove')
 
   return reasons
 }
