@@ -179,6 +179,9 @@ export function useReclAmmChartLogic() {
 
     const isPriceAdjusting = isPoolWithinRange && !reclAmmData.isPoolWithinTargetRange
 
+    const isLowMarginValue = marginValue && marginValue < 25
+    const needsMobileStyles = isMobile || isLowMarginValue
+
     let showTargetValues = true
     let showMinMaxValues = true
     const totalGreenAndOrangeBars = 52
@@ -411,7 +414,7 @@ export function useReclAmmChartLogic() {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
-        bottom: isMobile ? gridBottomMobile : gridBottomDesktop,
+        bottom: needsMobileStyles ? gridBottomMobile : gridBottomDesktop,
         containLabel: true,
       },
       xAxis: {
@@ -426,7 +429,7 @@ export function useReclAmmChartLogic() {
           interval: 0,
           formatter: (value: string, index: number) => {
             if (showMinMaxValues && index === baseGreyBarCount) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('tokenRatio', minPriceValue) : 'N/A'}}`
+              return `{${needsMobileStyles ? 'triangleMobile' : 'triangle'}|▲}\n{${needsMobileStyles ? 'labelTextMobile' : 'labelText'}|Min price}\n{${needsMobileStyles ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('tokenRatio', minPriceValue) : 'N/A'}}`
             }
 
             if (showTargetValues && index === baseGreyBarCount + baseOrangeBarCount) {
@@ -438,7 +441,7 @@ export function useReclAmmChartLogic() {
             }
 
             if (showMinMaxValues && index === totalBars - baseGreyBarCount) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('tokenRatio', maxPriceValue) : 'N/A'}}`
+              return `{${needsMobileStyles ? 'triangleMobile' : 'triangle'}|▲}\n{${needsMobileStyles ? 'labelTextMobile' : 'labelText'}|Max price}\n{${needsMobileStyles ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('tokenRatio', maxPriceValue) : 'N/A'}}`
             }
 
             return ''
