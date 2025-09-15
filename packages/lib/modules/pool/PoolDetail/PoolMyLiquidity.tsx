@@ -498,7 +498,7 @@ function StakeButton({ pool }: StakeButtonProps) {
             flex="1"
             isDisabled={!(canStake && hasUnstakedBalance)}
             maxW="120px"
-            rightIcon={<ChevronUp />}
+            rightIcon={<ChevronUp size="16" />}
             variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
           >
             Stake
