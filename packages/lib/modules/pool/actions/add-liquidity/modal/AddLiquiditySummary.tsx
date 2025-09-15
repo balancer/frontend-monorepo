@@ -85,7 +85,7 @@ export function AddLiquiditySummary({
 
   const addingInputTokenLabel = wantsProportional
     ? "You're adding at most"
-    : "You're adding  (exactly)"
+    : "You're adding (exactly)"
 
   const calculateSlippage = (value: SlippageOptions) => {
     if (value === 'zero') setSelectedSlippage(Number(slippage) / 100)
