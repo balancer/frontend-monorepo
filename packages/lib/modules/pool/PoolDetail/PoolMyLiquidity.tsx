@@ -16,8 +16,13 @@ import {
   VStack,
   Tooltip,
   useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverHeader,
 } from '@chakra-ui/react'
-import { useMemo, useState, useLayoutEffect } from 'react'
+import { useMemo, useState, useLayoutEffect, ReactNode } from 'react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'
@@ -26,6 +31,7 @@ import { keyBy } from 'lodash'
 import {
   getAuraPoolLink,
   getProportionalExitAmountsFromScaledBptIn,
+  getTotalApr,
   getXavePoolLink,
 } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -51,7 +57,7 @@ import {
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight, ChevronUp } from 'react-feather'
 import { getChainId } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
@@ -61,6 +67,11 @@ import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
 import { bn, fNum, ZERO_VALUE_DASH, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
+import { Pool } from '../pool.types'
+import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
+import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
+import { Protocol } from '../../protocols/useProtocols'
+import { useVebalBoost } from '../../vebal/useVebalBoost'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -427,15 +438,8 @@ export default function PoolMyLiquidity() {
               </Button>
             ) : (
               <>
-                <Button
-                  flex="1"
-                  isDisabled={!(canStake && hasUnstakedBalance)}
-                  maxW="120px"
-                  onClick={() => router.push(`${pathname}/stake`)}
-                  variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
-                >
-                  Stake
-                </Button>
+                <StakeButton pool={pool} />
+
                 {shouldMigrateStake(pool) ? (
                   <Tooltip label={migrateStakeTooltipLabel}>
                     <Button
@@ -465,5 +469,103 @@ export default function PoolMyLiquidity() {
         </VStack>
       </VStack>
     </Card>
+  )
+}
+
+type StakeButtonProps = {
+  pool: Pool
+}
+
+function StakeButton({ pool }: StakeButtonProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const auraDisclosure = useDisclosure()
+
+  const canStake = getCanStake(pool)
+  const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
+  const { veBalBoostMap } = useVebalBoost([pool])
+  const vebalBoost = veBalBoostMap[pool.address]
+  const [, balancerMaxApr] = getTotalApr(pool.dynamicData.aprItems, vebalBoost)
+
+  const stakeOnBalancer = () => router.push(`${pathname}/stake`)
+  const stakeOnAura = () => auraDisclosure.onOpen()
+
+  return (
+    <>
+      <Popover placement="top">
+        <PopoverTrigger>
+          <Button
+            flex="1"
+            isDisabled={!(canStake && hasUnstakedBalance)}
+            maxW="120px"
+            rightIcon={<ChevronUp size="16" />}
+            variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
+          >
+            Stake
+          </Button>
+        </PopoverTrigger>
+
+        <PopoverContent boxSize="44" height="max-content">
+          <PopoverHeader>
+            <Text color="font.secondary" fontWeight="bold">
+              Staking options
+            </Text>
+          </PopoverHeader>
+
+          <PopoverBody>
+            <VStack>
+              <StakingOption
+                apr={balancerMaxApr.toNumber()}
+                icon={<BalancerIconCircular />}
+                onClick={stakeOnBalancer}
+                title="Balancer"
+              />
+
+              <Divider />
+
+              <StakingOption
+                apr={pool.staking?.aura?.apr || 0}
+                icon={<ProtocolIcon height="28" protocol={Protocol.Aura} width="28" />}
+                onClick={stakeOnAura}
+                title="Aura"
+              />
+            </VStack>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+
+      <PartnerRedirectModal
+        isOpen={auraDisclosure.isOpen}
+        onClose={auraDisclosure.onClose}
+        partner={RedirectPartner.Aura}
+        redirectUrl={getAuraPoolLink(getChainId(pool.chain), pool.staking?.aura?.auraPoolId || '')}
+      />
+    </>
+  )
+}
+
+type StakingOptionProps = {
+  icon: ReactNode
+  title: string
+  apr: number
+  onClick(): void
+}
+
+function StakingOption({ icon, title, apr, onClick }: StakingOptionProps) {
+  return (
+    <Button isDisabled={!apr} onClick={onClick} variant="ghost" width="40">
+      <HStack w="full">
+        {icon}
+
+        <VStack spacing="0.5">
+          <Text fontWeight="bold" textAlign="left" w="full">
+            {title}
+          </Text>
+          <Text color="font.secondary" textAlign="left" w="full">
+            {apr ? `${fNum('apr', apr)} APR` : 'N/A'}
+          </Text>
+        </VStack>
+      </HStack>
+    </Button>
   )
 }
