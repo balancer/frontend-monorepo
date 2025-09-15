@@ -52,7 +52,8 @@ import {
   getPoolAddBlockedReason,
   calcUserShareOfPool,
   isFx,
-  isManaged,
+  getPoolRemoveBlockedReason,
+  shouldBlockRemoveLiquidity,
 } from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
@@ -128,7 +129,10 @@ export default function PoolMyLiquidity() {
   const poolMetadata = usePoolMetadata(pool)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, poolMetadata)
-  const blockingReasons = formatTextListAsItems(getPoolAddBlockedReason(pool))
+  const addBlockingReasons = formatTextListAsItems(getPoolAddBlockedReason(pool))
+
+  const isRemoveLiquidityBlocked = shouldBlockRemoveLiquidity(pool)
+  const removeBlockingReasons = formatTextListAsItems(getPoolRemoveBlockedReason(pool))
 
   useLayoutEffect(() => {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
@@ -403,10 +407,10 @@ export default function PoolMyLiquidity() {
           <Divider />
           <HStack justifyContent="flex-start" mt="md" width="full">
             <Tooltip
-              isDisabled={!blockingReasons}
+              isDisabled={!addBlockingReasons}
               label={
                 <Text color="primaryTextColor" whiteSpace="pre-line">
-                  {blockingReasons}
+                  {addBlockingReasons}
                 </Text>
               }
             >
@@ -420,15 +424,24 @@ export default function PoolMyLiquidity() {
                 Add
               </Button>
             </Tooltip>
-            <Button
-              flex="1"
-              isDisabled={!hasUnstakedBalance || isManaged(pool.type)}
-              maxW="120px"
-              onClick={() => handleRemoveLiquidity()}
-              variant={hasUnstakedBalance ? 'tertiary' : 'disabled'}
+            <Tooltip
+              isDisabled={!removeBlockingReasons}
+              label={
+                <Text color="primaryTextColor" whiteSpace="pre-line">
+                  {removeBlockingReasons}
+                </Text>
+              }
             >
-              Remove
-            </Button>
+              <Button
+                flex="1"
+                isDisabled={isRemoveLiquidityBlocked}
+                maxW="120px"
+                onClick={() => handleRemoveLiquidity()}
+                variant={hasUnstakedBalance ? 'tertiary' : 'disabled'}
+              >
+                Remove
+              </Button>
+            </Tooltip>
             <Text opacity="0.25" px={{ base: '0', sm: 'ms' }} variant="secondary">
               |
             </Text>
