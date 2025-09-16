@@ -112,6 +112,10 @@ export function isWeighted(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.Weighted
 }
 
+export function isWeightedV1(pool: Pool): boolean {
+  return pool.version === 1 && isWeighted(pool.type)
+}
+
 export function isManaged(poolType: GqlPoolType): boolean {
   // Correct terminology is managed pools but subgraph still returns poolType = "Investment"
   return poolType === GqlPoolType.Investment
