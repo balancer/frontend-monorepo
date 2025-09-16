@@ -6,9 +6,11 @@ import { useReClammConfigurationOptions } from './useReClammConfigurationOptions
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 
 export function ReClammConfiguration() {
-  const { poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const { poolTokens } = poolCreationForm.watch()
-  const { targetPrices, targetPriceBoundaries, marginBuffers, dailyPriceReadjustmentRates } =
+  const { initialTargetPrice, targetPriceBoundarySpread, centerednessMargin, priceShiftDailyRate } =
+    reClammConfigForm.watch()
+  const { targetPrice, targetPriceBoundary, marginBuffer, dailyPriceReadjustmentRate } =
     useReClammConfigurationOptions()
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
@@ -18,15 +20,29 @@ export function ReClammConfiguration() {
       <Heading color="font.maxContrast" size="md">
         ReClamm configuration
       </Heading>
-      <ConfigOptionsGroup label={`Target price: ${tokenSymbolsString}`} options={targetPrices} />
+      <ConfigOptionsGroup
+        label={`Target price: ${tokenSymbolsString}`}
+        options={targetPrice.options}
+        selectedOption={initialTargetPrice}
+        updateFn={targetPrice.updateFn}
+      />
       <ConfigOptionsGroup
         label={`Target concentration density of liquidity`}
-        options={targetPriceBoundaries}
+        options={targetPriceBoundary.options}
+        selectedOption={targetPriceBoundarySpread}
+        updateFn={targetPriceBoundary.updateFn}
       />
-      <ConfigOptionsGroup label={`Margin buffer`} options={marginBuffers} />
+      <ConfigOptionsGroup
+        label={`Margin buffer`}
+        options={marginBuffer.options}
+        selectedOption={centerednessMargin}
+        updateFn={marginBuffer.updateFn}
+      />
       <ConfigOptionsGroup
         label={`Daily price re-adjustment rate, when out-of-range`}
-        options={dailyPriceReadjustmentRates}
+        options={dailyPriceReadjustmentRate.options}
+        selectedOption={priceShiftDailyRate}
+        updateFn={dailyPriceReadjustmentRate.updateFn}
       />
     </VStack>
   )
@@ -34,10 +50,12 @@ export function ReClammConfiguration() {
 
 interface ConfigOptionsGroupProps {
   label: string
-  options: { label: string; displayValue: string; preciseValue: string }[]
+  options: { label: string; displayValue: string; rawValue: string }[]
+  selectedOption: string
+  updateFn: (rawValue: string) => void
 }
 
-function ConfigOptionsGroup({ label, options }: ConfigOptionsGroupProps) {
+function ConfigOptionsGroup({ label, options, selectedOption, updateFn }: ConfigOptionsGroupProps) {
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack>
@@ -49,18 +67,41 @@ function ConfigOptionsGroup({ label, options }: ConfigOptionsGroupProps) {
         </BalPopover>
       </HStack>
       <SimpleGrid columns={3} spacing="md" w="full">
-        {options.map(option => (
-          <Card h={32} key={option.label}>
-            <VStack h="full" justify="center">
-              <Text color="font.secondary" fontSize="sm">
-                {option.label}
-              </Text>
-              <Text color="font.secondary">{option.displayValue}</Text>
-            </VStack>
-          </Card>
-        ))}
+        {options.map(option => {
+          const isSelected = selectedOption === option.rawValue
+          const bg = isSelected ? '#63F2BE0D' : 'background.level2'
+          const borderColor = isSelected ? '#25E2A4' : 'transparent'
+          const shadow = isSelected ? 'none' : 'lg'
+          const textColor = isSelected ? 'font.maxContrast' : 'font.secondary'
+
+          return (
+            <Card
+              _hover={{ cursor: 'pointer', shadow: 'md' }}
+              bg={bg}
+              borderColor={borderColor}
+              h={28}
+              key={option.label}
+              onClick={() => updateFn(option.rawValue)}
+              shadow={shadow}
+            >
+              <VStack h="full" justify="center">
+                <Text color={textColor} fontSize="sm">
+                  {option.label}
+                </Text>
+                <Text color={textColor} fontWeight="bold">
+                  {option.displayValue}
+                </Text>
+              </VStack>
+            </Card>
+          )
+        })}
       </SimpleGrid>
-      <PoolCreationCheckbox isChecked={false} label="Or choose custom" onChange={() => {}} />
+      <PoolCreationCheckbox
+        isChecked={false}
+        label="Or choose custom"
+        labelColor="font.secondary"
+        onChange={() => {}}
+      />
     </VStack>
   )
 }

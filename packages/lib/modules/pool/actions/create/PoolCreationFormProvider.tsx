@@ -2,8 +2,12 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import { INITIAL_TOKEN_CONFIG, INITIAL_POOL_CREATION_FORM } from './constants'
-import { type PoolCreationForm, type PoolCreationToken } from './types'
+import {
+  INITIAL_TOKEN_CONFIG,
+  INITIAL_POOL_CREATION_FORM,
+  INITIAL_RECLAMM_CONFIG,
+} from './constants'
+import { PoolCreationForm, PoolCreationToken, ReClammConfig } from './types'
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
@@ -19,6 +23,11 @@ export function usePoolFormLogic() {
   )
 
   const { resetSteps } = usePoolCreationFormSteps()
+
+  const reClammConfigForm = usePersistentForm<ReClammConfig>(
+    LS_KEYS.PoolCreation.ReClammConfig,
+    INITIAL_RECLAMM_CONFIG
+  )
 
   const poolCreationForm = usePersistentForm<PoolCreationForm>(
     LS_KEYS.PoolCreation.Form,
@@ -78,6 +87,7 @@ export function usePoolFormLogic() {
 
   return {
     poolCreationForm,
+    reClammConfigForm,
     isFormStateValid: poolCreationForm.formState.isValid,
     poolTokens,
     poolType,

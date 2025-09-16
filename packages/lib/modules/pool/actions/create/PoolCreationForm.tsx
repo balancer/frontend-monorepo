@@ -50,7 +50,7 @@ export function PoolCreationForm() {
         spacing="2xl"
         w="full"
       >
-        <VStack align="start" spacing="lg" w="full">
+        <VStack align="start" minW="500px" spacing="lg">
           <VStack align="start" spacing="md" w="full">
             <Text color="font.secondary" fontWeight="medium" size="sm">
               STEPS

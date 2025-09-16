@@ -9,9 +9,10 @@ import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
 import { getGqlPoolType } from '../helpers'
 import { LearnMoreModal } from '@repo/lib/modules/lbp/header/LearnMoreModal'
+import { PreviewReClammConfig } from './PreviewReClammConfig'
 
 export function PreviewPoolCreation() {
-  const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
+  const { resetPoolCreationForm, network, poolType, isReClamm } = usePoolCreationForm()
   const { isBeforeStep } = usePoolCreationFormSteps()
 
   return (
@@ -38,6 +39,7 @@ export function PreviewPoolCreation() {
         </HStack>
 
         <PreviewPoolType />
+        {isReClamm && <PreviewReClammConfig />}
         <PreviewPoolTokens isBeforeStep={isBeforeStep('Tokens')} />
         <PreviewPoolTokensInWallet isBeforeStep={isBeforeStep('Tokens')} />
         <PreviewPoolDetails isBeforeStep={isBeforeStep('Details')} />

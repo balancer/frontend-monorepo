@@ -3,7 +3,13 @@ import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { zeroAddress } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { SupportedPoolTypes, PoolTypeDetails, PoolCreationToken, PoolCreationForm } from './types'
+import {
+  SupportedPoolTypes,
+  PoolTypeDetails,
+  PoolCreationToken,
+  PoolCreationForm,
+  ReClammConfig,
+} from './types'
 import { getSwapFeePercentageOptions } from './helpers'
 
 export const PERCENTAGE_DECIMALS = 16
@@ -95,4 +101,13 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   disableUnbalancedLiquidity: false,
   hasAcceptedTokenWeightsRisk: false,
   hasAcceptedPoolCreationRisk: false,
+}
+
+export const INITIAL_RECLAMM_CONFIG: ReClammConfig = {
+  initialTargetPrice: '',
+  initialMinPrice: '',
+  initialMaxPrice: '',
+  targetPriceBoundarySpread: '',
+  priceShiftDailyRate: '',
+  centerednessMargin: '',
 }
