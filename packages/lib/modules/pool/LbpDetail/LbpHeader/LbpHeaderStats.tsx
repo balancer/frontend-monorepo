@@ -28,8 +28,6 @@ export function LbpHeaderStats() {
     { label: 'Total fees', value: hasSaleStarted(lbpPool) ? stats.totalFees : 0 },
   ]
 
-  const formatOptions = '$0,0.00a'
-
   return (
     <Flex
       direction="row"
@@ -43,9 +41,7 @@ export function LbpHeaderStats() {
           <Stat
             imageTransform={IMAGE_TRANSFORM_ARRAY[index % IMAGE_TRANSFORM_ARRAY.length]}
             label={stat.label}
-            value={
-              <AnimatedNumber formatOptions={formatOptions} value={safeToNumber(stat.value)} />
-            }
+            value={<AnimatedNumber value={safeToNumber(stat.value)} />}
           />
         </Box>
       ))}
