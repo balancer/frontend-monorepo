@@ -12,7 +12,7 @@ import {
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { isV3Pool, isGyroEPool, isWeightedV1 } from '../../../pool.helpers'
+import { isV3Pool, isGyroEPool } from '../../../pool.helpers'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
@@ -113,7 +113,7 @@ export function AddLiquidityFormTabs({
   const { poolIsInRange } = useGetECLPLiquidityProfile(pool)
 
   const isDisabledProportionalTab =
-    nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool) || isWeightedV1(pool)
+    nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
 
   const isBelowMinTvlThreshold =
     isV3Pool(pool) &&
