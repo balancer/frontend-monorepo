@@ -502,10 +502,18 @@ function StakeButton({ pool }: StakeButtonProps) {
   // Optimism is a Beets & Balancer collaboration with Balancer & Aura staking
   const isBeetsAndOptimism = isBeets && pool.chain === GqlChain.Optimism
 
+  // networks where Aura is NOT deployed
+  const auraNonSupportedNetworks = [
+    GqlChain.Mode,
+    GqlChain.Fraxtal,
+    GqlChain.Zkevm,
+    GqlChain.Hyperevm,
+  ]
+
   const stakeOnBalancer = () => router.push(`${pathname}/stake`)
   const stakeOnAura = () => auraDisclosure.onOpen()
 
-  if (!(isBalancer || isBeetsAndOptimism)) {
+  if (auraNonSupportedNetworks.includes(pool.chain) || !(isBalancer || isBeetsAndOptimism)) {
     return (
       <Button
         flex="1"
