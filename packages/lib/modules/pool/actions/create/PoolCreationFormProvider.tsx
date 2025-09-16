@@ -82,6 +82,7 @@ export function usePoolFormLogic() {
   const resetPoolCreationForm = () => {
     setPoolAddress(undefined)
     poolCreationForm.resetToInitial()
+    reClammConfigForm.resetToInitial()
     resetSteps()
   }
 

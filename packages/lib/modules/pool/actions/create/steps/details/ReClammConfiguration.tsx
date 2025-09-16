@@ -1,61 +1,54 @@
 import { Heading, VStack, Text, HStack, Card, SimpleGrid } from '@chakra-ui/react'
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
-import { useReClammConfigurationOptions } from './useReClammConfigurationOptions'
+import {
+  useReClammConfigurationOptions,
+  ReClammConfigOptionsGroup,
+} from './useReClammConfigurationOptions'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 
 export function ReClammConfiguration() {
-  const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
-  const { poolTokens } = poolCreationForm.watch()
-  const { initialTargetPrice, targetPriceBoundarySpread, centerednessMargin, priceShiftDailyRate } =
-    reClammConfigForm.watch()
-  const { targetPrice, targetPriceBoundary, marginBuffer, dailyPriceReadjustmentRate } =
-    useReClammConfigurationOptions()
-
-  const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
+  const reClammConfigurationOptions = useReClammConfigurationOptions()
 
   return (
     <VStack align="start" spacing="xl" w="full">
       <Heading color="font.maxContrast" size="md">
         ReClamm configuration
       </Heading>
-      <ConfigOptionsGroup
-        label={`Target price: ${tokenSymbolsString}`}
-        options={targetPrice.options}
-        selectedOption={initialTargetPrice}
-        updateFn={targetPrice.updateFn}
-      />
-      <ConfigOptionsGroup
-        label={`Target concentration density of liquidity`}
-        options={targetPriceBoundary.options}
-        selectedOption={targetPriceBoundarySpread}
-        updateFn={targetPriceBoundary.updateFn}
-      />
-      <ConfigOptionsGroup
-        label={`Margin buffer`}
-        options={marginBuffer.options}
-        selectedOption={centerednessMargin}
-        updateFn={marginBuffer.updateFn}
-      />
-      <ConfigOptionsGroup
-        label={`Daily price re-adjustment rate, when out-of-range`}
-        options={dailyPriceReadjustmentRate.options}
-        selectedOption={priceShiftDailyRate}
-        updateFn={dailyPriceReadjustmentRate.updateFn}
-      />
+      {reClammConfigurationOptions.map(option => (
+        <ConfigOptionsGroup
+          customInputLabel={option.customInputLabel}
+          key={option.label}
+          label={option.label}
+          name={option.name}
+          options={option.options}
+          updateFn={option.updateFn}
+        />
+      ))}
     </VStack>
   )
 }
 
-interface ConfigOptionsGroupProps {
-  label: string
-  options: { label: string; displayValue: string; rawValue: string }[]
-  selectedOption: string
-  updateFn: (rawValue: string) => void
-}
+function ConfigOptionsGroup({
+  label,
+  options,
+  updateFn,
+  name,
+  customInputLabel,
+}: ReClammConfigOptionsGroup) {
+  const { reClammConfigForm } = usePoolCreationForm()
 
-function ConfigOptionsGroup({ label, options, selectedOption, updateFn }: ConfigOptionsGroupProps) {
+  const formValue = reClammConfigForm.watch(name)
+  const optionRawValues = options.map(option => option.rawValue)
+  const errors = reClammConfigForm.formState.errors[name]
+
+  const isCustom = !optionRawValues.includes(formValue)
+  const ispriceRangePercentage = name === 'priceRangePercentage'
+  const isCustomPriceRange = isCustom && ispriceRangePercentage
+  const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
+
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack>
@@ -68,7 +61,7 @@ function ConfigOptionsGroup({ label, options, selectedOption, updateFn }: Config
       </HStack>
       <SimpleGrid columns={3} spacing="md" w="full">
         {options.map(option => {
-          const isSelected = selectedOption === option.rawValue
+          const isSelected = formValue === option.rawValue
           const bg = isSelected ? '#63F2BE0D' : 'background.level2'
           const borderColor = isSelected ? '#25E2A4' : 'transparent'
           const shadow = isSelected ? 'none' : 'lg'
@@ -97,11 +90,41 @@ function ConfigOptionsGroup({ label, options, selectedOption, updateFn }: Config
         })}
       </SimpleGrid>
       <PoolCreationCheckbox
-        isChecked={false}
+        isChecked={isCustom}
         label="Or choose custom"
         labelColor="font.secondary"
-        onChange={() => {}}
+        onChange={() => {
+          updateFn('')
+        }}
       />
+      {isCustomPriceRange ? (
+        <VStack align="start" spacing="md" w="full">
+          <NumberInput
+            control={reClammConfigForm.control}
+            label={'Range low price'}
+            name={'initialMinPrice'}
+            validate={() => true}
+            width="full"
+          />
+          <NumberInput
+            control={reClammConfigForm.control}
+            label={'Range high price'}
+            name={'initialMaxPrice'}
+            validate={() => true}
+            width="full"
+          />
+        </VStack>
+      ) : isCustom ? (
+        <NumberInput
+          control={reClammConfigForm.control}
+          error={errors?.message}
+          isPercentage={isPercentage}
+          label={customInputLabel}
+          name={name}
+          validate={() => true}
+          width="full"
+        />
+      ) : null}
     </VStack>
   )
 }

@@ -10,10 +10,10 @@ import { Controller, Control } from 'react-hook-form'
 interface NumberInputProps {
   name: string
   control: Control<any>
-  isDisabled: boolean
-  isInvalid: boolean
+  isDisabled?: boolean
+  isInvalid?: boolean
   label: string
-  isPercentage: boolean
+  isPercentage?: boolean
   validate: (value: number) => string | boolean
   width?: string
   error?: string
@@ -31,7 +31,7 @@ export function NumberInput({
   error,
 }: NumberInputProps) {
   return (
-    <VStack align="start" spacing="sm">
+    <VStack align="start" spacing="sm" w="full">
       <Text>{label}</Text>
       <Box position="relative" w={width}>
         <Controller
