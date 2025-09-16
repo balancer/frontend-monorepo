@@ -55,7 +55,7 @@ export type ReClammConfig = {
   initialMinPrice: string
   initialTargetPrice: string
   initialMaxPrice: string
-  targetPriceBoundarySpread: string
+  priceRangePercentage: string
   priceShiftDailyRate: string
   centerednessMargin: string
 }

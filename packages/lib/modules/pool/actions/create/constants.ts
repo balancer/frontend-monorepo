@@ -107,7 +107,7 @@ export const INITIAL_RECLAMM_CONFIG: ReClammConfig = {
   initialTargetPrice: '',
   initialMinPrice: '',
   initialMaxPrice: '',
-  targetPriceBoundarySpread: '',
+  priceRangePercentage: '',
   priceShiftDailyRate: '',
   centerednessMargin: '',
 }
