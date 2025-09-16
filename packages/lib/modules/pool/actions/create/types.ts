@@ -50,3 +50,12 @@ export type PoolCreationForm = {
   hasAcceptedTokenWeightsRisk: boolean
   hasAcceptedPoolCreationRisk: boolean
 }
+
+export type ReClammConfig = {
+  initialMinPrice: string
+  initialTargetPrice: string
+  initialMaxPrice: string
+  targetPriceBoundarySpread: string
+  priceShiftDailyRate: string
+  centerednessMargin: string
+}
