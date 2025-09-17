@@ -22,8 +22,6 @@ export function usePoolFormLogic() {
     undefined
   )
 
-  const { resetSteps } = usePoolCreationFormSteps()
-
   const reClammConfigForm = usePersistentForm<ReClammConfig>(
     LS_KEYS.PoolCreation.ReClammConfig,
     INITIAL_RECLAMM_CONFIG
@@ -78,6 +76,8 @@ export function usePoolFormLogic() {
     newPoolTokens.splice(index, 1)
     poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
+
+  const { resetSteps } = usePoolCreationFormSteps()
 
   const resetPoolCreationForm = () => {
     setPoolAddress(undefined)

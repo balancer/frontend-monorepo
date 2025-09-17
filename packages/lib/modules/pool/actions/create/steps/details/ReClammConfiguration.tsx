@@ -25,6 +25,7 @@ export function ReClammConfiguration() {
           name={option.name}
           options={option.options}
           updateFn={option.updateFn}
+          validateFn={option.validateFn}
         />
       ))}
     </VStack>
@@ -35,11 +36,12 @@ function ConfigOptionsGroup({
   label,
   options,
   updateFn,
+  validateFn,
   name,
   customInputLabel,
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
-
+  const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
   const formValue = reClammConfigForm.watch(name)
   const optionRawValues = options.map(option => option.rawValue)
   const errors = reClammConfigForm.formState.errors[name]
@@ -101,16 +103,34 @@ function ConfigOptionsGroup({
         <VStack align="start" spacing="md" w="full">
           <NumberInput
             control={reClammConfigForm.control}
+            error={reClammConfigForm.formState.errors['initialMinPrice']?.message}
             label={'Range low price'}
             name={'initialMinPrice'}
-            validate={() => true}
+            validate={value => {
+              if (Number(value) >= Number(initialTargetPrice)) {
+                return 'Range low price must be less than target price'
+              }
+              if (Number(value) >= Number(initialMaxPrice)) {
+                return 'Range low price must be less than range high price'
+              }
+              return true
+            }}
             width="full"
           />
           <NumberInput
             control={reClammConfigForm.control}
+            error={reClammConfigForm.formState.errors['initialMaxPrice']?.message}
             label={'Range high price'}
             name={'initialMaxPrice'}
-            validate={() => true}
+            validate={value => {
+              if (Number(value) <= Number(initialTargetPrice)) {
+                return 'Range high price must be greater than target price'
+              }
+              if (Number(value) <= Number(initialMinPrice)) {
+                return 'Range low price must be greater than range low price'
+              }
+              return true
+            }}
             width="full"
           />
         </VStack>
@@ -121,7 +141,7 @@ function ConfigOptionsGroup({
           isPercentage={isPercentage}
           label={customInputLabel}
           name={name}
-          validate={() => true}
+          validate={value => validateFn(value.toString())}
           width="full"
         />
       ) : null}
