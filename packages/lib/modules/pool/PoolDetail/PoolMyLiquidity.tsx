@@ -71,6 +71,7 @@ import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/Ba
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
+import { isCowAmm } from '@repo/lib/config/getProjectConfig'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -498,8 +499,8 @@ function StakeButton({ pool }: StakeButtonProps) {
   const vebalBoost = veBalBoostMap[pool.address]
   const [, balancerMaxApr] = getTotalApr(pool.dynamicData.aprItems, vebalBoost)
 
-  // hide popover on networks where Aura is not deployed
-  const hidePopover = !getNetworkConfig(pool.chain).hasAura
+  // hide popover on cow or networks where Aura is not deployed
+  const hidePopover = isCowAmm || !getNetworkConfig(pool.chain).hasAura
 
   const stakeOnBalancer = () => router.push(`${pathname}/stake`)
   const stakeOnAura = () => auraDisclosure.onOpen()
