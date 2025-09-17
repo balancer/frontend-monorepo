@@ -14,6 +14,8 @@ import mode from './mode'
 import fraxtal from './fraxtal'
 import sonic from './sonic'
 import hyperevm from './hyperevm'
+// TODO: update
+// import plasma from './plasma'
 
 export type GqlChainValues = `${GqlChain}`
 export type NetworkConfigs = Partial<Record<GqlChainValues, NetworkConfig>>
@@ -33,6 +35,8 @@ const networkConfigs: NetworkConfigs = {
   [GqlChain.Fantom]: fantom,
   [GqlChain.Sonic]: sonic,
   [GqlChain.Hyperevm]: hyperevm,
+  // TODO: update
+  // [GqlChain.Plasma]: plasma,
 }
 
 export function getNetworkConfig(chain: GqlChain) {

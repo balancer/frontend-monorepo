@@ -58,6 +58,7 @@ export enum RiskKey {
   QuantAmmWeighted = 'btf',
   ReclAmm = 'reclamm',
   LiquidityBootstrappingPool = 'lbp',
+  Plasma = 'plasma',
 }
 
 export enum RiskCategory {
@@ -85,6 +86,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.Base]: 'L2 network: Base',
   [RiskKey.Avalanche]: 'L1 network: Avalanche',
   [RiskKey.HyperEVM]: 'L1 network: HyperEVM',
+  [RiskKey.Plasma]: 'L1 network: Plasma',
   [RiskKey.Mutable]: 'Mutable attributes',
   [RiskKey.Composability]: 'Composability',
   [RiskKey.RateProvider]: 'Rate provider',
@@ -234,6 +236,14 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     category: RiskCategory.Network,
     condition: pool => pool.chain === GqlChain.Hyperevm,
   },
+  // TODO: update
+  // {
+  //   key: RiskKey.Plasma,
+  //   title: RISK_TITLES[RiskKey.Plasma],
+  //   path: `/risks#${RiskKey.Plasma}`,
+  //   category: RiskCategory.Network,
+  //   condition: pool => pool.chain === GqlChain.Plasma,
+  // },
 
   // Hook risks
   {
