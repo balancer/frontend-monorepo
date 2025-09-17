@@ -61,8 +61,6 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
     }, bn(0))
     .toString()
 
-  const formatOptions = '$0,0.00a'
-
   return (
     <Flex
       direction="row"
@@ -77,7 +75,6 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
           label="TVL"
           value={
             <AnimatedNumber
-              formatOptions={formatOptions}
               value={safeToNumber(protocolData?.protocolMetricsAggregated.totalLiquidity)}
             />
           }
@@ -89,7 +86,6 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
           label="Volume (24h)"
           value={
             <AnimatedNumber
-              formatOptions={formatOptions}
               value={safeToNumber(protocolData?.protocolMetricsAggregated.swapVolume24h)}
             />
           }
@@ -108,9 +104,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
                 imageTransform="rotate(180deg) scale(2)"
                 label={feeLabel}
                 popover
-                value={
-                  <AnimatedNumber formatOptions={formatOptions} value={safeToNumber(totalFees)} />
-                }
+                value={<AnimatedNumber value={safeToNumber(totalFees)} />}
               />
             </Box>
           </PopoverTrigger>
@@ -131,10 +125,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
                       {fee.label}
                     </Text>
                     <Text className="home-stats" color="font.secondary" fontSize="xs">
-                      <AnimatedNumber
-                        formatOptions={formatOptions}
-                        value={safeToNumber(fee.value)}
-                      />
+                      <AnimatedNumber value={safeToNumber(fee.value)} />
                     </Text>
                   </Flex>
                 ))}
