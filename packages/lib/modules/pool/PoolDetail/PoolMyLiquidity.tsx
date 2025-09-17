@@ -518,6 +518,7 @@ function StakeButton({ pool }: StakeButtonProps) {
     )
   }
 
+  // rn this is only used for Balancer
   return (
     <>
       <Popover placement="top">
