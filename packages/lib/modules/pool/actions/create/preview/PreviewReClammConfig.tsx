@@ -48,7 +48,6 @@ export function PreviewReClammConfig() {
   ]
 
   const tokenSymbols = poolTokens.map(token => token.data?.symbol).filter(Boolean)
-  console.log('tokenSymbols', tokenSymbols)
   const tokenSymbolsString = tokenSymbols.join(' / ')
   const showInvertButton = tokenSymbols.length > 0
 

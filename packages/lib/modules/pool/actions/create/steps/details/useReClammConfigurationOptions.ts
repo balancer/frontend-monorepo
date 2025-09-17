@@ -8,6 +8,7 @@ export type ReClammConfigOptionsGroup = {
   label: string
   options: { label: string; displayValue: string; rawValue: string }[]
   updateFn: (rawValue: string) => void
+  validateFn: (value: string) => string | boolean
   name: keyof ReClammConfig
   customInputLabel: string
 }
@@ -71,6 +72,10 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         updatePriceBounds(rawValue, priceRangePercentage)
       }
     },
+    validateFn: (value: string) => {
+      if (!Number(value)) return 'Invalid target price'
+      return true
+    },
   }
 
   const priceRangeBoundaries = {
@@ -91,6 +96,10 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         reClammConfigForm.setValue('initialMaxPrice', '')
       }
     },
+    validateFn: (value: string) => {
+      if (!Number(value)) return 'Invalid price range percentage'
+      return true
+    },
   }
 
   const marginBuffer = {
@@ -105,6 +114,12 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue)
     },
+    validateFn: (value: string) => {
+      const numValue = Number(value)
+      if (numValue <= 0) return 'Margin buffer must be greater than 0%'
+      if (numValue >= 90) return 'Margin buffer must be less than or equal to 90%'
+      return true
+    },
   }
 
   const dailyPriceReadjustmentRate = {
@@ -118,6 +133,12 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceShiftDailyRate', rawValue)
+    },
+    validateFn: (value: string) => {
+      const numValue = Number(value)
+      if (numValue <= 0) return 'The rate must be greater than 0%'
+      if (numValue > 100) return 'The rate must be less than or equal to 100%'
+      return true
     },
   }
 
