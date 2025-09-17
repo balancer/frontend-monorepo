@@ -58,7 +58,6 @@ const networkConfig: NetworkConfig = {
       '0xdAC17F958D2ee523a2206206994597C13D831ec7': 'USDT',
       '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599': 'WBTC',
       '0xba100000625a3754423978a60c9317c58a424e3D': 'BAL',
-      '0xa3931d71877c0e7a3148cb7eb4463524fec27fbd': 'sUSDS',
       '0xc0c293ce456ff0ed870add98a0828dd4d2903dbf': 'AURA',
       '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d': 'auraBAL',
       '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56': 'B-80BAL-20WETH',
@@ -71,6 +70,7 @@ const networkConfig: NetworkConfig = {
       '0xe07f9d810a48ab5c3c914ba3ca53af14e4491e8a': 'GYD',
       '0x6810e776880c02933d47db1b9fc05908e5386b96': 'GNO',
       '0x6B175474E89094C44Da98b954EedeAC495271d0F': 'DAI',
+      '0xa3931d71877c0e7a3148cb7eb4463524fec27fbd': 'sUSDS',
     },
   },
   contracts: {
