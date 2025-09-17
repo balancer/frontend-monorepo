@@ -55,9 +55,9 @@ import {
 } from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
-import { GqlChain, GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ArrowUpRight, ChevronUp } from 'react-feather'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -71,7 +71,6 @@ import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/Ba
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
-import { isBalancer, isBeets } from '@repo/lib/config/getProjectConfig'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -492,28 +491,20 @@ function StakeButton({ pool }: StakeButtonProps) {
   const router = useRouter()
   const pathname = usePathname()
   const auraDisclosure = useDisclosure()
+  const { veBalBoostMap } = useVebalBoost([pool])
 
   const canStake = getCanStake(pool)
   const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
-  const { veBalBoostMap } = useVebalBoost([pool])
   const vebalBoost = veBalBoostMap[pool.address]
   const [, balancerMaxApr] = getTotalApr(pool.dynamicData.aprItems, vebalBoost)
 
-  // Optimism is a Beets & Balancer collaboration with Balancer & Aura staking
-  const isBeetsAndOptimism = isBeets && pool.chain === GqlChain.Optimism
-
-  // networks where Aura is NOT deployed
-  const auraNonSupportedNetworks = [
-    GqlChain.Mode,
-    GqlChain.Fraxtal,
-    GqlChain.Zkevm,
-    GqlChain.Hyperevm,
-  ]
+  // hide popover on networks where Aura is not deployed
+  const hidePopover = !getNetworkConfig(pool.chain).hasAura
 
   const stakeOnBalancer = () => router.push(`${pathname}/stake`)
   const stakeOnAura = () => auraDisclosure.onOpen()
 
-  if (auraNonSupportedNetworks.includes(pool.chain) || !(isBalancer || isBeetsAndOptimism)) {
+  if (hidePopover) {
     return (
       <Button
         flex="1"
