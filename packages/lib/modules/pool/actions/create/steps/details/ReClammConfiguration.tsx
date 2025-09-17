@@ -8,6 +8,8 @@ import {
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { getPercentFromPrice } from '../../helpers'
 
 export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
@@ -20,6 +22,7 @@ export function ReClammConfiguration() {
       {reClammConfigurationOptions.map(option => (
         <ConfigOptionsGroup
           customInputLabel={option.customInputLabel}
+          customInputPlaceholder={option.customInputPlaceholder}
           key={option.label}
           label={option.label}
           name={option.name}
@@ -39,6 +42,7 @@ function ConfigOptionsGroup({
   validateFn,
   name,
   customInputLabel,
+  customInputPlaceholder,
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
   const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
@@ -47,6 +51,7 @@ function ConfigOptionsGroup({
   const errors = reClammConfigForm.formState.errors[name]
 
   const isCustom = !optionRawValues.includes(formValue)
+  const isCustomTargetPrice = isCustom && name === 'initialTargetPrice'
   const ispriceRangePercentage = name === 'priceRangePercentage'
   const isCustomPriceRange = isCustom && ispriceRangePercentage
   const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
@@ -106,6 +111,10 @@ function ConfigOptionsGroup({
             error={reClammConfigForm.formState.errors['initialMinPrice']?.message}
             label={'Range low price'}
             name={'initialMinPrice'}
+            percentageLabel={
+              initialMinPrice ? getPercentFromPrice(initialMinPrice, initialTargetPrice) : '-10.00'
+            }
+            placeholder={initialTargetPrice ? bn(initialTargetPrice).times(0.9).toFixed(2) : ''}
             validate={value => {
               if (Number(value) >= Number(initialTargetPrice)) {
                 return 'Range low price must be less than target price'
@@ -122,6 +131,10 @@ function ConfigOptionsGroup({
             error={reClammConfigForm.formState.errors['initialMaxPrice']?.message}
             label={'Range high price'}
             name={'initialMaxPrice'}
+            percentageLabel={
+              initialMaxPrice ? getPercentFromPrice(initialMaxPrice, initialTargetPrice) : '10.00'
+            }
+            placeholder={initialTargetPrice ? bn(initialTargetPrice).times(1.1).toFixed(2) : ''}
             validate={value => {
               if (Number(value) <= Number(initialTargetPrice)) {
                 return 'Range high price must be greater than target price'
@@ -141,6 +154,10 @@ function ConfigOptionsGroup({
           isPercentage={isPercentage}
           label={customInputLabel}
           name={name}
+          percentageLabel={
+            isCustomTargetPrice ? getPercentFromPrice(formValue, options[1].rawValue) : ''
+          }
+          placeholder={customInputPlaceholder}
           validate={value => validateFn(value.toString())}
           width="full"
         />

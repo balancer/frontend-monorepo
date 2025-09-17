@@ -1,4 +1,5 @@
 import { PoolType } from '@balancer/sdk'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
@@ -41,4 +42,9 @@ export function getMinSwapFeePercentage(poolType: PoolType): number {
   } else {
     return 0.001
   }
+}
+
+export function getPercentFromPrice(value: string, price: string) {
+  if (!value) return '0.00'
+  return bn(value).minus(price).div(price).times(100).toFixed(2)
 }

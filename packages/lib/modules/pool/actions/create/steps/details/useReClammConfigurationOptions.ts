@@ -11,6 +11,7 @@ export type ReClammConfigOptionsGroup = {
   validateFn: (value: string) => string | boolean
   name: keyof ReClammConfig
   customInputLabel: string
+  customInputPlaceholder?: string
 }
 
 export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
@@ -49,20 +50,21 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     name: 'initialTargetPrice' as const,
     label: `Target price: ${tokenSymbolsString}`,
     customInputLabel: 'Custom target price',
+    customInputPlaceholder: bn(currentPrice).toFixed(2),
     options: [
       {
         label: 'Current price -5%',
-        displayValue: Number(currentPriceMinus5).toFixed(2),
+        displayValue: bn(currentPriceMinus5).toFixed(2),
         rawValue: currentPriceMinus5,
       },
       {
         label: 'Current price',
-        displayValue: Number(currentPrice).toFixed(2),
+        displayValue: bn(currentPrice).toFixed(2),
         rawValue: currentPrice.toString(),
       },
       {
         label: 'Current price +5%',
-        displayValue: Number(currentPricePlus5).toFixed(2),
+        displayValue: bn(currentPricePlus5).toFixed(2),
         rawValue: currentPricePlus5,
       },
     ],
