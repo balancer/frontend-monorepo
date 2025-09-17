@@ -4,6 +4,7 @@ import {
   VStack,
   NumberInput as ChakraNumberInput,
   NumberInputField,
+  HStack,
 } from '@chakra-ui/react'
 import { Controller, Control } from 'react-hook-form'
 
@@ -17,14 +18,18 @@ interface NumberInputProps {
   validate: (value: number) => string | boolean
   width?: string
   error?: string
+  percentageLabel?: string
+  placeholder?: string
 }
 
 export function NumberInput({
+  placeholder,
   isInvalid,
   isDisabled,
   control,
   label,
   isPercentage,
+  percentageLabel,
   validate,
   name,
   width = '20',
@@ -32,7 +37,19 @@ export function NumberInput({
 }: NumberInputProps) {
   return (
     <VStack align="start" spacing="sm" w="full">
-      <Text>{label}</Text>
+      <HStack justify="space-between" w="full">
+        <Text>{label}</Text>
+        {percentageLabel && (
+          <Text
+            color="font.secondary"
+            fontSize="sm"
+            opacity={Number(percentageLabel) === 0 ? 0.5 : 1}
+          >
+            {`${Number(percentageLabel) >= 0 ? '+' : ''}${percentageLabel}%`}
+          </Text>
+        )}
+      </HStack>
+
       <Box position="relative" w={width}>
         <Controller
           control={control}
@@ -47,7 +64,7 @@ export function NumberInput({
                 onChange={field.onChange}
                 value={field.value}
               >
-                <NumberInputField max={99} min={1} placeholder="0" />
+                <NumberInputField max={99} min={1} placeholder={placeholder} />
               </ChakraNumberInput>
               {isPercentage && (
                 <Text
