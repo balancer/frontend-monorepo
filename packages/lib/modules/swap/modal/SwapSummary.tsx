@@ -14,6 +14,16 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
+import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  EXACT_IN_SWAP_DESCRIPTION,
+  EXACT_OUT_SWAP_DESCRIPTION,
+  SlippageOptions,
+  SlippageSelector,
+} from '../../pool/actions/SlippageSelector'
+import { useState } from 'react'
+import { useUserSettings } from '../../user/settings/UserSettingsProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function SwapSummary({
   isLoading: isLoadingReceipt,
@@ -36,7 +46,17 @@ export function SwapSummary({
     isLbpSwap,
     lbpToken,
     isLbpProjectTokenBuy,
+    swapType,
   } = useSwap()
+
+  const { slippage } = useUserSettings()
+  const [selectedSlippage, setSelectedSlippage] = useState(
+    swapType === GqlSorSwapType.ExactIn ? 0 : Number(slippage) / 100
+  )
+  const calculateSlippage = (value: SlippageOptions) => {
+    if (value === 'zero') setSelectedSlippage(0)
+    else if (value === 'max') setSelectedSlippage(Number(slippage) / 100)
+  }
 
   const expectedTokenOut = simulationQuery?.data?.returnAmount as HumanAmount
 
@@ -45,10 +65,19 @@ export function SwapSummary({
   const shouldShowErrors = hasQuoteContext ? swapTxConfirmed : swapTxHash
   const isWrapComplete = isWrap && swapTxHash && swapTxConfirmed
 
+  const tokenInLabel =
+    shouldShowReceipt || isWrapComplete
+      ? 'You paid'
+      : swapType === GqlSorSwapType.ExactIn
+        ? 'You pay (exactly)'
+        : 'You pay'
+
   function tokenOutLabel() {
     if (shouldShowReceipt || isWrapComplete) return 'You got'
     if (isWrap) return "You'll get"
-    return "You'll get (if no slippage)"
+    if (swapType === GqlSorSwapType.ExactOut) return "You'll get (exactly)"
+
+    return "You'll get"
   }
 
   if (!isUserAddressLoading && !userAddress) {
@@ -66,6 +95,32 @@ export function SwapSummary({
     )
   }
 
+  const outTokenRightElement = () => {
+    return shouldShowReceipt ? (
+      slippageDiffLabel(receivedToken.humanAmount || '0', expectedTokenOut)
+    ) : swapType === GqlSorSwapType.ExactIn ? (
+      <SlippageSelector
+        description={EXACT_IN_SWAP_DESCRIPTION}
+        onChange={calculateSlippage}
+        selectedIndex={0}
+        title="Slippage on 'exact in' swaps"
+      />
+    ) : undefined
+  }
+
+  const inAmountWithSlippage =
+    swapType === GqlSorSwapType.ExactIn
+      ? tokenIn.amount
+      : bn(tokenIn.amount)
+          .times(1 + selectedSlippage)
+          .toString()
+  const outAmountWithSlippage =
+    swapType === GqlSorSwapType.ExactOut
+      ? tokenOut.amount
+      : bn(tokenOut.amount)
+          .times(1 - selectedSlippage)
+          .toString()
+
   return (
     <AnimateHeightChange spacing="sm" w="full">
       {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />}
@@ -73,9 +128,19 @@ export function SwapSummary({
       <Card variant="modalSubSection">
         <SwapTokenRow
           chain={selectedChain}
-          label={shouldShowReceipt || isWrapComplete ? 'You paid' : 'You pay'}
+          label={tokenInLabel}
+          rightElement={
+            swapType === GqlSorSwapType.ExactOut && (
+              <SlippageSelector
+                description={EXACT_OUT_SWAP_DESCRIPTION}
+                onChange={calculateSlippage}
+                selectedIndex={1}
+                title="Slippage on 'exact out' swaps"
+              />
+            )
+          }
           tokenAddress={shouldShowReceipt ? sentToken.tokenAddress : tokenIn.address}
-          tokenAmount={shouldShowReceipt ? sentToken.humanAmount : tokenIn.amount}
+          tokenAmount={shouldShowReceipt ? sentToken.humanAmount : inAmountWithSlippage}
           {...(isLbpSwap &&
             !isLbpProjectTokenBuy && {
               customToken: lbpToken as CustomToken,
@@ -87,13 +152,9 @@ export function SwapSummary({
         <SwapTokenRow
           chain={selectedChain}
           label={tokenOutLabel()}
-          rightLabel={
-            shouldShowReceipt
-              ? slippageDiffLabel(receivedToken.humanAmount || '0', expectedTokenOut)
-              : undefined
-          }
+          rightElement={outTokenRightElement()}
           tokenAddress={shouldShowReceipt ? receivedToken.tokenAddress : tokenOut.address}
-          tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : tokenOut.amount}
+          tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : outAmountWithSlippage}
           {...(isLbpSwap &&
             isLbpProjectTokenBuy && {
               customToken: lbpToken as CustomToken,

@@ -500,9 +500,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const isWrap = swapAction === 'wrap' || swapAction === 'unwrap'
 
-  /**
-   * Step construction
-   */
   const { steps, isLoadingSteps } = useSwapSteps({
     vaultAddress,
     swapState,
