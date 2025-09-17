@@ -81,6 +81,8 @@ const tokenColors: Record<GqlChain, Record<Address, TokenColorDef>> = {
   },
   [GqlChain.Hyperevm]: {},
   [GqlChain.Sonic]: {},
+  // TODO: update
+  // [GqlChain.Plasma]: {},
 }
 
 const DEFAULT_TOKEN_COLORS: TokenColorDef[] = [

@@ -43,6 +43,8 @@ export const rpcFallbacks: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Fraxtal]: 'https://fraxtal.drpc.org',
   [GqlChain.Sonic]: 'https://rpc.soniclabs.com',
   [GqlChain.Hyperevm]: 'https://rpc.hyperliquid.xyz/evm',
+  // TODO: update
+  // [GqlChain.Plasma]: 'https://rpc.plasma.to',
 }
 
 const baseUrl = getBaseUrl()
@@ -67,6 +69,8 @@ export const rpcOverrides: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Fraxtal]: getPrivateRpcUrl(GqlChain.Fraxtal),
   [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic),
   [GqlChain.Hyperevm]: getPrivateRpcUrl(GqlChain.Hyperevm),
+  // TODO: update
+  // [GqlChain.Plasma]: getPrivateRpcUrl(GqlChain.Plasma),
 }
 
 const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
@@ -84,6 +88,8 @@ const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
   [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
   [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
   [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEvm },
+  // TODO: update
+  // [GqlChain.Plasma]: { iconUrl: '/images/chains/PLASMA.svg', ...plasma },
 } as const
 
 export const supportedNetworks = PROJECT_CONFIG.supportedNetworks

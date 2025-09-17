@@ -31,6 +31,8 @@ const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Zkevm]: 'polygon-zkevm',
   [GqlChain.Sonic]: 'sonic',
   [GqlChain.Hyperevm]: 'hyperliquid',
+  // TODO: update
+  // [GqlChain.Plasma]: 'plasma',
 }
 
 const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
@@ -48,6 +50,8 @@ const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [polygonZkEvm.id]: 'polygon-zkevm',
   [sonic.id]: 'sonic',
   [hyperEvm.id]: 'hyperliquid',
+  // TODO: update
+  // [plasma.id]: 'plasma',
 }
 
 export function drpcUrl(chain: GqlChain, privateKey: string) {

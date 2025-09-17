@@ -409,6 +409,8 @@ export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
   [GqlChain.Fraxtal]: [],
   [GqlChain.Sonic]: [],
   [GqlChain.Hyperevm]: [],
+  // TODO: update
+  // [GqlChain.Plasma]: [],
 }
 
 export const HIGH_RISK_POOL_IDS: string[] = [
