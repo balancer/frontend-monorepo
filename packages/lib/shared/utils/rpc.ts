@@ -1,20 +1,5 @@
-import {
-  arbitrum,
-  avalanche,
-  base,
-  fantom,
-  fraxtal,
-  gnosis,
-  mainnet,
-  mode,
-  optimism,
-  polygon,
-  polygonZkEvm,
-  sepolia,
-  sonic,
-} from 'viem/chains'
 import { GqlChain } from '../services/api/generated/graphql'
-import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
+import { ChainId } from '@balancer/sdk'
 
 const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Mainnet]: 'ethereum',
@@ -36,20 +21,20 @@ const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
 }
 
 const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
-  [mainnet.id]: 'ethereum',
-  [arbitrum.id]: 'arbitrum',
-  [optimism.id]: 'optimism',
-  [base.id]: 'base',
-  [polygon.id]: 'polygon',
-  [avalanche.id]: 'avalanche',
-  [fantom.id]: 'fantom',
-  [sepolia.id]: 'sepolia',
-  [fraxtal.id]: 'fraxtal',
-  [gnosis.id]: 'gnosis',
-  [mode.id]: 'mode',
-  [polygonZkEvm.id]: 'polygon-zkevm',
-  [sonic.id]: 'sonic',
-  [hyperEvm.id]: 'hyperliquid',
+  [ChainId.MAINNET]: 'ethereum',
+  [ChainId.ARBITRUM_ONE]: 'arbitrum',
+  [ChainId.OPTIMISM]: 'optimism',
+  [ChainId.BASE]: 'base',
+  [ChainId.POLYGON]: 'polygon',
+  [ChainId.AVALANCHE]: 'avalanche',
+  [ChainId.FANTOM]: 'fantom',
+  [ChainId.SEPOLIA]: 'sepolia',
+  [ChainId.FRAXTAL]: 'fraxtal',
+  [ChainId.GNOSIS_CHAIN]: 'gnosis',
+  [ChainId.MODE]: 'mode',
+  [ChainId.ZKSYNC]: 'polygon-zkevm',
+  [ChainId.SONIC]: 'sonic',
+  [ChainId.HYPER_EVM]: 'hyperliquid',
   // TODO: update
   // [plasma.id]: 'plasma',
 }
