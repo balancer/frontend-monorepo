@@ -184,10 +184,10 @@ export function PoolComposition() {
                       {filteredErc4626Metadata.length > 0 &&
                         filteredErc4626Metadata.map((metadata, index) => (
                           <Fragment key={index}>
-                            <Link href={metadata.readMoreURL} isExternal>
-                              <Text as="span" fontSize="sm">
+                            <Link fontSize="sm" href={metadata.readMoreURL} isExternal>
+                              <Box as="span" color="purple.800" fontWeight="bold">
                                 {protocolNames[index]}
-                              </Text>
+                              </Box>
                             </Link>
                             {index < filteredErc4626Metadata.length - 2
                               ? ', '
