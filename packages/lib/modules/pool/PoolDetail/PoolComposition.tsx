@@ -177,28 +177,35 @@ export function PoolComposition() {
                 <>
                   <Text color="font.dark" fontSize="sm">
                     {boostedWarningMsg}
+                    {hasReadMoreURL && (
+                      <>
+                        {' '}
+                        Read more about{' '}
+                        {filteredErc4626Metadata.length > 0 &&
+                          filteredErc4626Metadata.map((metadata, index) => (
+                            <Fragment key={index}>
+                              <Link href={metadata.readMoreURL} isExternal>
+                                <Box
+                                  as="span"
+                                  color="purple.500"
+                                  fontSize="sm"
+                                  fontWeight="bold"
+                                  textDecoration="underline"
+                                >
+                                  {protocolNames[index]}
+                                </Box>
+                              </Link>
+                              {index < filteredErc4626Metadata.length - 2
+                                ? ', '
+                                : index === filteredErc4626Metadata.length - 2
+                                  ? ' & '
+                                  : ''}
+                            </Fragment>
+                          ))}
+                        .
+                      </>
+                    )}
                   </Text>
-                  {hasReadMoreURL && (
-                    <Text color="font.dark" fontSize="sm" mt="md">
-                      Read more about{' '}
-                      {filteredErc4626Metadata.length > 0 &&
-                        filteredErc4626Metadata.map((metadata, index) => (
-                          <Fragment key={index}>
-                            <Link fontSize="sm" href={metadata.readMoreURL} isExternal>
-                              <Box as="span" color="purple.800" fontWeight="bold">
-                                {protocolNames[index]}
-                              </Box>
-                            </Link>
-                            {index < filteredErc4626Metadata.length - 2
-                              ? ', '
-                              : index === filteredErc4626Metadata.length - 2
-                                ? ' & '
-                                : ''}
-                          </Fragment>
-                        ))}
-                      .
-                    </Text>
-                  )}
                 </>
               }
               status="info"
