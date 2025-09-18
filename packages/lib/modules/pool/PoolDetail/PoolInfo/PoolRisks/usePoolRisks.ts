@@ -236,14 +236,13 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     category: RiskCategory.Network,
     condition: pool => pool.chain === GqlChain.Hyperevm,
   },
-  // TODO: update
-  // {
-  //   key: RiskKey.Plasma,
-  //   title: RISK_TITLES[RiskKey.Plasma],
-  //   path: `/risks#${RiskKey.Plasma}`,
-  //   category: RiskCategory.Network,
-  //   condition: pool => pool.chain === GqlChain.Plasma,
-  // },
+  {
+    key: RiskKey.Plasma,
+    title: RISK_TITLES[RiskKey.Plasma],
+    path: `/risks#${RiskKey.Plasma}`,
+    category: RiskCategory.Network,
+    condition: pool => pool.chain === GqlChain.Plasma,
+  },
 
   // Hook risks
   {

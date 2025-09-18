@@ -63,8 +63,7 @@ export const chainToSlugMap: Partial<Record<GqlChainValues, ChainSlug>> = {
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
   [GqlChain.Sonic]: ChainSlug.Sonic,
   [GqlChain.Hyperevm]: ChainSlug.HyperEVM,
-  // TODO: update
-  // [GqlChain.Plasma]: ChainSlug.Plasma,
+  [GqlChain.Plasma]: ChainSlug.Plasma,
 }
 
 export function getChainSlug(chainSlug: ChainSlug): GqlChain {

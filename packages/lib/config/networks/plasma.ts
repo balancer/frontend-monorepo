@@ -18,9 +18,7 @@ const networkConfig: NetworkConfig = {
   chainId,
   name: chain.name,
   shortName: chain.name,
-  // TODO: update
-  chain: GqlChain.Gnosis,
-  // chain: GqlChain.Plasma,
+  chain: GqlChain.Plasma,
   iconPath: '/images/chains/PLASMA.svg',
   blockExplorer: {
     baseUrl: chain.blockExplorers!.default.url,
@@ -65,12 +63,10 @@ const networkConfig: NetworkConfig = {
     permit2: PERMIT2[chainId],
   },
   pools: convertHexToLowerCase({
-    // TODO: update (also CSP_ISSUE_POOL_IDS)
-    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Gnosis] },
-    // issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Plasma] },
+    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Plasma] },
   }),
-  layerZeroChainId: 145, // TODO: update
-  supportsVeBalSync: false, // TODO: update
+  layerZeroChainId: 145,
+  supportsVeBalSync: false,
 }
 
 export default networkConfig
