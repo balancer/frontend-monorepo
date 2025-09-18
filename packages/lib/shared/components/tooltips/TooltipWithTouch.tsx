@@ -19,12 +19,11 @@ export function TooltipWithTouch({ children, ...rest }: TooltipProps) {
   }
 
   return (
-    <Tooltip isOpen={isLabelOpen} {...rest}>
+    <Tooltip isOpen={isLabelOpen} {...rest} bg="background.level4" color="font.secondary">
       <Box
         onClick={() => setIsLabelOpen(true)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        w="full"
       >
         {children}
       </Box>
