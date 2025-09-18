@@ -16,8 +16,11 @@ const chain = CHAINS[chainId]
 
 const networkConfig: NetworkConfig = {
   chainId,
-  name: chain.name,
-  shortName: chain.name,
+  // TODO: update from sdk
+  // name: chain.name,
+  // shortName: chain.name,
+  name: 'Plasma',
+  shortName: 'Plasma',
   chain: GqlChain.Plasma,
   iconPath: '/images/chains/PLASMA.svg',
   blockExplorer: {
