@@ -19,7 +19,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState, Fragment } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 import { isBoosted, isQuantAmmPool } from '../pool.helpers'
@@ -128,6 +128,9 @@ export function PoolComposition() {
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
   const erc4626Metadata = getErc4626Metadata(pool)
 
+  const hasReadMoreURL = erc4626Metadata.some(metadata => metadata.readMoreURL)
+  const filteredErc4626Metadata = erc4626Metadata.filter(metadata => metadata.readMoreURL)
+
   const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
   const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
   const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${protocolNames.length === 1 ? 'that protocol' : 'those protocols'}. This results in continuous appreciation of the pool's total value over time.`
@@ -171,9 +174,32 @@ export function PoolComposition() {
           {isBoosted(pool) && (
             <BalAlert
               content={
-                <Text color="font.dark" fontSize="sm">
-                  {boostedWarningMsg}
-                </Text>
+                <>
+                  <Text color="font.dark" fontSize="sm">
+                    {boostedWarningMsg}
+                  </Text>
+                  {hasReadMoreURL && (
+                    <Text color="font.dark" fontSize="sm" mt="md">
+                      Read more about{' '}
+                      {filteredErc4626Metadata.length > 0 &&
+                        filteredErc4626Metadata.map((metadata, index) => (
+                          <Fragment key={index}>
+                            <Link href={metadata.readMoreURL} isExternal>
+                              <Text as="span" fontSize="sm">
+                                {protocolNames[index]}
+                              </Text>
+                            </Link>
+                            {index < filteredErc4626Metadata.length - 2
+                              ? ', '
+                              : index === filteredErc4626Metadata.length - 2
+                                ? ' & '
+                                : ''}
+                          </Fragment>
+                        ))}
+                      .
+                    </Text>
+                  )}
+                </>
               }
               status="info"
             />
