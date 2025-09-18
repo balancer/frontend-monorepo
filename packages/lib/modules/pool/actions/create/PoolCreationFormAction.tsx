@@ -6,29 +6,27 @@ import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
-import { LS_KEYS } from '../../../local-storage/local-storage.constants'
-import { Address } from 'viem'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const [poolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.PoolCreation.Address,
-    undefined
-  )
-
-  const { isFormStateValid } = usePoolCreationForm()
+  const { isFormStateValid, poolAddress, isReClamm, poolTokens } = usePoolCreationForm()
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
 
+  const hasTokenAmounts = poolTokens.every(token => token.amount)
+
   useEffect(() => {
     // trigger modal open if user has begun pool creation process
-    if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
-  }, [poolAddress])
+    // if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
+    // trigger modal close if reclamm and not token amounts have been set
+    if (poolAddress && isReClamm && !hasTokenAmounts) previewModalDisclosure.onClose()
+  }, [poolAddress, isReClamm, hasTokenAmounts])
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
+
+  const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
 
   return (
     <>
@@ -60,7 +58,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             variant="primary"
             w="full"
           >
-            {isLastStep ? 'Create Pool' : 'Next'}
+            {buttonText}
           </Button>
         </HStack>
       </VStack>

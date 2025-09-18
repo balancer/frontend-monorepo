@@ -17,7 +17,7 @@ export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 export function usePoolFormLogic() {
-  const [, setPoolAddress] = useLocalStorage<Address | undefined>(
+  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.PoolCreation.Address,
     undefined
   )
@@ -113,6 +113,7 @@ export function usePoolFormLogic() {
     removePoolToken,
     addPoolToken,
     resetPoolCreationForm,
+    poolAddress,
   }
 }
 
