@@ -13,7 +13,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { RefreshCcw } from 'react-feather'
 
-export function PreviewReClammConfig() {
+export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }) {
   const { reClammConfigForm, poolCreationForm } = usePoolCreationForm()
   const {
     initialTargetPrice,
@@ -52,7 +52,7 @@ export function PreviewReClammConfig() {
   const showInvertButton = tokenSymbols.length > 0
 
   return (
-    <Card>
+    <Card opacity={isBeforeStep ? 0.5 : 1}>
       <CardBody>
         <VStack spacing="lg">
           <SimpleGrid columns={5} spacing={3} w="full">

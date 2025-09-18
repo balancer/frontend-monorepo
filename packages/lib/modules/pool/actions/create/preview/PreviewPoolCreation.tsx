@@ -39,7 +39,7 @@ export function PreviewPoolCreation() {
         </HStack>
 
         <PreviewPoolType />
-        {isReClamm && <PreviewReClammConfig />}
+        {isReClamm && <PreviewReClammConfig isBeforeStep={isBeforeStep('Tokens')} />}
         <PreviewPoolTokens isBeforeStep={isBeforeStep('Tokens')} />
         <PreviewPoolTokensInWallet isBeforeStep={isBeforeStep('Tokens')} />
         <PreviewPoolDetails isBeforeStep={isBeforeStep('Details')} />
