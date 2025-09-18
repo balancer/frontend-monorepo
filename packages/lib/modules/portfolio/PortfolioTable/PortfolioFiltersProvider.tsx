@@ -12,10 +12,12 @@ import {
   StakingFilterKeyType,
   useExpandedPools,
   STAKING_FILTER_MAP,
+  ExpandedPoolInfo,
 } from './useExpandedPools'
 import { usePortfolio } from '../PortfolioProvider'
 import { poolTypeLabel } from '../../pool/pool.helpers'
 import { hasTinyBalance } from '../../pool/user-balance.helpers'
+import { removeHookDataFromPoolIfNecessary } from '@repo/lib/modules/pool/pool.utils'
 
 export type UsePortfolioFiltersResult = ReturnType<typeof usePortfolioFiltersLogic>
 
@@ -172,7 +174,7 @@ export function usePortfolioFiltersLogic() {
       filtered = filtered.filter(pool => targetPoolTypes.includes(pool.poolType))
     }
 
-    return filtered
+    return filtered.map(pool => removeHookDataFromPoolIfNecessary(pool)) as ExpandedPoolInfo[]
   }, [expandedPools, selectedNetworks, selectedPoolTypes, selectedStakingTypes])
 
   return {
