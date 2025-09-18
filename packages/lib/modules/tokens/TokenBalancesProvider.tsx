@@ -1,5 +1,3 @@
-'use client'
-
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { useBalance, useReadContracts } from 'wagmi'
 import { erc20Abi } from 'viem'
@@ -15,9 +13,7 @@ import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
-import { HumanAmount, Slippage } from '@balancer/sdk'
 import { ApiToken } from './token.types'
-import { isZero } from '@repo/lib/shared/utils/numbers'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
@@ -27,16 +23,8 @@ export const TokenBalancesContext = createContext<UseTokenBalancesResponse | nul
 /**
  * @param initTokens If initTokens are provided the tokens state will be managed internally.
  * @param extTokens If extTokens are provided the tokens state will be managed externally.
- * @param bufferPercentage An amount used to reduce the balances of the user's tokens. This is
- * primarily used for forced proportional adds where we need to "reserve"
- * an amount of the user's tokens to ensure the add is successful. In this
- * case the buffer is set to the slippage percentage set by the user.
  */
-export function useTokenBalancesLogic(
-  initTokens?: ApiToken[],
-  extTokens?: ApiToken[],
-  bufferPercentage: HumanAmount | string = '0'
-) {
+export function useTokenBalancesLogic(initTokens?: ApiToken[], extTokens?: ApiToken[]) {
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
@@ -97,14 +85,7 @@ export function useTokenBalancesLogic(
       const token = tokensExclNativeAsset[index]
       if (!token) return
 
-      let amount = balance.status === 'success' ? (balance.result as bigint) : 0n
-      const slippage = Slippage.fromPercentage(bufferPercentage as HumanAmount)
-      amount = slippage.applyTo(amount, -1)
-      if (!isZero(bufferPercentage) && (token.decimals === 6 || token.decimals === 8)) {
-        // Apply an extra buffer of 5n to avoid precision issues in tokens with 6/8 decimals
-        const extraBuffer = 5n
-        amount = amount - extraBuffer
-      }
+      const amount = balance.status === 'success' ? (balance.result as bigint) : 0n
 
       return {
         chainId,
@@ -154,16 +135,10 @@ export function useTokenBalancesLogic(
 type ProviderProps = PropsWithChildren<{
   initTokens?: ApiToken[]
   extTokens?: ApiToken[]
-  bufferPercentage?: HumanAmount | string
 }>
 
-export function TokenBalancesProvider({
-  initTokens,
-  extTokens,
-  bufferPercentage,
-  children,
-}: ProviderProps) {
-  const hook = useTokenBalancesLogic(initTokens, extTokens, bufferPercentage)
+export function TokenBalancesProvider({ initTokens, extTokens, children }: ProviderProps) {
+  const hook = useTokenBalancesLogic(initTokens, extTokens)
   return <TokenBalancesContext.Provider value={hook}>{children}</TokenBalancesContext.Provider>
 }
 

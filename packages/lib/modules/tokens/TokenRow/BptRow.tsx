@@ -2,10 +2,11 @@ import { VStack, HStack, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import TokenRow from './TokenRow'
 import { Pool } from '../../pool/pool.types'
+import { ReactNode } from 'react'
 
 export function BptRow({
   label,
-  rightLabel,
+  rightElement,
   bptAmount,
   pool,
   isLoading,
@@ -13,22 +14,18 @@ export function BptRow({
   label: string
   bptAmount: string
   pool: Pool
-  rightLabel?: string
+  rightElement?: ReactNode
   isLoading?: boolean
 }) {
   return (
     <VStack align="start" spacing="md">
       <HStack justify="space-between" w="full">
         {!isLoading && (
-          <Text color="grayText" fontSize="sm" fontWeight="bold">
+          <Text fontSize="sm" fontWeight="bold">
             {label}
           </Text>
         )}
-        {rightLabel && (
-          <Text color="grayText" fontSize="sm">
-            {rightLabel}
-          </Text>
-        )}
+        {rightElement}
       </HStack>
       <TokenRow
         abbreviated={false}

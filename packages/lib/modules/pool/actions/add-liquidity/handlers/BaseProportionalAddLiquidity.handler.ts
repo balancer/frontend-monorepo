@@ -14,6 +14,7 @@ import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-li
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 /**
  * Base abstract class that shares common logic shared by v3 and v2/v1 pool proportional add handlers
@@ -31,9 +32,17 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
 
   public async simulate(
     humanAmountsIn: HumanTokenAmountWithAddress[],
-    userAddress: Address
+    userAddress: Address,
+    _referenceAmountAddress?: Address,
+    slippage?: number
   ): Promise<SdkQueryAddLiquidityOutput> {
     const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
+    // Apply slippage tolerance to the reference amount by reducing the raw amount
+    referenceAmount.rawAmount = BigInt(
+      bn(bn(referenceAmount.rawAmount).times(100 - (slippage || 0)))
+        .div(100)
+        .toFixed(0)
+    )
 
     const addLiquidity = new AddLiquidity()
 

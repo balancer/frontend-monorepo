@@ -76,6 +76,7 @@ const networkConfig: NetworkConfig = {
       '0x4ecaba5870353805a9f068101a40e0f32ed605c6', // USDT
     ],
   },
+  hasAura: true,
 }
 
 export default networkConfig

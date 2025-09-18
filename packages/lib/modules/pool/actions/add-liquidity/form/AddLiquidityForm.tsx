@@ -21,10 +21,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
-import {
-  ProportionalTransactionSettings,
-  TransactionSettings,
-} from '@repo/lib/modules/user/settings/TransactionSettings'
+import { TransactionSettings } from '@repo/lib/modules/user/settings/TransactionSettings'
 import { usePool } from '../../../PoolProvider'
 import {
   hasNoLiquidity,
@@ -59,12 +56,10 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
-  const { validTokens, slippage, wantsProportional } = useAddLiquidity()
-
-  const bufferPercentage = wantsProportional ? slippage : '0'
+  const { validTokens } = useAddLiquidity()
 
   return (
-    <TokenBalancesProvider bufferPercentage={bufferPercentage} extTokens={validTokens}>
+    <TokenBalancesProvider extTokens={validTokens}>
       <AddLiquidityMainForm />
     </TokenBalancesProvider>
   )
@@ -89,7 +84,6 @@ function AddLiquidityMainForm() {
     wNativeAsset,
     previewModalDisclosure,
     slippage,
-    setProportionalSlippage,
     setWantsProportional,
     wantsProportional,
   } = useAddLiquidity()
@@ -176,16 +170,8 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
-            {wantsProportional ? (
-              <ProportionalTransactionSettings
-                pool={pool}
-                setSlippage={setProportionalSlippage}
-                size="sm"
-                slippage={slippage}
-              />
-            ) : (
-              <TransactionSettings size="xs" />
-            )}
+
+            <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
@@ -225,13 +211,13 @@ function AddLiquidityMainForm() {
                 accordionButtonComponent={
                   <HStack gap="xs">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
-                      Potential losses:{' '}
+                      {wantsProportional ? 'Max slippage:' : 'Potential losses:'}
                     </Text>
                     {isFetching ? (
                       <Skeleton h="16px" w="40px" />
                     ) : (
                       <Text color={priceImpactColor} fontSize="sm" variant="secondary">
-                        {priceImpactLabel}
+                        {wantsProportional ? fNum('slippage', slippage) : priceImpactLabel}
                       </Text>
                     )}
                   </HStack>
@@ -248,7 +234,7 @@ function AddLiquidityMainForm() {
                 action="add"
                 avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
-                isDisabled={!priceImpactQuery.data}
+                isDisabled={!wantsProportional && !priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}

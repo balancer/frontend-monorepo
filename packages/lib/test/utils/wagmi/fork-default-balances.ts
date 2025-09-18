@@ -3,7 +3,16 @@ import { TokenBalance } from './fork-options'
 /*
   Edit the following defaults to setup scenarios for manual tests
   (E2E dev tests have their own fork option defaults)
+
+  Some slots cannot be easily guessed so we hardcode them from here:
+  https://github.com/balancer/b-sdk/blob/2f8df4f20c9c9e478c58c5169c30055488d227c5/test/lib/utils/addresses.ts#L208
+
+  If not found on that list alternative tools can be used:
+  - https://hackmd.io/@oS7_rZFHQnCFw_lsRei3nw/HJN1rQWmA
+    `curl http://token-bss.xyz/eth/<token-address> | jq`
+  - https://github.com/kendricktan/slot20
  */
+
 export const mainnetTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56', // B-80BAL-20WETH
@@ -36,6 +45,16 @@ export const mainnetTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f', // GHO
     value: '6000',
+  },
+  {
+    tokenAddress: '0xc3d21f79c3120a4ffda7a535f8005a7c297799bf', // TERM
+    value: '10000',
+    slot: BigInt('0x52c63247e1f47db19d5ce0460030c497f067ca4cebf71ba98eeadabe20bace00'),
+  },
+  {
+    tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+    value: '2000',
+    decimals: 6,
   },
 ]
 
@@ -116,6 +135,7 @@ export const avalancheTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be', // sAVAX
     value: '20000',
+    slot: 203n,
   },
   {
     tokenAddress: '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // WAVAX
@@ -130,6 +150,7 @@ export const avalancheTokenBalances: TokenBalance[] = [
     tokenAddress: '0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7', // USDT
     value: '50000',
     decimals: 6,
+    slot: 51n,
   },
   {
     tokenAddress: '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e', // USDC
