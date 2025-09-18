@@ -107,6 +107,7 @@ export interface NetworkConfig {
   lbps?: {
     collateralTokens: string[]
   }
+  hasAura?: boolean
 }
 
 export interface Config {
