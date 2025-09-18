@@ -11,18 +11,18 @@ export type TokenColorDef = {
 const tokenColors: Record<GqlChain, Record<Address, TokenColorDef>> = {
   [GqlChain.Mainnet]: {
     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { from: '#627EEA', to: '#627EEA' }, // 'ETH'
-    '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': { from: '#627EEA', to: '#627EEA' }, // 'WETH' // FIXME!
+    '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': { from: '#F2F3F7', to: '#CECDFE' }, // 'WETH' // FIXME!
     '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { from: '#2775CA', to: '#2775CA' }, // 'USDC'
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#F5AC37', to: '#F5AC37' }, // 'DAI'
     '0xdac17f958d2ee523a2206206994597c13d831ec7': { from: '#50AF95', to: '#50AF95' }, // 'USDT'
     '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599': { from: '#F09242', to: '#F09242' }, // 'WBTC'
-    '0xba100000625a3754423978a60c9317c58a424e3d': { from: '#E7DEBD', to: '#E7DEBD' }, // 'BAL'
+    '0xba100000625a3754423978a60c9317c58a424e3d': { from: '#4C5561', to: '#303742' }, // 'BAL'
     '0xc0c293ce456ff0ed870add98a0828dd4d2903dbf': { from: '#8C43D2', to: '#8C43D2' }, // 'AURA'
     '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d': { from: '#AB60F3', to: '#AB60F3' }, // 'auraBAL'
     '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56': { from: '#D7B554', to: '#D7B554' }, // 'B-80BAL-20WETH'
-    '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0': { from: '#00A3FF', to: '#00A3FF' }, // 'wstETH'
-    '0xae78736cd615f374d3085123a210448e74fc6393': { from: '#FF6E2F', to: '#FF6E2F' }, // 'rETH'
-    '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9': { from: '#9996FD', to: '#9996FD' }, // 'AAVE'
+    '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0': { from: '#00A3FF', to: '#99DAFF' }, // 'wstETH'
+    '0xae78736cd615f374d3085123a210448e74fc6393': { from: '#FE856C', to: '#FFC5A8' }, // 'rETH'
+    '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9': { from: '#817DFD', to: '#CECDFE' }, // 'AAVE'
     '0xbf5495efe5db9ce00f80364c8b423567e58d2110': { from: '#ACE731', to: '#ACE731' }, // 'ezETH'
     '0xe07f9d810a48ab5c3c914ba3ca53af14e4491e8a': { from: '#F0FF9B', to: '#F0FF9B' }, // 'GYD'
     '0x6810e776880c02933d47db1b9fc05908e5386b96': { from: '#3E6957', to: '#3E6957' }, // 'GNO'
@@ -81,6 +81,7 @@ const tokenColors: Record<GqlChain, Record<Address, TokenColorDef>> = {
   },
   [GqlChain.Hyperevm]: {},
   [GqlChain.Sonic]: {},
+  [GqlChain.Plasma]: {},
 }
 
 const DEFAULT_TOKEN_COLORS: TokenColorDef[] = [
