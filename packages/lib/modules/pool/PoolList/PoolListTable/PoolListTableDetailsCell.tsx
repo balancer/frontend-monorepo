@@ -11,14 +11,18 @@ import {
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import Image from 'next/image'
 import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'
+import { useHook } from '../../../hooks/useHook'
 import { usePoolsMetadata } from '../../metadata/PoolsMetadataProvider'
 import { Erc4626Metadata } from '../../metadata/getErc4626Metadata'
 import { Protocol } from '@repo/lib/modules/protocols/useProtocols'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { LbpPoolListInfo } from '../../LbpDetail/LbpPoolListInfo'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
+import { BoostedIcon } from '@repo/lib/shared/components/icons/BoostedIcon'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 function getPoolDisplayTypeLabel(pool: PoolCore, erc4626Metadata: Erc4626Metadata[]) {
+  const boostedTooltipLabel = [...erc4626Metadata.map(m => m.name)].join(' & ')
   const hasIconTags = isGyro(pool.type) || isQuantAmmPool(pool.type) || isBoosted(pool)
 
   return (
@@ -28,42 +32,54 @@ function getPoolDisplayTypeLabel(pool: PoolCore, erc4626Metadata: Erc4626Metadat
       </Text>
 
       {hasIconTags && (
-        <HStack
-          background="background.level2"
-          border="1px solid"
-          borderColor="border.base"
-          gap="0.150rem"
-          p="1px"
-          rounded="full"
-          shadow="sm"
-        >
-          {isGyro(pool.type) && <ProtocolIcon protocol={Protocol.Gyro} />}
-          {isQuantAmmPool(pool.type) && <ProtocolIcon protocol={Protocol.QuantAmm} />}
+        <HStack gap="0.25rem">
+          {isGyro(pool.type) && (
+            <TooltipWithTouch label="Built by Gyroscope">
+              <Box h="18px" rounded="full" shadow="md" w="18px">
+                <ProtocolIcon
+                  protocol={Protocol.Gyro}
+                  size={18}
+                  sx={{ rounded: 'full', shadow: 'md' }}
+                />
+              </Box>
+            </TooltipWithTouch>
+          )}
+          {isQuantAmmPool(pool.type) && (
+            <TooltipWithTouch label="Built by QuantAMM">
+              <Box rounded="full" shadow="md">
+                <ProtocolIcon
+                  protocol={Protocol.QuantAmm}
+                  size={18}
+                  sx={{ rounded: 'full', shadow: 'md' }}
+                />
+              </Box>
+            </TooltipWithTouch>
+          )}
 
           {isBoosted(pool) && (
             <>
               {(isGyro(pool.type) || isQuantAmmPool(pool.type)) && (
-                <Box
-                  borderColor="border.base"
-                  borderRight="1px solid"
-                  height="3"
-                  marginLeft="1"
-                  marginRight="1"
-                  width="1px"
-                />
+                <Text color="border.base" fontSize="0.5rem">
+                  •
+                </Text>
               )}
-
-              <Image alt="Boosted" height={20} src="/images/icons/boosted.svg" width={20} />
-
-              {erc4626Metadata.map(metadata => (
-                <Image
-                  alt={metadata.name}
-                  height={20}
-                  key={metadata.name}
-                  src={metadata.iconUrl || ''}
-                  width={20}
-                />
-              ))}
+              <TooltipWithTouch label={boostedTooltipLabel}>
+                <HStack gap="0.25rem">
+                  <Box rounded="full" shadow="md">
+                    <BoostedIcon size={18} />
+                  </Box>
+                  {erc4626Metadata.map(metadata => (
+                    <Box key={metadata.name} rounded="full" shadow="md">
+                      <Image
+                        alt={metadata.name}
+                        height={18}
+                        src={metadata.iconUrl || ''}
+                        width={18}
+                      />
+                    </Box>
+                  ))}
+                </HStack>
+              </TooltipWithTouch>
             </>
           )}
         </HStack>
@@ -78,16 +94,28 @@ interface Props {
 
 export function PoolListTableDetailsCell({ pool }: Props) {
   const { getErc4626Metadata } = usePoolsMetadata()
+  const { hasHook } = useHook(pool)
 
   const erc4626Metadata = getErc4626Metadata(pool)
 
   return (
-    <HStack>
-      <PoolVersionTag isSmall pool={pool} />
+    <HStack gap="0.25rem">
+      <Box pr="0.1875rem">
+        <PoolVersionTag isSmall pool={pool} />
+      </Box>
       {getPoolDisplayTypeLabel(pool, erc4626Metadata)}
-      <PoolHookTag onlyShowIcon pool={pool} />
+      {hasHook && (
+        <HStack gap="0.25rem">
+          <Text color="border.base" fontSize="0.5rem">
+            •
+          </Text>
+          <PoolHookTag onlyShowIcon pool={pool} />
+        </HStack>
+      )}
       {isV3Pool(pool) && isLiquidityBootstrapping(pool.type) && (isDev || isStaging) && (
-        <LbpPoolListInfo pool={pool as PoolListItem} />
+        <Box pl="0.1875rem">
+          <LbpPoolListInfo pool={pool as PoolListItem} />
+        </Box>
       )}
     </HStack>
   )
