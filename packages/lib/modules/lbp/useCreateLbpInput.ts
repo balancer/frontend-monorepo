@@ -58,8 +58,8 @@ export function useCreateLbpInput() {
       reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight}`, PERCENTAGE_DECIMALS),
       projectTokenEndWeight: parseUnits(`${projectTokenEndWeight}`, PERCENTAGE_DECIMALS),
       reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight}`, PERCENTAGE_DECIMALS),
-      startTime: BigInt(millisecondsToSeconds(new Date(startDateTime).getTime())),
-      endTime: BigInt(millisecondsToSeconds(new Date(endDateTime).getTime())),
+      startTimestamp: BigInt(millisecondsToSeconds(new Date(startDateTime).getTime())),
+      endTimestamp: BigInt(millisecondsToSeconds(new Date(endDateTime).getTime())),
     },
   }
 }
