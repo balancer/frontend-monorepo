@@ -15,6 +15,7 @@ export type Erc4626Metadata = {
   addresses: {
     [key: string]: string[]
   }
+  readMoreURL?: string
 }
 
 export async function getErc4626Metadata(): Promise<Erc4626Metadata[] | undefined> {
