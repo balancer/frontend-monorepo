@@ -1,10 +1,8 @@
 'use client'
 
-import { VStack, Button, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { VStack, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { ArrowUpRight } from 'react-feather'
 import { GraniteBg } from './shared/GraniteBg'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
@@ -35,12 +33,7 @@ export function Grants() {
         <VStack align="start" spacing="lg" w="full">
           <VStack align="start" spacing="lg" w="full">
             <BlurIn delay={0.4}>
-              <Text
-                background="font.specialSecondary"
-                backgroundClip="text"
-                fontSize="sm"
-                variant="eyebrow"
-              >
+              <Text background="font.special" backgroundClip="text" fontSize="sm" variant="eyebrow">
                 BALANCER GRANTS
               </Text>
             </BlurIn>
@@ -74,14 +67,6 @@ export function Grants() {
                 Some fund-worthy ideas to get you started
               </Text>
             </FadeIn>
-            <Button
-              as={NextLink}
-              href="https://grants.balancer.community/"
-              rightIcon={<ArrowUpRight size="16px" />}
-              variant="secondary"
-            >
-              Get a grant
-            </Button>
           </Stack>
           <Grid
             gap="md"
