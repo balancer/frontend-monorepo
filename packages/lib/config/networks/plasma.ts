@@ -6,7 +6,7 @@ import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.t
 import { PERMIT2, NATIVE_ASSETS, ChainId, CHAINS, AddressProvider } from '@balancer/sdk'
 import { zeroAddress } from 'viem'
 
-const chainId = ChainId.GNOSIS_CHAIN
+const chainId = ChainId.PLASMA
 
 // name, symbol & wrapped are always defined in the sdk
 const nativeAsset = NATIVE_ASSETS[chainId]
@@ -16,11 +16,8 @@ const chain = CHAINS[chainId]
 
 const networkConfig: NetworkConfig = {
   chainId,
-  // TODO: update from sdk
-  // name: chain.name,
-  // shortName: chain.name,
-  name: 'Plasma',
-  shortName: 'Plasma',
+  name: chain.name,
+  shortName: chain.name,
   chain: GqlChain.Plasma,
   iconPath: '/images/chains/PLASMA.svg',
   blockExplorer: {
@@ -48,10 +45,9 @@ const networkConfig: NetworkConfig = {
       '0x9895d81bb462a195b4922ed7de0e3acd007c32cb': 'WETH',
     },
   },
-  // TODO: update addresses
   contracts: {
     multicall2: zeroAddress,
-    multicall3: '0xca11bde05977b3631167028862be2a173976ca11', // TODO: add to viem
+    multicall3: '0xca11bde05977b3631167028862be2a173976ca11',
     balancer: {
       vaultV2: zeroAddress,
       vaultV3: AddressProvider.Vault(chainId),
@@ -62,13 +58,11 @@ const networkConfig: NetworkConfig = {
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(chainId),
       vaultAdminV3: AddressProvider.VaultAdmin(chainId),
     },
-    veDelegationProxy: zeroAddress,
     permit2: PERMIT2[chainId],
   },
   pools: convertHexToLowerCase({
     issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Plasma] },
   }),
-  layerZeroChainId: 145,
   supportsVeBalSync: false,
 }
 

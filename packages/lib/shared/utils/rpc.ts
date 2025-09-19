@@ -34,8 +34,7 @@ const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [ChainId.ZKSYNC]: 'polygon-zkevm',
   [ChainId.SONIC]: 'sonic',
   [ChainId.HYPEREVM]: 'hyperliquid',
-  // TODO: update
-  // [ChainId.PLASMA]: 'plasma',
+  [ChainId.PLASMA]: 'plasma',
 }
 
 export function drpcUrl(chain: GqlChain, privateKey: string) {
