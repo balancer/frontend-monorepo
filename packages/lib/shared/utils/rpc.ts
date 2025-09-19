@@ -33,7 +33,7 @@ const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [ChainId.MODE]: 'mode',
   [ChainId.ZKSYNC]: 'polygon-zkevm',
   [ChainId.SONIC]: 'sonic',
-  [ChainId.HYPER_EVM]: 'hyperliquid',
+  [ChainId.HYPEREVM]: 'hyperliquid',
   // TODO: update
   // [ChainId.PLASMA]: 'plasma',
 }
