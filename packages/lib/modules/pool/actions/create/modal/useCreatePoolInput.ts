@@ -3,10 +3,10 @@ import { TokenType, CreatePoolInput, CreatePoolV3BaseInput, PoolType } from '@ba
 import { parseUnits, zeroAddress } from 'viem'
 import { PERCENTAGE_DECIMALS } from '../constants'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
-import { useAreTokensInOrder } from './useAreTokensInOrder'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
+  const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const {
     poolType,
     symbol,
@@ -19,10 +19,15 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     poolTokens,
     pauseManager,
     amplificationParameter,
-    reClammConfigForm,
-  } = usePoolCreationForm()
+  } = poolCreationForm.watch()
 
-  const areTokensInOrder = useAreTokensInOrder()
+  if (!poolTokens[0]?.address || !poolTokens[1]?.address) {
+    throw new Error('Pool token address missing for pool creation')
+  }
+
+  const areTokensInOrder =
+    poolTokens[0]?.address?.toLowerCase() < poolTokens[1]?.address?.toLowerCase()
+
   const chain = getGqlChain(chainId)
   const { tokens } = getNetworkConfig(chain)
   const nativeAsset = tokens.nativeAsset.address

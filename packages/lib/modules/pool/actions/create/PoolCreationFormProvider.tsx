@@ -95,6 +95,7 @@ export function usePoolFormLogic() {
     resetSteps()
   }
 
+  // TODO: return less stuff by using poolCreationForm.watch() in components
   return {
     poolCreationForm,
     reClammConfigForm,

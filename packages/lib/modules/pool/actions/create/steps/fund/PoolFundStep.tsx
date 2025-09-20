@@ -7,7 +7,7 @@ import { PoolCreationRiskCheckboxes } from './PoolCreationRiskCheckboxes'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
 import { SeedAmountProportions } from './SeedAmountProportions'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { useReClammSeedAmounts } from './useReClammSeedAmounts'
+import { useReClammInitAmounts } from './useReClammInitAmounts'
 import { PoolCreationToken } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatUnits } from 'viem'
@@ -55,7 +55,7 @@ export function PoolFundStep() {
 
 function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: number }) {
   const { network, updatePoolToken, isReClamm, poolAddress, poolTokens } = usePoolCreationForm()
-  const { initAmounts } = useReClammSeedAmounts(poolAddress, token)
+  const { initAmounts } = useReClammInitAmounts(poolAddress, token)
 
   const lastUserUpdatedTokenIdx = useRef<number | null>(null)
   const handleAmountChange = (idx: number, amount: string) => {
@@ -103,7 +103,6 @@ function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: numbe
 
 function SeedPoolTips() {
   const { isReClamm, poolAddress } = usePoolCreationForm()
-
   const showReClammAlert = isReClamm && !poolAddress
 
   return (
