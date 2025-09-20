@@ -12,6 +12,7 @@ import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
 import { PoolType } from '@balancer/sdk'
+import { invertNumber } from '@repo/lib/shared/utils/numbers'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -65,6 +66,14 @@ export function usePoolFormLogic() {
     poolCreationForm.setValue('poolTokens', updates)
   }
 
+  const invertReClammPriceParams = () => {
+    const { initialMinPrice, initialMaxPrice, initialTargetPrice } = reClammConfigForm.watch()
+    reClammConfigForm.setValue('initialMinPrice', invertNumber(initialMaxPrice))
+    reClammConfigForm.setValue('initialMaxPrice', invertNumber(initialMinPrice))
+    reClammConfigForm.setValue('initialTargetPrice', invertNumber(initialTargetPrice))
+    updatePoolTokens([...poolTokens].reverse())
+  }
+
   const addPoolToken = () => {
     const newPoolTokens = [...poolTokens]
     newPoolTokens.push(INITIAL_TOKEN_CONFIG)
@@ -114,6 +123,7 @@ export function usePoolFormLogic() {
     addPoolToken,
     resetPoolCreationForm,
     poolAddress,
+    invertReClammPriceParams,
   }
 }
 

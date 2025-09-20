@@ -3,6 +3,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReClammConfig } from '../../types'
 import { useEffect } from 'react'
+import { formatNumber } from '../../helpers'
 
 export type ReClammConfigOptionsGroup = {
   label: string
@@ -11,7 +12,6 @@ export type ReClammConfigOptionsGroup = {
   validateFn: (value: string) => string | boolean
   name: keyof ReClammConfig
   customInputLabel: string
-  customInputPlaceholder?: string
 }
 
 export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
@@ -54,17 +54,17 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     options: [
       {
         label: 'Current price -5%',
-        displayValue: bn(currentPriceMinus5).toFixed(2),
+        displayValue: formatNumber(currentPriceMinus5),
         rawValue: currentPriceMinus5,
       },
       {
         label: 'Current price',
-        displayValue: bn(currentPrice).toFixed(2),
+        displayValue: formatNumber(currentPrice.toString()),
         rawValue: currentPrice.toString(),
       },
       {
         label: 'Current price +5%',
-        displayValue: bn(currentPricePlus5).toFixed(2),
+        displayValue: formatNumber(currentPricePlus5),
         rawValue: currentPricePlus5,
       },
     ],
