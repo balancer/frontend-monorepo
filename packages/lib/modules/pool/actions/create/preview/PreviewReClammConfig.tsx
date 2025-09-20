@@ -10,11 +10,11 @@ import {
   Box,
 } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import { RefreshCcw } from 'react-feather'
+import { formatNumber } from '../helpers'
 
 export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }) {
-  const { reClammConfigForm, poolCreationForm } = usePoolCreationForm()
+  const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
   const {
     initialTargetPrice,
     initialMinPrice,
@@ -27,7 +27,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
   const reClammConfigCards = [
     {
       label: 'Min Price',
-      value: initialMinPrice ? bn(initialMinPrice).toFixed(2) : '-',
+      value: initialMinPrice ? formatNumber(initialMinPrice) : '-',
     },
     {
       label: 'Lower Target',
@@ -35,7 +35,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
     },
     {
       label: 'Current Price',
-      value: initialTargetPrice ? bn(initialTargetPrice).toFixed(2) : '-',
+      value: initialTargetPrice ? formatNumber(initialTargetPrice) : '-',
     },
     {
       label: 'Upper Target',
@@ -43,7 +43,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
     },
     {
       label: 'Max Price',
-      value: initialMaxPrice ? bn(initialMaxPrice).toFixed(2) : '-',
+      value: initialMaxPrice ? formatNumber(initialMaxPrice) : '-',
     },
   ]
 
@@ -76,7 +76,13 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
             <>
               <Divider />
               <HStack justify="space-between" w="full">
-                <Button flexDirection="row" gap="2" size="sm" variant="tertiary">
+                <Button
+                  flexDirection="row"
+                  gap="2"
+                  onClick={invertReClammPriceParams}
+                  size="sm"
+                  variant="tertiary"
+                >
                   <HStack>
                     <RefreshCcw size={12} />
                     <Text color="font.secondary" fontSize="sm">

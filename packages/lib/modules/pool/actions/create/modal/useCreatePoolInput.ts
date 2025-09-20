@@ -3,6 +3,8 @@ import { TokenType, CreatePoolInput, CreatePoolV3BaseInput, PoolType } from '@ba
 import { parseUnits, zeroAddress } from 'viem'
 import { PERCENTAGE_DECIMALS } from '../constants'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
+import { useAreTokensInOrder } from './useAreTokensInOrder'
+import { invertNumber } from '@repo/lib/shared/utils/numbers'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
   const {
@@ -20,6 +22,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     reClammConfigForm,
   } = usePoolCreationForm()
 
+  const areTokensInOrder = useAreTokensInOrder()
   const chain = getGqlChain(chainId)
   const { tokens } = getNetworkConfig(chain)
   const nativeAsset = tokens.nativeAsset.address
@@ -76,18 +79,24 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       centerednessMargin,
     } = reClammConfigForm.watch()
 
+    const minPrice = areTokensInOrder ? initialMinPrice : invertNumber(initialMaxPrice)
+    const maxPrice = areTokensInOrder ? initialMaxPrice : invertNumber(initialMinPrice)
+    const targetPrice = areTokensInOrder ? initialTargetPrice : invertNumber(initialTargetPrice)
+
+    const priceParams = {
+      initialMinPrice: parseUnits(minPrice, 18),
+      initialMaxPrice: parseUnits(maxPrice, 18),
+      initialTargetPrice: parseUnits(targetPrice, 18),
+      // hardcoded prices to not include rate until new reclamm deployments.
+      // without rate means boosted must be priced in terms of underlying
+      tokenAPriceIncludesRate: false,
+      tokenBPriceIncludesRate: false,
+    }
+
     return {
       ...baseInput,
       poolType,
-      priceParams: {
-        initialMinPrice: parseUnits(initialMinPrice, 18),
-        initialMaxPrice: parseUnits(initialMaxPrice, 18),
-        initialTargetPrice: parseUnits(initialTargetPrice, 18),
-        // hardcoded prices to not include rate until new reclamm deployments.
-        // without rate means boosted must be priced in terms of underlying
-        tokenAPriceIncludesRate: false,
-        tokenBPriceIncludesRate: false,
-      },
+      priceParams,
       priceShiftDailyRate: parseUnits(priceShiftDailyRate, 16),
       centerednessMargin: parseUnits(centerednessMargin, 16),
     }
