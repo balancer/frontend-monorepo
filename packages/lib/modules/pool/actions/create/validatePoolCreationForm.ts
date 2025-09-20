@@ -1,6 +1,5 @@
 import { isAddress } from 'viem'
 import {
-  MIN_SWAP_FEE_PERCENTAGE,
   MAX_SWAP_FEE_PERCENTAGE,
   MIN_AMPLIFICATION_PARAMETER,
   MAX_AMPLIFICATION_PARAMETER,
@@ -10,6 +9,7 @@ import {
   POOL_TYPES,
   REQUIRED_TOTAL_WEIGHT,
 } from './constants'
+import { getMinSwapFeePercentage } from './helpers'
 import { PoolCreationToken, SupportedPoolTypes } from './types'
 import { PoolType } from '@balancer/sdk'
 
@@ -93,8 +93,9 @@ export const validatePoolSettings = {
 
   swapFeePercentage: (value: string, poolType: SupportedPoolTypes) => {
     const numValue = Number(value)
-    if (numValue < MIN_SWAP_FEE_PERCENTAGE[poolType] || numValue > MAX_SWAP_FEE_PERCENTAGE) {
-      return `Value must be between ${MIN_SWAP_FEE_PERCENTAGE[poolType]} and ${MAX_SWAP_FEE_PERCENTAGE}`
+    const minSwapFeePercentage = getMinSwapFeePercentage(poolType)
+    if (numValue < minSwapFeePercentage || numValue > MAX_SWAP_FEE_PERCENTAGE) {
+      return `Value must be between ${minSwapFeePercentage} and ${MAX_SWAP_FEE_PERCENTAGE}`
     }
     return true
   },

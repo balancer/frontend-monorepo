@@ -11,6 +11,7 @@ import {
 import { ReactNode } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
+import { TokenInfoPopover } from '@repo/lib/modules/tokens/TokenInfoPopover'
 
 export function CardHeaderRow({ columnNames }: { columnNames: string[] }) {
   return (
@@ -64,7 +65,12 @@ export function IdentifyTokenCell({
     <HStack gap="3">
       <TokenIcon address={address} alt={address || ''} chain={chain} size={36} />
       <VStack align="start" spacing="0">
-        <Text fontWeight="semibold">{symbol}</Text>
+        <HStack spacing="xs">
+          <Text fontWeight="semibold">{symbol}</Text>
+          <Box onClick={e => e.stopPropagation()} zIndex={100}>
+            <TokenInfoPopover chain={chain} tokenAddress={address} />
+          </Box>
+        </HStack>
         <Text color="font.secondary" fontSize="sm">
           {name}
         </Text>

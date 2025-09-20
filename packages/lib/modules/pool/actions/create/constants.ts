@@ -3,7 +3,14 @@ import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { zeroAddress } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { SupportedPoolTypes, PoolTypeDetails, PoolCreationToken, PoolCreationForm } from './types'
+import {
+  SupportedPoolTypes,
+  PoolTypeDetails,
+  PoolCreationToken,
+  PoolCreationForm,
+  ReClammConfig,
+} from './types'
+import { getSwapFeePercentageOptions } from './helpers'
 
 export const PERCENTAGE_DECIMALS = 16
 export const MAX_POOL_NAME_LENGTH = 32
@@ -14,15 +21,12 @@ export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
 export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
 export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 
-const MIN_SWAP_FEE_WEIGHTED = 0.001
-const MIN_SWAP_FEE_STABLE = 0.0001
-
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   [PoolType.Weighted]: { label: 'Weighted', maxTokens: 8 },
   [PoolType.Stable]: { label: 'Stable', maxTokens: 5 },
   [PoolType.StableSurge]: { label: 'Stable Surge', maxTokens: 5 },
   // [PoolType.GyroE]: { label: 'Gyro Elliptic CLP', maxTokens: 2 },
-  // [PoolType.ReClamm]: { label: 'reClamm', maxTokens: 2 },
+  [PoolType.ReClamm]: { label: 'reClamm', maxTokens: 2 },
 }
 
 export const PROTOCOLS = [
@@ -71,29 +75,6 @@ export const RATE_PROVIDER_RADIO_OPTIONS = [
   },
 ] as const
 
-const STABLE_SWAP_FEE_PERCENTAGE_OPTIONS = [
-  { value: '0.01', tip: 'Best for super stable pairs' },
-  { value: '0.05', tip: 'Best for stable-ish pairs' },
-]
-
-export const SWAP_FEE_PERCENTAGE_OPTIONS: Record<
-  SupportedPoolTypes,
-  { value: string; tip: string }[]
-> = {
-  [PoolType.Weighted]: [
-    { value: '0.30', tip: 'Best for most weighted pairs' },
-    { value: '1.00', tip: 'Best for exotic pairs' },
-  ],
-  [PoolType.Stable]: STABLE_SWAP_FEE_PERCENTAGE_OPTIONS,
-  [PoolType.StableSurge]: STABLE_SWAP_FEE_PERCENTAGE_OPTIONS,
-}
-
-export const MIN_SWAP_FEE_PERCENTAGE = {
-  [PoolType.Weighted]: MIN_SWAP_FEE_WEIGHTED,
-  [PoolType.Stable]: MIN_SWAP_FEE_STABLE,
-  [PoolType.StableSurge]: MIN_SWAP_FEE_STABLE,
-}
-
 export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   address: undefined,
   rateProvider: zeroAddress,
@@ -113,11 +94,20 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   symbol: '',
   swapFeeManager: zeroAddress,
   pauseManager: zeroAddress,
-  swapFeePercentage: SWAP_FEE_PERCENTAGE_OPTIONS[PoolType.Weighted][0].value,
+  swapFeePercentage: getSwapFeePercentageOptions(PoolType.Weighted)[0].value,
   amplificationParameter: AMPLIFICATION_PARAMETER_OPTIONS[0],
   poolHooksContract: zeroAddress,
   enableDonation: false,
   disableUnbalancedLiquidity: false,
   hasAcceptedTokenWeightsRisk: false,
   hasAcceptedPoolCreationRisk: false,
+}
+
+export const INITIAL_RECLAMM_CONFIG: ReClammConfig = {
+  initialTargetPrice: '',
+  initialMinPrice: '',
+  initialMaxPrice: '',
+  priceRangePercentage: '',
+  priceShiftDailyRate: '',
+  centerednessMargin: '',
 }
