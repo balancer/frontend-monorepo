@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import {
-  calculateInitialBalances,
   calculateLowerMargin,
   calculateUpperMargin,
   computeCenteredness,
@@ -23,22 +22,27 @@ function getGradientColor(colorStops: string[]) {
 
 // const DEFAULT_PRICE_RATE = '1' // TODO
 
-type ReclAmmChartParams = {
-  minPrice: number
-  maxPrice: number
-  targetPrice: number
-  centerednessMargin: number
+type UseReclAmmChartParams = {
+  balanceA: number
+  balanceB: number
+  virtualBalanceA: number
+  virtualBalanceB: number
+  margin: number
+  isPriceAdjusting: boolean
+  isPoolWithinTargetRange: boolean
+  isReversed: boolean
 }
 
-/**
- * Using math from reclamm simulator and chart from frontend monorepo
- */
 export function useReclAmmChart({
-  minPrice,
-  maxPrice,
-  targetPrice,
-  centerednessMargin,
-}: ReclAmmChartParams) {
+  balanceA,
+  balanceB,
+  virtualBalanceA,
+  virtualBalanceB,
+  margin,
+  isPriceAdjusting,
+  isPoolWithinTargetRange,
+  isReversed,
+}: UseReclAmmChartParams) {
   const { isMobile } = useBreakpoints()
   const { colorMode } = useColorMode()
   const selectColor = useSelectColor()
@@ -49,25 +53,9 @@ export function useReclAmmChart({
   const borderColor = selectColor('background', 'level0')
 
   const currentChartData = useMemo(() => {
-    if (
-      !centerednessMargin ||
-      centerednessMargin < 0 ||
-      centerednessMargin > 90 ||
-      !minPrice ||
-      !maxPrice ||
-      !targetPrice ||
-      minPrice >= maxPrice ||
-      minPrice > targetPrice ||
-      targetPrice > maxPrice
-    ) {
+    if (!balanceA || !balanceB || !virtualBalanceA || !virtualBalanceB || !margin) {
       return {}
     }
-
-    const { balanceA, balanceB, virtualBalanceA, virtualBalanceB } = calculateInitialBalances({
-      minPrice,
-      maxPrice,
-      targetPrice,
-    })
 
     const invariant = bn(bn(balanceA).plus(virtualBalanceA)).times(
       bn(balanceB).plus(virtualBalanceB)
@@ -77,7 +65,7 @@ export function useReclAmmChart({
     const rBalanceB = balanceB
     const vBalanceA = virtualBalanceA
     const vBalanceB = virtualBalanceB
-    const marginValue = Number(centerednessMargin)
+    const marginValue = margin
 
     const lowerMargin = calculateLowerMargin({
       margin: marginValue,
@@ -104,6 +92,7 @@ export function useReclAmmChart({
       .toNumber()
 
     // TODO: how to get .priceRate on the pool creation tokens?
+    // OR should we move the whole currentChartData fn out of hook and feed the return values as params?
 
     // only scale back if token has rate but not an erc4626
     // const tokenA = pool.poolTokens[0]
@@ -145,11 +134,11 @@ export function useReclAmmChart({
       upperMarginValue,
       currentPriceValue,
       isPoolWithinRange,
+      marginValue,
       poolCenteredness,
       isPoolAboveCenter,
-      marginValue,
     }
-  }, [centerednessMargin, minPrice, maxPrice, targetPrice])
+  }, [balanceA, balanceB, virtualBalanceA, virtualBalanceB, margin])
 
   const options = useMemo(() => {
     const {
@@ -161,8 +150,6 @@ export function useReclAmmChart({
       marginValue, // is a true percentage
       isPoolWithinRange,
     } = currentChartData
-
-    const isPriceAdjusting = isPoolWithinRange
 
     const isLowMarginValue = marginValue && marginValue < 25
     const needsMobileStyles = isMobile || isLowMarginValue
@@ -179,7 +166,10 @@ export function useReclAmmChart({
 
     // if the margin is very small or very big, show only the target values or min/max values depending on the pool state
     if (marginValue && marginValue < 4) {
-      if (isPoolWithinRange) {
+      if (isPoolWithinTargetRange) {
+        showTargetValues = true
+        showMinMaxValues = false
+      } else if (isPoolWithinRange) {
         showTargetValues = false
         showMinMaxValues = true
       }
@@ -255,7 +245,7 @@ export function useReclAmmChart({
         barIndex = Math.floor(((2 - poolCenteredness) / 2) * totalGreenAndOrangeBars)
       }
 
-      return barIndex + baseGreyBarCount
+      return (isReversed ? totalGreenAndOrangeBars - barIndex - 1 : barIndex) + baseGreyBarCount
     }
 
     const currentPriceBarIndex = getCurrentPriceBarIndex()

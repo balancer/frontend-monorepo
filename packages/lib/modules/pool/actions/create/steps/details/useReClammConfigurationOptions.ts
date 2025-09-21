@@ -1,9 +1,9 @@
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReClammConfig } from '../../types'
 import { useEffect } from 'react'
 import { formatNumber } from '../../helpers'
+import { useReClammCurrentPrice } from './useReClammCurrentPrice'
 
 export type ReClammConfigOptionsGroup = {
   label: string
@@ -16,17 +16,13 @@ export type ReClammConfigOptionsGroup = {
 
 export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
-  const { poolTokens, network } = poolCreationForm.watch()
+  const { poolTokens } = poolCreationForm.watch()
   const reClammConfig = reClammConfigForm.watch()
   const { initialTargetPrice, priceRangePercentage } = reClammConfig
-  const { usdValueForTokenAddress } = useTokens()
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
 
-  const priceTokenA = +usdValueForTokenAddress(poolTokens[0]?.address || '', network, '1')
-  const priceTokenB = +usdValueForTokenAddress(poolTokens[1]?.address || '', network, '1')
-
-  const currentPrice = bn(priceTokenA).div(priceTokenB)
+  const currentPrice = useReClammCurrentPrice()
   const currentPriceMinus5 = currentPrice.times(0.95).toString()
   const currentPricePlus5 = currentPrice.times(1.05).toString()
 

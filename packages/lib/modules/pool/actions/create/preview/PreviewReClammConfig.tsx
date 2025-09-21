@@ -14,6 +14,7 @@ import { RefreshCcw } from 'react-feather'
 import { formatNumber } from '../helpers'
 import { useReclAmmChart } from './useReclammChart'
 import ReactECharts from 'echarts-for-react'
+import { calculateInitialBalances } from '@repo/lib/modules/reclamm/reclAmmMath'
 
 export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }) {
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
@@ -26,11 +27,21 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
   } = reClammConfigForm.watch()
   const { poolTokens } = poolCreationForm.watch()
 
-  const { options, lowerMarginValue, upperMarginValue } = useReclAmmChart({
+  const { balanceA, balanceB, virtualBalanceA, virtualBalanceB } = calculateInitialBalances({
     minPrice: Number(initialMinPrice),
     maxPrice: Number(initialMaxPrice),
     targetPrice: Number(initialTargetPrice),
-    centerednessMargin: Number(centerednessMargin),
+  })
+
+  const { options, lowerMarginValue, upperMarginValue } = useReclAmmChart({
+    balanceA,
+    balanceB,
+    virtualBalanceA,
+    virtualBalanceB,
+    margin: Number(centerednessMargin),
+    isPriceAdjusting: false,
+    isPoolWithinTargetRange: true,
+    isReversed: false,
   })
 
   const reClammConfigCards = [
