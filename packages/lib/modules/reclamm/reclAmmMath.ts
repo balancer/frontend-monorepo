@@ -262,3 +262,48 @@ export const recalculateVirtualBalances = (params: {
     newPriceRatio: newPriceRatio,
   }
 }
+
+/**
+ * @mattpereira derrived this logic from the pool math simulator repo by @joaobrunoah
+ * https://github.com/balancer/pool-math-simulator/blob/9425877eb68409ec58ac26e4609047a26793b84e/client/src/pool-types/reclamm/ReClamm.tsx#L238-L288
+ */
+export function calculateInitialBalances({
+  minPrice,
+  maxPrice,
+  targetPrice,
+}: {
+  minPrice: number
+  maxPrice: number
+  targetPrice: number
+}) {
+  // same arbitrary defaults as pool math simulator repo at https://github.com/balancer/pool-math-simulator/blob/9425877eb68409ec58ac26e4609047a26793b84e/client/src/pool-types/reclamm/ReClamm.tsx#L36-L44
+  const initialBalanceA = 1000
+  const defaultMaxBalanceA = 3000
+
+  const priceRatio = maxPrice / minPrice
+
+  const idealVirtualBalanceA = defaultMaxBalanceA / (Math.sqrt(priceRatio) - 1)
+  const idealVirtualBalanceB = minPrice * (defaultMaxBalanceA + idealVirtualBalanceA)
+
+  const idealBalanceB =
+    Math.sqrt(targetPrice * (defaultMaxBalanceA + idealVirtualBalanceA) * idealVirtualBalanceB) -
+    idealVirtualBalanceB
+  const idealBalanceA =
+    (idealBalanceB + idealVirtualBalanceB - idealVirtualBalanceA * targetPrice) / targetPrice
+
+  const idealProportion = idealBalanceB / idealBalanceA
+
+  const initialBalanceB = initialBalanceA * idealProportion
+
+  const maxBalanceA = (initialBalanceA / idealBalanceA) * defaultMaxBalanceA
+
+  const virtualBalanceA = maxBalanceA / (Math.sqrt(priceRatio) - 1)
+  const virtualBalanceB = minPrice * (maxBalanceA + virtualBalanceA)
+
+  return {
+    balanceA: initialBalanceA,
+    balanceB: initialBalanceB,
+    virtualBalanceA,
+    virtualBalanceB,
+  }
+}

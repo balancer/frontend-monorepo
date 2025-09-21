@@ -1,4 +1,4 @@
-import { VStack, Heading, Text, useDisclosure, HStack, Button, Icon } from '@chakra-ui/react'
+import { VStack, Heading, Text, useDisclosure, HStack, Button, Icon, Box } from '@chakra-ui/react'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -27,6 +27,8 @@ export function ChoosePoolTokens() {
     removePoolToken,
     addPoolToken,
     poolCreationForm,
+    reClammConfigForm,
+    isReClamm,
   } = usePoolCreationForm()
 
   const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
@@ -58,7 +60,9 @@ export function ChoosePoolTokens() {
       data: tokenData,
       paysYieldFees: !!verifiedRateProviderAddress, // defaults to true if rate provider exists in our DB
     })
+
     setSelectedTokenIndex(null)
+    if (isReClamm) reClammConfigForm.resetToInitial()
   }
 
   const currentTokenAddress = selectedTokenIndex
@@ -104,23 +108,25 @@ export function ChoosePoolTokens() {
                   </VStack>
 
                   {isWeightedPool && (
-                    <NumberInput
-                      control={poolCreationForm.control}
-                      isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-                      isInvalid={isInvalidWeight}
-                      isPercentage
-                      label="Weight"
-                      name={`poolTokens.${index}.weight`}
-                      validate={weight => {
-                        // getValues() grabs poolType from LS but watch() is tricked by initial default values
-                        const poolType = poolCreationForm.getValues('poolType')
-                        const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-                        if (!isWeightedPool) return true
-                        if (weight < 1) return 'Minimum weight for each token is 1%'
-                        if (weight > 99) return 'Maximum weight for a token is 99%'
-                        return true
-                      }}
-                    />
+                    <Box>
+                      <NumberInput
+                        control={poolCreationForm.control}
+                        isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                        isInvalid={isInvalidWeight}
+                        isPercentage
+                        label="Weight"
+                        name={`poolTokens.${index}.weight`}
+                        validate={weight => {
+                          // getValues() grabs poolType from LS but watch() is tricked by initial default values
+                          const poolType = poolCreationForm.getValues('poolType')
+                          const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+                          if (!isWeightedPool) return true
+                          if (weight < 1) return 'Minimum weight for each token is 1%'
+                          if (weight > 99) return 'Maximum weight for a token is 99%'
+                          return true
+                        }}
+                      />
+                    </Box>
                   )}
 
                   {poolTokens.length > 2 && (

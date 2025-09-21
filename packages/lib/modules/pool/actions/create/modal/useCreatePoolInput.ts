@@ -102,8 +102,8 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       ...baseInput,
       poolType,
       priceParams,
-      priceShiftDailyRate: parseUnits(priceShiftDailyRate, 16),
-      centerednessMargin: parseUnits(centerednessMargin, 16),
+      priceShiftDailyRate: parseUnits(priceShiftDailyRate, PERCENTAGE_DECIMALS),
+      centerednessMargin: parseUnits(centerednessMargin, PERCENTAGE_DECIMALS),
     }
   }
 

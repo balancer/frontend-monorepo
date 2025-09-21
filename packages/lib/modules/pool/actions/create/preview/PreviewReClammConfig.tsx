@@ -12,6 +12,8 @@ import {
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { formatNumber } from '../helpers'
+import { useReclAmmChart } from './useReclammChart'
+import ReactECharts from 'echarts-for-react'
 
 export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }) {
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
@@ -20,9 +22,16 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
     initialMinPrice,
     initialMaxPrice,
     priceShiftDailyRate,
-    // centerednessMargin,
+    centerednessMargin,
   } = reClammConfigForm.watch()
   const { poolTokens } = poolCreationForm.watch()
+
+  const { options, lowerMarginValue, upperMarginValue } = useReclAmmChart({
+    minPrice: Number(initialMinPrice),
+    maxPrice: Number(initialMaxPrice),
+    targetPrice: Number(initialTargetPrice),
+    centerednessMargin: Number(centerednessMargin),
+  })
 
   const reClammConfigCards = [
     {
@@ -31,7 +40,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
     },
     {
       label: 'Lower Target',
-      value: '-',
+      value: upperMarginValue ? formatNumber(upperMarginValue.toString()) : '-', // TODO: why need reversed?
     },
     {
       label: 'Current Price',
@@ -39,7 +48,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
     },
     {
       label: 'Upper Target',
-      value: '-',
+      value: lowerMarginValue ? formatNumber(lowerMarginValue.toString()) : '-', // TODO: why need reversed?
     },
     {
       label: 'Max Price',
@@ -70,7 +79,9 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
 
           <Divider />
 
-          <Box h={250}></Box>
+          <Box h={250} w="full">
+            <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
+          </Box>
 
           {showInvertButton && (
             <>
