@@ -4,6 +4,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin, computeCenteredness } from './reclAmmMath'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 
 const DEFAULT_PRICE_RATE = '1'
 
@@ -20,6 +21,7 @@ export type ReclAmmChartData =
       isPoolAboveCenter: boolean
       isLoading: boolean
       isPoolWithinTargetRange: boolean
+      poolTokens?: string[]
     }
   | undefined
 
@@ -114,6 +116,8 @@ export function useReclAmmChartData(): ReclAmmChartData {
       virtualBalanceB: vBalanceB,
     })
 
+    const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
+
     return {
       maxPriceValue,
       minPriceValue,
@@ -126,6 +130,7 @@ export function useReclAmmChartData(): ReclAmmChartData {
       isPoolAboveCenter,
       isLoading: !!reclAmmData.isLoading,
       isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
+      poolTokens,
     }
   }, [reclAmmData, pool])
 }

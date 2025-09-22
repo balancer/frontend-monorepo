@@ -3,8 +3,6 @@ import { fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
-import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
-import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useColorMode } from '@chakra-ui/react'
 import type { ReclAmmChartData } from './useReclAmmChartData'
 
@@ -28,7 +26,6 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
   const [isReversed, setIsReversed] = useState(false)
   const [chartInstance, setChartInstance] = useState<any>(null)
   const selectColor = useSelectColor()
-  const { pool } = usePool()
   const { colorMode } = useColorMode()
 
   const isLoading = !!chartData?.isLoading
@@ -44,10 +41,11 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
   }
 
   const tokens = useMemo(() => {
-    const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
+    const poolTokens = chartData?.poolTokens
+    if (!poolTokens) return ''
 
     return isReversed ? poolTokens.reverse().join(' / ') : poolTokens.join(' / ')
-  }, [pool, isReversed])
+  }, [chartData?.poolTokens, isReversed])
 
   const options = useMemo(() => {
     const data = (chartData || {}) as any

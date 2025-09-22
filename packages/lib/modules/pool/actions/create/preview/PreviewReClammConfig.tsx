@@ -12,37 +12,23 @@ import {
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { formatNumber } from '../helpers'
-import { useReclAmmChart } from './useReclammChart'
 import ReactECharts from 'echarts-for-react'
-import { calculateInitialBalances } from '@repo/lib/modules/reclamm/reclAmmMath'
+import { useReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 
-export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }) {
+export function PreviewReClammConfig({
+  isBeforeStep,
+  lowerMarginValue,
+  upperMarginValue,
+}: {
+  isBeforeStep: boolean
+  lowerMarginValue: number | undefined
+  upperMarginValue: number | undefined
+}) {
+  const { options } = useReclAmmChart()
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
-  const {
-    initialTargetPrice,
-    initialMinPrice,
-    initialMaxPrice,
-    priceShiftDailyRate,
-    centerednessMargin,
-  } = reClammConfigForm.watch()
+  const { initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate } =
+    reClammConfigForm.watch()
   const { poolTokens } = poolCreationForm.watch()
-
-  const { balanceA, balanceB, virtualBalanceA, virtualBalanceB } = calculateInitialBalances({
-    minPrice: Number(initialMinPrice),
-    maxPrice: Number(initialMaxPrice),
-    targetPrice: Number(initialTargetPrice),
-  })
-
-  const { options, lowerMarginValue, upperMarginValue } = useReclAmmChart({
-    balanceA,
-    balanceB,
-    virtualBalanceA,
-    virtualBalanceB,
-    margin: Number(centerednessMargin),
-    isPriceAdjusting: false,
-    isPoolWithinTargetRange: true,
-    isReversed: false,
-  })
 
   const reClammConfigCards = [
     {
@@ -51,7 +37,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
     },
     {
       label: 'Lower Target',
-      value: upperMarginValue ? formatNumber(upperMarginValue.toString()) : '-', // TODO: why need reversed?
+      value: upperMarginValue ? formatNumber(upperMarginValue.toString()) : '-',
     },
     {
       label: 'Current Price',
@@ -59,7 +45,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
     },
     {
       label: 'Upper Target',
-      value: lowerMarginValue ? formatNumber(lowerMarginValue.toString()) : '-', // TODO: why need reversed?
+      value: lowerMarginValue ? formatNumber(lowerMarginValue.toString()) : '-',
     },
     {
       label: 'Max Price',
@@ -90,7 +76,7 @@ export function PreviewReClammConfig({ isBeforeStep }: { isBeforeStep: boolean }
 
           <Divider />
 
-          <Box h={250} w="full">
+          <Box h={333} w="full">
             <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
           </Box>
 
