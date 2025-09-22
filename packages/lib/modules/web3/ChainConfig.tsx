@@ -69,7 +69,8 @@ export const rpcOverrides: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Fraxtal]: getPrivateRpcUrl(GqlChain.Fraxtal),
   [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic),
   [GqlChain.Hyperevm]: getPrivateRpcUrl(GqlChain.Hyperevm),
-  [GqlChain.Plasma]: getPrivateRpcUrl(GqlChain.Plasma),
+  //[GqlChain.Plasma]: getPrivateRpcUrl(GqlChain.Plasma),
+  [GqlChain.Plasma]: 'https://rpc.plasma.to',
 }
 
 const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
