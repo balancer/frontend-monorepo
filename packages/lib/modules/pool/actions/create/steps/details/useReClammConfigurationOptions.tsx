@@ -4,10 +4,30 @@ import { ReClammConfig } from '../../types'
 import { useEffect } from 'react'
 import { formatNumber } from '../../helpers'
 import { useReClammCurrentPrice } from './useReClammCurrentPrice'
+import { SVGProps } from 'react'
+import {
+  CurrentPriceMinusFivePercentSVG,
+  CurrentPriceSVG,
+  CurrentPricePlusFivePercentSVG,
+  TargetRangeNarrowSVG,
+  TargetRangeStandardSVG,
+  TargetRangeWideSVG,
+  MarginBufferNarrowSVG,
+  MarginBufferStandardSVG,
+  MarginBufferWideSVG,
+  PriceAdjustmentRateSlowSVG,
+  PriceAdjustmentRateStandardSVG,
+  PriceAdjustmentRateFastSVG,
+} from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 
 export type ReClammConfigOptionsGroup = {
   label: string
-  options: { label: string; displayValue: string; rawValue: string }[]
+  options: {
+    label: string
+    displayValue: string
+    rawValue: string
+    svg: React.ComponentType<SVGProps<SVGSVGElement>>
+  }[]
   updateFn: (rawValue: string) => void
   validateFn: (value: string) => string | boolean
   name: keyof ReClammConfig
@@ -52,16 +72,19 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         label: 'Current price -5%',
         displayValue: formatNumber(currentPriceMinus5),
         rawValue: currentPriceMinus5,
+        svg: CurrentPriceMinusFivePercentSVG,
       },
       {
         label: 'Current price',
         displayValue: formatNumber(currentPrice.toString()),
         rawValue: currentPrice.toString(),
+        svg: CurrentPriceSVG,
       },
       {
         label: 'Current price +5%',
         displayValue: formatNumber(currentPricePlus5),
         rawValue: currentPricePlus5,
+        svg: CurrentPricePlusFivePercentSVG,
       },
     ],
     updateFn: (rawValue: string) => {
@@ -81,9 +104,9 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     name: 'priceRangePercentage' as const,
     customInputLabel: '???',
     options: [
-      { label: 'Narrow', displayValue: '± 5.00%', rawValue: '5' },
-      { label: 'Standard', displayValue: '± 10.00%', rawValue: '10' },
-      { label: 'Wide', displayValue: '± 15.00%', rawValue: '15' },
+      { label: 'Narrow', displayValue: '± 5.00%', rawValue: '5', svg: TargetRangeNarrowSVG },
+      { label: 'Standard', displayValue: '± 10.00%', rawValue: '10', svg: TargetRangeStandardSVG },
+      { label: 'Wide', displayValue: '± 15.00%', rawValue: '15', svg: TargetRangeWideSVG },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue)
@@ -105,9 +128,9 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     label: `Margin buffer`,
     customInputLabel: 'Custom margin buffer',
     options: [
-      { label: 'Narrow', displayValue: '10%', rawValue: '10' },
-      { label: 'Standard', displayValue: '20%', rawValue: '20' },
-      { label: 'Wide', displayValue: '30%', rawValue: '30' },
+      { label: 'Narrow', displayValue: '10%', rawValue: '10', svg: MarginBufferNarrowSVG },
+      { label: 'Standard', displayValue: '20%', rawValue: '20', svg: MarginBufferStandardSVG },
+      { label: 'Wide', displayValue: '30%', rawValue: '30', svg: MarginBufferWideSVG },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue)
@@ -125,9 +148,19 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     label: `Daily price re-adjustment rate, when out-of-range`,
     customInputLabel: 'Custom rate',
     options: [
-      { label: 'Slow', displayValue: '25%', rawValue: '25' },
-      { label: 'Standard', displayValue: '50%', rawValue: '50' },
-      { label: 'Fast (higher MEV)', displayValue: '75%', rawValue: '75' },
+      { label: 'Slow', displayValue: '25%', rawValue: '25', svg: PriceAdjustmentRateSlowSVG },
+      {
+        label: 'Standard',
+        displayValue: '50%',
+        rawValue: '50',
+        svg: PriceAdjustmentRateStandardSVG,
+      },
+      {
+        label: 'Fast (higher MEV)',
+        displayValue: '75%',
+        rawValue: '75',
+        svg: PriceAdjustmentRateFastSVG,
+      },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceShiftDailyRate', rawValue)

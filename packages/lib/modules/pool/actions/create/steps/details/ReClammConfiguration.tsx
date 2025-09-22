@@ -78,12 +78,13 @@ function ConfigOptionsGroup({
               _hover={{ cursor: 'pointer', shadow: 'md' }}
               bg={bg}
               borderColor={borderColor}
-              h={28}
+              h={141}
               key={option.label}
               onClick={() => updateFn(option.rawValue)}
               shadow={shadow}
             >
               <VStack h="full" justify="center">
+                <option.svg height="100%" width="100%" />
                 <Text color={textColor} fontSize="sm">
                   {option.label}
                 </Text>
