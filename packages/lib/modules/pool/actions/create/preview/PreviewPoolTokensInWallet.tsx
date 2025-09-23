@@ -1,21 +1,22 @@
-import { Card, CardBody, VStack, Text, Divider } from '@chakra-ui/react'
+import { CardBody, VStack, Text, Divider } from '@chakra-ui/react'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { formatUnits } from 'viem'
+import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 
-export function PreviewPoolTokensInWallet({ isBeforeStep }: { isBeforeStep: boolean }) {
+export function PreviewPoolTokensInWallet() {
   return (
-    <Card opacity={isBeforeStep ? 0.5 : 1}>
+    <PreviewPoolCreationCard stepTitle="Tokens">
       <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token Value', '%']} />
       <CardBody>
         <VStack spacing="md">
           <PoolTokensInWalletContent />
         </VStack>
       </CardBody>
-    </Card>
+    </PreviewPoolCreationCard>
   )
 }
 

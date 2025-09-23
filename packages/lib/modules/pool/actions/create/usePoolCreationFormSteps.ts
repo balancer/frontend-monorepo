@@ -32,6 +32,10 @@ export function usePoolCreationFormSteps() {
     return activeStepIndex < stepIndex
   }
 
+  const isStep = (stepTitle: string) => {
+    return activeStep.title === stepTitle
+  }
+
   return {
     steps,
     activeStepIndex,
@@ -39,6 +43,7 @@ export function usePoolCreationFormSteps() {
     isFirstStep,
     activeStep,
     isBeforeStep,
+    isStep,
     previousStep,
     nextStep,
     resetSteps,

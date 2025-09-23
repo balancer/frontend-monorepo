@@ -1,26 +1,28 @@
-import { Card, CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakra-ui/react'
+import { CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
+import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
+import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 
-export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) {
+export function PreviewPoolDetails() {
   return (
-    <Card opacity={isBeforeStep ? 0.5 : 1}>
+    <PreviewPoolCreationCard stepTitle="Details">
       <CardHeader>
         <Heading size="md">Details</Heading>
       </CardHeader>
       <CardBody>
         <VStack spacing="md">
-          <PoolDetailsContent isBeforeStep={isBeforeStep} />
+          <PoolDetailsContent />
         </VStack>
       </CardBody>
-    </Card>
+    </PreviewPoolCreationCard>
   )
 }
 
-export function PoolDetailsContent({ isBeforeStep }: { isBeforeStep?: boolean }) {
+export function PoolDetailsContent() {
   const {
     network,
     name,
@@ -70,10 +72,12 @@ export function PoolDetailsContent({ isBeforeStep }: { isBeforeStep?: boolean })
     'Allow donations': enableDonation ? 'Yes' : 'No',
   }
 
+  const { isBeforeStep } = usePoolCreationFormSteps()
+
   return Object.entries(poolDetailsMap).map(([label, value]) => (
     <HStack align="start" justify="space-between" key={label} spacing="lg" w="full">
       <Text color="font.secondary">{label}</Text>
-      <Box color="font.secondary">{isBeforeStep ? '—' : value}</Box>
+      <Box color="font.secondary">{isBeforeStep('Details') ? '—' : value}</Box>
     </HStack>
   ))
 }

@@ -1,9 +1,10 @@
-import { VStack, Heading, Card, HStack, Text, CardBody, Box } from '@chakra-ui/react'
+import { VStack, Heading, HStack, Text, CardBody, Box } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { capitalize } from 'lodash'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
+import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 
 export function PreviewPoolType() {
   const { network, protocol, poolType, weightedPoolStructure } = usePoolCreationForm()
@@ -33,7 +34,7 @@ export function PreviewPoolType() {
   ]
 
   return (
-    <Card>
+    <PreviewPoolCreationCard stepTitle="Type">
       <CardBody p="sm">
         <HStack alignItems="start" justify="space-between" w="full">
           <VStack align="start" h="full" spacing="md">
@@ -58,6 +59,6 @@ export function PreviewPoolType() {
           </Box>
         </HStack>
       </CardBody>
-    </Card>
+    </PreviewPoolCreationCard>
   )
 }
