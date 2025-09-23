@@ -38,7 +38,7 @@ export function PoolCreationForm() {
 
   useEffect(() => {
     // replace network param for TokenBalancesProvider of PoolCreationPage
-    router.replace(`/create/${network}`)
+    router.replace(`/create/${network.toLowerCase()}`)
   }, [network])
 
   return (
