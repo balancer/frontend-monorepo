@@ -18,8 +18,8 @@ export function useReClammCurrentPrice() {
   const priceTokenA = +usdValueForTokenAddress(tokenA?.address || '', network, '1')
   const priceTokenB = +usdValueForTokenAddress(tokenB?.address || '', network, '1')
 
-  const { rate: rawRateTokenA } = useRateProvider(tokenA?.rateProvider)
-  const { rate: rawRateTokenB } = useRateProvider(tokenB?.rateProvider)
+  const { rate: rawRateTokenA } = useRateProvider(tokenA?.rateProvider, network)
+  const { rate: rawRateTokenB } = useRateProvider(tokenB?.rateProvider, network)
 
   // if token has no rate provider, the rate is simply '1'
   const rateTokenA = rawRateTokenA ? formatUnits(rawRateTokenA, 18) : '1'
