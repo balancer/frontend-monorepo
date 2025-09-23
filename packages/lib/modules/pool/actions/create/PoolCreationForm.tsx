@@ -42,7 +42,7 @@ export function PoolCreationForm() {
   }, [network])
 
   return (
-    <VStack paddingX="lg" spacing="lg">
+    <VStack spacing="lg">
       <HeaderBanner />
       <Stack
         direction={{ base: 'column', xl: 'row' }}
