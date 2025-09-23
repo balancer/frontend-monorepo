@@ -4,6 +4,7 @@ import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) {
   return (
@@ -40,7 +41,7 @@ export function PoolDetailsContent({ isBeforeStep }: { isBeforeStep?: boolean })
   const isStablePool = validatePoolType.isStablePool(poolType)
 
   function formatPoolManager(manager: string) {
-    if (manager === zeroAddress) return 'Balancer DAO'
+    if (manager === zeroAddress) return `${PROJECT_CONFIG.projectName} DAO`
     return <BlockExplorerLink address={manager as `0x${string}`} chain={network} fontSize="md" />
   }
 
