@@ -14,6 +14,7 @@ import { AlertTriangle } from 'react-feather'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
+import { useRateProvider } from '@repo/lib/modules/code-review/rate-providers/useRateProvider'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -30,6 +31,7 @@ export function ChoosePoolTokens() {
     reClammConfigForm,
     isReClamm,
   } = usePoolCreationForm()
+  const { isDynamicRateProvider, isConstantRateProvider } = useRateProvider()
 
   const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
     poolType,
@@ -49,10 +51,18 @@ export function ChoosePoolTokens() {
     token => !selectedTokenAddresses.includes(token.address.toLowerCase())
   )
 
+  function getVerifiedRateProviderAddress(rateProviderAddress: Address) {
+    const isRateProviderConstant = isConstantRateProvider(rateProviderAddress)
+    const isRateProviderDynamic = isDynamicRateProvider(rateProviderAddress)
+    return !(isRateProviderConstant || isRateProviderDynamic) ? rateProviderAddress : undefined
+  }
+
   function handleTokenSelect(tokenData: ApiToken) {
     if (!tokenData || selectedTokenIndex === null) return
 
-    const verifiedRateProviderAddress = tokenData?.priceRateProviderData?.address as Address
+    const verifiedRateProviderAddress = getVerifiedRateProviderAddress(
+      tokenData?.priceRateProviderData?.address as Address
+    )
 
     updatePoolToken(selectedTokenIndex, {
       address: tokenData.address as Address,
@@ -87,7 +97,13 @@ export function ChoosePoolTokens() {
         <VStack align="start" spacing="xl" w="full">
           {poolTokens.map((token, index) => {
             const isInvalidWeight = !!token.weight && Number(token.weight) < 1
-            const verifiedRateProviderAddress = token?.data?.priceRateProviderData?.address
+
+            const rateProviderAddress = token?.data
+              ? (token?.data?.priceRateProviderData?.address as Address)
+              : zeroAddress
+
+            const verifiedRateProviderAddress = getVerifiedRateProviderAddress(rateProviderAddress)
+
             const tokenWeightErrorMsg =
               poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
 
