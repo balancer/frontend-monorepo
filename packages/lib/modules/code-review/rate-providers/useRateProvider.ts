@@ -1,18 +1,24 @@
-import { useRateProviders } from './RateProvidersProvider'
+import { useRateProvidersQuery } from './useRateProvidersQuery'
 import { Address } from 'viem'
 
-export function useRateProvider(rateProviderAddress: Address) {
-  const { codeReviewData: rateProvidersCodeReviewData } = useRateProviders()
+export function useRateProvider() {
+  const { data: rateProvidersCodeReviewData, isLoading, error } = useRateProvidersQuery()
 
-  const rateProvider = rateProvidersCodeReviewData?.find(
-    rateProvider => rateProvider.address.toLowerCase() === rateProviderAddress.toLowerCase()
-  )
+  function getRateProvider(rateProviderAddress: Address) {
+    return rateProvidersCodeReviewData?.find(
+      rateProvider => rateProvider.address.toLowerCase() === rateProviderAddress.toLowerCase()
+    )
+  }
 
-  const isConstantRateProvider = rateProvider?.review.includes('constant')
-  const isDynamicRateProvider = rateProvider?.review.includes('dynamic')
+  const isConstantRateProvider = (rateProviderAddress: Address) =>
+    getRateProvider(rateProviderAddress)?.name.toLowerCase().includes('constant')
+
+  const isDynamicRateProvider = (rateProviderAddress: Address) =>
+    getRateProvider(rateProviderAddress)?.name.toLowerCase().includes('dynamic')
 
   return {
-    rateProvider,
+    loading: isLoading,
+    error,
     isConstantRateProvider,
     isDynamicRateProvider,
   }
