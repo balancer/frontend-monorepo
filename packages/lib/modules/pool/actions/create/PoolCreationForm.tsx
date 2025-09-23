@@ -38,7 +38,7 @@ export function PoolCreationForm() {
 
   useEffect(() => {
     // replace network param for TokenBalancesProvider of PoolCreationPage
-    router.replace(`/create/${network}`)
+    router.replace(`/create/${network.toLowerCase()}`)
   }, [network])
 
   return (
@@ -50,7 +50,7 @@ export function PoolCreationForm() {
         spacing="2xl"
         w="full"
       >
-        <VStack align="start" spacing="lg" w="full">
+        <VStack align="start" minW="500px" spacing="lg">
           <VStack align="start" spacing="md" w="full">
             <Text color="font.secondary" fontWeight="medium" size="sm">
               STEPS

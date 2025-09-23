@@ -9,10 +9,15 @@ import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
 import { getGqlPoolType } from '../helpers'
 import { LearnMoreModal } from '@repo/lib/modules/lbp/header/LearnMoreModal'
+import { PreviewReClammConfig } from './PreviewReClammConfig'
+import { ReclAmmChartProvider } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+import { usePreviewReclAmmChartData } from './usePreviewReclammChartData'
 
 export function PreviewPoolCreation() {
-  const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
+  const { resetPoolCreationForm, network, poolType, isReClamm } = usePoolCreationForm()
   const { isBeforeStep } = usePoolCreationFormSteps()
+  const reclammChartData = usePreviewReclAmmChartData()
+  const { lowerMarginValue, upperMarginValue } = reclammChartData || {}
 
   return (
     <NoisyCard
@@ -38,6 +43,15 @@ export function PreviewPoolCreation() {
         </HStack>
 
         <PreviewPoolType />
+        {isReClamm && (
+          <ReclAmmChartProvider chartData={reclammChartData}>
+            <PreviewReClammConfig
+              isBeforeStep={isBeforeStep('Details')}
+              lowerMarginValue={lowerMarginValue}
+              upperMarginValue={upperMarginValue}
+            />
+          </ReclAmmChartProvider>
+        )}
         <PreviewPoolTokens isBeforeStep={isBeforeStep('Tokens')} />
         <PreviewPoolTokensInWallet isBeforeStep={isBeforeStep('Tokens')} />
         <PreviewPoolDetails isBeforeStep={isBeforeStep('Details')} />
