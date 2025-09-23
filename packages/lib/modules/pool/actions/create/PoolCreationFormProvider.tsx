@@ -25,7 +25,8 @@ export function usePoolFormLogic() {
 
   const reClammConfigForm = usePersistentForm<ReClammConfig>(
     LS_KEYS.PoolCreation.ReClammConfig,
-    INITIAL_RECLAMM_CONFIG
+    INITIAL_RECLAMM_CONFIG,
+    { mode: 'all' }
   )
 
   const poolCreationForm = usePersistentForm<PoolCreationForm>(

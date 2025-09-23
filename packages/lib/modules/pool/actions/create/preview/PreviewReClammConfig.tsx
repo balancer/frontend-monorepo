@@ -15,15 +15,13 @@ import { formatNumber } from '../helpers'
 import ReactECharts from 'echarts-for-react'
 import { useReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 
-export function PreviewReClammConfig({
-  isBeforeStep,
-  lowerMarginValue,
-  upperMarginValue,
-}: {
+type Props = {
   isBeforeStep: boolean
   lowerMarginValue: number | undefined
   upperMarginValue: number | undefined
-}) {
+}
+
+export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarginValue }: Props) {
   const { options } = useReclAmmChart()
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
   const { initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate } =
@@ -55,7 +53,6 @@ export function PreviewReClammConfig({
 
   const tokenSymbols = poolTokens.map(token => token.data?.symbol).filter(Boolean)
   const tokenSymbolsString = tokenSymbols.join(' / ')
-  const showInvertButton = tokenSymbols.length > 0
 
   return (
     <Card opacity={isBeforeStep ? 0.5 : 1}>
@@ -74,14 +71,13 @@ export function PreviewReClammConfig({
             ))}
           </SimpleGrid>
 
-          <Divider />
-
-          <Box h={333} w="full">
-            <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
-          </Box>
-
-          {showInvertButton && (
+          {!isBeforeStep && (
             <>
+              <Divider />
+              <Box h={333} w="full">
+                <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
+              </Box>
+
               <Divider />
               <HStack justify="space-between" w="full">
                 <Button

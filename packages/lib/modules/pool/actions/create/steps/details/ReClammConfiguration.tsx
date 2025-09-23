@@ -47,7 +47,6 @@ function ConfigOptionsGroup({
   const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
   const formValue = reClammConfigForm.watch(name)
   const optionRawValues = options.map(option => Number(option.rawValue))
-  const errors = reClammConfigForm.formState.errors[name]
 
   const isCustom = !optionRawValues.includes(Number(formValue))
   const isCustomTargetPrice = isCustom && name === 'initialTargetPrice'
@@ -154,7 +153,7 @@ function ConfigOptionsGroup({
       ) : isCustom ? (
         <NumberInput
           control={reClammConfigForm.control}
-          error={errors?.message}
+          error={reClammConfigForm.formState.errors[name]?.message}
           isPercentage={isPercentage}
           label={customInputLabel}
           name={name}

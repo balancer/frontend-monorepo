@@ -14,7 +14,12 @@ export function usePreviewReclAmmChartData() {
     reClammConfigForm.watch()
 
   return useMemo(() => {
-    if (!initialMinPrice || !initialMaxPrice || !initialTargetPrice) {
+    if (
+      !initialMinPrice ||
+      !initialMaxPrice ||
+      !initialTargetPrice ||
+      Number(centerednessMargin) > 90
+    ) {
       return undefined
     }
 

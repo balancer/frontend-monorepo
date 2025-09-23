@@ -46,7 +46,7 @@ export function PreviewPoolCreation() {
         {isReClamm && (
           <ReclAmmChartProvider chartData={reclammChartData}>
             <PreviewReClammConfig
-              isBeforeStep={isBeforeStep('Tokens')}
+              isBeforeStep={isBeforeStep('Details')}
               lowerMarginValue={lowerMarginValue}
               upperMarginValue={upperMarginValue}
             />
