@@ -58,7 +58,7 @@ export function LbpPreview() {
                   network={chain}
                   poolType={GqlPoolType.LiquidityBootstrapping}
                 />
-                <LearnMoreModal buttonLabel="Get help" />
+                <LearnMoreModal buttonLabel="Get help" subject="LBP" />
               </Flex>
               <TokenSummary
                 chain={chain}

@@ -63,7 +63,7 @@ export function HeaderBanner() {
               and early supporters.
             </Text>
 
-            <LearnMoreModal buttonLabel="Learn more" />
+            <LearnMoreModal buttonLabel="Learn more" subject="LBP" />
           </VStack>
         </VStack>
 

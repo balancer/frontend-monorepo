@@ -38,7 +38,7 @@ export function PreviewPoolCreation() {
               network={network}
               poolType={getGqlPoolType(poolType)}
             />
-            <LearnMoreModal buttonLabel="Get help" />
+            <LearnMoreModal buttonLabel="Get help" subject="pool type" />
           </HStack>
         </HStack>
 
