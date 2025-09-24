@@ -38,6 +38,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
         name="network"
         render={({ field }) => (
           <RadioCardGroup
+            key={field.value ?? 'network'}
             name={field.name}
             onChange={(value: GqlChain) => {
               resetPoolCreationForm()
