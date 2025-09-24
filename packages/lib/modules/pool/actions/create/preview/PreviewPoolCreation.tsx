@@ -52,9 +52,9 @@ export function PreviewPoolCreation() {
             />
           </ReclAmmChartProvider>
         )}
-        <PreviewPoolTokens isBeforeStep={isBeforeStep('Tokens')} />
-        <PreviewPoolTokensInWallet isBeforeStep={isBeforeStep('Tokens')} />
-        <PreviewPoolDetails isBeforeStep={isBeforeStep('Details')} />
+        <PreviewPoolTokens />
+        <PreviewPoolTokensInWallet />
+        <PreviewPoolDetails />
       </VStack>
     </NoisyCard>
   )
