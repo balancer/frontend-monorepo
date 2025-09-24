@@ -17,8 +17,8 @@ export default function PoolCreationPage() {
   const { getTokensByChain, isLoadingTokens } = useTokens()
   const params = useParams()
 
-  const selectedNetwork = (params.network as GqlChain) || PROJECT_CONFIG.defaultNetwork
-  const initTokens = getTokensByChain(selectedNetwork)
+  const selectedNetwork = (params.network as string) || PROJECT_CONFIG.defaultNetwork
+  const initTokens = getTokensByChain(selectedNetwork.toUpperCase() as GqlChain)
 
   return (
     <DefaultPageContainer minH="100vh">
