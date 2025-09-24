@@ -32,6 +32,11 @@ const config: NextConfig = {
       permanent: boolean
     }> = [
       {
+        source: '/create',
+        destination: '/create/SONIC',
+        permanent: true,
+      },
+      {
         source: '/discord',
         destination: 'https://discord.gg/kbPnYJjvwZ',
         permanent: false,

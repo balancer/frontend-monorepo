@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
       permanent: boolean
     }> = [
       {
+        source: '/create',
+        destination: '/create/MAINNET',
+        permanent: true,
+      },
+      {
         source: '/',
         destination: '/pools',
         permanent: true,
