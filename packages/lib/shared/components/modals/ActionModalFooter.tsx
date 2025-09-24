@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Divider, HStack, ModalFooter, VStack, Link } from '@chakra-ui/react'
+import { Button, Divider, HStack, ModalFooter, VStack, Link, useColorMode } from '@chakra-ui/react'
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -18,6 +18,7 @@ export function SuccessActions({
   returnAction?: () => void
 }) {
   const { openNpsModal } = useAppzi()
+  const { colorMode } = useColorMode()
   const {
     options: { showVeBal },
   } = PROJECT_CONFIG
@@ -46,14 +47,20 @@ export function SuccessActions({
           </Button>
         )}
         <Button
+          _hover={{
+            color: 'font.maxContrast',
+            textDecoration: 'none',
+            background: colorMode === 'light' ? 'gray.100' : 'whiteAlpha.200',
+          }}
           as={Link}
+          fontSize="xs !important"
           href={getDiscordLink()}
           isExternal
           leftIcon={<MessageSquare size="14" />}
           size="xs"
           variant="ghost"
         >
-          Ask questions
+          Ask on Discord
         </Button>
       </HStack>
     </VStack>
