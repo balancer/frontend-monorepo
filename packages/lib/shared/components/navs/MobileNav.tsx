@@ -49,7 +49,7 @@ function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
         <Link
           alignItems="center"
           as={NextLink}
-          color={linkColorFor(link.href)}
+          color={linkColorFor(link.href || '')}
           display="flex"
           fontSize="xl"
           gap="xs"

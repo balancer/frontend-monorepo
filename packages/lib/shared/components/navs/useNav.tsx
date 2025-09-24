@@ -4,11 +4,12 @@ import { ReactNode } from 'react'
 import { IconType } from './SocialIcon'
 
 export type AppLink = {
-  href: string
+  href?: string
   label?: string
   icon?: ReactNode
   isExternal?: boolean
   iconType?: IconType
+  onClick?: () => void
 }
 
 export function useNav() {
