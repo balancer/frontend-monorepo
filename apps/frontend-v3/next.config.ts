@@ -26,22 +26,6 @@ const nextConfig: NextConfig = {
 
   // Safe App setup
   headers: manifestHeaders,
-
-  async redirects() {
-    const redirects: Array<{
-      source: string
-      destination: string
-      permanent: boolean
-    }> = [
-      {
-        source: '/create',
-        destination: '/create/MAINNET',
-        permanent: true,
-      },
-    ]
-
-    return redirects
-  },
 }
 
 // Avoid sentry setup in CI

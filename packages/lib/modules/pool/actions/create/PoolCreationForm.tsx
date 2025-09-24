@@ -22,24 +22,14 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { useEffect } from 'react'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
-import { useRouter } from 'next/navigation'
-import { usePoolCreationForm } from './PoolCreationFormProvider'
 
 export function PoolCreationForm() {
   const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
-  const { network } = usePoolCreationForm()
   const { isMobile } = useBreakpoints()
-
-  const router = useRouter()
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [activeStepIndex])
-
-  useEffect(() => {
-    // replace network param for TokenBalancesProvider of PoolCreationPage
-    router.replace(`/create/${network.toLowerCase()}`)
-  }, [network])
 
   return (
     <VStack paddingX="lg" spacing="lg">
