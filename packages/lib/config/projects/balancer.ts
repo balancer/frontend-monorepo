@@ -178,8 +178,30 @@ export const ProjectConfigBalancer: ProjectConfig = {
   promoItems: [
     {
       id: 0,
+      icon: 'plasma',
+      label: 'Plasma Chain',
+      title: 'Balancer is live on Plasma Chain',
+      description:
+        'Global Reach. Real Impact. Balancer brings stable-optimized pools to the stablecoins-focused blockchain.',
+      buttonText: 'View pools',
+      buttonLink: '/pools?networks=PLASMA',
+      linkText: 'Learn more',
+      linkURL:
+        'https://vote.balancer.fi/#/proposal/0x382b5f20c7e03f643df9fbf7c5981f1f9aa80ae12ba60fb1b3bf87affe42cf7c',
+      linkExternal: true,
+      bgImageActive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-active2',
+      },
+      bgImageInactive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-inactive2',
+      },
+    },
+    {
+      id: 1,
       icon: 'reclamm',
-      label: 'reCLAMM pools',
+      label: 'reCLAMM Pools',
       title: 'New readjusting Concentrated Liquidity Pools',
       description:
         'Maximize capital efficiency with reCLAMMs: Auto-readjusting concentrated liquidity—no micro-management of positions needed.',
@@ -199,7 +221,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
       },
     },
     {
-      id: 1,
+      id: 2,
       icon: 'boosted',
       label: 'Boosted Pools',
       title: '100% Boosted Pools on Balancer v3',
@@ -218,27 +240,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
       bgImageInactive: {
         directory: '/images/promos/promo-banner/',
         imgName: 'bg-inactive1',
-      },
-    },
-    {
-      id: 2,
-      icon: 'gyro',
-      label: 'Gyroscope',
-      title: 'Superliquidity, made simple',
-      description:
-        'Next generation Gyroscope pools are now live on Balancer v3. Manage liquidity directly within the Balancer UI.',
-      buttonText: 'View pools',
-      buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
-      linkText: 'Learn more',
-      linkURL: 'https://www.gyro.finance/',
-      linkExternal: true,
-      bgImageActive: {
-        directory: '/images/promos/promo-banner/',
-        imgName: 'bg-active2',
-      },
-      bgImageInactive: {
-        directory: '/images/promos/promo-banner/',
-        imgName: 'bg-inactive2',
       },
     },
     {
@@ -262,5 +263,26 @@ export const ProjectConfigBalancer: ProjectConfig = {
         imgName: 'bg-inactive3',
       },
     },
+    // {
+    //   id: 2,
+    //   icon: 'gyro',
+    //   label: 'Gyroscope',
+    //   title: 'Superliquidity, made simple',
+    //   description:
+    //     'Next generation Gyroscope pools are now live on Balancer v3. Manage liquidity directly within the Balancer UI.',
+    //   buttonText: 'View pools',
+    //   buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
+    //   linkText: 'Learn more',
+    //   linkURL: 'https://www.gyro.finance/',
+    //   linkExternal: true,
+    //   bgImageActive: {
+    //     directory: '/images/promos/promo-banner/',
+    //     imgName: 'bg-active2',
+    //   },
+    //   bgImageInactive: {
+    //     directory: '/images/promos/promo-banner/',
+    //     imgName: 'bg-inactive2',
+    //   },
+    // },
   ],
 }
