@@ -265,8 +265,8 @@ export function usePoolAlerts(pool: Pool) {
       alerts.push({
         identifier: 'poolIsReclamm',
         content:
-          'Experimental reCLAMM pool: This pool is not full range and has additional risks of impermanent loss.',
-        status: 'warning',
+          'By auto-adjusting their concentrated liquidity range, reCLAMM’s can get more swap fees but also increase the risk of impermanent loss.',
+        status: 'info',
         isSoftWarning: false,
         learnMoreLink: '/risks#reclamm',
       })
