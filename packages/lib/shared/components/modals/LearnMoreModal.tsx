@@ -18,21 +18,21 @@ import {
 } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { getDiscordLink } from '@repo/lib/shared/utils/links'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type LearnMoreModalProps = {
-  subject: 'LBP' | 'pool type'
+  listItems: string[]
+  docsUrl: string
   buttonLabel: string
+  headerText: string
 }
 
-export function LearnMoreModal({ subject, buttonLabel }: LearnMoreModalProps) {
+export function LearnMoreModal({
+  buttonLabel,
+  docsUrl,
+  headerText,
+  listItems,
+}: LearnMoreModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const isLbp = subject === 'LBP'
-  const listItems = isLbp ? lbpListItems : poolTypeListItems
-  const docsUrl = isLbp
-    ? 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/liquidity-bootstrapping-pool.html'
-    : 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/'
 
   return (
     <>
@@ -47,7 +47,7 @@ export function LearnMoreModal({ subject, buttonLabel }: LearnMoreModalProps) {
       <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
         <SuccessOverlay />
         <ModalContent>
-          <ModalHeader>Learn more about {`${subject}s`}</ModalHeader>
+          <ModalHeader>{headerText}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb="lg">
             <VStack gap="lg">
@@ -69,7 +69,7 @@ export function LearnMoreModal({ subject, buttonLabel }: LearnMoreModalProps) {
                   size="md"
                   variant="secondary"
                 >
-                  View {subject} docs
+                  View docs
                   <ArrowUpRight size={14} />
                 </Button>
 
@@ -94,14 +94,3 @@ export function LearnMoreModal({ subject, buttonLabel }: LearnMoreModalProps) {
     </>
   )
 }
-
-const lbpListItems = [
-  'LBPs typically start with an uneven ratio (like 90:10) heavily weighted toward the project token, with a high initial price, and gradually shift over a predetermined time period.',
-  'The pool automatically adjusts token weights over time, causing the price to decrease until there is sufficient buying pressure, which helps establish natural price discovery.',
-  'Projects only need to provide their token and a small portion (typically 10-20%) of a collateral asset (like ETH or USDC) to start the pool, making it capital efficient.',
-  'The dynamic weight mechanism forces large buyers to split their trades into smaller amounts over time, preventing price manipulation and enabling fairer distribution.',
-]
-
-const poolTypeListItems = [
-  `${PROJECT_CONFIG.projectName} offers a variety of liquidity pool types, each tailored to specific use cases`,
-]

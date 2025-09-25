@@ -8,10 +8,11 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
 import { getGqlPoolType } from '../helpers'
-import { LearnMoreModal } from '@repo/lib/modules/lbp/header/LearnMoreModal'
+import { LearnMoreModal } from '@repo/lib/shared/components/modals/LearnMoreModal'
 import { PreviewReClammConfig } from './PreviewReClammConfig'
 import { ReclAmmChartProvider } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 import { usePreviewReclAmmChartData } from './usePreviewReclammChartData'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PreviewPoolCreation() {
   const { resetPoolCreationForm, network, poolType, isReClamm } = usePoolCreationForm()
@@ -38,7 +39,14 @@ export function PreviewPoolCreation() {
               network={network}
               poolType={getGqlPoolType(poolType)}
             />
-            <LearnMoreModal buttonLabel="Get help" subject="pool type" />
+            <LearnMoreModal
+              buttonLabel="Get help"
+              docsUrl="https://docs.balancer.fi/concepts/explore-available-balancer-pools/"
+              headerText="Learn more about pool types"
+              listItems={[
+                `${PROJECT_CONFIG.projectName} offers a variety of liquidity pool types, each tailored to specific use cases`,
+              ]}
+            />
           </HStack>
         </HStack>
 

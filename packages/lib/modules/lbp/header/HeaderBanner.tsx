@@ -1,11 +1,11 @@
 import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { LearnMoreModal } from './LearnMoreModal'
 import { FeatureLink } from './FeatureLink'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { LbpBenefitsScalesIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsScalesIcon'
 import { LbpBenefitsChartIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsChartIcon'
 import { LbpBenefitsLightningIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsLightningIcon'
+import { LbpLearnMoreModal } from '../modal/LbpLearnMoreModal'
 
 export function HeaderBanner() {
   const fairPriceDescription = `
@@ -63,7 +63,7 @@ export function HeaderBanner() {
               and early supporters.
             </Text>
 
-            <LearnMoreModal buttonLabel="Learn more" subject="LBP" />
+            <LbpLearnMoreModal buttonLabel="Learn more" />
           </VStack>
         </VStack>
 
