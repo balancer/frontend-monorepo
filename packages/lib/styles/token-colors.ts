@@ -8,7 +8,7 @@ export type TokenColorDef = {
   to: string
 }
 
-const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
+const tokenColors: Record<GqlChain, Record<Address, TokenColorDef>> = {
   [GqlChain.Mainnet]: {
     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { from: '#627EEA', to: '#627EEA' }, // 'ETH'
     '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': { from: '#F2F3F7', to: '#CECDFE' }, // 'WETH'
@@ -164,7 +164,7 @@ export function getTokenColor(
   const defaultColorIndex = i === undefined ? getRandomInt(0, 15) : i
 
   return (
-    (tokenColors[normalizedChain] && tokenColors[normalizedChain][normalizedAddress]) ||
+    tokenColors[normalizedChain][normalizedAddress] ||
     DEFAULT_TOKEN_COLORS[defaultColorIndex] ||
     defaultColor
   )
