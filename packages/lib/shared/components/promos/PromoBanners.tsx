@@ -15,7 +15,7 @@ import {
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
-import { PromoHookIcon } from '../icons/promos/PromoHookIcon'
+import { HookIcon } from '../icons/HookIcon'
 import { PromoGyroIcon } from '../icons/promos/PromoGyroIcon'
 import { PromoVThreeIcon } from '../icons/promos/PromoVThreeIcon'
 import { PromoBoostedIcon } from '../icons/promos/PromoBoostedIcon'
@@ -33,7 +33,7 @@ function getIconElement(icon: string) {
     case 'gyro':
       return <PromoGyroIcon size={44} />
     case 'hook':
-      return <PromoHookIcon size={44} />
+      return <HookIcon size={44} />
     case 'reclamm':
       return <PromoReclammIcon size={44} />
     default:
