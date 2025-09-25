@@ -10,7 +10,7 @@ import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
-import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
+//import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { RadioCardGroup } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 
 export function ReClammConfiguration() {
@@ -124,14 +124,14 @@ function ConfigOptionsGroup({
         }}
         value={selectedValue}
       />
-      <PoolCreationCheckbox
+      {/* <PoolCreationCheckbox
         isChecked={isCustom}
         label="Or choose custom"
         labelColor="font.secondary"
         onChange={() => {
           updateFn('')
         }}
-      />
+      /> */}
       {isCustomPriceRange ? (
         <VStack align="start" spacing="md" w="full">
           <NumberInput
