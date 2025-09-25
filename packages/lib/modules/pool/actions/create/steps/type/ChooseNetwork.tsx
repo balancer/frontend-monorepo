@@ -48,7 +48,8 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
             radioCardProps={{
               containerProps: {
                 _checked: {
-                  borderColor: 'background.highlight',
+                  borderColor: 'green.400',
+                  bg: '#63F2BE0D',
                   color: 'font.opposite',
                 },
                 _focus: {

@@ -68,7 +68,7 @@ function ConfigOptionsGroup({
         {options.map(option => {
           const isSelected = Number(formValue) === Number(option.rawValue)
           const bg = isSelected ? '#63F2BE0D' : 'background.level2'
-          const borderColor = isSelected ? '#25E2A4' : 'transparent'
+          const borderColor = isSelected ? 'green.400' : 'transparent'
           const shadow = isSelected ? 'none' : 'lg'
           const textColor = isSelected ? 'font.maxContrast' : 'font.secondary'
 
