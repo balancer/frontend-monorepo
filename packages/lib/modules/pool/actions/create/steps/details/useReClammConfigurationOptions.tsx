@@ -104,9 +104,9 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     name: 'priceRangePercentage' as const,
     customInputLabel: '???',
     options: [
-      { label: 'Narrow', displayValue: '± 5.00%', rawValue: '5', svg: TargetRangeNarrowSVG },
-      { label: 'Standard', displayValue: '± 10.00%', rawValue: '10', svg: TargetRangeStandardSVG },
-      { label: 'Wide', displayValue: '± 15.00%', rawValue: '15', svg: TargetRangeWideSVG },
+      { label: 'Narrow', displayValue: '± 25.00%', rawValue: '25', svg: TargetRangeNarrowSVG },
+      { label: 'Standard', displayValue: '± 50.00%', rawValue: '50', svg: TargetRangeStandardSVG },
+      { label: 'Wide', displayValue: '± 75.00%', rawValue: '75', svg: TargetRangeWideSVG },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue)
@@ -129,8 +129,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     customInputLabel: 'Custom margin buffer',
     options: [
       { label: 'Narrow', displayValue: '10%', rawValue: '10', svg: MarginBufferNarrowSVG },
-      { label: 'Standard', displayValue: '20%', rawValue: '20', svg: MarginBufferStandardSVG },
-      { label: 'Wide', displayValue: '30%', rawValue: '30', svg: MarginBufferWideSVG },
+      { label: 'Standard', displayValue: '25%', rawValue: '25', svg: MarginBufferStandardSVG },
+      { label: 'Wide', displayValue: '50%', rawValue: '50', svg: MarginBufferWideSVG },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue)
