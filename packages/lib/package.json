@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.13.8",
-    "@balancer/sdk": "4.5.1",
+    "@balancer/sdk": "4.8.0",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
@@ -75,8 +75,8 @@
     "use-debounce": "10.0.6",
     "use-sound": "^4.0.1",
     "usehooks-ts": "3.1.1",
-    "viem": "2.31.6",
-    "wagmi": "2.15.6"
+    "viem": "2.37.6",
+    "wagmi": "2.17.0"
   },
   "devDependencies": {
     "@apollo/client-integration-nextjs": "0.12.2",
