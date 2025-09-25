@@ -109,6 +109,9 @@ export const colors = {
     sunsetDark: 'linear-gradient(45deg, #F06147 0%, #EA9A43 100%)',
     sandLight: 'linear-gradient(180deg, #E5D3BE 0%, #E6C6A0 100%)',
     sandDark: 'linear-gradient(180deg, #E5D3BE 0%, #E6C6A0 100%)',
+    special:
+      'linear-gradient(266.76deg, rgba(234, 168, 121, 0.5) -20.29%, rgba(179, 174, 245, 0.5) 45.08%, rgba(234, 168, 121, 0) 110.45%)',
+
     goldLight: 'linear-gradient(90deg, #BC874C 0%,rgb(193, 149, 17) 50%, #BC874C 100%)',
     goldDark: 'linear-gradient(90deg, #A18775 0%, #C4BC97 50%, #958471 100%)',
   },

@@ -26,6 +26,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           divider: colors.brown['100'],
           highlight: colors.green['600'],
           subduedZen: 'rgba(176, 126, 67, 0.08)',
+          special: colors.gradient.special,
         },
         // Button colors
         button: {
@@ -115,6 +116,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           highlight: colors.green['500'],
           zen: 'rgba(76, 85, 97, 0.50)',
           subduedZen: 'rgba(229, 211, 190, 0.05)',
+          special: colors.gradient.special,
         },
         // Button colors
         button: {
