@@ -259,6 +259,19 @@ export function usePoolAlerts(pool: Pool) {
   const getPoolAlerts = (pool: Pool): PoolAlert[] => {
     const alerts: PoolAlert[] = []
 
+    // alert for specific reclamm pool
+    // https://balancer.fi/pools/plasma/v3/0xe14ba497a7c51f34896d327ec075f3f18210a270
+    if (pool.id === '0xe14ba497a7c51f34896d327ec075f3f18210a270') {
+      alerts.push({
+        identifier: 'poolIsReclamm',
+        content:
+          'Experimental reCLAMM pool: This pool is not full range and has additional risks of impermanent loss.',
+        status: 'warning',
+        isSoftWarning: false,
+        learnMoreLink: '/risks#reclamm',
+      })
+    }
+
     if (pool.dynamicData.isPaused && pool.dynamicData.isInRecoveryMode) {
       alerts.push({
         identifier: 'poolIsPausedAndInRecoveryMode',
