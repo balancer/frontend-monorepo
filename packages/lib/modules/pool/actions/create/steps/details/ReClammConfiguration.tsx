@@ -77,7 +77,7 @@ function ConfigOptionsGroup({
         </BalPopover>
       </HStack>
       <RadioCardGroup
-        layoutProps={{ columns: { base: 1, md: 3 }, spacing: 'md', w: 'full' }}
+        layoutProps={{ columns: { base: 1, md: 4 }, spacing: 'md', w: 'full' }}
         name={name}
         onChange={value => updateFn(value)}
         options={options.map(option => ({
