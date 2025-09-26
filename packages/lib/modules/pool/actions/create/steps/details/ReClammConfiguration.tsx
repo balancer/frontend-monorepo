@@ -10,8 +10,9 @@ import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
-//import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
+import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { RadioCardGroup } from '@repo/lib/shared/components/inputs/RadioCardGroup'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
 export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
@@ -48,6 +49,7 @@ function ConfigOptionsGroup({
   const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
   const formValue = reClammConfigForm.watch(name)
   const normalizedFormValue = formValue?.toString?.() ?? ''
+
   const matchedOption = options.find(option => {
     if (option.rawValue === normalizedFormValue) return true
 
@@ -59,12 +61,48 @@ function ConfigOptionsGroup({
     return optionNumber === formValueNumber
   })
 
-  const isCustom = matchedOption ? matchedOption.rawValue === '' : normalizedFormValue !== ''
-  const selectedValue = isCustom ? '' : (matchedOption?.rawValue ?? '')
-  const isCustomTargetPrice = isCustom && name === 'initialTargetPrice'
+  const hasCustomFormValue = normalizedFormValue !== '' && !matchedOption
+  const defaultOptionValue = options[1]?.rawValue ?? options[0]?.rawValue ?? ''
+  const [isCustomChecked, setIsCustomChecked] = useState(hasCustomFormValue)
+  const previousRadioValueRef = useRef(matchedOption?.rawValue ?? defaultOptionValue)
+
+  useEffect(() => {
+    if (hasCustomFormValue && !isCustomChecked) {
+      setIsCustomChecked(true)
+    }
+  }, [hasCustomFormValue, isCustomChecked])
+
+  if (!isCustomChecked && matchedOption?.rawValue) {
+    previousRadioValueRef.current = matchedOption.rawValue
+  }
+
+  const showCustomInput = isCustomChecked || hasCustomFormValue
+  const radioValue = showCustomInput ? undefined : (matchedOption?.rawValue ?? '')
+  const isCustomTargetPrice = showCustomInput && name === 'initialTargetPrice'
   const ispriceRangePercentage = name === 'priceRangePercentage'
-  const isCustomPriceRange = isCustom && ispriceRangePercentage
+  const isCustomPriceRange = showCustomInput && ispriceRangePercentage
   const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
+
+  const handleRadioChange = (value: string) => {
+    previousRadioValueRef.current = value
+    setIsCustomChecked(false)
+    updateFn(value)
+  }
+
+  const handleCustomToggle = (event: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = event.target
+    if (checked) {
+      const currentRadioValue = matchedOption?.rawValue ?? defaultOptionValue
+      previousRadioValueRef.current = currentRadioValue
+      setIsCustomChecked(true)
+      updateFn('')
+      return
+    }
+
+    const fallbackValue = previousRadioValueRef.current ?? defaultOptionValue
+    setIsCustomChecked(false)
+    updateFn(fallbackValue)
+  }
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -77,9 +115,9 @@ function ConfigOptionsGroup({
         </BalPopover>
       </HStack>
       <RadioCardGroup
-        layoutProps={{ columns: { base: 1, md: 4 }, spacing: 'md', w: 'full' }}
+        layoutProps={{ columns: { base: 1, md: 3 }, spacing: 'md', w: 'full' }}
         name={name}
-        onChange={value => updateFn(value)}
+        onChange={handleRadioChange}
         options={options.map(option => ({
           value: option.rawValue,
           label: (
@@ -122,16 +160,14 @@ function ConfigOptionsGroup({
             },
           },
         }}
-        value={selectedValue}
+        value={radioValue}
       />
-      {/* <PoolCreationCheckbox
-        isChecked={isCustom}
+      <PoolCreationCheckbox
+        isChecked={showCustomInput}
         label="Or choose custom"
         labelColor="font.secondary"
-        onChange={() => {
-          updateFn('')
-        }}
-      /> */}
+        onChange={handleCustomToggle}
+      />
       {isCustomPriceRange ? (
         <VStack align="start" spacing="md" w="full">
           <NumberInput
@@ -179,7 +215,7 @@ function ConfigOptionsGroup({
             width="full"
           />
         </VStack>
-      ) : isCustom ? (
+      ) : showCustomInput ? (
         <NumberInput
           control={reClammConfigForm.control}
           error={reClammConfigForm.formState.errors[name]?.message}
