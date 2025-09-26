@@ -78,7 +78,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
 
     const isPriceAdjusting = isPoolWithinRange && !isPoolWithinTargetRange
 
-    const isLowMarginValue = marginValue && marginValue < 25
+    const isLowMarginValue = marginValue && marginValue < 26
     const needsMobileStyles = isMobile || isLowMarginValue
 
     let showTargetValues = true
@@ -112,7 +112,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
     // for some reason the number of orange (or green) bars matters to echarts in the grid
     const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '1%'
     const gridBottomMobile =
-      baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '24.5%' : '16%'
+      baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '28%' : '16%'
 
     const isDarkMode = colorMode === 'dark'
 
