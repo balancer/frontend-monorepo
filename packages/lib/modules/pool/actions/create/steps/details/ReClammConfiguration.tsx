@@ -47,6 +47,7 @@ function ConfigOptionsGroup({
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
   const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
+  const { trigger } = reClammConfigForm
   const formValue = reClammConfigForm.watch(name)
   const normalizedFormValue = formValue?.toString?.() ?? ''
 
@@ -71,6 +72,12 @@ function ConfigOptionsGroup({
       setIsCustomChecked(true)
     }
   }, [hasCustomFormValue, isCustomChecked])
+
+  useEffect(() => {
+    if (initialMaxPrice !== undefined && initialMaxPrice !== null && initialMaxPrice !== '') {
+      void trigger('initialMinPrice')
+    }
+  }, [initialMaxPrice, trigger])
 
   if (!isCustomChecked && matchedOption?.rawValue) {
     previousRadioValueRef.current = matchedOption.rawValue
