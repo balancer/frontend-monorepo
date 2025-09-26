@@ -186,7 +186,9 @@ function ConfigOptionsGroup({
               initialMinPrice ? getPercentFromPrice(initialMinPrice, initialTargetPrice) : '-10.00'
             }
             placeholder={
-              initialTargetPrice ? bn(initialTargetPrice).times(0.9).toString().slice(0, 7) : ''
+              initialTargetPrice
+                ? formatNumber(bn(initialTargetPrice).times(0.9).toString().slice(0, 7))
+                : ''
             }
             validate={value => {
               if (Number(value) >= Number(initialTargetPrice)) {
