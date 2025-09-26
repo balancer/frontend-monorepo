@@ -30,6 +30,7 @@ query GetTokens($chains: [GqlChain!]!) {
     priceRateProviderData {
       address
       reviewed
+      name
     }
   }
 }

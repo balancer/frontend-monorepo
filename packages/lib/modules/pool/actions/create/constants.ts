@@ -2,7 +2,6 @@ import { PoolType, STABLE_POOL_CONSTRAINTS } from '@balancer/sdk'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
 import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { zeroAddress } from 'viem'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   SupportedPoolTypes,
   PoolTypeDetails,
@@ -11,6 +10,7 @@ import {
   ReClammConfig,
 } from './types'
 import { getSwapFeePercentageOptions } from './helpers'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export const PERCENTAGE_DECIMALS = 16
 export const MAX_POOL_NAME_LENGTH = 32
@@ -85,8 +85,8 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
 }
 
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
-  protocol: ProjectConfigBalancer.projectId,
-  network: GqlChain.Mainnet,
+  protocol: PROJECT_CONFIG.projectId,
+  network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
   poolType: PoolType.Weighted,
   poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],

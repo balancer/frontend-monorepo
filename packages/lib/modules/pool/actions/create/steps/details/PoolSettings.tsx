@@ -14,6 +14,7 @@ import { usePublicClient } from 'wagmi'
 import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type PoolSettingsOption = {
   label: string
@@ -27,7 +28,7 @@ export function PoolSettings() {
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const poolManagerOptions: PoolSettingsOption[] = [
-    { label: 'Delegate to the balancer DAO', value: zeroAddress },
+    { label: `Delegate to the ${PROJECT_CONFIG.projectName} DAO`, value: zeroAddress },
     {
       label: 'My connected wallet:',
       value: userAddress,

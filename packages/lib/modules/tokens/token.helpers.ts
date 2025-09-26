@@ -168,3 +168,10 @@ export const veBalBptAddress = mainnetNetworkConfig.tokens.addresses.veBalBpt as
 export function isVeBalBtpAddress(tokenAddress: Address) {
   return isSameAddress(tokenAddress, veBalBptAddress)
 }
+
+export const isConstantRateProvider = (token: ApiToken) =>
+  token.priceRateProviderData &&
+  token.priceRateProviderData.name?.toLowerCase().includes('constant')
+
+export const isDynamicRateProvider = (token: ApiToken) =>
+  token.priceRateProviderData && token.priceRateProviderData.name?.toLowerCase().includes('dynamic')
