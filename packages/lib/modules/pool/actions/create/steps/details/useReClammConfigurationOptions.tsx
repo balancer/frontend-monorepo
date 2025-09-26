@@ -38,7 +38,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const { poolTokens } = poolCreationForm.watch()
   const reClammConfig = reClammConfigForm.watch()
-  const { initialTargetPrice, priceRangePercentage } = reClammConfig
+  const { initialTargetPrice, priceRangePercentage, initialMinPrice, initialMaxPrice } =
+    reClammConfig
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
 
@@ -190,6 +191,19 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       updatePriceBounds(currentPrice, priceRangePercentage)
     }
   }, [isInitialReClammConfig])
+
+  useEffect(() => {
+    if (!initialTargetPrice || !priceRangePercentage) return
+
+    const { initialMinPrice: nextMinPrice, initialMaxPrice: nextMaxPrice } = calculatePriceBounds(
+      initialTargetPrice,
+      priceRangePercentage
+    )
+
+    if (nextMinPrice !== initialMinPrice || nextMaxPrice !== initialMaxPrice) {
+      updatePriceBounds(initialTargetPrice, priceRangePercentage)
+    }
+  }, [initialTargetPrice, priceRangePercentage, initialMinPrice, initialMaxPrice])
 
   return [targetPrice, priceRangeBoundaries, marginBuffer, dailyPriceReadjustmentRate]
 }
