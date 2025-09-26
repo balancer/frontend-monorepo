@@ -67,11 +67,22 @@ function ConfigOptionsGroup({
   const [isCustomChecked, setIsCustomChecked] = useState(hasCustomFormValue)
   const previousRadioValueRef = useRef(matchedOption?.rawValue ?? defaultOptionValue)
 
+  const hasStoredCustomRangeValues =
+    name === 'priceRangePercentage' &&
+    normalizedFormValue === '' &&
+    (initialMinPrice !== '' || initialMaxPrice !== '')
+
   useEffect(() => {
     if (hasCustomFormValue && !isCustomChecked) {
       setIsCustomChecked(true)
     }
   }, [hasCustomFormValue, isCustomChecked])
+
+  useEffect(() => {
+    if (hasStoredCustomRangeValues && !isCustomChecked) {
+      setIsCustomChecked(true)
+    }
+  }, [hasStoredCustomRangeValues, isCustomChecked])
 
   useEffect(() => {
     if (initialMaxPrice !== undefined && initialMaxPrice !== null && initialMaxPrice !== '') {
@@ -83,7 +94,7 @@ function ConfigOptionsGroup({
     previousRadioValueRef.current = matchedOption.rawValue
   }
 
-  const showCustomInput = isCustomChecked || hasCustomFormValue
+  const showCustomInput = isCustomChecked || hasCustomFormValue || hasStoredCustomRangeValues
   const radioValue = showCustomInput ? undefined : (matchedOption?.rawValue ?? '')
   const isCustomTargetPrice = showCustomInput && name === 'initialTargetPrice'
   const ispriceRangePercentage = name === 'priceRangePercentage'
