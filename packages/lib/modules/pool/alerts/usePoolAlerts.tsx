@@ -11,6 +11,7 @@ import {
   hasReviewedHook,
   hasReviewedRateProvider,
   isV2Pool,
+  poolHasRateProviderExternalOracle,
 } from '../pool.helpers'
 import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
@@ -110,21 +111,6 @@ export function usePoolAlerts(pool: Pool) {
         alerts.push({
           identifier: `UnsafeRateProvider-${token.symbol}`,
           content: `The rate provider for ${token.symbol} has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
-          status: 'error',
-          isSoftWarning: true,
-        })
-      }
-
-      // Warning for tokens with an external oracle as the rate provider
-      if (
-        priceRateProviderData &&
-        priceRateProviderData?.warnings?.length &&
-        priceRateProviderData.warnings.includes('market-rate') &&
-        !alerts.find(alert => alert.identifier.startsWith('ExternalOracleRateProvider')) // one warning is enough here
-      ) {
-        alerts.push({
-          identifier: `ExternalOracleRateProvider-${token.symbol}`,
-          content: `This pool leverages an external oracle to price the underlying assets. It is highly experimental and should be used at your own risk. The swap fee APR does NOT reflect expected returns. Please read through the "Pool risks" before adding liquidity to this pool.`,
           status: 'error',
           isSoftWarning: true,
         })
@@ -315,6 +301,18 @@ export function usePoolAlerts(pool: Pool) {
         isSoftWarning: false,
       })
     }
+
+    // Warning for any tokens with an external oracle as the rate provider
+    if (poolHasRateProviderExternalOracle(pool)) {
+      alerts.push({
+        identifier: 'ExternalOracleRateProvider',
+        content:
+          'This pool leverages an external oracle to price the underlying assets. It is highly experimental and should be used at your own risk. The swap fee APR does NOT reflect expected returns. Please read through the "Pool risks" before adding liquidity to this pool.',
+        status: 'error',
+        isSoftWarning: true,
+      })
+    }
+
     return alerts
   }
 

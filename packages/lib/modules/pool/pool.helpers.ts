@@ -520,3 +520,9 @@ export function poolTypeLabel(poolType: GqlPoolType) {
       return getPoolTypeLabel(poolType)
   }
 }
+
+export function poolHasRateProviderExternalOracle(pool: Pool): boolean {
+  return pool.poolTokens.some(token =>
+    token.priceRateProviderData?.warnings?.includes('market-rate')
+  )
+}
