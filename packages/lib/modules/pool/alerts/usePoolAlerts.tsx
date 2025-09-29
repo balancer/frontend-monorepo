@@ -82,6 +82,8 @@ export function usePoolAlerts(pool: Pool) {
     }
 
     poolTokens?.forEach(token => {
+      const priceRateProviderData = token.priceRateProviderData
+
       if (isV2Pool(pool) && !token.isAllowed) {
         alerts.push({
           identifier: `TokenNotAllowed-${token.symbol}`,
@@ -97,17 +99,32 @@ export function usePoolAlerts(pool: Pool) {
 
       if (!hasReviewedRateProvider(token)) {
         alerts.push({
-          identifier: `PriceProviderNotReviewed-${token.symbol}`,
+          identifier: `RateProviderNotReviewed-${token.symbol}`,
           content: `The rate provider for ${token.symbol} has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
         })
       }
 
-      if (token.priceRateProviderData && token.priceRateProviderData?.summary !== 'safe') {
+      if (priceRateProviderData && priceRateProviderData?.summary !== 'safe') {
         alerts.push({
-          identifier: `UnsafePriceProvider-${token.symbol}`,
+          identifier: `UnsafeRateProvider-${token.symbol}`,
           content: `The rate provider for ${token.symbol} has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
+          status: 'error',
+          isSoftWarning: true,
+        })
+      }
+
+      // Warning for tokens with an external oracle as the rate provider
+      if (
+        priceRateProviderData &&
+        priceRateProviderData?.warnings?.length &&
+        priceRateProviderData.warnings.includes('market-rate') &&
+        !alerts.find(alert => alert.identifier.startsWith('ExternalOracleRateProvider')) // one warning is enough here
+      ) {
+        alerts.push({
+          identifier: `ExternalOracleRateProvider-${token.symbol}`,
+          content: `This pool leverages an external oracle to price the underlying assets. It is highly experimental and should be used at your own risk. The swap fee APR does NOT reflect expected returns. Please read through the "Pool risks" before adding liquidity to this pool.`,
           status: 'error',
           isSoftWarning: true,
         })
