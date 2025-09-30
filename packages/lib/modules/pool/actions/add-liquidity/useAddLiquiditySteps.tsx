@@ -34,8 +34,11 @@ export function useAddLiquiditySteps({
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
   const { shouldUseSignatures } = useUserSettings()
 
-  const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
-    useApproveRelayerStep(chainId)
+  const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } = useApproveRelayerStep(
+    chainId,
+    { relayerMode }
+  )
+
   const signRelayerStep = useSignRelayerStep(chain)
 
   const inputAmounts = useMemo(
