@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
   Radio,
   Tag,
+  Text,
   VStack,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
@@ -29,6 +30,7 @@ type Option<Value> = {
   label: ReactNode
   value: Value
   selectedLabel?: ReactNode
+  icon?: ReactNode
 }
 
 export function MultiSelect<Value = string>({
@@ -63,7 +65,7 @@ export function MultiSelect<Value = string>({
                 )}
               </HStack>
             ) : (
-              <Box>{label}</Box>
+              <Box fontWeight="medium">{label}</Box>
             )}
             <ChevronDown size={16} />
           </HStack>
@@ -74,20 +76,26 @@ export function MultiSelect<Value = string>({
           <VStack align="start" spacing="sm" w="full">
             {!!toggleAll && (
               <>
-                <Radio isChecked={!hasSelectedOptions} onChange={toggleAll}>
-                  All networks
+                <Radio isChecked={!hasSelectedOptions} onChange={toggleAll} py="xs">
+                  <Text fontSize="sm" fontWeight="medium">
+                    All networks
+                  </Text>
                 </Radio>
                 <Divider />
               </>
             )}
-            <VStack align="start" spacing="xs" w="full">
+            <VStack align="start" py="xs" spacing="ms" w="full">
               {options.map(option => (
                 <Checkbox
+                  fontWeight="medium"
                   isChecked={isChecked(option.value)}
                   key={`checkbox-${String(option.value)}`}
                   onChange={e => toggleOption(e.target.checked, option.value)}
                 >
-                  {option.label}
+                  <HStack>
+                    {option.icon}
+                    <Text fontSize="sm">{option.label}</Text>
+                  </HStack>
                 </Checkbox>
               ))}
             </VStack>
