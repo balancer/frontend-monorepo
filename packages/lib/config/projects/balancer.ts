@@ -10,17 +10,17 @@ export const ProjectConfigBalancer: ProjectConfig = {
   projectLogo: 'https://balancer.fi/images/icons/balancer.svg',
   supportedNetworks: [
     GqlChain.Mainnet,
+    GqlChain.Plasma,
     GqlChain.Arbitrum,
     GqlChain.Avalanche,
     GqlChain.Base,
     GqlChain.Gnosis,
+    GqlChain.Hyperevm,
+    GqlChain.Optimism,
     GqlChain.Polygon,
     GqlChain.Zkevm,
-    GqlChain.Optimism,
-    GqlChain.Mode,
     GqlChain.Fraxtal,
-    GqlChain.Hyperevm,
-    GqlChain.Plasma,
+    GqlChain.Mode,
 
     // testnets only in dev mode
     ...(isProd ? [] : [GqlChain.Sepolia]),
