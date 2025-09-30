@@ -16,13 +16,13 @@ import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
 import { PromoHookIcon } from '../icons/promos/PromoHookIcon'
-import { PromoGyroIcon } from '../icons/promos/PromoGyroIcon'
+import { PromoPlasmaIcon } from '../icons/promos/PromoPlasmaIcon'
 import { PromoVThreeIcon } from '../icons/promos/PromoVThreeIcon'
 import { PromoBoostedIcon } from '../icons/promos/PromoBoostedIcon'
 import { PromoReclammIcon } from '../icons/promos/PromoReclammIcon'
 import { PromoItem } from '@repo/lib/config/config.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { getRandomInt } from '@repo/lib/shared/utils/numbers'
+// import { getRandomInt } from '@repo/lib/shared/utils/numbers'
 
 function getIconElement(icon: string) {
   switch (icon) {
@@ -30,8 +30,8 @@ function getIconElement(icon: string) {
       return <PromoBoostedIcon size={44} />
     case 'v3':
       return <PromoVThreeIcon size={44} />
-    case 'gyro':
-      return <PromoGyroIcon size={44} />
+    case 'plasma':
+      return <PromoPlasmaIcon size={44} />
     case 'hook':
       return <PromoHookIcon size={44} />
     case 'reclamm':
@@ -49,7 +49,8 @@ const promoData: (PromoItem & { iconElement: React.ReactNode })[] =
 
 export function PromoBanners() {
   const { colorMode } = useColorMode()
-  const [activeIndex, setActiveIndex] = useState(getRandomInt(0, promoData.length - 1))
+  // const [activeIndex, setActiveIndex] = useState(getRandomInt(0, promoData.length - 1))
+  const [activeIndex, setActiveIndex] = useState(0)
   const isSmallScreen = useBreakpointValue({ base: true, md: false }, { fallback: 'md' }) ?? false
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 

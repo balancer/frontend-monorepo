@@ -3,7 +3,6 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { RestartPoolCreationModal } from '../pool/actions/create/modal/RestartPoolCreationModal'
-import { LearnMoreModal } from './header/LearnMoreModal'
 import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
 import { PoolWeights } from './steps/preview/PoolWeights'
@@ -13,6 +12,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
 import { Address } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { LbpLearnMoreModal } from './modal/LbpLearnMoreModal'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
@@ -58,7 +58,7 @@ export function LbpPreview() {
                   network={chain}
                   poolType={GqlPoolType.LiquidityBootstrapping}
                 />
-                <LearnMoreModal buttonLabel="Get help" />
+                <LbpLearnMoreModal buttonLabel="Get help" />
               </Flex>
               <TokenSummary
                 chain={chain}
