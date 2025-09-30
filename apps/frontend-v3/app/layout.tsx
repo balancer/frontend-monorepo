@@ -4,6 +4,7 @@ import NextTopLoader from 'nextjs-toploader'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import '@repo/lib/assets/css/global.css'
 import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
+import Script from 'next/script'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
 import { NavBarContainer } from '@bal/lib/components/navs/NavBarContainer'
@@ -37,9 +38,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script async src="https://w.appzi.io/w.js?token=8TY8k" />
-      </head>
       <body
         className={satoshiFont.className}
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
@@ -58,6 +56,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
                 title="AMMs made easy"
               />
               <SpeedInsights />
+              <Script async src="https://w.appzi.io/w.js?token=8TY8k" />
             </Providers>
           </ThemeProvider>
         </ColorThemeProvider>
