@@ -136,7 +136,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { chain: walletChain } = useNetworkConfig()
   const { getToken, getTokensByChain, usdValueForToken } = useTokens()
   const { tokens, setTokens } = useTokenBalances()
-  const { hasValidationErrors } = useTokenInputsValidation()
+  const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
   const { setPriceImpact, resetPriceImpact } = usePriceImpact()
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
@@ -258,6 +258,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     })
 
     resetPriceImpact()
+    resetValidationErrors()
   }
 
   function setTokenOut(tokenAddress: Address) {
@@ -276,6 +277,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     })
 
     resetPriceImpact()
+    resetValidationErrors()
   }
 
   function switchTokens() {
