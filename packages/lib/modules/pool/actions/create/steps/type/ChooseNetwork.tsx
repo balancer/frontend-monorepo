@@ -11,11 +11,9 @@ import {
   RadioCardGroup,
   type RadioCardOption,
 } from '@repo/lib/shared/components/inputs/RadioCardGroup'
-import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> }) {
   const { resetPoolCreationForm } = usePoolCreationForm()
-  const { refetchBalances } = useTokenBalances()
 
   const { supportedNetworks } = PROJECT_CONFIG
   const networkOptions: RadioCardOption<GqlChain>[] = [
@@ -42,7 +40,6 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
           <RadioCardGroup
             name={field.name}
             onChange={(value: GqlChain) => {
-              refetchBalances()
               resetPoolCreationForm()
               field.onChange(value)
             }}
