@@ -8,14 +8,14 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 
 type Props = AlertProps & {
   validTokens: ApiToken[]
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  amountsOut: HumanTokenAmountWithAddress[]
 }
 
 /**
- * if user attempts to add underlying token amount greater than max deposit of erc4626 vault
+ * if user attempts to remove underlying token amount greater than max withdraw of erc4626 vault
  */
-export function UnderlyingAddError({ humanAmountsIn, validTokens }: Props) {
-  const humanUnderlyingAmountsIn = humanAmountsIn.filter(humanAmount =>
+export function UnderlyingRemoveError({ amountsOut, validTokens }: Props) {
+  const humanUnderlyingAmountsOut = amountsOut.filter(humanAmount =>
     validTokens.some(
       token =>
         token.address === humanAmount.tokenAddress &&
@@ -24,14 +24,15 @@ export function UnderlyingAddError({ humanAmountsIn, validTokens }: Props) {
     )
   )
 
-  const errorMessages = humanUnderlyingAmountsIn
-    .map(humanUnderlyingAmountIn => {
-      const wrappedToken = validTokens.find(
-        token => humanUnderlyingAmountIn.tokenAddress === token.underlyingToken?.address
+  const errorMessages = humanUnderlyingAmountsOut
+    .map(humanUnderlyingAmountOut => {
+      const underlyingToken = validTokens.find(
+        token => humanUnderlyingAmountOut.tokenAddress === token.address
       )
-      if (!wrappedToken || !wrappedToken.maxDeposit) return undefined
-      if (bn(humanUnderlyingAmountIn.humanAmount).gt(bn(wrappedToken.maxDeposit))) {
-        return `The maximum amount of ${humanUnderlyingAmountIn.symbol} that can be deposited into the ${wrappedToken.symbol} vault is currently ${wrappedToken.maxDeposit}`
+      const wrappedToken = underlyingToken?.wrappedToken
+      if (!underlyingToken || !wrappedToken || !underlyingToken?.maxWithdraw) return undefined
+      if (bn(humanUnderlyingAmountOut.humanAmount).gt(bn(underlyingToken.maxWithdraw))) {
+        return `The maximum amount of ${underlyingToken?.symbol} that can be withdrawn from the ${wrappedToken.symbol} vault is currently ${wrappedToken.maxWithdraw}`
       }
     })
     .filter((message): message is string => message !== undefined)
