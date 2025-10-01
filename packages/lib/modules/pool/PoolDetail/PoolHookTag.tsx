@@ -54,7 +54,8 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
           alignItems="center"
           background="background.level2"
           border="1px solid"
-          borderColor={isOpen ? 'font.primary' : 'border.base'}
+          borderColor={isOpen ? 'font.highlight' : 'border.base'}
+          cursor="default"
           display="flex"
           fontWeight="normal"
           h={{ base: '28px' }}
@@ -64,10 +65,10 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
           rounded="full"
           shadow="sm"
         >
-          <HStack color={isOpen ? 'font.primary' : 'font.secondary'} gap="xs">
+          <HStack color={isOpen ? 'font.highlight' : 'font.secondary'} gap="xs">
             <HookIcon size={18} />
             <Text
-              color={isOpen ? 'font.primary' : 'font.secondary'}
+              color={isOpen ? 'font.highlight' : 'font.secondary'}
               fontSize="sm"
               variant="secondary"
             >

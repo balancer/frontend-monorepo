@@ -4,6 +4,7 @@ import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { isCowAmmPool } from '../../pool.helpers'
 import { PoolListItem } from '../../pool.types'
 import { Pool } from '../../pool.types'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 function getPoolVersionLabel(pool: Pick<PoolListItem | Pool, 'type' | 'protocolVersion'>) {
   if (isCowAmmPool(pool.type)) {
@@ -74,33 +75,35 @@ export function PoolVersionTag({
   const isCow = isCowAmmPool(pool.type)
 
   return (
-    <BalBadge
-      color="font.secondary"
-      fontSize="xs"
-      h={size}
-      p="0"
-      sx={isV3 ? v3BadgeStyles : undefined}
-      textTransform="lowercase"
-      w={size}
-    >
-      <Center h="full" w="full">
-        <Text
-          _groupHover={{
-            fontWeight: isV3 ? 'bold' : 'medium',
-            background: isCow ? 'auto' : isV3 ? 'background.special' : 'font.maxContrast',
-            color: isCow ? 'font.maxContrast' : 'auto',
-            backgroundClip: isCow ? 'unset' : 'text',
-          }}
-          background={isCow ? 'auto' : isV3 ? 'font.special' : 'font.secondary'}
-          backgroundClip={isCow ? 'unset' : 'text'}
-          fontSize="xs"
-          fontWeight="medium"
-          transition="all 0.2s var(--ease-out-cubic)"
-          zIndex={1}
-        >
-          {label}
-        </Text>
-      </Center>
-    </BalBadge>
+    <TooltipWithTouch label={isCow ? 'CoW AMM' : isV3 ? 'Balancer v3' : 'Balancer v2'}>
+      <BalBadge
+        color="font.secondary"
+        fontSize="xs"
+        h={size}
+        p="0"
+        sx={isV3 ? v3BadgeStyles : undefined}
+        textTransform="lowercase"
+        w={size}
+      >
+        <Center h="full" w="full">
+          <Text
+            _groupHover={{
+              fontWeight: isV3 ? 'bold' : 'medium',
+              background: isCow ? 'auto' : isV3 ? 'background.special' : 'font.maxContrast',
+              color: isCow ? 'font.maxContrast' : 'auto',
+              backgroundClip: isCow ? 'unset' : 'text',
+            }}
+            background={isCow ? 'auto' : isV3 ? 'font.special' : 'font.secondary'}
+            backgroundClip={isCow ? 'unset' : 'text'}
+            fontSize="xs"
+            fontWeight="medium"
+            transition="all 0.2s var(--ease-out-cubic)"
+            zIndex={1}
+          >
+            {label}
+          </Text>
+        </Center>
+      </BalBadge>
+    </TooltipWithTouch>
   )
 }
