@@ -57,7 +57,7 @@ import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ArrowUpRight, ChevronUp } from 'react-feather'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -71,7 +71,7 @@ import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/Ba
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
-import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { isCowAmm } from '@repo/lib/config/getProjectConfig'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -492,17 +492,20 @@ function StakeButton({ pool }: StakeButtonProps) {
   const router = useRouter()
   const pathname = usePathname()
   const auraDisclosure = useDisclosure()
+  const { veBalBoostMap } = useVebalBoost([pool])
 
   const canStake = getCanStake(pool)
   const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
-  const { veBalBoostMap } = useVebalBoost([pool])
   const vebalBoost = veBalBoostMap[pool.address]
   const [, balancerMaxApr] = getTotalApr(pool.dynamicData.aprItems, vebalBoost)
+
+  // hide popover on cow or networks where Aura is not deployed
+  const hidePopover = isCowAmm || !getNetworkConfig(pool.chain).hasAura
 
   const stakeOnBalancer = () => router.push(`${pathname}/stake`)
   const stakeOnAura = () => auraDisclosure.onOpen()
 
-  if (!isBalancer) {
+  if (hidePopover) {
     return (
       <Button
         flex="1"
@@ -516,6 +519,7 @@ function StakeButton({ pool }: StakeButtonProps) {
     )
   }
 
+  // rn this is only used for Balancer
   return (
     <>
       <Popover placement="top-start">

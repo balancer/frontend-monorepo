@@ -17,12 +17,12 @@ export function useHyperEvm({
   const { userAddress } = useUserAccount()
   const publicClient = usePublicClient()
 
-  const enabled = isHyperEvmTx && publicClient?.chain.id === ChainId.HYPER_EVM
+  const enabled = isHyperEvmTx && publicClient?.chain.id === ChainId.HYPEREVM
 
   const { data: isUsingBigBlocks, refetch: refetchIsUsingBigBlocks } = useQuery({
     queryKey: ['isUsingBigBlocks', publicClient?.chain.id, userAddress],
     queryFn: async () => {
-      if (!publicClient || !userAddress || publicClient.chain.id !== ChainId.HYPER_EVM) return false
+      if (!publicClient || !userAddress || publicClient.chain.id !== ChainId.HYPEREVM) return false
 
       const isUsingBigBlocks: boolean = await publicClient.transport.request({
         method: 'eth_usingBigBlocks',

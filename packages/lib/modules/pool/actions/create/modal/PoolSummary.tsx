@@ -25,14 +25,16 @@ import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
-  const { network } = usePoolCreationForm()
+  const { network, isReClamm, poolAddress } = usePoolCreationForm()
+
+  const showTokenAmountSummary = !isReClamm || poolAddress
 
   return (
     <AnimateHeightChange spacing={3} w="full">
       {isMobile && <MobileStepTracker chain={network} transactionSteps={transactionSteps} />}
       <PoolTitleCard />
-      <PoolTokenAmountsCard />
-      <SeedAmountProportions variant="modalSubSection" />
+      {showTokenAmountSummary && <PoolTokenAmountsCard />}
+      {showTokenAmountSummary && <SeedAmountProportions variant="modalSubSection" />}
       <PoolDetailsCard />
     </AnimateHeightChange>
   )

@@ -353,6 +353,12 @@ export function invert(value: number): number {
   return value === 0 ? 0 : 1 / value
 }
 
+// take the reciprocal of a BigNumber, returns string
+export function invertNumber(value: Numberish): string {
+  const bnValue = bn(value)
+  return bnValue.isZero() ? '0' : bn(1).div(bnValue).toString()
+}
+
 /**
  * Formats any value for display, showing dash for falsy values (0, '0', '', undefined)
  * @param value - The value to format (string, number, or undefined)

@@ -7,20 +7,22 @@ import {
   AnimationPlaybackControls,
 } from 'framer-motion'
 import { fNumCustom } from '../../utils/numbers'
+import { useCurrency } from '../../hooks/useCurrency'
 
 type AnimatedNumberProps = {
   value: number
-  formatOptions: string
+  formatOptions?: string
 }
 
 export function AnimatedNumber({ value, formatOptions }: AnimatedNumberProps) {
   const motionValue = useMotionValue(value)
   const isInitialRenderRef = useRef(true)
   const controlsRef = useRef<AnimationPlaybackControls | null>(null)
+  const { toCurrency } = useCurrency()
 
   const formattedValue = useTransform(motionValue, latest => {
     const num = Number.isFinite(latest) ? latest : 0
-    return fNumCustom(num, formatOptions)
+    return formatOptions ? fNumCustom(num, formatOptions) : toCurrency(num)
   })
 
   useEffect(() => {

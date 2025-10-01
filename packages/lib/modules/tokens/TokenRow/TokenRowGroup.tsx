@@ -5,7 +5,7 @@ import { ApiToken } from '../token.types'
 import { HumanTokenAmount } from '../token.types'
 import { useTotalUsdValue } from '../useTotalUsdValue'
 import TokenRow from './TokenRow'
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { HumanAmount } from '@balancer/sdk'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { bn, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
@@ -14,6 +14,7 @@ type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
 export function TokenRowGroup({
   label,
+  rightElement,
   amounts,
   chain,
   tokens = [],
@@ -22,6 +23,7 @@ export function TokenRowGroup({
   pool,
 }: {
   label: string
+  rightElement?: ReactNode
   amounts: HumanTokenAmountWithSymbol[]
   chain: GqlChain
   totalUSDValue?: string
@@ -67,7 +69,7 @@ export function TokenRowGroup({
   return (
     <VStack align="start" spacing="md">
       <HStack justify="space-between" w="full">
-        <Text color="grayText" fontSize="sm" fontWeight="bold">
+        <Text fontSize="sm" fontWeight="bold">
           {label}
         </Text>
         {isLoading ? (
@@ -79,6 +81,7 @@ export function TokenRowGroup({
             </Text>
           )
         )}
+        {rightElement}
       </HStack>
       {aggregatedAmounts.map(amount => {
         if (!amount.tokenAddress) return <div key={JSON.stringify(amount)}>Missing token</div>

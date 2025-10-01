@@ -17,7 +17,8 @@ import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
-import { isCowAmm } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, isCowAmm } from '@repo/lib/config/getProjectConfig'
+import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
 
 type Props = {
   mobileNav?: ReactNode
@@ -60,27 +61,30 @@ function NavLinks({
 
   return (
     <HStack fontWeight="medium" spacing="lg" {...props}>
-      {appLinks.map(link => (
-        <Box as={motion.div} key={link.href} variants={fadeIn}>
-          <Link
-            as={NextLink}
-            color={linkColorFor(link.href)}
-            href={link.href}
-            isExternal={link.isExternal}
-            prefetch
-            variant="nav"
-          >
-            <HStack gap="xxs">
-              <Box as="span">{link.label}</Box>
-              {link.isExternal && (
-                <Box as="span" color="grayText" position="relative" top="-4px">
-                  <ArrowUpRight size={12} />
-                </Box>
-              )}
-            </HStack>
-          </Link>
-        </Box>
-      ))}
+      {appLinks.map(link => {
+        if (!link.href) return null
+        return (
+          <Box as={motion.div} key={link.href} variants={fadeIn}>
+            <Link
+              as={NextLink}
+              color={linkColorFor(link.href || '')}
+              href={link.href}
+              isExternal={link.isExternal}
+              prefetch
+              variant="nav"
+            >
+              <HStack gap="xxs">
+                <Box as="span">{link.label}</Box>
+                {link.isExternal && (
+                  <Box as="span" color="grayText" position="relative" top="-4px">
+                    <ArrowUpRight size={12} />
+                  </Box>
+                )}
+              </HStack>
+            </Link>
+          </Box>
+        )
+      })}
       {customLinks}
       {!isCowAmm && (isDev || isStaging) && (
         <>
@@ -99,7 +103,7 @@ function NavLinks({
             <Link
               as={NextLink}
               color={linkColorFor('/create')}
-              href="/create/MAINNET"
+              href="/create"
               prefetch
               variant="nav"
             >
@@ -166,6 +170,14 @@ export function NavActions({
         el: <UserSettings />,
         display: { base: 'none', lg: 'block' },
       },
+      ...(isBalancer
+        ? [
+            {
+              el: <UserFeedback />,
+              display: { base: 'none', lg: 'block' },
+            },
+          ]
+        : []),
       {
         el: hideDarkModeToggle ? null : <DarkModeToggle />,
         display: { base: 'none', lg: 'block' },

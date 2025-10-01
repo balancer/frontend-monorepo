@@ -40,6 +40,7 @@ import {
   isV3Pool,
   supportsWethIsEth,
   hasNestedPools,
+  isWeightedV1,
 } from '../pool.helpers'
 import { getActionableTokenSymbol } from '../pool-tokens.utils'
 import { allPoolTokens } from '../pool-tokens.utils'
@@ -265,8 +266,13 @@ export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
   ) {
     return false
   }
+
   // WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
   if (isWeightedPool2Tokens(pool)) return false
+
+  // WeightedV1 pool types do not support AddLiquidityKind.Proportional in the SDK
+  if (isWeightedV1(pool)) return false
+
   return true
 }
 

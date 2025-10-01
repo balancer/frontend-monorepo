@@ -1,4 +1,4 @@
-import { VStack, Heading, Text, useDisclosure, HStack, Button, Icon } from '@chakra-ui/react'
+import { VStack, Heading, Text, useDisclosure, HStack, Button, Icon, Box } from '@chakra-ui/react'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -14,6 +14,10 @@ import { AlertTriangle } from 'react-feather'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
+import {
+  isConstantRateProvider,
+  isDynamicRateProvider,
+} from '@repo/lib/modules/tokens/token.helpers'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -27,6 +31,8 @@ export function ChoosePoolTokens() {
     removePoolToken,
     addPoolToken,
     poolCreationForm,
+    reClammConfigForm,
+    isReClamm,
   } = usePoolCreationForm()
 
   const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
@@ -47,10 +53,21 @@ export function ChoosePoolTokens() {
     token => !selectedTokenAddresses.includes(token.address.toLowerCase())
   )
 
+  function getVerifiedRateProviderAddress(token: ApiToken) {
+    if (!token.priceRateProviderData) return undefined
+
+    const isRateProviderConstant = isConstantRateProvider(token)
+    const isRateProviderDynamic = isDynamicRateProvider(token)
+
+    return !(isRateProviderConstant || isRateProviderDynamic)
+      ? (token.priceRateProviderData?.address as Address)
+      : undefined
+  }
+
   function handleTokenSelect(tokenData: ApiToken) {
     if (!tokenData || selectedTokenIndex === null) return
 
-    const verifiedRateProviderAddress = tokenData?.priceRateProviderData?.address as Address
+    const verifiedRateProviderAddress = getVerifiedRateProviderAddress(tokenData)
 
     updatePoolToken(selectedTokenIndex, {
       address: tokenData.address as Address,
@@ -58,7 +75,9 @@ export function ChoosePoolTokens() {
       data: tokenData,
       paysYieldFees: !!verifiedRateProviderAddress, // defaults to true if rate provider exists in our DB
     })
+
     setSelectedTokenIndex(null)
+    if (isReClamm) reClammConfigForm.resetToInitial()
   }
 
   const currentTokenAddress = selectedTokenIndex
@@ -83,7 +102,15 @@ export function ChoosePoolTokens() {
         <VStack align="start" spacing="xl" w="full">
           {poolTokens.map((token, index) => {
             const isInvalidWeight = !!token.weight && Number(token.weight) < 1
-            const verifiedRateProviderAddress = token?.data?.priceRateProviderData?.address
+
+            const tokenData = allTokens.find(
+              t => t.address.toLowerCase() === token.address?.toLowerCase()
+            ) as ApiToken
+
+            const verifiedRateProviderAddress = tokenData
+              ? getVerifiedRateProviderAddress(tokenData)
+              : undefined
+
             const tokenWeightErrorMsg =
               poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
 
@@ -104,23 +131,25 @@ export function ChoosePoolTokens() {
                   </VStack>
 
                   {isWeightedPool && (
-                    <NumberInput
-                      control={poolCreationForm.control}
-                      isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-                      isInvalid={isInvalidWeight}
-                      isPercentage
-                      label="Weight"
-                      name={`poolTokens.${index}.weight`}
-                      validate={weight => {
-                        // getValues() grabs poolType from LS but watch() is tricked by initial default values
-                        const poolType = poolCreationForm.getValues('poolType')
-                        const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-                        if (!isWeightedPool) return true
-                        if (weight < 1) return 'Minimum weight for each token is 1%'
-                        if (weight > 99) return 'Maximum weight for a token is 99%'
-                        return true
-                      }}
-                    />
+                    <Box>
+                      <NumberInput
+                        control={poolCreationForm.control}
+                        isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                        isInvalid={isInvalidWeight}
+                        isPercentage
+                        label="Weight"
+                        name={`poolTokens.${index}.weight`}
+                        validate={weight => {
+                          // getValues() grabs poolType from LS but watch() is tricked by initial default values
+                          const poolType = poolCreationForm.getValues('poolType')
+                          const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+                          if (!isWeightedPool) return true
+                          if (weight < 1) return 'Minimum weight for each token is 1%'
+                          if (weight > 99) return 'Maximum weight for a token is 99%'
+                          return true
+                        }}
+                      />
+                    </Box>
                   )}
 
                   {poolTokens.length > 2 && (

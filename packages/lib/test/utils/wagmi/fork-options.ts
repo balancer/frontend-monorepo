@@ -17,6 +17,7 @@ export type TokenBalance = {
   tokenAddress: Address
   decimals?: number
   value: HumanAmount
+  slot?: bigint
 }
 
 export type ChainTokenBalance = TokenBalance & {

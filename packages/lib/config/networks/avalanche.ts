@@ -70,6 +70,7 @@ const networkConfig: NetworkConfig = {
       '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e', // USDC
     ],
   },
+  hasAura: true,
 }
 
 export default networkConfig

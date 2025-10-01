@@ -218,14 +218,21 @@ export function PoolNetworkFilters({
 }: PoolNetworkFiltersArgs) {
   const { supportedNetworks } = PROJECT_CONFIG
 
-  // Sort networks alphabetically after mainnet
-  const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()]
+  // const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()] // Alphabetical order after Mainnet
+  const sortedNetworks = supportedNetworks
 
   const networkOptions = sortedNetworks.map(network => ({
     label: getChainShortName(network),
     value: network,
+    icon: (
+      <Box rounded="full" shadow="md">
+        <Image alt={network} height="16" src={`/images/chains/${network}.svg`} width="16" />
+      </Box>
+    ),
     selectedLabel: (
-      <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
+      <Box rounded="full" shadow="md">
+        <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
+      </Box>
     ),
   }))
 

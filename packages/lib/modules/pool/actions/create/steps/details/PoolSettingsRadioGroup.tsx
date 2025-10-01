@@ -84,11 +84,11 @@ export function PoolSettingsRadioGroup({
               w="full"
             >
               <Stack spacing={4}>
-                {optionsPlusCustom.map(option => {
+                {optionsPlusCustom.map((option, idx) => {
                   const isCustomOption = option.value === ''
 
                   return (
-                    <VStack align="start" key={option.value} w="full">
+                    <VStack align="start" key={idx} w="full">
                       <Radio isDisabled={isDisabled} size="lg" value={option.value}>
                         <HStack>
                           <Text

@@ -4,7 +4,9 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { SWAP_FEE_PERCENTAGE_OPTIONS, AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
+import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
+import { getSwapFeePercentageOptions } from '../../helpers'
+
 import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
@@ -12,6 +14,7 @@ import { usePublicClient } from 'wagmi'
 import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type PoolSettingsOption = {
   label: string
@@ -25,7 +28,7 @@ export function PoolSettings() {
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const poolManagerOptions: PoolSettingsOption[] = [
-    { label: 'Delegate to the balancer DAO', value: zeroAddress },
+    { label: `Delegate to the ${PROJECT_CONFIG.projectName} DAO`, value: zeroAddress },
     {
       label: 'My connected wallet:',
       value: userAddress,
@@ -34,7 +37,7 @@ export function PoolSettings() {
   ]
 
   const swapFeePercentageOptions: PoolSettingsOption[] = [
-    ...SWAP_FEE_PERCENTAGE_OPTIONS[poolType].map(option => ({
+    ...getSwapFeePercentageOptions(poolType).map(option => ({
       label: `${option.value}%`,
       value: option.value,
       detail: <Text color="font.secondary">{option.tip}</Text>,

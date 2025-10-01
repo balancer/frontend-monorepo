@@ -8,7 +8,7 @@ export type TokenColorDef = {
   to: string
 }
 
-const tokenColors: Record<GqlChain, Record<Address, TokenColorDef>> = {
+const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
   [GqlChain.Mainnet]: {
     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': { from: '#627EEA', to: '#627EEA' }, // 'ETH'
     '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2': { from: '#F2F3F7', to: '#CECDFE' }, // 'WETH'
@@ -120,6 +120,7 @@ const tokenColors: Record<GqlChain, Record<Address, TokenColorDef>> = {
     '0x3bce5cb273f0f148010bbea2470e7b5df84c7812': { from: '#A765DE', to: '#808FC7' }, // 'scETH'
   },
   [GqlChain.Plasma]: {
+    '0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb': { from: '#27A17C', to: '#42EBB8' }, // 'USDT0'
     '0xe0126f0c4451b2b917064a93040fd4770d6774b5': { from: '#27A17C', to: '#42EBB8' }, // 'waPlaUSDT0'
     '0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2': { from: '#F5F5F5', to: '#BABABA' }, // 'sUSDe'
     '0xc63f1a8c0cd4493e18f6f3371182be01ce0bef02': { from: '#000000', to: '#222222' }, // 'waPlaUSDe'
@@ -163,7 +164,7 @@ export function getTokenColor(
   const defaultColorIndex = i === undefined ? getRandomInt(0, 15) : i
 
   return (
-    tokenColors[normalizedChain][normalizedAddress] ||
+    (tokenColors[normalizedChain] && tokenColors[normalizedChain][normalizedAddress]) ||
     DEFAULT_TOKEN_COLORS[defaultColorIndex] ||
     defaultColor
   )

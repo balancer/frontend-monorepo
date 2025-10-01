@@ -1,35 +1,34 @@
 import { Control } from 'react-hook-form'
 import { PoolCreationForm } from '../../types'
-import { VStack, Text, SimpleGrid, Card, Checkbox, HStack } from '@chakra-ui/react'
+import { VStack, Text, HStack } from '@chakra-ui/react'
 import { Controller } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { capitalize } from 'lodash'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
-import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { getChainShortName } from '@repo/lib/config/app.config'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import {
+  RadioCardGroup,
+  type RadioCardOption,
+} from '@repo/lib/shared/components/inputs/RadioCardGroup'
 
 export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> }) {
   const { resetPoolCreationForm } = usePoolCreationForm()
 
-  let networkOptions: GqlChain[]
-
-  if (PROJECT_CONFIG.projectId === ProjectConfigBalancer.projectId) {
-    // balancer v3 pool creation not yet supported on these networks
-    networkOptions = ProjectConfigBalancer.supportedNetworks.filter(
+  const { supportedNetworks } = PROJECT_CONFIG
+  const networkOptions: RadioCardOption<GqlChain>[] = [
+    supportedNetworks[0],
+    ...supportedNetworks.slice(1).sort(),
+  ]
+    .filter(
       network =>
-        ![
-          GqlChain.Zkevm,
-          GqlChain.Mode,
-          GqlChain.Fraxtal,
-          GqlChain.Optimism,
-          GqlChain.Polygon,
-        ].includes(network)
+        // balancer v3 pool creation not yet supported on these networks
+        ![GqlChain.Zkevm, GqlChain.Mode, GqlChain.Fraxtal, GqlChain.Polygon].includes(network)
     )
-  } else if (PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId) {
-    networkOptions = ProjectConfigBeets.supportedNetworks
-  }
+    .map(network => ({
+      value: network,
+      label: getChainShortName(network),
+    }))
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -38,30 +37,39 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
         control={control}
         name="network"
         render={({ field }) => (
-          <SimpleGrid columns={2} spacing="md" w="full">
-            {networkOptions.map(network => (
-              <Card key={network} padding="0">
-                <Checkbox
-                  flexDirection="row-reverse"
-                  gap="md"
-                  isChecked={field.value === network}
-                  justifyContent="space-between"
-                  onChange={e => {
-                    if (e.target.checked) {
-                      resetPoolCreationForm()
-                      field.onChange(network)
-                    }
-                  }}
-                  padding="sm"
-                >
-                  <HStack spacing="sm">
-                    <NetworkIcon chain={network} size={8} />
-                    <Text fontWeight="bold">{capitalize(network)}</Text>
-                  </HStack>
-                </Checkbox>
-              </Card>
-            ))}
-          </SimpleGrid>
+          <RadioCardGroup
+            name={field.name}
+            onChange={(value: GqlChain) => {
+              resetPoolCreationForm()
+              field.onChange(value)
+            }}
+            options={networkOptions}
+            radioCardProps={{
+              containerProps: {
+                _checked: {
+                  borderColor: 'green.400 !important',
+                  bg: '#63F2BE0D',
+                  color: 'font.opposite',
+                },
+                _focus: {
+                  boxShadow: 'outline',
+                },
+                borderRadius: 'lg',
+                borderWidth: '2px',
+                boxShadow: 'md',
+                cursor: 'pointer',
+                px: 5,
+                py: 3,
+              },
+            }}
+            renderOption={({ value, label }) => (
+              <HStack spacing="sm">
+                <NetworkIcon chain={value} size={8} />
+                <Text fontWeight="bold">{label}</Text>
+              </HStack>
+            )}
+            value={field.value}
+          />
         )}
         rules={{
           required: 'Please select a network',

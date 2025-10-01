@@ -8,11 +8,17 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
 import { getGqlPoolType } from '../helpers'
-import { LearnMoreModal } from '@repo/lib/modules/lbp/header/LearnMoreModal'
+import { LearnMoreModal } from '@repo/lib/shared/components/modals/LearnMoreModal'
+import { PreviewReClammConfig } from './PreviewReClammConfig'
+import { ReclAmmChartProvider } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+import { usePreviewReclAmmChartData } from './usePreviewReclammChartData'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PreviewPoolCreation() {
-  const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
+  const { resetPoolCreationForm, network, poolType, isReClamm } = usePoolCreationForm()
   const { isBeforeStep } = usePoolCreationFormSteps()
+  const reclammChartData = usePreviewReclAmmChartData()
+  const { lowerMarginValue, upperMarginValue } = reclammChartData || {}
 
   return (
     <NoisyCard
@@ -33,14 +39,30 @@ export function PreviewPoolCreation() {
               network={network}
               poolType={getGqlPoolType(poolType)}
             />
-            <LearnMoreModal buttonLabel="Get help" />
+            <LearnMoreModal
+              buttonLabel="Get help"
+              docsUrl="https://docs.balancer.fi/concepts/explore-available-balancer-pools/"
+              headerText="Learn more about pool types"
+              listItems={[
+                `${PROJECT_CONFIG.projectName} offers a variety of liquidity pool types, each tailored to specific use cases`,
+              ]}
+            />
           </HStack>
         </HStack>
 
         <PreviewPoolType />
-        <PreviewPoolTokens isBeforeStep={isBeforeStep('Tokens')} />
-        <PreviewPoolTokensInWallet isBeforeStep={isBeforeStep('Tokens')} />
-        <PreviewPoolDetails isBeforeStep={isBeforeStep('Details')} />
+        {isReClamm && (
+          <ReclAmmChartProvider chartData={reclammChartData}>
+            <PreviewReClammConfig
+              isBeforeStep={isBeforeStep('Details')}
+              lowerMarginValue={lowerMarginValue}
+              upperMarginValue={upperMarginValue}
+            />
+          </ReclAmmChartProvider>
+        )}
+        <PreviewPoolTokens />
+        <PreviewPoolTokensInWallet />
+        <PreviewPoolDetails />
       </VStack>
     </NoisyCard>
   )

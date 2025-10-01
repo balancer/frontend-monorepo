@@ -35,6 +35,7 @@ import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
 import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedToggleButton'
 import { ThumbsDown, ThumbsUp } from 'react-feather'
 import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
+import { useReclAmmChartData } from '@repo/lib/modules/reclamm/useReclAmmChartData'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -53,11 +54,13 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 }
 
 export function PoolChartsContainer() {
+  const reclammChartData = useReclAmmChartData()
+
   return (
     <PoolChartTabsProvider>
       <PoolChartsProvider>
         <EclpChartProvider>
-          <ReclAmmChartProvider>
+          <ReclAmmChartProvider chartData={reclammChartData}>
             <PoolChartsContent />
           </ReclAmmChartProvider>
         </EclpChartProvider>

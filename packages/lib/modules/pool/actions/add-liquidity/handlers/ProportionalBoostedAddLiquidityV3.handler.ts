@@ -17,6 +17,7 @@ import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-li
 import { constructBaseBuildCallInput } from './add-liquidity.utils'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { isEmpty } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
   protected helpers: LiquidityActionHelpers
@@ -32,7 +33,8 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
   public async simulate(
     humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address,
-    referenceAmountAddress?: Address
+    referenceAmountAddress?: Address,
+    slippage?: number
   ): Promise<SdkQueryAddLiquidityOutput> {
     // TODO: generalize to other handlers with referenceAmountAddress
     const inputAmounts = this.helpers.toSdkInputAmounts(humanAmountsIn)
@@ -40,6 +42,12 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       referenceAmountAddress &&
       inputAmounts.find(item => isSameAddress(item.address, referenceAmountAddress))
     const referenceAmount = foundReferenceAmount || inputAmounts[0]
+    // Apply slippage tolerance to the reference amount by reducing the raw amount
+    referenceAmount.rawAmount = BigInt(
+      bn(bn(referenceAmount.rawAmount).times(100 - (slippage || 0)))
+        .div(100)
+        .toFixed(0)
+    )
 
     const addLiquidity = new AddLiquidityBoostedV3()
 
