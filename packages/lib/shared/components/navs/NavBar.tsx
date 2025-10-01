@@ -17,7 +17,7 @@ import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
-import { isCowAmm } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, isCowAmm } from '@repo/lib/config/getProjectConfig'
 import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
 
 type Props = {
@@ -170,10 +170,14 @@ export function NavActions({
         el: <UserSettings />,
         display: { base: 'none', lg: 'block' },
       },
-      {
-        el: <UserFeedback />,
-        display: { base: 'none', lg: 'block' },
-      },
+      ...(isBalancer
+        ? [
+            {
+              el: <UserFeedback />,
+              display: { base: 'none', lg: 'block' },
+            },
+          ]
+        : []),
       {
         el: hideDarkModeToggle ? null : <DarkModeToggle />,
         display: { base: 'none', lg: 'block' },
