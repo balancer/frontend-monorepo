@@ -760,6 +760,9 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           paddingInlineEnd: 0,
           marginInline: 3,
         },
+        body: {
+          textWrap: 'pretty',
+        },
       },
       variants: {
         tooltip: {
