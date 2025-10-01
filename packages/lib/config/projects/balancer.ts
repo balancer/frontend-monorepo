@@ -85,6 +85,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
       },
     ],
     legalLinks: [
+      { label: 'Feedback' },
       { label: 'Terms of use', href: '/terms-of-use' },
       { label: 'Privacy policy', href: '/privacy-policy' },
       { label: 'Cookies policy', href: '/cookies-policy' },
