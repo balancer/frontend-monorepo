@@ -91,6 +91,8 @@ fragment PoolTokens on GqlPoolTokenDetail {
     }
   }
   isErc4626
+  maxDeposit
+  maxWithdraw
   isBufferAllowed
   underlyingToken {
     ...UnderlyingToken
