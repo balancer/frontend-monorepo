@@ -14,6 +14,10 @@ import { AlertTriangle } from 'react-feather'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
+import {
+  isConstantRateProvider,
+  isDynamicRateProvider,
+} from '@repo/lib/modules/tokens/token.helpers'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -49,10 +53,21 @@ export function ChoosePoolTokens() {
     token => !selectedTokenAddresses.includes(token.address.toLowerCase())
   )
 
+  function getVerifiedRateProviderAddress(token: ApiToken) {
+    if (!token.priceRateProviderData) return undefined
+
+    const isRateProviderConstant = isConstantRateProvider(token)
+    const isRateProviderDynamic = isDynamicRateProvider(token)
+
+    return !(isRateProviderConstant || isRateProviderDynamic)
+      ? (token.priceRateProviderData?.address as Address)
+      : undefined
+  }
+
   function handleTokenSelect(tokenData: ApiToken) {
     if (!tokenData || selectedTokenIndex === null) return
 
-    const verifiedRateProviderAddress = tokenData?.priceRateProviderData?.address as Address
+    const verifiedRateProviderAddress = getVerifiedRateProviderAddress(tokenData)
 
     updatePoolToken(selectedTokenIndex, {
       address: tokenData.address as Address,
@@ -87,7 +102,15 @@ export function ChoosePoolTokens() {
         <VStack align="start" spacing="xl" w="full">
           {poolTokens.map((token, index) => {
             const isInvalidWeight = !!token.weight && Number(token.weight) < 1
-            const verifiedRateProviderAddress = token?.data?.priceRateProviderData?.address
+
+            const tokenData = allTokens.find(
+              t => t.address.toLowerCase() === token.address?.toLowerCase()
+            ) as ApiToken
+
+            const verifiedRateProviderAddress = tokenData
+              ? getVerifiedRateProviderAddress(tokenData)
+              : undefined
+
             const tokenWeightErrorMsg =
               poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
 

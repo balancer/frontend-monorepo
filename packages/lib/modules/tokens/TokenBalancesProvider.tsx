@@ -9,7 +9,7 @@ import {
   refetchQueries,
 } from '@repo/lib/shared/utils/queries'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { PropsWithChildren, createContext, useMemo, useState } from 'react'
+import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
@@ -33,6 +33,12 @@ export function useTokenBalancesLogic(initTokens?: ApiToken[], extTokens?: ApiTo
   const { userAddress } = useUserAccount()
 
   const tokens = extTokens || _tokens
+
+  useEffect(() => {
+    if (!initTokens || extTokens) return
+
+    _setTokens(initTokens)
+  }, [extTokens, initTokens])
 
   const NO_TOKENS_CHAIN_ID = 1 // this should never be used as the multicall is disabled when no tokens
   const chainId = tokens.length ? tokens[0].chainId : NO_TOKENS_CHAIN_ID
