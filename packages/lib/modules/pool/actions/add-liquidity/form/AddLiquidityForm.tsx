@@ -53,6 +53,7 @@ import { useContractWallet } from '@repo/lib/modules/web3/wallets/useContractWal
 import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { UnderlyingAddError } from '@repo/lib/shared/components/errors/UnderlyingAddError'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -86,6 +87,8 @@ function AddLiquidityMainForm() {
     slippage,
     setWantsProportional,
     wantsProportional,
+    humanAmountsIn,
+    validTokens,
   } = useAddLiquidity()
 
   const { pool } = usePool()
@@ -211,6 +214,7 @@ function AddLiquidityMainForm() {
               pool={pool}
             />
           )}
+          <UnderlyingAddError humanAmountsIn={humanAmountsIn} validTokens={validTokens} />
           <VStack align="start" spacing="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
