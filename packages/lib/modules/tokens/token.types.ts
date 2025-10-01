@@ -59,6 +59,8 @@ export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
   weight?: string
   priceRate?: string
   priceRateProviderData?: GqlPriceRateProviderData | null
+  maxDeposit?: string | null
+  maxWithdraw?: string | null
 }
 
 export type CustomToken = {

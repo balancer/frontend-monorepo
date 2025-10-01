@@ -183,3 +183,10 @@ export const hyperEVMTokenBalances: TokenBalance[] = [
     value: '100',
   },
 ]
+
+export const plasmaTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x9895D81bB462A195b4922ED7De0e3ACD007c32CB', // WETH
+    value: '10000',
+  },
+]
