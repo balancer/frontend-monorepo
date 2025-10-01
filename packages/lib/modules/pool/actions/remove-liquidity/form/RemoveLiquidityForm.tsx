@@ -46,6 +46,7 @@ import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
+import { UnderlyingRemoveError } from '@repo/lib/shared/components/errors/UnderlyingRemoveError'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
@@ -89,6 +90,7 @@ export function RemoveLiquidityForm() {
     setSingleTokenType,
     setHumanBptInPercent,
     setNeedsToAcceptHighPI,
+    amountsOut,
   } = useRemoveLiquidity()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
@@ -266,6 +268,7 @@ export function RemoveLiquidityForm() {
               priceImpactQuery={priceImpactQuery}
               simulationQuery={simulationQuery}
             />
+            <UnderlyingRemoveError amountsOut={amountsOut} validTokens={validTokens} />
             <TooltipWithTouch label={isDisabled ? disabledReason : ''}>
               <Button
                 isDisabled={isDisabled || isWarning}
