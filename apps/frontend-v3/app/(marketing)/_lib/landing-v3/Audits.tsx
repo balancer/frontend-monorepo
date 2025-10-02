@@ -12,61 +12,198 @@ import {
   Stack,
   IconButton,
   Heading,
+  useColorMode,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ArrowUpRight } from 'react-feather'
-import { GraniteBg } from './shared/GraniteBg'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
 import { TrailOfBitsLogo } from '@repo/lib/shared/components/imgs/TrailOfBitsLogo'
 import { CertoraLogo } from '@repo/lib/shared/components/imgs/CertoraLogo'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
 import { motion } from 'framer-motion'
-import { ReactNode } from 'react'
+import { ReactNode, useState, useMemo, memo } from 'react'
 
 const MotionBox = motion(Box)
 
-function AuditCard({ href, logo }: { href: string; logo: ReactNode }) {
+const HOVER_ANIMATION = {
+  scale: 1.0,
+  transition: { duration: 0.3 },
+}
+
+const ARROW_ICON = <ArrowUpRight size="14px" />
+
+const CENTER_HOVER_STYLES = { transform: 'scale(1.12)', color: 'font.maxContrast' }
+const ICON_BUTTON_HOVER_STYLES = { opacity: 1 }
+
+const GRADIENT_OVERLAYS = {
+  light: [
+    {
+      background: 'linear-gradient(90deg, #eee 0%, #999 100%)',
+      blendMode: 'soft-light',
+    },
+    {
+      background: 'linear-gradient(90deg, #666 0%, #eee 100%)',
+      blendMode: 'soft-light',
+    },
+    {
+      background: 'linear-gradient(90deg, #eee 0%, #bbb 100%)',
+      blendMode: 'soft-light',
+    },
+  ],
+  dark: [
+    {
+      background:
+        'linear-gradient(90deg, #B3AEF5 54.87%, #D7CBE7 70.41%, #E5C8C8 82.72%, #EAA879 96.28%)',
+      blendMode: 'overlay',
+    },
+    {
+      background: 'linear-gradient(90deg, rgba(237, 187, 250, 0.00) 0.08%, #F48975 90%)',
+      blendMode: 'soft-light',
+    },
+    {
+      background: 'linear-gradient(90deg, #62E9CA 0%, #42DCFD 98.03%)',
+      blendMode: 'soft-light',
+    },
+  ],
+} as const
+
+const AuditCard = memo(function AuditCard({
+  href,
+  logo,
+  bgImageName,
+  colorMode,
+  gradientIndex,
+}: {
+  href: string
+  logo: ReactNode
+  bgImageName: string
+  colorMode: 'light' | 'dark'
+  gradientIndex: number
+}) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  const gradientOverlay = useMemo(
+    () => GRADIENT_OVERLAYS[colorMode][gradientIndex],
+    [colorMode, gradientIndex]
+  )
+
   return (
-    <Link href={href} isExternal>
+    <Link cursor="pointer" href={href} isExternal>
       <MotionBox
-        minH="200px"
+        _hover={{ shadow: 'sm' }}
+        data-group
+        minH="180px"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         overflow="hidden"
         position="relative"
         role="group"
         rounded="lg"
-        shadow="lg"
-        whileHover={{
-          scale: 1.02,
-          transition: { duration: 0.3 },
-        }}
+        shadow="2xl"
+        whileHover={HOVER_ANIMATION}
       >
-        <GraniteBg />
-        <Center color="font.primary" h="full" position="absolute" w="full">
+        {/* Background with rock texture and gradient overlay */}
+        <Box
+          h="full"
+          left="0"
+          overflow="hidden"
+          pointerEvents="none"
+          position="absolute"
+          top="0"
+          w="full"
+          zIndex="0"
+        >
+          <Picture
+            altText="Background texture"
+            defaultImgType="png"
+            directory="/images/textures/rocks/slate-portrait/"
+            height="100%"
+            imgAvif
+            imgAvifDark
+            imgJpg
+            imgJpgDark
+            imgName={`slate${bgImageName}`}
+            width="100%"
+          />
+          {/* Flash overlay on initial hover */}
+          <Box
+            bg="white"
+            h="full"
+            left="0"
+            opacity={0}
+            position="absolute"
+            sx={{
+              animation: isHovered ? 'flash 0.3s ease-out' : 'none',
+              '@keyframes flash': {
+                '0%': { opacity: 0.15 },
+                '100%': { opacity: 0 },
+              },
+            }}
+            top="0"
+            w="full"
+            zIndex="1"
+          />
+          {/* Gradient overlay with blend mode shown on hover */}
+          <Box
+            background={gradientOverlay.background}
+            h="full"
+            left="0"
+            opacity={isHovered ? 1 : 0}
+            position="absolute"
+            sx={{
+              mixBlendMode: gradientOverlay.blendMode,
+            }}
+            top="0"
+            transition="opacity 0.5s var(--ease-out-cubic) 0.05s"
+            w="full"
+            zIndex="3"
+          />
+        </Box>
+        <Center
+          _groupHover={CENTER_HOVER_STYLES}
+          _hover={{ shadow: 'innerRockShadow' }}
+          color="font.primary"
+          h="full"
+          left="0"
+          position="absolute"
+          shadow="innerRockShadowSm"
+          top="0"
+          transition="transform 1s var(--ease-out-cubic), color 1s var(--ease-out-cubic)"
+          w="full"
+          zIndex="1"
+        >
           {logo}
         </Center>
         <IconButton
-          _groupHover={{
-            opacity: 1,
-          }}
+          _groupHover={ICON_BUTTON_HOVER_STYLES}
           aria-label="View report"
-          bottom="md"
-          h="50px"
-          icon={<ArrowUpRight />}
+          h="40px"
+          icon={ARROW_ICON}
           isRound
           opacity={0}
           position="absolute"
           right="md"
+          shadow="2xl"
+          top="md"
           transition="opacity 0.3s ease"
-          w="50px"
+          w="40px"
+          zIndex="2"
         />
       </MotionBox>
     </Link>
   )
-}
+})
 
 export function Audits() {
+  const { colorMode } = useColorMode()
+
+  const spearbitLogo = useMemo(() => <SpearbitLogo />, [])
+  const trailOfBitsLogo = useMemo(() => <TrailOfBitsLogo />, [])
+  const certoraLogo = useMemo(() => <CertoraLogo />, [])
+
   return (
     <Noise backgroundColor="background.level0WithOpacity ">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
@@ -104,7 +241,7 @@ export function Audits() {
               as={Link}
               href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits"
               isExternal
-              rightIcon={<ArrowUpRight size="14px" />}
+              rightIcon={ARROW_ICON}
               variant="secondary"
             >
               View reports
@@ -117,33 +254,48 @@ export function Audits() {
           >
             <GridItem>
               <AuditCard
-                href="https://github.com/balancer/balancer-v3-monorepo/blob/main/audits/spearbit/2024-10-04.pdf"
-                logo={<SpearbitLogo />}
+                bgImageName="0"
+                colorMode={colorMode}
+                gradientIndex={0}
+                href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits/spearbit"
+                logo={spearbitLogo}
               />
             </GridItem>
             <GridItem>
               <AuditCard
-                href="https://github.com/balancer/balancer-v3-monorepo/blob/main/audits/trail-of-bits/2024-10-08.pdf"
-                logo={<TrailOfBitsLogo />}
+                bgImageName="1"
+                colorMode={colorMode}
+                gradientIndex={1}
+                href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits/trail-of-bits"
+                logo={trailOfBitsLogo}
               />
             </GridItem>
             <GridItem>
               <AuditCard
-                href="https://github.com/balancer/balancer-v3-monorepo/blob/main/audits/certora/2024-09-04.pdf"
-                logo={<CertoraLogo />}
+                bgImageName="2"
+                colorMode={colorMode}
+                gradientIndex={2}
+                href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits/certora"
+                logo={certoraLogo}
               />
             </GridItem>
           </Grid>
-          <VStack align="start" mt="md" spacing="xs">
-            <Heading fontSize="lg" variant="h6">
+          <VStack align="start" mt="xs" spacing="xs">
+            <Heading fontSize="lg" pb="xs" variant="h6">
               Review the code and report vulnerabilities
             </Heading>
             <Text color="font.secondary">
               Up to $1m is up for grabs in the bug bounty on{' '}
-              <Link href="https://immunefi.com/bug-bounty/balancer/information/" isExternal>
+              <Link
+                alignItems="center"
+                display="inline-flex"
+                gap="2px"
+                href="https://immunefi.com/bug-bounty/balancer/information/"
+                isExternal
+              >
                 Immunefi
+                {ARROW_ICON}
               </Link>
-              .
             </Text>
           </VStack>
         </VStack>
