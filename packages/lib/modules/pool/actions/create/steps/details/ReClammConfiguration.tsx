@@ -130,7 +130,9 @@ function ConfigOptionsGroup({
       </SimpleGrid>
       {customOption ? (
         <Radio {...getRadioProps({ value: customOption.rawValue })} mt="2">
-          <Text>{customOption.label}</Text>
+          <Text color="font.secondary" fontSize="sm">
+            {customOption.label}
+          </Text>
         </Radio>
       ) : null}
       {isCustomPriceRange ? (
