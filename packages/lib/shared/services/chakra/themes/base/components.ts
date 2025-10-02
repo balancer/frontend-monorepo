@@ -465,6 +465,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           color: 'grayText',
         },
         _hover: {
+          textDecoration: 'none',
           _disabled: {
             background: 'background.level3',
           },
@@ -504,6 +505,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           _hover: {
             shadow: 'sm',
             backgroundSize: '120% 100%',
+            color: 'font.dark',
             boxShadow: '0 3px 20px hsla(9, 85%, 71%, 0.4)',
             _disabled: {
               boxShadow: 'none',
@@ -516,6 +518,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           boxShadow: '0 3px 20px hsla(33, 58%, 76%, 0.4)',
           _hover: {
             shadow: 'sm',
+            color: 'font.dark',
             boxShadow: '0 3px 20px hsla(32, 43%, 82%, 0.5)',
             _disabled: {
               boxShadow: 'none',

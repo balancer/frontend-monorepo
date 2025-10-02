@@ -57,7 +57,7 @@ export function FeatureCard({
         <Text
           background="font.secondary"
           backgroundClip="text"
-          fontSize="xs"
+          fontSize="sm"
           left="0"
           p="md"
           position="absolute"
@@ -68,14 +68,10 @@ export function FeatureCard({
         </Text>
       )}
       <Box bottom="0" left="0" p="md" position="absolute">
-        <Text fontSize={titleSize} fontWeight="bold">
+        <Text fontSize={titleSize} fontWeight="bold" pb="xs">
           {title}
         </Text>
-        {subTitle && (
-          <Text fontSize="xl" opacity={0.6}>
-            {subTitle}
-          </Text>
-        )}
+        {subTitle && <Text>{subTitle}</Text>}
       </Box>
     </Box>
   )
