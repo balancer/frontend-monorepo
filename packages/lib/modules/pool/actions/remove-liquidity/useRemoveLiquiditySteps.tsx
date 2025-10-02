@@ -24,8 +24,11 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
   const signRelayerStep = useSignRelayerStep(chain)
   const isSafeAccount = useIsSafeAccount()
-  const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
-    useApproveRelayerStep(chainId)
+
+  const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } = useApproveRelayerStep(
+    chainId,
+    { relayerMode }
+  )
 
   const { wethIsEth, simulationQuery } = params
   // Only used to sign permit for v3 pools (standard permit is supported by all BPTs by contract)

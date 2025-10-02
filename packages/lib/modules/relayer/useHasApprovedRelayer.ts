@@ -4,8 +4,14 @@ import { balancerV2VaultAbi } from '@repo/lib/modules/web3/contracts/abi/generat
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
 import { useChainSwitch } from '../web3/useChainSwitch'
+import { RelayerMode } from './useRelayerMode'
 
-export function useHasApprovedRelayer(chainId: SupportedChainId) {
+export function useHasApprovedRelayer(
+  chainId: SupportedChainId,
+  options?: {
+    relayerMode?: RelayerMode
+  }
+) {
   const { isConnected, userAddress } = useUserAccount()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const config = getNetworkConfig(chainId)
@@ -17,7 +23,9 @@ export function useHasApprovedRelayer(chainId: SupportedChainId) {
     account: userAddress,
     functionName: 'hasApprovedRelayer',
     args: [userAddress, config.contracts.balancer.relayerV6],
-    query: { enabled: isConnected && !shouldChangeNetwork },
+    query: {
+      enabled: options?.relayerMode === 'approveRelayer' && isConnected && !shouldChangeNetwork,
+    },
   })
 
   return {

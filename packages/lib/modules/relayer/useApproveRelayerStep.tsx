@@ -11,10 +11,16 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayer } from './useHasApprovedRelayer'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useState } from 'react'
+import { RelayerMode } from './useRelayerMode'
 
 const approveRelayerStepId = 'approve-relayer'
 
-export function useApproveRelayerStep(chainId: SupportedChainId): {
+export function useApproveRelayerStep(
+  chainId: SupportedChainId,
+  options?: {
+    relayerMode?: RelayerMode
+  }
+): {
   isLoading: boolean
   step: TransactionStep
 } {
@@ -26,7 +32,9 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
   const relayerAddress = config.contracts.balancer.relayerV6
   const vaultAddress = config.contracts.balancer.vaultV2
 
-  const { hasApprovedRelayer, isLoading, refetch } = useHasApprovedRelayer(chainId)
+  const relayerMode = options?.relayerMode ?? 'approveRelayer'
+
+  const { hasApprovedRelayer, isLoading, refetch } = useHasApprovedRelayer(chainId, { relayerMode })
 
   const labels: TransactionLabels = {
     title: 'Approve relayer',
