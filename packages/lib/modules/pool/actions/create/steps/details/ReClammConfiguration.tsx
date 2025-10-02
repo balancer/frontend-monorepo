@@ -10,7 +10,6 @@ import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
-//import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 
 export function ReClammConfiguration() {
