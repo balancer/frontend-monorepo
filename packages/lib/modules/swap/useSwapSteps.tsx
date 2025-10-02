@@ -45,6 +45,7 @@ export function useSwapSteps({
     chainId,
     { relayerMode }
   )
+
   const signRelayerStep = useSignRelayerStep(swapState.selectedChain)
   const swapRequiresRelayer =
     relayerMode !== 'no-relayer-needed' && handler.name === 'AuraBalSwapHandler'
