@@ -206,8 +206,26 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   useEffect(() => {
     if (!initialTargetPrice || !priceRangePercentage) return
 
+    const { initialMinPrice, initialMaxPrice } = calculatePriceBounds(
+      initialTargetPrice,
+      priceRangePercentage
+    )
+
+    // prevent unnecessary re-renders
+    if (
+      reClammConfig.initialMinPrice === initialMinPrice &&
+      reClammConfig.initialMaxPrice === initialMaxPrice
+    ) {
+      return
+    }
+
     updatePriceBounds(initialTargetPrice, priceRangePercentage)
-  }, [initialTargetPrice, priceRangePercentage])
+  }, [
+    initialTargetPrice,
+    priceRangePercentage,
+    reClammConfig.initialMinPrice,
+    reClammConfig.initialMaxPrice,
+  ])
 
   return [targetPrice, priceRangeBoundaries, marginBuffer, dailyPriceReadjustmentRate]
 }
