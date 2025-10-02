@@ -5,7 +5,7 @@ import {
   Divider,
   HStack,
   Button,
-  Text,
+  Heading,
   Icon,
   Portal,
   useColorModeValue,
@@ -72,15 +72,16 @@ function AuraAprTooltip({ auraApr }: Props) {
         <>
           <PopoverTrigger>
             <HStack align="center" alignItems="center">
-              <Button _focus={{ outline: 'none' }} px="0" variant="unstyled">
+              <Button _focus={{ outline: 'none' }} h="30px" px="0" variant="unstyled">
                 <HStack
                   // _hover={{ color: hoverColor }}
                   color="font.primary"
+                  gap="xs"
                   opacity={1}
                 >
-                  <Text color="font.primary" textAlign="right">
+                  <Heading cursor="pointer" size="h4">
                     {usedDisplayValueFormatter(bn(auraApr))}
-                  </Text>
+                  </Heading>
                   <Icon
                     as={StarsIcon}
                     gradFrom={isOpen ? 'green' : auraGradFrom}

@@ -16,6 +16,8 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
+import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
+import { hasAuraStakedBalance } from '../../../user-balance.helpers'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -53,7 +55,14 @@ export function UserSnapshotValues() {
     return veBalBoostMap[pool.id]
   }, [veBalBoostMap])
 
-  const myAprRaw = getTotalAprRaw(pool.dynamicData.aprItems, boost)
+  const myAprRaw = useMemo(() => {
+    // If user has staked on Aura, use Aura APR
+    if (hasAuraStakedBalance(pool) && pool.staking?.aura?.apr) {
+      return pool.staking.aura.apr
+    }
+    // Otherwise use the standard APR calculation
+    return getTotalAprRaw(pool.dynamicData.aprItems, boost)
+  }, [pool, boost])
 
   const poolMyStatsValues: PoolMyStatsValues | undefined = useMemo(() => {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
@@ -67,7 +76,7 @@ export function UserSnapshotValues() {
         myClaimableRewards: myClaimableRewards,
       }
     }
-  }, [veBalBoostMap, pool])
+  }, [veBalBoostMap, pool, myAprRaw])
 
   function onModalClose() {
     previewModalDisclosure.onClose()
@@ -112,18 +121,22 @@ export function UserSnapshotValues() {
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            My APR
+            {hasAuraStakedBalance(pool) && pool.staking?.aura?.apr ? 'My Aura APR' : 'My APR'}
           </Text>
           {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
-            <MemoizedMainAprTooltip
-              aprItems={pool.dynamicData.aprItems}
-              chain={pool.chain}
-              height="28px"
-              pool={pool}
-              poolId={pool.id}
-              textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
-              vebalBoost={boost || '1'}
-            />
+            hasAuraStakedBalance(pool) && pool.staking?.aura?.apr ? (
+              <AuraAprTooltip auraApr={pool.staking.aura.apr} />
+            ) : (
+              <MemoizedMainAprTooltip
+                aprItems={pool.dynamicData.aprItems}
+                chain={pool.chain}
+                height="28px"
+                pool={pool}
+                poolId={pool.id}
+                textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
+                vebalBoost={boost || '1'}
+              />
+            )
           ) : (
             <Heading size="h4">&mdash;</Heading>
           )}
