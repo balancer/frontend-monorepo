@@ -19,6 +19,7 @@ import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction
 import { useHasApprovedRelayer } from '@repo/lib/modules/relayer/useHasApprovedRelayer'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { HumanAmount } from '@balancer/sdk'
+import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
 
 const claimAndUnstakeStepId = 'claim-and-unstake'
 
@@ -40,13 +41,16 @@ export function useClaimAndUnstakeStep({
 } {
   const { userAddress } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  const { claimableRewards: nonBalrewards } = useClaimableBalances([pool])
+  const { balRewardsData: balRewards } = useBalTokenRewards([pool])
+  const relayerMode = useRelayerMode(pool)
 
   const { contracts, chainId } = getNetworkConfig(pool.chain)
 
-  const { claimableRewards: nonBalrewards } = useClaimableBalances([pool])
-  const { balRewardsData: balRewards } = useBalTokenRewards([pool])
-
-  const { hasApprovedRelayer, isLoading: isLoadingRelayerApproval } = useHasApprovedRelayer(chainId)
+  const { hasApprovedRelayer, isLoading: isLoadingRelayerApproval } = useHasApprovedRelayer(
+    chainId,
+    { relayerMode }
+  )
 
   const labels: TransactionLabels = {
     init: 'Claim & unstake',
