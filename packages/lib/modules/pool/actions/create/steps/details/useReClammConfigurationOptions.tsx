@@ -205,5 +205,11 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     }
   }, [isInitialReClammConfig])
 
+  useEffect(() => {
+    if (!initialTargetPrice || !priceRangePercentage) return
+
+    updatePriceBounds(initialTargetPrice, priceRangePercentage)
+  }, [initialTargetPrice, priceRangePercentage])
+
   return [targetPrice, priceRangeBoundaries, marginBuffer, dailyPriceReadjustmentRate]
 }
