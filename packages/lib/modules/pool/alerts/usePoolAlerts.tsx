@@ -11,6 +11,7 @@ import {
   hasReviewedHook,
   hasReviewedRateProvider,
   isV2Pool,
+  poolHasRateProviderExternalOracle,
 } from '../pool.helpers'
 import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
@@ -82,6 +83,8 @@ export function usePoolAlerts(pool: Pool) {
     }
 
     poolTokens?.forEach(token => {
+      const priceRateProviderData = token.priceRateProviderData
+
       if (isV2Pool(pool) && !token.isAllowed) {
         alerts.push({
           identifier: `TokenNotAllowed-${token.symbol}`,
@@ -97,16 +100,16 @@ export function usePoolAlerts(pool: Pool) {
 
       if (!hasReviewedRateProvider(token)) {
         alerts.push({
-          identifier: `PriceProviderNotReviewed-${token.symbol}`,
+          identifier: `RateProviderNotReviewed-${token.symbol}`,
           content: `The rate provider for ${token.symbol} has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
         })
       }
 
-      if (token.priceRateProviderData && token.priceRateProviderData?.summary !== 'safe') {
+      if (priceRateProviderData && priceRateProviderData?.summary !== 'safe') {
         alerts.push({
-          identifier: `UnsafePriceProvider-${token.symbol}`,
+          identifier: `UnsafeRateProvider-${token.symbol}`,
           content: `The rate provider for ${token.symbol} has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
@@ -203,7 +206,7 @@ export function usePoolAlerts(pool: Pool) {
 
           if (!hasReviewedRateProvider(nestedToken)) {
             alerts.push({
-              identifier: `NestedPriceProviderNotReviewed-${nestedToken.symbol}`,
+              identifier: `NestedRateProviderNotReviewed-${nestedToken.symbol}`,
               content: `The rate provider for ${nestedToken.symbol} in a nested pool has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,
@@ -215,7 +218,7 @@ export function usePoolAlerts(pool: Pool) {
             nestedToken.priceRateProviderData?.summary !== 'safe'
           ) {
             alerts.push({
-              identifier: `UnsafeNestedPriceProvider-${nestedToken.symbol}`,
+              identifier: `UnsafeNestedRateProvider-${nestedToken.symbol}`,
               content: `The rate provider for ${nestedToken.symbol} in a nested pool has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,
@@ -298,6 +301,18 @@ export function usePoolAlerts(pool: Pool) {
         isSoftWarning: false,
       })
     }
+
+    // Warning for any tokens with an external oracle as the rate provider
+    if (poolHasRateProviderExternalOracle(pool)) {
+      alerts.push({
+        identifier: 'ExternalOracleRateProvider',
+        content:
+          'This pool leverages an external oracle to price the underlying assets. It is highly experimental and should be used at your own risk. The swap fee APR does NOT reflect expected returns. Please read through the "Pool risks" before adding liquidity to this pool.',
+        status: 'error',
+        isSoftWarning: false,
+      })
+    }
+
     return alerts
   }
 
