@@ -90,7 +90,6 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         label: 'Or choose custom',
         displayValue: '',
         rawValue: '',
-        svg: CurrentPricePlusFivePercentSVG,
       },
     ],
     updateFn: (rawValue: string) => {
@@ -113,7 +112,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Narrow', displayValue: '± 25.00%', rawValue: '25', svg: TargetRangeNarrowSVG },
       { label: 'Standard', displayValue: '± 50.00%', rawValue: '50', svg: TargetRangeStandardSVG },
       { label: 'Wide', displayValue: '± 75.00%', rawValue: '75', svg: TargetRangeWideSVG },
-      { label: 'Or choose custom', displayValue: '', rawValue: '', svg: TargetRangeWideSVG },
+      { label: 'Or choose custom', displayValue: '', rawValue: '' },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue)
@@ -138,7 +137,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Narrow', displayValue: '10%', rawValue: '10', svg: MarginBufferNarrowSVG },
       { label: 'Standard', displayValue: '25%', rawValue: '25', svg: MarginBufferStandardSVG },
       { label: 'Wide', displayValue: '50%', rawValue: '50', svg: MarginBufferWideSVG },
-      { label: 'Or choose custom', displayValue: '', rawValue: '', svg: MarginBufferWideSVG },
+      { label: 'Or choose custom', displayValue: '', rawValue: '' },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue)
@@ -173,7 +172,6 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         label: 'Or choose custom',
         displayValue: '',
         rawValue: '',
-        svg: PriceAdjustmentRateFastSVG,
       },
     ],
     updateFn: (rawValue: string) => {
