@@ -1,11 +1,10 @@
 import * as hl from '@nktkas/hyperliquid'
 import { useMutation } from '@tanstack/react-query'
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts'
-import { useWalletClient } from 'wagmi'
-import { usePublicClient } from 'wagmi'
-import { useAccount } from 'wagmi'
+import { useWalletClient, usePublicClient } from 'wagmi'
 import { ChainId } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 export function useHyperEvm({
   isHyperEvmTx,
@@ -15,21 +14,21 @@ export function useHyperEvm({
   isContractDeploymentStep: boolean
 }) {
   const { data: walletClient } = useWalletClient()
-  const { address } = useAccount()
+  const { userAddress } = useUserAccount()
   const publicClient = usePublicClient()
 
-  const enabled = isHyperEvmTx && publicClient?.chain.id === ChainId.HYPER_EVM
+  const enabled = isHyperEvmTx && publicClient?.chain.id === ChainId.HYPEREVM
 
   const { data: isUsingBigBlocks, refetch: refetchIsUsingBigBlocks } = useQuery({
-    queryKey: ['isUsingBigBlocks', publicClient?.chain.id, address],
+    queryKey: ['isUsingBigBlocks', publicClient?.chain.id, userAddress],
     queryFn: async () => {
-      if (!publicClient || !address) return false
-      if (publicClient.chain.id !== ChainId.HYPER_EVM) return false
+      if (!publicClient || !userAddress || publicClient.chain.id !== ChainId.HYPEREVM) return false
 
       const isUsingBigBlocks: boolean = await publicClient.transport.request({
         method: 'eth_usingBigBlocks',
-        params: [address],
+        params: [userAddress],
       })
+
       return isUsingBigBlocks
     },
     enabled,

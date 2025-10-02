@@ -1,16 +1,17 @@
-import { VStack, Card, HStack, Text, CardBody, Divider, Icon } from '@chakra-ui/react'
+import { VStack, HStack, Text, CardBody, Divider, Icon } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { CheckCircle, XCircle } from 'react-feather'
-import { type PoolCreationForm } from '../constants'
+import { PoolCreationForm } from '../types'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { zeroAddress, Address } from 'viem'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 
-export function PreviewPoolTokens({ isBeforeStep }: { isBeforeStep: boolean }) {
+export function PreviewPoolTokens() {
   const { poolTokens } = usePoolCreationForm()
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
@@ -18,7 +19,7 @@ export function PreviewPoolTokens({ isBeforeStep }: { isBeforeStep: boolean }) {
   const hasRateProviders = poolTokens.some(token => token.rateProvider !== zeroAddress)
 
   return (
-    <Card opacity={isBeforeStep ? 0.5 : 1}>
+    <PreviewPoolCreationCard stepTitle="Tokens">
       <CardHeaderRow columnNames={['Tokens', 'Price', 'Market Cap']} />
       <CardBody>
         <VStack spacing="md">
@@ -46,7 +47,7 @@ export function PreviewPoolTokens({ isBeforeStep }: { isBeforeStep: boolean }) {
           {hasRateProviders && <RateProviderRows poolTokens={poolTokens} />}
         </VStack>
       </CardBody>
-    </Card>
+    </PreviewPoolCreationCard>
   )
 }
 

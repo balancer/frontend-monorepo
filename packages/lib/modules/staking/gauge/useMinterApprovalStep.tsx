@@ -21,7 +21,7 @@ export function useApproveMinterStep(
   step: TransactionStep
 } {
   const { isConnected } = useUserAccount()
-  const [, setTransaction] = useState<ManagedResult | undefined>()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const { contracts, chainId } = getNetworkConfig(chain)
 
@@ -59,9 +59,14 @@ export function useApproveMinterStep(
     id: approveMinterStepId,
     stepType: 'minterApproval',
     labels,
+    details: {
+      gasless: false,
+      type: 'Gas transaction',
+    },
     isComplete: () => isConnected && hasMinterApproval,
     renderAction: () => <ManagedTransactionButton id={approveMinterStepId} {...props} />,
     onSuccess: () => refetch(),
+    transaction,
   }
 
   return {

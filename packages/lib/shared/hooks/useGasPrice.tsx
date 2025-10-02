@@ -32,7 +32,8 @@ export function GasPriceCard({ chain }: { chain: GqlChain }) {
       <HStack spacing="xs">
         <GasIcon size={16} />
         <Text color={gasPriceColor} fontSize="xs" fontWeight="bold">
-          {gasPrice ? gasPrice.toString() : '-'}
+          {/* a gas price < 1 Gwei is rounded down to 0 */}
+          {!gasPrice ? '-' : gasPrice === '0' ? '<1' : gasPrice}
         </Text>
       </HStack>
     </Box>

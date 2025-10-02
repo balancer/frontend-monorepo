@@ -35,7 +35,7 @@ import { getVeBalManagePath } from '../../../vebal-navigation'
 export function MyVotes() {
   const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort, shouldResubmitVotes } =
     useVotes()
-  const { sortedMyVotes, loading: myVotesLoading, hasExpiredGauges } = useMyVotes()
+  const { sortedMyVotes, loading: myVotesLoading, hasExpiredGauges, hasNewVotes } = useMyVotes()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected } = useUserAccount()
 
@@ -224,6 +224,21 @@ export function MyVotes() {
                       >
                         <AlertTitle>You have votes on an expired pool gauge</AlertTitle>
                         <AlertDescription>Reallocate these to avoid wasting votes</AlertDescription>
+                      </Stack>
+                    </Alert>
+                  </GridItem>
+                )}
+
+                {hasNewVotes && (
+                  <GridItem colSpan={4} mt="md" w="full">
+                    <Alert status="warning">
+                      <AlertIcon as={AlertTriangle} />
+                      <Stack alignItems="baseline" gap="0">
+                        <AlertTitle>Resubmit your votes to use your full voting power</AlertTitle>
+                        <AlertDescription fontSize="sm">
+                          Votes are set at the time you cast them. Since you've added more veBAL
+                          afterward, that extra voting power is not being fully utilized.
+                        </AlertDescription>
                       </Stack>
                     </Alert>
                   </GridItem>

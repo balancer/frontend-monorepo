@@ -4,7 +4,10 @@ import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { BptRow } from '@repo/lib/modules/tokens/TokenRow/BptRow'
-import { requiresProportionalInput } from '../../LiquidityActionHelpers'
+import { FLEXIBLE_ADD_DESCRIPTION, SlippageOptions, SlippageSelector } from '../../SlippageSelector'
+import { Text } from '@chakra-ui/react'
+import { useState } from 'react'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 export function ReceiptBptOut({
   actualBptOut,
@@ -37,24 +40,50 @@ export function ReceiptBptOut({
       isLoading={isLoading}
       label="You got"
       pool={pool}
-      rightLabel={diffLabel()}
+      rightElement={
+        <Text color="grayText" fontSize="sm">
+          {diffLabel()}
+        </Text>
+      }
     />
   )
 }
 
 export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLoading?: boolean }) {
-  const { simulationQuery } = useAddLiquidity()
+  const { simulationQuery, wantsProportional } = useAddLiquidity()
+  const { slippage } = useUserSettings()
   const bptOut = simulationQuery?.data?.bptOut
   const bptOutUnits = bptOut ? formatUnits(bptOut.amount, BPT_DECIMALS) : '0'
   const { pool } = usePool()
 
-  const proportionalRequired = requiresProportionalInput(pool)
+  const [selectedSlippage, setSelectedSlippage] = useState(0)
+  const bptOutWithSlippage = bn(bptOutUnits)
+    .times(1 - selectedSlippage)
+    .toString()
 
-  const _label = label
-    ? label
-    : proportionalRequired
-      ? 'You will get'
-      : 'You will get (if no slippage)'
+  const _label = label ? label : wantsProportional ? 'You will get (exactly)' : 'You will get'
 
-  return <BptRow bptAmount={bptOutUnits} isLoading={isLoading} label={_label} pool={pool} />
+  const calculateSlippage = (value: SlippageOptions) => {
+    if (value === 'zero') setSelectedSlippage(0)
+    else if (value === 'max') setSelectedSlippage(Number(slippage) / 100)
+  }
+
+  return (
+    <BptRow
+      bptAmount={bptOutWithSlippage}
+      isLoading={isLoading}
+      label={_label}
+      pool={pool}
+      rightElement={
+        !wantsProportional && (
+          <SlippageSelector
+            description={FLEXIBLE_ADD_DESCRIPTION}
+            onChange={calculateSlippage}
+            selectedIndex={0}
+            title="Slippage on 'flexible' adds"
+          />
+        )
+      }
+    />
+  )
 }

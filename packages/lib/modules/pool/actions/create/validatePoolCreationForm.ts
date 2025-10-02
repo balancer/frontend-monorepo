@@ -1,17 +1,16 @@
 import { isAddress } from 'viem'
 import {
-  MIN_SWAP_FEE_PERCENTAGE,
   MAX_SWAP_FEE_PERCENTAGE,
   MIN_AMPLIFICATION_PARAMETER,
   MAX_AMPLIFICATION_PARAMETER,
   MAX_POOL_NAME_LENGTH,
   MAX_POOL_SYMBOL_LENGTH,
   WeightedPoolStructure,
-  SupportedPoolTypes,
   POOL_TYPES,
   REQUIRED_TOTAL_WEIGHT,
-  type PoolCreationToken,
 } from './constants'
+import { getMinSwapFeePercentage } from './helpers'
+import { PoolCreationToken, SupportedPoolTypes } from './types'
 import { PoolType } from '@balancer/sdk'
 
 export const validatePoolTokens = {
@@ -94,15 +93,18 @@ export const validatePoolSettings = {
 
   swapFeePercentage: (value: string, poolType: SupportedPoolTypes) => {
     const numValue = Number(value)
-    if (numValue < MIN_SWAP_FEE_PERCENTAGE[poolType] || numValue > MAX_SWAP_FEE_PERCENTAGE)
-      return `Value must be between ${MIN_SWAP_FEE_PERCENTAGE[poolType]} and ${MAX_SWAP_FEE_PERCENTAGE}`
+    const minSwapFeePercentage = getMinSwapFeePercentage(poolType)
+    if (numValue < minSwapFeePercentage || numValue > MAX_SWAP_FEE_PERCENTAGE) {
+      return `Value must be between ${minSwapFeePercentage} and ${MAX_SWAP_FEE_PERCENTAGE}`
+    }
     return true
   },
 
   amplificationParameter: (value: string) => {
     const numValue = Number(value)
-    if (numValue < MIN_AMPLIFICATION_PARAMETER || numValue > MAX_AMPLIFICATION_PARAMETER)
+    if (numValue < MIN_AMPLIFICATION_PARAMETER || numValue > MAX_AMPLIFICATION_PARAMETER) {
       return `Value must be between ${MIN_AMPLIFICATION_PARAMETER} and ${MAX_AMPLIFICATION_PARAMETER}`
+    }
     return true
   },
 }
@@ -110,15 +112,17 @@ export const validatePoolSettings = {
 export const validatePoolDetails = {
   name: (name: string) => {
     if (name.length < 3) return 'Pool name must be 3 characters or more'
-    if (name.length > MAX_POOL_NAME_LENGTH)
+    if (name.length > MAX_POOL_NAME_LENGTH) {
       return `Pool name must be ${MAX_POOL_NAME_LENGTH} characters or less`
+    }
     return true
   },
 
   symbol: (symbol: string) => {
     if (symbol.length < 3) return 'Pool symbol must be 3 characters or more'
-    if (symbol.length > MAX_POOL_SYMBOL_LENGTH)
+    if (symbol.length > MAX_POOL_SYMBOL_LENGTH) {
       return `Pool symbol must be ${MAX_POOL_SYMBOL_LENGTH} characters or less`
+    }
     return true
   },
 }

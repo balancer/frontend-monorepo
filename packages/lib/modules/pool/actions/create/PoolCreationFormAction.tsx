@@ -3,33 +3,30 @@ import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { validatePoolTokens, validatePoolType } from './validatePoolCreationForm'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
-import { PoolCreationProvider } from './modal/PoolCreationProvider'
 import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
-import { LS_KEYS } from '../../../local-storage/local-storage.constants'
-import { Address } from 'viem'
+import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
+  const { isFormStateValid, poolAddress, isReClamm, poolTokens } = usePoolCreationForm()
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
 
-  const [poolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.PoolCreation.Address,
-    undefined
-  )
+  const hasTokenAmounts = poolTokens.every(token => token.amount)
 
   useEffect(() => {
     // trigger modal open if user has begun pool creation process
-    if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
-  }, [poolAddress])
+    // if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
+    // trigger modal close if reclamm and not token amounts have been set
+    if (poolAddress && isReClamm && !hasTokenAmounts) previewModalDisclosure.onClose()
+  }, [poolAddress, isReClamm, hasTokenAmounts])
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
+
+  const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
 
   return (
     <>
@@ -61,49 +58,19 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             variant="primary"
             w="full"
           >
-            {isLastStep ? 'Create Pool' : 'Next'}
+            {buttonText}
           </Button>
         </HStack>
       </VStack>
 
-      {isLastStep && (
-        <PoolCreationProvider>
-          <PoolCreationModal
-            finalFocusRef={nextBtn}
-            isOpen={previewModalDisclosure.isOpen}
-            onClose={previewModalDisclosure.onClose}
-            onOpen={previewModalDisclosure.onOpen}
-          />
-        </PoolCreationProvider>
+      {isFormStateValid && isLastStep && (
+        <PoolCreationModal
+          finalFocusRef={nextBtn}
+          isOpen={previewModalDisclosure.isOpen}
+          onClose={previewModalDisclosure.onClose}
+          onOpen={previewModalDisclosure.onOpen}
+        />
       )}
     </>
   )
-}
-
-function InvalidTotalWeightAlert() {
-  const { poolTokens, poolType } = usePoolCreationForm()
-
-  const isTotalWeightTooLow = validatePoolTokens.isTotalWeightTooLow(poolTokens)
-  const isTotalWeightTooHigh = validatePoolTokens.isTotalWeightTooHigh(poolTokens)
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-
-  if (!isWeightedPool) return null
-
-  if (isTotalWeightTooLow)
-    return (
-      <BalAlert
-        content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
-        status="warning"
-        title="Token weights must tally 100%"
-      />
-    )
-
-  if (isTotalWeightTooHigh)
-    return (
-      <BalAlert
-        content="To create a weighted pool, the sum of all the weights of the tokens must tally exactly 100%"
-        status="error"
-        title="Token weights must tally 100%"
-      />
-    )
 }

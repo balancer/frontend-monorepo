@@ -1,11 +1,29 @@
-import { Card, CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakra-ui/react'
+import { CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
+import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 
-export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) {
+export function PreviewPoolDetails() {
+  return (
+    <PreviewPoolCreationCard stepTitle="Details">
+      <CardHeader>
+        <Heading size="md">Details</Heading>
+      </CardHeader>
+      <CardBody>
+        <VStack spacing="md">
+          <PoolDetailsContent />
+        </VStack>
+      </CardBody>
+    </PreviewPoolCreationCard>
+  )
+}
+
+export function PoolDetailsContent() {
   const {
     network,
     name,
@@ -25,7 +43,7 @@ export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) 
   const isStablePool = validatePoolType.isStablePool(poolType)
 
   function formatPoolManager(manager: string) {
-    if (manager === zeroAddress) return 'Balancer DAO'
+    if (manager === zeroAddress) return `${PROJECT_CONFIG.projectName} DAO`
     return <BlockExplorerLink address={manager as `0x${string}`} chain={network} fontSize="md" />
   }
 
@@ -55,21 +73,12 @@ export function PreviewPoolDetails({ isBeforeStep }: { isBeforeStep: boolean }) 
     'Allow donations': enableDonation ? 'Yes' : 'No',
   }
 
-  return (
-    <Card opacity={isBeforeStep ? 0.5 : 1}>
-      <CardHeader>
-        <Heading size="md">Details</Heading>
-      </CardHeader>
-      <CardBody>
-        <VStack spacing="md">
-          {Object.entries(poolDetailsMap).map(([label, value]) => (
-            <HStack align="start" justify="space-between" key={label} spacing="lg" w="full">
-              <Text color="font.secondary">{label}</Text>
-              <Box color="font.secondary">{isBeforeStep ? '—' : value}</Box>
-            </HStack>
-          ))}
-        </VStack>
-      </CardBody>
-    </Card>
-  )
+  const { isBeforeStep } = usePoolCreationFormSteps()
+
+  return Object.entries(poolDetailsMap).map(([label, value]) => (
+    <HStack align="start" justify="space-between" key={label} spacing="lg" w="full">
+      <Text color="font.secondary">{label}</Text>
+      <Box color="font.secondary">{isBeforeStep('Details') ? '—' : value}</Box>
+    </HStack>
+  ))
 }

@@ -10,11 +10,17 @@ import { ConnectWallet } from '../web3/ConnectWallet'
 import { Address } from 'viem'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '../local-storage/local-storage.constants'
-import { LbpCreationProvider } from './LbpCreationProvider'
 
 export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
-  const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = useLbpForm()
+  const {
+    activeStepIndex,
+    setActiveStep,
+    isLastStep,
+    isFirstStep,
+    saleStructureForm,
+    projectInfoForm,
+  } = useLbpForm()
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
 
@@ -27,6 +33,8 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     // trigger modal open if user has begun pool creation process
     if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
   }, [poolAddress])
+
+  const isFormStateValid = saleStructureForm.formState.isValid && projectInfoForm.formState.isValid
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
@@ -57,15 +65,13 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
         {isLastStep ? 'Create LBP' : 'Next'}
       </Button>
 
-      {isLastStep && (
-        <LbpCreationProvider>
-          <LbpCreationModal
-            finalFocusRef={nextBtn}
-            isOpen={previewModalDisclosure.isOpen}
-            onClose={previewModalDisclosure.onClose}
-            onOpen={previewModalDisclosure.onOpen}
-          />
-        </LbpCreationProvider>
+      {isFormStateValid && isLastStep && (
+        <LbpCreationModal
+          finalFocusRef={nextBtn}
+          isOpen={previewModalDisclosure.isOpen}
+          onClose={previewModalDisclosure.onClose}
+          onOpen={previewModalDisclosure.onOpen}
+        />
       )}
     </HStack>
   )

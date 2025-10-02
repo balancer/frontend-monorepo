@@ -13,7 +13,7 @@ import { BalAlertLink } from '../alerts/BalAlertLink'
 import { ErrorAlert } from './ErrorAlert'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
+import { hasSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 
 type Props = AlertProps & {
   error: Error
@@ -75,7 +75,7 @@ export function getErrorLabels(
   if (isInvariantRatioAboveMaxSimulationErrorMessage(error.message)) {
     errorTitle = 'Amount exceeds pool limits'
     errorMessage = 'Your input(s) would cause an invariant error in the vault.'
-  } else if (isPoolSurgingError(error.message, !!pool && hasStableSurgeHook(pool))) {
+  } else if (isPoolSurgingError(error.message, !!pool && hasSurgeHook(pool))) {
     errorTitle = 'Pool is surging'
     errorMessage = 'Flexible adds are disabled when a pool with stable surge hook is surging.'
   } else if (isInvariantRatioAboveMinSimulationErrorMessage(error.message)) {

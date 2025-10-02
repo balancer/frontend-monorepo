@@ -1,5 +1,3 @@
-'use client'
-
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { Box, Divider, Card, VStack, Button, Text } from '@chakra-ui/react'
@@ -14,11 +12,18 @@ import { AddLiquidityReceiptResult } from '@repo/lib/modules/transactions/transa
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { StakingOptions } from './StakingOptions'
 import { isVebalPool } from '../../../pool.helpers'
+import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useRouter } from 'next/navigation'
+import {
+  PROPORTIONAL_ADD_DESCRIPTION,
+  SlippageOptions,
+  SlippageSelector,
+} from '../../SlippageSelector'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -36,6 +41,7 @@ export function AddLiquiditySummary({
     addLiquidityTxHash,
     addLiquidityTxSuccess,
     slippage,
+    wantsProportional,
   } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
@@ -43,9 +49,16 @@ export function AddLiquiditySummary({
   const router = useRouter()
 
   // Order amountsIn like the form inputs which uses the tokens array.
+  const [selectedSlippage, setSelectedSlippage] = useState(0)
   const amountsIn = tokens
     .map(token => humanAmountsIn.find(amount => amount.tokenAddress === token?.address))
-    .filter(Boolean) as HumanTokenAmountWithAddress[]
+    .filter(Boolean)
+    .map(amount => ({
+      ...amount,
+      humanAmount: bn(amount?.humanAmount || 0)
+        .times(1 - selectedSlippage)
+        .toString(),
+    })) as HumanTokenAmountWithAddress[]
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -70,6 +83,15 @@ export function AddLiquiditySummary({
     )
   }
 
+  const addingInputTokenLabel = wantsProportional
+    ? "You're adding at most"
+    : "You're adding (exactly)"
+
+  const calculateSlippage = (value: SlippageOptions) => {
+    if (value === 'zero') setSelectedSlippage(Number(slippage) / 100)
+    else if (value === 'max') setSelectedSlippage(0)
+  }
+
   return (
     <AnimateHeightChange spacing="ms">
       {isMobile && hasQuoteContext && (
@@ -81,7 +103,17 @@ export function AddLiquiditySummary({
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
           isLoading={isLoadingTokens}
-          label={shouldShowReceipt || !hasQuoteContext ? 'You added' : "You're adding"}
+          label={shouldShowReceipt || !hasQuoteContext ? 'You added' : addingInputTokenLabel}
+          rightElement={
+            wantsProportional && (
+              <SlippageSelector
+                description={PROPORTIONAL_ADD_DESCRIPTION}
+                onChange={calculateSlippage}
+                selectedIndex={1}
+                title="Slippage on 'proportional' adds"
+              />
+            )
+          }
           tokens={tokens}
           totalUSDValue={hasQuoteContext ? totalUSDValue : undefined}
         />
@@ -96,30 +128,33 @@ export function AddLiquiditySummary({
       </Card>
 
       {shouldShowReceipt ? (
-        <CardPopAnim key="staking-options">
-          {isVebalPool(pool.id) ? (
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="md" w="full">
-                <Text>Get extra incentives with veBAL</Text>
-                <Button
-                  onClick={() => router.push('/vebal/manage')}
-                  size="lg"
-                  variant="primary"
-                  w="full"
-                >
-                  Lock to get veBAL
-                </Button>
-              </VStack>
-            </Card>
-          ) : (
-            pool.staking && (
-              <Box pt="sm">
-                <Divider mb="md" />
-                <StakingOptions />
-              </Box>
-            )
-          )}
-        </CardPopAnim>
+        <>
+          <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
+          <CardPopAnim key="staking-options">
+            {isVebalPool(pool.id) ? (
+              <Card variant="modalSubSection">
+                <VStack align="start" spacing="md" w="full">
+                  <Text>Get extra incentives with veBAL</Text>
+                  <Button
+                    onClick={() => router.push('/vebal/manage')}
+                    size="lg"
+                    variant="primary"
+                    w="full"
+                  >
+                    Lock to get veBAL
+                  </Button>
+                </VStack>
+              </Card>
+            ) : (
+              pool.staking && (
+                <Box pt="sm">
+                  <Divider mb="md" />
+                  <StakingOptions />
+                </Box>
+              )
+            )}
+          </CardPopAnim>
+        </>
       ) : hasQuoteContext ? (
         <CardPopAnim key="price-impact-details">
           <Card p="ms" variant="modalSubSection">

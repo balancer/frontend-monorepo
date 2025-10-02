@@ -32,6 +32,7 @@ import { useLastUserSlope } from '../../useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { Address } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -59,11 +60,7 @@ export interface SubmittingVote {
   weight: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface UseMyVotesArgs {}
-
-// eslint-disable-next-line no-empty-pattern
-export function useMyVotesLogic({}: UseMyVotesArgs) {
+export function useMyVotesLogic() {
   const {
     loading: votesLoading,
     votingPools,
@@ -74,6 +71,8 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
     isPoolGaugeExpired,
   } = useVotes()
   const filtersState = useMyVotesFiltersState()
+  const { lastLockTimestamp } = useVebalUserData()
+  const [selectedVotes, setSelectedVotes] = useState<Address[]>([])
 
   const myVotes = useMemo(() => {
     return uniqBy([...votedPools, ...selectedVotingPools], vote => vote.id)
@@ -261,8 +260,34 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
       })
   }, [votedPools])
 
-  const { steps, isLoadingSteps } = useSubmitVotesAllSteps({ votes: submittingVotes })
+  const changedVotes = submittingVotes.filter(vote => isVoteChanged(vote, lastLockTimestamp))
+  const unchangedVotes = submittingVotes.filter(vote => !isVoteChanged(vote, lastLockTimestamp))
+  const selectableVotes = changedVotes.filter(vote => {
+    const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
+    return previousWeight === vote.weight
+  })
+  const submittableVotes = changedVotes
+    .filter(vote => {
+      const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
+      return previousWeight !== vote.weight || selectedVotes.includes(vote.vote.id as Address)
+    })
+    .sort((a, b) => {
+      // Sending vote increases before decreases can reject the tx as each vote
+      // is sequentially processed and there is a check so the percentage is not
+      // bigger than 100%. Sorting the votes this way solves the problem.
+      const previousWeightA = a.vote.gaugeVotes?.userVotes || '0'
+      const previousWeightB = b.vote.gaugeVotes?.userVotes || '0'
+      const diffA = Number(a.weight) - Number(previousWeightA)
+      const diffB = Number(b.weight) - Number(previousWeightB)
 
+      if (diffA < 0 && diffB >= 0) return 1
+      if (diffB < 0 && diffA >= 0) return -1
+
+      return Number(a.weight) - Number(b.weight)
+    })
+    .reverse()
+
+  const { steps, isLoadingSteps } = useSubmitVotesAllSteps({ votes: submittableVotes })
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
   const txHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
 
@@ -287,13 +312,18 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
     clearAll,
     transactionSteps,
     txHash,
-    submittingVotes,
     timeLockedVotes,
+    changedVotes,
+    unchangedVotes,
     hasExceededWeight,
     hasUnallocatedWeight,
     refetchAll,
     hasExpiredGauges,
     hasNewVotes,
+    selectableVotes,
+    selectedVotes,
+    setSelectedVotes,
+    submittableVotes,
   }
 }
 
@@ -316,12 +346,24 @@ function newVotesSinceLastVote(
 
 export const MyVotesContext = createContext<ReturnType<typeof useMyVotesLogic> | null>(null)
 
-export function MyVotesProvider({ children, ...props }: PropsWithChildren<UseMyVotesArgs>) {
-  const hook = useMyVotesLogic(props)
+export function MyVotesProvider({ children }: PropsWithChildren) {
+  const hook = useMyVotesLogic()
 
   return <MyVotesContext.Provider value={hook}>{children}</MyVotesContext.Provider>
 }
 
 export function useMyVotes() {
   return useMandatoryContext(MyVotesContext, 'MyVotes')
+}
+
+function isVoteChanged(vote: SubmittingVote, lastLockTimestamp: number | undefined) {
+  const voteTimestamp = (vote.vote.gaugeVotes?.lastUserVoteTime || 0) * 1000
+  const previousWeight = vote.vote.gaugeVotes?.userVotes || '0'
+
+  return (
+    previousWeight !== vote.weight ||
+    !voteTimestamp ||
+    !lastLockTimestamp ||
+    voteTimestamp < lastLockTimestamp
+  )
 }

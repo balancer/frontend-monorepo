@@ -1,5 +1,3 @@
-'use client'
-
 import TokenRow from '../../tokens/TokenRow/TokenRow'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -16,8 +14,13 @@ import {
   VStack,
   Tooltip,
   useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverHeader,
 } from '@chakra-ui/react'
-import { useMemo, useState, useLayoutEffect } from 'react'
+import { useMemo, useState, useLayoutEffect, ReactNode } from 'react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'
@@ -26,6 +29,7 @@ import { keyBy } from 'lodash'
 import {
   getAuraPoolLink,
   getProportionalExitAmountsFromScaledBptIn,
+  getTotalApr,
   getXavePoolLink,
 } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -46,13 +50,14 @@ import {
   getPoolAddBlockedReason,
   calcUserShareOfPool,
   isFx,
-  isManaged,
+  getPoolRemoveBlockedReason,
+  shouldBlockRemoveLiquidity,
 } from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
-import { ArrowUpRight } from 'react-feather'
-import { getChainId } from '@repo/lib/config/app.config'
+import { ArrowUpRight, ChevronUp } from 'react-feather'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -61,6 +66,12 @@ import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
 import { bn, fNum, ZERO_VALUE_DASH, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
+import { Pool } from '../pool.types'
+import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
+import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
+import { Protocol } from '../../protocols/useProtocols'
+import { useVebalBoost } from '../../vebal/useVebalBoost'
+import { isCowAmm } from '@repo/lib/config/getProjectConfig'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -117,7 +128,10 @@ export default function PoolMyLiquidity() {
   const poolMetadata = usePoolMetadata(pool)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, poolMetadata)
-  const blockingReasons = formatTextListAsItems(getPoolAddBlockedReason(pool))
+  const addBlockingReasons = formatTextListAsItems(getPoolAddBlockedReason(pool))
+
+  const isRemoveLiquidityBlocked = shouldBlockRemoveLiquidity(pool)
+  const removeBlockingReasons = formatTextListAsItems(getPoolRemoveBlockedReason(pool))
 
   useLayoutEffect(() => {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
@@ -392,10 +406,10 @@ export default function PoolMyLiquidity() {
           <Divider />
           <HStack justifyContent="flex-start" mt="md" width="full">
             <Tooltip
-              isDisabled={!blockingReasons}
+              isDisabled={!addBlockingReasons}
               label={
                 <Text color="primaryTextColor" whiteSpace="pre-line">
-                  {blockingReasons}
+                  {addBlockingReasons}
                 </Text>
               }
             >
@@ -409,15 +423,24 @@ export default function PoolMyLiquidity() {
                 Add
               </Button>
             </Tooltip>
-            <Button
-              flex="1"
-              isDisabled={!hasUnstakedBalance || isManaged(pool.type)}
-              maxW="120px"
-              onClick={() => handleRemoveLiquidity()}
-              variant={hasUnstakedBalance ? 'tertiary' : 'disabled'}
+            <Tooltip
+              isDisabled={!removeBlockingReasons}
+              label={
+                <Text color="primaryTextColor" whiteSpace="pre-line">
+                  {removeBlockingReasons}
+                </Text>
+              }
             >
-              Remove
-            </Button>
+              <Button
+                flex="1"
+                isDisabled={isRemoveLiquidityBlocked}
+                maxW="120px"
+                onClick={() => handleRemoveLiquidity()}
+                variant={hasUnstakedBalance ? 'tertiary' : 'disabled'}
+              >
+                Remove
+              </Button>
+            </Tooltip>
             <Text opacity="0.25" px={{ base: '0', sm: 'ms' }} variant="secondary">
               |
             </Text>
@@ -427,15 +450,8 @@ export default function PoolMyLiquidity() {
               </Button>
             ) : (
               <>
-                <Button
-                  flex="1"
-                  isDisabled={!(canStake && hasUnstakedBalance)}
-                  maxW="120px"
-                  onClick={() => router.push(`${pathname}/stake`)}
-                  variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
-                >
-                  Stake
-                </Button>
+                <StakeButton pool={pool} />
+
                 {shouldMigrateStake(pool) ? (
                   <Tooltip label={migrateStakeTooltipLabel}>
                     <Button
@@ -465,5 +481,140 @@ export default function PoolMyLiquidity() {
         </VStack>
       </VStack>
     </Card>
+  )
+}
+
+type StakeButtonProps = {
+  pool: Pool
+}
+
+function StakeButton({ pool }: StakeButtonProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const auraDisclosure = useDisclosure()
+  const { veBalBoostMap } = useVebalBoost([pool])
+
+  const canStake = getCanStake(pool)
+  const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
+  const vebalBoost = veBalBoostMap[pool.address]
+  const [, balancerMaxApr] = getTotalApr(pool.dynamicData.aprItems, vebalBoost)
+
+  // hide popover on cow or networks where Aura is not deployed
+  const hidePopover = isCowAmm || !getNetworkConfig(pool.chain).hasAura
+
+  const stakeOnBalancer = () => router.push(`${pathname}/stake`)
+  const stakeOnAura = () => auraDisclosure.onOpen()
+
+  if (hidePopover) {
+    return (
+      <Button
+        flex="1"
+        isDisabled={!(canStake && hasUnstakedBalance)}
+        maxW="120px"
+        onClick={() => router.push(`${pathname}/stake`)}
+        variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
+      >
+        Stake
+      </Button>
+    )
+  }
+
+  // rn this is only used for Balancer
+  return (
+    <>
+      <Popover placement="top-start">
+        <PopoverTrigger>
+          <Button
+            flex="1"
+            isDisabled={!(canStake && hasUnstakedBalance)}
+            maxW="120px"
+            rightIcon={<ChevronUp size="16" />}
+            variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
+          >
+            Stake
+          </Button>
+        </PopoverTrigger>
+
+        <PopoverContent boxSize="44" height="max-content">
+          <PopoverHeader>
+            <Text color="font.secondary" fontSize="sm" fontWeight="bold">
+              Staking options
+            </Text>
+          </PopoverHeader>
+
+          <PopoverBody>
+            <VStack>
+              <StakingOption
+                apr={balancerMaxApr.toNumber()}
+                icon={<BalancerIconCircular />}
+                onClick={stakeOnBalancer}
+                title="Balancer"
+              />
+
+              <Divider />
+
+              <StakingOption
+                apr={pool.staking?.aura?.apr || 0}
+                icon={<ProtocolIcon protocol={Protocol.Aura} size={28} />}
+                onClick={stakeOnAura}
+                title="Aura"
+              />
+            </VStack>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+
+      <PartnerRedirectModal
+        isOpen={auraDisclosure.isOpen}
+        onClose={auraDisclosure.onClose}
+        partner={RedirectPartner.Aura}
+        redirectUrl={getAuraPoolLink(getChainId(pool.chain), pool.staking?.aura?.auraPoolId || '')}
+      />
+    </>
+  )
+}
+
+type StakingOptionProps = {
+  icon: ReactNode
+  title: string
+  apr: number
+  onClick(): void
+}
+
+function StakingOption({ icon, title, apr, onClick }: StakingOptionProps) {
+  return (
+    <Button
+      _hover={{ textDecoration: 'none' }}
+      data-group
+      isDisabled={!apr}
+      onClick={onClick}
+      px="xs"
+      variant="link"
+      width="40"
+    >
+      <HStack alignContent="start" w="full">
+        {icon}
+
+        <VStack gap="0">
+          <Text
+            _groupHover={{ color: 'font.highlight' }}
+            fontWeight="bold"
+            textAlign="left"
+            w="full"
+          >
+            {title}
+          </Text>
+          <Text
+            _groupHover={{ color: 'font.highlight' }}
+            color="font.secondary"
+            fontSize="sm"
+            textAlign="left"
+            w="full"
+          >
+            {apr ? `${fNum('apr', apr)} APR` : 'N/A'}
+          </Text>
+        </VStack>
+      </HStack>
+    </Button>
   )
 }

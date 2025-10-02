@@ -1,5 +1,3 @@
-'use client'
-
 import { useMemo, useState } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { createAvatar } from '@dicebear/core'
@@ -9,6 +7,7 @@ import { useTokens } from './TokensProvider'
 import { Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { SmartCircularImage } from '@repo/lib/shared/components/image/SmartCircularImage'
+import { getTokenColor } from '@repo/lib/styles/token-colors'
 
 type Props = {
   address?: Address | string
@@ -39,12 +38,18 @@ export function TokenIcon({
 
   const token = address && chain ? getToken(address, chain) : undefined
 
+  const tokenColor =
+    chain && address
+      ? { rowColor: [getTokenColor(chain, address as Address).from.replace('#', '')] }
+      : {}
+
   const fallbackSVG = createAvatar(identicon, {
     seed: address || 'unknown',
     backgroundColor: ['transparent'],
     radius: 50,
     backgroundType: ['solid'],
     scale: 80,
+    ...tokenColor,
   })
 
   function getIconSrc(): string | undefined {

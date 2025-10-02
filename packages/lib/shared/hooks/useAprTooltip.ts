@@ -70,19 +70,6 @@ export const TOTAL_APR_TYPES = [
   GqlPoolAprItemType.StakingBoost,
 ]
 
-function absMaxApr(aprItems: GqlPoolAprItem[], boost?: number) {
-  return aprItems
-    .filter(item => TOTAL_APR_TYPES.includes(item.type))
-    .reduce((acc, item) => {
-      const hasBoost = boost && boost > 1
-      if (hasBoost && item.type === GqlPoolAprItemType.Staking) {
-        return acc.plus(bn(item.apr).times(boost))
-      }
-
-      return acc.plus(bn(item.apr))
-    }, bn(0))
-}
-
 export function useAprTooltip({
   aprItems,
   numberFormatter,
@@ -169,12 +156,6 @@ export function useAprTooltip({
   const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
 
-  // Bal Reward
-  const balReward = aprItems.find(item => item.type === GqlPoolAprItemType.VebalEmissions)
-
-  const maxVeBal = hasVeBalBoost ? absMaxApr(aprItems, vebalBoost) : bn(0)
-  const maxVeBalDisplayed = numberFormatter(maxVeBal.toString())
-
   // maBEETS Rewards (Beets)
   const maBeetsReward = aprItems.find(item => item.type === GqlPoolAprItemType.MabeetsEmissions)
 
@@ -216,7 +197,11 @@ export function useAprTooltip({
     .reduce((acc, item) => acc.plus(item.apr), bn(0))
   const totalCombinedDisplayed = numberFormatter(totalCombined.toString())
 
-  const extraBalAprDisplayed = hasVeBalBoost ? maxVeBalDisplayed.minus(totalBaseDisplayed) : bn(0)
+  // Bal Reward
+  const balReward = aprItems.find(item => item.type === GqlPoolAprItemType.VebalEmissions)
+  const extraVeBALBoost = bn(balReward?.apr || 0).times(vebalBoost ? vebalBoost : 2.5)
+  const extraBalApr = bn(extraVeBALBoost).minus(balReward?.apr || 0)
+  const maxVeBal = totalBase.plus(extraBalApr)
 
   if (balReward) {
     stakingIncentivesDisplayed.push({
@@ -248,14 +233,13 @@ export function useAprTooltip({
 
   return {
     totalBaseDisplayed,
-    extraBalAprDisplayed,
+    extraBalApr,
     yieldBearingTokensAprDisplayed,
     stakingIncentivesAprDisplayed,
     swapFeesDisplayed,
     isSwapFeePresent,
     isYieldPresent,
     isStakingPresent,
-    maxVeBalDisplayed,
     yieldBearingTokensDisplayed,
     stakingIncentivesDisplayed,
     merklIncentivesAprDisplayed,

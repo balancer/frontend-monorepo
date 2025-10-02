@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test'
 import { TokenBalancesByChain, ForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'
-import { clickButton } from './user.helpers'
+import { clickButton, forceClickButton } from './user.helpers'
 
 declare global {
   interface Window {
@@ -12,7 +12,7 @@ export async function impersonate(page: Page, impersonationAddress: string) {
   await clickButton(page, 'Dev tools button')
   await page.getByLabel('Mock address').fill(impersonationAddress)
   await clickButton(page, 'Impersonate button')
-  await clickButton(page, 'Dev tools close button')
+  await forceClickButton(page, 'Dev tools close button')
 }
 
 /*

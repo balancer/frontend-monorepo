@@ -5,23 +5,29 @@ import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import {
   INITIAL_TOKEN_CONFIG,
   INITIAL_POOL_CREATION_FORM,
-  type PoolCreationForm,
-  type PoolCreationToken,
+  INITIAL_RECLAMM_CONFIG,
 } from './constants'
+import { PoolCreationForm, PoolCreationToken, ReClammConfig } from './types'
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
+import { PoolType } from '@balancer/sdk'
+import { invertNumber } from '@repo/lib/shared/utils/numbers'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 export function usePoolFormLogic() {
-  const [, setPoolAddress] = useLocalStorage<Address | undefined>(
+  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.PoolCreation.Address,
     undefined
   )
 
-  const { resetSteps } = usePoolCreationFormSteps()
+  const reClammConfigForm = usePersistentForm<ReClammConfig>(
+    LS_KEYS.PoolCreation.ReClammConfig,
+    INITIAL_RECLAMM_CONFIG,
+    { mode: 'all' }
+  )
 
   const poolCreationForm = usePersistentForm<PoolCreationForm>(
     LS_KEYS.PoolCreation.Form,
@@ -46,6 +52,11 @@ export function usePoolFormLogic() {
     amplificationParameter,
   } = poolCreationForm.watch()
 
+  const isReClamm = poolType === PoolType.ReClamm
+  const isStablePool = poolType === PoolType.Stable
+  const isStableSurgePool = poolType === PoolType.StableSurge
+  const isWeightedPool = poolType === PoolType.Weighted
+
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const newPoolTokens = [...poolTokens]
     newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
@@ -54,6 +65,14 @@ export function usePoolFormLogic() {
 
   const updatePoolTokens = (updates: PoolCreationToken[]) => {
     poolCreationForm.setValue('poolTokens', updates)
+  }
+
+  const invertReClammPriceParams = () => {
+    const { initialMinPrice, initialMaxPrice, initialTargetPrice } = reClammConfigForm.watch()
+    reClammConfigForm.setValue('initialMinPrice', invertNumber(initialMaxPrice))
+    reClammConfigForm.setValue('initialMaxPrice', invertNumber(initialMinPrice))
+    reClammConfigForm.setValue('initialTargetPrice', invertNumber(initialTargetPrice))
+    updatePoolTokens([...poolTokens].reverse())
   }
 
   const addPoolToken = () => {
@@ -68,14 +87,19 @@ export function usePoolFormLogic() {
     poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
 
+  const { resetSteps } = usePoolCreationFormSteps()
+
   const resetPoolCreationForm = () => {
     setPoolAddress(undefined)
     poolCreationForm.resetToInitial()
+    reClammConfigForm.resetToInitial()
     resetSteps()
   }
 
+  // TODO: return less stuff by using poolCreationForm.watch() in components
   return {
     poolCreationForm,
+    reClammConfigForm,
     isFormStateValid: poolCreationForm.formState.isValid,
     poolTokens,
     poolType,
@@ -91,11 +115,17 @@ export function usePoolFormLogic() {
     poolHooksContract,
     enableDonation,
     disableUnbalancedLiquidity,
+    isReClamm,
+    isStablePool,
+    isStableSurgePool,
+    isWeightedPool,
     updatePoolToken,
     updatePoolTokens,
     removePoolToken,
     addPoolToken,
     resetPoolCreationForm,
+    poolAddress,
+    invertReClammPriceParams,
   }
 }
 

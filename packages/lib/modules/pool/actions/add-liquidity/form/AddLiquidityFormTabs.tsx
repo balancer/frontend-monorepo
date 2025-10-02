@@ -175,7 +175,7 @@ export function AddLiquidityFormTabs({
 
   return (
     <VStack w="full">
-      <PoolWeightsInfo />
+      {!isDisabledProportionalTab && <PoolWeightsInfo />}
       <ButtonGroup
         currentOption={options[tabIndex]}
         groupId="add-liquidity"

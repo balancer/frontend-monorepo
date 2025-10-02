@@ -8,6 +8,7 @@ import {
   keccak256,
   pad,
   parseAbiParameters,
+  parseUnits,
   publicActions,
   testActions,
   TestClient,
@@ -15,13 +16,13 @@ import {
 } from 'viem'
 
 import { createConfig } from 'wagmi'
-import { getBalancerCustomSlot, getPackedBalanceCustomSlot } from './customSlots'
+import { getPackedBalanceCustomSlot } from './customSlots'
+import { TokenBalance } from '../utils/wagmi/fork-options'
 
 type WagmiConfig = ReturnType<typeof createConfig>
 type SetErcBalanceParameters = {
   address: Address
-  tokenAddress: Address
-  value: bigint
+  balance: TokenBalance
   wagmiConfig: WagmiConfig
   chainId: number
 }
@@ -42,38 +43,33 @@ export type SetBalanceMutation = ReturnType<typeof useSetErc20Balance>
  */
 export function useSetErc20Balance() {
   return useMutation({
-    async mutationFn({
-      tokenAddress,
-      address,
-      value,
-      wagmiConfig,
-      chainId,
-    }: SetErcBalanceParameters) {
-      // TODO: Cache client instance?
+    async mutationFn({ address, balance, wagmiConfig, chainId }: SetErcBalanceParameters) {
       const client = wagmiConfig
         .getClient({ chainId })
         .extend(() => ({ mode: 'anvil' }))
         .extend(publicActions)
         .extend(testActions({ mode: 'anvil' }))
 
-      // TODO: Compose storage slot manipulation into an action.
-      // See https://github.com/paradigmxyz/rivet/pull/50#discussion_r1322267280
-      let slotFound = false
-      let slotGuess = getBalancerCustomSlot(tokenAddress)
-      const customPackedSlot = getPackedBalanceCustomSlot(tokenAddress)
+      const value = parseUnits(balance.value, balance.decimals ?? 18)
 
       console.log('Setting balance for address', {
         address,
-        tokenAddress,
-        slotGuess,
+        tokenAddress: balance.tokenAddress,
+        slot: balance.slot,
+        value: balance.value,
         chainId,
       })
 
+      const customPackedSlot = getPackedBalanceCustomSlot(balance.tokenAddress)
       if (customPackedSlot) {
-        console.log('Using custom packed slot for ', { tokenAddress, customPackedSlot })
+        console.log('Using custom packed slot for ', {
+          tokenAddress: balance.tokenAddress,
+          customPackedSlot,
+        })
+
         await setPackedBalance({
           client,
-          tokenAddress,
+          tokenAddress: balance.tokenAddress,
           userAddress: address,
           value,
           storageSlot: customPackedSlot,
@@ -81,6 +77,8 @@ export function useSetErc20Balance() {
         return
       }
 
+      let slotFound = false
+      let slotGuess = balance.slot || 0n
       while (slotFound !== true) {
         // if mapping, use keccak256(abi.encode(address(key), uint(slot)));
         const encodedData = encodeAbiParameters(parseAbiParameters('address, uint'), [
@@ -89,20 +87,20 @@ export function useSetErc20Balance() {
         ])
 
         const oldSlotValue = await client.getStorageAt({
-          address: tokenAddress,
+          address: balance.tokenAddress,
           slot: keccak256(encodedData),
         })
 
         // user value might be something that might have collision (like 0)
         await client.setStorageAt({
-          address: tokenAddress,
+          address: balance.tokenAddress,
           index: keccak256(encodedData),
           value: pad(toHex(SLOT_VALUE_TO_CHECK)),
         })
 
         const newBalance = await client.readContract({
           abi: [balanceOfAbiItem],
-          address: tokenAddress,
+          address: balance.tokenAddress,
           functionName: 'balanceOf',
           args: [address],
         })
@@ -112,7 +110,7 @@ export function useSetErc20Balance() {
         if (guessIsCorrect) {
           slotFound = true
           await client.setStorageAt({
-            address: tokenAddress,
+            address: balance.tokenAddress,
             index: keccak256(encodedData),
             value: pad(toHex(value)),
           })
@@ -120,13 +118,13 @@ export function useSetErc20Balance() {
           // check for a rebasing token (stETH)
           // by setting storage value again with an offset
           await client.setStorageAt({
-            address: tokenAddress,
+            address: balance.tokenAddress,
             index: keccak256(encodedData),
             value: pad(toHex(SLOT_VALUE_TO_CHECK + 1n)),
           })
           const newBalanceAgain = await client.readContract({
             abi: [balanceOfAbiItem],
-            address: tokenAddress,
+            address: balance.tokenAddress,
             functionName: 'balanceOf',
             args: [address],
           })
@@ -135,7 +133,7 @@ export function useSetErc20Balance() {
           if (newBalanceAgain - newBalance === 1n) {
             slotFound = true
             await client.setStorageAt({
-              address: tokenAddress,
+              address: balance.tokenAddress,
               index: keccak256(encodedData),
               value: pad(toHex(value)),
             })
@@ -144,7 +142,7 @@ export function useSetErc20Balance() {
 
           // reset storage slot
           await client.setStorageAt({
-            address: tokenAddress,
+            address: balance.tokenAddress,
             index: keccak256(encodedData),
             value: oldSlotValue || pad('0x0'),
           })
@@ -152,7 +150,9 @@ export function useSetErc20Balance() {
           // loop
           slotGuess++
           if (slotGuess >= 10n) {
-            console.log('Could not find storage slot to set balance of token ', { tokenAddress })
+            console.log('Could not find storage slot to set balance of token ', {
+              tokenAddress: balance.tokenAddress,
+            })
             break
           }
         }

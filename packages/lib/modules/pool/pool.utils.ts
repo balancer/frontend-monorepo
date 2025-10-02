@@ -44,6 +44,7 @@ export enum ChainSlug {
   Fraxtal = 'fraxtal',
   Sonic = 'sonic',
   HyperEVM = 'hyperevm',
+  Plasma = 'plasma',
 }
 
 // Maps GraphQL chain enum to URL slug
@@ -62,6 +63,7 @@ export const chainToSlugMap: Partial<Record<GqlChainValues, ChainSlug>> = {
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
   [GqlChain.Sonic]: ChainSlug.Sonic,
   [GqlChain.Hyperevm]: ChainSlug.HyperEVM,
+  [GqlChain.Plasma]: ChainSlug.Plasma,
 }
 
 export function getChainSlug(chainSlug: ChainSlug): GqlChain {
@@ -144,8 +146,8 @@ export function getTotalApr(
       }
 
       if (item.type === GqlPoolAprItemType.VebalEmissions) {
+        // We don't add this to maxTotal as is already included on the staking boost
         minTotal = bn(item.apr).plus(minTotal)
-        maxTotal = bn(item.apr).plus(maxTotal)
         return
       }
 
@@ -192,9 +194,9 @@ export function getTotalAprRaw(aprItems: GqlPoolAprItem[], vebalBoost?: string):
 const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Weighted]: 'Weighted',
   [GqlPoolType.Element]: 'Element',
-  [GqlPoolType.Gyro]: 'Gyro 2-CLP',
-  [GqlPoolType.Gyro3]: 'Gyro 3-CLP',
-  [GqlPoolType.Gyroe]: 'Gyro E-CLP',
+  [GqlPoolType.Gyro]: '2-CLP',
+  [GqlPoolType.Gyro3]: '3-CLP',
+  [GqlPoolType.Gyroe]: 'E-CLP',
   [GqlPoolType.Investment]: 'Managed',
   [GqlPoolType.LiquidityBootstrapping]: 'LBP',
   [GqlPoolType.MetaStable]: 'Stable',

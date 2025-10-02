@@ -1,14 +1,10 @@
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
-import { bn, fNum, invert } from '@repo/lib/shared/utils/numbers'
-import { formatUnits } from 'viem'
-import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
-import { calculateLowerMargin, calculateUpperMargin, computeCenteredness } from './reclAmmMath'
+import { fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
-import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
-import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useColorMode } from '@chakra-ui/react'
+import type { ReclAmmChartData } from './useReclAmmChartData'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -25,16 +21,15 @@ function getGradientColor(colorStops: string[]) {
   }
 }
 
-const DEFAULT_PRICE_RATE = '1'
-
-export function useReclAmmChartLogic() {
+export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
   const { isMobile } = useBreakpoints()
-  const reclAmmData = useGetComputeReclAmmData()
   const [isReversed, setIsReversed] = useState(false)
   const [chartInstance, setChartInstance] = useState<any>(null)
   const selectColor = useSelectColor()
-  const { pool } = usePool()
   const { colorMode } = useColorMode()
+
+  const isLoading = !!chartData?.isLoading
+  const isPoolWithinTargetRange = !!chartData?.isPoolWithinTargetRange
 
   const secondaryFontColor = selectColor('font', 'secondary')
   const highlightFontColor = selectColor('font', 'highlight')
@@ -46,89 +41,28 @@ export function useReclAmmChartLogic() {
   }
 
   const tokens = useMemo(() => {
-    const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
+    const poolTokens = chartData?.poolTokens
+    if (!poolTokens) return ''
 
     return isReversed ? poolTokens.reverse().join(' / ') : poolTokens.join(' / ')
-  }, [pool, isReversed])
+  }, [chartData?.poolTokens, isReversed])
 
-  const currentChartData = useMemo(() => {
+  const options = useMemo(() => {
+    const data = (chartData || {}) as any
+    const { marginValue, isPoolWithinRange } = data
+
+    let { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue, currentPriceValue } =
+      data
+
     if (
-      !reclAmmData.priceRange ||
-      !reclAmmData.virtualBalances ||
-      !reclAmmData.virtualBalances.virtualBalanceA ||
-      !reclAmmData.virtualBalances.virtualBalanceB ||
-      !reclAmmData.centerednessMargin ||
-      !reclAmmData.liveBalances ||
-      !reclAmmData.liveBalances.liveBalanceA ||
-      !reclAmmData.liveBalances.liveBalanceB
+      chartData &&
+      maxPriceValue !== undefined &&
+      minPriceValue !== undefined &&
+      lowerMarginValue !== undefined &&
+      upperMarginValue !== undefined &&
+      currentPriceValue !== undefined &&
+      isReversed
     ) {
-      return {}
-    }
-
-    const balanceA = formatUnits(reclAmmData.liveBalances.liveBalanceA, 18)
-    const balanceB = formatUnits(reclAmmData.liveBalances.liveBalanceB, 18)
-    const margin = formatUnits(reclAmmData.centerednessMargin, 16)
-    const virtualBalanceA = formatUnits(reclAmmData.virtualBalances.virtualBalanceA, 18)
-    const virtualBalanceB = formatUnits(reclAmmData.virtualBalances.virtualBalanceB, 18)
-
-    const invariant = bn(bn(balanceA).plus(virtualBalanceA)).times(
-      bn(balanceB).plus(virtualBalanceB)
-    )
-
-    const rBalanceA = Number(balanceA)
-    const rBalanceB = Number(balanceB)
-    const vBalanceA = Number(virtualBalanceA)
-    const vBalanceB = Number(virtualBalanceB)
-    const marginValue = Number(margin)
-
-    const lowerMargin = calculateLowerMargin({
-      margin: marginValue,
-      invariant: invariant.toNumber(),
-      virtualBalanceA: vBalanceA,
-      virtualBalanceB: vBalanceB,
-    })
-
-    const upperMargin = calculateUpperMargin({
-      margin: marginValue,
-      invariant: invariant.toNumber(),
-      virtualBalanceA: vBalanceA,
-      virtualBalanceB: vBalanceB,
-    })
-
-    let minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
-    let maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
-
-    let lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
-    let upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
-
-    let currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
-      .div(bn(balanceA).plus(virtualBalanceA))
-      .toNumber()
-
-    // only scale back if token has rate but not an erc4626
-    const tokenA = pool.poolTokens[0]
-    const tokenB = pool.poolTokens[1]
-    const tokenAHasRate = tokenA.priceRate !== DEFAULT_PRICE_RATE
-    const tokenBHasRate = tokenB.priceRate !== DEFAULT_PRICE_RATE
-    const shouldScaleBackTokenA = tokenAHasRate && !tokenA.isErc4626
-    const shouldScaleBackTokenB = tokenBHasRate && !tokenB.isErc4626
-    const shouldScaleBackPrices = shouldScaleBackTokenA || shouldScaleBackTokenB
-
-    if (shouldScaleBackPrices) {
-      // to scale back we use price * tokenARate / tokenBRate
-      const tokenARate = shouldScaleBackTokenA ? tokenA.priceRate : DEFAULT_PRICE_RATE
-      const tokenBRate = shouldScaleBackTokenB ? tokenB.priceRate : DEFAULT_PRICE_RATE
-      const rateProviderScaleBackFactor = bn(tokenARate).div(tokenBRate)
-
-      minPriceValue = rateProviderScaleBackFactor.times(minPriceValue).toNumber()
-      maxPriceValue = rateProviderScaleBackFactor.times(maxPriceValue).toNumber()
-      lowerMarginValue = rateProviderScaleBackFactor.times(lowerMarginValue).toNumber()
-      upperMarginValue = rateProviderScaleBackFactor.times(upperMarginValue).toNumber()
-      currentPriceValue = rateProviderScaleBackFactor.times(currentPriceValue).toNumber()
-    }
-
-    if (isReversed) {
-      // Swap min/max and lower/upper
       const minPriceInverted = invert(maxPriceValue)
       const maxPriceInverted = invert(minPriceValue)
       const lowerMarginInverted = invert(upperMarginValue)
@@ -142,42 +76,10 @@ export function useReclAmmChartLogic() {
       currentPriceValue = currentPriceInverted
     }
 
-    const isPoolWithinRange =
-      (currentPriceValue > minPriceValue && currentPriceValue < lowerMarginValue) ||
-      (currentPriceValue > upperMarginValue && currentPriceValue < maxPriceValue)
+    const isPriceAdjusting = isPoolWithinRange && !isPoolWithinTargetRange
 
-    const { poolCenteredness, isPoolAboveCenter } = computeCenteredness({
-      balanceA: rBalanceA,
-      balanceB: rBalanceB,
-      virtualBalanceA: vBalanceA,
-      virtualBalanceB: vBalanceB,
-    })
-
-    return {
-      maxPriceValue,
-      minPriceValue,
-      lowerMarginValue,
-      upperMarginValue,
-      currentPriceValue,
-      isPoolWithinRange,
-      marginValue,
-      poolCenteredness,
-      isPoolAboveCenter,
-    }
-  }, [reclAmmData])
-
-  const options = useMemo(() => {
-    const {
-      maxPriceValue,
-      minPriceValue,
-      lowerMarginValue,
-      upperMarginValue,
-      currentPriceValue,
-      marginValue, // is a true percentage
-      isPoolWithinRange,
-    } = currentChartData
-
-    const isPriceAdjusting = isPoolWithinRange && !reclAmmData.isPoolWithinTargetRange
+    const isLowMarginValue = marginValue && marginValue < 26
+    const needsMobileStyles = isMobile || isLowMarginValue
 
     let showTargetValues = true
     let showMinMaxValues = true
@@ -191,7 +93,7 @@ export function useReclAmmChartLogic() {
 
     // if the margin is very small or very big, show only the target values or min/max values depending on the pool state
     if (marginValue && marginValue < 4) {
-      if (reclAmmData.isPoolWithinTargetRange) {
+      if (isPoolWithinTargetRange) {
         showTargetValues = true
         showMinMaxValues = false
       } else if (isPoolWithinRange) {
@@ -210,7 +112,7 @@ export function useReclAmmChartLogic() {
     // for some reason the number of orange (or green) bars matters to echarts in the grid
     const gridBottomDesktop = baseOrangeBarCount % 2 === 0 ? '19.5%' : '1%'
     const gridBottomMobile =
-      baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '24.5%' : '16%'
+      baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '28%' : '16%'
 
     const isDarkMode = colorMode === 'dark'
 
@@ -259,7 +161,7 @@ export function useReclAmmChartLogic() {
 
     // Calculate which bar the current price corresponds to
     const getCurrentPriceBarIndex = () => {
-      const { poolCenteredness = 0, isPoolAboveCenter = false } = currentChartData || {}
+      const { poolCenteredness = 0, isPoolAboveCenter = false } = chartData || {}
 
       const totalGreenAndOrangeBars = 2 * baseOrangeBarCount + baseGreenBarCount
       let barIndex = 0
@@ -411,7 +313,7 @@ export function useReclAmmChartLogic() {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
-        bottom: isMobile ? gridBottomMobile : gridBottomDesktop,
+        bottom: needsMobileStyles ? gridBottomMobile : gridBottomDesktop,
         containLabel: true,
       },
       xAxis: {
@@ -426,7 +328,7 @@ export function useReclAmmChartLogic() {
           interval: 0,
           formatter: (value: string, index: number) => {
             if (showMinMaxValues && index === baseGreyBarCount) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('tokenRatio', minPriceValue) : 'N/A'}}`
+              return `{${needsMobileStyles ? 'triangleMobile' : 'triangle'}|▲}\n{${needsMobileStyles ? 'labelTextMobile' : 'labelText'}|Min price}\n{${needsMobileStyles ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('tokenRatio', minPriceValue) : 'N/A'}}`
             }
 
             if (showTargetValues && index === baseGreyBarCount + baseOrangeBarCount) {
@@ -438,7 +340,7 @@ export function useReclAmmChartLogic() {
             }
 
             if (showMinMaxValues && index === totalBars - baseGreyBarCount) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('tokenRatio', maxPriceValue) : 'N/A'}}`
+              return `{${needsMobileStyles ? 'triangleMobile' : 'triangle'}|▲}\n{${needsMobileStyles ? 'labelTextMobile' : 'labelText'}|Max price}\n{${needsMobileStyles ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('tokenRatio', maxPriceValue) : 'N/A'}}`
             }
 
             return ''
@@ -516,7 +418,7 @@ export function useReclAmmChartLogic() {
         },
       ],
     }
-  }, [currentChartData])
+  }, [chartData, isReversed])
 
   const outOfRangeText =
     'The price has moved outside the range, so Liquidity Providers are not currently earning swap fees. The reCLAMM pool is automatically readjusting to center liquidity around the current price to maximize swap fees. '
@@ -772,21 +674,26 @@ export function useReclAmmChartLogic() {
 
   return {
     options,
-    hasChartData: !!currentChartData,
-    isLoading: reclAmmData.isLoading,
-    isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
+    hasChartData: !!chartData,
+    isLoading,
+    isPoolWithinTargetRange,
     toggleIsReversed,
     outOfRangeText,
     inRangeText,
     inRangeReadjustingText,
-    isPoolWithinRange: currentChartData.isPoolWithinRange,
+    isPoolWithinRange: chartData?.isPoolWithinRange,
     tokens,
     setChartInstance,
   }
 }
 
-export function ReclAmmChartProvider({ children }: PropsWithChildren) {
-  const hook = useReclAmmChartLogic()
+export function ReclAmmChartProvider({
+  children,
+  chartData,
+}: PropsWithChildren<{
+  chartData: ReclAmmChartData | undefined
+}>) {
+  const hook = useReclAmmChartLogic(chartData)
   return <ReclAmmChartContext.Provider value={hook}>{children}</ReclAmmChartContext.Provider>
 }
 

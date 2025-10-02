@@ -67,6 +67,10 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       id: stakeStepId,
       stepType: 'stakingDeposit',
       labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+      },
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
       onActivated: () => setIsStakeEnabled(true),

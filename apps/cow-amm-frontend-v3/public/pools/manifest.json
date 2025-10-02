@@ -1,0 +1,16 @@
+{
+  "short_name": "Balancer",
+  "name": "Balancer",
+  "description": "Balancer is a battle-tested toolkit for true AMM experimentation and innovation.",
+  "icons": [
+    {
+      "src": "/balancer.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/pools",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

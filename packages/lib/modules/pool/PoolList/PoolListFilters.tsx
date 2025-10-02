@@ -49,7 +49,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
-import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isCowAmm, isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
@@ -218,14 +218,21 @@ export function PoolNetworkFilters({
 }: PoolNetworkFiltersArgs) {
   const { supportedNetworks } = PROJECT_CONFIG
 
-  // Sort networks alphabetically after mainnet
-  const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()]
+  // const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()] // Alphabetical order after Mainnet
+  const sortedNetworks = supportedNetworks
 
   const networkOptions = sortedNetworks.map(network => ({
     label: getChainShortName(network),
     value: network,
+    icon: (
+      <Box rounded="full" shadow="md">
+        <Image alt={network} height="16" src={`/images/chains/${network}.svg`} width="16" />
+      </Box>
+    ),
     selectedLabel: (
-      <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
+      <Box rounded="full" shadow="md">
+        <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
+      </Box>
     ),
   }))
 
@@ -560,7 +567,7 @@ export function PoolListFilters() {
                           toggleNetwork={toggleNetwork}
                         />
                       </Box>
-                      {!isCowPath && (
+                      {!isCowAmm && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
                           <Heading as="h3" mb="sm" size="sm">
                             Protocol version
@@ -589,18 +596,22 @@ export function PoolListFilters() {
                           />
                         </Box>
                       )}
-                      <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" mb="sm" size="sm">
-                          Pool categories
-                        </Heading>
-                        <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
-                      </Box>
-                      <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" mb="sm" size="sm">
-                          Hooks
-                        </Heading>
-                        <PoolHookFilters />
-                      </Box>
+                      {!isCowAmm && (
+                        <Box as={motion.div} variants={staggeredFadeInUp}>
+                          <Heading as="h3" mb="sm" size="sm">
+                            Pool categories
+                          </Heading>
+                          <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
+                        </Box>
+                      )}
+                      {!isCowAmm && (
+                        <Box as={motion.div} variants={staggeredFadeInUp}>
+                          <Heading as="h3" mb="sm" size="sm">
+                            Hooks
+                          </Heading>
+                          <PoolHookFilters />
+                        </Box>
+                      )}
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
                       </Box>

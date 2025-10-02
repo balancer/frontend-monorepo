@@ -151,9 +151,13 @@ const getDefaultPoolActivityChartOptions = (
                   }; display:flex;justify-content:start;align-items:center;gap:6px; margin-bottom:${
                     index === tokens.length - 1 ? `4px` : `-20px`
                   }">
-                    <img src="${
+                    ${
                       token.token?.logoURI
-                    }" style="width: 16px; height: 16px; border-radius: 50%; margin-right;letter-spacing:-0.1px" />
+                        ? `<img src="${
+                            token.token?.logoURI
+                          }" style="width: 16px; height: 16px; border-radius: 50%; margin-right;letter-spacing:-0.1px" />`
+                        : ``
+                    }
                     <div style="text-align:left">
                       <span>${Number(Number(token.amount).toFixed(2)).toLocaleString()}</span>
                       <span>${token.token?.symbol}</span>

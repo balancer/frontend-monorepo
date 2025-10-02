@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react'
-import { hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
+import { hasSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { isPoolSurgingError } from '../../utils/error-filters'
 import { ensureError } from '../../utils/errors'
@@ -32,7 +32,7 @@ export function RemoveSimulationError({
     goToProportionalRemoves()
   }
 
-  if (isPoolSurgingError(error.message, hasStableSurgeHook(pool))) {
+  if (isPoolSurgingError(error.message, hasSurgeHook(pool))) {
     const errorTitle = 'Pool is surging'
     const errorMessage =
       'Single token removes are disabled when a pool with stable surge hook is surging.'

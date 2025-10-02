@@ -6,9 +6,9 @@ import { Protocol } from '../../protocols/useProtocols'
 import { isBoosted } from '../pool.helpers'
 import Image from 'next/image'
 import { PoolListItem } from '../pool.types'
-import { Erc4626Metadata } from '../metadata/getErc4626Metadata'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
+import { formatStringsToSentenceList } from '../usePoolTokenPriceWarnings'
 
 type PoolTypeTagProps = {
   pool: Pool | PoolListItem
@@ -32,37 +32,21 @@ const tagWrapperProps = {
 
 function TagWrapper({ children, ...rest }: { children: React.ReactNode } & ChakraProps) {
   return (
-    <Box {...tagWrapperProps} {...rest}>
+    <Box {...tagWrapperProps} {...rest} cursor="default">
       <HStack>{children}</HStack>
     </Box>
   )
 }
 
-function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Metadata[]) {
-  const { tags, type } = pool
-  const textProps = { fontSize: 'sm', variant: 'secondary' }
+const TEXT_PROPS = { fontSize: 'sm', variant: 'secondary' }
 
-  if (isBoosted(pool) && erc4626Metadata.length) {
-    return (
-      <TagWrapper>
-        {erc4626Metadata.map(metadata => (
-          <Image
-            alt={metadata.name}
-            height={20}
-            key={metadata.name}
-            src={metadata.iconUrl || ''}
-            width={20}
-          />
-        ))}
-        <Text {...textProps}>Boosted</Text>
-      </TagWrapper>
-    )
-  }
+function getPoolTypeLabel(pool: Pool | PoolListItem) {
+  const { tags, type } = pool
 
   if (tags?.includes('VE8020')) {
     return (
       <TagWrapper pl="6px">
-        <Text {...textProps}>ve8020 weighted</Text>
+        <Text {...TEXT_PROPS}>ve8020 weighted</Text>
       </TagWrapper>
     )
   }
@@ -72,14 +56,14 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
       return (
         <TagWrapper pl="6px">
           <ProtocolIcon protocol={Protocol.CowAmm} />
-          <Text {...textProps}>Weighted</Text>
+          <Text {...TEXT_PROPS}>Weighted</Text>
         </TagWrapper>
       )
 
     case GqlPoolType.Weighted:
       return (
         <TagWrapper pl="6px">
-          <Text {...textProps}>Weighted</Text>
+          <Text {...TEXT_PROPS}>Weighted</Text>
         </TagWrapper>
       )
 
@@ -89,7 +73,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
     case GqlPoolType.MetaStable:
       return (
         <TagWrapper pl="8px">
-          <Text {...textProps}>Stable</Text>
+          <Text {...TEXT_PROPS}>Stable</Text>
         </TagWrapper>
       )
 
@@ -97,14 +81,14 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Xave} />
-          <Text {...textProps}>FX</Text>
+          <Text {...TEXT_PROPS}>FX</Text>
         </TagWrapper>
       )
 
     case GqlPoolType.LiquidityBootstrapping:
       return (
         <TagWrapper pl="6px">
-          <Text {...textProps}>LBP</Text>
+          <Text {...TEXT_PROPS}>LBP</Text>
         </TagWrapper>
       )
 
@@ -112,7 +96,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Gyro} />
-          <Text {...textProps}>2-CLP</Text>
+          <Text {...TEXT_PROPS}>2-CLP</Text>
         </TagWrapper>
       )
 
@@ -120,7 +104,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Gyro} />
-          <Text {...textProps}>3-CLP</Text>
+          <Text {...TEXT_PROPS}>3-CLP</Text>
         </TagWrapper>
       )
 
@@ -128,7 +112,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
       return (
         <TagWrapper>
           <ProtocolIcon protocol={Protocol.Gyro} />
-          <Text {...textProps}>E-CLP</Text>
+          <Text {...TEXT_PROPS}>E-CLP</Text>
         </TagWrapper>
       )
 
@@ -142,7 +126,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
         >
           <Box {...tagWrapperProps}>
             <ProtocolIcon protocol={Protocol.QuantAmm} />
-            <Text {...textProps}>BTF</Text>
+            <Text {...TEXT_PROPS}>BTF</Text>
           </Box>
         </CustomPopover>
       )
@@ -150,7 +134,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
     case GqlPoolType.Reclamm:
       return (
         <TagWrapper pl="8px">
-          <Text {...textProps}>reCLAMM</Text>
+          <Text {...TEXT_PROPS}>reCLAMM</Text>
         </TagWrapper>
       )
 
@@ -162,6 +146,45 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
 export function PoolTypeTag({ pool }: PoolTypeTagProps) {
   const { getErc4626Metadata } = usePoolsMetadata()
   const erc4626Metadata = getErc4626Metadata(pool)
+  const boostedTooltipLabel = [...erc4626Metadata.map(m => m.name)].join(' & ')
 
-  return getPoolTypeLabel(pool, erc4626Metadata)
+  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
+  const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
+  const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${
+    protocolNames.length === 1 ? 'that protocol' : 'those protocols'
+  }. This results in continuous appreciation of the pool's total value over time.`
+
+  return (
+    <HStack>
+      {getPoolTypeLabel(pool)}
+
+      {isBoosted(pool) && erc4626Metadata.length && (
+        <CustomPopover
+          bodyText={boostedWarningMsg}
+          headerText={boostedTooltipLabel}
+          trigger="hover"
+          useIsOpen
+        >
+          {({ isOpen }) => (
+            <TagWrapper borderColor={isOpen ? 'font.highlight' : 'border.base'}>
+              <HStack gap="xs">
+                {erc4626Metadata.map(metadata => (
+                  <Image
+                    alt={metadata.name}
+                    height={20}
+                    key={metadata.name}
+                    src={metadata.iconUrl || ''}
+                    width={20}
+                  />
+                ))}
+              </HStack>
+              <Text {...TEXT_PROPS} color={isOpen ? 'font.highlight' : 'font.secondary'}>
+                Boosted
+              </Text>
+            </TagWrapper>
+          )}
+        </CustomPopover>
+      )}
+    </HStack>
+  )
 }

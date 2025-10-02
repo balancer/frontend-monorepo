@@ -15,6 +15,7 @@ export type StepProps = {
   colorMode: ColorMode
   isLastStep: boolean
   isTxBatch?: boolean
+  lastTransactionConfirmed?: boolean
 }
 
 /*

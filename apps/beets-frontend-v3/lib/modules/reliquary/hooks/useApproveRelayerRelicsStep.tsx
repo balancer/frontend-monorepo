@@ -18,7 +18,7 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
   step: TransactionStep
 } {
   const { userAddress, isConnected } = useUserAccount()
-  const [, setTransaction] = useState<ManagedResult | undefined>()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const config = getNetworkConfig(chainId)
 
@@ -55,6 +55,7 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
     isComplete: () => isConnected && hasApprovedRelayerForAllRelics,
     renderAction: () => <ManagedTransactionButton id={approveRelayerRelicsStepId} {...props} />,
     onSuccess: () => refetch(),
+    transaction,
   }
 
   return {

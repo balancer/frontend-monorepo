@@ -13,7 +13,7 @@ import {
   HookFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, isTooSmallToRemoveUsd } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
@@ -21,7 +21,11 @@ import { BPT_DECIMALS } from './pool.constants'
 import { isNotMainnet } from '../chains/chain.utils'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
-import { getUserTotalBalanceInt } from './user-balance.helpers'
+import {
+  getUserTotalBalanceInt,
+  getUserWalletBalance,
+  getUserWalletBalanceUsd,
+} from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
@@ -31,6 +35,7 @@ import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 import { PoolMetadata } from './metadata/getPoolsMetadata'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /**
  * METHODS
@@ -105,6 +110,10 @@ export function isV3LBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
 
 export function isWeighted(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.Weighted
+}
+
+export function isWeightedV1(pool: Pool): boolean {
+  return pool.version === 1 && isWeighted(pool.type)
 }
 
 export function isManaged(poolType: GqlPoolType): boolean {
@@ -302,8 +311,9 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
-export function hasStableSurgeHook(pool: Pool): boolean {
+export function hasSurgeHook(pool: Pool): boolean {
   return hasHookType(pool, GqlHookType.StableSurge)
+  // TODO: add more surge hook types
 }
 
 export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
@@ -334,23 +344,26 @@ export function shouldBlockAddLiquidity(pool: Pool, metadata?: PoolMetadata) {
 export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): string[] {
   // we allow the metadata to override the default behavior
   if (metadata?.allowAddLiquidity === true) return []
-
   if (pool.chain === GqlChain.Sepolia) return []
 
   const reasons: string[] = []
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) reasons.push('Adds are blocked for all V3 pools')
-
   if (isLBP(pool.type)) reasons.push('LBP pool')
-  if (isManaged(pool.type)) reasons.push('Managed pools are not compatible')
+  if (isManaged(pool.type)) reasons.push('Managed pools are not supported. Seek help in Discord.')
   if (pool.dynamicData.isPaused) reasons.push('Paused pool')
   if (pool.dynamicData.isInRecoveryMode) reasons.push('Pool in recovery')
 
   // reason for blocking in custom scenarios eg. maBEETS
   if (isMaBeetsPool(pool.id)) reasons.push('Please manage your liquidity on the maBEETS page')
 
-  if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
+  if (isNotSupported(pool)) {
+    reasons.push(
+      `This pool type is not currently supported in the ${PROJECT_CONFIG.projectName} UI`
+    )
+  }
 
+  if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
   if (pool.hook?.reviewData?.summary === 'unsafe') reasons.push('Unsafe hook')
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
@@ -383,6 +396,26 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
       }
     }
   }
+
+  return reasons
+}
+
+export function shouldBlockRemoveLiquidity(pool: Pool) {
+  const reasons = getPoolRemoveBlockedReason(pool)
+  return reasons.length > 0
+}
+
+export function getPoolRemoveBlockedReason(pool: Pool): string[] {
+  if (pool.chain === GqlChain.Sepolia) return []
+
+  const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
+  const hasTooSmallBalance = isTooSmallToRemoveUsd(getUserWalletBalanceUsd(pool))
+
+  const reasons: string[] = []
+
+  if (isManaged(pool.type)) reasons.push('Managed pools are not supported. Seek help in Discord.')
+  if (!hasUnstakedBalance) reasons.push("You don't have any unstaked balance to remove")
+  if (hasTooSmallBalance) reasons.push('Your balance is too small to remove')
 
   return reasons
 }

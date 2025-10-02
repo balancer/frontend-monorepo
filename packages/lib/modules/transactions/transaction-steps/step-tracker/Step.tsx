@@ -5,28 +5,43 @@ import {
   HStack,
   Text,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import { StepProps, getStepSettings } from './getStepSettings'
-import { Check } from 'react-feather'
+import { ArrowUpRight, Check } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
 import { indexToLetter } from '@repo/lib/shared/labels'
 import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
+import { useTransactionGasCost } from '../useTransactionGasCost'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { getGqlChain } from '@repo/lib/config/app.config'
+import { SMALL_AMOUNT_LABEL } from '@repo/lib/shared/utils/numbers'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
+  const step = props.step
   const { color, isActive, title } = getStepSettings(props, transaction)
+  const variant = isActive && !props.lastTransactionConfirmed ? 'special' : 'secondary'
 
   const shouldDisplayAsTxBatch =
     props.isTxBatch && props.step.isBatchEnd && hasSomePendingNestedTxInBatch(props.step)
 
   return (
-    <HStack alignItems="flex-start">
+    <HStack alignItems="center">
       <StepIndicator transaction={transaction} {...props} />
       <VStack alignItems="start" spacing="0">
-        <Text color={color} fontWeight="bold" mt={isActive ? -0.3 : 0}>
+        <Text fontWeight="bold" lineHeight="1.2" mt={isActive ? -0.3 : 0} variant={variant}>
           {shouldDisplayAsTxBatch ? 'Safe transaction bundle' : title}
         </Text>
-        {!shouldDisplayAsTxBatch && <NestedInfo color={color} details={props.step.details} />}
+        {!shouldDisplayAsTxBatch && (
+          <NestedInfo
+            color={color}
+            details={props.step.details}
+            step={step}
+            transaction={transaction}
+            variant={variant}
+          />
+        )}
         {shouldDisplayAsTxBatch && (
           <TransactionBatchSteps
             color={color}
@@ -80,19 +95,65 @@ export function StepIndicator({
   )
 }
 
-function NestedInfo({ color, details }: { color: string; details?: StepDetails }) {
+function NestedInfo({
+  color,
+  details,
+  transaction,
+  variant,
+  step,
+}: {
+  color: string
+  details?: StepDetails
+  transaction?: ManagedResult
+  variant?: string
+  step: TransactionStep
+}) {
+  const gasCostData = useTransactionGasCost(transaction)
+
+  const isSmallAmount = gasCostData && gasCostData.costUsd?.replace('$', '') === SMALL_AMOUNT_LABEL
+
+  const textProps = {
+    fontSize: 'sm',
+    lineHeight: '1.2',
+    variant,
+  }
+
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
-      <Text color={color} fontSize="sm" lineHeight="1">
-        {details?.type || (details?.gasless ? 'Free signature' : 'Gas transaction')}
-      </Text>
+      <HStack align="start" gap="xxs">
+        {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
+          <Text {...textProps}>
+            {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
+            {(!isSmallAmount || !gasCostData.isActual) && '~'}
+            {gasCostData.costUsd}
+          </Text>
+        ) : step.isComplete() ? (
+          <Text {...textProps}>Previously approved</Text>
+        ) : (
+          <Text {...textProps}>
+            {details?.type || (details?.gasless ? 'Signature: Free' : 'Gas transaction')}
+          </Text>
+        )}
+        {transaction?.result.data && (
+          <Link
+            color="font.secondary"
+            href={getBlockExplorerTxUrl(
+              transaction?.result?.data?.transactionHash,
+              getGqlChain(transaction?.result?.data?.chainId)
+            )}
+            isExternal
+          >
+            <ArrowUpRight size={14} />
+          </Link>
+        )}
+      </HStack>
 
       {details?.batchApprovalTokens &&
         details.batchApprovalTokens.length > 1 &&
         details.batchApprovalTokens.map((token, index) => (
           <HStack key={token} mt={index === 0 ? '2' : '1'}>
             <SubStepIndicator color={color} label={indexToLetter(index)} />
-            <Text color={color} fontSize="sm">
+            <Text fontSize="sm" variant={variant}>
               {token}
             </Text>
           </HStack>

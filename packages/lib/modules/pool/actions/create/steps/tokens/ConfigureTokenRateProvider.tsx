@@ -1,10 +1,7 @@
 import { Text, HStack, VStack, RadioGroup, Stack, Radio, InputGroup } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import {
-  RATE_PROVIDER_RADIO_OPTIONS,
-  RateProviderOption,
-  type PoolCreationForm,
-} from '../../constants'
+import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
+import { PoolCreationForm } from '../../types'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { Address, parseAbi, zeroAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
@@ -36,10 +33,12 @@ export function ConfigureTokenRateProvider({
   const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
 
   let rateProviderRadioValue = RateProviderOption.Null
-  if (currentRateProvider === verifiedRateProviderAddress)
+  if (currentRateProvider === verifiedRateProviderAddress) {
     rateProviderRadioValue = RateProviderOption.Verified
-  if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProviderAddress)
+  }
+  if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProviderAddress) {
     rateProviderRadioValue = RateProviderOption.Custom
+  }
 
   const handleRateProviderOptionChange = (value: RateProviderOption) => {
     let rateProvider: Address | '' = zeroAddress

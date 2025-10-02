@@ -35,7 +35,6 @@ import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filter
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
-import { useProportionalSlippage } from './form/useProportionalSlippage'
 
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -56,17 +55,12 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
     - the user selected the proportional tab
   */
   const [wantsProportional, setWantsProportional] = useState(requiresProportionalInput(pool))
-  const { proportionalSlippage, setProportionalSlippage } = useProportionalSlippage({
-    pool,
-    clearAmountsIn,
-    wantsProportional,
-  })
 
   const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
 
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
-  const { slippage: userSlippage } = useUserSettings()
+  const { slippage } = useUserSettings()
 
   const handler = useMemo(
     () => selectAddLiquidityHandler(pool, wantsProportional),
@@ -81,7 +75,6 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
-  const slippage = wantsProportional ? proportionalSlippage : userSlippage
 
   // Actionable tokens selected in the add form
   const tokens = getPoolActionableTokens(pool, wrapUnderlying)
@@ -256,7 +249,6 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
     wantsProportional,
     referenceAmountAddress,
     setWantsProportional,
-    setProportionalSlippage,
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,

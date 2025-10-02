@@ -19,7 +19,6 @@ import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/review/ReviewStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
-import { LbpDeleteAndRestartModal } from './LbpDeleteAndRestartModal'
 
 export function LbpForm() {
   const { steps, activeStepIndex, activeStep } = useLbpForm()
@@ -58,7 +57,6 @@ export function LbpForm() {
         {activeStep.id === 'step2' && <ProjectInfoStep />}
         {activeStep.id === 'step3' && <ReviewStep />}
       </VStack>
-      <LbpDeleteAndRestartModal />
     </VStack>
   )
 }
