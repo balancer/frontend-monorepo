@@ -206,7 +206,7 @@ export function usePoolAlerts(pool: Pool) {
 
           if (!hasReviewedRateProvider(nestedToken)) {
             alerts.push({
-              identifier: `NestedPriceProviderNotReviewed-${nestedToken.symbol}`,
+              identifier: `NestedRateProviderNotReviewed-${nestedToken.symbol}`,
               content: `The rate provider for ${nestedToken.symbol} in a nested pool has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,
@@ -218,7 +218,7 @@ export function usePoolAlerts(pool: Pool) {
             nestedToken.priceRateProviderData?.summary !== 'safe'
           ) {
             alerts.push({
-              identifier: `UnsafeNestedPriceProvider-${nestedToken.symbol}`,
+              identifier: `UnsafeNestedRateProvider-${nestedToken.symbol}`,
               content: `The rate provider for ${nestedToken.symbol} in a nested pool has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,
