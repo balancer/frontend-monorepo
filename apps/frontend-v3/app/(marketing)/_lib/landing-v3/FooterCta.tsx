@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Center, HStack, VStack, Link } from '@chakra-ui/react'
+import { Box, Text, Button, Center, HStack, VStack, Link } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
@@ -44,34 +44,34 @@ export function FooterCta() {
 
   return (
     <Noise position="relative">
-      <Box minH="700px" position="absolute" w="full">
+      <Box minH="800px" position="absolute" w="full">
         <Box
           bottom={0}
           display={{ base: 'none', xl: 'block' }}
-          h="700px"
+          h="800px"
           left={0}
           position="absolute"
           top={0}
           w="100vw"
         >
           <RadialPattern
-            circleCount={8}
+            circleCount={6}
             height={600}
             innerHeight={150}
             innerWidth={500}
             padding="15px"
             position="absolute"
             progress={patternProgress}
-            right={{ base: -700, lg: -700, xl: -600, '2xl': -400 }}
+            right={{ base: -700, lg: -700, xl: -600, '2xl': -480 }}
             top="calc(50% - 300px)"
             width={1000}
           />
           <RadialPattern
-            circleCount={8}
+            circleCount={6}
             height={600}
             innerHeight={150}
             innerWidth={500}
-            left={{ base: -700, lg: -700, xl: -600, '2xl': -400 }}
+            left={{ base: -700, lg: -700, xl: -600, '2xl': -480 }}
             padding="15px"
             position="absolute"
             progress={patternProgress}
@@ -80,19 +80,19 @@ export function FooterCta() {
           />
         </Box>
       </Box>
-      <Center minH="700px" position="relative">
+      <Center minH="800px" position="relative">
         <RadialPattern
-          circleCount={8}
-          height={600}
+          circleCount={7}
+          height={700}
           innerHeight={150}
           innerWidth={150}
-          left="calc(50% - 300px)"
+          left="calc(50% - 350px)"
           position="absolute"
           progress={patternProgress}
-          top="calc(50% - 300px)"
-          width={600}
+          top="calc(50% - 350px)"
+          width={700}
         ></RadialPattern>
-        <VStack position="relative" pt="md" spacing="xl">
+        <VStack position="relative" pt="md" spacing="lg">
           <WordsPullUp
             as="h2"
             color="font.primary"
@@ -101,8 +101,15 @@ export function FooterCta() {
             letterSpacing="-0.04rem"
             lineHeight={1}
             pr={{ base: 0.8, lg: 0.9 }}
-            text="Ready to build on Balancer?"
+            text="Build on Balancer"
           />
+          <Box>
+            <Text color="font.secondary" textAlign="center" w="38ch">
+              Launch faster with the most extensive DeFi toolkit made for creating AMMs / liquidity
+              pools. Get day-1 swap volume via Balancer’s aggregator integrations and incentive
+              system.
+            </Text>
+          </Box>
           <HStack justifyContent="center" ref={ref} spacing="md">
             <MotionButton
               animate={shouldAnimate ? { opacity: 1 } : {}}
