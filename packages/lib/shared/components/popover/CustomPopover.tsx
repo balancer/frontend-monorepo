@@ -37,24 +37,26 @@ export function CustomPopover({
     <PopoverContent maxW="300px" p="sm" w="auto">
       {showArrow && <PopoverArrow bg="background.level3" />}
       {headerText && (
-        <PopoverHeader>
-          <Text color="font.primary" fontWeight="bold" size="md">
+        <PopoverHeader marginInline="0" p="0">
+          <Text color="font.primary" fontWeight="bold" pb="sm" size="md">
             {headerText}
           </Text>
         </PopoverHeader>
       )}
       {bodyText && (
-        <PopoverBody>
-          <Text fontSize="sm" variant="secondary">
+        <PopoverBody p="0">
+          <Text fontSize="sm" pt="sm" variant="secondary">
             {bodyText}
           </Text>
         </PopoverBody>
       )}
       {footerUrl && (
-        <PopoverFooter>
+        <PopoverFooter p="0">
           <Link href={footerUrl} isExternal variant="link">
             <HStack gap="xxs">
-              <Text color="link">Learn more</Text>
+              <Text color="link" fontSize="sm">
+                Learn more
+              </Text>
               <ArrowUpRight size={12} />
             </HStack>
           </Link>

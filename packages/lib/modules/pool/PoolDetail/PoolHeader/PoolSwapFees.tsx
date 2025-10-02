@@ -55,7 +55,7 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
   return (
     <CustomPopover
       bodyText={getBodyText(isDynamicSwapFee, pool.swapFeeManager, feeManager, isV3)}
-      headerText={`${feeTypeText} fee percentage`}
+      headerText={`${feeTypeText} fee percentage: ${fNum('feePercent', pool.dynamicData.swapFee, { hideSmallPercentage: false })}`}
       trigger="hover"
       useIsOpen
     >
@@ -65,6 +65,7 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
           background="background.level2"
           border="1px solid"
           borderColor={isOpen ? 'font.highlight' : 'border.base'}
+          cursor="default"
           display="flex"
           fontWeight="normal"
           h={{ base: '28px' }}

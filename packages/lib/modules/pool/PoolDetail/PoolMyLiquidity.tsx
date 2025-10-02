@@ -522,7 +522,7 @@ function StakeButton({ pool }: StakeButtonProps) {
   // rn this is only used for Balancer
   return (
     <>
-      <Popover placement="top">
+      <Popover placement="top-start">
         <PopoverTrigger>
           <Button
             flex="1"
@@ -537,7 +537,7 @@ function StakeButton({ pool }: StakeButtonProps) {
 
         <PopoverContent boxSize="44" height="max-content">
           <PopoverHeader>
-            <Text color="font.secondary" fontWeight="bold">
+            <Text color="font.secondary" fontSize="sm" fontWeight="bold">
               Staking options
             </Text>
           </PopoverHeader>
@@ -555,7 +555,7 @@ function StakeButton({ pool }: StakeButtonProps) {
 
               <StakingOption
                 apr={pool.staking?.aura?.apr || 0}
-                icon={<ProtocolIcon height="28" protocol={Protocol.Aura} width="28" />}
+                icon={<ProtocolIcon protocol={Protocol.Aura} size={28} />}
                 onClick={stakeOnAura}
                 title="Aura"
               />
@@ -583,15 +583,34 @@ type StakingOptionProps = {
 
 function StakingOption({ icon, title, apr, onClick }: StakingOptionProps) {
   return (
-    <Button isDisabled={!apr} onClick={onClick} variant="ghost" width="40">
-      <HStack w="full">
+    <Button
+      _hover={{ textDecoration: 'none' }}
+      data-group
+      isDisabled={!apr}
+      onClick={onClick}
+      px="xs"
+      variant="link"
+      width="40"
+    >
+      <HStack alignContent="start" w="full">
         {icon}
 
-        <VStack spacing="0.5">
-          <Text fontWeight="bold" textAlign="left" w="full">
+        <VStack gap="0">
+          <Text
+            _groupHover={{ color: 'font.highlight' }}
+            fontWeight="bold"
+            textAlign="left"
+            w="full"
+          >
             {title}
           </Text>
-          <Text color="font.secondary" textAlign="left" w="full">
+          <Text
+            _groupHover={{ color: 'font.highlight' }}
+            color="font.secondary"
+            fontSize="sm"
+            textAlign="left"
+            w="full"
+          >
             {apr ? `${fNum('apr', apr)} APR` : 'N/A'}
           </Text>
         </VStack>

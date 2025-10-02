@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { PoolListItem } from '../pool.types'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
+import { formatStringsToSentenceList } from '../usePoolTokenPriceWarnings'
 
 type PoolTypeTagProps = {
   pool: Pool | PoolListItem
@@ -31,7 +32,7 @@ const tagWrapperProps = {
 
 function TagWrapper({ children, ...rest }: { children: React.ReactNode } & ChakraProps) {
   return (
-    <Box {...tagWrapperProps} {...rest}>
+    <Box {...tagWrapperProps} {...rest} cursor="default">
       <HStack>{children}</HStack>
     </Box>
   )
@@ -145,24 +146,44 @@ function getPoolTypeLabel(pool: Pool | PoolListItem) {
 export function PoolTypeTag({ pool }: PoolTypeTagProps) {
   const { getErc4626Metadata } = usePoolsMetadata()
   const erc4626Metadata = getErc4626Metadata(pool)
+  const boostedTooltipLabel = [...erc4626Metadata.map(m => m.name)].join(' & ')
+
+  const protocolNames = erc4626Metadata.map(metadata => metadata.name.split(' ')[0])
+  const formattedProtocolNames = formatStringsToSentenceList(protocolNames)
+  const boostedWarningMsg = `This Boosted pool uses wrapped ${formattedProtocolNames} tokens to generate yield from lending on ${
+    protocolNames.length === 1 ? 'that protocol' : 'those protocols'
+  }. This results in continuous appreciation of the pool's total value over time.`
 
   return (
     <HStack>
       {getPoolTypeLabel(pool)}
 
       {isBoosted(pool) && erc4626Metadata.length && (
-        <TagWrapper>
-          {erc4626Metadata.map(metadata => (
-            <Image
-              alt={metadata.name}
-              height={20}
-              key={metadata.name}
-              src={metadata.iconUrl || ''}
-              width={20}
-            />
-          ))}
-          <Text {...TEXT_PROPS}>Boosted</Text>
-        </TagWrapper>
+        <CustomPopover
+          bodyText={boostedWarningMsg}
+          headerText={boostedTooltipLabel}
+          trigger="hover"
+          useIsOpen
+        >
+          {({ isOpen }) => (
+            <TagWrapper borderColor={isOpen ? 'font.highlight' : 'border.base'}>
+              <HStack gap="xs">
+                {erc4626Metadata.map(metadata => (
+                  <Image
+                    alt={metadata.name}
+                    height={20}
+                    key={metadata.name}
+                    src={metadata.iconUrl || ''}
+                    width={20}
+                  />
+                ))}
+              </HStack>
+              <Text {...TEXT_PROPS} color={isOpen ? 'font.highlight' : 'font.secondary'}>
+                Boosted
+              </Text>
+            </TagWrapper>
+          )}
+        </CustomPopover>
       )}
     </HStack>
   )
