@@ -12,10 +12,10 @@ type Props = {
 }
 
 export function UnderlyingLiqudityOperationWarning({ amounts, validTokens, operation }: Props) {
-  const humanUnderlyingAmounts = amounts.filter(humanAmount =>
+  const humanUnderlyingAmounts = amounts.filter(amount =>
     validTokens.some(
       token =>
-        token.address === humanAmount.tokenAddress &&
+        token.address === amount.tokenAddress &&
         token.wrappedToken &&
         token.useUnderlyingForAddRemove
     )
@@ -33,13 +33,12 @@ export function UnderlyingLiqudityOperationWarning({ amounts, validTokens, opera
       } else {
         const underlyingToken = validTokens.find(validToken => tokenAddress === validToken.address)
         const { maxWithdraw: maxAmount, symbol: amountSymbol, wrappedToken } = underlyingToken ?? {}
-        console.log('maxAmount', maxAmount)
         const { symbol: vaultSymbol } = wrappedToken ?? {}
         if (!maxAmount || !bn(humanAmount).gt(bn(maxAmount))) return null
         return { amountSymbol, vaultSymbol, maxAmount }
       }
     })
-    .filter((data): data is NonNullable<typeof data> => data !== null)
+    .filter(error => error !== null)
 
   return errors.length > 0
     ? errors.map(({ amountSymbol, maxAmount, vaultSymbol }, idx) => (
