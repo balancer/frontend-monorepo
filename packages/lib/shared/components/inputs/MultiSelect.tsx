@@ -55,14 +55,29 @@ export function MultiSelect<Value = string>({
         <Button h="auto" py="sm" ref={ref} variant="tertiary" w="full" {...buttonProps}>
           <HStack justify="space-between" w="full">
             {hasSelectedOptions ? (
-              <HStack spacing="xs" wrap="wrap">
-                {selectedOptions.map(option =>
-                  option.selectedLabel ? (
-                    <Box key={`selected-option-label-${option.value}`}>{option.selectedLabel}</Box>
-                  ) : (
-                    <Tag key={`selected-label-${option.value}`}>{option.label}</Tag>
-                  )
-                )}
+              <HStack overflow="hidden" spacing="6px" w="full">
+                <HStack spacing="xs">
+                  {selectedOptions.map(option =>
+                    option.selectedLabel ? (
+                      <Box key={`selected-option-label-${option.value}`}>
+                        {option.selectedLabel}
+                      </Box>
+                    ) : (
+                      <Tag key={`selected-label-${option.value}`}>{option.label}</Tag>
+                    )
+                  )}
+                </HStack>
+                <Text
+                  fontSize="sm"
+                  fontWeight="medium"
+                  isTruncated
+                  noOfLines={1}
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                >
+                  {selectedOptions.map(option => option.label).join(', ')}
+                </Text>
               </HStack>
             ) : (
               <Box fontWeight="medium">{label}</Box>
