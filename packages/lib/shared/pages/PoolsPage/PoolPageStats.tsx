@@ -14,6 +14,7 @@ import { bn, safeToNumber } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { AnimatedNumber } from '../../components/other/AnimatedNumber'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { TooltipWithTouch } from '../../components/tooltips/TooltipWithTouch'
 
 type Fee = {
   label: string
@@ -67,29 +68,45 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
       flexWrap="wrap"
       gap={{ base: 'sm', lg: 'ms' }}
       mt="3"
-      pr="md"
+      pr={{ base: 'md', md: '0' }}
       w={{ base: 'full', sm: 'auto' }}
     >
       <Box flex="1">
-        <Stat
-          label="TVL"
-          value={
-            <AnimatedNumber
-              value={safeToNumber(protocolData?.protocolMetricsAggregated.totalLiquidity)}
-            />
-          }
-        />
+        <TooltipWithTouch
+          bg="background.level0"
+          fontSize="12px"
+          label="Total Value Locked on Balancer v2, v3, and CoW AMM across Ethereum and all supported networks."
+          placement="top"
+        >
+          <Stat
+            label="TVL"
+            popover
+            value={
+              <AnimatedNumber
+                value={safeToNumber(protocolData?.protocolMetricsAggregated.totalLiquidity)}
+              />
+            }
+          />
+        </TooltipWithTouch>
       </Box>
       <Box flex="1">
-        <Stat
-          imageTransform="rotate(180deg)"
-          label="Volume (24h)"
-          value={
-            <AnimatedNumber
-              value={safeToNumber(protocolData?.protocolMetricsAggregated.swapVolume24h)}
-            />
-          }
-        />
+        <TooltipWithTouch
+          bg="background.level0"
+          fontSize="12px"
+          label="Total 24h trading volume on Balancer v2, v3, and CoW AMM across Ethereum and all supported networks."
+          placement="top"
+        >
+          <Stat
+            imageTransform="rotate(180deg)"
+            label="Volume (24h)"
+            popover
+            value={
+              <AnimatedNumber
+                value={safeToNumber(protocolData?.protocolMetricsAggregated.swapVolume24h)}
+              />
+            }
+          />
+        </TooltipWithTouch>
       </Box>
       <Box flex={{ base: '1', sm: '1' }}>
         <Popover
@@ -110,6 +127,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
           </PopoverTrigger>
           <PopoverContent
             bg="background.level0"
+            border="none"
             borderRadius="md"
             minW="200px"
             p={2}
