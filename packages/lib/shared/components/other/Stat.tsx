@@ -58,6 +58,7 @@ function Stat({
       </Box>
       <Box p="2">
         <Text
+          cursor="default"
           fontSize="xs"
           mb="1.5"
           position="relative"

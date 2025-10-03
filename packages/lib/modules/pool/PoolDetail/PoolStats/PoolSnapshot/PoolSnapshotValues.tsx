@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { HStack, Heading, Skeleton, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -43,15 +43,16 @@ export function PoolSnapshotValues() {
       }
     : undefined
 
-  const incomeLabel = isCowAmmPool(pool.type) ? 'Surplus (24h)' : 'Fees (24h)'
+  const incomeLabel = isCowAmmPool(pool.type) ? 'Surplus (24h)' : 'Swap fees (24h)'
 
   return (
     <>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            TVL
-          </Text>
+          <LabelWithTooltip
+            label="TVL"
+            tooltip="The Total Value Locked (TVL) of the pool. This is the sum of the value of all the assets in the pool."
+          />
           {isLoadingPool && !Number(tvl) ? ( // Only show loading state when we have no TVL
             <Skeleton height="28px" w="100px" />
           ) : (
@@ -66,7 +67,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label="Swap vol (24h)"
-            tooltip="The swap volume routing through this pool over the last 24 hours. Unlike the daily chart, which tracks volume since the last UTC midnight, this number always reflects a full 24 hour period."
+            tooltip="The swap volume routing through this pool over the last 24 hours from this UI and and aggregator partners (like CowSwap). Unlike the daily chart, which tracks volume since the last UTC midnight, this number always reflects a full 24 hour period."
           />
           {poolStatsValues ? (
             <Heading size="h4">{poolStatsValues.volume24h}</Heading>
@@ -77,9 +78,10 @@ export function PoolSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            APR for LPs
-          </Text>
+          <LabelWithTooltip
+            label="APR for LPs"
+            tooltip="The APR for Liquidity Providers (LPs) based on the last 24h performance of the pool. It includes yield from various sources, including swap fees, staking incentives, yield-bearing tokens and Merkl incentives. APR ranges are display for pools eligible for veBAL incentives. The lower range is the minimum range for people who don't stake or have no veBAL. The maximim rate is for veBAL holders with the max 2.5x veBAL boost."
+          />
           <MemoizedMainAprTooltip
             aprItems={pool.dynamicData.aprItems}
             chain={pool.chain}
@@ -96,9 +98,11 @@ export function PoolSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            {incomeLabel}
-          </Text>
+          <LabelWithTooltip
+            label={incomeLabel}
+            tooltip="The swap fees from trades routed through this pool over the last 24 hours from this UI and aggregator partners (like CowSwap). Unlike the daily fee chart, which tracks swap fees since the last UTC midnight, this number always reflects a full 24 hour period."
+          />
+
           {poolStatsValues ? (
             <Heading size="h4">{poolStatsValues.income24h}</Heading>
           ) : (

@@ -5,6 +5,7 @@ import {
   Divider,
   HStack,
   Button,
+  Heading,
   Text,
   Icon,
   Portal,
@@ -17,6 +18,7 @@ import StarsIcon from '../../icons/StarsIcon'
 
 interface Props {
   auraApr: number
+  textProps?: { fontWeight?: string }
 }
 
 const basePopoverAprItemProps = {
@@ -29,7 +31,7 @@ const basePopoverAprItemProps = {
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 
-function AuraAprTooltip({ auraApr }: Props) {
+function AuraAprTooltip({ auraApr, textProps }: Props) {
   const usedDisplayValueFormatter = defaultDisplayValueFormatter
 
   const auraGradFrom = useColorModeValue(
@@ -72,15 +74,20 @@ function AuraAprTooltip({ auraApr }: Props) {
         <>
           <PopoverTrigger>
             <HStack align="center" alignItems="center">
-              <Button _focus={{ outline: 'none' }} px="0" variant="unstyled">
+              <Button _focus={{ outline: 'none' }} h="30px" px="0" variant="unstyled">
                 <HStack
                   // _hover={{ color: hoverColor }}
                   color="font.primary"
+                  gap="xs"
                   opacity={1}
                 >
-                  <Text color="font.primary" textAlign="right">
-                    {usedDisplayValueFormatter(bn(auraApr))}
-                  </Text>
+                  {textProps ? (
+                    <Text {...textProps}>{usedDisplayValueFormatter(bn(auraApr))}</Text>
+                  ) : (
+                    <Heading cursor="pointer" size="h4">
+                      {usedDisplayValueFormatter(bn(auraApr))}
+                    </Heading>
+                  )}
                   <Icon
                     as={StarsIcon}
                     gradFrom={isOpen ? 'green' : auraGradFrom}

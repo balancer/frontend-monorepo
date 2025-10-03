@@ -26,7 +26,7 @@ import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
-import { getNestedPoolPath } from '../../pool/pool.utils'
+import { getNestedPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
 import { ApiToken, CustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 import { AlertTriangle } from 'react-feather'
@@ -298,40 +298,48 @@ export default function TokenRow({
                           </PopoverTrigger>
                           <PopoverContent maxW="300px" p="sm" w="auto">
                             <Text fontSize="sm" variant="secondary">
-                              The target weight percentage set for this token in the context of a
-                              Weighted Pool.
+                              The target weight percentage set for this token in the context of a{' '}
+                              {pool ? getPoolTypeLabel(pool.type) : 'this'} pool.
                             </Text>
                           </PopoverContent>
                         </Popover>
                       </>
                     ) : (
                       <>
-                        <Flex alignItems="center" height="24px">
-                          <Text
-                            fontSize="sm"
-                            fontWeight="medium"
-                            position="relative"
-                            top="1px"
-                            variant="secondary"
-                          >
-                            N/A
-                          </Text>
-                        </Flex>
                         <Popover trigger="hover">
                           <PopoverTrigger>
-                            <Box
-                              _hover={{ opacity: 1 }}
-                              opacity="0.5"
-                              position="relative"
-                              top="1px"
-                              transition="opacity 0.2s var(--ease-out-cubic)"
-                            >
-                              <BullseyeIcon />
-                            </Box>
+                            <HStack cursor="default" data-group>
+                              <Flex alignItems="center" height="24px">
+                                <Text
+                                  _groupHover={{ color: 'font.maxContrast' }}
+                                  fontSize="sm"
+                                  fontWeight="medium"
+                                  position="relative"
+                                  top="1px"
+                                  transition="color 0.2s var(--ease-out-cubic)"
+                                  variant="secondary"
+                                >
+                                  N/A
+                                </Text>
+                              </Flex>
+
+                              <Box
+                                _groupHover={{ color: 'font.highlight' }}
+                                _hover={{ opacity: 1 }}
+                                opacity="0.5"
+                                position="relative"
+                                top="1px"
+                                transition="opacity 0.2s var(--ease-out-cubic)"
+                              >
+                                <BullseyeIcon />
+                              </Box>
+                            </HStack>
                           </PopoverTrigger>
                           <PopoverContent p="sm">
                             <Text fontSize="sm" variant="secondary">
-                              Target weights are only applicable to tokens within Weighted Pools.
+                              There is no concept of a target weight for tokens within{' '}
+                              {pool ? getPoolTypeLabel(pool.type) : 'this'} pools. Target weights
+                              only apply to tokens within Weighted pools.
                             </Text>
                           </PopoverContent>
                         </Popover>

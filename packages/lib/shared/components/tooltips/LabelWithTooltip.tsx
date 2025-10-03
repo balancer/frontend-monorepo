@@ -21,9 +21,10 @@ export function LabelWithTooltip({ label, tooltip, ...rest }: LabelWithTooltipPr
           borderBottom: '1.5px dotted',
           borderColor: 'border.base',
         }}
+        cursor="default"
         fontSize="sm"
         fontWeight="semibold"
-        mb="xs"
+        mb="xxs"
         mt="xxs"
         position="relative"
         variant="secondary"
