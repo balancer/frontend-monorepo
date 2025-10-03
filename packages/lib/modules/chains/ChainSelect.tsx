@@ -35,8 +35,8 @@ function DropdownIndicator({
 
   return (
     <chakraComponents.DropdownIndicator {...props}>
-      <HStack pr="ms">
-        <Center bg="background.level4" h="24px" rounded="full" shadow="sm" w="24px">
+      <HStack position="relative" right="12px">
+        <Center bg="background.level4" h="24px" rounded="full" w="24px">
           <Box color={hasBalance ? 'font.secondary' : 'font.warning'}>
             <GasIcon size={14} />
           </Box>
@@ -51,15 +51,10 @@ function DropdownIndicator({
 function SingleValue({ ...props }: SingleValueProps<SelectOption, false, GroupBase<SelectOption>>) {
   return (
     <chakraComponents.SingleValue {...props}>
-      <HStack align="center" gap="xxs">
+      <HStack align="center" gap="sm">
         <NetworkIcon chain={props.data.value} size={5} />
         <Text>{getChainShortName(props.data.value)}</Text>
-        <NativeTokenBalance
-          chain={props.data.value}
-          color="font.secondary"
-          fontSize="xs"
-          pr="1.5"
-        />
+        <NativeTokenBalance chain={props.data.value} color="font.secondary" fontSize="xs" pr="3" />
       </HStack>
     </chakraComponents.SingleValue>
   )
