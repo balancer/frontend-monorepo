@@ -11,9 +11,30 @@ import { getGqlChain } from '@repo/lib/config/app.config'
 
 interface NativeTokenBalanceProps extends Omit<React.ComponentProps<typeof Text>, 'children'> {
   chain: GqlChain
+  applyOpacity?: boolean
 }
 
-export function NativeTokenBalance({ chain, ...props }: NativeTokenBalanceProps) {
+export function useHasNativeBalance(chain: GqlChain) {
+  const { userAddress, isConnected } = useUserAccount()
+  const networkConfig = getNetworkConfig(chain)
+
+  const { data: balance } = useBalance({
+    chainId: networkConfig.chainId,
+    address: userAddress,
+    query: {
+      enabled: isConnected,
+      staleTime: 30_000,
+    },
+  })
+
+  if (!isConnected) {
+    return true // Default to true when not connected (neutral state)
+  }
+
+  return balance && !bn(balance.value).isZero()
+}
+
+export function NativeTokenBalance({ chain, applyOpacity, ...props }: NativeTokenBalanceProps) {
   const { userAddress, chainId, isConnected } = useUserAccount()
   const nativeAsset = getNativeAsset(chain)
   const networkConfig = getNetworkConfig(chain)
@@ -28,17 +49,21 @@ export function NativeTokenBalance({ chain, ...props }: NativeTokenBalanceProps)
     },
   })
 
-  if (!balance || bn(balance.value).isZero()) {
+  if (!isConnected) {
     return null
   }
 
-  const formattedBalance = fNum('token', formatUnits(balance.value, nativeAsset.decimals))
+  const hasBalance = balance && !bn(balance.value).isZero()
+  const formattedBalance = hasBalance
+    ? fNum('token', formatUnits(balance.value, nativeAsset.decimals))
+    : '–'
 
   return (
     <Text
       color={connectedChain && connectedChain === chain ? 'font.primary' : 'font.secondary'}
       fontSize="sm"
       ml="auto"
+      opacity={applyOpacity ? (hasBalance ? 1 : 0.5) : 1}
       {...props}
     >
       {formattedBalance} {nativeAsset.symbol}
