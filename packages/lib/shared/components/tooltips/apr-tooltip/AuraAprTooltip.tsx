@@ -6,6 +6,7 @@ import {
   HStack,
   Button,
   Heading,
+  Text,
   Icon,
   Portal,
   useColorModeValue,
@@ -17,6 +18,7 @@ import StarsIcon from '../../icons/StarsIcon'
 
 interface Props {
   auraApr: number
+  textProps?: { fontWeight?: string }
 }
 
 const basePopoverAprItemProps = {
@@ -29,7 +31,7 @@ const basePopoverAprItemProps = {
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 
-function AuraAprTooltip({ auraApr }: Props) {
+function AuraAprTooltip({ auraApr, textProps }: Props) {
   const usedDisplayValueFormatter = defaultDisplayValueFormatter
 
   const auraGradFrom = useColorModeValue(
@@ -79,9 +81,13 @@ function AuraAprTooltip({ auraApr }: Props) {
                   gap="xs"
                   opacity={1}
                 >
-                  <Heading cursor="pointer" size="h4">
-                    {usedDisplayValueFormatter(bn(auraApr))}
-                  </Heading>
+                  {textProps ? (
+                    <Text {...textProps}>{usedDisplayValueFormatter(bn(auraApr))}</Text>
+                  ) : (
+                    <Heading cursor="pointer" size="h4">
+                      {usedDisplayValueFormatter(bn(auraApr))}
+                    </Heading>
+                  )}
                   <Icon
                     as={StarsIcon}
                     gradFrom={isOpen ? 'green' : auraGradFrom}

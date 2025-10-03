@@ -110,7 +110,10 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             <GridItem justifySelf="end" px="sm">
               {pool.poolType === ExpandedPoolType.StakedAura ? (
                 pool.staking?.aura?.apr ? (
-                  <AuraAprTooltip auraApr={pool.staking?.aura?.apr} />
+                  <AuraAprTooltip
+                    auraApr={pool.staking?.aura?.apr}
+                    textProps={{ fontWeight: 'medium' }}
+                  />
                 ) : (
                   ' - '
                 )
