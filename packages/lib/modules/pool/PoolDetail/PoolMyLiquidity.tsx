@@ -523,45 +523,63 @@ function StakeButton({ pool }: StakeButtonProps) {
   return (
     <>
       <Popover placement="top-start">
-        <PopoverTrigger>
-          <Button
-            flex="1"
-            isDisabled={!(canStake && hasUnstakedBalance)}
-            maxW="120px"
-            rightIcon={<ChevronUp size="16" />}
-            variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
-          >
-            Stake
-          </Button>
-        </PopoverTrigger>
+        {({ isOpen }) => (
+          <>
+            <PopoverTrigger>
+              <Button
+                flex="1"
+                isDisabled={!(canStake && hasUnstakedBalance)}
+                maxW="120px"
+                position="relative"
+                px="md"
+                rightIcon={canStake && hasUnstakedBalance ? <ChevronUp size="16" /> : undefined}
+                sx={{
+                  '& .chakra-button__icon': {
+                    position: 'absolute',
+                    right: '8px',
+                    marginInlineStart: '0',
+                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.2s var(--ease-out-cubic)',
+                  },
+                }}
+                variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
+                w="full"
+              >
+                <span style={{ marginLeft: canStake && hasUnstakedBalance ? '-12px' : '0' }}>
+                  Stake
+                </span>
+              </Button>
+            </PopoverTrigger>
 
-        <PopoverContent boxSize="44" height="max-content">
-          <PopoverHeader>
-            <Text color="font.secondary" fontSize="sm" fontWeight="bold">
-              Staking options
-            </Text>
-          </PopoverHeader>
+            <PopoverContent boxSize="44" height="max-content">
+              <PopoverHeader>
+                <Text color="font.secondary" fontSize="sm" fontWeight="bold">
+                  Staking options
+                </Text>
+              </PopoverHeader>
 
-          <PopoverBody>
-            <VStack>
-              <StakingOption
-                apr={balancerMaxApr.toNumber()}
-                icon={<BalancerIconCircular />}
-                onClick={stakeOnBalancer}
-                title="Balancer"
-              />
+              <PopoverBody>
+                <VStack>
+                  <StakingOption
+                    apr={balancerMaxApr.toNumber()}
+                    icon={<BalancerIconCircular />}
+                    onClick={stakeOnBalancer}
+                    title="Balancer"
+                  />
 
-              <Divider />
+                  <Divider />
 
-              <StakingOption
-                apr={pool.staking?.aura?.apr || 0}
-                icon={<ProtocolIcon protocol={Protocol.Aura} size={28} />}
-                onClick={stakeOnAura}
-                title="Aura"
-              />
-            </VStack>
-          </PopoverBody>
-        </PopoverContent>
+                  <StakingOption
+                    apr={pool.staking?.aura?.apr || 0}
+                    icon={<ProtocolIcon protocol={Protocol.Aura} size={28} />}
+                    onClick={stakeOnAura}
+                    title="Aura"
+                  />
+                </VStack>
+              </PopoverBody>
+            </PopoverContent>
+          </>
+        )}
       </Popover>
 
       <PartnerRedirectModal
