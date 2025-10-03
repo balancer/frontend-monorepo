@@ -49,6 +49,7 @@ export type PoolCreationForm = {
   disableUnbalancedLiquidity: boolean
   hasAcceptedTokenWeightsRisk: boolean
   hasAcceptedPoolCreationRisk: boolean
+  hasAcceptedSimilarPoolsWarning: boolean
 }
 
 export type ReClammConfig = {

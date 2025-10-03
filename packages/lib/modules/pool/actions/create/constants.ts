@@ -101,6 +101,7 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   disableUnbalancedLiquidity: false,
   hasAcceptedTokenWeightsRisk: false,
   hasAcceptedPoolCreationRisk: false,
+  hasAcceptedSimilarPoolsWarning: false,
 }
 
 export const INITIAL_RECLAMM_CONFIG: ReClammConfig = {

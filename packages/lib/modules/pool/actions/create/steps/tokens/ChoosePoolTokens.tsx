@@ -77,6 +77,7 @@ export function ChoosePoolTokens() {
     })
 
     setSelectedTokenIndex(null)
+    poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
     if (isReClamm) reClammConfigForm.resetToInitial()
   }
 
