@@ -24,7 +24,6 @@ export function useCheckForSimilarPools() {
     },
     skip: !network || !poolType || !poolTokens?.every(token => token.address),
   })
-  console.log({ data })
 
   const similarPools = data?.pools.filter(pool => {
     const sameNumberOfTokens = pool.poolTokens.length === poolTokens.length
