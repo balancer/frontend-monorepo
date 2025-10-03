@@ -72,7 +72,12 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
       w={{ base: 'full', sm: 'auto' }}
     >
       <Box flex="1">
-        <TooltipWithTouch label="Total Value Locked on Balancer v2, v3, and CoW AMM across Ethereum and all supported networks.">
+        <TooltipWithTouch
+          bg="background.level0"
+          fontSize="13px"
+          label="Total Value Locked on Balancer v2, v3, and CoW AMM across Ethereum and all supported networks."
+          placement="top"
+        >
           <Stat
             label="TVL"
             popover
@@ -86,9 +91,10 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
       </Box>
       <Box flex="1">
         <TooltipWithTouch
-          bg="background.level0 !important"
-          fontSize="12px"
+          bg="background.level0"
+          fontSize="13px"
           label="Total 24h trading volume on Balancer v2, v3, and CoW AMM across Ethereum and all supported networks."
+          placement="top"
         >
           <Stat
             imageTransform="rotate(180deg)"
@@ -121,6 +127,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
           </PopoverTrigger>
           <PopoverContent
             bg="background.level0"
+            border="none"
             borderRadius="md"
             minW="200px"
             p={2}

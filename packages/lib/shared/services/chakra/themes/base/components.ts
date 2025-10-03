@@ -230,6 +230,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         letterSpacing: '-0.25px',
         lineHeight: 'short',
         p: 'sm',
+        textWrap: 'pretty',
       },
     },
     FormLabel: {
@@ -772,6 +773,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             color: 'grayText',
             fontWeight: 'bold',
             shadow: '3xl',
+            textWrap: 'pretty',
           },
           body: {
             background: 'background.level2',
