@@ -1,7 +1,7 @@
 import { InputAmount, InitPoolInputV3, PoolType } from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { ApiToken, CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { WeightedPoolStructure } from './constants'
 
@@ -29,7 +29,7 @@ export type PoolCreationToken = {
   paysYieldFees: boolean
   weight?: string
   amount: string
-  data?: ApiToken
+  data?: ApiToken | CustomToken
 }
 
 export type PoolCreationForm = {
