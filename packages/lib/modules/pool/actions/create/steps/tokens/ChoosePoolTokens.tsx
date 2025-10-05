@@ -3,7 +3,7 @@ import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInp
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { ApiToken, CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
@@ -64,16 +64,20 @@ export function ChoosePoolTokens() {
       : undefined
   }
 
-  function handleTokenSelect(tokenData: ApiToken) {
-    if (!tokenData || selectedTokenIndex === null) return
+  function handleTokenSelect(tokenMetadata: ApiToken | CustomToken) {
+    if (!tokenMetadata || selectedTokenIndex === null) return
 
-    const verifiedRateProviderAddress = getVerifiedRateProviderAddress(tokenData)
+    let rateProvider: Address = zeroAddress
+
+    if ('priceRateProviderData' in tokenMetadata) {
+      rateProvider = getVerifiedRateProviderAddress(tokenMetadata) ?? zeroAddress
+    }
 
     updatePoolToken(selectedTokenIndex, {
-      address: tokenData.address as Address,
-      rateProvider: verifiedRateProviderAddress ? verifiedRateProviderAddress : zeroAddress, // default to using rate provider if exists in our DB
-      data: tokenData,
-      paysYieldFees: !!verifiedRateProviderAddress, // defaults to true if rate provider exists in our DB
+      address: tokenMetadata.address as Address,
+      rateProvider,
+      data: tokenMetadata,
+      paysYieldFees: rateProvider !== zeroAddress,
     })
 
     setSelectedTokenIndex(null)
@@ -181,6 +185,7 @@ export function ChoosePoolTokens() {
       <TokenSelectModal
         chain={network}
         currentToken={currentTokenAddress}
+        enableUnknownToken
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}

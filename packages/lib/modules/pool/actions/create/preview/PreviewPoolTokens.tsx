@@ -89,26 +89,29 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
           const { data } = token
           if (!data) return null
 
-          const { address, chain, symbol, priceRateProviderData } = data
-          const { reviewed, address: verifiedRateProviderAddress } = priceRateProviderData || {}
-          const chosenRateProviderAddress = token.rateProvider
-
-          const rateProviderHasBeenReviewed =
-            reviewed &&
-            verifiedRateProviderAddress?.toLowerCase() === chosenRateProviderAddress.toLowerCase()
+          const hasBeenReviewed = !!(
+            'priceRateProviderData' in data &&
+            data.priceRateProviderData &&
+            data.priceRateProviderData.reviewed &&
+            data.priceRateProviderData.address?.toLowerCase() === token.rateProvider.toLowerCase()
+          )
 
           return (
             <CardDataRow
               data={[
-                <IdentifyTokenCell address={address} chain={chain} symbol={symbol} />,
-                <RateProviderReviewedCell hasBeenReviewed={rateProviderHasBeenReviewed} />,
+                <IdentifyTokenCell
+                  address={data.address}
+                  chain={data.chain}
+                  symbol={data.symbol}
+                />,
+                <RateProviderReviewedCell hasBeenReviewed={hasBeenReviewed} />,
                 <BlockExplorerLink
-                  address={chosenRateProviderAddress || undefined}
-                  chain={chain}
+                  address={token.rateProvider || undefined}
+                  chain={data.chain}
                   fontSize="md"
                 />,
               ]}
-              key={address}
+              key={data.address}
             />
           )
         })}

@@ -15,7 +15,9 @@ import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useTokens } from '../../TokensProvider'
 import { Address } from 'viem'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { ApiToken } from '../../token.types'
+import { ApiToken, CustomToken } from '../../token.types'
+import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
+import { getChainId } from '@repo/lib/config/app.config'
 
 type Props = {
   chain: GqlChain
@@ -25,7 +27,8 @@ type Props = {
   listHeight: number
   searchTerm?: string
   currentToken?: Address
-  onTokenSelect: (token: ApiToken) => void
+  onTokenSelect: (token: ApiToken | CustomToken) => void
+  enableUnknownToken?: boolean
 }
 function OtherTokens() {
   return (
@@ -92,14 +95,14 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
 
 interface TokenRowProps {
   index: number
-  token: ApiToken
+  token: ApiToken | CustomToken
   isConnected: boolean
-  balanceFor: (token: ApiToken) => any
+  balanceFor: (token: ApiToken | string) => any
   isBalancesLoading: boolean
   isLoadingTokenPrices: boolean
   activeIndex: number
-  isCurrentToken: (token: ApiToken) => boolean
-  onTokenSelect: (token: ApiToken) => void
+  isCurrentToken: (token: ApiToken | CustomToken) => boolean
+  onTokenSelect: (token: ApiToken | CustomToken) => void
 }
 
 function TokenRow({
@@ -113,7 +116,7 @@ function TokenRow({
   isCurrentToken,
   onTokenSelect,
 }: TokenRowProps) {
-  const userBalance = isConnected ? balanceFor(token) : undefined
+  const userBalance = isConnected ? balanceFor(token.address) : undefined
 
   return (
     <TokenSelectListRow
@@ -130,13 +133,13 @@ function TokenRow({
 function renderTokenRow(
   index: number,
   activeIndex: number,
-  balanceFor: (token: ApiToken) => any,
+  balanceFor: (token: ApiToken | string) => any,
   isBalancesLoading: boolean,
   isConnected: boolean,
-  isCurrentToken: (token: ApiToken) => boolean,
+  isCurrentToken: (token: ApiToken | CustomToken) => boolean,
   isLoadingTokenPrices: boolean,
-  onTokenSelect: (token: ApiToken) => void,
-  tokensToShow: ApiToken[]
+  onTokenSelect: (token: ApiToken | CustomToken) => void,
+  tokensToShow: (ApiToken | CustomToken)[]
 ) {
   return (
     <TokenRow
@@ -162,6 +165,7 @@ export function TokenSelectList({
   searchTerm,
   currentToken,
   onTokenSelect,
+  enableUnknownToken = false,
   ...rest
 }: Props & BoxProps) {
   const ref = useRef<GroupedVirtuosoHandle>(null)
@@ -178,13 +182,32 @@ export function TokenSelectList({
   )
   const { openConnectModal } = useConnectModal()
 
+  const { name, symbol, decimals } = useTokenMetadata(searchTerm ?? '', chain)
+
+  const customTokenToShow =
+    name && symbol && decimals && searchTerm && enableUnknownToken
+      ? {
+          name,
+          symbol,
+          decimals,
+          chain,
+          chainId: getChainId(chain),
+          address: searchTerm as `0x${string}`,
+          logoURI: '',
+        }
+      : undefined
+
   const tokensWithBalance = isConnected
     ? orderedTokens.filter(token => balanceFor(token)?.amount)
     : []
   const tokensWithoutBalance = orderedTokens.filter(token => !tokensWithBalance.includes(token))
-  const tokensToShow = [...tokensWithBalance, ...tokensWithoutBalance]
+  const tokensToShow = [
+    ...tokensWithBalance,
+    ...tokensWithoutBalance,
+    ...(customTokenToShow ? [customTokenToShow] : []),
+  ]
 
-  const isCurrentToken = (token: ApiToken) =>
+  const isCurrentToken = (token: ApiToken | CustomToken) =>
     !!currentToken && isSameAddress(token.address, currentToken)
 
   const groups = [
@@ -196,7 +219,10 @@ export function TokenSelectList({
     />,
     <OtherTokens key="other-tokens" />,
   ]
-  const groupCounts = [tokensWithBalance.length, tokensWithoutBalance.length]
+  const groupCounts = [
+    tokensWithBalance.length,
+    tokensWithoutBalance.length + (customTokenToShow ? 1 : 0),
+  ]
 
   const decrementActiveIndex = () => setActiveIndex(prev => Math.max(prev - 1, 0))
   const incrementActiveIndex = () =>
@@ -222,7 +248,7 @@ export function TokenSelectList({
 
   return (
     <Box height={listHeight} {...rest}>
-      {tokensToShow.length === 0 ? (
+      {tokensToShow.length === 0 && !customTokenToShow ? (
         <Box p="lg">
           <Text color="font.error" fontWeight="bold" mb="xxs">
             No tokens found
