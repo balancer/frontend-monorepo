@@ -46,7 +46,7 @@ export default defineConfig(() => {
           },
           {
             name: 'MagpieLoopedSonicRouter',
-            address: '0xd1e0b8dc3a4cd1a892fe1b46e0aed30c35f6a087',
+            address: sonicNetworkConfig.contracts.beets?.magpieLoopedSonicRouter,
           },
         ],
       }),

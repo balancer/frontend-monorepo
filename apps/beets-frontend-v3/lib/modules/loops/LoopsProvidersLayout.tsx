@@ -12,19 +12,19 @@ import { LoopsProvider } from './LoopsProvider'
 export default function LoopsProvidersLayout({ children }: PropsWithChildren) {
   const { tokens, isLoadingTokens } = useTokens()
 
-  const loopTokens = tokens.filter(
+  const loopedTokens = tokens.filter(
     t =>
       (t.address === sonicNetworkConfig.tokens.nativeAsset.address &&
         t.chainId === sonicNetworkConfig.chainId) ||
-      t.address === sonicNetworkConfig.tokens.stakedAsset?.address
+      t.address === sonicNetworkConfig.tokens.loopedAsset?.address
   )
 
-  if (!isLoadingTokens && loopTokens.length === 0) throw new Error('Loop tokens not found')
+  if (!isLoadingTokens && loopedTokens.length === 0) throw new Error('Loop tokens not found')
 
   return (
     <TransactionStateProvider>
-      {loopTokens.length > 0 && (
-        <TokenBalancesProvider initTokens={loopTokens}>
+      {loopedTokens.length > 0 && (
+        <TokenBalancesProvider initTokens={loopedTokens}>
           <TokenInputsValidationProvider>
             <LoopsProvider>
               <PriceImpactProvider>{children}</PriceImpactProvider>

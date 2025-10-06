@@ -35,12 +35,12 @@ export function useLoopsDepositStep(humanAmount: string, chain: GqlChain, enable
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
-    contractId: 'beets.lstStaking',
-    contractAddress: getNetworkConfig(chain).contracts.beets?.lstStakingProxy || '',
+    contractId: 'beets.loops',
+    contractAddress: getNetworkConfig(chain).contracts.beets?.magpieLoopedSonicRouter || '',
     functionName: 'deposit',
     args: [],
     value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(0.01) && isConnected && enabled,
+    enabled: bn(humanAmount).gte(0) && isConnected && enabled,
     onTransactionChange: setTransaction,
   }
 

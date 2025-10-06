@@ -12,7 +12,8 @@ import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLoopsWithdrawStep } from './hooks/useLoopsWithdrawStep'
-//import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 const CHAIN = GqlChain.Sonic
 
@@ -22,13 +23,13 @@ export function useLoopsLogic() {
   const [amountWithdraw, setAmountWithdraw] = useState('')
   const { isConnected } = useUserAccount()
   const { getToken } = useTokens()
-  // const { hasValidationError, getValidationError } = useTokenInputsValidation()
+  const { hasValidationError, getValidationError } = useTokenInputsValidation()
 
   const isDepositTab = activeTab?.value === '0'
   const isWithdrawTab = activeTab?.value === '1'
 
   const nativeAsset = getToken(sonicNetworkConfig.tokens.nativeAsset.address, CHAIN)
-  const stakedAsset = getToken(sonicNetworkConfig.tokens.stakedAsset?.address || '', CHAIN)
+  const loopedAsset = getToken(sonicNetworkConfig.tokens.loopedAsset?.address || '', CHAIN)
 
   const { step: depositStep } = useLoopsDepositStep(amountDeposit, CHAIN, isDepositTab)
   const depositTransactionSteps = useTransactionSteps([depositStep], false)
@@ -42,11 +43,15 @@ export function useLoopsLogic() {
   const loopsWithdrawTxConfirmed = withdrawTransactionSteps.lastTransactionConfirmed
 
   // const hasStakedAssetValidationError = hasValidationError(stakedAsset)
-  // const hasNativeAssetValidationError = hasValidationError(nativeAsset)
+  const hasNativeAssetValidationError = hasValidationError(nativeAsset)
 
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
-    //    [isStakeTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
+    [
+      isDepositTab && (!amountDeposit || bn(amountDeposit).lte(0)),
+      'Please enter an amount to deposit',
+    ],
+    [isDepositTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
     // [isUnstakeTab && hasStakedAssetValidationError, getValidationError(stakedAsset)],
   ]
 
@@ -63,7 +68,7 @@ export function useLoopsLogic() {
     loopsDepositTxHash,
     loopsStakeTxConfirmed,
     nativeAsset,
-    stakedAsset,
+    loopedAsset,
     isDisabled,
     disabledReason,
     isDepositTab,
