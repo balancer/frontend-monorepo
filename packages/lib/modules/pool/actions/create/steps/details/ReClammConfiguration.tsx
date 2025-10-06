@@ -111,11 +111,12 @@ function ConfigOptionsGroup({
         </BalPopover>
       </HStack>
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing="md" w="full" {...radioGroupProps}>
-        {cardOptions.map(option => {
+        {cardOptions.map((option, idx) => {
           const radio = getRadioProps({ value: option.rawValue })
+          const key = `${label.replace(/\s+/g, '-')}-${idx}`
 
           return (
-            <RadioCard key={option.rawValue} {...radio} containerProps={cardContainerProps}>
+            <RadioCard key={key} {...radio} containerProps={cardContainerProps}>
               <VStack align="center" h="full" justify="center" spacing="1" textAlign="center">
                 {option.svg && <option.svg height="100%" width="100%" />}
                 <Text color="inherit" fontSize="sm">
