@@ -38,6 +38,10 @@ export const ProjectConfigBeets: ProjectConfig = {
         label: 'Stake $S',
       },
       {
+        href: '/loops',
+        label: 'Loop $S',
+      },
+      {
         href: 'https://ma.beets.fi',
         label: 'maBEETS',
         isExternal: true,
