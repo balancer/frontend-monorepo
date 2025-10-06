@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
  */
 export const beetsV2BatchRelayerLibraryAbi = [
   {
@@ -503,14 +503,14 @@ export const beetsV2BatchRelayerLibraryAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
  */
 export const beetsV2BatchRelayerLibraryAddress = {
   146: '0x1498437067d7bdDc4C9427964F073eE1AB4f50fC',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
  */
 export const beetsV2BatchRelayerLibraryConfig = {
   address: beetsV2BatchRelayerLibraryAddress,
@@ -518,11 +518,211 @@ export const beetsV2BatchRelayerLibraryConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MagpieLoopedSonicRouter
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0xd1e0b8dc3a4cd1a892fe1b46e0aed30c35f6a087)
+ */
+export const magpieLoopedSonicRouterAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: '_vault',
+        internalType: 'contract LoopedSonicVault',
+        type: 'address',
+      },
+      {
+        name: '_magpieRouter',
+        internalType: 'contract IMagpieRouterV3_1',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'AmountOutBelowMin' },
+  { type: 'error', inputs: [], name: 'BadInitiator' },
+  { type: 'error', inputs: [], name: 'NotAavePool' },
+  { type: 'error', inputs: [], name: 'NotEnoughLst' },
+  { type: 'error', inputs: [], name: 'NotVault' },
+  {
+    type: 'error',
+    inputs: [{ name: 'token', internalType: 'address', type: 'address' }],
+    name: 'SafeERC20FailedOperation',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'ADDRESSES_PROVIDER',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract IPoolAddressesProvider',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'MAGPIE_ROUTER',
+    outputs: [{ name: '', internalType: 'contract IMagpieRouterV3_1', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'MAX_LOOP_ITERATIONS',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'POOL',
+    outputs: [{ name: '', internalType: 'contract IPool', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'VAULT',
+    outputs: [{ name: '', internalType: 'contract LoopedSonicVault', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'deposit',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'initialAssets', internalType: 'uint256', type: 'uint256' }],
+    name: 'depositCallback',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'asset', internalType: 'address', type: 'address' },
+      { name: 'flashLoanAmount', internalType: 'uint256', type: 'uint256' },
+      { name: 'flashLoanFee', internalType: 'uint256', type: 'uint256' },
+      { name: 'initiator', internalType: 'address', type: 'address' },
+      { name: 'params', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'executeOperation',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'amountShares', internalType: 'uint256', type: 'uint256' },
+      { name: 'minWethAmountOut', internalType: 'uint256', type: 'uint256' },
+      { name: 'convertLstToWethData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct BaseLoopedSonicRouter.WithdrawParams',
+        type: 'tuple',
+        components: [
+          { name: 'recipient', internalType: 'address', type: 'address' },
+          { name: 'amountShares', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'minWethAmountOut',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'collateralInLst', internalType: 'uint256', type: 'uint256' },
+          { name: 'debtInEth', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'convertLstToWethData',
+            internalType: 'bytes',
+            type: 'bytes',
+          },
+        ],
+      },
+    ],
+    name: 'withdrawCallback',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'amountShares', internalType: 'uint256', type: 'uint256' },
+      { name: 'minWethAmountOut', internalType: 'uint256', type: 'uint256' },
+      { name: 'convertLstToWethData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'withdrawWithFlashLoan',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct BaseLoopedSonicRouter.WithdrawParams',
+        type: 'tuple',
+        components: [
+          { name: 'recipient', internalType: 'address', type: 'address' },
+          { name: 'amountShares', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'minWethAmountOut',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'collateralInLst', internalType: 'uint256', type: 'uint256' },
+          { name: 'debtInEth', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'convertLstToWethData',
+            internalType: 'bytes',
+            type: 'bytes',
+          },
+        ],
+      },
+      { name: 'flashLoanFee', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'withdrawWithFlashLoanCallback',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0xd1e0b8dc3a4cd1a892fe1b46e0aed30c35f6a087)
+ */
+export const magpieLoopedSonicRouterAddress = {
+  146: '0xD1e0B8Dc3A4Cd1A892FE1b46E0AEd30c35f6A087',
+} as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0xd1e0b8dc3a4cd1a892fe1b46e0aed30c35f6a087)
+ */
+export const magpieLoopedSonicRouterConfig = {
+  address: magpieLoopedSonicRouterAddress,
+  abi: magpieLoopedSonicRouterAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Reliquary
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x973670ce19594f857a7cd85ee834c7a74a941684)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x973670ce19594f857a7cd85ee834c7a74a941684)
  */
 export const reliquaryAbi = [
   {
@@ -1505,14 +1705,14 @@ export const reliquaryAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x973670ce19594f857a7cd85ee834c7a74a941684)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x973670ce19594f857a7cd85ee834c7a74a941684)
  */
 export const reliquaryAddress = {
   146: '0x973670ce19594F857A7cD85EE834c7a74a941684',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x973670ce19594f857a7cd85ee834c7a74a941684)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x973670ce19594f857a7cd85ee834c7a74a941684)
  */
 export const reliquaryConfig = {
   address: reliquaryAddress,
@@ -1524,7 +1724,7 @@ export const reliquaryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
  */
 export const sfcAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -2500,14 +2700,14 @@ export const sfcAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
  */
 export const sfcAddress = {
   146: '0x0aB8f3b709A52c096f33702fE8153776472305ed',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
  */
 export const sfcConfig = { address: sfcAddress, abi: sfcAbi } as const
 
@@ -2516,7 +2716,7 @@ export const sfcConfig = { address: sfcAddress, abi: sfcAbi } as const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -3788,14 +3988,14 @@ export const sonicStakingAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingAddress = {
   146: '0xD5F7FC8ba92756a34693bAA386Edcc8Dd5B3F141',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingConfig = {
   address: sonicStakingAddress,
@@ -3807,7 +4007,7 @@ export const sonicStakingConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
  */
 export const sonicStakingWithdrawRequestHelperAbi = [
   {
@@ -3905,14 +4105,14 @@ export const sonicStakingWithdrawRequestHelperAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
  */
 export const sonicStakingWithdrawRequestHelperAddress = {
   146: '0x52B16e3D7d25bA64F242e59f9A74799ecC432d78',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
  */
 export const sonicStakingWithdrawRequestHelperConfig = {
   address: sonicStakingWithdrawRequestHelperAddress,

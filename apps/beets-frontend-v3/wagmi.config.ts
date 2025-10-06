@@ -44,6 +44,10 @@ export default defineConfig(() => {
             name: 'BeetsV2BatchRelayerLibrary',
             address: '0x1498437067d7bddc4c9427964f073ee1ab4f50fc',
           },
+          {
+            name: 'MagpieLoopedSonicRouter',
+            address: '0xd1e0b8dc3a4cd1a892fe1b46e0aed30c35f6a087',
+          },
         ],
       }),
     ],
