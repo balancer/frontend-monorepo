@@ -49,6 +49,7 @@ function ConfigOptionsGroup({
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
     if (option.rawValue === normalizedFormValue) return true
+    if (option.rawValue === '' || normalizedFormValue === '') return false
 
     const optionNumber = Number(option.rawValue)
     const formValueNumber = Number(normalizedFormValue)
