@@ -15,7 +15,7 @@ import {
 } from '../web3/signatures/signature.helpers'
 
 export function useShouldSignRelayerApproval(chainId: SupportedChainId, relayerMode: RelayerMode) {
-  const { hasApprovedRelayer } = useHasApprovedRelayer(chainId)
+  const { hasApprovedRelayer } = useHasApprovedRelayer(chainId, { relayerMode })
   return relayerMode === 'signRelayer' && !hasApprovedRelayer
 }
 

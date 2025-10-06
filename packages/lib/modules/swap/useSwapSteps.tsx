@@ -40,8 +40,12 @@ export function useSwapSteps({
   const isPermit2 = orderRouteVersion(simulationQuery) === 3
 
   const relayerMode = useRelayerMode()
-  const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
-    useApproveRelayerStep(chainId)
+
+  const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } = useApproveRelayerStep(
+    chainId,
+    { relayerMode }
+  )
+
   const signRelayerStep = useSignRelayerStep(swapState.selectedChain)
   const swapRequiresRelayer =
     relayerMode !== 'no-relayer-needed' && handler.name === 'AuraBalSwapHandler'
