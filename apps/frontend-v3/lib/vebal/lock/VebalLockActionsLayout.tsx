@@ -7,7 +7,6 @@ import { PropsWithChildren } from 'react'
 import { VebalLockProvider } from './VebalLockProvider'
 import { useVeBalRedirectPath } from '../vebal-navigation'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 type Props = PropsWithChildren
 
@@ -27,9 +26,7 @@ export function VebalLockActionsLayout({ children }: Props) {
       redirectPath={redirectPath}
     >
       <TokenInputsValidationProvider>
-        <PriceImpactProvider>
-          <VebalLockProvider>{children}</VebalLockProvider>
-        </PriceImpactProvider>
+        <VebalLockProvider>{children}</VebalLockProvider>
       </TokenInputsValidationProvider>
     </FocussedActionLayout>
   )

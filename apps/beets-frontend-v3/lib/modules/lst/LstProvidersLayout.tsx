@@ -5,7 +5,6 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PropsWithChildren } from 'react'
 import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { LstProvider } from './LstProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
@@ -26,9 +25,7 @@ export default function LstProvidersLayout({ children }: PropsWithChildren) {
       {stakingTokens.length > 0 && (
         <TokenBalancesProvider initTokens={stakingTokens}>
           <TokenInputsValidationProvider>
-            <LstProvider>
-              <PriceImpactProvider>{children}</PriceImpactProvider>
-            </LstProvider>
+            <LstProvider>{children}</LstProvider>
           </TokenInputsValidationProvider>
         </TokenBalancesProvider>
       )}

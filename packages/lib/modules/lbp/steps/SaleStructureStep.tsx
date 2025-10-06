@@ -52,7 +52,6 @@ import {
 import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
-import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
 import { CustomToken } from '../../tokens/token.types'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
@@ -193,26 +192,23 @@ export function SaleStructureStep() {
             </VStack>
 
             <TokenInputsValidationProvider>
-              {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
-              <PriceImpactProvider>
-                {collateralToken && (
-                  <TokenBalancesProvider extTokens={[collateralToken]}>
-                    <SaleTokenAmountInput
-                      control={control}
-                      errors={errors}
-                      launchToken={launchToken}
-                      selectedChain={selectedChain}
-                    />
-                    <CollateralTokenAmountInput
-                      collateralTokenAddress={collateralTokenAddress}
-                      collateralTokenSymbol={collateralToken?.symbol || ''}
-                      control={control}
-                      errors={errors}
-                      selectedChain={selectedChain}
-                    />
-                  </TokenBalancesProvider>
-                )}
-              </PriceImpactProvider>
+              {collateralToken && (
+                <TokenBalancesProvider extTokens={[collateralToken]}>
+                  <SaleTokenAmountInput
+                    control={control}
+                    errors={errors}
+                    launchToken={launchToken}
+                    selectedChain={selectedChain}
+                  />
+                  <CollateralTokenAmountInput
+                    collateralTokenAddress={collateralTokenAddress}
+                    collateralTokenSymbol={collateralToken?.symbol || ''}
+                    control={control}
+                    errors={errors}
+                    selectedChain={selectedChain}
+                  />
+                </TokenBalancesProvider>
+              )}
             </TokenInputsValidationProvider>
           </>
         )}
