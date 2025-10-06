@@ -148,7 +148,7 @@ function ConfigOptionsGroup({
             placeholder={
               initialTargetPrice ? bn(initialTargetPrice).times(0.9).toString().slice(0, 7) : ''
             }
-            validate={(value: number) => {
+            validate={value => {
               if (Number(value) >= Number(initialTargetPrice)) {
                 return 'Range low price must be less than target price'
               }
@@ -170,7 +170,7 @@ function ConfigOptionsGroup({
             placeholder={
               initialTargetPrice ? formatNumber(bn(initialTargetPrice).times(1.1).toString()) : ''
             }
-            validate={(value: number) => {
+            validate={value => {
               if (Number(value) <= Number(initialTargetPrice)) {
                 return 'Range high price must be greater than target price'
               }
@@ -193,7 +193,7 @@ function ConfigOptionsGroup({
             isCustomTargetPrice ? getPercentFromPrice(formValue, options[1].rawValue) : ''
           }
           placeholder={options[1].displayValue.replace('%', '')}
-          validate={(value: number) => validateFn(Number.isNaN(value) ? '' : value.toString())}
+          validate={value => validateFn(Number.isNaN(value) ? '' : value.toString())}
           width="full"
         />
       ) : null}
