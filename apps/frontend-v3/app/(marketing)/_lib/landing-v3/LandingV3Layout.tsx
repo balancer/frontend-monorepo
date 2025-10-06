@@ -2,7 +2,6 @@ import { Hero } from './Hero'
 import { Code } from './Code'
 import { Videos } from './Videos'
 import { Audits } from './Audits'
-import { Grants } from './Grants'
 import { Grow } from './Grow'
 import { Contracts } from './Contracts'
 import { Features } from './Features'
@@ -16,9 +15,8 @@ export function LandingV3Layout() {
       <Contracts />
       <Features />
       <Grow />
-      <Audits />
       <Videos />
-      <Grants />
+      <Audits />
       <FooterCta />
     </>
   )
