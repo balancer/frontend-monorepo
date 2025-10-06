@@ -138,7 +138,6 @@ function TokenInputFooter({
   const { usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
-
   const isMounted = useIsMounted()
 
   const hasError = hasValidationError(token)
