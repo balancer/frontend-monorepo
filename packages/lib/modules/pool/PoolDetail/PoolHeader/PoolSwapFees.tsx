@@ -38,7 +38,7 @@ function getBodyText(
       case zeroAddress:
         return isV3
           ? delegateOwnerText
-          : 'Swap fees for this pool are immutable. The swap fee is fixed and cannot be updated by anyone.'
+          : 'Swap fees for this pool are fixed forever and cannot be updated by anyone.'
       default:
         return `This pool has an editable swap fee that may be updated by this 3rd party Swap Fee Manager: ${abbreviateAddress(swapFeeManager)}`
     }
@@ -56,19 +56,19 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
 
   let headerText: string
   if (hasStableSurgeHook) {
-    headerText = 'Dynamic Stable Surge swap fees'
+    headerText = 'Dynamic Stable Surge swap fee'
   } else if (pool.swapFeeManager === zeroAddress && !isV3) {
-    headerText = `Fixed forever swap fees: ${feePercentage}`
+    headerText = `Immutable swap fee: ${feePercentage}`
   } else if (feeManager?.id === FeeManagersId.EZKL) {
-    headerText = `EZKL-set swap fees: ${feePercentage}`
+    headerText = `EZKL-set swap fee: ${feePercentage}`
   } else if (pool.swapFeeManager === PROJECT_CONFIG.delegateOwner) {
-    headerText = `Swap fees: ${feePercentage}`
+    headerText = `Swap fee: ${feePercentage}`
   } else if (pool.swapFeeManager === zeroAddress && isV3) {
-    headerText = `Swap fees: ${feePercentage}`
+    headerText = `Swap fee: ${feePercentage}`
   } else if (pool.swapFeeManager && pool.swapFeeManager !== zeroAddress) {
-    headerText = `3rd party set swap fees: ${feePercentage}`
+    headerText = `3rd party set swap fee: ${feePercentage}`
   } else {
-    headerText = `Swap fees: ${feePercentage}`
+    headerText = `Swap fee: ${feePercentage}`
   }
 
   return (
