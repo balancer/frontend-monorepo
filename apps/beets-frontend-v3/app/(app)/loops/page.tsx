@@ -1,7 +1,12 @@
 'use client'
 
-import { Lst } from '@/lib/modules/lst/Lst'
+import { Loops } from '@/lib/modules/loops/Loops'
+import LoopsProvidersLayout from '@/lib/modules/loops/LoopsProvidersLayout'
 
 export default function LoopsPage() {
-  return <Lst />
+  return (
+    <LoopsProvidersLayout>
+      <Loops />
+    </LoopsProvidersLayout>
+  )
 }
