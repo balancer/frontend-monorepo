@@ -37,7 +37,7 @@ function DropdownIndicator({
     <chakraComponents.DropdownIndicator {...props}>
       <HStack position="relative" right="12px">
         <Center bg="background.level4" h="24px" rounded="full" w="24px">
-          <Box color={hasBalance ? 'font.secondary' : 'font.warning'}>
+          <Box color={hasBalance ? 'font.secondary' : 'font.error'}>
             <GasIcon size={14} />
           </Box>
         </Center>
