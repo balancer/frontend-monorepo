@@ -1,7 +1,7 @@
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReClammConfig } from '../../types'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { formatNumber } from '../../helpers'
 import { useReClammCurrentPrice } from './useReClammCurrentPrice'
 import { SVGProps } from 'react'
@@ -36,6 +36,8 @@ export type ReClammConfigOptionsGroup = {
 
 export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
+  const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
+
   const { poolTokens } = poolCreationForm.watch()
   const reClammConfig = reClammConfigForm.watch()
   const { initialTargetPrice, priceRangePercentage } = reClammConfig
@@ -211,21 +213,17 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       priceRangePercentage
     )
 
-    // prevent unnecessary re-renders
     if (
-      reClammConfig.initialMinPrice === initialMinPrice &&
-      reClammConfig.initialMaxPrice === initialMaxPrice
+      lastCalculatedPriceBoundsRef.current.minPrice === initialMinPrice &&
+      lastCalculatedPriceBoundsRef.current.maxPrice === initialMaxPrice
     ) {
       return
     }
 
+    lastCalculatedPriceBoundsRef.current = { minPrice: initialMinPrice, maxPrice: initialMaxPrice }
+
     updatePriceBounds(initialTargetPrice, priceRangePercentage)
-  }, [
-    initialTargetPrice,
-    priceRangePercentage,
-    reClammConfig.initialMinPrice,
-    reClammConfig.initialMaxPrice,
-  ])
+  }, [initialTargetPrice, priceRangePercentage])
 
   return [targetPrice, priceRangeBoundaries, marginBuffer, dailyPriceReadjustmentRate]
 }
