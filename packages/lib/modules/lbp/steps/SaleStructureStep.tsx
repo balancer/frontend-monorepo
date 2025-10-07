@@ -648,7 +648,7 @@ function SaleTokenAmountInput({
   }
 
   return (
-    <VStack align="start" w="full">
+    <VStack align="start" data-group w="full">
       <Text color="font.primary">Sale token</Text>
       <Controller
         control={control}
@@ -669,6 +669,17 @@ function SaleTokenAmountInput({
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
+      <Text
+        _groupFocusWithin={{ opacity: '1' }}
+        _groupHover={{ opacity: '1' }}
+        fontSize="sm"
+        opacity="0.5"
+        pt="xs"
+        transition="opacity 0.2s var(--ease-out-cubic)"
+        variant="secondary"
+      >
+        This is the max amount of tokens that can be sold during the LBP
+      </Text>
       {errors.saleTokenAmount && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full">
           {errors.saleTokenAmount.message}
@@ -709,7 +720,7 @@ function CollateralTokenAmountInput({
   }
 
   return (
-    <VStack align="start" w="full">
+    <VStack align="start" data-group w="full">
       <Text color="font.primary">Collateral token</Text>
       <Controller
         control={control}
@@ -727,7 +738,15 @@ function CollateralTokenAmountInput({
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
-      <Text fontSize="sm" pt="xs" variant="secondary">
+      <Text
+        _groupFocusWithin={{ opacity: '1' }}
+        _groupHover={{ opacity: '1' }}
+        fontSize="sm"
+        opacity="0.5"
+        pt="xs"
+        transition="opacity 0.2s var(--ease-out-cubic)"
+        variant="secondary"
+      >
         Add $5k+ of the collateral token to ensure a smooth start.
       </Text>
       {errors.collateralTokenAmount && (
