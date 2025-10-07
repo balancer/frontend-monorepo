@@ -16,6 +16,8 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
+import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
+import { hasAuraStakedBalance } from '../../../user-balance.helpers'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -53,7 +55,11 @@ export function UserSnapshotValues() {
     return veBalBoostMap[pool.id]
   }, [veBalBoostMap])
 
-  const myAprRaw = getTotalAprRaw(pool.dynamicData.aprItems, boost)
+  // If user has staked on Aura, use Aura APR
+  const myAprRaw =
+    hasAuraStakedBalance(pool) && pool.staking?.aura?.apr
+      ? pool.staking.aura.apr
+      : getTotalAprRaw(pool.dynamicData.aprItems, boost)
 
   const poolMyStatsValues: PoolMyStatsValues | undefined = useMemo(() => {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
@@ -67,7 +73,7 @@ export function UserSnapshotValues() {
         myClaimableRewards: myClaimableRewards,
       }
     }
-  }, [veBalBoostMap, pool])
+  }, [veBalBoostMap, pool, myAprRaw])
 
   function onModalClose() {
     previewModalDisclosure.onClose()
@@ -81,9 +87,10 @@ export function UserSnapshotValues() {
     <>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            My liquidity
-          </Text>
+          <LabelWithTooltip
+            label="My liquidity"
+            tooltip="The value of all your tokens in this pool."
+          />
           {poolMyStatsValues ? (
             poolMyStatsValues.myLiquidity ? (
               <HStack onClick={handleClick}>
@@ -111,19 +118,28 @@ export function UserSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            My APR
-          </Text>
+          <LabelWithTooltip
+            label={hasAuraStakedBalance(pool) && pool.staking?.aura?.apr ? 'My Aura APR' : 'My APR'}
+            tooltip={
+              hasAuraStakedBalance(pool) && pool.staking?.aura?.apr
+                ? 'The APR you are likely to earn this week from staking in this pool on Aura.'
+                : 'The APR you are likely to earn this week from staking in this pool on Balancer.'
+            }
+          />
           {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
-            <MemoizedMainAprTooltip
-              aprItems={pool.dynamicData.aprItems}
-              chain={pool.chain}
-              height="28px"
-              pool={pool}
-              poolId={pool.id}
-              textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
-              vebalBoost={boost || '1'}
-            />
+            hasAuraStakedBalance(pool) && pool.staking?.aura?.apr ? (
+              <AuraAprTooltip auraApr={pool.staking.aura.apr} />
+            ) : (
+              <MemoizedMainAprTooltip
+                aprItems={pool.dynamicData.aprItems}
+                chain={pool.chain}
+                height="28px"
+                pool={pool}
+                poolId={pool.id}
+                textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
+                vebalBoost={boost || '1'}
+              />
+            )
           ) : (
             <Heading size="h4">&mdash;</Heading>
           )}
@@ -137,9 +153,10 @@ export function UserSnapshotValues() {
               tooltip="The amount you could earn each week if you added $10,000 to this pool at its current APR. If there is an APR range, the amount displayed is based on the minimum APR."
             />
           ) : (
-            <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-              My potential weekly yield
-            </Text>
+            <LabelWithTooltip
+              label="My potential weekly yield"
+              tooltip="The amount of incentives you could earn this week from staking in this pool based on your veBAL balance"
+            />
           )}
 
           {poolMyStatsValues ? (
@@ -151,9 +168,10 @@ export function UserSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-            My claimable rewards
-          </Text>
+          <LabelWithTooltip
+            label="My claimable incentives"
+            tooltip="The amount of liquidity incentives you can claim from staking in this pool."
+          />
           {poolMyStatsValues ? (
             hasNoRewards ? (
               <Heading size="h4">&mdash;</Heading>

@@ -230,6 +230,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         letterSpacing: '-0.25px',
         lineHeight: 'short',
         p: 'sm',
+        textWrap: 'pretty',
       },
     },
     FormLabel: {
@@ -322,7 +323,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           lineHeight: { base: '1.75rem', md: '2.25rem' },
         },
         h4: {
-          fontSize: { base: '1.25rem', md: '1.625rem' },
+          fontSize: { base: '1.25rem', md: '1.5rem' },
           lineHeight: { base: '1.5rem', md: '2rem' },
         },
         h5: {
@@ -775,6 +776,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             color: 'grayText',
             fontWeight: 'bold',
             shadow: '3xl',
+            textWrap: 'pretty',
           },
           body: {
             background: 'background.level2',
