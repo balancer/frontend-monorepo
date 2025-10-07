@@ -1,5 +1,5 @@
 import { Badge, HStack, Text, Box } from '@chakra-ui/react'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { Repeat } from 'react-feather'
 import { Pool } from '../../pool.types'
 import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
@@ -13,7 +13,7 @@ import {
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useFeeManager } from '@repo/lib/modules/fee-managers/useFeeManager'
 import { zeroAddress } from 'viem'
-import { isV3Pool } from '../../pool.helpers'
+import { hasSurgeHook, isV3Pool } from '../../pool.helpers'
 
 function getBodyText(
   isDynamicSwapFee: boolean | null | undefined,
@@ -30,7 +30,7 @@ function getBodyText(
   }
 
   if (swapFeeManager) {
-    const delegateOwnerText = `This pool has a dynamic fee rate that may be updated through ${PROJECT_CONFIG.projectName} governance.`
+    const delegateOwnerText = `This pool has an editable swap fee that may be updated via ${PROJECT_CONFIG.projectName} governance in the future.`
 
     switch (swapFeeManager) {
       case PROJECT_CONFIG.delegateOwner:
@@ -38,24 +38,43 @@ function getBodyText(
       case zeroAddress:
         return isV3
           ? delegateOwnerText
-          : 'This pool has a static swap fee that cannot be updated by anyone.'
+          : 'Swap fees for this pool are fixed forever and cannot be updated by anyone.'
       default:
-        return `This pool has a dynamic fee rate that may be updated by a 3rd party Swap Fee Manager: ${abbreviateAddress(swapFeeManager)}`
+        return `This pool has an editable swap fee that may be updated by this 3rd party Swap Fee Manager: ${abbreviateAddress(swapFeeManager)}`
     }
   }
 }
 
 export function PoolSwapFees({ pool }: { pool: Pool }) {
   const { feeManager } = useFeeManager(pool)
-
   const isDynamicSwapFee = shouldCallComputeDynamicSwapFee(pool)
-  const feeTypeText = pool.swapFeeManager === zeroAddress ? 'Fixed' : 'Dynamic'
+
   const isV3 = isV3Pool(pool)
+  const hasStableSurgeHook = hasSurgeHook(pool)
+
+  const feePercentage = fNumCustom(pool.dynamicData.swapFee, '0.00[00]%')
+
+  let headerText: string
+  if (hasStableSurgeHook) {
+    headerText = 'Dynamic Stable Surge swap fee'
+  } else if (pool.swapFeeManager === zeroAddress && !isV3) {
+    headerText = `Immutable swap fee: ${feePercentage}`
+  } else if (feeManager?.id === FeeManagersId.EZKL) {
+    headerText = `EZKL-set swap fee: ${feePercentage}`
+  } else if (pool.swapFeeManager === PROJECT_CONFIG.delegateOwner) {
+    headerText = `Swap fee: ${feePercentage}`
+  } else if (pool.swapFeeManager === zeroAddress && isV3) {
+    headerText = `Swap fee: ${feePercentage}`
+  } else if (pool.swapFeeManager && pool.swapFeeManager !== zeroAddress) {
+    headerText = `3rd party set swap fee: ${feePercentage}`
+  } else {
+    headerText = `Swap fee: ${feePercentage}`
+  }
 
   return (
     <CustomPopover
       bodyText={getBodyText(isDynamicSwapFee, pool.swapFeeManager, feeManager, isV3)}
-      headerText={`${feeTypeText} fee percentage: ${fNum('feePercent', pool.dynamicData.swapFee, { hideSmallPercentage: false })}`}
+      headerText={headerText}
       trigger="hover"
       useIsOpen
     >
