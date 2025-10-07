@@ -15,7 +15,6 @@ import {
   BoxProps,
   Grid,
   GridItem,
-  Flex,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -34,7 +33,7 @@ import { LstUnstake } from './components/LstUnstake'
 import { LstUnstakeModal } from './modals/LstUnstakeModal'
 import { LstWithdraw } from './components/LstWithdraw'
 import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
-import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LstFaq } from './components/LstFaq'
@@ -45,7 +44,7 @@ import { LstStats } from './components/LstStats'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
+import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 
 const CHAIN = GqlChain.Sonic
 
@@ -97,6 +96,7 @@ function LstForm() {
     getAmountShares,
     getAmountAssets,
     isRateLoading,
+    chain,
   } = useLst()
 
   const isLoading = !isMounted || isBalancesLoading
@@ -182,17 +182,19 @@ function LstForm() {
           )}
         </HStack> */}
         {isStakeTab && !isRateLoading && amountAssets !== '' && (
-          <LstYouWillReceive
+          <YouWillReceive
             address={stakedAsset?.address || ''}
             amount={getAmountShares(amountAssets)}
+            chain={chain}
             label="You will receive"
             symbol={stakedAsset?.symbol || ''}
           />
         )}
         {isUnstakeTab && !isRateLoading && amountShares !== '' && (
-          <LstYouWillReceive
+          <YouWillReceive
             address={nativeAsset?.address || ''}
             amount={getAmountAssets(amountShares)}
+            chain={chain}
             label="You can withdraw (after 14 days)"
             symbol={nativeAsset?.symbol || ''}
           />
@@ -238,40 +240,6 @@ function LstForm() {
         onOpen={unstakeModalDisclosure.onOpen}
       />
     </VStack>
-  )
-}
-
-function LstYouWillReceive({
-  label,
-  amount,
-  address,
-  symbol,
-}: {
-  label: string
-  amount: string
-  address: string
-  symbol: string
-}) {
-  const amountFormatted = fNumCustom(amount, '0,0.[000000]')
-
-  return (
-    <Box w="full">
-      <FadeInOnView>
-        <Flex alignItems="flex-end" w="full">
-          <Box flex="1">
-            <Text color="grayText" mb="sm">
-              {label}
-            </Text>
-            <Text fontSize="3xl">
-              {amountFormatted === 'NaN' ? amount : amountFormatted} {symbol}
-            </Text>
-          </Box>
-          <Box>
-            <TokenIcon address={address} alt={symbol} chain={CHAIN} size={40} />
-          </Box>
-        </Flex>
-      </FadeInOnView>
-    </Box>
   )
 }
 
