@@ -215,40 +215,6 @@ function LoopsForm() {
   )
 }
 
-// function LstYouWillReceive({
-//   label,
-//   amount,
-//   address,
-//   symbol,
-// }: {
-//   label: string
-//   amount: string
-//   address: string
-//   symbol: string
-// }) {
-//   const amountFormatted = fNumCustom(amount, '0,0.[000000]')
-
-//   return (
-//     <Box w="full">
-//       <FadeInOnView>
-//         <Flex alignItems="flex-end" w="full">
-//           <Box flex="1">
-//             <Text color="grayText" mb="sm">
-//               {label}
-//             </Text>
-//             <Text fontSize="3xl">
-//               {amountFormatted === 'NaN' ? amount : amountFormatted} {symbol}
-//             </Text>
-//           </Box>
-//           <Box>
-//             <TokenIcon address={address} alt={symbol} chain={CHAIN} size={40} />
-//           </Box>
-//         </Flex>
-//       </FadeInOnView>
-//     </Box>
-//   )
-// }
-
 function LoopsStatRow({
   label,
   value,
