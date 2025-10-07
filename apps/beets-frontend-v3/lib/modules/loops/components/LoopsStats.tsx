@@ -5,7 +5,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { useGetLoopsData } from '../hooks/useGetLoopsData'
+import { useLoopsGetData } from '../hooks/useLoopsGetData'
 //import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 //const CHAIN = GqlChain.Sonic
@@ -56,7 +56,7 @@ function GlobalStatsCard({
 
 export function LoopsStats() {
   const { toCurrency } = useCurrency()
-  const { data: loopsData, loading: isLoopsDataLoading } = useGetLoopsData()
+  const { data: loopsData, loading: isLoopsDataLoading } = useLoopsGetData()
 
   const loopsApr = loopsData?.loopsGetData.apr || '0'
   const loopsTVL = loopsData?.loopsGetData.tvl || '0'

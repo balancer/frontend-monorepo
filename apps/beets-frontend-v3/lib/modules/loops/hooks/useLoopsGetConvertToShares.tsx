@@ -7,7 +7,7 @@ import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { loopedSonicVaultAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetLoopsConvertToShares(assetAmount: bigint, chain: GqlChain) {
+export function useLoopsGetConvertToShares(assetAmount: bigint, chain: GqlChain) {
   const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 

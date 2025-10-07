@@ -5,7 +5,7 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useLoops } from '../LoopsProvider'
-import { useGetLoopsConvertToShares } from '../hooks/useGetLoopsConvertToShares'
+import { useLoopsGetConvertToShares } from '../hooks/useLoopsGetConvertToShares'
 import { formatUnits, parseUnits } from 'viem'
 
 export function LoopsDepositSummary({
@@ -23,7 +23,7 @@ export function LoopsDepositSummary({
     amountAssets,
   } = useLoops()
 
-  const { sharesAmount, isLoading: isLoadingSharesAmount } = useGetLoopsConvertToShares(
+  const { sharesAmount, isLoading: isLoadingSharesAmount } = useLoopsGetConvertToShares(
     parseUnits(amountAssets, 18),
     chain
   )

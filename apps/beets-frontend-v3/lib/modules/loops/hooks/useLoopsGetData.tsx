@@ -2,7 +2,7 @@ import { GetLoopsDataDocument } from '@repo/lib/shared/services/api/generated/gr
 import { useQuery } from '@apollo/client'
 import { minutesToMilliseconds } from 'date-fns'
 
-export function useGetLoopsData() {
+export function useLoopsGetData() {
   return useQuery(GetLoopsDataDocument, {
     pollInterval: minutesToMilliseconds(5),
   })

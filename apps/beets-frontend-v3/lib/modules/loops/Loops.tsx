@@ -36,6 +36,7 @@ import { LstFaq } from './components/LoopsFaq'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LoopsStats } from './components/LoopsStats'
+import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 //import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 //const CHAIN = GqlChain.Sonic
@@ -80,6 +81,11 @@ function LoopsForm() {
     withdrawTransactionSteps,
     isDisabled,
     disabledReason,
+    loopedAsset,
+    chain,
+    amountAssets,
+    getAmountShares,
+    isRateLoading,
   } = useLoops()
 
   const isLoading = !isMounted || isBalancesLoading
@@ -147,14 +153,16 @@ function LoopsForm() {
           {isDepositTab && <LoopsDeposit />}
           {/* {isWithdrawTab && <LoopsWithdraw />} */}
         </Box>
-        {/* {isStakeTab && !isRateLoading && amountAssets !== '' && (
-          <LstYouWillReceive
-            address={stakedAsset?.address || ''}
+        {isDepositTab && !isRateLoading && amountAssets !== '' && (
+          <YouWillReceive
+            address={loopedAsset?.address || ''}
             amount={getAmountShares(amountAssets)}
+            chain={chain}
             label="You will receive"
-            symbol={stakedAsset?.symbol || ''}
+            symbol={loopedAsset?.symbol || ''}
           />
         )}
+        {/*
         {isUnstakeTab && !isRateLoading && amountShares !== '' && (
           <LstYouWillReceive
             address={nativeAsset?.address || ''}

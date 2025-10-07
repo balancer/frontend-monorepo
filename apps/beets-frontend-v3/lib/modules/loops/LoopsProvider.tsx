@@ -14,6 +14,8 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLoopsWithdrawStep } from './hooks/useLoopsWithdrawStep'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { formatUnits, parseUnits } from 'viem'
+import { useLoopsGetRate } from './hooks/useLoopsGetRate'
 
 const CHAIN = GqlChain.Sonic
 
@@ -57,6 +59,16 @@ export function useLoopsLogic() {
 
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
 
+  const { data: rate, isLoading: isRateLoading } = useLoopsGetRate(CHAIN)
+
+  function getAmountShares(amountAssets: string) {
+    if (amountAssets === '') return '0'
+
+    const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
+
+    return formatUnits(amountShares, 18)
+  }
+
   return {
     activeTab,
     setActiveTab,
@@ -78,6 +90,8 @@ export function useLoopsLogic() {
     loopsWithdrawTxConfirmed,
     amountShares,
     setAmountShares,
+    getAmountShares,
+    isRateLoading,
   }
 }
 
