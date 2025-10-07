@@ -1,7 +1,7 @@
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Box, HStack, Text, Center } from '@chakra-ui/react'
+import { Box, HStack, Text, Center, VStack, Divider } from '@chakra-ui/react'
 import {
   GroupBase,
   chakraComponents,
@@ -68,24 +68,28 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
   const nativeBalances = useNativeTokenBalances(chains)
 
   const sortedChains = chains.sort((a, b) => nativeBalances[b] - nativeBalances[a])
+  const firstChainWithoutBalance = sortedChains.find(chain => nativeBalances[chain] === 0)
 
   const networkOptions: SelectOption[] = sortedChains.map(chain => ({
     label: (
-      <HStack w="full">
-        <NetworkIcon chain={chain} size={6} />
-        <HStack gap="xxs">
-          <Text>{getChainShortName(chain)}</Text>
-          {connectedChain === chain && (
-            <Box alignItems="center" borderRadius="full" display="inline-flex" gap="xxs" px="xxs">
-              <PlugIcon size={18} />
-              <Text color="font.secondary" fontSize="11px" opacity="0.8">
-                Connected
-              </Text>
-            </Box>
-          )}
+      <VStack w="full">
+        {chain === firstChainWithoutBalance && <Divider />}
+        <HStack w="full">
+          <NetworkIcon chain={chain} size={6} />
+          <HStack gap="xxs">
+            <Text>{getChainShortName(chain)}</Text>
+            {connectedChain === chain && (
+              <Box alignItems="center" borderRadius="full" display="inline-flex" gap="xxs" px="xxs">
+                <PlugIcon size={18} />
+                <Text color="font.secondary" fontSize="11px" opacity="0.8">
+                  Connected
+                </Text>
+              </Box>
+            )}
+          </HStack>
+          <NativeTokenBalance applyOpacity chain={chain} fontSize="xs" />
         </HStack>
-        <NativeTokenBalance applyOpacity chain={chain} fontSize="xs" />
-      </HStack>
+      </VStack>
     ),
     value: chain,
   }))
