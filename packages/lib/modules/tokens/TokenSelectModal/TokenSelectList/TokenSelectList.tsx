@@ -21,7 +21,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 
 type Props = {
   chain: GqlChain
-  tokens: ApiToken[]
+  tokens: (ApiToken | CustomToken)[]
   excludeNativeAsset?: boolean
   pinNativeAsset?: boolean
   listHeight: number
@@ -184,7 +184,7 @@ export function TokenSelectList({
 
   const { name, symbol, decimals } = useTokenMetadata(searchTerm ?? '', chain)
 
-  const customTokenToShow =
+  const unknownTokenToShow: CustomToken | undefined =
     name && symbol && decimals && searchTerm && enableUnknownToken
       ? {
           name,
@@ -193,7 +193,6 @@ export function TokenSelectList({
           chain,
           chainId: getChainId(chain),
           address: searchTerm as `0x${string}`,
-          logoURI: '',
         }
       : undefined
 
@@ -204,7 +203,7 @@ export function TokenSelectList({
   const tokensToShow = [
     ...tokensWithBalance,
     ...tokensWithoutBalance,
-    ...(customTokenToShow ? [customTokenToShow] : []),
+    ...(unknownTokenToShow ? [unknownTokenToShow] : []),
   ]
 
   const isCurrentToken = (token: ApiToken | CustomToken) =>
@@ -221,7 +220,7 @@ export function TokenSelectList({
   ]
   const groupCounts = [
     tokensWithBalance.length,
-    tokensWithoutBalance.length + (customTokenToShow ? 1 : 0),
+    tokensWithoutBalance.length + (unknownTokenToShow ? 1 : 0),
   ]
 
   const decrementActiveIndex = () => setActiveIndex(prev => Math.max(prev - 1, 0))
@@ -248,7 +247,7 @@ export function TokenSelectList({
 
   return (
     <Box height={listHeight} {...rest}>
-      {tokensToShow.length === 0 && !customTokenToShow ? (
+      {tokensToShow.length === 0 && !unknownTokenToShow ? (
         <Box p="lg">
           <Text color="font.error" fontWeight="bold" mb="xxs">
             No tokens found

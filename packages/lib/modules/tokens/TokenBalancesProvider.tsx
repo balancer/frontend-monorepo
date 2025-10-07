@@ -13,7 +13,7 @@ import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
-import { ApiToken } from './token.types'
+import { ApiToken, CustomToken } from './token.types'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
@@ -24,7 +24,10 @@ export const TokenBalancesContext = createContext<UseTokenBalancesResponse | nul
  * @param initTokens If initTokens are provided the tokens state will be managed internally.
  * @param extTokens If extTokens are provided the tokens state will be managed externally.
  */
-export function useTokenBalancesLogic(initTokens?: ApiToken[], extTokens?: ApiToken[]) {
+export function useTokenBalancesLogic(
+  initTokens?: ApiToken[],
+  extTokens?: (ApiToken | CustomToken)[]
+) {
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
@@ -134,7 +137,7 @@ export function useTokenBalancesLogic(initTokens?: ApiToken[], extTokens?: ApiTo
 
 type ProviderProps = PropsWithChildren<{
   initTokens?: ApiToken[]
-  extTokens?: ApiToken[]
+  extTokens?: (ApiToken | CustomToken)[]
 }>
 
 export function TokenBalancesProvider({ initTokens, extTokens, children }: ProviderProps) {
