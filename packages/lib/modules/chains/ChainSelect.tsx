@@ -20,8 +20,8 @@ import {
 } from './NativeTokenBalance'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
-import { GasIcon } from '@repo/lib/shared/components/icons/GasIcon'
 import { PlugIcon } from '@repo/lib/shared/components/icons/PlugIcon'
+import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 
 type Props = {
   value: GqlChain
@@ -40,7 +40,7 @@ function DropdownIndicator({
       <HStack position="relative" right="12px">
         <Center bg="background.level4" h="24px" rounded="full" w="24px">
           <Box color={hasBalance ? 'font.secondary' : 'font.error'}>
-            <GasIcon size={14} />
+            <WalletIcon size={16} />
           </Box>
         </Center>
 
