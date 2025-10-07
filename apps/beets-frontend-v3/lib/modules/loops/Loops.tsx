@@ -12,6 +12,7 @@ import {
   BoxProps,
   Grid,
   GridItem,
+  Divider,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -224,6 +225,9 @@ function LoopsInfo({
 }) {
   const { toCurrency } = useCurrency()
 
+  const assetsToSharesRate = loopsData?.loopsGetData.rate || '1.0'
+  const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
+
   return (
     <NoisyCard
       cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
@@ -245,14 +249,26 @@ function LoopsInfo({
       >
         <StatRow
           isLoading={isLoopsDataLoading}
+          label="Net Asset Value"
+          secondaryValue={toCurrency(loopsData?.loopsGetData.tvl || '0')}
+          value={`${fNum('token', loopsData?.loopsGetData.nav || '0')} S`}
+        />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="loopS rate"
+          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} loopS`}
+          value={`1 loopS = ${fNum('token', assetsToSharesRate)} S`}
+        />
+        <Divider my="md" />
+        <StatRow
+          isLoading={isLoopsDataLoading}
           label="Health Factor"
           value={fNum('boost', bn(loopsData?.loopsGetData.healthFactor || '0'))}
         />
         <StatRow
           isLoading={isLoopsDataLoading}
-          label="Net Asset Value"
-          secondaryValue={toCurrency(loopsData?.loopsGetData.tvl || '0')}
-          value={fNum('token', loopsData?.loopsGetData.nav || '0')}
+          label="Sonic Point Multiplier"
+          value={fNum('boost', bn(loopsData?.loopsGetData.sonicPointsMultiplier || '0'))}
         />
         <Box minH="220px" w="full" />
       </VStack>
