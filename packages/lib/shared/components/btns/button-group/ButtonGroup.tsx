@@ -30,12 +30,12 @@ type Props = {
   size?: ButtonProps['size']
   width?: ButtonProps['width']
   isFullWidth?: boolean
-  hasLargeTextLabel?: boolean
+  fontSize?: ButtonProps['fontSize']
   isGray?: boolean
 }
 
 export default function ButtonGroup(props: Props) {
-  const { groupId, options, currentOption, isFullWidth, isGray } = props
+  const { groupId, options, currentOption, isFullWidth, isGray, fontSize = 'xs' } = props
 
   return (
     <LayoutGroup id={groupId}>
@@ -55,7 +55,12 @@ export default function ButtonGroup(props: Props) {
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <Box _hover={{ opacity: 0.75 }} transition="opacity 0.2s var(--ease-out-cubic)">
-                    <GroupOptionButton isActive={isActive} option={option} {...props} />
+                    <GroupOptionButton
+                      isActive={isActive}
+                      option={option}
+                      {...props}
+                      fontSize={fontSize}
+                    />
                   </Box>
                 </PopoverTrigger>
                 <PopoverContent maxW="300px" p="sm" w="auto">
@@ -67,7 +72,12 @@ export default function ButtonGroup(props: Props) {
             </Box>
           ) : (
             <Box flex="1" key={`button-group-option-${option.value}`}>
-              <GroupOptionButton isActive={isActive} option={option} {...props} />
+              <GroupOptionButton
+                isActive={isActive}
+                option={option}
+                {...props}
+                fontSize={fontSize}
+              />
             </Box>
           )
         })}
@@ -82,7 +92,7 @@ function GroupOptionButton({
   size,
   width,
   groupId,
-  hasLargeTextLabel,
+  fontSize,
   isGray,
   onChange,
 }: { option: ButtonGroupOption; isActive: boolean } & Props) {
@@ -118,7 +128,7 @@ function GroupOptionButton({
           shadow="md"
         />
       )}
-      <Box fontSize={hasLargeTextLabel ? 'lg' : undefined} position="relative" zIndex="8">
+      <Box fontSize={fontSize} position="relative" zIndex="8">
         {option.label}
       </Box>
     </Button>

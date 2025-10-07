@@ -1,4 +1,4 @@
-import { Box, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Box, Divider, ListItem, UnorderedList, VStack, HStack } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -174,17 +174,21 @@ export function AddLiquidityFormTabs({
   const isProportional = tabIndex === 1
 
   return (
-    <VStack w="full">
+    <VStack alignItems="start" w="full">
       {!isDisabledProportionalTab && <PoolWeightsInfo />}
-      <ButtonGroup
-        currentOption={options[tabIndex]}
-        groupId="add-liquidity"
-        hasLargeTextLabel
-        isFullWidth
-        onChange={handleTabChanged}
-        options={options}
-        size="md"
-      />
+      <HStack pb="sm" w="full">
+        <ButtonGroup
+          currentOption={options[tabIndex]}
+          fontSize="md"
+          groupId="add-liquidity"
+          onChange={handleTabChanged}
+          options={options}
+          size="sm"
+        />
+        <Box w="full">
+          <Divider w="full" />
+        </Box>
+      </HStack>
       {isOutOfRange && <OutOfRangeWarning />}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
