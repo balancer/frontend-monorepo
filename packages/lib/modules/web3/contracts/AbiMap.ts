@@ -43,7 +43,7 @@ export const AbiMap = {
   'beets.lstStaking': sonicStakingAbi,
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,
-  'beets.loops': magpieLoopedSonicRouterAbi,
+  'beets.loopedSonicRouter': magpieLoopedSonicRouterAbi,
   'beets.loopedSonicVault': loopedSonicVaultAbi,
   permit2: permit2Abi,
 }

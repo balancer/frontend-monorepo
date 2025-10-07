@@ -35,7 +35,7 @@ export function useLoopsDepositStep(humanAmount: string, chain: GqlChain, enable
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
-    contractId: 'beets.loops',
+    contractId: 'beets.loopedSonicRouter',
     contractAddress: getNetworkConfig(chain).contracts.beets?.magpieLoopedSonicRouter || '',
     functionName: 'deposit',
     args: [],
