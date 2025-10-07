@@ -69,11 +69,12 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
 
   const sortedChains = chains.sort((a, b) => nativeBalances[b] - nativeBalances[a])
   const firstChainWithoutBalance = sortedChains.find(chain => nativeBalances[chain] === 0)
+  const hasChainsWithBalance = sortedChains.find(chain => nativeBalances[chain] !== 0) !== undefined
 
   const networkOptions: SelectOption[] = sortedChains.map(chain => ({
     label: (
       <VStack w="full">
-        {chain === firstChainWithoutBalance && <Divider />}
+        {chain === firstChainWithoutBalance && hasChainsWithBalance && <Divider />}
         <HStack w="full">
           <NetworkIcon chain={chain} size={6} />
           <HStack gap="xxs">
