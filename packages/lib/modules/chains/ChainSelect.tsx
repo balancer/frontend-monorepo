@@ -1,5 +1,3 @@
-'use client'
-
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -15,7 +13,11 @@ import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { SelectInput, SelectOption } from '@repo/lib/shared/components/inputs/SelectInput'
-import { NativeTokenBalance, useHasNativeBalance } from './NativeTokenBalance'
+import {
+  NativeTokenBalance,
+  useHasNativeBalance,
+  useNativeTokenBalances,
+} from './NativeTokenBalance'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { GasIcon } from '@repo/lib/shared/components/icons/GasIcon'
@@ -63,7 +65,11 @@ function SingleValue({ ...props }: SingleValueProps<SelectOption, false, GroupBa
 export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supportedNetworks }: Props) {
   const { chainId } = useUserAccount()
   const connectedChain = chainId ? getGqlChain(chainId) : undefined
-  const networkOptions: SelectOption[] = chains.map(chain => ({
+  const nativeBalances = useNativeTokenBalances(chains)
+
+  const sortedChains = chains.sort((a, b) => nativeBalances[b] - nativeBalances[a])
+
+  const networkOptions: SelectOption[] = sortedChains.map(chain => ({
     label: (
       <HStack w="full">
         <NetworkIcon chain={chain} size={6} />
