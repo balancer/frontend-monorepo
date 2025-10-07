@@ -59,7 +59,7 @@ jobs:
       #     retention-days: 30
 
   Integration-Test:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v5
       - name: Setup
