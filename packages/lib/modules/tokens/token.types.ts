@@ -66,8 +66,9 @@ export type CustomToken = {
   chain: GqlChain
   address: Address
   symbol: string
-  logoURI: string
+  logoURI?: string
   decimals: number
+  chainId: number
 }
 
 export type BalanceForFn = (token: TokenBase | string) => TokenAmount | undefined

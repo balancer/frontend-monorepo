@@ -15,6 +15,7 @@ import { Address } from 'viem'
 import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -123,6 +124,7 @@ export function useLbpFormLogic() {
   const launchToken: CustomToken = {
     name: launchTokenMetadata.name || '',
     chain: selectedChain,
+    chainId: getChainId(selectedChain),
     address: launchTokenAddress as Address,
     symbol: launchTokenMetadata.symbol || '',
     logoURI: projectInfoForm.getValues().tokenIconUrl || '',

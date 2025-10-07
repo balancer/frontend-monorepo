@@ -13,6 +13,10 @@ import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
 import { PoolType } from '@balancer/sdk'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
+import { ApiToken, CustomToken } from '@repo/lib/modules/tokens/token.types'
+import { useEffect, useState } from 'react'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -96,6 +100,21 @@ export function usePoolFormLogic() {
     resetSteps()
   }
 
+  const [tokenList, setTokenList] = useState<(ApiToken | CustomToken)[]>([])
+
+  const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()
+
+  useEffect(() => {
+    const networkTokens = getTokensByChain(network.toUpperCase() as GqlChain) || []
+
+    const unknownTokens = poolTokens
+      .filter(token => !networkTokens.some(t => t.address === token.address))
+      .map(token => token.data)
+      .filter((token): token is ApiToken | CustomToken => token !== undefined)
+
+    setTokenList([...networkTokens, ...unknownTokens])
+  }, [getTokensByChain, network, poolTokens])
+
   // TODO: return less stuff by using poolCreationForm.watch() in components
   return {
     poolCreationForm,
@@ -126,6 +145,8 @@ export function usePoolFormLogic() {
     resetPoolCreationForm,
     poolAddress,
     invertReClammPriceParams,
+    tokenList,
+    isLoadingTokenList,
   }
 }
 

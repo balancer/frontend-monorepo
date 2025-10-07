@@ -150,7 +150,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       selectedChain,
       swapState.swapType,
       client,
-      tokens
+      tokens as ApiToken[]
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 

@@ -39,16 +39,18 @@ function PoolTokensInWalletContent() {
       const { decimals, chain, symbol } = data
       const userBalanceHuman = formatUnits(userBalanceRaw.amount, decimals)
       const userBalanceUsd = usdValueForTokenAddress(address, chain, userBalanceHuman)
-      return { address, symbol, chain, userBalanceUsd }
+      return { address, symbol, chain, userBalanceUsd, userBalanceHuman }
     })
     .filter(token => token !== null)
-    .filter(token => token && token.userBalanceUsd !== '0')
+    .filter(token => {
+      return token && (token.userBalanceUsd !== '0' || token.userBalanceHuman !== '0')
+    })
 
   const userHasPoolTokens = poolTokensWithUserBalances.length > 0
   if (!userHasPoolTokens) return <DefaultCardContent />
 
   const totalLiquidityUsd = poolTokensWithUserBalances.reduce((acc, token) => {
-    return acc + Number(token.userBalanceUsd)
+    return acc + Number(token.userBalanceUsd || 0)
   }, 0)
 
   return (
@@ -57,9 +59,13 @@ function PoolTokensInWalletContent() {
         <CardDataRow
           data={[
             <IdentifyTokenCell address={token.address} chain={token.chain} symbol={token.symbol} />,
-            <Text align="right">{toCurrency(token.userBalanceUsd)}</Text>,
             <Text align="right">
-              {((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2)}%
+              {token.userBalanceUsd !== '0' ? toCurrency(token.userBalanceUsd) : 'No price data'}
+            </Text>,
+            <Text align="right">
+              {token.userBalanceUsd !== '0'
+                ? ((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2) + '%'
+                : 'N/A'}
             </Text>,
           ]}
           key={token.address}

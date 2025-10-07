@@ -92,7 +92,7 @@ function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: numbe
     <VStack align="start" key={idx} spacing="sm" w="full">
       <Text>Token {idx + 1}</Text>
       <TokenInput
-        address={token.address}
+        apiToken={token.data}
         chain={network}
         onChange={e => handleAmountChange(idx, e.currentTarget.value)}
         value={token.amount}

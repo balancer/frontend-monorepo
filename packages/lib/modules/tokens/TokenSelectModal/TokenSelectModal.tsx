@@ -23,7 +23,7 @@ import { ApiToken, CustomToken } from '../token.types'
 type TokenType = ApiToken | CustomToken
 
 type Props<T extends TokenType = ApiToken> = {
-  tokens: ApiToken[]
+  tokens: (ApiToken | CustomToken)[]
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
