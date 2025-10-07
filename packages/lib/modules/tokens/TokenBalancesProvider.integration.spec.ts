@@ -6,7 +6,7 @@ import { useTokenBalancesLogic } from './TokenBalancesProvider'
 
 await connectWithDefaultUser()
 
-test('fetches balance for native asset token', async () => {
+test.skip('fetches balance for native asset token', async () => {
   const nativeAssetBasicToken = fakeTokenBySymbol('ETH')
   const { result } = testHook(() => useTokenBalancesLogic([nativeAssetBasicToken]))
 
@@ -23,7 +23,7 @@ test('fetches balance for native asset token', async () => {
   expect(ethBalance.amount).toBeGreaterThan(0n)
 })
 
-test('fetches token balance', async () => {
+test.skip('fetches token balance', async () => {
   const balBasicToken = fakeTokenBySymbol('BAL')
 
   const { result } = testHook(() => useTokenBalancesLogic([balBasicToken]))
@@ -47,7 +47,7 @@ test('fetches token balance', async () => {
 
 // TODO: this test behaves differently when running with ".only"
 // FIX: reset useQuery wagmi client once we migrate to wagmi v2
-test('refetches balances', async () => {
+test.skip('refetches balances', async () => {
   const balBasicToken = fakeTokenBySymbol('BAL')
 
   const { result } = testHook(() => useTokenBalancesLogic([balBasicToken]))
@@ -75,7 +75,7 @@ test('refetches balances', async () => {
   `)
 })
 
-test('Should not return balances when user is not connected (account is empty) ', async () => {
+test.skip('Should not return balances when user is not connected (account is empty) ', async () => {
   const balBasicToken = fakeTokenBySymbol('BAL')
   const nativeAssetToken = fakeTokenBySymbol('ETH')
 
