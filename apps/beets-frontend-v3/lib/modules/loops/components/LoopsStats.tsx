@@ -5,6 +5,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { useGetLoopsData } from '../hooks/useGetLoopsData'
 //import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 //const CHAIN = GqlChain.Sonic
@@ -55,6 +56,11 @@ function GlobalStatsCard({
 
 export function LoopsStats() {
   const { toCurrency } = useCurrency()
+  const { data: loopsData, loading: isLoopsDataLoading } = useGetLoopsData()
+
+  const loopsApr = loopsData?.loopsGetData.apr || '0'
+  const loopsTVL = loopsData?.loopsGetData.tvl || '0'
+  const loopsCollateral = loopsData?.loopsGetData.collateralAmountInEth || '0'
 
   return (
     <Card rounded="xl" w="full">
@@ -81,13 +87,25 @@ export function LoopsStats() {
               LOGO
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
-              <GlobalStatsCard isLoading={false} label="APR" value={fNum('apr', '0')} />
+              <GlobalStatsCard
+                isLoading={isLoopsDataLoading}
+                label="APR"
+                value={fNum('apr', loopsApr)}
+              />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
-              <GlobalStatsCard isLoading={false} label="TVL" value={toCurrency('0')} />
+              <GlobalStatsCard
+                isLoading={isLoopsDataLoading}
+                label="TVL"
+                value={toCurrency(loopsTVL)}
+              />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
-              <GlobalStatsCard isLoading={false} label="Total $S" value={fNum('token', '0')} />
+              <GlobalStatsCard
+                isLoading={isLoopsDataLoading}
+                label="Total $S"
+                value={fNum('token', loopsCollateral)}
+              />
             </GridItem>
           </Grid>
         </Box>
