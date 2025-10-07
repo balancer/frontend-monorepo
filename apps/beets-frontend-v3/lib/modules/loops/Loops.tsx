@@ -72,8 +72,8 @@ function LoopsForm() {
   const {
     isDepositTab,
     isWithdrawTab,
-    setAmountDeposit,
-    setAmountWithdraw,
+    setAmountAssets,
+    setAmountShares,
     activeTab,
     setActiveTab,
     depositTransactionSteps,
@@ -102,10 +102,10 @@ function LoopsForm() {
   useEffect(() => {
     if (isDepositTab) {
       setDisclosure(depositModalDisclosure)
-      setAmountDeposit('')
+      setAmountAssets('')
     } else if (isWithdrawTab) {
       setDisclosure(withdrawModalDisclosure)
-      setAmountWithdraw('')
+      setAmountShares('')
     }
   }, [activeTab])
 
@@ -122,8 +122,8 @@ function LoopsForm() {
     withdrawTransactionSteps.resetTransactionSteps()
 
     // reset amounts
-    setAmountDeposit('')
-    setAmountWithdraw('')
+    setAmountAssets('')
+    setAmountShares('')
 
     // finally close the modal
     disclosure.onClose()

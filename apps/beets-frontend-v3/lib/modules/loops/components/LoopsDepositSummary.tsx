@@ -4,7 +4,9 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BeetsTokenRow } from '../../../components/BeetsTokenRow'
-import { useLoops } from '@/lib/modules/loops/LoopsProvider'
+import { useLoops } from '../LoopsProvider'
+import { useGetLoopsConvertToShares } from '../hooks/useGetLoopsConvertToShares'
+import { formatUnits, parseUnits } from 'viem'
 
 export function LoopsDepositSummary({
   isLoading: isLoadingReceipt,
@@ -12,7 +14,19 @@ export function LoopsDepositSummary({
 }: LstStakeReceiptResult) {
   const { isMobile } = useBreakpoints()
 
-  const { chain, depositTransactionSteps, loopsDepositTxHash } = useLoops()
+  const {
+    chain,
+    depositTransactionSteps,
+    loopsDepositTxHash,
+    nativeAsset,
+    loopedAsset,
+    amountAssets,
+  } = useLoops()
+
+  const { sharesAmount, isLoading: isLoadingSharesAmount } = useGetLoopsConvertToShares(
+    parseUnits(amountAssets, 18),
+    chain
+  )
 
   const shouldShowReceipt = !!loopsDepositTxHash && !isLoadingReceipt && !!receivedToken
 
@@ -22,19 +36,21 @@ export function LoopsDepositSummary({
       <Card variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={false}
+          isLoading={isLoadingSharesAmount}
           label={shouldShowReceipt ? 'You deposited' : 'You deposit'}
-          tokenAddress={''}
-          tokenAmount="0"
+          tokenAddress={nativeAsset?.address || ''}
+          tokenAmount={amountAssets}
         />
       </Card>
       <Card variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingReceipt}
+          isLoading={isLoadingSharesAmount || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
-          tokenAddress={''}
-          tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : '0'}
+          tokenAddress={loopedAsset?.address || ''}
+          tokenAmount={
+            shouldShowReceipt ? receivedToken.humanAmount : formatUnits(sharesAmount, 18)
+          }
         />
       </Card>
     </AnimateHeightChange>

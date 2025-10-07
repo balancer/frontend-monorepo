@@ -2,14 +2,14 @@ import { useLoops } from '../LoopsProvider'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 
 export function LoopsDeposit() {
-  const { amountDeposit, setAmountDeposit, chain, nativeAsset } = useLoops()
+  const { amountAssets, setAmountAssets, chain, nativeAsset } = useLoops()
 
   return (
     <TokenInput
       address={nativeAsset?.address}
       chain={chain}
-      onChange={e => setAmountDeposit(e.currentTarget.value)}
-      value={amountDeposit}
+      onChange={e => setAmountAssets(e.currentTarget.value)}
+      value={amountAssets}
     />
   )
 }

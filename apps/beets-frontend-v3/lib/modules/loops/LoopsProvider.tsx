@@ -19,8 +19,8 @@ const CHAIN = GqlChain.Sonic
 
 export function useLoopsLogic() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
-  const [amountDeposit, setAmountDeposit] = useState('')
-  const [amountWithdraw, setAmountWithdraw] = useState('')
+  const [amountAssets, setAmountAssets] = useState('')
+  const [amountShares, setAmountShares] = useState('')
   const { isConnected } = useUserAccount()
   const { getToken } = useTokens()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
@@ -31,12 +31,12 @@ export function useLoopsLogic() {
   const nativeAsset = getToken(sonicNetworkConfig.tokens.nativeAsset.address, CHAIN)
   const loopedAsset = getToken(sonicNetworkConfig.tokens.loopedAsset?.address || '', CHAIN)
 
-  const { step: depositStep } = useLoopsDepositStep(amountDeposit, CHAIN, isDepositTab)
+  const { step: depositStep } = useLoopsDepositStep(amountAssets, CHAIN, isDepositTab)
   const depositTransactionSteps = useTransactionSteps([depositStep], false)
   const loopsDepositTxHash = depositTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const loopsStakeTxConfirmed = depositTransactionSteps.lastTransactionConfirmed
 
-  const { step: withdrawStep } = useLoopsWithdrawStep(amountWithdraw, CHAIN, isWithdrawTab)
+  const { step: withdrawStep } = useLoopsWithdrawStep(amountShares, CHAIN, isWithdrawTab)
   const withdrawTransactionSteps = useTransactionSteps([withdrawStep], false)
   const loopsWithdrawTxHash =
     withdrawTransactionSteps.lastTransaction?.result?.data?.transactionHash
@@ -48,7 +48,7 @@ export function useLoopsLogic() {
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
     [
-      isDepositTab && (!amountDeposit || bn(amountDeposit).lte(0)),
+      isDepositTab && (!amountAssets || bn(amountAssets).lte(0)),
       'Please enter an amount to deposit',
     ],
     [isDepositTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
@@ -62,8 +62,8 @@ export function useLoopsLogic() {
     setActiveTab,
     depositTransactionSteps,
     lastTransaction: depositTransactionSteps.lastTransaction,
-    amountDeposit,
-    setAmountDeposit,
+    amountAssets,
+    setAmountAssets,
     chain: CHAIN,
     loopsDepositTxHash,
     loopsStakeTxConfirmed,
@@ -76,8 +76,8 @@ export function useLoopsLogic() {
     withdrawTransactionSteps,
     loopsWithdrawTxHash,
     loopsWithdrawTxConfirmed,
-    amountWithdraw,
-    setAmountWithdraw,
+    amountShares,
+    setAmountShares,
   }
 }
 

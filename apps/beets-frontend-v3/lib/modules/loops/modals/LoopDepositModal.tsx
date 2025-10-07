@@ -73,7 +73,7 @@ export function LoopDepositModal({
         {isDesktop && (
           <DesktopStepTracker chain={chain} transactionSteps={depositTransactionSteps} />
         )}
-        <TransactionModalHeader chain={chain} isReceiptLoading label="Review stake" txHash="0x" />
+        <TransactionModalHeader chain={chain} isReceiptLoading label="Review deposit" txHash="0x" />
         <ModalCloseButton />
         <ModalBody>
           <LoopsDepositSummary {...loopsDepositReceipt} />
@@ -82,7 +82,7 @@ export function LoopDepositModal({
           currentStep={depositTransactionSteps.currentStep}
           isSuccess={isSuccess}
           returnAction={onClose}
-          returnLabel="Stake again"
+          returnLabel="Deposit again"
         />
       </ModalContent>
     </Modal>
