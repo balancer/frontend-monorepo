@@ -59,7 +59,7 @@ jobs:
       #     retention-days: 30
 
   Integration-Test:
-    runs-on: macos-14
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - name: Setup
@@ -69,12 +69,14 @@ jobs:
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
-        run: pnpm test:integration
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=4096"
+          pnpm test:integration
 
   E2E-Smoke-Test:
-      timeout-minutes: 15
-      runs-on: ubuntu-latest
-      steps:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v5
       - name: Setup
         uses: ./.github/actions/setup
@@ -91,9 +93,9 @@ jobs:
           retention-days: 30
 
   E2E-Dev-Test:
-      timeout-minutes: 15
-      runs-on: ubuntu-latest
-      steps:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v5
       - name: Setup
         uses: ./.github/actions/setup
@@ -112,5 +114,3 @@ jobs:
           path: |
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
-
-
