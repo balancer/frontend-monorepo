@@ -230,9 +230,11 @@ export function PoolNetworkFilters({
       </Box>
     ),
     selectedLabel: (
-      <Box rounded="full" shadow="md">
-        <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
-      </Box>
+      <HStack spacing="6px">
+        <Box h="20px" rounded="full" shadow="md" w="20px">
+          <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
+        </Box>
+      </HStack>
     ),
   }))
 
@@ -242,9 +244,12 @@ export function PoolNetworkFilters({
 
   return (
     <MultiSelect<GqlChain>
+      bg="background.level4"
       isChecked={isCheckedNetwork}
       label="All networks"
+      mb="xs"
       options={networkOptions}
+      rounded="md"
       toggleAll={() => setNetworks(null)}
       toggleOption={toggleNetwork}
     />
