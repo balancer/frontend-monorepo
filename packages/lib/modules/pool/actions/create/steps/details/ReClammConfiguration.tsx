@@ -1,16 +1,16 @@
-import { Heading, VStack, Text, HStack, Card, SimpleGrid } from '@chakra-ui/react'
+import { Heading, VStack, Text, HStack, Radio, SimpleGrid, useRadioGroup } from '@chakra-ui/react'
 import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import {
   useReClammConfigurationOptions,
   ReClammConfigOptionsGroup,
 } from './useReClammConfigurationOptions'
-import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
+import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 
 export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
@@ -46,13 +46,59 @@ function ConfigOptionsGroup({
   const { reClammConfigForm } = usePoolCreationForm()
   const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
   const formValue = reClammConfigForm.watch(name)
-  const optionRawValues = options.map(option => Number(option.rawValue))
+  const normalizedFormValue = formValue?.toString?.() ?? ''
+  const matchedOption = options.find(option => {
+    if (option.rawValue === normalizedFormValue) return true
+    if (option.rawValue === '' || normalizedFormValue === '') return false
 
-  const isCustom = !optionRawValues.includes(Number(formValue))
+    const optionNumber = Number(option.rawValue)
+    const formValueNumber = Number(normalizedFormValue)
+
+    if (Number.isNaN(optionNumber) || Number.isNaN(formValueNumber)) return false
+
+    return optionNumber === formValueNumber
+  })
+
+  const isCustom = matchedOption ? matchedOption.rawValue === '' : normalizedFormValue !== ''
+  const selectedValue = isCustom ? '' : (matchedOption?.rawValue ?? '')
   const isCustomTargetPrice = isCustom && name === 'initialTargetPrice'
   const ispriceRangePercentage = name === 'priceRangePercentage'
   const isCustomPriceRange = isCustom && ispriceRangePercentage
   const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
+  const cardOptions = options.filter(option => option.rawValue !== '')
+  const customOption = options.find(option => option.rawValue === '')
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name,
+    value: selectedValue,
+    onChange: (value: string) => updateFn(value),
+  })
+  const radioGroupProps = getRootProps()
+  const cardContainerProps = {
+    alignItems: 'center',
+    bg: 'background.level2',
+    borderColor: 'transparent',
+    borderRadius: 'lg',
+    borderWidth: '2px',
+    boxShadow: 'lg',
+    color: 'font.secondary',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+    h: 141,
+    justifyContent: 'center',
+    px: 2,
+    py: 3,
+    textAlign: 'center',
+    _checked: {
+      bg: '#63F2BE0D',
+      borderColor: 'green.400 !important',
+      boxShadow: 'none',
+      color: 'font.maxContrast',
+    },
+    _hover: {
+      boxShadow: 'md',
+    },
+  } as const
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -64,45 +110,33 @@ function ConfigOptionsGroup({
           <InfoIcon />
         </BalPopover>
       </HStack>
-      <SimpleGrid columns={3} spacing="md" w="full">
-        {options.map(option => {
-          const isSelected = Number(formValue) === Number(option.rawValue)
-          const bg = isSelected ? '#63F2BE0D' : 'background.level2'
-          const borderColor = isSelected ? 'green.400' : 'transparent'
-          const shadow = isSelected ? 'none' : 'lg'
-          const textColor = isSelected ? 'font.maxContrast' : 'font.secondary'
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing="md" w="full" {...radioGroupProps}>
+        {cardOptions.map((option, idx) => {
+          const radio = getRadioProps({ value: option.rawValue })
+          const key = `${label.replace(/\s+/g, '-')}-${idx}`
 
           return (
-            <Card
-              _hover={{ cursor: 'pointer', shadow: 'md' }}
-              bg={bg}
-              borderColor={borderColor}
-              h={141}
-              key={option.label}
-              onClick={() => updateFn(option.rawValue)}
-              shadow={shadow}
-            >
-              <VStack h="full" justify="center">
-                <option.svg height="100%" width="100%" />
-                <Text color={textColor} fontSize="sm">
+            <RadioCard key={key} {...radio} containerProps={cardContainerProps}>
+              <VStack align="center" h="full" justify="center" spacing="1" textAlign="center">
+                {option.svg && <option.svg height="100%" width="100%" />}
+                <Text color="inherit" fontSize="sm">
                   {option.label}
                 </Text>
-                <Text color={textColor} fontWeight="bold">
+                <Text color="inherit" fontWeight="bold">
                   {option.displayValue}
                 </Text>
               </VStack>
-            </Card>
+            </RadioCard>
           )
         })}
       </SimpleGrid>
-      <PoolCreationCheckbox
-        isChecked={isCustom}
-        label="Or choose custom"
-        labelColor="font.secondary"
-        onChange={() => {
-          updateFn('')
-        }}
-      />
+      {customOption ? (
+        <Radio {...getRadioProps({ value: customOption.rawValue })} mt="2">
+          <Text color="font.secondary" fontSize="sm">
+            {customOption.label}
+          </Text>
+        </Radio>
+      ) : null}
       {isCustomPriceRange ? (
         <VStack align="start" spacing="md" w="full">
           <NumberInput
@@ -161,7 +195,7 @@ function ConfigOptionsGroup({
             isCustomTargetPrice ? getPercentFromPrice(formValue, options[1].rawValue) : ''
           }
           placeholder={options[1].displayValue.replace('%', '')}
-          validate={value => validateFn(value.toString())}
+          validate={value => validateFn(Number.isNaN(value) ? '' : value.toString())}
           width="full"
         />
       ) : null}
