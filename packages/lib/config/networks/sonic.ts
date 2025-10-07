@@ -73,6 +73,7 @@ const networkConfig: NetworkConfig = {
       lstWithdrawRequestHelper: '0x52b16e3d7d25ba64f242e59f9a74799ecc432d78',
       reliquary: '0x973670ce19594f857a7cd85ee834c7a74a941684',
       magpieLoopedSonicRouter: '0xd1e0b8dc3a4cd1a892fe1b46e0aed30c35f6a087',
+      loopedSonicVault: '0xc76995054ce51dfbbc954840d699b2f33d2538ee',
     },
     permit2: PERMIT2[sonic.id],
   },

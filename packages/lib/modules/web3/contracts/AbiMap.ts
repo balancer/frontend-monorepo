@@ -19,6 +19,7 @@ import {
   sonicStakingAbi,
   reliquaryAbi,
   magpieLoopedSonicRouterAbi,
+  loopedSonicVaultAbi,
 } from './abi/beets/generated'
 import { LiquidityGaugeV5Abi } from './abi/LiquidityGaugeV5Abi'
 import { permit2Abi } from '@balancer/sdk'
@@ -43,6 +44,7 @@ export const AbiMap = {
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,
   'beets.loops': magpieLoopedSonicRouterAbi,
+  'beets.loopedSonicVault': loopedSonicVaultAbi,
   permit2: permit2Abi,
 }
 

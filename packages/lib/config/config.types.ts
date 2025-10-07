@@ -67,6 +67,7 @@ export interface ContractsConfig {
     lstWithdrawRequestHelper?: Address
     reliquary?: Address
     magpieLoopedSonicRouter?: Address
+    loopedSonicVault?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address
