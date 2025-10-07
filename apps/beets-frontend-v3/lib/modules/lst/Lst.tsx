@@ -6,12 +6,9 @@ import {
   Card,
   CardBody,
   CardFooter,
-  HStack,
   Tooltip,
   useDisclosure,
   VStack,
-  Text,
-  Skeleton,
   BoxProps,
   Grid,
   GridItem,
@@ -45,6 +42,7 @@ import { getNetworkConfig } from '@repo/lib/config/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
+import { StatRow } from '@/lib/components/shared/StatRow'
 
 const CHAIN = GqlChain.Sonic
 
@@ -243,34 +241,6 @@ function LstForm() {
   )
 }
 
-function LstStatRow({
-  label,
-  value,
-  secondaryValue,
-  isLoading,
-}: {
-  label: string
-  value: string
-  secondaryValue?: string
-  isLoading?: boolean
-}) {
-  return (
-    <HStack align="flex-start" justify="space-between" w="full">
-      <Text color="font.secondary">{label}</Text>
-      <Box alignItems="flex-end" display="flex" flexDirection="column">
-        {isLoading ? <Skeleton h="full" w="12" /> : <Text fontWeight="bold">{value}</Text>}
-        {isLoading ? (
-          <Skeleton h="full" w="12" />
-        ) : (
-          <Text color="grayText" fontSize="sm">
-            {secondaryValue}
-          </Text>
-        )}
-      </Box>
-    </HStack>
-  )
-}
-
 function LstInfo({
   stakedSonicData,
   isStakedSonicDataLoading,
@@ -304,7 +274,7 @@ function LstInfo({
         w="full"
         zIndex={1}
       >
-        <LstStatRow
+        <StatRow
           isLoading={isStakedSonicDataLoading}
           label="Total ($S)"
           secondaryValue={toCurrency(
@@ -312,7 +282,7 @@ function LstInfo({
           )}
           value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
         />
-        <LstStatRow
+        <StatRow
           isLoading={isStakedSonicDataLoading}
           label="Delegated ($S)"
           secondaryValue={toCurrency(
@@ -326,7 +296,7 @@ function LstInfo({
             stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
           )}
         />
-        <LstStatRow
+        <StatRow
           isLoading={isStakedSonicDataLoading}
           label="Pending delegation ($S)"
           secondaryValue={toCurrency(
@@ -337,7 +307,7 @@ function LstInfo({
           )}
           value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
         />
-        <LstStatRow
+        <StatRow
           isLoading={isStakedSonicDataLoading}
           label="stS rate"
           secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}

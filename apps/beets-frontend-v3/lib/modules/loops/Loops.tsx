@@ -6,12 +6,9 @@ import {
   Card,
   CardBody,
   CardFooter,
-  HStack,
   Tooltip,
   useDisclosure,
   VStack,
-  Text,
-  Skeleton,
   BoxProps,
   Grid,
   GridItem,
@@ -29,7 +26,7 @@ import { LoopDepositModal } from './modals/LoopDepositModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { LoopsDeposit } from './components/LoopsDeposit'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LstFaq } from './components/LoopsFaq'
@@ -37,6 +34,9 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LoopsStats } from './components/LoopsStats'
 import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
+import { StatRow } from '@/lib/components/shared/StatRow'
+import { useLoopsGetData } from '@/lib/modules/loops/hooks/useLoopsGetData'
+import { GetLoopsDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 //import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 //const CHAIN = GqlChain.Sonic
@@ -215,35 +215,13 @@ function LoopsForm() {
   )
 }
 
-function LoopsStatRow({
-  label,
-  value,
-  secondaryValue,
-  isLoading,
+function LoopsInfo({
+  loopsData,
+  isLoopsDataLoading,
 }: {
-  label: string
-  value: string
-  secondaryValue?: string
-  isLoading?: boolean
+  loopsData?: GetLoopsDataQuery
+  isLoopsDataLoading: boolean
 }) {
-  return (
-    <HStack align="flex-start" justify="space-between" w="full">
-      <Text color="font.secondary">{label}</Text>
-      <Box alignItems="flex-end" display="flex" flexDirection="column">
-        {isLoading ? <Skeleton h="full" w="12" /> : <Text fontWeight="bold">{value}</Text>}
-        {isLoading ? (
-          <Skeleton h="full" w="12" />
-        ) : (
-          <Text color="grayText" fontSize="sm">
-            {secondaryValue}
-          </Text>
-        )}
-      </Box>
-    </HStack>
-  )
-}
-
-function LoopsInfo() {
   const { toCurrency } = useCurrency()
 
   return (
@@ -265,20 +243,26 @@ function LoopsInfo() {
         w="full"
         zIndex={1}
       >
-        <LoopsStatRow
-          isLoading={false}
-          label="Total ($S)"
-          secondaryValue={toCurrency('0')}
-          value={fNum('token', '0')}
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Health Factor"
+          value={fNum('boost', bn(loopsData?.loopsGetData.healthFactor || '0'))}
         />
-
-        <Box minH="120px" w="full" />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Net Asset Value"
+          secondaryValue={toCurrency(loopsData?.loopsGetData.tvl || '0')}
+          value={fNum('token', loopsData?.loopsGetData.nav || '0')}
+        />
+        <Box minH="220px" w="full" />
       </VStack>
     </NoisyCard>
   )
 }
 
 export function Loops() {
+  const { data: loopsData, loading: isLoopsDataLoading } = useLoopsGetData()
+
   return (
     <FadeInOnView>
       <DefaultPageContainer noVerticalPadding>
@@ -290,7 +274,7 @@ export function Loops() {
                 <LoopsForm />
               </GridItem>
               <GridItem>
-                <LoopsInfo />
+                <LoopsInfo isLoopsDataLoading={isLoopsDataLoading} loopsData={loopsData} />
               </GridItem>
             </Grid>
           </Card>
