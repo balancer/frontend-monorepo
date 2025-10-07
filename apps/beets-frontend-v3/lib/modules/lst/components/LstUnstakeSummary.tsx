@@ -3,7 +3,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
-import { BeetsTokenRow } from '../../../components/BeetsTokenRow'
+import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 

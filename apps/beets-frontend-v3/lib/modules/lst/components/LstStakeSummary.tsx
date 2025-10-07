@@ -4,7 +4,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { BeetsTokenRow } from '../../../components/BeetsTokenRow'
+import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useGetConvertToShares } from '../hooks/useGetConvertToShares'
 import { formatUnits, parseUnits } from 'viem'
 
