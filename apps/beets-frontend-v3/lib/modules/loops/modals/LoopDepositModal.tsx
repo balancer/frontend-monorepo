@@ -19,7 +19,6 @@ import { useLoops } from '@/lib/modules/loops/LoopsProvider'
 type Props = {
   isOpen: boolean
   onClose(): void
-  onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 

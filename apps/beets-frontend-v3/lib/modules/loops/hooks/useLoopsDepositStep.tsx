@@ -28,7 +28,7 @@ export function useLoopsDepositStep(humanAmount: string, chain: GqlChain, enable
     init: 'Deposit',
     title: 'Deposit',
     confirming: 'Confirming deposit...',
-    confirmed: 'Depositd!',
+    confirmed: 'Deposited!',
     tooltip: 'tooltip',
   }
 

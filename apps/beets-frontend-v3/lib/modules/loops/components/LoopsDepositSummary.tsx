@@ -24,7 +24,7 @@ export function LoopsDepositSummary({
   } = useLoops()
 
   const { sharesAmount, isLoading: isLoadingSharesAmount } = useLoopsGetConvertToShares(
-    parseUnits(amountAssets, 18),
+    amountAssets && nativeAsset?.decimals ? parseUnits(amountAssets, nativeAsset.decimals) : 0n,
     chain
   )
 
@@ -36,7 +36,7 @@ export function LoopsDepositSummary({
       <Card variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingSharesAmount}
+          isLoading={false}
           label={shouldShowReceipt ? 'You deposited' : 'You deposit'}
           tokenAddress={nativeAsset?.address || ''}
           tokenAmount={amountAssets}
@@ -49,7 +49,9 @@ export function LoopsDepositSummary({
           label={shouldShowReceipt ? 'You received' : 'You receive'}
           tokenAddress={loopedAsset?.address || ''}
           tokenAmount={
-            shouldShowReceipt ? receivedToken.humanAmount : formatUnits(sharesAmount, 18)
+            shouldShowReceipt
+              ? receivedToken.humanAmount
+              : formatUnits(sharesAmount, loopedAsset?.decimals ?? 18)
           }
         />
       </Card>

@@ -139,7 +139,7 @@ const FAQ_ITEMS = [
   },
 ]
 
-export function LstFaq() {
+export function LoopsFaq() {
   return (
     <Card rounded="xl" w="full">
       <CardHeader as={HStack} justify="space-between" w="full">
@@ -147,22 +147,23 @@ export function LstFaq() {
           FAQ
         </Heading>
       </CardHeader>
-      <CardBody align="start" as={VStack} />
-      <Accordion allowToggle bg="transparent" variant="button">
-        {FAQ_ITEMS.map(item => (
-          <AccordionItem key={item.question} mb="sm">
-            <h2>
-              <AccordionButton>
-                <Box as="span" flex="1" textAlign="left">
-                  {item.question}
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb="md">{item.answer}</AccordionPanel>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <CardBody align="start" as={VStack}>
+        <Accordion allowToggle bg="transparent" variant="button">
+          {FAQ_ITEMS.map(item => (
+            <AccordionItem key={item.question} mb="sm">
+              <h2>
+                <AccordionButton>
+                  <Box as="span" flex="1" textAlign="left">
+                    {item.question}
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb="md">{item.answer}</AccordionPanel>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </CardBody>
     </Card>
   )
 }

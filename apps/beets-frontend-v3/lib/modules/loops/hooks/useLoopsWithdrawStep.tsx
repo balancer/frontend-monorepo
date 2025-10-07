@@ -28,7 +28,7 @@ export function useLoopsWithdrawStep(humanAmount: string, chain: GqlChain, enabl
     init: 'Withdraw',
     title: 'Withdraw',
     confirming: 'Confirming withdraw...',
-    confirmed: 'Withdrawd!',
+    confirmed: 'Withdrawn!',
     tooltip: 'tooltip',
   }
 

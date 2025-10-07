@@ -30,7 +30,7 @@ import { LoopsDeposit } from './components/LoopsDeposit'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { LstFaq } from './components/LoopsFaq'
+import { LoopsFaq } from './components/LoopsFaq'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LoopsStats } from './components/LoopsStats'
@@ -38,9 +38,6 @@ import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 import { StatRow } from '@/lib/components/shared/StatRow'
 import { useLoopsGetData } from '@/lib/modules/loops/hooks/useLoopsGetData'
 import { GetLoopsDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
-//import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-
-//const CHAIN = GqlChain.Sonic
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -204,7 +201,6 @@ function LoopsForm() {
         finalFocusRef={nextBtn}
         isOpen={depositModalDisclosure.isOpen}
         onClose={onModalClose}
-        onOpen={depositModalDisclosure.onOpen}
       />
       {/* <LstUnstakeModal
         finalFocusRef={nextBtn}
@@ -294,7 +290,7 @@ export function Loops() {
               </GridItem>
             </Grid>
           </Card>
-          <LstFaq />
+          <LoopsFaq />
         </VStack>
       </DefaultPageContainer>
     </FadeInOnView>
