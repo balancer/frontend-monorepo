@@ -55,14 +55,11 @@ export function UserSnapshotValues() {
     return veBalBoostMap[pool.id]
   }, [veBalBoostMap])
 
-  const myAprRaw = useMemo(() => {
-    // If user has staked on Aura, use Aura APR
-    if (hasAuraStakedBalance(pool) && pool.staking?.aura?.apr) {
-      return pool.staking.aura.apr
-    }
-    // Otherwise use the standard APR calculation
-    return getTotalAprRaw(pool.dynamicData.aprItems, boost)
-  }, [pool, boost])
+  // If user has staked on Aura, use Aura APR
+  const myAprRaw =
+    hasAuraStakedBalance(pool) && pool.staking?.aura?.apr
+      ? pool.staking.aura.apr
+      : getTotalAprRaw(pool.dynamicData.aprItems, boost)
 
   const poolMyStatsValues: PoolMyStatsValues | undefined = useMemo(() => {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
