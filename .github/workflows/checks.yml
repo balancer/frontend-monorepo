@@ -69,9 +69,7 @@ jobs:
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
-        run: |
-          export NODE_OPTIONS="--max-old-space-size=4096"
-          pnpm test:integration
+        run: pnpm test:integration
 
   E2E-Smoke-Test:
     timeout-minutes: 15
