@@ -148,7 +148,7 @@ export function LoopsFaq() {
         </Heading>
       </CardHeader>
       <CardBody align="start" as={VStack}>
-        <Accordion allowToggle bg="transparent" variant="button">
+        <Accordion allowToggle bg="transparent" variant="button" w="full">
           {FAQ_ITEMS.map(item => (
             <AccordionItem key={item.question} mb="sm">
               <h2>
