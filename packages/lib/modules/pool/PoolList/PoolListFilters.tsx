@@ -627,18 +627,20 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        <Button
-          as={Link}
-          display="flex"
-          gap="2"
-          href={poolCreatorUrl}
-          isExternal
-          ml="ms"
-          variant="tertiary"
-        >
-          <Icon as={Plus} boxSize={4} />
-          {!isMobile && 'Create pool'}
-        </Button>
+        {!isBalancer && (
+          <Button
+            as={Link}
+            display="flex"
+            gap="2"
+            href={poolCreatorUrl}
+            isExternal
+            ml="ms"
+            variant="tertiary"
+          >
+            <Icon as={Plus} boxSize={4} />
+            {!isMobile && 'Create pool'}
+          </Button>
+        )}
       </HStack>
     </VStack>
   )
