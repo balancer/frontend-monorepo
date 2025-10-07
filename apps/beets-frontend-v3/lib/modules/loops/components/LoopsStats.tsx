@@ -60,7 +60,7 @@ export function LoopsStats() {
 
   const loopsApr = loopsData?.loopsGetData.apr || '0'
   const loopsTVL = loopsData?.loopsGetData.tvl || '0'
-  const loopsCollateral = loopsData?.loopsGetData.collateralAmountInEth || '0'
+  const loopsNav = loopsData?.loopsGetData.nav || '0'
 
   return (
     <Card rounded="xl" w="full">
@@ -103,8 +103,8 @@ export function LoopsStats() {
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
                 isLoading={isLoopsDataLoading}
-                label="Total $S"
-                value={fNum('token', loopsCollateral)}
+                label="NAV ($S)"
+                value={fNum('token', loopsNav)}
               />
             </GridItem>
           </Grid>
