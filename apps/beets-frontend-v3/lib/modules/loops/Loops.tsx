@@ -12,7 +12,6 @@ import {
   BoxProps,
   Grid,
   GridItem,
-  Divider,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -245,9 +244,36 @@ function LoopsInfo({
       >
         <StatRow
           isLoading={isLoopsDataLoading}
-          label="Net Asset Value"
+          label="Total ($S)"
           secondaryValue={toCurrency(loopsData?.loopsGetData.tvl || '0')}
           value={`${fNum('token', loopsData?.loopsGetData.nav || '0')} S`}
+        />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Total collateral"
+          secondaryValue={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmountInEth || '0'))} S`}
+          value={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmount || '0'))} stS`}
+        />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Total debt"
+          value={`${fNum('token', bn(loopsData?.loopsGetData.debtAmount || '0'))} S`}
+        />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Health factor"
+          secondaryValue={`target: ${fNum('boost', bn(loopsData?.loopsGetData.targetHealthFactor || '0'))}`}
+          value={fNum('boost', bn(loopsData?.loopsGetData.healthFactor || '0'))}
+        />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Current leverage"
+          value={fNum('boost', bn(loopsData?.loopsGetData.leverage || '0'))}
+        />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Actual supply"
+          value={`${fNum('token', bn(loopsData?.loopsGetData.actualSupply || '0'))} loopS`}
         />
         <StatRow
           isLoading={isLoopsDataLoading}
@@ -255,18 +281,12 @@ function LoopsInfo({
           secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} loopS`}
           value={`1 loopS = ${fNum('token', assetsToSharesRate)} S`}
         />
-        <Divider my="md" />
         <StatRow
           isLoading={isLoopsDataLoading}
-          label="Health Factor"
-          value={fNum('boost', bn(loopsData?.loopsGetData.healthFactor || '0'))}
-        />
-        <StatRow
-          isLoading={isLoopsDataLoading}
-          label="Sonic Point Multiplier"
+          label="Sonic points multiplier"
           value={fNum('boost', bn(loopsData?.loopsGetData.sonicPointsMultiplier || '0'))}
         />
-        <Box minH="220px" w="full" />
+        <Box minH="20px" w="full" />
       </VStack>
     </NoisyCard>
   )

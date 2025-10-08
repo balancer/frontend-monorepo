@@ -12,6 +12,7 @@ query GetLoopsData {
     sonicPointsMultiplier
     stSAaveMarketSupply
     stSAaveMarketSupplyCap
+    targetHealthFactor
     tvl
   }
 }
