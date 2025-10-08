@@ -110,7 +110,7 @@ export function AddLiquiditySummary({
                 description={PROPORTIONAL_ADD_DESCRIPTION}
                 onChange={calculateSlippage}
                 selectedIndex={1}
-                title="Slippage Simulation on 'Proportional' Adds"
+                title="Slippage Simulation: ‘Proportional’ Add"
               />
             )
           }

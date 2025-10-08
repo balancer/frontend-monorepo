@@ -103,7 +103,7 @@ export function SwapSummary({
         description={EXACT_IN_SWAP_DESCRIPTION}
         onChange={calculateSlippage}
         selectedIndex={0}
-        title="Slippage Simulation on 'Exact In' Swaps"
+        title="Slippage Simulation: ‘Exact In’ Swap"
       />
     ) : undefined
   }
@@ -135,7 +135,7 @@ export function SwapSummary({
                 description={EXACT_OUT_SWAP_DESCRIPTION}
                 onChange={calculateSlippage}
                 selectedIndex={1}
-                title="Slippage Simulation on 'Exact Out' Swaps"
+                title="Slippage Simulation: ‘Exact Out’ Swap"
               />
             )
           }
