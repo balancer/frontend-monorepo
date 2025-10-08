@@ -65,26 +65,26 @@ function TokenInfo({
   iconSize = 40,
   logoURI,
 }: TokenInfoProps) {
-  const tokenSymbol = isBpt ? 'LP token' : poolToken?.symbol || token?.symbol || symbol
+  const tokenSymbol = isBpt ? '‘LP’ pool token' : poolToken?.symbol || token?.symbol || symbol
   const tokenName = isBpt ? pool?.name : poolToken?.name || token?.name
 
   const headingProps = {
     as: 'h6' as const,
-    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
     fontWeight: 'bold',
-    lineHeight: isNestedPoolToken ? '20px' : '24px',
+    lineHeight: isNestedPoolToken ? '18px' : '24px',
     variant: disabled ? 'secondary' : 'primary',
   }
 
   const tokenNameProps = {
-    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
-    lineHeight: '24px',
+    lineHeight: isNestedPoolToken ? '12px' : '18px',
     variant: 'secondary',
   }
 
   return (
-    <HStack spacing="sm">
+    <HStack spacing={{ base: 'sm', md: 'ms' }}>
       {!isBpt && (
         <TokenIcon
           address={address}
@@ -214,15 +214,15 @@ export default function TokenRow({
 
   const headingProps = {
     as: 'h6' as const,
-    fontSize: isNestedPoolToken ? 'md' : 'lg',
-    fontWeight: isNestedPoolToken ? 'normal' : 'bold',
-    lineHeight: isNestedPoolToken ? '20px' : '24px',
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: isNestedPoolToken ? 'medium' : 'bold',
+    lineHeight: isNestedPoolToken ? '18px' : '24px',
   }
 
   const subTextProps = {
-    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
-    lineHeight: '24px',
+    lineHeight: isNestedPoolToken ? '12px' : '18px',
     variant: 'secondary',
   }
 

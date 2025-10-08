@@ -69,7 +69,7 @@ export function TokenRowGroup({
   return (
     <VStack align="start" spacing="md">
       <HStack justify="space-between" w="full">
-        <Text fontSize="sm" fontWeight="bold">
+        <Text fontSize="sm" fontWeight="bold" pb="xxs">
           {label}
         </Text>
         {isLoading ? (

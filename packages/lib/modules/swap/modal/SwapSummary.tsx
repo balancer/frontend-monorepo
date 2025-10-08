@@ -177,7 +177,9 @@ export function SwapSummary({
           <CardPopAnim key="exchange-rate">
             <Card fontSize="sm" variant="modalSubSection">
               <HStack justify="space-between" w="full">
-                <Text color="grayText">Exchange rate</Text>
+                <Text color="grayText" fontSize="sm">
+                  Exchange rate
+                </Text>
                 <SwapRate />
               </HStack>
             </Card>
