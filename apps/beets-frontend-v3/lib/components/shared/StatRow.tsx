@@ -17,16 +17,20 @@ export function StatRow({
     <HStack align="flex-start" justify="space-between" w="full">
       <Text color="font.secondary">{label}</Text>
       <Box alignItems="flex-end" display="flex" flexDirection="column">
-        {isLoading ? <Skeleton h="16" w="12" /> : <Text fontWeight="bold">{value}</Text>}
+        {isLoading ? (
+          <Skeleton h="16px" my="2px" w="80px" />
+        ) : (
+          <Text fontWeight="bold">{value}</Text>
+        )}
         {isLoading && secondaryValue ? (
-          <Skeleton h="full" w="12" />
+          <Skeleton h="16px" my="2px" w="80px" />
         ) : (
           <Text color="grayText" fontSize="sm">
             {secondaryValue}
           </Text>
         )}
         {isLoading && tertiaryValue ? (
-          <Skeleton h="full" w="12" />
+          <Skeleton h="16px" my="2px" w="80px" />
         ) : (
           <Text color="grayText" fontSize="sm">
             {tertiaryValue}
