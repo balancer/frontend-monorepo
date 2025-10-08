@@ -1,4 +1,4 @@
-import { CardBody, VStack, Text, Divider } from '@chakra-ui/react'
+import { CardBody, VStack, Text, Divider, HStack } from '@chakra-ui/react'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -6,6 +6,8 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { formatUnits } from 'viem'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
+import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
+import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
 
 export function PreviewPoolTokensInWallet() {
   return (
@@ -25,6 +27,7 @@ function PoolTokensInWalletContent() {
   const { toCurrency } = useCurrency()
   const { usdValueForTokenAddress } = useTokens()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
+  const { tokenPriceTip, tokenWeightTip } = usePoolTokenPriceWarnings()
 
   if (isBalancesLoading) return <DefaultCardContent />
 
@@ -38,7 +41,12 @@ function PoolTokensInWalletContent() {
 
       const { decimals, chain, symbol } = data
       const userBalanceHuman = formatUnits(userBalanceRaw.amount, decimals)
-      const userBalanceUsd = usdValueForTokenAddress(address, chain, userBalanceHuman)
+      const userBalanceUsd = usdValueForTokenAddress(
+        address,
+        chain,
+        userBalanceHuman,
+        token.usdPrice
+      )
       return { address, symbol, chain, userBalanceUsd, userBalanceHuman }
     })
     .filter(token => token !== null)
@@ -59,14 +67,22 @@ function PoolTokensInWalletContent() {
         <CardDataRow
           data={[
             <IdentifyTokenCell address={token.address} chain={token.chain} symbol={token.symbol} />,
-            <Text align="right">
-              {token.userBalanceUsd !== '0' ? toCurrency(token.userBalanceUsd) : 'No price data'}
-            </Text>,
-            <Text align="right">
-              {token.userBalanceUsd !== '0'
-                ? ((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2) + '%'
-                : 'N/A'}
-            </Text>,
+            <HStack justify="end">
+              {token.userBalanceUsd !== '0' ? (
+                <Text>{toCurrency(token.userBalanceUsd)}</Text>
+              ) : (
+                <TokenMissingPriceWarning message={tokenPriceTip} />
+              )}
+            </HStack>,
+            <HStack justify="end">
+              {token.userBalanceUsd !== '0' ? (
+                <Text>
+                  {((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2) + '%'}
+                </Text>
+              ) : (
+                <TokenMissingPriceWarning message={tokenWeightTip} />
+              )}
+            </HStack>,
           ]}
           key={token.address}
         />
