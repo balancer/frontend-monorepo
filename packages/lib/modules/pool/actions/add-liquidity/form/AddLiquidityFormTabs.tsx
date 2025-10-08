@@ -181,6 +181,7 @@ export function AddLiquidityFormTabs({
           currentOption={options[tabIndex]}
           fontSize="md"
           groupId="add-liquidity"
+          minWidth="140px"
           onChange={handleTabChanged}
           options={options}
           size="sm"

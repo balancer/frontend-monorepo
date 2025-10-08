@@ -27,12 +27,13 @@ type Props = {
   options: Readonly<ButtonGroupOption[]>
   onChange: (option: ButtonGroupOption) => void
   groupId: string
+  fontSize?: ButtonProps['fontSize']
+  isCompact?: boolean
+  isFullWidth?: boolean
+  isGray?: boolean
+  minWidth?: ButtonProps['minWidth']
   size?: ButtonProps['size']
   width?: ButtonProps['width']
-  isFullWidth?: boolean
-  fontSize?: ButtonProps['fontSize']
-  isGray?: boolean
-  isCompact?: boolean
 }
 
 export default function ButtonGroup(props: Props) {
@@ -90,12 +91,13 @@ export default function ButtonGroup(props: Props) {
 function GroupOptionButton({
   option,
   isActive,
+  fontSize,
+  groupId,
+  isCompact,
+  isGray,
+  minWidth,
   size,
   width,
-  groupId,
-  fontSize,
-  isGray,
-  isCompact,
   onChange,
 }: { option: ButtonGroupOption; isActive: boolean } & Props) {
   const variant = isActive ? 'buttonGroupActive' : 'buttonGroupInactive'
@@ -108,6 +110,7 @@ function GroupOptionButton({
       bg="transparent"
       id={`button-group-${option.value}`}
       isDisabled={option.disabled}
+      minWidth={minWidth}
       onClick={() => onChange(option)}
       position="relative"
       rightIcon={
