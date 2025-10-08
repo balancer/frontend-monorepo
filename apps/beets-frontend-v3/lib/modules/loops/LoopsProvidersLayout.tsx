@@ -5,7 +5,6 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PropsWithChildren } from 'react'
 import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { LoopsProvider } from './LoopsProvider'
 
@@ -26,9 +25,7 @@ export default function LoopsProvidersLayout({ children }: PropsWithChildren) {
       {loopedTokens.length > 0 && (
         <TokenBalancesProvider initTokens={loopedTokens}>
           <TokenInputsValidationProvider>
-            <LoopsProvider>
-              <PriceImpactProvider>{children}</PriceImpactProvider>
-            </LoopsProvider>
+            <LoopsProvider>{children}</LoopsProvider>
           </TokenInputsValidationProvider>
         </TokenBalancesProvider>
       )}
