@@ -11,11 +11,11 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { useLoopsWithdrawStep } from './hooks/useLoopsWithdrawStep'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits, parseUnits } from 'viem'
 import { useLoopsGetRate } from './hooks/useLoopsGetRate'
+import { useLoopsWithdrawSteps } from './hooks/useLoopsWithdrawSteps'
 
 const CHAIN = GqlChain.Sonic
 
@@ -38,13 +38,21 @@ export function useLoopsLogic() {
   const loopsDepositTxHash = depositTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const loopsStakeTxConfirmed = depositTransactionSteps.lastTransactionConfirmed
 
-  const { step: withdrawStep } = useLoopsWithdrawStep(amountShares, CHAIN, isWithdrawTab)
-  const withdrawTransactionSteps = useTransactionSteps([withdrawStep], false)
+  const { steps: withdrawSteps, isLoadingSteps: isLoadingWithdrawSteps } = useLoopsWithdrawSteps({
+    amountShares,
+    chain: CHAIN,
+    isWithdrawTab,
+    loopedAsset,
+  })
+
+  const withdrawTransactionSteps = useTransactionSteps(withdrawSteps, isLoadingWithdrawSteps)
+
   const loopsWithdrawTxHash =
     withdrawTransactionSteps.lastTransaction?.result?.data?.transactionHash
+
   const loopsWithdrawTxConfirmed = withdrawTransactionSteps.lastTransactionConfirmed
 
-  // const hasStakedAssetValidationError = hasValidationError(stakedAsset)
+  const hasLoopedAssetValidationError = hasValidationError(loopedAsset)
   const hasNativeAssetValidationError = hasValidationError(nativeAsset)
 
   const disabledConditions: [boolean, string][] = [
@@ -54,7 +62,11 @@ export function useLoopsLogic() {
       'Please enter an amount to deposit',
     ],
     [isDepositTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
-    // [isUnstakeTab && hasStakedAssetValidationError, getValidationError(stakedAsset)],
+    [
+      isWithdrawTab && (!amountShares || bn(amountShares).lte(0)),
+      'Please enter an amount to wihdraw',
+    ],
+    [isWithdrawTab && hasLoopedAssetValidationError, getValidationError(loopedAsset)],
   ]
 
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
@@ -67,6 +79,14 @@ export function useLoopsLogic() {
     const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
 
     return formatUnits(amountShares, 18)
+  }
+
+  function getAmountAssets(amountShares: string) {
+    if (amountShares === '') return '0'
+
+    const amountAssets = (parseUnits(amountShares, 18) * (rate || 1n)) / 10n ** 18n
+
+    return formatUnits(amountAssets, 18)
   }
 
   return {
@@ -92,6 +112,7 @@ export function useLoopsLogic() {
     setAmountShares,
     getAmountShares,
     isRateLoading,
+    getAmountAssets,
   }
 }
 

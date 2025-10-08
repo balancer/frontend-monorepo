@@ -23,7 +23,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useLoops } from './LoopsProvider'
-import { LoopDepositModal } from './modals/LoopDepositModal'
+import { LoopsDepositModal } from './modals/LoopsDepositModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { LoopsDeposit } from './components/LoopsDeposit'
@@ -39,6 +39,8 @@ import { StatRow } from '@/lib/components/shared/StatRow'
 import { useLoopsGetData } from '@/lib/modules/loops/hooks/useLoopsGetData'
 import { GetLoopsDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { getNetworkConfig } from '@repo/lib/config/networks'
+import { LoopsWithdraw } from './components/LoopsWithdraw'
+import { LoopsWithdrawModal } from './modals/LoopsWithdrawModal'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -85,6 +87,9 @@ function LoopsForm() {
     amountAssets,
     getAmountShares,
     isRateLoading,
+    amountShares,
+    getAmountAssets,
+    nativeAsset,
   } = useLoops()
 
   const isLoading = !isMounted || isBalancesLoading
@@ -150,7 +155,7 @@ function LoopsForm() {
             />
           </VStack>
           {isDepositTab && <LoopsDeposit />}
-          {/* {isWithdrawTab && <LoopsWithdraw />} */}
+          {isWithdrawTab && <LoopsWithdraw />}
         </Box>
         {isDepositTab && !isRateLoading && amountAssets !== '' && (
           <YouWillReceive
@@ -161,18 +166,18 @@ function LoopsForm() {
             symbol={loopedAsset?.symbol || ''}
           />
         )}
-        {/*
-        {isUnstakeTab && !isRateLoading && amountShares !== '' && (
-          <LstYouWillReceive
+        {isWithdrawTab && !isRateLoading && amountShares !== '' && (
+          <YouWillReceive
             address={nativeAsset?.address || ''}
             amount={getAmountAssets(amountShares)}
-            label="You can withdraw (after 14 days)"
+            chain={chain}
+            label="You will receive"
             symbol={nativeAsset?.symbol || ''}
           />
-        )} */}
+        )}
       </CardBody>
       <CardFooter w="full">
-        {isConnected && !isWithdrawTab && (
+        {isConnected && (
           <Tooltip label={isDisabled ? disabledReason : ''}>
             <Button
               isDisabled={isDisabled}
@@ -198,17 +203,16 @@ function LoopsForm() {
           />
         )}
       </CardFooter>
-      <LoopDepositModal
+      <LoopsDepositModal
         finalFocusRef={nextBtn}
         isOpen={depositModalDisclosure.isOpen}
         onClose={onModalClose}
       />
-      {/* <LstUnstakeModal
+      <LoopsWithdrawModal
         finalFocusRef={nextBtn}
         isOpen={withdrawModalDisclosure.isOpen}
         onClose={onModalClose}
-        onOpen={withdrawModalDisclosure.onOpen}
-      /> */}
+      />
     </VStack>
   )
 }

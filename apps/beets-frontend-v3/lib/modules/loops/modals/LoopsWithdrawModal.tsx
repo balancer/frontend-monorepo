@@ -10,11 +10,11 @@ import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/trans
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
-import { useLoopsDepositReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { useLoopsWithdrawReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { LoopsDepositSummary } from '../components/LoopsDepositSummary'
 import { useLoops } from '@/lib/modules/loops/LoopsProvider'
+import { LoopsWithdrawSummary } from '@/lib/modules/loops/components/LoopsWithdrawSummary'
 
 type Props = {
   isOpen: boolean
@@ -22,7 +22,7 @@ type Props = {
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
-export function LoopDepositModal({
+export function LoopsWithdrawModal({
   isOpen,
   onClose,
   finalFocusRef,
@@ -32,13 +32,12 @@ export function LoopDepositModal({
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
-  const { depositTransactionSteps, chain, loopsDepositTxHash, lastTransaction } = useLoops()
+  const { withdrawTransactionSteps, chain, loopsWithdrawTxHash, lastTransaction } = useLoops()
 
-  useResetStepIndexOnOpen(isOpen, depositTransactionSteps)
+  useResetStepIndexOnOpen(isOpen, withdrawTransactionSteps)
 
-  // TODO: fix
-  const loopsDepositReceipt = useLoopsDepositReceipt({
-    txHash: loopsDepositTxHash,
+  const loopsWithdrawReceipt = useLoopsWithdrawReceipt({
+    txHash: loopsWithdrawTxHash,
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
@@ -54,7 +53,7 @@ export function LoopDepositModal({
 
   useOnUserAccountChanged(onClose)
 
-  const isSuccess = !!loopsDepositTxHash && loopsDepositReceipt.hasReceipt
+  const isSuccess = !!loopsWithdrawTxHash && loopsWithdrawReceipt.hasReceipt
 
   return (
     <Modal
@@ -67,21 +66,26 @@ export function LoopDepositModal({
       trapFocus={!isSuccess}
       {...rest}
     >
-      <SuccessOverlay startAnimation={!!loopsDepositTxHash} />
+      <SuccessOverlay startAnimation={!!loopsWithdrawTxHash} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
-          <DesktopStepTracker chain={chain} transactionSteps={depositTransactionSteps} />
+          <DesktopStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />
         )}
-        <TransactionModalHeader chain={chain} isReceiptLoading label="Review deposit" txHash="0x" />
+        <TransactionModalHeader
+          chain={chain}
+          isReceiptLoading
+          label="Review withdrawal"
+          txHash={loopsWithdrawTxHash}
+        />
         <ModalCloseButton />
         <ModalBody>
-          <LoopsDepositSummary {...loopsDepositReceipt} />
+          <LoopsWithdrawSummary {...loopsWithdrawReceipt} />
         </ModalBody>
         <ActionModalFooter
-          currentStep={depositTransactionSteps.currentStep}
+          currentStep={withdrawTransactionSteps.currentStep}
           isSuccess={isSuccess}
           returnAction={onClose}
-          returnLabel="Deposit again"
+          returnLabel="Withdraw again"
         />
       </ModalContent>
     </Modal>

@@ -13,6 +13,7 @@ import {
   parsePoolCreationReceipt,
   parseRecoveryModeChangedReceipt,
   parseLoopsDepositReceipt,
+  parseLoopsWithdrawReceipt,
 } from './receipt-parsers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 import { TransactionResult } from '@repo/lib/modules/web3/contracts/contract.types'
@@ -119,6 +120,18 @@ export type LoopsDepositReceiptResult = ReturnType<typeof useLoopsDepositReceipt
 export function useLoopsDepositReceipt(props: BaseReceiptProps) {
   const result = useTxReceipt({ ...props, parseReceipt: parseLoopsDepositReceipt })
   const data = result.data as ReturnType<typeof parseLoopsDepositReceipt> | undefined
+
+  return {
+    ...result,
+    receivedToken: data?.receivedToken,
+  }
+}
+
+export type LoopsWithdrawReceiptResult = ReturnType<typeof useLoopsWithdrawReceipt>
+
+export function useLoopsWithdrawReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLoopsWithdrawReceipt })
+  const data = result.data as ReturnType<typeof parseLoopsWithdrawReceipt> | undefined
 
   return {
     ...result,
