@@ -2,7 +2,7 @@ import { Card } from '@chakra-ui/react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
-import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { LoopsDepositReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useLoops } from '../LoopsProvider'
 import { useLoopsGetConvertToShares } from '../hooks/useLoopsGetConvertToShares'
@@ -11,7 +11,7 @@ import { formatUnits, parseUnits } from 'viem'
 export function LoopsDepositSummary({
   isLoading: isLoadingReceipt,
   receivedToken,
-}: LstStakeReceiptResult) {
+}: LoopsDepositReceiptResult) {
   const { isMobile } = useBreakpoints()
 
   const {
