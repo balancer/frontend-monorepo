@@ -1,4 +1,4 @@
-import { HStack, Text, TextDecorationProps, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -52,12 +52,6 @@ ${slippageTolerance}`
 export function SlippageSelector({ title, description, onChange, selectedIndex }: Props) {
   const [selected, setSelected] = useState(OPTIONS[selectedIndex])
 
-  const textAttr = {
-    textDecoration: 'underline',
-    textDecorationStyle: 'dotted',
-    textDecorationThickness: '1px',
-  } as TextDecorationProps
-
   const selectOption = (option: ButtonGroupOption) => {
     setSelected(option)
     onChange(option.value as SlippageOptions)
@@ -79,24 +73,40 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
         }
         p="ms"
       >
-        <Text
+        <Box
+          as="span"
           cursor="default"
-          fontSize="xs"
-          fontWeight="semibold"
-          variant="secondary"
-          {...textAttr}
+          display="inline-block"
+          position="relative"
+          sx={{
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '0px',
+              borderBottom: '1px dotted',
+              borderColor: 'font.secondary',
+              opacity: 0.5,
+            },
+          }}
+          top="-3px"
         >
-          Slippage:
-        </Text>
+          <Text as="span" fontSize="xs" variant="secondary">
+            Simulated slippage:
+          </Text>
+        </Box>
       </TooltipWithTouch>
 
       <ButtonGroup
         currentOption={selected}
-        fontSize="xs"
+        fontSize="11px"
         groupId="slippage"
+        isCompact
         onChange={selectOption}
         options={OPTIONS}
-        size="xxs"
+        size="xxxs"
       />
     </HStack>
   )

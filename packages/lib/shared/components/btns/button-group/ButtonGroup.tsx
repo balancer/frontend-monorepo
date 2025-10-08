@@ -32,20 +32,21 @@ type Props = {
   isFullWidth?: boolean
   fontSize?: ButtonProps['fontSize']
   isGray?: boolean
+  isCompact?: boolean
 }
 
 export default function ButtonGroup(props: Props) {
-  const { groupId, options, currentOption, isFullWidth, isGray, fontSize = 'xs' } = props
+  const { groupId, options, currentOption, isFullWidth, isGray, isCompact, fontSize = 'xs' } = props
 
   return (
     <LayoutGroup id={groupId}>
       <HStack
         background={isGray ? 'gray.600' : 'level0'}
         p="1"
-        pt="3px" // TODO: maybe there a better way to align the buttons
+        pt={isCompact ? '0' : '3px'} // TODO: maybe there a better way to align the buttons
         rounded="md"
         shadow="innerXl"
-        spacing="1"
+        spacing={isCompact ? '0' : '1'}
         w={isFullWidth ? 'full' : undefined}
       >
         {options.map(function (option) {
@@ -94,11 +95,13 @@ function GroupOptionButton({
   groupId,
   fontSize,
   isGray,
+  isCompact,
   onChange,
 }: { option: ButtonGroupOption; isActive: boolean } & Props) {
   const variant = isActive ? 'buttonGroupActive' : 'buttonGroupInactive'
   const variantGray = isActive ? 'buttonGroupActiveGray' : 'buttonGroupInactiveGray'
-  const variantToUse = isGray ? variantGray : variant
+  const variantCompact = isActive ? 'buttonGroupActiveCompact' : 'buttonGroupInactiveCompact'
+  const variantToUse = isCompact ? variantCompact : isGray ? variantGray : variant
 
   return (
     <Button
@@ -126,9 +129,31 @@ function GroupOptionButton({
           layoutId={`active-${groupId}`}
           position="absolute"
           shadow="md"
+          sx={
+            isCompact
+              ? {
+                  _dark: {
+                    bg: 'background.level4',
+                  },
+                }
+              : undefined
+          }
         />
       )}
-      <Box fontSize={fontSize} position="relative" zIndex="8">
+      <Box
+        fontSize={fontSize}
+        position="relative"
+        sx={
+          isCompact && isActive
+            ? {
+                _dark: {
+                  color: 'white',
+                },
+              }
+            : undefined
+        }
+        zIndex="8"
+      >
         {option.label}
       </Box>
     </Button>

@@ -67,8 +67,8 @@ export function TokenRowGroup({
   const hasMultipleAmounts = aggregatedAmounts.length > 1
 
   return (
-    <VStack align="start" spacing="md">
-      <HStack justify="space-between" w="full">
+    <VStack align="start" spacing="sm">
+      <HStack height="28px" justify="space-between" w="full">
         <HStack spacing="xs">
           <Text fontSize="sm" fontWeight="bold">
             {label}

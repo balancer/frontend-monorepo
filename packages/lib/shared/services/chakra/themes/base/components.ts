@@ -473,6 +473,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
       sizes: {
+        xxxs: {
+          h: '24px',
+          px: '0.5',
+        },
         xxs: {
           h: { base: '24px', md: '26px' },
           px: '2',
@@ -681,6 +685,32 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           _dark: {
             color: 'gray.400',
           },
+        },
+        buttonGroupInactiveCompact: {
+          backgroundColor: 'transparent',
+          height: '18px',
+          width: 'fit-content',
+          shadow: 'none',
+          px: '1.5',
+          py: '0',
+          fontSize: 'xs',
+          color: 'font.secondary',
+          fontWeight: 'bold',
+          borderRadius: '4px',
+          _hover: {
+            color: 'font.maxContrast',
+            transform: 'none',
+          },
+        },
+        buttonGroupActiveCompact: {
+          background: 'transparent',
+          height: '18px',
+          px: '1.5',
+          py: '0',
+          fontSize: 'xs',
+          color: 'font.dark',
+          fontWeight: 'bold',
+          borderRadius: '4px',
         },
       },
     },
