@@ -614,7 +614,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           fontWeight: 'bold',
           borderRadius: '4px',
           _hover: {
-            color: 'font.highlight',
+            color: 'font.maxContrast',
             transform: 'none',
             _disabled: {
               background: 'transparent',
