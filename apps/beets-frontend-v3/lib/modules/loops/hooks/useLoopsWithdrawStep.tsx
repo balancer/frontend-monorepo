@@ -18,11 +18,17 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+//import { useLoopsGetFlyQuote } from './useLoopsGetFlyQuote'
 
-export function useLoopsWithdrawStep(humanAmount: string, chain: GqlChain, enabled: boolean) {
+export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enabled: boolean) {
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  //const { data: flyQuote } = useLoopsGetFlyQuote()
+  //console.log({ flyQuote })
+
+  const minWethAmountOut = 0n
+  const convertLstToWethData = '0x'
 
   const labels: TransactionLabels = {
     init: 'Withdraw',
@@ -35,12 +41,11 @@ export function useLoopsWithdrawStep(humanAmount: string, chain: GqlChain, enabl
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
-    contractId: 'beets.lstStaking',
-    contractAddress: getNetworkConfig(chain).contracts.beets?.lstStakingProxy || '',
-    functionName: 'withdraw',
-    args: [],
-    value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(0.01) && isConnected && enabled,
+    contractId: 'beets.loopedSonicRouter',
+    contractAddress: getNetworkConfig(chain).contracts.beets?.magpieLoopedSonicRouter || '',
+    functionName: 'withdrawWithFlashLoan',
+    args: [parseUnits(amountShares, BPT_DECIMALS), minWethAmountOut, convertLstToWethData],
+    enabled: bn(amountShares).gte(0) && isConnected && enabled,
     onTransactionChange: setTransaction,
   }
 
