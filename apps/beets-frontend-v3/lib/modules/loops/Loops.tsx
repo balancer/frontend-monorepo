@@ -12,6 +12,7 @@ import {
   BoxProps,
   Grid,
   GridItem,
+  Divider,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -26,7 +27,7 @@ import { LoopDepositModal } from './modals/LoopDepositModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { LoopsDeposit } from './components/LoopsDeposit'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LoopsFaq } from './components/LoopsFaq'
@@ -37,6 +38,7 @@ import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 import { StatRow } from '@/lib/components/shared/StatRow'
 import { useLoopsGetData } from '@/lib/modules/loops/hooks/useLoopsGetData'
 import { GetLoopsDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -219,9 +221,25 @@ function LoopsInfo({
   isLoopsDataLoading: boolean
 }) {
   const { toCurrency } = useCurrency()
+  const { usdValueForTokenAddress } = useTokens()
+  const { chain } = useLoops()
 
   const assetsToSharesRate = loopsData?.loopsGetData.rate || '1.0'
   const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
+
+  const networkConfig = getNetworkConfig(chain)
+
+  const collateralUsdValue = usdValueForTokenAddress(
+    networkConfig.tokens.stakedAsset?.address || '',
+    chain,
+    loopsData?.loopsGetData.collateralAmountInEth || '0'
+  )
+
+  const debtUsdValue = usdValueForTokenAddress(
+    networkConfig.tokens.nativeAsset.address,
+    chain,
+    loopsData?.loopsGetData.debtAmount || '0'
+  )
 
   return (
     <NoisyCard
@@ -244,21 +262,24 @@ function LoopsInfo({
       >
         <StatRow
           isLoading={isLoopsDataLoading}
-          label="Total ($S)"
-          secondaryValue={toCurrency(loopsData?.loopsGetData.tvl || '0')}
-          value={`${fNum('token', loopsData?.loopsGetData.nav || '0')} S`}
-        />
-        <StatRow
-          isLoading={isLoopsDataLoading}
           label="Total collateral"
           secondaryValue={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmountInEth || '0'))} S`}
+          tertiaryValue={toCurrency(collateralUsdValue)}
           value={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmount || '0'))} stS`}
         />
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Total debt"
+          secondaryValue={toCurrency(debtUsdValue)}
           value={`${fNum('token', bn(loopsData?.loopsGetData.debtAmount || '0'))} S`}
         />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="loopS rate"
+          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} loopS`}
+          value={`1 loopS = ${fNum('token', assetsToSharesRate)} S`}
+        />
+        <Divider my="md" />
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Health factor"
@@ -268,23 +289,17 @@ function LoopsInfo({
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Current leverage"
-          value={fNum('boost', bn(loopsData?.loopsGetData.leverage || '0'))}
+          value={`${fNumCustom(bn(loopsData?.loopsGetData.leverage || '0'), '0.[000]')}x`}
         />
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Actual supply"
-          value={`${fNum('token', bn(loopsData?.loopsGetData.actualSupply || '0'))} loopS`}
-        />
-        <StatRow
-          isLoading={isLoopsDataLoading}
-          label="loopS rate"
-          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} loopS`}
-          value={`1 loopS = ${fNum('token', assetsToSharesRate)} S`}
+          value={fNum('token', bn(loopsData?.loopsGetData.actualSupply || '0'))}
         />
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Sonic points multiplier"
-          value={fNum('boost', bn(loopsData?.loopsGetData.sonicPointsMultiplier || '0'))}
+          value={`${fNumCustom(bn(loopsData?.loopsGetData.sonicPointsMultiplier || '0'), '0.[000]')}x`}
         />
         <Box minH="20px" w="full" />
       </VStack>

@@ -103,7 +103,7 @@ export function LoopsStats() {
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
                 isLoading={isLoopsDataLoading}
-                label="Total $S"
+                label="NAV $S"
                 value={fNum('token', loopsNav)}
               />
             </GridItem>
