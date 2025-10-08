@@ -492,7 +492,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
         lg: {
           h: { base: '40px', md: '48px' },
-          px: { base: '3', md: '4' },
+          px: { base: '2', md: '3' },
         },
       },
       variants: {
