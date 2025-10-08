@@ -26,17 +26,17 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
 
   const tokenAmountToUsd = poolTokens.map(token => {
     const { data, address, amount } = token
-    if (!address || !data) return { symbol: '', inputUsdValue: 0 }
+    if (!address || !data) return { symbol: '', usdValue: 0 }
     const { chain, symbol } = data
-    const inputUsdValue = Number(usdValueForTokenAddress(address, chain, amount))
-    return { symbol, inputUsdValue }
+    const usdValue = Number(usdValueForTokenAddress(address, chain, amount, token.usdPrice))
+    return { symbol, usdValue }
   })
 
-  const totalInputUsdValue = tokenAmountToUsd.reduce((acc, token) => acc + token.inputUsdValue, 0)
+  const totalSeedUsdValue = tokenAmountToUsd.reduce((acc, token) => acc + token.usdValue, 0)
 
   const tokenAmountToUsdWithWeights = tokenAmountToUsd.map(token => ({
     ...token,
-    usdWeight: totalInputUsdValue ? (token.inputUsdValue * 100) / totalInputUsdValue : 0,
+    usdWeight: totalSeedUsdValue ? (token.usdValue * 100) / totalSeedUsdValue : 0,
   }))
 
   const targetWeights = poolTokens.map(t => Number(t.weight))

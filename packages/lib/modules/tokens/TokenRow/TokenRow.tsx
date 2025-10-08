@@ -29,9 +29,8 @@ import NextLink from 'next/link'
 import { getNestedPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
 import { ApiToken, CustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
-import { AlertTriangle } from 'react-feather'
-import { Tooltip } from '@chakra-ui/react'
 import { usePoolTokenPriceWarnings } from '../../pool/usePoolTokenPriceWarnings'
+import { TokenMissingPriceWarning } from '../TokenMissingPriceWarning'
 
 export type TokenInfoProps = {
   address: Address
@@ -169,7 +168,7 @@ export default function TokenRow({
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
-  const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice } =
+  const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
 
   const token = customToken || getToken(address, chain)
@@ -252,7 +251,7 @@ export default function TokenRow({
                   })}
                 </Heading>
                 {isTokenPriceMissing ? (
-                  <MissingTokenPriceWarning message={tokenPriceTip} />
+                  <TokenMissingPriceWarning message={tokenPriceTip} />
                 ) : (
                   <Text {...subTextProps}>
                     {formatFalsyValueAsDash(usdValue, toCurrency, {
@@ -275,7 +274,7 @@ export default function TokenRow({
                 <>
                   <Heading {...headingProps}>
                     {isAnyTokenWithoutPrice ? (
-                      <MissingTokenPriceWarning message="Current weight percentages cannot be calculated since the price of one or more tokens are unknown." />
+                      <TokenMissingPriceWarning message={tokenWeightTip} />
                     ) : (
                       fNum('weight', actualWeight, { abbreviated: false })
                     )}
@@ -353,16 +352,5 @@ export default function TokenRow({
         </HStack>
       </HStack>
     </VStack>
-  )
-}
-
-function MissingTokenPriceWarning({ message }: { message: string }) {
-  return (
-    <HStack color="font.warning" spacing="xs">
-      <Text color="font.warning">—</Text>
-      <Tooltip label={message} placement="top">
-        <AlertTriangle size={16} />
-      </Tooltip>
-    </HStack>
   )
 }

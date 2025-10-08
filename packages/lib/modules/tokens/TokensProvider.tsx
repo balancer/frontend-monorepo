@@ -90,9 +90,16 @@ export function useTokensLogic() {
       .toFixed()
   }
 
-  function usdValueForTokenAddress(address: string, chain: GqlChain, amount: Numberish) {
+  function usdValueForTokenAddress(
+    address: string,
+    chain: GqlChain,
+    amount: Numberish,
+    customUsdPrice?: number
+  ) {
     if (amount === '') return '0'
-    return bn(amount).times(priceFor(address, chain)).toFixed()
+    return bn(amount)
+      .times(customUsdPrice || priceFor(address, chain))
+      .toFixed()
   }
 
   const priceFor = (address: string, chain: GqlChain): number => {

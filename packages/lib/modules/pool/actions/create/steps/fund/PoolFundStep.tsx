@@ -94,6 +94,7 @@ function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: numbe
       <TokenInput
         apiToken={token.data}
         chain={network}
+        customUsdPrice={token.usdPrice}
         onChange={e => handleAmountChange(idx, e.currentTarget.value)}
         value={token.amount}
       />
