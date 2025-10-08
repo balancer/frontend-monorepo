@@ -287,7 +287,6 @@ function LoopsInfo({
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Health factor"
-          secondaryValue={`target: ${fNum('boost', bn(loopsData?.loopsGetData.targetHealthFactor || '0'))}`}
           value={fNum('boost', bn(loopsData?.loopsGetData.healthFactor || '0'))}
         />
         <StatRow
