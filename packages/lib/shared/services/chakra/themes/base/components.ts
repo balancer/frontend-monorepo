@@ -689,7 +689,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         dialog: {
           background: 'background.level0',
           borderRadius: '2xl',
-          paddingBottom: 'sm',
+          paddingBottom: 'xs',
           shadow: '2xl',
         },
         closeButton: {
@@ -704,17 +704,29 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           color: 'font.primary',
           letterSpacing: '-0.04rem',
           paddingBottom: 'ms',
+          paddingX: '5',
           paddingRight: 'xl',
         },
         body: {
           paddingTop: 'xxs',
           paddingBottom: '0',
+          paddingX: '5',
+        },
+        footer: {
+          paddingX: '5',
         },
         overlay: {
           bg: 'rgba(0,0,0,0.85)',
           backdropFilter: 'blur(4px)',
           _dark: {
             bg: 'rgba(0,0,0,0.7)',
+          },
+        },
+      },
+      sizes: {
+        lg: {
+          dialog: {
+            maxWidth: '480px',
           },
         },
       },

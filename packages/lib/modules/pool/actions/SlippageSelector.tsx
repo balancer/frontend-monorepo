@@ -82,10 +82,11 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
 
       <ButtonGroup
         currentOption={selected}
+        fontSize="xs"
         groupId="slippage"
         onChange={selectOption}
         options={OPTIONS}
-        size="xs"
+        size="xxs"
       />
     </HStack>
   )
