@@ -15,9 +15,9 @@ type Props = {
 
 export function DesktopStepTracker({ chain, transactionSteps, isTxBatch, extraStyles }: Props) {
   return (
-    <Card padding={0} position="absolute" right="-274px" width="250px" {...extraStyles}>
-      <VStack alignItems="flex-start" w="full">
-        <HStack justify="space-between" p="sm" pb="0" w="full">
+    <Card padding={0} position="absolute" right="-304px" top="10px" width="280px" {...extraStyles}>
+      <VStack alignItems="flex-start" gap="0" w="full">
+        <HStack justify="space-between" px="ms" py="sm" w="full">
           <Heading fontWeight="bold" size="h6">
             Steps
           </Heading>
@@ -25,7 +25,7 @@ export function DesktopStepTracker({ chain, transactionSteps, isTxBatch, extraSt
         </HStack>
 
         <Divider p="0" />
-        <Box p="sm" pb="md">
+        <Box p="ms">
           <Steps isTxBatch={isTxBatch} transactionSteps={transactionSteps} />
         </Box>
       </VStack>
