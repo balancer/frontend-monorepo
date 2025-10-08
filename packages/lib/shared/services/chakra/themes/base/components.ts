@@ -688,15 +688,27 @@ export function getComponents(tokens: any, primaryTextColor: string) {
       baseStyle: {
         dialog: {
           background: 'background.level0',
+          borderRadius: '2xl',
+          paddingBottom: 'sm',
+          shadow: '2xl',
         },
         closeButton: {
-          top: 3,
+          top: 3.5,
+          right: 3.5,
           color: 'font.primary',
           rounded: 'full',
+          background: 'background.level2',
+          shadow: '2xl',
         },
         header: {
           color: 'font.primary',
           letterSpacing: '-0.04rem',
+          paddingBottom: 'ms',
+          paddingRight: 'xl',
+        },
+        body: {
+          paddingTop: 'xxs',
+          paddingBottom: '0',
         },
         overlay: {
           bg: 'rgba(0,0,0,0.85)',
@@ -707,7 +719,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
       defaultProps: {
-        size: 'md',
+        size: 'lg',
       },
     },
     Drawer: {
@@ -855,7 +867,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             borderWidth: '1px',
             borderColor: 'border.base',
             shadow: 'sm',
-            padding: 'md',
+            padding: 'ms',
             width: 'full',
             rounded: 'md',
           },
