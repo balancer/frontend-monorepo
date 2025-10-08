@@ -12,6 +12,7 @@ import {
   parseLstWithdrawReceipt,
   parsePoolCreationReceipt,
   parseRecoveryModeChangedReceipt,
+  parseLoopsDepositReceipt,
 } from './receipt-parsers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 import { TransactionResult } from '@repo/lib/modules/web3/contracts/contract.types'
@@ -81,6 +82,7 @@ export function useLstStakeReceipt(props: BaseReceiptProps) {
     receivedToken: data?.receivedToken,
   }
 }
+
 export type LstWithdrawReceiptResult = ReturnType<typeof useLstWithdrawReceipt>
 
 export function useLstWithdrawReceipt(props: BaseReceiptProps) {
@@ -109,6 +111,18 @@ export function useRecoveryModeChangedReceipt(props: BaseReceiptProps) {
   return {
     ...result,
     enabled: data?.enabled || false,
+  }
+}
+
+export type LoopsDepositReceiptResult = ReturnType<typeof useLoopsDepositReceipt>
+
+export function useLoopsDepositReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLoopsDepositReceipt })
+  const data = result.data as ReturnType<typeof parseLoopsDepositReceipt> | undefined
+
+  return {
+    ...result,
+    receivedToken: data?.receivedToken,
   }
 }
 
