@@ -49,6 +49,7 @@ import { useContractWallet } from '../web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '../web3/safe.hooks'
 import { buildCowSwapUrl } from '../cow/cow.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -103,6 +104,7 @@ export function SwapForm({
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
+  const { priceImpact, priceImpactColor, priceImpactLevel } = usePriceImpact()
 
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
@@ -309,6 +311,12 @@ export function SwapForm({
                     simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                   }
                   onChange={e => setTokenOutAmount(e.currentTarget.value as HumanAmount)}
+                  // pi is only used for token out
+                  priceImpactProps={{
+                    priceImpact,
+                    priceImpactColor,
+                    priceImpactLevel,
+                  }}
                   ref={finalRefTokenOut}
                   value={tokenOut.amount}
                   {...(!isLbpSwap && {

@@ -7,6 +7,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolPath } from '../../pool/pool.utils'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import {
   ExpandedPoolInfo,
   ExpandedPoolType,
@@ -109,7 +110,10 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             <GridItem justifySelf="end" px="sm">
               {pool.poolType === ExpandedPoolType.StakedAura ? (
                 pool.staking?.aura?.apr ? (
-                  <AuraAprTooltip auraApr={pool.staking?.aura?.apr} />
+                  <AuraAprTooltip
+                    auraApr={pool.staking?.aura?.apr}
+                    textProps={{ fontWeight: 'medium' }}
+                  />
                 ) : (
                   ' - '
                 )
@@ -147,8 +151,16 @@ function StakingIcons({ pool, showIcon }: { pool: ExpandedPoolInfo; showIcon: bo
 
   return (
     <>
-      {showAuraIcon && <ProtocolIcon protocol={Protocol.Aura} />}
-      {showBalIcon && <ProtocolIcon protocol={Protocol.Balancer} />}
+      {showAuraIcon && (
+        <TooltipWithTouch label="Aura">
+          <ProtocolIcon protocol={Protocol.Aura} />
+        </TooltipWithTouch>
+      )}
+      {showBalIcon && (
+        <TooltipWithTouch label="Balancer">
+          <ProtocolIcon protocol={Protocol.Balancer} />
+        </TooltipWithTouch>
+      )}
     </>
   )
 }

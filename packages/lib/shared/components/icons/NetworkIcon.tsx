@@ -9,11 +9,16 @@ type NetworkConfigProps = {
   shortName: string
 }
 
-export function NetworkIcon({ chain, size = 12, ...rest }: { chain: GqlChain } & SquareProps) {
+export function NetworkIcon({
+  chain,
+  size = 12,
+  withPadding = true,
+  ...rest
+}: { chain: GqlChain; withPadding?: boolean } & SquareProps) {
   const [networkConfig, setNetworkConfig] = useState<NetworkConfigProps | undefined>(undefined)
   const { iconPath, shortName } = getNetworkConfig(chain)
 
-  const imageSize = Number(size) * 2 + 8
+  const imageSize = Number(size) * (withPadding ? 2 : 3) + 8
 
   useEffect(() => {
     if (shortName && iconPath) {

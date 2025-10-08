@@ -1,7 +1,7 @@
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReClammConfig } from '../../types'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { formatNumber } from '../../helpers'
 import { useReClammCurrentPrice } from './useReClammCurrentPrice'
 import { SVGProps } from 'react'
@@ -26,7 +26,7 @@ export type ReClammConfigOptionsGroup = {
     label: string
     displayValue: string
     rawValue: string
-    svg: React.ComponentType<SVGProps<SVGSVGElement>>
+    svg?: React.ComponentType<SVGProps<SVGSVGElement>>
   }[]
   updateFn: (rawValue: string) => void
   validateFn: (value: string) => string | boolean
@@ -36,6 +36,8 @@ export type ReClammConfigOptionsGroup = {
 
 export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
+  const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
+
   const { poolTokens } = poolCreationForm.watch()
   const reClammConfig = reClammConfigForm.watch()
   const { initialTargetPrice, priceRangePercentage } = reClammConfig
@@ -86,6 +88,11 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         rawValue: currentPricePlus5,
         svg: CurrentPricePlusFivePercentSVG,
       },
+      {
+        label: 'Or choose custom',
+        displayValue: '',
+        rawValue: '',
+      },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('initialTargetPrice', rawValue)
@@ -107,6 +114,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Narrow', displayValue: '± 25.00%', rawValue: '25', svg: TargetRangeNarrowSVG },
       { label: 'Standard', displayValue: '± 50.00%', rawValue: '50', svg: TargetRangeStandardSVG },
       { label: 'Wide', displayValue: '± 75.00%', rawValue: '75', svg: TargetRangeWideSVG },
+      { label: 'Or choose custom', displayValue: '', rawValue: '' },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue)
@@ -131,6 +139,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Narrow', displayValue: '10%', rawValue: '10', svg: MarginBufferNarrowSVG },
       { label: 'Standard', displayValue: '25%', rawValue: '25', svg: MarginBufferStandardSVG },
       { label: 'Wide', displayValue: '50%', rawValue: '50', svg: MarginBufferWideSVG },
+      { label: 'Or choose custom', displayValue: '', rawValue: '' },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue)
@@ -161,6 +170,11 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         rawValue: '75',
         svg: PriceAdjustmentRateFastSVG,
       },
+      {
+        label: 'Or choose custom',
+        displayValue: '',
+        rawValue: '',
+      },
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceShiftDailyRate', rawValue)
@@ -190,6 +204,26 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       updatePriceBounds(currentPrice, priceRangePercentage)
     }
   }, [isInitialReClammConfig])
+
+  useEffect(() => {
+    if (!initialTargetPrice || !priceRangePercentage) return
+
+    const { initialMinPrice, initialMaxPrice } = calculatePriceBounds(
+      initialTargetPrice,
+      priceRangePercentage
+    )
+
+    if (
+      lastCalculatedPriceBoundsRef.current.minPrice === initialMinPrice &&
+      lastCalculatedPriceBoundsRef.current.maxPrice === initialMaxPrice
+    ) {
+      return
+    }
+
+    lastCalculatedPriceBoundsRef.current = { minPrice: initialMinPrice, maxPrice: initialMaxPrice }
+
+    updatePriceBounds(initialTargetPrice, priceRangePercentage)
+  }, [initialTargetPrice, priceRangePercentage])
 
   return [targetPrice, priceRangeBoundaries, marginBuffer, dailyPriceReadjustmentRate]
 }
