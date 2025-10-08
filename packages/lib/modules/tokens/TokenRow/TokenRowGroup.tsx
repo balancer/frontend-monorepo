@@ -69,10 +69,24 @@ export function TokenRowGroup({
   return (
     <VStack align="start" spacing="md">
       <HStack justify="space-between" w="full">
-        <Text fontSize="sm" fontWeight="bold" pb="xxs">
-          {label}
-        </Text>
-        {isLoading ? (
+        <HStack spacing="xs">
+          <Text fontSize="sm" fontWeight="bold">
+            {label}
+          </Text>
+          {rightElement &&
+            (isLoading ? (
+              <Skeleton h="5" w="12" />
+            ) : (
+              hasMultipleAmounts && (
+                <Text fontSize="sm" fontWeight="bold">
+                  {formatFalsyValueAsDash(usdValue, toCurrency, { abbreviated: false })}
+                </Text>
+              )
+            ))}
+        </HStack>
+        {rightElement ? (
+          rightElement
+        ) : isLoading ? (
           <Skeleton h="5" w="12" />
         ) : (
           hasMultipleAmounts && (
@@ -81,7 +95,6 @@ export function TokenRowGroup({
             </Text>
           )
         )}
-        {rightElement}
       </HStack>
       {aggregatedAmounts.map(amount => {
         if (!amount.tokenAddress) return <div key={JSON.stringify(amount)}>Missing token</div>

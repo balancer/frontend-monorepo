@@ -66,7 +66,7 @@ function TokenInfo({
   logoURI,
 }: TokenInfoProps) {
   const tokenSymbol = isBpt ? '‘LP’ pool token' : poolToken?.symbol || token?.symbol || symbol
-  const tokenName = isBpt ? pool?.name : poolToken?.name || token?.name
+  const tokenName = isBpt ? pool?.symbol : poolToken?.name || token?.name
 
   const headingProps = {
     as: 'h6' as const,
