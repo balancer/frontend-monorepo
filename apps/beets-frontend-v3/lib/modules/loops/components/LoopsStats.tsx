@@ -6,9 +6,7 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLoopsGetData } from '../hooks/useLoopsGetData'
-//import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-
-//const CHAIN = GqlChain.Sonic
+import { LoopsByTheNumbersSvg } from './LoopsByTheNumbersSvg'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -84,7 +82,7 @@ export function LoopsStats() {
             w="full"
           >
             <GridItem alignItems="center" display="flex">
-              LOGO
+              <LoopsByTheNumbersSvg />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
