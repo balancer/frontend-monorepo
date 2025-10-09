@@ -35,8 +35,8 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
     toTokenAddress: zeroAddress,
     sellAmount: collateralInLst.toString(),
     slippage: '0.005',
-    fromAddress: zeroAddress,
-    toAddress: zeroAddress,
+    fromAddress: networkConfig.contracts.beets?.magpieLoopedSonicRouter || '',
+    toAddress: networkConfig.contracts.beets?.magpieLoopedSonicRouter || '',
     gasless: 'false',
     network: 'sonic',
   }
