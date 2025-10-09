@@ -34,6 +34,12 @@ export type ReClammConfigOptionsGroup = {
   customInputLabel: string
 }
 
+const CUSTOM_OPTION = {
+  label: 'Or choose custom',
+  displayValue: '',
+  rawValue: '',
+}
+
 export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
@@ -88,11 +94,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         rawValue: currentPricePlus5,
         svg: CurrentPricePlusFivePercentSVG,
       },
-      {
-        label: 'Or choose custom',
-        displayValue: '',
-        rawValue: '',
-      },
+      CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('initialTargetPrice', rawValue)
@@ -114,7 +116,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Narrow', displayValue: '± 25.00%', rawValue: '25', svg: TargetRangeNarrowSVG },
       { label: 'Standard', displayValue: '± 50.00%', rawValue: '50', svg: TargetRangeStandardSVG },
       { label: 'Wide', displayValue: '± 75.00%', rawValue: '75', svg: TargetRangeWideSVG },
-      { label: 'Or choose custom', displayValue: '', rawValue: '' },
+      CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue)
@@ -139,7 +141,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Narrow', displayValue: '10%', rawValue: '10', svg: MarginBufferNarrowSVG },
       { label: 'Standard', displayValue: '25%', rawValue: '25', svg: MarginBufferStandardSVG },
       { label: 'Wide', displayValue: '50%', rawValue: '50', svg: MarginBufferWideSVG },
-      { label: 'Or choose custom', displayValue: '', rawValue: '' },
+      CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue)
@@ -170,11 +172,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         rawValue: '75',
         svg: PriceAdjustmentRateFastSVG,
       },
-      {
-        label: 'Or choose custom',
-        displayValue: '',
-        rawValue: '',
-      },
+      CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceShiftDailyRate', rawValue)
