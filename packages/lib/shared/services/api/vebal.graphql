@@ -16,3 +16,7 @@ query GetVeBalUser(
     }
   }
 }
+
+query GetVeBalTotalSupply($chain: GqlChain) {
+  veBalGetTotalSupply(chain: $chain)
+}

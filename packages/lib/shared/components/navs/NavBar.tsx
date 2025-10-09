@@ -19,6 +19,8 @@ import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
 import { isBalancer, isCowAmm } from '@repo/lib/config/getProjectConfig'
 import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
+import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
+import { useApiHealth } from '../../hooks/useApiHealth'
 
 type Props = {
   mobileNav?: ReactNode
@@ -242,6 +244,7 @@ export function NavBar({
   allowCreateWallet,
   ...rest
 }: Props & BoxProps) {
+  const { apiOK } = useApiHealth()
   const [showShadow, setShowShadow] = useState(false)
 
   useEffect(() => {
@@ -295,6 +298,8 @@ export function NavBar({
       zIndex={100}
       {...rest}
     >
+      {!apiOK && <ApiOutageAlert />}
+
       <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
         <HStack
           animate="show"
