@@ -258,6 +258,9 @@ export function TokenSelectList({
           <Text color="font.secondary" fontSize="sm">
             You can search by token name, symbol or address
           </Text>
+          <Text color="font.warning" fontSize="sm">
+            To search for unlisted tokens, use the contract address
+          </Text>
         </Box>
       ) : (
         <GroupedVirtuoso
