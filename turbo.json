@@ -24,7 +24,8 @@
     "VERCEL_GIT_COMMIT_REF",
     "NEXT_PRIVATE_ALLOWED_ORIGINS",
     "VERCEL_BRANCH_URL",
-    "TZ"
+    "TZ",
+    "NEXT_PRIVATE_MAGPIE_API_KEY"
   ],
   "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {

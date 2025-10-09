@@ -1,50 +1,34 @@
+'use client'
+
 import { useQuery } from '@tanstack/react-query'
-import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { mins } from '@repo/lib/shared/utils/time'
-import { zeroAddress } from 'viem'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { FlyQuoteApiRequest, FlyQuoteApiResponse } from '@/app/api/fly/quote/route'
 
-const FLY_API_URL = 'https://api.fly.trade/aggregator/quote'
+export function useLoopsGetFlyQuote(params: FlyQuoteApiRequest) {
+  const queryKey = ['fly-quote', params] as const
 
-export function useLoopsGetFlyQuote() {
-  const queryKey = ['fly-quote'] as const
+  const queryFn = async () => {
+    const searchParams = new URLSearchParams(Object.entries(params) as [string, string][])
+    const url = `/api/fly/quote?${searchParams.toString()}`
+    const res = await fetch(url)
 
-  const queryFn = async () => getFlyQuota()
-
-  const { data, isLoading, error } = useQuery({
-    queryKey,
-    queryFn,
-    ...onlyExplicitRefetch,
-  })
-
-  return { data, isLoading, error }
-}
-
-async function getFlyQuota(): Promise<any> {
-  try {
-    const params = new URLSearchParams({
-      fromTokenAddress: '0x',
-      toTokenAddress: zeroAddress,
-      amount: 0n.toString(),
-      slippage: '0.005',
-      fromAddress: zeroAddress,
-      toAddress: zeroAddress,
-      gasless: 'true',
-      enableRFQ: 'false',
-    })
-
-    const res = await fetch(`${FLY_API_URL}?${params.toString()}`, {
-      next: { revalidate: mins(1).toSecs() },
-    })
-
-    const result = await res.json()
-
-    if (result.error) {
-      throw new Error('Invalid quote response: ' + JSON.stringify(result))
+    if (!res.ok) {
+      const error = await res.json()
+      throw new Error(error.message || 'Failed to fetch quote')
     }
 
-    return result
-  } catch (error) {
-    console.error('Unable to fetch quote', error)
-    throw error
+    return (await res.json()) as FlyQuoteApiResponse
   }
+
+  const { data, isLoading, error, refetch } = useQuery<FlyQuoteApiResponse>({
+    queryKey,
+    queryFn,
+    enabled: bn(params.sellAmount).gt(0),
+    staleTime: mins(1).toMs(),
+  })
+
+  console.log({ data })
+
+  return { data, isLoading, error, refetch }
 }

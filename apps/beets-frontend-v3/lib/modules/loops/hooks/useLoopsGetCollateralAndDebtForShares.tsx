@@ -6,21 +6,24 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { loopedSonicVaultAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { parseUnits } from 'viem'
 
-export function useLoopsGetCollateralAndDebtForShares(sharesAmount: bigint, chain: GqlChain) {
+export function useLoopsGetCollateralAndDebtForShares(sharesAmount: string, chain: GqlChain) {
   const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const config = getNetworkConfig(chainId)
 
+  const amountShares = sharesAmount ? BigInt(parseUnits(sharesAmount, 18).toString()) : 0n
+
   const query = useReadContract({
     chainId,
     abi: loopedSonicVaultAbi,
     address: config.contracts.beets?.loopedSonicVault,
     functionName: 'getCollateralAndDebtForShares',
-    args: [sharesAmount],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!sharesAmount },
+    args: [amountShares],
+    query: { enabled: isConnected && !shouldChangeNetwork && !!amountShares },
   })
 
   return {
