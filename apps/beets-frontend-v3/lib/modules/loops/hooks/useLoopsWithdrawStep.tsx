@@ -21,7 +21,6 @@ import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction
 import { useLoopsGetFlyQuote } from './useLoopsGetFlyQuote'
 import { useLoopsGetCollateralAndDebtForShares } from '@/lib/modules/loops/hooks/useLoopsGetCollateralAndDebtForShares'
 import { ConvertLstToWethMessage, getConvertLstToWethData } from '../getConvertLstToWethData'
-import {} from '../getConvertLstToWethData'
 
 export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enabled: boolean) {
   const { isConnected } = useUserAccount()
@@ -52,7 +51,7 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
 
   console.log({ convertLstToWethData })
 
-  const minWethAmountOut = 0n
+  const minWethAmountOut = 1n
 
   const labels: TransactionLabels = {
     init: 'Withdraw',
