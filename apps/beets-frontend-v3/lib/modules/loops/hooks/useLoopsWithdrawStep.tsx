@@ -36,9 +36,9 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
     toTokenAddress: zeroAddress,
     sellAmount: collateralInLst.toString(),
     slippage: '0.005',
-    fromAddress: '0xc325856e5585823aac0d1fd46c35c608d95e65a9',
-    toAddress: '0xc325856e5585823aac0d1fd46c35c608d95e65a9',
-    gasless: 'true',
+    fromAddress: zeroAddress,
+    toAddress: zeroAddress,
+    gasless: 'false',
     network: 'sonic',
   }
 
