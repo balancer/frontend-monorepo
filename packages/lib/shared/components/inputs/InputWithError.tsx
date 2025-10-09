@@ -29,7 +29,7 @@ export function InputWithError({
   ...props
 }: InputWithErrorProps) {
   return (
-    <VStack align="start" w="full">
+    <VStack align="start" data-group w="full">
       {label && (
         <HStack>
           <Text textAlign="start" w="full">
@@ -73,7 +73,16 @@ export function InputWithError({
       )}
 
       {!error && info && (
-        <Text color="font.secondary" fontSize="sm" textAlign="start" w="full">
+        <Text
+          _groupFocusWithin={{ opacity: '1' }}
+          _groupHover={{ opacity: '1' }}
+          color="font.secondary"
+          fontSize="sm"
+          opacity="0.5"
+          textAlign="start"
+          transition="opacity 0.2s var(--ease-out-cubic)"
+          w="full"
+        >
           {info}
         </Text>
       )}
