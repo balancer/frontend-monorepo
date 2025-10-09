@@ -198,7 +198,8 @@ export function ClaimNetworkPools() {
             >
               {poolsWithChain.map(
                 ([chain, pools], index) =>
-                  pools[0] && (
+                  pools[0] &&
+                  totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0 && (
                     <motion.div
                       animate={{ opacity: 1, scale: 1 }}
                       initial={{ opacity: 0, scale: 0.95 }}

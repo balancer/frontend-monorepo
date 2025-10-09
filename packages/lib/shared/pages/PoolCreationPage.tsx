@@ -25,14 +25,14 @@ function PoolCreationPageContent() {
   const { getTokensByChain, isLoadingTokens } = useTokens()
   const { network } = usePoolCreationForm()
 
-  const initTokens = getTokensByChain(network.toUpperCase() as GqlChain)
+  const chainTokens = getTokensByChain(network.toUpperCase() as GqlChain)
 
   return (
     <DefaultPageContainer minH="100vh">
       <TransactionStateProvider>
         {!isLoadingTokens && (
           <TokenInputsValidationProvider>
-            <TokenBalancesProvider initTokens={initTokens}>
+            <TokenBalancesProvider extTokens={chainTokens}>
               <Permit2SignatureProvider>
                 <PoolCreationForm />
               </Permit2SignatureProvider>
