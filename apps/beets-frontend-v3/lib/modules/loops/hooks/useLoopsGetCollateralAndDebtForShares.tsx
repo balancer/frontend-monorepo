@@ -29,5 +29,6 @@ export function useLoopsGetCollateralAndDebtForShares(sharesAmount: string, chai
   return {
     ...query,
     collateralInLst: query.data?.[0] ?? 0n,
+    debtInEth: query.data?.[1] ?? 0n,
   }
 }

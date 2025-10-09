@@ -20,13 +20,13 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useLoopsGetFlyQuote } from './useLoopsGetFlyQuote'
 import { useLoopsGetCollateralAndDebtForShares } from '@/lib/modules/loops/hooks/useLoopsGetCollateralAndDebtForShares'
-import { ConvertLstToWethMessage, getConvertLstToWethData } from '../getConvertLstToWethData'
+import { useLoopsGetFlyTransaction } from '@/lib/modules/loops/hooks/useLoopsGetFlyTransaction'
 
 export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enabled: boolean) {
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
-  const { collateralInLst } = useLoopsGetCollateralAndDebtForShares(amountShares, chain)
+  const { collateralInLst, debtInEth } = useLoopsGetCollateralAndDebtForShares(amountShares, chain)
 
   const networkConfig = getNetworkConfig(chain)
 
@@ -44,14 +44,21 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
   console.log({ flyQuoteParams })
 
   const { data: flyQuote } = useLoopsGetFlyQuote(flyQuoteParams)
+  const { data: flyTransaction } = useLoopsGetFlyTransaction({
+    quoteId: flyQuote?.id || '',
+    estimateGas: 'true',
+  })
 
-  const convertLstToWethData = getConvertLstToWethData(
-    flyQuote?.typedData?.message as unknown as ConvertLstToWethMessage
-  )
+  const minWethAmountOut = flyQuote?.typedData.message.amountOutMin
+    ? BigInt(
+        bn(flyQuote?.typedData.message.amountOutMin || '0')
+          .minus(debtInEth)
+          .minus(bn(0.05).times(debtInEth))
+          .toFixed(0)
+      )
+    : 0n
 
-  console.log({ convertLstToWethData })
-
-  const minWethAmountOut = 1n
+  console.log({ minWethAmountOut })
 
   const labels: TransactionLabels = {
     init: 'Withdraw',
@@ -67,8 +74,13 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
     contractId: 'beets.loopedSonicRouter',
     contractAddress: getNetworkConfig(chain).contracts.beets?.magpieLoopedSonicRouter || '',
     functionName: 'withdrawWithFlashLoan',
-    args: [parseUnits(amountShares, BPT_DECIMALS), minWethAmountOut, convertLstToWethData || '0x'],
-    enabled: bn(amountShares).gte(0) && isConnected && !!convertLstToWethData && enabled,
+    args: [parseUnits(amountShares, BPT_DECIMALS), minWethAmountOut, flyTransaction?.data || '0x'],
+    enabled:
+      bn(amountShares).gte(0) &&
+      isConnected &&
+      !!flyTransaction?.data &&
+      bn(minWethAmountOut).gt(0) &&
+      enabled,
     onTransactionChange: setTransaction,
   }
 
