@@ -1,4 +1,16 @@
-import { Box, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  ListItem,
+  UnorderedList,
+  VStack,
+  HStack,
+  Icon,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+} from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -13,6 +25,7 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { isV3Pool, isGyroEPool } from '../../../pool.helpers'
+import { Info } from 'react-feather'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
@@ -149,16 +162,12 @@ export function AddLiquidityFormTabs({
       value: '0',
       label: 'Flexible',
       disabled: isDisabledFlexibleTab,
-      iconTooltipLabel:
-        'Enter any amount for each token manually. Balances are independent, and no automatic adjustments will be made.',
       tabTooltipLabel: getFlexibleTabTooltipLabel(),
     },
     {
       value: '1',
       label: 'Proportional',
       disabled: isDisabledProportionalTab,
-      iconTooltipLabel:
-        "When you enter an amount for one token, the others are automatically adjusted to maintain the pool's proportional balance.",
       tabTooltipLabel: isDisabledProportionalTab
         ? 'This pool does not support liquidity to be added proportionally'
         : undefined,
@@ -174,17 +183,49 @@ export function AddLiquidityFormTabs({
   const isProportional = tabIndex === 1
 
   return (
-    <VStack w="full">
+    <VStack alignItems="start" w="full">
       {!isDisabledProportionalTab && <PoolWeightsInfo />}
-      <ButtonGroup
-        currentOption={options[tabIndex]}
-        groupId="add-liquidity"
-        hasLargeTextLabel
-        isFullWidth
-        onChange={handleTabChanged}
-        options={options}
-        size="md"
-      />
+      <HStack pb="sm" w="full">
+        <ButtonGroup
+          currentOption={options[tabIndex]}
+          fontSize="md"
+          groupId="add-liquidity"
+          minWidth="116px"
+          onChange={handleTabChanged}
+          options={options}
+          size="sm"
+        />
+        <Popover placement="top" trigger="hover">
+          <PopoverTrigger>
+            <Box cursor="pointer" display="inline-flex">
+              <Icon as={Info} boxSize="16px" color="font.secondary" />
+            </Box>
+          </PopoverTrigger>
+          <PopoverContent maxW="300px" p="sm" w="auto">
+            <VStack align="start" spacing="sm">
+              <Box>
+                <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                  Flexible Adds
+                </Text>
+                <Text fontSize="sm" variant="secondary">
+                  Enter any amount for each token manually. Balances are independent, and no
+                  automatic adjustments will be made.
+                </Text>
+              </Box>
+              <Box>
+                <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                  Proportional Adds (No price impact)
+                </Text>
+                <Text fontSize="sm" variant="secondary">
+                  When you enter an amount for one token, the others are automatically adjusted to
+                  maintain the pool's proportional balance.
+                </Text>
+              </Box>
+            </VStack>
+          </PopoverContent>
+        </Popover>
+        <Divider w="full" />
+      </HStack>
       {isOutOfRange && <OutOfRangeWarning />}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>

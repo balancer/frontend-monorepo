@@ -152,7 +152,7 @@ function TokenInputFooter({
         ? usdValueForToken(token, value)
         : '0'
 
-  const noBalance = !token || bn(userBalance).isZero()
+  const noBalance = token && bn(userBalance).isZero()
   const _isNativeAsset = token && isNativeAsset(token.chain, token.address)
 
   const showPriceImpact = !isLoadingPriceImpact && hasPriceImpact && priceImpactProps?.priceImpact
@@ -203,10 +203,17 @@ function TokenInputFooter({
               {getValidationError(token)}
             </Text>
           )}
-          <Text color={noBalance ? 'font.error' : 'inherit'} fontSize="sm">
-            {fNum('token', userBalance, { abbreviated: false })}
+          <Text
+            color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
+            fontSize="sm"
+            opacity={!token ? 0.5 : 1}
+          >
+            {!token ? '–' : fNum('token', userBalance, { abbreviated: false })}
           </Text>
-          <Box color={noBalance ? 'font.error' : undefined}>
+          <Box
+            color={!token ? 'font.secondary' : noBalance ? 'font.error' : undefined}
+            opacity={!token ? 0.5 : 1}
+          >
             <WalletIcon size={16} />
           </Box>
         </HStack>

@@ -473,6 +473,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
       sizes: {
+        xxxs: {
+          h: '24px',
+          px: '0.5',
+        },
         xxs: {
           h: { base: '24px', md: '26px' },
           px: '2',
@@ -492,7 +496,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
         lg: {
           h: { base: '40px', md: '48px' },
-          px: { base: '3', md: '4' },
+          px: { base: '2', md: '3' },
         },
       },
       variants: {
@@ -610,7 +614,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           fontWeight: 'bold',
           borderRadius: '4px',
           _hover: {
-            color: 'font.highlight',
+            color: 'font.maxContrast',
             transform: 'none',
             _disabled: {
               background: 'transparent',
@@ -682,21 +686,64 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             color: 'gray.400',
           },
         },
+        buttonGroupInactiveCompact: {
+          backgroundColor: 'transparent',
+          height: '18px',
+          width: 'fit-content',
+          shadow: 'none',
+          px: '1.5',
+          py: '0',
+          fontSize: 'xs',
+          color: 'font.secondary',
+          fontWeight: 'bold',
+          borderRadius: '4px',
+          _hover: {
+            color: 'font.maxContrast',
+            transform: 'none',
+          },
+        },
+        buttonGroupActiveCompact: {
+          background: 'transparent',
+          height: '18px',
+          px: '1.5',
+          py: '0',
+          fontSize: 'xs',
+          color: 'font.dark',
+          fontWeight: 'bold',
+          borderRadius: '4px',
+        },
       },
     },
     Modal: {
       baseStyle: {
         dialog: {
           background: 'background.level0',
+          borderRadius: '2xl',
+          paddingBottom: 'xs',
+          shadow: '2xl',
         },
         closeButton: {
-          top: 3,
+          top: 3.5,
+          right: 3.5,
           color: 'font.primary',
           rounded: 'full',
+          background: 'background.level2',
+          shadow: '2xl',
         },
         header: {
           color: 'font.primary',
           letterSpacing: '-0.04rem',
+          paddingBottom: 'ms',
+          paddingX: '5',
+          paddingRight: 'xl',
+        },
+        body: {
+          paddingTop: 'xxs',
+          paddingBottom: '0',
+          paddingX: '5',
+        },
+        footer: {
+          paddingX: '5',
         },
         overlay: {
           bg: 'rgba(0,0,0,0.85)',
@@ -706,8 +753,15 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           },
         },
       },
+      sizes: {
+        lg: {
+          dialog: {
+            maxWidth: '480px',
+          },
+        },
+      },
       defaultProps: {
-        size: 'md',
+        size: 'lg',
       },
     },
     Drawer: {
@@ -855,7 +909,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             borderWidth: '1px',
             borderColor: 'border.base',
             shadow: 'sm',
-            padding: 'md',
+            padding: 'ms',
             width: 'full',
             rounded: 'md',
           },

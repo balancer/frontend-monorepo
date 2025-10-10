@@ -98,8 +98,8 @@ const completeColor = {
 }
 
 const incompleteColor = {
-  dark: 'gray',
-  light: 'gray',
+  dark: 'font.secondary',
+  light: 'font.secondary',
 }
 
 const activeColor = {

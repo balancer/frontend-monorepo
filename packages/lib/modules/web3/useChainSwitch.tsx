@@ -50,7 +50,7 @@ export function NetworkSwitchButton({ chainId }: Props) {
         networkSwitchButtonProps.switchChain?.({ chainId: networkSwitchButtonProps.chainId })
       }
       size="lg"
-      variant="primary"
+      variant="secondary"
       w="full"
     >
       Switch network to {networkSwitchButtonProps.name}

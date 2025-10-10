@@ -27,25 +27,27 @@ type Props = {
   options: Readonly<ButtonGroupOption[]>
   onChange: (option: ButtonGroupOption) => void
   groupId: string
+  fontSize?: ButtonProps['fontSize']
+  isCompact?: boolean
+  isFullWidth?: boolean
+  isGray?: boolean
+  minWidth?: ButtonProps['minWidth']
   size?: ButtonProps['size']
   width?: ButtonProps['width']
-  isFullWidth?: boolean
-  hasLargeTextLabel?: boolean
-  isGray?: boolean
 }
 
 export default function ButtonGroup(props: Props) {
-  const { groupId, options, currentOption, isFullWidth, isGray } = props
+  const { groupId, options, currentOption, isFullWidth, isGray, isCompact, fontSize = 'xs' } = props
 
   return (
     <LayoutGroup id={groupId}>
       <HStack
         background={isGray ? 'gray.600' : 'level0'}
         p="1"
-        pt="3px" // TODO: maybe there a better way to align the buttons
+        pt={isCompact ? '0' : '3px'} // TODO: maybe there a better way to align the buttons
         rounded="md"
         shadow="innerXl"
-        spacing="1"
+        spacing={isCompact ? '0' : '1'}
         w={isFullWidth ? 'full' : undefined}
       >
         {options.map(function (option) {
@@ -55,7 +57,12 @@ export default function ButtonGroup(props: Props) {
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <Box _hover={{ opacity: 0.75 }} transition="opacity 0.2s var(--ease-out-cubic)">
-                    <GroupOptionButton isActive={isActive} option={option} {...props} />
+                    <GroupOptionButton
+                      isActive={isActive}
+                      option={option}
+                      {...props}
+                      fontSize={fontSize}
+                    />
                   </Box>
                 </PopoverTrigger>
                 <PopoverContent maxW="300px" p="sm" w="auto">
@@ -67,7 +74,12 @@ export default function ButtonGroup(props: Props) {
             </Box>
           ) : (
             <Box flex="1" key={`button-group-option-${option.value}`}>
-              <GroupOptionButton isActive={isActive} option={option} {...props} />
+              <GroupOptionButton
+                isActive={isActive}
+                option={option}
+                {...props}
+                fontSize={fontSize}
+              />
             </Box>
           )
         })}
@@ -79,22 +91,26 @@ export default function ButtonGroup(props: Props) {
 function GroupOptionButton({
   option,
   isActive,
+  fontSize,
+  groupId,
+  isCompact,
+  isGray,
+  minWidth,
   size,
   width,
-  groupId,
-  hasLargeTextLabel,
-  isGray,
   onChange,
 }: { option: ButtonGroupOption; isActive: boolean } & Props) {
   const variant = isActive ? 'buttonGroupActive' : 'buttonGroupInactive'
   const variantGray = isActive ? 'buttonGroupActiveGray' : 'buttonGroupInactiveGray'
-  const variantToUse = isGray ? variantGray : variant
+  const variantCompact = isActive ? 'buttonGroupActiveCompact' : 'buttonGroupInactiveCompact'
+  const variantToUse = isCompact ? variantCompact : isGray ? variantGray : variant
 
   return (
     <Button
       bg="transparent"
       id={`button-group-${option.value}`}
       isDisabled={option.disabled}
+      minWidth={minWidth}
       onClick={() => onChange(option)}
       position="relative"
       rightIcon={
@@ -116,9 +132,31 @@ function GroupOptionButton({
           layoutId={`active-${groupId}`}
           position="absolute"
           shadow="md"
+          sx={
+            isCompact
+              ? {
+                  _dark: {
+                    bg: 'background.level4',
+                  },
+                }
+              : undefined
+          }
         />
       )}
-      <Box fontSize={hasLargeTextLabel ? 'lg' : undefined} position="relative" zIndex="8">
+      <Box
+        fontSize={fontSize}
+        position="relative"
+        sx={
+          isCompact && isActive
+            ? {
+                _dark: {
+                  color: 'white',
+                },
+              }
+            : undefined
+        }
+        zIndex="8"
+      >
         {option.label}
       </Box>
     </Button>
