@@ -89,7 +89,7 @@ function LoopsForm() {
     isRateLoading,
     amountShares,
     getAmountAssets,
-    nativeAsset,
+    wNativeAsset,
   } = useLoops()
 
   const isLoading = !isMounted || isBalancesLoading
@@ -168,11 +168,11 @@ function LoopsForm() {
         )}
         {isWithdrawTab && !isRateLoading && amountShares !== '' && (
           <YouWillReceive
-            address={nativeAsset?.address || ''}
+            address={wNativeAsset?.address || ''}
             amount={getAmountAssets(amountShares)}
             chain={chain}
             label="You will receive"
-            symbol={nativeAsset?.symbol || ''}
+            symbol={wNativeAsset?.symbol || ''}
           />
         )}
       </CardBody>

@@ -2,7 +2,7 @@ import { Card } from '@chakra-ui/react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
-import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { LoopsWithdrawReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useLoops } from '../LoopsProvider'
 import { formatUnits, parseUnits } from 'viem'
@@ -11,24 +11,24 @@ import { useLoopsGetConvertToAssets } from '../hooks/useLoopsGetConvertToAssets'
 export function LoopsWithdrawSummary({
   isLoading: isLoadingReceipt,
   receivedToken,
-}: LstStakeReceiptResult) {
+}: LoopsWithdrawReceiptResult) {
   const { isMobile } = useBreakpoints()
 
   const {
     chain,
     depositTransactionSteps,
-    loopsDepositTxHash,
-    nativeAsset,
+    loopsWithdrawTxHash,
+    wNativeAsset,
     loopedAsset,
     amountShares,
   } = useLoops()
 
   const { assetsAmount, isLoading: isLoadingAssetsAmount } = useLoopsGetConvertToAssets(
-    amountShares && nativeAsset?.decimals ? parseUnits(amountShares, nativeAsset.decimals) : 0n,
+    amountShares && wNativeAsset?.decimals ? parseUnits(amountShares, wNativeAsset.decimals) : 0n,
     chain
   )
 
-  const shouldShowReceipt = !!loopsDepositTxHash && !isLoadingReceipt && !!receivedToken
+  const shouldShowReceipt = !!loopsWithdrawTxHash && !isLoadingReceipt && !!receivedToken
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
@@ -47,11 +47,11 @@ export function LoopsWithdrawSummary({
           chain={chain}
           isLoading={isLoadingAssetsAmount || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
-          tokenAddress={nativeAsset?.address || ''}
+          tokenAddress={wNativeAsset?.address || ''}
           tokenAmount={
             shouldShowReceipt
               ? receivedToken.humanAmount
-              : formatUnits(assetsAmount, nativeAsset?.decimals ?? 18)
+              : formatUnits(assetsAmount, wNativeAsset?.decimals ?? 18)
           }
         />
       </Card>

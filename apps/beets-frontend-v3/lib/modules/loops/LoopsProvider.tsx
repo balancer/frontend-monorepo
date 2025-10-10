@@ -32,6 +32,7 @@ export function useLoopsLogic() {
 
   const nativeAsset = getToken(sonicNetworkConfig.tokens.nativeAsset.address, CHAIN)
   const loopedAsset = getToken(sonicNetworkConfig.tokens.loopedAsset?.address || '', CHAIN)
+  const wNativeAsset = getToken(sonicNetworkConfig.tokens.addresses.wNativeAsset, CHAIN)
 
   const { step: depositStep } = useLoopsDepositStep(amountAssets, CHAIN, isDepositTab)
   const depositTransactionSteps = useTransactionSteps([depositStep], false)
@@ -113,6 +114,7 @@ export function useLoopsLogic() {
     getAmountShares,
     isRateLoading,
     getAmountAssets,
+    wNativeAsset,
   }
 }
 
