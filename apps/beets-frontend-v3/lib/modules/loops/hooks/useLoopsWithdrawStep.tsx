@@ -80,7 +80,6 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
       isConnected &&
       !!flyTransaction?.data &&
       bn(minWethAmountOut).gt(0) &&
-      !!flyTransaction?.data &&
       enabled,
     onTransactionChange: setTransaction,
   }
