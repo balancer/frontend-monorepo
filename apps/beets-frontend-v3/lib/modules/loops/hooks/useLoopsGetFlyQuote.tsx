@@ -28,7 +28,5 @@ export function useLoopsGetFlyQuote(params: FlyQuoteApiRequest) {
     staleTime: mins(1).toMs(),
   })
 
-  console.log({ data })
-
   return { data, isLoading, error, refetch }
 }

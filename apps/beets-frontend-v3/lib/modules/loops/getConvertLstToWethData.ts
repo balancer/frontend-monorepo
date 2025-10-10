@@ -18,7 +18,5 @@ export function getConvertLstToWethData(data: any) {
     data,
   })
 
-  console.log({ decoded })
-
   return decoded?.args?.[0] as `0x${string}`
 }

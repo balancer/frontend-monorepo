@@ -30,7 +30,5 @@ export function useLoopsGetFlyTransaction(params: FlyTransactionApiRequest) {
     staleTime: mins(1).toMs(),
   })
 
-  console.log('transaction', { data, params })
-
   return { data, isLoading, error, refetch }
 }

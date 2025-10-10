@@ -42,8 +42,6 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
     network: 'sonic',
   }
 
-  console.log({ flyQuoteParams })
-
   const { data: flyQuote } = useLoopsGetFlyQuote(flyQuoteParams)
   const { data: flyTransaction } = useLoopsGetFlyTransaction({
     quoteId: flyQuote?.id || '',
@@ -60,8 +58,6 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
           .toFixed(0)
       )
     : 0n
-
-  console.log({ minWethAmountOut })
 
   const labels: TransactionLabels = {
     init: 'Withdraw',
