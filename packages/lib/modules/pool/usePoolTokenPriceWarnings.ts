@@ -4,6 +4,15 @@ import { Pool } from './pool.types'
 export function usePoolTokenPriceWarnings(pool?: Pool) {
   const { priceFor, isLoadingTokenPrices } = useTokens()
 
+  const tokenPriceTip =
+    'The price of this token currently cannot be accessed. This may be due to our pricing provider, CoinGecko, being down or not listing it.'
+
+  const tokenWeightTip =
+    'Current weight percentages cannot be calculated since the price of one or more tokens are unknown.'
+
+  const marketCapTip =
+    'The market cap for this token is not available because the price is unknown.'
+
   if (!pool || isLoadingTokenPrices) {
     return {
       isAnyTokenWithoutPrice: false,
@@ -11,9 +20,10 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
       totalLiquidityTip: '',
       addLiquidityWarning: '',
       removeLiquidityWarning: '',
-      tokenPriceTip: '',
-      tokenWeightTip: '',
+      tokenPriceTip,
+      tokenWeightTip,
       tokensWithoutPrice: {},
+      marketCapTip,
     }
   }
 
@@ -31,12 +41,6 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
   const poolWarning = isAnyTokenWithoutPrice
     ? `This pool's total value does not include the value of ${formattedTokensWithoutPrice} ${tokenNoun} since the current price cannot be accessed.`
     : ''
-
-  const tokenPriceTip =
-    'The price of this token currently cannot be accessed. This may be due to our pricing provider, CoinGecko, being down or not listing it.'
-
-  const tokenWeightTip =
-    'Current weight percentages cannot be calculated since the price of one or more tokens are unknown.'
 
   const totalLiquidityTip = isAnyTokenWithoutPrice
     ? `This amount does not include the value of ${formattedTokensWithoutPrice} ${tokenNoun} since the current price cannot be accessed.`
@@ -59,6 +63,7 @@ export function usePoolTokenPriceWarnings(pool?: Pool) {
     tokenPriceTip,
     tokenWeightTip,
     tokensWithoutPrice,
+    marketCapTip,
   }
 }
 

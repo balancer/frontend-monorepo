@@ -114,6 +114,10 @@ export const colors = {
 
     goldLight: 'linear-gradient(90deg, #BC874C 0%,rgb(193, 149, 17) 50%, #BC874C 100%)',
     goldDark: 'linear-gradient(90deg, #A18775 0%, #C4BC97 50%, #958471 100%)',
+    warningLight:
+      'linear-gradient(180deg, rgba(253, 186, 116, 0.2) 0%, rgba(151, 111, 69, 0.1) 100%)',
+    warningDark:
+      'linear-gradient(180deg, rgba(253, 186, 116, 0.2) 0%, rgba(151, 111, 69, 0.1) 100%)',
   },
   aura: {
     purple: '#A855F7',

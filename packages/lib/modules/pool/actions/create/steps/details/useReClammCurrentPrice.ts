@@ -10,13 +10,13 @@ import { formatUnits } from 'viem'
 export function useReClammCurrentPrice() {
   const { poolCreationForm } = usePoolCreationForm()
   const { poolTokens, network } = poolCreationForm.watch()
-  const { usdValueForTokenAddress } = useTokens()
+  const { priceFor } = useTokens()
 
   const tokenA = poolTokens[0]
   const tokenB = poolTokens[1]
 
-  const priceTokenA = +usdValueForTokenAddress(tokenA?.address || '', network, '1')
-  const priceTokenB = +usdValueForTokenAddress(tokenB?.address || '', network, '1')
+  const priceTokenA = tokenA.usdPrice || priceFor(tokenA?.address || '', network)
+  const priceTokenB = tokenB.usdPrice || priceFor(tokenB?.address || '', network)
 
   const { rate: rawRateTokenA } = useRateProvider(tokenA?.rateProvider, network)
   const { rate: rawRateTokenB } = useRateProvider(tokenB?.rateProvider, network)

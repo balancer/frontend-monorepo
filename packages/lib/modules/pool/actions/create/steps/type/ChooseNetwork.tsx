@@ -54,9 +54,11 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
                 _focus: {
                   boxShadow: 'outline',
                 },
+                borderColor: 'transparent',
                 borderRadius: 'lg',
-                borderWidth: '2px',
+                borderWidth: '1px',
                 boxShadow: 'md',
+                bg: 'background.level2',
                 cursor: 'pointer',
                 px: 5,
                 py: 3,

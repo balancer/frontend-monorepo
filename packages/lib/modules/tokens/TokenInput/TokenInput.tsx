@@ -30,11 +30,11 @@ import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
-import { ApiToken, CustomToken } from '../token.types'
+import { ApiOrCustomToken } from '../token.types'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 
 type TokenInputSelectorProps = {
-  token: ApiToken | CustomToken | undefined
+  token: ApiOrCustomToken | undefined
   weight?: string
   showWeight?: boolean
   onToggleTokenClicked?: () => void
@@ -110,7 +110,7 @@ type PriceImpactProps = {
 }
 
 type TokenInputFooterProps = {
-  token: ApiToken | CustomToken | undefined
+  token: ApiOrCustomToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean
@@ -224,7 +224,7 @@ function TokenInputFooter({
 
 type Props = {
   address?: string
-  apiToken?: ApiToken | CustomToken
+  apiToken?: ApiOrCustomToken
   chain?: GqlChain | number
   weight?: string
   value?: string
