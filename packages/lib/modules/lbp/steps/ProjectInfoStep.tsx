@@ -1,16 +1,4 @@
-import {
-  Heading,
-  VStack,
-  Text,
-  HStack,
-  Spacer,
-  Divider,
-  Checkbox,
-  Button,
-  InputGroup,
-  InputRightElement,
-  Spinner,
-} from '@chakra-ui/react'
+import { Heading, VStack, Text, HStack, Spacer, Divider, Checkbox, Button } from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
@@ -163,6 +151,7 @@ function TokenIconInput() {
       control,
       formState: { errors, dirtyFields },
       watch,
+      setValue,
       trigger,
     },
   } = useLbpForm()
@@ -173,6 +162,11 @@ function TokenIconInput() {
     if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
   }, [iconUrl, isChecking, error, trigger, dirtyFields])
 
+  const paste = async () => {
+    const clipboardText = await navigator.clipboard.readText()
+    setValue('tokenIconUrl', clipboardText, { shouldDirty: true })
+  }
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Token icon URL</Text>
@@ -180,20 +174,14 @@ function TokenIconInput() {
         control={control}
         name="tokenIconUrl"
         render={({ field }) => (
-          <InputGroup>
-            <InputWithError
-              error={isChecking ? '' : errors.tokenIconUrl?.message}
-              isInvalid={!isChecking && !!errors.tokenIconUrl}
-              onChange={e => field.onChange(e.target.value)}
-              placeholder="https://project-name.com/token.svg"
-              value={field.value}
-            />
-            {isChecking && (
-              <InputRightElement>
-                <Spinner />
-              </InputRightElement>
-            )}
-          </InputGroup>
+          <InputWithError
+            error={isChecking ? '' : errors.tokenIconUrl?.message}
+            isInvalid={!isChecking && !!errors.tokenIconUrl}
+            onChange={e => field.onChange(e.target.value)}
+            pasteFn={paste}
+            placeholder="https://project-name.com/token.svg"
+            value={field.value}
+          />
         )}
         rules={{
           required: 'Token icon URL is required',
@@ -336,10 +324,18 @@ function ProjectOwnerInput() {
     projectInfoForm: {
       control,
       formState: { errors },
+      setValue,
+      trigger,
     },
   } = useLbpForm()
 
   const { userAddress } = useUserAccount()
+
+  const paste = async () => {
+    const clipboardText = await navigator.clipboard.readText()
+    setValue('owner', clipboardText)
+    trigger('owner')
+  }
 
   return (
     <VStack align="start" w="full">
@@ -352,6 +348,7 @@ function ProjectOwnerInput() {
             error={errors.owner?.message}
             isInvalid={!!errors.owner}
             onChange={e => field.onChange(e.target.value)}
+            pasteFn={paste}
             placeholder={userAddress}
             value={field.value}
           />
