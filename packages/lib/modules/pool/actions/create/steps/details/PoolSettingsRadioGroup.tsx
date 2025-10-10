@@ -126,12 +126,14 @@ export function PoolSettingsRadioGroup({
                               )}
                               rules={{ validate: validateAsync ? validateAsync : validate }}
                             />
-                            <BalAlert
-                              content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
-                              status="warning"
-                              title="Unrecognized contract"
-                              w="full"
-                            />
+                            {name === 'poolHooksContract' && (
+                              <BalAlert
+                                content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
+                                status="warning"
+                                title="Unrecognized contract"
+                                w="full"
+                              />
+                            )}
                           </VStack>
                         ) : (
                           <NumberInput
