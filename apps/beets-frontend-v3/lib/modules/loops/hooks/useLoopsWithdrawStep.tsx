@@ -11,7 +11,7 @@ import {
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { parseUnits, zeroAddress } from 'viem'
+import { parseUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { noop } from 'lodash'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -32,7 +32,7 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
 
   const flyQuoteParams = {
     fromTokenAddress: networkConfig.tokens.stakedAsset?.address || '',
-    toTokenAddress: zeroAddress,
+    toTokenAddress: networkConfig.tokens.addresses.wNativeAsset || '',
     sellAmount: collateralInLst.toString(),
     slippage: '0.005',
     fromAddress: networkConfig.contracts.beets?.magpieLoopedSonicRouter || '',
