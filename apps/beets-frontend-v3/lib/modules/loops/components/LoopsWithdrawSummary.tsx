@@ -5,8 +5,8 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { LoopsWithdrawReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useLoops } from '../LoopsProvider'
-import { formatUnits, parseUnits } from 'viem'
-import { useLoopsGetConvertToAssets } from '../hooks/useLoopsGetConvertToAssets'
+import { formatUnits } from 'viem'
+import { useLoopsGetFlyQuote } from '@/lib/modules/loops/hooks/useLoopsGetFlyQuote'
 
 export function LoopsWithdrawSummary({
   isLoading: isLoadingReceipt,
@@ -23,10 +23,7 @@ export function LoopsWithdrawSummary({
     amountShares,
   } = useLoops()
 
-  const { assetsAmount, isLoading: isLoadingAssetsAmount } = useLoopsGetConvertToAssets(
-    amountShares && wNativeAsset?.decimals ? parseUnits(amountShares, wNativeAsset.decimals) : 0n,
-    chain
-  )
+  const { wethAmountOut, isLoading: isLoadingFlyQuote } = useLoopsGetFlyQuote(amountShares, chain)
 
   const shouldShowReceipt = !!loopsWithdrawTxHash && !isLoadingReceipt && !!receivedToken
 
@@ -45,13 +42,13 @@ export function LoopsWithdrawSummary({
       <Card variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingAssetsAmount || isLoadingReceipt}
+          isLoading={isLoadingFlyQuote || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
           tokenAddress={wNativeAsset?.address || ''}
           tokenAmount={
             shouldShowReceipt
               ? receivedToken.humanAmount
-              : formatUnits(assetsAmount, wNativeAsset?.decimals ?? 18)
+              : formatUnits(wethAmountOut, wNativeAsset?.decimals ?? 18)
           }
         />
       </Card>

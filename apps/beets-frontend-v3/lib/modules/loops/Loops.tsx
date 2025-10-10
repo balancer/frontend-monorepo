@@ -41,6 +41,8 @@ import { GetLoopsDataQuery } from '@repo/lib/shared/services/api/generated/graph
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { LoopsWithdraw } from './components/LoopsWithdraw'
 import { LoopsWithdrawModal } from './modals/LoopsWithdrawModal'
+import { useLoopsGetFlyQuote } from '@/lib/modules/loops/hooks/useLoopsGetFlyQuote'
+import { formatUnits } from 'viem'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -88,12 +90,12 @@ function LoopsForm() {
     getAmountShares,
     isRateLoading,
     amountShares,
-    getAmountAssets,
     wNativeAsset,
   } = useLoops()
 
-  const isLoading = !isMounted || isBalancesLoading
+  const { wethAmountOut, isLoading: isLoadingFlyQuote } = useLoopsGetFlyQuote(amountShares, chain)
 
+  const isLoading = !isMounted || isBalancesLoading || isLoadingFlyQuote
   const loadingText = isLoading ? 'Loading...' : undefined
 
   const tabs: ButtonGroupOption[] = [
@@ -166,10 +168,10 @@ function LoopsForm() {
             symbol={loopedAsset?.symbol || ''}
           />
         )}
-        {isWithdrawTab && !isRateLoading && amountShares !== '' && (
+        {isWithdrawTab && !isLoadingFlyQuote && wethAmountOut !== 0n && (
           <YouWillReceive
             address={wNativeAsset?.address || ''}
-            amount={getAmountAssets(amountShares)}
+            amount={formatUnits(wethAmountOut, wNativeAsset?.decimals ?? 18)}
             chain={chain}
             label="You will receive"
             symbol={wNativeAsset?.symbol || ''}
