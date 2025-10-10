@@ -71,6 +71,8 @@ export type CustomToken = {
   chainId: number
 }
 
+export type ApiOrCustomToken = ApiToken | CustomToken
+
 export type BalanceForFn = (token: TokenBase | string) => TokenAmount | undefined
 
 export type InfoPopoverToken = {

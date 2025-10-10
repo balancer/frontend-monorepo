@@ -5,11 +5,11 @@ import { orderBy } from 'lodash'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { exclNativeAssetFilter, nativeAssetFilter } from '../../token.helpers'
 import { useCallback, useMemo } from 'react'
-import { ApiToken, CustomToken } from '../../token.types'
+import { ApiOrCustomToken } from '../../token.types'
 
 export function useTokenSelectList(
   chain: GqlChain,
-  tokens: (ApiToken | CustomToken)[],
+  tokens: ApiOrCustomToken[],
   excludeNativeAsset: boolean,
   pinNativeAsset: boolean,
   searchTerm?: string
@@ -65,11 +65,11 @@ export function useTokenSelectList(
   }
 }
 
-function symbolMatch(token: ApiToken | CustomToken, searchTerm: string) {
+function symbolMatch(token: ApiOrCustomToken, searchTerm: string) {
   return normalize(token.symbol).includes(normalize(searchTerm))
 }
 
-function nameMatch(token: ApiToken | CustomToken, searchTerm: string) {
+function nameMatch(token: ApiOrCustomToken, searchTerm: string) {
   return normalize(token.name).includes(normalize(searchTerm))
 }
 
