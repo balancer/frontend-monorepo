@@ -18,12 +18,10 @@ import { TokenSelectPopular } from './TokenSelectPopular'
 import { SearchInput } from '@repo/lib/shared/components/inputs/SearchInput'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { Address } from 'viem'
-import { ApiToken, CustomToken } from '../token.types'
+import { ApiToken, ApiOrCustomToken } from '../token.types'
 
-type TokenType = ApiToken | CustomToken
-
-type Props<T extends TokenType = ApiToken> = {
-  tokens: (ApiToken | CustomToken)[]
+type Props<T extends ApiOrCustomToken = ApiToken> = {
+  tokens: ApiOrCustomToken[]
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
@@ -36,7 +34,7 @@ type Props<T extends TokenType = ApiToken> = {
   onTokenSelect: (token: T) => void
 }
 
-export function TokenSelectModal<T extends TokenType = ApiToken>({
+export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   tokens,
   chain,
   currentToken,
@@ -51,7 +49,7 @@ export function TokenSelectModal<T extends TokenType = ApiToken>({
 }: Props<T> & Omit<ModalProps, 'children'>) {
   const [searchTerm, setSearchTerm] = useState('')
 
-  function closeOnSelect(token: TokenType) {
+  function closeOnSelect(token: ApiOrCustomToken) {
     onTokenSelect(token as T)
     closeModal()
   }

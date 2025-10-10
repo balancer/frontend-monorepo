@@ -13,7 +13,7 @@ import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
 import { PoolType } from '@balancer/sdk'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
-import { ApiToken, CustomToken } from '@repo/lib/modules/tokens/token.types'
+import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { useEffect, useState } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -100,7 +100,7 @@ export function usePoolFormLogic() {
     resetSteps()
   }
 
-  const [tokenList, setTokenList] = useState<(ApiToken | CustomToken)[]>([])
+  const [tokenList, setTokenList] = useState<ApiOrCustomToken[]>([])
 
   const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()
 
@@ -110,7 +110,7 @@ export function usePoolFormLogic() {
     const unknownTokens = poolTokens
       .filter(token => !networkTokens.some(t => t.address === token.address))
       .map(token => token.data)
-      .filter((token): token is ApiToken | CustomToken => token !== undefined)
+      .filter((token): token is ApiOrCustomToken => token !== undefined)
 
     setTokenList([...networkTokens, ...unknownTokens])
   }, [getTokensByChain, network, poolTokens])

@@ -13,7 +13,7 @@ import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
-import { ApiToken, CustomToken } from './token.types'
+import { ApiOrCustomToken } from './token.types'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
@@ -25,13 +25,13 @@ export const TokenBalancesContext = createContext<UseTokenBalancesResponse | nul
  * @param extTokens If extTokens are provided the tokens state will be managed externally.
  */
 export function useTokenBalancesLogic(
-  initTokens?: ApiToken[],
-  extTokens?: (ApiToken | CustomToken)[]
+  initTokens?: ApiOrCustomToken[],
+  extTokens?: ApiOrCustomToken[]
 ) {
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
-  const [_tokens, _setTokens] = useState<ApiToken[]>(initTokens || [])
+  const [_tokens, _setTokens] = useState<ApiOrCustomToken[]>(initTokens || [])
 
   const { userAddress } = useUserAccount()
 
@@ -119,7 +119,7 @@ export function useTokenBalancesLogic(
     return balances.find(balance => isSameAddress(balance.address, address))
   }
 
-  function setTokens(tokens: ApiToken[]) {
+  function setTokens(tokens: ApiOrCustomToken[]) {
     if (extTokens) throw new Error('Cannot set tokens when using external tokens')
     _setTokens(tokens)
   }
@@ -136,8 +136,8 @@ export function useTokenBalancesLogic(
 }
 
 type ProviderProps = PropsWithChildren<{
-  initTokens?: ApiToken[]
-  extTokens?: (ApiToken | CustomToken)[]
+  initTokens?: ApiOrCustomToken[]
+  extTokens?: ApiOrCustomToken[]
 }>
 
 export function TokenBalancesProvider({ initTokens, extTokens, children }: ProviderProps) {

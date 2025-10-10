@@ -21,7 +21,7 @@ import {
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { PoolToken } from '../pool/pool.types'
-import { ApiToken, CustomToken } from './token.types'
+import { ApiToken, ApiOrCustomToken } from './token.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type UseTokensResult = ReturnType<typeof useTokensLogic>
@@ -82,7 +82,7 @@ export function useTokensLogic() {
     return shouldUseAnvilFork ? result.slice(0, 10) : result
   }
 
-  function usdValueForToken(token: ApiToken | CustomToken | undefined, amount: Numberish) {
+  function usdValueForToken(token: ApiOrCustomToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
     return bn(amount)

@@ -27,7 +27,7 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
-import { ApiToken, CustomToken } from '../token.types'
+import { ApiToken, CustomToken, ApiOrCustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 import { usePoolTokenPriceWarnings } from '../../pool/usePoolTokenPriceWarnings'
 import { TokenMissingPriceWarning } from '../TokenMissingPriceWarning'
@@ -36,7 +36,7 @@ export type TokenInfoProps = {
   address: Address
   symbol?: string
   chain: GqlChain
-  token?: ApiToken | CustomToken
+  token?: ApiOrCustomToken
   poolToken?: ApiToken
   pool?: Pool
   disabled?: boolean

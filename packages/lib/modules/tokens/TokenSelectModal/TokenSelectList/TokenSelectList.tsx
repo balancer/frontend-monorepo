@@ -15,19 +15,19 @@ import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useTokens } from '../../TokensProvider'
 import { Address } from 'viem'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { ApiToken, CustomToken } from '../../token.types'
+import { ApiOrCustomToken, ApiToken, CustomToken } from '../../token.types'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { getChainId } from '@repo/lib/config/app.config'
 
 type Props = {
   chain: GqlChain
-  tokens: (ApiToken | CustomToken)[]
+  tokens: ApiOrCustomToken[]
   excludeNativeAsset?: boolean
   pinNativeAsset?: boolean
   listHeight: number
   searchTerm?: string
   currentToken?: Address
-  onTokenSelect: (token: ApiToken | CustomToken) => void
+  onTokenSelect: (token: ApiOrCustomToken) => void
   enableUnknownToken?: boolean
 }
 function OtherTokens() {
@@ -95,14 +95,14 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
 
 interface TokenRowProps {
   index: number
-  token: ApiToken | CustomToken
+  token: ApiOrCustomToken
   isConnected: boolean
   balanceFor: (token: ApiToken | string) => any
   isBalancesLoading: boolean
   isLoadingTokenPrices: boolean
   activeIndex: number
-  isCurrentToken: (token: ApiToken | CustomToken) => boolean
-  onTokenSelect: (token: ApiToken | CustomToken) => void
+  isCurrentToken: (token: ApiOrCustomToken) => boolean
+  onTokenSelect: (token: ApiOrCustomToken) => void
 }
 
 function TokenRow({
@@ -136,10 +136,10 @@ function renderTokenRow(
   balanceFor: (token: ApiToken | string) => any,
   isBalancesLoading: boolean,
   isConnected: boolean,
-  isCurrentToken: (token: ApiToken | CustomToken) => boolean,
+  isCurrentToken: (token: ApiOrCustomToken) => boolean,
   isLoadingTokenPrices: boolean,
-  onTokenSelect: (token: ApiToken | CustomToken) => void,
-  tokensToShow: (ApiToken | CustomToken)[]
+  onTokenSelect: (token: ApiOrCustomToken) => void,
+  tokensToShow: ApiOrCustomToken[]
 ) {
   return (
     <TokenRow
@@ -206,7 +206,7 @@ export function TokenSelectList({
     ...(unknownTokenToShow ? [unknownTokenToShow] : []),
   ]
 
-  const isCurrentToken = (token: ApiToken | CustomToken) =>
+  const isCurrentToken = (token: ApiOrCustomToken) =>
     !!currentToken && isSameAddress(token.address, currentToken)
 
   const groups = [

@@ -3,7 +3,7 @@ import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInp
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { ApiToken, CustomToken } from '@repo/lib/modules/tokens/token.types'
+import { ApiToken, ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
@@ -64,7 +64,7 @@ export function ChoosePoolTokens() {
       : undefined
   }
 
-  function handleTokenSelect(tokenMetadata: ApiToken | CustomToken) {
+  function handleTokenSelect(tokenMetadata: ApiOrCustomToken) {
     if (!tokenMetadata || selectedTokenIndex === null) return
 
     let rateProvider: Address = zeroAddress

@@ -8,10 +8,10 @@ import { useTokens } from '../../TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenInfoPopover } from '../../TokenInfoPopover'
-import { ApiToken, CustomToken } from '../../token.types'
+import { ApiOrCustomToken } from '../../token.types'
 
 type Props = {
-  token: ApiToken | CustomToken
+  token: ApiOrCustomToken
   userBalance?: TokenAmount
   isBalancesLoading?: boolean
   active?: boolean
