@@ -139,7 +139,7 @@ const FAQ_ITEMS = [
   },
 ]
 
-export function LstFaq() {
+export function LoopsFaq() {
   return (
     <Card rounded="xl" w="full">
       <CardHeader as={HStack} justify="space-between" w="full">
