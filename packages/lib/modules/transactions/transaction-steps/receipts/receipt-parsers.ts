@@ -294,14 +294,10 @@ function getIncomingLogsLoopsDeposit(logs: Log[], userAddress?: Address) {
 
 function getIncomingLogsLoopsWithdraw(logs: Log[], userAddress?: Address) {
   return parseEventLogs({
-    abi: [
-      parseAbiItem(
-        'event Deposit(address indexed caller, address indexed receiver, uint256 sharesMinted, uint256 navIncreaseEth, uint256 totalCollateralEth, uint256 totalDebtEth, uint256 totalSupply)'
-      ),
-    ],
-    args: { receiver: userAddress },
+    abi: [parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)')],
+    args: { to: userAddress },
     logs,
-  })[0]?.args?.sharesMinted
+  })[0]?.args?.value
 }
 
 function filterEdgeCases(tokens: HumanTokenAmount[], chain: GqlChain) {
