@@ -26,13 +26,14 @@ import {
   GqlHookReviewData,
   Erc4626ReviewData,
   HookFragment,
+  GqlPoolLiquidityBootstrappingV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
-import { getWarnings, isBoosted, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
+import { getWarnings, isBoosted, isV3LBP, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
 import { InfoPopoverToken } from '@repo/lib/modules/tokens/token.types'
@@ -150,6 +151,15 @@ export function PoolContracts({ ...props }: CardProps) {
         label: 'Incentives gauge',
         address: gaugeAddress,
         explorerLink: gaugeExplorerLink,
+      })
+    }
+
+    if (isV3LBP(pool)) {
+      const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+      contracts.push({
+        label: 'Sale token contract',
+        address: abbreviateAddress(lbpPool.projectToken as Address),
+        explorerLink: getBlockExplorerAddressUrl(lbpPool.projectToken as Address, pool.chain),
       })
     }
 
