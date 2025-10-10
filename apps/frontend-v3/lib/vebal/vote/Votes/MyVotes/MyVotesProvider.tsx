@@ -224,7 +224,7 @@ export function useMyVotesLogic() {
 
   const hasExceededWeight = getExceededWeight(totalInfo.editVotes || bn(0)).gt(0)
   const hasUnallocatedWeight = getUnallocatedWeight(totalInfo.editVotes || bn(0)).gt(0)
-  const hasNewVotes = newVotesSinceLastVote(myVotes, slope, lockEnd)
+  const hasNewVotes = votedPools.length > 1 && newVotesSinceLastVote(myVotes, slope, lockEnd)
 
   const clearAll = () => {
     setEditVotesWeights({})
