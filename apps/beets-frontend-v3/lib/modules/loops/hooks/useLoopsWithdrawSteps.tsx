@@ -1,9 +1,9 @@
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { useLoopsWithdrawStep } from './useLoopsWithdrawStep'
-import { Address, parseUnits } from 'viem'
-import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { Address, parseUnits, zeroAddress } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 export function useLoopsWithdrawSteps({
   amountShares,
@@ -16,13 +16,13 @@ export function useLoopsWithdrawSteps({
   isWithdrawTab: boolean
   loopedAsset: ApiToken | undefined
 }) {
-  const { userAddress } = useUserAccount()
-
   const { step: withdrawStep } = useLoopsWithdrawStep(amountShares, chain, isWithdrawTab)
+
+  const networkConfig = getNetworkConfig(chain)
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
-      spenderAddress: userAddress,
+      spenderAddress: networkConfig.contracts.beets?.magpieLoopedSonicRouter || zeroAddress,
       chain,
       approvalAmounts: [
         {
