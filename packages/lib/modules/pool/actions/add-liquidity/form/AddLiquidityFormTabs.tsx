@@ -224,9 +224,7 @@ export function AddLiquidityFormTabs({
             </VStack>
           </PopoverContent>
         </Popover>
-        <Box w="full">
-          <Divider w="full" />
-        </Box>
+        <Divider w="full" />
       </HStack>
       {isOutOfRange && <OutOfRangeWarning />}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
