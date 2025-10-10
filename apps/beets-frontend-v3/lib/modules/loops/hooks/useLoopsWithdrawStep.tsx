@@ -21,6 +21,7 @@ import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction
 import { useLoopsGetFlyQuote } from './useLoopsGetFlyQuote'
 import { useLoopsGetCollateralAndDebtForShares } from '@/lib/modules/loops/hooks/useLoopsGetCollateralAndDebtForShares'
 import { useLoopsGetFlyTransaction } from '@/lib/modules/loops/hooks/useLoopsGetFlyTransaction'
+import { getConvertLstToWethData } from '../getConvertLstToWethData'
 
 export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enabled: boolean) {
   const { isConnected } = useUserAccount()
@@ -46,8 +47,10 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
   const { data: flyQuote } = useLoopsGetFlyQuote(flyQuoteParams)
   const { data: flyTransaction } = useLoopsGetFlyTransaction({
     quoteId: flyQuote?.id || '',
-    estimateGas: 'true',
+    estimateGas: 'false',
   })
+
+  const convertLstToWethData = getConvertLstToWethData(flyTransaction?.data)
 
   const minWethAmountOut = flyQuote?.typedData.message.amountOutMin
     ? BigInt(
@@ -74,12 +77,13 @@ export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enab
     contractId: 'beets.loopedSonicRouter',
     contractAddress: getNetworkConfig(chain).contracts.beets?.magpieLoopedSonicRouter || '',
     functionName: 'withdrawWithFlashLoan',
-    args: [parseUnits(amountShares, BPT_DECIMALS), minWethAmountOut, flyTransaction?.data || '0x'],
+    args: [parseUnits(amountShares, BPT_DECIMALS), minWethAmountOut, convertLstToWethData || '0x'],
     enabled:
       bn(amountShares).gte(0) &&
       isConnected &&
       !!flyTransaction?.data &&
       bn(minWethAmountOut).gt(0) &&
+      !!convertLstToWethData &&
       enabled,
     onTransactionChange: setTransaction,
   }
