@@ -20,16 +20,11 @@ import { PoolDetailsStep } from './steps/details/PoolDetailsStep'
 import { PoolFundStep } from './steps/fund/PoolFundStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
-import { useEffect } from 'react'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
 
 export function PoolCreationForm() {
   const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [activeStepIndex])
 
   return (
     <VStack spacing="lg">
