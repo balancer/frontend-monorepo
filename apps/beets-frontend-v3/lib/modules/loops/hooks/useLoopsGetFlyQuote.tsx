@@ -46,7 +46,8 @@ export function useLoopsGetFlyQuote(amountShares: string, chain: GqlChain) {
     staleTime: mins(1).toMs(),
   })
 
-  const debtMinusFees = bn(debtInEth).minus(bn(0.0005).times(debtInEth))
+  const aaveFlashLoanFee = '0.0005'
+  const debtMinusFees = bn(debtInEth).minus(bn(aaveFlashLoanFee).times(debtInEth))
 
   const wethAmountOut = data?.amountOut
     ? BigInt(
