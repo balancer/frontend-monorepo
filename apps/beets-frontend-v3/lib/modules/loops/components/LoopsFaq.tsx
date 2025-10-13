@@ -18,122 +18,194 @@ import { ArrowUpRight } from 'react-feather'
 
 const FAQ_ITEMS = [
   {
-    question: 'What is stS?',
+    question: 'What is loopS?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        stS is a liquid-staked token that users receive when they stake $S on the Beets platform.
-        The value of stS naturally appreciates in relation to $S thanks to native network staking
-        rewards from validator delegation being automatically compounded within the token.
+        loopS is a leveraged staking vault that compounds your stS yield. It borrows $S against your
+        stS and restakes it through Aave to increase rewards safely and automatically.
       </Text>
     ),
   },
   {
-    question: 'What are the stS fees?',
+    question: 'What can I deposit into loopS?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        Due to the management of underlying nodes, validators earn 15% of the overall stS staking
-        rewards. Beets also takes a 10% protocol fee on the rewards after the validator fees. The
-        APY displayed on the UI is the APY the user receives (all fees have been subtracted
-        automatically).
+        You need to deposit $S. When you deposit $S, it’s automatically staked into stS before
+        entering the vault. All loopS positions use stS as collateral behind the scenes.
       </Text>
     ),
   },
   {
-    question: 'How do I get stS tokens?',
+    question: 'What happens when I deposit?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        To stake, users simply need to head to the stS page and select how much $S they wish to
-        deposit. As an alternative to staking, users can swap into stS on DEXs by swapping their $S
-        for stS on the Swap Page.
+        Your deposit becomes stS collateral. loopS borrows $S from Aave, restakes it, and repeats
+        the process to boost your yield.
       </Text>
     ),
   },
   {
-    question: 'How do I unstake stS for $S?',
+    question: 'What do I receive when depositing?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        Unstaking stS involves a 14-day unbonding period aligned with staking on Sonic. After
-        initiating the unstake, users will need to return to the UI after 14 days to claim $S. For
-        instant liquidity, users can swap stS for $S directly on DEXs via the Swap Page. However,
-        note that swapping may offer a less favorable exchange rate than unstaking, depending on the
-        pool’s liquidity.
+        You receive{' '}
+        <Text as="span" fontWeight="bold">
+          $loopS tokens
+        </Text>
+        , a liquid representation of your position in the vault. These tokens accrue value as yield
+        builds up and can be held, transferred, or integrated across DeFi as liquidity grows.
       </Text>
     ),
   },
   {
-    question: 'Where can I use stS tokens?',
+    question: 'What is Total Collateral?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        stS is fully liquid, meaning you can use stS seamlessly across DeFi and access lending
-        markets, liquidity pools, and more without pausing your rewards.
+        Total collateral shows the total amount of stS that is supplied to the vault, including any
+        restaked amounts created through looping.
       </Text>
     ),
   },
   {
-    question: 'What is the stS exchange rate and how does it change?',
+    question: 'What is Total Debt?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        The stS token accrues staking rewards via delegating the underlying $S to trustworthy
-        validators on the network. Every time staking rewards are added to the pool, the stS
-        exchange rate to $S increases.
+        Total debt is the amount of $S borrowed from Aave to create the leveraged positions. It’s
+        managed automatically to stay within safe limits.
       </Text>
     ),
   },
   {
-    question:
-      'What steps have been taken to ensure the security and reliability of the stS smart contract code?',
+    question: 'What does the loopS rate mean?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        To mitigate smart contract risks, the stS code has been thoroughly audited by leading
-        security firms, including{' '}
+        The loopS rate shows how much $S each loopS token is worth. As rewards build up, this rate
+        gradually increases over time.
+      </Text>
+    ),
+  },
+  {
+    question: 'What is Health Factor?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        Health factor measures how safe the positions are. A higher number means lower liquidation
+        risk. If it falls too low, part of the collateral may be sold to repay debt.
+      </Text>
+    ),
+  },
+  {
+    question: 'What does Current Leverage represent?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        It shows how many times the stS has been looped. For example, 3.25x means you’re earning
+        yield on over three times your initial deposit.
+      </Text>
+    ),
+  },
+  {
+    question: 'Do I earn Sonic Points with loopS?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        Yes. loopS positions earn Sonic Points with a multiplier based on the leverage and deposit
+        size.
+      </Text>
+    ),
+  },
+  {
+    question: 'What is the Sonic Points Multiplier?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        It shows how many times your position amplifies your Sonic Points. Higher leverage results
+        in a higher multiplier.
+      </Text>
+    ),
+  },
+  {
+    question: 'What is Actual Supply?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        Actual supply refers to the total number of loopS tokens issued, representing all users’
+        positions in the vault.
+      </Text>
+    ),
+  },
+  {
+    question: 'How does loopS protect against liquidation?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        loopS continuously monitors your health factor and adjusts positions automatically when
+        needed to minimize risk from price or rate changes on Aave.
+      </Text>
+    ),
+  },
+  {
+    question: 'Can I withdraw anytime?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        Yes. You can withdraw anytime. loopS unwinds your position, repays the borrowed $S, and
+        returns your underlying stS or $S balance.
+      </Text>
+    ),
+  },
+  {
+    question: 'Are there any fees?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        A small protocol fee (number) applies to the yield earned. Standard network gas fees also
+        apply for deposits and withdrawals.
+      </Text>
+    ),
+  },
+  {
+    question: 'Which wallets can I use?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        loopS works with all major Sonic-compatible wallets such as MetaMask and Rabby.
+      </Text>
+    ),
+  },
+  {
+    question: 'Is loopS audited?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        Yes. loopS has been fully audited by{' '}
+        <Text as="span" fontWeight="bold">
+          Spearbit
+        </Text>
+        , one of the leading smart contract security firms in DeFi.
+      </Text>
+    ),
+  },
+  {
+    question: 'What is the loopS contract address?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        The official loopS contract can be found here:{' '}
         <Link
           alignItems="center"
           display="inline-flex"
-          href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
+          href="https://sonicscan.org/address/0xc76995054ce51dfbbc954840d699b2f33d2538ee"
           isExternal
         >
           <Box as="span" fontSize="lg" fontWeight="thin">
-            Spearbit
-          </Box>
-          <Box as="span" ml={1}>
-            <ArrowUpRight size={12} />
-          </Box>
-        </Link>{' '}
-        and{' '}
-        <Link
-          alignItems="center"
-          display="inline-flex"
-          href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
-          isExternal
-        >
-          <Box as="span" fontSize="lg" fontWeight="thin">
-            Trail of Bits
+            0xC76995054Ce51DfBBC954840D699b2F33D2538Ee
           </Box>
           <Box as="span" ml={1}>
             <ArrowUpRight size={12} />
           </Box>
         </Link>
+        . Always verify that you are interacting with the correct address before depositing.
       </Text>
     ),
   },
   {
-    question: 'What is the contract address for stS?',
+    question: 'Why do I get slightly less $S on withdrawal?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        The contract address for stS is{' '}
-        <Link
-          alignItems="center"
-          display="inline-flex"
-          href="https://sonicscan.org/token/0xe5da20f15420ad15de0fa650600afc998bbe3955"
-          isExternal
-        >
-          <Box as="span" fontSize="lg" fontWeight="thin">
-            0xE5DA20F15420aD15DE0fa650600aFc998bbE3955
-          </Box>
-          <Box as="span" ml={1}>
-            <ArrowUpRight size={12} />
-          </Box>
-        </Link>
+        When you withdraw, your position is unwound and converted from stS back to $S through market
+        routes on Fly. Because this involves on-chain swaps, the final amount may be slightly lower
+        than the displayed rate due to price impact and slippage. This is normal and depends on
+        current liquidity conditions.
       </Text>
     ),
   },
