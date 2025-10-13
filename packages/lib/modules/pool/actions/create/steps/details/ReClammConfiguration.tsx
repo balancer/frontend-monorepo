@@ -78,7 +78,7 @@ function ConfigOptionsGroup({
     bg: 'background.level2',
     borderColor: 'transparent',
     borderRadius: 'lg',
-    borderWidth: '2px',
+    borderWidth: '1px',
     boxShadow: 'lg',
     color: 'font.secondary',
     display: 'flex',

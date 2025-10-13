@@ -3,7 +3,7 @@ import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInp
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { ApiToken, ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
@@ -44,7 +44,7 @@ export function ChoosePoolTokens() {
   const maxTokens = validatePoolTokens.maxTokens(poolType)
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
-  const { getTokensByChain } = useTokens()
+  const { getTokensByChain, priceFor } = useTokens()
   const allTokens = getTokensByChain(network)
 
   // Filter out already selected tokens
@@ -64,16 +64,20 @@ export function ChoosePoolTokens() {
       : undefined
   }
 
-  function handleTokenSelect(tokenData: ApiToken) {
-    if (!tokenData || selectedTokenIndex === null) return
+  function handleTokenSelect(tokenMetadata: ApiOrCustomToken) {
+    if (!tokenMetadata || selectedTokenIndex === null) return
 
-    const verifiedRateProviderAddress = getVerifiedRateProviderAddress(tokenData)
+    let rateProvider: Address = zeroAddress
+
+    if ('priceRateProviderData' in tokenMetadata) {
+      rateProvider = getVerifiedRateProviderAddress(tokenMetadata) ?? zeroAddress
+    }
 
     updatePoolToken(selectedTokenIndex, {
-      address: tokenData.address as Address,
-      rateProvider: verifiedRateProviderAddress ? verifiedRateProviderAddress : zeroAddress, // default to using rate provider if exists in our DB
-      data: tokenData,
-      paysYieldFees: !!verifiedRateProviderAddress, // defaults to true if rate provider exists in our DB
+      address: tokenMetadata.address as Address,
+      rateProvider,
+      data: tokenMetadata,
+      paysYieldFees: rateProvider !== zeroAddress,
     })
 
     setSelectedTokenIndex(null)
@@ -126,7 +130,6 @@ export function ChoosePoolTokens() {
                         setSelectedTokenIndex(index)
                         tokenSelectDisclosure.onOpen()
                       }}
-                      showWeight={false}
                       token={token?.data}
                     />
                   </VStack>
@@ -163,6 +166,26 @@ export function ChoosePoolTokens() {
 
                 {isWeightedPool && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
 
+                {token.address && !priceFor(token.address || '', network) && (
+                  <VStack align="start" spacing="sm" w="full">
+                    <NumberInput
+                      control={poolCreationForm.control}
+                      label="Estimated current  price of token"
+                      name={`poolTokens.${index}.usdPrice`}
+                      validate={price => {
+                        if (price < 0) return 'Token price must be greater than 0'
+                        return true
+                      }}
+                      width="full"
+                    />
+                    <Text color="font.secondary">
+                      Enter the token’s price accurately, or you’ll be vulnerable to losing money to
+                      arbitrageurs, if you don’t add pool assets in proportion to their target
+                      weights.
+                    </Text>
+                  </VStack>
+                )}
+
                 <ConfigureTokenRateProvider
                   tokenIndex={index}
                   verifiedRateProviderAddress={verifiedRateProviderAddress}
@@ -181,6 +204,7 @@ export function ChoosePoolTokens() {
       <TokenSelectModal
         chain={network}
         currentToken={currentTokenAddress}
+        enableUnlistedToken
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}

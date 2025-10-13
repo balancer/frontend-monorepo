@@ -10,11 +10,14 @@ import { zeroAddress, Address } from 'viem'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
+import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
+import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
 
 export function PreviewPoolTokens() {
   const { poolTokens } = usePoolCreationForm()
-  const { usdValueForTokenAddress } = useTokens()
+  const { priceFor } = useTokens()
   const { toCurrency } = useCurrency()
+  const { tokenPriceTip } = usePoolTokenPriceWarnings()
 
   const hasRateProviders = poolTokens.some(token => token.rateProvider !== zeroAddress)
 
@@ -27,13 +30,19 @@ export function PreviewPoolTokens() {
             if (!token.address || !token.data) return <DefaultDataRow key={idx} />
             const { address, chain, symbol, name } = token.data
 
-            const tokenUsdValue = usdValueForTokenAddress(address, chain, '1')
+            const tokenUsdValue = token.usdPrice || priceFor(address, chain)
 
             return (
               <CardDataRow
                 data={[
                   <IdentifyTokenCell address={address} chain={chain} name={name} symbol={symbol} />,
-                  <Text align="right">{toCurrency(tokenUsdValue, { abbreviated: false })}</Text>,
+                  <HStack justify="end">
+                    {tokenUsdValue ? (
+                      <Text>{toCurrency(tokenUsdValue, { abbreviated: false })}</Text>
+                    ) : (
+                      <TokenMissingPriceWarning message={tokenPriceTip} />
+                    )}
+                  </HStack>,
                   <MarketCapValue
                     address={address as Address}
                     chain={chain}
@@ -60,10 +69,18 @@ interface MarketCapValueProps {
 function MarketCapValue({ address, chain, tokenUsdValue }: MarketCapValueProps) {
   const { toCurrency } = useCurrency()
   const { totalSupply } = useTokenMetadata(address, chain)
-
+  const { marketCapTip } = usePoolTokenPriceWarnings()
   const marketCap = totalSupply ? totalSupply * tokenUsdValue : 0
 
-  return <Text align="right">{marketCap ? toCurrency(marketCap, { abbreviated: true }) : '—'}</Text>
+  return (
+    <HStack justify="end">
+      {marketCap ? (
+        <Text>{toCurrency(marketCap, { abbreviated: true })}</Text>
+      ) : (
+        <TokenMissingPriceWarning message={marketCapTip} />
+      )}
+    </HStack>
+  )
 }
 
 function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTokens'] }) {
@@ -89,26 +106,29 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
           const { data } = token
           if (!data) return null
 
-          const { address, chain, symbol, priceRateProviderData } = data
-          const { reviewed, address: verifiedRateProviderAddress } = priceRateProviderData || {}
-          const chosenRateProviderAddress = token.rateProvider
-
-          const rateProviderHasBeenReviewed =
-            reviewed &&
-            verifiedRateProviderAddress?.toLowerCase() === chosenRateProviderAddress.toLowerCase()
+          const hasBeenReviewed = !!(
+            'priceRateProviderData' in data &&
+            data.priceRateProviderData &&
+            data.priceRateProviderData.reviewed &&
+            data.priceRateProviderData.address?.toLowerCase() === token.rateProvider.toLowerCase()
+          )
 
           return (
             <CardDataRow
               data={[
-                <IdentifyTokenCell address={address} chain={chain} symbol={symbol} />,
-                <RateProviderReviewedCell hasBeenReviewed={rateProviderHasBeenReviewed} />,
+                <IdentifyTokenCell
+                  address={data.address}
+                  chain={data.chain}
+                  symbol={data.symbol}
+                />,
+                <RateProviderReviewedCell hasBeenReviewed={hasBeenReviewed} />,
                 <BlockExplorerLink
-                  address={chosenRateProviderAddress || undefined}
-                  chain={chain}
+                  address={token.rateProvider || undefined}
+                  chain={data.chain}
                   fontSize="md"
                 />,
               ]}
-              key={address}
+              key={data.address}
             />
           )
         })}
