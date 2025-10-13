@@ -136,11 +136,11 @@ export function LoopsWithdrawSummary({
                   <InfoIcon />
                 </Box>
               </PopoverTrigger>
-              {/* <PopoverContent p="sm">
-                    <Text fontSize="sm" variant="secondary">
-                      {limitTooltip}
-                    </Text>
-                  </PopoverContent> */}
+              <PopoverContent p="sm">
+                <Text fontSize="sm" variant="secondary">
+                  TBD
+                </Text>
+              </PopoverContent>
             </Popover>
           </HStack>
         </HStack>
