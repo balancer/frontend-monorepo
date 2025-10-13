@@ -17,11 +17,14 @@ import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { useEffect, useState } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useRouter } from 'next/navigation'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 export function usePoolFormLogic() {
+  const router = useRouter()
+
   const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.PoolCreation.Address,
     undefined
@@ -114,6 +117,15 @@ export function usePoolFormLogic() {
 
     setTokenList([...networkTokens, ...unknownTokens])
   }, [getTokensByChain, network, poolTokens])
+
+  useEffect(() => {
+    if (network && poolType) {
+      router.replace(`/create/${network}/${poolType}`, { scroll: false })
+    }
+    if (poolAddress) {
+      router.replace(`/create/${network}/${poolType}/${poolAddress}`, { scroll: false })
+    }
+  }, [poolAddress, network, poolType])
 
   // TODO: return less stuff by using poolCreationForm.watch() in components
   return {
