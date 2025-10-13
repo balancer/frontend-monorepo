@@ -1,5 +1,3 @@
-'use client'
-
 import { useQuery } from '@tanstack/react-query'
 import { mins } from '@repo/lib/shared/utils/time'
 import {

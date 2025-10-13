@@ -1,5 +1,3 @@
-'use client'
-
 import { getChainId } from '@repo/lib/config/app.config'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'

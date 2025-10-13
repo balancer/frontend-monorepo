@@ -1,5 +1,3 @@
-'use client'
-
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, BoxProps, Card, Flex, Grid, GridItem, Skeleton, Text } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'

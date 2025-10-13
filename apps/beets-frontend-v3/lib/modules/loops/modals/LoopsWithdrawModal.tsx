@@ -1,5 +1,3 @@
-'use client'
-
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'

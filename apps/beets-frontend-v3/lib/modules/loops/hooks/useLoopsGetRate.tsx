@@ -1,5 +1,3 @@
-'use client'
-
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { loopedSonicVaultAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
