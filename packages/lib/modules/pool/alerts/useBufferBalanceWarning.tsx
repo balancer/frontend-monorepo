@@ -54,7 +54,6 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         )
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
-          // then max amount of underlying token user can add is however much underlying can be swapped for wrapped buffer balance
           return {
             amountSymbol,
             // multiply wrapped buffer balance by wrapped rate to get max underlying amount user can add?
@@ -64,9 +63,9 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
         return null
       } else {
-        // if operation is remove liquidity, the user is giving BPT which represents some amount of wrapped tokens and asking for underlying token from buffer
+        // if operation is remove liquidity, the user is giving BPT ( which represents some amount of wrapped tokens )
+        // user is asking for underlying token from buffer
         const underlyingToken = validTokens.find(validToken => tokenAddress === validToken.address)
-
         const underlyingBufferBalance = bufferBalances?.find(
           bufferBalance => bufferBalance.underlyingTokenAddress === underlyingToken?.address
         )
@@ -92,7 +91,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         return null
       }
     })
-    .filter(error => error !== null)
+    .filter(bufferViolation => bufferViolation !== null)
 
   if (isLoadingBufferBalances) return null
   if (bufferLimitViolations.length === 0) return null
