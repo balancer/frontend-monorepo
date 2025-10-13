@@ -143,7 +143,7 @@ const FAQ_ITEMS = [
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
         Yes. You can withdraw anytime. loopS unwinds your position, repays the borrowed $S, and
-        returns your underlying stS or $S balance.
+        returns wS.
       </Text>
     ),
   },
