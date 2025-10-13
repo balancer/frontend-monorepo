@@ -1,5 +1,3 @@
-'use client'
-
 import { Loops } from '@/lib/modules/loops/Loops'
 import LoopsProvidersLayout from '@/lib/modules/loops/LoopsProvidersLayout'
 
