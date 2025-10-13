@@ -26,7 +26,7 @@ type Props<T extends ApiOrCustomToken = ApiToken> = {
   currentToken?: Address
   excludeNativeAsset?: boolean
   pinNativeAsset?: boolean
-  enableUnknownToken?: boolean
+  enableUnlistedToken?: boolean
   isOpen: boolean
   onClose(): void
   onOpen(): void
@@ -40,7 +40,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   currentToken,
   excludeNativeAsset = false,
   pinNativeAsset = false,
-  enableUnknownToken = false,
+  enableUnlistedToken = false,
   isOpen,
   onClose,
   finalFocusRef,
@@ -97,7 +97,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
               <TokenSelectList
                 chain={chain}
                 currentToken={currentToken}
-                enableUnknownToken={enableUnknownToken}
+                enableUnlistedToken={enableUnlistedToken}
                 excludeNativeAsset={excludeNativeAsset}
                 listHeight={500}
                 onTokenSelect={closeOnSelect}

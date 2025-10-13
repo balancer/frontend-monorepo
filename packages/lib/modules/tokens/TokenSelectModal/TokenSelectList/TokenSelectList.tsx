@@ -28,7 +28,7 @@ type Props = {
   searchTerm?: string
   currentToken?: Address
   onTokenSelect: (token: ApiOrCustomToken) => void
-  enableUnknownToken?: boolean
+  enableUnlistedToken?: boolean
 }
 function OtherTokens() {
   return (
@@ -165,7 +165,7 @@ export function TokenSelectList({
   searchTerm,
   currentToken,
   onTokenSelect,
-  enableUnknownToken = false,
+  enableUnlistedToken = false,
   ...rest
 }: Props & BoxProps) {
   const ref = useRef<GroupedVirtuosoHandle>(null)
@@ -184,8 +184,8 @@ export function TokenSelectList({
 
   const { name, symbol, decimals } = useTokenMetadata(searchTerm ?? '', chain)
 
-  const unknownTokenToShow: CustomToken | undefined =
-    name && symbol && decimals && searchTerm && enableUnknownToken
+  const unlistedTokenToShow: CustomToken | undefined =
+    name && symbol && decimals && searchTerm && enableUnlistedToken
       ? {
           name,
           symbol,
@@ -203,7 +203,7 @@ export function TokenSelectList({
   const tokensToShow = [
     ...tokensWithBalance,
     ...tokensWithoutBalance,
-    ...(unknownTokenToShow ? [unknownTokenToShow] : []),
+    ...(unlistedTokenToShow ? [unlistedTokenToShow] : []),
   ]
 
   const isCurrentToken = (token: ApiOrCustomToken) =>
@@ -220,7 +220,7 @@ export function TokenSelectList({
   ]
   const groupCounts = [
     tokensWithBalance.length,
-    tokensWithoutBalance.length + (unknownTokenToShow ? 1 : 0),
+    tokensWithoutBalance.length + (unlistedTokenToShow ? 1 : 0),
   ]
 
   const decrementActiveIndex = () => setActiveIndex(prev => Math.max(prev - 1, 0))
@@ -247,7 +247,7 @@ export function TokenSelectList({
 
   return (
     <Box height={listHeight} {...rest}>
-      {tokensToShow.length === 0 && !unknownTokenToShow ? (
+      {tokensToShow.length === 0 && !unlistedTokenToShow ? (
         <Box p="lg">
           <Text color="font.error" fontWeight="bold" mb="xxs">
             No tokens found
@@ -258,9 +258,11 @@ export function TokenSelectList({
           <Text color="font.secondary" fontSize="sm">
             You can search by token name, symbol or address
           </Text>
-          <Text color="font.warning" fontSize="sm">
-            To search for unlisted tokens, use the contract address
-          </Text>
+          {enableUnlistedToken && (
+            <Text color="font.warning" fontSize="sm">
+              To search for unlisted tokens, use the contract address
+            </Text>
+          )}
         </Box>
       ) : (
         <GroupedVirtuoso

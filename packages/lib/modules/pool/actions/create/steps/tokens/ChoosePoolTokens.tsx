@@ -204,7 +204,7 @@ export function ChoosePoolTokens() {
       <TokenSelectModal
         chain={network}
         currentToken={currentTokenAddress}
-        enableUnknownToken
+        enableUnlistedToken
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
