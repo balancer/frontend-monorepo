@@ -31,8 +31,6 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams
 
-    console.log({ url: `${FLY_API_URL}?${searchParams.toString()}` })
-
     const res = await fetch(`${FLY_API_URL}?${searchParams.toString()}`, {
       headers: {
         apikey: apiKey,
