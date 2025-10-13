@@ -3,7 +3,7 @@ import {
   Card,
   HStack,
   Popover,
-  //PopoverContent,
+  PopoverContent,
   PopoverTrigger,
   VStack,
   Text,
@@ -102,11 +102,12 @@ export function LoopsWithdrawSummary({
                   <InfoIcon />
                 </Box>
               </PopoverTrigger>
-              {/* <PopoverContent p="sm">
-                    <Text fontSize="sm" variant="secondary">
-                      {slippageLabel}
-                    </Text>
-                  </PopoverContent> */}
+              <PopoverContent p="sm">
+                <Text fontSize="sm" variant="secondary">
+                  Withdrawals may return slightly less than the displayed rate due to stS → $S
+                  market swaps and normal slippage.
+                </Text>
+              </PopoverContent>
             </Popover>
           </HStack>
         </HStack>
