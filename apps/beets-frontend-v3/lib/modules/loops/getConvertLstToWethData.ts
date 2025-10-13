@@ -1,7 +1,7 @@
-import { decodeFunctionData } from 'viem'
+import { decodeFunctionData, Hex } from 'viem'
 
-export function getConvertLstToWethData(data: any) {
-  if (!data) return
+export function getConvertLstToWethData(data: Hex | undefined): `0x${string}` | undefined {
+  if (!data) return undefined
 
   const abi = [
     {

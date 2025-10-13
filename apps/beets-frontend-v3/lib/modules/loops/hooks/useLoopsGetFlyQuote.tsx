@@ -6,6 +6,8 @@ import { useLoopsGetCollateralAndDebtForShares } from '@/lib/modules/loops/hooks
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
+const AAVE_FLASH_LOAN_FEE = '0.0005'
+
 export function useLoopsGetFlyQuote(amountShares: string, chain: GqlChain) {
   const { collateralInLst, debtInEth } = useLoopsGetCollateralAndDebtForShares(amountShares, chain)
 
@@ -44,8 +46,7 @@ export function useLoopsGetFlyQuote(amountShares: string, chain: GqlChain) {
     staleTime: mins(1).toMs(),
   })
 
-  const aaveFlashLoanFee = '0.0005'
-  const debtMinusFees = bn(debtInEth).minus(bn(aaveFlashLoanFee).times(debtInEth))
+  const debtMinusFees = bn(debtInEth).minus(bn(AAVE_FLASH_LOAN_FEE).times(debtInEth))
 
   const wethAmountOut = data?.amountOut
     ? BigInt(

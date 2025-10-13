@@ -15,7 +15,8 @@ export default function LoopsProvidersLayout({ children }: PropsWithChildren) {
     t =>
       (t.address === sonicNetworkConfig.tokens.nativeAsset.address &&
         t.chainId === sonicNetworkConfig.chainId) ||
-      t.address === sonicNetworkConfig.tokens.loopedAsset?.address
+      (t.address === sonicNetworkConfig.tokens.loopedAsset?.address &&
+        +t.chainId === sonicNetworkConfig.chainId)
   )
 
   if (!isLoadingTokens && loopedTokens.length === 0) throw new Error('Loop tokens not found')

@@ -33,7 +33,7 @@ export function LoopsWithdrawSummary({
 
   const {
     chain,
-    depositTransactionSteps,
+    withdrawTransactionSteps,
     loopsWithdrawTxHash,
     wNativeAsset,
     loopedAsset,
@@ -46,7 +46,9 @@ export function LoopsWithdrawSummary({
     minWethAmountOut,
   } = useLoopsGetFlyQuote(amountShares, chain)
 
-  const slippage = bn(bn(wethAmountOut).minus(minWethAmountOut)).div(wethAmountOut).times(100)
+  const slippage = bn(wethAmountOut).isZero()
+    ? bn(0)
+    : bn(bn(wethAmountOut).minus(minWethAmountOut)).div(wethAmountOut).times(100)
 
   const slippageUsdValue = bn(slippage)
     .div(100)
@@ -56,7 +58,7 @@ export function LoopsWithdrawSummary({
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
-      {isMobile && <MobileStepTracker chain={chain} transactionSteps={depositTransactionSteps} />}
+      {isMobile && <MobileStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />}
       <Card variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}

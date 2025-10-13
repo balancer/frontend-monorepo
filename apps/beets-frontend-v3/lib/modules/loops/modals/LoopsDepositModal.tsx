@@ -69,7 +69,12 @@ export function LoopsDepositModal({
         {isDesktop && (
           <DesktopStepTracker chain={chain} transactionSteps={depositTransactionSteps} />
         )}
-        <TransactionModalHeader chain={chain} isReceiptLoading label="Review deposit" txHash="0x" />
+        <TransactionModalHeader
+          chain={chain}
+          isReceiptLoading
+          label="Review deposit"
+          txHash={loopsDepositTxHash}
+        />
         <ModalCloseButton />
         <ModalBody>
           <LoopsDepositSummary {...loopsDepositReceipt} />

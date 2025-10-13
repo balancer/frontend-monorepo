@@ -1,6 +1,6 @@
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { useLoopsWithdrawStep } from './useLoopsWithdrawStep'
-import { Address, parseUnits, zeroAddress } from 'viem'
+import { Address, parseUnits } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
@@ -22,7 +22,7 @@ export function useLoopsWithdrawSteps({
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
-      spenderAddress: networkConfig.contracts.beets?.magpieLoopedSonicRouter || zeroAddress,
+      spenderAddress: networkConfig.contracts.beets?.magpieLoopedSonicRouter as Address,
       chain,
       approvalAmounts: [
         {

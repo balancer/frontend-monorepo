@@ -63,7 +63,7 @@ export function useLoopsLogic() {
     [isDepositTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
     [
       isWithdrawTab && (!amountShares || bn(amountShares).lte(0)),
-      'Please enter an amount to wihdraw',
+      'Please enter an amount to withdraw',
     ],
     [isWithdrawTab && hasLoopedAssetValidationError, getValidationError(loopedAsset)],
   ]

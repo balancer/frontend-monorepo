@@ -22,19 +22,27 @@ export function StatRow({
         ) : (
           <Text fontWeight="bold">{value}</Text>
         )}
-        {isLoading && secondaryValue ? (
-          <Skeleton h="16px" my="2px" w="80px" />
-        ) : (
-          <Text color="grayText" fontSize="sm">
-            {secondaryValue}
-          </Text>
+        {secondaryValue && (
+          <>
+            {isLoading ? (
+              <Skeleton h="16px" my="2px" w="80px" />
+            ) : (
+              <Text color="grayText" fontSize="sm">
+                {secondaryValue}
+              </Text>
+            )}
+          </>
         )}
-        {isLoading && tertiaryValue ? (
-          <Skeleton h="16px" my="2px" w="80px" />
-        ) : (
-          <Text color="grayText" fontSize="sm">
-            {tertiaryValue}
-          </Text>
+        {tertiaryValue && (
+          <>
+            {isLoading ? (
+              <Skeleton h="16px" my="2px" w="80px" />
+            ) : (
+              <Text color="grayText" fontSize="sm">
+                {tertiaryValue}
+              </Text>
+            )}
+          </>
         )}
       </Box>
     </HStack>
