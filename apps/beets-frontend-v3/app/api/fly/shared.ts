@@ -1,11 +1,13 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { isProd } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
+import { isAllowedReferer } from '../shared/referer'
 
 type FlyApiErrorResponse = {
   error: string
   message?: string
   details?: unknown
+  code?: number
 }
 
 type CreateFlyGetHandlerOptions = {
@@ -29,6 +31,17 @@ export function createFlyGetHandler<T>({
     request: NextRequest
   ): Promise<NextResponse<T | FlyApiErrorResponse>> {
     try {
+      if (!isAllowedReferer(request.headers.get('referer'))) {
+        return NextResponse.json(
+          {
+            error: 'Forbidden: Access denied',
+            code: -32000,
+            message: 'Access denied',
+          },
+          { status: 403 }
+        )
+      }
+
       const apiKey = process.env.NEXT_PRIVATE_MAGPIE_API_KEY
 
       if (!isProd && !apiKey) {
