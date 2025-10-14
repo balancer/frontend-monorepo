@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
+import { isProd } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
 
 type FlyApiErrorResponse = {
@@ -30,7 +31,7 @@ export function createFlyGetHandler<T>({
     try {
       const apiKey = process.env.NEXT_PRIVATE_MAGPIE_API_KEY
 
-      if (!apiKey) {
+      if (!isProd && !apiKey) {
         return NextResponse.json(
           { error: 'NEXT_PRIVATE_MAGPIE_API_KEY is not configured' },
           { status: 500 }
@@ -40,9 +41,7 @@ export function createFlyGetHandler<T>({
       const searchParams = request.nextUrl.searchParams
 
       const res = await fetch(`${endpoint}?${searchParams.toString()}`, {
-        headers: {
-          apikey: apiKey,
-        },
+        headers: apiKey ? { apikey: apiKey } : undefined,
         next: { revalidate: mins(1).toSecs() },
       })
 
