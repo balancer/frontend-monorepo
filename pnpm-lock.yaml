@@ -223,13 +223,13 @@ importers:
         version: link:../../packages/test
       '@sentry/nextjs':
         specifier: 8.50.0
-        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.2(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
+        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
       '@tanstack/react-query':
         specifier: 5.90.2
         version: 5.90.2(react@19.1.0)
       '@vercel/speed-insights':
         specifier: 1.1.0
-        version: 1.1.0(next@15.3.2(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 1.1.0(next@15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       bignumber.js:
         specifier: 9.3.1
         version: 9.3.1
@@ -250,13 +250,13 @@ importers:
         version: 4.17.21
       next:
         specifier: 15.3.2
-        version: 15.3.2(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-themes:
         specifier: 0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       nextjs-toploader:
         specifier: 3.8.16
-        version: 3.8.16(next@15.3.2(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 3.8.16(next@15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       prismjs:
         specifier: 1.30.0
         version: 1.30.0
@@ -383,13 +383,13 @@ importers:
         version: link:../../packages/test
       '@sentry/nextjs':
         specifier: 8.50.0
-        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
+        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.2(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
       '@tanstack/react-query':
         specifier: 5.90.2
         version: 5.90.2(react@19.1.0)
       '@vercel/speed-insights':
         specifier: 1.1.0
-        version: 1.1.0(next@15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 1.1.0(next@15.3.2(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       bignumber.js:
         specifier: 9.3.1
         version: 9.3.1
@@ -410,13 +410,13 @@ importers:
         version: 4.17.21
       next:
         specifier: 15.3.2
-        version: 15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 15.3.2(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-themes:
         specifier: 0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       nextjs-toploader:
         specifier: 3.8.16
-        version: 3.8.16(next@15.3.2(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 3.8.16(next@15.3.2(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       prismjs:
         specifier: 1.30.0
         version: 1.30.0
@@ -539,8 +539,8 @@ importers:
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
-        specifier: 9.34.0
-        version: 9.34.0
+        specifier: 9.37.0
+        version: 9.37.0
       '@next/eslint-plugin-next':
         specifier: 15.5.4
         version: 15.5.4
@@ -2068,8 +2068,8 @@ packages:
     resolution: {integrity: sha512-G5JD9Tu5HJEu4z2Uo4aHY2sLV64B7CDMXxFzqzjl3NKd6RVzSXNoE80jk7Y0lJkTTkjiIhBAqmlYwjuBY3tvpA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@eslint/js@9.34.0':
-    resolution: {integrity: sha512-EoyvqQnBNsV1CWaEJ559rxXL4c8V92gxirbawSmVUOWXlsRxxQXl6LmCpdUblgxgSkDIqKnhzba2SjRTI/A5Rw==}
+  '@eslint/js@9.37.0':
+    resolution: {integrity: sha512-jaS+NJ+hximswBG6pjNX0uEJZkrT0zwpVi3BA3vX22aFGjJjmgSTSmPpZCRKmoBL5VY/M6p0xsSJx7rk7sy5gg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.6':
@@ -10386,7 +10386,7 @@ snapshots:
 
   '@eslint/js@9.27.0': {}
 
-  '@eslint/js@9.34.0': {}
+  '@eslint/js@9.37.0': {}
 
   '@eslint/object-schema@2.1.6': {}
 
