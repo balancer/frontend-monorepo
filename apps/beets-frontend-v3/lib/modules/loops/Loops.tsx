@@ -247,6 +247,8 @@ function LoopsInfo({
     loopsData?.loopsGetData.debtAmount || '0'
   )
 
+  const customFormat = '0.[000]'
+
   return (
     <NoisyCard
       cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
@@ -289,12 +291,12 @@ function LoopsInfo({
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Health factor"
-          value={fNum('boost', bn(loopsData?.loopsGetData.healthFactor || '0'))}
+          value={`${fNumCustom(bn(loopsData?.loopsGetData.healthFactor || '0'), customFormat)}`}
         />
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Current leverage"
-          value={`${fNumCustom(bn(loopsData?.loopsGetData.leverage || '0'), '0.[000]')}x`}
+          value={`${fNumCustom(bn(loopsData?.loopsGetData.leverage || '0'), customFormat)}x`}
         />
         <StatRow
           isLoading={isLoopsDataLoading}
@@ -304,7 +306,7 @@ function LoopsInfo({
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Sonic points multiplier"
-          value={`${fNumCustom(bn(loopsData?.loopsGetData.sonicPointsMultiplier || '0'), '0.[000]')}x`}
+          value={`${fNumCustom(bn(loopsData?.loopsGetData.sonicPointsMultiplier || '0'), customFormat)}x`}
         />
         <Box minH="20px" w="full" />
       </VStack>
