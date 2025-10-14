@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { mins } from '@repo/lib/shared/utils/time'
-import { zeroAddress } from 'viem'
 
 const FLY_API_URL = 'https://api.magpiefi.xyz/aggregator/quote'
 
@@ -86,23 +85,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const typedData = result?.typedData
-    const message = typedData?.message
-
-    const normalizedResult = message
-      ? {
-          ...result,
-          typedData: {
-            ...typedData,
-            message: {
-              ...message,
-              recipient: message.recipient || zeroAddress,
-            },
-          },
-        }
-      : result
-
-    return NextResponse.json(normalizedResult)
+    return NextResponse.json(result)
   } catch (error) {
     console.error('Unable to fetch quote from Magpie API:', error)
     return NextResponse.json(
