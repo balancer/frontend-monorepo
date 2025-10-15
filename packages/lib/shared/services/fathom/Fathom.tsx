@@ -7,9 +7,24 @@ import { isProd } from '@repo/lib/config/app.config'
 
 export enum AnalyticsEvent {
   ClickAddLiquidity = 'click: Add liquidity',
-  TransactionSubmitted = 'transaction: Submitted',
+  ClickNavBalancerLogo = 'click: Primary nav Balancer logo',
+  ClickNavBuild = 'click: Build  primary nav',
+  ClickNavPools = 'click: Pools primary nav',
+  ClickNavPortfolio = 'click: Portfolio primary nav',
+  ClickNavSwap = 'click: Swap primary nav',
+  ClickNavUtilitiesActivity = 'click: Nav utilities activity',
+  ClickNavUtilitiesDarkmode = 'click: Nav utilities darkmode',
+  ClickNavUtilitiesFeedback = 'click: Nav utilities feedback',
+  ClickNavUtilitiesNetwork = 'click: Nav utilities network',
+  ClickNavUtilitiesSettings = 'click: Nav utilities settings',
+  ClickNavUtilitiesWalletChange = 'click: Nav utilities wallet change',
+  ClickNavUtilitiesWalletConnect = 'click: Nav utilities wallet connect',
+  ClickNavVeBal = 'click: veBAL primary nav',
+  ClickPoolListCreatePool = 'click: Pool list create pool',
+  ClickPoolListFilter = 'click: Pool list filter',
   TransactionConfirmed = 'transaction: Confirmed',
   TransactionReverted = 'transaction: Reverted',
+  TransactionSubmitted = 'transaction: Submitted',
 }
 
 /**
