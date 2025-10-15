@@ -3,6 +3,7 @@ import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
 import { useIsSafeApp } from './safe.hooks'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 export function ConnectWallet({
   connectLabel = 'Connect wallet',
@@ -33,6 +34,11 @@ export function ConnectWallet({
           (!authenticationStatus || authenticationStatus === 'authenticated')
 
         if (!isConnected) {
+          const handleConnectClick = () => {
+            trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletConnect)
+            openConnectModal()
+          }
+
           return (
             <HStack width="full">
               {showCreateWalletButton && (
@@ -54,7 +60,7 @@ export function ConnectWallet({
               <Button
                 isDisabled={isLoading || !mounted}
                 loadingText={connectLabel}
-                onClick={openConnectModal}
+                onClick={handleConnectClick}
                 type="button"
                 variant="primary"
                 {...rest}
@@ -79,13 +85,23 @@ export function ConnectWallet({
           )
         }
 
+        const handleNetworkClick = () => {
+          trackEvent(AnalyticsEvent.ClickNavUtilitiesNetwork)
+          openChainModal()
+        }
+
+        const handleWalletClick = () => {
+          trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletChange)
+          openAccountModal()
+        }
+
         return (
           <HStack spacing="sm">
             <Button
               alignItems="center"
               display="flex"
               isDisabled={isSafeApp}
-              onClick={openChainModal}
+              onClick={handleNetworkClick}
               type="button"
               variant="tertiary"
               {...rest}
@@ -110,7 +126,7 @@ export function ConnectWallet({
               )}
               <Show above="sm">{chain.name}</Show>
             </Button>
-            <Button onClick={openAccountModal} variant="tertiary" {...rest} isDisabled={isSafeApp}>
+            <Button onClick={handleWalletClick} variant="tertiary" {...rest} isDisabled={isSafeApp}>
               <CustomAvatar
                 address={account.address}
                 alt="Avatar"

@@ -28,6 +28,7 @@ import { getChainId, getChainShortName } from '@repo/lib/config/app.config'
 import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
 import { getSafeWebUrl } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 import { formatDistanceToNowAbbr } from '../../utils/time'
+import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
 
 function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
@@ -131,10 +132,14 @@ export default function RecentTransactions() {
     tx => tx.status === 'confirming'
   ).length
 
+  const handleActivityClick = () => {
+    trackEvent(AnalyticsEvent.ClickNavUtilitiesActivity)
+  }
+
   return (
     <Popover>
       <PopoverTrigger>
-        <Button p="0" variant="tertiary">
+        <Button onClick={handleActivityClick} p="0" variant="tertiary">
           {confirmingTxCount > 0 ? (
             <CircularProgress
               color="font.warning"
