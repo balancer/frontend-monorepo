@@ -62,13 +62,7 @@ export function OtherSaleDetails({
             variant="secondary"
             w="full"
           >
-            <ListItem>
-              Swap fees: {fNum('feePercent', fee / 100)}
-              <List listStylePosition="outside" listStyleType="disc" pl="md" variant="secondary">
-                <ListItem>To you (LBP creator): {fNum('feePercent', fee / 200)}</ListItem>
-                <ListItem>To Balancer protocol: {fNum('feePercent', fee / 200)}</ListItem>
-              </List>
-            </ListItem>
+            <ListItem>Swap fees: {fNum('feePercent', fee / 100)}</ListItem>
           </List>
         </VStack>
       </VStack>
