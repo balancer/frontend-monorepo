@@ -1,3 +1,4 @@
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { addWeeks } from 'date-fns'
 
 export type ICalEvent = {
@@ -34,19 +35,31 @@ export function buildIcalEvent({
 }): string {
   const body: string[] = []
 
+  const dtStamp = formatDate(new Date())
+  const uid = `${event.start.getTime()}@${PROJECT_CONFIG.projectName}.fi`
+
+  body.push(`UID:${uid}`)
+  body.push(`DTSTAMP:${dtStamp}`)
   body.push(`DTSTART:${formatDate(event.start)}`)
   body.push(`SUMMARY:${event.title}`)
+
   if (makeItWeekly) {
     const nextYear = addWeeks(event.start, 52)
     body.push(`RRULE:FREQ=WEEKLY;UNTIL=${formatDate(nextYear)}`)
   }
-  if (event.url) body.push(`URL:${event.url}`)
+
+  if (event.url) {
+    body.push(`URL;VALUE=URI:${event.url}`)
+    body.push(`LOCATION:${event.url}`) // also here so Google Calendar shows a separate field with a link in it
+  }
+
   if (event.end) body.push(`DTEND:${formatDate(event.end)}`)
   if (event.description) body.push(`DESCRIPTION:${event.description}`)
 
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
+    `PRODID:-//${PROJECT_CONFIG.projectName}//Calendar//EN`,
     'BEGIN:VEVENT',
     body.join('\n'),
     'END:VEVENT',
