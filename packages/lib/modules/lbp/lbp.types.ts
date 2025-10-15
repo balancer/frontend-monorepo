@@ -25,5 +25,6 @@ export type ProjectInfoForm = {
   telegramHandle?: string
   discordUrl?: string
   owner: string
+  poolCreator: string
   disclaimerAccepted: boolean
 }
