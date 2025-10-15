@@ -67,7 +67,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label="Swap vol (24h)"
-            tooltip="The swap volume routing through this pool over the last 24 hours from this UI and and aggregator partners (like CowSwap). Unlike the daily chart, which tracks volume since the last UTC midnight, this number always reflects a full 24 hour period."
+            tooltip={`The swap volume routing through this pool over the last 24 hours from this UI and aggregator partners${isBalancer ? ' (like CowSwap)' : ''}. Unlike the daily chart, which tracks volume since the last UTC midnight, this number always reflects a full 24 hour period.`}
           />
           {poolStatsValues ? (
             <Heading size="h4">{poolStatsValues.volume24h}</Heading>
@@ -100,7 +100,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label={incomeLabel}
-            tooltip="The swap fees from trades routed through this pool over the last 24 hours from this UI and aggregator partners (like CowSwap). Unlike the daily fee chart, which tracks swap fees since the last UTC midnight, this number always reflects a full 24 hour period."
+            tooltip={`The swap fees from trades routed through this pool over the last 24 hours from this UI and aggregator partners${isBalancer ? ' (like CowSwap)' : ''}. Unlike the daily fee chart, which tracks swap fees since the last UTC midnight, this number always reflects a full 24 hour period.`}
           />
 
           {poolStatsValues ? (
