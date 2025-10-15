@@ -80,7 +80,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label="APR for LPs"
-            tooltip="The APR for Liquidity Providers (LPs) based on the last 24h performance of the pool. It includes yield from various sources, including swap fees, staking incentives, yield-bearing tokens and Merkl incentives. APR ranges are display for pools eligible for veBAL incentives. The lower range is the minimum range for people who don't stake or have no veBAL. The maximim rate is for veBAL holders with the max 2.5x veBAL boost."
+            tooltip={`The APR for Liquidity Providers (LPs) based on the last 24h performance of the pool. It includes yield from various sources, including swap fees, staking incentives${isBalancer ? ", yield-bearing tokens and Merkl incentives. APR ranges are displayed for pools eligible for veBAL incentives. The lower range is the minimum range for people who don't stake or have no veBAL. The maximim rate is for veBAL holders with the max 2.5x veBAL boost." : ' and yield-bearing tokens.'}`}
           />
           <MemoizedMainAprTooltip
             aprItems={pool.dynamicData.aprItems}
