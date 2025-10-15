@@ -57,7 +57,7 @@ export function UserSnapshotValues() {
   }, [veBalBoostMap])
 
   // If user has staked on Aura, use Aura APR
-  const auraApr = pool.staking?.aura?.apr
+  const auraApr = pool.staking?.aura?.apr !== undefined ? pool.staking?.aura?.apr : undefined
   const hasAuraStakedBalanceValue = hasAuraStakedBalance(pool)
   const myAprRaw =
     hasAuraStakedBalanceValue && auraApr
