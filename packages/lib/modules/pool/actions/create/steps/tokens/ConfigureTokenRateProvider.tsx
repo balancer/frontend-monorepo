@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Radio, InputGroup } from '@chakra-ui/react'
+import { Text, HStack, VStack, RadioGroup, Stack, Radio } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
 import { PoolCreationForm } from '../../types'
@@ -25,10 +25,6 @@ export function ConfigureTokenRateProvider({
   const { poolTokens, network, updatePoolToken, poolCreationForm } = usePoolCreationForm()
 
   if (!poolTokens[tokenIndex].address) return null
-
-  if (!verifiedRateProviderAddress) {
-    return <Text color="font.secondary">No rate provider is required for this token</Text>
-  }
 
   const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
 
@@ -60,6 +56,10 @@ export function ConfigureTokenRateProvider({
   const isVerifiedRateProvider = rateProviderRadioValue === RateProviderOption.Verified
   const showYieldFeesToggle = isCustomRateProvider || isVerifiedRateProvider
 
+  const adjustedRateProviderOptions = RATE_PROVIDER_RADIO_OPTIONS.filter(
+    option => option.value !== RateProviderOption.Verified || verifiedRateProviderAddress
+  )
+
   return (
     <VStack align="start" spacing="md" w="full">
       <VStack align="start" w="full">
@@ -69,7 +69,7 @@ export function ConfigureTokenRateProvider({
         </HStack>
         <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>
           <Stack spacing={3}>
-            {RATE_PROVIDER_RADIO_OPTIONS.map(({ label, value }) => (
+            {adjustedRateProviderOptions.map(({ label, value }) => (
               <HStack key={value} spacing="xs">
                 <Radio size="lg" value={value}>
                   <Text>{label}</Text>
@@ -151,27 +151,25 @@ function CustomRateProviderInput({
   return (
     <VStack align="start" spacing="md" w="full">
       <VStack align="start" spacing="sm" w="full">
-        <InputGroup>
-          <Controller
-            control={control}
-            name={`poolTokens.${tokenIndex}.rateProvider`}
-            render={({ field }) => (
-              <InputWithError
-                error={rateProviderErrors?.message}
-                isInvalid={!!rateProviderErrors}
-                label={`Rate provider contract address on ${chainName}`}
-                onChange={e => field.onChange(e.target.value)}
-                pasteFn={paste}
-                placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
-                tooltip="The contract you enter must have a function named getRate"
-                value={field.value}
-              />
-            )}
-            rules={{
-              validate: validateRateProvider,
-            }}
-          />
-        </InputGroup>
+        <Controller
+          control={control}
+          name={`poolTokens.${tokenIndex}.rateProvider`}
+          render={({ field }) => (
+            <InputWithError
+              error={rateProviderErrors?.message}
+              isInvalid={!!rateProviderErrors}
+              label={`Rate provider contract address on ${chainName}`}
+              onChange={e => field.onChange(e.target.value)}
+              pasteFn={paste}
+              placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
+              tooltip="The contract you enter must have a function named getRate"
+              value={field.value}
+            />
+          )}
+          rules={{
+            validate: validateRateProvider,
+          }}
+        />
       </VStack>
 
       <BalAlert

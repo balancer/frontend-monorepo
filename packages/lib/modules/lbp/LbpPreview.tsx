@@ -45,10 +45,10 @@ export function LbpPreview() {
           rounded: 'xl',
         }}
       >
-        <VStack align="start" p="lg" spacing="md" w="full">
+        <VStack align="start" px="lg" py="md" spacing="md" w="full">
           {!isLastStep && (
             <>
-              <Flex alignItems="center" w="full">
+              <Flex alignItems="center" pt="xs" w="full">
                 <Heading color="font.maxContrast" size="md">
                   LBP preview
                 </Heading>

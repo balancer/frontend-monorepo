@@ -10,8 +10,8 @@
     "./react-internal": "./react-internals.js"
   },
   "devDependencies": {
-    "@eslint/js": "9.34.0",
-    "@next/eslint-plugin-next": "15.5.3",
+    "@eslint/js": "9.37.0",
+    "@next/eslint-plugin-next": "15.5.4",
     "@repo/prettier-config": "workspace:*",
     "@typescript-eslint/eslint-plugin": "8.41.0",
     "@typescript-eslint/parser": "8.37.0",

@@ -30,11 +30,11 @@ import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
-import { ApiToken, CustomToken } from '../token.types'
+import { ApiOrCustomToken } from '../token.types'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 
 type TokenInputSelectorProps = {
-  token: ApiToken | CustomToken | undefined
+  token: ApiOrCustomToken | undefined
   weight?: string
   showWeight?: boolean
   onToggleTokenClicked?: () => void
@@ -110,7 +110,7 @@ type PriceImpactProps = {
 }
 
 type TokenInputFooterProps = {
-  token: ApiToken | CustomToken | undefined
+  token: ApiOrCustomToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean
@@ -152,7 +152,7 @@ function TokenInputFooter({
         ? usdValueForToken(token, value)
         : '0'
 
-  const noBalance = !token || bn(userBalance).isZero()
+  const noBalance = token && bn(userBalance).isZero()
   const _isNativeAsset = token && isNativeAsset(token.chain, token.address)
 
   const showPriceImpact = !isLoadingPriceImpact && hasPriceImpact && priceImpactProps?.priceImpact
@@ -203,10 +203,17 @@ function TokenInputFooter({
               {getValidationError(token)}
             </Text>
           )}
-          <Text color={noBalance ? 'font.error' : 'inherit'} fontSize="sm">
-            {fNum('token', userBalance, { abbreviated: false })}
+          <Text
+            color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
+            fontSize="sm"
+            opacity={!token ? 0.5 : 1}
+          >
+            {!token ? '–' : fNum('token', userBalance, { abbreviated: false })}
           </Text>
-          <Box color={noBalance ? 'font.error' : undefined}>
+          <Box
+            color={!token ? 'font.secondary' : noBalance ? 'font.error' : undefined}
+            opacity={!token ? 0.5 : 1}
+          >
             <WalletIcon size={16} />
           </Box>
         </HStack>
@@ -217,7 +224,7 @@ function TokenInputFooter({
 
 type Props = {
   address?: string
-  apiToken?: ApiToken | CustomToken
+  apiToken?: ApiOrCustomToken
   chain?: GqlChain | number
   weight?: string
   value?: string

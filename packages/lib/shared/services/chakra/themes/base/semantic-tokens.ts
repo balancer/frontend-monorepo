@@ -87,6 +87,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
             _dark: tokens.colors.dark.button.background.secondary,
           },
         },
+        warning: {
+          default: tokens.colors.light.background.warning,
+          _dark: tokens.colors.dark.background.warning,
+        },
       },
       input: {
         fontDefault: {

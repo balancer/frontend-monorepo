@@ -84,7 +84,7 @@ export function AddLiquiditySummary({
   }
 
   const addingInputTokenLabel = wantsProportional
-    ? "You're adding at most"
+    ? "You're adding at most:"
     : "You're adding (exactly)"
 
   const calculateSlippage = (value: SlippageOptions) => {
@@ -110,7 +110,7 @@ export function AddLiquiditySummary({
                 description={PROPORTIONAL_ADD_DESCRIPTION}
                 onChange={calculateSlippage}
                 selectedIndex={1}
-                title="Slippage on 'proportional' adds"
+                title="Slippage Simulation: ‘Proportional’ Add"
               />
             )
           }

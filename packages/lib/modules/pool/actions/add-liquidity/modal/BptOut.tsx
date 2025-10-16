@@ -80,7 +80,7 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
             description={FLEXIBLE_ADD_DESCRIPTION}
             onChange={calculateSlippage}
             selectedIndex={0}
-            title="Slippage on 'flexible' adds"
+            title="Slippage Simulation: ‘Flexible’ Add"
           />
         )
       }
