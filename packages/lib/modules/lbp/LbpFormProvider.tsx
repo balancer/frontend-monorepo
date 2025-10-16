@@ -57,6 +57,7 @@ export function useLbpFormLogic() {
       telegramHandle: '',
       discordUrl: '',
       owner: '',
+      poolCreator: '',
       disclaimerAccepted: false,
     },
     { mode: 'all' }

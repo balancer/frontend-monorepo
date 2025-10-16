@@ -23,7 +23,7 @@ export function LbpPoolAttributes({ pool }: { pool: Pool }) {
     },
     {
       title: 'Available user actions',
-      value: `Users can ${lbpPool.isProjectTokenSwapInBlocked ? 'buy and sell' : 'only buy'} the sale token`,
+      value: `Users can ${lbpPool.isProjectTokenSwapInBlocked ? 'only buy' : 'buy and sell'} the sale token`,
     },
     {
       title: hasEnded ? `${token.symbol} price at the end of LBP` : `${token.symbol} spot price`,

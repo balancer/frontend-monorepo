@@ -42,6 +42,7 @@ export function ProjectInfoStep() {
         <ProjectWebsiteUrlInput />
         <TokenIconInput />
         <ProjectOwnerInput />
+        <PoolCreatorInput />
         <Divider />
         <Heading color="font.maxContrast" size="md">
           Social accounts
@@ -347,6 +348,48 @@ function ProjectOwnerInput() {
           <InputWithError
             error={errors.owner?.message}
             isInvalid={!!errors.owner}
+            onChange={e => field.onChange(e.target.value)}
+            pasteFn={paste}
+            placeholder={userAddress}
+            value={field.value}
+          />
+        )}
+        rules={{
+          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
+        }}
+      />
+    </VStack>
+  )
+}
+
+function PoolCreatorInput() {
+  const {
+    projectInfoForm: {
+      control,
+      formState: { errors },
+      setValue,
+      trigger,
+    },
+  } = useLbpForm()
+
+  const { userAddress } = useUserAccount()
+
+  const paste = async () => {
+    const clipboardText = await navigator.clipboard.readText()
+    setValue('poolCreator', clipboardText)
+    trigger('poolCreator')
+  }
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Pool creator wallet address (optional)</Text>
+      <Controller
+        control={control}
+        name="poolCreator"
+        render={({ field }) => (
+          <InputWithError
+            error={errors.poolCreator?.message}
+            isInvalid={!!errors.poolCreator}
             onChange={e => field.onChange(e.target.value)}
             pasteFn={paste}
             placeholder={userAddress}
