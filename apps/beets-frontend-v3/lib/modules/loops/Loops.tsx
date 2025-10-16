@@ -173,6 +173,7 @@ function LoopsForm() {
             address={wNativeAsset?.address || ''}
             amount={formatUnits(wethAmountOut, wNativeAsset?.decimals ?? 18)}
             chain={chain}
+            infoText="Please check to FAQ below to learn more about why you are receiving slightly less than the displayed rate."
             label="You will receive"
             symbol={wNativeAsset?.symbol || ''}
           />
