@@ -148,8 +148,8 @@ function LoopsForm() {
           <VStack spacing="md" w="full">
             <ButtonGroup
               currentOption={activeTab}
+              fontSize="lg"
               groupId="add-liquidity"
-              hasLargeTextLabel
               isFullWidth
               onChange={setActiveTab}
               options={tabs}
