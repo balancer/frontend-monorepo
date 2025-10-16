@@ -61,12 +61,10 @@ export enum RiskKey {
 }
 
 export enum RiskCategory {
-  PoolType = 'Pool risks',
-  Network = 'Network risks',
-  Hook = 'Hook risks',
-  Feature = 'Feature risks',
-  Protocol = 'Protocol risks',
+  PoolSpecific = 'Pool specific risks',
+
   Token = 'Token risks',
+  General = 'General risks',
 }
 
 export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
@@ -75,7 +73,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.Stable]: 'Stable pool',
   [RiskKey.ComposableStable]: 'Composable stable pool',
   [RiskKey.MetaStable]: 'MetaStable pool',
-  [RiskKey.Boosted]: 'Boosted pool',
+  [RiskKey.Boosted]: 'Boosted tokens',
   [RiskKey.Clp]: 'Concentrated Liquidity pool',
   [RiskKey.Arbitrum]: 'L2 network: Arbitrum',
   [RiskKey.Polygon]: 'Sidechain network: Polygon',
@@ -90,7 +88,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.RateProvider]: 'Rate provider',
   [RiskKey.RateProviderBridge]: 'Rate provider cross-chain bridge: Layer Zero',
   [RiskKey.NestedPool]: 'Nested pool',
-  [RiskKey.Hook]: 'General hook',
+  [RiskKey.Hook]: 'Hooks',
   [RiskKey.StableSurgeHook]: 'StableSurge hook',
   [RiskKey.MEVCaptureHook]: 'MEV Capture hook',
   [RiskKey.QuantAmmWeighted]: 'BTF pool',
@@ -124,114 +122,114 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     key: RiskKey.Weighted,
     title: RISK_TITLES[RiskKey.Weighted],
     path: `/risks#${RiskKey.Weighted}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isWeighted(pool.type),
   },
   {
     key: RiskKey.Stable,
     title: RISK_TITLES[RiskKey.Stable],
     path: `/risks#${RiskKey.Stable}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isStable(pool.type),
   },
   {
     key: RiskKey.MetaStable,
     title: RISK_TITLES[RiskKey.MetaStable],
     path: `/risks#${RiskKey.MetaStable}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isMetaStable(pool.type),
   },
   {
     key: RiskKey.Clp,
     title: RISK_TITLES[RiskKey.Clp],
     path: `/risks#${RiskKey.Clp}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isGyro(pool.type),
   },
   {
     key: RiskKey.Boosted,
     title: RISK_TITLES[RiskKey.Boosted],
     path: `/risks#${RiskKey.Boosted}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => !!isBoosted(pool),
   },
   {
     key: RiskKey.QuantAmmWeighted,
     title: RISK_TITLES[RiskKey.QuantAmmWeighted],
     path: `/risks#${RiskKey.QuantAmmWeighted}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isQuantAmmPool(pool.type),
   },
   {
     key: RiskKey.ReclAmm,
     title: RISK_TITLES[RiskKey.ReclAmm],
     path: `/risks#${RiskKey.ReclAmm}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isReclAmm(pool.type),
   },
   {
     key: RiskKey.LiquidityBootstrappingPool,
     title: RISK_TITLES[RiskKey.LiquidityBootstrappingPool],
     path: `/risks#${RiskKey.LiquidityBootstrappingPool}`,
-    category: RiskCategory.PoolType,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isV3LBP(pool),
   },
 
-  // Network risks
+  // General Network risks
   {
     key: RiskKey.Arbitrum,
     title: RISK_TITLES[RiskKey.Arbitrum],
     path: `/risks#${RiskKey.Arbitrum}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Arbitrum,
   },
   {
     key: RiskKey.Optimism,
     title: RISK_TITLES[RiskKey.Optimism],
     path: `/risks#${RiskKey.Optimism}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Optimism,
   },
   {
     key: RiskKey.Polygon,
     title: RISK_TITLES[RiskKey.Polygon],
     path: `/risks#${RiskKey.Polygon}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Polygon,
   },
   {
     key: RiskKey.Zkevm,
     title: RISK_TITLES[RiskKey.Zkevm],
     path: `/risks#${RiskKey.Zkevm}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Zkevm,
   },
   {
     key: RiskKey.Gnosis,
     title: RISK_TITLES[RiskKey.Gnosis],
     path: `/risks#${RiskKey.Gnosis}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Gnosis,
   },
   {
     key: RiskKey.Base,
     title: RISK_TITLES[RiskKey.Base],
     path: `/risks#${RiskKey.Base}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Base,
   },
   {
     key: RiskKey.Avalanche,
     title: RISK_TITLES[RiskKey.Avalanche],
     path: `/risks#${RiskKey.Avalanche}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Avalanche,
   },
   {
     key: RiskKey.HyperEVM,
     title: RISK_TITLES[RiskKey.HyperEVM],
     path: `/risks#${RiskKey.HyperEVM}`,
-    category: RiskCategory.Network,
+    category: RiskCategory.General,
     condition: pool => pool.chain === GqlChain.Hyperevm,
   },
 
@@ -240,37 +238,37 @@ const RISK_CONDITIONS: RiskDefinition[] = [
     key: RiskKey.Hook,
     title: RISK_TITLES[RiskKey.Hook],
     path: `/risks#${RiskKey.Hook}`,
-    category: RiskCategory.Hook,
+    category: RiskCategory.General,
     condition: pool => hasHooks(pool),
   },
   {
     key: RiskKey.StableSurgeHook,
     title: RISK_TITLES[RiskKey.StableSurgeHook],
     path: `/risks#${RiskKey.StableSurgeHook}`,
-    category: RiskCategory.Hook,
+    category: RiskCategory.PoolSpecific,
     condition: pool => hasHookType(pool, GqlHookType.StableSurge),
   },
   {
     key: RiskKey.MEVCaptureHook,
     title: RISK_TITLES[RiskKey.MEVCaptureHook],
     path: `/risks#${RiskKey.MEVCaptureHook}`,
-    category: RiskCategory.Hook,
+    category: RiskCategory.PoolSpecific,
     condition: pool => hasHookType(pool, GqlHookType.MevTax),
   },
 
-  // Feature risks
+  // Pool specific feature risks
   {
     key: RiskKey.NestedPool,
     title: RISK_TITLES[RiskKey.NestedPool],
     path: `/risks#${RiskKey.NestedPool}`,
-    category: RiskCategory.Feature,
+    category: RiskCategory.PoolSpecific,
     condition: pool => hasNestedPools(pool),
   },
   {
     key: RiskKey.Mutable,
     title: RISK_TITLES[RiskKey.Mutable],
     path: `/risks#${RiskKey.Mutable}`,
-    category: RiskCategory.Feature,
+    category: RiskCategory.PoolSpecific,
     condition: pool => isMutable(pool),
   },
 ]
@@ -280,12 +278,9 @@ export function getPoolRisks(pool: GqlPoolElement): RiskCategoryGroup[] {
 
   // Group risks by category
   const grouped: Record<RiskCategory, Risk[]> = {
-    [RiskCategory.PoolType]: [],
-    [RiskCategory.Hook]: [],
-    [RiskCategory.Network]: [],
-    [RiskCategory.Feature]: [],
+    [RiskCategory.PoolSpecific]: [],
     [RiskCategory.Token]: [],
-    [RiskCategory.Protocol]: [],
+    [RiskCategory.General]: [],
   }
 
   // Add general risk
@@ -293,7 +288,7 @@ export function getPoolRisks(pool: GqlPoolElement): RiskCategoryGroup[] {
     title: RISK_TITLES[RiskKey.General] || 'General protocol risks',
     path: `/risks#${RiskKey.General}`,
   }
-  grouped[RiskCategory.Protocol].push(generalProtocolRisk)
+  grouped[RiskCategory.General].push(generalProtocolRisk)
 
   // Group applicable risks
   applicableRisks.forEach(risk => {

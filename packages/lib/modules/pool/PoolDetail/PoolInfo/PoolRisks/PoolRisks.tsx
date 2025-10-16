@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Box,
   Card,
   CardProps,
   Divider,
@@ -26,11 +27,13 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
   return (
     <VStack alignItems="flex-start" gap="xs">
       <Text variant={textVariant}>{risksTitle()}</Text>
-      <UnorderedList ml="5">
+      <Box ml="0">
         {riskGroups.map(group => (
-          <ListItem key={group.category}>
-            <Text fontWeight="bold">{group.title}</Text>
-            <UnorderedList ml="3">
+          <Box key={group.category}>
+            <Text fontWeight="bold" mt="sm">
+              {group.title}
+            </Text>
+            <UnorderedList ml="6">
               {group.risks.map(risk => (
                 <Link
                   href={risk.path}
@@ -41,9 +44,9 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
                 </Link>
               ))}
             </UnorderedList>
-          </ListItem>
+          </Box>
         ))}
-      </UnorderedList>
+      </Box>
     </VStack>
   )
 }
