@@ -13,6 +13,8 @@ import {
   AccordionPanel,
   Text,
   Link,
+  UnorderedList,
+  ListItem,
 } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 
@@ -55,6 +57,79 @@ const FAQ_ITEMS = [
         , a liquid representation of your position in the vault. These tokens accrue value as yield
         builds up and can be held, transferred, or integrated across DeFi as liquidity grows.
       </Text>
+    ),
+  },
+  {
+    question: 'How does loopS protect against liquidation?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        loopS continuously monitors your health factor and adjusts positions automatically when
+        needed to minimize risk from price or rate changes on Aave.
+      </Text>
+    ),
+  },
+  {
+    question: 'Can I withdraw anytime?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        Yes. You can withdraw anytime. loopS unwinds your position, repays the borrowed $S, and
+        returns wS.
+      </Text>
+    ),
+  },
+  {
+    question: 'Are there any fees?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        A small protocol fee (number) applies to the yield earned. Standard network gas fees also
+        apply for deposits and withdrawals.
+      </Text>
+    ),
+  },
+  {
+    question: 'Why do I get slightly less $S on withdrawal?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        When you withdraw, your position is unwound and converted from stS back to $S through market
+        routes on Fly. Because this involves on-chain swaps, the final amount may be slightly lower
+        than the displayed rate due to price impact and slippage. This is normal and depends on
+        current liquidity conditions.
+      </Text>
+    ),
+  },
+  {
+    question: 'Why is the amount I receive on withdrawal slightly less than the loopS rate?',
+    answer: (
+      <>
+        <Text color="font.primary" fontSize="lg" fontWeight="thin">
+          loopS uses leveraged staking to amplify yield. When you withdraw, part of your position is
+          unwound to repay the leveraged portion of your stake. This process can make the amount you
+          receive slightly lower than the displayed rate. The difference depends on:
+        </Text>
+        <br />
+        <UnorderedList>
+          <ListItem>
+            <Text color="font.primary" fontSize="lg" fontWeight="thin">
+              Leverage — higher leverage means more assets need to be sold to close your position.
+            </Text>
+          </ListItem>
+          <ListItem>
+            <Text color="font.primary" fontSize="lg" fontWeight="thin">
+              Market conditions — minor slippage and fees can also impact the final value.
+            </Text>
+          </ListItem>
+        </UnorderedList>
+        <br />
+        <Text color="font.primary" fontSize="lg" fontWeight="thin">
+          This ensures the vault remains fully collateralized and solvent after every withdrawal.
+          <br />
+          <br />
+          Example:
+          <br />
+          If 1 loopS = 1.002 S, you might receive around 0.997 S when exiting a 3× leveraged
+          position.
+        </Text>
+      </>
     ),
   },
   {
@@ -129,33 +204,7 @@ const FAQ_ITEMS = [
       </Text>
     ),
   },
-  {
-    question: 'How does loopS protect against liquidation?',
-    answer: (
-      <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        loopS continuously monitors your health factor and adjusts positions automatically when
-        needed to minimize risk from price or rate changes on Aave.
-      </Text>
-    ),
-  },
-  {
-    question: 'Can I withdraw anytime?',
-    answer: (
-      <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        Yes. You can withdraw anytime. loopS unwinds your position, repays the borrowed $S, and
-        returns wS.
-      </Text>
-    ),
-  },
-  {
-    question: 'Are there any fees?',
-    answer: (
-      <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        A small protocol fee (number) applies to the yield earned. Standard network gas fees also
-        apply for deposits and withdrawals.
-      </Text>
-    ),
-  },
+
   {
     question: 'Which wallets can I use?',
     answer: (
@@ -195,17 +244,6 @@ const FAQ_ITEMS = [
           </Box>
         </Link>
         . Always verify that you are interacting with the correct address before depositing.
-      </Text>
-    ),
-  },
-  {
-    question: 'Why do I get slightly less $S on withdrawal?',
-    answer: (
-      <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        When you withdraw, your position is unwound and converted from stS back to $S through market
-        routes on Fly. Because this involves on-chain swaps, the final amount may be slightly lower
-        than the displayed rate due to price impact and slippage. This is normal and depends on
-        current liquidity conditions.
       </Text>
     ),
   },
