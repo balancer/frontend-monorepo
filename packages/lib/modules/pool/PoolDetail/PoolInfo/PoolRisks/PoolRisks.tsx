@@ -15,6 +15,7 @@ import {
 import { usePool } from '../../../PoolProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolRisks, risksTitle } from './usePoolRisks'
+import NextLink from 'next/link'
 
 interface RisksListProps {
   textVariant?: string
@@ -36,8 +37,8 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
             <UnorderedList ml="6">
               {group.risks.map(risk => (
                 <Link
+                  as={NextLink}
                   href={risk.path}
-                  isExternal
                   key={`pool-risk-${risk.path.replaceAll('//', '')}`}
                 >
                   <ListItem color="link">{risk.title}</ListItem>
