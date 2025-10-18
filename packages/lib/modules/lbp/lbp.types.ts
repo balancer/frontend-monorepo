@@ -10,7 +10,7 @@ export type SaleStructureForm = {
   weightAdjustmentType: 'linear_90_10' | 'linear_90_50' | 'custom'
   customStartWeight: number
   customEndWeight: number
-  userActions: 'buy_and_sell' | 'buy_only'
+  userActions: 'buy_and_sell' | 'only_buy'
   fee: number
   saleTokenAmount: HumanAmount | ''
   collateralTokenAmount: HumanAmount | ''

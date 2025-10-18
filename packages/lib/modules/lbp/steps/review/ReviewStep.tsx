@@ -150,6 +150,7 @@ export function ReviewStep() {
       <OtherSaleDetails
         fee={saleStructureData.fee}
         launchTokenSymbol={launchTokenMetadata.symbol || ''}
+        userActions={saleStructureData.userActions}
       />
 
       <LbpFormAction />

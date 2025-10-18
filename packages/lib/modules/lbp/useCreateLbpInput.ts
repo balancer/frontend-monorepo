@@ -37,7 +37,7 @@ export function useCreateLbpInput() {
     reserveTokenEndWeight,
   } = useLbpWeights()
 
-  const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
+  const blockProjectTokenSwapsIn = userActions === 'only_buy' ? true : false
 
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
