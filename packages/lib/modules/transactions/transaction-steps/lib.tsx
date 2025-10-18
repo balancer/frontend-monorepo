@@ -60,6 +60,8 @@ export type StepType =
   | 'sendLbpMetadata'
   | 'initializePool'
   | 'enableRecovery'
+  | 'depositLoops'
+  | 'withdrawLoops'
 
 export type TxActionId =
   | 'SignBatchRelayer'
