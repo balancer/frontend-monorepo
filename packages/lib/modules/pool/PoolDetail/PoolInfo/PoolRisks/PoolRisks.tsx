@@ -34,15 +34,13 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
             <Text fontWeight="bold" mt="sm">
               {group.title}
             </Text>
-            <UnorderedList ml="6">
+            <UnorderedList ml="6" variant="link">
               {group.risks.map(risk => (
-                <Link
-                  as={NextLink}
-                  href={risk.path}
-                  key={`pool-risk-${risk.path.replaceAll('//', '')}`}
-                >
-                  <ListItem color="link">{risk.title}</ListItem>
-                </Link>
+                <ListItem key={`pool-risk-${risk.path.replaceAll('//', '')}`}>
+                  <Link as={NextLink} href={risk.path}>
+                    {risk.title}
+                  </Link>
+                </ListItem>
               ))}
             </UnorderedList>
           </Box>
