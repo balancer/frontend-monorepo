@@ -28,7 +28,7 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
   return (
     <VStack alignItems="flex-start" gap="xs">
       <Text variant={textVariant}>{risksTitle()}</Text>
-      <Box ml="0">
+      <Box>
         {riskGroups.map(group => (
           <Box key={group.category}>
             <Text fontWeight="bold" mt="sm">
