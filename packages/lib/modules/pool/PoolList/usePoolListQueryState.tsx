@@ -4,6 +4,7 @@ import {
   GqlChain,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
+  GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
 import { useQueryState } from 'nuqs'
@@ -230,7 +231,10 @@ export function usePoolListQueryState() {
     orderBy,
     orderDirection,
     where: {
-      poolTypeIn: mappedPoolTypes,
+      poolTypeIn: mappedPoolTypes.filter(
+        poolType => poolType !== GqlPoolType.LiquidityBootstrapping
+      ),
+      poolTypeNotIn: [GqlPoolType.LiquidityBootstrapping],
       chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
       minTvl,
