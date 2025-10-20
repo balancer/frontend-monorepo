@@ -14,16 +14,13 @@ import { LbpPoolChartsContainer } from './LbpPoolCharts/LbpPoolChartsContainer'
 import { MyPurchases } from './MyPurchases'
 import { MyTransactions } from './MyTransactions'
 import { GetFundsWarning } from './GetFundsWarning'
-import { useUserAccount } from '../../web3/UserAccountProvider'
 import { Top10Trades } from './Top10Trades'
 
 export function LbpDetail() {
   const { userPoolEvents, isLoadingUserPoolEvents, hasPoolEvents } = useUserPoolEvents()
-  const { userAddress } = useUserAccount()
   const { pool } = usePool()
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-  const isPoolOwner = lbpPool.lbpOwner.toLowerCase() === userAddress.toLowerCase()
   const isSaleFinished = isAfter(now(), secondsToMilliseconds(lbpPool.endTime))
   const fundsAvailable = Number(lbpPool.userBalance?.totalBalance) > 0
 
@@ -32,7 +29,7 @@ export function LbpDetail() {
       <LbpHeader />
       <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '40px']}>
         <VStack spacing="2xl" w="full">
-          {isPoolOwner && isSaleFinished && fundsAvailable && <GetFundsWarning />}
+          {isSaleFinished && fundsAvailable && <GetFundsWarning />}
 
           <Grid gap="4" templateColumns={{ base: '1fr', md: '2fr 1fr' }} w="full">
             <GridItem>
