@@ -122,12 +122,6 @@ const FAQ_ITEMS = [
         <br />
         <Text color="font.primary" fontSize="lg" fontWeight="thin">
           This ensures the vault remains fully collateralized and solvent after every withdrawal.
-          <br />
-          <br />
-          Example:
-          <br />
-          If 1 loopS = 1.002 S, you might receive around 0.997 S when exiting a 3× leveraged
-          position.
         </Text>
       </>
     ),
