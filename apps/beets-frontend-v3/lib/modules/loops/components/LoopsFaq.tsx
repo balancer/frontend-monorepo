@@ -210,13 +210,29 @@ const FAQ_ITEMS = [
   {
     question: 'Is loopS audited?',
     answer: (
-      <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        Yes. loopS has been fully audited by{' '}
-        <Text as="span" fontWeight="bold">
-          Spearbit
+      <>
+        <Text color="font.primary" fontSize="lg" fontWeight="thin">
+          Yes. loopS has been fully audited by{' '}
+          <Text as="span" fontWeight="bold">
+            Cantina
+          </Text>
+          , one of the leading smart contract security firms in DeFi. You can view the audit report{' '}
+          <Link
+            alignItems="center"
+            display="inline-flex"
+            href="https://sonicscan.org/address/0xc76995054ce51dfbbc954840d699b2f33d2538ee"
+            isExternal
+          >
+            <Box as="span" fontSize="lg" fontWeight="thin">
+              here
+            </Box>
+            <Box as="span" ml={1}>
+              <ArrowUpRight size={12} />
+            </Box>
+          </Link>
+          .
         </Text>
-        , one of the leading smart contract security firms in DeFi.
-      </Text>
+      </>
     ),
   },
   {
