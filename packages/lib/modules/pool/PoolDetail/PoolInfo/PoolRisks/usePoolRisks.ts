@@ -62,7 +62,6 @@ export enum RiskKey {
 
 export enum RiskCategory {
   PoolSpecific = 'Pool specific risks',
-
   Token = 'Token risks',
   General = 'General risks',
 }
@@ -113,7 +112,6 @@ export interface RiskCategoryGroup {
   category: RiskCategory
   title: string
   risks: Risk[]
-  subCategories?: RiskCategoryGroup[]
 }
 
 // Risk condition definitions
@@ -306,7 +304,6 @@ export function getPoolRisks(pool: GqlPoolElement): RiskCategoryGroup[] {
       category: category as RiskCategory,
       title: category as RiskCategory,
       risks,
-      subCategories: [],
     }))
 }
 
