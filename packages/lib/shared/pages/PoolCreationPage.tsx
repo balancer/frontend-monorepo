@@ -10,6 +10,7 @@ import {
 } from '@repo/lib/modules/pool/actions/create/PoolCreationFormProvider'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { usePathToInitializePool } from '@repo/lib/modules/pool/actions/initialize/usePathToInitializePool'
 
 export default function PoolCreationPage() {
   return (
@@ -20,6 +21,7 @@ export default function PoolCreationPage() {
 }
 
 function PoolCreationPageContent() {
+  usePathToInitializePool()
   const { tokenList, isLoadingTokenList } = usePoolCreationForm()
 
   return (
