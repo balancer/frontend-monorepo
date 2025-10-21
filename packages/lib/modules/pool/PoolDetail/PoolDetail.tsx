@@ -21,6 +21,7 @@ import { PoolBanners } from './PoolBanners/PoolBanners'
 import { useUserPoolEvents } from '../useUserPoolEvents'
 import { hasTotalBalance } from '@repo/lib/modules/pool/user-balance.helpers'
 import { PoolQuantAMMBanner } from './PoolBanners/PoolQuantAMMBanner'
+import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
 
 export function PoolDetail() {
   const { pool } = usePool()
@@ -52,36 +53,38 @@ export function PoolDetail() {
   return (
     <>
       <DefaultPageContainer>
-        <ClaimProvider pools={[pool]}>
-          <VStack spacing="2xl" w="full">
-            <VStack spacing="md" w="full">
-              <PoolAlerts />
-              <PoolHeader />
-              {banners?.headerSrc && <CowPoolBanner />}
+        <RelayerSignatureProvider>
+          <ClaimProvider pools={[pool]}>
+            <VStack spacing="2xl" w="full">
+              <VStack spacing="md" w="full">
+                <PoolAlerts />
+                <PoolHeader />
+                {banners?.headerSrc && <CowPoolBanner />}
 
-              <PoolStatsLayout />
+                <PoolStatsLayout />
+              </VStack>
+              {(userHasLiquidity || userHasPoolEvents) && (
+                <Stack
+                  direction={{ base: 'column', xl: 'row' }}
+                  justifyContent="stretch"
+                  spacing="md"
+                  w="full"
+                >
+                  <PoolMyLiquidity />
+                  <PoolUserEvents
+                    isLoading={isLoadingUserPoolEvents}
+                    userPoolEvents={userPoolEvents}
+                  />
+                </Stack>
+              )}
+              <PoolQuantAMMBanner />
+              <PoolActivity />
+              <PoolComposition />
+              <PoolBanners />
+              <PoolInfoLayout />
             </VStack>
-            {(userHasLiquidity || userHasPoolEvents) && (
-              <Stack
-                direction={{ base: 'column', xl: 'row' }}
-                justifyContent="stretch"
-                spacing="md"
-                w="full"
-              >
-                <PoolMyLiquidity />
-                <PoolUserEvents
-                  isLoading={isLoadingUserPoolEvents}
-                  userPoolEvents={userPoolEvents}
-                />
-              </Stack>
-            )}
-            <PoolQuantAMMBanner />
-            <PoolActivity />
-            <PoolComposition />
-            <PoolBanners />
-            <PoolInfoLayout />
-          </VStack>
-        </ClaimProvider>
+          </ClaimProvider>
+        </RelayerSignatureProvider>
       </DefaultPageContainer>
 
       {banners?.footerSrc && <CowFooter />}
