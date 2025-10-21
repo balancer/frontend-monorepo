@@ -196,13 +196,13 @@ const FAQ_ITEMS = [
         <Text color="font.primary" fontSize="lg" fontWeight="thin">
           Yes. loopS has been fully audited by{' '}
           <Text as="span" fontWeight="bold">
-            Cantina
+            Spearbit
           </Text>
           , one of the leading smart contract security firms in DeFi. You can view the audit report{' '}
           <Link
             alignItems="center"
             display="inline-flex"
-            href="https://sonicscan.org/address/0xc76995054ce51dfbbc954840d699b2f33d2538ee"
+            href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beets-Looped-Sonic-Spearbit-Security-Review-September-2025.pdf"
             isExternal
           >
             <Box as="span" fontSize="lg" fontWeight="thin">
