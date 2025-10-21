@@ -1056,6 +1056,14 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             color: 'font.secondary',
           },
         },
+        link: {
+          item: {
+            color: 'font.link',
+            '&::marker': {
+              color: 'font.link',
+            },
+          },
+        },
       },
     },
     Checkbox: {
