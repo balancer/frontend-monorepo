@@ -380,12 +380,13 @@ export function FilterTags({
 }
 
 export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number }, 'button'>(
-  ({ totalFilterCount, ...props }, ref) => {
+  ({ totalFilterCount, onClick, ...props }, ref) => {
     const { isMobile } = useBreakpoints()
     const textColor = useColorModeValue('#fff', 'font.dark')
 
-    const handleFilterClick = () => {
+    const handleFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       trackEvent(AnalyticsEvent.ClickPoolListFilter)
+      onClick?.(e)
     }
 
     return (
