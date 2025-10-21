@@ -29,6 +29,7 @@ import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
 import { getSafeWebUrl } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 import { formatDistanceToNowAbbr } from '../../utils/time'
 import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
@@ -133,7 +134,7 @@ export default function RecentTransactions() {
   ).length
 
   const handleActivityClick = () => {
-    trackEvent(AnalyticsEvent.ClickNavUtilitiesActivity)
+    if (isBalancer) trackEvent(AnalyticsEvent.ClickNavUtilitiesActivity)
   }
 
   return (
