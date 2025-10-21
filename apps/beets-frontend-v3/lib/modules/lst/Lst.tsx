@@ -21,7 +21,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -97,31 +97,18 @@ function LstForm() {
     getAmountShares,
     getAmountAssets,
     isRateLoading,
+    tabs,
   } = useLst()
 
   const isLoading = !isMounted || isBalancesLoading
 
   const loadingText = isLoading ? 'Loading...' : undefined
 
-  const tabs: ButtonGroupOption[] = [
-    {
-      value: '0',
-      label: 'Stake',
-      disabled: false,
-    },
-    {
-      value: '1',
-      label: 'Unstake',
-      disabled: false,
-    },
-    {
-      value: '2',
-      label: 'Withdraw',
-      disabled: false,
-    },
-  ]
+  const handleTabChange = (tab: ButtonGroupOption | undefined) => {
+    if (!tab) return
 
-  useEffect(() => {
+    setActiveTab(tab)
+
     if (isStakeTab) {
       setDisclosure(stakeModalDisclosure)
       setAmountAssets('')
@@ -129,11 +116,7 @@ function LstForm() {
       setDisclosure(unstakeModalDisclosure)
       setAmountShares('')
     }
-  }, [activeTab])
-
-  useEffect(() => {
-    setActiveTab(tabs[0])
-  }, [])
+  }
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -161,7 +144,7 @@ function LstForm() {
               fontSize="lg"
               groupId="add-liquidity"
               isFullWidth
-              onChange={setActiveTab}
+              onChange={handleTabChange}
               options={tabs}
               size="md"
             />
