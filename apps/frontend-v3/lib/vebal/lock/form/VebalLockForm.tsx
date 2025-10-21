@@ -233,11 +233,13 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                 </Tooltip>
               </Box>
             </HStack>
+
             <LockDurationSlider
               max={lockDuration.maxStep}
               min={lockDuration.minStep}
               minValue={lockDuration.minSliderValue}
               onChange={lockDuration.onSliderChange}
+              onSliderChange={lockDuration.onSliderChange}
               step={lockDuration.stepSize}
               steps={lockDuration.steps}
               value={lockDuration.sliderValue}
