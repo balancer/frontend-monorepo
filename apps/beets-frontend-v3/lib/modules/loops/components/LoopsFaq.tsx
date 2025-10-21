@@ -172,24 +172,6 @@ const FAQ_ITEMS = [
     ),
   },
   {
-    question: 'Do I earn Sonic Points with loopS?',
-    answer: (
-      <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        Yes. loopS positions earn Sonic Points with a multiplier based on the leverage and deposit
-        size.
-      </Text>
-    ),
-  },
-  {
-    question: 'What is the Sonic Points Multiplier?',
-    answer: (
-      <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        It shows how many times your position amplifies your Sonic Points. Higher leverage results
-        in a higher multiplier.
-      </Text>
-    ),
-  },
-  {
     question: 'What is Actual Supply?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">

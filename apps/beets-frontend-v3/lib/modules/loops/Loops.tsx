@@ -304,11 +304,6 @@ function LoopsInfo({
           label="Actual supply"
           value={fNum('token', bn(loopsData?.loopsGetData.actualSupply || '0'))}
         />
-        <StatRow
-          isLoading={isLoopsDataLoading}
-          label="Sonic points multiplier"
-          value={`${fNumCustom(bn(loopsData?.loopsGetData.sonicPointsMultiplier || '0'), customFormat)}x`}
-        />
         <Box minH="20px" w="full" />
       </VStack>
     </NoisyCard>

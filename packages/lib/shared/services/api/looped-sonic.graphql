@@ -9,7 +9,6 @@ query GetLoopsData {
     leverage
     nav
     rate
-    sonicPointsMultiplier
     stSAaveMarketSupply
     stSAaveMarketSupplyCap
     tvl
