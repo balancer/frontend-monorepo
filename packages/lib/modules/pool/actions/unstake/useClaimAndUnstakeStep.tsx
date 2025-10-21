@@ -19,6 +19,7 @@ import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction
 import { useHasApprovedRelayer } from '@repo/lib/modules/relayer/useHasApprovedRelayer'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { HumanAmount } from '@balancer/sdk'
+import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
 
 const claimAndUnstakeStepId = 'claim-and-unstake'
 
@@ -42,10 +43,9 @@ export function useClaimAndUnstakeStep({
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const { claimableRewards: nonBalrewards } = useClaimableBalances([pool])
   const { balRewardsData: balRewards } = useBalTokenRewards([pool])
+  const relayerMode = useRelayerMode(pool)
 
   const { contracts, chainId } = getNetworkConfig(pool.chain)
-
-  const relayerMode = 'approveRelayer' // relayer is always needed to claim rewards from gauges and unstake
 
   const { hasApprovedRelayer, isLoading: isLoadingRelayerApproval } = useHasApprovedRelayer(
     chainId,
