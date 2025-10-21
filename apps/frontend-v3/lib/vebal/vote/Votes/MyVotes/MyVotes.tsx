@@ -129,7 +129,7 @@ export function MyVotes() {
         </>
       )}
 
-      <Grid gap="md" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
+      <Grid gap="md" mb="100px" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyVebal loading={loading} myVebalBalance={veBALBalance} />
         </GridItem>
@@ -148,7 +148,7 @@ export function MyVotes() {
             {!vebalIsExpired && !noVeBALBalance && (
               <>
                 {hasAllVotingPowerTimeLocked && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -166,7 +166,7 @@ export function MyVotes() {
                 )}
 
                 {vebalLockTooShort && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -193,7 +193,7 @@ export function MyVotes() {
                 )}
 
                 {shouldResubmitVotes && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="info" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -214,7 +214,7 @@ export function MyVotes() {
                 )}
 
                 {hasExpiredGauges && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -230,7 +230,7 @@ export function MyVotes() {
                 )}
 
                 {hasNewVotes && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning">
                       <AlertIcon as={AlertTriangle} />
                       <Stack alignItems="baseline" gap="0">
@@ -248,7 +248,7 @@ export function MyVotes() {
           </>
         )}
 
-        <GridItem colSpan={4}>
+        <GridItem colSpan={4} mt="xs">
           <MyVotesTable
             loading={myVotesLoading}
             myVotes={sortedMyVotes}
