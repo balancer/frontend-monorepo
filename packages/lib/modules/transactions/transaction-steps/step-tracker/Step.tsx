@@ -150,7 +150,7 @@ function NestedInfo({
                 <PopoverTrigger>
                   <HStack gap="0">
                     <SpeedIcon size={20} />
-                    <Text color="grayText" fontSize="sm">
+                    <Text color="grayText" cursor="pointer" fontSize="sm">
                       Slow
                     </Text>
                   </HStack>
