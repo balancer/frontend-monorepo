@@ -341,7 +341,9 @@ function newVotesSinceLastVote(
     return acc.plus(votes)
   }, bn(0))
 
-  return votingPower.gt(previousVotingPower)
+  // FIXME: [JUANJO] we have added some error margin related to https://github.com/balancer/frontend-monorepo/issues/1718
+  // It should be changed for a better solution in the future (see issue)
+  return votingPower.gt(previousVotingPower.times(1.02))
 }
 
 export const MyVotesContext = createContext<ReturnType<typeof useMyVotesLogic> | null>(null)
