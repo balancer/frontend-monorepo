@@ -36,17 +36,14 @@ export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
     useClaimAllRewardsStep(params)
 
   const steps = useMemo((): TransactionStep[] => {
-    const steps = [claimAllRewardsStep]
-
-    if (shouldSignRelayerApproval) {
-      steps.unshift(signRelayerStep)
-    } else {
-      steps.unshift(relayerApprovalStep)
-    }
+    const steps: TransactionStep[] = []
 
     if (hasUnclaimedBalRewards) {
-      steps.unshift(minterApprovalStep)
+      steps.push(minterApprovalStep)
     }
+
+    steps.push(shouldSignRelayerApproval ? signRelayerStep : relayerApprovalStep)
+    steps.push(claimAllRewardsStep)
 
     return steps
   }, [

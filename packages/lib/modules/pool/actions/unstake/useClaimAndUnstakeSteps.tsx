@@ -34,17 +34,15 @@ export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
   )
 
   const steps = useMemo((): TransactionStep[] => {
-    const steps = [claimAndUnstakeStep]
-
-    if (shouldSignRelayerApproval) {
-      steps.unshift(signRelayerStep)
-    } else {
-      steps.unshift(relayerApprovalStep)
-    }
+    const steps: TransactionStep[] = []
 
     if (hasUnclaimedBalRewards) {
-      steps.unshift(minterApprovalStep)
+      steps.push(minterApprovalStep)
     }
+
+    steps.push(shouldSignRelayerApproval ? signRelayerStep : relayerApprovalStep)
+    steps.push(claimAndUnstakeStep)
+
     return steps
   }, [relayerApprovalStep, claimAndUnstakeStep, minterApprovalStep, hasUnclaimedBalRewards])
 
