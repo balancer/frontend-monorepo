@@ -5,10 +5,10 @@ import { IconButton, IconButtonProps, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useIsSafeApp } from '../web3/safe.hooks'
 
-export function CopyTokenAddressButton({
-  tokenAddress,
+export function CopyAddressButton({
+  address,
   ...rest
-}: { tokenAddress: string } & Omit<IconButtonProps, 'aria-label'>) {
+}: { address: string } & Omit<IconButtonProps, 'aria-label'>) {
   const [isCopied, setIsCopied] = useState(false)
   const isSafeApp = useIsSafeApp()
 
@@ -16,7 +16,7 @@ export function CopyTokenAddressButton({
   if (isSafeApp) return null
 
   function copyToClipboard() {
-    navigator.clipboard.writeText(tokenAddress)
+    navigator.clipboard.writeText(address)
     setIsCopied(true)
     setTimeout(() => setIsCopied(false), 2000)
   }
