@@ -22,9 +22,9 @@ export function CopyAddressButton({
   }
 
   return (
-    <Tooltip label="Copy token address">
+    <Tooltip label="Copy address">
       <IconButton
-        aria-label="Copy token address"
+        aria-label="Copy address"
         h="6"
         icon={isCopied ? <CheckCircleIcon /> : <CopyIcon />}
         isRound
