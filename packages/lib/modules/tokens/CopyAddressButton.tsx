@@ -11,7 +11,7 @@ export function CopyAddressButton({
 }: { address: string } & Omit<IconButtonProps, 'aria-label'>) {
   const [isCopied, setIsCopied] = useState(false)
   const isSafeApp = useIsSafeApp()
-  const timeoutRef = useRef<NodeJS.Timeout>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     return () => {
