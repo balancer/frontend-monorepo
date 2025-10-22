@@ -6,10 +6,6 @@ import {
   Text,
   VStack,
   Link,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
 } from '@chakra-ui/react'
 import { StepProps, getStepSettings } from './getStepSettings'
 import { ArrowUpRight, Check } from 'react-feather'
@@ -19,8 +15,7 @@ import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/sa
 import { useTransactionGasCost } from '../useTransactionGasCost'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { getGqlChain } from '@repo/lib/config/app.config'
-import { SMALL_AMOUNT_LABEL } from '@repo/lib/shared/utils/numbers'
-import { SpeedIcon } from '@repo/lib/shared/components/icons/SpeedIcon'
+import { TxnSpeedSetting } from './TxnSpeedSetting'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
@@ -126,7 +121,6 @@ function NestedInfo({
 }) {
   const gasCostData = useTransactionGasCost(transaction)
 
-  const isSmallAmount = gasCostData && gasCostData.costUsd?.replace('$', '') === SMALL_AMOUNT_LABEL
   const isActual = gasCostData && gasCostData.isActual
 
   const textProps = {
@@ -142,28 +136,9 @@ function NestedInfo({
           <HStack gap="0">
             <Text {...textProps} mr="sm" p="0">
               {isActual ? 'Final gas: ' : 'Estimated gas: '}
-              {(!isSmallAmount || !isActual) && '~'}
               {gasCostData.costUsd}
             </Text>
-            {!isActual && (
-              <Popover placement="top" trigger="hover">
-                <PopoverTrigger>
-                  <HStack gap="0">
-                    <SpeedIcon size={20} />
-                    <Text color="grayText" cursor="pointer" fontSize="sm">
-                      Slow
-                    </Text>
-                  </HStack>
-                </PopoverTrigger>
-                <PopoverContent p="2" shadow="2xl" width="250px" zIndex="popover">
-                  <PopoverArrow bg="background.level3" />
-                  <Text color="grayText">
-                    This estimate assumes a slow speed. A higher gas cost likely means your wallet
-                    is set to a faster transaction speed.
-                  </Text>
-                </PopoverContent>
-              </Popover>
-            )}
+            {!isActual && <TxnSpeedSetting />}
           </HStack>
         ) : step.isComplete() ? (
           <Text {...textProps}>Previously approved</Text>
