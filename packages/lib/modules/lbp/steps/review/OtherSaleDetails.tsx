@@ -1,4 +1,5 @@
 import { Card, Heading, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function OtherSaleDetails({
@@ -8,7 +9,7 @@ export function OtherSaleDetails({
 }: {
   launchTokenSymbol: string
   fee: number
-  userActions: string
+  userActions: UserActions
 }) {
   return (
     <Card>
