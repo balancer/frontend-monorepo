@@ -81,7 +81,7 @@ const FAQ_ITEMS = [
     question: 'Are there any fees?',
     answer: (
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
-        A small protocol fee (number) applies to the yield earned. Standard network gas fees also
+        A small protocol fee of 10% applies to the yield earned. Standard network gas fees also
         apply for deposits and withdrawals.
       </Text>
     ),
