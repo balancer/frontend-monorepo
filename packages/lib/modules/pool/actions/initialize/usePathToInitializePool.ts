@@ -12,18 +12,8 @@ import { usePoolCreationFormSteps } from '../create/usePoolCreationFormSteps'
 import { PoolCreationToken, SupportedPoolTypes } from '../create/types'
 
 export function usePathToInitializePool() {
-  // manage updating path as user configures / creates pool
-  // useEffect(() => {
-  //   let path = `/create/${network}/${poolType}`
-  //   if (poolAddress) path += `/${poolAddress}`
-  //   router.replace(path)
-  // }, [poolAddress, network, poolType])
-
-  // const [tokenAddresses, setTokenAddresses] = useState<Address[]>([])
   const { poolCreationForm, poolAddress, setPoolAddress } = usePoolCreationForm()
   const { lastStep } = usePoolCreationFormSteps()
-  // const { network, poolType } = poolCreationForm.watch()
-  // const router = useRouter()
   const params = useParams()
   const networkParam = params.network as GqlChain
   const poolAddressParam = params.poolAddress as Address
@@ -31,26 +21,25 @@ export function usePathToInitializePool() {
 
   const chainId = params.network ? getChainId(params.network as GqlChain) : undefined
 
+  const poolFunctionNames = ['name', 'symbol']
+  const vaultFunctionNames = [
+    'getPoolTokenInfo',
+    'getPoolConfig',
+    'getHooksConfig',
+    'getPoolRoleAccounts',
+  ]
+
   const poolDataContracts = useMemo(() => {
     if (!params.poolAddress || !chainId) return []
 
-    const poolContractReads = ['name', 'symbol'].map(functionName => ({
+    const poolContractReads = poolFunctionNames.map(functionName => ({
       address: poolAddressParam,
-      abi: parseAbi([
-        'function name() view returns (string)',
-        'function symbol() view returns (string)',
-        'function getAmplificationParameter() view returns (uint256)',
-      ]),
+      abi: erc20Abi,
       chainId,
       functionName,
     }))
 
-    const vaultContractReads = [
-      'getPoolTokenInfo',
-      'getPoolConfig',
-      'getHooksConfig',
-      'getPoolRoleAccounts',
-    ].map(functionName => ({
+    const vaultContractReads = vaultFunctionNames.map(functionName => ({
       address: AddressProvider.Vault(chainId),
       chainId,
       abi: vaultExtensionAbi_V3,
@@ -61,10 +50,8 @@ export function usePathToInitializePool() {
     return [...poolContractReads, ...vaultContractReads]
   }, [poolAddressParam, chainId])
 
-  const { data: poolData } = useReadContracts({
-    query: {
-      enabled: poolDataContracts.length > 0,
-    },
+  const { data: poolData, isLoading: isLoadingPoolData } = useReadContracts({
+    query: { enabled: poolDataContracts.length > 0 && !!poolAddressParam },
     contracts: poolDataContracts,
   })
 
@@ -87,7 +74,7 @@ export function usePathToInitializePool() {
       .sort((a, b) => a.address.localeCompare(b.address))
   }, [chainId, poolData])
 
-  const { data: poolTokenDetails } = useReadContracts({
+  const { data: poolTokenDetails, isLoading: isLoadingPoolTokenDetails } = useReadContracts({
     query: {
       enabled: tokenContracts.length > 0,
     },
@@ -101,9 +88,11 @@ export function usePathToInitializePool() {
     chainId,
   })
 
-  // // manage updating LS using params
+  const isLoadingPool = isLoadingPoolData || isLoadingPoolTokenDetails
+
   useEffect(() => {
-    if (!poolAddress && poolData && poolTokenDetails) {
+    // Update local storage with values read on chain
+    if (!poolAddress && poolAddressParam && poolData && poolTokenDetails && !isLoadingPool) {
       const [name, symbol, poolTokenInfo, poolConfig, hooksConfig, poolRoleAccounts] =
         poolData ?? []
 
@@ -168,5 +157,14 @@ export function usePathToInitializePool() {
 
       lastStep()
     }
-  }, [params.network, params.poolType, params.poolAddress, poolAddress, poolData, poolTokenDetails])
+  }, [
+    params.network,
+    params.poolType,
+    params.poolAddress,
+    poolData,
+    poolTokenDetails,
+    isLoadingPool,
+  ])
+
+  return { isLoadingPool }
 }
