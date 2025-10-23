@@ -8,6 +8,7 @@ import { Address } from 'viem'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { millisecondsToSeconds } from 'date-fns'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
+import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 
 export function useCreateLbpInput() {
   const { saleStructureForm, projectInfoForm, isCollateralNativeAsset } = useLbpForm()
@@ -37,7 +38,7 @@ export function useCreateLbpInput() {
     reserveTokenEndWeight,
   } = useLbpWeights()
 
-  const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
+  const blockProjectTokenSwapsIn = userActions === UserActions.BUY_ONLY
 
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)

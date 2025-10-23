@@ -1,12 +1,15 @@
 import { Card, Heading, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function OtherSaleDetails({
   launchTokenSymbol,
   fee,
+  userActions,
 }: {
   launchTokenSymbol: string
   fee: number
+  userActions: UserActions
 }) {
   return (
     <Card>
@@ -46,7 +49,7 @@ export function OtherSaleDetails({
             variant="secondary"
             w="full"
           >
-            <ListItem>{`Ability to buy and sell ${launchTokenSymbol} during the LBP`}</ListItem>
+            <ListItem>{`Ability to ${userActions.replaceAll('_', ' ')} ${launchTokenSymbol} during the LBP`}</ListItem>
             <ListItem>{`Immediate access to ${launchTokenSymbol} on swap (no claiming delay or vesting)`}</ListItem>
           </List>
         </VStack>

@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
-import { SaleStructureForm } from '../lbp.types'
+import { SaleStructureForm, UserActions } from '../lbp.types'
 import {
   Control,
   Controller,
@@ -530,8 +530,8 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack direction="row" gap="md">
-              <Radio value="buy_and_sell">Buy & sell</Radio>
-              <Radio value="buy_only">Buy only</Radio>
+              <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
+              <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
             </Stack>
           </RadioGroup>
         )}
