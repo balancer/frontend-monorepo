@@ -21,8 +21,11 @@ import { PoolFundStep } from './steps/fund/PoolFundStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
+import { usePathToInitializePool } from '../initialize/usePathToInitializePool'
 
 export function PoolCreationForm() {
+  usePathToInitializePool()
+
   const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
 

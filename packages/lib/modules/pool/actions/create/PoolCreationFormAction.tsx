@@ -27,6 +27,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
   const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
+  const showBackButton = !isFirstStep && !poolAddress
 
   return (
     <>
@@ -36,7 +37,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         <InvalidTotalWeightAlert />
 
         <HStack spacing="md" w="full">
-          {!isFirstStep && (
+          {showBackButton && (
             <IconButton
               aria-label="Back"
               icon={<ChevronLeftIcon h="8" w="8" />}
