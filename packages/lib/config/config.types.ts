@@ -108,6 +108,11 @@ export interface NetworkConfig {
     collateralTokens: string[]
   }
   hasAura?: boolean
+  snapshot?: {
+    contractAddress: Address
+    delegateAddress: Address
+    id: string
+  }
 }
 
 export interface Config {
