@@ -10,14 +10,20 @@ import { vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { PERCENTAGE_DECIMALS } from '../create/constants'
 import { usePoolCreationFormSteps } from '../create/usePoolCreationFormSteps'
 import { PoolCreationToken, SupportedPoolTypes } from '../create/types'
+import { PoolType } from '@balancer/sdk'
 
 export function usePathToInitializePool() {
   const { poolCreationForm, poolAddress, setPoolAddress } = usePoolCreationForm()
+  const { name, symbol } = poolCreationForm.watch() // these will be undefined if user did not create the pool
   const { lastStep } = usePoolCreationFormSteps()
   const params = useParams()
   const networkParam = params.network as GqlChain
   const poolAddressParam = params.poolAddress as Address
   const poolTypeParam = params.poolType as SupportedPoolTypes
+  const isStablePool = poolTypeParam === PoolType.Stable || poolTypeParam === PoolType.StableSurge
+  const isWeightedPool = poolTypeParam === PoolType.Weighted
+
+  const shouldUsePathToInitialize = !name && !symbol && !poolAddress && !!poolAddressParam
 
   const chainId = params.network ? getChainId(params.network as GqlChain) : undefined
 
@@ -51,7 +57,7 @@ export function usePathToInitializePool() {
   }, [poolAddressParam, chainId])
 
   const { data: poolData, isLoading: isLoadingPoolData } = useReadContracts({
-    query: { enabled: poolDataContracts.length > 0 && !!poolAddressParam },
+    query: { enabled: poolDataContracts.length > 0 && shouldUsePathToInitialize },
     contracts: poolDataContracts,
   })
 
@@ -86,13 +92,30 @@ export function usePathToInitializePool() {
     abi: parseAbi(['function getAmplificationParameter() view returns (uint256)']),
     functionName: 'getAmplificationParameter',
     chainId,
+    query: { enabled: isStablePool && shouldUsePathToInitialize },
+  })
+
+  const { data: normalizedWeights } = useReadContract({
+    address: poolAddressParam,
+    abi: parseAbi(['function getNormalizedWeights() view returns (uint256[])']),
+    functionName: 'getNormalizedWeights',
+    chainId,
+    query: { enabled: isWeightedPool && shouldUsePathToInitialize },
   })
 
   const isLoadingPool = isLoadingPoolData || isLoadingPoolTokenDetails
 
   useEffect(() => {
+    const hasRequiredWeightedInfo = !isWeightedPool || !!normalizedWeights
+    const hasRequiredStableInfo = !isStablePool || !!amplificationParameter
+    const hasRequiredData =
+      !!poolData && !!poolTokenDetails && hasRequiredWeightedInfo && hasRequiredStableInfo
+    const shouldPopulateFormData = !poolAddress && !!poolAddressParam && !name && !symbol
+
+    console.log('shouldPopulateFormData', shouldPopulateFormData)
+
     // Update local storage with values read on chain
-    if (!poolAddress && poolAddressParam && poolData && poolTokenDetails && !isLoadingPool) {
+    if (!isLoadingPool && hasRequiredData && shouldPopulateFormData) {
       const [name, symbol, poolTokenInfo, poolConfig, hooksConfig, poolRoleAccounts] =
         poolData ?? []
 
@@ -126,6 +149,9 @@ export function usePathToInitializePool() {
         rateProvider: tokenConfigs[index].rateProvider,
         paysYieldFees: tokenConfigs[index].paysYieldFees,
         amount: '',
+        weight: normalizedWeights
+          ? formatUnits(normalizedWeights?.[index] as bigint, PERCENTAGE_DECIMALS)
+          : undefined,
         data: { ...poolTokenData[address], chain: params.network, chainId },
       }))
 
@@ -148,7 +174,7 @@ export function usePathToInitializePool() {
       poolCreationForm.setValue('pauseManager', pauseManager)
       poolCreationForm.setValue('swapFeePercentage', swapFeePercentage)
       if (amplificationParameter) {
-        poolCreationForm.setValue('amplificationParameter', amplificationParameter.toString())
+        poolCreationForm.setValue('amplificationParameter', formatUnits(amplificationParameter, 3)) // SC multiplies by 1e3 precision during creation of pool
       }
       poolCreationForm.setValue('poolHooksContract', poolHooksContract)
       poolCreationForm.setValue('disableUnbalancedLiquidity', disableUnbalancedLiquidity)
