@@ -34,21 +34,30 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0xc71ea051a5f82c67adcf634c36ffe6334793d24c': { from: '#28D358', to: '#9AF9B5' }, // 'Aave Prime GHO'
     '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38': { from: '#549BEB', to: '#5B7CF1' }, // 'osETH'
     '0xac3e018457b222d93114458476f3e3416abbe38f': { from: '#000000', to: '#333333' }, // 'sfrxETH'
+    '0x1e6ffa4e9f63d10b8820a3ab52566af881dab53c': { from: '#7180F7', to: '#A3ADFA' }, // 'gtWETHe'
+    '0x3976d71e7ddfbab9bd120ec281b7d35fa0f28528': { from: '#AE80FA', to: '#CDB0FC' }, // 'slpETH'
+    '0xbfb53910c935e837c74e6c4ef584557352d20fde': { from: '#AE80FA', to: '#CDB0FC' }, // 'slpUSDC'
+    '0xdef1ca1fb7fbcdc777520aa7f396b4e015f497ab': { from: '#F2CF18', to: '#F7E069' }, // 'COW'
   },
   [GqlChain.Arbitrum]: {
+    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': { from: '#F2F3F7', to: '#CECDFE' }, // 'WETH'
     '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8': { from: '#1075E2', to: '#62A8F4' }, // USDC
-    '0x82af49447d8a07e3bd95bd0d56f35241523fbab1': { from: '#33FF57', to: '#33FF57' }, // WETH
     '0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f': { from: '#3357FF', to: '#3357FF' }, // WBTC
     '0x912ce59144191c1204e64559fe8253a0e49e6548': { from: '#FF33A1', to: '#FF33A1' }, // ARB
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#A133FF', to: '#A133FF' }, // DAI
+    '0xba5ddd1f9d7f570dc94a51479a000e3bce967196': { from: '#817DFD', to: '#CECDFE' }, // 'AAVE'
   },
   [GqlChain.Base]: {
+    '0x4200000000000000000000000000000000000006': { from: '#F2F3F7', to: '#CECDFE' }, // 'WETH'
     '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { from: '#1075E2', to: '#62A8F4' }, // USDC
     '0x6b175474e89094c44da98b954eedeac495271d0f': { from: '#33FF57', to: '#33FF57' }, // DAI
     '0x853d955acef822db058eb8505911ed77f175b99e': { from: '#3357FF', to: '#3357FF' }, // FRAX
     '0x5a98fcbea516cf06857215779fd812ca3bef1b32': { from: '#FF33A1', to: '#FF33A1' }, // LDO
     '0x88b1cd4b430d95b406e382c3cdbae54697a0286e': { from: '#28D358', to: '#9AF9B5' }, // 'waBasGHO'
     '0xc768c589647798a6ee01a91fde98ef2ed046dbd6': { from: '#2775CA', to: '#2775CA' }, // 'waBasUSDC'
+    '0xc694a91e6b071bf030a18bd3053a7fe09b6dae69': { from: '#F2CF18', to: '#F7E069' }, // 'COW'
+    '0xfd28f108e95f4d41daae9dbfff707d677985998e': { from: '#A695FA', to: '#9F75FB' }, // 'PRL'
+    '0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf': { from: '#045CE3', to: '#3784FB' }, // 'cbBTC'
   },
   [GqlChain.Avalanche]: {
     '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7': { from: '#FF5733', to: '#FF5733' }, // WAVAX
