@@ -5,11 +5,14 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { PoolCreationModal } from './modal/PoolCreationModal'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const { isFormStateValid, poolAddress, isReClamm, poolTokens } = usePoolCreationForm()
+  const [copiedInitLInk, setCopiedInitLink] = useState(false)
+
+  const { isFormStateValid, poolAddress, isReClamm, poolTokens, network, poolType } =
+    usePoolCreationForm()
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
@@ -17,10 +20,15 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   const hasTokenAmounts = poolTokens.every(token => token.amount)
 
+  function copyInitializeLinkToClipboard() {
+    const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
+    navigator.clipboard.writeText(initializeUrl)
+    setCopiedInitLink(true)
+    setTimeout(() => setCopiedInitLink(false), 2000)
+  }
+
   useEffect(() => {
-    // trigger modal open if user has begun pool creation process
-    // if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
-    // trigger modal close if reclamm and not token amounts have been set
+    // trigger modal close if reclamm and token amounts have not been set
     if (poolAddress && isReClamm && !hasTokenAmounts) previewModalDisclosure.onClose()
   }, [poolAddress, isReClamm, hasTokenAmounts])
 
@@ -44,6 +52,12 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
               onClick={previousStep}
               size="lg"
             />
+          )}
+
+          {poolAddress && (
+            <Button onClick={copyInitializeLinkToClipboard} size="lg" variant="secondary" w="full">
+              {copiedInitLInk ? 'Copied ✓' : 'Copy Link'}
+            </Button>
           )}
 
           <Button
