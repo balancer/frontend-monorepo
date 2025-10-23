@@ -5,7 +5,8 @@ import { ClaimAllRewardsStepParams, useClaimAllRewardsStep } from './useClaimAll
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
-import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
+import { useShouldSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 
 export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
   const pool = params.pools[0]
@@ -14,11 +15,14 @@ export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
     throw new Error('Pools should contain at least one element')
   }
 
-  const relayerMode = useRelayerMode(pool as Pool)
+  const relayerMode = useRelayerMode()
 
   const { chain } = pool
   const chainId = getChainId(pool.chain)
   const hasUnclaimedBalRewards = params.balTokenRewardsQuery.balRewardsData.length > 0
+
+  const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
+  const signRelayerStep = useSignRelayerStep(chain)
 
   const { step: relayerApprovalStep, isLoading: isLoadingRelayerApprovalStep } =
     useApproveRelayerStep(chainId, { relayerMode })
@@ -32,14 +36,23 @@ export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
     useClaimAllRewardsStep(params)
 
   const steps = useMemo((): TransactionStep[] => {
-    const steps = [relayerApprovalStep, claimAllRewardsStep]
+    const steps: TransactionStep[] = []
 
     if (hasUnclaimedBalRewards) {
-      steps.unshift(minterApprovalStep)
+      steps.push(minterApprovalStep)
     }
 
+    steps.push(shouldSignRelayerApproval ? signRelayerStep : relayerApprovalStep)
+    steps.push(claimAllRewardsStep)
+
     return steps
-  }, [relayerApprovalStep, claimAllRewardsStep, minterApprovalStep, hasUnclaimedBalRewards])
+  }, [
+    relayerApprovalStep,
+    claimAllRewardsStep,
+    minterApprovalStep,
+    hasUnclaimedBalRewards,
+    signRelayerStep,
+  ])
 
   return {
     isLoading:
