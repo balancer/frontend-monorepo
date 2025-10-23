@@ -11,7 +11,7 @@ import { tokenFormatAmount } from '~/lib/services/token/token-util';
 import { numberFormatUSDValue } from '~/lib/util/number-formats';
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers';
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 
 interface Props {
     isLoading?: boolean;

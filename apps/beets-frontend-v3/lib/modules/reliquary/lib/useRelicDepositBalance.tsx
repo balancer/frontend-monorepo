@@ -1,10 +1,10 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useGetTokens } from '~/lib/global/useToken';
 import { sumBy } from 'lodash';
 import { useReliquaryWithdraw } from '~/modules/reliquary/withdraw/lib/useReliquaryWithdraw';
 import { usePool } from '~/modules/pool/lib/usePool';
 import { createContext, ReactNode, useContext } from 'react';
-import useReliquary from '~/modules/reliquary/lib/useReliquary';
+import { useReliquary } from '~/modules/reliquary/ReliquaryProvider';
 
 export function _useRelicDepositBalance() {
     const { poolService } = usePool();
@@ -12,9 +12,9 @@ export function _useRelicDepositBalance() {
     const { selectedWithdrawTokenAddresses } = useReliquaryWithdraw();
     const { selectedRelic } = useReliquary();
 
-    const query = useQuery(
-        ['relicDepositBalance', selectedRelic?.relicId, selectedRelic?.amount, selectedWithdrawTokenAddresses],
-        async () => {
+    const query = useQuery({
+        queryKey: ['relicDepositBalance', selectedRelic?.relicId, selectedRelic?.amount, selectedWithdrawTokenAddresses],
+        queryFn: async () => {
             const result = await poolService.exitGetProportionalWithdrawEstimate(
                 selectedRelic?.amount || '0',
                 selectedWithdrawTokenAddresses,
@@ -22,8 +22,8 @@ export function _useRelicDepositBalance() {
 
             return result;
         },
-        { enabled: !!selectedRelic && parseFloat(selectedRelic.amount) > 0 },
-    );
+        enabled: !!selectedRelic && parseFloat(selectedRelic.amount) > 0,
+    });
 
     return {
         ...query,

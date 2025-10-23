@@ -33,7 +33,7 @@ import ReliquaryHeroBanner from './components/ReliquaryHeroBanner';
 import ReliquaryMigrateModal from './components/ReliquaryMigrateModal';
 import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats';
 import { useDelegation } from './lib/useDelegation';
-import useReliquary from './lib/useReliquary';
+import { useReliquary } from './ReliquaryProvider';
 import { CurrentStepProvider } from './lib/useReliquaryCurrentStep';
 import { useOldBeetsBalance } from '~/lib/global/useOldBeetsBalance';
 import { BeetsMigration } from '../migrate/BeetsMigration';

@@ -1,9 +1,9 @@
 import { useReliquaryWithdraw } from '../withdraw/lib/useReliquaryWithdraw';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useGetTokens } from '~/lib/global/useToken';
 import { sum, sumBy } from 'lodash';
 import { usePool } from '~/modules/pool/lib/usePool';
-import useReliquary from './useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import { parseUnits } from 'ethers/lib/utils.js';
 import { BigNumber } from 'ethers';
 import { formatFixed } from '@ethersproject/bignumber';
@@ -14,9 +14,9 @@ export function useAllRelicsDepositBalances() {
     const { selectedWithdrawTokenAddresses } = useReliquaryWithdraw();
     const { relicPositionsForFarmId, relicIds, isLoadingRelicPositions } = useReliquary();
 
-    const query = useQuery(
-        ['useAllRelicsDepositBalances', relicIds, selectedWithdrawTokenAddresses],
-        async () => {
+    const query = useQuery({
+        queryKey: ['useAllRelicsDepositBalances', relicIds, selectedWithdrawTokenAddresses],
+        queryFn: async () => {
             const result = await Promise.all(
                 relicPositionsForFarmId.map(async (relic) => {
                     const tokenAmounts = await poolService.exitGetProportionalWithdrawEstimate(
@@ -36,8 +36,8 @@ export function useAllRelicsDepositBalances() {
 
             return result;
         },
-        { enabled: relicPositionsForFarmId.length > 0 && !isLoadingRelicPositions },
-    );
+        enabled: relicPositionsForFarmId.length > 0 && !isLoadingRelicPositions,
+    });
 
     let alllRelicsBptTotal = BigNumber.from(0);
     let allRelicsBeetsAmount = BigNumber.from(0);

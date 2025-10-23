@@ -1,22 +1,20 @@
-import { useQuery } from 'react-query';
-import { reliquaryService } from '~/lib/services/staking/reliquary.service';
-import { useProvider } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 import { useUserAccount } from '~/lib/user/useUserAccount';
-import { networkConfig } from '~/lib/config/network-config';
+import { getNetworkConfig } from '@repo/lib/config/app.config';
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql';
+import { useReliquary } from '../ReliquaryProvider';
 
 export function useReliquaryPendingRewards() {
-    const provider = useProvider();
     const { userAddress } = useUserAccount();
+    const { getPendingRewards } = useReliquary();
+    const networkConfig = getNetworkConfig(GqlChain.Sonic);
 
-    return useQuery(
-        ['reliquaryPendingRewards', networkConfig.reliquary.fbeets.farmId, userAddress],
-        async () => {
-            return reliquaryService.getPendingRewards({
-                farmIds: [networkConfig.reliquary.fbeets.farmId.toString()],
-                userAddress: userAddress || '',
-                provider,
-            });
+    return useQuery({
+        queryKey: ['reliquaryPendingRewards', networkConfig.contracts.beets?.reliquary, userAddress],
+        queryFn: async () => {
+            // Note: farmId would need to be configured in network config
+            return getPendingRewards(['0'], userAddress || '');
         },
-        { enabled: !!userAddress && !!networkConfig.fbeets.address },
-    );
+        enabled: !!userAddress,
+    });
 }

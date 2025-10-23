@@ -1,9 +1,9 @@
 import { useSwiperSlide } from 'swiper/react';
 import { useEffect, useState } from 'react';
 import { Badge, Box, Heading, HStack, VStack, Flex, Stack, Button } from '@chakra-ui/react';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ReliquaryFarmPosition } from '~/lib/services/staking/reliquary.service';
+import { ReliquaryFarmPosition } from '../ReliquaryProvider';
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers';
 import RelicLevelUpButton from './RelicLevelUpButton';
 import RelicSlideApr from './RelicSlideApr';

@@ -30,7 +30,7 @@ import { usePool } from '~/modules/pool/lib/usePool';
 import { useBatchRelayerHasApprovedForAll } from '../lib/useBatchRelayerHasApprovedForAll';
 import { useRelicHarvestRewards } from '../lib/useRelicHarvestRewards';
 import { useRelicPendingRewards } from '../lib/useRelicPendingRewards';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import RelicMaturityModal from './RelicMaturityModal';
 import { ReliquaryBatchRelayerApprovalButton } from './ReliquaryBatchRelayerApprovalButton';
 import { useGetHHRewards } from '~/modules/reliquary/lib/useGetHHRewards';

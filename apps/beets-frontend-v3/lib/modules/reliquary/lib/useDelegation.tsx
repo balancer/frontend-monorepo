@@ -1,5 +1,5 @@
 import { useNetworkConfig } from '~/lib/global/useNetworkConfig';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { snapshotService } from '~/lib/services/util/snapshot.service';
 import { useUserAccount } from '~/lib/user/useUserAccount';
 import { Address, useProvider } from 'wagmi';
@@ -9,9 +9,9 @@ export function useDelegation() {
     const provider = useProvider();
     const networkConfig = useNetworkConfig();
 
-    return useQuery(
-        ['getDelegation', userAddress],
-        async (): Promise<boolean> => {
+    return useQuery({
+        queryKey: ['getDelegation', userAddress],
+        queryFn: async (): Promise<boolean> => {
             const delegationAddress = await snapshotService.getDelegation({
                 userAddress: userAddress as Address,
                 provider,
@@ -19,6 +19,6 @@ export function useDelegation() {
             });
             return delegationAddress === networkConfig.snapshot.delegateAddress;
         },
-        { enabled: !!userAddress },
-    );
+        enabled: !!userAddress,
+    });
 }

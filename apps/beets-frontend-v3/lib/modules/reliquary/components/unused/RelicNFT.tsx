@@ -3,7 +3,7 @@ import { Box, Image } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { getProvider } from '@wagmi/core';
 import useReliquary from '~/modules/reliquary/lib/useReliquary';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export function RelicNFT() {
     const controls = useAnimation();
@@ -18,19 +18,21 @@ export function RelicNFT() {
         });
     };
 
-    const nft = useQuery(
-        ['relicNFT', { selectedRelicId, isLoadingRelicPositions }],
-        async () => {
+    const nft = useQuery({
+        queryKey: ['relicNFT', selectedRelicId, isLoadingRelicPositions],
+        queryFn: async () => {
             if (selectedRelicId) {
                 return await reliquaryService.getRelicNFT({ tokenId: selectedRelicId, provider: getProvider() });
             }
         },
-        {
-            onSuccess: (imageURI) => {
-                setImageURI(imageURI);
-            },
-        },
-    );
+        enabled: !!selectedRelicId,
+    });
+
+    useEffect(() => {
+        if (nft.data) {
+            setImageURI(nft.data);
+        }
+    }, [nft.data]);
 
     useEffect(() => {
         setTimeout(() => {

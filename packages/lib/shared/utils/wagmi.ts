@@ -12,6 +12,7 @@ import {
   useBalance,
   useWaitForTransactionReceipt,
   useWriteContract,
+  usePublicClient,
   BaseError,
 } from 'wagmi'
 
@@ -21,5 +22,6 @@ export {
   useBalance,
   useWaitForTransactionReceipt,
   useWriteContract,
+  usePublicClient,
   BaseError,
 }

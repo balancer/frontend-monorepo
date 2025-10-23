@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useUserAccount } from '~/lib/user/useUserAccount';
 
 interface HHReward {
@@ -34,9 +34,9 @@ interface HHRewardsResult {
 export function useGetHHRewards() {
     const { userAddress } = useUserAccount();
 
-    return useQuery(
-        ['hhRewards', userAddress],
-        async (): Promise<HHRewardsResult> => {
+    return useQuery({
+        queryKey: ['hhRewards', userAddress],
+        queryFn: async (): Promise<HHRewardsResult> => {
             if (!userAddress) {
                 return { rewards: [], totalValue: 0 };
             }
@@ -64,10 +64,8 @@ export function useGetHHRewards() {
                 totalValue,
             };
         },
-        {
-            enabled: !!userAddress,
-            refetchInterval: 30000, // Refetch every 30 seconds
-            staleTime: 15000, // Consider data stale after 15 seconds
-        },
-    );
+        enabled: !!userAddress,
+        refetchInterval: 30000, // Refetch every 30 seconds
+        staleTime: 15000, // Consider data stale after 15 seconds
+    });
 }

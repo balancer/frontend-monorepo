@@ -1,5 +1,5 @@
 import { add, addSeconds, fromUnixTime } from 'date-fns';
-import { ReliquaryFarmPosition } from '~/lib/services/staking/reliquary.service';
+import { ReliquaryFarmPosition } from '../ReliquaryProvider';
 
 export function relicGetMaturityProgress(relic: ReliquaryFarmPosition | null, maturities: string[]) {
     if (!relic || !maturities.length) {

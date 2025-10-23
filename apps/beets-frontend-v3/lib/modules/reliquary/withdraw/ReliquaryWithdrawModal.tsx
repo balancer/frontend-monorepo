@@ -8,7 +8,7 @@ import { ReliquaryWithdrawSingleAsset } from '~/modules/reliquary/withdraw/compo
 import { ReliquaryWithdrawPreview } from '~/modules/reliquary/withdraw/components/ReliquaryWithdrawPreview';
 import { FadeInBox } from '~/components/animation/FadeInBox';
 import { useReliquaryWithdrawState } from '~/modules/reliquary/withdraw/lib/useReliquaryWithdrawState';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 
 interface Props {
     activatorProps?: ButtonProps;

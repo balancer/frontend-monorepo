@@ -2,7 +2,7 @@ import { HStack, Text } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { BeetsSubmitTransactionButton } from '~/components/button/BeetsSubmitTransactionButton';
 import { ToastType, useToast } from '~/components/toast/BeetsToast';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import { useRelicBurn } from '../lib/useRelicBurn';
 
 interface Props {

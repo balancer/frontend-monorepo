@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { reliquaryZapService } from '~/lib/services/staking/reliquary-zap.service';
 import { useUserAccount } from '~/lib/user/useUserAccount';
 import { useSlippage } from '~/lib/global/useSlippage';
@@ -19,9 +19,9 @@ export function useReliquaryWithdrawAndHarvestContractCallData({
     const { userAddress } = useUserAccount();
     const { slippage } = useSlippage();
 
-    return useQuery(
-        ['reliquaryWithdrawAndHarvestContractCallData', userAddress, slippage, relicId, bptAmount],
-        async () => {
+    return useQuery({
+        queryKey: ['reliquaryWithdrawAndHarvestContractCallData', userAddress, slippage, relicId, bptAmount],
+        queryFn: async () => {
             return reliquaryZapService.getReliquaryWithdrawAndHarvestContractCallData({
                 userAddress: userAddress || '',
                 relicId: relicId || 0,
@@ -31,6 +31,6 @@ export function useReliquaryWithdrawAndHarvestContractCallData({
                 poolTotalShares,
             });
         },
-        { enabled: !!userAddress && typeof relicId === 'number' && parseFloat(bptAmount) !== 0 },
-    );
+        enabled: !!userAddress && typeof relicId === 'number' && parseFloat(bptAmount) !== 0,
+    });
 }

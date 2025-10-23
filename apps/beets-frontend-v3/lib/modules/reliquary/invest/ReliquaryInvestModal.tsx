@@ -16,7 +16,7 @@ import { ReliquaryInvestPreview } from '~/modules/reliquary/invest/components/Re
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, AnimatePresence, motion, useAnimation } from 'framer-motion';
 import { BeetsModalBody, BeetsModalContent, BeetsModalHeader } from '~/components/modal/BeetsModal';
-import useReliquary from '~/modules/reliquary/lib/useReliquary';
+import { useReliquary } from '~/modules/reliquary/ReliquaryProvider';
 import { ReliquaryInvestTypeChoice } from './components/ReliquaryInvestTypeChoice';
 import { ReliquaryInvestCustom } from './components/ReliquaryInvestCustom';
 import { ReliquaryInvestProportional } from './components/ReliquaryInvestProportional';

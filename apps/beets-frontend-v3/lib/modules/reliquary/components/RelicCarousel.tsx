@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useEffect, useState } from 'react';
 import { Pagination } from 'swiper';
 import { Box, BoxProps, Heading, VStack, Flex, useBreakpointValue } from '@chakra-ui/react';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import { ReliquaryInvestModal } from '~/modules/reliquary/invest/ReliquaryInvestModal';
 import RelicSlide from './RelicSlide';
 import { ReliquaryWithdrawModal } from '~/modules/reliquary/withdraw/ReliquaryWithdrawModal';

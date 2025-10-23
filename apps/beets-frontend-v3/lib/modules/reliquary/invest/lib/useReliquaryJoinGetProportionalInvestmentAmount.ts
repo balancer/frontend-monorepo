@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { sumBy } from 'lodash';
 import { isEth, replaceWethWithEth } from '~/lib/services/token/token-util';
 import { useUserAccount } from '~/lib/user/useUserAccount';
@@ -12,15 +12,13 @@ export function useReliquaryJoinGetProportionalInvestmentAmount() {
     const { userAddress } = useUserAccount();
     const { priceForAmount } = useGetTokens();
 
-    const query = useQuery(
-        [
-            {
-                key: 'joinGetProportionalInvestmentAmount',
-                userInvestTokenBalances,
-                userAddress,
-            },
+    const query = useQuery({
+        queryKey: [
+            'joinGetProportionalInvestmentAmount',
+            userInvestTokenBalances,
+            userAddress,
         ],
-        async ({ queryKey }) => {
+        queryFn: async () => {
             const hasEth = !!userInvestTokenBalances.find((token) => isEth(token.address));
 
             if (!poolService.joinGetMaxProportionalForUserBalances) {
@@ -36,8 +34,9 @@ export function useReliquaryJoinGetProportionalInvestmentAmount() {
                 totalValueProportionalAmounts: sumBy(result, priceForAmount),
             };
         },
-        { enabled: true, staleTime: 0, cacheTime: 0 },
-    );
+        enabled: true,
+        gcTime: 0,
+    });
 
     return {
         ...query,

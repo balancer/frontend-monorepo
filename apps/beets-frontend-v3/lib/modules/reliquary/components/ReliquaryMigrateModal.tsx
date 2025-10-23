@@ -22,7 +22,7 @@ import { useUserAllowances } from '~/lib/util/useUserAllowances';
 import { useLegacyFBeetsBalance } from '../lib/useLegacyFbeetsBalance';
 import { useReliquaryFbeetsMigrateContractCallData } from '../lib/useReliquaryFbeetsMigrateContractCallData';
 import { useReliquaryZap } from '../lib/useReliquaryZap';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import { BeetsBox } from '~/components/box/BeetsBox';
 import { useToast } from '~/components/toast/BeetsToast';
 import { useBatchRelayerHasApprovedForAll } from '../lib/useBatchRelayerHasApprovedForAll';
@@ -49,13 +49,14 @@ export default function ReliquaryMigrateModal({ isOpen, onClose }: Props) {
 
     const legacyfBeets = getToken(networkConfig.fbeets.address);
 
-    const { legacyFbeetsBalance, relicPositionsForFarmId, refetchRelicPositions, setSelectedRelicId, selectedRelic } =
+    const { relicPositionsForFarmId, refetchRelicPositions, setSelectedRelicId, selectedRelic } =
         useReliquary();
     const { data: hasBatchRelayerApproval, isLoading: isLoadingBatchRelayerApproval } = useHasBatchRelayerApproval();
     const {
         staked,
         isLoading: isLoadingLegacyFbeetsBalance,
         unstaked,
+        total: legacyFbeetsBalance,
         refetchLegacyFbeetsBalance,
         refetchStakedBalance,
     } = useLegacyFBeetsBalance();

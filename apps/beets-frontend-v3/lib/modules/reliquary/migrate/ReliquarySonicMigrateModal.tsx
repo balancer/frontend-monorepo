@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FadeInBox } from '~/components/animation/FadeInBox';
 import { ReliquaryWithdrawTypeChoice } from '~/modules/reliquary/withdraw/components/ReliquaryWithdrawTypeChoice';
 import { useReliquaryWithdrawState } from '~/modules/reliquary/withdraw/lib/useReliquaryWithdrawState';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import { ReliquarySonicMigrateBridgeBeets } from './components/ReliquarySonicMigrateBridgeBeets';
 import { ReliquarySonicMigrateNextSteps } from './components/ReliquarySonicMigrateNextSteps';
 import { ReliquarySonicMigrateBridgeFtm } from './components/ReliquarySonicMigrateBridgeFtm';

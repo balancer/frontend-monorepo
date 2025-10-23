@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { reliquaryZapService } from '~/lib/services/staking/reliquary-zap.service';
 import { useUserAccount } from '~/lib/user/useUserAccount';
 import { useSlippage } from '~/lib/global/useSlippage';
@@ -14,9 +14,9 @@ export function useReliquaryFbeetsMigrateContractCallData(relicId: number | unde
     ]);
     const fbeetsBalance = balances.find((balance) => balance.address === networkConfig.fbeets.address)?.amount || '0';
 
-    const query = useQuery(
-        ['reliquaryFbeetsMigrateContractCallData', userAddress, balances, slippage, relicId],
-        async () => {
+    const query = useQuery({
+        queryKey: ['reliquaryFbeetsMigrateContractCallData', userAddress, balances, slippage, relicId],
+        queryFn: async () => {
             return reliquaryZapService.getFbeetsMigrateContractCallData({
                 userAddress: userAddress || '',
                 fbeetsAmount: fbeetsBalance,
@@ -24,8 +24,8 @@ export function useReliquaryFbeetsMigrateContractCallData(relicId: number | unde
                 relicId: relicId !== -1 ? relicId : undefined,
             });
         },
-        { enabled: enabled && !!userAddress },
-    );
+        enabled: enabled && !!userAddress,
+    });
 
     return {
         ...query,

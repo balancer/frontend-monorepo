@@ -76,6 +76,16 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         version
         workingSupply
       }
+      reliquary {
+        levels {
+          level
+          balance
+          apr
+          allocationPoints
+        }
+        beetsPerSecond
+        totalBalance
+      }
       id
       type
     }
@@ -234,12 +244,7 @@ query GetPoolEvents(
   poolEvents(
     first: $first
     skip: $skip
-    where: {
-      poolId: $poolId
-      chainIn: $chainIn
-      type: $type
-      userAddress: $userAddress
-    }
+    where: { poolId: $poolId, chainIn: $chainIn, type: $type, userAddress: $userAddress }
   ) {
     id
     poolId

@@ -11,7 +11,7 @@ import { SubTransactionSubmittedContent } from '~/components/transaction/SubTran
 import { transactionMessageFromError } from '~/lib/util/transaction-util';
 import { useReliquaryDepositContractCallData } from '~/modules/reliquary/lib/useReliquaryDepositContractCallData';
 import { useReliquaryZap } from '~/modules/reliquary/lib/useReliquaryZap';
-import useReliquary from '~/modules/reliquary/lib/useReliquary';
+import { useReliquary } from '~/modules/reliquary/ReliquaryProvider';
 import { useBatchRelayerHasApprovedForAll } from '~/modules/reliquary/lib/useBatchRelayerHasApprovedForAll';
 import { ReliquaryTransactionStepsSubmit, TransactionStep } from '../../components/ReliquaryTransactionStepsSubmit';
 

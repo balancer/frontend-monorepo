@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { reliquaryZapService } from '~/lib/services/staking/reliquary-zap.service';
 import { useUserAccount } from '~/lib/user/useUserAccount';
 import { useSlippage } from '~/lib/global/useSlippage';
@@ -8,7 +8,7 @@ import { AmountHumanReadable } from '~/lib/services/token/token-types';
 import { GqlPoolToken } from '~/apollo/generated/graphql-codegen-generated';
 import { useMemo } from 'react';
 import { keyBy } from 'lodash';
-import useReliquary from './useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 
 export function useReliquaryDepositContractCallData({
     investTokensWithAmounts,
@@ -50,9 +50,9 @@ export function useReliquaryDepositContractCallData({
         };
     }, [enabled, investTokensWithAmountsMap]);
 
-    const query = useQuery(
-        ['reliquaryDepositContractCallData', userAddress, slippage, investData],
-        async () => {
+    const query = useQuery({
+        queryKey: ['reliquaryDepositContractCallData', userAddress, slippage, investData],
+        queryFn: async () => {
             console.log('reliquaryDepositContractCallData', {
                 userAddress: userAddress || '',
                 slippage,
@@ -71,8 +71,8 @@ export function useReliquaryDepositContractCallData({
                 relicId: createRelic ? undefined : parseInt(selectedRelicId || ''),
             });
         },
-        { enabled: !!userAddress && enabled },
-    );
+        enabled: !!userAddress && enabled,
+    });
 
     return {
         ...query,

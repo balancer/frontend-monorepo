@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useReactiveVar } from '@apollo/client';
 import { investStateVar } from '~/modules/reliquary/invest/lib/useReliquaryInvestState';
 import { replaceEthWithWeth, tokenAmountsGetArrayFromMap } from '~/lib/services/token/token-util';
@@ -23,9 +23,9 @@ export function useReliquaryJoinGetBptOutAndPriceImpactForTokensIn() {
         };
     });
 
-    const query = useQuery(
-        ['joinGetBptOutAndPriceImpactForTokensIn', tokenAmountsIn, slippage],
-        async () => {
+    const query = useQuery({
+        queryKey: ['joinGetBptOutAndPriceImpactForTokensIn', tokenAmountsIn, slippage],
+        queryFn: async () => {
             if (
                 !tokenAmountsIn ||
                 tokenAmountsIn.every((tokenAmount) => !tokenAmount.amount || parseFloat(tokenAmount.amount) === 0)
@@ -42,8 +42,9 @@ export function useReliquaryJoinGetBptOutAndPriceImpactForTokensIn() {
 
             return poolService.joinGetBptOutAndPriceImpactForTokensIn(replacedWethTokenAmountsIn, slippage);
         },
-        { enabled: tokenAmountsIn.length > 0, staleTime: 0, cacheTime: 0 },
-    );
+        enabled: tokenAmountsIn.length > 0,
+        gcTime: 0,
+    });
 
     const bptOutAndPriceImpact = query.data;
     const priceImpact = Math.abs(bptOutAndPriceImpact?.priceImpact || 0);

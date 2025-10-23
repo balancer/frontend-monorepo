@@ -1,20 +1,14 @@
-import { useQuery } from 'react-query';
-import useReliquary from '~/modules/reliquary/lib/useReliquary';
-import { reliquaryService } from '~/lib/services/staking/reliquary.service';
-import { useProvider } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
+import { useReliquary } from '../ReliquaryProvider';
 
 export function useRelicPendingRewards() {
-    const { selectedRelic } = useReliquary();
-    const provider = useProvider();
+    const { selectedRelic, getPendingRewardsForRelic } = useReliquary();
 
-    return useQuery(
-        ['relicPendingRewards', selectedRelic?.relicId],
-        async () => {
-            return reliquaryService.getPendingRewardsForRelic({
-                relicId: selectedRelic?.relicId || '0',
-                provider,
-            });
+    return useQuery({
+        queryKey: ['relicPendingRewards', selectedRelic?.relicId],
+        queryFn: async () => {
+            return getPendingRewardsForRelic(selectedRelic?.relicId || '0');
         },
-        { enabled: !!selectedRelic },
-    );
+        enabled: !!selectedRelic,
+    });
 }

@@ -1,6 +1,6 @@
 import { Text, Heading, VStack } from '@chakra-ui/react';
 import React from 'react';
-import useReliquary from '../../lib/useReliquary';
+import { useReliquary } from '../../ReliquaryProvider';
 import { useCurrentStep } from '../../lib/useReliquaryCurrentStep';
 
 interface Props {

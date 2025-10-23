@@ -5,7 +5,7 @@ import { ReliquaryInvestSummary } from '~/modules/reliquary/invest/components/Re
 import { ReliquaryInvestActions } from '~/modules/reliquary/invest/components/ReliquaryInvestActions';
 import TokenRow from '~/components/token/TokenRow';
 import React from 'react';
-import useReliquary from '~/modules/reliquary/lib/useReliquary';
+import { useReliquary } from '~/modules/reliquary/ReliquaryProvider';
 import { ReliquaryInvestDepositImpact } from './ReliquaryInvestDepositImpact';
 import { ReliquaryInvestImage } from './ReliquaryInvestImage';
 import { CurrentStepProvider } from '~/modules/reliquary/lib/useReliquaryCurrentStep';

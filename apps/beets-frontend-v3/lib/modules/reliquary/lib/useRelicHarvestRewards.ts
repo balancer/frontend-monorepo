@@ -2,7 +2,7 @@ import { useSubmitTransaction } from '~/lib/util/useSubmitTransaction';
 import { useNetworkConfig } from '~/lib/global/useNetworkConfig';
 import ReliquaryAbi from '~/lib/abi/Reliquary.json';
 import { useUserAccount } from '~/lib/user/useUserAccount';
-import useReliquary from '~/modules/reliquary/lib/useReliquary';
+import { useReliquary } from '~/modules/reliquary/ReliquaryProvider';
 
 export function useRelicHarvestRewards() {
     const networkConfig = useNetworkConfig();

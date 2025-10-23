@@ -1,6 +1,6 @@
 import { AmountHumanReadable } from '~/lib/services/token/token-types';
 import { useProvider } from 'wagmi';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { freshBeetsService } from '~/lib/services/staking/fresh-beets.service';
 import { useUserAccount } from '~/lib/user/useUserAccount';
 import { useNetworkConfig } from '~/lib/global/useNetworkConfig';
@@ -24,9 +24,9 @@ export function useLegacyFBeetsBalance() {
         data: stakedBalance = '0',
         isLoading: isLoadingStakedBalance,
         refetch: refetchStakedBalance,
-    } = useQuery(
-        ['legacyFbeetsBalances', userAddress || ''],
-        async (): Promise<AmountHumanReadable> => {
+    } = useQuery({
+        queryKey: ['legacyFbeetsBalances', userAddress || ''],
+        queryFn: async (): Promise<AmountHumanReadable> => {
             if (!userAddress) {
                 return '0';
             }
@@ -40,8 +40,8 @@ export function useLegacyFBeetsBalance() {
 
             return stakedBalance;
         },
-        { enabled: !!networkConfig.fbeets.address },
-    );
+        enabled: !!networkConfig.fbeets.address,
+    });
 
     return {
         staked: stakedBalance,

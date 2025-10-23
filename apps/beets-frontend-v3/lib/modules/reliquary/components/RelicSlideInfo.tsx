@@ -1,7 +1,7 @@
 import { useSwiperSlide } from 'swiper/react';
 import { useEffect, useState } from 'react';
 import { HStack, Skeleton, VStack, Text, Tooltip, Stack, StackDivider } from '@chakra-ui/react';
-import useReliquary from '../lib/useReliquary';
+import { useReliquary } from '../ReliquaryProvider';
 import { numberFormatUSDValue } from '~/lib/util/number-formats';
 import numeral from 'numeral';
 import { InfoButton } from '~/components/info-button/InfoButton';
