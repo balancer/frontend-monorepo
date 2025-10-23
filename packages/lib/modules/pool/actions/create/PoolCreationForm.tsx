@@ -22,25 +22,12 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
 import { usePathToInitializePool } from '../initialize/usePathToInitializePool'
-import { usePoolCreationForm } from './PoolCreationFormProvider'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 
 export function PoolCreationForm() {
-  const router = useRouter()
   const { isLoadingPool } = usePathToInitializePool()
 
   const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
-
-  const { poolAddress, poolCreationForm } = usePoolCreationForm()
-  const { network, poolType } = poolCreationForm.watch()
-
-  useEffect(() => {
-    let path = `/create/${network}/${poolType}`
-    if (poolAddress) path += `/${poolAddress}`
-    router.replace(path)
-  }, [poolAddress, network, poolType])
 
   return (
     <VStack spacing="lg">

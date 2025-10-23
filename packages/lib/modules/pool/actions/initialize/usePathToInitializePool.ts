@@ -10,11 +10,11 @@ import { vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { PERCENTAGE_DECIMALS } from '../create/constants'
 import { usePoolCreationFormSteps } from '../create/usePoolCreationFormSteps'
 import { PoolCreationToken, SupportedPoolTypes } from '../create/types'
+import { WeightedPoolStructure } from '../create/constants'
 import { PoolType } from '@balancer/sdk'
 
 export function usePathToInitializePool() {
   const { poolCreationForm, poolAddress, setPoolAddress } = usePoolCreationForm()
-  const { name, symbol } = poolCreationForm.watch() // these will be undefined if user did not create the pool
   const { lastStep } = usePoolCreationFormSteps()
   const params = useParams()
   const networkParam = params.network as GqlChain
@@ -23,7 +23,7 @@ export function usePathToInitializePool() {
   const isStablePool = poolTypeParam === PoolType.Stable || poolTypeParam === PoolType.StableSurge
   const isWeightedPool = poolTypeParam === PoolType.Weighted
 
-  const shouldUsePathToInitialize = !name && !symbol && !poolAddress && !!poolAddressParam
+  const shouldUsePathToInitialize = !poolAddress && !!poolAddressParam
 
   const chainId = params.network ? getChainId(params.network as GqlChain) : undefined
 
@@ -36,7 +36,7 @@ export function usePathToInitializePool() {
   ]
 
   const poolDataContracts = useMemo(() => {
-    if (!params.poolAddress || !chainId) return []
+    if (!poolAddressParam || !chainId) return []
 
     const poolContractReads = poolFunctionNames.map(functionName => ({
       address: poolAddressParam,
@@ -110,12 +110,9 @@ export function usePathToInitializePool() {
     const hasRequiredStableInfo = !isStablePool || !!amplificationParameter
     const hasRequiredData =
       !!poolData && !!poolTokenDetails && hasRequiredWeightedInfo && hasRequiredStableInfo
-    const shouldPopulateFormData = !poolAddress && !!poolAddressParam && !name && !symbol
-
-    console.log('shouldPopulateFormData', shouldPopulateFormData)
 
     // Update local storage with values read on chain
-    if (!isLoadingPool && hasRequiredData && shouldPopulateFormData) {
+    if (!isLoadingPool && hasRequiredData && shouldUsePathToInitialize) {
       const [name, symbol, poolTokenInfo, poolConfig, hooksConfig, poolRoleAccounts] =
         poolData ?? []
 
@@ -144,16 +141,23 @@ export function usePathToInitializePool() {
           {} as Record<Address, any>
         ) ?? {}
 
+      const formattedWeights = normalizedWeights
+        ? normalizedWeights.map(weight => formatUnits(weight, PERCENTAGE_DECIMALS))
+        : undefined
+
       const poolTokens: PoolCreationToken[] = tokenAddresses.map((address, index) => ({
         address,
         rateProvider: tokenConfigs[index].rateProvider,
         paysYieldFees: tokenConfigs[index].paysYieldFees,
         amount: '',
-        weight: normalizedWeights
-          ? formatUnits(normalizedWeights?.[index] as bigint, PERCENTAGE_DECIMALS)
-          : undefined,
+        weight: formattedWeights ? formattedWeights[index] : undefined,
         data: { ...poolTokenData[address], chain: params.network, chainId },
       }))
+
+      const isFiftyFiftyWeights = formattedWeights?.every(weight => weight === '50')
+      const isEightyTwentyWeights =
+        formattedWeights?.some(weight => weight === '80') &&
+        formattedWeights?.some(weight => weight === '20')
 
       const { swapFeeManager, pauseManager } = poolRoleAccounts.result as unknown as {
         swapFeeManager: Address
@@ -165,7 +169,7 @@ export function usePathToInitializePool() {
         .hooksContract
 
       poolCreationForm.setValue('network', networkParam)
-      // weightedPoolStructure
+
       poolCreationForm.setValue('poolType', poolTypeParam)
       poolCreationForm.setValue('poolTokens', poolTokens)
       poolCreationForm.setValue('name', name?.result as string)
@@ -173,13 +177,25 @@ export function usePathToInitializePool() {
       poolCreationForm.setValue('swapFeeManager', swapFeeManager)
       poolCreationForm.setValue('pauseManager', pauseManager)
       poolCreationForm.setValue('swapFeePercentage', swapFeePercentage)
-      if (amplificationParameter) {
-        poolCreationForm.setValue('amplificationParameter', formatUnits(amplificationParameter, 3)) // SC multiplies by 1e3 precision during creation of pool
-      }
       poolCreationForm.setValue('poolHooksContract', poolHooksContract)
       poolCreationForm.setValue('disableUnbalancedLiquidity', disableUnbalancedLiquidity)
       poolCreationForm.setValue('enableDonation', enableDonation)
       setPoolAddress(poolAddressParam)
+
+      if (amplificationParameter) {
+        poolCreationForm.setValue('amplificationParameter', formatUnits(amplificationParameter, 3)) // SC multiplies by 1e3 precision during creation of pool
+      }
+
+      if (isWeightedPool) {
+        poolCreationForm.setValue(
+          'weightedPoolStructure',
+          isFiftyFiftyWeights
+            ? WeightedPoolStructure.FiftyFifty
+            : isEightyTwentyWeights
+              ? WeightedPoolStructure.EightyTwenty
+              : WeightedPoolStructure.Custom
+        )
+      }
 
       lastStep()
     }
