@@ -7,7 +7,7 @@ import { format, fromUnixTime } from 'date-fns';
 import useReliquary from '../../lib/useReliquary';
 import { InfoButton } from '~/components/info-button/InfoButton';
 import numeral from 'numeral';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 
 interface Props {}
 

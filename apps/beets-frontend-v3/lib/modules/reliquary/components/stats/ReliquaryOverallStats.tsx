@@ -2,7 +2,7 @@ import { Box, Divider, HStack, Text, VStack } from '@chakra-ui/layout';
 import numeral from 'numeral';
 import AprTooltip from '~/components/apr-tooltip/AprTooltip';
 import { PercentChangeBadge } from '~/components/badge/PercentChangeBadge';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import TokenAvatar from '~/components/token/TokenAvatar';
 import { tokenFormatAmount } from '~/lib/services/token/token-util';
 import { networkConfig } from '~/lib/config/network-config';

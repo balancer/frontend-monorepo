@@ -1,7 +1,7 @@
 import Card from '~/components/card/Card';
 import { EChartsOption, graphic } from 'echarts';
 import ReactECharts from 'echarts-for-react';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import { chartGetPrimaryColor } from '~/modules/pool/detail/components/charts/chart-util';
 import { networkConfig } from '~/lib/config/network-config';
 import { InfoButton } from '~/components/info-button/InfoButton';

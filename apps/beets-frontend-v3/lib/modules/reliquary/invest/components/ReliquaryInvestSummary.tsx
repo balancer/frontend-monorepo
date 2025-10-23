@@ -2,7 +2,7 @@ import { Box, BoxProps, Heading, HStack, VStack } from '@chakra-ui/react';
 import AprTooltip from '~/components/apr-tooltip/AprTooltip';
 import { numberFormatUSDValue } from '~/lib/util/number-formats';
 import { useReliquaryInvest } from '~/modules/reliquary/invest/lib/useReliquaryInvest';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import React from 'react';
 
 interface Props extends BoxProps {}

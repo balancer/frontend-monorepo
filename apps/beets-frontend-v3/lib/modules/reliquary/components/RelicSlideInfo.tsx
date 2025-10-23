@@ -1,5 +1,4 @@
 import { useSwiperSlide } from 'swiper/react';
-import { useEffect, useState } from 'react';
 import { HStack, Skeleton, VStack, Text, Tooltip, Stack, StackDivider } from '@chakra-ui/react';
 import { useReliquary } from '../ReliquaryProvider';
 import { numberFormatUSDValue } from '~/lib/util/number-formats';
@@ -8,12 +7,9 @@ import { InfoButton } from '~/components/info-button/InfoButton';
 import TokenAvatar from '~/components/token/TokenAvatar';
 import { useReliquaryGlobalStats } from '../lib/useReliquaryGlobalStats';
 import { motion } from 'framer-motion';
-import { usePool } from '~/modules/pool/lib/usePool';
-import { getTotalApr } from '~/lib/util/apr-util';
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance';
 
 export default function RelicSlideInfo() {
-    const { pool } = usePool();
     const { isActive } = useSwiperSlide();
     const {
         isLoadingRelicPositions,

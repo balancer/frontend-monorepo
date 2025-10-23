@@ -2,7 +2,7 @@ import { useReliquaryWithdraw } from '../withdraw/lib/useReliquaryWithdraw';
 import { useQuery } from '@tanstack/react-query';
 import { useGetTokens } from '~/lib/global/useToken';
 import { sum, sumBy } from 'lodash';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import { useReliquary } from '../ReliquaryProvider';
 import { parseUnits } from 'ethers/lib/utils.js';
 import { BigNumber } from 'ethers';

@@ -5,7 +5,7 @@ import { EChartsOption, graphic } from 'echarts'
 import numeral from 'numeral'
 import { chartGetPrimaryColor } from '~/modules/pool/detail/components/charts/chart-util'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { usePool } from '~/modules/pool/lib/usePool'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 export function ReliquaryMaturityChart() {
   const { pool } = usePool()

@@ -1,14 +1,15 @@
 import { useReliquaryInvestState } from '~/modules/reliquary/invest/lib/useReliquaryInvestState';
-import { usePoolUserTokenBalancesInWallet } from '~/modules/pool/lib/usePoolUserTokenBalancesInWallet';
+import { usePoolUserTokenBalancesInWallet } from '@repo/lib/modules/pool/useUserBalances' // TODO: Fix this import;
 import { Alert, Box, Button, Checkbox, Collapse, useBoolean } from '@chakra-ui/react';
 import { ReliquaryInvestSummary } from '~/modules/reliquary/invest/components/ReliquaryInvestSummary';
 import { ReliquaryInvestSettings } from '~/modules/reliquary/invest/components/ReliquaryInvestSettings';
 
 import { useReliquaryInvest } from '~/modules/reliquary/invest/lib/useReliquaryInvest';
 import { BeetsTokenInputWithSlider } from '~/components/inputs/BeetsTokenInputWithSlider';
-import { usePoolJoinGetBptOutAndPriceImpactForTokensIn } from '~/modules/pool/invest/lib/usePoolJoinGetBptOutAndPriceImpactForTokensIn';
+import { usePoolJoinGetBptOutAndPriceImpactForTokensIn } // TODO: Migrate to AddLiquidityHandler
+// from '~/modules/pool/invest/lib/usePoolJoinGetBptOutAndPriceImpactForTokensIn';
 import { useHasBatchRelayerApproval } from '~/lib/util/useHasBatchRelayerApproval';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import React from 'react';
 
 interface Props {

@@ -3,7 +3,7 @@ import { withdrawStateVar } from '~/modules/reliquary/withdraw/lib/useReliquaryW
 import { useQuery } from '@tanstack/react-query'
 import numeral from 'numeral'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { usePool } from '~/modules/pool/lib/usePool'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 export function useReliquaryExitGetBptInForSingleAssetWithdraw() {
   const networkConfig = useNetworkConfig()

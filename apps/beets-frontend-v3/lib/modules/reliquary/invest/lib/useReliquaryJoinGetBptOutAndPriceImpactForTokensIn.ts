@@ -5,7 +5,7 @@ import { replaceEthWithWeth, tokenAmountsGetArrayFromMap } from '~/lib/services/
 import { useSlippage } from '~/lib/global/useSlippage'
 import numeral from 'numeral'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { usePool } from '~/modules/pool/lib/usePool'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 export function useReliquaryJoinGetBptOutAndPriceImpactForTokensIn() {
   const networkConfig = useNetworkConfig()

@@ -1,12 +1,12 @@
 import { TokenAmountHumanReadable } from '~/lib/services/token/token-types';
 import { useReliquaryInvestState } from '~/modules/reliquary/invest/lib/useReliquaryInvestState';
-import { usePoolUserTokenBalancesInWallet } from '~/modules/pool/lib/usePoolUserTokenBalancesInWallet';
+import { usePoolUserTokenBalancesInWallet } from '@repo/lib/modules/pool/useUserBalances' // TODO: Fix this import;
 import { isEth, tokenGetAmountForAddress } from '~/lib/services/token/token-util';
 import { GqlPoolToken } from '~/apollo/generated/graphql-codegen-generated';
 import { sumBy } from 'lodash';
 import { useGetTokens } from '~/lib/global/useToken';
 import { oldBnum } from '~/lib/services/pool/lib/old-big-number';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 
 export function useReliquaryInvest() {
     const { pool } = usePool();

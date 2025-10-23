@@ -26,7 +26,7 @@ import { useGetTokens } from '~/lib/global/useToken';
 import { tokenFormatAmount } from '~/lib/services/token/token-util';
 import { formatApr, getTotalApr, getTotalAprLabel } from '~/lib/util/apr-util';
 import { numberFormatUSDValue } from '~/lib/util/number-formats';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import { useBatchRelayerHasApprovedForAll } from '../lib/useBatchRelayerHasApprovedForAll';
 import { useRelicHarvestRewards } from '../lib/useRelicHarvestRewards';
 import { useRelicPendingRewards } from '../lib/useRelicPendingRewards';

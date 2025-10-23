@@ -6,7 +6,7 @@ import { useReliquaryWithdrawState } from '~/modules/reliquary/withdraw/lib/useR
 import { ReliquaryWithdrawSummary } from '~/modules/reliquary/withdraw/components/ReliquaryWithdrawSummary';
 import { FadeInBox } from '~/components/animation/FadeInBox';
 import { sum } from 'lodash';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import useReliquary from '~/modules/reliquary/lib/useReliquary';
 import { useReliquaryWithdrawAndHarvestContractCallData } from '~/modules/reliquary/lib/useReliquaryWithdrawAndHarvestContractCallData';
 import { useReliquaryZap } from '~/modules/reliquary/lib/useReliquaryZap';

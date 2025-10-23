@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { ReliquaryWithdrawSummary } from '~/modules/reliquary/withdraw/components/ReliquaryWithdrawSummary';
 import { ReliquaryWithdrawSettings } from '~/modules/reliquary/withdraw/components/ReliquaryWithdrawSettings';
 import { BeetsTokenInputWithSlider } from '~/components/inputs/BeetsTokenInputWithSlider';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import { useHasBatchRelayerApproval } from '~/lib/util/useHasBatchRelayerApproval';
 import { useGetTokens } from '~/lib/global/useToken';
 

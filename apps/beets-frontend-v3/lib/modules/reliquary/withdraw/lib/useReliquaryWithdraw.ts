@@ -1,6 +1,6 @@
 import { GqlPoolToken } from '~/apollo/generated/graphql-codegen-generated';
 import { useReliquaryWithdrawState } from '~/modules/reliquary/withdraw/lib/useReliquaryWithdrawState';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 
 export function useReliquaryWithdraw() {
     const { pool } = usePool();

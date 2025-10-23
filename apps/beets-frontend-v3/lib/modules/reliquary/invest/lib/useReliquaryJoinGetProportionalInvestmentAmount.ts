@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { sumBy } from 'lodash'
 import { isEth, replaceWethWithEth } from '~/lib/services/token/token-util'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { usePool } from '~/modules/pool/lib/usePool'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useGetTokens } from '~/lib/global/useToken'
 import { useReliquaryInvest } from './useReliquaryInvest'
 

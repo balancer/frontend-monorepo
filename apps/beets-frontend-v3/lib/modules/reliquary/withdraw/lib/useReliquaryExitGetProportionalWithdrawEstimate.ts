@@ -3,7 +3,7 @@ import { withdrawStateVar } from '~/modules/reliquary/withdraw/lib/useReliquaryW
 import { useQuery } from '@tanstack/react-query';
 import { oldBnumScaleAmount, oldBnumToHumanReadable } from '~/lib/services/pool/lib/old-big-number';
 import { useReliquaryWithdraw } from '~/modules/reliquary/withdraw/lib/useReliquaryWithdraw';
-import { usePool } from '~/modules/pool/lib/usePool';
+import { usePool } from '@repo/lib/modules/pool/PoolProvider';
 import useReliquary from '~/modules/reliquary/lib/useReliquary';
 
 export function useReliquaryExitGetProportionalWithdrawEstimate() {
