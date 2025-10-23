@@ -3,7 +3,7 @@ import { reliquaryZapService } from '~/lib/services/staking/reliquary-zap.servic
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSlippage } from '~/lib/global/useSlippage'
 import { AmountHumanReadable } from '~/lib/services/token/token-types'
-import { GqlPoolTokenBase } from '~/apollo/generated/graphql-codegen-generated'
+import { GqlPoolTokenBase } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useReliquaryWithdrawAndHarvestContractCallData({
   relicId,

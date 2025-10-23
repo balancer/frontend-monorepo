@@ -3,7 +3,7 @@ import { sumBy } from 'lodash'
 import { isEth, replaceWethWithEth } from '~/lib/services/token/token-util'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { useGetTokens } from '~/lib/global/useToken'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useReliquaryInvest } from './useReliquaryInvest'
 
 export function useReliquaryJoinGetProportionalInvestmentAmount() {

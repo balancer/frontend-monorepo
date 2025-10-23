@@ -113,6 +113,15 @@ export interface NetworkConfig {
     delegateAddress: Address
     id: string
   }
+  reliquary?: {
+    address: Address
+    fbeets: {
+      poolId: string
+      poolAddress: Address
+      farmId: number
+      maxLevel: number
+    }
+  }
 }
 
 export interface Config {

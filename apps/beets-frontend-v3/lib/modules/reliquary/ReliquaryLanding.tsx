@@ -1,30 +1,21 @@
 import {
   Badge,
   Box,
-  Button,
   Flex,
-  getToken,
   Heading,
-  HStack,
   Stack,
   Text,
-  useDisclosure,
   VStack,
   Grid,
   GridItem,
   Skeleton,
+  Tooltip,
+  Card,
 } from '@chakra-ui/react'
-import numeral from 'numeral'
-import { useEffect, useState } from 'react'
-import { BeetsTokenSonic } from '~/assets/logo/BeetsTokenSonic'
-import { FBeetsTokenSonic } from '~/assets/logo/FBeetsTokenSonic'
-import { MaBeetsTokenSonic } from '~/assets/logo/MaBeetsTokenSonic'
-import Card from '~/components/card/Card'
-import { ToastType, useToast } from '~/components/toast/BeetsToast'
-import BeetsTooltip from '~/components/tooltip/BeetsTooltip'
-import { TokensProvider, useGetTokens } from '~/lib/global/useToken'
-import { useUserAccount } from '~/lib/user/useUserAccount'
-import { PoolProvider, usePool } from '../pool/lib/usePool'
+import { BeetsTokenSonic } from './assets/BeetsTokenSonic'
+import { FBeetsTokenSonic } from './assets/FBeetsTokenSonic'
+import { MaBeetsTokenSonic } from './assets/MaBeetsTokenSonic'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import DelegateClearButton from './components/DelegateClearButton'
 import DelegateSetButton from './components/DelegateSetButton'
 import { RelicCarousel } from './components/RelicCarousel'
@@ -33,79 +24,13 @@ import ReliquaryHeroBanner from './components/ReliquaryHeroBanner'
 import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats'
 import { useDelegation } from './lib/useDelegation'
 import { useReliquary } from './ReliquaryProvider'
-import { CurrentStepProvider } from './lib/useReliquaryCurrentStep'
-import { useOldBeetsBalance } from '~/lib/global/useOldBeetsBalance'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { ReliquaryInvestModal } from './invest/ReliquaryInvestModal'
-
-const infoButtonLabelProps = {
-  lineHeight: '1rem',
-  fontWeight: 'semibold',
-  fontSize: 'sm',
-  color: 'beets.base.50',
-}
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 export default function ReliquaryLanding() {
-  const networkConfig = useNetworkConfig()
-  const { getToken } = useGetTokens()
-  const { isConnected, isConnecting } = useUserAccount()
-  const { showToast } = useToast()
-  const { pool } = usePool()
-  const { isOpen, onOpen, onClose } = useDisclosure({
-    onOpen: () => {
-      window.open('https://ftm.beets.fi/mabeets', '_blank')
-    },
-  })
-  const [buttonEnabled, setButtonEnabled] = useState(true)
-  const { totalMaBeetsVP, isLoading, relicPositions } = useReliquary()
+  const { isConnected } = useUserAccount()
+  const { totalMaBeetsVP, isLoading } = useReliquary()
   const { data: isDelegatedToMDs } = useDelegation()
-  const { isLoading: isLoadingOldBeetsBalance, balance: oldBeetsBalance } = useOldBeetsBalance()
-  const tokenData = getToken(networkConfig.beets.oldAddress)
-  const {
-    isOpen: isOpenMigrateModal,
-    onOpen: onOpenMigrateModal,
-    onClose: onCloseMigrateModal,
-  } = useDisclosure()
-
-  useEffect(() => {
-    if (!isConnecting) {
-      setButtonEnabled(isConnected)
-    }
-  }, [isConnected])
-
-  useEffect(() => {
-    if (!isOpenMigrateModal && !isLoadingOldBeetsBalance && parseFloat(oldBeetsBalance) > 0) {
-      onOpenMigrateModal()
-    }
-  }, [isLoadingOldBeetsBalance, oldBeetsBalance])
-
-  const hasRelics = !isLoading && relicPositions.length > 0
-  const hasNoRelics = !isLoading && relicPositions.length === 0
-  const hasNoLzBeets = !isLoadingOldBeetsBalance && parseFloat(oldBeetsBalance) === 0
-
-  useEffect(() => {
-    if (!isOpen && hasNoRelics && hasNoLzBeets) {
-      showToast({
-        id: 'migrate-sonic',
-        type: ToastType.Info,
-        content: (
-          <Stack
-            alignItems="center"
-            direction={['column', 'row']}
-            justifyContent={{ base: 'stretch', xl: undefined }}
-            spacing="4"
-          >
-            <Text>
-              BEETS are live on Sonic! If you have maBEETS Fantom, you can migrate to Sonic.
-            </Text>
-            <Button onClick={onOpen} variant="primary" w={{ base: 'full', xl: 'inherit' }}>
-              Fantom App
-            </Button>
-          </Stack>
-        ),
-      })
-    }
-  }, [hasNoRelics, hasNoLzBeets])
 
   return (
     <>
@@ -133,7 +58,6 @@ export default function ReliquaryLanding() {
               <BeetsTokenSonic />
             </Box>
           </Flex>
-
           <Flex mb="2">
             <Box>
               <Text
@@ -198,7 +122,6 @@ export default function ReliquaryLanding() {
           <Box>Receive a transferable and composable Relic that holds your maBEETS position.</Box>
         </Card>
       </Stack>
-
       <Stack direction="column" width="full">
         <Box width="full">
           <VStack py="4" spacing="8" width="full">
@@ -231,20 +154,17 @@ export default function ReliquaryLanding() {
                     </Heading>
                   </GridItem>
                   <GridItem area="vp" mt={{ base: '2', lg: '0' }} w="full">
-                    <BeetsTooltip
-                      label="This is your current maBEETS Voting Power. Depending on when you level up or invest/withdraw, it might be different to what is shown on the latest vote on Snapshot."
-                      noImage
-                    >
+                    <Tooltip label="This is your current maBEETS Voting Power. Depending on when you level up or invest/withdraw, it might be different to what is shown on the latest vote on Snapshot.">
                       {!isLoading ? (
                         <Badge colorScheme="orange" p="2" rounded="md">
                           <Heading size="sm" textAlign="center" textTransform="initial">
-                            {numeral(totalMaBeetsVP).format('0.000a')} maBEETS voting power
+                            {fNumCustom(totalMaBeetsVP, '0.000a')} maBEETS voting power
                           </Heading>
                         </Badge>
                       ) : (
                         <Skeleton height="24px" />
                       )}
-                    </BeetsTooltip>
+                    </Tooltip>
                   </GridItem>
                   <GridItem
                     area="delegate"
@@ -252,12 +172,9 @@ export default function ReliquaryLanding() {
                     mt={{ base: '2', lg: '0' }}
                     w="full"
                   >
-                    <BeetsTooltip
-                      label="Delegate or undelegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets space on Snapshot."
-                      noImage
-                    >
+                    <Tooltip label="Delegate or undelegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets space on Snapshot.">
                       {isDelegatedToMDs ? <DelegateClearButton /> : <DelegateSetButton />}
-                    </BeetsTooltip>
+                    </Tooltip>
                   </GridItem>
                   <GridItem area="create" justifySelf="end">
                     <ReliquaryInvestModal

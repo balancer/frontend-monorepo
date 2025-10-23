@@ -75,6 +75,15 @@ const networkConfig: NetworkConfig = {
     delegateAddress: '0x641e10Cd6132D3e3FA01bfd65d2e0afCf64b136A', // MD delegator address case sensitive!
     id: '0x62656574732D6761756765732E65746800000000000000000000000000000000', // BeethovenX Snapshot id
   },
+  reliquary: {
+    address: '0x973670ce19594f857a7cd85ee834c7a74a941684',
+    fbeets: {
+      poolId: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005',
+      poolAddress: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8',
+      farmId: 0,
+      maxLevel: 10,
+    },
+  },
 }
 
 export default networkConfig
