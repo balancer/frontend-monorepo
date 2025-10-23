@@ -1,24 +1,27 @@
-import { useNetworkConfig } from '~/lib/global/useNetworkConfig';
-import { useQuery } from '@tanstack/react-query';
-import { snapshotService } from '~/lib/services/util/snapshot.service';
-import { useUserAccount } from '~/lib/user/useUserAccount';
-import { Address, useProvider } from 'wagmi';
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
+import { DelegateRegistryAbi } from '@repo/lib/modules/web3/contracts/abi/DelegateRegistryAbi'
+import { Address } from 'viem'
 
 export function useDelegation() {
-    const { userAddress } = useUserAccount();
-    const provider = useProvider();
-    const networkConfig = useNetworkConfig();
+  const { userAddress } = useUserAccount()
+  const networkConfig = useNetworkConfig()
 
-    return useQuery({
-        queryKey: ['getDelegation', userAddress],
-        queryFn: async (): Promise<boolean> => {
-            const delegationAddress = await snapshotService.getDelegation({
-                userAddress: userAddress as Address,
-                provider,
-                id: networkConfig.snapshot.id,
-            });
-            return delegationAddress === networkConfig.snapshot.delegateAddress;
-        },
-        enabled: !!userAddress,
-    });
+  const { data: delegationAddress } = useReadContract({
+    address: networkConfig.snapshot.contractAddress as Address,
+    abi: DelegateRegistryAbi,
+    functionName: 'delegation',
+    args: [userAddress as Address, networkConfig.snapshot.id],
+    query: {
+      enabled: !!userAddress,
+    },
+  })
+
+  const isDelegatedToMDs = delegationAddress === networkConfig.snapshot.delegateAddress
+
+  return {
+    data: isDelegatedToMDs,
+    delegationAddress,
+  }
 }
