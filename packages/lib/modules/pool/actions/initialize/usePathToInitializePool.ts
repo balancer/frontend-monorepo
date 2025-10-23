@@ -14,14 +14,17 @@ import { WeightedPoolStructure } from '../create/constants'
 import { PoolType } from '@balancer/sdk'
 
 export function usePathToInitializePool() {
-  const { poolCreationForm, poolAddress, setPoolAddress } = usePoolCreationForm()
+  const { poolCreationForm, poolAddress, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
   const { lastStep } = usePoolCreationFormSteps()
   const params = useParams()
+
   const networkParam = params.network as GqlChain
   const poolAddressParam = params.poolAddress as Address
   const poolTypeParam = params.poolType as SupportedPoolTypes
+
   const isStablePool = poolTypeParam === PoolType.Stable || poolTypeParam === PoolType.StableSurge
   const isWeightedPool = poolTypeParam === PoolType.Weighted
+  const isReClammPool = poolTypeParam === PoolType.ReClamm
 
   const shouldUsePathToInitialize = !poolAddress && !!poolAddressParam
 
@@ -87,15 +90,16 @@ export function usePathToInitializePool() {
     contracts: tokenContracts,
   })
 
-  const { data: amplificationParameter } = useReadContract({
-    address: poolAddressParam,
-    abi: parseAbi(['function getAmplificationParameter() view returns (uint256)']),
-    functionName: 'getAmplificationParameter',
-    chainId,
-    query: { enabled: isStablePool && shouldUsePathToInitialize },
-  })
+  const { data: amplificationParameter, isLoading: isLoadingAmplificationParameter } =
+    useReadContract({
+      address: poolAddressParam,
+      abi: parseAbi(['function getAmplificationParameter() view returns (uint256)']),
+      functionName: 'getAmplificationParameter',
+      chainId,
+      query: { enabled: isStablePool && shouldUsePathToInitialize },
+    })
 
-  const { data: normalizedWeights } = useReadContract({
+  const { data: normalizedWeights, isLoading: isLoadingWeights } = useReadContract({
     address: poolAddressParam,
     abi: parseAbi(['function getNormalizedWeights() view returns (uint256[])']),
     functionName: 'getNormalizedWeights',
@@ -103,7 +107,22 @@ export function usePathToInitializePool() {
     query: { enabled: isWeightedPool && shouldUsePathToInitialize },
   })
 
-  const isLoadingPool = isLoadingPoolData || isLoadingPoolTokenDetails
+  const { data: reClammConfig, isLoading: isLoadingReClamm } = useReadContract({
+    address: poolAddressParam,
+    abi: parseAbi([
+      'function getReClammPoolImmutableData() external view returns ((address[] tokens, uint256[] decimalScalingFactors, bool tokenAPriceIncludesRate, bool tokenBPriceIncludesRate, uint256 minSwapFeePercentage, uint256 maxSwapFeePercentage, uint256 initialMinPrice, uint256 initialMaxPrice, uint256 initialTargetPrice, uint256 initialDailyPriceShiftExponent, uint256 initialCenterednessMargin, uint256 maxCenterednessMargin, uint256 maxDailyPriceShiftExponent, uint256 maxDailyPriceRatioUpdateRate, uint256 minPriceRatioUpdateDuration, uint256 minPriceRatioDelta, uint256 balanceRatioAndPriceTolerance))',
+    ]),
+    functionName: 'getReClammPoolImmutableData',
+    chainId,
+    query: { enabled: isReClammPool && shouldUsePathToInitialize },
+  })
+
+  const isLoadingPool =
+    isLoadingPoolData ||
+    isLoadingPoolTokenDetails ||
+    isLoadingAmplificationParameter ||
+    isLoadingWeights ||
+    isLoadingReClamm
 
   useEffect(() => {
     const hasRequiredWeightedInfo = !isWeightedPool || !!normalizedWeights
@@ -195,6 +214,24 @@ export function usePathToInitializePool() {
               ? WeightedPoolStructure.EightyTwenty
               : WeightedPoolStructure.Custom
         )
+      }
+
+      if (isReClammPool && reClammConfig) {
+        const {
+          initialTargetPrice,
+          initialMinPrice,
+          initialMaxPrice,
+          initialCenterednessMargin,
+          initialDailyPriceShiftExponent,
+        } = reClammConfig
+        reClammConfigForm.setValue('initialMinPrice', formatUnits(initialMinPrice, 18))
+        reClammConfigForm.setValue('initialTargetPrice', formatUnits(initialTargetPrice, 18))
+        reClammConfigForm.setValue('initialMaxPrice', formatUnits(initialMaxPrice, 18))
+        reClammConfigForm.setValue(
+          'priceShiftDailyRate',
+          formatUnits(initialDailyPriceShiftExponent, 16)
+        )
+        reClammConfigForm.setValue('centerednessMargin', formatUnits(initialCenterednessMargin, 16))
       }
 
       lastStep()
