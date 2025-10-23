@@ -37,10 +37,10 @@ export function RelicCarousel({ loading, ...rest }: Props) {
           <VStack alignItems="center" height="full" justifyContent="center" spacing="4">
             <Heading size="md">Get started by minting your own relic</Heading>
             <Box>
-              <ReliquaryInvestModal
+              {/* <ReliquaryInvestModal
                 activatorProps={{ size: 'lg', width: '200px', mx: 'auto' }}
                 createRelic
-              />
+              /> */}
             </Box>
           </VStack>
         </Flex>
@@ -108,7 +108,7 @@ export function RelicCarousel({ loading, ...rest }: Props) {
                     )} */}
         </Swiper>
       </Box>
-      <ReliquaryInvestModal
+      {/* <ReliquaryInvestModal
         isVisible={isInvestModalVisible}
         noActivator
         onClose={() => setIsInvestModalVisible(false)}
@@ -117,7 +117,7 @@ export function RelicCarousel({ loading, ...rest }: Props) {
         isVisible={isWithdrawModalVisible}
         noActivator
         onClose={() => setIsWithdrawModalVisible(false)}
-      />
+      /> */}
     </Box>
   )
 }

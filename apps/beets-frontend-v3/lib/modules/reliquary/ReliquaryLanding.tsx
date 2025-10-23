@@ -177,11 +177,11 @@ export default function ReliquaryLanding() {
                     </Tooltip>
                   </GridItem>
                   <GridItem area="create" justifySelf="end">
-                    <ReliquaryInvestModal
+                    {/* <ReliquaryInvestModal
                       activatorLabel="Create new relic"
                       activatorProps={{ size: 'md', width: '160px', mx: 'auto' }}
                       createRelic
-                    />
+                    /> */}
                   </GridItem>
                 </Grid>
                 <Box width="full">
