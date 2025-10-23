@@ -24,7 +24,7 @@ import ReliquaryHeroBanner from './components/ReliquaryHeroBanner'
 import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats'
 import { useDelegation } from './lib/useDelegation'
 import { useReliquary } from './ReliquaryProvider'
-import { ReliquaryInvestModal } from './invest/ReliquaryInvestModal'
+//import { ReliquaryInvestModal } from './invest/ReliquaryInvestModal'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 export default function ReliquaryLanding() {

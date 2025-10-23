@@ -6,7 +6,7 @@ import { ReliquaryInvestSettings } from '~/modules/reliquary/invest/components/R
 
 import { useReliquaryInvest } from '~/modules/reliquary/invest/lib/useReliquaryInvest';
 import { BeetsTokenInputWithSlider } from '~/components/inputs/BeetsTokenInputWithSlider';
-import { usePoolJoinGetBptOutAndPriceImpactForTokensIn } // TODO: Migrate to AddLiquidityHandler
+// import { usePoolJoinGetBptOutAndPriceImpactForTokensIn } // TODO: Migrate to AddLiquidityHandler
 // from '~/modules/pool/invest/lib/usePoolJoinGetBptOutAndPriceImpactForTokensIn';
 import { useHasBatchRelayerApproval } from '~/lib/util/useHasBatchRelayerApproval';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider';
