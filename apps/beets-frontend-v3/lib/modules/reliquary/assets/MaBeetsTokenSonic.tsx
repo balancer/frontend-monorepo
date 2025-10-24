@@ -2,7 +2,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export function MaBeetsTokenSonic(props: IconProps) {
   return (
-    <Icon viewBox="0 0 31 31" width="31px" height="31px" {...props}>
+    <Icon height="31px" viewBox="0 0 31 31" width="31px" {...props}>
       <path
         d="M15.5 0C6.93966 0 0 6.93966 0 15.5C0 24.0603 6.93966 31 15.5 31C24.0603 31 31 24.0603 31 15.5C31 6.93966 24.0603 0 15.5 0ZM23.25 22.63H7.75V14.88C7.75 10.5995 11.2195 7.13 15.5 7.13C17.6402 7.13 19.5777 7.99738 20.9802 9.39982C22.3826 10.8023 23.25 12.7398 23.25 14.88V22.63Z"
         fill="#05D690"

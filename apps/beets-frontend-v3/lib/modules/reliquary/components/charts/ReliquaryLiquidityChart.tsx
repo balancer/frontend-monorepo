@@ -48,7 +48,7 @@ export function ReliquaryLiquidityChart({ data }: Props) {
         minorSplitLine: { show: false },
         axisTick: { show: false },
         axisLabel: {
-          formatter: (value: number, index: number) => {
+          formatter: (value: number) => {
             return format(new Date(value), 'MMM d')
           },
           color: colors.gray['200'],

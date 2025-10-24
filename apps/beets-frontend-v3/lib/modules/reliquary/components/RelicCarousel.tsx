@@ -9,17 +9,10 @@ interface Props extends BoxProps {
   loading?: boolean
 }
 
-export function RelicCarousel({ loading, ...rest }: Props) {
-  const {
-    relicPositionsForFarmId: relicPositions,
-    isLoadingRelicPositions,
-    selectedRelic,
-  } = useReliquary()
+export function RelicCarousel({ ...rest }: Props) {
+  const { relicPositionsForFarmId: relicPositions, isLoadingRelicPositions } = useReliquary()
   // hack to get around next.js hydration issues with swiper
   const [_isLoadingRelicPositions, setIsLoadingRelicPositions] = useState(false)
-
-  const [isInvestModalVisible, setIsInvestModalVisible] = useState(false)
-  const [isWithdrawModalVisible, setIsWithdrawModalVisible] = useState(false)
 
   const isMobile = useBreakpointValue({ base: true, lg: false })
   const hasNoRelics = relicPositions.length === 0
@@ -88,11 +81,7 @@ export function RelicCarousel({ loading, ...rest }: Props) {
         >
           {relicPositions.map(relic => (
             <SwiperSlide key={`relic-carousel-${relic.relicId}`}>
-              <RelicSlide
-                openInvestModal={() => setIsInvestModalVisible(true)}
-                openWithdrawModal={() => setIsWithdrawModalVisible(true)}
-                relic={relic}
-              />
+              <RelicSlide openInvestModal={() => {}} openWithdrawModal={() => {}} relic={relic} />
             </SwiperSlide>
           ))}
           {/* {!relicPositions.length && (

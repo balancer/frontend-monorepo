@@ -7,7 +7,7 @@ interface BeetsTooltipProps extends Omit<TooltipProps, 'children'> {
   children: ReactNode
 }
 
-export default function BeetsTooltip({ label, noImage, children, ...props }: BeetsTooltipProps) {
+export default function BeetsTooltip({ label, children, ...props }: BeetsTooltipProps) {
   return (
     <Tooltip label={label} {...props}>
       {children}

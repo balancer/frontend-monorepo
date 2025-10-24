@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, PropsWithChildren, createContext, useCallback, useRef } from 'react'
+import { useState, PropsWithChildren, createContext, useCallback } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { GqlChain, GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

@@ -12,11 +12,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { sumBy } from 'lodash'
-import { useEffect, useState } from 'react'
 import { BarChart } from 'react-feather'
 import { useSwiperSlide } from 'swiper/react'
-import { GqlPoolAprTotal } from '@repo/lib/shared/services/api/generated/graphql'
 import AprTooltip from '~/components/apr-tooltip/AprTooltip'
 import { BeetsSubmitTransactionButton } from '~/components/button/BeetsSubmitTransactionButton'
 import { InfoButton } from '~/components/info-button/InfoButton'
@@ -25,7 +22,7 @@ import BeetsTooltip from '~/components/tooltip/BeetsTooltip'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { getTotalApr, getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
+import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
 import { useBatchRelayerHasApprovedForAll } from '../lib/useBatchRelayerHasApprovedForAll'
 import { useRelicHarvestRewards } from '../lib/useRelicHarvestRewards'
 import { useRelicPendingRewards } from '../lib/useRelicPendingRewards'
@@ -39,8 +36,7 @@ export default function RelicSlideApr() {
   const { pool } = usePool()
   const { isActive } = useSwiperSlide()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isLoadingRelicPositions, selectedRelicLevel, relicPositions, selectedRelicApr } =
-    useReliquary()
+  const { selectedRelicLevel, selectedRelicApr } = useReliquary()
   const { data, isLoading } = useGetHHRewards()
   const { harvest, ...harvestQuery } = useRelicHarvestRewards()
 
@@ -102,6 +98,7 @@ export default function RelicSlideApr() {
         background="box.500"
         boxShadow="0px 0px 0px 1px #00000005,1px 1px 1px -0.5px #0000000F,3px 3px 3px -1.5px #0000000F,6px 6px 6px -3px #0000000F,12px 12px 12px -6px #0000000F,24px 24px 24px -12px #0000001A,-0.5px -1px 0px 0px #FFFFFF26"
         divider={<StackDivider />}
+        height="full"
         hidden={!isActive}
         left={{ base: '0', lg: '-42.5%' }}
         p="4"
@@ -110,7 +107,6 @@ export default function RelicSlideApr() {
         spacing="4"
         top="0"
         width={{ base: '100%', lg: '60%' }}
-        height="full"
         // minHeight="310px"
         // justifyContent="stretch"
       >

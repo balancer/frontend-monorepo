@@ -1,10 +1,9 @@
-import { Box, Button, VStack, Text, HStack, Badge, Stack, StackDivider } from '@chakra-ui/react'
+import { Box, VStack, Text, HStack, Badge, Stack, StackDivider } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import React from 'react'
 import Countdown from 'react-countdown'
 import { useSwiperSlide } from 'swiper/react'
 import AnimatedProgress from '~/components/animated-progress/AnimatedProgress'
-import TokenAvatar from '~/components/token/TokenAvatar'
 import BeetsTooltip from '~/components/tooltip/BeetsTooltip'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -19,7 +18,7 @@ interface Props {
 
 export default function RelicSlideMainInfo({ isLoading }: Props) {
   const { isActive } = useSwiperSlide()
-  const { relicPositions, selectedRelic, maturityThresholds } = useReliquary()
+  const { selectedRelic, maturityThresholds } = useReliquary()
   const config = useNetworkConfig()
   const { relicBalanceUSD } = useRelicDepositBalance()
 
@@ -27,7 +26,6 @@ export default function RelicSlideMainInfo({ isLoading }: Props) {
     selectedRelic,
     maturityThresholds
   )
-  const hasNoRelics = relicPositions.length === 0
 
   return (
     <Box height="full" width="full">

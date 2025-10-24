@@ -8,9 +8,7 @@ import { InfoButton } from '~/components/info-button/InfoButton'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
-interface Props {}
-
-export default function RelicMaturity({}: Props) {
+export default function RelicMaturity() {
   const { maturityThresholds, isLoading, selectedRelic } = useReliquary()
   const { pool } = usePool()
 

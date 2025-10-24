@@ -1,37 +1,24 @@
 import { useSwiperSlide } from 'swiper/react'
-import { HStack, Skeleton, VStack, Text, Tooltip, Stack, StackDivider } from '@chakra-ui/react'
+import { Skeleton, VStack, Text, Stack, StackDivider } from '@chakra-ui/react'
 import { useReliquary } from '../ReliquaryProvider'
 import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { InfoButton } from '~/components/info-button/InfoButton'
-import TokenAvatar from '~/components/token/TokenAvatar'
 import { useReliquaryGlobalStats } from '../hooks/useReliquaryGlobalStats'
 import { motion } from 'framer-motion'
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
-import { useEffect, useState } from 'react'
 
 export default function RelicSlideInfo() {
   const { isActive } = useSwiperSlide()
   const { pool } = usePool()
-  const {
-    isLoadingRelicPositions,
-    selectedRelicLevel,
-    selectedRelic,
-    weightedTotalBalance,
-    beetsPerDay,
-    isLoading,
-    selectedRelicApr,
-  } = useReliquary()
+  const { selectedRelicLevel, selectedRelic, weightedTotalBalance, isLoading, selectedRelicApr } =
+    useReliquary()
   const { relicBalanceUSD } = useRelicDepositBalance()
   const { data: globalStats, loading: isLoadingGlobalStats } = useReliquaryGlobalStats()
   const weightedRelicAmount =
     parseFloat(selectedRelic?.amount || '0') * (selectedRelicLevel?.allocationPoints || 0)
   const relicShare = globalStats && selectedRelic ? weightedRelicAmount / weightedTotalBalance : 0
-
-  const baseApr = pool.dynamicData.aprItems.find(
-    item => item.title === 'BEETS reward APR' && item.type === 'MABEETS_EMISSIONS'
-  )
 
   const dynamicDataAprItems = pool.dynamicData.aprItems.map(item => {
     if (item.title === 'BEETS reward APR' && item.type === 'STAKING_BOOST') {
@@ -46,13 +33,6 @@ export default function RelicSlideInfo() {
 
   const [, maxTotal] = getTotalApr(dynamicDataAprItems)
   const relicYieldPerDay = (relicBalanceUSD * maxTotal.toNumber()) / 365
-
-  const [_isLoadingRelicPositions, setIsLoadingRelicPositions] = useState(false)
-
-  // hack to get around next.js hydration issues with swiper
-  useEffect(() => {
-    setIsLoadingRelicPositions(isLoadingRelicPositions)
-  }, [isLoadingRelicPositions])
 
   return (
     <Stack

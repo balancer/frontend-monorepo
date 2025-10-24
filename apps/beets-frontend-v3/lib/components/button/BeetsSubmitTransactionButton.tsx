@@ -17,13 +17,10 @@ interface BeetsSubmitTransactionButtonProps extends ButtonProps {
 export function BeetsSubmitTransactionButton({
   children,
   onClick,
-  onConfirmed,
   submittingText,
   pendingText,
   isPending,
   isSubmitting,
-  submitError,
-  inline,
   fullWidth,
   ...rest
 }: BeetsSubmitTransactionButtonProps) {
@@ -31,9 +28,9 @@ export function BeetsSubmitTransactionButton({
 
   return (
     <Button
-      onClick={onClick}
       isLoading={isLoading}
       loadingText={isSubmitting ? submittingText : pendingText}
+      onClick={onClick}
       width={fullWidth ? 'full' : undefined}
       {...rest}
     >

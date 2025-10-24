@@ -6,9 +6,7 @@ import { relicGetMaturityProgress } from '../../lib/reliquary-helpers'
 import { differenceInSeconds } from 'date-fns'
 import { Box } from '@chakra-ui/react'
 
-interface Props {}
-
-export default function RelicMaturityBarChart({}: Props) {
+export default function RelicMaturityBarChart() {
   const { maturityThresholds, isLoading, selectedRelic } = useReliquary()
   const { entryDate } = relicGetMaturityProgress(selectedRelic, maturityThresholds)
 
@@ -80,8 +78,8 @@ export default function RelicMaturityBarChart({}: Props) {
   }, [isLoading, selectedRelic])
 
   return (
-    <Box w="full" pt="2 " pb="4" h="30%">
-      <ReactECharts showLoading={isLoading} option={chartOption} style={{ height: '100%' }} />
+    <Box h="30%" pb="4" pt="2 " w="full">
+      <ReactECharts option={chartOption} showLoading={isLoading} style={{ height: '100%' }} />
     </Box>
   )
 }

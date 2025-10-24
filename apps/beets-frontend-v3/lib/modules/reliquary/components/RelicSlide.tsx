@@ -31,7 +31,7 @@ export interface RelicSlideProps {
   openWithdrawModal: () => void
 }
 
-export default function RelicSlide({ relic, openInvestModal, openWithdrawModal }: RelicSlideProps) {
+export default function RelicSlide({ relic }: RelicSlideProps) {
   const { isActive } = useSwiperSlide()
   const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState('')

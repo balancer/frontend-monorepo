@@ -2,7 +2,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export function FBeetsTokenSonic(props: IconProps) {
   return (
-    <Icon viewBox="0 0 31 31" width="31px" height="31px" {...props}>
+    <Icon height="31px" viewBox="0 0 31 31" width="31px" {...props}>
       <path
         d="M15.5 31C24.0604 31 31 24.0604 31 15.5C31 6.93959 24.0604 0 15.5 0C6.93959 0 0 6.93959 0 15.5C0 24.0604 6.93959 31 15.5 31Z"
         fill="#1A1A1A"

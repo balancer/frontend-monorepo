@@ -1,4 +1,4 @@
-import { Flex, Grid, GridItem } from '@chakra-ui/react'
+import { Grid, GridItem } from '@chakra-ui/react'
 import React from 'react'
 import { ReliquaryCurveChart } from '../charts/ReliquaryCurveChart'
 import { ReliquaryDetailsCharts } from '../charts/ReliquaryDetailsCharts'
