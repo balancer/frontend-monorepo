@@ -17,6 +17,7 @@ import { VeDelegationProxyL2Abi } from './abi/veDelegationProxyL2'
 import { sfcAbi, sonicStakingAbi, reliquaryAbi } from './abi/beets/generated'
 import { LiquidityGaugeV5Abi } from './abi/LiquidityGaugeV5Abi'
 import { permit2Abi } from '@balancer/sdk'
+import { DelegateRegistryAbi } from './abi/DelegateRegistryAbi'
 
 export const AbiMap = {
   'balancer.vaultV2': balancerV2VaultAbi,
@@ -37,6 +38,7 @@ export const AbiMap = {
   'beets.lstStaking': sonicStakingAbi,
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,
+  'beets.delegateRegistry': DelegateRegistryAbi,
   permit2: permit2Abi,
 }
 

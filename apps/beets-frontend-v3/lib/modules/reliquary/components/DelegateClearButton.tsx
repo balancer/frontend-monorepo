@@ -1,48 +1,19 @@
-import { HStack, Text } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import { BeetsSubmitTransactionButton } from '~/components/button/BeetsSubmitTransactionButton'
-import { ToastType, useToast } from '~/components/toast/BeetsToast'
-import { useDelegateClear } from '../lib/useDelegateClear'
+import { useDelegateClearStep } from '../hooks/useDelegateClearStep'
 import { useDelegation } from '../lib/useDelegation'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-interface Props {
-  size?: string
-  rounded?: string
-  w?: string
-}
-
-export default function DelegateClearButton({ ...rest }: Props) {
-  // TODO combine into one hook?
-  const { clearDelegate, ...clearDelegateQuery } = useDelegateClear()
+export default function DelegateClearButton() {
   const { refetch } = useDelegation()
-  const { showToast } = useToast()
+  const { step } = useDelegateClearStep(GqlChain.Sonic)
 
-  useEffect(() => {
-    if (clearDelegateQuery.submitError) {
-      showToast({
-        id: 'clearDelegate-error',
-        auto: true,
-        type: ToastType.Error,
-        content: (
-          <HStack>
-            <Text>{clearDelegateQuery.submitError.message}</Text>
-          </HStack>
-        ),
-      })
-    }
-  }, [clearDelegateQuery.submitError])
+  // Add refetch callback to step
+  const stepWithRefetch = {
+    ...step,
+    onSuccess: () => {
+      step.onSuccess?.()
+      refetch()
+    },
+  }
 
-  return (
-    <BeetsSubmitTransactionButton
-      inline
-      submittingText="Confirm..."
-      pendingText="Waiting..."
-      onClick={() => clearDelegate()}
-      onConfirmed={() => refetch()}
-      {...clearDelegateQuery}
-      {...rest}
-    >
-      Undelegate from vote optimizer
-    </BeetsSubmitTransactionButton>
-  )
+  return stepWithRefetch.renderAction()
 }
