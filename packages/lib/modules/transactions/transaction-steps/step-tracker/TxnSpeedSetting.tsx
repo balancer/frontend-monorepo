@@ -13,6 +13,7 @@ import { SpeedIcon } from '@repo/lib/shared/components/icons/SpeedIcon'
 
 function getSpeedSettingLabel(id: string = 'default') {
   switch (id) {
+    case 'rabby':
     case 'io.rabby':
       return 'Normal'
     case 'metaMaskSDK':
