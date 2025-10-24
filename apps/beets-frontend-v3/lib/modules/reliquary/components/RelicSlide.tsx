@@ -5,10 +5,13 @@ import { useReliquary } from '../ReliquaryProvider'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReliquaryFarmPosition } from '../ReliquaryProvider'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
-import RelicLevelUpButton from './RelicLevelUpButton'
 import RelicSlideApr from './RelicSlideApr'
 import RelicSlideInfo from './RelicSlideInfo'
 import RelicSlideMainInfo from './RelicSlideMainInfo'
+import { LevelUpModal } from './LevelUpModal'
+import { ClaimModal } from './ClaimModal'
+import { BurnModal } from './BurnModal'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import RelicLevel1 from '~/assets/images/reliquary/1.png'
 import RelicLevel2 from '~/assets/images/reliquary/2.png'
@@ -21,7 +24,6 @@ import RelicLevel8 from '~/assets/images/reliquary/8.png'
 import RelicLevel9 from '~/assets/images/reliquary/9.png'
 import RelicLevel10 from '~/assets/images/reliquary/10.png'
 import RelicLevel11 from '~/assets/images/reliquary/11.png'
-import RelicBurnButton from './RelicBurnButton'
 
 export interface RelicSlideProps {
   relic: ReliquaryFarmPosition
@@ -31,11 +33,17 @@ export interface RelicSlideProps {
 
 export default function RelicSlide({ relic, openInvestModal, openWithdrawModal }: RelicSlideProps) {
   const { isActive } = useSwiperSlide()
+  const router = useRouter()
+  const [isModalOpen, setIsModalOpen] = useState('')
 
-  const { maturityThresholds, isLoadingRelicPositions, setSelectedRelicId, relicPositions } =
+  const { maturityThresholds, isLoadingRelicPositions, setSelectedRelicId, relicPositions, chain } =
     useReliquary()
-  const { canUpgrade } = relicGetMaturityProgress(relic, maturityThresholds)
+  const { canUpgrade, canUpgradeTo } = relicGetMaturityProgress(relic, maturityThresholds)
   const [_isLoadingRelicPositions, setIsLoadingRelicPositions] = useState(false)
+
+  const isLevelUpModalOpen = isModalOpen === 'levelUp'
+  const isClaimModalOpen = isModalOpen === 'claim'
+  const isBurnModalOpen = isModalOpen === 'burn'
 
   const relicLevelNames = [
     'The Initiate',
@@ -62,6 +70,16 @@ export default function RelicSlide({ relic, openInvestModal, openWithdrawModal }
 
   if (isActive) {
     setSelectedRelicId(relic.relicId)
+  }
+
+  function handleAction(action: 'claim' | 'levelUp' | 'deposit' | 'withdraw' | 'burn') {
+    if (action === 'deposit') {
+      router.push('/mabeets/add-liquidity')
+    } else if (action === 'withdraw') {
+      router.push('/mabeets/remove-liquidity')
+    } else {
+      setIsModalOpen(action)
+    }
   }
 
   function getImage(level: number) {
@@ -115,117 +133,132 @@ export default function RelicSlide({ relic, openInvestModal, openWithdrawModal }
   return (
     <AnimatePresence>
       <VStack
-        filter="auto"
-        blur={hasNoRelics ? '10px' : '0'}
-        as={motion.div}
         animate={{
           opacity: getContainerOpacity(),
           transform: isActive ? 'scale(1)' : 'scale(0.5)',
           transition: { type: 'spring', mass: 0.1 },
         }}
+        as={motion.div}
+        blur={hasNoRelics ? '10px' : '0'}
+        filter="auto"
         rounded="lg"
         spacing="8"
         zIndex={isActive ? 1 : -1}
       >
-        <Flex justifyContent="center" width={{ base: '100%', lg: '50%' }} rounded="lg">
+        <Flex justifyContent="center" rounded="lg" width={{ base: '100%', lg: '50%' }}>
           <HStack
-            spacing="4"
-            width="full"
             alignItems="start"
             justifyContent={{ base: 'space-between', xl: undefined }}
+            spacing="4"
+            width="full"
           >
-            <Badge rounded="md" colorScheme="green" p="2">
-              <Heading textAlign="center" size="sm">
+            <Badge colorScheme="green" p="2" rounded="md">
+              <Heading size="sm" textAlign="center">
                 {isRelicAmountZero
                   ? 'Empty relic - no level'
                   : `Level ${relic?.level + 1} - ${relicLevelNames[relic.level]}`}
               </Heading>
             </Badge>
-            <Badge p="2" rounded="md" colorScheme="purple">
+            <Badge colorScheme="purple" p="2" rounded="md">
               <Heading size="sm">Relic #{relic?.relicId}</Heading>
             </Badge>
           </HStack>
         </Flex>
-        <Flex position="relative" className={getUnderglowClass()} as={motion.div}>
+        <Flex as={motion.div} className={getUnderglowClass()} position="relative">
           {canUpgrade && isActive && !isRelicAmountZero && (
             <Flex
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-              exit={{ opacity: 0 }}
               alignItems="center"
+              animate={{ opacity: 1 }}
+              as={motion.div}
+              bg="blackAlpha.500"
+              exit={{ opacity: 0 }}
+              height="full"
+              initial={{ opacity: 0 }}
               justifyContent="center"
+              position="absolute"
               rounded="lg"
               width="full"
-              height="full"
-              position="absolute"
-              bg="blackAlpha.500"
-              as={motion.div}
               zIndex={2}
             >
-              <RelicLevelUpButton />
+              <Button
+                onClick={() => {}}
+                rounded="lg"
+                size="lg"
+                variant="primary"
+              >
+                Placeholder Button
+              </Button>
             </Flex>
           )}
 
           {isActive && isRelicAmountZero && (
             <Flex
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-              exit={{ opacity: 0 }}
               alignItems="center"
+              animate={{ opacity: 1 }}
+              as={motion.div}
+              bg="blackAlpha.500"
+              exit={{ opacity: 0 }}
+              height="full"
+              initial={{ opacity: 0 }}
               justifyContent="center"
+              position="absolute"
               rounded="lg"
               width="full"
-              height="full"
-              position="absolute"
-              bg="blackAlpha.500"
-              as={motion.div}
               zIndex={2}
             >
-              <HStack w="full" spacing="2" justifyContent="center">
+              <HStack justifyContent="center" spacing="2" w="full">
                 <Button
-                  variant="primary"
-                  size="md"
+                  onClick={() => handleAction('deposit')}
                   rounded="lg"
-                  onClick={openInvestModal}
+                  size="md"
+                  variant="primary"
                   w="100px"
                 >
                   Deposit
                 </Button>
-                <RelicBurnButton size="md" rounded="lg" w="100px" />
+                <Button
+                  onClick={() => handleAction('burn')}
+                  rounded="lg"
+                  size="md"
+                  variant="secondary"
+                  w="100px"
+                >
+                  Burn
+                </Button>
               </HStack>
             </Flex>
           )}
 
           <Box
-            filter="auto"
             blur={isActive && canUpgrade && !_isLoadingRelicPositions ? '10px' : '0px'}
-            style={{ marginTop: '0 !important' }}
-            rounded="lg"
+            filter="auto"
             overflow="hidden"
+            rounded="lg"
+            style={{ marginTop: '0 !important' }}
           >
             <Image
-              style={{ cursor: 'pointer' }}
-              src={getImage(relic?.level + 1)}
-              width="400px"
-              height="400px"
               alt="reliquary"
+              height={400}
               placeholder="blur"
+              src={getImage(relic?.level + 1)}
+              style={{ cursor: 'pointer' }}
+              width={400}
             />
           </Box>
         </Flex>
 
         <Stack
           direction={{ base: 'column', lg: 'row' }}
-          position="relative"
           height="310px"
+          position="relative"
           width="full"
         >
           {isActive && !isRelicAmountZero && (
             <>
               <RelicSlideMainInfo
+                isLoading={_isLoadingRelicPositions}
                 openInvestModal={openInvestModal}
                 openWithdrawModal={openWithdrawModal}
-                isLoading={_isLoadingRelicPositions}
               />
               <RelicSlideApr />
               <RelicSlideInfo />
@@ -238,6 +271,20 @@ export default function RelicSlide({ relic, openInvestModal, openWithdrawModal }
           )}
         </Stack>
       </VStack>
+      {isLevelUpModalOpen && (
+        <LevelUpModal
+          chain={chain}
+          isOpen={isLevelUpModalOpen}
+          nextLevel={canUpgradeTo}
+          onClose={() => setIsModalOpen('')}
+        />
+      )}
+      {isClaimModalOpen && (
+        <ClaimModal chain={chain} isOpen={isClaimModalOpen} onClose={() => setIsModalOpen('')} />
+      )}
+      {isBurnModalOpen && (
+        <BurnModal chain={chain} isOpen={isBurnModalOpen} onClose={() => setIsModalOpen('')} />
+      )}
     </AnimatePresence>
   )
 }

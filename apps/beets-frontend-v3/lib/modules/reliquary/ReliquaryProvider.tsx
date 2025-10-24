@@ -11,6 +11,7 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { useLevelUpStep } from './hooks/useLevelUpStep'
 import { ReliquaryPosition } from './reliquary.types'
 import { useClaimRewardsSteps } from './hooks/useClaimRewardsSteps'
+import { useBurnRelicStep } from './hooks/useBurnRelicStep'
 import { usePublicClient } from '@repo/lib/shared/utils/wagmi'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
@@ -75,6 +76,11 @@ export function useReliquaryLogic() {
   const claimRewardsTxHash =
     claimRewardsTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const claimRewardsTxConfirmed = claimRewardsTransactionSteps.lastTransactionConfirmed
+
+  const { step: burnRelicStep } = useBurnRelicStep(CHAIN, selectedRelic?.relicId)
+  const burnRelicTransactionSteps = useTransactionSteps([burnRelicStep], false)
+  const burnRelicTxHash = burnRelicTransactionSteps.lastTransaction?.result?.data?.transactionHash
+  const burnRelicTxConfirmed = burnRelicTransactionSteps.lastTransactionConfirmed
 
   // Queries for positions and maturity thresholds
   const {
@@ -446,6 +452,9 @@ export function useReliquaryLogic() {
     claimRewardsTransactionSteps,
     claimRewardsTxHash,
     claimRewardsTxConfirmed,
+    burnRelicTransactionSteps,
+    burnRelicTxHash,
+    burnRelicTxConfirmed,
     // Reliquary-specific state and data
     relicPositions,
     isLoadingRelicPositions,

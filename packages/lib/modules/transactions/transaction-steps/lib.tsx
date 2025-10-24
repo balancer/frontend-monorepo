@@ -55,6 +55,7 @@ export type StepType =
   | 'voteForManyGaugeWeights'
   | 'levelUp'
   | 'claimRelicReward'
+  | 'burnRelic'
   | 'approveBatchRelayerForAllRelics'
   | 'delegateClear'
   | 'delegateSet'
