@@ -1,5 +1,5 @@
-import { Reliquary } from '@/lib/modules/reliquary/Reliquary'
+import ReliquaryLanding from '@/lib/modules/reliquary/ReliquaryLanding'
 
 export default async function PoolsPageWrapper() {
-  return <Reliquary />
+  return <ReliquaryLanding />
 }

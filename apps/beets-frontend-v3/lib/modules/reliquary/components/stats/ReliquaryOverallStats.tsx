@@ -1,3 +1,5 @@
+'use client'
+
 import { Box, Divider, HStack, Text, VStack, Card } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
