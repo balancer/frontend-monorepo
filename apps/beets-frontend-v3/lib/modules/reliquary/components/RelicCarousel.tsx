@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react'
 import { Pagination } from 'swiper/modules'
 import { Box, BoxProps, Heading, VStack, Flex, useBreakpointValue } from '@chakra-ui/react'
 import { useReliquary } from '../ReliquaryProvider'
-//import { ReliquaryInvestModal } from '../invest/ReliquaryInvestModal'
 import RelicSlide from './RelicSlide'
-//import { ReliquaryWithdrawModal } from '../withdraw/ReliquaryWithdrawModal'
 
 interface Props extends BoxProps {
   loading?: boolean
@@ -108,16 +106,6 @@ export function RelicCarousel({ loading, ...rest }: Props) {
                     )} */}
         </Swiper>
       </Box>
-      {/* <ReliquaryInvestModal
-        isVisible={isInvestModalVisible}
-        noActivator
-        onClose={() => setIsInvestModalVisible(false)}
-      />
-      <ReliquaryWithdrawModal
-        isVisible={isWithdrawModalVisible}
-        noActivator
-        onClose={() => setIsWithdrawModalVisible(false)}
-      /> */}
     </Box>
   )
 }
