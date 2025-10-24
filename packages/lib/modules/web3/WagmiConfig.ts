@@ -49,7 +49,7 @@ const connectors = connectorsForWallets(
   This fixes this rainbowkit issue:
   https://github.com/rainbow-me/rainbowkit/issues/2232
 */
-if (!isConnectedToWC()) {
+if (typeof window !== 'undefined' && !isConnectedToWC()) {
   const lastConnector = connectors[connectors.length - 1]
   if (lastConnector({} as any).id !== 'walletConnect') {
     connectors.push(
@@ -59,7 +59,9 @@ if (!isConnectedToWC()) {
 }
 
 // Add mock connector for development/staging environments
-if (!isProd) connectors.push(createMockConnector({ index: connectors.length }))
+if (typeof window !== 'undefined' && !isProd) {
+  connectors.push(createMockConnector({ index: connectors.length }))
+}
 
 export type WagmiConfig = ReturnType<typeof createConfig>
 export const wagmiConfig = createConfig({
