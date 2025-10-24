@@ -17,11 +17,14 @@ import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { useEffect, useState } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useRouter } from 'next/navigation'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 export function usePoolFormLogic() {
+  const router = useRouter()
+
   const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.PoolCreation.Address,
     undefined
@@ -98,6 +101,7 @@ export function usePoolFormLogic() {
     poolCreationForm.resetToInitial()
     reClammConfigForm.resetToInitial()
     resetSteps()
+    router.push('/create')
   }
 
   const [tokenList, setTokenList] = useState<ApiOrCustomToken[]>([])
@@ -147,6 +151,7 @@ export function usePoolFormLogic() {
     invertReClammPriceParams,
     tokenList,
     isLoadingTokenList,
+    setPoolAddress,
   }
 }
 
