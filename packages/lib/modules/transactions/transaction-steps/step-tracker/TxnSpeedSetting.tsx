@@ -29,8 +29,6 @@ export function TxnSpeedSetting() {
   const speedSettingLabel = getSpeedSettingLabel(connector?.id)
   const userWalletLabel = connector?.name || 'your wallet'
 
-  console.log({ connector })
-
   return (
     <Popover placement="top" trigger="hover">
       <PopoverTrigger>
