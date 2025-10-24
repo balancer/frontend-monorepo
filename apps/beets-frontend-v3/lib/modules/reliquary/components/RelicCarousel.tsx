@@ -4,6 +4,8 @@ import { Pagination } from 'swiper/modules'
 import { Box, BoxProps, Heading, VStack, Flex, useBreakpointValue } from '@chakra-ui/react'
 import { useReliquary } from '../ReliquaryProvider'
 import RelicSlide from './RelicSlide'
+import 'swiper/css'
+import 'swiper/css/pagination'
 
 interface Props extends BoxProps {
   loading?: boolean
