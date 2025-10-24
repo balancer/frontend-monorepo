@@ -34,9 +34,9 @@ export function useDelegateSetStep(chain: GqlChain) {
     chainId: getChainId(chain),
     contractId: 'beets.delegateRegistry',
     contractAddress: networkConfig.snapshot?.contractAddress || '',
-    functionName: 'setDelegate',
+    functionName: 'setDelegate' as any,
     args:
-      networkConfig.snapshot?.id && networkConfig.snapshot?.delegateAddress
+      networkConfig.snapshot && networkConfig.snapshot.id && networkConfig.snapshot.delegateAddress
         ? [networkConfig.snapshot.id, networkConfig.snapshot.delegateAddress]
         : null,
     enabled:

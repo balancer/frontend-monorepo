@@ -111,7 +111,7 @@ export interface NetworkConfig {
   snapshot?: {
     contractAddress: Address
     delegateAddress: Address
-    id: string
+    id: `0x${string}`
   }
   reliquary?: {
     address: Address

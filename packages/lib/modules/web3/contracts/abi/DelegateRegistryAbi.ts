@@ -46,4 +46,4 @@ export const DelegateRegistryAbi = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-]
+] as const
