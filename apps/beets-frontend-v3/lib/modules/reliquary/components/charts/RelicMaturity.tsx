@@ -3,9 +3,9 @@ import React, { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { EChartsOption } from 'echarts'
 import { format, fromUnixTime } from 'date-fns'
-import useReliquary from '../../lib/useReliquary'
+import { useReliquary } from '../../ReliquaryProvider'
 import { InfoButton } from '~/components/info-button/InfoButton'
-import numeral from 'numeral'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 interface Props {}
@@ -63,7 +63,7 @@ export default function RelicMaturity({}: Props) {
           snap: true,
           label: {
             formatter: function (params) {
-              return numeral((params.value as number) - 1).format('0a')
+              return fNumCustom((params.value as number) - 1, '0a')
             },
           },
         },

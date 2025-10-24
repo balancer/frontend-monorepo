@@ -2,10 +2,8 @@ import { useTheme } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
-import numeral from 'numeral'
 import { format } from 'date-fns'
-import { chartGetPrimaryColor } from '~/modules/pool/detail/components/charts/chart-util'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 interface Props {
   data: { timestamp: number; totalLiquidity: string }[]
@@ -13,7 +11,6 @@ interface Props {
 
 export function ReliquaryLiquidityChart({ data }: Props) {
   const { colors } = useTheme()
-  const networkConfig = useNetworkConfig()
 
   const option = useMemo<EChartsOption>(
     () => ({
@@ -79,14 +76,15 @@ export function ReliquaryLiquidityChart({ data }: Props) {
           splitLine: { show: false },
           axisLabel: {
             formatter: function (value: number, index: number) {
-              return index % 3 === 1 ? `$${numeral(value).format('0a')}` : ''
+              return index % 3 === 1 ? `$${fNumCustom(value, '0a')}` : ''
             },
             color: colors.beets.base['100'],
           },
           axisPointer: {
             label: {
               formatter: function (params) {
-                return `$${numeral(params.value).format('0a')}`
+                const value = typeof params.value === 'number' ? params.value : Number(params.value)
+                return `$${fNumCustom(value, '0a')}`
               },
             },
           },
@@ -99,16 +97,19 @@ export function ReliquaryLiquidityChart({ data }: Props) {
           type: 'bar',
           tooltip: {
             valueFormatter: function (value) {
-              return `$${numeral(value).format('0a')}`
+              if (value == null) return '$0'
+              const numValue = Array.isArray(value) ? value[0] : value
+              if (numValue == null || numValue instanceof Date) return '$0'
+              return `$${fNumCustom(numValue, '0a')}`
             },
           },
           itemStyle: {
             opacity: 1,
             borderRadius: [5, 5, 0, 0],
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: chartGetPrimaryColor(networkConfig.chainId, 1) },
-              { offset: 0.5, color: chartGetPrimaryColor(networkConfig.chainId, 0.7) },
-              { offset: 1, color: chartGetPrimaryColor(networkConfig.chainId, 0) },
+              { offset: 0, color: `rgba(5, 214, 144, 1)` },
+              { offset: 0.5, color: `rgba(5, 214, 144, 0.7)` },
+              { offset: 1, color: `rgba(5, 214, 144, 0)` },
             ]),
           },
         },

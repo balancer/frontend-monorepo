@@ -1,16 +1,11 @@
-import { useTheme } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
-import numeral from 'numeral'
-import { chartGetPrimaryColor } from '~/modules/pool/detail/components/charts/chart-util'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 export function ReliquaryMaturityChart() {
   const { pool } = usePool()
-  const { colors } = useTheme()
-  const networkConfig = useNetworkConfig()
 
   const option = useMemo<EChartsOption>(
     () => ({
@@ -25,7 +20,7 @@ export function ReliquaryMaturityChart() {
         },
         // any -> https://github.com/apache/echarts/issues/14277
         formatter: (params: any) =>
-          `Level ${params[0].data[0]}: ${numeral(params[0].data[1]).format('0a')} fBEETS`,
+          `Level ${params[0].data[0]}: ${fNumCustom(params[0].data[1], '0a')} fBEETS`,
       },
       textStyle: {
         color: '#D3D3D3',
@@ -71,9 +66,9 @@ export function ReliquaryMaturityChart() {
             opacity: 1,
             borderRadius: [5, 5, 0, 0],
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: chartGetPrimaryColor(networkConfig.chainId, 1) },
-              { offset: 0.5, color: chartGetPrimaryColor(networkConfig.chainId, 0.7) },
-              { offset: 1, color: chartGetPrimaryColor(networkConfig.chainId, 0) },
+              { offset: 0, color: `rgba(5, 214, 144, 1)` },
+              { offset: 0.5, color: `rgba(5, 214, 144, 0.7)` },
+              { offset: 1, color: `rgba(5, 214, 144, 0)` },
             ]),
           },
         },

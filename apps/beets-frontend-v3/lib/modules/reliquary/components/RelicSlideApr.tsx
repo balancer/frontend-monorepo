@@ -23,10 +23,9 @@ import { InfoButton } from '~/components/info-button/InfoButton'
 import TokenAvatar from '~/components/token/TokenAvatar'
 import BeetsTooltip from '~/components/tooltip/BeetsTooltip'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { tokenFormatAmount } from '~/lib/services/token/token-util'
-import { formatApr, getTotalApr, getTotalAprLabel } from '~/lib/util/apr-util'
-import { numberFormatUSDValue } from '~/lib/util/number-formats'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { getTotalApr, getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import { useBatchRelayerHasApprovedForAll } from '../lib/useBatchRelayerHasApprovedForAll'
 import { useRelicHarvestRewards } from '../lib/useRelicHarvestRewards'
 import { useRelicPendingRewards } from '../lib/useRelicPendingRewards'
@@ -34,6 +33,7 @@ import { useReliquary } from '../ReliquaryProvider'
 import RelicMaturityModal from './RelicMaturityModal'
 import { ReliquaryBatchRelayerApprovalButton } from './ReliquaryBatchRelayerApprovalButton'
 import { useGetHHRewards } from '~/modules/reliquary/lib/useGetHHRewards'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 
 export default function RelicSlideApr() {
   const { pool } = usePool()
@@ -56,8 +56,13 @@ export default function RelicSlideApr() {
   // }, [isLoadingRelicPositions])
 
   const { data: batchRelayerHasApprovedForAll, refetch } = useBatchRelayerHasApprovedForAll()
-  const { priceForAmount } = useGetTokens()
-  const pendingRewardsUsdValue = sumBy(pendingRewards, priceForAmount)
+  const { priceFor } = useTokens()
+  const config = useNetworkConfig()
+  // Calculate USD value of pending rewards
+  const pendingRewardsUsdValue = pendingRewards.reduce((sum: number, reward: any) => {
+    const price = priceFor(reward.address, config.chain)
+    return sum + parseFloat(reward.amount) * price
+  }, 0)
 
   const baseApr = pool.dynamicData.aprItems.find(
     item => item.title === 'BEETS reward APR' && item.type === 'MABEETS_EMISSIONS'
@@ -82,7 +87,7 @@ export default function RelicSlideApr() {
   })
 
   const [, maxTotal] = getTotalApr(dynamicDataAprItems)
-  const maxTotalFormatted = formatApr(maxTotal.toString())
+  const maxTotalFormatted = fNum('apr', maxTotal.toString())
 
   return (
     <>
@@ -148,7 +153,7 @@ export default function RelicSlideApr() {
                     Hidden Hand incentives
                   </Text>
                   <Text color="white" fontSize="1.75rem">
-                    {numberFormatUSDValue(data.totalValue)}
+                    {fNum('fiat', data.totalValue)}
                   </Text>
                 </VStack>
                 <Button
@@ -188,11 +193,11 @@ export default function RelicSlideApr() {
                   <Skeleton height="34px" mb="4px" mt="4px" width="140px" />
                 ) : (
                   <Text color="white" fontSize="1.75rem">
-                    {numberFormatUSDValue(pendingRewardsUsdValue)}
+                    {fNum('fiat', pendingRewardsUsdValue)}
                   </Text>
                 )}
                 <Box>
-                  {pendingRewards.map((reward, index) => (
+                  {pendingRewards.map((reward: any, index: number) => (
                     <HStack
                       key={index}
                       mb={index === pendingRewards.length - 1 ? '0' : '0.5'}
@@ -201,7 +206,7 @@ export default function RelicSlideApr() {
                       <TokenAvatar address={reward.address} height="20px" width="20px" />
                       <Skeleton isLoaded={!isLoadingPendingRewards}>
                         <Text fontSize="1rem" lineHeight="1rem">
-                          {tokenFormatAmount(reward.amount)}
+                          {fNum('token', reward.amount)}
                         </Text>
                       </Skeleton>
                     </HStack>

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { EChartsOption } from 'echarts'
-import useReliquary from '../../lib/useReliquary'
+import { useReliquary } from '../../ReliquaryProvider'
 import { relicGetMaturityProgress } from '../../lib/reliquary-helpers'
-import differenceInSeconds from 'date-fns/differenceInSeconds'
+import { differenceInSeconds } from 'date-fns'
 import { Box } from '@chakra-ui/react'
 
 interface Props {}

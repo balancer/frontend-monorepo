@@ -7,11 +7,11 @@ import AnimatedProgress from '~/components/animated-progress/AnimatedProgress'
 import TokenAvatar from '~/components/token/TokenAvatar'
 import BeetsTooltip from '~/components/tooltip/BeetsTooltip'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { tokenFormatAmount } from '~/lib/services/token/token-util'
-import { numberFormatUSDValue } from '~/lib/util/number-formats'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
 import { useReliquary } from '../ReliquaryProvider'
+import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 
 interface Props {
   isLoading?: boolean
@@ -57,13 +57,13 @@ export default function RelicSlideMainInfo({ isLoading }: Props) {
                     Relic liquidity
                   </Text>
                   <Text color="white" fontSize="1.75rem">
-                    {numberFormatUSDValue(relicBalanceUSD)}
+                    {fNum('fiat', relicBalanceUSD)}
                   </Text>
                 </Box>
                 <HStack mb="0.5" spacing="1">
-                  <TokenAvatar address={config.fbeets.address} height="20px" width="20px" />
+                  <TokenIcon address={config.tokens.addresses.beets || ''} alt="beets" />
                   <Text fontSize="1rem" lineHeight="1rem">
-                    {tokenFormatAmount(selectedRelic?.amount || '0')}
+                    {fNum('token', selectedRelic?.amount || '0')}
                   </Text>
                 </HStack>
               </VStack>

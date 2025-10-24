@@ -1,17 +1,13 @@
 import { EChartsOption, graphic } from 'echarts'
 import ReactECharts from 'echarts-for-react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { chartGetPrimaryColor } from '~/modules/pool/detail/components/charts/chart-util'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { InfoButton } from '~/components/info-button/InfoButton'
-import { Box, HStack, Link, useTheme, Card } from '@chakra-ui/react'
+import { Box, HStack, Link, Card } from '@chakra-ui/react'
 import { ExternalLink } from 'react-feather'
-import numeral from 'numeral'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 export function ReliquaryCurveChart() {
   const { pool } = usePool()
-  const { colors } = useTheme()
-  const networkConfig = useNetworkConfig()
 
   const data = pool.staking?.reliquary?.levels
     ?.map(level => ({
@@ -33,7 +29,7 @@ export function ReliquaryCurveChart() {
       },
       // any -> https://github.com/apache/echarts/issues/14277
       formatter: (params: any) =>
-        `Level ${params[0].data[0]}: ${numeral(params[0].data[1]).format('0a')}x maturity boost`,
+        `Level ${params[0].data[0]}: ${fNumCustom(params[0].data[1], '0a')}x maturity boost`,
       confine: true,
     },
     textStyle: {
@@ -78,9 +74,9 @@ export function ReliquaryCurveChart() {
         areaStyle: {
           opacity: 0.2,
           color: new graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: chartGetPrimaryColor(networkConfig.chainId, 1) },
-            { offset: 0.5, color: chartGetPrimaryColor(networkConfig.chainId, 1) },
-            { offset: 1, color: chartGetPrimaryColor(networkConfig.chainId, 0) },
+            { offset: 0, color: `rgba(5, 214, 144, 1)` },
+            { offset: 0.5, color: `rgba(5, 214, 144, 1)` },
+            { offset: 1, color: `rgba(5, 214, 144, 0)` },
           ]),
         },
         lineStyle: {

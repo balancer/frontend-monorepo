@@ -1,22 +1,16 @@
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
 import { format } from 'date-fns'
-import { numberFormatUSDValue } from '~/lib/util/number-formats'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from '@chakra-ui/react'
-import {
-  chartGetPrimaryColor,
-  chartGetSecondaryColor,
-} from '~/modules/pool/detail/components/charts/chart-util'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import numeral from 'numeral'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 interface Props {
   data: { timestamp: number; relicCount: string }[]
 }
 
 export function ReliquaryRelicsCountChart({ data }: Props) {
-  const networkConfig = useNetworkConfig()
   const { colors } = useTheme()
 
   const option = useMemo<EChartsOption>(
@@ -41,7 +35,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           },
         },
         // any -> https://github.com/apache/echarts/issues/14277
-        formatter: (params: any) => `# of relics: ${numeral(params[0].data[1]).format('0a')}`,
+        formatter: (params: any) => `# of relics: ${fNumCustom(params[0].data[1], '0a')}`,
       },
       textStyle: {
         color: '#D3D3D3',
@@ -91,14 +85,14 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           showSymbol: false,
           data: data.map(item => [item.timestamp * 1000, parseInt(item.relicCount)]),
           itemStyle: {
-            color: chartGetSecondaryColor(networkConfig.chainId, 1),
+            color: `rgba(5, 214, 144, 1)`,
           },
           areaStyle: {
-            opacity: networkConfig.chainId === '10' ? 0.75 : 0.2,
+            opacity: 0.2,
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: chartGetPrimaryColor(networkConfig.chainId, 1) },
-              { offset: 0.5, color: chartGetPrimaryColor(networkConfig.chainId, 1) },
-              { offset: 1, color: chartGetPrimaryColor(networkConfig.chainId, 0) },
+              { offset: 0, color: `rgba(5, 214, 144, 1)` },
+              { offset: 0.5, color: `rgba(5, 214, 144, 1)` },
+              { offset: 1, color: `rgba(5, 214, 144, 0)` },
             ]),
           },
           axisLine: { show: false },
@@ -106,7 +100,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           splitLine: { show: false },
 
           tooltip: {
-            valueFormatter: value => numberFormatUSDValue(value as number),
+            valueFormatter: value => fNum('fiat', value as number),
           },
         },
       ],

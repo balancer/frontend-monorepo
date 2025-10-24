@@ -19,12 +19,12 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import DelegateClearButton from './components/DelegateClearButton'
 import DelegateSetButton from './components/DelegateSetButton'
 import { RelicCarousel } from './components/RelicCarousel'
-import ReliquaryConnectWallet from './components/ReliquaryConnectWallet'
 import ReliquaryHeroBanner from './components/ReliquaryHeroBanner'
 import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats'
 import { useDelegation } from './hooks/useDelegation'
 import { useReliquary } from './ReliquaryProvider'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 
 export default function ReliquaryLanding() {
   const { isConnected } = useUserAccount()
@@ -126,7 +126,7 @@ export default function ReliquaryLanding() {
           <VStack py="4" spacing="8" width="full">
             {!isConnected && (
               <VStack alignItems="center" justifyContent="center" minH="200px">
-                <ReliquaryConnectWallet />
+                <ConnectWallet />
               </VStack>
             )}
             {isConnected && (

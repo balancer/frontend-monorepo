@@ -1,7 +1,7 @@
 import { Box, Divider, HStack, Text, VStack, Card } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { useReliquaryGlobalStats } from '../../lib/useReliquaryGlobalStats'
+import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
 import { startOfWeek } from 'date-fns'
 import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
@@ -28,23 +28,26 @@ export default function ReliquaryOverallStats() {
     symbol: getToken(token.address, networkConfig.chain)?.symbol,
   }))
 
-  const relicMaturityLevels = globalStats?.levelBalances.map(balance => ({
+  const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
     level: parseInt(balance.level) + 1,
     percentageOfTotal: parseFloat(balance.balance) / parseFloat(globalStats.totalBalance),
   }))
   const avgRelicMaturity = fNumCustom(
-    relicMaturityLevels?.reduce((total, obj) => total + obj.level * obj.percentageOfTotal, 0) || 0,
+    relicMaturityLevels?.reduce(
+      (total: number, obj: any) => total + obj.level * obj.percentageOfTotal,
+      0
+    ) || 0,
     '0.00'
   )
 
-  const maxPercentageOfLevels = relicMaturityLevels?.reduce((prev, curr) =>
+  const maxPercentageOfLevels = relicMaturityLevels?.reduce((prev: any, curr: any) =>
     prev.percentageOfTotal > curr.percentageOfTotal ? prev : curr
   )
 
   const today = Date.now()
   const cutOffDate = startOfWeek(today).getTime()
   const snapshotsThisWeek = snapshots?.snapshots.filter(
-    snapshot => snapshot.timestamp >= cutOffDate / 1000
+    (snapshot: any) => snapshot.timestamp >= cutOffDate / 1000
   )
 
   let numberOfRelicsThisWeek = 0
