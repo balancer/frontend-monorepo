@@ -19,3 +19,8 @@ declare module 'react' {
     popovertargetaction?: string
   }
 }
+
+declare module '*.png' {
+  const content: import('next/image').StaticImageData
+  export default content
+}
