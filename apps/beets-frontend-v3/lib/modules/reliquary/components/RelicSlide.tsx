@@ -181,12 +181,12 @@ export default function RelicSlide({ relic, openInvestModal, openWithdrawModal }
               zIndex={2}
             >
               <Button
-                onClick={() => {}}
+                onClick={() => handleAction('levelUp')}
                 rounded="lg"
                 size="lg"
                 variant="primary"
               >
-                Placeholder Button
+                Level Up to {canUpgradeTo}
               </Button>
             </Flex>
           )}
