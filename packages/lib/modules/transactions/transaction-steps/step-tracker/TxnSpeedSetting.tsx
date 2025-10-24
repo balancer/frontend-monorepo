@@ -46,7 +46,7 @@ export function TxnSpeedSetting() {
       <PopoverContent p="2" shadow="2xl" width="250px" zIndex="popover">
         <PopoverArrow bg="background.level3" />
         <Text color="grayText" fontSize="sm">
-          {`This is a general estimate to give you a sense of the cost based on a '${speedSettingLabel}' speed transaction on ${userWalletLabel}. This estimate will not be accurate if the transaction speed is set higher in your wallet.`}
+          {`This is a general estimate to give you a sense of the cost based on a '${speedSettingLabel}' speed transaction on your ${userWalletLabel}. This UI can’t access your wallet’s transaction speed, so the estimate may be inaccurate if your wallet is set to a higher speed.`}
         </Text>
       </PopoverContent>
     </Popover>
