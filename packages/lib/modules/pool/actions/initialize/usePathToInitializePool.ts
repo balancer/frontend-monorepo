@@ -12,6 +12,7 @@ import { usePoolCreationFormSteps } from '../create/usePoolCreationFormSteps'
 import { PoolCreationToken, SupportedPoolTypes } from '../create/types'
 import { WeightedPoolStructure } from '../create/constants'
 import { isStablePool, isWeightedPool, isReClammPool } from '../create/helpers'
+import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 
 export function usePathToInitializePool() {
   const { poolCreationForm, poolAddress, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
@@ -109,9 +110,7 @@ export function usePathToInitializePool() {
 
   const { data: reClammConfig, isLoading: isLoadingReClamm } = useReadContract({
     address: poolAddressParam,
-    abi: parseAbi([
-      'function getReClammPoolImmutableData() external view returns ((address[] tokens, uint256[] decimalScalingFactors, bool tokenAPriceIncludesRate, bool tokenBPriceIncludesRate, uint256 minSwapFeePercentage, uint256 maxSwapFeePercentage, uint256 initialMinPrice, uint256 initialMaxPrice, uint256 initialTargetPrice, uint256 initialDailyPriceShiftExponent, uint256 initialCenterednessMargin, uint256 maxCenterednessMargin, uint256 maxDailyPriceShiftExponent, uint256 maxDailyPriceRatioUpdateRate, uint256 minPriceRatioUpdateDuration, uint256 minPriceRatioDelta, uint256 balanceRatioAndPriceTolerance))',
-    ]),
+    abi: reClammPoolAbi,
     functionName: 'getReClammPoolImmutableData',
     chainId,
     query: { enabled: isReClammPoolType && shouldUsePathToInitialize },
