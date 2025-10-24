@@ -9,9 +9,7 @@ interface AprTooltipProps {
 
 export default function AprTooltip({ apr, items, onlySparkles }: AprTooltipProps) {
   // Simple tooltip that shows APR breakdown
-  const tooltipContent = items
-    .map(item => `${item.title}: ${item.apr.toFixed(2)}%`)
-    .join('\n')
+  const tooltipContent = items.map(item => `${item.title}: ${item.apr.toFixed(2)}%`).join('\n')
 
   return (
     <Tooltip label={tooltipContent}>
