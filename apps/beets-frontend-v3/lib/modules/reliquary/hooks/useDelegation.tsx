@@ -8,7 +8,7 @@ export function useDelegation() {
   const { userAddress } = useUserAccount()
   const networkConfig = useNetworkConfig()
 
-  const { data: delegationAddress } = useReadContract({
+  const { data: delegationAddress, refetch } = useReadContract({
     address: networkConfig.snapshot?.contractAddress as Address,
     abi: DelegateRegistryAbi,
     functionName: 'delegation',
@@ -23,5 +23,6 @@ export function useDelegation() {
   return {
     data: isDelegatedToMDs,
     delegationAddress,
+    refetch,
   }
 }

@@ -22,7 +22,7 @@ import { RelicCarousel } from './components/RelicCarousel'
 import ReliquaryConnectWallet from './components/ReliquaryConnectWallet'
 import ReliquaryHeroBanner from './components/ReliquaryHeroBanner'
 import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats'
-import { useDelegation } from './lib/useDelegation'
+import { useDelegation } from './hooks/useDelegation'
 import { useReliquary } from './ReliquaryProvider'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 

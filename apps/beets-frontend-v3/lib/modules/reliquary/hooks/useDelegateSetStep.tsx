@@ -15,18 +15,18 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useDelegation } from './useDelegation'
 
-export function useDelegateClearStep(chain: GqlChain) {
+export function useDelegateSetStep(chain: GqlChain) {
   const { isConnected } = useUserAccount()
   const { refetch } = useDelegation()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const networkConfig = getNetworkConfig(chain)
 
   const labels: TransactionLabels = {
-    init: 'Undelegate from vote optimizer',
-    title: 'Undelegate from vote optimizer',
-    confirming: 'Confirming undelegate...',
-    confirmed: 'Undelegated!',
-    tooltip: 'Clear your delegation from the vote optimizer',
+    init: 'Delegate to vote optimizer',
+    title: 'Delegate to vote optimizer',
+    confirming: 'Confirming delegation...',
+    confirmed: 'Delegated!',
+    tooltip: 'Delegate your voting power to the vote optimizer',
   }
 
   const props: ManagedTransactionInput = {
@@ -34,22 +34,28 @@ export function useDelegateClearStep(chain: GqlChain) {
     chainId: getChainId(chain),
     contractId: 'beets.delegateRegistry',
     contractAddress: networkConfig.snapshot?.contractAddress || '',
-    functionName: 'clearDelegate',
-    args: networkConfig.snapshot?.id ? [networkConfig.snapshot.id] : null,
+    functionName: 'setDelegate',
+    args:
+      networkConfig.snapshot?.id && networkConfig.snapshot?.delegateAddress
+        ? [networkConfig.snapshot.id, networkConfig.snapshot.delegateAddress]
+        : null,
     enabled:
-      isConnected && !!networkConfig.snapshot?.contractAddress && !!networkConfig.snapshot?.id,
+      isConnected &&
+      !!networkConfig.snapshot?.contractAddress &&
+      !!networkConfig.snapshot?.id &&
+      !!networkConfig.snapshot?.delegateAddress,
     onTransactionChange: setTransaction,
   }
 
   const isComplete = () => isConnected && isTransactionSuccess(transaction)
 
   const step: TransactionStep = {
-    id: 'delegateClear',
+    id: 'delegateSet',
     labels,
-    stepType: 'delegateClear',
+    stepType: 'delegateSet',
     isComplete,
     onSuccess: () => refetch(),
-    renderAction: () => <ManagedTransactionButton id="delegateClear" {...props} />,
+    renderAction: () => <ManagedTransactionButton id="delegateSet" {...props} />,
     transaction,
   }
 
