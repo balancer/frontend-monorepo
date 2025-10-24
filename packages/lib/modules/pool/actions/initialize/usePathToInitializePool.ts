@@ -14,22 +14,39 @@ import { WeightedPoolStructure } from '../create/constants'
 import { isStablePool, isWeightedPool, isReClammPool } from '../create/helpers'
 import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 
+type HooksConfig = { hooksContract: Address }
+type PoolRoleAccounts = { swapFeeManager: Address; pauseManager: Address }
+type PoolTokenInfo = [Address[], { rateProvider: Address; paysYieldFees: boolean }[]]
+type PoolConfig = {
+  staticSwapFeePercentage: bigint
+  liquidityManagement: {
+    disableUnbalancedLiquidity: boolean
+    enableDonation: boolean
+  }
+}
+type TokenData = {
+  address: Address
+  [key: string]: string | number | bigint | Address | undefined
+}
+
+/**
+ *  Use path to fetch pool data to set up local storage for pool initialization
+ */
 export function usePathToInitializePool() {
   const { poolCreationForm, poolAddress, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
   const { lastStep } = usePoolCreationFormSteps()
   const params = useParams()
 
-  const networkParam = params.network as GqlChain
-  const poolAddressParam = params.poolAddress as Address
-  const poolTypeParam = params.poolType as SupportedPoolTypes
+  const networkParam = params.network as GqlChain | undefined
+  const poolAddressParam = params.poolAddress as Address | undefined
+  const poolTypeParam = params.poolType as SupportedPoolTypes | undefined
 
-  const isStablePoolType = isStablePool(poolTypeParam)
-  const isWeightedPoolType = isWeightedPool(poolTypeParam)
-  const isReClammPoolType = isReClammPool(poolTypeParam)
+  const chainId = networkParam ? getChainId(networkParam) : undefined
+  const isStablePoolType = poolTypeParam && isStablePool(poolTypeParam)
+  const isWeightedPoolType = poolTypeParam && isWeightedPool(poolTypeParam)
+  const isReClammPoolType = poolTypeParam && isReClammPool(poolTypeParam)
 
   const shouldUsePathToInitialize = !poolAddress && !!poolAddressParam
-
-  const chainId = params.network ? getChainId(params.network as GqlChain) : undefined
 
   const poolFunctionNames = ['name', 'symbol']
   const vaultFunctionNames = [
@@ -39,7 +56,7 @@ export function usePathToInitializePool() {
     'getPoolRoleAccounts',
   ]
 
-  const poolDataContracts = useMemo(() => {
+  const poolDataReads = useMemo(() => {
     if (!poolAddressParam || !chainId) return []
 
     const poolContractReads = poolFunctionNames.map(functionName => ({
@@ -48,7 +65,6 @@ export function usePathToInitializePool() {
       chainId,
       functionName,
     }))
-
     const vaultContractReads = vaultFunctionNames.map(functionName => ({
       address: AddressProvider.Vault(chainId),
       chainId,
@@ -61,14 +77,14 @@ export function usePathToInitializePool() {
   }, [poolAddressParam, chainId])
 
   const { data: poolData, isLoading: isLoadingPoolData } = useReadContracts({
-    query: { enabled: poolDataContracts.length > 0 && shouldUsePathToInitialize },
-    contracts: poolDataContracts,
+    query: { enabled: poolDataReads.length > 0 && shouldUsePathToInitialize },
+    contracts: poolDataReads,
   })
 
   const tokenFunctionNames = ['name', 'symbol', 'decimals']
 
   const tokenContracts = useMemo(() => {
-    if (!poolData) return []
+    if (!poolData || !chainId) return []
 
     const tokenAddresses = (poolData[2].result as unknown as any[])[0] as Address[]
 
@@ -85,9 +101,7 @@ export function usePathToInitializePool() {
   }, [chainId, poolData])
 
   const { data: poolTokenDetails, isLoading: isLoadingPoolTokenDetails } = useReadContracts({
-    query: {
-      enabled: tokenContracts.length > 0,
-    },
+    query: { enabled: tokenContracts.length > 0 && shouldUsePathToInitialize },
     contracts: tokenContracts,
   })
 
@@ -99,7 +113,6 @@ export function usePathToInitializePool() {
       chainId,
       query: { enabled: isStablePoolType && shouldUsePathToInitialize },
     })
-
   const { data: normalizedWeights, isLoading: isLoadingWeights } = useReadContract({
     address: poolAddressParam,
     abi: parseAbi(['function getNormalizedWeights() view returns (uint256[])']),
@@ -107,7 +120,6 @@ export function usePathToInitializePool() {
     chainId,
     query: { enabled: isWeightedPoolType && shouldUsePathToInitialize },
   })
-
   const { data: reClammConfig, isLoading: isLoadingReClamm } = useReadContract({
     address: poolAddressParam,
     abi: reClammPoolAbi,
@@ -129,35 +141,26 @@ export function usePathToInitializePool() {
     const hasRequiredData =
       !!poolData && !!poolTokenDetails && hasRequiredWeightedInfo && hasRequiredStableInfo
 
-    // Update local storage with values read on chain
     if (!isLoadingPool && hasRequiredData && shouldUsePathToInitialize) {
       const [name, symbol, poolTokenInfo, poolConfig, hooksConfig, poolRoleAccounts] =
         poolData ?? []
+      const [tokenAddresses, tokenConfigs] = poolTokenInfo.result as unknown as PoolTokenInfo
+      const { hooksContract: poolHooksContract } = hooksConfig.result as unknown as HooksConfig
+      const { swapFeeManager, pauseManager } =
+        poolRoleAccounts.result as unknown as PoolRoleAccounts
+      const { staticSwapFeePercentage, liquidityManagement } =
+        poolConfig.result as unknown as PoolConfig
+      const { disableUnbalancedLiquidity, enableDonation } = liquidityManagement
 
-      const [tokenAddresses, tokenConfigs] = poolTokenInfo.result as unknown as [
-        Address[],
-        { rateProvider: Address; paysYieldFees: boolean }[],
-      ]
-
-      const { staticSwapFeePercentage, liquidityManagement } = poolConfig.result as unknown as {
-        staticSwapFeePercentage: bigint
-        liquidityManagement: {
-          disableUnbalancedLiquidity: boolean
-          enableDonation: boolean
-        }
-      }
-
+      // Group token details by address (each token has 3 reads: name, symbol, decimals)
       const poolTokenData =
-        poolTokenDetails?.reduce(
-          (acc, item, index) => {
-            const address = tokenContracts[index].address
-            const functionName = tokenFunctionNames[index % tokenFunctionNames.length]
-            if (!acc[address]) acc[address] = { address }
-            acc[address][functionName] = item.result
-            return acc
-          },
-          {} as Record<Address, any>
-        ) ?? {}
+        poolTokenDetails?.reduce<Record<Address, TokenData>>((acc, item, index) => {
+          const address = tokenContracts[index].address
+          const functionName = tokenFunctionNames[index % tokenFunctionNames.length]
+          if (!acc[address]) acc[address] = { address }
+          acc[address][functionName] = item.result
+          return acc
+        }, {}) ?? {}
 
       const formattedWeights = normalizedWeights
         ? normalizedWeights.map(weight => formatUnits(weight, PERCENTAGE_DECIMALS))
@@ -169,70 +172,51 @@ export function usePathToInitializePool() {
         paysYieldFees: tokenConfigs[index].paysYieldFees,
         amount: '',
         weight: formattedWeights ? formattedWeights[index] : undefined,
-        data: { ...poolTokenData[address], chain: params.network, chainId },
+        data: poolTokenData[address]
+          ? ({ ...poolTokenData[address], chain: params.network, chainId } as any)
+          : undefined,
       }))
 
-      const isFiftyFiftyWeights = formattedWeights?.every(weight => weight === '50')
-      const isEightyTwentyWeights =
-        formattedWeights?.some(weight => weight === '80') &&
-        formattedWeights?.some(weight => weight === '20')
+      const weightSet = new Set(formattedWeights ?? [])
+      const isFiftyFiftyWeights = weightSet.size === 1 && weightSet.has('50')
+      const isEightyTwentyWeights = weightSet.has('80') && weightSet.has('20')
+      const weightedPoolStructure = isFiftyFiftyWeights
+        ? WeightedPoolStructure.FiftyFifty
+        : isEightyTwentyWeights
+          ? WeightedPoolStructure.EightyTwenty
+          : WeightedPoolStructure.Custom
 
-      const { swapFeeManager, pauseManager } = poolRoleAccounts.result as unknown as {
-        swapFeeManager: Address
-        pauseManager: Address
-      }
       const swapFeePercentage = formatUnits(staticSwapFeePercentage, PERCENTAGE_DECIMALS)
-      const { disableUnbalancedLiquidity, enableDonation } = liquidityManagement
-      const poolHooksContract = (hooksConfig.result as unknown as { hooksContract: Address })
-        .hooksContract
 
-      poolCreationForm.setValue('network', networkParam)
-
-      poolCreationForm.setValue('poolType', poolTypeParam)
-      poolCreationForm.setValue('poolTokens', poolTokens)
-      poolCreationForm.setValue('name', name?.result as string)
-      poolCreationForm.setValue('symbol', symbol?.result as string)
-      poolCreationForm.setValue('swapFeeManager', swapFeeManager)
-      poolCreationForm.setValue('pauseManager', pauseManager)
-      poolCreationForm.setValue('swapFeePercentage', swapFeePercentage)
-      poolCreationForm.setValue('poolHooksContract', poolHooksContract)
-      poolCreationForm.setValue('disableUnbalancedLiquidity', disableUnbalancedLiquidity)
-      poolCreationForm.setValue('enableDonation', enableDonation)
-      setPoolAddress(poolAddressParam)
-
-      if (amplificationParameter) {
-        poolCreationForm.setValue('amplificationParameter', formatUnits(amplificationParameter, 3)) // SC multiplies by 1e3 precision during creation of pool
-      }
-
-      if (isWeightedPoolType) {
-        poolCreationForm.setValue(
-          'weightedPoolStructure',
-          isFiftyFiftyWeights
-            ? WeightedPoolStructure.FiftyFifty
-            : isEightyTwentyWeights
-              ? WeightedPoolStructure.EightyTwenty
-              : WeightedPoolStructure.Custom
-        )
-      }
+      poolCreationForm.reset({
+        network: networkParam,
+        poolType: poolTypeParam,
+        poolTokens,
+        name: name?.result as string,
+        symbol: symbol?.result as string,
+        swapFeeManager,
+        pauseManager,
+        swapFeePercentage,
+        poolHooksContract,
+        disableUnbalancedLiquidity,
+        enableDonation,
+        ...(amplificationParameter && {
+          amplificationParameter: formatUnits(amplificationParameter, 3),
+        }), // SC multiplies by 1e3 precision during creation of pool
+        ...(isWeightedPoolType && { weightedPoolStructure }),
+      })
 
       if (isReClammPoolType && reClammConfig) {
-        const {
-          initialTargetPrice,
-          initialMinPrice,
-          initialMaxPrice,
-          initialCenterednessMargin,
-          initialDailyPriceShiftExponent,
-        } = reClammConfig
-        reClammConfigForm.setValue('initialMinPrice', formatUnits(initialMinPrice, 18))
-        reClammConfigForm.setValue('initialTargetPrice', formatUnits(initialTargetPrice, 18))
-        reClammConfigForm.setValue('initialMaxPrice', formatUnits(initialMaxPrice, 18))
-        reClammConfigForm.setValue(
-          'priceShiftDailyRate',
-          formatUnits(initialDailyPriceShiftExponent, 16)
-        )
-        reClammConfigForm.setValue('centerednessMargin', formatUnits(initialCenterednessMargin, 16))
+        reClammConfigForm.reset({
+          initialMinPrice: formatUnits(reClammConfig.initialMinPrice, 18),
+          initialTargetPrice: formatUnits(reClammConfig.initialTargetPrice, 18),
+          initialMaxPrice: formatUnits(reClammConfig.initialMaxPrice, 18),
+          priceShiftDailyRate: formatUnits(reClammConfig.initialDailyPriceShiftExponent, 16),
+          centerednessMargin: formatUnits(reClammConfig.initialCenterednessMargin, 16),
+        })
       }
 
+      setPoolAddress(poolAddressParam)
       lastStep()
     }
   }, [
