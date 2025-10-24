@@ -2,7 +2,7 @@ import { useSwiperSlide } from 'swiper/react'
 import { useEffect, useState } from 'react'
 import { Badge, Box, Heading, HStack, VStack, Flex, Stack, Button } from '@chakra-ui/react'
 import { useReliquary } from '../ReliquaryProvider'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ReliquaryFarmPosition } from '../ReliquaryProvider'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
 import RelicSlideApr from './RelicSlideApr'
@@ -131,7 +131,7 @@ export default function RelicSlide({ relic }: RelicSlideProps) {
   }
 
   return (
-    <AnimatePresence>
+    <>
       <VStack
         animate={{
           opacity: getContainerOpacity(),
@@ -281,6 +281,6 @@ export default function RelicSlide({ relic }: RelicSlideProps) {
       {isBurnModalOpen && (
         <BurnModal chain={chain} isOpen={isBurnModalOpen} onClose={() => setIsModalOpen('')} />
       )}
-    </AnimatePresence>
+    </>
   )
 }
