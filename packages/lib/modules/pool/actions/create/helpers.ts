@@ -57,3 +57,19 @@ export const formatNumber = (value: string) => {
 
   return fNumCustom(value, numFormat)
 }
+
+export function isStablePool(poolType: PoolType): boolean {
+  return poolType === PoolType.Stable || poolType === PoolType.StableSurge
+}
+
+export function isWeightedPool(poolType: PoolType): boolean {
+  return poolType === PoolType.Weighted
+}
+
+export function isReClammPool(poolType: PoolType): boolean {
+  return poolType === PoolType.ReClamm
+}
+
+export function isGyroEllipticPool(poolType: PoolType): boolean {
+  return poolType === PoolType.GyroE
+}

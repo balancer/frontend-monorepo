@@ -11,7 +11,7 @@ import { PERCENTAGE_DECIMALS } from '../create/constants'
 import { usePoolCreationFormSteps } from '../create/usePoolCreationFormSteps'
 import { PoolCreationToken, SupportedPoolTypes } from '../create/types'
 import { WeightedPoolStructure } from '../create/constants'
-import { PoolType } from '@balancer/sdk'
+import { isStablePool, isWeightedPool, isReClammPool } from '../create/helpers'
 
 export function usePathToInitializePool() {
   const { poolCreationForm, poolAddress, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
@@ -22,9 +22,9 @@ export function usePathToInitializePool() {
   const poolAddressParam = params.poolAddress as Address
   const poolTypeParam = params.poolType as SupportedPoolTypes
 
-  const isStablePool = poolTypeParam === PoolType.Stable || poolTypeParam === PoolType.StableSurge
-  const isWeightedPool = poolTypeParam === PoolType.Weighted
-  const isReClammPool = poolTypeParam === PoolType.ReClamm
+  const isStablePoolType = isStablePool(poolTypeParam)
+  const isWeightedPoolType = isWeightedPool(poolTypeParam)
+  const isReClammPoolType = isReClammPool(poolTypeParam)
 
   const shouldUsePathToInitialize = !poolAddress && !!poolAddressParam
 
@@ -96,7 +96,7 @@ export function usePathToInitializePool() {
       abi: parseAbi(['function getAmplificationParameter() view returns (uint256)']),
       functionName: 'getAmplificationParameter',
       chainId,
-      query: { enabled: isStablePool && shouldUsePathToInitialize },
+      query: { enabled: isStablePoolType && shouldUsePathToInitialize },
     })
 
   const { data: normalizedWeights, isLoading: isLoadingWeights } = useReadContract({
@@ -104,7 +104,7 @@ export function usePathToInitializePool() {
     abi: parseAbi(['function getNormalizedWeights() view returns (uint256[])']),
     functionName: 'getNormalizedWeights',
     chainId,
-    query: { enabled: isWeightedPool && shouldUsePathToInitialize },
+    query: { enabled: isWeightedPoolType && shouldUsePathToInitialize },
   })
 
   const { data: reClammConfig, isLoading: isLoadingReClamm } = useReadContract({
@@ -114,7 +114,7 @@ export function usePathToInitializePool() {
     ]),
     functionName: 'getReClammPoolImmutableData',
     chainId,
-    query: { enabled: isReClammPool && shouldUsePathToInitialize },
+    query: { enabled: isReClammPoolType && shouldUsePathToInitialize },
   })
 
   const isLoadingPool =
@@ -125,8 +125,8 @@ export function usePathToInitializePool() {
     isLoadingReClamm
 
   useEffect(() => {
-    const hasRequiredWeightedInfo = !isWeightedPool || !!normalizedWeights
-    const hasRequiredStableInfo = !isStablePool || !!amplificationParameter
+    const hasRequiredWeightedInfo = !isWeightedPoolType || !!normalizedWeights
+    const hasRequiredStableInfo = !isStablePoolType || !!amplificationParameter
     const hasRequiredData =
       !!poolData && !!poolTokenDetails && hasRequiredWeightedInfo && hasRequiredStableInfo
 
@@ -205,7 +205,7 @@ export function usePathToInitializePool() {
         poolCreationForm.setValue('amplificationParameter', formatUnits(amplificationParameter, 3)) // SC multiplies by 1e3 precision during creation of pool
       }
 
-      if (isWeightedPool) {
+      if (isWeightedPoolType) {
         poolCreationForm.setValue(
           'weightedPoolStructure',
           isFiftyFiftyWeights
@@ -216,7 +216,7 @@ export function usePathToInitializePool() {
         )
       }
 
-      if (isReClammPool && reClammConfig) {
+      if (isReClammPoolType && reClammConfig) {
         const {
           initialTargetPrice,
           initialMinPrice,
