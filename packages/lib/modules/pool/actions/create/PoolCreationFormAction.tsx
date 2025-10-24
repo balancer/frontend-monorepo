@@ -5,27 +5,20 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { PoolCreationModal } from './modal/PoolCreationModal'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
+import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const [copiedInitLInk, setCopiedInitLink] = useState(false)
-
   const { isFormStateValid, poolAddress, isReClamm, poolTokens, network, poolType } =
     usePoolCreationForm()
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
+  const { copyToClipboard, isCopied } = useCopyToClipboard()
 
   const hasTokenAmounts = poolTokens.every(token => token.amount)
-
-  function copyInitializeLinkToClipboard() {
-    const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
-    navigator.clipboard.writeText(initializeUrl)
-    setCopiedInitLink(true)
-    setTimeout(() => setCopiedInitLink(false), 2000)
-  }
 
   useEffect(() => {
     // trigger modal close if reclamm and token amounts have not been set
@@ -36,6 +29,8 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
   const showBackButton = !isFirstStep && !poolAddress
+
+  const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
 
   return (
     <>
@@ -55,8 +50,13 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
           )}
 
           {poolAddress && (
-            <Button onClick={copyInitializeLinkToClipboard} size="lg" variant="secondary" w="full">
-              {copiedInitLInk ? 'Copied ✓' : 'Copy Link'}
+            <Button
+              onClick={() => copyToClipboard(initializeUrl)}
+              size="lg"
+              variant="secondary"
+              w="full"
+            >
+              {isCopied ? 'Copied ✓' : 'Copy Link'}
             </Button>
           )}
 
