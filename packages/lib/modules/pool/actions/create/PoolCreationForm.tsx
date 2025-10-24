@@ -21,10 +21,10 @@ import { PoolFundStep } from './steps/fund/PoolFundStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
-import { usePathToInitializePool } from '../initialize/usePathToInitializePool'
+import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
 
 export function PoolCreationForm() {
-  const { isLoadingPool } = usePathToInitializePool()
+  const { isLoadingPool } = useHydratePoolCreationForm()
 
   const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
@@ -33,7 +33,7 @@ export function PoolCreationForm() {
     <VStack spacing="lg">
       <HeaderBanner />
       {isLoadingPool ? (
-        <Box>Loading pool information...</Box>
+        <Box>Loading pool for initialization...</Box>
       ) : (
         <Stack
           direction={{ base: 'column', xl: 'row' }}
