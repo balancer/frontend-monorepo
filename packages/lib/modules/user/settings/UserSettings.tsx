@@ -23,6 +23,8 @@ import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 import { Percent, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
 import { EnableTxBundleSetting } from './EnableTxBundlesSetting'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 interface SlippageInputProps {
   slippage: string
@@ -96,10 +98,14 @@ function ToggleAllowSounds() {
 export function UserSettings() {
   const { slippage, setSlippage } = useUserSettings()
 
+  const handleSettingsClick = () => {
+    if (isBalancer) trackEvent(AnalyticsEvent.ClickNavUtilitiesSettings)
+  }
+
   return (
     <Popover isLazy>
       <PopoverTrigger>
-        <Button p="0" variant="tertiary">
+        <Button onClick={handleSettingsClick} p="0" variant="tertiary">
           <Settings size={18} />
         </Button>
       </PopoverTrigger>
