@@ -255,11 +255,7 @@ export default function RelicSlide({ relic, openInvestModal, openWithdrawModal }
         >
           {isActive && !isRelicAmountZero && (
             <>
-              <RelicSlideMainInfo
-                isLoading={_isLoadingRelicPositions}
-                openInvestModal={openInvestModal}
-                openWithdrawModal={openWithdrawModal}
-              />
+              <RelicSlideMainInfo isLoading={_isLoadingRelicPositions} />
               <RelicSlideApr />
               <RelicSlideInfo />
             </>

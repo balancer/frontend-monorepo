@@ -15,15 +15,9 @@ import { useReliquary } from '../ReliquaryProvider'
 
 interface Props {
   isLoading?: boolean
-  openInvestModal: () => void
-  openWithdrawModal: () => void
 }
 
-export default function RelicSlideMainInfo({
-  isLoading,
-  openInvestModal,
-  openWithdrawModal,
-}: Props) {
+export default function RelicSlideMainInfo({ isLoading }: Props) {
   const { isActive } = useSwiperSlide()
   const { relicPositions, selectedRelic, maturityThresholds } = useReliquary()
   const config = useNetworkConfig()
@@ -38,62 +32,62 @@ export default function RelicSlideMainInfo({
   return (
     <Box height="full" width="full">
       {isActive && !isLoading && (
-        <Box position="relative" height="full">
+        <Box height="full" position="relative">
           <VStack
-            as={motion.div}
             animate={{ opacity: 1, transform: 'scale(1)', transition: { delay: 0.1 } }}
-            initial={{ opacity: 0, transform: 'scale(0.75)' }}
+            as={motion.div}
             exit={{ opacity: 0, transform: 'scale(0.75)' }}
-            overflow="hidden"
             height="full"
+            initial={{ opacity: 0, transform: 'scale(0.75)' }}
+            overflow="hidden"
             position="relative"
           >
             <Stack
-              divider={<StackDivider />}
-              width={{ base: '100%', lg: '60%' }}
-              height="full"
-              rounded="md"
               background="box.500"
               boxShadow="0px 0px 0px 1px #00000005,1px 1px 1px -0.5px #0000000F,3px 3px 3px -1.5px #0000000F,6px 6px 6px -3px #0000000F,12px 12px 12px -6px #0000000F,24px 24px 24px -12px #0000001A,-0.5px -1px 0px 0px #FFFFFF26"
+              divider={<StackDivider />}
+              height="full"
               p="4"
+              rounded="md"
+              width={{ base: '100%', lg: '60%' }}
             >
-              <VStack spacing="0" h="50%" w="full" alignItems="flex-start">
+              <VStack alignItems="flex-start" h="50%" spacing="0" w="full">
                 <Box>
-                  <Text lineHeight="1rem" fontWeight="semibold" fontSize="md" color="beets.base.50">
+                  <Text color="beets.base.50" fontSize="md" fontWeight="semibold" lineHeight="1rem">
                     Relic liquidity
                   </Text>
                   <Text color="white" fontSize="1.75rem">
                     {numberFormatUSDValue(relicBalanceUSD)}
                   </Text>
                 </Box>
-                <HStack spacing="1" mb="0.5">
-                  <TokenAvatar height="20px" width="20px" address={config.fbeets.address} />
+                <HStack mb="0.5" spacing="1">
+                  <TokenAvatar address={config.fbeets.address} height="20px" width="20px" />
                   <Text fontSize="1rem" lineHeight="1rem">
                     {tokenFormatAmount(selectedRelic?.amount || '0')}
                   </Text>
                 </HStack>
               </VStack>
-              <VStack spacing="0" h="50%" w="full" pt={{ base: '1', lg: undefined }}>
-                <VStack spacing="1" w="full" alignItems="flex-start">
-                  <Text lineHeight="1rem" fontWeight="semibold" fontSize="md" color="beets.base.50">
+              <VStack h="50%" pt={{ base: '1', lg: undefined }} spacing="0" w="full">
+                <VStack alignItems="flex-start" spacing="1" w="full">
+                  <Text color="beets.base.50" fontSize="md" fontWeight="semibold" lineHeight="1rem">
                     Level up progress
                   </Text>
                   <VStack alignItems="flex-start" w="full">
                     {!isMaxMaturity ? (
                       <>
-                        <HStack spacing="1" color="beets.green">
+                        <HStack color="beets.green" spacing="1">
                           <Text>Next level in</Text>
                           <Countdown date={levelUpDate} />
                         </HStack>
                         <AnimatedProgress
-                          rounded="5"
                           color="black"
-                          w="full"
+                          rounded="5"
                           value={progressToNextLevel}
+                          w="full"
                         />
                       </>
                     ) : (
-                      <BeetsTooltip noImage label="You've achieved the max level, nice!">
+                      <BeetsTooltip label="You've achieved the max level, nice!" noImage>
                         <Box>
                           <Badge colorScheme="green">MAX LEVEL</Badge>
                         </Box>
@@ -101,36 +95,6 @@ export default function RelicSlideMainInfo({
                     )}
                   </VStack>
                 </VStack>
-
-                <HStack
-                  h="full"
-                  w="full"
-                  alignItems="flex-end"
-                  pt={{ base: '4', xl: '0' }}
-                  pb={{ base: '6', xl: '0' }}
-                >
-                  <Button
-                    variant="primary"
-                    w="full"
-                    size="md"
-                    rounded="lg"
-                    disabled={hasNoRelics}
-                    onClick={openInvestModal}
-                  >
-                    Deposit
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    w="full"
-                    size="md"
-                    rounded="lg"
-                    disabled={hasNoRelics}
-                    onClick={openWithdrawModal}
-                    zIndex={2}
-                  >
-                    Withdraw
-                  </Button>
-                </HStack>
               </VStack>
             </Stack>
           </VStack>
