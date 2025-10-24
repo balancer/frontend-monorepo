@@ -15,7 +15,7 @@ import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/sa
 import { useTransactionGasCost } from '../useTransactionGasCost'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { getGqlChain } from '@repo/lib/config/app.config'
-import { SMALL_AMOUNT_LABEL } from '@repo/lib/shared/utils/numbers'
+import { TxnSpeedSetting } from './TxnSpeedSetting'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
@@ -121,7 +121,7 @@ function NestedInfo({
 }) {
   const gasCostData = useTransactionGasCost(transaction)
 
-  const isSmallAmount = gasCostData && gasCostData.costUsd?.replace('$', '') === SMALL_AMOUNT_LABEL
+  const isActual = gasCostData && gasCostData.isActual
 
   const textProps = {
     fontSize: 'sm',
@@ -133,11 +133,13 @@ function NestedInfo({
     <Box mb="0" mt="0" p="0.5" pl="0">
       <HStack align="start" gap="xxs">
         {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
-          <Text {...textProps} p="0">
-            {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
-            {(!isSmallAmount || !gasCostData.isActual) && '~'}
-            {gasCostData.costUsd}
-          </Text>
+          <HStack gap="0">
+            <Text {...textProps} mr="sm" p="0">
+              {isActual ? 'Final gas: ' : 'Estimated gas: '}
+              {gasCostData.costUsd}
+            </Text>
+            {!isActual && <TxnSpeedSetting />}
+          </HStack>
         ) : step.isComplete() ? (
           <Text {...textProps}>Previously approved</Text>
         ) : (
