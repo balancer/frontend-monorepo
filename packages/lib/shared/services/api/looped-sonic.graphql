@@ -1,0 +1,16 @@
+query GetLoopsData {
+  loopsGetData {
+    actualSupply
+    apr
+    collateralAmount
+    collateralAmountInEth
+    debtAmount
+    healthFactor
+    leverage
+    nav
+    rate
+    stSAaveMarketSupply
+    stSAaveMarketSupplyCap
+    tvl
+  }
+}
