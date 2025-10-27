@@ -19,6 +19,7 @@ import { createMockConnector } from './impersonation/createMockConnector'
 import { Address, fallback, http } from 'viem'
 import { isProd, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { isBrowser } from '@repo/lib/shared/utils/app'
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
 if (!walletConnectProjectId) throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT_ID env')
@@ -49,7 +50,7 @@ const connectors = connectorsForWallets(
   This fixes this rainbowkit issue:
   https://github.com/rainbow-me/rainbowkit/issues/2232
 */
-if (typeof window !== 'undefined' && !isConnectedToWC()) {
+if (isBrowser() && !isConnectedToWC()) {
   const lastConnector = connectors[connectors.length - 1]
   if (lastConnector({} as any).id !== 'walletConnect') {
     connectors.push(
@@ -59,7 +60,7 @@ if (typeof window !== 'undefined' && !isConnectedToWC()) {
 }
 
 // Add mock connector for development/staging environments
-if (typeof window !== 'undefined' && !isProd) {
+if (isBrowser() && !isProd) {
   connectors.push(createMockConnector({ index: connectors.length }))
 }
 
