@@ -16,7 +16,6 @@ const lockedEndDateTimestamp: number = lockedEndDate.getTime()
 function testUseLockDuration() {
   const { result } = testHook(() =>
     useLockDuration({
-      initialValue: 0,
       lockedEndDate,
       mainnetLockedInfo: {
         lockedEndDate: lockedEndDateTimestamp,
@@ -39,16 +38,16 @@ test('lockDuration returns expected slider values', () => {
   expect(result.current).toMatchObject({
     isExtendedLockEndDate: false,
     isValidLockEndDate: true,
-    lockUntilDateDuration: '~2 weeks',
-    lockUntilDateFormatted: '17 Apr 2025',
+    lockUntilDateDuration: '~1 year',
+    lockUntilDateFormatted: '2 Apr 2026',
     lockedUntilDateFormatted: '10 Apr 2025',
     minLockEndDate: new Date('2025-04-17T00:00:00.000Z'), // 2 weeks from now
-    lockEndDate: new Date('2025-04-17T00:00:00.000Z'), // 2 weeks from now
+    lockEndDate: new Date('2026-04-02T00:00:00.000Z'), // 1 year from now
     maxLockEndDate: new Date('2026-04-02T00:00:00.000Z'), // 1 year from now
     maxStep: 50,
     minSliderValue: undefined,
     minStep: 0,
-    sliderValue: 0,
+    sliderValue: 50,
     stepSize: 1,
     steps: expect.any(Array),
   })
