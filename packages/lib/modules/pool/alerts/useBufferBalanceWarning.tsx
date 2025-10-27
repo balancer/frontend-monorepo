@@ -25,8 +25,9 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
   )
 
   const wrappedTokens = validTokens.filter(token => token.underlyingToken)
-
   const { bufferBalances, isLoadingBufferBalances } = useBufferBalances(wrappedTokens)
+
+  if (isLoadingBufferBalances) return null
 
   const bufferLimitViolations = humanUnderlyingAmounts
     .map(({ tokenAddress, humanAmount, symbol: amountSymbol }) => {
@@ -89,7 +90,6 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
     })
     .filter(bufferViolation => bufferViolation !== null)
 
-  if (isLoadingBufferBalances) return null
   if (bufferLimitViolations.length === 0) return null
 
   return bufferLimitViolations.map(({ amountSymbol, maxAmountOfUnderlying }, idx) => (
@@ -97,7 +97,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
       content={`The maximum ${operation === 'add' ? 'deposit' : 'withdraw'} amount is currently ${fNum('integer', maxAmountOfUnderlying)} ${amountSymbol}`}
       key={idx}
       status="warning"
-      title="Amount exceeds buffer limits"
+      title="Underlying amount exceeds buffer limits"
     />
   ))
 }
