@@ -1,17 +1,20 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
-import { useParams } from 'next/navigation'
-import { useReadContracts, useReadContract } from 'wagmi'
-import { formatUnits, Address, erc20Abi, parseAbi } from 'viem'
-import { getChainId } from '@repo/lib/config/app.config'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { AddressProvider } from '@balancer/sdk'
-import { vaultExtensionAbi_V3 } from '@balancer/sdk'
+import { formatUnits, Address } from 'viem'
 import { PERCENTAGE_DECIMALS } from './constants'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
-import { PoolCreationToken, SupportedPoolTypes } from './types'
+import { PoolCreationToken } from './types'
 import { WeightedPoolStructure } from './constants'
+import { useMemo } from 'react'
+import { useParams } from 'next/navigation'
+import { getChainId } from '@repo/lib/config/app.config'
+import { getCreatePathParams } from './getCreatePathParams'
 import { isStablePool, isWeightedPool, isReClammPool } from './helpers'
+import { erc20Abi } from 'viem'
+import { AddressProvider } from '@balancer/sdk'
+import { vaultExtensionAbi_V3 } from '@balancer/sdk'
+import { useReadContracts, useReadContract } from 'wagmi'
+import { parseAbi } from 'viem'
 import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 
@@ -32,33 +35,30 @@ type PoolDataResponse = [
   ReadContractResponse<PoolRoleAccounts>,
 ]
 type TokenDataResponse = ReadContractResponse<string | number>[]
-type PoolTokenDataObject = Record<
-  Address,
-  {
-    address: Address
-    [key: string]: string | number | undefined
-  }
->
 
 /**
  *  Must fetch data on chain because API does not capture pool until after initialization
  *  Reads to balancer vault always have tokens sorted by address (i.e. token weights, etc.)
  */
 export function useHydratePoolCreationForm() {
-  const { poolCreationForm, poolAddress, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
+  const { poolCreationForm, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
   const { lastStep } = usePoolCreationFormSteps()
-  const params = useParams()
 
-  const networkParam = params.network as GqlChain | undefined
-  const poolAddressParam = params.poolAddress as Address | undefined
-  const poolTypeParam = params.poolType as SupportedPoolTypes | undefined
+  const { slug } = useParams()
+  const params = getCreatePathParams(slug as string[] | undefined)
+  const networkParam = params.network
+  const poolAddressParam = params.poolAddress
+  const poolTypeParam = params.poolType
 
   const chainId = networkParam ? getChainId(networkParam) : undefined
   const isStablePoolType = poolTypeParam && isStablePool(poolTypeParam)
   const isWeightedPoolType = poolTypeParam && isWeightedPool(poolTypeParam)
   const isReClammPoolType = poolTypeParam && isReClammPool(poolTypeParam)
 
-  const shouldUsePathToInitialize = !poolAddress && !!poolAddressParam
+  const { poolAddress } = usePoolCreationForm()
+
+  const shouldHydratePoolCreationForm =
+    !poolAddress && !!poolAddressParam && !!networkParam && !!poolTypeParam
 
   const poolFunctionNames = ['name', 'symbol']
   const vaultFunctionNames = [
@@ -89,7 +89,7 @@ export function useHydratePoolCreationForm() {
   }, [poolAddressParam, chainId])
 
   const { data: poolData, isLoading: isLoadingPoolData } = useReadContracts({
-    query: { enabled: poolDataReads.length > 0 && shouldUsePathToInitialize },
+    query: { enabled: poolDataReads.length > 0 && shouldHydratePoolCreationForm },
     contracts: poolDataReads,
   }) as { data: PoolDataResponse; isLoading: boolean }
 
@@ -113,9 +113,27 @@ export function useHydratePoolCreationForm() {
   }, [chainId, poolData])
 
   const { data: poolTokenDetails, isLoading: isLoadingPoolTokenDetails } = useReadContracts({
-    query: { enabled: tokenContracts.length > 0 && shouldUsePathToInitialize },
+    query: { enabled: tokenContracts.length > 0 && shouldHydratePoolCreationForm },
     contracts: tokenContracts,
   }) as { data: TokenDataResponse; isLoading: boolean }
+
+  // Group sorted token details by address (each token has name, symbol, and decimals)
+  const poolTokenData =
+    poolTokenDetails?.reduce<
+      Record<
+        Address,
+        {
+          address: Address
+          [key: string]: string | number | undefined
+        }
+      >
+    >((acc, item, index) => {
+      const address = tokenContracts[index].address
+      const functionName = tokenFunctionNames[index % tokenFunctionNames.length]
+      if (!acc[address]) acc[address] = { address }
+      acc[address][functionName] = item.result
+      return acc
+    }, {}) ?? {}
 
   const { data: amplificationParameter, isLoading: isLoadingAmplificationParameter } =
     useReadContract({
@@ -123,7 +141,7 @@ export function useHydratePoolCreationForm() {
       abi: parseAbi(['function getAmplificationParameter() view returns (uint256)']),
       functionName: 'getAmplificationParameter',
       chainId,
-      query: { enabled: isStablePoolType && shouldUsePathToInitialize },
+      query: { enabled: isStablePoolType && shouldHydratePoolCreationForm },
     })
 
   const { data: normalizedWeights, isLoading: isLoadingWeights } = useReadContract({
@@ -131,7 +149,7 @@ export function useHydratePoolCreationForm() {
     abi: parseAbi(['function getNormalizedWeights() view returns (uint256[])']),
     functionName: 'getNormalizedWeights',
     chainId,
-    query: { enabled: isWeightedPoolType && shouldUsePathToInitialize },
+    query: { enabled: isWeightedPoolType && shouldHydratePoolCreationForm },
   })
 
   const { data: reClammConfig, isLoading: isLoadingReClamm } = useReadContract({
@@ -139,7 +157,7 @@ export function useHydratePoolCreationForm() {
     abi: reClammPoolAbi,
     functionName: 'getReClammPoolImmutableData',
     chainId,
-    query: { enabled: isReClammPoolType && shouldUsePathToInitialize },
+    query: { enabled: isReClammPoolType && shouldHydratePoolCreationForm },
   })
 
   const isLoadingPool =
@@ -155,7 +173,7 @@ export function useHydratePoolCreationForm() {
     const hasRequiredData =
       !!poolData && !!poolTokenDetails && hasRequiredWeightedInfo && hasRequiredStableInfo
 
-    if (!isLoadingPool && hasRequiredData && shouldUsePathToInitialize) {
+    if (!isLoadingPool && hasRequiredData && shouldHydratePoolCreationForm) {
       const [name, symbol, poolTokenInfo, poolConfig, hooksConfig, poolRoleAccounts] =
         poolData ?? []
 
@@ -177,16 +195,6 @@ export function useHydratePoolCreationForm() {
       const tokenWeights = normalizedWeights
         ? normalizedWeights.map(weight => formatUnits(weight, PERCENTAGE_DECIMALS))
         : undefined
-
-      // Group sorted token details by address (each token has 3 reads: name, symbol, decimals)
-      const poolTokenData =
-        poolTokenDetails?.reduce<PoolTokenDataObject>((acc, item, index) => {
-          const address = tokenContracts[index].address
-          const functionName = tokenFunctionNames[index % tokenFunctionNames.length]
-          if (!acc[address]) acc[address] = { address }
-          acc[address][functionName] = item.result
-          return acc
-        }, {}) ?? {}
 
       const poolTokens: PoolCreationToken[] = tokenAddresses.map((address, index) => ({
         address,
@@ -222,10 +230,11 @@ export function useHydratePoolCreationForm() {
         poolHooksContract,
         disableUnbalancedLiquidity,
         enableDonation,
-        ...(amplificationParameter && {
-          amplificationParameter: formatUnits(amplificationParameter, 3), // SC multiplies by 1e3 precision during creation of pool
-        }),
-        ...(isWeightedPoolType && { weightedPoolStructure }),
+        ...(isStablePoolType &&
+          amplificationParameter && {
+            amplificationParameter: formatUnits(amplificationParameter, 3), // SC multiplies by 1e3 precision during creation of pool
+          }),
+        ...(isWeightedPoolType && normalizedWeights && { weightedPoolStructure }),
       })
 
       if (isReClammPoolType && reClammConfig) {
@@ -247,14 +256,7 @@ export function useHydratePoolCreationForm() {
       setPoolAddress(poolAddressParam)
       lastStep()
     }
-  }, [
-    params.network,
-    params.poolType,
-    params.poolAddress,
-    poolData,
-    poolTokenDetails,
-    isLoadingPool,
-  ])
+  }, [networkParam, poolTypeParam, poolAddressParam, poolData, poolTokenDetails, isLoadingPool])
 
   return { isLoadingPool }
 }

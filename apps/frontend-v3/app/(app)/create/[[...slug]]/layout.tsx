@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   `,
 }
 
-export default async function Create({ children }: PropsWithChildren) {
+export default async function Layout({ children }: PropsWithChildren) {
   if (isProd) redirect('/')
   return <>{children}</>
 }
