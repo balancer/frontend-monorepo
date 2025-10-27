@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { SpeedIcon } from '@repo/lib/shared/components/icons/SpeedIcon'
+import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 
 function getSpeedSettingLabel(id: string = 'default') {
   switch (id) {
@@ -33,7 +34,11 @@ export function TxnSpeedSetting() {
     <Popover placement="top" trigger="hover">
       <PopoverTrigger>
         <HStack gap="xs">
-          <Image height="14px" src={connector?.icon} width="14px" />
+          {connector && connector.icon ? (
+            <Image height="14px" src={connector.icon} width="14px" />
+          ) : (
+            <WalletIcon size={14} />
+          )}
           <Box color="font.secondary" position="relative" top="0px">
             <SpeedIcon size={14} />
           </Box>
