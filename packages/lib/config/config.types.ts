@@ -183,7 +183,7 @@ export type PromoItem = {
 }
 
 export interface ProjectConfig {
-  projectId: 'beets' | 'balancer' | 'cow-amm'
+  projectId: 'beets' | 'balancer'
   projectUrl: string
   projectName: string
   projectLogo: string
