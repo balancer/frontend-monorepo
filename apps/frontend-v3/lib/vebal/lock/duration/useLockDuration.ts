@@ -1,6 +1,7 @@
 import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { useToday } from '@repo/lib/shared/hooks/date.hooks'
 import {
+  addHours,
   addMonths,
   addWeeks,
   differenceInMonths,
@@ -62,7 +63,8 @@ export function useLockDuration({
   const stepSize = 1
 
   const lockEndDate = useMemo(() => {
-    const value = startOfDayUtc(addWeeks(sliderMinDate, sliderValue))
+    // HACK: we have the same problem as lock-time.utils.ts with daylight savings
+    const value = startOfDayUtc(addWeeks(addHours(sliderMinDate, 2), sliderValue))
 
     if (value >= sliderMaxDate) {
       return sliderMaxDate
