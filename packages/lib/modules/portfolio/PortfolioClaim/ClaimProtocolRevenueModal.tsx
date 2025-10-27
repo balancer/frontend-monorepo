@@ -52,6 +52,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
 
   const rewards: HumanTokenAmount[] = rewardsDataSnapshot
     .filter(reward => !bn(reward.balance).isZero())
+    .sort((a, b) => b.fiatBalance.minus(a.fiatBalance).toNumber())
     .map(reward => ({
       tokenAddress: reward.tokenAddress as Address,
       humanAmount: reward.humanBalance,
