@@ -19,6 +19,7 @@ import { getChainName } from '@repo/lib/config/app.config'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   modalTitle?: string
@@ -79,8 +80,8 @@ export function RestartPoolCreationModal({
                   <Text color="font.link">{poolAddress}</Text>
                   <Text>
                     Although it has been created on the {getChainName(network)} network, it will not
-                    appear on the Balancer UI and it will not be accessible to liquidity providers
-                    if you abandon it now.
+                    appear on the {PROJECT_CONFIG.projectName} UI and it will not be accessible to
+                    liquidity providers if you abandon it now.
                   </Text>
                   <Text>Are you sure you want to abandon it and delete all associated data?</Text>
                 </VStack>
