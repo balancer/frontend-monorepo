@@ -19,7 +19,7 @@ import { createMockConnector } from './impersonation/createMockConnector'
 import { Address, fallback, http } from 'viem'
 import { isProd, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { isBrowser } from '@repo/lib/shared/utils/app'
+import { isBrowser } from '@repo/lib/shared/utils/app.helper'
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
 if (!walletConnectProjectId) throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT_ID env')
