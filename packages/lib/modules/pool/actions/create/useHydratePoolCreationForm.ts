@@ -14,8 +14,11 @@ import { erc20Abi } from 'viem'
 import { AddressProvider } from '@balancer/sdk'
 import { vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { useReadContracts, useReadContract } from 'wagmi'
-import { parseAbi } from 'viem'
-import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
+import {
+  reClammPoolAbi,
+  balancerV3WeightedPoolAbi,
+  balancerV3StablePoolAbi,
+} from '@repo/lib/modules/web3/contracts/abi/generated'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 
 type PoolTokenInfo = [Address[], { rateProvider: Address; paysYieldFees: boolean }[]]
@@ -135,10 +138,10 @@ export function useHydratePoolCreationForm() {
       return acc
     }, {}) ?? {}
 
-  const { data: amplificationParameter, isLoading: isLoadingAmplificationParameter } =
+  const { data: amplificationParameterResponse, isLoading: isLoadingAmplificationParameter } =
     useReadContract({
       address: poolAddressParam,
-      abi: parseAbi(['function getAmplificationParameter() view returns (uint256)']),
+      abi: balancerV3StablePoolAbi,
       functionName: 'getAmplificationParameter',
       chainId,
       query: { enabled: isStablePoolType && shouldHydratePoolCreationForm },
@@ -146,7 +149,7 @@ export function useHydratePoolCreationForm() {
 
   const { data: normalizedWeights, isLoading: isLoadingWeights } = useReadContract({
     address: poolAddressParam,
-    abi: parseAbi(['function getNormalizedWeights() view returns (uint256[])']),
+    abi: balancerV3WeightedPoolAbi,
     functionName: 'getNormalizedWeights',
     chainId,
     query: { enabled: isWeightedPoolType && shouldHydratePoolCreationForm },
@@ -169,7 +172,7 @@ export function useHydratePoolCreationForm() {
 
   useEffect(() => {
     const hasRequiredWeightedInfo = !isWeightedPoolType || !!normalizedWeights
-    const hasRequiredStableInfo = !isStablePoolType || !!amplificationParameter
+    const hasRequiredStableInfo = !isStablePoolType || !!amplificationParameterResponse
     const hasRequiredData =
       !!poolData && !!poolTokenDetails && hasRequiredWeightedInfo && hasRequiredStableInfo
 
@@ -217,6 +220,8 @@ export function useHydratePoolCreationForm() {
           : WeightedPoolStructure.Custom
 
       const swapFeePercentage = formatUnits(staticSwapFeePercentage, PERCENTAGE_DECIMALS)
+      const amplificationParameter =
+        amplificationParameterResponse && amplificationParameterResponse[0]
 
       poolCreationForm.reset({
         network: networkParam,
