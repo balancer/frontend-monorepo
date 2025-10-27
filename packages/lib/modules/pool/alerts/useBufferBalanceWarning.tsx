@@ -31,7 +31,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
   const bufferLimitViolations = humanUnderlyingAmounts
     .map(({ tokenAddress, humanAmount, symbol: amountSymbol }) => {
       if (operation === 'add') {
-        // if operation is add liquidity, the user is offering underlying token which requires wrapped tokens from buffer
+        // if operation is add liquidity, the user is offering underlying tokens which requires sufficient buffer balance of wrapped tokens
         const wrappedToken = validTokens.find(
           validToken => tokenAddress === validToken.underlyingToken?.address
         )
@@ -41,51 +41,47 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
         if (!wrappedBufferBalance || !wrappedToken || !wrappedToken.priceRate) return null
 
-        const wrappedTokenBufferBalance = wrappedBufferBalance?.wrappedBalanceHuman
-        const halfBufferTotalBalance = bn(wrappedBufferBalance?.bufferTotalBalanceHuman).div(2)
+        const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped } = wrappedBufferBalance
 
-        // convert underlying amount to wrapped amount using wrapped rate?
-        const adjustedAmountIn = bn(humanAmount).div(wrappedToken.priceRate)
-        const maxDeposit = wrappedToken?.maxDeposit ?? 0
+        // convert underlying amount to wrapped amount using wrapped rate
+        const wrappedAmountNeeded = bn(humanAmount).div(wrappedToken.priceRate)
+        const maxDeposit = bn(wrappedToken?.maxDeposit ?? 0)
 
-        const exceedsBufferBalance = bn(adjustedAmountIn).gt(bn(wrappedTokenBufferBalance))
-        const exceedsVaultCapacity = bn(maxDeposit).lt(
-          halfBufferTotalBalance.plus(bn(adjustedAmountIn).minus(bn(wrappedTokenBufferBalance)))
+        const exceedsBufferBalance = wrappedAmountNeeded.gt(bufferBalanceOfWrapped)
+        const exceedsVaultCapacity = maxDeposit.lt(
+          halfOfBufferTotalLiquidityAsWrapped.plus(
+            wrappedAmountNeeded.minus(bufferBalanceOfWrapped)
+          )
         )
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
-          return {
-            amountSymbol,
-            // multiply wrapped buffer balance by wrapped rate to get max underlying amount user can add?
-            maxAmount: bn(wrappedTokenBufferBalance).times(wrappedToken.priceRate),
-          }
+          const maxAmountOfUnderlying = bufferBalanceOfWrapped.times(wrappedToken.priceRate)
+          return { amountSymbol, maxAmountOfUnderlying }
         }
 
         return null
       } else {
-        // if operation is remove liquidity, the user is giving BPT ( which represents some amount of wrapped tokens )
-        // user is asking for underlying token from buffer
+        // if operation is remove liquidity, the user is offering wrapped tokens which requires sufficient buffer balance of underlying tokens
         const underlyingToken = validTokens.find(validToken => tokenAddress === validToken.address)
         const underlyingBufferBalance = bufferBalances?.find(
           bufferBalance => bufferBalance.underlyingTokenAddress === underlyingToken?.address
         )
 
         if (!underlyingBufferBalance || !amountSymbol) return null
+        const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } =
+          underlyingBufferBalance
 
-        const underlyingTokenBufferBalance = underlyingBufferBalance.underlyingBalanceHuman
-        const halfTotalBufferBalance = bn(underlyingBufferBalance.bufferTotalBalanceHuman).div(2)
-        const maxWithdraw = underlyingToken?.maxWithdraw ?? 0
+        const maxWithdraw = bn(underlyingToken?.maxWithdraw ?? 0)
 
-        const exceedsBufferBalance = bn(humanAmount).gt(bn(underlyingTokenBufferBalance))
-        const exceedsVaultCapacity = bn(maxWithdraw).lt(
-          halfTotalBufferBalance.plus(bn(humanAmount).minus(bn(underlyingTokenBufferBalance)))
+        const exceedsBufferBalance = bn(humanAmount).gt(bufferBalanceOfUnderlying)
+        const exceedsVaultCapacity = maxWithdraw.lt(
+          halfOfBufferTotalLiquidityAsUnderlying.plus(
+            bn(humanAmount).minus(bufferBalanceOfUnderlying)
+          )
         )
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
-          return {
-            amountSymbol,
-            maxAmount: underlyingTokenBufferBalance,
-          }
+          return { amountSymbol, maxAmountOfUnderlying: bufferBalanceOfUnderlying }
         }
 
         return null
@@ -96,9 +92,9 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
   if (isLoadingBufferBalances) return null
   if (bufferLimitViolations.length === 0) return null
 
-  return bufferLimitViolations.map(({ amountSymbol, maxAmount }, idx) => (
+  return bufferLimitViolations.map(({ amountSymbol, maxAmountOfUnderlying }, idx) => (
     <BalAlert
-      content={`The maximum ${operation === 'add' ? 'deposit' : 'withdraw'} amount is currently ${fNum('integer', maxAmount)} ${amountSymbol}`}
+      content={`The maximum ${operation === 'add' ? 'deposit' : 'withdraw'} amount is currently ${fNum('integer', maxAmountOfUnderlying)} ${amountSymbol}`}
       key={idx}
       status="warning"
       title="Amount exceeds buffer limits"
@@ -115,30 +111,53 @@ function useBufferBalances(wrappedTokens: ApiToken[]) {
       functionName: 'getBufferBalance',
       args: [token.address],
     })),
+    query: { enabled: wrappedTokens.length > 0 },
   })
 
-  const bufferBalances = data?.map((item, index) => {
-    const result = item.result as readonly [bigint, bigint] | undefined
+  const bufferBalances = data
+    ?.map((item, index) => {
+      const result = item.result as readonly [bigint, bigint] | undefined
+      const wrappedToken = wrappedTokens[index]
 
-    const underlyingBalanceRaw = result?.[0] ?? 0n
-    const wrappedBalanceRaw = result?.[1] ?? 0n
-    const underlyingDecimals = wrappedTokens[index].underlyingToken?.decimals ?? 0
-    const wrappedDecimals = wrappedTokens[index].wrappedToken?.decimals ?? 0
+      const underlyingBalanceRaw = result?.[0]
+      const wrappedBalanceRaw = result?.[1]
+      const underlyingDecimals = wrappedToken.underlyingToken?.decimals
+      const wrappedDecimals = wrappedToken?.decimals
 
-    const underlyingBalanceHuman = Number(formatUnits(underlyingBalanceRaw, underlyingDecimals))
-    const wrappedBalanceHuman = Number(formatUnits(wrappedBalanceRaw, wrappedDecimals))
-    const bufferTotalBalanceHuman = underlyingBalanceHuman + wrappedBalanceHuman
-    const underlyingTokenAddress = wrappedTokens[index].underlyingToken?.address
-    const wrappedTokenAddress = wrappedTokens[index].address
+      if (
+        !underlyingBalanceRaw ||
+        !wrappedBalanceRaw ||
+        !underlyingDecimals ||
+        !wrappedDecimals ||
+        !wrappedToken?.priceRate
+      ) {
+        return null
+      }
 
-    return {
-      underlyingTokenAddress,
-      wrappedTokenAddress,
-      underlyingBalanceHuman,
-      wrappedBalanceHuman,
-      bufferTotalBalanceHuman,
-    }
-  })
+      const bufferBalanceOfUnderlying = bn(formatUnits(underlyingBalanceRaw, underlyingDecimals))
+      const bufferBalanceOfWrapped = bn(formatUnits(wrappedBalanceRaw, wrappedDecimals))
+
+      const bufferTotalLiquidityAsUnderlying = bufferBalanceOfUnderlying.plus(
+        bufferBalanceOfWrapped.times(wrappedToken.priceRate)
+      )
+      const halfOfBufferTotalLiquidityAsUnderlying = bufferTotalLiquidityAsUnderlying.div(2)
+      const halfOfBufferTotalLiquidityAsWrapped = halfOfBufferTotalLiquidityAsUnderlying.div(
+        wrappedToken.priceRate
+      )
+
+      const underlyingTokenAddress = wrappedTokens[index].underlyingToken?.address
+      const wrappedTokenAddress = wrappedTokens[index].address
+
+      return {
+        underlyingTokenAddress,
+        wrappedTokenAddress,
+        bufferBalanceOfUnderlying,
+        bufferBalanceOfWrapped,
+        halfOfBufferTotalLiquidityAsUnderlying,
+        halfOfBufferTotalLiquidityAsWrapped,
+      }
+    })
+    .filter(bufferBalance => bufferBalance !== null)
 
   return { bufferBalances, isLoadingBufferBalances: isLoading }
 }
