@@ -43,14 +43,13 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
         const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped } = wrappedBufferBalance
 
-        // convert underlying amount to wrapped amount using wrapped rate
-        const wrappedAmountNeeded = bn(humanAmount).div(wrappedToken.priceRate)
-        const maxDeposit = bn(wrappedToken?.maxDeposit ?? 0)
+        const wrappedAmountRequired = bn(humanAmount).div(wrappedToken.priceRate)
+        const exceedsBufferBalance = wrappedAmountRequired.gt(bufferBalanceOfWrapped)
 
-        const exceedsBufferBalance = wrappedAmountNeeded.gt(bufferBalanceOfWrapped)
+        const maxDeposit = bn(wrappedToken?.maxDeposit ?? 0)
         const exceedsVaultCapacity = maxDeposit.lt(
           halfOfBufferTotalLiquidityAsWrapped.plus(
-            wrappedAmountNeeded.minus(bufferBalanceOfWrapped)
+            wrappedAmountRequired.minus(bufferBalanceOfWrapped)
           )
         )
 
@@ -71,12 +70,13 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } =
           underlyingBufferBalance
 
-        const maxWithdraw = bn(underlyingToken?.maxWithdraw ?? 0)
+        const underlyingAmountRequired = bn(humanAmount)
+        const exceedsBufferBalance = underlyingAmountRequired.gt(bufferBalanceOfUnderlying)
 
-        const exceedsBufferBalance = bn(humanAmount).gt(bufferBalanceOfUnderlying)
+        const maxWithdraw = bn(underlyingToken?.maxWithdraw ?? 0)
         const exceedsVaultCapacity = maxWithdraw.lt(
           halfOfBufferTotalLiquidityAsUnderlying.plus(
-            bn(humanAmount).minus(bufferBalanceOfUnderlying)
+            underlyingAmountRequired.minus(bufferBalanceOfUnderlying)
           )
         )
 
