@@ -33,6 +33,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { Address } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
+import { secondsToMilliseconds } from 'date-fns'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -224,7 +225,14 @@ export function useMyVotesLogic() {
 
   const hasExceededWeight = getExceededWeight(totalInfo.editVotes || bn(0)).gt(0)
   const hasUnallocatedWeight = getUnallocatedWeight(totalInfo.editVotes || bn(0)).gt(0)
-  const hasNewVotes = votedPools.length > 1 && newVotesSinceLastVote(myVotes, slope, lockEnd)
+  const hasNewVotes = newVotesSinceLastVote(myVotes, slope, lockEnd)
+  const hasUsablePools =
+    myVotes.filter(
+      vote =>
+        !!vote.gaugeVotes?.lastUserVoteTime &&
+        !isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime) &&
+        !isPoolGaugeExpired(vote)
+    ).length > 0
 
   const clearAll = () => {
     setEditVotesWeights({})
@@ -320,6 +328,7 @@ export function useMyVotesLogic() {
     refetchAll,
     hasExpiredGauges,
     hasNewVotes,
+    hasUsablePools,
     selectableVotes,
     selectedVotes,
     setSelectedVotes,
@@ -337,13 +346,14 @@ function newVotesSinceLastVote(
   const votingPower = calculateVotingPower(currentSlope, lockEnd)
 
   const previousVotingPower = myVotes.reduce((acc, vote) => {
-    const votes = calculateVotingPower(vote.gaugeVotes?.userSlope || 0n, lockEnd)
+    const votes = calculateVotingPower(
+      vote.gaugeVotes?.userSlope || 0n,
+      secondsToMilliseconds(Number(vote.gaugeVotes?.userEndLock))
+    )
     return acc.plus(votes)
   }, bn(0))
 
-  // FIXME: [JUANJO] we have added some error margin related to https://github.com/balancer/frontend-monorepo/issues/1718
-  // It should be changed for a better solution in the future (see issue)
-  return votingPower.gt(previousVotingPower.times(1.02))
+  return votingPower.gt(previousVotingPower)
 }
 
 export const MyVotesContext = createContext<ReturnType<typeof useMyVotesLogic> | null>(null)
