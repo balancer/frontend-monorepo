@@ -41,20 +41,22 @@ export function buildIcalEvent({
   body.push(`UID:${uid}`)
   body.push(`DTSTAMP:${dtStamp}`)
   body.push(`DTSTART:${formatDate(event.start)}`)
+
+  if (event.end) body.push(`DTEND:${formatDate(event.end)}`)
+
   body.push(`SUMMARY:${event.title}`)
+
+  if (event.description) body.push(`DESCRIPTION:${event.description}`)
+
+  if (event.url) {
+    body.push(`LOCATION:${event.url}`) // also here so Google Calendar shows a separate field with a link in it
+    body.push(`URL;VALUE=URI:${event.url}`)
+  }
 
   if (makeItWeekly) {
     const nextYear = addWeeks(event.start, 52)
     body.push(`RRULE:FREQ=WEEKLY;UNTIL=${formatDate(nextYear)}`)
   }
-
-  if (event.url) {
-    body.push(`URL;VALUE=URI:${event.url}`)
-    body.push(`LOCATION:${event.url}`) // also here so Google Calendar shows a separate field with a link in it
-  }
-
-  if (event.end) body.push(`DTEND:${formatDate(event.end)}`)
-  if (event.description) body.push(`DESCRIPTION:${event.description}`)
 
   return [
     'BEGIN:VCALENDAR',
