@@ -17,7 +17,7 @@ import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
-import { isBalancer, isCowAmm } from '@repo/lib/config/getProjectConfig'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
 import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
 import { useApiHealth } from '../../hooks/useApiHealth'
@@ -88,7 +88,7 @@ function NavLinks({
         )
       })}
       {customLinks}
-      {!isCowAmm && (isDev || isStaging) && (
+      {(isDev || isStaging) && (
         <>
           <Box as={motion.div} variants={fadeIn}>
             <Link
