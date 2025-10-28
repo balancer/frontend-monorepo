@@ -23,6 +23,10 @@ export function usePoolCreationFormSteps() {
     setActiveStepIndex(activeStepIndex - 1)
   }
 
+  const lastStep = () => {
+    setActiveStepIndex(steps.length - 1)
+  }
+
   const resetSteps = () => {
     setActiveStepIndex(0)
   }
@@ -46,6 +50,7 @@ export function usePoolCreationFormSteps() {
     isStep,
     previousStep,
     nextStep,
+    lastStep,
     resetSteps,
   }
 }

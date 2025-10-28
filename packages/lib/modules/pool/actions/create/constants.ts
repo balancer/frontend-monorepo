@@ -84,12 +84,14 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   weight: '',
 }
 
+export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]
+
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   protocol: PROJECT_CONFIG.projectId,
   network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
   poolType: PoolType.Weighted,
-  poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
+  poolTokens: INITIAL_POOL_TOKENS,
   name: '',
   symbol: '',
   swapFeeManager: zeroAddress,

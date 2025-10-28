@@ -3892,6 +3892,1227 @@ export const balancerV2WeightedPoolV4Config = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BalancerV3StablePool
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x57c23c58b1d8c3292c15becf07c62c5c52457a42)
+ */
+export const balancerV3StablePoolAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct StablePool.NewPoolParams',
+        type: 'tuple',
+        components: [
+          { name: 'name', internalType: 'string', type: 'string' },
+          { name: 'symbol', internalType: 'string', type: 'string' },
+          {
+            name: 'amplificationParameter',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'version', internalType: 'string', type: 'string' },
+        ],
+      },
+      { name: 'vault', internalType: 'contract IVault', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'AmpUpdateAlreadyStarted' },
+  { type: 'error', inputs: [], name: 'AmpUpdateDurationTooShort' },
+  { type: 'error', inputs: [], name: 'AmpUpdateNotStarted' },
+  { type: 'error', inputs: [], name: 'AmpUpdateRateTooFast' },
+  { type: 'error', inputs: [], name: 'AmplificationFactorTooHigh' },
+  { type: 'error', inputs: [], name: 'AmplificationFactorTooLow' },
+  { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
+  {
+    type: 'error',
+    inputs: [{ name: 'length', internalType: 'uint256', type: 'uint256' }],
+    name: 'ECDSAInvalidSignatureLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 's', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'ECDSAInvalidSignatureS',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'ERC2612ExpiredSignature',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC2612InvalidSigner',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidAccountNonce',
+  },
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'bits', internalType: 'uint8', type: 'uint8' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'SafeCastOverflowedUintDowncast',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'SenderIsNotVault',
+  },
+  { type: 'error', inputs: [], name: 'SenderNotAllowed' },
+  { type: 'error', inputs: [], name: 'StableComputeBalanceDidNotConverge' },
+  { type: 'error', inputs: [], name: 'StableInvariantDidNotConverge' },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
+  },
+  { type: 'error', inputs: [], name: 'ZeroDivision' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'startValue',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'endValue',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'startTime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'endTime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'AmpUpdateStarted',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'currentValue',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'AmpUpdateStopped',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'PERMIT_TYPEHASH',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'balancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'tokenInIndex', internalType: 'uint256', type: 'uint256' },
+      { name: 'invariantRatio', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'computeBalance',
+    outputs: [{ name: 'newBalance', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'balancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'rounding', internalType: 'enum Rounding', type: 'uint8' },
+    ],
+    name: 'computeInvariant',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'emitApproval',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'emitTransfer',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'selector', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'getActionId',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getAggregateFeePercentages',
+    outputs: [
+      {
+        name: 'aggregateSwapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      {
+        name: 'aggregateYieldFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getAmplificationParameter',
+    outputs: [
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'isUpdating', internalType: 'bool', type: 'bool' },
+      { name: 'precision', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getAmplificationState',
+    outputs: [
+      {
+        name: 'amplificationState',
+        internalType: 'struct AmplificationState',
+        type: 'tuple',
+        components: [
+          { name: 'startValue', internalType: 'uint64', type: 'uint64' },
+          { name: 'endValue', internalType: 'uint64', type: 'uint64' },
+          { name: 'startTime', internalType: 'uint32', type: 'uint32' },
+          { name: 'endTime', internalType: 'uint32', type: 'uint32' },
+        ],
+      },
+      { name: 'precision', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getCurrentLiveBalances',
+    outputs: [
+      {
+        name: 'balancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMaximumInvariantRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMaximumSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMinimumInvariantRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMinimumSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getRate',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getStablePoolDynamicData',
+    outputs: [
+      {
+        name: 'data',
+        internalType: 'struct StablePoolDynamicData',
+        type: 'tuple',
+        components: [
+          {
+            name: 'balancesLiveScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'tokenRates', internalType: 'uint256[]', type: 'uint256[]' },
+          {
+            name: 'staticSwapFeePercentage',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'totalSupply', internalType: 'uint256', type: 'uint256' },
+          { name: 'bptRate', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'amplificationParameter',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'startValue', internalType: 'uint256', type: 'uint256' },
+          { name: 'endValue', internalType: 'uint256', type: 'uint256' },
+          { name: 'startTime', internalType: 'uint32', type: 'uint32' },
+          { name: 'endTime', internalType: 'uint32', type: 'uint32' },
+          { name: 'isAmpUpdating', internalType: 'bool', type: 'bool' },
+          { name: 'isPoolInitialized', internalType: 'bool', type: 'bool' },
+          { name: 'isPoolPaused', internalType: 'bool', type: 'bool' },
+          { name: 'isPoolInRecoveryMode', internalType: 'bool', type: 'bool' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getStablePoolImmutableData',
+    outputs: [
+      {
+        name: 'data',
+        internalType: 'struct StablePoolImmutableData',
+        type: 'tuple',
+        components: [
+          {
+            name: 'tokens',
+            internalType: 'contract IERC20[]',
+            type: 'address[]',
+          },
+          {
+            name: 'decimalScalingFactors',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          {
+            name: 'amplificationParameterPrecision',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getStaticSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTokenInfo',
+    outputs: [
+      { name: 'tokens', internalType: 'contract IERC20[]', type: 'address[]' },
+      {
+        name: 'tokenInfo',
+        internalType: 'struct TokenInfo[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'tokenType', internalType: 'enum TokenType', type: 'uint8' },
+          {
+            name: 'rateProvider',
+            internalType: 'contract IRateProvider',
+            type: 'address',
+          },
+          { name: 'paysYieldFees', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      { name: 'balancesRaw', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'lastBalancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTokens',
+    outputs: [{ name: 'tokens', internalType: 'contract IERC20[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getVault',
+    outputs: [{ name: '', internalType: 'contract IVault', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'incrementNonce',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'request',
+        internalType: 'struct PoolSwapParams',
+        type: 'tuple',
+        components: [
+          { name: 'kind', internalType: 'enum SwapKind', type: 'uint8' },
+          {
+            name: 'amountGivenScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'balancesScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'indexIn', internalType: 'uint256', type: 'uint256' },
+          { name: 'indexOut', internalType: 'uint256', type: 'uint256' },
+          { name: 'router', internalType: 'address', type: 'address' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+    ],
+    name: 'onSwap',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'rawEndValue', internalType: 'uint256', type: 'uint256' },
+      { name: 'endTime', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'startAmplificationParameterUpdate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'stopAmplificationParameterUpdate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'version',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+] as const
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x57c23c58b1d8c3292c15becf07c62c5c52457a42)
+ */
+export const balancerV3StablePoolAddress = {
+  1: '0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42',
+} as const
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x57c23c58b1d8c3292c15becf07c62c5c52457a42)
+ */
+export const balancerV3StablePoolConfig = {
+  address: balancerV3StablePoolAddress,
+  abi: balancerV3StablePoolAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BalancerV3WeightedPool
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x3f89f8c0e0ffdfae0b97959303831fa893f1cfe0)
+ */
+export const balancerV3WeightedPoolAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct WeightedPool.NewPoolParams',
+        type: 'tuple',
+        components: [
+          { name: 'name', internalType: 'string', type: 'string' },
+          { name: 'symbol', internalType: 'string', type: 'string' },
+          { name: 'numTokens', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'normalizedWeights',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'version', internalType: 'string', type: 'string' },
+        ],
+      },
+      { name: 'vault', internalType: 'contract IVault', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'BaseOutOfBounds' },
+  { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
+  {
+    type: 'error',
+    inputs: [{ name: 'length', internalType: 'uint256', type: 'uint256' }],
+    name: 'ECDSAInvalidSignatureLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 's', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'ECDSAInvalidSignatureS',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'ERC2612ExpiredSignature',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC2612InvalidSigner',
+  },
+  { type: 'error', inputs: [], name: 'ExponentOutOfBounds' },
+  { type: 'error', inputs: [], name: 'InputLengthMismatch' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidAccountNonce',
+  },
+  { type: 'error', inputs: [], name: 'InvalidExponent' },
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  { type: 'error', inputs: [], name: 'InvalidToken' },
+  { type: 'error', inputs: [], name: 'MaxInRatio' },
+  { type: 'error', inputs: [], name: 'MaxOutRatio' },
+  { type: 'error', inputs: [], name: 'MinWeight' },
+  { type: 'error', inputs: [], name: 'NormalizedWeightInvariant' },
+  { type: 'error', inputs: [], name: 'ProductOutOfBounds' },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'SenderIsNotVault',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
+  },
+  { type: 'error', inputs: [], name: 'WeightedPoolBptRateUnsupported' },
+  { type: 'error', inputs: [], name: 'ZeroDivision' },
+  { type: 'error', inputs: [], name: 'ZeroInvariant' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'PERMIT_TYPEHASH',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'balancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'tokenInIndex', internalType: 'uint256', type: 'uint256' },
+      { name: 'invariantRatio', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'computeBalance',
+    outputs: [{ name: 'newBalance', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'balancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'rounding', internalType: 'enum Rounding', type: 'uint8' },
+    ],
+    name: 'computeInvariant',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'emitApproval',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'emitTransfer',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getAggregateFeePercentages',
+    outputs: [
+      {
+        name: 'aggregateSwapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      {
+        name: 'aggregateYieldFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getCurrentLiveBalances',
+    outputs: [
+      {
+        name: 'balancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMaximumInvariantRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMaximumSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMinimumInvariantRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMinimumSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getNormalizedWeights',
+    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getRate',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getStaticSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTokenInfo',
+    outputs: [
+      { name: 'tokens', internalType: 'contract IERC20[]', type: 'address[]' },
+      {
+        name: 'tokenInfo',
+        internalType: 'struct TokenInfo[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'tokenType', internalType: 'enum TokenType', type: 'uint8' },
+          {
+            name: 'rateProvider',
+            internalType: 'contract IRateProvider',
+            type: 'address',
+          },
+          { name: 'paysYieldFees', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      { name: 'balancesRaw', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'lastBalancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTokens',
+    outputs: [{ name: 'tokens', internalType: 'contract IERC20[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getVault',
+    outputs: [{ name: '', internalType: 'contract IVault', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getWeightedPoolDynamicData',
+    outputs: [
+      {
+        name: 'data',
+        internalType: 'struct WeightedPoolDynamicData',
+        type: 'tuple',
+        components: [
+          {
+            name: 'balancesLiveScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'tokenRates', internalType: 'uint256[]', type: 'uint256[]' },
+          {
+            name: 'staticSwapFeePercentage',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'totalSupply', internalType: 'uint256', type: 'uint256' },
+          { name: 'isPoolInitialized', internalType: 'bool', type: 'bool' },
+          { name: 'isPoolPaused', internalType: 'bool', type: 'bool' },
+          { name: 'isPoolInRecoveryMode', internalType: 'bool', type: 'bool' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getWeightedPoolImmutableData',
+    outputs: [
+      {
+        name: 'data',
+        internalType: 'struct WeightedPoolImmutableData',
+        type: 'tuple',
+        components: [
+          {
+            name: 'tokens',
+            internalType: 'contract IERC20[]',
+            type: 'address[]',
+          },
+          {
+            name: 'decimalScalingFactors',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          {
+            name: 'normalizedWeights',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'incrementNonce',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'request',
+        internalType: 'struct PoolSwapParams',
+        type: 'tuple',
+        components: [
+          { name: 'kind', internalType: 'enum SwapKind', type: 'uint8' },
+          {
+            name: 'amountGivenScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'balancesScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'indexIn', internalType: 'uint256', type: 'uint256' },
+          { name: 'indexOut', internalType: 'uint256', type: 'uint256' },
+          { name: 'router', internalType: 'address', type: 'address' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+    ],
+    name: 'onSwap',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'version',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+] as const
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x3f89f8c0e0ffdfae0b97959303831fa893f1cfe0)
+ */
+export const balancerV3WeightedPoolAddress = {
+  1: '0x3F89f8C0E0FfdfaE0b97959303831fa893f1CFE0',
+} as const
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x3f89f8c0e0ffdfae0b97959303831fa893f1cfe0)
+ */
+export const balancerV3WeightedPoolConfig = {
+  address: balancerV3WeightedPoolAddress,
+  abi: balancerV3WeightedPoolAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GyroECLPPool
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
