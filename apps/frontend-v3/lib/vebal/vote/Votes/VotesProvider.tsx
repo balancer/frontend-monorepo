@@ -8,13 +8,10 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { isVotingTimeLocked, sharesToBps } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import { compact, sumBy } from 'lodash'
+import { sumBy } from 'lodash'
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { useExpiredGauges } from '@bal/lib/vebal/vote/useExpiredGaugesQuery'
-import { useVotingEscrowLocksQueries } from '@bal/lib/vebal/cross-chain/useVotingEscrowLocksQueries'
-import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { useHiddenHandVotingIncentives } from '@repo/lib/shared/services/hidden-hand/useHiddenHandVotingIncentives'
 import { isGaugeExpired } from '@repo/lib/modules/vebal/vote/vote.helpers'
 import { filterVotingPoolsForAnvilFork } from '@repo/lib/test/utils/wagmi/fork.helpers'
@@ -27,7 +24,7 @@ export interface UseVotesArgs {
 }
 
 export function useVotesLogic({ data, votingListLoading = false, error }: UseVotesArgs) {
-  const { userAddress, isConnected } = useUserAccount()
+  const { userAddress } = useUserAccount()
 
   const votingList = useMemo(() => {
     const votingPools = data?.veBalGetVotingList || []
@@ -136,48 +133,13 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
   const vebalIsExpired = mainnetLockedInfo.isExpired
   const vebalLockTooShort = mainnetLockedInfo.lockTooShort
 
-  const { veBALBalance, noVeBALBalance } = useVebalUserData()
+  const { noVeBALBalance } = useVebalUserData()
 
   const votingIsDisabled =
     vebalIsExpired || vebalLockTooShort || noVeBALBalance || hasAllVotingPowerTimeLocked
 
   const allowChangeVotes = !votingIsDisabled
   const allowSelectVotingPools = !votingIsDisabled
-
-  const votingEscrowResponses = useVotingEscrowLocksQueries(isConnected ? [userAddress] : [])
-
-  // Timestamp when user has last received veBAL
-  const lastReceivedVebal = useMemo(() => {
-    const votingEscrowLocks = compact(
-      votingEscrowResponses.flatMap(response => response.data?.votingEscrowLocks)
-    )
-    return (
-      votingEscrowLocks.find(item =>
-        isSameAddress(item.votingEscrowID.id, mainnetNetworkConfig.contracts.veBAL!)
-      )?.updatedAt || 0
-    )
-  }, [votingEscrowResponses])
-
-  //  If user has received more veBAL since they last voted, their voting power is under-utilized
-  const poolsUsingUnderUtilizedVotingPower = useMemo<VotingPoolWithData[]>(
-    () =>
-      votingPools.filter(votingPool => {
-        return (
-          // Does the gauge have user votes
-          bn(votingPool.gaugeVotes?.userVotes ?? 0).gt(0) &&
-          // Has user received veBAL since they last voted
-          votingPool.gaugeVotes?.lastUserVoteTime &&
-          votingPool.gaugeVotes.lastUserVoteTime < lastReceivedVebal &&
-          // Is voting currently not locked
-          !isVotingTimeLocked(votingPool.gaugeVotes?.lastUserVoteTime ?? 0) &&
-          // Is gauge not expired
-          !isPoolGaugeExpired(votingPool)
-        )
-      }),
-    [votingPools, lastReceivedVebal, isPoolGaugeExpired]
-  )
-
-  const shouldResubmitVotes = bn(veBALBalance).gt(0) && !!poolsUsingUnderUtilizedVotingPower.length // Does user have any veBAL
 
   const scrollToMyVotes = () => {
     document.body.scrollIntoView({ behavior: 'smooth' })
@@ -210,7 +172,6 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
     vebalLockTooShort,
     allowSelectVotingPools,
     allowChangeVotes,
-    shouldResubmitVotes,
     expiredGauges,
     scrollToMyVotes,
   }
