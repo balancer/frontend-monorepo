@@ -78,5 +78,5 @@ export function openIcalEvent({
 }) {
   const data = buildIcalEvent({ event, makeItWeekly })
 
-  window.open(encodeURI('data:text/calendar;charset=utf8,' + data))
+  window.open('data:text/calendar;charset=utf8,' + encodeURIComponent(data))
 }
