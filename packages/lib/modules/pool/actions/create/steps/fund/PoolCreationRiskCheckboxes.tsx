@@ -28,7 +28,6 @@ export function PoolCreationRiskCheckboxes() {
           alignItems="flex-start"
           isChecked={hasAcceptedTokenWeightsRisk}
           onChange={e => poolCreationForm.setValue('hasAcceptedTokenWeightsRisk', e.target.checked)}
-          size="lg"
         >
           <Text {...textProps}>
             I understand that I will likely get rekt if the USD values of each token are not
@@ -37,6 +36,7 @@ export function PoolCreationRiskCheckboxes() {
         </Checkbox>
       )}
       <Checkbox
+        alignItems="flex-start"
         isChecked={hasAcceptedPoolCreationRisk}
         onChange={e => poolCreationForm.setValue('hasAcceptedPoolCreationRisk', e.target.checked)}
       >
