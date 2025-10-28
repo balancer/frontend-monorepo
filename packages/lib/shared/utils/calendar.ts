@@ -50,7 +50,7 @@ export function buildIcalEvent({
 
   if (event.url) {
     body.push(`LOCATION:${event.url}`) // also here so Google Calendar shows a separate field with a link in it
-    body.push(`URL;VALUE=URI:${event.url}`)
+    body.push(`URL:${event.url}`)
   }
 
   if (makeItWeekly) {
