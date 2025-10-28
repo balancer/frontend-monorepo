@@ -1,0 +1,76 @@
+import { getChainId } from '@repo/lib/config/app.config'
+import { getNetworkConfig } from '@repo/lib/config/networks'
+import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
+import {
+  ManagedResult,
+  TransactionLabels,
+  TransactionStep,
+} from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { useState } from 'react'
+import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { parseUnits } from 'viem'
+import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
+import { noop } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { useLoopsGetFlyQuote } from './useLoopsGetFlyQuote'
+import { useLoopsGetFlyTransaction } from './useLoopsGetFlyTransaction'
+import { getConvertLstToWethData } from '../getConvertLstToWethData'
+
+export function useLoopsWithdrawStep(amountShares: string, chain: GqlChain, enabled: boolean) {
+  const { isConnected } = useUserAccount()
+  const { refetchBalances } = useTokenBalances()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  const { data: flyQuote, minWethAmountOut } = useLoopsGetFlyQuote(amountShares, chain)
+
+  const { data: flyTransaction } = useLoopsGetFlyTransaction({
+    quoteId: flyQuote?.id || '',
+    estimateGas: 'false',
+  })
+
+  const convertLstToWethData = getConvertLstToWethData(flyTransaction?.data)
+
+  const labels: TransactionLabels = {
+    init: 'Withdraw',
+    title: 'Withdraw',
+    confirming: 'Confirming withdraw...',
+    confirmed: 'Withdrawn!',
+    tooltip: 'tooltip',
+  }
+
+  const props: ManagedTransactionInput = {
+    labels,
+    chainId: getChainId(chain),
+    contractId: 'beets.loopedSonicRouter',
+    contractAddress: getNetworkConfig(chain).contracts.beets?.magpieLoopedSonicRouter || '',
+    functionName: 'withdrawWithFlashLoan',
+    args: [parseUnits(amountShares, BPT_DECIMALS), minWethAmountOut, convertLstToWethData || '0x'],
+    enabled:
+      bn(amountShares).gt(0) &&
+      isConnected &&
+      !!flyTransaction?.data &&
+      bn(minWethAmountOut).gt(0) &&
+      !!convertLstToWethData &&
+      enabled,
+    onTransactionChange: setTransaction,
+  }
+
+  const isComplete = () => isConnected && isTransactionSuccess(transaction)
+
+  const step: TransactionStep = {
+    id: 'withdrawLoops',
+    labels,
+    stepType: 'withdrawLoops',
+    transaction,
+    isComplete,
+    onActivated: noop,
+    onDeactivated: noop,
+    onSuccess: () => refetchBalances(),
+    renderAction: () => <ManagedTransactionButton id="withdrawLoops" {...props} />,
+  }
+
+  return { step }
+}

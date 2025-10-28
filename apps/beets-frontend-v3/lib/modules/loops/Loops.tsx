@@ -12,6 +12,7 @@ import {
   BoxProps,
   Grid,
   GridItem,
+  Divider,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -21,30 +22,27 @@ import { useEffect, useRef, useState } from 'react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { useLst } from './LstProvider'
-import { LstStakeModal } from './modals/LstStakeModal'
+import { useLoops } from './LoopsProvider'
+import { LoopsDepositModal } from './modals/LoopsDepositModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
-import { LstStake } from './components/LstStake'
-import { LstUnstake } from './components/LstUnstake'
-import { LstUnstakeModal } from './modals/LstUnstakeModal'
-import { LstWithdraw } from './components/LstWithdraw'
-import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { LoopsDeposit } from './components/LoopsDeposit'
+import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { LstFaq } from './components/LstFaq'
+import { LoopsFaq } from './components/LoopsFaq'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { LstStats } from './components/LstStats'
-import { getNetworkConfig } from '@repo/lib/config/networks'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Address } from 'viem'
+import { LoopsStats } from './components/LoopsStats'
 import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 import { StatRow } from '@/lib/components/shared/StatRow'
-
-const CHAIN = GqlChain.Sonic
+import { useLoopsGetData } from './hooks/useLoopsGetData'
+import { GetLoopsDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { getNetworkConfig } from '@repo/lib/config/networks'
+import { LoopsWithdraw } from './components/LoopsWithdraw'
+import { LoopsWithdrawModal } from './modals/LoopsWithdrawModal'
+import { useLoopsGetFlyQuote } from './hooks/useLoopsGetFlyQuote'
+import { formatUnits } from 'viem'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -65,66 +63,60 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
   },
 }
 
-function LstForm() {
+function LoopsForm() {
   const nextBtn = useRef(null)
-  const stakeModalDisclosure = useDisclosure()
-  const unstakeModalDisclosure = useDisclosure()
-  const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
+  const depositModalDisclosure = useDisclosure()
+  const withdrawModalDisclosure = useDisclosure()
+  const [disclosure, setDisclosure] = useState(depositModalDisclosure)
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
   const { isBalancesLoading } = useTokenBalances()
   const { startTokenPricePolling } = useTokens()
 
   const {
-    activeTab,
-    setActiveTab,
-    amountAssets,
-    amountShares,
+    isDepositTab,
+    isWithdrawTab,
     setAmountAssets,
     setAmountShares,
+    activeTab,
+    setActiveTab,
+    depositTransactionSteps,
+    withdrawTransactionSteps,
     isDisabled,
     disabledReason,
-    isStakeTab,
-    isUnstakeTab,
-    isWithdrawTab,
-    stakeTransactionSteps,
-    unstakeTransactionSteps,
-    nativeAsset,
-    stakedAsset,
-    getAmountShares,
-    getAmountAssets,
-    isRateLoading,
+    loopedAsset,
     chain,
-  } = useLst()
+    amountAssets,
+    getAmountShares,
+    isRateLoading,
+    amountShares,
+    wNativeAsset,
+  } = useLoops()
 
-  const isLoading = !isMounted || isBalancesLoading
+  const { wethAmountOut, isLoading: isLoadingFlyQuote } = useLoopsGetFlyQuote(amountShares, chain)
 
+  const isLoading = !isMounted || isBalancesLoading || isLoadingFlyQuote
   const loadingText = isLoading ? 'Loading...' : undefined
 
   const tabs: ButtonGroupOption[] = [
     {
       value: '0',
-      label: 'Stake',
+      label: 'Deposit',
       disabled: false,
     },
     {
       value: '1',
-      label: 'Unstake',
-      disabled: false,
-    },
-    {
-      value: '2',
       label: 'Withdraw',
       disabled: false,
     },
   ]
 
   useEffect(() => {
-    if (isStakeTab) {
-      setDisclosure(stakeModalDisclosure)
+    if (isDepositTab) {
+      setDisclosure(depositModalDisclosure)
       setAmountAssets('')
-    } else if (isUnstakeTab) {
-      setDisclosure(unstakeModalDisclosure)
+    } else if (isWithdrawTab) {
+      setDisclosure(withdrawModalDisclosure)
       setAmountShares('')
     }
   }, [activeTab])
@@ -138,8 +130,8 @@ function LstForm() {
     startTokenPricePolling()
 
     // just reset all transaction steps
-    stakeTransactionSteps.resetTransactionSteps()
-    unstakeTransactionSteps.resetTransactionSteps()
+    depositTransactionSteps.resetTransactionSteps()
+    withdrawTransactionSteps.resetTransactionSteps()
 
     // reset amounts
     setAmountAssets('')
@@ -164,42 +156,31 @@ function LstForm() {
               size="md"
             />
           </VStack>
-          {isStakeTab && <LstStake />}
-          {isUnstakeTab && <LstUnstake />}
-          {isWithdrawTab && <LstWithdraw />}
+          {isDepositTab && <LoopsDeposit />}
+          {isWithdrawTab && <LoopsWithdraw />}
         </Box>
-        {/* <HStack>
-          {isStakedSonicDataLoading ? (
-            <Skeleton h="full" w="12" />
-          ) : (
-            <>
-              <Text>{`1 ${tokenIn}`}</Text>
-              <Icon as={ArrowRight} />
-              <Text>{`${fNum('token', rate)} ${tokenOut}`}</Text>
-            </>
-          )}
-        </HStack> */}
-        {isStakeTab && !isRateLoading && amountAssets !== '' && (
+        {isDepositTab && !isRateLoading && amountAssets !== '' && (
           <YouWillReceive
-            address={stakedAsset?.address || ''}
+            address={loopedAsset?.address || ''}
             amount={getAmountShares(amountAssets)}
             chain={chain}
             label="You will receive"
-            symbol={stakedAsset?.symbol || ''}
+            symbol={loopedAsset?.symbol || ''}
           />
         )}
-        {isUnstakeTab && !isRateLoading && amountShares !== '' && (
+        {isWithdrawTab && !isLoadingFlyQuote && wethAmountOut !== 0n && (
           <YouWillReceive
-            address={nativeAsset?.address || ''}
-            amount={getAmountAssets(amountShares)}
+            address={wNativeAsset?.address || ''}
+            amount={formatUnits(wethAmountOut, wNativeAsset?.decimals ?? 18)}
             chain={chain}
-            label="You can withdraw (after 14 days)"
-            symbol={nativeAsset?.symbol || ''}
+            infoText="Please check to FAQ below to learn more about why you are receiving slightly less than the displayed rate."
+            label="You will receive"
+            symbol={wNativeAsset?.symbol || ''}
           />
         )}
       </CardBody>
       <CardFooter w="full">
-        {isConnected && !isWithdrawTab && (
+        {isConnected && (
           <Tooltip label={isDisabled ? disabledReason : ''}>
             <Button
               isDisabled={isDisabled}
@@ -225,35 +206,49 @@ function LstForm() {
           />
         )}
       </CardFooter>
-      <LstStakeModal
+      <LoopsDepositModal
         finalFocusRef={nextBtn}
-        isOpen={stakeModalDisclosure.isOpen}
+        isOpen={depositModalDisclosure.isOpen}
         onClose={onModalClose}
-        onOpen={stakeModalDisclosure.onOpen}
       />
-      <LstUnstakeModal
+      <LoopsWithdrawModal
         finalFocusRef={nextBtn}
-        isOpen={unstakeModalDisclosure.isOpen}
+        isOpen={withdrawModalDisclosure.isOpen}
         onClose={onModalClose}
-        onOpen={unstakeModalDisclosure.onOpen}
       />
     </VStack>
   )
 }
 
-function LstInfo({
-  stakedSonicData,
-  isStakedSonicDataLoading,
+function LoopsInfo({
+  loopsData,
+  isLoopsDataLoading,
 }: {
-  stakedSonicData?: GetStakedSonicDataQuery
-  isStakedSonicDataLoading: boolean
+  loopsData?: GetLoopsDataQuery
+  isLoopsDataLoading: boolean
 }) {
-  const lstAddress = (getNetworkConfig(CHAIN).contracts.beets?.lstStakingProxy || '') as Address
-  const { getToken, usdValueForToken } = useTokens()
-  const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()
-  const assetsToSharesRate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1.0'
+  const { usdValueForTokenAddress } = useTokens()
+  const { chain } = useLoops()
+
+  const assetsToSharesRate = loopsData?.loopsGetData.rate || '1.0'
   const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
+
+  const networkConfig = getNetworkConfig(chain)
+
+  const collateralUsdValue = usdValueForTokenAddress(
+    networkConfig.tokens.stakedAsset?.address || '',
+    chain,
+    loopsData?.loopsGetData.collateralAmountInEth || '0'
+  )
+
+  const debtUsdValue = usdValueForTokenAddress(
+    networkConfig.tokens.nativeAsset.address,
+    chain,
+    loopsData?.loopsGetData.debtAmount || '0'
+  )
+
+  const customFormat = '0.[000]'
 
   return (
     <NoisyCard
@@ -275,75 +270,65 @@ function LstInfo({
         zIndex={1}
       >
         <StatRow
-          isLoading={isStakedSonicDataLoading}
-          label="Total ($S)"
-          secondaryValue={toCurrency(
-            usdValueForToken(lstToken, stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')
-          )}
-          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
+          isLoading={isLoopsDataLoading}
+          label="Total collateral"
+          secondaryValue={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmountInEth || '0'))} S`}
+          tertiaryValue={toCurrency(collateralUsdValue)}
+          value={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmount || '0'))} stS`}
         />
         <StatRow
-          isLoading={isStakedSonicDataLoading}
-          label="Delegated ($S)"
-          secondaryValue={toCurrency(
-            usdValueForToken(
-              lstToken,
-              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
-            )
-          )}
-          value={fNum(
-            'token',
-            stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
-          )}
+          isLoading={isLoopsDataLoading}
+          label="Total debt"
+          secondaryValue={toCurrency(debtUsdValue)}
+          value={`${fNum('token', bn(loopsData?.loopsGetData.debtAmount || '0'))} S`}
         />
         <StatRow
-          isLoading={isStakedSonicDataLoading}
-          label="Pending delegation ($S)"
-          secondaryValue={toCurrency(
-            usdValueForToken(
-              lstToken,
-              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0'
-            )
-          )}
-          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
+          isLoading={isLoopsDataLoading}
+          label="loopS rate"
+          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} loopS`}
+          value={`1 loopS = ${fNum('token', assetsToSharesRate)} S`}
+        />
+        <Divider my="md" />
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Health factor"
+          value={`${fNumCustom(bn(loopsData?.loopsGetData.healthFactor || '0'), customFormat)}`}
         />
         <StatRow
-          isLoading={isStakedSonicDataLoading}
-          label="stS rate"
-          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
-          value={`1 stS = ${fNum('token', assetsToSharesRate)} S`}
+          isLoading={isLoopsDataLoading}
+          label="Current leverage"
+          value={`${fNumCustom(bn(loopsData?.loopsGetData.leverage || '0'), customFormat)}x`}
         />
-        <Box minH="120px" w="full" />
-        {/* <Box minH="200px" w="full">
-          <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
-        </Box> */}
+        <StatRow
+          isLoading={isLoopsDataLoading}
+          label="Actual supply"
+          value={fNum('token', bn(loopsData?.loopsGetData.actualSupply || '0'))}
+        />
+        <Box minH="20px" w="full" />
       </VStack>
     </NoisyCard>
   )
 }
 
-export function Lst() {
-  const { data: stakedSonicData, loading: isStakedSonicDataLoading } = useGetStakedSonicData()
+export function Loops() {
+  const { data: loopsData, loading: isLoopsDataLoading } = useLoopsGetData()
 
   return (
     <FadeInOnView>
       <DefaultPageContainer noVerticalPadding>
         <VStack gap="xl" w="full">
-          <LstStats />
+          <LoopsStats />
           <Card rounded="xl" w="full">
             <Grid gap="lg" templateColumns={{ base: '1fr', lg: '5fr 4fr' }}>
               <GridItem>
-                <LstForm />
+                <LoopsForm />
               </GridItem>
               <GridItem>
-                <LstInfo
-                  isStakedSonicDataLoading={isStakedSonicDataLoading}
-                  stakedSonicData={stakedSonicData}
-                />
+                <LoopsInfo isLoopsDataLoading={isLoopsDataLoading} loopsData={loopsData} />
               </GridItem>
             </Grid>
           </Card>
-          <LstFaq />
+          <LoopsFaq />
         </VStack>
       </DefaultPageContainer>
     </FadeInOnView>

@@ -2,36 +2,42 @@ import { Card } from '@chakra-ui/react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
-import { useLst } from '../LstProvider'
-import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { LoopsDepositReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
-import { useGetConvertToShares } from '../hooks/useGetConvertToShares'
+import { useLoops } from '../LoopsProvider'
+import { useLoopsGetConvertToShares } from '../hooks/useLoopsGetConvertToShares'
 import { formatUnits, parseUnits } from 'viem'
 
-export function LstStakeSummary({
+export function LoopsDepositSummary({
   isLoading: isLoadingReceipt,
   receivedToken,
-}: LstStakeReceiptResult) {
+}: LoopsDepositReceiptResult) {
   const { isMobile } = useBreakpoints()
 
-  const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amountAssets } =
-    useLst()
+  const {
+    chain,
+    depositTransactionSteps,
+    loopsDepositTxHash,
+    nativeAsset,
+    loopedAsset,
+    amountAssets,
+  } = useLoops()
 
-  const { sharesAmount, isLoading: isLoadingSharesAmount } = useGetConvertToShares(
-    parseUnits(amountAssets, 18),
+  const { sharesAmount, isLoading: isLoadingSharesAmount } = useLoopsGetConvertToShares(
+    amountAssets && nativeAsset?.decimals ? parseUnits(amountAssets, nativeAsset.decimals) : 0n,
     chain
   )
 
-  const shouldShowReceipt = !!lstStakeTxHash && !isLoadingReceipt && !!receivedToken
+  const shouldShowReceipt = !!loopsDepositTxHash && !isLoadingReceipt && !!receivedToken
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
-      {isMobile && <MobileStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
+      {isMobile && <MobileStepTracker chain={chain} transactionSteps={depositTransactionSteps} />}
       <Card variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingSharesAmount}
-          label={shouldShowReceipt ? 'You staked' : 'You stake'}
+          isLoading={false}
+          label={shouldShowReceipt ? 'You deposited' : 'You deposit'}
           tokenAddress={nativeAsset?.address || ''}
           tokenAmount={amountAssets}
         />
@@ -41,9 +47,11 @@ export function LstStakeSummary({
           chain={chain}
           isLoading={isLoadingSharesAmount || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
-          tokenAddress={stakedAsset?.address || ''}
+          tokenAddress={loopedAsset?.address || ''}
           tokenAmount={
-            shouldShowReceipt ? receivedToken.humanAmount : formatUnits(sharesAmount, 18)
+            shouldShowReceipt
+              ? receivedToken.humanAmount
+              : formatUnits(sharesAmount, loopedAsset?.decimals ?? 18)
           }
         />
       </Card>
