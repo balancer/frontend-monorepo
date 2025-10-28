@@ -16,7 +16,7 @@ function pad(n: number): string {
 
 function formatDate(date: Date): string {
   return (
-    pad(date.getUTCFullYear()) +
+    date.getUTCFullYear().toString() +
     pad(date.getUTCMonth() + 1) +
     pad(date.getUTCDate()) +
     'T' +
