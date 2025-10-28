@@ -37,10 +37,11 @@ export const ProjectConfigBeets: ProjectConfig = {
         href: '/stake',
         label: 'Stake $S',
       },
-      {
-        href: '/loops',
-        label: 'Loop $S',
-      },
+      // TODO: uncomment when loops goes live
+      // {
+      //   href: '/loops',
+      //   label: 'Loop $S',
+      // },
       {
         href: 'https://ma.beets.fi',
         label: 'maBEETS',
