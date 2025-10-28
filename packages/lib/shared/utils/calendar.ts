@@ -63,10 +63,10 @@ export function buildIcalEvent({
     'VERSION:2.0',
     `PRODID:-//${PROJECT_CONFIG.projectName}//Calendar//EN`,
     'BEGIN:VEVENT',
-    body.join('\n'),
+    body.join('\r\n'),
     'END:VEVENT',
     'END:VCALENDAR',
-  ].join('\n')
+  ].join('\r\n')
 }
 
 export function openIcalEvent({
