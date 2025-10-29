@@ -102,7 +102,7 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
       chains.map(chain => [chain.id, fallback([http(defaultAnvilForkRpcUrl)])])
     )
     console.log(
-      'All chains and transports updated to use default Anvil fork RPC URL:',
+      'All chains and transports updated to use default Anvil fork RPC URL: ',
       defaultAnvilForkRpcUrl
     )
   }
