@@ -8,7 +8,6 @@ import { SliderWithSteps } from '@repo/lib/shared/components/inputs/SliderWithSt
 
 export function WeightAdjustmentTypeInput({
   control,
-  isDisabled,
   launchTokenSymbol,
   collateralTokenSymbol,
   watch,
@@ -17,7 +16,6 @@ export function WeightAdjustmentTypeInput({
   control: Control<SaleStructureForm>
   launchTokenSymbol: string
   collateralTokenSymbol: string
-  isDisabled?: boolean
   watch: UseFormWatch<SaleStructureForm>
   setValue: UseFormSetValue<SaleStructureForm>
 }) {
@@ -80,7 +78,6 @@ export function WeightAdjustmentTypeInput({
           <SelectInput
             defaultValue={options[0].value}
             id="weight-adjustment-type"
-            isDisabled={isDisabled}
             onChange={newValue => {
               field.onChange(newValue as GqlChain)
             }}
@@ -95,7 +92,6 @@ export function WeightAdjustmentTypeInput({
           <WeightSlider
             collateralTokenSymbol={collateralTokenSymbol}
             customWeight={customStartWeight}
-            isDisabled={isDisabled}
             launchTokenSymbol={launchTokenSymbol}
             name="customStartWeight"
             setValue={setValue}
@@ -104,7 +100,6 @@ export function WeightAdjustmentTypeInput({
           <WeightSlider
             collateralTokenSymbol={collateralTokenSymbol}
             customWeight={customEndWeight}
-            isDisabled={isDisabled}
             launchTokenSymbol={launchTokenSymbol}
             name="customEndWeight"
             setValue={setValue}

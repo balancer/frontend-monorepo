@@ -103,125 +103,128 @@ export function SaleStructureStep() {
 
   const isPoolCreated = !!poolAddress
 
+  const TokenAmountInputs = () => (
+    <TokenInputsValidationProvider>
+      {collateralToken && (
+        <TokenBalancesProvider extTokens={[collateralToken]}>
+          <SaleTokenAmountInput
+            control={control}
+            errors={errors}
+            launchToken={launchToken}
+            selectedChain={selectedChain}
+          />
+          <CollateralTokenAmountInput
+            collateralTokenAddress={collateralTokenAddress}
+            collateralTokenSymbol={collateralToken?.symbol || ''}
+            control={control}
+            errors={errors}
+            selectedChain={selectedChain}
+          />
+        </TokenBalancesProvider>
+      )}
+    </TokenInputsValidationProvider>
+  )
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
       <VStack align="start" spacing="lg" w="full">
-        <Heading color="font.maxContrast" size="md">
-          Launch token details
-        </Heading>
-
-        <VStack align="start" spacing="lg" w="full">
-          <NetworkSelectInput chains={supportedChains} control={control} />
-          <LaunchTokenAddressInput
-            chainId={selectedChain}
-            control={control}
-            errors={errors}
-            metadata={launchTokenMetadata}
-            resetForm={resetLbpCreation}
-            setFormValue={setValue}
-            triggerValidation={trigger}
-            value={launchTokenAddress}
-          />
-        </VStack>
-
-        {launchTokenIsValid && (
+        {isPoolCreated ? (
+          <TokenAmountInputs />
+        ) : (
           <>
-            <Divider />
-
             <Heading color="font.maxContrast" size="md">
-              Sale period
+              Launch token details
             </Heading>
-            <VStack align="start" gap="lg" w="full">
-              <VStack align="start" gap="sm" w="full">
-                <SaleStartInput
-                  control={control}
-                  errors={errors}
-                  isDisabled={isPoolCreated}
-                  triggerValidation={trigger}
-                  value={saleStart}
-                />
-              </VStack>
-              <VStack align="start" gap="sm" w="full">
-                <SaleEndInput
-                  control={control}
-                  errors={errors}
-                  isDisabled={isPoolCreated}
-                  saleStart={saleStart}
-                  value={saleEnd}
-                />
-              </VStack>
+
+            <VStack align="start" spacing="lg" w="full">
+              <NetworkSelectInput chains={supportedChains} control={control} />
+              <LaunchTokenAddressInput
+                chainId={selectedChain}
+                control={control}
+                errors={errors}
+                metadata={launchTokenMetadata}
+                resetForm={resetLbpCreation}
+                setFormValue={setValue}
+                triggerValidation={trigger}
+                value={launchTokenAddress}
+              />
             </VStack>
 
-            <Divider />
+            {launchTokenIsValid && (
+              <>
+                <Divider />
 
-            <Heading color="font.maxContrast" size="md">
-              LBP mechanism
-            </Heading>
-            <CollateralTokenAddressInput
-              control={control}
-              isDisabled={isPoolCreated}
-              selectedChain={selectedChain}
-            />
-            <WeightAdjustmentTypeInput
-              collateralTokenSymbol={collateralToken?.symbol || ''}
-              control={control}
-              isDisabled={isPoolCreated}
-              launchTokenSymbol={launchTokenMetadata.symbol || ''}
-              setValue={setValue}
-              watch={watch}
-            />
-            <UserActionsInput control={control} isDisabled={isPoolCreated} />
-            <FeeSelection
-              control={control}
-              errors={errors}
-              feeValue={saleStructureData.fee}
-              isDisabled={isPoolCreated}
-              setFormValue={setValue}
-            />
-            <Divider />
-            <VStack align="start" spacing="md" w="full">
-              <Heading color="font.maxContrast" size="md">
-                Seed initial pool liquidity
-              </Heading>
-              <Text color="font.secondary" fontSize="sm">
-                The initial seed amounts and their ratio set the starting price, projected market
-                cap and price curve. The stats and charts in the preview show the impact of your
-                choices.
-              </Text>
-              {saleStart && isSaleStartValid(saleStart) && (
-                <Alert
-                  status={saleStartsSoon(saleStart) ? 'warning' : 'info'}
-                  variant="WideOnDesktop"
-                >
-                  <AlertIcon as={saleStartsSoon(saleStart) ? AlertTriangle : LightbulbIcon} />
-                  <AlertDescription color="#000" fontSize="sm">
-                    {saleStartsSoon(saleStart) && 'This sale is scheduled to start soon. '}
-                    The LBP will fail to launch unless you seed the initial liquidity before the
-                    scheduled start time at {format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.
-                  </AlertDescription>
-                </Alert>
-              )}
-            </VStack>
+                <Heading color="font.maxContrast" size="md">
+                  Sale period
+                </Heading>
+                <VStack align="start" gap="lg" w="full">
+                  <VStack align="start" gap="sm" w="full">
+                    <SaleStartInput
+                      control={control}
+                      errors={errors}
+                      triggerValidation={trigger}
+                      value={saleStart}
+                    />
+                  </VStack>
+                  <VStack align="start" gap="sm" w="full">
+                    <SaleEndInput
+                      control={control}
+                      errors={errors}
+                      saleStart={saleStart}
+                      value={saleEnd}
+                    />
+                  </VStack>
+                </VStack>
 
-            <TokenInputsValidationProvider>
-              {collateralToken && (
-                <TokenBalancesProvider extTokens={[collateralToken]}>
-                  <SaleTokenAmountInput
-                    control={control}
-                    errors={errors}
-                    launchToken={launchToken}
-                    selectedChain={selectedChain}
-                  />
-                  <CollateralTokenAmountInput
-                    collateralTokenAddress={collateralTokenAddress}
-                    collateralTokenSymbol={collateralToken?.symbol || ''}
-                    control={control}
-                    errors={errors}
-                    selectedChain={selectedChain}
-                  />
-                </TokenBalancesProvider>
-              )}
-            </TokenInputsValidationProvider>
+                <Divider />
+
+                <Heading color="font.maxContrast" size="md">
+                  LBP mechanism
+                </Heading>
+                <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+                <WeightAdjustmentTypeInput
+                  collateralTokenSymbol={collateralToken?.symbol || ''}
+                  control={control}
+                  launchTokenSymbol={launchTokenMetadata.symbol || ''}
+                  setValue={setValue}
+                  watch={watch}
+                />
+                <UserActionsInput control={control} />
+                <FeeSelection
+                  control={control}
+                  errors={errors}
+                  feeValue={saleStructureData.fee}
+                  setFormValue={setValue}
+                />
+                <Divider />
+                <VStack align="start" spacing="md" w="full">
+                  <Heading color="font.maxContrast" size="md">
+                    Seed initial pool liquidity
+                  </Heading>
+                  <Text color="font.secondary" fontSize="sm">
+                    The initial seed amounts and their ratio set the starting price, projected
+                    market cap and price curve. The stats and charts in the preview show the impact
+                    of your choices.
+                  </Text>
+                  {saleStart && isSaleStartValid(saleStart) && (
+                    <Alert
+                      status={saleStartsSoon(saleStart) ? 'warning' : 'info'}
+                      variant="WideOnDesktop"
+                    >
+                      <AlertIcon as={saleStartsSoon(saleStart) ? AlertTriangle : LightbulbIcon} />
+                      <AlertDescription color="#000" fontSize="sm">
+                        {saleStartsSoon(saleStart) && 'This sale is scheduled to start soon. '}
+                        The LBP will fail to launch unless you seed the initial liquidity before the
+                        scheduled start time at{' '}
+                        {format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </VStack>
+
+                <TokenAmountInputs />
+              </>
+            )}
           </>
         )}
         <Divider />
@@ -356,13 +359,11 @@ function SaleStartInput({
   errors,
   value,
   triggerValidation,
-  isDisabled,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   value: string
   triggerValidation: UseFormTrigger<SaleStructureForm>
-  isDisabled?: boolean
 }) {
   useEffect(() => {
     if (value) triggerValidation('startDateTime')
@@ -377,7 +378,6 @@ function SaleStartInput({
       <DateTimeInput
         control={control}
         errors={errors}
-        isDisabled={isDisabled}
         label="Start date and time"
         min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
         name="startDateTime"
@@ -420,13 +420,11 @@ function SaleEndInput({
   errors,
   value,
   saleStart,
-  isDisabled,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   value: string
   saleStart: string
-  isDisabled?: boolean
 }) {
   const validateSaleEnd = (value: string | number) => {
     if (typeof value !== 'string') return 'End time must be type string'
@@ -447,7 +445,6 @@ function SaleEndInput({
       <DateTimeInput
         control={control}
         errors={errors}
-        isDisabled={isDisabled}
         label="End date and time"
         min={saleStart}
         name="endDateTime"
@@ -469,14 +466,12 @@ function DateTimeInput({
   errors,
   min,
   validate,
-  isDisabled,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   min?: string
-  isDisabled?: boolean
   validate: (value: string | number) => string | true
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
@@ -490,7 +485,6 @@ function DateTimeInput({
         render={({ field }) => (
           <InputWithError
             error={errors[field.name]?.message}
-            isDisabled={isDisabled}
             isInvalid={!!errors[field.name]}
             min={min || today}
             onChange={e => field.onChange(e.target.value)}
@@ -510,11 +504,9 @@ function DateTimeInput({
 function CollateralTokenAddressInput({
   selectedChain,
   control,
-  isDisabled,
 }: {
   selectedChain: GqlChain
   control: Control<SaleStructureForm>
-  isDisabled?: boolean
 }) {
   const chainConfig = getNetworkConfig(selectedChain)
   const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
@@ -530,7 +522,6 @@ function CollateralTokenAddressInput({
           <TokenSelectInput
             chain={selectedChain}
             defaultTokenAddress={field.value || collateralTokens?.[0]}
-            isDisabled={isDisabled}
             onChange={newValue => {
               field.onChange(newValue as GqlChain)
             }}
@@ -543,13 +534,7 @@ function CollateralTokenAddressInput({
   )
 }
 
-function UserActionsInput({
-  control,
-  isDisabled,
-}: {
-  control: Control<SaleStructureForm>
-  isDisabled?: boolean
-}) {
+function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) {
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Available user actions</Text>
@@ -557,7 +542,7 @@ function UserActionsInput({
         control={control}
         name="userActions"
         render={({ field }) => (
-          <RadioGroup isDisabled={isDisabled} onChange={field.onChange} value={field.value}>
+          <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack direction="row" gap="md">
               <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
@@ -574,13 +559,11 @@ function FeeSelection({
   errors,
   feeValue,
   setFormValue,
-  isDisabled,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   feeValue: number
   setFormValue: UseFormSetValue<SaleStructureForm>
-  isDisabled?: boolean
 }) {
   const [value, setValue] = useState('minimum')
 
@@ -598,7 +581,6 @@ function FeeSelection({
     <VStack align="start" w="full">
       <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
       <RadioGroup
-        isDisabled={isDisabled}
         onChange={(value: string) => {
           setValue(value)
           if (value === 'minimum') setFormValue('fee', 1.0)
