@@ -13,6 +13,7 @@ type Props = {
   tokenAddresses: string[]
   chain: GqlChain
   defaultTokenAddress?: string
+  isDisabled?: boolean
 }
 
 export function TokenSelectInput({
@@ -21,6 +22,7 @@ export function TokenSelectInput({
   tokenAddresses,
   chain,
   defaultTokenAddress,
+  isDisabled,
 }: Props) {
   const { getToken } = useTokens()
 
@@ -46,6 +48,7 @@ export function TokenSelectInput({
     <SelectInput
       defaultValue={defaultTokenAddress}
       id="token-select"
+      isDisabled={isDisabled}
       onChange={onChange}
       options={tokenOptions}
       value={value}

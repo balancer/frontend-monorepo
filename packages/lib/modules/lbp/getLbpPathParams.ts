@@ -3,8 +3,6 @@ import { Address } from 'viem'
 
 type LbpPathParams = {
   chain?: GqlChain
-  saleTokenAmount?: string
-  collateralTokenAmount?: string
   poolAddress?: Address
 }
 export function getLbpPathParams(slug?: string[]): LbpPathParams {
@@ -12,11 +10,9 @@ export function getLbpPathParams(slug?: string[]): LbpPathParams {
     return {}
   }
 
-  const [chain, saleTokenAmount, collateralTokenAmount, poolAddress] = slug
+  const [chain, poolAddress] = slug
   return {
     chain: chain as GqlChain | undefined,
     poolAddress: poolAddress as Address | undefined,
-    saleTokenAmount,
-    collateralTokenAmount,
   }
 }

@@ -76,6 +76,7 @@ export function SaleStructureStep() {
     activeStepIndex,
     resetLbpCreation,
     launchToken,
+    poolAddress,
   } = useLbpForm()
   const saleStructureData = watch()
 
@@ -99,6 +100,8 @@ export function SaleStructureStep() {
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
     setActiveStep(activeStepIndex + 1)
   }
+
+  const isPoolCreated = !!poolAddress
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
@@ -133,6 +136,7 @@ export function SaleStructureStep() {
                 <SaleStartInput
                   control={control}
                   errors={errors}
+                  isDisabled={isPoolCreated}
                   triggerValidation={trigger}
                   value={saleStart}
                 />
@@ -141,6 +145,7 @@ export function SaleStructureStep() {
                 <SaleEndInput
                   control={control}
                   errors={errors}
+                  isDisabled={isPoolCreated}
                   saleStart={saleStart}
                   value={saleEnd}
                 />
@@ -152,19 +157,25 @@ export function SaleStructureStep() {
             <Heading color="font.maxContrast" size="md">
               LBP mechanism
             </Heading>
-            <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+            <CollateralTokenAddressInput
+              control={control}
+              isDisabled={isPoolCreated}
+              selectedChain={selectedChain}
+            />
             <WeightAdjustmentTypeInput
               collateralTokenSymbol={collateralToken?.symbol || ''}
               control={control}
+              isDisabled={isPoolCreated}
               launchTokenSymbol={launchTokenMetadata.symbol || ''}
               setValue={setValue}
               watch={watch}
             />
-            <UserActionsInput control={control} />
+            <UserActionsInput control={control} isDisabled={isPoolCreated} />
             <FeeSelection
               control={control}
               errors={errors}
               feeValue={saleStructureData.fee}
+              isDisabled={isPoolCreated}
               setFormValue={setValue}
             />
             <Divider />
@@ -345,11 +356,13 @@ function SaleStartInput({
   errors,
   value,
   triggerValidation,
+  isDisabled,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   value: string
   triggerValidation: UseFormTrigger<SaleStructureForm>
+  isDisabled?: boolean
 }) {
   useEffect(() => {
     if (value) triggerValidation('startDateTime')
@@ -364,6 +377,7 @@ function SaleStartInput({
       <DateTimeInput
         control={control}
         errors={errors}
+        isDisabled={isDisabled}
         label="Start date and time"
         min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
         name="startDateTime"
@@ -406,11 +420,13 @@ function SaleEndInput({
   errors,
   value,
   saleStart,
+  isDisabled,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   value: string
   saleStart: string
+  isDisabled?: boolean
 }) {
   const validateSaleEnd = (value: string | number) => {
     if (typeof value !== 'string') return 'End time must be type string'
@@ -431,6 +447,7 @@ function SaleEndInput({
       <DateTimeInput
         control={control}
         errors={errors}
+        isDisabled={isDisabled}
         label="End date and time"
         min={saleStart}
         name="endDateTime"
@@ -452,12 +469,14 @@ function DateTimeInput({
   errors,
   min,
   validate,
+  isDisabled,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   min?: string
+  isDisabled?: boolean
   validate: (value: string | number) => string | true
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
@@ -471,6 +490,7 @@ function DateTimeInput({
         render={({ field }) => (
           <InputWithError
             error={errors[field.name]?.message}
+            isDisabled={isDisabled}
             isInvalid={!!errors[field.name]}
             min={min || today}
             onChange={e => field.onChange(e.target.value)}
@@ -490,9 +510,11 @@ function DateTimeInput({
 function CollateralTokenAddressInput({
   selectedChain,
   control,
+  isDisabled,
 }: {
   selectedChain: GqlChain
   control: Control<SaleStructureForm>
+  isDisabled?: boolean
 }) {
   const chainConfig = getNetworkConfig(selectedChain)
   const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
@@ -508,6 +530,7 @@ function CollateralTokenAddressInput({
           <TokenSelectInput
             chain={selectedChain}
             defaultTokenAddress={field.value || collateralTokens?.[0]}
+            isDisabled={isDisabled}
             onChange={newValue => {
               field.onChange(newValue as GqlChain)
             }}
@@ -520,7 +543,13 @@ function CollateralTokenAddressInput({
   )
 }
 
-function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) {
+function UserActionsInput({
+  control,
+  isDisabled,
+}: {
+  control: Control<SaleStructureForm>
+  isDisabled?: boolean
+}) {
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Available user actions</Text>
@@ -528,7 +557,7 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
         control={control}
         name="userActions"
         render={({ field }) => (
-          <RadioGroup onChange={field.onChange} value={field.value}>
+          <RadioGroup isDisabled={isDisabled} onChange={field.onChange} value={field.value}>
             <Stack direction="row" gap="md">
               <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
@@ -545,11 +574,13 @@ function FeeSelection({
   errors,
   feeValue,
   setFormValue,
+  isDisabled,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   feeValue: number
   setFormValue: UseFormSetValue<SaleStructureForm>
+  isDisabled?: boolean
 }) {
   const [value, setValue] = useState('minimum')
 
@@ -567,6 +598,7 @@ function FeeSelection({
     <VStack align="start" w="full">
       <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
       <RadioGroup
+        isDisabled={isDisabled}
         onChange={(value: string) => {
           setValue(value)
           if (value === 'minimum') setFormValue('fee', 1.0)

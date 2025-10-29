@@ -27,6 +27,7 @@ type Props = {
   >
   isSearchable?: boolean
   SingleValue?: ComponentType<SingleValueProps<SelectOption, false, GroupBase<SelectOption>>>
+  isDisabled?: boolean
 }
 
 export function SelectInput({
@@ -38,6 +39,7 @@ export function SelectInput({
   DropdownIndicator,
   isSearchable = true,
   SingleValue,
+  isDisabled,
 }: Props) {
   const defaultOption = defaultValue
     ? options.find(option => option.value === defaultValue)
@@ -62,6 +64,7 @@ export function SelectInput({
       chakraStyles={chakraStyles}
       components={components}
       id={id}
+      isDisabled={isDisabled}
       isSearchable={isSearchable}
       menuPortalTarget={document.body}
       name="Chain"

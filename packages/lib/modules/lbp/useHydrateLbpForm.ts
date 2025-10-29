@@ -35,14 +35,10 @@ type LbpDataResponse = [
 export function useHydrateLbpForm() {
   const { slug } = useParams()
   const params = getLbpPathParams(slug as string[] | undefined)
-  const { poolAddress, setPoolAddress, setActiveStep, saleStructureForm } = useLbpForm()
+  const { poolAddress, setPoolAddress, saleStructureForm } = useLbpForm()
   const chainId = params.chain ? getChainId(params.chain) : undefined
 
-  const areAllParamsDefined =
-    !!params.chain &&
-    !!params.poolAddress &&
-    !!params.saleTokenAmount &&
-    !!params.collateralTokenAmount
+  const areAllParamsDefined = !!params.chain && !!params.poolAddress
 
   const shouldHydrateLbpForm = !poolAddress && areAllParamsDefined // useEffect below to save poolAddress to LS
 
@@ -93,8 +89,6 @@ export function useHydrateLbpForm() {
         staticSwapFeePercentage.result === undefined ||
         lbpImmutableData.result === undefined ||
         isProjectTokenSwapInBlocked.result === undefined ||
-        params.saleTokenAmount === undefined ||
-        params.collateralTokenAmount === undefined ||
         params.chain === undefined
       ) {
         return
@@ -108,8 +102,8 @@ export function useHydrateLbpForm() {
         selectedChain: params.chain,
         launchTokenAddress: projectToken.result,
         collateralTokenAddress: reserveToken.result,
-        saleTokenAmount: `${+params.saleTokenAmount}`,
-        collateralTokenAmount: `${+params.collateralTokenAmount}`,
+        saleTokenAmount: '',
+        collateralTokenAmount: '',
         userActions,
         weightAdjustmentType: WeightAdjustmentType.LINEAR_90_10, // TODO
         customStartWeight: 90, // TODO
@@ -121,13 +115,10 @@ export function useHydrateLbpForm() {
 
       saleStructureForm.reset(saleStructureFormValues)
       setPoolAddress(params.poolAddress)
-      setActiveStep(1)
     }
   }, [
     params.chain,
     params.poolAddress,
-    params.saleTokenAmount,
-    params.collateralTokenAmount,
     lbpData,
     isLbpLoading,
     shouldHydrateLbpForm,
