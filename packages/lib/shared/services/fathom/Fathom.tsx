@@ -57,7 +57,7 @@ function TrackPageView() {
     load('MKFEFCXC', {
       auto: false,
       // Optional but I like to explicitly choose the domains to track:
-      includedDomains: ['balancer.fi', 'zen.balancer.fi'],
+      includedDomains: ['balancer.fi'],
     })
   }, [])
 
