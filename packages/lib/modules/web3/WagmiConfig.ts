@@ -71,7 +71,6 @@ export const wagmiConfig = createConfig({
   chains,
   transports,
   connectors,
-  ssr: true,
 })
 
 /*
@@ -109,7 +108,6 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
     chains,
     transports: _transports,
     connectors,
-    ssr: true,
   })
 
   return { connectors, updatedConfig: impersonatedConfig }
