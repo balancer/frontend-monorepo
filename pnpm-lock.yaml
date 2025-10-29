@@ -159,10 +159,10 @@ importers:
         specifier: 22.15.19
         version: 22.15.19
       '@types/react':
-        specifier: ~19.2.2
+        specifier: '19.2'
         version: 19.2.2
       '@types/react-dom':
-        specifier: ~19.2.2
+        specifier: '19.2'
         version: 19.2.2(@types/react@19.2.2)
       '@types/tinycolor2':
         specifier: ^1.4.6
@@ -316,10 +316,10 @@ importers:
         specifier: ^1.26.5
         version: 1.26.5
       '@types/react':
-        specifier: ~19.2.2
+        specifier: '19.2'
         version: 19.2.2
       '@types/react-dom':
-        specifier: ~19.2.2
+        specifier: '19.2'
         version: 19.2.2(@types/react@19.2.2)
       '@types/tinycolor2':
         specifier: ^1.4.6
@@ -656,10 +656,10 @@ importers:
         specifier: ^0.0.33
         version: 0.0.33
       '@types/react':
-        specifier: ~19.2.2
+        specifier: '19.2'
         version: 19.2.2
       '@types/react-dom':
-        specifier: ~19.2.2
+        specifier: '19.2'
         version: 19.2.2(@types/react@19.2.2)
       '@types/tinycolor2':
         specifier: ^1.4.6
