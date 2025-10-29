@@ -35,12 +35,11 @@ type LbpDataResponse = [
 export function useHydrateLbpForm() {
   const { slug } = useParams()
   const params = getLbpPathParams(slug as string[] | undefined)
-  const { poolAddress, setPoolAddress, saleStructureForm } = useLbpForm()
+  const { poolAddress, setPoolAddress, saleStructureForm, isResetting } = useLbpForm()
   const chainId = params.chain ? getChainId(params.chain) : undefined
 
   const areAllParamsDefined = !!params.chain && !!params.poolAddress
-
-  const shouldHydrateLbpForm = !poolAddress && areAllParamsDefined // useEffect below to save poolAddress to LS
+  const shouldHydrateLbpForm = !poolAddress && areAllParamsDefined && !isResetting
 
   const lbpFunctionNames = [
     'owner',
@@ -62,7 +61,7 @@ export function useHydrateLbpForm() {
 
   const { data: lbpData, isLoading: isLoadingLbpData } = useReadContracts({
     contracts: lbpContractReads,
-    query: { enabled: lbpContractReads.length > 0 },
+    query: { enabled: lbpContractReads.length > 0 && shouldHydrateLbpForm },
   }) as { data: LbpDataResponse; isLoading: boolean }
 
   const isLbpLoading = isLoadingLbpData
@@ -98,6 +97,28 @@ export function useHydrateLbpForm() {
         ? UserActions.BUY_ONLY
         : UserActions.BUY_AND_SELL
 
+      const { startWeights, endWeights, projectTokenIndex } = lbpImmutableData.result
+
+      const projectTokenStartWeight = +formatUnits(
+        startWeights[projectTokenIndex],
+        PERCENTAGE_DECIMALS
+      )
+      const projectTokenEndWeight = +formatUnits(endWeights[projectTokenIndex], PERCENTAGE_DECIMALS)
+
+      let weightAdjustmentType: WeightAdjustmentType
+      let customStartWeight = 90
+      let customEndWeight = 10
+
+      if (projectTokenStartWeight === 90 && projectTokenEndWeight === 10) {
+        weightAdjustmentType = WeightAdjustmentType.LINEAR_90_10
+      } else if (projectTokenStartWeight === 90 && projectTokenEndWeight === 50) {
+        weightAdjustmentType = WeightAdjustmentType.LINEAR_90_50
+      } else {
+        weightAdjustmentType = WeightAdjustmentType.CUSTOM
+        customStartWeight = projectTokenStartWeight
+        customEndWeight = projectTokenEndWeight
+      }
+
       const saleStructureFormValues: SaleStructureForm = {
         selectedChain: params.chain,
         launchTokenAddress: projectToken.result,
@@ -105,9 +126,9 @@ export function useHydrateLbpForm() {
         saleTokenAmount: '',
         collateralTokenAmount: '',
         userActions,
-        weightAdjustmentType: WeightAdjustmentType.LINEAR_90_10, // TODO
-        customStartWeight: 90, // TODO
-        customEndWeight: 10, // TODO
+        weightAdjustmentType,
+        customStartWeight,
+        customEndWeight,
         fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
         startDateTime: formatLbpTimestamp(lbpImmutableData.result.startTime),
         endDateTime: formatLbpTimestamp(lbpImmutableData.result.endTime),

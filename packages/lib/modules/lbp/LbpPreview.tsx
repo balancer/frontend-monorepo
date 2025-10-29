@@ -46,20 +46,20 @@ export function LbpPreview() {
         }}
       >
         <VStack align="start" px="lg" py="md" spacing="md" w="full">
+          <Flex alignItems="center" pt="xs" w="full">
+            <Heading color="font.maxContrast" size="md">
+              LBP preview
+            </Heading>
+            <Spacer />
+            <RestartPoolCreationModal
+              handleRestart={resetLbpCreation}
+              network={chain}
+              poolType={GqlPoolType.LiquidityBootstrapping}
+            />
+            <LbpLearnMoreModal buttonLabel="Get help" />
+          </Flex>
           {!isLastStep && (
             <>
-              <Flex alignItems="center" pt="xs" w="full">
-                <Heading color="font.maxContrast" size="md">
-                  LBP preview
-                </Heading>
-                <Spacer />
-                <RestartPoolCreationModal
-                  handleRestart={resetLbpCreation}
-                  network={chain}
-                  poolType={GqlPoolType.LiquidityBootstrapping}
-                />
-                <LbpLearnMoreModal buttonLabel="Get help" />
-              </Flex>
               <TokenSummary
                 chain={chain}
                 launchTokenAddress={launchTokenAddress as Address}
