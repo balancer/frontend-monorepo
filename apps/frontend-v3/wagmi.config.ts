@@ -89,6 +89,10 @@ export default defineConfig(() => {
             address: '0x3f89f8c0e0ffdfae0b97959303831fa893f1cfe0',
           },
           { name: 'BalancerV3StablePool', address: '0x57c23c58b1d8c3292c15becf07c62c5c52457a42' },
+          {
+            name: 'LiquidityBootstrappingPool',
+            address: '0xa1E9e74BbDBDE4B8F9F624E71641F54e3b7F11bf',
+          },
         ],
       }),
     ],
