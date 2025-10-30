@@ -23,7 +23,22 @@ const config: NextConfig = {
   transpilePackages: ['@repo/lib'],
 
   // Safe App setup
-  headers: manifestHeaders,
+  headers: async () => {
+    const manifestHeadersResult = await manifestHeaders()
+
+    return [
+      ...manifestHeadersResult,
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
+  },
 
   async redirects() {
     const redirects: Array<{

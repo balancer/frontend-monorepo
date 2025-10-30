@@ -1,4 +1,5 @@
 import { hasWhitespace } from './strings'
+import { proxyCoinGeckoImage } from '../../modules/pool/utils/image-proxy'
 
 export function getBaseUrl() {
   if (typeof window === 'undefined') {
@@ -30,5 +31,6 @@ export function isValidUrl(maybeUrl?: string): string | true {
 
 export function normalizeUrl(url: string) {
   if (!url.startsWith('http://') && !url.startsWith('https://')) return 'https://' + url
-  return url
+  // Proxy CoinGecko images to avoid CORS issues
+  return proxyCoinGeckoImage(url)
 }
