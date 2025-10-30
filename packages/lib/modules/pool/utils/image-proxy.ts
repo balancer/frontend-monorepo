@@ -1,16 +1,26 @@
 /**
- * Proxies CoinGecko image URLs through the Next.js API to avoid CORS issues
+ * Proxies external image URLs through the Next.js API to avoid CORS issues
  */
-export function proxyCoinGeckoImage(originalUrl: string): string {
+export function proxyExternalImageUrl(originalUrl: string): string {
   try {
     const url = new URL(originalUrl)
 
-    const isCoingecko =
-      url.hostname === 'assets.coingecko.com' || url.hostname.endsWith('.coingecko.com')
+    // List of domains that should be proxied
+    const proxyDomains = ['assets.coingecko.com', '*.coingecko.com']
+
+    const isExternal = proxyDomains.some(domain => {
+      if (domain.startsWith('*.')) {
+        // Handle wildcard subdomains
+        const baseDomain = domain.slice(2)
+        return url.hostname.endsWith(baseDomain) || url.hostname === baseDomain
+      }
+
+      return url.hostname === domain
+    })
 
     const isHttps = url.protocol === 'https:'
 
-    if (!isCoingecko || !isHttps) {
+    if (!isExternal || !isHttps) {
       return originalUrl
     }
   } catch {
