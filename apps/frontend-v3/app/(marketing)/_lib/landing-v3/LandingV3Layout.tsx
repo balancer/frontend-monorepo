@@ -1,4 +1,5 @@
 import { Hero } from './Hero'
+import { HomeHero } from './HomeHero'
 import { Code } from './Code'
 import { Videos } from './Videos'
 import { Audits } from './Audits'
@@ -10,6 +11,7 @@ import { FooterCta } from './FooterCta'
 export function LandingV3Layout() {
   return (
     <>
+      <HomeHero />
       <Hero />
       <Code />
       <Contracts />
