@@ -98,14 +98,6 @@ export async function manifestHeaders() {
           key: 'Access-Control-Allow-Headers',
           value: 'X-Requested-With, content-type, Authorization',
         },
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=86400, s-maxage=86400', // Cache for 24 hours
-        },
-        {
-          key: 'ETag',
-          value: 'W/"manifest-v1"',
-        },
       ],
     },
   ]
