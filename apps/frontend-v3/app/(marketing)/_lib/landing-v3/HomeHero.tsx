@@ -18,6 +18,7 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import NextLink from 'next/link'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
+import LiquidMetal from '@bal/app/(marketing)/_lib/landing-v3/shared/LiquidMetal'
 
 export function HomeHero() {
   const radialPatternProps = useBreakpointValue({
@@ -164,16 +165,32 @@ export function HomeHero() {
                     width={radialPatternProps?.width}
                     zIndex={-1}
                   />
-                  <Box overflow="hidden" rounded="full" shadow="2xl">
-                    <Box rounded="full" shadow="innerRockShadow">
-                      <Picture
-                        altText="Balancer protocol"
-                        defaultImgType="jpg"
-                        directory="/images/textures/"
-                        imgAvif
-                        imgJpg
-                        imgName="slate-square-large"
-                      />
+                  <Box overflow="hidden" position="relative" rounded="full" shadow="2xl">
+                    <Picture
+                      altText="Balancer protocol"
+                      defaultImgType="jpg"
+                      directory="/images/textures/"
+                      imgAvif
+                      imgJpg
+                      imgName="slate-square-large"
+                    />
+                    <Box
+                      h="full"
+                      left="0"
+                      position="absolute"
+                      rounded="full"
+                      shadow="innerRockShadowXl"
+                      top="0"
+                      w="full"
+                    />
+                    <Box
+                      left="50%"
+                      pointerEvents="none"
+                      position="absolute"
+                      top="50%"
+                      transform="translate(-50%, -50%)"
+                    >
+                      <LiquidMetal />
                     </Box>
                   </Box>
                 </Box>

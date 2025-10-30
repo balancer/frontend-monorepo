@@ -37,6 +37,7 @@
     "@chakra-ui/theme-tools": "2.2.6",
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
+    "@paper-design/shaders-react": "0.0.60",
     "@repo/lib": "workspace:*",
     "@repo/test": "workspace:*",
     "@sentry/nextjs": "8.50.0",

@@ -419,6 +419,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
         default: tokens.shadows.light.innerRockShadowSm,
         _dark: tokens.shadows.dark.innerRockShadowSm,
       },
+      innerRockShadowXl: {
+        default: tokens.shadows.light.innerRockShadowXl,
+        _dark: tokens.shadows.dark.innerRockShadowXl,
+      },
       chartIconInner: {
         default: tokens.shadows.light.chartIconInner,
         _dark: tokens.shadows.dark.chartIconInner,
