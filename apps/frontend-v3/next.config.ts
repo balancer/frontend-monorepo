@@ -21,26 +21,12 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
+    minimumCacheTTL: 60,
   },
   transpilePackages: ['@repo/lib'],
 
   // Safe App setup
-  headers: async () => {
-    const manifestHeadersResult = await manifestHeaders()
-
-    return [
-      ...manifestHeadersResult,
-      {
-        source: '/_next/image(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-    ]
-  },
+  headers: manifestHeaders,
 }
 
 // Avoid sentry setup in CI

@@ -1,5 +1,5 @@
 import { hasWhitespace } from './strings'
-import { proxyCoinGeckoImage } from '../../modules/pool/utils/image-proxy'
+import { proxyCoinGeckoImage } from '@repo/lib/modules/pool/utils/image-proxy'
 
 export function getBaseUrl() {
   if (typeof window === 'undefined') {
