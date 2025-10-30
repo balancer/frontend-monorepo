@@ -15,7 +15,7 @@ import { VStack, Text, Heading, Alert, AlertIcon, AlertDescription } from '@chak
 import { AlertTriangle } from 'react-feather'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { format, parseISO } from 'date-fns'
-import { isSaleStartValid, saleStartsSoon } from '../SaleStructureStep'
+import { isSaleStartValid, saleStartsSoon } from './helpers'
 
 export function LbpTokenAmountInputs() {
   const { getToken } = useTokens()

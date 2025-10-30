@@ -40,16 +40,15 @@ import {
   differenceInDays,
   differenceInHours,
   format,
-  isBefore,
   parseISO,
   isAfter,
 } from 'date-fns'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { LbpFormAction } from '../LbpFormAction'
 import { LbpTokenAmountInputs } from './sale-structure/LbpTokenAmountInputs'
-import { now } from '@repo/lib/shared/utils/time'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useInterval } from 'usehooks-ts'
+import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -334,28 +333,6 @@ function SaleStartInput({
         </Text>
       )}
     </>
-  )
-}
-
-export function isSaleStartValid(value: string | number) {
-  if (typeof value !== 'string') return 'Start time must be type string'
-
-  if (isBefore(parseISO(value), now())) {
-    return `This start date is already in the past.
-              Set it at least 1 hour ahead to ensure the pool is seeded
-              before the sale begins.`
-  }
-
-  if (!isAfter(parseISO(value), addHours(now(), 1))) {
-    return 'Set the start time at least 1 hour ahead to ensure the pool is seeded before the sale begins.'
-  }
-
-  return true
-}
-
-export function saleStartsSoon(saleStart: string) {
-  return (
-    saleStart && isSaleStartValid(saleStart) && isBefore(parseISO(saleStart), addDays(now(), 1))
   )
 }
 
