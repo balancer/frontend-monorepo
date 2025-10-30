@@ -1,5 +1,3 @@
-'use client'
-
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
 import {
   coinbaseWallet,
@@ -24,44 +22,48 @@ import { isBrowser } from '@repo/lib/shared/utils/app.helper'
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
 if (!walletConnectProjectId) throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT_ID env')
 
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: 'Recommended',
-      wallets: [
-        // metaMaskWallet must appear above injectedWallet to avoid random disconnection issues
-        metaMaskWallet,
-        safeWallet,
-        rabbyWallet,
-        coinbaseWallet,
-        rainbowWallet,
-        injectedWallet,
-      ],
-    },
-  ],
-  {
-    appName: PROJECT_CONFIG.projectName,
-    projectId: walletConnectProjectId,
-  }
-)
+let connectors: ReturnType<typeof connectorsForWallets> = []
 
-/*
+if (isBrowser()) {
+  connectors = connectorsForWallets(
+    [
+      {
+        groupName: 'Recommended',
+        wallets: [
+          // metaMaskWallet must appear above injectedWallet to avoid random disconnection issues
+          metaMaskWallet,
+          safeWallet,
+          rabbyWallet,
+          coinbaseWallet,
+          rainbowWallet,
+          injectedWallet,
+        ],
+      },
+    ],
+    {
+      appName: PROJECT_CONFIG.projectName,
+      projectId: walletConnectProjectId,
+    }
+  )
+
+  /*
   Only adding a new WC Connector if the user is not already connected to WC
   This fixes this rainbowkit issue:
   https://github.com/rainbow-me/rainbowkit/issues/2232
 */
-if (isBrowser() && !isConnectedToWC()) {
-  const lastConnector = connectors[connectors.length - 1]
-  if (lastConnector({} as any).id !== 'walletConnect') {
-    connectors.push(
-      createWalletConnectConnector({ index: connectors.length, walletConnectProjectId })
-    )
+  if (!isConnectedToWC()) {
+    const lastConnector = connectors[connectors.length - 1]
+    if (lastConnector({} as any).id !== 'walletConnect') {
+      connectors.push(
+        createWalletConnectConnector({ index: connectors.length, walletConnectProjectId })
+      )
+    }
   }
-}
 
-// Add mock connector for development/staging environments
-if (isBrowser() && !isProd) {
-  connectors.push(createMockConnector({ index: connectors.length }))
+  // Add mock connector for development/staging environments
+  if (!isProd) {
+    connectors.push(createMockConnector({ index: connectors.length }))
+  }
 }
 
 export type WagmiConfig = ReturnType<typeof createConfig>
@@ -69,7 +71,6 @@ export const wagmiConfig = createConfig({
   chains,
   transports,
   connectors,
-  ssr: true,
 })
 
 /*
@@ -93,7 +94,7 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
       For now, E2E dev tests will always run against MAINNET fork
       If needed, this could be easily extended to use different RPC URLs for different chains
      */
-    chains.map(chain => (chain.rpcUrls.default.http = [defaultAnvilForkRpcUrl]))
+    chains.forEach(chain => (chain.rpcUrls.default.http = [defaultAnvilForkRpcUrl]))
     _transports = Object.fromEntries(
       chains.map(chain => [chain.id, fallback([http(defaultAnvilForkRpcUrl)])])
     )
@@ -107,7 +108,6 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
     chains,
     transports: _transports,
     connectors,
-    ssr: true,
   })
 
   return { connectors, updatedConfig: impersonatedConfig }
