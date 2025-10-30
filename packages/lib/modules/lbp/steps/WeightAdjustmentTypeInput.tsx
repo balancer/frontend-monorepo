@@ -118,6 +118,7 @@ function WeightSlider({
   collateralTokenSymbol,
   customWeight,
   setValue,
+  isDisabled,
 }: {
   name: keyof SaleStructureForm
   title: string
@@ -125,6 +126,7 @@ function WeightSlider({
   collateralTokenSymbol: string
   customWeight: number
   setValue: UseFormSetValue<SaleStructureForm>
+  isDisabled?: boolean
 }) {
   return (
     <VStack align="start" w="full">
@@ -154,6 +156,7 @@ function WeightSlider({
         </HStack>
         <SliderWithSteps
           aria-label="weights-slider"
+          isDisabled={isDisabled}
           max={99}
           min={1}
           onChange={value => setValue(name, value)}

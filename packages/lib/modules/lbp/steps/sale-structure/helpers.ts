@@ -1,4 +1,6 @@
 import { differenceInDays, format } from 'date-fns'
+import { isBefore, isAfter, addHours, addDays, parseISO } from 'date-fns'
+import { now } from '@repo/lib/shared/utils/time'
 
 /**
  * Formats date axis labels dynamically based on the total date range
@@ -28,4 +30,26 @@ export function formatDateAxisLabel(value: number, startDate: Date, endDate: Dat
     // > 1 year: Show "2024-04" for year-month
     return format(date, 'yyyy-MM')
   }
+}
+
+export function isSaleStartValid(value: string | number) {
+  if (typeof value !== 'string') return 'Start time must be type string'
+
+  if (isBefore(parseISO(value), now())) {
+    return `This start date is already in the past.
+              Set it at least 1 hour ahead to ensure the pool is seeded
+              before the sale begins.`
+  }
+
+  if (!isAfter(parseISO(value), addHours(now(), 1))) {
+    return 'Set the start time at least 1 hour ahead to ensure the pool is seeded before the sale begins.'
+  }
+
+  return true
+}
+
+export function saleStartsSoon(saleStart: string) {
+  return (
+    saleStart && isSaleStartValid(saleStart) && isBefore(parseISO(saleStart), addDays(now(), 1))
+  )
 }
