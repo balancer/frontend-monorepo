@@ -8,6 +8,7 @@ import {
   PoolCreationToken,
   PoolCreationForm,
   ReClammConfig,
+  EclpConfigForm,
 } from './types'
 import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -22,10 +23,10 @@ export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AM
 export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
-  [PoolType.Weighted]: { label: 'Weighted', maxTokens: 8 },
   [PoolType.Stable]: { label: 'Stable', maxTokens: 5 },
   [PoolType.StableSurge]: { label: 'Stable Surge', maxTokens: 5 },
-  // [PoolType.GyroE]: { label: 'Gyro Elliptic CLP', maxTokens: 2 },
+  [PoolType.Weighted]: { label: 'Weighted', maxTokens: 8 },
+  [PoolType.GyroE]: { label: 'Gyro Elliptic CLP', maxTokens: 2 },
   [PoolType.ReClamm]: { label: 'reClamm', maxTokens: 2 },
 }
 
@@ -113,4 +114,13 @@ export const INITIAL_RECLAMM_CONFIG: ReClammConfig = {
   priceRangePercentage: '',
   priceShiftDailyRate: '',
   centerednessMargin: '',
+}
+
+export const INITIAL_ECLP_CONFIG: EclpConfigForm = {
+  alpha: '',
+  beta: '',
+  c: '',
+  s: '',
+  lambda: '',
+  peakPrice: '',
 }

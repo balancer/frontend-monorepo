@@ -16,7 +16,7 @@ export type SupportedPoolTypes =
   | PoolType.Weighted
   | PoolType.StableSurge
   | PoolType.ReClamm
-// | PoolType.GyroE
+  | PoolType.GyroE
 
 export type PoolTypeDetails = {
   label: string
@@ -60,4 +60,13 @@ export type ReClammConfig = {
   priceRangePercentage: string
   priceShiftDailyRate: string
   centerednessMargin: string
+}
+
+export type EclpConfigForm = {
+  alpha: string
+  beta: string
+  c: string
+  s: string
+  lambda: string
+  peakPrice: string
 }

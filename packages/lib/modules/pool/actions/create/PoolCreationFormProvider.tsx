@@ -6,8 +6,9 @@ import {
   INITIAL_TOKEN_CONFIG,
   INITIAL_POOL_CREATION_FORM,
   INITIAL_RECLAMM_CONFIG,
+  INITIAL_ECLP_CONFIG,
 } from './constants'
-import { PoolCreationForm, PoolCreationToken, ReClammConfig } from './types'
+import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } from './types'
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
@@ -33,6 +34,12 @@ export function usePoolFormLogic() {
   const reClammConfigForm = usePersistentForm<ReClammConfig>(
     LS_KEYS.PoolCreation.ReClammConfig,
     INITIAL_RECLAMM_CONFIG,
+    { mode: 'all' }
+  )
+
+  const eclpConfigForm = usePersistentForm<EclpConfigForm>(
+    LS_KEYS.PoolCreation.EclpConfig,
+    INITIAL_ECLP_CONFIG,
     { mode: 'all' }
   )
 
@@ -63,6 +70,7 @@ export function usePoolFormLogic() {
   const isStablePool = poolType === PoolType.Stable
   const isStableSurgePool = poolType === PoolType.StableSurge
   const isWeightedPool = poolType === PoolType.Weighted
+  const isGyroEclp = poolType === PoolType.GyroE
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const newPoolTokens = [...poolTokens]
@@ -123,6 +131,7 @@ export function usePoolFormLogic() {
   return {
     poolCreationForm,
     reClammConfigForm,
+    eclpConfigForm,
     isFormStateValid: poolCreationForm.formState.isValid,
     poolTokens,
     poolType,
@@ -142,6 +151,7 @@ export function usePoolFormLogic() {
     isStablePool,
     isStableSurgePool,
     isWeightedPool,
+    isGyroEclp,
     updatePoolToken,
     updatePoolTokens,
     removePoolToken,
