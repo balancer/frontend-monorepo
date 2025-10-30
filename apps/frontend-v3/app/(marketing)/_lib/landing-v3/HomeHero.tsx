@@ -47,12 +47,14 @@ export function HomeHero() {
       >
         <DefaultPageContainer
           h={{ base: '500px', md: '800px' }}
+          minH={{ lg: 'calc(95vh - 36px)' }}
           pb={['0', '0', '10']}
           position="relative"
           pt={['xl', '40px']}
           px="0"
         >
           <Grid
+            alignItems="center"
             gap={{ base: '0', md: '4' }}
             h="100%"
             overflow={{ base: 'hidden', md: 'visible' }}
@@ -67,8 +69,6 @@ export function HomeHero() {
                   justifyContent="center"
                   margin={{ base: '0 auto', md: '0' }}
                   pl={{ md: 'md', '2xl': '0' }}
-                  position="relative"
-                  top={{ base: '0', md: '200px' }}
                 >
                   <Stack alignItems={{ base: 'center', md: 'start' }} px="0">
                     <Heading
@@ -135,7 +135,7 @@ export function HomeHero() {
                 </Stack>
               </FadeInOnView>
             </GridItem>
-
+            {/* Image Column */}
             <GridItem
               display="flex"
               justifyContent={{ base: 'center', md: 'flex-start' }}
@@ -164,14 +164,18 @@ export function HomeHero() {
                     width={radialPatternProps?.width}
                     zIndex={-1}
                   />
-                  <Picture
-                    altText="veBAL token"
-                    defaultImgType="png"
-                    directory="/images/vebal/"
-                    imgAvif
-                    imgName="vebal"
-                    imgPng
-                  />
+                  <Box overflow="hidden" rounded="full" shadow="2xl">
+                    <Box rounded="full" shadow="innerRockShadow">
+                      <Picture
+                        altText="Balancer protocol"
+                        defaultImgType="jpg"
+                        directory="/images/textures/"
+                        imgAvif
+                        imgJpg
+                        imgName="slate-square-large"
+                      />
+                    </Box>
+                  </Box>
                 </Box>
               </FadeInOnView>
             </GridItem>
