@@ -33,6 +33,7 @@ export function NetworkIcon({
           alt={networkConfig.shortName}
           height={imageSize}
           src={networkConfig.iconPath}
+          style={{ width: 'auto', height: 'auto' }}
           width={imageSize}
         />
       )}
