@@ -4,9 +4,6 @@ import { TransactionStep } from '@repo/lib/modules/transactions/transaction-step
 import { UnstakeParams, useClaimAndUnstakeStep } from './useClaimAndUnstakeStep'
 import { useMemo } from 'react'
 import { useApproveMinterStep } from '@repo/lib/modules/staking/gauge/useMinterApprovalStep'
-import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
-import { useShouldSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
-import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
 
 export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
   isLoading: boolean
@@ -20,10 +17,6 @@ export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
     isLoading: isLoadingClaimAndUnstakeStep,
     hasUnclaimedBalRewards,
   } = useClaimAndUnstakeStep(unstakeParams)
-
-  const relayerMode = useRelayerMode()
-  const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
-  const signRelayerStep = useSignRelayerStep(pool.chain)
 
   const { step: relayerApprovalStep, isLoading: isLoadingRelayerApprovalStep } =
     useApproveRelayerStep(chainId)
@@ -40,8 +33,7 @@ export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
       steps.push(minterApprovalStep)
     }
 
-    steps.push(shouldSignRelayerApproval ? signRelayerStep : relayerApprovalStep)
-    steps.push(claimAndUnstakeStep)
+    steps.push(...[relayerApprovalStep, claimAndUnstakeStep])
 
     return steps
   }, [relayerApprovalStep, claimAndUnstakeStep, minterApprovalStep, hasUnclaimedBalRewards])
