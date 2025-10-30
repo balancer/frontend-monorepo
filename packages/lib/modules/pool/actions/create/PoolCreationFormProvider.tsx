@@ -101,7 +101,7 @@ export function usePoolFormLogic() {
     poolCreationForm.resetToInitial()
     reClammConfigForm.resetToInitial()
     resetSteps()
-    router.push('/create')
+    router.replace('/create')
   }
 
   const [tokenList, setTokenList] = useState<ApiOrCustomToken[]>([])

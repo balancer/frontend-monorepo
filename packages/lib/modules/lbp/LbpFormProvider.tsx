@@ -16,7 +16,7 @@ import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -28,7 +28,6 @@ const steps = [
 ]
 
 export function useLbpFormLogic() {
-  const [isResetting, setIsResetting] = useState(false)
   const router = useRouter()
   const saleStructureForm = usePersistentForm<SaleStructureForm>(
     LS_KEYS.LbpConfig.SaleStructure,
@@ -89,7 +88,6 @@ export function useLbpFormLogic() {
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const resetLbpCreation = () => {
-    setIsResetting(true)
     setPoolAddress(undefined)
     saleStructureForm.resetToInitial()
     projectInfoForm.resetToInitial()
@@ -98,13 +96,6 @@ export function useLbpFormLogic() {
     setIsMetadataSaved(false)
     router.replace('/lbp/create')
   }
-
-  const pathname = usePathname()
-  useEffect(() => {
-    if (pathname === '/lbp/create') {
-      setIsResetting(false)
-    }
-  }, [pathname])
 
   const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } =
     saleStructureForm.watch()
@@ -164,7 +155,6 @@ export function useLbpFormLogic() {
     isCollateralNativeAsset,
     poolAddress,
     setPoolAddress,
-    isResetting,
   }
 }
 

@@ -5,7 +5,7 @@ import { useLbpForm } from './LbpFormProvider'
 import { useReadContracts } from 'wagmi'
 import { Address, formatUnits } from 'viem'
 import { liquidityBootstrappingPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
@@ -35,11 +35,21 @@ type LbpDataResponse = [
 export function useHydrateLbpForm() {
   const { slug } = useParams()
   const params = getLbpPathParams(slug as string[] | undefined)
-  const { poolAddress, setPoolAddress, saleStructureForm, isResetting } = useLbpForm()
+  const { poolAddress, setPoolAddress, saleStructureForm } = useLbpForm()
   const chainId = params.chain ? getChainId(params.chain) : undefined
 
   const areAllParamsDefined = !!params.chain && !!params.poolAddress
-  const shouldHydrateLbpForm = !poolAddress && areAllParamsDefined && !isResetting
+  const shouldHydrateLbpForm = !poolAddress && areAllParamsDefined
+
+  const hasHydratedRef = useRef(false)
+
+  useEffect(() => {
+    // clean up LS and ref in case user wants to load another pool
+    if (areAllParamsDefined) {
+      setPoolAddress(undefined)
+      hasHydratedRef.current = false
+    }
+  }, [areAllParamsDefined, setPoolAddress])
 
   const lbpFunctionNames = [
     'owner',
@@ -59,15 +69,13 @@ export function useHydrateLbpForm() {
     functionName,
   }))
 
-  const { data: lbpData, isLoading: isLoadingLbpData } = useReadContracts({
+  const { data: lbpData, isLoading: isLbpLoading } = useReadContracts({
     contracts: lbpContractReads,
     query: { enabled: lbpContractReads.length > 0 && shouldHydrateLbpForm },
   }) as { data: LbpDataResponse; isLoading: boolean }
 
-  const isLbpLoading = isLoadingLbpData
-
   useEffect(() => {
-    if (!isLbpLoading && !!lbpData && shouldHydrateLbpForm) {
+    if (!isLbpLoading && !!lbpData && shouldHydrateLbpForm && !hasHydratedRef.current) {
       const [
         owner,
         name,
@@ -136,6 +144,7 @@ export function useHydrateLbpForm() {
 
       saleStructureForm.reset(saleStructureFormValues)
       setPoolAddress(params.poolAddress)
+      hasHydratedRef.current = true
     }
   }, [
     params.chain,

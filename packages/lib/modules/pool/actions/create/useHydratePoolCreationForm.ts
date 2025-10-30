@@ -5,7 +5,7 @@ import { PERCENTAGE_DECIMALS } from './constants'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { PoolCreationToken } from './types'
 import { WeightedPoolStructure } from './constants'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import { getChainId } from '@repo/lib/config/app.config'
 import { getCreatePathParams } from './getCreatePathParams'
@@ -44,7 +44,7 @@ type TokenDataResponse = ReadContractResponse<string | number>[]
  *  Reads to balancer vault always have tokens sorted by address (i.e. token weights, etc.)
  */
 export function useHydratePoolCreationForm() {
-  const { poolCreationForm, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
+  const { poolCreationForm, poolAddress, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
   const { lastStep } = usePoolCreationFormSteps()
 
   const { slug } = useParams()
@@ -58,10 +58,17 @@ export function useHydratePoolCreationForm() {
   const isWeightedPoolType = poolTypeParam && isWeightedPool(poolTypeParam)
   const isReClammPoolType = poolTypeParam && isReClammPool(poolTypeParam)
 
-  const { poolAddress } = usePoolCreationForm()
+  const areAllParamsDefined = !!networkParam && !!poolTypeParam && !!poolAddressParam
+  const shouldHydratePoolCreationForm = !poolAddress && areAllParamsDefined
+  const hasHydratedRef = useRef(false)
 
-  const shouldHydratePoolCreationForm =
-    !poolAddress && !!poolAddressParam && !!networkParam && !!poolTypeParam
+  useEffect(() => {
+    // clean up LS and ref in case user wants to load another pool
+    if (areAllParamsDefined) {
+      setPoolAddress(undefined)
+      hasHydratedRef.current = false
+    }
+  }, [areAllParamsDefined, setPoolAddress])
 
   const poolFunctionNames = ['name', 'symbol']
   const vaultFunctionNames = [
