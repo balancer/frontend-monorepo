@@ -41,7 +41,7 @@ export async function handleImageProxy(request: NextRequest) {
   try {
     const response = await fetch(imageUrl, {
       signal: controller.signal,
-      redirect: 'follow', // Be explicit about redirect handling
+      redirect: 'manual', // Disable automatic redirects for security
       headers: {
         'User-Agent': 'ImageProxy/1.0', // Identify your proxy
       },
@@ -55,6 +55,10 @@ export async function handleImageProxy(request: NextRequest) {
     // Check content size before buffering (limit to 10MB)
     const contentLength = response.headers.get('content-length')
     const maxSize = 10 * 1024 * 1024 // 10MB
+
+    if (!contentLength) {
+      return NextResponse.json({ error: 'Content-Length header required' }, { status: 400 })
+    }
 
     if (contentLength && parseInt(contentLength) > maxSize) {
       return NextResponse.json({ error: 'Image too large' }, { status: 413 })
