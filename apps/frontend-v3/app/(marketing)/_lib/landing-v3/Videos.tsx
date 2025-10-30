@@ -87,6 +87,7 @@ export function VideoBox({
             <Image
               alt="initial frame"
               fill
+              sizes="100%"
               src={video.src}
               style={{
                 objectFit: 'cover',

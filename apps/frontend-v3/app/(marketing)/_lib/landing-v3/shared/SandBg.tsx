@@ -16,7 +16,13 @@ export function SandBg({ variant = 1 }: { variant?: 1 | 2 | 3 }) {
 
   return (
     <>
-      <Image alt="sand" fill src={src} style={{ objectFit: 'cover', filter: 'grayscale(100%)' }} />
+      <Image
+        alt="sand"
+        fill
+        sizes="100%"
+        src={src}
+        style={{ objectFit: 'cover', filter: 'grayscale(100%)' }}
+      />
       <Box bg="background.base" h="full" opacity={0.9} position="absolute" w="full" />
     </>
   )
