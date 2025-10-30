@@ -19,7 +19,7 @@ export function SandBg({ variant = 1 }: { variant?: 1 | 2 | 3 }) {
       <Image
         alt="sand"
         fill
-        sizes="100%"
+        sizes="100vw"
         src={src}
         style={{ objectFit: 'cover', filter: 'grayscale(100%)' }}
       />
