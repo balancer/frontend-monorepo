@@ -7,8 +7,6 @@ import { AddressProvider, PERMIT2 } from '@balancer/sdk'
 import { zeroAddress } from 'viem'
 import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
 
-const NOT_USED = zeroAddress
-
 const networkConfig: NetworkConfig = {
   chainId: hyperEvm.id,
   name: hyperEvm.name,
@@ -41,17 +39,17 @@ const networkConfig: NetworkConfig = {
     },
   },
   contracts: {
-    multicall2: NOT_USED,
+    multicall2: zeroAddress,
     multicall3: hyperEvm.contracts.multicall3.address,
     balancer: {
-      vaultV2: NOT_USED,
+      vaultV2: zeroAddress,
       vaultV3: AddressProvider.Vault(hyperEvm.id),
-      relayerV6: NOT_USED,
-      minter: NOT_USED,
+      relayerV6: zeroAddress,
+      minter: zeroAddress,
       router: AddressProvider.Router(hyperEvm.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(hyperEvm.id),
     },
-    veDelegationProxy: NOT_USED,
+    veDelegationProxy: zeroAddress,
     permit2: PERMIT2[hyperEvm.id],
   },
   pools: convertHexToLowerCase({

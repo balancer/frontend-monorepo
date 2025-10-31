@@ -49,7 +49,7 @@ const networkConfig: NetworkConfig = {
     multicall2: zeroAddress,
     multicall3: '0xca11bde05977b3631167028862be2a173976ca11',
     balancer: {
-      vaultV2: zeroAddress,
+      vaultV2: '0xba12222222228d8ba445958a75a0704d566bf2c8',
       vaultV3: AddressProvider.Vault(chainId),
       relayerV6: zeroAddress,
       minter: zeroAddress,
