@@ -8,6 +8,7 @@ import { Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { SmartCircularImage } from '@repo/lib/shared/components/image/SmartCircularImage'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
+import { proxyExternalImageUrl } from '../pool/utils/image-proxy'
 
 type Props = {
   address?: Address | string
@@ -65,7 +66,8 @@ export function TokenIcon({
 
     try {
       new URL(src)
-      return src
+      // Proxy certain external images to avoid CORS issues
+      return proxyExternalImageUrl(src)
     } catch {
       return undefined
     }

@@ -33,10 +33,10 @@ export function useLbpMetadata() {
           metadata: {
             lbpName: name,
             description,
-            website: normalizeUrl(websiteUrl),
+            website: normalizeUrl(websiteUrl, { useImageProxy: false }),
             tokenLogo: normalizeUrl(tokenIconUrl),
             telegram: telegramHandle ? normalizeHandle(telegramHandle) : undefined,
-            discord: discordUrl ? normalizeUrl(discordUrl) : undefined,
+            discord: discordUrl ? normalizeUrl(discordUrl, { useImageProxy: false }) : undefined,
             x: xHandle ? normalizeHandle(xHandle) : undefined,
           },
         },
