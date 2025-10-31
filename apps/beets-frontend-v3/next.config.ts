@@ -46,6 +46,15 @@ const config: NextConfig = {
       })
     }
 
+    // TODO: remove when loops goes live
+    if (process.env.NEXT_PUBLIC_APP_ENV === 'prod') {
+      redirects.push({
+        source: '/loops',
+        destination: '/',
+        permanent: false,
+      })
+    }
+
     return redirects
   },
 }

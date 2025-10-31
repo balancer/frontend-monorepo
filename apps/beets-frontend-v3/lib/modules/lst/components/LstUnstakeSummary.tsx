@@ -3,7 +3,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
-import { LstTokenRow } from './LstTokenRow'
+import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { addWeeks } from 'date-fns'
@@ -32,7 +32,7 @@ export function LstUnstakeSummary() {
     <AnimateHeightChange spacing="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
       <Card variant="modalSubSection">
-        <LstTokenRow
+        <BeetsTokenRow
           chain={chain}
           label={shouldShowReceipt ? 'You unstaked' : 'You unstake'}
           tokenAddress={stakedAsset?.address || ''}

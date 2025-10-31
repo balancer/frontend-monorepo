@@ -4,12 +4,10 @@ export const fromManage = 'manage'
 export const fromVote = 'vote'
 
 // Used to determine the redirect path after a vebal lock action
-type VeBalSourcePage = 'manage' | 'vote'
+export type VeBalSourcePage = 'manage' | 'vote'
+export type VeBalAction = 'lock' | 'unlock' | 'extend'
 
-export function getVeBalManagePath(
-  veBalAction: 'lock' | 'unlock' | 'extend',
-  sourcePage: VeBalSourcePage
-) {
+export function getVeBalManagePath(veBalAction: VeBalAction, sourcePage: VeBalSourcePage) {
   return `/vebal/manage/${veBalAction}?from=${sourcePage}`
 }
 

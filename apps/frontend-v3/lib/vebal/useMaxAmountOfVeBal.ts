@@ -45,10 +45,15 @@ export function useMaxAmountOfVeBAL() {
     return maxAmount.isLessThan(currentBalanceBN)
   }
 
+  const canExtendLock =
+    bptAmount !== '0' ||
+    (lockedInfo.lockedEndDate && lockedInfo.lockedEndDate < maxLockEndDate.getTime())
+
   return {
     isMaxAmountLoading: isLoadingTokens || isBalancesLoading || isLockInfoLoading,
     maxAmount,
     calculateCurrentVeBalPercentage,
     isSmallerThanCurrentBalance,
+    canExtendLock,
   }
 }

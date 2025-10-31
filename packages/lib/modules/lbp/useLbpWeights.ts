@@ -1,4 +1,5 @@
 import { useLbpForm } from './LbpFormProvider'
+import { WeightAdjustmentType } from './lbp.types'
 
 type LbpWeights = {
   projectTokenStartWeight: number
@@ -14,9 +15,9 @@ export function useLbpWeights(): LbpWeights {
   const { weightAdjustmentType, customStartWeight, customEndWeight } = watch()
 
   const lbpWeightConfig = {
-    linear_90_10: { start: 90, end: 10 },
-    linear_90_50: { start: 90, end: 50 },
-    custom: { start: customStartWeight, end: customEndWeight },
+    [WeightAdjustmentType.LINEAR_90_10]: { start: 90, end: 10 },
+    [WeightAdjustmentType.LINEAR_90_50]: { start: 90, end: 50 },
+    [WeightAdjustmentType.CUSTOM]: { start: customStartWeight, end: customEndWeight },
   }
 
   const projectTokenStartWeight = lbpWeightConfig[weightAdjustmentType].start

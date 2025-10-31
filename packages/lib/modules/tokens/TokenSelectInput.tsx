@@ -13,6 +13,7 @@ type Props = {
   tokenAddresses: string[]
   chain: GqlChain
   defaultTokenAddress?: string
+  isDisabled?: boolean
 }
 
 export function TokenSelectInput({

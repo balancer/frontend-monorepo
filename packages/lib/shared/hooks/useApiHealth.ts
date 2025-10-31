@@ -7,8 +7,6 @@ export function useApiHealth() {
     variables: {
       chain: GqlChain.Mainnet,
     },
-    initialFetchPolicy: 'no-cache',
-    nextFetchPolicy: 'no-cache',
     pollInterval: secondsToMilliseconds(15),
     notifyOnNetworkStatusChange: true,
   })

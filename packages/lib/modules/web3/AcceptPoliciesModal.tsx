@@ -20,7 +20,7 @@ import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
 import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
-import { isBalancer, isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export function AcceptPoliciesModal() {
@@ -99,17 +99,9 @@ export function AcceptPoliciesModal() {
                   </Link>
                   .
                 </Box>
-              ) : isBeets ? (
-                <Box color="font.primary" fontSize="md" mt="-3px">
-                  By connecting my wallet, I agree to Beets&apos;{' '}
-                  <Link as={NextLink} href="/terms-of-service">
-                    Terms of Service
-                  </Link>
-                  .
-                </Box>
               ) : (
                 <Box color="font.primary" fontSize="md" mt="-3px">
-                  By connecting my wallet, I agree to Cow&apos;s{' '}
+                  By connecting my wallet, I agree to Beets&apos;{' '}
                   <Link as={NextLink} href="/terms-of-service">
                     Terms of Service
                   </Link>

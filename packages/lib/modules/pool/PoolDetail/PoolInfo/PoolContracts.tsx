@@ -42,6 +42,7 @@ import { useHook } from '@repo/lib/modules/hooks/useHook'
 import { getChainId } from '@repo/lib/config/app.config'
 import { HooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
 import { Pool } from '../../pool.types'
+import { CopyAddressButton } from '@repo/lib/modules/tokens/CopyAddressButton'
 
 type RateProvider = {
   tokenAddress: Address
@@ -224,12 +225,17 @@ export function PoolContracts({ ...props }: CardProps) {
               </Text>
             </GridItem>
             <GridItem>
-              <Link href={contract.explorerLink} isExternal variant="link">
-                <HStack gap="xxs">
-                  <Text color="link">{abbreviateAddress(contract.address)}</Text>
-                  <ArrowUpRight size={12} />
-                </HStack>
-              </Link>
+              <HStack gap="xxs">
+                <Link href={contract.explorerLink} isExternal variant="link">
+                  <HStack gap="xxs">
+                    <Text color="link">{abbreviateAddress(contract.address)}</Text>
+                    <ArrowUpRight size={12} />
+                  </HStack>
+                </Link>
+                {contract.label === 'Pool address' && (
+                  <CopyAddressButton address={contract.address} />
+                )}
+              </HStack>
             </GridItem>
           </Grid>
         ))}

@@ -4,7 +4,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { LstTokenRow } from './LstTokenRow'
+import { BeetsTokenRow } from '../../../components/shared/BeetsTokenRow'
 import { useGetConvertToShares } from '../hooks/useGetConvertToShares'
 import { formatUnits, parseUnits } from 'viem'
 
@@ -28,7 +28,7 @@ export function LstStakeSummary({
     <AnimateHeightChange spacing="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
       <Card variant="modalSubSection">
-        <LstTokenRow
+        <BeetsTokenRow
           chain={chain}
           isLoading={isLoadingSharesAmount}
           label={shouldShowReceipt ? 'You staked' : 'You stake'}
@@ -37,7 +37,7 @@ export function LstStakeSummary({
         />
       </Card>
       <Card variant="modalSubSection">
-        <LstTokenRow
+        <BeetsTokenRow
           chain={chain}
           isLoading={isLoadingSharesAmount || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}

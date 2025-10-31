@@ -5,7 +5,6 @@ import {
   UnorderedList,
   VStack,
   HStack,
-  Icon,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -25,12 +24,12 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { isV3Pool, isGyroEPool } from '../../../pool.helpers'
-import { Info } from 'react-feather'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
+import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -197,8 +196,12 @@ export function AddLiquidityFormTabs({
         />
         <Popover placement="top" trigger="hover">
           <PopoverTrigger>
-            <Box cursor="pointer" display="inline-flex">
-              <Icon as={Info} boxSize="16px" color="font.secondary" />
+            <Box
+              _hover={{ opacity: 1 }}
+              opacity="0.6"
+              transition="opacity 0.2s var(--ease-out-cubic)"
+            >
+              <InfoIcon />
             </Box>
           </PopoverTrigger>
           <PopoverContent maxW="300px" p="sm" w="auto">

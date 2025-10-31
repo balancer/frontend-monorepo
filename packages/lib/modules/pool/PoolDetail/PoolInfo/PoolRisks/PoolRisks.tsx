@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Box,
   Card,
   CardProps,
   Divider,
@@ -14,6 +15,7 @@ import {
 import { usePool } from '../../../PoolProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolRisks, risksTitle } from './usePoolRisks'
+import NextLink from 'next/link'
 
 interface RisksListProps {
   textVariant?: string
@@ -26,24 +28,24 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
   return (
     <VStack alignItems="flex-start" gap="xs">
       <Text variant={textVariant}>{risksTitle()}</Text>
-      <UnorderedList ml="5">
+      <Box>
         {riskGroups.map(group => (
-          <ListItem key={group.category}>
-            <Text fontWeight="bold">{group.title}</Text>
-            <UnorderedList ml="3">
+          <Box key={group.category}>
+            <Text fontWeight="bold" mt="sm">
+              {group.title}
+            </Text>
+            <UnorderedList ml="6" variant="link">
               {group.risks.map(risk => (
-                <Link
-                  href={risk.path}
-                  isExternal
-                  key={`pool-risk-${risk.path.replaceAll('//', '')}`}
-                >
-                  <ListItem color="link">{risk.title}</ListItem>
-                </Link>
+                <ListItem key={`pool-risk-${risk.path.replaceAll('//', '')}`}>
+                  <Link as={NextLink} href={risk.path}>
+                    {risk.title}
+                  </Link>
+                </ListItem>
               ))}
             </UnorderedList>
-          </ListItem>
+          </Box>
         ))}
-      </UnorderedList>
+      </Box>
     </VStack>
   )
 }

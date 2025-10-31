@@ -11,6 +11,7 @@ import { useReClammInitAmounts } from './useReClammInitAmounts'
 import { PoolCreationToken } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatUnits } from 'viem'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PoolFundStep() {
   const { isFormStateValid, poolTokens, poolAddress, poolCreationForm, isWeightedPool, isReClamm } =
@@ -106,6 +107,8 @@ function SeedPoolTips() {
   const { isReClamm, poolAddress } = usePoolCreationForm()
   const showReClammAlert = isReClamm && !poolAddress
 
+  const { projectName } = PROJECT_CONFIG
+
   return (
     <>
       {showReClammAlert ? (
@@ -124,11 +127,11 @@ function SeedPoolTips() {
             <UnorderedList>
               <ListItem color="black">Suggested seed amount: $5k+</ListItem>
               <ListItem color="black">
-                The pool will be listed on the Balancer UI only once it is seeded.
+                The pool will be listed on the {projectName} UI only once it is seeded.
               </ListItem>
               <ListItem color="black">
-                For safety on the Balancer UI, LPs are required to make proportional adds when the
-                liquidity of the pool is less than $50k.
+                For safety on the {projectName} UI, LPs are required to make proportional adds when
+                the liquidity of the pool is less than $50k.
               </ListItem>
               <ListItem color="black">
                 Be very careful that the USD values are proportional to the target token weights, or

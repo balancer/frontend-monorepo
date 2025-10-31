@@ -15,6 +15,7 @@ import { useParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { isMaBeetsPool } from '@repo/lib/modules/pool/pool.helpers'
+import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
 
 export default function ClaimNetworkPoolsLayoutWrapper() {
   const { toCurrency } = useCurrency()
@@ -60,88 +61,90 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
   const hasMultipleClaims = useMemo(() => poolsWithClaims.length > 1, [poolsWithClaims])
 
   return (
-    <ClaimNetworkPoolsLayout backLink="/portfolio" title="Portfolio">
-      <HStack justifyContent="space-between" pb="1">
-        <HStack spacing="xs">
-          <NetworkIcon chain={gqlChain} size={12} />
-          <Stack spacing="none">
-            <Heading size="md">{chainName} incentives</Heading>
-          </Stack>
+    <RelayerSignatureProvider>
+      <ClaimNetworkPoolsLayout backLink="/portfolio" title="Portfolio">
+        <HStack justifyContent="space-between" pb="1">
+          <HStack spacing="xs">
+            <NetworkIcon chain={gqlChain} size={12} />
+            <Stack spacing="none">
+              <Heading size="md">{chainName} incentives</Heading>
+            </Stack>
+          </HStack>
+          <Heading size="md" variant="special">
+            {claimableFiatBalance && toCurrency(claimableFiatBalance)}
+          </Heading>
         </HStack>
-        <Heading size="md" variant="special">
-          {claimableFiatBalance && toCurrency(claimableFiatBalance)}
-        </Heading>
-      </HStack>
-      <Stack gap="md" py="4">
-        {isLoadingRewards ? (
-          <Skeleton height="126px" />
-        ) : poolsWithClaims.length > 0 ? (
-          poolsWithClaims.map(pool => (
-            <Card key={pool.id} variant="subSection">
-              <VStack align="start">
-                <HStack w="full">
-                  <PoolName fontSize="lg" fontWeight="bold" pool={pool} />
-                  <Text fontWeight="bold" ml="auto" variant="special">
-                    {toCurrency(poolRewardsMap[pool.id]?.totalFiatClaimBalance?.toNumber() || 0)}
-                  </Text>
-                </HStack>
-                <HStack w="full">
-                  <TokenIconStack
-                    chain={pool.chain}
-                    size={36}
-                    tokens={getUserReferenceTokens(pool)}
-                  />
-                  {hasMultipleClaims && (
-                    <Button
-                      minW="60px"
-                      ml="auto"
-                      onClick={() => {
-                        setModalPools([pool])
-                      }}
-                      size="sm"
-                      variant="secondary"
-                    >
-                      Claim
-                    </Button>
-                  )}
-                </HStack>
-              </VStack>
-            </Card>
-          ))
-        ) : (
-          <Text p="10" textAlign="center" variant="secondary">
-            You have no liquidity incentives to claim
-          </Text>
-        )}
-      </Stack>
-      {poolsWithClaims.length > 0 && (
-        <Button
-          isDisabled={isClaimAllDisabled}
-          onClick={() => {
-            setModalPools(poolsWithClaims)
-          }}
-          size="lg"
-          variant="secondary"
-          width="100%"
-        >
-          {`Claim${hasMultipleClaims ? ' all' : ''}`}
-        </Button>
-      )}
-      {modalPools.length > 0 && (
-        <ClaimProvider pools={modalPools}>
-          <ClaimModal
-            chain={gqlChain}
-            isOpen={modalPools.length > 0}
-            onClose={(isSuccess: boolean) => {
-              if (isSuccess) {
-                refetchClaimPoolData()
-              }
-
-              setModalPools([])
+        <Stack gap="md" py="4">
+          {isLoadingRewards ? (
+            <Skeleton height="126px" />
+          ) : poolsWithClaims.length > 0 ? (
+            poolsWithClaims.map(pool => (
+              <Card key={pool.id} variant="subSection">
+                <VStack align="start">
+                  <HStack w="full">
+                    <PoolName fontSize="lg" fontWeight="bold" pool={pool} />
+                    <Text fontWeight="bold" ml="auto" variant="special">
+                      {toCurrency(poolRewardsMap[pool.id]?.totalFiatClaimBalance?.toNumber() || 0)}
+                    </Text>
+                  </HStack>
+                  <HStack w="full">
+                    <TokenIconStack
+                      chain={pool.chain}
+                      size={36}
+                      tokens={getUserReferenceTokens(pool)}
+                    />
+                    {hasMultipleClaims && (
+                      <Button
+                        minW="60px"
+                        ml="auto"
+                        onClick={() => {
+                          setModalPools([pool])
+                        }}
+                        size="sm"
+                        variant="secondary"
+                      >
+                        Claim
+                      </Button>
+                    )}
+                  </HStack>
+                </VStack>
+              </Card>
+            ))
+          ) : (
+            <Text p="10" textAlign="center" variant="secondary">
+              You have no liquidity incentives to claim
+            </Text>
+          )}
+        </Stack>
+        {poolsWithClaims.length > 0 && (
+          <Button
+            isDisabled={isClaimAllDisabled}
+            onClick={() => {
+              setModalPools(poolsWithClaims)
             }}
-          />
-        </ClaimProvider>
-      )}
-    </ClaimNetworkPoolsLayout>
+            size="lg"
+            variant="secondary"
+            width="100%"
+          >
+            {`Claim${hasMultipleClaims ? ' all' : ''}`}
+          </Button>
+        )}
+        {modalPools.length > 0 && (
+          <ClaimProvider pools={modalPools}>
+            <ClaimModal
+              chain={gqlChain}
+              isOpen={modalPools.length > 0}
+              onClose={(isSuccess: boolean) => {
+                if (isSuccess) {
+                  refetchClaimPoolData()
+                }
+
+                setModalPools([])
+              }}
+            />
+          </ClaimProvider>
+        )}
+      </ClaimNetworkPoolsLayout>
+    </RelayerSignatureProvider>
   )
 }

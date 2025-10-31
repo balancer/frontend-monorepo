@@ -49,7 +49,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
-import { isCowAmm, isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
@@ -562,6 +562,7 @@ export function PoolListFilters() {
                           <UserPoolFilter />
                         </Box>
                       ) : null}
+                      {/* TODO: filter for cow networks when 'isCowPath' is true */}
                       <Box as={motion.div} variants={staggeredFadeInUp} w="full">
                         <Heading as="h3" mb="sm" size="sm">
                           Networks
@@ -572,7 +573,7 @@ export function PoolListFilters() {
                           toggleNetwork={toggleNetwork}
                         />
                       </Box>
-                      {!isCowAmm && (
+                      {!isCowPath && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
                           <Heading as="h3" mb="sm" size="sm">
                             Protocol version
@@ -601,21 +602,22 @@ export function PoolListFilters() {
                           />
                         </Box>
                       )}
-                      {!isCowAmm && (
-                        <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" mb="sm" size="sm">
-                            Pool categories
-                          </Heading>
-                          <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
-                        </Box>
-                      )}
-                      {!isCowAmm && (
-                        <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" mb="sm" size="sm">
-                            Hooks
-                          </Heading>
-                          <PoolHookFilters />
-                        </Box>
+                      {!isCowPath && (
+                        <>
+                          <Box as={motion.div} variants={staggeredFadeInUp}>
+                            <Heading as="h3" mb="sm" size="sm">
+                              Pool categories
+                            </Heading>
+                            <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
+                          </Box>
+
+                          <Box as={motion.div} variants={staggeredFadeInUp}>
+                            <Heading as="h3" mb="sm" size="sm">
+                              Hooks
+                            </Heading>
+                            <PoolHookFilters />
+                          </Box>
+                        </>
                       )}
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
