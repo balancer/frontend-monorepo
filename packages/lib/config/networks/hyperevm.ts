@@ -44,7 +44,7 @@ const networkConfig: NetworkConfig = {
     multicall2: NOT_USED,
     multicall3: hyperEvm.contracts.multicall3.address,
     balancer: {
-      vaultV2: NOT_USED,
+      vaultV2: zeroAddress,
       vaultV3: AddressProvider.Vault(hyperEvm.id),
       relayerV6: NOT_USED,
       minter: NOT_USED,
