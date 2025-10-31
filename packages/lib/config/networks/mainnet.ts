@@ -4,7 +4,7 @@ import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
-import { PERMIT2, balancerV3Contracts } from '@balancer/sdk'
+import { AddressProvider, PERMIT2 } from '@balancer/sdk'
 import { mainnet } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -77,15 +77,14 @@ const networkConfig: NetworkConfig = {
     multicall2: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      vaultV3: balancerV3Contracts.Vault[mainnet.id],
+      vaultV3: AddressProvider.Vault(mainnet.id),
       relayerV6: '0x35Cea9e57A393ac66Aaa7E25C391D52C74B5648f',
       minter: '0x239e55F427D44C3cc793f49bFB507ebe76638a2b',
-      router: balancerV3Contracts.Router[mainnet.id],
-      batchRouter: balancerV3Contracts.BatchRouter[mainnet.id],
-
-      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[mainnet.id],
+      router: AddressProvider.Router(mainnet.id),
+      batchRouter: AddressProvider.BatchRouter(mainnet.id),
+      compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(mainnet.id),
       WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
-      vaultAdminV3: balancerV3Contracts.VaultAdmin[mainnet.id],
+      vaultAdminV3: AddressProvider.VaultAdmin(mainnet.id),
     },
     feeDistributor: '0xD3cf852898b21fc233251427c2DC93d3d604F3BB',
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',
