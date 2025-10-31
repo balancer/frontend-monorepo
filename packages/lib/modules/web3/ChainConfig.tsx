@@ -86,7 +86,7 @@ const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
   [GqlChain.Mode]: { iconUrl: '/images/chains/MODE.svg', ...mode },
   [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
   [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
-  [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEVM } as Chain, // TODO remove assertion when sdk is on same viem version
+  [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEVM },
   [GqlChain.Plasma]: { iconUrl: '/images/chains/PLASMA.svg', ...plasma },
 } as const
 
