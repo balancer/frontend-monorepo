@@ -1,11 +1,10 @@
-import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { getNetworkConfig, hasRelayerBeenDeployed } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { balancerV2VaultAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
 import { useChainSwitch } from '../web3/useChainSwitch'
 import { RelayerMode } from './useRelayerMode'
-import { zeroAddress } from 'viem'
 
 export function useHasApprovedRelayer(
   chainId: SupportedChainId,
@@ -26,7 +25,7 @@ export function useHasApprovedRelayer(
     args: [userAddress, config.contracts.balancer.relayerV6],
     query: {
       enabled:
-        config.contracts.balancer.vaultV2 !== zeroAddress &&
+        hasRelayerBeenDeployed(chainId) &&
         options?.relayerMode === 'approveRelayer' &&
         isConnected &&
         !shouldChangeNetwork,
