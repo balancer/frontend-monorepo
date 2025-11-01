@@ -21,6 +21,7 @@ import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
 import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
 import { useApiHealth } from '../../hooks/useApiHealth'
+import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
 
 type Props = {
   mobileNav?: ReactNode
@@ -61,6 +62,16 @@ function NavLinks({
 }) {
   const { linkColorFor } = useNav()
 
+  const handleLinkClick = (analyticsEvent?: string) => {
+    if (
+      isBalancer &&
+      analyticsEvent &&
+      AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent]
+    ) {
+      trackEvent(AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent])
+    }
+  }
+
   return (
     <HStack fontWeight="medium" spacing="lg" {...props}>
       {appLinks.map(link => {
@@ -72,6 +83,7 @@ function NavLinks({
               color={linkColorFor(link.href || '')}
               href={link.href}
               isExternal={link.isExternal}
+              onClick={() => handleLinkClick(link.analyticsEvent)}
               prefetch
               variant="nav"
             >
