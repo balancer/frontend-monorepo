@@ -215,6 +215,9 @@ importers:
       '@nikolovlazar/chakra-ui-prose':
         specifier: ^1.2.1
         version: 1.2.1(@chakra-ui/react@2.10.6(@emotion/react@11.14.0(@types/react@19.2.2)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.2)(react@19.2.0))(@types/react@19.2.2)(react@19.2.0))(@types/react@19.2.2)(framer-motion@12.9.7(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.14.0(@types/react@19.2.2)(react@19.2.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.2)(react@19.2.0))(@types/react@19.2.2)(react@19.2.0))(react@19.2.0))(react@19.2.0)
+      '@paper-design/shaders-react':
+        specifier: 0.0.60
+        version: 0.0.60(@types/react@19.2.2)(react@19.2.0)
       '@repo/lib':
         specifier: workspace:*
         version: link:../../packages/lib
@@ -1061,7 +1064,7 @@ packages:
   '@chakra-ui/react-use-safe-layout-effect@2.1.0':
     resolution: {integrity: sha512-Knbrrx/bcPwVS1TorFdzrK/zWA8yuU/eaXDkNj24IrKoRlQrSBFarcgAEzlCHtzuhufP3OULPkELTzz91b0tCw==}
     peerDependencies:
-      react: '>=18'
+      react: '>=18 || ^18.0.0'
 
   '@chakra-ui/react-utils@2.0.12':
     resolution: {integrity: sha512-GbSfVb283+YA3kA8w8xWmzbjNWk14uhNpntnipHCftBibl0lxtQ9YqMFQLwuFOO0U2gYVocszqqDWX+XNKq9hw==}
@@ -3116,6 +3119,18 @@ packages:
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
+
+  '@paper-design/shaders-react@0.0.60':
+    resolution: {integrity: sha512-mlEr4HqiUykAvYx4XepS/eQ4oJhrvKZRc04ICfEeDfwmcj/Bpjpg7PjDuRVKARR4qr4DqXzhVpsYyA+AiNMi4w==}
+    peerDependencies:
+      '@types/react': '19.2'
+      react: ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@paper-design/shaders@0.0.60':
+    resolution: {integrity: sha512-z2xPEpPysbNReWnMya2NDZPKwELA+Mat4o9HtZjAlolazL0KS3mJfx4jdMQPn8wDsJwUkLEjBYodQzndmQPi+w==}
 
   '@parcel/watcher-android-arm64@2.5.1':
     resolution: {integrity: sha512-KF8+j9nNbUN8vzOFDpRMsaKBHZ/mcjEjMToVMJOhTozkDonQFFrRcfdLWn6yWKCmJKmdVxSgHiYvTCef4/qcBA==}
@@ -11676,6 +11691,15 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.0(@opentelemetry/api@1.9.0)
+
+  '@paper-design/shaders-react@0.0.60(@types/react@19.2.2)(react@19.2.0)':
+    dependencies:
+      '@paper-design/shaders': 0.0.60
+      react: 19.2.0
+    optionalDependencies:
+      '@types/react': 19.2.2
+
+  '@paper-design/shaders@0.0.60': {}
 
   '@parcel/watcher-android-arm64@2.5.1':
     optional: true
