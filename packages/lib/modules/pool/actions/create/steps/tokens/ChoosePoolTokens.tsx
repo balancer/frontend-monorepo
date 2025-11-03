@@ -46,6 +46,7 @@ export function ChoosePoolTokens() {
     poolCreationForm,
     reClammConfigForm,
     isReClamm,
+    isGyroEclp,
   } = usePoolCreationForm()
 
   const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
@@ -105,18 +106,24 @@ export function ChoosePoolTokens() {
   return (
     <>
       <VStack align="start" spacing="md" w="full">
-        <VStack align="start" spacing="sm">
-          <Heading color="font.maxContrast" size="md">
-            Choose pool tokens
-          </Heading>
-          {isCustomWeightedPool && (
-            <BalAlert
-              content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
-              status="info"
-              title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
-            />
-          )}
-        </VStack>
+        {isGyroEclp && (
+          <BalAlert
+            content="Gyroscope’s elliptic concentrated liquidity pools offer the flexibility to asymmetrically focus liquidity. You can only add 2 tokens into a Gyro E-CLP."
+            status="info"
+          />
+        )}
+        {isCustomWeightedPool && (
+          <BalAlert
+            content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
+            status="info"
+            title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
+          />
+        )}
+
+        <Heading color="font.maxContrast" size="md">
+          Choose pool tokens
+        </Heading>
+
         <VStack align="start" spacing="xl" w="full">
           {poolTokens.map((token, index) => {
             const tokenData = listedTokens.find(
