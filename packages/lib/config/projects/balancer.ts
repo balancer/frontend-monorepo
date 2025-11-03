@@ -21,6 +21,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
     GqlChain.Zkevm,
     GqlChain.Fraxtal,
     GqlChain.Mode,
+    GqlChain.Xlayer,
 
     // testnets only in dev mode
     ...(isProd ? [] : [GqlChain.Monad, GqlChain.Sepolia]),
