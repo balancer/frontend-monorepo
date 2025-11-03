@@ -59,7 +59,7 @@ function getTestRpcUrls(chainId: ChainIdWithFork) {
   } as const
 }
 
-export let testWagmiConfig = createTestWagmiConfig()
+export let testWagmiConfig: any = createTestWagmiConfig()
 
 function createTestWagmiConfig() {
   return createConfig({

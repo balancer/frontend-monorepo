@@ -12,8 +12,7 @@ export function useGetTokenRates(pool: Pool) {
   const chainId = getChainId(pool.chain)
   const isV3 = isV3Pool(pool)
 
-  const v3Vault: Address = AddressProvider.Vault(chainId)
-  const contractAddress: Address = isV3 ? v3Vault : (pool.address as Address)
+  const contractAddress: Address = isV3 ? AddressProvider.Vault(chainId) : (pool.address as Address)
 
   const query = useReadContract({
     chainId,
