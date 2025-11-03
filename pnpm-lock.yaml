@@ -75,7 +75,7 @@ importers:
         version: 3.13.8(@types/react@19.2.7)(graphql-ws@6.0.6(crossws@0.3.5)(graphql@16.12.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@balancer/sdk':
         specifier: 4.10.1
-        version: 4.10.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+        version: 4.10.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@19.2.3)
@@ -138,7 +138,7 @@ importers:
         version: 1.6.0
       viem:
         specifier: 2.39.3
-        version: 2.39.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+        version: 2.39.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
@@ -202,7 +202,7 @@ importers:
         version: 3.13.8(@types/react@19.2.7)(graphql-ws@6.0.6(crossws@0.3.5)(graphql@16.12.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@balancer/sdk':
         specifier: 4.10.1
-        version: 4.10.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
+        version: 4.10.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@chakra-ui/clickable':
         specifier: ^2.1.0
         version: 2.1.0(react@19.2.3)
@@ -232,7 +232,7 @@ importers:
         version: link:../../packages/test
       '@sentry/nextjs':
         specifier: 10.23.0
-        version: 10.23.0(@opentelemetry/context-async-hooks@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.2.0(@opentelemetry/api@1.9.0))(next@16.0.10(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(webpack@5.94.0)
+        version: 10.23.0(@opentelemetry/context-async-hooks@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.2.0(@opentelemetry/api@1.9.0))(next@16.0.10(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(webpack@5.94.0(esbuild@0.19.12))
       '@tanstack/react-query':
         specifier: 5.90.5
         version: 5.90.5(react@19.2.3)
@@ -298,7 +298,7 @@ importers:
         version: 3.1.1(react@19.2.3)
       viem:
         specifier: 2.39.3
-        version: 2.39.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
+        version: 2.39.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
@@ -13165,6 +13165,32 @@ snapshots:
       - supports-color
       - webpack
 
+  '@sentry/nextjs@10.23.0(@opentelemetry/context-async-hooks@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.2.0(@opentelemetry/api@1.9.0))(next@16.0.10(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(webpack@5.94.0(esbuild@0.19.12))':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/semantic-conventions': 1.38.0
+      '@rollup/plugin-commonjs': 28.0.1(rollup@4.45.0)
+      '@sentry-internal/browser-utils': 10.23.0
+      '@sentry/bundler-plugin-core': 4.6.0
+      '@sentry/core': 10.23.0
+      '@sentry/node': 10.23.0
+      '@sentry/opentelemetry': 10.23.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.38.0)
+      '@sentry/react': 10.23.0(react@19.2.3)
+      '@sentry/vercel-edge': 10.23.0
+      '@sentry/webpack-plugin': 4.6.0(webpack@5.94.0(esbuild@0.19.12))
+      next: 16.0.10(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      resolve: 1.22.8
+      rollup: 4.45.0
+      stacktrace-parser: 0.1.10
+    transitivePeerDependencies:
+      - '@opentelemetry/context-async-hooks'
+      - '@opentelemetry/core'
+      - '@opentelemetry/sdk-trace-base'
+      - encoding
+      - react
+      - supports-color
+      - webpack
+
   '@sentry/node-core@10.23.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.204.0(@opentelemetry/api@1.9.0))(@opentelemetry/resources@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.2.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.38.0)':
     dependencies:
       '@apm-js-collab/tracing-hooks': 0.3.1
@@ -13246,6 +13272,16 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/resources': 2.2.0(@opentelemetry/api@1.9.0)
       '@sentry/core': 10.23.0
+
+  '@sentry/webpack-plugin@4.6.0(webpack@5.94.0(esbuild@0.19.12))':
+    dependencies:
+      '@sentry/bundler-plugin-core': 4.6.0
+      unplugin: 1.0.1
+      uuid: 9.0.1
+      webpack: 5.94.0(esbuild@0.19.12)
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
 
   '@sentry/webpack-plugin@4.6.0(webpack@5.94.0)':
     dependencies:
@@ -20153,6 +20189,17 @@ snapshots:
 
   tapable@2.3.0: {}
 
+  terser-webpack-plugin@5.3.16(esbuild@0.19.12)(webpack@5.94.0(esbuild@0.19.12)):
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.31
+      jest-worker: 27.5.1
+      schema-utils: 4.3.3
+      serialize-javascript: 6.0.2
+      terser: 5.44.1
+      webpack: 5.94.0(esbuild@0.19.12)
+    optionalDependencies:
+      esbuild: 0.19.12
+
   terser-webpack-plugin@5.3.16(webpack@5.94.0):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
@@ -20925,6 +20972,36 @@ snapshots:
       schema-utils: 3.3.0
       tapable: 2.3.0
       terser-webpack-plugin: 5.3.16(webpack@5.94.0)
+      watchpack: 2.4.4
+      webpack-sources: 3.3.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+
+  webpack@5.94.0(esbuild@0.19.12):
+    dependencies:
+      '@types/estree': 1.0.8
+      '@webassemblyjs/ast': 1.14.1
+      '@webassemblyjs/wasm-edit': 1.14.1
+      '@webassemblyjs/wasm-parser': 1.14.1
+      acorn: 8.15.0
+      acorn-import-attributes: 1.9.5(acorn@8.15.0)
+      browserslist: 4.28.1
+      chrome-trace-event: 1.0.4
+      enhanced-resolve: 5.18.4
+      es-module-lexer: 1.7.0
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.1
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.3.0
+      terser-webpack-plugin: 5.3.16(esbuild@0.19.12)(webpack@5.94.0(esbuild@0.19.12))
       watchpack: 2.4.4
       webpack-sources: 3.3.3
     transitivePeerDependencies:
