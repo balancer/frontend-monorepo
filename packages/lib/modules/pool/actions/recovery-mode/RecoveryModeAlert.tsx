@@ -11,7 +11,7 @@ export function recoveryModeAlert(pool: Pool) {
   const content = isV3
     ? 'Liquidity can’t be removed unless recovery mode is enabled. You may trigger recovery or wait for someone else to do it.'
     : isGyro(pool.type)
-      ? '' // no content needed for gyro pools
+      ? '' // gyro pools don't have a recovery mode
       : `Liquidity can’t be removed until ${PROJECT_CONFIG.projectName} governance authorized recovery mode after assessing the situation.`
 
   return {
