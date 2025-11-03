@@ -18,6 +18,9 @@ import {
   isConstantRateProvider,
   isDynamicRateProvider,
 } from '@repo/lib/modules/tokens/token.helpers'
+import { PoolCreationToken } from '../../types'
+import { useEffect } from 'react'
+import { useUnlistedTokenPrice } from './useUnlistedTokenPrice'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -28,7 +31,6 @@ export function ChoosePoolTokens() {
     weightedPoolStructure,
     poolType,
     updatePoolToken,
-    removePoolToken,
     addPoolToken,
     poolCreationForm,
     reClammConfigForm,
@@ -44,12 +46,12 @@ export function ChoosePoolTokens() {
   const maxTokens = validatePoolTokens.maxTokens(poolType)
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
-  const { getTokensByChain, priceFor } = useTokens()
-  const allTokens = getTokensByChain(network)
+  const { getTokensByChain } = useTokens()
+  const listedTokens = getTokensByChain(network)
 
   // Filter out already selected tokens
   const selectedTokenAddresses = poolTokens.map(token => token.address?.toLowerCase())
-  const tokens = allTokens.filter(
+  const tokens = listedTokens.filter(
     token => !selectedTokenAddresses.includes(token.address.toLowerCase())
   )
 
@@ -106,9 +108,7 @@ export function ChoosePoolTokens() {
         </VStack>
         <VStack align="start" spacing="xl" w="full">
           {poolTokens.map((token, index) => {
-            const isInvalidWeight = !!token.weight && Number(token.weight) < 1
-
-            const tokenData = allTokens.find(
+            const tokenData = listedTokens.find(
               t => t.address.toLowerCase() === token.address?.toLowerCase()
             ) as ApiToken
 
@@ -116,81 +116,17 @@ export function ChoosePoolTokens() {
               ? getVerifiedRateProviderAddress(tokenData)
               : undefined
 
-            const tokenWeightErrorMsg =
-              poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
-
             return (
-              <VStack align="start" key={index} spacing="md" w="full">
-                <HStack align="end" w="full">
-                  <VStack align="start" spacing="sm" w="full">
-                    <Text>Token {index + 1}</Text>
-
-                    <TokenInputSelector
-                      onToggleTokenClicked={() => {
-                        setSelectedTokenIndex(index)
-                        tokenSelectDisclosure.onOpen()
-                      }}
-                      token={token?.data}
-                    />
-                  </VStack>
-
-                  {isWeightedPool && (
-                    <Box>
-                      <NumberInput
-                        control={poolCreationForm.control}
-                        isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-                        isInvalid={isInvalidWeight}
-                        isPercentage
-                        label="Weight"
-                        name={`poolTokens.${index}.weight`}
-                        validate={weight => {
-                          // getValues() grabs poolType from LS but watch() is tricked by initial default values
-                          const poolType = poolCreationForm.getValues('poolType')
-                          const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-                          if (!isWeightedPool) return true
-                          if (weight < 1) return 'Minimum weight for each token is 1%'
-                          if (weight > 99) return 'Maximum weight for a token is 99%'
-                          return true
-                        }}
-                      />
-                    </Box>
-                  )}
-
-                  {poolTokens.length > 2 && (
-                    <RemoveTokenButton
-                      isDisabled={poolTokens.length <= 2}
-                      onClick={() => removePoolToken(index)}
-                    />
-                  )}
-                </HStack>
-
-                {isWeightedPool && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
-
-                {token.address && !priceFor(token.address || '', network) && (
-                  <VStack align="start" spacing="sm" w="full">
-                    <NumberInput
-                      control={poolCreationForm.control}
-                      label="Estimated current  price of token"
-                      name={`poolTokens.${index}.usdPrice`}
-                      validate={price => {
-                        if (price < 0) return 'Token price must be greater than 0'
-                        return true
-                      }}
-                      width="full"
-                    />
-                    <Text color="font.secondary">
-                      Enter the token’s price accurately, or you’ll be vulnerable to losing money to
-                      arbitrageurs, if you don’t add pool assets in proportion to their target
-                      weights.
-                    </Text>
-                  </VStack>
-                )}
-
-                <ConfigureTokenRateProvider
-                  tokenIndex={index}
-                  verifiedRateProviderAddress={verifiedRateProviderAddress}
-                />
-              </VStack>
+              <ConfigureToken
+                index={index}
+                key={index}
+                onToggleTokenClicked={() => {
+                  setSelectedTokenIndex(index)
+                  tokenSelectDisclosure.onOpen()
+                }}
+                rateProviderAddress={verifiedRateProviderAddress}
+                token={token}
+              />
             )
           })}
           {(!isWeightedPool || isCustomWeightedPool) && (
@@ -212,6 +148,112 @@ export function ChoosePoolTokens() {
         tokens={tokens}
       />
     </>
+  )
+}
+
+interface ConfigureTokenProps {
+  token: PoolCreationToken
+  index: number
+  rateProviderAddress: Address | undefined
+  onToggleTokenClicked: () => void
+}
+
+function ConfigureToken({
+  token,
+  index,
+  rateProviderAddress,
+  onToggleTokenClicked,
+}: ConfigureTokenProps) {
+  const {
+    poolCreationForm,
+    isWeightedPool,
+    weightedPoolStructure,
+    poolTokens,
+    removePoolToken,
+    network,
+    updatePoolToken,
+  } = usePoolCreationForm()
+  const { priceFor } = useTokens()
+
+  const apiPriceForToken = priceFor(token.address || '', network)
+  const { cgPriceForToken } = useUnlistedTokenPrice({ token: token.address, network })
+
+  useEffect(() => {
+    // automatically hydrate form with coingecko price for unlisted tokens
+    if (!apiPriceForToken && cgPriceForToken && !token.usdPrice) {
+      updatePoolToken(index, {
+        usdPrice: cgPriceForToken,
+      })
+    }
+  }, [cgPriceForToken, apiPriceForToken, token.usdPrice])
+
+  const isInvalidWeight = !!token.weight && Number(token.weight) < 1
+  const tokenWeightErrorMsg = poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
+
+  return (
+    <VStack align="start" key={index} spacing="md" w="full">
+      <HStack align="end" w="full">
+        <VStack align="start" spacing="sm" w="full">
+          <Text>Token {index + 1}</Text>
+
+          <TokenInputSelector onToggleTokenClicked={onToggleTokenClicked} token={token?.data} />
+        </VStack>
+
+        {isWeightedPool && (
+          <Box>
+            <NumberInput
+              control={poolCreationForm.control}
+              isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+              isInvalid={isInvalidWeight}
+              isPercentage
+              label="Weight"
+              name={`poolTokens.${index}.weight`}
+              validate={weight => {
+                const poolType = poolCreationForm.getValues('poolType')
+                const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+                if (!isWeightedPool) return true
+                if (weight < 1) return 'Minimum weight for each token is 1%'
+                if (weight > 99) return 'Maximum weight for a token is 99%'
+                return true
+              }}
+            />
+          </Box>
+        )}
+
+        {poolTokens.length > 2 && (
+          <RemoveTokenButton
+            isDisabled={poolTokens.length <= 2}
+            onClick={() => removePoolToken(index)}
+          />
+        )}
+      </HStack>
+
+      {isWeightedPool && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
+
+      {token.address && !apiPriceForToken && (
+        <VStack align="start" spacing="sm" w="full">
+          <NumberInput
+            control={poolCreationForm.control}
+            label="Estimated current  price of token"
+            name={`poolTokens.${index}.usdPrice`}
+            validate={price => {
+              if (price < 0) return 'Token price must be greater than 0'
+              return true
+            }}
+            width="full"
+          />
+          <Text color="font.secondary">
+            Enter the token’s price accurately, or you’ll be vulnerable to losing money to
+            arbitrageurs, if you don’t add pool assets in proportion to their target weights.
+          </Text>
+        </VStack>
+      )}
+
+      <ConfigureTokenRateProvider
+        tokenIndex={index}
+        verifiedRateProviderAddress={rateProviderAddress}
+      />
+    </VStack>
   )
 }
 
