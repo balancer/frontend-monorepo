@@ -24,12 +24,30 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
     )
   )
 
-  const wrappedTokens = validTokens.filter(token => token.underlyingToken)
+  const wrappedTokens =
+    operation === 'add'
+      ? validTokens.filter(token => token.underlyingToken)
+      : validTokens
+          .filter(token => token.wrappedToken)
+          .map(token => token.wrappedToken!)
+          .filter(token => token !== undefined)
   const { bufferBalances, isLoadingBufferBalances } = useBufferBalances(wrappedTokens)
 
   if (isLoadingBufferBalances) return null
 
-  const bufferLimitViolations = humanUnderlyingAmounts
+  // fix symbol sometimes "unkown"
+  const underlyingAmounts = humanUnderlyingAmounts.map(({ tokenAddress, humanAmount }) => {
+    const tokenSymbol = validTokens.find(
+      token => token.address.toLowerCase() === tokenAddress.toLowerCase()
+    )?.symbol
+    return {
+      tokenAddress,
+      humanAmount: humanAmount,
+      symbol: tokenSymbol,
+    }
+  })
+
+  const bufferLimitViolations = underlyingAmounts
     .map(({ tokenAddress, humanAmount, symbol: amountSymbol }) => {
       if (operation === 'add') {
         // if operation is add liquidity, the user is offering underlying tokens which requires sufficient buffer balance of wrapped tokens
@@ -80,6 +98,9 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
             underlyingAmountRequired.minus(bufferBalanceOfUnderlying)
           )
         )
+        console.log('bufferBalanceOFUnderlying', bufferBalanceOfUnderlying.toNumber())
+        console.log('exceedsBufferBalance', exceedsBufferBalance)
+        console.log('maxWithdraw', maxWithdraw.toNumber())
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
           return { amountSymbol, maxAmountOfUnderlying: bufferBalanceOfUnderlying }
@@ -92,14 +113,18 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
   if (bufferLimitViolations.length === 0) return null
 
-  return bufferLimitViolations.map(({ amountSymbol, maxAmountOfUnderlying }, idx) => (
-    <BalAlert
-      content={`The maximum ${operation === 'add' ? 'deposit' : 'withdraw'} amount is currently ${fNum('integer', maxAmountOfUnderlying)} ${amountSymbol}`}
-      key={idx}
-      status="warning"
-      title="Underlying amount exceeds buffer limits"
-    />
-  ))
+  return bufferLimitViolations.map(({ amountSymbol, maxAmountOfUnderlying }, idx) => {
+    const action = operation === 'add' ? 'deposit' : 'withdraw'
+    const amount = fNum('token', maxAmountOfUnderlying)
+    return (
+      <BalAlert
+        content={`The maximum ${action} amount is currently ${amount} ${amountSymbol}`}
+        key={idx}
+        status="warning"
+        title="Underlying amount exceeds buffer limits"
+      />
+    )
+  })
 }
 
 function useBufferBalances(wrappedTokens: ApiToken[]) {
@@ -113,6 +138,8 @@ function useBufferBalances(wrappedTokens: ApiToken[]) {
     })),
     query: { enabled: wrappedTokens.length > 0 },
   })
+
+  console.log('data', data)
 
   const bufferBalances = data
     ?.map((item, index) => {

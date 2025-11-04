@@ -189,4 +189,19 @@ export const plasmaTokenBalances: TokenBalance[] = [
     tokenAddress: '0x9895D81bB462A195b4922ED7De0e3ACD007c32CB', // WETH
     value: '10000',
   },
+  {
+    tokenAddress: '0x6eaf19b2fc24552925db245f9ff613157a7dbb4c', // xUSD
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xa9c251f8304b1b3fc2b9e8fcae78d94eff82ac66', // tcUSDT0
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb', // USDT0
+    value: '1000',
+    decimals: 6,
+  },
 ]
