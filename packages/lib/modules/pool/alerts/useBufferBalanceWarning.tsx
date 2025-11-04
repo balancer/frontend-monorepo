@@ -27,15 +27,12 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
   const wrappedTokens =
     operation === 'add'
       ? validTokens.filter(token => token.underlyingToken)
-      : validTokens
-          .filter(token => token.wrappedToken)
-          .map(token => token.wrappedToken!)
-          .filter(token => token !== undefined)
+      : validTokens.map(token => token.wrappedToken).filter(token => token !== undefined)
   const { bufferBalances, isLoadingBufferBalances } = useBufferBalances(wrappedTokens)
 
   if (isLoadingBufferBalances) return null
 
-  // fix symbol sometimes "unkown"
+  // validTokens always have symbol but amounts do not
   const underlyingAmounts = humanUnderlyingAmounts.map(({ tokenAddress, humanAmount }) => {
     const tokenSymbol = validTokens.find(
       token => token.address.toLowerCase() === tokenAddress.toLowerCase()
@@ -48,7 +45,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
   })
 
   const bufferLimitViolations = underlyingAmounts
-    .map(({ tokenAddress, humanAmount, symbol: amountSymbol }) => {
+    .map(({ tokenAddress, humanAmount, symbol }) => {
       if (operation === 'add') {
         // if operation is add liquidity, the user is offering underlying tokens which requires sufficient buffer balance of wrapped tokens
         const wrappedToken = validTokens.find(
@@ -74,7 +71,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
           const maxAmountOfUnderlying = bufferBalanceOfWrapped.times(wrappedToken.priceRate)
-          return { amountSymbol, maxAmountOfUnderlying }
+          return { symbol, maxAmountOfUnderlying }
         }
 
         return null
@@ -85,7 +82,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
           bufferBalance => bufferBalance.underlyingTokenAddress === underlyingToken?.address
         )
 
-        if (!underlyingBufferBalance || !amountSymbol) return null
+        if (!underlyingBufferBalance || !symbol) return null
         const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } =
           underlyingBufferBalance
 
@@ -100,7 +97,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         )
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
-          return { amountSymbol, maxAmountOfUnderlying: bufferBalanceOfUnderlying }
+          return { symbol, maxAmountOfUnderlying: bufferBalanceOfUnderlying }
         }
 
         return null
@@ -110,15 +107,15 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
   if (bufferLimitViolations.length === 0) return null
 
-  return bufferLimitViolations.map(({ amountSymbol, maxAmountOfUnderlying }, idx) => {
+  return bufferLimitViolations.map(({ symbol, maxAmountOfUnderlying }, idx) => {
     const action = operation === 'add' ? 'deposit' : 'withdraw'
     const amount = fNum('token', maxAmountOfUnderlying)
     return (
       <BalAlert
-        content={`You may not be able to ${action} more than ${amount} ${amountSymbol}, but you can choose to remove the yield bearing token instead`}
+        content={`You may not be able to ${action} more than ${amount} ${symbol}, but you can choose to remove the yield bearing token instead`}
         key={idx}
         status="warning"
-        title={`Low liquidity for ${amountSymbol}`}
+        title={`Low liquidity for ${symbol}`}
       />
     )
   })
