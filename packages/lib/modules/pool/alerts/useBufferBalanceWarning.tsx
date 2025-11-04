@@ -98,9 +98,6 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
             underlyingAmountRequired.minus(bufferBalanceOfUnderlying)
           )
         )
-        console.log('bufferBalanceOFUnderlying', bufferBalanceOfUnderlying.toNumber())
-        console.log('exceedsBufferBalance', exceedsBufferBalance)
-        console.log('maxWithdraw', maxWithdraw.toNumber())
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
           return { amountSymbol, maxAmountOfUnderlying: bufferBalanceOfUnderlying }
@@ -118,10 +115,10 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
     const amount = fNum('token', maxAmountOfUnderlying)
     return (
       <BalAlert
-        content={`The maximum ${action} amount is currently ${amount} ${amountSymbol}`}
+        content={`You may not be able to ${action} more than ${amount} ${amountSymbol}, but you can choose to remove the yield bearing token instead`}
         key={idx}
         status="warning"
-        title="Underlying amount exceeds buffer limits"
+        title={`Low liquidity for ${amountSymbol}`}
       />
     )
   })
@@ -138,8 +135,6 @@ function useBufferBalances(wrappedTokens: ApiToken[]) {
     })),
     query: { enabled: wrappedTokens.length > 0 },
   })
-
-  console.log('data', data)
 
   const bufferBalances = data
     ?.map((item, index) => {

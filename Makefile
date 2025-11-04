@@ -24,3 +24,6 @@ fork-polygon:
 
 fork-plasma:
 	anvil --fork-url "${PLASMA_RPC_URL}" --port 8545
+
+fork-avalanche:
+	anvil --fork-url "${AVALANCHE_RPC_URL}" --port 8545
