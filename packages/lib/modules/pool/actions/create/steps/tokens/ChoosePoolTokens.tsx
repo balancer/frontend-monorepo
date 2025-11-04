@@ -20,7 +20,7 @@ import {
 } from '@repo/lib/modules/tokens/token.helpers'
 import { PoolCreationToken } from '../../types'
 import { useEffect } from 'react'
-import { useUnlistedTokenPrice } from './useUnlistedTokenPrice'
+import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -176,7 +176,7 @@ function ConfigureToken({
   const { priceFor } = useTokens()
 
   const apiPriceForToken = priceFor(token.address || '', network)
-  const { cgPriceForToken } = useUnlistedTokenPrice({ token: token.address, network })
+  const { cgPriceForToken } = useCoingeckoTokenPrice({ token: token.address, network })
 
   useEffect(() => {
     // automatically hydrate form with coingecko price for unlisted tokens

@@ -2,7 +2,6 @@ import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.Weighted]: GqlPoolType.Weighted,
@@ -16,20 +15,6 @@ export function getGqlPoolType(poolType: PoolType): GqlPoolType {
   const gqlPoolType = sdkToGqlPoolType[poolType]
   if (!gqlPoolType) throw new Error(`Invalid pool type: ${poolType}`)
   return gqlPoolType
-}
-
-export function getCoingeckoNetworkName(network: GqlChain): string {
-  // TODO: look up rest of cg network names https://docs.coingecko.com/v3.0.1/reference/networks-list?playground=open#supported-networks-list-id-map
-  switch (network) {
-    case GqlChain.Mainnet:
-      return 'ethereum'
-    case GqlChain.Arbitrum:
-      return 'arbitrum'
-    case GqlChain.Base:
-      return 'base'
-    default:
-      throw new Error(`Missing Coingecko network name for chain: ${network}`)
-  }
 }
 
 export function getSwapFeePercentageOptions(poolType: PoolType): { value: string; tip: string }[] {
