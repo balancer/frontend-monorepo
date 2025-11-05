@@ -57,7 +57,7 @@ export function usePermit2ApprovalSteps({
 
   const { getToken } = useTokens()
 
-  const PERMIT2_ALLOWANCE_COMPARISON_FACTOR = 100_000n
+  const PERMIT2_ALLOWANCE_COMPARISON_FACTOR = 100_000_000_000_000_000n
 
   // Precompute common values
   const chainId = getChainId(chain)
@@ -123,6 +123,9 @@ export function usePermit2ApprovalSteps({
       symbol,
       lpToken,
     })
+
+    // 730750818665451459101842416358135993529062573218
+    // 730750818665451459101842416358141509827966271487
 
     // Check if the token has been approved
     const isComplete = () => {
