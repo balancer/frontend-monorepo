@@ -126,7 +126,8 @@ export function usePermit2ApprovalSteps({
 
     // Check if the token has been approved
     const isComplete = () => {
-      // the 2 big numbers are not equal, but the truncated ones are because somehow the passed approval amount is bigger than the allowance queried after it?!?
+      // the 2 big numbers are not equal, but the truncated ones are
+      // this is because somehow the passed approval amount differs in the last few digits from the allowance amount?!?
       const currentAllowance = allowanceFor(tokenAddress)
 
       const truncatedAllowance =
