@@ -20,6 +20,7 @@ interface NumberInputProps {
   error?: string
   percentageLabel?: string
   placeholder?: string
+  attribution?: React.ReactNode
 }
 
 export function NumberInput({
@@ -34,6 +35,7 @@ export function NumberInput({
   name,
   width = '20',
   error,
+  attribution,
 }: NumberInputProps) {
   return (
     <VStack align="start" spacing="sm" w="full">
@@ -48,6 +50,7 @@ export function NumberInput({
             {`${Number(percentageLabel) >= 0 ? '+' : ''}${percentageLabel}%`}
           </Text>
         )}
+        {attribution && attribution}
       </HStack>
 
       <Box position="relative" w={width}>

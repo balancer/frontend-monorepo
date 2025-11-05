@@ -1,4 +1,14 @@
-import { VStack, Heading, Text, useDisclosure, HStack, Button, Icon, Box } from '@chakra-ui/react'
+import {
+  VStack,
+  Heading,
+  Text,
+  useDisclosure,
+  HStack,
+  Button,
+  Icon,
+  Box,
+  Link,
+} from '@chakra-ui/react'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -21,6 +31,7 @@ import {
 import { PoolCreationToken } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
+import { ArrowUpRight } from 'react-feather'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -233,6 +244,7 @@ function ConfigureToken({
       {token.address && !apiPriceForToken && (
         <VStack align="start" spacing="sm" w="full">
           <NumberInput
+            attribution={cgPriceForToken && <CoingeckoAttribution />}
             control={poolCreationForm.control}
             label="Estimated current  price of token"
             name={`poolTokens.${index}.usdPrice`}
@@ -285,6 +297,20 @@ function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
       <Text color="font.error" fontSize="sm" fontWeight="semibold" textAlign="start" w="full">
         {message}
       </Text>
+    </HStack>
+  )
+}
+
+function CoingeckoAttribution() {
+  return (
+    <HStack spacing="xs">
+      <Text color="font.secondary" fontSize="sm">
+        Price data by
+      </Text>
+      <Link color="font.link" fontSize="sm" href="https://www.coingecko.com" isExternal>
+        CoinGecko
+        <Icon as={ArrowUpRight} />
+      </Link>
     </HStack>
   )
 }

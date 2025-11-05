@@ -3,11 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { Address } from 'viem'
 import { getChainId } from '@repo/lib/config/app.config'
-
-type CoingeckoAssetPlatform = {
-  id: string
-  chain_identifier: number
-}
+import { oneDayInMs, oneMinInMs } from '@repo/lib/shared/utils/time'
+import { CoingeckoAssetPlatform } from '@repo/lib/shared/services/coingecko/assetPlatforms'
 
 type Props = {
   token: Address | undefined
@@ -26,12 +23,10 @@ export function useCoingeckoTokenPrice({ token, network }: Props) {
       const data: CoingeckoAssetPlatform[] = await res.json()
       return data
     },
-    staleTime: 86400000, // 24 hours
+    staleTime: oneDayInMs,
   })
 
   const assetPlatform = assetPlatforms?.find(platform => platform.chain_identifier === chainId)
-
-  const shouldFetchPrice = !apiPriceForToken && !!token && !!network && !!assetPlatform
 
   const { data: cgPriceForToken } = useQuery({
     queryKey: ['unlisted-token-price', token, network],
@@ -46,8 +41,9 @@ export function useCoingeckoTokenPrice({ token, network }: Props) {
 
       return token ? data[token.toLowerCase()].usd : undefined
     },
-    enabled: shouldFetchPrice,
-    retry: false, // avoids rate limit if coingecko doesnt have price and returns 404?
+    enabled: !apiPriceForToken && !!token && !!network && !!assetPlatform,
+    retry: false, // helps to avoid rate limit when coingecko has no price for token?
+    staleTime: oneMinInMs,
   })
 
   return { cgPriceForToken }
