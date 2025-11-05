@@ -57,6 +57,8 @@ export function usePermit2ApprovalSteps({
 
   const { getToken } = useTokens()
 
+  const PERMIT2_ALLOWANCE_COMPARISON_FACTOR = 100_000n
+
   // Precompute common values
   const chainId = getChainId(chain)
   const nativeAssetAddress = getNativeAssetAddress(chain)
@@ -124,8 +126,18 @@ export function usePermit2ApprovalSteps({
 
     // Check if the token has been approved
     const isComplete = () => {
+      // the 2 big numbers are not equal, but the truncated ones are because somehow the passed approval amount is bigger than the allowance queried after it?!?
+      const currentAllowance = allowanceFor(tokenAddress)
+
+      const truncatedAllowance =
+        currentAllowance - (currentAllowance % PERMIT2_ALLOWANCE_COMPARISON_FACTOR)
+
+      const truncatedAmountToApprove =
+        amountToApprove - (amountToApprove % PERMIT2_ALLOWANCE_COMPARISON_FACTOR)
+
       const isNotExpired = !!expirations && expirations[tokenAddress] > nowInSecs
-      const isAllowed = allowanceFor(tokenAddress) >= amountToApprove
+      const isAllowed = truncatedAllowance >= truncatedAmountToApprove
+
       return requiredRawAmount > 0n && isAllowed && isNotExpired
     }
 
