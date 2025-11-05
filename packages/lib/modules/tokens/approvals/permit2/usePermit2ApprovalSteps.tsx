@@ -124,9 +124,6 @@ export function usePermit2ApprovalSteps({
       lpToken,
     })
 
-    // 730750818665451459101842416358135993529062573218
-    // 730750818665451459101842416358141509827966271487
-
     // Check if the token has been approved
     const isComplete = () => {
       // the 2 big numbers are not equal, but the truncated ones are because somehow the passed approval amount is bigger than the allowance queried after it?!?
