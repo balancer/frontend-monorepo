@@ -254,6 +254,7 @@ function ConfigureToken({
             }}
             width="full"
           />
+
           <Text color="font.secondary">
             Enter the token’s price accurately, or you’ll be vulnerable to losing money to
             arbitrageurs, if you don’t add pool assets in proportion to their target weights.
@@ -294,6 +295,7 @@ function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
   return (
     <HStack spacing="sm" w="full">
       <Icon as={AlertTriangle} boxSize="18px" color="font.error" />
+
       <Text color="font.error" fontSize="sm" fontWeight="semibold" textAlign="start" w="full">
         {message}
       </Text>
@@ -307,6 +309,7 @@ function CoingeckoAttribution() {
       <Text color="font.secondary" fontSize="sm">
         Price data by
       </Text>
+
       <Link color="font.link" fontSize="sm" href="https://www.coingecko.com" isExternal>
         CoinGecko
         <Icon as={ArrowUpRight} />
