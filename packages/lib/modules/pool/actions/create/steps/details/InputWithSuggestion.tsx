@@ -20,7 +20,7 @@ export function InputWithSuggestion({
   label,
   name,
   placeholder,
-  suggestionLabel = 'Suggestion',
+  suggestionLabel = 'Suggested',
   suggestedValue,
   tooltip,
   onClickSuggestion,

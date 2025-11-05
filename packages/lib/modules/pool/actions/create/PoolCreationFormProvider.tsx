@@ -108,6 +108,7 @@ export function usePoolFormLogic() {
     setPoolAddress(undefined)
     poolCreationForm.resetToInitial()
     reClammConfigForm.resetToInitial()
+    eclpConfigForm.resetToInitial()
     resetSteps()
     router.replace('/create')
   }

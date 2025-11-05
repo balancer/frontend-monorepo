@@ -45,6 +45,7 @@ export function ChoosePoolTokens() {
     addPoolToken,
     poolCreationForm,
     reClammConfigForm,
+    eclpConfigForm,
     isReClamm,
     isGyroEclp,
   } = usePoolCreationForm()
@@ -97,6 +98,7 @@ export function ChoosePoolTokens() {
     setSelectedTokenIndex(null)
     poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
     if (isReClamm) reClammConfigForm.resetToInitial()
+    if (isGyroEclp) eclpConfigForm.resetToInitial()
   }
 
   const currentTokenAddress = selectedTokenIndex

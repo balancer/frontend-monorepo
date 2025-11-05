@@ -3,7 +3,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReClammConfig } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatNumber } from '../../helpers'
-import { useReClammCurrentPrice } from './useReClammCurrentPrice'
+import { usePoolSpotPriceWithoutRate } from './usePoolSpotPriceWithoutRate'
 import { SVGProps } from 'react'
 import {
   CurrentPriceMinusFivePercentSVG,
@@ -50,7 +50,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
 
-  const currentPrice = useReClammCurrentPrice()
+  const currentPrice = usePoolSpotPriceWithoutRate()
   const currentPriceMinus5 = currentPrice.times(0.95).toString()
   const currentPricePlus5 = currentPrice.times(1.05).toString()
 

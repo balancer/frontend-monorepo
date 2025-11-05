@@ -4,8 +4,9 @@ import { ArrowUpRight } from 'react-feather'
 import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
 
-export function EclpConfiguration() {
+export function GyroEclpConfiguration() {
   return (
     <VStack align="start" spacing="xl" w="full">
       <EclpParamHeader />
@@ -38,6 +39,7 @@ function EclpParamHeader() {
 }
 
 function EclpParamInputs() {
+  const suggestedEclpConfig = useSuggestedGyroEclpConfig()
   const { eclpConfigForm, poolCreationForm, updatePoolToken } = usePoolCreationForm()
   const { poolTokens, network } = poolCreationForm.watch()
   const { priceFor } = useTokens()
@@ -90,11 +92,11 @@ function EclpParamInputs() {
     label: `Lower bound price: ${tokenPricePair}`,
     name: 'alpha' as const,
     placeholder: '???',
-    suggestedValue: '1',
+    suggestedValue: suggestedEclpConfig.alpha,
     tooltip: 'The lowest price the pool will provide liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
-      eclpConfigForm.setValue('alpha', '1')
+      eclpConfigForm.setValue('alpha', suggestedEclpConfig.alpha)
       eclpConfigForm.trigger('alpha')
     },
     validate: (value: string) => {
@@ -106,11 +108,11 @@ function EclpParamInputs() {
     label: `Peak price: ${tokenPricePair}`,
     name: 'peakPrice' as const,
     placeholder: '???',
-    suggestedValue: '2',
+    suggestedValue: suggestedEclpConfig.peakPrice,
     tooltip: 'The price where the pool will provide the deepest liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
-      eclpConfigForm.setValue('peakPrice', '2')
+      eclpConfigForm.setValue('peakPrice', suggestedEclpConfig.peakPrice)
       eclpConfigForm.trigger('peakPrice')
     },
     validate: (value: string) => {
@@ -122,11 +124,11 @@ function EclpParamInputs() {
     label: `Upper bound price: ${tokenPricePair}`,
     name: 'beta' as const,
     placeholder: '???',
-    suggestedValue: '3',
+    suggestedValue: suggestedEclpConfig.beta,
     tooltip: 'The highest price the pool will provide liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
-      eclpConfigForm.setValue('beta', '3')
+      eclpConfigForm.setValue('beta', suggestedEclpConfig.beta)
       eclpConfigForm.trigger('beta')
     },
     validate: (value: string) => {
@@ -138,11 +140,11 @@ function EclpParamInputs() {
     label: `Stretching factor`,
     name: 'lambda' as const,
     placeholder: '???',
-    suggestedValue: '10',
+    suggestedValue: suggestedEclpConfig.lambda,
     tooltip: 'The concentration of liquidity around the peak price',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
-      eclpConfigForm.setValue('lambda', '10')
+      eclpConfigForm.setValue('lambda', suggestedEclpConfig.lambda)
       eclpConfigForm.trigger('lambda')
     },
     validate: (value: string) => {
