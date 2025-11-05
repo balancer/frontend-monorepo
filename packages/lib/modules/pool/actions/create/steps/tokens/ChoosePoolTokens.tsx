@@ -32,6 +32,7 @@ import { PoolCreationToken } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 import { ArrowUpRight } from 'react-feather'
+import { InputWithSuggestion } from '../details/InputWithSuggestion'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -197,6 +198,7 @@ function ConfigureToken({
 
   const apiPriceForToken = priceFor(token.address || '', network)
   const { cgPriceForToken } = useCoingeckoTokenPrice({ token: token.address, network })
+  console.log('cgPriceForToken', cgPriceForToken)
 
   useEffect(() => {
     // automatically hydrate form with coingecko price for unlisted tokens
@@ -252,22 +254,24 @@ function ConfigureToken({
 
       {token.address && !apiPriceForToken && (
         <VStack align="start" spacing="sm" w="full">
-          <NumberInput
+          <InputWithSuggestion
             attribution={cgPriceForToken && <CoingeckoAttribution />}
             control={poolCreationForm.control}
+            isFiatPrice
             label="Estimated current  price of token"
             name={`poolTokens.${index}.usdPrice`}
-            validate={price => {
-              if (price < 0) return 'Token price must be greater than 0'
+            onClickSuggestion={() => {
+              poolCreationForm.setValue(`poolTokens.${index}.usdPrice`, cgPriceForToken)
+              poolCreationForm.trigger(`poolTokens.${index}.usdPrice`)
+            }}
+            placeholder="Enter token price"
+            suggestedValue={`$${cgPriceForToken}`}
+            tooltip="Enter the token’s price accurately to avoid losing money to arbitrage."
+            validate={(price: string) => {
+              if (Number(price) < 0) return 'Token price must be greater than 0'
               return true
             }}
-            width="full"
           />
-
-          <Text color="font.secondary">
-            Enter the token’s price accurately, or you’ll be vulnerable to losing money to
-            arbitrageurs, if you don’t add pool assets in proportion to their target weights.
-          </Text>
         </VStack>
       )}
 

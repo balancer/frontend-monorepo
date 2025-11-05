@@ -10,9 +10,11 @@ interface InputWithSuggestionProps {
   onClickSuggestion: () => void
   placeholder: string
   suggestionLabel?: string
-  suggestedValue: string
+  suggestedValue?: string
   tooltip: string
   validate: (value: string) => string | true
+  attribution?: React.ReactNode
+  isFiatPrice?: boolean
 }
 
 export function InputWithSuggestion({
@@ -25,6 +27,8 @@ export function InputWithSuggestion({
   tooltip,
   onClickSuggestion,
   validate,
+  attribution,
+  isFiatPrice,
 }: InputWithSuggestionProps) {
   return (
     <VStack align="start" spacing="sm" w="full">
@@ -34,6 +38,7 @@ export function InputWithSuggestion({
         render={({ field, fieldState: { error } }) => (
           <InputWithError
             error={error?.message}
+            isFiatPrice={isFiatPrice}
             label={label}
             onChange={e => field.onChange(e.target.value)}
             placeholder={placeholder}
@@ -46,23 +51,28 @@ export function InputWithSuggestion({
           validate,
         }}
       />
-      <HStack spacing="xs">
-        <Text color="font.secondary" fontSize="sm">
-          {suggestionLabel}:
-        </Text>
-        <Text
-          color="font.link"
-          cursor="pointer"
-          fontSize="sm"
-          onClick={onClickSuggestion}
-          textDecoration="underline"
-          textDecorationStyle="dotted"
-          textDecorationThickness="1px"
-          textUnderlineOffset="3px"
-        >
-          {suggestedValue}
-        </Text>
-      </HStack>
+      {suggestedValue && (
+        <HStack justify="space-between" w="full">
+          <HStack spacing="xs">
+            <Text color="font.secondary" fontSize="sm">
+              {suggestionLabel}:
+            </Text>
+            <Text
+              color="font.link"
+              cursor="pointer"
+              fontSize="sm"
+              onClick={onClickSuggestion}
+              textDecoration="underline"
+              textDecorationStyle="dotted"
+              textDecorationThickness="1px"
+              textUnderlineOffset="3px"
+            >
+              {suggestedValue}
+            </Text>
+          </HStack>
+          {attribution && attribution}
+        </HStack>
+      )}
     </VStack>
   )
 }

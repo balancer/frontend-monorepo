@@ -3,7 +3,6 @@ import { Link } from '@chakra-ui/next-js'
 import { ArrowUpRight } from 'react-feather'
 import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
 
 export function GyroEclpConfiguration() {
@@ -40,53 +39,13 @@ function EclpParamHeader() {
 
 function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
-  const { eclpConfigForm, poolCreationForm, updatePoolToken } = usePoolCreationForm()
-  const { poolTokens, network } = poolCreationForm.watch()
-  const { priceFor } = useTokens()
-
-  const tokenA = poolTokens[0]
-  const tokenB = poolTokens[1]
-  const usdPriceTokenA = priceFor(tokenA?.address || '', network)
-  const usdPriceTokenB = priceFor(tokenB?.address || '', network)
+  const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+  const { poolTokens } = poolCreationForm.watch()
 
   const tokenPricePair = poolTokens
     .map(token => token.data?.symbol)
     .filter(Boolean)
     .join(' / ')
-
-  const usdPriceForTokenA = {
-    label: `${tokenA.data?.symbol} / USD price`,
-    name: 'poolTokens.0.usdPrice' as const,
-    placeholder: '???',
-    suggestionLabel: 'Current price',
-    suggestedValue: `$${usdPriceTokenA}`,
-    tooltip: `Amount of USD per ${tokenA.data?.symbol}`,
-    control: poolCreationForm.control,
-    onClickSuggestion: () => {
-      updatePoolToken(0, { usdPrice: usdPriceTokenA })
-    },
-    validate: (value: string) => {
-      if (Number(value) < 0) return 'Value must be greater than 0'
-      return true
-    },
-  }
-
-  const usdPriceForTokenB = {
-    label: `${tokenB.data?.symbol} / USD price`,
-    name: 'poolTokens.1.usdPrice' as const,
-    placeholder: '???',
-    suggestionLabel: 'Current price',
-    suggestedValue: `$${usdPriceTokenB}`,
-    tooltip: `Amount of USD per ${tokenB.data?.symbol}`,
-    control: poolCreationForm.control,
-    onClickSuggestion: () => {
-      updatePoolToken(1, { usdPrice: usdPriceTokenB })
-    },
-    validate: (value: string) => {
-      if (Number(value) < 0) return 'Value must be greater than 0'
-      return true
-    },
-  }
 
   const lowerBoundPrice = {
     label: `Lower bound price: ${tokenPricePair}`,
@@ -104,6 +63,7 @@ function EclpParamInputs() {
       return true
     },
   }
+
   const peakPrice = {
     label: `Peak price: ${tokenPricePair}`,
     name: 'peakPrice' as const,
@@ -120,6 +80,7 @@ function EclpParamInputs() {
       return true
     },
   }
+
   const upperBoundPrice = {
     label: `Upper bound price: ${tokenPricePair}`,
     name: 'beta' as const,
@@ -136,6 +97,7 @@ function EclpParamInputs() {
       return true
     },
   }
+
   const stretchingFactor = {
     label: `Stretching factor`,
     name: 'lambda' as const,
@@ -153,14 +115,7 @@ function EclpParamInputs() {
     },
   }
 
-  const eclpConfigInputs = [
-    usdPriceForTokenA,
-    usdPriceForTokenB,
-    lowerBoundPrice,
-    peakPrice,
-    upperBoundPrice,
-    stretchingFactor,
-  ]
+  const eclpConfigInputs = [lowerBoundPrice, peakPrice, upperBoundPrice, stretchingFactor]
 
   return (
     <>
