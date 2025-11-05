@@ -19,6 +19,7 @@ const config: NextConfig = {
         hostname: '**',
       },
     ],
+    minimumCacheTTL: 60,
   },
   transpilePackages: ['@repo/lib'],
 

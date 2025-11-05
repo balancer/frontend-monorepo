@@ -124,6 +124,7 @@ export function SmartCircularImage({
         <NextImage
           alt={alt || 'unknown'}
           fill
+          sizes={`${size}px`}
           src={src}
           style={{
             objectFit: 'cover',
@@ -139,6 +140,7 @@ export function SmartCircularImage({
         <NextImage
           alt={alt || 'unknown'}
           fill
+          sizes={`${size}px`}
           src={src}
           style={{
             objectFit: 'contain',
