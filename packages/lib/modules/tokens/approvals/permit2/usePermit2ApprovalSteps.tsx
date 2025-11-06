@@ -127,7 +127,8 @@ export function usePermit2ApprovalSteps({
       const isAllowed = allowanceFor(tokenAddress) >= requiredRawAmount
 
       // some expirations were set too far in the future so redo them
-      const hasValidExpiry = !!expirations && expirations[tokenAddress] < permitExpiry // 3 days from now
+      // the expiration shouldn't be more than 3 days from now
+      const hasValidExpiry = !!expirations && expirations[tokenAddress] < permitExpiry
 
       return requiredRawAmount > 0n && isAllowed && isNotExpired && hasValidExpiry
     }
