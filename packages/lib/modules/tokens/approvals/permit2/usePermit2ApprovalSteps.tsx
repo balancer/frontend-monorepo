@@ -8,7 +8,6 @@ import { ApprovalAction, buildTokenApprovalLabels } from '../approval-labels'
 import { TransactionStep, TxCall } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
-import { get24HoursFromNowInSecs, getNowTimestampInSecs } from '@repo/lib/shared/utils/time'
 import { usePermit2Allowance } from './usePermit2Allowance'
 import { useTokens } from '../../TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -16,6 +15,7 @@ import { getMaxAmountForPermit2 } from './permit2.helpers'
 import { Address, encodeFunctionData } from 'viem'
 import { permit2Abi } from '@balancer/sdk'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
+import { addHours, millisecondsToSeconds } from 'date-fns'
 
 export type Params = {
   chain: GqlChain
@@ -54,7 +54,6 @@ export function usePermit2ApprovalSteps({
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getTransaction, setTransactionFn } = useStepsTransactionState()
-
   const { getToken } = useTokens()
 
   // Precompute common values
@@ -62,8 +61,12 @@ export function usePermit2ApprovalSteps({
   const nativeAssetAddress = getNativeAssetAddress(chain)
   const networkConfig = getNetworkConfig(chain)
   const permit2Address = networkConfig.contracts.permit2
-  const permitExpiry = get24HoursFromNowInSecs() * 3 // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
   const spenderAddress = router || networkConfig.contracts.balancer.router!
+
+  // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
+  const seventyTwoHoursFromNowMs = addHours(new Date(), 72).getTime()
+  const permitExpiry = millisecondsToSeconds(seventyTwoHoursFromNowMs) // in seconds
+  const nowInSecs = millisecondsToSeconds(Date.now())
 
   // Unwraps of wrapped native assets do not require approval
   const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'
@@ -120,9 +123,14 @@ export function usePermit2ApprovalSteps({
 
     // Check if the token has been approved
     const isComplete = () => {
-      const isNotExpired = !!expirations && expirations[tokenAddress] > getNowTimestampInSecs()
-      const isAllowed = allowanceFor(tokenAddress) >= amountToApprove
-      return requiredRawAmount > 0n && isAllowed && isNotExpired
+      const isNotExpired = !!expirations && expirations[tokenAddress] > nowInSecs
+      const isAllowed = allowanceFor(tokenAddress) >= requiredRawAmount
+
+      // some expirations were set too far in the future so redo them
+      // the expiration shouldn't be more than 3 days from now
+      const hasValidExpiry = !!expirations && expirations[tokenAddress] < permitExpiry
+
+      return requiredRawAmount > 0n && isAllowed && isNotExpired && hasValidExpiry
     }
 
     const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address
