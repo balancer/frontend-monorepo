@@ -63,6 +63,7 @@ export function usePermit2ApprovalSteps({
   const permit2Address = networkConfig.contracts.permit2
   const spenderAddress = router || networkConfig.contracts.balancer.router!
 
+  // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
   const seventyTwoHoursFromNowMs = addHours(new Date(), 72).getTime()
   const permitExpiry = millisecondsToSeconds(seventyTwoHoursFromNowMs) // in seconds
   const nowInSecs = millisecondsToSeconds(Date.now())
