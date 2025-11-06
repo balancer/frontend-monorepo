@@ -95,9 +95,7 @@ export function SaleStructureStep() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
       <VStack align="start" spacing="lg" w="full">
-        {isPoolCreated ? (
-          <LbpTokenAmountInputs />
-        ) : (
+        {!isPoolCreated && (
           <>
             <Heading color="font.maxContrast" size="md">
               Launch token details
@@ -164,12 +162,11 @@ export function SaleStructureStep() {
                   setFormValue={setValue}
                 />
                 <Divider />
-
-                <LbpTokenAmountInputs />
               </>
             )}
           </>
         )}
+        <LbpTokenAmountInputs />
         <Divider />
         <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
       </VStack>
