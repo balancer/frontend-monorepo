@@ -17,6 +17,8 @@ import { permit2Abi } from '@balancer/sdk'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { addHours, millisecondsToSeconds } from 'date-fns'
 
+const PERMIT2_ALLOWANCE_COMPARISON_FACTOR = 100_000_000_000_000_000n
+
 export type Params = {
   chain: GqlChain
   approvalAmounts: RawAmount[]
@@ -54,10 +56,7 @@ export function usePermit2ApprovalSteps({
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getTransaction, setTransactionFn } = useStepsTransactionState()
-
   const { getToken } = useTokens()
-
-  const PERMIT2_ALLOWANCE_COMPARISON_FACTOR = 100_000_000_000_000_000n
 
   // Precompute common values
   const chainId = getChainId(chain)
