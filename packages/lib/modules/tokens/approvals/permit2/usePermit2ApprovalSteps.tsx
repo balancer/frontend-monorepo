@@ -17,8 +17,6 @@ import { permit2Abi } from '@balancer/sdk'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { addHours, millisecondsToSeconds } from 'date-fns'
 
-const PERMIT2_ALLOWANCE_COMPARISON_FACTOR = 100_000_000_000_000_000n
-
 export type Params = {
   chain: GqlChain
   approvalAmounts: RawAmount[]
@@ -124,18 +122,8 @@ export function usePermit2ApprovalSteps({
 
     // Check if the token has been approved
     const isComplete = () => {
-      // truncate numbers for better comparison
-      // see also https://github.com/balancer/frontend-monorepo/issues/1784
-      const currentAllowance = allowanceFor(tokenAddress)
-
-      const truncatedAllowance =
-        currentAllowance - (currentAllowance % PERMIT2_ALLOWANCE_COMPARISON_FACTOR)
-
-      const truncatedAmountToApprove =
-        amountToApprove - (amountToApprove % PERMIT2_ALLOWANCE_COMPARISON_FACTOR)
-
       const isNotExpired = !!expirations && expirations[tokenAddress] > nowInSecs
-      const isAllowed = truncatedAllowance >= truncatedAmountToApprove
+      const isAllowed = allowanceFor(tokenAddress) >= requiredRawAmount
 
       // some expirations were set too far in the future so redo them
       const hasValidExpiry = !!expirations && expirations[tokenAddress] < permitExpiry // 3 days from now
