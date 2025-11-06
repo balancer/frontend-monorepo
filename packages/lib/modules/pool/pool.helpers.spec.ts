@@ -119,6 +119,14 @@ describe('shouldBlockAddLiquidity', () => {
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
     })
 
+    it('should block exploited V2 composable stable pools', () => {
+      const pool = getApiPoolMock(sDAIWeighted)
+      pool.type = GqlPoolType.ComposableStable
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
     it('should not block liquidity if all tokens are allowed', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.poolTokens[0].isAllowed = true
