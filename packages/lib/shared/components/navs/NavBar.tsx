@@ -312,7 +312,7 @@ export function NavBar({
           </Text>
           <Link
             color="font.dark"
-            href="https://x.com/Balancer/status/1985390307245244573"
+            href="https://x.com/Balancer/status/1986104426667401241"
             isExternal
             textDecoration="underline"
           >
