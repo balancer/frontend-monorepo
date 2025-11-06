@@ -16,6 +16,7 @@ import { Address, encodeFunctionData } from 'viem'
 import { permit2Abi } from '@balancer/sdk'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { addHours, millisecondsToSeconds } from 'date-fns'
+import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
 
 export type Params = {
   chain: GqlChain
@@ -70,6 +71,9 @@ export function usePermit2ApprovalSteps({
   const permitExpiry = millisecondsToSeconds(seventyTwoHoursFromNowMs) // in seconds
 
   const nowInSecs = millisecondsToSeconds(Date.now())
+
+  const wrongExpiry = get24HoursFromNowInSecs()
+  console.log({ wrongExpiry })
 
   // Unwraps of wrapped native assets do not require approval
   const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'
@@ -126,8 +130,8 @@ export function usePermit2ApprovalSteps({
 
     // Check if the token has been approved
     const isComplete = () => {
-      // the 2 big numbers are not equal, but the truncated ones are
-      // this is because somehow the passed approval amount differs in the last few digits from the allowance amount?!?
+      // truncate numbers for better comparison
+      // see also https://github.com/balancer/frontend-monorepo/issues/1784
       const currentAllowance = allowanceFor(tokenAddress)
 
       const truncatedAllowance =
