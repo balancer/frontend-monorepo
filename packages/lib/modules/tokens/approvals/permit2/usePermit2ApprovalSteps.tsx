@@ -16,7 +16,6 @@ import { Address, encodeFunctionData } from 'viem'
 import { permit2Abi } from '@balancer/sdk'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { addHours, millisecondsToSeconds } from 'date-fns'
-import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
 
 export type Params = {
   chain: GqlChain
@@ -69,11 +68,7 @@ export function usePermit2ApprovalSteps({
 
   const seventyTwoHoursFromNowMs = addHours(new Date(), 72).getTime()
   const permitExpiry = millisecondsToSeconds(seventyTwoHoursFromNowMs) // in seconds
-
   const nowInSecs = millisecondsToSeconds(Date.now())
-
-  const wrongExpiry = get24HoursFromNowInSecs()
-  console.log({ wrongExpiry })
 
   // Unwraps of wrapped native assets do not require approval
   const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'
@@ -143,7 +138,10 @@ export function usePermit2ApprovalSteps({
       const isNotExpired = !!expirations && expirations[tokenAddress] > nowInSecs
       const isAllowed = truncatedAllowance >= truncatedAmountToApprove
 
-      return requiredRawAmount > 0n && isAllowed && isNotExpired
+      // some expirations were set too far in the future so redo them
+      const hasValidExpiry = !!expirations && expirations[tokenAddress] < permitExpiry // 3 days from now
+
+      return requiredRawAmount > 0n && isAllowed && isNotExpired && hasValidExpiry
     }
 
     const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address
