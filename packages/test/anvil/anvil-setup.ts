@@ -15,7 +15,7 @@ import {
 } from 'viem/chains'
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
+import { hyperEVM } from '@balancer/sdk'
 
 // FIXME: [JUANJO] This is duplicated on rpc.ts
 const chainIdToDrpcName: Record<number, string | undefined> = {
@@ -32,7 +32,7 @@ const chainIdToDrpcName: Record<number, string | undefined> = {
   [mode.id]: 'mode',
   [polygonZkEvm.id]: 'polygon-zkevm',
   [sonic.id]: 'sonic',
-  [hyperEvm.id]: 'hyperliquid',
+  [hyperEVM.id]: 'hyperliquid',
 }
 
 export function drpcUrlByChainId(chainId: number, privateKey: string) {
