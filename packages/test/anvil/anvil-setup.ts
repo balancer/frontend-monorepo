@@ -38,7 +38,7 @@ const chainIdToDrpcName: Record<number, string | undefined> = {
 export function drpcUrlByChainId(chainId: number, privateKey: string) {
   const chainSlug = chainIdToDrpcName[chainId]
   if (!chainSlug) throw new Error(`Invalid chain id: ${chainId}`)
-  return `https://lb.drpc.org/ogrpc?network=${chainSlug}&dkey=${privateKey}`
+  return `https://lb.drpc.live/${chainSlug}/${privateKey}`
 }
 
 type NetworksWithFork = readonly [
