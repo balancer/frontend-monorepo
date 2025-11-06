@@ -43,7 +43,10 @@ export async function fetchPoolMock({
     },
     body: JSON.stringify({ query: queryString, variables }),
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) console.log(response.body)
+      return response.json()
+    })
     .then(result => result.data)) as GetPoolQuery
 
   if (!getPoolQuery?.pool) {
