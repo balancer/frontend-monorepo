@@ -7,6 +7,7 @@ import {
   INITIAL_POOL_CREATION_FORM,
   INITIAL_RECLAMM_CONFIG,
   INITIAL_ECLP_CONFIG,
+  NUM_FORMAT,
 } from './constants'
 import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } from './types'
 import { Address } from 'viem'
@@ -19,6 +20,7 @@ import { useEffect, useState } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -87,6 +89,19 @@ export function usePoolFormLogic() {
     reClammConfigForm.setValue('initialMinPrice', invertNumber(initialMaxPrice))
     reClammConfigForm.setValue('initialMaxPrice', invertNumber(initialMinPrice))
     reClammConfigForm.setValue('initialTargetPrice', invertNumber(initialTargetPrice))
+    updatePoolTokens([...poolTokens].reverse())
+  }
+
+  const invertGyroEclpPriceParams = () => {
+    const { alpha, beta, peakPrice, s, c, lambda } = eclpConfigForm.watch()
+    eclpConfigForm.reset({
+      alpha: fNumCustom(invertNumber(beta), NUM_FORMAT),
+      beta: fNumCustom(invertNumber(alpha), NUM_FORMAT),
+      peakPrice: fNumCustom(invertNumber(peakPrice), NUM_FORMAT),
+      s: c,
+      c: s,
+      lambda: lambda,
+    })
     updatePoolTokens([...poolTokens].reverse())
   }
 
@@ -160,6 +175,7 @@ export function usePoolFormLogic() {
     resetPoolCreationForm,
     poolAddress,
     invertReClammPriceParams,
+    invertGyroEclpPriceParams,
     tokenList,
     isLoadingTokenList,
     setPoolAddress,

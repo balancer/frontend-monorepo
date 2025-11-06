@@ -45,7 +45,7 @@ function PoolTokensInWalletContent() {
         address,
         chain,
         userBalanceHuman,
-        token.usdPrice
+        Number(token.usdPrice)
       )
       return { address, symbol, chain, userBalanceUsd, userBalanceHuman }
     })

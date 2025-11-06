@@ -30,7 +30,7 @@ export type PoolCreationToken = {
   weight?: string
   amount: string
   data?: ApiOrCustomToken
-  usdPrice?: number
+  usdPrice?: string
 }
 
 export type PoolCreationForm = {

@@ -13,9 +13,10 @@ import { PreviewReClammConfig } from './PreviewReClammConfig'
 import { ReclAmmChartProvider } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 import { usePreviewReclAmmChartData } from './usePreviewReclammChartData'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { PreviewGyroEclpConfig } from './PreviewGyroEclpConfig'
 
 export function PreviewPoolCreation() {
-  const { resetPoolCreationForm, network, poolType, isReClamm } = usePoolCreationForm()
+  const { resetPoolCreationForm, network, poolType, isReClamm, isGyroEclp } = usePoolCreationForm()
   const { isBeforeStep } = usePoolCreationFormSteps()
   const reclammChartData = usePreviewReclAmmChartData()
   const { lowerMarginValue, upperMarginValue } = reclammChartData || {}
@@ -51,6 +52,7 @@ export function PreviewPoolCreation() {
         </HStack>
 
         <PreviewPoolType />
+        {isGyroEclp && <PreviewGyroEclpConfig />}
         {isReClamm && (
           <ReclAmmChartProvider chartData={reclammChartData}>
             <PreviewReClammConfig

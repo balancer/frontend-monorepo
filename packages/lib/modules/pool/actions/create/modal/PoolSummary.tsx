@@ -87,7 +87,7 @@ function PoolTokenAmountsCard() {
       const { data, address } = token
       if (!data || !address) return null
       const { chain, symbol, name } = data
-      const usdValue = usdValueForTokenAddress(address, chain, token.amount, token.usdPrice)
+      const usdValue = usdValueForTokenAddress(address, chain, token.amount, Number(token.usdPrice))
       return { address, symbol, name, amount: token.amount, usdValue }
     })
     .filter(token => token !== null)

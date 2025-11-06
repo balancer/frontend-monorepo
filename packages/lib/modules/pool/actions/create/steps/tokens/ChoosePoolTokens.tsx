@@ -94,6 +94,7 @@ export function ChoosePoolTokens() {
       rateProvider,
       data: tokenMetadata,
       paysYieldFees: rateProvider !== zeroAddress,
+      usdPrice: '',
     })
 
     setSelectedTokenIndex(null)
@@ -198,13 +199,12 @@ function ConfigureToken({
 
   const apiPriceForToken = priceFor(token.address || '', network)
   const { cgPriceForToken } = useCoingeckoTokenPrice({ token: token.address, network })
-  console.log('cgPriceForToken', cgPriceForToken)
 
   useEffect(() => {
     // automatically hydrate form with coingecko price for unlisted tokens
     if (!apiPriceForToken && cgPriceForToken && !token.usdPrice) {
       updatePoolToken(index, {
-        usdPrice: cgPriceForToken,
+        usdPrice: cgPriceForToken.toString(),
       })
     }
   }, [cgPriceForToken, apiPriceForToken, token.usdPrice])
@@ -261,11 +261,11 @@ function ConfigureToken({
             label="Estimated current  price of token"
             name={`poolTokens.${index}.usdPrice`}
             onClickSuggestion={() => {
-              poolCreationForm.setValue(`poolTokens.${index}.usdPrice`, cgPriceForToken)
+              poolCreationForm.setValue(`poolTokens.${index}.usdPrice`, cgPriceForToken?.toString())
               poolCreationForm.trigger(`poolTokens.${index}.usdPrice`)
             }}
             placeholder="Enter token price"
-            suggestedValue={`$${cgPriceForToken}`}
+            suggestedValue={cgPriceForToken ? `$${cgPriceForToken}` : undefined}
             tooltip="Enter the token’s price accurately to avoid losing money to arbitrage."
             validate={(price: string) => {
               if (Number(price) < 0) return 'Token price must be greater than 0'
