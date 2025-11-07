@@ -89,6 +89,8 @@ Sentry.init({
   },
 })
 
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
+
 function handleNonFatalError(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null {
   if (shouldIgnoreException(event)) return null
   event.level = 'error'
