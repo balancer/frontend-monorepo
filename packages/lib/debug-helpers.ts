@@ -24,6 +24,7 @@ export const auraBalAddress = '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d' as co
 export const bal80Weth20Address = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56' as const
 
 export const wstEthAddress = '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0' as const
+export const aaveEthAddress = '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9' as const
 export const rstEthAddress = '0x7a4effd87c2f3c55ca251080b1343b605f327e3a' as const
 
 export const ethAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' as const
@@ -47,6 +48,7 @@ export const vaultV2Address = mainnetNetworkConfig.contracts.balancer.vaultV2 as
 export const vaultV3Address = sepoliaNetworkConfig.contracts.balancer.vaultV3 as Address
 
 export const poolId = '0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512' as const // Balancer Weighted wjAura and WETH
+export const poolId2 = '0x3de27efa2f1aa663ae5d458857e731c129069f29000200000000000000000588' as const // Balancer Weighted 20wstETH-80AAVE
 
 export const sepoliaRouter = sepoliaNetworkConfig.contracts.balancer.router
 export const mainnetRouter = mainnetNetworkConfig.contracts.balancer.router

@@ -1,8 +1,17 @@
 import networkConfig from '@repo/lib/config/networks/mainnet'
-import { balAddress, wETHAddress, wjAuraAddress } from '@repo/lib/debug-helpers'
+import {
+  aaveEthAddress,
+  balAddress,
+  wETHAddress,
+  wjAuraAddress,
+  wstEthAddress,
+} from '@repo/lib/debug-helpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
-import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
+import {
+  aWeightedV2PoolMock,
+  aWjAuraWethPoolElementMock,
+} from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { UnbalancedAddLiquidityV2Handler } from './UnbalancedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 
@@ -12,11 +21,11 @@ function selectUnbalancedHandler() {
 
 describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
   test('calculates price impact', async () => {
-    const handler = selectUnbalancedHandler()
+    const handler = selectAddLiquidityHandler(aWeightedV2PoolMock())
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'ETH' },
-      { humanAmount: '1', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
+      { tokenAddress: wstEthAddress, humanAmount: '1', symbol: 'wstETH' },
+      { tokenAddress: aaveEthAddress, humanAmount: '1', symbol: 'AAVE' },
     ]
 
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
