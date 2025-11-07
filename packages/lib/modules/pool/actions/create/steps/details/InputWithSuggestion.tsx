@@ -7,7 +7,7 @@ interface InputWithSuggestionProps {
   control: Control<any>
   label: string
   name: string
-  onClickSuggestion: () => void
+  onClickSuggestion?: () => void
   placeholder: string
   suggestionLabel?: string
   suggestedValue?: string

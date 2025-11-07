@@ -4,12 +4,16 @@ import { RefreshCcw } from 'react-feather'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { NUM_FORMAT } from '../constants'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
+import ReactECharts from 'echarts-for-react'
+import { useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 
 export function PreviewGyroEclpConfig() {
   const { isBeforeStep } = usePoolCreationFormSteps()
   const { eclpConfigForm, poolCreationForm, invertGyroEclpPriceParams } = usePoolCreationForm()
   const { alpha, beta, peakPrice } = eclpConfigForm.watch()
   const { poolTokens } = poolCreationForm.watch()
+
+  const { options } = useEclpChart()
 
   const priceDisplayCards = [
     {
@@ -19,7 +23,7 @@ export function PreviewGyroEclpConfig() {
     },
     {
       color: 'green.400',
-      label: 'Current price',
+      label: 'Peak price',
       value: peakPrice ? fNumCustom(peakPrice, NUM_FORMAT) : '-',
     },
     {
@@ -53,7 +57,9 @@ export function PreviewGyroEclpConfig() {
           ))}
         </SimpleGrid>
         <Divider />
-        <Box h={250} w="full" />
+        <Box h={333} w="full">
+          <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
+        </Box>
         <Divider />
         <HStack justify="space-between" w="full">
           <Button

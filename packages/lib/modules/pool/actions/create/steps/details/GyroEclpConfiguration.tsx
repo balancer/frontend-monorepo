@@ -4,6 +4,8 @@ import { ArrowUpRight } from 'react-feather'
 import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
+import { calculateRotationComponents } from './gyro.helpers'
+import { useEffect } from 'react'
 
 export function GyroEclpConfiguration() {
   return (
@@ -41,13 +43,21 @@ function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const { poolTokens } = poolCreationForm.watch()
+  const { peakPrice } = eclpConfigForm.watch()
 
   const tokenPricePair = poolTokens
     .map(token => token.data?.symbol)
     .filter(Boolean)
     .join(' / ')
 
-  const lowerBoundPrice = {
+  // must re-calculate c and s as peak price input changes
+  useEffect(() => {
+    const { c, s } = calculateRotationComponents(peakPrice)
+    eclpConfigForm.setValue('c', c)
+    eclpConfigForm.setValue('s', s)
+  }, [peakPrice])
+
+  const lowerBoundPriceInput = {
     label: `Lower bound price: ${tokenPricePair}`,
     name: 'alpha' as const,
     placeholder: '???',
@@ -64,7 +74,7 @@ function EclpParamInputs() {
     },
   }
 
-  const peakPrice = {
+  const peakPriceInput = {
     label: `Peak price: ${tokenPricePair}`,
     name: 'peakPrice' as const,
     placeholder: '???',
@@ -81,7 +91,7 @@ function EclpParamInputs() {
     },
   }
 
-  const upperBoundPrice = {
+  const upperBoundPriceInput = {
     label: `Upper bound price: ${tokenPricePair}`,
     name: 'beta' as const,
     placeholder: '???',
@@ -98,24 +108,24 @@ function EclpParamInputs() {
     },
   }
 
-  const stretchingFactor = {
+  const stretchingFactorInput = {
     label: `Stretching factor`,
     name: 'lambda' as const,
-    placeholder: '???',
-    suggestedValue: suggestedEclpConfig.lambda,
+    placeholder: '100',
     tooltip: 'The concentration of liquidity around the peak price',
     control: eclpConfigForm.control,
-    onClickSuggestion: () => {
-      eclpConfigForm.setValue('lambda', suggestedEclpConfig.lambda)
-      eclpConfigForm.trigger('lambda')
-    },
     validate: (value: string) => {
       if (Number(value) < 0) return 'Value must be greater than 0'
       return true
     },
   }
 
-  const eclpConfigInputs = [lowerBoundPrice, peakPrice, upperBoundPrice, stretchingFactor]
+  const eclpConfigInputs = [
+    lowerBoundPriceInput,
+    peakPriceInput,
+    upperBoundPriceInput,
+    stretchingFactorInput,
+  ]
 
   return (
     <>

@@ -10,7 +10,6 @@ const NUM_FORMAT = '0.00000000' // up to 8 decimals?
 export function useSuggestedGyroEclpConfig() {
   const { spotPriceWithoutRate } = usePoolSpotPriceWithoutRate()
   const { eclpConfigForm } = usePoolCreationForm()
-  const { lambda } = eclpConfigForm.watch()
   const isEmptyEclpConfig = Object.values(eclpConfigForm.watch()).every(value => value === '')
 
   const { c, s } = calculateRotationComponents(spotPriceWithoutRate.toString())
@@ -23,7 +22,7 @@ export function useSuggestedGyroEclpConfig() {
     beta,
     c,
     s,
-    lambda: lambda || suggestedLamba,
+    lambda: suggestedLamba,
     peakPrice: fNumCustom(spotPriceWithoutRate, NUM_FORMAT),
   }
 

@@ -1,25 +1,22 @@
-import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
-import { Pool } from '../../pool/pool.types'
-import { isGyroEPool } from '../../pool/pool.helpers'
+type EclpParams = {
+  alpha: number
+  beta: number
+  s: number
+  c: number
+  lambda: number
+}
 
 export function drawLiquidityECLP(
-  pool: Pool,
+  isGyroEclp: boolean,
+  eclpParams: EclpParams,
   tokenRateScalingFactorString?: string
 ): [number, number][] | null {
-  if (!isGyroEPool(pool) && tokenRateScalingFactorString) {
+  if (!isGyroEclp && tokenRateScalingFactorString) {
     return null
   }
 
-  const gyroPool = pool as GqlPoolGyro
-
-  const [alpha, beta, s, c, lambda, scalingFactor] = [
-    gyroPool.alpha,
-    gyroPool.beta,
-    gyroPool.s,
-    gyroPool.c,
-    gyroPool.lambda,
-    tokenRateScalingFactorString,
-  ].map(el => Number(el))
+  const { alpha, beta, s, c, lambda } = eclpParams
+  const scalingFactor = Number(tokenRateScalingFactorString)
 
   const priceRange = [alpha * scalingFactor, beta * scalingFactor]
   const granularity = (priceRange[1] - priceRange[0]) / 1000

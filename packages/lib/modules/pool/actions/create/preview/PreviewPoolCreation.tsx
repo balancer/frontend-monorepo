@@ -11,16 +11,13 @@ import { getGqlPoolType } from '../helpers'
 import { LearnMoreModal } from '@repo/lib/shared/components/modals/LearnMoreModal'
 import { PreviewReClammConfig } from './PreviewReClammConfig'
 import { ReclAmmChartProvider } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+import { EclpChartProvider } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 import { usePreviewReclAmmChartData } from './usePreviewReclammChartData'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewGyroEclpConfig } from './PreviewGyroEclpConfig'
+import { usePreviewEclpLiquidityProfile } from './usePreviewEclpLiquidityProfile'
 
 export function PreviewPoolCreation() {
-  const { resetPoolCreationForm, network, poolType, isReClamm, isGyroEclp } = usePoolCreationForm()
-  const { isBeforeStep } = usePoolCreationFormSteps()
-  const reclammChartData = usePreviewReclAmmChartData()
-  const { lowerMarginValue, upperMarginValue } = reclammChartData || {}
-
   return (
     <NoisyCard
       cardProps={{
@@ -30,42 +27,72 @@ export function PreviewPoolCreation() {
       }}
     >
       <VStack align="start" p="lg" spacing="md" w="full">
-        <HStack alignItems="center" justifyContent="space-between" w="full">
-          <Heading color="font.maxContrast" size="md">
-            Pool preview
-          </Heading>
-          <HStack cursor="pointer" spacing="xs" zIndex={1}>
-            <RestartPoolCreationModal
-              handleRestart={resetPoolCreationForm}
-              network={network}
-              poolType={getGqlPoolType(poolType)}
-            />
-            <LearnMoreModal
-              buttonLabel="Get help"
-              docsUrl="https://docs.balancer.fi/concepts/explore-available-balancer-pools/"
-              headerText="Learn more about pool types"
-              listItems={[
-                `${PROJECT_CONFIG.projectName} offers a variety of liquidity pool types, each tailored to specific use cases`,
-              ]}
-            />
-          </HStack>
-        </HStack>
-
+        <PreviewPoolHeader />
         <PreviewPoolType />
-        {isGyroEclp && <PreviewGyroEclpConfig />}
-        {isReClamm && (
-          <ReclAmmChartProvider chartData={reclammChartData}>
-            <PreviewReClammConfig
-              isBeforeStep={isBeforeStep('Details')}
-              lowerMarginValue={lowerMarginValue}
-              upperMarginValue={upperMarginValue}
-            />
-          </ReclAmmChartProvider>
-        )}
+        <PreviewPoolChart />
         <PreviewPoolTokens />
         <PreviewPoolTokensInWallet />
         <PreviewPoolDetails />
       </VStack>
     </NoisyCard>
   )
+}
+
+function PreviewPoolHeader() {
+  const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
+
+  return (
+    <HStack alignItems="center" justifyContent="space-between" w="full">
+      <Heading color="font.maxContrast" size="md">
+        Pool preview
+      </Heading>
+      <HStack cursor="pointer" spacing="xs" zIndex={1}>
+        <RestartPoolCreationModal
+          handleRestart={resetPoolCreationForm}
+          network={network}
+          poolType={getGqlPoolType(poolType)}
+        />
+        <LearnMoreModal
+          buttonLabel="Get help"
+          docsUrl="https://docs.balancer.fi/concepts/explore-available-balancer-pools/"
+          headerText="Learn more about pool types"
+          listItems={[
+            `${PROJECT_CONFIG.projectName} offers a variety of liquidity pool types, each tailored to specific use cases`,
+          ]}
+        />
+      </HStack>
+    </HStack>
+  )
+}
+
+function PreviewPoolChart() {
+  const { isReClamm, isGyroEclp } = usePoolCreationForm()
+  const { isBeforeStep } = usePoolCreationFormSteps()
+
+  const eclpLiquidityProfile = usePreviewEclpLiquidityProfile()
+
+  const reclammChartData = usePreviewReclAmmChartData()
+  const { lowerMarginValue, upperMarginValue } = reclammChartData || {}
+
+  if (isGyroEclp) {
+    return (
+      <EclpChartProvider eclpLiquidityProfile={eclpLiquidityProfile}>
+        <PreviewGyroEclpConfig />
+      </EclpChartProvider>
+    )
+  }
+
+  if (isReClamm) {
+    return (
+      <ReclAmmChartProvider chartData={reclammChartData}>
+        <PreviewReClammConfig
+          isBeforeStep={isBeforeStep('Details')}
+          lowerMarginValue={lowerMarginValue}
+          upperMarginValue={upperMarginValue}
+        />
+      </ReclAmmChartProvider>
+    )
+  }
+
+  return null
 }
