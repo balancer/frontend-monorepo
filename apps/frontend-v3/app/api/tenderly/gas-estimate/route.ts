@@ -2,13 +2,16 @@ import type { NextRequest } from 'next/server'
 import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
 import {
   getTenderlyConfig,
-  getAllowedOrigins,
-  isAllowedOrigin,
   validateRequestBody,
   getGasEstimateSimulation,
-  createForbiddenResponse,
+} from '@repo/lib/shared/utils/internal-api/tenderly-gas-estimate'
+
+import {
   createBadRequestResponse,
-} from '@repo/lib/shared/utils/tenderly-gas-estimate'
+  createForbiddenResponse,
+  getAllowedOrigins,
+  isAllowedOrigin,
+} from '@repo/lib/shared/utils/internal-api/errors'
 
 const allowedOrigins = getAllowedOrigins()
 const tenderlyConfig = getTenderlyConfig()
