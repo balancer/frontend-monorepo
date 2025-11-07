@@ -32,7 +32,7 @@ Check this video for a detailed explanation: https://www.youtube.com/watch?v=bsE
 
 ```bash
 # This is run by GHA when running this tests in CI
-anvil --fork-url https://lb.drpc.org/ogrpc?network=ethereum&dkey=YOUR_LOCAL_NEXT_PRIVATE_DRPC_KEY --port 8545
+anvil --fork-url https://lb.drpc.live/ethereum/<YOUR_LOCAL_NEXT_PRIVATE_DRPC_KEY> --port 8545
 ```
 
 ```bash
