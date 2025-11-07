@@ -53,6 +53,9 @@ Sentry.init({
   },
 
   beforeSend(event) {
+    if (originatesFromExtensionServiceWorker(event)) {
+      return null
+    }
     /*
       The transaction values in the nextjs-sentry integration are misleading
       so we replace them with the url of the request that caused the error
@@ -129,4 +132,12 @@ function isNonFatalError(event: Sentry.ErrorEvent) {
   if (errorText.includes('Must contain at least 1 path.')) return true
 
   return false
+}
+
+function originatesFromExtensionServiceWorker(event: Sentry.ErrorEvent) {
+  return (
+    event.exception?.values?.some(value =>
+      value.stacktrace?.frames?.some(frame => frame.filename?.includes('extensionServiceWorker.js'))
+    ) ?? false
+  )
 }
