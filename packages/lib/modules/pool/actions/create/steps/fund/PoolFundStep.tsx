@@ -12,6 +12,7 @@ import { PoolCreationToken } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatUnits } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { useGyroEclpInitAmountsRatio } from './useGyroEclpInitAmountsRatio'
 
 export function PoolFundStep() {
   const { isFormStateValid, poolTokens, poolAddress, poolCreationForm, isWeightedPool, isReClamm } =
@@ -29,22 +30,26 @@ export function PoolFundStep() {
     : hasAcceptedPoolCreationRisk
 
   const isDisabled = !isFormStateValid || !hasAcceptedRisks || !isTokenAmountsValid
-
   const showTokenAmountInputs = !isReClamm || poolAddress
 
   return (
     <Box as="form" style={{ width: '100%' }}>
       <VStack align="start" spacing="lg" w="full">
+        <SeedPoolTypeAlert />
+
         <Heading color="font.maxContrast" size="md">
           Seed initial pool liquidity
         </Heading>
 
-        <SeedPoolTips />
+        {showTokenAmountInputs && (
+          <>
+            {poolTokens.map((token, idx) => (
+              <TokenAmountInput idx={idx} key={idx} token={token} />
+            ))}
 
-        {showTokenAmountInputs &&
-          poolTokens.map((token, idx) => <TokenAmountInput idx={idx} key={idx} token={token} />)}
-
-        {showTokenAmountInputs && <SeedAmountProportions displayAlert />}
+            <SeedAmountProportions displayAlert />
+          </>
+        )}
 
         <PoolCreationRiskCheckboxes />
 
@@ -55,39 +60,61 @@ export function PoolFundStep() {
 }
 
 function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: number }) {
-  const { network, updatePoolToken, isReClamm, poolAddress, poolTokens } = usePoolCreationForm()
-  const { initAmounts } = useReClammInitAmounts(poolAddress, token)
+  const { network, updatePoolToken, poolAddress, poolTokens, isGyroEclp } = usePoolCreationForm()
+  const { reClammInitAmounts } = useReClammInitAmounts(poolAddress, token)
+  const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
-  const lastUserUpdatedTokenIdx = useRef<number | null>(null)
+  const lastUserUpdatedAmountIdx = useRef<number | null>(null)
+
+  const otherTokenInputIdx = idx === 0 ? 1 : 0
+  const otherToken = poolTokens[otherTokenInputIdx]
+
   const handleAmountChange = (idx: number, amount: string) => {
-    lastUserUpdatedTokenIdx.current = idx
+    lastUserUpdatedAmountIdx.current = idx
+
+    if (isGyroEclp && eclpInitAmountsRatio) {
+      const referenceAmount = Number(amount)
+
+      if (!poolTokens[1]?.address || !poolTokens[0]?.address) return
+
+      const areTokensInOrder =
+        poolTokens[0].address.toLowerCase() < poolTokens[1].address.toLowerCase()
+
+      const isReferenceAmountForTokenA = areTokensInOrder ? idx === 0 : idx === 1
+
+      // must consider both the token order and which token is being updated by user
+      const otherTokenAmount =
+        isReferenceAmountForTokenA === areTokensInOrder
+          ? referenceAmount / eclpInitAmountsRatio
+          : referenceAmount * eclpInitAmountsRatio
+
+      updatePoolToken(otherTokenInputIdx, { amount: otherTokenAmount.toString() })
+    }
+
     updatePoolToken(idx, { amount })
   }
 
+  // autofill other token amount for ReClamm using response from contract
   useEffect(() => {
-    if (!isReClamm || !initAmounts || lastUserUpdatedTokenIdx.current !== idx) return
+    if (!reClammInitAmounts || lastUserUpdatedAmountIdx.current !== idx) return
 
-    const otherTokenIdx = idx === 0 ? 1 : 0
-    const otherToken = poolTokens[otherTokenIdx]
+    if (!otherToken?.address || !otherToken?.data?.decimals) return
 
-    if (!otherToken?.address || !otherToken?.data?.decimals) {
-      throw new Error('Token address or decimals missing for ReClamm seed amount computation')
-    }
-
-    // Create sorted token addresses to match the order of initAmounts from contract
+    // Use sorted token addresses to find the index of the other tokenAmount in the sorted array
     const sortedAddresses = poolTokens
       .map(t => t.address?.toLowerCase())
       .filter(Boolean)
       .sort((a, b) => a!.localeCompare(b!))
-
-    // Find the index of the other token in the sorted array
-    const otherTokenIndex = sortedAddresses.indexOf(otherToken.address.toLowerCase())
+    const otherTokenAmountIdx = sortedAddresses.indexOf(otherToken.address.toLowerCase())
 
     // Update the other token's amount using the corresponding value from initAmounts
-    const otherTokenAmount = formatUnits(initAmounts[otherTokenIndex], otherToken.data.decimals)
-    updatePoolToken(otherTokenIdx, { amount: otherTokenAmount })
-    lastUserUpdatedTokenIdx.current = null
-  }, [isReClamm, idx, updatePoolToken, initAmounts, poolTokens])
+    const otherTokenAmount = formatUnits(
+      reClammInitAmounts[otherTokenAmountIdx],
+      otherToken.data.decimals
+    )
+    updatePoolToken(otherTokenInputIdx, { amount: otherTokenAmount })
+    lastUserUpdatedAmountIdx.current = null
+  }, [idx, updatePoolToken, reClammInitAmounts, poolTokens])
 
   return (
     <VStack align="start" key={idx} spacing="sm" w="full">
@@ -103,9 +130,10 @@ function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: numbe
   )
 }
 
-function SeedPoolTips() {
-  const { isReClamm, poolAddress } = usePoolCreationForm()
+function SeedPoolTypeAlert() {
+  const { isReClamm, poolAddress, isGyroEclp } = usePoolCreationForm()
   const showReClammAlert = isReClamm && !poolAddress
+  const showGyroEclpAlert = isGyroEclp
 
   const { projectName } = PROJECT_CONFIG
 
@@ -117,6 +145,16 @@ function SeedPoolTips() {
             <Text color="black">
               The ReClamm pool type requires you to deploy the pool contract before initial token
               amounts can be chosen.
+            </Text>
+          }
+          status="info"
+        />
+      ) : showGyroEclpAlert ? (
+        <BalAlert
+          content={
+            <Text color="black">
+              Gyro ECLPs should be initialized with precise amounts according to the pool's
+              configuration parameters.
             </Text>
           }
           status="info"

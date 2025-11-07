@@ -14,7 +14,7 @@ export const useReClammInitAmounts = (
   const rawAmount = parseUnits(tokenAmount!, tokenDecimals!)
   const enabled = !!poolAddress && !!tokenAddress && !!tokenAmount && !!tokenDecimals && isReClamm
 
-  const { data: initAmounts } = useReadContract({
+  const { data: reClammInitAmounts } = useReadContract({
     address: poolAddress,
     abi: parseAbi([
       'function computeInitialBalancesRaw(address, uint256) view returns (uint256[])',
@@ -24,5 +24,5 @@ export const useReClammInitAmounts = (
     query: { enabled },
   })
 
-  return { initAmounts }
+  return { reClammInitAmounts }
 }

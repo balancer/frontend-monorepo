@@ -6,7 +6,7 @@ import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
-  const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
+  const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
   const {
     poolType,
     symbol,
@@ -84,6 +84,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       centerednessMargin,
     } = reClammConfigForm.watch()
 
+    // must invert params if tokens are not in order
     const minPrice = areTokensInOrder ? initialMinPrice : invertNumber(initialMaxPrice)
     const maxPrice = areTokensInOrder ? initialMaxPrice : invertNumber(initialMinPrice)
     const targetPrice = areTokensInOrder ? initialTargetPrice : invertNumber(initialTargetPrice)
@@ -105,6 +106,20 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       priceShiftDailyRate: parseUnits(priceShiftDailyRate, PERCENTAGE_DECIMALS),
       centerednessMargin: parseUnits(centerednessMargin, PERCENTAGE_DECIMALS),
     }
+  }
+
+  if (poolType === PoolType.GyroE) {
+    const { alpha, beta, s, c, lambda } = eclpConfigForm.watch()
+
+    const eclpParams = {
+      // must invert params if tokens are not in order
+      alpha: parseUnits(areTokensInOrder ? alpha : invertNumber(beta), 18),
+      beta: parseUnits(areTokensInOrder ? beta : invertNumber(alpha), 18),
+      s: parseUnits(areTokensInOrder ? s : c, 18),
+      c: parseUnits(areTokensInOrder ? c : s, 18),
+      lambda: parseUnits(lambda, 18),
+    }
+    return { ...baseInput, poolType, eclpParams }
   }
 
   throw new Error('Invalid pool type for useCreatePoolInput')

@@ -75,7 +75,8 @@ export function usePoolFormLogic() {
   const isGyroEclp = poolType === PoolType.GyroE
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
-    const newPoolTokens = [...poolTokens]
+    const currentPoolTokens = poolCreationForm.getValues('poolTokens')
+    const newPoolTokens = [...currentPoolTokens]
     newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
     poolCreationForm.setValue('poolTokens', newPoolTokens)
   }

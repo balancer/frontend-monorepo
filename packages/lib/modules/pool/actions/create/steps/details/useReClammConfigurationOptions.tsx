@@ -50,9 +50,9 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
 
-  const currentPrice = usePoolSpotPriceWithoutRate()
-  const currentPriceMinus5 = currentPrice.times(0.95).toString()
-  const currentPricePlus5 = currentPrice.times(1.05).toString()
+  const { spotPriceWithoutRate } = usePoolSpotPriceWithoutRate()
+  const currentPriceMinus5 = spotPriceWithoutRate.times(0.95).toString()
+  const currentPricePlus5 = spotPriceWithoutRate.times(1.05).toString()
 
   const calculatePriceBounds = (targetPrice: string, spread: string) => {
     const lowerBoundPercentage = (100 - bn(spread).toNumber()) / 100
@@ -74,7 +74,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     name: 'initialTargetPrice' as const,
     label: `Target price: ${tokenSymbolsString}`,
     customInputLabel: 'Custom target price',
-    customInputPlaceholder: bn(currentPrice).toFixed(2),
+    customInputPlaceholder: bn(spotPriceWithoutRate.toString()).toFixed(2),
     options: [
       {
         label: 'Current price -5%',
@@ -84,8 +84,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       },
       {
         label: 'Current price',
-        displayValue: formatNumber(currentPrice.toString()),
-        rawValue: currentPrice.toString(),
+        displayValue: formatNumber(spotPriceWithoutRate.toString()),
+        rawValue: spotPriceWithoutRate.toString(),
         svg: CurrentPriceSVG,
       },
       {

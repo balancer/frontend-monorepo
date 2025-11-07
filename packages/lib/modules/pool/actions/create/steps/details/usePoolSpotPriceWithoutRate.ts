@@ -29,7 +29,7 @@ export function usePoolSpotPriceWithoutRate() {
   const adjustedPriceTokenA = bn(priceTokenA).div(rateTokenA)
   const adjustedPriceTokenB = bn(priceTokenB).div(rateTokenB)
 
-  const spotPrice = adjustedPriceTokenA.div(adjustedPriceTokenB)
+  const spotPriceWithoutRate = adjustedPriceTokenA.div(adjustedPriceTokenB)
 
-  return spotPrice
+  return { spotPriceWithoutRate, rateTokenA, rateTokenB }
 }
