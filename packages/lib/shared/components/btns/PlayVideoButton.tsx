@@ -18,6 +18,7 @@ export function PlayVideoButton({ size = 24 }: { size?: number }) {
         />
       }
       isRound
+      minW={size}
       shadow="md"
       variant="primary"
       w={size}

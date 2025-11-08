@@ -233,6 +233,8 @@ export function getTokens(colors: any, primaryTextColor: string) {
           '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset',
         innerRockShadowSm:
           '-2px -2px 4px 0px rgba(0, 0, 0, 0.04) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.04) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.5) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.40) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.40) inset',
+        innerRockShadowXl:
+          '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset',
         chartIconInner:
           'drop-shadow(0px 0px 0px rgba(73, 53, 29, 0.02)) drop-shadow(1px 1px 1px rgba(73, 53, 29, 0.06)) drop-shadow(3px 3px 3px rgba(73, 53, 29, 0.06)) drop-shadow(-0.5px -1px 0px #FFF)',
         chartIconOuter:
@@ -284,6 +286,8 @@ export function getTokens(colors: any, primaryTextColor: string) {
         innerRockShadowSm:
           '-2px -2px 4px 0px rgba(0, 0, 0, 0.3) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.3) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.04) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.10) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.04) inset',
 
+        innerRockShadowXl:
+          '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, -20px -20px 40px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset, 20px 20px 40px 0px rgba(255, 255, 255, 0.08) inset',
         chartIconInner:
           'drop-shadow(0px 0px 0px rgba(0, 0, 0, 0.02)) drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.06)) drop-shadow(3px 3px 3px rgba(0, 0, 0, 0.06))',
         chartIconOuter:
