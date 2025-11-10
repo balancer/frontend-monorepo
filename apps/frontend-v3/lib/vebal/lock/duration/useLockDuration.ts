@@ -10,7 +10,7 @@ import {
   isEqual,
 } from 'date-fns'
 import { range } from 'lodash'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { getMinLockEndDate } from '../lock-time.utils'
 import { useLockEndDate, UseLockEndDateProps } from './useLockEndDate'
 import { startOfDayUtc } from '@repo/lib/shared/utils/time'
@@ -41,21 +41,28 @@ export function useLockDuration({ lockedEndDate, mainnetLockedInfo }: UseLockDur
   const maxStep = differenceInWeeks(sliderMaxDate, sliderMinDate, { roundingMethod: 'ceil' })
   const stepSize = 1
 
-  const [sliderValue, setSliderValue] = useState(() => maxStep)
+  const [rawSliderValue, setRawSliderValue] = useState(() => maxStep)
 
-  const onSliderChange = (val: number) => setSliderValue(val)
+  const sliderValue = useMemo(() => {
+    const upperBounded = Math.min(rawSliderValue, maxStep)
 
-  useEffect(() => {
     if (typeof minSliderValue !== 'undefined') {
-      setSliderValue(prevValue => {
-        const minValue = minSliderValue
-        if (prevValue < minValue) {
-          return minValue
-        }
-        return prevValue
-      })
+      return Math.max(upperBounded, minSliderValue)
     }
-  }, [minSliderValue])
+
+    return Math.max(upperBounded, minStep)
+  }, [rawSliderValue, minSliderValue, maxStep, minStep])
+
+  const onSliderChange = (val: number) => {
+    const upperBounded = Math.min(val, maxStep)
+
+    if (typeof minSliderValue !== 'undefined') {
+      setRawSliderValue(Math.max(upperBounded, minSliderValue))
+      return
+    }
+
+    setRawSliderValue(Math.max(upperBounded, minStep))
+  }
 
   const lockEndDate = useMemo(() => {
     // HACK: we have the same problem as lock-time.utils.ts with daylight savings
