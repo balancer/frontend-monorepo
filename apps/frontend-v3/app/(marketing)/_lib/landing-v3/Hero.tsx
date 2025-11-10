@@ -15,7 +15,7 @@ import bgLightSrc from './images/hero-bg-light.png'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
 import { SandBg } from './shared/SandBg'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { MotionButtonProps, MotionBoxProps } from './types'
 
@@ -26,25 +26,15 @@ const MotionBox = motion(Box) as React.FC<MotionBoxProps>
 
 export function Hero() {
   const isDarkMode = useIsDarkMode()
-
-  const [shouldAnimate, setShouldAnimate] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
-
-  useEffect(() => {
-    if (isInView) {
-      setShouldAnimate(true)
-    }
-  }, [isInView])
 
   return (
     <Noise position="relative">
       <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
         <AnimatePresence>
           <motion.div
-            animate={
-              shouldAnimate ? { opacity: isDarkMode ? 0.3 : 0.5, willChange: 'opacity' } : {}
-            }
+            animate={isInView ? { opacity: isDarkMode ? 0.3 : 0.5, willChange: 'opacity' } : {}}
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.01 }}
             ref={ref}
@@ -83,7 +73,7 @@ export function Hero() {
           <VStack alignItems="start" spacing="xl">
             <MotionText
               animate={
-                shouldAnimate
+                isInView
                   ? {
                       opacity: 1,
                       filter: 'blur(0px)',
@@ -114,7 +104,7 @@ export function Hero() {
             />
             <MotionHeading
               animate={
-                shouldAnimate
+                isInView
                   ? {
                       opacity: 1,
                       y: 0,
@@ -138,7 +128,7 @@ export function Hero() {
             <Stack alignItems={{ base: 'start', md: 'center' }} direction="row" mt="0" spacing="ms">
               <MotionButton
                 animate={
-                  shouldAnimate
+                  isInView
                     ? {
                         opacity: 1,
                         willChange: 'opacity',
@@ -160,7 +150,7 @@ export function Hero() {
 
               <MotionButton
                 animate={
-                  shouldAnimate
+                  isInView
                     ? {
                         opacity: 1,
                         willChange: 'opacity',
@@ -182,7 +172,7 @@ export function Hero() {
             </Stack>
             <HStack alignItems="center" mt="xl" spacing="md">
               <MotionBox
-                animate={shouldAnimate ? { opacity: 1 } : {}}
+                animate={isInView ? { opacity: 1 } : {}}
                 as={Link}
                 h="56px"
                 href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
@@ -203,7 +193,7 @@ export function Hero() {
                 </Center>
               </MotionBox>
               <MotionText
-                animate={shouldAnimate ? { opacity: 1 } : {}}
+                animate={isInView ? { opacity: 1 } : {}}
                 initial={{ opacity: 0 }}
                 transition={{ duration: 2, delay: 1.4 }}
               >
