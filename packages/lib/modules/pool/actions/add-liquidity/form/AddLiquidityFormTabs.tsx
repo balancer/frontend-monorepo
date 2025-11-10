@@ -18,6 +18,7 @@ import { useEffect } from 'react'
 import { usePool } from '../../../PoolProvider'
 import {
   requiresProportionalInput,
+  requiresProportionalInputReason,
   supportsProportionalAddLiquidityKind,
   supportsProportionalAddLiquidityReasons,
 } from '../../LiquidityActionHelpers'
@@ -139,7 +140,7 @@ export function AddLiquidityFormTabs({
 
   function getFlexibleTabTooltipLabel(): string | undefined {
     if (requiresProportionalInput(pool)) {
-      return 'This pool requires liquidity to be added proportionally'
+      return requiresProportionalInputReason(pool)
     }
     if (isBelowMinTvlThreshold) {
       return `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`

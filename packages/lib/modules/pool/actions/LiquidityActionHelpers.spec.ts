@@ -27,9 +27,11 @@ import {
 } from '../__mocks__/pool-examples/boosted'
 import {
   balWeth8020,
+  cowAmmPoolWethGno,
   osETHPhantom,
   sDAIWeighted,
   v2SepoliaStableWithERC4626,
+  v3StableNonBoosted,
 } from '../__mocks__/pool-examples/flat'
 import { auraBal } from '../__mocks__/pool-examples/nested'
 import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
@@ -38,6 +40,7 @@ import { Pool } from '../pool.types'
 import {
   LiquidityActionHelpers,
   areEmptyAmounts,
+  requiresProportionalInput,
   roundDecimals,
   shouldUseRecoveryRemoveLiquidity,
   supportsNestedActions,
@@ -899,12 +902,45 @@ describe('supportsProportionalAddLiquidityKind', () => {
     expect(supportsProportionalAddLiquidityReasons(pool)).toBeUndefined()
   })
 
-  it('should allow proportional add for other pools (eg reClamm)', () => {
+  it('should allow proportional add for other pools (e.g. reClamm)', () => {
     const pool = getApiPoolMock(sDAIWeighted)
     pool.type = GqlPoolType.Reclamm
     pool.protocolVersion = 3
 
     expect(supportsProportionalAddLiquidityKind(pool)).toBe(true)
     expect(supportsProportionalAddLiquidityReasons(pool)).toBeUndefined()
+  })
+})
+
+describe('requiresProportionalInput', () => {
+  it('should require for gyro pools', () => {
+    const pool = getApiPoolMock(sDAIWeighted)
+    pool.type = GqlPoolType.Gyro
+
+    expect(requiresProportionalInput(pool)).toBe(true)
+    expect(requiresProportionalInput(pool)).not.toBeUndefined()
+  })
+
+  it('should require for Cow pools', () => {
+    const pool = getApiPoolMock(cowAmmPoolWethGno)
+
+    expect(requiresProportionalInput(pool)).toBe(true)
+    expect(requiresProportionalInput(pool)).not.toBeUndefined()
+  })
+
+  it('should require when unbalanced liquidity is disabled on v3', () => {
+    const pool = getApiPoolMock(v3StableNonBoosted)
+    pool.liquidityManagement = {
+      __typename: 'LiquidityManagement',
+      disableUnbalancedLiquidity: true,
+    }
+
+    expect(requiresProportionalInput(pool)).toBe(true)
+    expect(requiresProportionalInput(pool)).not.toBeUndefined()
+  })
+
+  it('should allow unbalanced add liquidity for other pools (e.g. reClamm)', () => {
+    const pool = getApiPoolMock(sDAIWeighted)
+    pool.type = GqlPoolType.Reclamm
   })
 })
