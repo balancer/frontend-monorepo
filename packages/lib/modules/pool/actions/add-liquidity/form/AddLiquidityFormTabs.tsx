@@ -19,6 +19,7 @@ import { usePool } from '../../../PoolProvider'
 import {
   requiresProportionalInput,
   supportsProportionalAddLiquidityKind,
+  supportsProportionalAddLiquidityReasons,
 } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
@@ -168,7 +169,8 @@ export function AddLiquidityFormTabs({
       label: 'Proportional',
       disabled: isDisabledProportionalTab,
       tabTooltipLabel: isDisabledProportionalTab
-        ? 'This pool does not support liquidity to be added proportionally'
+        ? supportsProportionalAddLiquidityReasons(pool) ||
+          'This pool does not support liquidity to be added proportionally'
         : undefined,
     },
   ]

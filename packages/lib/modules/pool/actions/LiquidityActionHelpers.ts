@@ -260,27 +260,33 @@ export function requiresProportionalInput(pool: Pool): boolean {
 
 // Some pool types do not support AddLiquidityKind.Proportional in the SDK
 export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
-  if (
-    isV2Pool(pool) &&
-    (pool.type === GqlPoolType.Stable || pool.type === GqlPoolType.MetaStable)
-  ) {
-    return false
+  return supportsProportionalAddLiquidityReasons(pool) === undefined
+}
+
+export function supportsProportionalAddLiquidityReasons(pool: Pool): string | undefined {
+  if (isV2Pool(pool)) {
+    if (pool.type === GqlPoolType.Stable) return reasonTemplate('v2 stable')
+    if (pool.type === GqlPoolType.MetaStable) return reasonTemplate('v2 metastable')
   }
 
   // WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
-  if (isWeightedPool2Tokens(pool)) return false
+  if (isWeightedPool2Tokens(pool)) return reasonTemplate('v2 weighted 2 tokens')
 
   // WeightedV1 pool types do not support AddLiquidityKind.Proportional in the SDK except for protocolVersion 3
-  if (!isV3Pool(pool) && isWeightedV1(pool)) return false
+  if (!isV3Pool(pool) && isWeightedV1(pool)) return reasonTemplate('weightedV1 (non v3 protocol)')
 
-  return true
+  return undefined
+}
+
+function reasonTemplate(poolType: string) {
+  return `This is a ${poolType} pool which does not support liquidity to be added proportionally`
 }
 
 export function isWeightedPool2Tokens(pool: Pool): boolean {
   if (
     isV2Pool(pool) &&
     isSameAddress(
-      (pool?.factory as Address) || '',
+      (pool.factory as Address) || '',
       getNetworkConfig(pool.chain).contracts.balancer?.WeightedPool2TokensFactory || '0xUndefined'
     )
   ) {
