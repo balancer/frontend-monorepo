@@ -33,7 +33,7 @@ import {
   UseBuildLockStepsArgs,
 } from '@bal/lib/vebal/lock/steps/useBuildLockSteps'
 import { getPreviewLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -74,30 +74,22 @@ export function VebalLockModal({
   } = useVebalLock()
   const { mainnetLockedInfo, isLoading: vebalLockDataIsLoading } = useVebalLockData()
 
-  // This value should be static when modal is opened
-  const [buildLockStepsArgs, setBuildLockStepsArgs] = useState<UseBuildLockStepsArgs>(() => ({
-    extendExpired,
-    totalAmount,
-    lockDuration,
-    isIncreasedLockAmount,
-    mainnetLockedInfo,
-  }))
-
   /*
     When lptoken: we are creating/increasing the lock amount
     When no lptoken: we are unlocking/locking
    */
-  const addedAmount = lpToken ? bn(lpToken) : totalAmount
+  const addedAmount = useMemo(() => (lpToken ? bn(lpToken) : totalAmount), [lpToken, totalAmount])
 
-  useEffect(() => {
-    setBuildLockStepsArgs({
+  const buildLockStepsArgs = useMemo<UseBuildLockStepsArgs>(
+    () => ({
       extendExpired,
       totalAmount: addedAmount,
       lockDuration,
       isIncreasedLockAmount,
       mainnetLockedInfo,
-    })
-  }, [isOpen, userAddress, isIncreasedLockAmount])
+    }),
+    [addedAmount, extendExpired, isIncreasedLockAmount, lockDuration, mainnetLockedInfo]
+  )
 
   const { transactionSteps, lockTxHash } = useBuildLockSteps(buildLockStepsArgs)
 
