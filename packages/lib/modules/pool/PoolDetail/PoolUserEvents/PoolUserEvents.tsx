@@ -1,16 +1,4 @@
-import {
-  Card,
-  VStack,
-  Heading,
-  Divider,
-  Grid,
-  GridItem,
-  Text,
-  Box,
-  HStack,
-  Link,
-  Skeleton,
-} from '@chakra-ui/react'
+import { VStack, Grid, GridItem, Text, Box, HStack, Link, Divider } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -32,6 +20,7 @@ import { BoostText } from './BoostText'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { formatDistanceToNowAbbr } from '@repo/lib/shared/utils/time'
+import { PoolTransactionsCard } from '../../PoolTransactionsCard'
 
 type PoolEventRowProps = {
   poolEvent: PoolEventItem
@@ -229,56 +218,10 @@ export default function PoolUserEvents({
   }, [pool])
 
   return (
-    <Card h={height}>
-      {isLoading && <Skeleton h="full" w="full" />}
-      {!isLoading && (
-        <VStack alignItems="flex-start" h="full" spacing="md" w="full">
-          <Heading
-            backgroundClip="text"
-            bg="font.special"
-            fontWeight="bold"
-            lineHeight="34px" // to align with 'My liquidity'
-            size="h5"
-          >
-            My transactions
-          </Heading>
-          <Divider />
-          <Box display={{ base: 'none', md: 'block' }} w="full">
-            <Grid gap="4" templateColumns={{ base: '1fr', md: GRID_COLUMNS }} w="full">
-              {['Action', 'Tokens', 'Value', 'Time'].map((label, index) => (
-                <GridItem
-                  key={label}
-                  mr={index === 3 ? 'md' : 0}
-                  textAlign={index > 1 ? 'right' : 'left'}
-                >
-                  <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
-                    {label}
-                  </Text>
-                </GridItem>
-              ))}
-            </Grid>
-            <Divider mt="md" />
-          </Box>
-          <Box overflowY="auto" w="full">
-            {isEmpty(poolEvents) ? (
-              <>
-                <Text variant="secondary">No recent transactions</Text>
-                <Text variant="secondary">
-                  Note: Recent transactions may take a few minutes to display here.
-                </Text>
-              </>
-            ) : (
-              poolEvents.map(poolEvent => (
-                <PoolEventRow
-                  chain={chain}
-                  key={poolEvent.id}
-                  poolEvent={poolEvent}
-                  txUrl={getBlockExplorerTxUrl(poolEvent.tx, poolEvent.chain)}
-                  usdValue={toCurrency(poolEvent.valueUSD)}
-                />
-              ))
-            )}
-          </Box>
+    <PoolTransactionsCard
+      cardProps={{ h: height }}
+      footer={
+        <>
           <Divider />
           <HStack mt="auto" spacing="4">
             <Text fontSize="0.85rem" variant="secondary">
@@ -286,8 +229,30 @@ export default function PoolUserEvents({
             </Text>
             {showBoostValue && <BoostText pool={pool} />}
           </HStack>
+        </>
+      }
+      hasNoTransactions={isEmpty(poolEvents)}
+      headerTemplateColumns={GRID_COLUMNS}
+      isLoading={isLoading}
+      renderNoTransactions={() => (
+        <VStack alignItems="flex-start" spacing="1">
+          <Text variant="secondary">No recent transactions</Text>
+          <Text variant="secondary">
+            Note: Recent transactions may take a few minutes to display here.
+          </Text>
         </VStack>
       )}
-    </Card>
+      title="My transactions"
+    >
+      {poolEvents.map(poolEvent => (
+        <PoolEventRow
+          chain={chain}
+          key={poolEvent.id}
+          poolEvent={poolEvent}
+          txUrl={getBlockExplorerTxUrl(poolEvent.tx, poolEvent.chain)}
+          usdValue={toCurrency(poolEvent.valueUSD)}
+        />
+      ))}
+    </PoolTransactionsCard>
   )
 }
