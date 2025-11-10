@@ -28,7 +28,7 @@ import { FeatureCard } from './shared/FeatureCard'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { motion, useInView } from 'framer-motion'
+import { AnimationGeneratorType, motion, useInView } from 'framer-motion'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 
 const MotionGrid = motion(Grid)
@@ -95,7 +95,7 @@ export function Grow() {
       y: 0,
       scale: 1,
       transition: {
-        type: 'spring',
+        type: 'spring' as AnimationGeneratorType,
         stiffness: 100,
         damping: 10,
       },
