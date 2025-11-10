@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   CardHeader,
+  Divider,
   HStack,
   Skeleton,
   Text,
@@ -166,33 +167,50 @@ export function RemoveLiquidityForm() {
             )}
             <SettingsAlert />
             {!requiresProportionalInput(pool) && !isV3LBP(pool) && (
-              <HStack>
+              <HStack w="full">
                 <ButtonGroup
                   currentOption={activeTab}
+                  fontSize="md"
                   groupId="remove"
+                  minWidth="116px"
                   onChange={toggleTab}
                   options={TABS}
-                  size="xxs"
+                  size="sm"
                 />
                 <Popover trigger="hover">
                   <PopoverTrigger>
                     <Box
                       _hover={{ opacity: 1 }}
-                      opacity="0.5"
+                      opacity="0.6"
                       transition="opacity 0.2s var(--ease-out-cubic)"
                     >
                       <InfoIcon />
                     </Box>
                   </PopoverTrigger>
                   <PopoverContent maxW="300px" p="sm" w="auto">
-                    <Text fontSize="sm" variant="secondary">
-                      Proportional liquidity removal does not impact the prices of tokens on exit,
-                      which maximizes your returns. Alternatively, Single-token removal may be more
-                      convenient in certain situations but may reduce the value returned to you due
-                      to price impact.
-                    </Text>
+                    <VStack align="start" spacing="sm">
+                      <Box>
+                        <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                          Proportional Removal
+                        </Text>
+                        <Text fontSize="sm" variant="secondary">
+                          Proportional liquidity removal keeps token prices unchanged, ensuring zero
+                          price impact to maximize your returns.
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                          Single token Removal
+                        </Text>
+                        <Text fontSize="sm" variant="secondary">
+                          Single-token removal can be convenient but may lower your returns due to
+                          price impact.
+                        </Text>
+                      </Box>
+                    </VStack>
                   </PopoverContent>
                 </Popover>
+                <Divider w="full" />
               </HStack>
             )}
             <VStack align="start" spacing="md" w="full">
@@ -203,7 +221,9 @@ export function RemoveLiquidityForm() {
                   onPercentChanged={setHumanBptInPercent}
                   value={totalUSDValue}
                 >
-                  <Text fontSize="sm">Amount</Text>
+                  <Text fontSize="sm" fontWeight="bold">
+                    Amount
+                  </Text>
                   <Text fontSize="sm" variant="secondary">
                     {fNum('percentage', humanBptInPercent / 100)}
                   </Text>
@@ -266,7 +286,7 @@ export function RemoveLiquidityForm() {
               priceImpactQuery={priceImpactQuery}
               simulationQuery={simulationQuery}
             />
-            <TooltipWithTouch label={isDisabled ? disabledReason : ''}>
+            <TooltipWithTouch fullWidth label={isDisabled ? disabledReason : ''}>
               <Button
                 isDisabled={isDisabled || isWarning}
                 isLoading={simulationQuery.isLoading || priceImpactQuery.isLoading}

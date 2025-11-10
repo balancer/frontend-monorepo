@@ -24,7 +24,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { GqlChainValues } from '@repo/lib/config/networks'
-import { hyperEvm } from '../chains/custom/hyperevm'
+import { hyperEVM } from '@balancer/sdk'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.
   https://viem.sh/docs/clients/transports/fallback#fallback-transport
@@ -86,7 +86,7 @@ const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
   [GqlChain.Mode]: { iconUrl: '/images/chains/MODE.svg', ...mode },
   [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
   [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
-  [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEvm },
+  [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEVM },
   [GqlChain.Plasma]: { iconUrl: '/images/chains/PLASMA.svg', ...plasma },
 } as const
 

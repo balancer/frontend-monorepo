@@ -270,8 +270,8 @@ export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
   // WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
   if (isWeightedPool2Tokens(pool)) return false
 
-  // WeightedV1 pool types do not support AddLiquidityKind.Proportional in the SDK
-  if (isWeightedV1(pool)) return false
+  // WeightedV1 pool types do not support AddLiquidityKind.Proportional in the SDK except for protocolVersion 3
+  if (!isV3Pool(pool) && isWeightedV1(pool)) return false
 
   return true
 }

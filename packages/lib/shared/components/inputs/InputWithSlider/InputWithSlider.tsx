@@ -70,21 +70,21 @@ export const InputWithSlider = forwardRef(
     const boxShadow = isWarning ? `0 0 0 1px ${boxShadowColor}` : undefined
 
     return (
-      <VStack spacing="xs" w="full">
+      <VStack spacing="sm" w="full">
         {children && (
           <HStack justifyContent="space-between" w="full">
             {children}
           </HStack>
         )}
         <Box
-          bg="background.level1"
+          bg="background.level2"
           border="white"
           borderRadius="md"
           boxShadow={boxShadow}
           px="md"
           py="sm"
           ref={ref}
-          shadow="innerBase"
+          shadow="md"
           w="full"
           {...boxProps}
         >
@@ -115,15 +115,18 @@ export const InputWithSlider = forwardRef(
                 _focusVisible={{
                   borderColor: 'transparent',
                   boxShadow: 'none',
+                  shadow: 'none',
                 }}
                 _hover={{
                   borderColor: 'transparent',
                   boxShadow: 'none',
                 }}
                 aria-valuenow={sliderPercent}
+                boxShadow="none"
                 fontSize="2xl"
                 fontWeight="medium"
                 pl="0"
+                shadow="none"
               />
             </NumberInput>
             <Box alignSelf="center" pr="sm" w="50%">
@@ -134,7 +137,13 @@ export const InputWithSlider = forwardRef(
                 onChange={handleSliderChange}
                 value={sliderPercent}
               >
-                <SliderTrack>
+                <SliderTrack
+                  bg="background.level0"
+                  borderBottom="1px solid"
+                  borderColor="background.level4"
+                  height="6px"
+                  shadow="innerBase"
+                >
                   <SliderFilledTrack />
                 </SliderTrack>
                 <SliderThumb />

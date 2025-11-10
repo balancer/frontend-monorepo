@@ -1,6 +1,7 @@
 import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { useToday } from '@repo/lib/shared/hooks/date.hooks'
 import {
+  addHours,
   addMonths,
   addWeeks,
   differenceInMonths,
@@ -16,17 +17,12 @@ import { startOfDayUtc } from '@repo/lib/shared/utils/time'
 import { UseVebalLockDataResult } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 
 export interface UseLockDurationProps extends UseLockEndDateProps {
-  initialValue?: number
   mainnetLockedInfo: UseVebalLockDataResult['mainnetLockedInfo']
 }
 
 export type UseLockDurationResult = ReturnType<typeof useLockDuration>
 
-export function useLockDuration({
-  initialValue = 0,
-  lockedEndDate,
-  mainnetLockedInfo,
-}: UseLockDurationProps) {
+export function useLockDuration({ lockedEndDate, mainnetLockedInfo }: UseLockDurationProps) {
   const today = useToday()
 
   const { minLockEndDate, maxLockEndDate } = useLockEndDate({ lockedEndDate })
@@ -41,7 +37,11 @@ export function useLockDuration({
       : undefined
   }, [lockedEndDate, sliderMinDate])
 
-  const [sliderValue, setSliderValue] = useState(() => minSliderValue ?? initialValue)
+  const minStep = 0
+  const maxStep = differenceInWeeks(sliderMaxDate, sliderMinDate, { roundingMethod: 'ceil' })
+  const stepSize = 1
+
+  const [sliderValue, setSliderValue] = useState(() => maxStep)
 
   const onSliderChange = (val: number) => setSliderValue(val)
 
@@ -57,12 +57,9 @@ export function useLockDuration({
     }
   }, [minSliderValue])
 
-  const minStep = 0
-  const maxStep = differenceInWeeks(sliderMaxDate, sliderMinDate, { roundingMethod: 'ceil' })
-  const stepSize = 1
-
   const lockEndDate = useMemo(() => {
-    const value = startOfDayUtc(addWeeks(sliderMinDate, sliderValue))
+    // HACK: we have the same problem as lock-time.utils.ts with daylight savings
+    const value = startOfDayUtc(addWeeks(addHours(sliderMinDate, 2), sliderValue))
 
     if (value >= sliderMaxDate) {
       return sliderMaxDate

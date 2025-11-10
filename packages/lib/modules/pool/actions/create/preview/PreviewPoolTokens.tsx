@@ -31,6 +31,7 @@ export function PreviewPoolTokens() {
             const { address, chain, symbol, name } = token.data
 
             const tokenUsdValue = token.usdPrice || priceFor(address, chain)
+            const tokenPriceDisplay = toCurrency(tokenUsdValue, { abbreviated: false })
 
             return (
               <CardDataRow
@@ -38,7 +39,7 @@ export function PreviewPoolTokens() {
                   <IdentifyTokenCell address={address} chain={chain} name={name} symbol={symbol} />,
                   <HStack justify="end">
                     {tokenUsdValue ? (
-                      <Text>{toCurrency(tokenUsdValue, { abbreviated: false })}</Text>
+                      <Text>{tokenPriceDisplay}</Text>
                     ) : (
                       <TokenMissingPriceWarning message={tokenPriceTip} />
                     )}

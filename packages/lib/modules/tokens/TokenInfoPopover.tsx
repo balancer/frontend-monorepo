@@ -12,7 +12,7 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { Address } from 'viem'
-import { CopyTokenAddressButton } from './CopyTokenAddressButton'
+import { CopyAddressButton } from './CopyAddressButton'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { CoingeckoIcon } from '@repo/lib/shared/components/icons/CoingeckoIcon'
 import { AddTokenToWalletButton } from './AddTokenToWalletButton'
@@ -62,7 +62,7 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
               {abbreviateAddress(tokenAddress)}
             </Text>
             <HStack spacing="xs">
-              <CopyTokenAddressButton color="inherit" tokenAddress={tokenAddress} />
+              <CopyAddressButton address={tokenAddress} color="inherit" />
               <AddTokenToWalletButton chain={chain} color="inherit" tokenAddress={tokenAddress} />
               {!isBpt && coingeckoUrl && (
                 <Tooltip label="View on Coingecko">

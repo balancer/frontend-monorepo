@@ -4,7 +4,7 @@ import { useSteps } from '@chakra-ui/react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
+import { ProjectInfoForm, SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLocalStorage } from 'usehooks-ts'
@@ -16,6 +16,7 @@ import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
+import { useRouter } from 'next/navigation'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -27,17 +28,18 @@ const steps = [
 ]
 
 export function useLbpFormLogic() {
+  const router = useRouter()
   const saleStructureForm = usePersistentForm<SaleStructureForm>(
     LS_KEYS.LbpConfig.SaleStructure,
     {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
-      userActions: 'buy_and_sell',
+      userActions: UserActions.BUY_AND_SELL,
       fee: 1.0,
       startDateTime: '',
       endDateTime: '',
       collateralTokenAddress: '',
-      weightAdjustmentType: 'linear_90_10',
+      weightAdjustmentType: WeightAdjustmentType.LINEAR_90_10,
       customStartWeight: 90,
       customEndWeight: 10,
       saleTokenAmount: '',
@@ -79,19 +81,20 @@ export function useLbpFormLogic() {
     setPersistedStepIndex(activeStepIndex)
   }, [activeStepIndex, setPersistedStepIndex])
 
-  const [, setPoolAddress] = useLocalStorage<Address | undefined>(
+  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const resetLbpCreation = () => {
+    setPoolAddress(undefined)
     saleStructureForm.resetToInitial()
     projectInfoForm.resetToInitial()
     setPersistedStepIndex(0)
     setActiveStep(0)
-    setPoolAddress(undefined)
     setIsMetadataSaved(false)
+    router.replace('/lbp/create')
   }
 
   const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } =
@@ -150,6 +153,8 @@ export function useLbpFormLogic() {
     launchTokenMetadata,
     launchToken,
     isCollateralNativeAsset,
+    poolAddress,
+    setPoolAddress,
   }
 }
 

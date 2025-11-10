@@ -11,9 +11,10 @@ import {
   RadioCardGroup,
   type RadioCardOption,
 } from '@repo/lib/shared/components/inputs/RadioCardGroup'
+import { INITIAL_POOL_TOKENS } from '../../constants'
 
 export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> }) {
-  const { resetPoolCreationForm } = usePoolCreationForm()
+  const { updatePoolTokens } = usePoolCreationForm()
 
   const { supportedNetworks } = PROJECT_CONFIG
   const networkOptions: RadioCardOption<GqlChain>[] = [
@@ -40,8 +41,8 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
           <RadioCardGroup
             name={field.name}
             onChange={(value: GqlChain) => {
-              resetPoolCreationForm()
               field.onChange(value)
+              updatePoolTokens(INITIAL_POOL_TOKENS) // reset because tokens are network specific
             }}
             options={networkOptions}
             radioCardProps={{

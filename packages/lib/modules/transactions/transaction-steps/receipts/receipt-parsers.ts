@@ -176,6 +176,22 @@ export function parseRecoveryModeChangedReceipt({ receiptLogs }: ParseProps) {
   }
 }
 
+export function parseLoopsDepositReceipt({ receiptLogs, userAddress }: ParseProps) {
+  const amount = getIncomingLogsLoopsDeposit(receiptLogs, userAddress)
+
+  return {
+    receivedToken: _toHumanAmount('0xc76995054ce51dfbbc954840d699b2f33d2538ee', amount, 18), // TODO: removed hardcoded address
+  }
+}
+
+export function parseLoopsWithdrawReceipt({ receiptLogs, userAddress }: ParseProps) {
+  const amount = getIncomingLogsLoopsWithdraw(receiptLogs, userAddress)
+
+  return {
+    receivedToken: _toHumanAmount('0xc76995054ce51dfbbc954840d699b2f33d2538ee', amount, 18), // TODO: removed hardcoded address
+  }
+}
+
 /*
   rawValue and tokenDecimals should always be valid so we use default values to avoid complex error handling
 */
@@ -262,6 +278,26 @@ function getIncomingLogsLstWithdrawn(logs: Log[], userAddress?: Address) {
   })
 
   return test[0]?.args?.amountAssets
+}
+
+function getIncomingLogsLoopsDeposit(logs: Log[], userAddress?: Address) {
+  return parseEventLogs({
+    abi: [
+      parseAbiItem(
+        'event Deposit(address indexed caller, address indexed receiver, uint256 sharesMinted, uint256 navIncreaseEth, uint256 totalCollateralEth, uint256 totalDebtEth, uint256 totalSupply)'
+      ),
+    ],
+    args: { receiver: userAddress },
+    logs,
+  })[0]?.args?.sharesMinted
+}
+
+function getIncomingLogsLoopsWithdraw(logs: Log[], userAddress?: Address) {
+  return parseEventLogs({
+    abi: [parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)')],
+    args: { to: userAddress },
+    logs,
+  })[0]?.args?.value
 }
 
 function filterEdgeCases(tokens: HumanTokenAmount[], chain: GqlChain) {

@@ -3,7 +3,13 @@ import type { NextConfig } from 'next'
 /** @type {import('next').NextConfig} */
 const config: NextConfig = {
   webpack: config => {
-    config.resolve.fallback = { fs: false, net: false, tls: false }
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+      '@react-native-async-storage/async-storage': false, // rainbowkit tries to find this during the build but we're not in react native here
+    }
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
     return config
   },
@@ -19,6 +25,7 @@ const config: NextConfig = {
         hostname: '**',
       },
     ],
+    minimumCacheTTL: 60,
   },
   transpilePackages: ['@repo/lib'],
 
@@ -42,6 +49,15 @@ const config: NextConfig = {
       redirects.push({
         source: '/mabeets',
         destination: 'https://ma.beets.fi/',
+        permanent: false,
+      })
+    }
+
+    // TODO: remove when loops goes live
+    if (process.env.NEXT_PUBLIC_APP_ENV === 'prod') {
+      redirects.push({
+        source: '/loops',
+        destination: '/',
         permanent: false,
       })
     }

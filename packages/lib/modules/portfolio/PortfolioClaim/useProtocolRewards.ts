@@ -16,7 +16,7 @@ export const claimableVeBalRewardsTokens: string[] = [
 
 export function useProtocolRewards() {
   const { userAddress, isConnected } = useUserAccount()
-  const { priceFor, getToken } = useTokens()
+  const { priceFor, getToken, isLoadingTokens } = useTokens()
 
   const networkConfig = getNetworkConfig(GqlChain.Mainnet)
 
@@ -33,7 +33,7 @@ export function useProtocolRewards() {
     functionName: 'claimTokens',
     args: [userAddress, claimableVeBalRewardsTokens],
     query: {
-      enabled: isConnected && isBalancer, // protocol rewards are only available for balancer
+      enabled: isConnected && !isLoadingTokens && isBalancer, // protocol rewards are only available for balancer
       select: data => {
         return (data as bigint[]).map((clBalance, index) => {
           const tokenAddress = claimableVeBalRewardsTokens[index]
