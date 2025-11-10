@@ -12,6 +12,7 @@ import {
   Heading,
   Skeleton,
   Text,
+  VStack,
 } from '@chakra-ui/react'
 
 export type PoolTransactionsCardHeaderCell = {
@@ -26,7 +27,7 @@ export type PoolTransactionsCardProps = {
   headerCells?: PoolTransactionsCardHeaderCell[]
   headerTemplateColumns: string
   hasNoTransactions: boolean
-  renderNoTransactions: () => ReactNode
+  renderNoTransactions?: () => ReactNode
   children: ReactNode
   footer?: ReactNode
   cardProps?: CardProps
@@ -42,6 +43,15 @@ const DEFAULT_HEADER_CELLS: PoolTransactionsCardHeaderCell[] = [
   { label: 'Value', textAlign: 'right' },
   { label: 'Time', textAlign: 'right', marginRight: 'md' },
 ]
+
+const DEFAULT_NO_TRANSACTIONS_STATE = (
+  <VStack alignItems="flex-start" spacing="1">
+    <Text variant="secondary">No recent transactions</Text>
+    <Text variant="secondary">
+      Note: Recent transactions may take a few minutes to display here.
+    </Text>
+  </VStack>
+)
 
 export function PoolTransactionsCard({
   title,
@@ -59,6 +69,7 @@ export function PoolTransactionsCard({
   contentAlignItems = 'flex-start',
 }: PoolTransactionsCardProps) {
   const cells = headerCells ?? DEFAULT_HEADER_CELLS
+  const noTransactionsState = renderNoTransactions ?? DEFAULT_NO_TRANSACTIONS_STATE
 
   return (
     <Card ref={cardRef} {...cardProps}>
@@ -101,7 +112,7 @@ export function PoolTransactionsCard({
             <Divider mt="md" />
           </Box>
           <Box overflowY="auto" w="full" {...listContainerProps}>
-            {hasNoTransactions ? renderNoTransactions() : children}
+            {hasNoTransactions ? noTransactionsState : children}
           </Box>
           {footer}
         </Box>

@@ -1,4 +1,4 @@
-import { VStack, Grid, GridItem, Text, Box, HStack, Link } from '@chakra-ui/react'
+import { Grid, GridItem, Text, Box, HStack, Link } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import {
   GetPoolEventsQuery,
@@ -66,14 +66,6 @@ export function MyTransactions({
         overflowX: 'hidden',
         overflowY: 'auto',
       }}
-      renderNoTransactions={() => (
-        <VStack alignItems="flex-start" spacing="1">
-          <Text variant="secondary">No recent transactions</Text>
-          <Text variant="secondary">
-            Note: Recent transactions may take a few minutes to display here.
-          </Text>
-        </VStack>
-      )}
       title="My transactions"
     >
       {!isEmptyState &&
