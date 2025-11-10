@@ -15,7 +15,6 @@ import { MotionButtonProps } from './types'
 const MotionButton = motion(Button) as React.FC<MotionButtonProps>
 
 export function FooterCta() {
-  const [shouldAnimate, setShouldAnimate] = useState(false)
   const [patternProgress, setPatternProgress] = useState(0)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
@@ -24,7 +23,6 @@ export function FooterCta() {
     let interval: NodeJS.Timeout | null = null
 
     if (isInView) {
-      setShouldAnimate(true)
       interval = setInterval(() => {
         setPatternProgress(prev => {
           if (prev >= 100) {
@@ -113,7 +111,7 @@ export function FooterCta() {
           </Box>
           <HStack justifyContent="center" ref={ref} spacing="md">
             <MotionButton
-              animate={shouldAnimate ? { opacity: 1 } : {}}
+              animate={isInView ? { opacity: 1 } : {}}
               as={Link}
               href="https://docs.balancer.fi"
               initial={{ opacity: 0 }}
@@ -128,7 +126,7 @@ export function FooterCta() {
               View v3 docs
             </MotionButton>
             <MotionButton
-              animate={shouldAnimate ? { opacity: 1 } : {}}
+              animate={isInView ? { opacity: 1 } : {}}
               as={Link}
               href="https://github.com/balancer/scaffold-balancer-v3"
               initial={{ opacity: 0 }}
