@@ -82,9 +82,7 @@ export function PoolTransactionsCard({
           >
             {title}
           </Heading>
-
           <Divider />
-
           <Box display={{ base: 'none', md: 'block' }} w="full">
             <Grid
               gap="4"
@@ -102,11 +100,9 @@ export function PoolTransactionsCard({
             </Grid>
             <Divider mt="md" />
           </Box>
-
           <Box overflowY="auto" w="full" {...listContainerProps}>
             {hasNoTransactions ? renderNoTransactions() : children}
           </Box>
-
           {footer}
         </Box>
       )}
