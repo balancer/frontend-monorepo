@@ -6,13 +6,18 @@ import { PoolSettings } from './PoolSettings'
 import { ReClammConfiguration } from './ReClammConfiguration'
 import { SimilarPoolsModal } from '../../modal/SimilarPoolsModal'
 import { GyroEclpConfiguration } from './GyroEclpConfiguration'
+import { useValidateEclpParams } from './useValidateEclpParams'
 
 export function PoolDetailsStep() {
-  const { poolCreationForm, isReClamm, isGyroEclp } = usePoolCreationForm()
+  const { poolCreationForm, reClammConfigForm, eclpConfigForm, isReClamm, isGyroEclp } =
+    usePoolCreationForm()
+  const { isEclpParamsValid } = useValidateEclpParams()
 
   const isPoolCreationFormValid = poolCreationForm.formState.isValid
-  const isReClammFormValid = !isReClamm || poolCreationForm.formState.isValid
-  const isDisabled = !isPoolCreationFormValid || !isReClammFormValid
+  const isReClammFormValid = !isReClamm || reClammConfigForm.formState.isValid
+  const isGyroEclpFormValid = !isGyroEclp || (eclpConfigForm.formState.isValid && isEclpParamsValid)
+
+  const isDisabled = !isPoolCreationFormValid || !isReClammFormValid || !isGyroEclpFormValid
 
   return (
     <>

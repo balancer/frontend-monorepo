@@ -7,12 +7,19 @@ import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
 import { calculateRotationComponents } from './gyro.helpers'
 import { useEffect } from 'react'
 import { MAX_LAMBDA } from '../../constants'
+import { useValidateEclpParams } from './useValidateEclpParams'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function GyroEclpConfiguration() {
+  const { errorMessage } = useValidateEclpParams()
+
   return (
     <VStack align="start" spacing="xl" w="full">
       <EclpParamHeader />
       <EclpParamInputs />
+      {errorMessage && (
+        <BalAlert content={errorMessage} status="error" title="Invalid E-CLP parameters" />
+      )}
     </VStack>
   )
 }

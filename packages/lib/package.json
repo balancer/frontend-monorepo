@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.13.8",
+    "@balancer-labs/balancer-maths": "^0.0.37",
     "@balancer/sdk": "4.9.0",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
