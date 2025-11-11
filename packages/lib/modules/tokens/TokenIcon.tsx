@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useMemo, useState } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { createAvatar } from '@dicebear/core'

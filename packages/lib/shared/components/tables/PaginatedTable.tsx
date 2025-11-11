@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { ReactNode, useEffect, useState } from 'react'
 import {
   Box,

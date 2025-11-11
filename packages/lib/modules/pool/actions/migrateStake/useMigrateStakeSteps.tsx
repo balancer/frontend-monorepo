@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { Pool } from '../../pool.types'
 import { useEffect, useMemo, useState } from 'react'

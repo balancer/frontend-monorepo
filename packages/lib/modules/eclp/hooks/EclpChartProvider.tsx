@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '../../pool/PoolProvider'

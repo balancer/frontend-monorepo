@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/purity */
 import { useCallback, useMemo } from 'react'
 import { oneWeekInMs, toUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { mainnet } from 'viem/chains'

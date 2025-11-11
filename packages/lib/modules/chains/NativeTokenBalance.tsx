@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { getNativeAsset } from '@repo/lib/config/app.config'

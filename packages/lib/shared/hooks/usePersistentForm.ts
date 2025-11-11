@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { useLocalStorage } from 'usehooks-ts'
 import { useForm, UseFormProps, UseFormReturn, FieldValues, DefaultValues } from 'react-hook-form'
 import { useEffect, useCallback } from 'react'

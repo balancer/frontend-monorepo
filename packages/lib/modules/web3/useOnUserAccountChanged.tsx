@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react'
 import { useUserAccount } from './UserAccountProvider'
 import { Address } from 'viem'

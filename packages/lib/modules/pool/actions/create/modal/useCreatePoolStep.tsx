@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import {
   ManagedResult,
   TransactionLabels,

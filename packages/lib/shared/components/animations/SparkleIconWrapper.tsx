@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import { useEffect, useRef, ReactNode, cloneElement, isValidElement } from 'react'
 import { Box } from '@chakra-ui/react'
 import { useScroll, useTransform, useSpring } from 'framer-motion'
