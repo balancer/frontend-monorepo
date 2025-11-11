@@ -9,7 +9,7 @@ import { captureFatalError } from '@repo/lib/shared/utils/query-errors'
 import { secs } from '@repo/lib/shared/utils/time'
 import { AlertStatus, ToastId, useToast } from '@chakra-ui/react'
 import { keyBy, orderBy, take } from 'lodash'
-import { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
+import { ReactNode, createContext, useCallback, useEffect, useRef, useState } from 'react'
 import { Hash } from 'viem'
 import { useConfig, usePublicClient } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
@@ -77,10 +77,146 @@ const TransactionStatusToastStatusMapping: Record<TransactionStatus, AlertStatus
 }
 
 export function useRecentTransactionsLogic() {
-  const [transactions, setTransactions] = useState<Record<string, TrackedTransaction>>({})
+  const hasHydratedTransactions = useRef(false)
+  const [transactions, setTransactions] = useState<Record<string, TrackedTransaction>>(() => {
+    if (typeof window === 'undefined') {
+      return {}
+    }
+
+    const storedTransactions = window.localStorage.getItem(RECENT_TRANSACTIONS_KEY)
+
+    if (!storedTransactions) {
+      return {}
+    }
+
+    try {
+      const parsedTransactions = JSON.parse(storedTransactions) as Record<
+        string,
+        TrackedTransaction
+      >
+      return parsedTransactions
+    } catch (error) {
+      console.error('Failed to parse recent transactions from localStorage', error)
+      return {}
+    }
+  })
+
   const toast = useToast()
   const publicClient = usePublicClient()
   const config = useConfig()
+
+  // these functions need to be declared before being accessed
+  function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    window.localStorage.setItem(
+      RECENT_TRANSACTIONS_KEY,
+      JSON.stringify(customUpdate || transactions)
+    )
+  }
+
+  function updateTrackedTransaction(hash: Hash, updatePayload: UpdateTrackedTransaction) {
+    // attempt to find this transaction in the cache
+    const cachedTransaction = transactions[hash]
+
+    if (!cachedTransaction) {
+      console.log('Cannot update a cached tracked transaction', { hash, transactions })
+      throw new Error('Cannot update a cached tracked transaction that does not exist.')
+    }
+
+    const updatedCachedTransaction = {
+      ...cachedTransaction,
+      ...updatePayload,
+    }
+
+    const updatedCache = {
+      ...transactions,
+      [hash]: updatedCachedTransaction,
+    }
+
+    setTransactions(updatedCache)
+    updateLocalStorage(updatedCache)
+
+    const duration = updatePayload.duration
+
+    // update the relevant toast too
+    if (updatedCachedTransaction.toastId) {
+      if (updatePayload.status === 'timeout' || updatePayload.status === 'unknown') {
+        // Close the toast as these errors are shown as alerts inside the TransactionStepButton
+        return toast.close(updatedCachedTransaction.toastId)
+      }
+
+      toast.update(updatedCachedTransaction.toastId, {
+        status: TransactionStatusToastStatusMapping[updatePayload.status],
+        title: updatedCachedTransaction.label,
+        description: updatedCachedTransaction.description,
+        isClosable: true,
+        duration: duration || duration === null ? duration : secs(10).toMs(),
+        render: ({ ...rest }) => (
+          <Toast
+            linkUrl={getBlockExplorerTxUrl(
+              updatedCachedTransaction.hash,
+              updatedCachedTransaction.chain
+            )}
+            {...rest}
+          />
+        ),
+      })
+    }
+  }
+
+  function addTrackedTransaction(
+    trackedTransaction: TrackedTransaction,
+    showToast: boolean = true
+  ) {
+    // add a toast for this transaction, rather than emitting a new toast
+    // on updates for the same transaction, we will modify the same toast
+    // using updateTrackedTransaction.
+    let toastId: ToastId | undefined = undefined
+    // Edge case: if the transaction is confirmed we don't show the toast
+    if (trackedTransaction.status !== 'confirmed' && showToast) {
+      toastId = toast({
+        title: trackedTransaction.label,
+        description: trackedTransaction.description,
+        status: 'loading',
+        duration: trackedTransaction.duration ?? null,
+        isClosable: true,
+        render: ({ ...rest }) => (
+          <Toast
+            linkUrl={getBlockExplorerTxUrl(trackedTransaction.hash, trackedTransaction.chain)}
+            {...rest}
+          />
+        ),
+      })
+    }
+
+    if (!trackedTransaction.hash) {
+      throw new Error('Attempted to add a transaction to the cache without a hash.')
+    }
+    // Make sure to store a reference to the toast on this transaction
+    const updatedTrackedTransactions = {
+      ...transactions,
+      [trackedTransaction.hash]: { ...trackedTransaction, toastId },
+    }
+
+    // keep only the 'n' most recent transactions
+    const mostRecentTransactions = keyBy(
+      take(
+        orderBy(Object.values(updatedTrackedTransactions), 'timestamp', 'desc'),
+        NUM_RECENT_TRANSACTIONS
+      ),
+      'hash'
+    )
+
+    setTransactions(mostRecentTransactions)
+    updateLocalStorage(updatedTrackedTransactions)
+  }
+
+  function isTxTracked(txHash: Hash) {
+    return !!transactions[txHash]
+  }
 
   // when loading transactions from the localStorage cache and we identify any unconfirmed
   // transactions, we should fetch the receipt of the transactions
@@ -140,20 +276,27 @@ export function useRecentTransactionsLogic() {
       updateLocalStorage(updatePayload)
     },
 
-    [publicClient]
+    [publicClient, config, updateLocalStorage]
   )
 
-  // fetch recent transactions from local storage
+  // confirm the status of any past confirming transactions on load
   useEffect(() => {
-    const _recentTransactions = localStorage.getItem(RECENT_TRANSACTIONS_KEY)
-    if (_recentTransactions) {
-      const recentTransactions = JSON.parse(_recentTransactions)
-      setTransactions(recentTransactions)
-      // confirm the status of any past confirming transactions
-      // on load
-      waitForUnconfirmedTransactions(recentTransactions)
+    if (hasHydratedTransactions.current) {
+      return
     }
-  }, [])
+
+    if (!Object.keys(transactions).length) {
+      return
+    }
+
+    hasHydratedTransactions.current = true
+
+    const timeoutId = window.setTimeout(() => {
+      void waitForUnconfirmedTransactions(transactions)
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [transactions, waitForUnconfirmedTransactions])
 
   useInterval(() => {
     const safeAppsSdk = new SafeAppsSDK()
@@ -191,114 +334,9 @@ export function useRecentTransactionsLogic() {
     })
   }, 5000)
 
-  function addTrackedTransaction(
-    trackedTransaction: TrackedTransaction,
-    showToast: boolean = true
-  ) {
-    // add a toast for this transaction, rather than emitting a new toast
-    // on updates for the same transaction, we will modify the same toast
-    // using updateTrackedTransaction.
-    let toastId: ToastId | undefined = undefined
-    // Edge case: if the transaction is confirmed we don't show the toast
-    if (trackedTransaction.status !== 'confirmed' && showToast) {
-      toastId = toast({
-        title: trackedTransaction.label,
-        description: trackedTransaction.description,
-        status: 'loading',
-        duration: trackedTransaction.duration ?? null,
-        isClosable: true,
-        render: ({ ...rest }) => (
-          <Toast
-            linkUrl={getBlockExplorerTxUrl(trackedTransaction.hash, trackedTransaction.chain)}
-            {...rest}
-          />
-        ),
-      })
-    }
-
-    if (!trackedTransaction.hash) {
-      throw new Error('Attempted to add a transaction to the cache without a hash.')
-    }
-    // Make sure to store a reference to the toast on this transaction
-    const updatedTrackedTransactions = {
-      ...transactions,
-      [trackedTransaction.hash]: { ...trackedTransaction, toastId },
-    }
-
-    // keep only the 'n' most recent transactions
-    const mostRecentTransactions = keyBy(
-      take(
-        orderBy(Object.values(updatedTrackedTransactions), 'timestamp', 'desc'),
-        NUM_RECENT_TRANSACTIONS
-      ),
-      'hash'
-    )
-
-    setTransactions(mostRecentTransactions)
-    updateLocalStorage(updatedTrackedTransactions)
-  }
-
-  function updateTrackedTransaction(hash: Hash, updatePayload: UpdateTrackedTransaction) {
-    // attempt to find this transaction in the cache
-    const cachedTransaction = transactions[hash]
-
-    if (!cachedTransaction) {
-      console.log('Cannot update a cached tracked transaction', { hash, transactions })
-      throw new Error('Cannot update a cached tracked transaction that does not exist.')
-    }
-
-    const updatedCachedTransaction = {
-      ...cachedTransaction,
-      ...updatePayload,
-    }
-
-    const updatedCache = {
-      ...transactions,
-      [hash]: updatedCachedTransaction,
-    }
-
-    setTransactions(updatedCache)
-    updateLocalStorage(updatedCache)
-
-    const duration = updatePayload.duration
-
-    // update the relevant toast too
-    if (updatedCachedTransaction.toastId) {
-      if (updatePayload.status === 'timeout' || updatePayload.status === 'unknown') {
-        // Close the toast as these errors are shown as alerts inside the TransactionStepButton
-        return toast.close(updatedCachedTransaction.toastId)
-      }
-
-      toast.update(updatedCachedTransaction.toastId, {
-        status: TransactionStatusToastStatusMapping[updatePayload.status],
-        title: updatedCachedTransaction.label,
-        description: updatedCachedTransaction.description,
-        isClosable: true,
-        duration: duration || duration === null ? duration : secs(10).toMs(),
-        render: ({ ...rest }) => (
-          <Toast
-            linkUrl={getBlockExplorerTxUrl(
-              updatedCachedTransaction.hash,
-              updatedCachedTransaction.chain
-            )}
-            {...rest}
-          />
-        ),
-      })
-    }
-  }
-
-  function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
-    localStorage.setItem(RECENT_TRANSACTIONS_KEY, JSON.stringify(customUpdate || transactions))
-  }
-
   function clearTransactions() {
     updateLocalStorage({})
     setTransactions({})
-  }
-
-  function isTxTracked(txHash: Hash) {
-    return !!transactions[txHash]
   }
 
   return {
