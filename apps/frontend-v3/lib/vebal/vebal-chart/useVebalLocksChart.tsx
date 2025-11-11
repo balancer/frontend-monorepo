@@ -124,7 +124,10 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   const instanceRef = useRef<ECharts | undefined>(undefined)
   const [currentTimestampMs, setCurrentTimestampMs] = useState(() => Date.now())
 
-  const userHistoricalLocks = [...lockSnapshots].sort((a, b) => a.timestamp - b.timestamp)
+  const userHistoricalLocks = useMemo(
+    () => [...lockSnapshots].sort((a, b) => a.timestamp - b.timestamp),
+    [lockSnapshots]
+  )
 
   const lockedUntil = mainnetLockedInfo.lockedEndDate
     ? differenceInDays(new Date(mainnetLockedInfo.lockedEndDate), new Date())
