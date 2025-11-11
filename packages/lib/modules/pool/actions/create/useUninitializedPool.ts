@@ -287,8 +287,6 @@ export function useUninitializedPool() {
     query: { enabled: isGyroEclpType && shouldHydratePoolCreationForm },
   })
 
-  console.log('eclpParams', eclpParams, isGyroEclpType)
-
   const eclpFormData = useMemo(() => {
     if (!eclpParams || !isGyroEclpType) return undefined
     const alpha = formatUnits(eclpParams[0].alpha, 18)

@@ -6,6 +6,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
 import { calculateRotationComponents } from './gyro.helpers'
 import { useEffect } from 'react'
+import { MAX_LAMBDA } from '../../constants'
 
 export function GyroEclpConfiguration() {
   return (
@@ -41,26 +42,31 @@ function EclpParamHeader() {
 
 function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
-  const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+  const { eclpConfigForm, poolCreationForm, updatePoolTokens } = usePoolCreationForm()
   const { poolTokens } = poolCreationForm.watch()
-  const { peakPrice } = eclpConfigForm.watch()
+  const { alpha, beta, peakPrice, lambda, c, s } = eclpConfigForm.watch()
 
   const tokenPricePair = poolTokens
     .map(token => token.data?.symbol)
     .filter(Boolean)
     .join(' / ')
 
-  // must re-calculate c and s as peak price input changes
+  // peak price is used to calculate c and s
   useEffect(() => {
     const { c, s } = calculateRotationComponents(peakPrice)
     eclpConfigForm.setValue('c', c)
     eclpConfigForm.setValue('s', s)
   }, [peakPrice])
 
+  // since eclp init amounts are calculated based on eclp params
+  useEffect(() => {
+    updatePoolTokens([...poolTokens].map(token => ({ ...token, amount: '' })))
+  }, [alpha, beta, peakPrice, lambda, c, s])
+
   const lowerBoundPriceInput = {
     label: `Lower bound price: ${tokenPricePair}`,
     name: 'alpha' as const,
-    placeholder: '???',
+    placeholder: suggestedEclpConfig.alpha,
     suggestedValue: suggestedEclpConfig.alpha,
     tooltip: 'The lowest price the pool will provide liquidity',
     control: eclpConfigForm.control,
@@ -70,6 +76,8 @@ function EclpParamInputs() {
     },
     validate: (value: string) => {
       if (Number(value) < 0) return 'Value must be greater than 0'
+      if (Number(value) > Number(peakPrice)) return 'Value must be less than peak price'
+      if (Number(value) > Number(beta)) return 'Value must be less than upper bound price'
       return true
     },
   }
@@ -77,7 +85,7 @@ function EclpParamInputs() {
   const peakPriceInput = {
     label: `Peak price: ${tokenPricePair}`,
     name: 'peakPrice' as const,
-    placeholder: '???',
+    placeholder: suggestedEclpConfig.peakPrice,
     suggestedValue: suggestedEclpConfig.peakPrice,
     tooltip: 'The price where the pool will provide the deepest liquidity',
     control: eclpConfigForm.control,
@@ -87,6 +95,8 @@ function EclpParamInputs() {
     },
     validate: (value: string) => {
       if (Number(value) < 0) return 'Value must be greater than 0'
+      if (Number(value) < Number(alpha)) return 'Value must be greater than lower bound price'
+      if (Number(value) > Number(beta)) return 'Value must be less than upper bound price'
       return true
     },
   }
@@ -94,7 +104,7 @@ function EclpParamInputs() {
   const upperBoundPriceInput = {
     label: `Upper bound price: ${tokenPricePair}`,
     name: 'beta' as const,
-    placeholder: '???',
+    placeholder: suggestedEclpConfig.beta,
     suggestedValue: suggestedEclpConfig.beta,
     tooltip: 'The highest price the pool will provide liquidity',
     control: eclpConfigForm.control,
@@ -104,6 +114,8 @@ function EclpParamInputs() {
     },
     validate: (value: string) => {
       if (Number(value) < 0) return 'Value must be greater than 0'
+      if (Number(value) < Number(alpha)) return 'Value must be greater than lower bound price'
+      if (Number(value) < Number(peakPrice)) return 'Value must be greater than peak price'
       return true
     },
   }
@@ -111,11 +123,12 @@ function EclpParamInputs() {
   const stretchingFactorInput = {
     label: `Stretching factor`,
     name: 'lambda' as const,
-    placeholder: '100',
+    placeholder: suggestedEclpConfig.lambda,
     tooltip: 'The concentration of liquidity around the peak price',
     control: eclpConfigForm.control,
     validate: (value: string) => {
       if (Number(value) < 0) return 'Value must be greater than 0'
+      if (Number(value) > MAX_LAMBDA) return 'Value must be less than 100000000'
       return true
     },
   }
