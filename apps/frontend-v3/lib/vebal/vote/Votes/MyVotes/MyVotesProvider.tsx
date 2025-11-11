@@ -2,7 +2,7 @@
 'use client'
 
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
-import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { useMyVotesFiltersState } from '@bal/lib/vebal/vote/Votes/MyVotes/useMyVotesFiltersState'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { MyVotesTotalInfo, SortingBy } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.types'
@@ -91,28 +91,32 @@ export function useMyVotesLogic() {
     [votedPools]
   )
 
-  // Record<VoteId, Weight>
-  const [editVotesWeights, setEditVotesWeights] = useState<Record<string, string>>(() => ({}))
+  // Record<VoteId, Weight override>
+  const [editVotesOverrides, setEditVotesOverrides] = useState<Record<string, string>>(() => ({}))
 
-  useEffect(() => {
-    setEditVotesWeights(current => {
-      const result: Record<string, string> = {}
+  const editVotesWeights = useMemo<Record<string, string>>(() => {
+    const result: Record<string, string> = {}
 
-      for (const vote of myVotes) {
-        if (isPoolGaugeExpired(vote)) {
-          result[vote.id] = '0'
-        } else {
-          result[vote.id] =
-            (current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes) || '0'
-        }
+    for (const vote of myVotes) {
+      if (isPoolGaugeExpired(vote)) {
+        result[vote.id] = '0'
+        continue
       }
 
-      return result
-    })
-  }, [myVotes, isPoolGaugeExpired])
+      const override = editVotesOverrides[vote.id]
+
+      if (override !== undefined) {
+        result[vote.id] = override
+      } else {
+        result[vote.id] = vote.gaugeVotes?.userVotes || '0'
+      }
+    }
+
+    return result
+  }, [editVotesOverrides, myVotes, isPoolGaugeExpired])
 
   const onEditVotesChange = (id: string, value: string) => {
-    setEditVotesWeights(current => ({
+    setEditVotesOverrides(current => ({
       ...current,
       [id]: value,
     }))
@@ -236,7 +240,7 @@ export function useMyVotesLogic() {
     ).length > 0
 
   const clearAll = () => {
-    setEditVotesWeights({})
+    setEditVotesOverrides({})
     clearSelectedVotingPools()
   }
 
