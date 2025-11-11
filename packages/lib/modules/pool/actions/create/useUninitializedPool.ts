@@ -8,16 +8,18 @@ import {
   reClammPoolAbi,
   balancerV3WeightedPoolAbi,
   balancerV3StablePoolAbi,
+  gyroEclpPoolAbi,
 } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { getCreatePathParams } from './getCreatePathParams'
 import { useParams } from 'next/navigation'
 import { getChainId } from '@repo/lib/config/app.config'
-import { isStablePool, isWeightedPool, isReClammPool } from './helpers'
+import { isStablePool, isWeightedPool, isReClammPool, isGyroEllipticPool } from './helpers'
 import { formatUnits } from 'viem'
 import { PERCENTAGE_DECIMALS, WeightedPoolStructure } from './constants'
 import { PoolCreationToken } from './types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { calculatePeakPrice } from './steps/details/gyro.helpers'
 
 type PoolTokenInfo = [Address[], { rateProvider: Address; paysYieldFees: boolean }[]]
 type PoolConfig = {
@@ -54,6 +56,7 @@ export function useUninitializedPool() {
   const isStablePoolType = poolTypeParam && isStablePool(poolTypeParam)
   const isWeightedPoolType = poolTypeParam && isWeightedPool(poolTypeParam)
   const isReClammPoolType = poolTypeParam && isReClammPool(poolTypeParam)
+  const isGyroEclpType = poolTypeParam && isGyroEllipticPool(poolTypeParam)
 
   const areAllParamsDefined = !!networkParam && !!poolTypeParam && !!poolAddressParam
   // only trigger form hydration if no poolAddress in local storage
@@ -276,16 +279,46 @@ export function useUninitializedPool() {
     }
   }, [reClammConfig, isReClammPoolType])
 
+  const { data: eclpParams, isLoading: isLoadingEclpParams } = useReadContract({
+    address: poolAddressParam,
+    abi: gyroEclpPoolAbi,
+    functionName: 'getECLPParams',
+    chainId,
+    query: { enabled: isGyroEclpType && shouldHydratePoolCreationForm },
+  })
+
+  console.log('eclpParams', eclpParams, isGyroEclpType)
+
+  const eclpFormData = useMemo(() => {
+    if (!eclpParams || !isGyroEclpType) return undefined
+    const alpha = formatUnits(eclpParams[0].alpha, 18)
+    const beta = formatUnits(eclpParams[0].beta, 18)
+    const c = formatUnits(eclpParams[0].c, 18)
+    const s = formatUnits(eclpParams[0].s, 18)
+    const lambda = formatUnits(eclpParams[0].lambda, 18)
+
+    return {
+      alpha,
+      beta,
+      c,
+      s,
+      lambda,
+      peakPrice: calculatePeakPrice({ c, s }),
+    }
+  }, [eclpParams, isGyroEclpType])
+
   const isLoadingPool =
     isLoadingPoolData ||
     isLoadingPoolTokenDetails ||
     isLoadingAmplificationParameter ||
     isLoadingWeights ||
-    isLoadingReClammConfig
+    isLoadingReClammConfig ||
+    isLoadingEclpParams
 
   return {
     poolFormData,
     reClammFormData,
+    eclpFormData,
     isLoadingPool,
     shouldHydratePoolCreationForm,
     areAllParamsDefined,

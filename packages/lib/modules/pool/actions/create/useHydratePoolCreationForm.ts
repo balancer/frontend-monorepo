@@ -7,13 +7,15 @@ export function useHydratePoolCreationForm() {
   const {
     poolFormData,
     reClammFormData,
+    eclpFormData,
     isLoadingPool,
     shouldHydratePoolCreationForm,
     areAllParamsDefined,
     poolAddressParam,
   } = useUninitializedPool()
 
-  const { poolCreationForm, setPoolAddress, reClammConfigForm } = usePoolCreationForm()
+  const { poolCreationForm, setPoolAddress, reClammConfigForm, eclpConfigForm } =
+    usePoolCreationForm()
   const { lastStep } = usePoolCreationFormSteps()
 
   // allows user to switch between uninitialzed pools
@@ -25,6 +27,7 @@ export function useHydratePoolCreationForm() {
     if (!isLoadingPool && shouldHydratePoolCreationForm) {
       if (poolFormData) poolCreationForm.reset(poolFormData)
       if (reClammFormData) reClammConfigForm.reset(reClammFormData)
+      if (eclpFormData) eclpConfigForm.reset(eclpFormData)
 
       setPoolAddress(poolAddressParam)
       lastStep()

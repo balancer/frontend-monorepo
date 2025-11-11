@@ -24,3 +24,19 @@ export function calculateRotationComponents(peakPrice: string): { c: string; s: 
 
   return { c, s }
 }
+
+/**
+ * Calculates peak price from E-CLP rotation components
+ * @param c - cosθ component (normalized such that c² + s² = 1)
+ * @param s - sinθ component (normalized such that c² + s² = 1)
+ * @returns peakPrice as tan(θ) = s/c
+ */
+export function calculatePeakPrice({ c, s }: { c: string; s: string }): string {
+  if (!c || !s || Number(c) === 0) return ''
+
+  // Since tan(θ) = sin(θ)/cos(θ) = s/c
+  // Simply divide s by c to recover the original tan(θ) value
+  const peakPrice = bn(s).div(bn(c))
+
+  return peakPrice.toString()
+}
