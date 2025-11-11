@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/useGaugeVotes'
@@ -33,6 +33,8 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
   }, [data?.veBalGetVotingList])
 
   const gaugeAddresses = useMemo(() => votingList.map(vote => vote.gauge.address), [votingList])
+  const { expiredGauges, isLoading: isExpiredGaugesLoading } = useExpiredGauges({ gaugeAddresses })
+  const { incentives, incentivesError, incentivesAreLoading } = useHiddenHandVotingIncentives()
 
   const {
     gaugeVotes,
@@ -40,82 +42,75 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
     refetchAll,
   } = useGaugeVotes({ gaugeAddresses })
 
-  const { expiredGauges, isLoading: isExpiredGaugesLoading } = useExpiredGauges({ gaugeAddresses })
-
-  const { incentives, incentivesError, incentivesAreLoading } = useHiddenHandVotingIncentives()
-
   const votingPools = useMemo<VotingPoolWithData[]>(() => {
     return votingList.map(vote => ({
       ...vote,
       gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
-      votingIncentive: incentives
-        ? incentives.find(incentive => incentive.poolId === vote.id)
-        : undefined,
+      votingIncentive: incentives?.find(incentive => incentive.poolId === vote.id),
     }))
   }, [votingList, gaugeVotes, incentives])
 
   const votedPools = useMemo(
-    () => votingPools.filter(vote => bn(vote.gaugeVotes?.userVotes || '0') > bn(0)),
+    () => votingPools.filter(vote => bn(vote.gaugeVotes?.userVotes || '0').gt(0)),
     [votingPools]
   )
 
-  const [selectedVotingPools, setSelectedVotingPools] = useState<VotingPoolWithData[]>([])
+  const [votingPoolsByUser, setVotingPoolsByUser] = useState<Record<string, VotingPoolWithData[]>>(
+    {}
+  )
 
-  useEffect(() => {
-    setSelectedVotingPools([])
-  }, [userAddress])
+  const selectedVotingPools = useMemo(() => {
+    if (!userAddress) return []
 
-  useEffect(() => {
-    if (gaugeVotes) {
-      setSelectedVotingPools(selectedVotingPools =>
-        // remove already voted selectedVotingPools (e.g. after refetch)
-        selectedVotingPools.filter(selectedVotingPool => {
-          const votesData = gaugeVotes[selectedVotingPool.gauge.address]
+    const pools = votingPoolsByUser[userAddress] ?? []
 
-          if (!votesData) return true
+    if (!gaugeVotes) return pools
 
-          return !bn(votesData.userVotes).gt(0)
-        })
-      )
-    }
-  }, [gaugeVotes])
+    return pools.filter(pool => {
+      const votesData = gaugeVotes[pool.gauge.address]
 
-  const clearSelectedVotingPools = () => {
-    setSelectedVotingPools([])
-  }
+      if (!votesData) return true
+
+      return bn(votesData.userVotes).lte(0)
+    })
+  }, [userAddress, gaugeVotes, votingPoolsByUser])
 
   const toggleVotingPool = (votingPool: VotingPoolWithData) => {
-    setSelectedVotingPools(current => {
-      const foundVotingPool = current.find(
-        selectedVotingPool => selectedVotingPool.id === votingPool.id
-      )
-      if (foundVotingPool) {
-        return current.filter(selectedVotingPool => selectedVotingPool.id !== foundVotingPool.id)
-      }
-      return current.concat(votingPool)
+    if (!userAddress) return
+
+    setVotingPoolsByUser(current => {
+      const userPools = current[userAddress] ?? []
+      const exists = userPools.find(pool => pool.id === votingPool.id)
+
+      const updated = exists
+        ? userPools.filter(pool => pool.id !== votingPool.id)
+        : [...userPools, votingPool]
+
+      return { ...current, [userAddress]: updated }
     })
   }
 
+  const clearSelectedVotingPools = () => {
+    if (!userAddress) return
+
+    setVotingPoolsByUser(current => ({ ...current, [userAddress]: [] }))
+  }
+
   const isSelectedPool = useCallback(
-    (votingPool: VotingPoolWithData) => {
-      return Boolean(
+    (votingPool: VotingPoolWithData) =>
+      Boolean(
         selectedVotingPools.find(selectedVotingPool => selectedVotingPool.id === votingPool.id)
-      )
-    },
+      ),
     [selectedVotingPools]
   )
 
   const isVotedPool = useCallback(
-    (vote: VotingPoolWithData) => {
-      return Boolean(votedPools.find(votedPool => votedPool.id === vote.id))
-    },
+    (vote: VotingPoolWithData) => Boolean(votedPools.find(votedPool => votedPool.id === vote.id)),
     [votedPools]
   )
 
   const isPoolGaugeExpired = useCallback(
-    (votingPool: VotingPoolWithData) => {
-      return isGaugeExpired(expiredGauges, votingPool.gauge.address)
-    },
+    (votingPool: VotingPoolWithData) => isGaugeExpired(expiredGauges, votingPool.gauge.address),
     [expiredGauges]
   )
 
