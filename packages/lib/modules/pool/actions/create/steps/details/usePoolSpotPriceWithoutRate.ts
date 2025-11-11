@@ -7,7 +7,7 @@ import { formatUnits } from 'viem'
 /**
  * @returns the current price of the pool in terms of underlying tokens
  */
-export function useReClammCurrentPrice() {
+export function usePoolSpotPriceWithoutRate() {
   const { poolCreationForm } = usePoolCreationForm()
   const { poolTokens, network } = poolCreationForm.watch()
   const { priceFor } = useTokens()
@@ -29,7 +29,7 @@ export function useReClammCurrentPrice() {
   const adjustedPriceTokenA = bn(priceTokenA).div(rateTokenA)
   const adjustedPriceTokenB = bn(priceTokenB).div(rateTokenB)
 
-  const currentPrice = adjustedPriceTokenA.div(adjustedPriceTokenB)
+  const spotPriceWithoutRate = adjustedPriceTokenA.div(adjustedPriceTokenB)
 
-  return currentPrice
+  return { spotPriceWithoutRate, rateTokenA, rateTokenB }
 }

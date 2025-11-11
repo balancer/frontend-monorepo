@@ -59,6 +59,7 @@ export function BalAlert({
           color="black"
           display="flex"
           flexDirection="column"
+          fontWeight="normal"
           w="full"
           wordBreak="break-word"
         >

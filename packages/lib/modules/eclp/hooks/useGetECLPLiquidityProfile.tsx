@@ -2,15 +2,42 @@ import { useGetTokenRates } from './useGetTokenRates'
 import { useMemo, useState } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { drawLiquidityECLP } from '../helpers/drawLiquidityECLP'
-import { Pool } from '../../pool/pool.types'
 import { calculateSpotPrice, destructureRequiredPoolParams } from '../helpers/calculateSpotPrice'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { formatUnits } from 'viem'
 import { getPriceRateRatio } from '../../pool/pool-tokens.utils'
+import { getPoolActionableTokens } from '../../pool/pool-tokens.utils'
+import { usePool } from '../../pool/PoolProvider'
+import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
+import { isGyroEPool } from '../../pool/pool.helpers'
 
-export function useGetECLPLiquidityProfile(pool: Pool) {
+export type ECLPLiquidityProfile = {
+  data: [[number, number]] | null
+  poolSpotPrice: string | number | null
+  poolIsInRange: boolean
+  xMin: number
+  xMax: number
+  yMax: number
+  isReversed: boolean
+  toggleIsReversed: () => void
+  isLoading: boolean
+  poolTokens: string[]
+}
+
+export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
+  const { pool } = usePool()
   const { data: tokenRates, isLoading } = useGetTokenRates(pool)
   const [isReversed, setIsReversed] = useState(false)
+
+  const gyroPool = pool as GqlPoolGyro
+
+  const eclpParams = {
+    alpha: Number(gyroPool.alpha),
+    beta: Number(gyroPool.beta),
+    s: Number(gyroPool.s),
+    c: Number(gyroPool.c),
+    lambda: Number(gyroPool.lambda),
+  }
 
   function toggleIsReversed() {
     setIsReversed(!isReversed)
@@ -23,7 +50,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   }, [tokenRates])
 
   const liquidityData = useMemo(
-    () => drawLiquidityECLP(pool, tokenRateScalingFactorString),
+    () => drawLiquidityECLP(isGyroEPool(pool), eclpParams, tokenRateScalingFactorString),
     [pool, tokenRateScalingFactorString]
   )
 
@@ -79,5 +106,6 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     isReversed,
     toggleIsReversed,
     isLoading,
+    poolTokens: getPoolActionableTokens(pool).map(token => token.symbol),
   }
 }
