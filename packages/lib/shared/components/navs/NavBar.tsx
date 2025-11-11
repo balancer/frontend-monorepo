@@ -217,7 +217,7 @@ export function NavActions({
     }
 
     return defaultActions
-  }, [pathname, isConnected])
+  }, [pathname, isConnected, hideDarkModeToggle, mobileNav, allowCreateWallet])
 
   return (
     <>
