@@ -1,7 +1,6 @@
 import { VStack, Text, HStack } from '@chakra-ui/react'
-import { Controller } from 'react-hook-form'
+import { Controller, Control } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { Control } from 'react-hook-form'
 
 interface InputWithSuggestionProps {
   control: Control<any>

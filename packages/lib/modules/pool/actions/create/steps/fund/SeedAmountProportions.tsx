@@ -28,7 +28,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
     const { data, address, amount } = token
     if (!address || !data) return { symbol: '', usdValue: 0 }
     const { chain, symbol } = data
-    const usdValue = Number(usdValueForTokenAddress(address, chain, amount, Number(token.usdPrice)))
+    const usdValue = Number(usdValueForTokenAddress(address, chain, amount, token.usdPrice))
     return { symbol, usdValue }
   })
 

@@ -15,6 +15,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export const NUM_FORMAT = '0.00000000' // up to 8 decimals?
 export const PERCENTAGE_DECIMALS = 16
+export const DEFAULT_DECIMALS = 18
 export const MAX_POOL_NAME_LENGTH = 32
 export const MAX_POOL_SYMBOL_LENGTH = 26
 export const MAX_SWAP_FEE_PERCENTAGE = 10

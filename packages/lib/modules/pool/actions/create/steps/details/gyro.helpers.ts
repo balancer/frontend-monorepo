@@ -34,9 +34,5 @@ export function calculateRotationComponents(peakPrice: string): { c: string; s: 
 export function calculatePeakPrice({ c, s }: { c: string; s: string }): string {
   if (!c || !s || Number(c) === 0) return ''
 
-  // Since tan(θ) = sin(θ)/cos(θ) = s/c
-  // Simply divide s by c to recover the original tan(θ) value
-  const peakPrice = bn(s).div(bn(c))
-
-  return peakPrice.toString()
+  return bn(s).div(bn(c)).toString()
 }

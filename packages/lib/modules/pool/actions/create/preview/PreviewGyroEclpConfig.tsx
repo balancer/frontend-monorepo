@@ -45,6 +45,7 @@ export function PreviewGyroEclpConfig() {
             <Card key={label} variant="subSection">
               <HStack spacing="sm">
                 <Box bg={color} borderRadius="full" h="8px" w="8px" />
+
                 <Text color="font.secondary" fontSize="sm">
                   {label}
                 </Text>
@@ -56,11 +57,15 @@ export function PreviewGyroEclpConfig() {
             </Card>
           ))}
         </SimpleGrid>
+
         <Divider />
+
         <Box h={333} w="full">
           <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
         </Box>
+
         <Divider />
+
         <HStack justify="space-between" w="full">
           <Button
             flexDirection="row"
@@ -71,6 +76,7 @@ export function PreviewGyroEclpConfig() {
           >
             <HStack>
               <RefreshCcw size={12} />
+
               <Text color="font.secondary" fontSize="sm">
                 {tokenSymbolsString}
               </Text>

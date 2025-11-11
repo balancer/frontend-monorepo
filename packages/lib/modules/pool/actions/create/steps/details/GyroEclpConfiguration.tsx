@@ -1,5 +1,4 @@
-import { VStack, Heading, Text, HStack } from '@chakra-ui/react'
-import { Link } from '@chakra-ui/next-js'
+import { VStack, Heading, Text, HStack, Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -82,9 +81,13 @@ function EclpParamInputs() {
       eclpConfigForm.trigger('alpha')
     },
     validate: (value: string) => {
-      if (Number(value) < 0) return 'Value must be greater than 0'
-      if (Number(value) > Number(peakPrice)) return 'Value must be less than peak price'
-      if (Number(value) > Number(beta)) return 'Value must be less than upper bound price'
+      if (Number(value) < 0) return 'Lower bound price must be greater than 0'
+      if (Number(value) >= Number(peakPrice)) {
+        return 'Lower bound price must be less than peak price'
+      }
+      if (Number(value) >= Number(beta)) {
+        return 'Lower bound price must be less than upper bound price'
+      }
       return true
     },
   }
@@ -101,9 +104,9 @@ function EclpParamInputs() {
       eclpConfigForm.trigger('peakPrice')
     },
     validate: (value: string) => {
-      if (Number(value) < 0) return 'Value must be greater than 0'
-      if (Number(value) < Number(alpha)) return 'Value must be greater than lower bound price'
-      if (Number(value) > Number(beta)) return 'Value must be less than upper bound price'
+      if (Number(value) < 0) return 'Peak price must be greater than 0'
+      if (Number(value) <= Number(alpha)) return 'Peak price must be greater than lower bound price'
+      if (Number(value) >= Number(beta)) return 'Peak price must be less than upper bound price'
       return true
     },
   }
@@ -120,9 +123,13 @@ function EclpParamInputs() {
       eclpConfigForm.trigger('beta')
     },
     validate: (value: string) => {
-      if (Number(value) < 0) return 'Value must be greater than 0'
-      if (Number(value) < Number(alpha)) return 'Value must be greater than lower bound price'
-      if (Number(value) < Number(peakPrice)) return 'Value must be greater than peak price'
+      if (Number(value) < 0) return 'Upper bound price must be greater than 0'
+      if (Number(value) <= Number(alpha)) {
+        return 'Upper bound price must be greater than lower bound price'
+      }
+      if (Number(value) <= Number(peakPrice)) {
+        return 'Upper bound price must be greater than peak price'
+      }
       return true
     },
   }
@@ -134,8 +141,8 @@ function EclpParamInputs() {
     tooltip: 'The concentration of liquidity around the peak price',
     control: eclpConfigForm.control,
     validate: (value: string) => {
-      if (Number(value) < 0) return 'Value must be greater than 0'
-      if (Number(value) > MAX_LAMBDA) return 'Value must be less than 100000000'
+      if (Number(value) <= 0) return 'Stretching factor must be greater than 0'
+      if (Number(value) > MAX_LAMBDA) return `Maximum value for stretching factor is ${MAX_LAMBDA}`
       return true
     },
   }

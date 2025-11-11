@@ -67,7 +67,7 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
     xMax,
     yMax,
     isReversed,
-    toggleIsReversed: () => {}, // not needed because "isReversed" state managed by order of tokens in pool creaiton form
+    toggleIsReversed: () => {}, // not needed because "isReversed" state managed by order of tokens in pool creation form
     isLoading: false,
     poolTokens: poolTokens.map(token => token.data?.symbol).filter(token => token !== undefined),
   }
