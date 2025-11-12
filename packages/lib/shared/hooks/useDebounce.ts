@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { debounce } from 'lodash'
 import { useMemo } from 'react'
 

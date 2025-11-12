@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useGetTokenRates } from './useGetTokenRates'
 import { useMemo, useState } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'

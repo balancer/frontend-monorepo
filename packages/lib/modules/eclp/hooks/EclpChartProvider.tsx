@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
