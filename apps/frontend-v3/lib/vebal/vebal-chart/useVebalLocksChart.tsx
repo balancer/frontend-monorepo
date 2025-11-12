@@ -236,7 +236,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
       },
       grid: {
         left: '1.5%',
-        right: '2.5%',
+        right: '3%',
         top: '12%',
         bottom: '4%',
         containLabel: true,
@@ -307,7 +307,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         axisTick: { show: false },
         axisLabel: {
           formatter: (value: number) => {
-            return format(new Date(value), 'MMM d')
+            return format(new Date(value), 'MMM d yyyy')
           },
           color:
             nextTheme === 'dark'
