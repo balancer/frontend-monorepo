@@ -2,7 +2,7 @@
 
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { BalAlert } from '../../../shared/components/alerts/BalAlert'
 import { useReadContracts } from 'wagmi'
 import { vaultAdminAbi_V3, AddressProvider } from '@balancer/sdk'
@@ -45,7 +45,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
   })
 
   const bufferLimitViolations = underlyingAmounts
-    .map(({ tokenAddress, humanAmount, symbol }) => {
+    .map(({ tokenAddress, humanAmount, symbol: underlyingSymbol }) => {
       if (operation === 'add') {
         // if operation is add liquidity, the user is offering underlying tokens which requires sufficient buffer balance of wrapped tokens
         const wrappedToken = validTokens.find(
@@ -70,8 +70,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         )
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
-          const maxAmountOfUnderlying = bufferBalanceOfWrapped.times(wrappedToken.priceRate)
-          return { symbol, maxAmountOfUnderlying }
+          return { underlyingSymbol, wrappedSymbol: wrappedToken.symbol }
         }
 
         return null
@@ -82,7 +81,7 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
           bufferBalance => bufferBalance.underlyingTokenAddress === underlyingToken?.address
         )
 
-        if (!underlyingBufferBalance || !symbol) return null
+        if (!underlyingBufferBalance || !underlyingSymbol) return null
         const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } =
           underlyingBufferBalance
 
@@ -97,7 +96,10 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         )
 
         if (exceedsBufferBalance && exceedsVaultCapacity) {
-          return { symbol, maxAmountOfUnderlying: bufferBalanceOfUnderlying }
+          return {
+            underlyingSymbol,
+            wrappedSymbol: underlyingToken?.wrappedToken?.symbol,
+          }
         }
 
         return null
@@ -107,18 +109,22 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
   if (bufferLimitViolations.length === 0) return null
 
-  return bufferLimitViolations.map(({ symbol, maxAmountOfUnderlying }, idx) => {
-    const action = operation === 'add' ? 'deposit' : 'withdraw'
-    const amount = fNum('token', maxAmountOfUnderlying)
-    return (
-      <BalAlert
-        content={`You may not be able to ${action} more than ${amount} ${symbol}, but you can choose to remove the yield bearing token instead`}
-        key={idx}
-        status="warning"
-        title={`Low liquidity for ${symbol}`}
-      />
-    )
-  })
+  const isAddLiquidity = operation === 'add'
+
+  return bufferLimitViolations.map(({ underlyingSymbol, wrappedSymbol }, idx) => (
+    <BalAlert
+      content={
+        isAddLiquidity
+          ? `You may not be able to add ${underlyingSymbol} to this pool. Consider depositing ${wrappedSymbol} instead.`
+          : `You may not be able to remove ${underlyingSymbol} from this pool. Consider receiving ${wrappedSymbol} instead.`
+      }
+      key={idx}
+      status="warning"
+      title={
+        isAddLiquidity ? 'Low liquidity for wrapped token' : 'Low liquidity for underlying token'
+      }
+    />
+  ))
 }
 
 function useBufferBalances(wrappedTokens: ApiToken[]) {
