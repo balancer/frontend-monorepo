@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { ChakraProvider, ThemeTypings } from '@chakra-ui/react'

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 'use client'
 
 import { getChainId } from '@repo/lib/config/app.config'

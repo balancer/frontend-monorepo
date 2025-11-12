@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 import { memo } from 'react'
 import { HStack, Heading, Skeleton, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'

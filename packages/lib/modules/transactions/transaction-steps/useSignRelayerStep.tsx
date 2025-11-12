@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { useSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'

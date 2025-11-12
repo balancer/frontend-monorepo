@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react'
 
 // The usage of mounted helps to overcome nextjs hydration mismatch

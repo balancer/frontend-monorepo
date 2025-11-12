@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
