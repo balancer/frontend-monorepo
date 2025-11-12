@@ -7,8 +7,10 @@ import {
   INITIAL_TOKEN_CONFIG,
   INITIAL_POOL_CREATION_FORM,
   INITIAL_RECLAMM_CONFIG,
+  INITIAL_ECLP_CONFIG,
+  NUM_FORMAT,
 } from './constants'
-import { PoolCreationForm, PoolCreationToken, ReClammConfig } from './types'
+import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } from './types'
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
@@ -19,6 +21,7 @@ import { useEffect, useState } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -34,6 +37,12 @@ export function usePoolFormLogic() {
   const reClammConfigForm = usePersistentForm<ReClammConfig>(
     LS_KEYS.PoolCreation.ReClammConfig,
     INITIAL_RECLAMM_CONFIG,
+    { mode: 'all' }
+  )
+
+  const eclpConfigForm = usePersistentForm<EclpConfigForm>(
+    LS_KEYS.PoolCreation.EclpConfig,
+    INITIAL_ECLP_CONFIG,
     { mode: 'all' }
   )
 
@@ -64,9 +73,11 @@ export function usePoolFormLogic() {
   const isStablePool = poolType === PoolType.Stable
   const isStableSurgePool = poolType === PoolType.StableSurge
   const isWeightedPool = poolType === PoolType.Weighted
+  const isGyroEclp = poolType === PoolType.GyroE
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
-    const newPoolTokens = [...poolTokens]
+    const currentPoolTokens = poolCreationForm.getValues('poolTokens')
+    const newPoolTokens = [...currentPoolTokens]
     newPoolTokens[index] = { ...newPoolTokens[index], ...updates }
     poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
@@ -80,6 +91,19 @@ export function usePoolFormLogic() {
     reClammConfigForm.setValue('initialMinPrice', invertNumber(initialMaxPrice))
     reClammConfigForm.setValue('initialMaxPrice', invertNumber(initialMinPrice))
     reClammConfigForm.setValue('initialTargetPrice', invertNumber(initialTargetPrice))
+    updatePoolTokens([...poolTokens].reverse())
+  }
+
+  const invertGyroEclpPriceParams = () => {
+    const { alpha, beta, peakPrice, s, c, lambda } = eclpConfigForm.watch()
+    eclpConfigForm.reset({
+      alpha: fNumCustom(invertNumber(beta), NUM_FORMAT),
+      beta: fNumCustom(invertNumber(alpha), NUM_FORMAT),
+      peakPrice: fNumCustom(invertNumber(peakPrice), NUM_FORMAT),
+      s: c,
+      c: s,
+      lambda: lambda,
+    })
     updatePoolTokens([...poolTokens].reverse())
   }
 
@@ -101,6 +125,7 @@ export function usePoolFormLogic() {
     setPoolAddress(undefined)
     poolCreationForm.resetToInitial()
     reClammConfigForm.resetToInitial()
+    eclpConfigForm.resetToInitial()
     resetSteps()
     router.replace('/create')
   }
@@ -124,6 +149,7 @@ export function usePoolFormLogic() {
   return {
     poolCreationForm,
     reClammConfigForm,
+    eclpConfigForm,
     isFormStateValid: poolCreationForm.formState.isValid,
     poolTokens,
     poolType,
@@ -143,6 +169,7 @@ export function usePoolFormLogic() {
     isStablePool,
     isStableSurgePool,
     isWeightedPool,
+    isGyroEclp,
     updatePoolToken,
     updatePoolTokens,
     removePoolToken,
@@ -150,6 +177,7 @@ export function usePoolFormLogic() {
     resetPoolCreationForm,
     poolAddress,
     invertReClammPriceParams,
+    invertGyroEclpPriceParams,
     tokenList,
     isLoadingTokenList,
     setPoolAddress,

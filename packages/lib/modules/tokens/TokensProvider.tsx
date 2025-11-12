@@ -95,7 +95,7 @@ export function useTokensLogic() {
     address: string,
     chain: GqlChain,
     amount: Numberish,
-    customUsdPrice?: number
+    customUsdPrice?: string
   ) {
     if (amount === '') return '0'
     return bn(amount)

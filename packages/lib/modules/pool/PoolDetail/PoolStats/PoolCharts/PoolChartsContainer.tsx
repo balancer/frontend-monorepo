@@ -36,6 +36,7 @@ import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedT
 import { ThumbsDown, ThumbsUp } from 'react-feather'
 import { WandIcon } from '@repo/lib/shared/components/icons/WandIcon'
 import { useReclAmmChartData } from '@repo/lib/modules/reclamm/useReclAmmChartData'
+import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -55,11 +56,12 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 
 export function PoolChartsContainer() {
   const reclammChartData = useReclAmmChartData()
+  const eclpLiquidityProfile = useGetECLPLiquidityProfile()
 
   return (
     <PoolChartTabsProvider>
       <PoolChartsProvider>
-        <EclpChartProvider>
+        <EclpChartProvider eclpLiquidityProfile={eclpLiquidityProfile}>
           <ReclAmmChartProvider chartData={reclammChartData}>
             <PoolChartsContent />
           </ReclAmmChartProvider>

@@ -32,6 +32,7 @@ import { PoolCreationToken } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 import { ArrowUpRight } from 'react-feather'
+import { InputWithSuggestion } from '../details/InputWithSuggestion'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -45,7 +46,9 @@ export function ChoosePoolTokens() {
     addPoolToken,
     poolCreationForm,
     reClammConfigForm,
+    eclpConfigForm,
     isReClamm,
+    isGyroEclp,
   } = usePoolCreationForm()
 
   const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
@@ -91,11 +94,13 @@ export function ChoosePoolTokens() {
       rateProvider,
       data: tokenMetadata,
       paysYieldFees: rateProvider !== zeroAddress,
+      usdPrice: '',
     })
 
     setSelectedTokenIndex(null)
     poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
     if (isReClamm) reClammConfigForm.resetToInitial()
+    if (isGyroEclp) eclpConfigForm.resetToInitial()
   }
 
   const currentTokenAddress = selectedTokenIndex
@@ -105,18 +110,24 @@ export function ChoosePoolTokens() {
   return (
     <>
       <VStack align="start" spacing="md" w="full">
-        <VStack align="start" spacing="sm">
-          <Heading color="font.maxContrast" size="md">
-            Choose pool tokens
-          </Heading>
-          {isCustomWeightedPool && (
-            <BalAlert
-              content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
-              status="info"
-              title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
-            />
-          )}
-        </VStack>
+        {isGyroEclp && (
+          <BalAlert
+            content="Gyroscope’s elliptic concentrated liquidity pools offer the flexibility to asymmetrically focus liquidity. You can only add 2 tokens into a Gyro E-CLP."
+            status="info"
+          />
+        )}
+        {isCustomWeightedPool && (
+          <BalAlert
+            content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
+            status="info"
+            title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
+          />
+        )}
+
+        <Heading color="font.maxContrast" size="md">
+          Choose pool tokens
+        </Heading>
+
         <VStack align="start" spacing="xl" w="full">
           {poolTokens.map((token, index) => {
             const tokenData = listedTokens.find(
@@ -193,7 +204,7 @@ function ConfigureToken({
     // automatically hydrate form with coingecko price for unlisted tokens
     if (!apiPriceForToken && cgPriceForToken && !token.usdPrice) {
       updatePoolToken(index, {
-        usdPrice: cgPriceForToken,
+        usdPrice: cgPriceForToken.toString(),
       })
     }
   }, [cgPriceForToken, apiPriceForToken, token.usdPrice])
@@ -243,22 +254,24 @@ function ConfigureToken({
 
       {token.address && !apiPriceForToken && (
         <VStack align="start" spacing="sm" w="full">
-          <NumberInput
+          <InputWithSuggestion
             attribution={cgPriceForToken && <CoingeckoAttribution />}
             control={poolCreationForm.control}
+            isFiatPrice
             label="Estimated current  price of token"
             name={`poolTokens.${index}.usdPrice`}
-            validate={price => {
-              if (price < 0) return 'Token price must be greater than 0'
+            onClickSuggestion={() => {
+              poolCreationForm.setValue(`poolTokens.${index}.usdPrice`, cgPriceForToken?.toString())
+              poolCreationForm.trigger(`poolTokens.${index}.usdPrice`)
+            }}
+            placeholder="Enter token price"
+            suggestedValue={cgPriceForToken ? `$${cgPriceForToken}` : undefined}
+            tooltip="Enter the token’s price accurately to avoid losing money to arbitrage."
+            validate={(price: string) => {
+              if (Number(price) < 0) return 'Token price must be greater than 0'
               return true
             }}
-            width="full"
           />
-
-          <Text color="font.secondary">
-            Enter the token’s price accurately, or you’ll be vulnerable to losing money to
-            arbitrageurs, if you don’t add pool assets in proportion to their target weights.
-          </Text>
         </VStack>
       )}
 

@@ -6,7 +6,7 @@ import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
-
+import { PoolType } from '@balancer/sdk'
 import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
@@ -27,6 +27,10 @@ export function PoolSettings() {
   const { network, poolType, poolCreationForm } = usePoolCreationForm()
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
+  const filteredPoolHooksOptions = poolHooksWhitelist.filter(
+    hook => hook.label !== 'StableSurge' || poolType !== PoolType.GyroE
+  )
+
   const poolManagerOptions: PoolSettingsOption[] = [
     { label: `Delegate to the ${PROJECT_CONFIG.projectName} DAO`, value: zeroAddress },
     {
@@ -46,7 +50,7 @@ export function PoolSettings() {
 
   const poolHooksOptions: PoolSettingsOption[] = [
     { label: 'No hooks', value: zeroAddress },
-    ...(poolHooksWhitelist || []),
+    ...(filteredPoolHooksOptions || []),
   ]
 
   const amplificationParameterOptions: PoolSettingsOption[] = AMPLIFICATION_PARAMETER_OPTIONS.map(

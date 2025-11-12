@@ -5,6 +5,7 @@ import {
   Text,
   VStack,
   InputRightElement,
+  InputLeftElement,
   Button,
   InputGroup,
 } from '@chakra-ui/react'
@@ -17,6 +18,7 @@ type InputWithErrorProps = {
   label?: string
   tooltip?: string
   pasteFn?: () => void
+  isFiatPrice?: boolean
 } & InputProps
 
 export function InputWithError({
@@ -25,6 +27,7 @@ export function InputWithError({
   label,
   tooltip,
   pasteFn,
+  isFiatPrice,
   ...props
 }: InputWithErrorProps) {
   return (
@@ -43,6 +46,11 @@ export function InputWithError({
       )}
 
       <InputGroup>
+        {isFiatPrice && (
+          <InputLeftElement pointerEvents="none">
+            <Text>$</Text>
+          </InputLeftElement>
+        )}
         <Input {...props} />
 
         {pasteFn && (
