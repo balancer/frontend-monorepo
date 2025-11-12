@@ -30,3 +30,5 @@ fork-optimism:
 
 fork-sonic:
 	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${SONIC_RPC_URL}" --port 8545
+fork-xlayer:
+	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${XLAYER_RPC_URL}" --port 8545
