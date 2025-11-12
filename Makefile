@@ -15,3 +15,7 @@ fork-gnosis:
 
 fork-sonic:
 	anvil --fork-url "${SONIC_RPC_URL}" --port 8545
+
+fork-xlayer:
+	anvil --fork-url "${XLAYER_RPC_URL}" --port 8545
+
