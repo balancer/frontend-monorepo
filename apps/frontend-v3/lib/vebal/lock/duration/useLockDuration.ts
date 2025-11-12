@@ -24,11 +24,8 @@ export type UseLockDurationResult = ReturnType<typeof useLockDuration>
 
 export function useLockDuration({ lockedEndDate, mainnetLockedInfo }: UseLockDurationProps) {
   const today = useToday()
-
   const { minLockEndDate, maxLockEndDate } = useLockEndDate({ lockedEndDate })
-
   const sliderMinDate = useMemo(() => getMinLockEndDate(today), [today])
-  const sliderMaxDate = maxLockEndDate
 
   const minSliderValue = useMemo(() => {
     if (!lockedEndDate) return undefined
@@ -38,12 +35,12 @@ export function useLockDuration({ lockedEndDate, mainnetLockedInfo }: UseLockDur
   }, [lockedEndDate, sliderMinDate])
 
   const minStep = 0
+  const sliderMaxDate = maxLockEndDate
   const maxStep = differenceInWeeks(sliderMaxDate, sliderMinDate, { roundingMethod: 'ceil' })
   const stepSize = 1
+  const lowerBound = Math.min(minSliderValue ?? minStep, maxStep)
 
   const [rawSliderValue, setRawSliderValue] = useState(() => maxStep)
-
-  const lowerBound = Math.min(minSliderValue ?? minStep, maxStep)
 
   const sliderValue = useMemo(() => {
     const upperBounded = Math.min(rawSliderValue, maxStep)
