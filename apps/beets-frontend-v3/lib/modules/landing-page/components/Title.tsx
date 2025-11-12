@@ -22,10 +22,12 @@ export function Title({ ...rest }: BoxProps) {
     if (!node) return
 
     const newWidths: Record<string, number> = {}
+
     words.forEach(({ word }) => {
       node.textContent = word
       newWidths[word] = node.offsetWidth + 20
     })
+
     node.textContent = ''
     setWidths(newWidths)
   }, [])
