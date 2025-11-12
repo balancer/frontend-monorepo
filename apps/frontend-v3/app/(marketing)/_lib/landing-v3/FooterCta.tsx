@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { Box, Text, Button, Center, HStack, VStack, Link } from '@chakra-ui/react'

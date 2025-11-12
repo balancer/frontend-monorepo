@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { Box, Heading, Stack, HStack, VStack, useBreakpointValue } from '@chakra-ui/react'
