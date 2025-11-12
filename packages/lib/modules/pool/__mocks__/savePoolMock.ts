@@ -26,7 +26,7 @@ export async function savePoolMock({
   const pool = (await fetchPoolMock({ poolId, chain, apiUrl })) as Pool
   const poolJson = JSON.stringify(pool, null, 2)
 
-  const poolVarName = fileName || createPoolVarName(pool) + 'Mock'
+  const poolVarName = fileName || createPoolVarName(pool.symbol) + 'Mock'
   const apiMocksDir = path.join(__dirname, 'api-mocks')
   const filePath = path.join(apiMocksDir, `${poolVarName}.ts`)
 
@@ -51,8 +51,8 @@ ${poolJson} as unknown as Pool
 `
 }
 
-export function createPoolVarName(pool: Pool) {
-  return lowerFirst(pool.symbol.replace(/[^a-zA-Z0-9]/g, '_'))
+export function createPoolVarName(poolName: string) {
+  return lowerFirst(poolName.replace(/[^a-zA-Z0-9]/g, '_'))
 }
 
 /**

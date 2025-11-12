@@ -28,6 +28,7 @@ import {
 import {
   balWeth8020,
   cowAmmPoolWethGno,
+  gyroV3,
   osETHPhantom,
   sDAIWeighted,
   v2SepoliaStableWithERC4626,
@@ -41,6 +42,7 @@ import {
   LiquidityActionHelpers,
   areEmptyAmounts,
   requiresProportionalInput,
+  requiresProportionalInputReason,
   roundDecimals,
   shouldUseRecoveryRemoveLiquidity,
   supportsNestedActions,
@@ -914,18 +916,17 @@ describe('supportsProportionalAddLiquidityKind', () => {
 
 describe('requiresProportionalInput', () => {
   it('should require for gyro pools', () => {
-    const pool = getApiPoolMock(sDAIWeighted)
-    pool.type = GqlPoolType.Gyro
+    const pool = getApiPoolMock(gyroV3)
 
     expect(requiresProportionalInput(pool)).toBe(true)
-    expect(requiresProportionalInput(pool)).not.toBeUndefined()
+    expect(requiresProportionalInputReason(pool)).not.toBeUndefined()
   })
 
   it('should require for Cow pools', () => {
     const pool = getApiPoolMock(cowAmmPoolWethGno)
 
     expect(requiresProportionalInput(pool)).toBe(true)
-    expect(requiresProportionalInput(pool)).not.toBeUndefined()
+    expect(requiresProportionalInputReason(pool)).not.toBeUndefined()
   })
 
   it('should require when unbalanced liquidity is disabled on v3', () => {
@@ -936,11 +937,13 @@ describe('requiresProportionalInput', () => {
     }
 
     expect(requiresProportionalInput(pool)).toBe(true)
-    expect(requiresProportionalInput(pool)).not.toBeUndefined()
+    expect(requiresProportionalInputReason(pool)).not.toBeUndefined()
   })
 
-  it('should allow unbalanced add liquidity for other pools (e.g. reClamm)', () => {
-    const pool = getApiPoolMock(sDAIWeighted)
-    pool.type = GqlPoolType.Reclamm
+  it('should allow unbalanced add liquidity for other pools (e.g. v3 stable)', () => {
+    const pool = getApiPoolMock(v3StableNonBoosted)
+
+    expect(requiresProportionalInput(pool)).toBe(false)
+    expect(requiresProportionalInputReason(pool)).toBeUndefined()
   })
 })
