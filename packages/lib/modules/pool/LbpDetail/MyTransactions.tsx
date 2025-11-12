@@ -64,7 +64,6 @@ export function MyTransactions({
       listContainerProps={{
         maxH: { base: '200px', md: '250px' },
         overflowX: 'hidden',
-        overflowY: 'auto',
       }}
       title="My transactions"
     >
