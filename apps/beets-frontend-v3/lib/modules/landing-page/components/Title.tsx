@@ -1,4 +1,3 @@
- 
 'use client'
 
 import { Box, BoxProps, Heading } from '@chakra-ui/react'
