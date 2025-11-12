@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { getChainId } from '@repo/lib/config/app.config'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { selectStakingService } from '@repo/lib/modules/staking/selectStakingService'

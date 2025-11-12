@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.13.8",
+    "@balancer-labs/balancer-maths": "0.0.37",
     "@balancer/sdk": "4.9.0",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
@@ -51,7 +52,7 @@
     "echarts": "5.6.0",
     "echarts-for-react": "3.0.2",
     "fathom-client": "^3.7.0",
-    "framer-motion": "12.9.7",
+    "framer-motion": "12.23.24",
     "graphql": "16.11.0",
     "graphql-request": "7.2.0",
     "graphql-tag": "^2.12.6",

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { HumanTokenAmount } from '@repo/lib/modules/tokens/token.types'

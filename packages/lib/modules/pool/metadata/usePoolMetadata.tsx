@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { Pool } from '../pool.types'
 import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { usePoolsMetadata } from './PoolsMetadataProvider'

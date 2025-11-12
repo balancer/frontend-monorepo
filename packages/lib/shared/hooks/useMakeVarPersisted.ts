@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 // adapted from https://github.com/apollographql/apollo-cache-persist/issues/361#issuecomment-912545495
 
 'use client'

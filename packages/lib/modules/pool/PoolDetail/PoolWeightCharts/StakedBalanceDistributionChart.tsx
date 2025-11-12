@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { Box, HStack, Text, VStack, useTheme } from '@chakra-ui/react'

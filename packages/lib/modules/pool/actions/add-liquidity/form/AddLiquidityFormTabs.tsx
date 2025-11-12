@@ -122,7 +122,7 @@ export function AddLiquidityFormTabs({
   const { clearAmountsIn } = useAddLiquidity()
   const { isLoading, pool } = usePool()
   const { toCurrency } = useCurrency()
-  const { poolIsInRange } = useGetECLPLiquidityProfile(pool)
+  const { poolIsInRange } = useGetECLPLiquidityProfile()
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)

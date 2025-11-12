@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 'use client'
 
 // eslint-disable-next-line no-restricted-imports
