@@ -8,7 +8,9 @@ test('Balancer: can add liquidity to random pool', async ({ page }) => {
 
   // Proportional tab is disabled
   await page.locator('#button-group-1').hover() //TODO: add id to the button to improve locator
-  await expect(page.getByText('This pool does not support')).toBeVisible()
+  await expect(
+    page.getByText('does not support liquidity to be added proportionally'),
+  ).toBeVisible()
   await page.locator('#button-group-0').hover() //TODO: add id to the button to improve locator
 
   // Form works for flexible tab

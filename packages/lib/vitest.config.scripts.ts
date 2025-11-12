@@ -1,3 +1,4 @@
+import { defineConfig } from 'vitest/config'
 import { InlineConfig } from 'vitest/node'
 import vitestUnitConfig from './vitest.config'
 
@@ -12,16 +13,13 @@ import vitestUnitConfig from './vitest.config'
 
 function setupFilesWithoutMswSetup() {
   const setupFiles = vitestUnitConfig.test!.setupFiles! as string[]
-  return setupFiles.filter(file => file !== 'test/vitest/setup-msw.ts')
+  return setupFiles.filter(file => !file.includes('setup-msw.ts'))
 }
 
 const scriptTestOptions: Partial<InlineConfig> = {
   include: ['./**/*.script.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-  // Avoid msw in integration tests
   setupFiles: [...setupFilesWithoutMswSetup()],
   testTimeout: 30_000,
-  // Uncomment the next line to exclude test for debug reasons
-  // exclude: ['lib/modules/tokens/useTokenBalances.integration.spec.ts', 'node_modules', 'dist'],
 }
 
 const scriptConfig = vitestUnitConfig
@@ -31,4 +29,4 @@ scriptConfig.test = {
   ...scriptTestOptions,
 }
 
-export default scriptConfig
+export default defineConfig(scriptConfig)

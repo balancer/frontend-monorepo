@@ -2,7 +2,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolExample } from './pool-examples.types'
 
 export const balWeth8020: PoolExample = {
-  name: 'B-50BAL-50WETH',
+  name: 'B-80BAL-20WETH',
   description: 'Weighted OG',
   poolId: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014',
   poolAddress: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
@@ -51,6 +51,14 @@ export const v3StableNonBoosted: PoolExample = {
   version: 3,
 }
 
+export const gyroV3: PoolExample = {
+  name: 'ECLP-GYD-sDAI',
+  description: 'v3 gyro (eclp)',
+  poolId: '0x2191df821c198600499aa1f0031b1a7514d7a7d9000200000000000000000639',
+  poolChain: GqlChain.Mainnet,
+  version: 3,
+}
+
 export const flatPoolExamples = [
   balWeth8020,
   osETHPhantom,
@@ -58,4 +66,5 @@ export const flatPoolExamples = [
   v2SepoliaStableWithERC4626,
   cowAmmPoolWethGno,
   v3StableNonBoosted,
+  gyroV3,
 ]
