@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useShouldSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
@@ -89,15 +88,27 @@ export function useAddLiquiditySteps({
     slippage,
   })
 
-  const approveAndAddSteps = getApprovalAndAddSteps({
-    isPermit2,
-    shouldUseSignatures,
-    shouldBatchTransactions,
-    permit2ApprovalSteps,
-    tokenApprovalSteps,
-    signPermit2Step,
-    addLiquidityStep,
-  })
+  const approveAndAddSteps = useMemo(
+    () =>
+      getApprovalAndAddSteps({
+        isPermit2,
+        shouldUseSignatures,
+        shouldBatchTransactions,
+        permit2ApprovalSteps,
+        tokenApprovalSteps,
+        signPermit2Step,
+        addLiquidityStep,
+      }),
+    [
+      isPermit2,
+      shouldUseSignatures,
+      shouldBatchTransactions,
+      permit2ApprovalSteps,
+      tokenApprovalSteps,
+      signPermit2Step,
+      addLiquidityStep,
+    ]
+  )
 
   const steps = useMemo<TransactionStep[]>(() => {
     if (relayerMode === 'approveRelayer') {
@@ -110,12 +121,9 @@ export function useAddLiquiditySteps({
   }, [
     relayerMode,
     shouldSignRelayerApproval,
-    tokenApprovalSteps,
-    addLiquidityStep,
     approveRelayerStep,
     signRelayerStep,
-    signPermit2Step,
-    humanAmountsIn,
+    approveAndAddSteps,
   ])
 
   return {
