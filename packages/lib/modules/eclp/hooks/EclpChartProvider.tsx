@@ -30,12 +30,10 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
   }, [poolTokens, isReversed])
 
   const secondaryFontColor = selectColor('font', 'secondary')
-
   const fontHighlightColor = selectColor('font', 'highlight')
-
   const backgroundHighlightColor = selectColor('background', 'highlight')
-
   const markPointMargin = 0.05
+
   const isSpotPriceNearLowerBound = useMemo(() => {
     return bn(poolSpotPrice || 0).lt(xMin * (1 + markPointMargin))
   }, [poolSpotPrice, xMin])
