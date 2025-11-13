@@ -77,7 +77,7 @@ export function VebalLockModal({
     When lptoken: we are creating/increasing the lock amount
     When no lptoken: we are unlocking/locking
    */
-  const addedAmount = useMemo(() => (lpToken ? bn(lpToken) : totalAmount), [lpToken, totalAmount])
+  const addedAmount = lpToken ? bn(lpToken) : totalAmount
 
   const buildLockStepsArgs = useMemo<UseBuildLockStepsArgs>(
     () => ({
