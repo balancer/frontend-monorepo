@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import {
   ManagedResult,
   TransactionLabels,
@@ -100,7 +99,7 @@ export function useClaimAndUnstakeStep({
 
   const onSuccess = useCallback(() => {
     refetchPoolBalances()
-  }, [])
+  }, [refetchPoolBalances])
 
   const step = useMemo(
     (): TransactionStep => ({
@@ -116,7 +115,7 @@ export function useClaimAndUnstakeStep({
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimAndUnstakeStepId} {...props} />,
     }),
-    [transaction, data, props]
+    [transaction, props, onSuccess]
   )
 
   return {
