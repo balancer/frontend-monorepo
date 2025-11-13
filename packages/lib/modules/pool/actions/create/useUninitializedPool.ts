@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useMemo } from 'react'
 import { Address } from 'viem'
 import { erc20Abi } from 'viem'
@@ -22,14 +21,28 @@ import { PoolCreationToken } from './types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { calculatePeakPrice } from './steps/details/gyro.helpers'
 
+const POOL_FUNCTION_NAMES = ['name', 'symbol'] as const
+const TOKEN_FUNCTION_NAMES = ['name', 'symbol', 'decimals'] as const
+const TOKEN_READS_PER_TOKEN = TOKEN_FUNCTION_NAMES.length
+
+const VAULT_FUNCTION_NAMES = [
+  'getPoolTokenInfo',
+  'getPoolConfig',
+  'getHooksConfig',
+  'getPoolRoleAccounts',
+] as const
+
 type PoolTokenInfo = [Address[], { rateProvider: Address; paysYieldFees: boolean }[]]
+type HooksConfig = { hooksContract: Address }
+type PoolRoleAccounts = { swapFeeManager: Address; pauseManager: Address }
+type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
+type TokenDataResponse = ReadContractResponse<string | number>[]
+
 type PoolConfig = {
   staticSwapFeePercentage: bigint
   liquidityManagement: { disableUnbalancedLiquidity: boolean; enableDonation: boolean }
 }
-type HooksConfig = { hooksContract: Address }
-type PoolRoleAccounts = { swapFeeManager: Address; pauseManager: Address }
-type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
+
 type PoolDataResponse = [
   ReadContractResponse<string>,
   ReadContractResponse<string>,
@@ -38,7 +51,6 @@ type PoolDataResponse = [
   ReadContractResponse<HooksConfig>,
   ReadContractResponse<PoolRoleAccounts>,
 ]
-type TokenDataResponse = ReadContractResponse<string | number>[]
 
 /**
  *  This hook translates on chain data into pool creation form data
@@ -60,27 +72,21 @@ export function useUninitializedPool() {
   const isGyroEclpType = poolTypeParam && isGyroEllipticPool(poolTypeParam)
 
   const areAllParamsDefined = !!networkParam && !!poolTypeParam && !!poolAddressParam
+
   // only trigger form hydration if no poolAddress in local storage
   const shouldHydratePoolCreationForm = !poolAddress && areAllParamsDefined
-
-  const poolFunctionNames = ['name', 'symbol']
-  const vaultFunctionNames = [
-    'getPoolTokenInfo',
-    'getPoolConfig',
-    'getHooksConfig',
-    'getPoolRoleAccounts',
-  ]
 
   const poolDataReads = useMemo(() => {
     if (!poolAddressParam || !chainId) return []
 
-    const poolContractReads = poolFunctionNames.map(functionName => ({
+    const poolContractReads = POOL_FUNCTION_NAMES.map(functionName => ({
       address: poolAddressParam,
       abi: erc20Abi,
       chainId,
       functionName,
     }))
-    const vaultContractReads = vaultFunctionNames.map(functionName => ({
+
+    const vaultContractReads = VAULT_FUNCTION_NAMES.map(functionName => ({
       address: AddressProvider.Vault(chainId),
       chainId,
       abi: vaultExtensionAbi_V3,
@@ -98,28 +104,37 @@ export function useUninitializedPool() {
 
   const [name, symbol, poolTokenInfo, poolConfig, hooksConfig, poolRoleAccounts] = poolData ?? []
 
-  const tokenAddresses = (poolTokenInfo?.result?.[0] ?? []) as Address[]
-  const tokenFunctionNames = ['name', 'symbol', 'decimals']
+  const tokenAddresses = useMemo(() => {
+    const addresses = (poolTokenInfo?.result?.[0] ?? []) as Address[]
+    return addresses ? [...addresses] : []
+  }, [poolTokenInfo])
+
+  const tokenConfigs = useMemo(
+    () =>
+      (
+        (poolTokenInfo?.result?.[1] ?? []) as {
+          rateProvider: Address
+          paysYieldFees: boolean
+        }[]
+      ).map(config => ({ ...config })),
+    [poolTokenInfo]
+  )
 
   const tokenContracts = useMemo(() => {
-    if (!poolData || !chainId) return []
+    if (!chainId || tokenAddresses.length === 0) return []
 
-    if (!tokenAddresses) return []
-
-    return (
-      tokenFunctionNames
-        .flatMap((functionName: string) =>
-          tokenAddresses.map((address: Address) => ({
-            address,
-            abi: erc20Abi,
-            chainId,
-            functionName,
-          }))
-        )
-        // IMPORTANT: token contract reads must be sorted by token address!
-        .sort((a, b) => a.address.localeCompare(b.address))
+    const contracts = TOKEN_FUNCTION_NAMES.flatMap(functionName =>
+      tokenAddresses.map(address => ({
+        address,
+        abi: erc20Abi,
+        chainId,
+        functionName,
+      }))
     )
-  }, [chainId, poolData])
+
+    // IMPORTANT: token contract reads must be sorted by token address!
+    return contracts.sort((a, b) => a.address.localeCompare(b.address))
+  }, [chainId, tokenAddresses])
 
   const { data: poolTokenDetails, isLoading: isLoadingPoolTokenDetails } = useReadContracts({
     query: { enabled: tokenContracts.length > 0 && shouldHydratePoolCreationForm },
@@ -128,25 +143,30 @@ export function useUninitializedPool() {
 
   // group contract read results by token address
   const tokenData = useMemo(() => {
-    if (!poolTokenDetails || !tokenAddresses || !chainId || !networkParam) return []
+    if (!poolTokenDetails || tokenAddresses.length === 0 || !chainId || !networkParam) return []
 
-    const data = []
+    const groupedReads: TokenDataResponse[] = []
 
-    for (let i = 0; i < tokenContracts.length; i += tokenFunctionNames.length) {
-      data.push(poolTokenDetails.slice(i, i + tokenFunctionNames.length))
+    for (let i = 0; i < poolTokenDetails.length; i += TOKEN_READS_PER_TOKEN) {
+      groupedReads.push(poolTokenDetails.slice(i, i + TOKEN_READS_PER_TOKEN))
     }
 
-    return data.map((tokenReadResults, index) => {
-      return {
-        address: tokenAddresses[index],
-        name: tokenReadResults[0]?.result as string,
-        symbol: tokenReadResults[1]?.result as string,
-        decimals: tokenReadResults[2]?.result as number,
-        chainId,
-        chain: networkParam,
-      }
+    return groupedReads.flatMap((tokenReadResults, index) => {
+      const address = tokenAddresses[index]
+      if (!address) return []
+
+      return [
+        {
+          address,
+          name: tokenReadResults[0]?.result as string,
+          symbol: tokenReadResults[1]?.result as string,
+          decimals: tokenReadResults[2]?.result as number,
+          chainId,
+          chain: networkParam,
+        },
+      ]
     })
-  }, [poolTokenDetails])
+  }, [poolTokenDetails, tokenAddresses, chainId, networkParam])
 
   const { data: normalizedWeights, isLoading: isLoadingWeights } = useReadContract({
     address: poolAddressParam,
@@ -156,27 +176,44 @@ export function useUninitializedPool() {
     query: { enabled: isWeightedPoolType && shouldHydratePoolCreationForm },
   })
 
-  const tokenWeights = normalizedWeights
-    ? normalizedWeights.map(weight => formatUnits(weight, PERCENTAGE_DECIMALS))
-    : undefined
+  const tokenWeights = useMemo(() => {
+    if (!normalizedWeights) return undefined
+
+    return normalizedWeights.map(weight => formatUnits(weight, PERCENTAGE_DECIMALS))
+  }, [normalizedWeights])
 
   const poolTokens: PoolCreationToken[] | undefined = useMemo(() => {
-    if (!tokenAddresses || !tokenData) return undefined
+    if (
+      tokenAddresses.length === 0 ||
+      tokenConfigs.length !== tokenAddresses.length ||
+      tokenData.length < tokenAddresses.length
+    ) {
+      return undefined
+    }
 
-    const tokenConfigs = (poolTokenInfo?.result?.[1] ?? []) as {
-      rateProvider: Address
-      paysYieldFees: boolean
-    }[]
+    const tokens: PoolCreationToken[] = []
 
-    return tokenAddresses.map((address, idx) => ({
-      address,
-      rateProvider: tokenConfigs[idx].rateProvider,
-      paysYieldFees: tokenConfigs[idx].paysYieldFees,
-      amount: '',
-      weight: tokenWeights ? tokenWeights[idx] : undefined,
-      data: tokenData.find(token => token.address.toLowerCase() === address.toLowerCase()),
-    }))
-  }, [tokenAddresses, poolTokenInfo, normalizedWeights, tokenData])
+    for (let idx = 0; idx < tokenAddresses.length; idx += 1) {
+      const address = tokenAddresses[idx]
+      const config = tokenConfigs[idx]
+      const data = tokenData.find(token => token.address.toLowerCase() === address.toLowerCase())
+
+      if (!config || !data) {
+        return undefined
+      }
+
+      tokens.push({
+        address,
+        rateProvider: config.rateProvider,
+        paysYieldFees: config.paysYieldFees,
+        amount: '',
+        weight: tokenWeights ? tokenWeights[idx] : undefined,
+        data,
+      })
+    }
+
+    return tokens
+  }, [tokenAddresses, tokenConfigs, tokenData, tokenWeights])
 
   const { data: amplificationParameterRes, isLoading: isLoadingAmplificationParameter } =
     useReadContract({
@@ -187,7 +224,15 @@ export function useUninitializedPool() {
       query: { enabled: isStablePoolType && shouldHydratePoolCreationForm },
     })
 
-  const poolFormData = useMemo(() => {
+  const { data: reClammConfig, isLoading: isLoadingReClammConfig } = useReadContract({
+    address: poolAddressParam,
+    abi: reClammPoolAbi,
+    functionName: 'getReClammPoolImmutableData',
+    chainId,
+    query: { enabled: isReClammPoolType && shouldHydratePoolCreationForm },
+  })
+
+  const poolFormData = (() => {
     const network = networkParam
     const poolType = poolTypeParam
     const staticSwapFeePercentage = poolConfig?.result?.staticSwapFeePercentage
@@ -201,6 +246,7 @@ export function useUninitializedPool() {
     const weightSet = new Set(tokenWeights ?? [])
     const isFiftyFiftyWeights = weightSet.size === 1 && weightSet.has('50')
     const isEightyTwentyWeights = weightSet.has('80') && weightSet.has('20')
+
     const weightedPoolStructure = isFiftyFiftyWeights
       ? WeightedPoolStructure.FiftyFifty
       : isEightyTwentyWeights
@@ -222,8 +268,8 @@ export function useUninitializedPool() {
       !poolType ||
       !poolTokens ||
       !pauseManager ||
-      !name.result ||
-      !symbol.result ||
+      !name?.result ||
+      !symbol?.result ||
       disableUnbalancedLiquidity === undefined ||
       enableDonation === undefined ||
       !poolHooksContract ||
@@ -250,15 +296,7 @@ export function useUninitializedPool() {
       amplificationParameter,
       weightedPoolStructure,
     }
-  }, [networkParam, poolTypeParam, poolData, poolTokenDetails])
-
-  const { data: reClammConfig, isLoading: isLoadingReClammConfig } = useReadContract({
-    address: poolAddressParam,
-    abi: reClammPoolAbi,
-    functionName: 'getReClammPoolImmutableData',
-    chainId,
-    query: { enabled: isReClammPoolType && shouldHydratePoolCreationForm },
-  })
+  })()
 
   const reClammFormData = useMemo(() => {
     if (!reClammConfig || !isReClammPoolType) return undefined
