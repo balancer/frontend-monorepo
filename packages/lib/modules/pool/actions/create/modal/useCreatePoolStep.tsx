@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import {
   ManagedResult,
   TransactionLabels,
@@ -39,13 +38,16 @@ export function useCreatePoolStep({
   const chainName = getChainName(chainId)
   const chain = getGqlChain(chainId)
 
-  const labels: TransactionLabels = {
-    init: `Deploy pool on ${chainName}`,
-    title: `Deploy pool on ${chainName}`,
-    confirming: 'Confirming pool creation...',
-    confirmed: 'Pool creation confirmed!',
-    tooltip: `Deploy pool on ${chainName}`,
-  }
+  const labels = useMemo<TransactionLabels>(
+    () => ({
+      init: `Deploy pool on ${chainName}`,
+      title: `Deploy pool on ${chainName}`,
+      confirming: 'Confirming pool creation...',
+      confirmed: 'Pool creation confirmed!',
+      tooltip: `Deploy pool on ${chainName}`,
+    }),
+    [chainName]
+  )
 
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput,
@@ -92,6 +94,6 @@ export function useCreatePoolStep({
         )
       },
     }),
-    [transaction, buildCallDataQuery.data, gasEstimationMeta, poolAddress]
+    [transaction, buildCallDataQuery.data, gasEstimationMeta, poolAddress, labels]
   )
 }
