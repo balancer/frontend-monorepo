@@ -429,6 +429,8 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
     secondaryFontColor,
     fontHighlightColor,
     backgroundHighlightColor,
+    isSpotPriceNearLowerBound,
+    isSpotPriceNearUpperBound,
   ])
 
   const outOfRangeText =
