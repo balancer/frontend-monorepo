@@ -60,8 +60,8 @@ function EclpParamInputs() {
   // peak price is used to calculate c and s
   useEffect(() => {
     const { c, s } = calculateRotationComponents(peakPrice)
-    eclpConfigForm.setValue('c', c)
-    eclpConfigForm.setValue('s', s)
+    eclpConfigForm.setValue('c', c, { shouldValidate: true })
+    eclpConfigForm.setValue('s', s, { shouldValidate: true })
   }, [peakPrice])
 
   // since eclp init amounts are calculated based on eclp params
@@ -77,8 +77,7 @@ function EclpParamInputs() {
     tooltip: 'The lowest price the pool will provide liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
-      eclpConfigForm.setValue('alpha', suggestedEclpConfig.alpha)
-      eclpConfigForm.trigger('alpha')
+      eclpConfigForm.setValue('alpha', suggestedEclpConfig.alpha, { shouldValidate: true })
     },
     validate: (value: string) => {
       if (Number(value) < 0) return 'Lower bound price must be greater than 0'
@@ -100,8 +99,7 @@ function EclpParamInputs() {
     tooltip: 'The price where the pool will provide the deepest liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
-      eclpConfigForm.setValue('peakPrice', suggestedEclpConfig.peakPrice)
-      eclpConfigForm.trigger('peakPrice')
+      eclpConfigForm.setValue('peakPrice', suggestedEclpConfig.peakPrice, { shouldValidate: true })
     },
     validate: (value: string) => {
       if (Number(value) < 0) return 'Peak price must be greater than 0'
@@ -119,8 +117,7 @@ function EclpParamInputs() {
     tooltip: 'The highest price the pool will provide liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
-      eclpConfigForm.setValue('beta', suggestedEclpConfig.beta)
-      eclpConfigForm.trigger('beta')
+      eclpConfigForm.setValue('beta', suggestedEclpConfig.beta, { shouldValidate: true })
     },
     validate: (value: string) => {
       if (Number(value) < 0) return 'Upper bound price must be greater than 0'
