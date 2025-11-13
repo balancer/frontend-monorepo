@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
   ManagedResult,
   TransactionLabels,
@@ -53,12 +53,19 @@ export function useInitializePoolStep({
     initPoolInput,
   })
 
-  const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in initialze LBP gas estimation', {
-    buildCallQueryData: buildCallDataQuery.data,
-    tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
-  })
+  const gasEstimationMeta = useMemo(
+    () =>
+      sentryMetaForWagmiSimulation('Error in initialize pool gas estimation', {
+        buildCallQueryData: buildCallDataQuery.data,
+        tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
+      }),
+    [buildCallDataQuery.data, buildTenderlyUrl]
+  )
 
-  const isComplete = () => !!isPoolInitialized || isTransactionSuccess(transaction)
+  const isComplete = useCallback(
+    () => !!isPoolInitialized || isTransactionSuccess(transaction),
+    [isPoolInitialized, transaction]
+  )
 
   return useMemo(
     () => ({
