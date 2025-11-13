@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
@@ -67,7 +66,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
 
   const handler = useMemo(
     () => selectRemoveLiquidityHandler(pool, removalType),
-    [pool.id, removalType, isLoading]
+    [pool, removalType, isLoading]
   )
 
   const totalUsdFromBprPrice = bn(humanBptIn).times(bptPrice).toFixed()
@@ -110,15 +109,16 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   const tokenOut =
     wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress
 
+  const walletBalance = pool.userBalance?.walletBalance
+  const totalShares = pool.dynamicData.totalShares
+
   const isSingleTokenBalanceMoreThat25Percent = useMemo(() => {
-    if (!pool.userBalance || !isSingleToken) {
+    if (!walletBalance || !isSingleToken) {
       return false
     }
 
-    return bn(pool.userBalance.walletBalance)
-      .times(bn(humanBptInPercent).div(100))
-      .gt(bn(pool.dynamicData.totalShares).times(0.25))
-  }, [singleTokenOutAddress, humanBptInPercent, isSingleToken])
+    return bn(walletBalance).times(bn(humanBptInPercent).div(100)).gt(bn(totalShares).times(0.25))
+  }, [walletBalance, totalShares, humanBptInPercent, isSingleToken])
 
   /**
    * Queries
