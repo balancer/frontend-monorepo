@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { getChainId } from '@repo/lib/config/app.config'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { selectStakingService } from '@repo/lib/modules/staking/selectStakingService'
@@ -10,7 +9,7 @@ import {
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { GqlChain, GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 import { useClaimCallDataQuery } from './useClaimCallDataQuery'
@@ -36,6 +35,7 @@ export function useClaimAllRewardsStep({
   const [isClaimQueryEnabled, setIsClaimQueryEnabled] = useState(false)
   const { isConnected } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+
   const { claimableRewards: nonBalRewards, refetchClaimableRewards } = claimableBalancesQuery
   const { balRewardsData: balRewards, refetchBalRewards } = balTokenRewardsQuery
 
@@ -47,12 +47,19 @@ export function useClaimAllRewardsStep({
   const chain = pool.chain as GqlChain
   const stakingType = pool.staking?.type || GqlPoolStakingType.Gauge
 
-  const claimRewardGauges = nonBalRewards.map(r => r.gaugeAddress)
-  const mintBalRewardGauges = balRewards.map(r => r.gaugeAddress as Address)
-  const allRewardGauges = [...claimRewardGauges, ...mintBalRewardGauges]
-  const shouldClaimMany = allRewardGauges.length > 1
+  const claimRewardGauges = useMemo(() => nonBalRewards.map(r => r.gaugeAddress), [nonBalRewards])
 
+  const mintBalRewardGauges = useMemo(
+    () => balRewards.map(r => r.gaugeAddress as Address),
+    [balRewards]
+  )
+  const allRewardGauges = useMemo(
+    () => [...claimRewardGauges, ...mintBalRewardGauges],
+    [claimRewardGauges, mintBalRewardGauges]
+  )
+  const shouldClaimMany = allRewardGauges.length > 1
   const stakingService = selectStakingService(chain, stakingType)
+
   const { data: claimData, isLoading } = useClaimCallDataQuery({
     claimRewardGauges,
     mintBalRewardGauges,
@@ -60,40 +67,50 @@ export function useClaimAllRewardsStep({
     enabled: isClaimQueryEnabled,
   })
 
-  const labels: TransactionLabels = {
-    init: `Claim${shouldClaimMany ? ' all' : ''}`,
-    title: `Claim${shouldClaimMany ? ' all' : ''}`,
-    confirming: 'Confirming claim...',
-    confirmed: 'Claimed!',
-    tooltip: shouldClaimMany
-      ? 'Claim all rewards from your gauges'
-      : 'Claim all rewards from your gauge',
-  }
-
-  const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (Claim all rewards transaction)',
-    {
-      poolId: pool.id,
-      chain,
-      claimData,
-      stakingType,
-      allRewardGauges,
-    }
+  const labels: TransactionLabels = useMemo(
+    () => ({
+      init: `Claim${shouldClaimMany ? ' all' : ''}`,
+      title: `Claim${shouldClaimMany ? ' all' : ''}`,
+      confirming: 'Confirming claim...',
+      confirmed: 'Claimed!',
+      tooltip: shouldClaimMany
+        ? 'Claim all rewards from your gauges'
+        : 'Claim all rewards from your gauge',
+    }),
+    [shouldClaimMany]
   )
 
-  const props: ManagedTransactionInput = {
-    labels,
-    chainId: getChainId(chain),
-    contractId: 'balancer.relayerV6',
-    contractAddress: getNetworkConfig(chain).contracts.balancer.relayerV6,
-    functionName: 'multicall',
-    args: [claimData],
-    enabled: allRewardGauges.length > 0 && claimData && claimData.length > 0,
-    txSimulationMeta,
-    onTransactionChange: setTransaction,
-  }
+  const txSimulationMeta = useMemo(
+    () =>
+      sentryMetaForWagmiSimulation('Error in wagmi tx simulation (Claim all rewards transaction)', {
+        poolId: pool.id,
+        chain,
+        claimData,
+        stakingType,
+        allRewardGauges,
+      }),
+    [allRewardGauges, chain, claimData, pool.id, stakingType]
+  )
 
-  const isComplete = () => isConnected && isTransactionSuccess(transaction)
+  const managedTransactionProps = useMemo<ManagedTransactionInput>(
+    () => ({
+      labels,
+      chainId: getChainId(chain),
+      contractId: 'balancer.relayerV6',
+      contractAddress: getNetworkConfig(chain).contracts.balancer.relayerV6,
+      functionName: 'multicall',
+      args: [claimData],
+      enabled: allRewardGauges.length > 0 && !!claimData && claimData.length > 0,
+      txSimulationMeta,
+      onTransactionChange: setTransaction,
+    }),
+    [allRewardGauges.length, chain, claimData, labels, txSimulationMeta]
+  )
+
+  const isComplete = useCallback(
+    () => isConnected && isTransactionSuccess(transaction),
+    [isConnected, transaction]
+  )
 
   const step = useMemo(
     (): TransactionStep => ({
@@ -108,10 +125,19 @@ export function useClaimAllRewardsStep({
         refetchClaimableRewards()
         refetchBalRewards()
       },
-      renderAction: () => <ManagedTransactionButton id={claimAllRewardsStepId} {...props} />,
+      renderAction: () => (
+        <ManagedTransactionButton id={claimAllRewardsStepId} {...managedTransactionProps} />
+      ),
     }),
 
-    [transaction, claimData, isLoading]
+    [
+      transaction,
+      labels,
+      isComplete,
+      refetchClaimableRewards,
+      refetchBalRewards,
+      managedTransactionProps,
+    ]
   )
   return { step, isLoading }
 }
