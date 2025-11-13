@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useMemo, useState } from 'react'
 import {
   ManagedResult,
@@ -105,6 +104,13 @@ export function useInitializePoolStep({
         : undefined,
     }),
 
-    [transaction, labels, buildCallDataQuery.data, isPoolInitialized]
+    [
+      transaction,
+      isComplete,
+      buildCallDataQuery.data,
+      gasEstimationMeta,
+      initPoolInput.chainId,
+      refetchIsPoolInitialized,
+    ]
   )
 }
