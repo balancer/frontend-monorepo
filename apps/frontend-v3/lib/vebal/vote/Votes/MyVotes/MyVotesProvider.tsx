@@ -90,7 +90,7 @@ export function useMyVotesLogic() {
     [votedPools]
   )
 
-  // Record<VoteId, Weight override>
+  // Record<VoteId, Weight>
   const [editVotesOverrides, setEditVotesOverrides] = useState<Record<string, string>>(() => ({}))
 
   const editVotesWeights = useMemo<Record<string, string>>(() => {
