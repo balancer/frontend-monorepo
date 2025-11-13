@@ -43,15 +43,15 @@ export function useLockDuration({ lockedEndDate, mainnetLockedInfo }: UseLockDur
   const [rawSliderValue, setRawSliderValue] = useState(() => maxStep)
 
   const sliderValue = useMemo(() => {
-    const upperBounded = Math.min(rawSliderValue, maxStep)
+    const upperBound = Math.min(rawSliderValue, maxStep)
 
-    return Math.max(lowerBound, upperBounded)
+    return Math.max(lowerBound, upperBound)
   }, [rawSliderValue, lowerBound, maxStep])
 
   const onSliderChange = (val: number) => {
-    const upperBounded = Math.min(val, maxStep)
+    const upperBound = Math.min(val, maxStep)
 
-    setRawSliderValue(Math.max(lowerBound, upperBounded))
+    setRawSliderValue(Math.max(lowerBound, upperBound))
   }
 
   const lockEndDate = useMemo(() => {
