@@ -1,12 +1,10 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useLst } from '../LstProvider'
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { LstWithdrawTableRow } from './LstWithdrawTableRow'
 import { LstWithdrawTableHeader } from './LstWithdrawTableHeader'
 import { orderBy } from 'lodash'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { LstWithdrawModal } from '../modals/LstWithdrawModal'
 import { useDisclosure } from '@chakra-ui/react'
 import { useGetUserWithdraws, UserWithdraw } from '../hooks/useGetUserWithdraws'
@@ -33,15 +31,12 @@ export function LstWithdraw() {
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination, false, true)
   const showPagination = !!count && count > pagination.pageSize
 
-  const [withdrawalsView, setWithdrawalsView] = useState(withdrawalsDataOrdered.slice(skip, first))
-
-  useEffect(() => {
+  const withdrawalsView = useMemo(() => {
     if (withdrawalsDataOrdered.length < first) {
-      setWithdrawalsView(withdrawalsDataOrdered.slice(skip))
-    } else {
-      setWithdrawalsView(withdrawalsDataOrdered.slice(skip, first + skip))
+      return withdrawalsDataOrdered.slice(skip)
     }
-  }, [skip, withdrawalsData])
+    return withdrawalsDataOrdered.slice(skip, first + skip)
+  }, [withdrawalsDataOrdered, skip, first])
 
   const rowProps = {
     px: { base: 'sm', sm: '0' },

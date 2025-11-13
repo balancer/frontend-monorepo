@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { Box, BoxProps, Heading } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { LettersPullUp } from '@repo/lib/shared/components/animations/LettersPullUp'
 
@@ -17,19 +16,20 @@ const words = [
 export function Title({ ...rest }: BoxProps) {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [widths, setWidths] = useState<Record<string, number>>({})
-  const measureRef = useRef<HTMLSpanElement>(null)
   const { isMobile } = useBreakpoints()
 
-  // Measure all words once on mount
-  useEffect(() => {
-    if (measureRef.current) {
-      const newWidths: Record<string, number> = {}
-      words.forEach(({ word }) => {
-        measureRef.current!.textContent = word
-        newWidths[word] = measureRef.current!.offsetWidth + 20
-      })
-      setWidths(newWidths)
-    }
+  const setMeasureRef = useCallback((node: HTMLSpanElement | null) => {
+    if (!node) return
+
+    const newWidths: Record<string, number> = {}
+
+    words.forEach(({ word }) => {
+      node.textContent = word
+      newWidths[word] = node.offsetWidth + 20
+    })
+
+    node.textContent = ''
+    setWidths(newWidths)
   }, [])
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export function Title({ ...rest }: BoxProps) {
         </AnimatePresence>
         {/* Hidden measurement element */}
         <span
-          ref={measureRef}
+          ref={setMeasureRef}
           style={{
             visibility: 'hidden',
             position: 'absolute',
