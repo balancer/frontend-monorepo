@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
@@ -66,7 +65,7 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
 
   const handler = useMemo(
     () => selectAddLiquidityHandler(pool, wantsProportional),
-    [pool.id, isLoading, wantsProportional]
+    [pool, isLoading, wantsProportional]
   )
 
   /**
