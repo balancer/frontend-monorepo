@@ -307,7 +307,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         axisTick: { show: false },
         axisLabel: {
           formatter: (value: number) => {
-            return format(new Date(value), 'MMM d yyyy')
+            return format(new Date(value), 'd MMM yy')
           },
           color:
             nextTheme === 'dark'
