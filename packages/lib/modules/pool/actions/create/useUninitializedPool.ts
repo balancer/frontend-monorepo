@@ -221,16 +221,20 @@ export function useUninitializedPool() {
     query: { enabled: isReClammPoolType && shouldHydratePoolCreationForm },
   })
 
-  const poolFormData = (() => {
+  const poolFormData = useMemo(() => {
     const network = networkParam
     const poolType = poolTypeParam
-    const staticSwapFeePercentage = poolConfig?.result?.staticSwapFeePercentage
-    const swapFeeManager = poolRoleAccounts?.result?.swapFeeManager
-    const pauseManager = poolRoleAccounts?.result?.pauseManager
-    const { liquidityManagement } = poolConfig?.result || {}
+    const poolConfigResult = poolConfig?.result
+    const staticSwapFeePercentage = poolConfigResult?.staticSwapFeePercentage
+    const liquidityManagement = poolConfigResult?.liquidityManagement
+    const poolRoleAccountsResult = poolRoleAccounts?.result
+    const swapFeeManager = poolRoleAccountsResult?.swapFeeManager
+    const pauseManager = poolRoleAccountsResult?.pauseManager
+    const poolHooksContract = hooksConfig?.result?.hooksContract
     const disableUnbalancedLiquidity = liquidityManagement?.disableUnbalancedLiquidity
     const enableDonation = liquidityManagement?.enableDonation
-    const poolHooksContract = hooksConfig?.result?.hooksContract
+    const nameResult = name?.result
+    const symbolResult = symbol?.result
 
     const weightSet = new Set(tokenWeights ?? [])
     const isFiftyFiftyWeights = weightSet.size === 1 && weightSet.has('50')
@@ -257,8 +261,8 @@ export function useUninitializedPool() {
       !poolType ||
       !poolTokens ||
       !pauseManager ||
-      !name?.result ||
-      !symbol?.result ||
+      !nameResult ||
+      !symbolResult ||
       disableUnbalancedLiquidity === undefined ||
       enableDonation === undefined ||
       !poolHooksContract ||
@@ -273,8 +277,8 @@ export function useUninitializedPool() {
       protocol: PROJECT_CONFIG.projectId,
       network,
       poolType,
-      name: name.result,
-      symbol: symbol.result,
+      name: nameResult,
+      symbol: symbolResult,
       poolTokens,
       swapFeePercentage: formatUnits(staticSwapFeePercentage, PERCENTAGE_DECIMALS),
       swapFeeManager,
@@ -285,7 +289,7 @@ export function useUninitializedPool() {
       amplificationParameter,
       weightedPoolStructure,
     }
-  })()
+  }, [amplificationParameterRes, poolTokens])
 
   const reClammFormData = useMemo(() => {
     if (!reClammConfig || !isReClammPoolType) return undefined
