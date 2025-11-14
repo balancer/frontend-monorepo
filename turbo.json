@@ -33,14 +33,6 @@
       "cache": false,
       "persistent": true
     },
-    "dev:webpack": {
-      "cache": false,
-      "persistent": true
-    },
-    "dev:beets:webpack": {
-      "cache": false,
-      "persistent": true
-    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

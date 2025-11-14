@@ -47,7 +47,6 @@ Related threads:
 ### Watchers
 
 - vitests are run in watch mode by default.
-- next currently uses a global webpack watcher for HMR.
 - It is possible that vitest tests are rerun by next watcher if you have it running in another tab.
 
 ### Testing strategy: Component vs Hook tests
