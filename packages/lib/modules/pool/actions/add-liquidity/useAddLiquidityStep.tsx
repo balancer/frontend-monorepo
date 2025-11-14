@@ -8,7 +8,7 @@ import { TransactionBatchButton } from '@repo/lib/modules/transactions/transacti
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import {
   AddLiquidityBuildQueryParams,
@@ -33,40 +33,28 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
     enabled: isStepActivated,
   })
 
-  const labels: TransactionLabels = useMemo(
-    () => ({
-      init: 'Add liquidity',
-      title: 'Add liquidity',
-      description: `Add liquidity to ${pool.name || 'pool'}.`,
-      confirming: 'Confirming add liquidity...',
-      confirmed: `Liquidity added!`,
-      tooltip: `Add liquidity to ${pool.name || 'pool'}.`,
-      poolId: pool.id,
-    }),
-    [pool.id, pool.name]
-  )
+  const labels: TransactionLabels = {
+    init: 'Add liquidity',
+    title: 'Add liquidity',
+    description: `Add liquidity to ${pool.name || 'pool'}.`,
+    confirming: 'Confirming add liquidity...',
+    confirmed: `Liquidity added!`,
+    tooltip: `Add liquidity to ${pool.name || 'pool'}.`,
+    poolId: pool.id,
+  }
 
-  const gasEstimationMeta = useMemo(
-    () =>
-      sentryMetaForWagmiSimulation('Error in AddLiquidity gas estimation', {
-        simulationQueryData: simulationQuery.data,
-        buildCallQueryData: buildCallDataQuery.data,
-        tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
-      }),
-    [simulationQuery.data, buildCallDataQuery.data, buildTenderlyUrl]
-  )
+  const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in AddLiquidity gas estimation', {
+    simulationQueryData: simulationQuery.data,
+    buildCallQueryData: buildCallDataQuery.data,
+    tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
+  })
 
-  const isComplete = useCallback(() => isTransactionSuccess(transaction), [transaction])
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds by AddLiquidityTimeout
     if (simulationQuery.data && isStepActivated) {
       buildCallDataQuery.refetch()
     }
   }, [simulationQuery.data])
-
-  const onSuccess = useCallback(() => {
-    refetchPoolBalances()
-  }, [refetchPoolBalances])
 
   return useMemo(
     () => ({
@@ -78,10 +66,10 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
         type: 'Gas transaction',
       },
       transaction,
-      isComplete,
+      isComplete: () => isTransactionSuccess(transaction),
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
-      onSuccess,
+      onSuccess: () => refetchPoolBalances(),
       renderAction: () => {
         if (!buildCallDataQuery.data) return <DisabledTransactionButton />
         return (
@@ -115,14 +103,6 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
           }
         : undefined,
     }),
-    [
-      transaction,
-      gasEstimationMeta,
-      buildCallDataQuery.data,
-      labels,
-      chainId,
-      isComplete,
-      onSuccess,
-    ]
+    [transaction, gasEstimationMeta, buildCallDataQuery.data, labels, chainId, refetchPoolBalances]
   )
 }

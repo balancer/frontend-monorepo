@@ -88,27 +88,15 @@ export function useAddLiquiditySteps({
     slippage,
   })
 
-  const approveAndAddSteps = useMemo(
-    () =>
-      getApprovalAndAddSteps({
-        isPermit2,
-        shouldUseSignatures,
-        shouldBatchTransactions,
-        permit2ApprovalSteps,
-        tokenApprovalSteps,
-        signPermit2Step,
-        addLiquidityStep,
-      }),
-    [
-      isPermit2,
-      shouldUseSignatures,
-      shouldBatchTransactions,
-      permit2ApprovalSteps,
-      tokenApprovalSteps,
-      signPermit2Step,
-      addLiquidityStep,
-    ]
-  )
+  const approveAndAddSteps = getApprovalAndAddSteps({
+    isPermit2,
+    shouldUseSignatures,
+    shouldBatchTransactions,
+    permit2ApprovalSteps,
+    tokenApprovalSteps,
+    signPermit2Step,
+    addLiquidityStep,
+  })
 
   const steps = useMemo<TransactionStep[]>(() => {
     if (relayerMode === 'approveRelayer') {

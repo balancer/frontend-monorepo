@@ -109,16 +109,16 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   const tokenOut =
     wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress
 
-  const walletBalance = pool.userBalance?.walletBalance
-  const totalShares = pool.dynamicData.totalShares
-
   const isSingleTokenBalanceMoreThat25Percent = useMemo(() => {
+    const walletBalance = pool.userBalance?.walletBalance
+    const totalShares = pool.dynamicData.totalShares
+
     if (!walletBalance || !isSingleToken) {
       return false
     }
 
     return bn(walletBalance).times(bn(humanBptInPercent).div(100)).gt(bn(totalShares).times(0.25))
-  }, [walletBalance, totalShares, humanBptInPercent, isSingleToken])
+  }, [humanBptInPercent, isSingleToken])
 
   /**
    * Queries

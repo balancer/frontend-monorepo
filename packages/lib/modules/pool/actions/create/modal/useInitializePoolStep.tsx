@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   ManagedResult,
   TransactionLabels,
@@ -62,18 +62,13 @@ export function useInitializePoolStep({
     [buildCallDataQuery.data, buildTenderlyUrl]
   )
 
-  const isComplete = useCallback(
-    () => !!isPoolInitialized || isTransactionSuccess(transaction),
-    [isPoolInitialized, transaction]
-  )
-
   return useMemo(
     () => ({
       id: initializePoolStepId,
       stepType: 'initializePool',
       labels,
       transaction,
-      isComplete,
+      isComplete: () => !!isPoolInitialized || isTransactionSuccess(transaction),
       onSuccess: () => {
         refetchIsPoolInitialized()
       },
@@ -113,11 +108,11 @@ export function useInitializePoolStep({
 
     [
       transaction,
-      isComplete,
       buildCallDataQuery.data,
       gasEstimationMeta,
       initPoolInput.chainId,
       refetchIsPoolInitialized,
+      isPoolInitialized,
     ]
   )
 }

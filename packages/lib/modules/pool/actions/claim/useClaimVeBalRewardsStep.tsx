@@ -9,7 +9,7 @@ import {
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Address } from 'viem'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
@@ -32,37 +32,25 @@ export function useClaimVeBalRewardsStep({
   const { userAddress } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
-  const txSimulationMeta = useMemo(
-    () =>
-      sentryMetaForWagmiSimulation(
-        'Error in wagmi tx simulation (Claim veBal rewards transaction)',
-        {
-          userAddress,
-          feeDistributor: networkConfig.contracts.feeDistributor,
-        }
-      ),
-    [userAddress]
+  const txSimulationMeta = sentryMetaForWagmiSimulation(
+    'Error in wagmi tx simulation (Claim veBal rewards transaction)',
+    {
+      userAddress,
+      feeDistributor: networkConfig.contracts.feeDistributor,
+    }
   )
 
-  const buttonProps: ManagedTransactionInput = useMemo(
-    () => ({
-      labels,
-      chainId: 1, // only on mainnet
-      contractAddress: networkConfig.contracts.feeDistributor as string,
-      contractId: 'balancer.feeDistributor',
-      functionName: 'claimTokens',
-      args: [userAddress, claimableVeBalRewardsTokens as Address[]],
-      enabled: !!userAddress,
-      txSimulationMeta,
-      onTransactionChange: setTransaction,
-    }),
-    [txSimulationMeta, userAddress]
-  )
-
-  const isComplete = useCallback(
-    () => userAddress && isTransactionSuccess(transaction),
-    [transaction, userAddress]
-  )
+  const props: ManagedTransactionInput = {
+    labels,
+    chainId: 1, // only on mainnet
+    contractAddress: networkConfig.contracts.feeDistributor as string,
+    contractId: 'balancer.feeDistributor',
+    functionName: 'claimTokens',
+    args: [userAddress, claimableVeBalRewardsTokens as Address[]],
+    enabled: !!userAddress,
+    txSimulationMeta,
+    onTransactionChange: setTransaction,
+  }
 
   return useMemo(
     () => ({
@@ -70,13 +58,11 @@ export function useClaimVeBalRewardsStep({
       stepType: 'claim',
       labels,
       transaction,
-      isComplete,
+      isComplete: () => userAddress && isTransactionSuccess(transaction),
       onSuccess,
-      renderAction: () => (
-        <ManagedTransactionButton id={claimVeBalRewardsStepId} {...buttonProps} />
-      ),
+      renderAction: () => <ManagedTransactionButton id={claimVeBalRewardsStepId} {...props} />,
     }),
 
-    [buttonProps, isComplete, onSuccess, transaction]
+    [props, onSuccess, transaction, userAddress]
   )
 }

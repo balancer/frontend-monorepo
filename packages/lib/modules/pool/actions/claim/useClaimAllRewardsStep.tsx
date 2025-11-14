@@ -9,7 +9,7 @@ import {
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { GqlChain, GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 import { useClaimCallDataQuery } from './useClaimCallDataQuery'
@@ -47,16 +47,9 @@ export function useClaimAllRewardsStep({
   const chain = pool.chain as GqlChain
   const stakingType = pool.staking?.type || GqlPoolStakingType.Gauge
 
-  const claimRewardGauges = useMemo(() => nonBalRewards.map(r => r.gaugeAddress), [nonBalRewards])
-
-  const mintBalRewardGauges = useMemo(
-    () => balRewards.map(r => r.gaugeAddress as Address),
-    [balRewards]
-  )
-  const allRewardGauges = useMemo(
-    () => [...claimRewardGauges, ...mintBalRewardGauges],
-    [claimRewardGauges, mintBalRewardGauges]
-  )
+  const claimRewardGauges = nonBalRewards.map(r => r.gaugeAddress)
+  const mintBalRewardGauges = balRewards.map(r => r.gaugeAddress as Address)
+  const allRewardGauges = [...claimRewardGauges, ...mintBalRewardGauges]
   const shouldClaimMany = allRewardGauges.length > 1
   const stakingService = selectStakingService(chain, stakingType)
 
@@ -67,50 +60,38 @@ export function useClaimAllRewardsStep({
     enabled: isClaimQueryEnabled,
   })
 
-  const labels: TransactionLabels = useMemo(
-    () => ({
-      init: `Claim${shouldClaimMany ? ' all' : ''}`,
-      title: `Claim${shouldClaimMany ? ' all' : ''}`,
-      confirming: 'Confirming claim...',
-      confirmed: 'Claimed!',
-      tooltip: shouldClaimMany
-        ? 'Claim all rewards from your gauges'
-        : 'Claim all rewards from your gauge',
-    }),
-    [shouldClaimMany]
+  const labels: TransactionLabels = {
+    init: `Claim${shouldClaimMany ? ' all' : ''}`,
+    title: `Claim${shouldClaimMany ? ' all' : ''}`,
+    confirming: 'Confirming claim...',
+    confirmed: 'Claimed!',
+    tooltip: shouldClaimMany
+      ? 'Claim all rewards from your gauges'
+      : 'Claim all rewards from your gauge',
+  }
+
+  const txSimulationMeta = sentryMetaForWagmiSimulation(
+    'Error in wagmi tx simulation (Claim all rewards transaction)',
+    {
+      poolId: pool.id,
+      chain,
+      claimData,
+      stakingType,
+      allRewardGauges,
+    }
   )
 
-  const txSimulationMeta = useMemo(
-    () =>
-      sentryMetaForWagmiSimulation('Error in wagmi tx simulation (Claim all rewards transaction)', {
-        poolId: pool.id,
-        chain,
-        claimData,
-        stakingType,
-        allRewardGauges,
-      }),
-    [allRewardGauges, chain, claimData, pool.id, stakingType]
-  )
-
-  const managedTransactionProps = useMemo<ManagedTransactionInput>(
-    () => ({
-      labels,
-      chainId: getChainId(chain),
-      contractId: 'balancer.relayerV6',
-      contractAddress: getNetworkConfig(chain).contracts.balancer.relayerV6,
-      functionName: 'multicall',
-      args: [claimData],
-      enabled: allRewardGauges.length > 0 && !!claimData && claimData.length > 0,
-      txSimulationMeta,
-      onTransactionChange: setTransaction,
-    }),
-    [allRewardGauges.length, chain, claimData, labels, txSimulationMeta]
-  )
-
-  const isComplete = useCallback(
-    () => isConnected && isTransactionSuccess(transaction),
-    [isConnected, transaction]
-  )
+  const props: ManagedTransactionInput = {
+    labels,
+    chainId: getChainId(chain),
+    contractId: 'balancer.relayerV6',
+    contractAddress: getNetworkConfig(chain).contracts.balancer.relayerV6,
+    functionName: 'multicall',
+    args: [claimData],
+    enabled: allRewardGauges.length > 0 && !!claimData && claimData.length > 0,
+    txSimulationMeta,
+    onTransactionChange: setTransaction,
+  }
 
   const step = useMemo(
     (): TransactionStep => ({
@@ -118,25 +99,23 @@ export function useClaimAllRewardsStep({
       labels,
       stepType: 'claim',
       transaction,
-      isComplete,
+      isComplete: () => isConnected && isTransactionSuccess(transaction),
       onActivated: () => setIsClaimQueryEnabled(true),
       onDeactivated: () => setIsClaimQueryEnabled(false),
       onSuccess: () => {
         refetchClaimableRewards()
         refetchBalRewards()
       },
-      renderAction: () => (
-        <ManagedTransactionButton id={claimAllRewardsStepId} {...managedTransactionProps} />
-      ),
+      renderAction: () => <ManagedTransactionButton id={claimAllRewardsStepId} {...props} />,
     }),
-
     [
       transaction,
       labels,
-      isComplete,
       refetchClaimableRewards,
       refetchBalRewards,
-      managedTransactionProps,
+      isConnected,
+      transaction,
+      props,
     ]
   )
   return { step, isLoading }

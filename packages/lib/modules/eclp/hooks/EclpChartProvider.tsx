@@ -42,14 +42,11 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
     return bn(poolSpotPrice || 0).gt(xMax * (1 - markPointMargin))
   }, [poolSpotPrice, xMax])
 
-  const toolTipTheme = useMemo(
-    () => ({
-      heading: 'font-weight: bold; color: #E5D3BE',
-      container: `background: ${theme.colors.gray[800]};`,
-      text: theme.colors.gray[400],
-    }),
-    [theme]
-  )
+  const toolTipTheme = {
+    heading: 'font-weight: bold; color: #E5D3BE',
+    container: `background: ${theme.colors.gray[800]};`,
+    text: theme.colors.gray[400],
+  }
 
   const options = useMemo(() => {
     if (!data) return

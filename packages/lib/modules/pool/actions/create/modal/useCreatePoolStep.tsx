@@ -38,16 +38,13 @@ export function useCreatePoolStep({
   const chainName = getChainName(chainId)
   const chain = getGqlChain(chainId)
 
-  const labels = useMemo<TransactionLabels>(
-    () => ({
-      init: `Deploy pool on ${chainName}`,
-      title: `Deploy pool on ${chainName}`,
-      confirming: 'Confirming pool creation...',
-      confirmed: 'Pool creation confirmed!',
-      tooltip: `Deploy pool on ${chainName}`,
-    }),
-    [chainName]
-  )
+  const labels: TransactionLabels = {
+    init: `Deploy pool on ${chainName}`,
+    title: `Deploy pool on ${chainName}`,
+    confirming: 'Confirming pool creation...',
+    confirmed: 'Pool creation confirmed!',
+    tooltip: `Deploy pool on ${chainName}`,
+  }
 
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput,

@@ -5,7 +5,7 @@ import {
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import {
   RemoveLiquidityBuildQueryParams,
@@ -33,30 +33,24 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
     enabled: isStepActivated,
   })
 
-  const labels: TransactionLabels = useMemo(
-    () => ({
-      init: 'Remove liquidity',
-      title: 'Remove liquidity',
-      description: `Remove liquidity from ${pool.name || 'pool'}.`,
-      confirming: 'Confirming remove...',
-      confirmed: `Liquidity removed!`,
-      tooltip: `Remove liquidity from ${pool.name || 'pool'}.`,
-      poolId: pool.id,
-    }),
-    [pool]
-  )
+  const labels: TransactionLabels = {
+    init: 'Remove liquidity',
+    title: 'Remove liquidity',
+    description: `Remove liquidity from ${pool.name || 'pool'}.`,
+    confirming: 'Confirming remove...',
+    confirmed: `Liquidity removed!`,
+    tooltip: `Remove liquidity from ${pool.name || 'pool'}.`,
+    poolId: pool.id,
+  }
 
-  const gasEstimationMeta = useMemo(
-    () =>
-      sentryMetaForWagmiSimulation('Error in RemoveLiquidity gas estimation', {
-        simulationQueryData: simulationQuery.data,
-        buildCallQueryData: buildCallDataQuery.data,
-        tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
-      }),
-    [simulationQuery.data, buildCallDataQuery.data, buildTenderlyUrl]
+  const gasEstimationMeta = sentryMetaForWagmiSimulation(
+    'Error in RemoveLiquidity gas estimation',
+    {
+      simulationQueryData: simulationQuery.data,
+      buildCallQueryData: buildCallDataQuery.data,
+      tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
+    }
   )
-
-  const isComplete = useCallback(() => isTransactionSuccess(transaction), [transaction])
 
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds by RemoveLiquidityTimeout
@@ -75,7 +69,7 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
         type: 'Gas transaction',
       },
       transaction,
-      isComplete,
+      isComplete: () => isTransactionSuccess(transaction),
       renderAction: () => {
         if (!buildCallDataQuery.data) return <DisabledTransactionButton />
         return (
@@ -114,7 +108,6 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       buildCallDataQuery.data,
       gasEstimationMeta,
       labels,
-      isComplete,
       refetchPoolUserBalances,
       chainId,
     ]

@@ -8,7 +8,7 @@ import {
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { parseUnits } from 'viem'
 import { Pool } from '../../pool.types'
 import { BPT_DECIMALS } from '../../pool.constants'
@@ -33,51 +33,37 @@ export function useUnstakeFromNonPreferentialGaugeStep(
   const { nonPreferentialGaugeAddress, nonPreferentialStakedBalance } =
     findFirstNonPreferentialStaking(pool)
 
-  const labels = useMemo<TransactionLabels>(
-    () => ({
-      init: 'Unstake from deprecated gauge',
-      title: 'Unstake LP tokens',
-      description: 'Unstake LP tokens from deprecated gauge.',
-      confirming: 'Confirming unstake...',
-      confirmed: `Unstaked!`,
-      tooltip: 'Unstake LP tokens from deprecated gauge.',
-    }),
-    []
-  )
+  const labels: TransactionLabels = {
+    init: 'Unstake from deprecated gauge',
+    title: 'Unstake LP tokens',
+    description: 'Unstake LP tokens from deprecated gauge.',
+    confirming: 'Confirming unstake...',
+    confirmed: 'Unstaked!',
+    tooltip: 'Unstake LP tokens from deprecated gauge.',
+  }
 
   const amount = parseUnits(nonPreferentialStakedBalance, BPT_DECIMALS)
 
-  const txSimulationMeta = useMemo(
-    () =>
-      sentryMetaForWagmiSimulation(
-        'Error in wagmi tx simulation (Unstake from non preferential gauge transaction)',
-        {
-          poolId: pool.id,
-          chainId,
-          amount,
-        }
-      ),
-    [pool.id, chainId, amount]
-  )
-
-  const props = useMemo<ManagedTransactionInput>(
-    () => ({
-      contractAddress: nonPreferentialGaugeAddress,
-      contractId: 'balancer.gaugeV5',
-      functionName: 'withdraw',
-      labels,
+  const txSimulationMeta = sentryMetaForWagmiSimulation(
+    'Error in wagmi tx simulation (Unstake from non preferential gauge transaction)',
+    {
+      poolId: pool.id,
       chainId,
-      args: [amount],
-      enabled: !!pool && !!userAddress,
-      txSimulationMeta,
-      onTransactionChange: setTransaction,
-    }),
-    [nonPreferentialGaugeAddress, labels, chainId, amount, pool, userAddress, txSimulationMeta]
+      amount,
+    }
   )
 
-  const onSuccess = useCallback(() => {
-    refetchPoolBalances()
-  }, [refetchPoolBalances])
+  const props: ManagedTransactionInput = {
+    contractAddress: nonPreferentialGaugeAddress,
+    contractId: 'balancer.gaugeV5',
+    functionName: 'withdraw',
+    labels,
+    chainId,
+    args: [amount],
+    enabled: !!pool && !!userAddress,
+    txSimulationMeta,
+    onTransactionChange: setTransaction,
+  }
 
   const step = useMemo(
     (): TransactionStep => ({
@@ -86,10 +72,10 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       labels,
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
-      onSuccess,
+      onSuccess: () => refetchPoolBalances(),
       renderAction: () => <ManagedTransactionButton id={unstakeStepId} {...props} />,
     }),
-    [transaction, labels, onSuccess, props]
+    [transaction, labels, props, refetchPoolBalances]
   )
 
   return {

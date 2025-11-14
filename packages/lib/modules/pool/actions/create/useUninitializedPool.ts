@@ -104,21 +104,12 @@ export function useUninitializedPool() {
 
   const [name, symbol, poolTokenInfo, poolConfig, hooksConfig, poolRoleAccounts] = poolData ?? []
 
-  const tokenAddresses = useMemo(() => {
-    const addresses = (poolTokenInfo?.result?.[0] ?? []) as Address[]
-    return addresses ? [...addresses] : []
-  }, [poolTokenInfo])
+  const tokenAddresses = (poolTokenInfo?.result?.[0] ?? []) as Address[]
 
-  const tokenConfigs = useMemo(
-    () =>
-      (
-        (poolTokenInfo?.result?.[1] ?? []) as {
-          rateProvider: Address
-          paysYieldFees: boolean
-        }[]
-      ).map(config => ({ ...config })),
-    [poolTokenInfo]
-  )
+  const tokenConfigs = (poolTokenInfo?.result?.[1] ?? []) as {
+    rateProvider: Address
+    paysYieldFees: boolean
+  }[]
 
   const tokenContracts = useMemo(() => {
     if (!chainId || tokenAddresses.length === 0) return []
@@ -176,11 +167,9 @@ export function useUninitializedPool() {
     query: { enabled: isWeightedPoolType && shouldHydratePoolCreationForm },
   })
 
-  const tokenWeights = useMemo(() => {
-    if (!normalizedWeights) return undefined
-
-    return normalizedWeights.map(weight => formatUnits(weight, PERCENTAGE_DECIMALS))
-  }, [normalizedWeights])
+  const tokenWeights = normalizedWeights
+    ? normalizedWeights.map(weight => formatUnits(weight, PERCENTAGE_DECIMALS))
+    : undefined
 
   const poolTokens: PoolCreationToken[] | undefined = useMemo(() => {
     if (
