@@ -306,13 +306,17 @@ export function NavBar({
       {!apiOK && <ApiOutageAlert />}
 
       {isBalancer && shouldShowV2Exploit && (
-        <Alert gap="2" justifyContent="center" status="warning">
-          <Text color="font.dark" fontWeight="bold">
+        <Alert borderRadius="none" gap="1" justifyContent="center" status="warning">
+          <Text color="#000" fontWeight="bold">
             There has been an exploit affecting v2 Composable Stable pools (v3 pools are not
             affected).
           </Text>
           <Link
-            color="font.dark"
+            _hover={{
+              color: '#555',
+            }}
+            color="#000"
+            fontWeight="bold"
             href="https://x.com/Balancer/status/1986104426667401241"
             isExternal
             textDecoration="underline"
