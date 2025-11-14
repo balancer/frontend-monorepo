@@ -108,15 +108,7 @@ export function useClaimAllRewardsStep({
       },
       renderAction: () => <ManagedTransactionButton id={claimAllRewardsStepId} {...props} />,
     }),
-    [
-      transaction,
-      labels,
-      refetchClaimableRewards,
-      refetchBalRewards,
-      isConnected,
-      transaction,
-      props,
-    ]
+    [transaction, labels, refetchClaimableRewards, refetchBalRewards, isConnected, props]
   )
   return { step, isLoading }
 }

@@ -118,7 +118,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
     }
 
     return bn(walletBalance).times(bn(humanBptInPercent).div(100)).gt(bn(totalShares).times(0.25))
-  }, [humanBptInPercent, isSingleToken])
+  }, [humanBptInPercent, isSingleToken, pool])
 
   /**
    * Queries
