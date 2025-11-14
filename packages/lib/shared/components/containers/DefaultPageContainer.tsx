@@ -1,5 +1,6 @@
 import { Box, Container, ContainerProps } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
+import { useNavbarHeight } from '../../hooks/useNavbarHeight'
 
 type Props = {
   noVerticalPadding?: boolean
@@ -11,8 +12,10 @@ export function DefaultPageContainer({
   bg,
   ...rest
 }: PropsWithChildren & ContainerProps & Props) {
+  const navbarHeight = useNavbarHeight()
+
   return (
-    <Box bg={bg} pt={noVerticalPadding ? '0px' : '72px'}>
+    <Box bg={bg} pt={noVerticalPadding ? '0px' : `${navbarHeight}px`}>
       <Container
         maxW="maxContent"
         overflowX={{ base: 'hidden', md: 'visible' }}
