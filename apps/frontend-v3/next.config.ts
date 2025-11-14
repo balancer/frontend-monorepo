@@ -4,17 +4,10 @@ import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
-  webpack: config => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-      tls: false,
-      '@react-native-async-storage/async-storage': false, // rainbowkit tries to find this during the build but we're not in react native here
-    }
-    config.externals.push('pino-pretty', 'lokijs', 'encoding')
-    return config
+  turbopack: {
+    //
   },
+  serverExternalPackages: ['pino-pretty', 'lokijs', 'encoding'],
   logging: {
     fetches: {
       fullUrl: true,
