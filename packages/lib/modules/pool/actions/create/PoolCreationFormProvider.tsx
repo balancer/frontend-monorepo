@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
@@ -17,7 +16,7 @@ import { useLocalStorage } from 'usehooks-ts'
 import { PoolType } from '@balancer/sdk'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
@@ -130,19 +129,18 @@ export function usePoolFormLogic() {
     router.replace('/create')
   }
 
-  const [tokenList, setTokenList] = useState<ApiOrCustomToken[]>([])
-
   const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()
 
-  useEffect(() => {
+  const tokenList = useMemo(() => {
     const networkTokens = getTokensByChain(network.toUpperCase() as GqlChain) || []
+    const networkAddresses = new Set(networkTokens.map(t => t.address))
 
     const unknownTokens = poolTokens
-      .filter(token => !networkTokens.some(t => t.address === token.address))
+      .filter(token => token.address && !networkAddresses.has(token.address))
       .map(token => token.data)
       .filter((token): token is ApiOrCustomToken => token !== undefined)
 
-    setTokenList([...networkTokens, ...unknownTokens])
+    return [...networkTokens, ...unknownTokens]
   }, [getTokensByChain, network, poolTokens])
 
   // TODO: return less stuff by using poolCreationForm.watch() in components
