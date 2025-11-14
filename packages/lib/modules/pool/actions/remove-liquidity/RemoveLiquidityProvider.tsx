@@ -44,7 +44,6 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   const [quoteBptIn, setQuoteBptIn] = useState<HumanAmount>('0')
   const [quoteAmountsOut, setQuoteAmountsOut] = useState<TokenAmount[]>([])
   const [quotePriceImpact, setQuotePriceImpact] = useState<number>()
-
   const { pool, chainId, bptPrice, isLoading } = usePool()
   const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()

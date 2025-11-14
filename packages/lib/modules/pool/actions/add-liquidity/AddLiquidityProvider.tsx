@@ -47,9 +47,8 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
-
   const [totalUSDValue, setTotalUSDValue] = useState('0')
-  const { pool, refetch: refetchPool } = usePool()
+  const { pool, refetch: refetchPool, isLoading } = usePool()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
   /* wantsProportional is true when:
     - the pool requires proportional input
@@ -65,7 +64,7 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
 
   const handler = useMemo(
     () => selectAddLiquidityHandler(pool, wantsProportional),
-    [pool, wantsProportional]
+    [pool, isLoading, wantsProportional]
   )
 
   /**
