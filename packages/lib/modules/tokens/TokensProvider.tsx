@@ -76,12 +76,15 @@ export function useTokensLogic() {
     return getToken(getWrappedNativeAssetAddress(chain), chain)
   }
 
-  const getTokensByChain = (chain: number | GqlChain): GqlToken[] => {
-    const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
-    const result = tokens.filter(token => token[chainKey] === chain)
-    // Limit to 10 tokens in Anvil fork to avoid Swap performance issues
-    return shouldUseAnvilFork ? result.slice(0, 10) : result
-  }
+  const getTokensByChain = useCallback(
+    (chain: number | GqlChain): GqlToken[] => {
+      const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
+      const result = tokens.filter(token => token[chainKey] === chain)
+      // Limit to 10 tokens in Anvil fork to avoid Swap performance issues
+      return shouldUseAnvilFork ? result.slice(0, 10) : result
+    },
+    [tokens]
+  )
 
   function usdValueForToken(token: ApiOrCustomToken | undefined, amount: Numberish) {
     if (!token) return '0'
