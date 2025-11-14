@@ -53,13 +53,12 @@ export function useInitializePoolStep({
     initPoolInput,
   })
 
-  const gasEstimationMeta = useMemo(
-    () =>
-      sentryMetaForWagmiSimulation('Error in initialize pool gas estimation', {
-        buildCallQueryData: buildCallDataQuery.data,
-        tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
-      }),
-    [buildCallDataQuery.data, buildTenderlyUrl]
+  const gasEstimationMeta = sentryMetaForWagmiSimulation(
+    'Error in initialize pool gas estimation',
+    {
+      buildCallQueryData: buildCallDataQuery.data,
+      tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
+    }
   )
 
   return useMemo(
@@ -105,7 +104,6 @@ export function useInitializePoolStep({
           }
         : undefined,
     }),
-
     [
       transaction,
       buildCallDataQuery.data,
