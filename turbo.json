@@ -25,7 +25,8 @@
     "NEXT_PRIVATE_ALLOWED_ORIGINS",
     "VERCEL_BRANCH_URL",
     "TZ",
-    "NEXT_PRIVATE_MAGPIE_API_KEY"
+    "NEXT_PRIVATE_MAGPIE_API_KEY",
+    "ENABLE_REACT_COMPILER"
   ],
   "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {
