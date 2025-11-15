@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
+    localPatterns: [
+      {
+        pathname: '/api/proxy/image/**',
+      },
+      {
+        pathname: '/images/**',
+      },
+    ],
     minimumCacheTTL: 60,
   },
   transpilePackages: ['@repo/lib'],
