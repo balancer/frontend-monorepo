@@ -104,7 +104,7 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests (Balancer)
-        run: pnpm test:e2e:dev:bal
+        run: pnpm test:e2e:dev:ui:bal
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
