@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/purity */
 'use client'
 
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
@@ -69,8 +68,8 @@ function createInterpolatedPoints(firstDay: number, lastDay: number, snapshot: L
   return interpolatedPoints
 }
 
-function processLockSnapshots(lockSnapshots: LockSnapshot[]) {
-  const currentDate = millisecondsToSeconds(Date.now()).toFixed(0)
+function processLockSnapshots(lockSnapshots: LockSnapshot[], currentTimestampMs: number) {
+  const currentDateSeconds = Math.floor(millisecondsToSeconds(currentTimestampMs))
 
   return lockSnapshots.reduce((acc: ChartValueAcc, snapshot, i) => {
     const point1Balance = bn(snapshot.bias).toNumber()
@@ -78,7 +77,7 @@ function processLockSnapshots(lockSnapshots: LockSnapshot[]) {
 
     const point2Timestamp = lockSnapshots[i + 1]
       ? bn(lockSnapshots[i + 1].timestamp)
-      : bn(currentDate)
+      : bn(currentDateSeconds)
     const point2Balance = forecastBalance(snapshot, point2Timestamp)
     const point2Date = formatDate(point2Timestamp.toNumber())
 
@@ -122,8 +121,12 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   const { theme: nextTheme } = useNextTheme()
 
   const instanceRef = useRef<ECharts | undefined>(undefined)
+  const [currentTimestampMs, setCurrentTimestampMs] = useState(() => Date.now())
 
-  const userHistoricalLocks = [...lockSnapshots].sort((a, b) => a.timestamp - b.timestamp)
+  const userHistoricalLocks = useMemo(
+    () => [...lockSnapshots].sort((a, b) => a.timestamp - b.timestamp),
+    [lockSnapshots]
+  )
 
   const lockedUntil = mainnetLockedInfo.lockedEndDate
     ? differenceInDays(new Date(mainnetLockedInfo.lockedEndDate), new Date())
@@ -131,22 +134,32 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   const hasExistingLock = mainnetLockedInfo.hasExistingLock
   const isExpired = mainnetLockedInfo.isExpired
 
+  useEffect(() => {
+    // refresh the "now" timestamp after render so chart math stays pure during render
+    const rafId = requestAnimationFrame(() => {
+      setCurrentTimestampMs(Date.now())
+    })
+
+    return () => cancelAnimationFrame(rafId)
+  }, [userHistoricalLocks, mainnetLockedInfo.lockedEndDate])
+
   const chartValues = useMemo(() => {
     const processedValues = processLockSnapshots(
       userHistoricalLocks.map(userHistoricalLock => ({
         ...userHistoricalLock,
         slope: userHistoricalLock.slope,
-      }))
+      })),
+      currentTimestampMs
     )
     const valuesByDates = groupValuesByDates(processedValues)
 
     return filterAndFlattenValues(valuesByDates)
-  }, [userHistoricalLocks])
+  }, [currentTimestampMs, userHistoricalLocks])
 
   const futureLockChartData = useMemo(() => {
     if (hasExistingLock && !isExpired && userHistoricalLocks.length > 0) {
       const lastSnapshot = userHistoricalLocks[userHistoricalLocks.length - 1]
-      const firstDay = Date.now()
+      const firstDay = currentTimestampMs
       const lastDay = mainnetLockedInfo.lockedEndDate
       const interpolatedPoints = createInterpolatedPoints(firstDay, lastDay, lastSnapshot)
 
@@ -176,6 +189,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
     }
   }, [
     chartValues,
+    currentTimestampMs,
     mainnetLockedInfo.lockedEndDate,
     hasExistingLock,
     isExpired,
@@ -222,7 +236,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
       },
       grid: {
         left: '1.5%',
-        right: '2.5%',
+        right: '3%',
         top: '12%',
         bottom: '4%',
         containLabel: true,
@@ -293,7 +307,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         axisTick: { show: false },
         axisLabel: {
           formatter: (value: number) => {
-            return format(new Date(value), 'MMM d')
+            return format(new Date(value), 'd MMM yy')
           },
           color:
             nextTheme === 'dark'

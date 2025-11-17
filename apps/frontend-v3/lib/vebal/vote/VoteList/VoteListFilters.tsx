@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Button,
@@ -33,15 +32,8 @@ export function useFilterTagsVisible() {
   const {
     filtersState: { networks, poolTypes, includeExpiredPools, protocolVersion },
   } = useVoteList()
-  const [isVisible, setIsVisible] = useState(false)
 
-  useEffect(() => {
-    setIsVisible(
-      networks.length > 0 || poolTypes.length > 0 || includeExpiredPools || !!protocolVersion
-    )
-  }, [networks, poolTypes, includeExpiredPools, protocolVersion])
-
-  return isVisible
+  return networks.length > 0 || poolTypes.length > 0 || includeExpiredPools || !!protocolVersion
 }
 
 export function VoteListFilters() {
