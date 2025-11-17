@@ -32,6 +32,7 @@ const config: NextConfig = {
 
   // Safe App setup
   headers: manifestHeaders,
+  reactCompiler: true,
 
   async redirects() {
     const redirects: Array<{

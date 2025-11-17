@@ -34,6 +34,7 @@ const nextConfig: NextConfig = {
 
   // Safe App setup
   headers: manifestHeaders,
+  reactCompiler: true,
 }
 
 // Avoid sentry setup in CI
