@@ -90,7 +90,7 @@ jobs:
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
 
-  E2E-Dev-Test:
+  E2E-Dev-Test-Balancer:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
@@ -103,8 +103,8 @@ jobs:
         run: anvil --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
-      - name: Run Playwright dev tests
-        run: pnpm test:e2e:dev
+      - name: Run Playwright dev tests (Balancer)
+        run: pnpm test:e2e:dev:bal
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
