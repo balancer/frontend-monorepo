@@ -107,10 +107,11 @@ function LstForm() {
 
     setActiveTab(tab)
 
-    if (isStakeTab) {
+    // need to use tab here because activeTab is not synced yet
+    if (tab.label === 'Stake') {
       setDisclosure(stakeModalDisclosure)
       setAmountAssets('')
-    } else if (isUnstakeTab) {
+    } else if (tab.label === 'Unstake') {
       setDisclosure(unstakeModalDisclosure)
       setAmountShares('')
     }
