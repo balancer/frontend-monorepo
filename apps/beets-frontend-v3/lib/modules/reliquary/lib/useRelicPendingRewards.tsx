@@ -1,4 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
+import { formatUnits } from 'viem'
+import { useGetPendingReward } from '../hooks/useGetPendingReward'
+import { useReliquary } from '../ReliquaryProvider'
 
 interface PendingReward {
   address: string
@@ -6,16 +10,19 @@ interface PendingReward {
 }
 
 export function useRelicPendingRewards() {
-  const query = useQuery({
-    queryKey: ['relicPendingRewards'],
-    queryFn: async (): Promise<PendingReward[]> => {
-      // Stub - would normally fetch from contract
-      return []
-    },
-  })
+  const { selectedRelic } = useReliquary()
+  const config = useNetworkConfig()
+  const beetsAddress = config.tokens.addresses.beets
+
+  const query = useGetPendingReward(GqlChain.Sonic, selectedRelic?.relicId)
+
+  const data: PendingReward[] =
+    query.amount && beetsAddress
+      ? [{ address: beetsAddress, amount: formatUnits(query.amount, 18) }]
+      : []
 
   return {
-    data: query.data || [],
+    data,
     refetch: query.refetch,
     isLoading: query.isLoading,
   }

@@ -27,8 +27,6 @@ import RelicLevel11 from '../assets/11.png'
 
 export interface RelicSlideProps {
   relic: ReliquaryFarmPosition
-  openInvestModal: () => void
-  openWithdrawModal: () => void
 }
 
 export default function RelicSlide({ relic }: RelicSlideProps) {

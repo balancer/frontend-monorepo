@@ -38,9 +38,8 @@ export const ProjectConfigBeets: ProjectConfig = {
         label: 'Stake $S',
       },
       {
-        href: 'https://ma.beets.fi',
+        href: '/mabeets',
         label: 'maBEETS',
-        isExternal: true,
       },
     ],
     ecosystemLinks: [
@@ -88,7 +87,7 @@ export const ProjectConfigBeets: ProjectConfig = {
           { label: 'Explore pools', href: '/pools' },
           { label: 'Swap tokens', href: '/swap' },
           { label: 'View portfolio', href: '/portfolio' },
-          { label: 'Get maBEETS', href: 'https://ma.beets.fi', isExternal: true },
+          { label: 'Get maBEETS', href: '/mabeets' },
         ],
       },
       {

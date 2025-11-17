@@ -1,9 +1,10 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useEffect, useState } from 'react'
 import { Pagination } from 'swiper/modules'
-import { Box, BoxProps, Heading, VStack, Flex, useBreakpointValue } from '@chakra-ui/react'
+import { Box, BoxProps, Button, Heading, VStack, Flex, useBreakpointValue } from '@chakra-ui/react'
 import { useReliquary } from '../ReliquaryProvider'
 import RelicSlide from './RelicSlide'
+import { useRouter } from 'next/navigation'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
@@ -13,6 +14,7 @@ interface Props extends BoxProps {
 
 export function RelicCarousel({ ...rest }: Props) {
   const { relicPositionsForFarmId: relicPositions, isLoadingRelicPositions } = useReliquary()
+  const router = useRouter()
   // hack to get around next.js hydration issues with swiper
   const [_isLoadingRelicPositions, setIsLoadingRelicPositions] = useState(false)
 
@@ -29,12 +31,14 @@ export function RelicCarousel({ ...rest }: Props) {
         <Flex alignItems="center" height="300px" justifyContent="center" width="full" zIndex={2}>
           <VStack alignItems="center" height="full" justifyContent="center" spacing="4">
             <Heading size="md">Get started by minting your own relic</Heading>
-            <Box>
-              {/* <ReliquaryInvestModal
-                activatorProps={{ size: 'lg', width: '200px', mx: 'auto' }}
-                createRelic
-              /> */}
-            </Box>
+            <Button
+              onClick={() => router.push('/mabeets/add-liquidity')}
+              size="lg"
+              variant="primary"
+              width="200px"
+            >
+              Create Relic
+            </Button>
           </VStack>
         </Flex>
       )}
@@ -83,18 +87,9 @@ export function RelicCarousel({ ...rest }: Props) {
         >
           {relicPositions.map(relic => (
             <SwiperSlide key={`relic-carousel-${relic.relicId}`}>
-              <RelicSlide openInvestModal={() => {}} openWithdrawModal={() => {}} relic={relic} />
+              <RelicSlide relic={relic} />
             </SwiperSlide>
           ))}
-          {/* {!relicPositions.length && (
-                        <SwiperSlide key={`dummy-slide`}>
-                            <RelicSlide
-                                openInvestModal={() => setIsInvestModalVisible(true)}
-                                openWithdrawModal={() => setIsWithdrawModalVisible(true)}
-                                relic={relicPositions[0]}
-                            />
-                        </SwiperSlide>
-                    )} */}
         </Swiper>
       </Box>
     </Box>

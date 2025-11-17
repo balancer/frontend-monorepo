@@ -1,16 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
+import { useHasApprovedRelayerForAllRelics } from '../hooks/useHasApprovedRelayerForAllRelics'
 
 export function useBatchRelayerHasApprovedForAll() {
-  const query = useQuery({
-    queryKey: ['batchRelayerApproval'],
-    queryFn: async () => {
-      // Stub - would normally check approval status
-      return false
-    },
-  })
+  const config = useNetworkConfig()
+  const query = useHasApprovedRelayerForAllRelics(config.chainId)
 
   return {
-    data: query.data,
+    data: query.hasApprovedRelayerForAllRelics,
     refetch: query.refetch,
   }
 }

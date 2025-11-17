@@ -50,7 +50,6 @@ const CHAIN = GqlChain.Sonic
 
 // Apollo Client reactive variables for state management
 const selectedRelicIdVar = makeVar<string | undefined>(undefined)
-const createRelicVar = makeVar<boolean>(false)
 
 export function useReliquaryLogic() {
   const { isConnected, userAddress } = useUserAccount()
@@ -120,7 +119,6 @@ export function useReliquaryLogic() {
 
   // Derived state and calculations
   const selectedRelicIdValue = useReactiveVar(selectedRelicIdVar)
-  const createRelicValue = useReactiveVar(createRelicVar)
   const selectedRelicFromPositions =
     relicPositions.find(position => position.relicId === selectedRelicIdValue) || null
   const isLoading = isLoadingRelicPositions || isLoadingMaturityThresholds
@@ -146,10 +144,6 @@ export function useReliquaryLogic() {
     const boost = reliquaryLevels.find(level => level.level === position.level)
     return ((boost?.allocationPoints || 0) / 100) * numFBeets
   })
-
-  function setCreateRelic(value: boolean) {
-    createRelicVar(value)
-  }
 
   function setSelectedRelicId(value: string) {
     selectedRelicIdVar(value)
@@ -466,11 +460,9 @@ export function useReliquaryLogic() {
     beetsPerDay: parseFloat(beetsPerSecond) * 86400,
     selectedRelicLevel,
     weightedTotalBalance,
-    createRelic: createRelicValue,
     relicIds,
     relicPositionsForFarmId,
     totalMaBeetsVP,
-    setCreateRelic,
     setSelectedRelicId,
     refetchRelicPositions,
     refetchMaturityThresholds,
