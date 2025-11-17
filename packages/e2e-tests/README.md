@@ -62,8 +62,8 @@ recommend the ui option:
 ```bash
 pnpm run test:e2e:build:ui
 # or
-# Remember to run the mainnet anvil fork locally before running dev E2E tests.
-pnpm run test:e2e:dev:ui
+# Remember to run the mainnet anvil fork locally before running dev E2E tests for Balancer.
+pnpm run test:e2e:dev:ui:bal
 ```
 
 For more info about playwright tests check the [official documentation](https://playwright.dev/) and
