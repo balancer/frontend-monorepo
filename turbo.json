@@ -108,7 +108,7 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "test:e2e:build:turbo:bal": {
-      "dependsOn": ["^build:turbo"],
+      "dependsOn": ["^build:turbo:bal"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
     },
     "test:e2e:build:ui": {
