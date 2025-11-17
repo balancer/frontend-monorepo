@@ -94,7 +94,7 @@
     "@repo/test": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@sentry/core": "10.23.0",
-    "@sentry/types": "10.23.0",
+    "@sentry/types": "10.25.0",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.0",
     "@types/echarts": "4.9.22",
