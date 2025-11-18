@@ -14,10 +14,15 @@ import {
   veDelegationProxyAbi,
 } from './abi/generated'
 import { VeDelegationProxyL2Abi } from './abi/veDelegationProxyL2'
-import { sfcAbi, sonicStakingAbi, reliquaryAbi } from './abi/beets/generated'
+import {
+  sfcAbi,
+  sonicStakingAbi,
+  reliquaryAbi,
+  magpieLoopedSonicRouterAbi,
+  loopedSonicVaultAbi,
+} from './abi/beets/generated'
 import { LiquidityGaugeV5Abi } from './abi/LiquidityGaugeV5Abi'
 import { permit2Abi } from '@balancer/sdk'
-import { DelegateRegistryAbi } from './abi/DelegateRegistryAbi'
 
 export const AbiMap = {
   'balancer.vaultV2': balancerV2VaultAbi,
@@ -38,7 +43,8 @@ export const AbiMap = {
   'beets.lstStaking': sonicStakingAbi,
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,
-  'beets.delegateRegistry': DelegateRegistryAbi,
+  'beets.loopedSonicRouter': magpieLoopedSonicRouterAbi,
+  'beets.loopedSonicVault': loopedSonicVaultAbi,
   permit2: permit2Abi,
 }
 

@@ -3,7 +3,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReClammConfig } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatNumber } from '../../helpers'
-import { useReClammCurrentPrice } from './useReClammCurrentPrice'
+import { usePoolSpotPriceWithoutRate } from './usePoolSpotPriceWithoutRate'
 import { SVGProps } from 'react'
 import {
   CurrentPriceMinusFivePercentSVG,
@@ -50,9 +50,9 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
 
-  const currentPrice = useReClammCurrentPrice()
-  const currentPriceMinus5 = currentPrice.times(0.95).toString()
-  const currentPricePlus5 = currentPrice.times(1.05).toString()
+  const { spotPriceWithoutRate } = usePoolSpotPriceWithoutRate()
+  const currentPriceMinus5 = spotPriceWithoutRate.times(0.95).toString()
+  const currentPricePlus5 = spotPriceWithoutRate.times(1.05).toString()
 
   const calculatePriceBounds = (targetPrice: string, spread: string) => {
     const lowerBoundPercentage = (100 - bn(spread).toNumber()) / 100
@@ -66,15 +66,15 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
 
   const updatePriceBounds = (targetPrice: string, spread: string) => {
     const { initialMinPrice, initialMaxPrice } = calculatePriceBounds(targetPrice, spread)
-    reClammConfigForm.setValue('initialMinPrice', initialMinPrice)
-    reClammConfigForm.setValue('initialMaxPrice', initialMaxPrice)
+    reClammConfigForm.setValue('initialMinPrice', initialMinPrice, { shouldValidate: true })
+    reClammConfigForm.setValue('initialMaxPrice', initialMaxPrice, { shouldValidate: true })
   }
 
   const targetPrice = {
     name: 'initialTargetPrice' as const,
     label: `Target price: ${tokenSymbolsString}`,
     customInputLabel: 'Custom target price',
-    customInputPlaceholder: bn(currentPrice).toFixed(2),
+    customInputPlaceholder: bn(spotPriceWithoutRate.toString()).toFixed(2),
     options: [
       {
         label: 'Current price -5%',
@@ -84,8 +84,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       },
       {
         label: 'Current price',
-        displayValue: formatNumber(currentPrice.toString()),
-        rawValue: currentPrice.toString(),
+        displayValue: formatNumber(spotPriceWithoutRate.toString()),
+        rawValue: spotPriceWithoutRate.toString(),
         svg: CurrentPriceSVG,
       },
       {
@@ -97,7 +97,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('initialTargetPrice', rawValue)
+      reClammConfigForm.setValue('initialTargetPrice', rawValue, { shouldValidate: true })
       if (priceRangePercentage) {
         updatePriceBounds(rawValue, priceRangePercentage)
       }
@@ -119,12 +119,12 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('priceRangePercentage', rawValue)
+      reClammConfigForm.setValue('priceRangePercentage', rawValue, { shouldValidate: true })
       if (rawValue) {
         updatePriceBounds(initialTargetPrice, rawValue)
       } else {
-        reClammConfigForm.setValue('initialMinPrice', '')
-        reClammConfigForm.setValue('initialMaxPrice', '')
+        reClammConfigForm.setValue('initialMinPrice', '', { shouldValidate: true })
+        reClammConfigForm.setValue('initialMaxPrice', '', { shouldValidate: true })
       }
     },
     validateFn: (value: string) => {
@@ -144,7 +144,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('centerednessMargin', rawValue)
+      reClammConfigForm.setValue('centerednessMargin', rawValue, { shouldValidate: true })
     },
     validateFn: (value: string) => {
       const numValue = Number(value)
@@ -175,7 +175,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       CUSTOM_OPTION,
     ],
     updateFn: (rawValue: string) => {
-      reClammConfigForm.setValue('priceShiftDailyRate', rawValue)
+      reClammConfigForm.setValue('priceShiftDailyRate', rawValue, { shouldValidate: true })
     },
     validateFn: (value: string) => {
       const numValue = Number(value)
@@ -195,10 +195,14 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       const centerednessMargin = marginBuffer.options[1].rawValue
       const priceShiftDailyRate = dailyPriceReadjustmentRate.options[1].rawValue
 
-      reClammConfigForm.setValue('initialTargetPrice', currentPrice)
-      reClammConfigForm.setValue('priceRangePercentage', priceRangePercentage)
-      reClammConfigForm.setValue('centerednessMargin', centerednessMargin)
-      reClammConfigForm.setValue('priceShiftDailyRate', priceShiftDailyRate)
+      reClammConfigForm.setValue('initialTargetPrice', currentPrice, { shouldValidate: true })
+      reClammConfigForm.setValue('priceRangePercentage', priceRangePercentage, {
+        shouldValidate: true,
+      })
+      reClammConfigForm.setValue('centerednessMargin', centerednessMargin, { shouldValidate: true })
+      reClammConfigForm.setValue('priceShiftDailyRate', priceShiftDailyRate, {
+        shouldValidate: true,
+      })
       updatePriceBounds(currentPrice, priceRangePercentage)
     }
   }, [isInitialReClammConfig])

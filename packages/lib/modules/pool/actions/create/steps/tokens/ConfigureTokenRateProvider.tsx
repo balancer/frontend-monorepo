@@ -12,6 +12,7 @@ import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { usePublicClient } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -173,7 +174,7 @@ function CustomRateProviderInput({
       </VStack>
 
       <BalAlert
-        content="All new Rate Provider contracts must be reviewed and approved before LPs can interact with the pool on the Balancer.fi UI. Learn more."
+        content={`All new Rate Provider contracts must be reviewed and approved before LPs can interact with the pool on the ${PROJECT_CONFIG.projectName} UI. Learn more.`}
         status="warning"
       />
     </VStack>

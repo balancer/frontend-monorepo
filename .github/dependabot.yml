@@ -10,7 +10,6 @@ updates:
       - /
       - /apps/frontend-v3
       - /apps/beets-frontend-v3
-      - /apps/cow-amm-frontend-v3
       - /packages/lib
     schedule:
       interval: 'weekly'

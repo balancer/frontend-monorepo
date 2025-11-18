@@ -5,7 +5,6 @@ import {
   UnorderedList,
   VStack,
   HStack,
-  Icon,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -19,18 +18,20 @@ import { useEffect } from 'react'
 import { usePool } from '../../../PoolProvider'
 import {
   requiresProportionalInput,
+  requiresProportionalInputReason,
   supportsProportionalAddLiquidityKind,
+  supportsProportionalAddLiquidityReasons,
 } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { isV3Pool, isGyroEPool } from '../../../pool.helpers'
-import { Info } from 'react-feather'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
+import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -123,7 +124,7 @@ export function AddLiquidityFormTabs({
   const { clearAmountsIn } = useAddLiquidity()
   const { isLoading, pool } = usePool()
   const { toCurrency } = useCurrency()
-  const { poolIsInRange } = useGetECLPLiquidityProfile(pool)
+  const { poolIsInRange } = useGetECLPLiquidityProfile()
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
@@ -139,7 +140,7 @@ export function AddLiquidityFormTabs({
 
   function getFlexibleTabTooltipLabel(): string | undefined {
     if (requiresProportionalInput(pool)) {
-      return 'This pool requires liquidity to be added proportionally'
+      return requiresProportionalInputReason(pool)
     }
     if (isBelowMinTvlThreshold) {
       return `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
@@ -169,7 +170,8 @@ export function AddLiquidityFormTabs({
       label: 'Proportional',
       disabled: isDisabledProportionalTab,
       tabTooltipLabel: isDisabledProportionalTab
-        ? 'This pool does not support liquidity to be added proportionally'
+        ? supportsProportionalAddLiquidityReasons(pool) ||
+          'This pool does not support liquidity to be added proportionally'
         : undefined,
     },
   ]
@@ -197,8 +199,12 @@ export function AddLiquidityFormTabs({
         />
         <Popover placement="top" trigger="hover">
           <PopoverTrigger>
-            <Box cursor="pointer" display="inline-flex">
-              <Icon as={Info} boxSize="16px" color="font.secondary" />
+            <Box
+              _hover={{ opacity: 1 }}
+              opacity="0.6"
+              transition="opacity 0.2s var(--ease-out-cubic)"
+            >
+              <InfoIcon />
             </Box>
           </PopoverTrigger>
           <PopoverContent maxW="300px" p="sm" w="auto">

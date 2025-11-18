@@ -25,7 +25,7 @@ import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/Balancer
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
-import { motion, useInView } from 'framer-motion'
+import { AnimationGeneratorType, motion, useInView } from 'framer-motion'
 
 const MotionBox = motion(Box)
 const MotionGrid = motion(Grid)
@@ -202,7 +202,7 @@ export function Features() {
       y: 0,
       scale: 1,
       transition: {
-        type: 'spring',
+        type: 'spring' as AnimationGeneratorType,
         stiffness: 100,
         damping: 10,
       },

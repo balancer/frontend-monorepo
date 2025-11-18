@@ -4,9 +4,6 @@ import { useMemo } from 'react'
 import { ClaimAllRewardsStepParams, useClaimAllRewardsStep } from './useClaimAllRewardsStep'
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
 import { getChainId } from '@repo/lib/config/app.config'
-import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
-import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
-import { useShouldSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 
 export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
   const pool = params.pools[0]
@@ -15,17 +12,12 @@ export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
     throw new Error('Pools should contain at least one element')
   }
 
-  const relayerMode = useRelayerMode()
-
   const { chain } = pool
   const chainId = getChainId(pool.chain)
   const hasUnclaimedBalRewards = params.balTokenRewardsQuery.balRewardsData.length > 0
 
-  const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
-  const signRelayerStep = useSignRelayerStep(chain)
-
   const { step: relayerApprovalStep, isLoading: isLoadingRelayerApprovalStep } =
-    useApproveRelayerStep(chainId, { relayerMode })
+    useApproveRelayerStep(chainId)
 
   const { step: minterApprovalStep, isLoading: isLoadingMinterApprovalStep } = useApproveMinterStep(
     chain,
@@ -42,17 +34,10 @@ export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
       steps.push(minterApprovalStep)
     }
 
-    steps.push(shouldSignRelayerApproval ? signRelayerStep : relayerApprovalStep)
-    steps.push(claimAllRewardsStep)
+    steps.push(...[relayerApprovalStep, claimAllRewardsStep])
 
     return steps
-  }, [
-    relayerApprovalStep,
-    claimAllRewardsStep,
-    minterApprovalStep,
-    hasUnclaimedBalRewards,
-    signRelayerStep,
-  ])
+  }, [relayerApprovalStep, claimAllRewardsStep, minterApprovalStep, hasUnclaimedBalRewards])
 
   return {
     isLoading:

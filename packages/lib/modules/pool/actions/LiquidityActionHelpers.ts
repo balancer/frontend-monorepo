@@ -254,33 +254,54 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
 }
 
 export function requiresProportionalInput(pool: Pool): boolean {
-  if (isV3Pool(pool) && isUnbalancedLiquidityDisabled(pool)) return true
-  return isGyro(pool.type) || isCowAmmPool(pool.type)
+  return requiresProportionalInputReason(pool) !== undefined
+}
+
+export function requiresProportionalInputReason(pool: Pool): string | undefined {
+  if (isV3Pool(pool) && isUnbalancedLiquidityDisabled(pool)) {
+    return 'Adding unbalanced liquidity has been disabled in this pool'
+  }
+  if (isGyro(pool.type)) return requiresProportionalTemplate('Gyro (CLP)')
+  if (isCowAmmPool(pool.type)) return requiresProportionalTemplate('Cow AMM')
+
+  return undefined
+}
+
+function requiresProportionalTemplate(poolType: string) {
+  return `This is a ${poolType} pool which requires liquidity to be added proportionally`
 }
 
 // Some pool types do not support AddLiquidityKind.Proportional in the SDK
 export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
-  if (
-    isV2Pool(pool) &&
-    (pool.type === GqlPoolType.Stable || pool.type === GqlPoolType.MetaStable)
-  ) {
-    return false
+  return supportsProportionalAddLiquidityReasons(pool) === undefined
+}
+
+export function supportsProportionalAddLiquidityReasons(pool: Pool): string | undefined {
+  if (isV2Pool(pool)) {
+    if (pool.type === GqlPoolType.Stable) return supportsProportionalTemplate('v2 stable')
+    if (pool.type === GqlPoolType.MetaStable) return supportsProportionalTemplate('v2 metastable')
   }
 
   // WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
-  if (isWeightedPool2Tokens(pool)) return false
+  if (isWeightedPool2Tokens(pool)) return supportsProportionalTemplate('v2 weighted 2 tokens')
 
-  // WeightedV1 pool types do not support AddLiquidityKind.Proportional in the SDK
-  if (isWeightedV1(pool)) return false
+  // WeightedV1 pool types do not support AddLiquidityKind.Proportional in the SDK except for protocolVersion 3
+  if (!isV3Pool(pool) && isWeightedV1(pool)) {
+    return supportsProportionalTemplate('weightedV1 (non v3 protocol)')
+  }
 
-  return true
+  return undefined
+}
+
+function supportsProportionalTemplate(poolType: string) {
+  return `This is a ${poolType} pool which does not support liquidity to be added proportionally`
 }
 
 export function isWeightedPool2Tokens(pool: Pool): boolean {
   if (
     isV2Pool(pool) &&
     isSameAddress(
-      (pool?.factory as Address) || '',
+      (pool.factory as Address) || '',
       getNetworkConfig(pool.chain).contracts.balancer?.WeightedPool2TokensFactory || '0xUndefined'
     )
   ) {

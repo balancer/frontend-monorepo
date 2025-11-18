@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../../TokensProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'

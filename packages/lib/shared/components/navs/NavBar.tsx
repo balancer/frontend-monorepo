@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
-import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react'
+import { Alert, Box, BoxProps, Button, HStack, Link, Text } from '@chakra-ui/react'
 import { isDev, isStaging, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
@@ -17,7 +18,7 @@ import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
-import { isBalancer, isCowAmm } from '@repo/lib/config/getProjectConfig'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
 import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
 import { useApiHealth } from '../../hooks/useApiHealth'
@@ -88,7 +89,7 @@ function NavLinks({
         )
       })}
       {customLinks}
-      {!isCowAmm && (isDev || isStaging) && (
+      {(isDev || isStaging) && (
         <>
           <Box as={motion.div} variants={fadeIn}>
             <Link
@@ -269,6 +270,10 @@ export function NavBar({
   const top = useTransform(scrollYBoundedProgressDelayed, [0, 1], [0, -72])
   const opacity = useTransform(scrollYBoundedProgressDelayed, [0, 1], [1, 0])
 
+  const poolActions = ['add-liquidity', 'remove-liquidity', 'stake', 'unstake', 'swap']
+  const pathname = usePathname()
+  const shouldShowV2Exploit = poolActions.every(action => !pathname.includes(action))
+
   return (
     <Box
       _before={{
@@ -299,6 +304,23 @@ export function NavBar({
       {...rest}
     >
       {!apiOK && <ApiOutageAlert />}
+
+      {isBalancer && shouldShowV2Exploit && (
+        <Alert gap="2" justifyContent="center" status="warning">
+          <Text color="font.dark" fontWeight="bold">
+            There has been an exploit affecting v2 Composable Stable pools (v3 pools are not
+            affected).
+          </Text>
+          <Link
+            color="font.dark"
+            href="https://x.com/Balancer/status/1986104426667401241"
+            isExternal
+            textDecoration="underline"
+          >
+            View the official statement
+          </Link>
+        </Alert>
+      )}
 
       <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
         <HStack

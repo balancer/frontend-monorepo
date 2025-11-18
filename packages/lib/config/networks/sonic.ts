@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { zeroAddress } from 'viem'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
+import { AddressProvider, PERMIT2 } from '@balancer/sdk'
 import { sonic } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -34,6 +34,12 @@ const networkConfig: NetworkConfig = {
       symbol: 'stS',
       decimals: 18,
     },
+    loopedAsset: {
+      name: 'Beets Looped Sonic',
+      address: '0xc76995054ce51dfbbc954840d699b2f33d2538ee',
+      symbol: 'loopS',
+      decimals: 18,
+    },
     defaultSwapTokens: {
       tokenIn: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     },
@@ -50,13 +56,13 @@ const networkConfig: NetworkConfig = {
     multicall3: '0xcA11bde05977b3631167028862bE2a173976CA11',
     balancer: {
       vaultV2: '0xba12222222228d8ba445958a75a0704d566bf2c8',
-      vaultV3: balancerV3Contracts.Vault[sonic.id],
+      vaultV3: AddressProvider.Vault(sonic.id),
       relayerV6: '0x7b52D5ef006E59e3227629f97F182D6442380bb6',
       minter: zeroAddress,
-      router: balancerV3Contracts.Router[sonic.id],
-      batchRouter: balancerV3Contracts.BatchRouter[sonic.id],
-      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[sonic.id],
-      vaultAdminV3: balancerV3Contracts.VaultAdmin[sonic.id],
+      router: AddressProvider.Router(sonic.id),
+      batchRouter: AddressProvider.BatchRouter(sonic.id),
+      compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(sonic.id),
+      vaultAdminV3: AddressProvider.VaultAdmin(sonic.id),
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {
@@ -66,6 +72,8 @@ const networkConfig: NetworkConfig = {
       sfc: '0x0aB8f3b709A52c096f33702fE8153776472305ed',
       lstWithdrawRequestHelper: '0x52b16e3d7d25ba64f242e59f9a74799ecc432d78',
       reliquary: '0x973670ce19594f857a7cd85ee834c7a74a941684',
+      magpieLoopedSonicRouter: '0xd1e0b8dc3a4cd1a892fe1b46e0aed30c35f6a087',
+      loopedSonicVault: '0xc76995054ce51dfbbc954840d699b2f33d2538ee',
     },
     permit2: PERMIT2[sonic.id],
   },

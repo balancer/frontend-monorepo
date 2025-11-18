@@ -26,5 +26,6 @@ export const LS_KEYS = {
     StepIndex: 'poolCreation.stepIndex',
     Address: 'poolCreation.address',
     ReClammConfig: 'poolCreation.reClammConfig',
+    EclpConfig: 'poolCreation.eclpConfig',
   },
 }

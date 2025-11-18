@@ -131,7 +131,13 @@ function ConfigOptionsGroup({
         })}
       </SimpleGrid>
       {customOption ? (
-        <Radio {...getRadioProps({ value: customOption.rawValue })} mt="2">
+        <Radio
+          isChecked={selectedValue === customOption.rawValue}
+          mt="2"
+          name={name}
+          onChange={() => updateFn(customOption.rawValue)}
+          value={customOption.rawValue}
+        >
           <Text color="font.secondary" fontSize="sm">
             {customOption.label}
           </Text>

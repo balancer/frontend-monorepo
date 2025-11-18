@@ -2,6 +2,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { keyBy } from 'lodash'
 import { Config, NetworkConfig, SupportedChainId } from './config.types'
 import networks from './networks'
+import { zeroAddress } from 'viem'
 
 if (!process.env.NEXT_PUBLIC_BALANCER_API_URL) {
   throw new Error(
@@ -71,4 +72,13 @@ export function getChainName(chainId: GqlChain | SupportedChainId) {
 
 export function getChainShortName(chainId: GqlChain | SupportedChainId) {
   return getNetworkConfig(chainId).shortName
+}
+
+export function hasRelayerBeenDeployed(chainId: SupportedChainId) {
+  const config = getNetworkConfig(chainId)
+
+  return (
+    config.contracts.balancer.relayerV6 !== zeroAddress &&
+    config.contracts.balancer.vaultV2 !== zeroAddress
+  )
 }

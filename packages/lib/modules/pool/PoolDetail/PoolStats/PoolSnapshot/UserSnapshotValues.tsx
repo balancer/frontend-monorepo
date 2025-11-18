@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/static-components */
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { memo, useMemo } from 'react'

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
@@ -52,6 +53,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
 
   const rewards: HumanTokenAmount[] = rewardsDataSnapshot
     .filter(reward => !bn(reward.balance).isZero())
+    .sort((a, b) => b.fiatBalance.minus(a.fiatBalance).toNumber())
     .map(reward => ({
       tokenAddress: reward.tokenAddress as Address,
       humanAmount: reward.humanBalance,

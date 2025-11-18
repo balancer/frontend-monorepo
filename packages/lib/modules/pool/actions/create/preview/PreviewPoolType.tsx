@@ -5,6 +5,7 @@ import { capitalize } from 'lodash'
 import { validatePoolType } from '../validatePoolCreationForm'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
+import { POOL_TYPES } from '../constants'
 
 export function PreviewPoolType() {
   const { network, protocol, poolType, weightedPoolStructure } = usePoolCreationForm()
@@ -26,7 +27,7 @@ export function PreviewPoolType() {
     {
       label: 'Pool type',
       value:
-        capitalize(poolType) +
+        POOL_TYPES[poolType].label +
         (isWeightedPool
           ? `: ${!isCustomWeightedPool ? '2-token' : ''} ${weightedPoolStructure}`
           : ''),

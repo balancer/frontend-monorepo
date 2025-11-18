@@ -21,9 +21,6 @@ export const sentryOptions: SentryBuildOptions = {
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
   tunnelRoute: '/monitoring',
 
-  // Hides source maps from generated client bundles
-  hideSourceMaps: false,
-
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
 
@@ -37,6 +34,9 @@ export const sentryOptions: SentryBuildOptions = {
     disable: !shouldEnableSourceMaps,
   },
   telemetry: shouldEnableSourceMaps,
+  reactComponentAnnotation: {
+    enabled: true,
+  },
 }
 
 const productionSentryDSN =

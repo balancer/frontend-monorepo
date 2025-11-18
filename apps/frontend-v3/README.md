@@ -62,23 +62,6 @@ make fork-ethereum
 pnpm dev:bal:fork
 ```
 
-### Sentry does not work with turbopack yet
-
-This is not a real issue as we don't normally use sentry in dev mode. The only downside is that you
-will see a sentry warning in the console when using turbopack mode.
-
-For build mode, we will always use webpack which works with Sentry as expected.
-
-Check
-[this link](https://github.com/getsentry/sentry-javascript/issues/8105#issuecomment-2577559235) for
-more context.
-
-You can explicitly run with webpack mode with:
-
-```bash
-pnpm dev:webpack
-```
-
 ## Testing
 
 See [Testing instructions](../../README.md#testing).

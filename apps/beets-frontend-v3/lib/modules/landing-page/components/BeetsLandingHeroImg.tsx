@@ -2,7 +2,7 @@
 'use client'
 
 import { AnimatePresence, motion, useInView } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 import { Box } from '@chakra-ui/react'
 
@@ -10,21 +10,14 @@ import { Box } from '@chakra-ui/react'
 import bgSrc from '../images/hero-bg.png'
 
 export function BeetsLandingHeroImg() {
-  const [shouldAnimate, setShouldAnimate] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
-
-  useEffect(() => {
-    if (isInView) {
-      setShouldAnimate(true)
-    }
-  }, [isInView])
 
   return (
     <Box bottom={0} h="1200px" left={0} position="absolute" top={-100} w="100%">
       <AnimatePresence>
         <motion.div
-          animate={shouldAnimate ? { opacity: 0.5, willChange: 'opacity' } : {}}
+          animate={isInView ? { opacity: 0.5, willChange: 'opacity' } : {}}
           exit={{ opacity: 0 }}
           initial={{ opacity: 0.15 }}
           ref={ref}

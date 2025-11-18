@@ -14,19 +14,19 @@ export default function Terms() {
             <Box mt="3xl">
               <h1>Balancer Terms of Use</h1>
               <p>
-                <em>Last updated: August 2024</em>
+                <em>Last updated: November 2025</em>
               </p>
               <p>
                 <em className="font-semibold">
-                  Do not access this site where such access is prohibited by applicable law. Please
-                  carefully read these terms of use before using the site. These terms apply to any
-                  person or entity accessing the site and by using the site you agree to be bound by
-                  them. The terms of use contain a mandatory individual arbitration and class
-                  action/jury trial waiver provision that requires the use of arbitration on an
-                  individual basis to resolve disputes, rather than jury trials or class actions. If
-                  you do not want to be bound by these terms of use, you should not access the site.
-                  By using the site in any capacity, you agree that you have read, understood, and
-                  agree to be subject to these terms of use.
+                  Do not access this site, as defined below, where such access is prohibited by
+                  applicable law. Please carefully read these terms of use before using the site.
+                  These terms apply to any person or entity accessing the site and by using the site
+                  you agree to be bound by them. The terms of use contain a mandatory individual
+                  arbitration and class action/jury trial waiver provision that requires the use of
+                  arbitration on an individual basis to resolve disputes, rather than jury trials or
+                  class actions. If you do not want to be bound by these terms of use, you should
+                  not access the site. By using the site in any capacity, you agree that you have
+                  read, understood, and agree to be subject to these terms of use.
                 </em>
               </p>
             </Box>
@@ -37,14 +37,14 @@ export default function Terms() {
             <h2>1. Overview</h2>
             <p>
               This Balancer Terms of Use document (“Terms” or “agreement”) (“Balancer ”, “we” and
-              “us” refers to the Balancer Foundation and its subsidiary Balancer OpCo Limited)
-              covers the website, Balancer Protocol user-interface and free application
-              (collectively “the Site”) we own and administer, at times in conjunction with others,
-              which provides the ability to access the decentralized Balancer Protocol.
-              Additionally, you can access the Balancer Protocol through third-party web or mobile
-              interfaces. These Terms apply to you (“You” or “you”) as a user of our Site including
-              all the products, services, tools and information, without limitation, made available
-              on the Site.
+              “us” refers to the Balancer Foundation and its subsidiaries including without
+              limitation Balancer OpCo Limited) covers the website, Balancer Protocol user-interface
+              and free application (collectively “the Site”) we own and administer, at times in
+              conjunction with others, which provides the ability to access the decentralized
+              Balancer Protocol. Additionally, you can access the Balancer Protocol through
+              third-party web or mobile interfaces. These Terms apply to you (“You” or “you”) as a
+              user of our Site including all the products, services, tools and information, without
+              limitation, made available on the Site.
             </p>
             <p>
               To avoid any confusion, you agree a) you retain full control, at all times, over your
@@ -117,9 +117,8 @@ export default function Terms() {
             <p>
               You acknowledge and accept the material potential risks associated with using the
               smart contracts that can be accessed via the Balancer user interface including,
-              without limitation, the smart contracts for Balancer Pools. Before using these
-              features or Pools, please confirm you understand the functionality and risks. For more
-              information about the risks, please carefully read <Link href="risks">risks</Link>.
+              without limitation, the smart contracts for Balancer Pools. For more information about
+              the risks, please carefully read <Link href="risks">risks</Link>.
             </p>
           </div>
         </FadeInOnView>
@@ -573,7 +572,7 @@ export default function Terms() {
               With regards to opportunity loss (e.g., loss of opportunity to place a payment
               instruction, resulting in loss of profits which could have been obtained) due to
               occurrences such as emergency situations and force majeure events, Balancer is under
-              no obligation to take any corrective action or measure and shall no under
+              no obligation to take any corrective action or measure and shall not under
               circumstances be liable for any lost profits or other swapping losses.
             </p>
           </div>
@@ -585,8 +584,8 @@ export default function Terms() {
               Balancer is a foundation company organized in the Cayman Islands with an operating
               company organized in the British Virgin Islands (BVI). Please contact us if you have
               any questions about these Terms or other topics, by sending an email to{' '}
-              <a className="link" href="mailto:termsofuse@balancer.finance">
-                termsofuse@balancer.finance
+              <a className="link" href="mailto:admin@balancer.finance">
+                admin@balancer.finance
               </a>
               .
             </p>

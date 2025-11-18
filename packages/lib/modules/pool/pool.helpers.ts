@@ -353,6 +353,9 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   if (isManaged(pool.type)) reasons.push('Managed pools are not supported. Seek help in Discord.')
   if (pool.dynamicData.isPaused) reasons.push('Paused pool')
   if (pool.dynamicData.isInRecoveryMode) reasons.push('Pool in recovery')
+  if (isV2Pool(pool) && isComposableStable(pool.type)) {
+    reasons.push('This pool type is affected by an exploit. Adding liquidity is not allowed')
+  }
 
   // reason for blocking in custom scenarios eg. maBEETS
   if (isMaBeetsPool(pool.id)) reasons.push('Please manage your liquidity on the maBEETS page')
