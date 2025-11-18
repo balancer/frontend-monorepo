@@ -166,7 +166,7 @@ function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
     } else {
       return (
         <BalAlert
-          content="As you enter an amount for one of the tokens, the other token's amount is calculated to set up the required price ratio for pool initialization."
+          content="When you enter a seed amount for one of the ReClamm pool tokens, the other amount is proportionally autofilled to maintain the required price ratio for pool initialization."
           status="info"
         />
       )
@@ -176,7 +176,7 @@ function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
   if (isGyroEllipticPool(poolType)) {
     return (
       <BalAlert
-        content="Gyro ECLPs should be initialized with precise amounts according to the pool's configuration parameters."
+        content="When you enter a seed amount for one of the Gyro ECLP tokens, the other amount is proportionally autofilled to maintain the recommended price ratio for pool initialization."
         status="info"
       />
     )
