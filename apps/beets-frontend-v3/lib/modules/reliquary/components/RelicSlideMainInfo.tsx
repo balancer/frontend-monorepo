@@ -1,10 +1,11 @@
 'use client'
 
-import { Box, VStack, Text, HStack, Badge, Stack, StackDivider } from '@chakra-ui/react'
+import { Box, VStack, Text, HStack, Badge, Stack, StackDivider, Button } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import React from 'react'
 import Countdown from 'react-countdown'
 import { useSwiperSlide } from 'swiper/react'
+import { useRouter } from 'next/navigation'
 import AnimatedProgress from '~/components/animated-progress/AnimatedProgress'
 import BeetsTooltip from '~/components/tooltip/BeetsTooltip'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
@@ -23,11 +24,14 @@ export default function RelicSlideMainInfo({ isLoading }: Props) {
   const { selectedRelic, maturityThresholds } = useReliquary()
   const config = useNetworkConfig()
   const { relicBalanceUSD } = useRelicDepositBalance()
+  const router = useRouter()
 
   const { progressToNextLevel, levelUpDate, isMaxMaturity } = relicGetMaturityProgress(
     selectedRelic,
     maturityThresholds
   )
+
+  const hasBalance = selectedRelic && parseFloat(selectedRelic.amount) > 0
 
   return (
     <Box height="full" width="full">
@@ -95,6 +99,26 @@ export default function RelicSlideMainInfo({ isLoading }: Props) {
                     )}
                   </VStack>
                 </VStack>
+                <HStack pt="2" spacing="2" w="full">
+                  <Button
+                    flex="1"
+                    onClick={() => router.push('/mabeets/deposit')}
+                    size="sm"
+                    variant="primary"
+                  >
+                    Deposit
+                  </Button>
+                  {hasBalance && (
+                    <Button
+                      flex="1"
+                      onClick={() => router.push('/mabeets/withdraw')}
+                      size="sm"
+                      variant="secondary"
+                    >
+                      Withdraw
+                    </Button>
+                  )}
+                </HStack>
               </VStack>
             </Stack>
           </VStack>

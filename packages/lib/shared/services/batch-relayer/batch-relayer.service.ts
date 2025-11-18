@@ -1,4 +1,5 @@
 import {
+  EncodeExitPoolInput,
   EncodeGaugeClaimRewardsInput,
   EncodeGaugeDepositInput,
   EncodeGaugeMintInput,
@@ -6,6 +7,7 @@ import {
   EncodeJoinPoolInput,
   EncodeReliquaryCreateRelicAndDepositInput,
   EncodeReliquaryDepositInput,
+  EncodeReliquaryWithdrawAndHarvestInput,
 } from './relayer-types'
 import { gaugeActionsService, GaugeActionsService } from './extensions/gauge-actions.service'
 import { balancerV2BatchRelayerLibraryAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
@@ -73,9 +75,12 @@ export class BatchRelayerService {
     return this.reliquaryActionsService.encodeDeposit(params)
   }
 
-  // public reliquaryEncodeWithdrawAndHarvest(params: EncodeReliquaryWithdrawAndHarvestInput) {
-  //   return this.reliquaryActionsService.encodeWithdrawAndHarvest(params)
-  // }
+  public reliquaryEncodeWithdrawAndHarvest(params: EncodeReliquaryWithdrawAndHarvestInput) {
+    if (!this.reliquaryActionsService) {
+      throw new Error('ReliquaryActionsService not initialized')
+    }
+    return this.reliquaryActionsService.encodeWithdrawAndHarvest(params)
+  }
 
   // public reliquaryEncodeHarvestAll(params: EncodeReliquaryHarvestAllInput) {
   //   return this.reliquaryActionsService.encodeHarvestAll(params)
@@ -83,5 +88,9 @@ export class BatchRelayerService {
 
   public vaultEncodeJoinPool(params: EncodeJoinPoolInput): string {
     return this.vaultActionsService.encodeJoinPool(params)
+  }
+
+  public vaultEncodeExitPool(params: EncodeExitPoolInput): string {
+    return this.vaultActionsService.encodeExitPool(params)
   }
 }

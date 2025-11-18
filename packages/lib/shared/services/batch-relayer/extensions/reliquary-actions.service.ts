@@ -2,6 +2,7 @@ import { encodeFunctionData, Hex } from 'viem'
 import {
   EncodeReliquaryCreateRelicAndDepositInput,
   EncodeReliquaryDepositInput,
+  EncodeReliquaryWithdrawAndHarvestInput,
 } from '../relayer-types'
 import { beetsV2BatchRelayerLibraryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 
@@ -26,6 +27,14 @@ export class ReliquaryActionsService {
       abi: beetsV2BatchRelayerLibraryAbi,
       functionName: 'reliquaryDeposit',
       args: [params.sender, params.token, params.relicId, params.amount, params.outputReference],
+    })
+  }
+
+  public encodeWithdrawAndHarvest(params: EncodeReliquaryWithdrawAndHarvestInput): Hex {
+    return encodeFunctionData({
+      abi: beetsV2BatchRelayerLibraryAbi,
+      functionName: 'reliquaryWithdrawAndHarvest',
+      args: [params.recipient, params.relicId, params.amount, params.outputReference],
     })
   }
 }

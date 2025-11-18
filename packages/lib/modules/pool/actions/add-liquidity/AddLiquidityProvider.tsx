@@ -21,6 +21,8 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
+import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
+import { Pool } from '../../pool.types'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { useAddLiquiditySteps } from './useAddLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
@@ -39,7 +41,10 @@ import { useWrapUnderlying } from '../useWrapUnderlying'
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
-export function useAddLiquidityLogic(urlTxHash?: Hash) {
+export function useAddLiquidityLogic(
+  urlTxHash?: Hash,
+  handlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
@@ -62,10 +67,10 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage } = useUserSettings()
 
-  const handler = useMemo(
-    () => selectAddLiquidityHandler(pool, wantsProportional),
-    [pool.id, isLoading, wantsProportional]
-  )
+  const handler = useMemo(() => {
+    const selector = handlerSelector ?? selectAddLiquidityHandler
+    return selector(pool, wantsProportional)
+  }, [pool.id, isLoading, wantsProportional, handlerSelector])
 
   /**
    * Helper functions & variables

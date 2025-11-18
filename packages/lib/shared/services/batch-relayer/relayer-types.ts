@@ -61,3 +61,10 @@ export interface EncodeReliquaryDepositInput {
   amount: bigint
   outputReference: bigint
 }
+
+export interface EncodeReliquaryWithdrawAndHarvestInput {
+  recipient: Address
+  relicId: bigint
+  amount: bigint
+  outputReference: bigint
+}

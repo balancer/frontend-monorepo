@@ -12,9 +12,10 @@ import { PermitSignatureProvider } from '@repo/lib/modules/tokens/approvals/perm
 
 type Props = {
   txHash?: string[]
+  redirectPath?: string
 }
 
-export function RemoveLiquidityPage({ txHash }: Props) {
+export function RemoveLiquidityPage({ txHash, redirectPath }: Props) {
   const maybeTxHash = txHash?.[0] || ''
   const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
 
@@ -24,7 +25,7 @@ export function RemoveLiquidityPage({ txHash }: Props) {
         <RelayerSignatureProvider>
           <PermitSignatureProvider>
             <RemoveLiquidityProvider urlTxHash={urlTxHash}>
-              <PoolActionsLayout>
+              <PoolActionsLayout redirectPath={redirectPath}>
                 <PriceImpactProvider>
                   <RemoveLiquidityForm />
                 </PriceImpactProvider>

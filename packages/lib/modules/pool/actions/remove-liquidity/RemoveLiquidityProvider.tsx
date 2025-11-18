@@ -10,6 +10,8 @@ import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import { selectRemoveLiquidityHandler } from './handlers/selectRemoveLiquidityHandler'
+import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
+import { Pool } from '../../pool.types'
 import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidityPriceImpactQuery'
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, formatUnits, Hash } from 'viem'
@@ -29,7 +31,10 @@ import { useWrapUnderlying } from '../useWrapUnderlying'
 export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
 
-export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
+export function useRemoveLiquidityLogic(
+  urlTxHash?: Hash,
+  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
   const [wethIsEth, setWethIsEth] = useState(false)
@@ -63,10 +68,10 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
     isWrappedNativeAsset(token.address as Address, chain)
   )
 
-  const handler = useMemo(
-    () => selectRemoveLiquidityHandler(pool, removalType),
-    [pool.id, removalType, isLoading]
-  )
+  const handler = useMemo(() => {
+    const selector = handlerSelector ?? selectRemoveLiquidityHandler
+    return selector(pool, removalType)
+  }, [pool.id, removalType, isLoading, handlerSelector])
 
   const totalUsdFromBprPrice = bn(humanBptIn).times(bptPrice).toFixed()
 
