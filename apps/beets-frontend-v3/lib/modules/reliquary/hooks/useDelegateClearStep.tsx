@@ -32,9 +32,9 @@ export function useDelegateClearStep(chain: GqlChain) {
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
-    contractId: 'beets.delegateRegistry',
+    contractId: 'beets.reliquary',
     contractAddress: networkConfig.snapshot?.contractAddress || '',
-    functionName: 'clearDelegate',
+    functionName: 'undelegate',
     args: networkConfig.snapshot?.id ? [networkConfig.snapshot.id] : null,
     enabled:
       isConnected && !!networkConfig.snapshot?.contractAddress && !!networkConfig.snapshot?.id,

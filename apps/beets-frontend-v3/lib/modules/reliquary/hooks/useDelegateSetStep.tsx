@@ -32,9 +32,9 @@ export function useDelegateSetStep(chain: GqlChain) {
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
-    contractId: 'beets.delegateRegistry',
+    contractId: 'beets.reliquary',
     contractAddress: networkConfig.snapshot?.contractAddress || '',
-    functionName: 'setDelegate' as any,
+    functionName: 'setDelegation',
     args:
       networkConfig.snapshot && networkConfig.snapshot.id && networkConfig.snapshot.delegateAddress
         ? [networkConfig.snapshot.id, networkConfig.snapshot.delegateAddress]
