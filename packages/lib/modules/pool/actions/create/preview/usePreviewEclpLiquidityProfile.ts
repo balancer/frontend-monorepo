@@ -6,7 +6,8 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePoolSpotPriceWithoutRate } from '../steps/details/usePoolSpotPriceWithoutRate'
 
 export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
-  const { eclpConfigForm, isGyroEclp, poolTokens } = usePoolCreationForm()
+  const { eclpConfigForm, isGyroEclp, poolCreationForm } = usePoolCreationForm()
+  const poolTokens = poolCreationForm.watch('poolTokens')
   const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
 
   const poolSpotPrice = spotPriceWithoutRate.toString()

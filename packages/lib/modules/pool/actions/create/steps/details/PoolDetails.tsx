@@ -4,7 +4,8 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolDetails } from '../../validatePoolCreationForm'
 
 export function PoolDetails() {
-  const { poolTokens, poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolTokens = poolCreationForm.watch('poolTokens')
 
   const tokenSymbols = poolTokens.map(token => {
     const { data, weight } = token

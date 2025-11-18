@@ -21,7 +21,8 @@ const WEIGHT_COLORS = [
 type Props = { variant?: string; displayAlert?: boolean }
 
 export function SeedAmountProportions({ variant = 'level3', displayAlert = false }: Props) {
-  const { poolTokens, poolType } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, poolType] = poolCreationForm.watch(['poolTokens', 'poolType'])
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {

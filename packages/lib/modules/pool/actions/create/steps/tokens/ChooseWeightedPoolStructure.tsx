@@ -7,8 +7,12 @@ import { PoolCreationForm } from '../../types'
 import { validatePoolType } from '../../validatePoolCreationForm'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationForm> }) {
-  const { poolTokens, updatePoolTokens, weightedPoolStructure, poolCreationForm, poolType } =
-    usePoolCreationForm()
+  const { poolCreationForm, updatePoolTokens } = usePoolCreationForm()
+  const [poolTokens, weightedPoolStructure, poolType] = poolCreationForm.watch([
+    'poolTokens',
+    'weightedPoolStructure',
+    'poolType',
+  ])
 
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 

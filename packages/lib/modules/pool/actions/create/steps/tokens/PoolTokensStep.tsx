@@ -6,8 +6,10 @@ import { ChoosePoolTokens } from './ChoosePoolTokens'
 import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
 
 export function PoolTokensStep() {
-  const { isFormStateValid, poolType, poolTokens, poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolType, poolTokens] = poolCreationForm.watch(['poolType', 'poolTokens'])
 
+  const isFormStateValid = poolCreationForm.formState.isValid
   const isValidTokenWeights = validatePoolTokens.isValidTokenWeights(poolType, poolTokens)
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
   const isValidTokens = validatePoolTokens.isValidTokens(poolTokens)

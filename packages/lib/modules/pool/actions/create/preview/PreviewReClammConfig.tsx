@@ -24,9 +24,14 @@ type Props = {
 export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarginValue }: Props) {
   const { options } = useReclAmmChart()
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
-  const { initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate } =
-    reClammConfigForm.watch()
-  const { poolTokens } = poolCreationForm.watch()
+  const [initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate] =
+    reClammConfigForm.watch([
+      'initialTargetPrice',
+      'initialMinPrice',
+      'initialMaxPrice',
+      'priceShiftDailyRate',
+    ])
+  const poolTokens = poolCreationForm.watch('poolTokens')
 
   const reClammConfigCards = [
     {

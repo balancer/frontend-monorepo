@@ -44,7 +44,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
 
-  const { poolTokens } = poolCreationForm.watch()
+  const poolTokens = poolCreationForm.watch('poolTokens')
   const reClammConfig = reClammConfigForm.watch()
   const { initialTargetPrice, priceRangePercentage } = reClammConfig
 

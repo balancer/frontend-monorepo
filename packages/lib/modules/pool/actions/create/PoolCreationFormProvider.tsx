@@ -51,28 +51,17 @@ export function usePoolFormLogic() {
     { mode: 'all' }
   )
 
-  const {
-    poolTokens,
-    poolType,
-    weightedPoolStructure,
-    protocol,
-    network,
-    name,
-    symbol,
-    swapFeeManager,
-    pauseManager,
-    swapFeePercentage,
-    poolHooksContract,
-    enableDonation,
-    disableUnbalancedLiquidity,
-    amplificationParameter,
-  } = poolCreationForm.watch()
+  const [poolTokens, poolType, network] = poolCreationForm.watch([
+    'poolTokens',
+    'poolType',
+    'network',
+  ])
 
-  const isReClamm = poolType === PoolType.ReClamm
   const isStablePool = poolType === PoolType.Stable
   const isStableSurgePool = poolType === PoolType.StableSurge
   const isWeightedPool = poolType === PoolType.Weighted
   const isGyroEclp = poolType === PoolType.GyroE
+  const isReClamm = poolType === PoolType.ReClamm
 
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const currentPoolTokens = poolCreationForm.getValues('poolTokens')
@@ -143,26 +132,10 @@ export function usePoolFormLogic() {
     return [...networkTokens, ...unknownTokens]
   }, [getTokensByChain, network, poolTokens])
 
-  // TODO: return less stuff by using poolCreationForm.watch() in components
   return {
     poolCreationForm,
     reClammConfigForm,
     eclpConfigForm,
-    isFormStateValid: poolCreationForm.formState.isValid,
-    poolTokens,
-    poolType,
-    weightedPoolStructure,
-    protocol,
-    network,
-    name,
-    symbol,
-    swapFeeManager,
-    pauseManager,
-    swapFeePercentage,
-    amplificationParameter,
-    poolHooksContract,
-    enableDonation,
-    disableUnbalancedLiquidity,
     isReClamm,
     isStablePool,
     isStableSurgePool,
@@ -172,12 +145,12 @@ export function usePoolFormLogic() {
     updatePoolTokens,
     removePoolToken,
     addPoolToken,
-    resetPoolCreationForm,
-    poolAddress,
     invertReClammPriceParams,
     invertGyroEclpPriceParams,
+    resetPoolCreationForm,
     tokenList,
     isLoadingTokenList,
+    poolAddress,
     setPoolAddress,
   }
 }

@@ -20,8 +20,6 @@ import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { getGqlPoolType } from '../helpers'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { useCreatePoolInput } from './useCreatePoolInput'
-import { useLocalStorage } from 'usehooks-ts'
-import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useInitializePoolInput } from './useInitializePoolInput'
 import { RestartPoolCreationModal } from './RestartPoolCreationModal'
@@ -39,15 +37,13 @@ export function PoolCreationModal({
   finalFocusRef,
   ...rest
 }: PoolCreationModalProps & Omit<ModalProps, 'children'>) {
-  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.PoolCreation.Address,
-    undefined
-  )
-
-  const { network, poolType, resetPoolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm, resetPoolCreationForm, poolAddress, setPoolAddress } =
+    usePoolCreationForm()
+  const { network, poolType } = poolCreationForm.watch()
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
+  console.log('createPoolInput', createPoolInput)
   const initPoolInput = useInitializePoolInput(chainId)
 
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({

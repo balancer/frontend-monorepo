@@ -24,7 +24,8 @@ export function PreviewPoolDetails() {
 }
 
 export function PoolDetailsContent() {
-  const {
+  const { poolCreationForm } = usePoolCreationForm()
+  const [
     network,
     name,
     symbol,
@@ -36,7 +37,19 @@ export function PoolDetailsContent() {
     disableUnbalancedLiquidity,
     enableDonation,
     poolType,
-  } = usePoolCreationForm()
+  ] = poolCreationForm.watch([
+    'network',
+    'name',
+    'symbol',
+    'swapFeePercentage',
+    'swapFeeManager',
+    'pauseManager',
+    'amplificationParameter',
+    'poolHooksContract',
+    'disableUnbalancedLiquidity',
+    'enableDonation',
+    'poolType',
+  ])
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 

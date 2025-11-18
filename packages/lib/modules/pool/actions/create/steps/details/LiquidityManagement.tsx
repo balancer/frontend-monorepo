@@ -8,14 +8,15 @@ import { useEffect } from 'react'
 import { usePoolHooksContract } from './usePoolHooksContract'
 
 export function LiquidityManagement() {
-  const {
-    poolType,
-    enableDonation,
-    disableUnbalancedLiquidity,
-    poolHooksContract,
-    poolCreationForm,
-    network,
-  } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolType, enableDonation, disableUnbalancedLiquidity, poolHooksContract, network] =
+    poolCreationForm.watch([
+      'poolType',
+      'enableDonation',
+      'disableUnbalancedLiquidity',
+      'poolHooksContract',
+      'network',
+    ])
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
   const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)

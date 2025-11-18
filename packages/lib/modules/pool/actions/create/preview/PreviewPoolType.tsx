@@ -8,7 +8,13 @@ import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
 
 export function PreviewPoolType() {
-  const { network, protocol, poolType, weightedPoolStructure } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [network, protocol, poolType, weightedPoolStructure] = poolCreationForm.watch([
+    'network',
+    'protocol',
+    'poolType',
+    'weightedPoolStructure',
+  ])
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
   const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
     poolType,

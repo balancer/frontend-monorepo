@@ -9,7 +9,11 @@ import { getGqlPoolType } from '../helpers'
 
 export function useCheckForSimilarPools() {
   const { poolCreationForm, isWeightedPool } = usePoolCreationForm()
-  const { network, poolType, poolTokens } = poolCreationForm.watch()
+  const [network, poolType, poolTokens] = poolCreationForm.watch([
+    'network',
+    'poolType',
+    'poolTokens',
+  ])
 
   const { data, loading, error } = useQuery(GetPoolsDocument, {
     variables: {

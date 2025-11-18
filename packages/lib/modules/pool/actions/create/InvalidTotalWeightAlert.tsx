@@ -3,7 +3,8 @@ import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function InvalidTotalWeightAlert() {
-  const { poolTokens, poolType } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, poolType] = poolCreationForm.watch(['poolTokens', 'poolType'])
 
   const isTotalWeightTooLow = validatePoolTokens.isTotalWeightTooLow(poolTokens)
   const isTotalWeightTooHigh = validatePoolTokens.isTotalWeightTooHigh(poolTokens)

@@ -10,8 +10,8 @@ import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const { isFormStateValid, poolAddress, isReClamm, poolTokens, network, poolType } =
-    usePoolCreationForm()
+  const { poolAddress, isReClamm, poolCreationForm } = usePoolCreationForm()
+  const { poolTokens, poolType, network } = poolCreationForm.watch()
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
@@ -31,6 +31,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const showBackButton = !isFirstStep && !poolAddress
 
   const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
+  const isFormStateValid = poolCreationForm.formState.isValid
 
   return (
     <>

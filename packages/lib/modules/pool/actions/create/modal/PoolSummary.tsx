@@ -25,7 +25,8 @@ import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
-  const { network, isReClamm, poolAddress } = usePoolCreationForm()
+  const { poolCreationForm, isReClamm, poolAddress } = usePoolCreationForm()
+  const network = poolCreationForm.watch('network')
 
   const showTokenAmountSummary = !isReClamm || poolAddress
 
@@ -41,7 +42,8 @@ export function PoolSummary({ transactionSteps }: { transactionSteps: Transactio
 }
 
 function PoolTitleCard() {
-  const { poolTokens, symbol, network } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, symbol, network] = poolCreationForm.watch(['poolTokens', 'symbol', 'network'])
 
   return (
     <Card variant="modalSubSection">
@@ -78,7 +80,8 @@ function PoolTitleCard() {
 }
 
 function PoolTokenAmountsCard() {
-  const { poolTokens, network } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const { poolTokens, network } = poolCreationForm.watch()
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -121,7 +124,8 @@ function PoolTokenAmountsCard() {
 }
 
 function PoolDetailsCard() {
-  const { swapFeePercentage } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const { swapFeePercentage } = poolCreationForm.watch()
   const { isOpen, onToggle } = useDisclosure()
 
   return (

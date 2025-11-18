@@ -15,10 +15,9 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useGyroEclpInitAmountsRatio } from './useGyroEclpInitAmountsRatio'
 
 export function PoolFundStep() {
-  const { isFormStateValid, poolTokens, poolAddress, poolCreationForm, isWeightedPool, isReClamm } =
-    usePoolCreationForm()
-
-  const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
+  const { poolAddress, poolCreationForm, isWeightedPool, isReClamm } = usePoolCreationForm()
+  const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk, poolTokens } =
+    poolCreationForm.watch()
   const { hasValidationErrors } = useTokenInputsValidation()
 
   const isTokenAmountsValid =
@@ -29,7 +28,8 @@ export function PoolFundStep() {
     ? hasAcceptedTokenWeightsRisk && hasAcceptedPoolCreationRisk
     : hasAcceptedPoolCreationRisk
 
-  const isDisabled = !isFormStateValid || !hasAcceptedRisks || !isTokenAmountsValid
+  const isDisabled =
+    !poolCreationForm.formState.isValid || !hasAcceptedRisks || !isTokenAmountsValid
   const showTokenAmountInputs = !isReClamm || poolAddress
 
   return (
@@ -60,7 +60,8 @@ export function PoolFundStep() {
 }
 
 function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: number }) {
-  const { network, updatePoolToken, poolAddress, poolTokens, isGyroEclp } = usePoolCreationForm()
+  const { updatePoolToken, poolAddress, isGyroEclp, poolCreationForm } = usePoolCreationForm()
+  const { network, poolTokens } = poolCreationForm.watch()
   const { reClammInitAmounts } = useReClammInitAmounts(poolAddress, token)
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
@@ -132,54 +133,54 @@ function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: numbe
 
 function SeedPoolTypeAlert() {
   const { isReClamm, poolAddress, isGyroEclp } = usePoolCreationForm()
-  const showReClammAlert = isReClamm && !poolAddress
-  const showGyroEclpAlert = isGyroEclp
-
   const { projectName } = PROJECT_CONFIG
 
+  if (isReClamm) {
+    if (!poolAddress) {
+      return (
+        <BalAlert
+          content="The ReClamm pool type requires you to deploy the pool contract before initial token amounts can be chosen."
+          status="info"
+        />
+      )
+    } else {
+      return (
+        <BalAlert
+          content="As you enter an amount for one of the tokens, the other token's amount is calculated to set up the required price ratio for pool initialization."
+          status="info"
+        />
+      )
+    }
+  }
+
+  if (isGyroEclp) {
+    return (
+      <BalAlert
+        content="Gyro ECLPs should be initialized with precise amounts according to the pool's configuration parameters."
+        status="info"
+      />
+    )
+  }
+
   return (
-    <>
-      {showReClammAlert ? (
-        <BalAlert
-          content={
-            <Text color="black">
-              The ReClamm pool type requires you to deploy the pool contract before initial token
-              amounts can be chosen.
-            </Text>
-          }
-          status="info"
-        />
-      ) : showGyroEclpAlert ? (
-        <BalAlert
-          content={
-            <Text color="black">
-              Gyro ECLPs should be initialized with precise amounts according to the pool's
-              configuration parameters.
-            </Text>
-          }
-          status="info"
-        />
-      ) : (
-        <BalAlert
-          content={
-            <UnorderedList>
-              <ListItem color="black">Suggested seed amount: $5k+</ListItem>
-              <ListItem color="black">
-                The pool will be listed on the {projectName} UI only once it is seeded.
-              </ListItem>
-              <ListItem color="black">
-                For safety on the {projectName} UI, LPs are required to make proportional adds when
-                the liquidity of the pool is less than $50k.
-              </ListItem>
-              <ListItem color="black">
-                Be very careful that the USD values are proportional to the target token weights, or
-                you’ll likely get rekt.{' '}
-              </ListItem>
-            </UnorderedList>
-          }
-          status="info"
-        />
-      )}
-    </>
+    <BalAlert
+      content={
+        <UnorderedList>
+          <ListItem color="black">Suggested seed amount: $5k+</ListItem>
+          <ListItem color="black">
+            The pool will be listed on the {projectName} UI only once it is seeded.
+          </ListItem>
+          <ListItem color="black">
+            For safety on the {projectName} UI, LPs are required to make proportional adds when the
+            liquidity of the pool is less than $50k.
+          </ListItem>
+          <ListItem color="black">
+            Be very careful that the USD values are proportional to the target token weights, or
+            you’ll likely get rekt.{' '}
+          </ListItem>
+        </UnorderedList>
+      }
+      status="info"
+    />
   )
 }

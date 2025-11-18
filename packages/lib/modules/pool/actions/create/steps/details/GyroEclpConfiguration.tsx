@@ -49,7 +49,7 @@ function EclpParamHeader() {
 function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
   const { eclpConfigForm, poolCreationForm, updatePoolTokens } = usePoolCreationForm()
-  const { poolTokens } = poolCreationForm.watch()
+  const poolTokens = poolCreationForm.watch('poolTokens')
   const { alpha, beta, peakPrice, lambda, c, s } = eclpConfigForm.watch()
 
   const tokenPricePair = poolTokens

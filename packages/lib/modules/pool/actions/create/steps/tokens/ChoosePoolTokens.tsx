@@ -33,15 +33,12 @@ import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 import { ArrowUpRight } from 'react-feather'
 import { InputWithSuggestion } from '../details/InputWithSuggestion'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
   const tokenSelectDisclosure = useDisclosure()
   const {
-    network,
-    poolTokens,
-    weightedPoolStructure,
-    poolType,
     updatePoolToken,
     addPoolToken,
     poolCreationForm,
@@ -50,6 +47,12 @@ export function ChoosePoolTokens() {
     isReClamm,
     isGyroEclp,
   } = usePoolCreationForm()
+  const [network, poolTokens, weightedPoolStructure, poolType] = poolCreationForm.watch([
+    'network',
+    'poolTokens',
+    'weightedPoolStructure',
+    'poolType',
+  ])
 
   const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
     poolType,
@@ -142,12 +145,15 @@ export function ChoosePoolTokens() {
               <ConfigureToken
                 index={index}
                 key={index}
+                network={network}
                 onToggleTokenClicked={() => {
                   setSelectedTokenIndex(index)
                   tokenSelectDisclosure.onOpen()
                 }}
+                poolTokens={poolTokens}
                 rateProviderAddress={verifiedRateProviderAddress}
                 token={token}
+                weightedPoolStructure={weightedPoolStructure}
               />
             )
           })}
@@ -178,6 +184,9 @@ interface ConfigureTokenProps {
   index: number
   rateProviderAddress: Address | undefined
   onToggleTokenClicked: () => void
+  weightedPoolStructure: WeightedPoolStructure
+  poolTokens: PoolCreationToken[]
+  network: GqlChain
 }
 
 function ConfigureToken({
@@ -185,16 +194,13 @@ function ConfigureToken({
   index,
   rateProviderAddress,
   onToggleTokenClicked,
+  weightedPoolStructure,
+  poolTokens,
+  network,
 }: ConfigureTokenProps) {
-  const {
-    poolCreationForm,
-    isWeightedPool,
-    weightedPoolStructure,
-    poolTokens,
-    removePoolToken,
-    network,
-    updatePoolToken,
-  } = usePoolCreationForm()
+  const { poolCreationForm, isWeightedPool, removePoolToken, updatePoolToken } =
+    usePoolCreationForm()
+
   const { priceFor } = useTokens()
 
   const apiPriceForToken = priceFor(token.address || '', network)

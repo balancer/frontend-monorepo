@@ -4,7 +4,8 @@ import { validatePoolType } from '../../validatePoolCreationForm'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function PoolCreationRiskCheckboxes() {
-  const { poolCreationForm, poolType } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolType = poolCreationForm.watch('poolType')
   const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
   const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 

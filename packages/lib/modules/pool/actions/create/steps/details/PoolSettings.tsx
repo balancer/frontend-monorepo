@@ -24,7 +24,8 @@ export type PoolSettingsOption = {
 
 export function PoolSettings() {
   const { userAddress } = useUserAccount()
-  const { network, poolType, poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const filteredPoolHooksOptions = poolHooksWhitelist.filter(

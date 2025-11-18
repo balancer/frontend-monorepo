@@ -39,7 +39,8 @@ export function PreviewPoolCreation() {
 }
 
 function PreviewPoolHeader() {
-  const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
+  const { resetPoolCreationForm, poolCreationForm } = usePoolCreationForm()
+  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
 
   return (
     <HStack alignItems="center" justifyContent="space-between" w="full">

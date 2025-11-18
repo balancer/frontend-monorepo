@@ -44,7 +44,11 @@ function ConfigOptionsGroup({
   customInputLabel,
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
-  const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
+  const [initialMinPrice, initialTargetPrice, initialMaxPrice] = reClammConfigForm.watch([
+    'initialMinPrice',
+    'initialTargetPrice',
+    'initialMaxPrice',
+  ])
   const formValue = reClammConfigForm.watch(name)
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
