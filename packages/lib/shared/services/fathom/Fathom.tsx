@@ -4,6 +4,7 @@ import { load, trackPageview } from 'fathom-client'
 import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { isProd } from '@repo/lib/config/app.config'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export enum AnalyticsEvent {
   ClickAddLiquidity = 'click: Add liquidity',
@@ -35,6 +36,8 @@ export enum AnalyticsEvent {
  * @param value Optional value to track, should be in cents (e.g. 1000 for $10)
  */
 export function trackEvent(event: AnalyticsEvent, value?: number) {
+  if (!isBalancer) return
+
   if (!window.fathom) return
   try {
     window.fathom.trackEvent(event, { _value: value })

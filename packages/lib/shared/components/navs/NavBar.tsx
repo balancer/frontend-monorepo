@@ -64,11 +64,7 @@ function NavLinks({
   const { linkColorFor } = useNav()
 
   const handleLinkClick = (analyticsEvent?: string) => {
-    if (
-      isBalancer &&
-      analyticsEvent &&
-      AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent]
-    ) {
+    if (analyticsEvent && AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent]) {
       trackEvent(AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent])
     }
   }

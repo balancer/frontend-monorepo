@@ -16,6 +16,7 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Box,
+  useDisclosure,
 } from '@chakra-ui/react'
 import {
   TrackedTransaction,
@@ -29,7 +30,6 @@ import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
 import { getSafeWebUrl } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 import { formatDistanceToNowAbbr } from '../../utils/time'
 import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
-import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
@@ -126,6 +126,7 @@ function Transactions({ transactions }: { transactions: Record<string, TrackedTr
 }
 
 export default function RecentTransactions() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const { transactions } = useRecentTransactions()
   const hasTransactions = !isEmpty(transactions)
 
@@ -134,11 +135,11 @@ export default function RecentTransactions() {
   ).length
 
   const handleActivityClick = () => {
-    if (isBalancer) trackEvent(AnalyticsEvent.ClickNavUtilitiesActivity)
+    if (!isOpen) trackEvent(AnalyticsEvent.ClickNavUtilitiesActivity)
   }
 
   return (
-    <Popover>
+    <Popover isOpen={isOpen} onClose={onClose} onOpen={onOpen}>
       <PopoverTrigger>
         <Button onClick={handleActivityClick} p="0" variant="tertiary">
           {confirmingTxCount > 0 ? (

@@ -24,7 +24,6 @@ import { Percent, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
 import { EnableTxBundleSetting } from './EnableTxBundlesSetting'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
-import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 interface SlippageInputProps {
   slippage: string
@@ -99,7 +98,7 @@ export function UserSettings() {
   const { slippage, setSlippage } = useUserSettings()
 
   const handleSettingsClick = () => {
-    if (isBalancer) trackEvent(AnalyticsEvent.ClickNavUtilitiesSettings)
+    trackEvent(AnalyticsEvent.ClickNavUtilitiesSettings)
   }
 
   return (

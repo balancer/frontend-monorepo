@@ -4,7 +4,6 @@ import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
 import { useIsSafeApp } from './safe.hooks'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
-import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function ConnectWallet({
   connectLabel = 'Connect wallet',
@@ -36,7 +35,7 @@ export function ConnectWallet({
 
         if (!isConnected) {
           const handleConnectClick = () => {
-            if (isBalancer) trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletConnect)
+            trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletConnect)
             openConnectModal()
           }
 
@@ -87,12 +86,12 @@ export function ConnectWallet({
         }
 
         const handleNetworkClick = () => {
-          if (isBalancer) trackEvent(AnalyticsEvent.ClickNavUtilitiesNetwork)
+          trackEvent(AnalyticsEvent.ClickNavUtilitiesNetwork)
           openChainModal()
         }
 
         const handleWalletClick = () => {
-          if (isBalancer) trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletChange)
+          trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletChange)
           openAccountModal()
         }
 
