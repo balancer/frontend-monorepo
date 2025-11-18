@@ -8,34 +8,41 @@ import { validatePoolTokens } from '../../validatePoolCreationForm'
 import { SeedAmountProportions } from './SeedAmountProportions'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { useReClammInitAmounts } from './useReClammInitAmounts'
-import { PoolCreationToken } from '../../types'
+import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatUnits } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useGyroEclpInitAmountsRatio } from './useGyroEclpInitAmountsRatio'
+import { isWeightedPool, isReClammPool, isGyroEllipticPool } from '../../helpers'
+import { PoolType } from '@balancer/sdk'
 
 export function PoolFundStep() {
-  const { poolAddress, poolCreationForm, isWeightedPool, isReClamm } = usePoolCreationForm()
-  const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk, poolTokens } =
-    poolCreationForm.watch()
+  const { poolAddress, poolCreationForm } = usePoolCreationForm()
+  const [poolType, poolTokens, hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk] =
+    poolCreationForm.watch([
+      'poolType',
+      'poolTokens',
+      'hasAcceptedTokenWeightsRisk',
+      'hasAcceptedPoolCreationRisk',
+    ])
   const { hasValidationErrors } = useTokenInputsValidation()
 
   const isTokenAmountsValid =
     (validatePoolTokens.isValidTokenAmounts(poolTokens) && !hasValidationErrors) ||
-    (isReClamm && !poolAddress)
+    (isReClammPool(poolType) && !poolAddress)
 
-  const hasAcceptedRisks = isWeightedPool
+  const hasAcceptedRisks = isWeightedPool(poolType)
     ? hasAcceptedTokenWeightsRisk && hasAcceptedPoolCreationRisk
     : hasAcceptedPoolCreationRisk
 
   const isDisabled =
     !poolCreationForm.formState.isValid || !hasAcceptedRisks || !isTokenAmountsValid
-  const showTokenAmountInputs = !isReClamm || poolAddress
+  const showTokenAmountInputs = !isReClammPool(poolType) || poolAddress
 
   return (
     <Box as="form" style={{ width: '100%' }}>
       <VStack align="start" spacing="lg" w="full">
-        <SeedPoolTypeAlert />
+        <SeedPoolAlert poolType={poolType} />
 
         <Heading color="font.maxContrast" size="md">
           Seed initial pool liquidity
@@ -44,7 +51,13 @@ export function PoolFundStep() {
         {showTokenAmountInputs && (
           <>
             {poolTokens.map((token, idx) => (
-              <TokenAmountInput idx={idx} key={idx} token={token} />
+              <TokenAmountInput
+                idx={idx}
+                key={idx}
+                poolTokens={poolTokens}
+                poolType={poolType}
+                token={token}
+              />
             ))}
 
             <SeedAmountProportions displayAlert />
@@ -59,10 +72,17 @@ export function PoolFundStep() {
   )
 }
 
-function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: number }) {
-  const { updatePoolToken, poolAddress, isGyroEclp, poolCreationForm } = usePoolCreationForm()
-  const { network, poolTokens } = poolCreationForm.watch()
-  const { reClammInitAmounts } = useReClammInitAmounts(poolAddress, token)
+interface TokenAmountInputProps {
+  token: PoolCreationToken
+  idx: number
+  poolType: SupportedPoolTypes
+  poolTokens: PoolCreationToken[]
+}
+
+function TokenAmountInput({ token, idx, poolType, poolTokens }: TokenAmountInputProps) {
+  const { updatePoolToken, poolAddress, poolCreationForm } = usePoolCreationForm()
+  const [network] = poolCreationForm.watch(['network', 'poolType'])
+  const { reClammInitAmounts } = useReClammInitAmounts(isReClammPool(poolType), poolAddress, token)
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
   const lastUserUpdatedAmountIdx = useRef<number | null>(null)
@@ -73,7 +93,7 @@ function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: numbe
   const handleAmountChange = (idx: number, amount: string) => {
     lastUserUpdatedAmountIdx.current = idx
 
-    if (isGyroEclp && eclpInitAmountsRatio) {
+    if (isGyroEllipticPool(poolType) && eclpInitAmountsRatio) {
       const referenceAmount = Number(amount)
 
       if (!poolTokens[1]?.address || !poolTokens[0]?.address) return
@@ -131,11 +151,11 @@ function TokenAmountInput({ token, idx }: { token: PoolCreationToken; idx: numbe
   )
 }
 
-function SeedPoolTypeAlert() {
-  const { isReClamm, poolAddress, isGyroEclp } = usePoolCreationForm()
+function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
+  const { poolAddress } = usePoolCreationForm()
   const { projectName } = PROJECT_CONFIG
 
-  if (isReClamm) {
+  if (isReClammPool(poolType)) {
     if (!poolAddress) {
       return (
         <BalAlert
@@ -153,7 +173,7 @@ function SeedPoolTypeAlert() {
     }
   }
 
-  if (isGyroEclp) {
+  if (isGyroEllipticPool(poolType)) {
     return (
       <BalAlert
         content="Gyro ECLPs should be initialized with precise amounts according to the pool's configuration parameters."

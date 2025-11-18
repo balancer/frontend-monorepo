@@ -1,14 +1,12 @@
 import { Address, parseAbi, parseUnits } from 'viem'
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationToken } from '../../types'
 import { useReadContract } from 'wagmi'
 
 export const useReClammInitAmounts = (
+  isReClamm: boolean,
   poolAddress: Address | undefined,
   token: PoolCreationToken
 ) => {
-  const { isReClamm } = usePoolCreationForm()
-
   const { address: tokenAddress, amount: tokenAmount, data } = token
   const tokenDecimals = data?.decimals
   const rawAmount = parseUnits(tokenAmount!, tokenDecimals!)

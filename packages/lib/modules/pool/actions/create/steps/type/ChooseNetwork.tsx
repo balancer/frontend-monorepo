@@ -14,7 +14,7 @@ import {
 import { INITIAL_POOL_TOKENS } from '../../constants'
 
 export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> }) {
-  const { updatePoolTokens } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
 
   const { supportedNetworks } = PROJECT_CONFIG
   const networkOptions: RadioCardOption<GqlChain>[] = [
@@ -42,7 +42,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
             name={field.name}
             onChange={(value: GqlChain) => {
               field.onChange(value)
-              updatePoolTokens(INITIAL_POOL_TOKENS) // reset because tokens are network specific
+              poolCreationForm.setValue('poolTokens', INITIAL_POOL_TOKENS) // reset because tokens are network specific
             }}
             options={networkOptions}
             radioCardProps={{

@@ -1,9 +1,11 @@
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { usePoolSpotPriceWithoutRate } from '../details/usePoolSpotPriceWithoutRate'
+import { isGyroEllipticPool } from '../../helpers'
 
 export function useGyroEclpInitAmountsRatio() {
   const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
-  const { eclpConfigForm, isGyroEclp } = usePoolCreationForm()
+  const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+  const [poolType] = poolCreationForm.watch(['poolType'])
   const eclpParams = eclpConfigForm.watch()
 
   const alpha = Number(eclpParams.alpha)
@@ -16,7 +18,13 @@ export function useGyroEclpInitAmountsRatio() {
 
   const isValidEclpParams = alpha && beta && c && s && lambda
 
-  if (!isGyroEclp || !isValidEclpParams || !rateA || !rateB || !spotPriceWithoutRate) {
+  if (
+    !isGyroEllipticPool(poolType) ||
+    !isValidEclpParams ||
+    !rateA ||
+    !rateB ||
+    !spotPriceWithoutRate
+  ) {
     return undefined
   }
 

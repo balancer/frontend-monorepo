@@ -3,9 +3,9 @@ import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { validatePoolType } from '../../validatePoolCreationForm'
 import { useEffect } from 'react'
 import { usePoolHooksContract } from './usePoolHooksContract'
+import { isStableSurgePool } from '../../helpers'
 
 export function LiquidityManagement() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -19,7 +19,6 @@ export function LiquidityManagement() {
     ])
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
-  const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
 
   useEffect(() => {
     // if contract has this flag set to true, enforce `disableUnbalancedLiquidity: true` to avoid tx revert
@@ -27,12 +26,12 @@ export function LiquidityManagement() {
       poolCreationForm.setValue('disableUnbalancedLiquidity', true)
     }
     // the stable surge pool factory only supports `disableUnbalancedLiquidity: false`
-    if (isStableSurgePool) {
+    if (isStableSurgePool(poolType)) {
       poolCreationForm.setValue('disableUnbalancedLiquidity', false)
     }
-  }, [hookFlags, isStableSurgePool])
+  }, [hookFlags, poolType])
 
-  const isDisabled = isStableSurgePool || hookFlags?.enableHookAdjustedAmounts
+  const isDisabled = isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
 
   return (
     <VStack align="start" spacing="md" w="full">

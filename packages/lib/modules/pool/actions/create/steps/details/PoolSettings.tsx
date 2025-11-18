@@ -7,7 +7,7 @@ import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink
 import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
-import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
+import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
 import { usePublicClient } from 'wagmi'
@@ -15,6 +15,7 @@ import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isStablePool, isStableSurgePool } from '../../helpers'
 
 export type PoolSettingsOption = {
   label: string
@@ -58,17 +59,14 @@ export function PoolSettings() {
     value => ({ label: value, value })
   )
 
-  const isStablePool = validatePoolType.isStablePool(poolType)
-  const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
-
   useEffect(() => {
-    if (isStableSurgePool && poolHooksWhitelist) {
+    if (isStableSurgePool(poolType) && poolHooksWhitelist) {
       const stableSurgeHookMetadata = poolHooksWhitelist.find(hook => hook.label === 'StableSurge')
       if (stableSurgeHookMetadata) {
         poolCreationForm.setValue('poolHooksContract', stableSurgeHookMetadata.value)
       }
     }
-  }, [isStableSurgePool, poolHooksWhitelist])
+  }, [poolType, poolHooksWhitelist])
 
   const publicClient = usePublicClient({ chainId: getChainId(network) })
 
@@ -133,7 +131,7 @@ export function PoolSettings() {
         validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
 
-      {isStablePool && (
+      {isStablePool(poolType) && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom amplification parameter"
           customInputType="number"
@@ -148,7 +146,7 @@ export function PoolSettings() {
       <PoolSettingsRadioGroup
         customInputLabel="Custom pool hooks address"
         customInputType="address"
-        isDisabled={isStableSurgePool}
+        isDisabled={isStableSurgePool(poolType)}
         name="poolHooksContract"
         options={poolHooksOptions}
         title="Pool hooks"

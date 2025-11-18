@@ -22,13 +22,14 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { TransactionStepsResponse } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
+import { isReClammPool } from '../helpers'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
-  const { poolCreationForm, isReClamm, poolAddress } = usePoolCreationForm()
-  const network = poolCreationForm.watch('network')
+  const { poolCreationForm, poolAddress } = usePoolCreationForm()
+  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
 
-  const showTokenAmountSummary = !isReClamm || poolAddress
+  const showTokenAmountSummary = !isReClammPool(poolType) || poolAddress
 
   return (
     <AnimateHeightChange spacing={3} w="full">
@@ -81,7 +82,7 @@ function PoolTitleCard() {
 
 function PoolTokenAmountsCard() {
   const { poolCreationForm } = usePoolCreationForm()
-  const { poolTokens, network } = poolCreationForm.watch()
+  const [poolTokens, network] = poolCreationForm.watch(['poolTokens', 'network'])
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -125,7 +126,7 @@ function PoolTokenAmountsCard() {
 
 function PoolDetailsCard() {
   const { poolCreationForm } = usePoolCreationForm()
-  const { swapFeePercentage } = poolCreationForm.watch()
+  const swapFeePercentage = poolCreationForm.watch('swapFeePercentage')
   const { isOpen, onToggle } = useDisclosure()
 
   return (

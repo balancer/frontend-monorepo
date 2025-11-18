@@ -48,7 +48,7 @@ function EclpParamHeader() {
 
 function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
-  const { eclpConfigForm, poolCreationForm, updatePoolTokens } = usePoolCreationForm()
+  const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const poolTokens = poolCreationForm.watch('poolTokens')
   const { alpha, beta, peakPrice, lambda, c, s } = eclpConfigForm.watch()
 
@@ -64,9 +64,12 @@ function EclpParamInputs() {
     eclpConfigForm.setValue('s', s, { shouldValidate: true })
   }, [peakPrice])
 
-  // since eclp init amounts are calculated based on eclp params
+  // reset init amounts when eclp params change
   useEffect(() => {
-    updatePoolTokens([...poolTokens].map(token => ({ ...token, amount: '' })))
+    poolCreationForm.setValue(
+      'poolTokens',
+      [...poolTokens].map(token => ({ ...token, amount: '' }))
+    )
   }, [alpha, beta, peakPrice, lambda, c, s])
 
   const lowerBoundPriceInput = {

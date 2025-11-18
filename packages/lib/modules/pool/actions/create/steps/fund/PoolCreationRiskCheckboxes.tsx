@@ -1,13 +1,12 @@
 import { Checkbox, Link, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { validatePoolType } from '../../validatePoolCreationForm'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { isWeightedPool } from '../../helpers'
 
 export function PoolCreationRiskCheckboxes() {
   const { poolCreationForm } = usePoolCreationForm()
   const poolType = poolCreationForm.watch('poolType')
   const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
 
   const linkProps = {
     textDecoration: 'underline',
@@ -24,7 +23,7 @@ export function PoolCreationRiskCheckboxes() {
 
   return (
     <>
-      {isWeightedPool && (
+      {isWeightedPool(poolType) && (
         <Checkbox
           alignItems="flex-start"
           isChecked={hasAcceptedTokenWeightsRisk}

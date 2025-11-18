@@ -43,7 +43,6 @@ export function PoolCreationModal({
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
-  console.log('createPoolInput', createPoolInput)
   const initPoolInput = useInitializePoolInput(chainId)
 
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
