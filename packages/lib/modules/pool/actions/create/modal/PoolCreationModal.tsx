@@ -39,7 +39,7 @@ export function PoolCreationModal({
 }: PoolCreationModalProps & Omit<ModalProps, 'children'>) {
   const { poolCreationForm, resetPoolCreationForm, poolAddress, setPoolAddress } =
     usePoolCreationForm()
-  const { network, poolType } = poolCreationForm.watch()
+  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
