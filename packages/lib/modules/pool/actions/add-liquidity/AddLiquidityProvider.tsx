@@ -272,10 +272,11 @@ export function useAddLiquidityLogic(
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
+  handlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
 }>
 
-export function AddLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = useAddLiquidityLogic(urlTxHash)
+export function AddLiquidityProvider({ urlTxHash, handlerSelector, children }: Props) {
+  const hook = useAddLiquidityLogic(urlTxHash, handlerSelector)
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

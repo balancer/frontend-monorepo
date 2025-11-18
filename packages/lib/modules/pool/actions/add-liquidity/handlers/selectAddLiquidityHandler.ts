@@ -1,19 +1,17 @@
-import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
+import { isBoosted, isV3Pool } from '../../../pool.helpers'
 import { Pool } from '../../../pool.types'
+import { supportsNestedActions } from '../../LiquidityActionHelpers'
+import { AddLiquidityHandler } from './AddLiquidity.handler'
+import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
+import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
+import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
+import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
+import { ProportionalAddLiquidityHandlerV3 } from './ProportionalAddLiquidityV3.handler'
+import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiquidityV3.handler'
 import { TwammAddLiquidityHandler } from './TwammAddLiquidity.handler'
 import { UnbalancedAddLiquidityV2Handler } from './UnbalancedAddLiquidityV2.handler'
-import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
-import { supportsNestedActions } from '../../LiquidityActionHelpers'
-import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
-import { isBoosted, isMaBeetsPool, isV3Pool } from '../../../pool.helpers'
-import { ProportionalAddLiquidityHandlerV3 } from './ProportionalAddLiquidityV3.handler'
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
-import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
-import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
-import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiquidityV3.handler'
-import { ReliquaryProportionalAddLiquidityHandler } from './ReliquaryProportionalAddLiquidity.handler'
-import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
 
 export function selectAddLiquidityHandler(
   pool: Pool,
@@ -45,15 +43,6 @@ export function selectAddLiquidityHandler(
   if (wantsProportional) {
     if (isV3Pool(pool)) {
       return new ProportionalAddLiquidityHandlerV3(pool)
-    }
-    if (isMaBeetsPool(pool.id)) {
-      const networkConfig = getNetworkConfig(pool.chain)
-      const batchRelayerService = BatchRelayerService.create(
-        networkConfig.contracts.balancer.relayerV6,
-        true // include reliquary service
-      )
-
-      return new ReliquaryProportionalAddLiquidityHandler(pool, batchRelayerService)
     }
     return new ProportionalAddLiquidityHandler(pool)
   }

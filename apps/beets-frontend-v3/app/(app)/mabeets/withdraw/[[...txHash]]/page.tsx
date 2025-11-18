@@ -1,15 +1,7 @@
 'use client'
 
-import { RelicWithdrawProvider } from '@/lib/modules/reliquary/RelicWithdrawProvider'
-import { Box, Text } from '@chakra-ui/react'
+import { ReliquaryWithdrawPage } from '@/lib/modules/reliquary/pages/ReliquaryWithdrawPage'
 
-export default function RelicWithdrawPage({ params }: { params: { txHash?: string[] } }) {
-  return (
-    <RelicWithdrawProvider urlTxHash={params.txHash?.[0] as `0x${string}` | undefined}>
-      <Box>
-        <Text>Relic Withdraw Page - Coming Soon</Text>
-        {/* TODO: Add WithdrawForm, etc. */}
-      </Box>
-    </RelicWithdrawProvider>
-  )
+export default function RelicWithdrawPage() {
+  return <ReliquaryWithdrawPage />
 }

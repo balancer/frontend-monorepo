@@ -1,24 +1,14 @@
 'use client'
 
-import { useAddLiquidityLogic } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
-import { ReliquaryProportionalAddLiquidityHandler } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/ReliquaryProportionalAddLiquidity.handler'
-import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
-import { useCallback, useState, createContext, useContext } from 'react'
-import { useRelicId } from '@repo/lib/modules/pool/actions/add-liquidity/RelicIdProvider'
-import { useReliquaryDepositImpact } from './hooks/useReliquaryDepositImpact'
+import { AddLiquidityProvider } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
+import { ReliquaryProportionalAddLiquidityHandler } from './handlers/ReliquaryProportionalAddLiquidity.handler'
+import { ReliquaryUnbalancedAddLiquidityHandler } from './handlers/ReliquaryUnbalancedAddLiquidity.handler'
+import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
+import { useCallback } from 'react'
+import { useReliquary } from './ReliquaryProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-
-type RelicDepositContext = ReturnType<typeof useAddLiquidityLogic> & {
-  // Relic-specific additions
-  relicId?: string
-  createNew: boolean
-  setCreateNew: (value: boolean) => void
-  depositImpactQuery: ReturnType<typeof useReliquaryDepositImpact>
-}
-
-const RelicDepositContext = createContext<RelicDepositContext | null>(null)
 
 export function RelicDepositProvider({
   children,
@@ -27,46 +17,31 @@ export function RelicDepositProvider({
   children: React.ReactNode
   urlTxHash?: Hash
 }) {
-  const { relicId } = useRelicId()
-  const [createNew, setCreateNew] = useState(!relicId) // Default to create if no relic selected
+  const { selectedRelicId: relicId } = useReliquary()
 
-  // Custom selector that returns reliquary handler
-  const reliquaryHandlerSelector = useCallback((pool: Pool) => {
-    const networkConfig = getNetworkConfig(pool.chain)
-    const batchRelayer = BatchRelayerService.create(
-      networkConfig.contracts.balancer.relayerV6,
-      true // include reliquary
-    )
-    // For now, only support proportional. Can add unbalanced later.
-    return new ReliquaryProportionalAddLiquidityHandler(pool, batchRelayer)
-  }, [])
+  // Convert relicId string to number for handler
+  const relicIdNumber = relicId ? parseInt(relicId, 10) : undefined
 
-  // Reuse ALL the add liquidity logic
-  const addLiquidityState = useAddLiquidityLogic(urlTxHash, reliquaryHandlerSelector)
+  // Custom selector that returns reliquary handler based on mode
+  const reliquaryHandlerSelector = useCallback(
+    (pool: Pool, wantsProportional: boolean) => {
+      const networkConfig = getNetworkConfig(pool.chain)
+      const batchRelayer = BeetsBatchRelayerService.create(
+        networkConfig.contracts.balancer.relayerV6
+      )
 
-  // Add relic-specific queries
-  // Calculate deposit impact based on simulated BPT amount
-  const bptAmount = addLiquidityState.simulationQuery.data?.bptOut
-    ? Number(addLiquidityState.simulationQuery.data.bptOut) / 1e18 // Convert from wei to human amount
-    : 0
+      if (wantsProportional) {
+        return new ReliquaryProportionalAddLiquidityHandler(pool, batchRelayer, relicIdNumber)
+      } else {
+        return new ReliquaryUnbalancedAddLiquidityHandler(pool, batchRelayer, relicIdNumber)
+      }
+    },
+    [relicIdNumber]
+  )
 
-  const depositImpactQuery = useReliquaryDepositImpact(bptAmount, createNew ? undefined : relicId)
-
-  const value: RelicDepositContext = {
-    ...addLiquidityState,
-    relicId,
-    createNew,
-    setCreateNew,
-    depositImpactQuery,
-  }
-
-  return <RelicDepositContext.Provider value={value}>{children}</RelicDepositContext.Provider>
-}
-
-export function useRelicDeposit(): RelicDepositContext {
-  const context = useContext(RelicDepositContext)
-  if (!context) {
-    throw new Error('useRelicDeposit must be used within RelicDepositProvider')
-  }
-  return context
+  return (
+    <AddLiquidityProvider handlerSelector={reliquaryHandlerSelector} urlTxHash={urlTxHash}>
+      {children}
+    </AddLiquidityProvider>
+  )
 }

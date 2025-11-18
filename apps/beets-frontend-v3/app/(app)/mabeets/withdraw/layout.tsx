@@ -1,11 +1,24 @@
 'use client'
 
-import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
 import { PropsWithChildren } from 'react'
-import { RelicIdProvider } from '@repo/lib/modules/pool/actions/add-liquidity/RelicIdProvider'
+import { RelicWithdrawProvider } from '@/lib/modules/reliquary/RelicWithdrawProvider'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { isHash } from 'viem'
 
-export default function RelicWithdrawLayoutWrapper({ children }: PropsWithChildren) {
-  const { selectedRelic } = useReliquary()
+type Props = PropsWithChildren<{
+  params: { txHash?: string[] }
+}>
 
-  return <RelicIdProvider relicId={selectedRelic?.relicId}>{children}</RelicIdProvider>
+export default function RelicWithdrawLayoutWrapper({ params: { txHash }, children }: Props) {
+  const maybeTxHash = txHash?.[0] || ''
+  const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
+
+  return (
+    <DefaultPageContainer>
+      <RelicWithdrawProvider urlTxHash={urlTxHash}>
+        <PriceImpactProvider>{children}</PriceImpactProvider>
+      </RelicWithdrawProvider>
+    </DefaultPageContainer>
+  )
 }

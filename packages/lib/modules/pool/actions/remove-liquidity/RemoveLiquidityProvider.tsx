@@ -319,10 +319,13 @@ export function useRemoveLiquidityLogic(
   }
 }
 
-type Props = PropsWithChildren<{ urlTxHash?: Hash }>
+type Props = PropsWithChildren<{
+  urlTxHash?: Hash
+  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+}>
 
-export function RemoveLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = useRemoveLiquidityLogic(urlTxHash)
+export function RemoveLiquidityProvider({ urlTxHash, handlerSelector, children }: Props) {
+  const hook = useRemoveLiquidityLogic(urlTxHash, handlerSelector)
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 

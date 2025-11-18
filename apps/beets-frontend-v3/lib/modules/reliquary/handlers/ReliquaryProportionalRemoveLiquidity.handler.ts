@@ -1,18 +1,19 @@
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { RemoveLiquidity, Relayer, Slippage } from '@balancer/sdk'
-import { SdkBuildRemoveLiquidityInput } from '../remove-liquidity.types'
-import { BaseProportionalRemoveLiquidityHandler } from './BaseProportionalRemoveLiquidity.handler'
-import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
+import { SdkBuildRemoveLiquidityInput } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'
+import { BaseProportionalRemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-liquidity/handlers/BaseProportionalRemoveLiquidity.handler'
+import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
 import { Address, encodeAbiParameters, encodeFunctionData, Hex } from 'viem'
 import networkConfig from '@repo/lib/config/networks/sonic'
-import { Pool } from '../../../pool.types'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { balancerV2BalancerRelayerV6Abi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export class ReliquaryProportionalRemoveLiquidityHandler extends BaseProportionalRemoveLiquidityHandler {
   constructor(
     pool: Pool,
-    private readonly batchRelayerService: BatchRelayerService
+    private readonly batchRelayerService: BeetsBatchRelayerService,
+    private readonly relicId?: number
   ) {
     super(pool)
   }
@@ -21,8 +22,9 @@ export class ReliquaryProportionalRemoveLiquidityHandler extends BaseProportiona
     account,
     queryOutput,
     slippagePercent,
-    relicId,
-  }: SdkBuildRemoveLiquidityInput & { relicId?: number }): Promise<TransactionConfig> {
+  }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
+    const relicId = this.relicId
+
     if (relicId === undefined || relicId === null) {
       throw new Error('relicId is required for reliquary remove liquidity')
     }

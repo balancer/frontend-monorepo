@@ -7,19 +7,20 @@ import {
   Slippage,
   WeightedEncoder,
 } from '@balancer/sdk'
-import { SdkBuildAddLiquidityInput } from '../add-liquidity.types'
-import { BaseProportionalAddLiquidityHandler } from './BaseProportionalAddLiquidity.handler'
-import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
+import { SdkBuildAddLiquidityInput } from '@repo/lib/modules/pool/actions/add-liquidity/add-liquidity.types'
+import { BaseProportionalAddLiquidityHandler } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/BaseProportionalAddLiquidity.handler'
+import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
 import { Address, encodeFunctionData, Hex } from 'viem'
 import networkConfig from '@repo/lib/config/networks/sonic'
-import { Pool } from '../../../pool.types'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { balancerV2BalancerRelayerV6Abi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAddLiquidityHandler {
   constructor(
     pool: Pool,
-    private readonly batchRelayerService: BatchRelayerService
+    private readonly batchRelayerService: BeetsBatchRelayerService,
+    private readonly relicId?: number
   ) {
     super(pool)
   }
@@ -28,8 +29,8 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
     account,
     queryOutput,
     slippagePercent,
-    relicId,
-  }: SdkBuildAddLiquidityInput & { relicId?: number }): Promise<TransactionConfig> {
+  }: SdkBuildAddLiquidityInput): Promise<TransactionConfig> {
+    const relicId = this.relicId
     const addLiquidity = new AddLiquidity()
 
     // simulate add liquidity to get maxAmountsIn and minBptOut

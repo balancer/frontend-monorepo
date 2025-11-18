@@ -66,15 +66,17 @@ export default function RelicSlide({ relic }: RelicSlideProps) {
 
   const isRelicAmountZero = relic.amount === '0.0'
 
-  if (isActive) {
-    setSelectedRelicId(relic.relicId)
-  }
+  useEffect(() => {
+    if (isActive) {
+      setSelectedRelicId(relic.relicId)
+    }
+  }, [isActive, relic.relicId, setSelectedRelicId])
 
   function handleAction(action: 'claim' | 'levelUp' | 'deposit' | 'withdraw' | 'burn') {
     if (action === 'deposit') {
-      router.push('/mabeets/add-liquidity')
+      router.push('/mabeets/deposit')
     } else if (action === 'withdraw') {
-      router.push('/mabeets/remove-liquidity')
+      router.push('/mabeets/withdraw')
     } else {
       setIsModalOpen(action)
     }
