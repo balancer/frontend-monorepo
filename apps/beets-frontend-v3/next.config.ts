@@ -2,9 +2,6 @@ import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
 const config: NextConfig = {
-  turbopack: {
-    //
-  },
   serverExternalPackages: ['pino-pretty', 'lokijs', 'encoding'],
   logging: {
     fetches: {
