@@ -321,7 +321,7 @@ export function NavBar({
           </Text>
           <Link
             color="font.dark"
-            href="https://x.com/Balancer/status/1986104426667401241"
+            href="https://x.com/Balancer/status/1990856260988670132"
             isExternal
             textDecoration="underline"
           >
