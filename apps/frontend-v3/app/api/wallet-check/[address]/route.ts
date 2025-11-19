@@ -8,8 +8,7 @@ type Params = {
 }
 
 export async function GET(request: Request, props: Params) {
-  const params = await props.params
-  const { address } = params
+  const { address } = await props.params
   const hypernativeApiId = process.env.PRIVATE_HYPERNATIVE_API_ID
   const hypernativeApiSecret = process.env.PRIVATE_HYPERNATIVE_API_SECRET
 
