@@ -95,6 +95,8 @@ export function ChoosePoolTokens() {
 
     setSelectedTokenIndex(null)
     poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
+    poolCreationForm.setValue('name', '')
+    poolCreationForm.setValue('symbol', '')
     if (isReClammPool(poolType)) reClammConfigForm.resetToInitial()
     if (isGyroEllipticPool(poolType)) eclpConfigForm.resetToInitial()
   }

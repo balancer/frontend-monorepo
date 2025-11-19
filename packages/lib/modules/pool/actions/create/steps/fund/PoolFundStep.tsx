@@ -155,31 +155,21 @@ function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
   const { poolAddress } = usePoolCreationForm()
   const { projectName } = PROJECT_CONFIG
 
-  if (isReClammPool(poolType)) {
-    if (!poolAddress) {
-      return (
-        <BalAlert
-          content="The ReClamm pool type requires you to deploy the pool contract before initial token amounts can be chosen."
-          status="info"
-        />
-      )
-    } else {
-      return (
-        <BalAlert
-          content="When you enter a seed amount for one of the ReClamm pool tokens, the other amount is proportionally autofilled to maintain the required price ratio for pool initialization."
-          status="info"
-        />
-      )
-    }
-  }
+  const reclammContent = poolAddress
+    ? 'When you enter a seed amount for one of the ReClamm pool tokens, the other amount is proportionally autofilled to maintain the required price ratio for pool initialization.'
+    : 'The ReClamm pool type requires you to deploy the pool contract before initial token amounts can be chosen.'
 
-  if (isGyroEllipticPool(poolType)) {
-    return (
-      <BalAlert
-        content="When you enter a seed amount for one of the Gyro ECLP tokens, the other amount is proportionally autofilled to maintain the recommended price ratio for pool initialization."
-        status="info"
-      />
-    )
+  const gyroEclpContent =
+    'When you enter a seed amount for one of the Gyro ECLP tokens, the other amount is proportionally autofilled to maintain the recommended price ratio for pool initialization.'
+
+  const poolSpecificContent = isReClammPool(poolType)
+    ? reclammContent
+    : isGyroEllipticPool(poolType)
+      ? gyroEclpContent
+      : null
+
+  if (poolSpecificContent) {
+    return <BalAlert content={poolSpecificContent} status="info" />
   }
 
   return (

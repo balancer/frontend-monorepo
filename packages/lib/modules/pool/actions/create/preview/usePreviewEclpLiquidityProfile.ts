@@ -33,15 +33,15 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
     tokenRateScalingFactorString
   )
 
-  const data = !liquidityData
-    ? null
-    : (liquidityData
+  const data = liquidityData
+    ? (liquidityData
         .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
         .map(([price, liquidity]) => {
           const displayedPrice = bn(price).div(priceRateRatio).toNumber()
           return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
         })
         .sort((a, b) => a[0] - b[0]) as [[number, number]])
+    : null
 
   const xMin = data ? Math.min(...data.map(([x]) => x)) : 0
   const xMax = data ? Math.max(...data.map(([x]) => x)) : 0

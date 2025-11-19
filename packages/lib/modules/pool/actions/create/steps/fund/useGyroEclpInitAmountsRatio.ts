@@ -16,17 +16,16 @@ export function useGyroEclpInitAmountsRatio() {
   const rateA = Number(rateTokenA)
   const rateB = Number(rateTokenB)
 
-  const isValidEclpParams = alpha && beta && c && s && lambda
+  const isValidEclpParams = !!(alpha && beta && c && s && lambda)
 
-  if (
-    !isGyroEllipticPool(poolType) ||
-    !isValidEclpParams ||
-    !rateA ||
-    !rateB ||
-    !spotPriceWithoutRate
-  ) {
-    return undefined
-  }
+  const hasRequiredData =
+    isGyroEllipticPool(poolType) &&
+    isValidEclpParams &&
+    !!rateA &&
+    !!rateB &&
+    !!spotPriceWithoutRate
+
+  if (!hasRequiredData) return undefined
 
   const rHint = 1000
   const tauAlpha = getTau(alpha, c, s, lambda)

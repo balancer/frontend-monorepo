@@ -14,12 +14,12 @@ export function PoolDetailsStep() {
   const [poolType] = poolCreationForm.watch(['poolType'])
   const { isEclpParamsValid } = useValidateEclpParams()
 
-  const isPoolCreationFormValid = poolCreationForm.formState.isValid
-  const isReClammFormValid = !isReClammPool(poolType) || reClammConfigForm.formState.isValid
-  const isGyroEclpFormValid =
-    !isGyroEllipticPool(poolType) || (eclpConfigForm.formState.isValid && isEclpParamsValid)
+  const isPoolCreationFormInvalid = !poolCreationForm.formState.isValid
+  const isReClammFormInvalid = isReClammPool(poolType) && !reClammConfigForm.formState.isValid
+  const isGyroEclpFormInvalid =
+    isGyroEllipticPool(poolType) && (!eclpConfigForm.formState.isValid || !isEclpParamsValid)
 
-  const isDisabled = !isPoolCreationFormValid || !isReClammFormValid || !isGyroEclpFormValid
+  const isDisabled = isPoolCreationFormInvalid || isReClammFormInvalid || isGyroEclpFormInvalid
 
   return (
     <>
