@@ -39,7 +39,7 @@ export function LiquidityManagement() {
         <Text textAlign="start" w="full">
           Liquidity Management
         </Text>
-        <BalPopover text={'TODO'}>
+        <BalPopover text="Flags related to adding/removing liquidity">
           <InfoIcon />
         </BalPopover>
       </HStack>

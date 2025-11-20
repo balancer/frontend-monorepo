@@ -106,7 +106,7 @@ export function PoolSettings() {
         name="swapFeeManager"
         options={poolManagerOptions}
         title="Swap fee manager"
-        tooltip="TODO"
+        tooltip="Account empowered to set static swap fees for a pool"
         validate={validatePoolSettings.swapFeeManager}
       />
 
@@ -116,7 +116,7 @@ export function PoolSettings() {
         name="pauseManager"
         options={poolManagerOptions}
         title="Pause manager"
-        tooltip="TODO"
+        tooltip="Account empowered to pause/unpause the pool (note that governance can always pause a pool)"
         validate={validatePoolSettings.pauseManager}
       />
 
@@ -127,7 +127,7 @@ export function PoolSettings() {
         name="swapFeePercentage"
         options={swapFeePercentageOptions}
         title="Swap fee percentage"
-        tooltip="TODO"
+        tooltip="The initial static swap fee percentage of the pool"
         validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
 
@@ -138,7 +138,7 @@ export function PoolSettings() {
           name="amplificationParameter"
           options={amplificationParameterOptions}
           title="Amplification parameter"
-          tooltip="TODO"
+          tooltip='Controls the "flatness" of the invariant curve. Higher values = lower slippage and assumes prices are near parity. Lower values = closer to the constant product curve (e.g., more like a weighted pool). This has higher slippage and accommodates greater price volatility.'
           validate={validatePoolSettings.amplificationParameter}
         />
       )}
@@ -150,7 +150,7 @@ export function PoolSettings() {
         name="poolHooksContract"
         options={poolHooksOptions}
         title="Pool hooks"
-        tooltip="TODO"
+        tooltip="Contract that implements the hooks for the pool"
         validateAsync={validateHooksContract}
       />
 

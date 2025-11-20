@@ -25,7 +25,7 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
     eclpParams.lambda,
   ].map(Number)
 
-  const tokenRateScalingFactorString = '1' // TODO: figure out if necessary?
+  const tokenRateScalingFactorString = '1'
 
   const liquidityData = drawLiquidityECLP(
     isGyroEllipticPool(poolType),

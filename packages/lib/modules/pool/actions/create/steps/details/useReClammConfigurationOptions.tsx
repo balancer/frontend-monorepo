@@ -32,6 +32,7 @@ export type ReClammConfigOptionsGroup = {
   validateFn: (value: string) => string | boolean
   name: keyof ReClammConfig
   customInputLabel: string
+  tooltip: string
 }
 
 const CUSTOM_OPTION = {
@@ -96,6 +97,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       },
       CUSTOM_OPTION,
     ],
+    tooltip: 'The initial target price of token A in terms of token B',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('initialTargetPrice', rawValue, { shouldValidate: true })
       if (priceRangePercentage) {
@@ -118,6 +120,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Wide', displayValue: '± 75.00%', rawValue: '75', svg: TargetRangeWideSVG },
       CUSTOM_OPTION,
     ],
+    tooltip: 'The target concentration density of liquidity',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue, { shouldValidate: true })
       if (rawValue) {
@@ -143,6 +146,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Wide', displayValue: '50%', rawValue: '50', svg: MarginBufferWideSVG },
       CUSTOM_OPTION,
     ],
+    tooltip: 'How far the price can be from the center before the price range starts to move',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue, { shouldValidate: true })
     },
@@ -174,6 +178,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       },
       CUSTOM_OPTION,
     ],
+    tooltip: 'Controls the speed of the price shift when out-of-range',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceShiftDailyRate', rawValue, { shouldValidate: true })
     },
