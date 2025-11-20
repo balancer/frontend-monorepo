@@ -18,7 +18,7 @@
     "prettier:fix": "turbo prettier:fix",
     "stylelint": "turbo stylelint",
     "stylelint:fix": "turbo stylelint:fix",
-    "test:e2e:dev:bal": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:build:turbo:bal --ui=stream --log-order=stream --",
+    "test:e2e:dev:bal": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:bal --ui=stream --log-order=stream --",
     "test:e2e:dev:ui:bal": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:ui:bal --ui=stream --log-order=stream --",
     "test:e2e:dev:beets": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:build:turbo:beets --ui=stream --log-order=stream --",
     "test:e2e:dev:ui:beets": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:ui:beets --ui=stream --log-order=stream --",
