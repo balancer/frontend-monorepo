@@ -54,6 +54,7 @@ import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 export function useFilterTagsVisible() {
   const {
@@ -379,12 +380,24 @@ export function FilterTags({
 }
 
 export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number }, 'button'>(
-  ({ totalFilterCount, ...props }, ref) => {
+  ({ totalFilterCount, onClick, ...props }, ref) => {
     const { isMobile } = useBreakpoints()
     const textColor = useColorModeValue('#fff', 'font.dark')
 
+    const handleFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      trackEvent(AnalyticsEvent.ClickPoolListFilter)
+      onClick?.(e)
+    }
+
     return (
-      <Button ref={ref} {...props} display="flex" gap="2" variant="tertiary">
+      <Button
+        ref={ref}
+        {...props}
+        display="flex"
+        gap="2"
+        onClick={handleFilterClick}
+        variant="tertiary"
+      >
         <Icon as={Filter} boxSize={4} />
         {!isMobile && 'Filters'}
         {totalFilterCount > 0 && (
@@ -637,6 +650,7 @@ export function PoolListFilters() {
           href={poolCreatorUrl}
           isExternal
           ml="ms"
+          onClick={() => trackEvent(AnalyticsEvent.ClickPoolListCreatePool)}
           variant="tertiary"
         >
           <Icon as={Plus} boxSize={4} />

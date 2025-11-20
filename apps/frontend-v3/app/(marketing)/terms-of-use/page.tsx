@@ -7,7 +7,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export default function Terms() {
   return (
-    <Container>
+    <Container py="2xl">
       <Prose>
         <FadeInOnView>
           <div className="subsection">

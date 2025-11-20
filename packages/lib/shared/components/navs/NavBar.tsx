@@ -22,6 +22,7 @@ import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
 import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
 import { useApiHealth } from '../../hooks/useApiHealth'
+import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
 
 type Props = {
   mobileNav?: ReactNode
@@ -62,6 +63,12 @@ function NavLinks({
 }) {
   const { linkColorFor } = useNav()
 
+  const handleLinkClick = (analyticsEvent?: string) => {
+    if (analyticsEvent && AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent]) {
+      trackEvent(AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent])
+    }
+  }
+
   return (
     <HStack fontWeight="medium" spacing="lg" {...props}>
       {appLinks.map(link => {
@@ -73,6 +80,7 @@ function NavLinks({
               color={linkColorFor(link.href || '')}
               href={link.href}
               isExternal={link.isExternal}
+              onClick={() => handleLinkClick(link.analyticsEvent)}
               prefetch
               variant="nav"
             >
@@ -274,6 +282,15 @@ export function NavBar({
   const pathname = usePathname()
   const shouldShowV2Exploit = poolActions.every(action => !pathname.includes(action))
 
+  // Determine navbar height based on alerts
+  const hasAlerts = !apiOK || (isBalancer && shouldShowV2Exploit)
+  const navbarHeight = hasAlerts ? '120px' : '72px'
+
+  // Set CSS variable on document root
+  useEffect(() => {
+    document.documentElement.style.setProperty('--navbar-height', navbarHeight)
+  }, [navbarHeight])
+
   return (
     <Box
       _before={{
@@ -306,18 +323,21 @@ export function NavBar({
       {!apiOK && <ApiOutageAlert />}
 
       {isBalancer && shouldShowV2Exploit && (
-        <Alert gap="2" justifyContent="center" status="warning">
-          <Text color="font.dark" fontWeight="bold">
-            There has been an exploit affecting v2 Composable Stable pools (v3 pools are not
-            affected).
+        <Alert gap="1" justifyContent="center" rounded="none" status="warning">
+          <Text color="#000" fontWeight="bold">
+            There was a recent exploit on some v2 Composable Stable pools (v3 pools not affected).
           </Text>
           <Link
-            color="font.dark"
-            href="https://x.com/Balancer/status/1986104426667401241"
+            _hover={{
+              color: '#555',
+            }}
+            color="#000"
+            fontWeight="bold"
+            href="https://x.com/Balancer/status/1990856260988670132"
             isExternal
             textDecoration="underline"
           >
-            View the official statement
+            Read the Post-Mortem
           </Link>
         </Alert>
       )}
