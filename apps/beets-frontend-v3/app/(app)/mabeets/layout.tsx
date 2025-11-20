@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   `,
 }
 
-export default async function Pools({ children }: PropsWithChildren) {
+export default function Pools({ children }: PropsWithChildren) {
   return (
     <PoolLayout chain={ChainSlug.Sonic} id={PROJECT_CONFIG.corePoolId} variant={BaseVariant.v2}>
       <ReliquaryProvidersLayout>

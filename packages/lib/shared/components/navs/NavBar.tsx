@@ -276,17 +276,6 @@ export function NavBar({
 
   return (
     <Box
-      _before={{
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        bg: showShadow ? 'background.level1' : 'none',
-        opacity: 0.5,
-        zIndex: -1,
-      }}
       as={motion.div}
       borderColor="border.base"
       boxShadow={showShadow ? 'lg' : 'none'}
@@ -308,7 +297,7 @@ export function NavBar({
       {isBalancer && shouldShowV2Exploit && (
         <Alert borderRadius="none" gap="1" justifyContent="center" status="warning">
           <Text color="#000" fontWeight="bold">
-            There has been an exploit affecting v2 Composable Stable pools (v3 pools are not
+            There was a recent exploit on some v2 Composable Stable pools (v3 pools were not
             affected).
           </Text>
           <Link

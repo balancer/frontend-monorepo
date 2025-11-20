@@ -13,6 +13,7 @@ import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@bal/lib/services/chakra/ThemeProvider'
 import { BalancerLogoType } from '@bal/lib/components/imgs/BalancerLogoType'
 import { Footer } from '@repo/lib/shared/components/navs/Footer'
+import { NavbarHeightProvider } from '@repo/lib/shared/components/containers/NavbarHeightProvider'
 
 export const metadata: Metadata = {
   title: `Balancer—DeFi Liquidity Pools`,
@@ -53,15 +54,17 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
             <Providers>
-              <NavBarContainer />
-              {children}
-              <Footer
-                logoType={<BalancerLogoType />}
-                subTitle="Balancer is a battle-tested toolkit for true AMM experimentation and innovation."
-                title="AMMs made easy"
-              />
-              <SpeedInsights />
-              <Script async src="https://w.appzi.io/w.js?token=8TY8k" />
+              <NavbarHeightProvider>
+                <NavBarContainer />
+                {children}
+                <Footer
+                  logoType={<BalancerLogoType />}
+                  subTitle="Balancer is a battle-tested toolkit for true AMM experimentation and innovation."
+                  title="AMMs made easy"
+                />
+                <SpeedInsights />
+                <Script async src="https://w.appzi.io/w.js?token=8TY8k" />
+              </NavbarHeightProvider>
             </Providers>
           </ThemeProvider>
         </ColorThemeProvider>
