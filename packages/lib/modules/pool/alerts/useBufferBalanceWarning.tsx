@@ -3,6 +3,7 @@
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { Text } from '@chakra-ui/react'
 import { BalAlert } from '../../../shared/components/alerts/BalAlert'
 import { useReadContracts } from 'wagmi'
 import { vaultAdminAbi_V3, AddressProvider } from '@balancer/sdk'
@@ -109,22 +110,32 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
   if (bufferLimitViolations.length === 0) return null
 
-  const isAddLiquidity = operation === 'add'
+  return bufferLimitViolations.map(({ underlyingSymbol, wrappedSymbol }, idx) => {
+    const action = operation === 'add' ? 'deposit' : 'withdrawal'
+    const isRemoveLiquidity = operation === 'remove'
 
-  return bufferLimitViolations.map(({ underlyingSymbol, wrappedSymbol }, idx) => (
-    <BalAlert
-      content={
-        isAddLiquidity
-          ? `You may not be able to add ${underlyingSymbol} to this pool. Consider depositing ${wrappedSymbol} instead.`
-          : `You may not be able to remove ${underlyingSymbol} from this pool. Consider receiving ${wrappedSymbol} instead.`
-      }
-      key={idx}
-      status="warning"
-      title={
-        isAddLiquidity ? 'Low liquidity for wrapped token' : 'Low liquidity for underlying token'
-      }
-    />
-  ))
+    return (
+      <BalAlert
+        content={
+          <>
+            <Text color="black" mb="sm">
+              Liquidity buffers in v3 Boosted pools facilitate instant, gas-efficient transitions
+              between the wrapped yield generating tokens and the unwrapped underlying tokens.
+            </Text>
+            <Text color="black">
+              Unfortunately, the {underlyingSymbol} in this pool's buffer is too small to allow for
+              your {action}. Instead, you can {action} any amount as {wrappedSymbol} (the
+              yield-bearing token)
+              {isRemoveLiquidity && ', which you can then unwrap later on the lending protocol'}.
+            </Text>
+          </>
+        }
+        key={idx}
+        status="warning"
+        title={`Insufficient buffer liquidity for your ${underlyingSymbol} ${action}`}
+      />
+    )
+  })
 }
 
 function useBufferBalances(wrappedTokens: ApiToken[]) {
