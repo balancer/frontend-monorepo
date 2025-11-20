@@ -1,23 +1,13 @@
-'use client'
-
 import {
   GetPoolsQuery,
   GetPoolsQueryVariables,
   GqlChain,
   GqlPoolType,
   GqlPoolOrderBy,
-  GqlPoolOrderDirection,
   GqlNestedPool,
   GetPoolQuery,
   QuantAmmWeightSnapshot,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  parseAsArrayOf,
-  parseAsFloat,
-  parseAsInteger,
-  parseAsString,
-  parseAsStringEnum,
-} from 'nuqs'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
 
@@ -143,31 +133,6 @@ export const orderByHash: { [key: string]: string } = {
   volume24h: 'Volume (24h)',
   apr: 'APR',
   userbalanceUsd: 'My liquidity',
-}
-
-export const poolListQueryStateParsers = {
-  first: parseAsInteger.withDefault(20),
-  skip: parseAsInteger.withDefault(0),
-  orderBy: parseAsStringEnum<GqlPoolOrderBy>(Object.values(GqlPoolOrderBy)).withDefault(
-    GqlPoolOrderBy.TotalLiquidity
-  ),
-  orderDirection: parseAsStringEnum<GqlPoolOrderDirection>(
-    Object.values(GqlPoolOrderDirection)
-  ).withDefault(GqlPoolOrderDirection.Desc),
-  poolTypes: parseAsArrayOf(
-    parseAsStringEnum<PoolFilterType>(Object.values(poolTypeFilters))
-  ).withDefault([]),
-  networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChain))).withDefault([]),
-  protocolVersion: parseAsInteger,
-  textSearch: parseAsString,
-  userAddress: parseAsString,
-  minTvl: parseAsFloat.withDefault(0),
-  poolTags: parseAsArrayOf(
-    parseAsStringEnum<PoolTagType>(Object.values(poolTagFilters))
-  ).withDefault([]),
-  poolHookTags: parseAsArrayOf(
-    parseAsStringEnum<PoolHookTagType>(Object.values(poolHookTagFilters))
-  ).withDefault([]),
 }
 
 /*
