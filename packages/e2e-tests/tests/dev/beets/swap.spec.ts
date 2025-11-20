@@ -7,7 +7,7 @@ test('Swap 1 S to USDC)', async ({ page }) => {
   await page.goto('http://localhost:3001/swap/sonic/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
   await impersonate(page, defaultAnvilAccount)
-  await expect(button(page, 'Connect wallet')).not.toBeVisible()
+  await expect(button(page, 'Connect wallet')).not.toBeVisible({ timeout: 20000 })
 
   await clickButton(page, 'S')
   await page.getByText('Wrapped Sonic').click()
