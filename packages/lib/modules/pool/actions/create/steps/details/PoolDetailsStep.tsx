@@ -7,24 +7,26 @@ import { ReClammConfiguration } from './ReClammConfiguration'
 import { SimilarPoolsModal } from '../../modal/SimilarPoolsModal'
 import { GyroEclpConfiguration } from './GyroEclpConfiguration'
 import { useValidateEclpParams } from './useValidateEclpParams'
+import { isReClammPool, isGyroEllipticPool } from '../../helpers'
 
 export function PoolDetailsStep() {
-  const { poolCreationForm, reClammConfigForm, eclpConfigForm, isReClamm, isGyroEclp } =
-    usePoolCreationForm()
+  const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
+  const [poolType] = poolCreationForm.watch(['poolType'])
   const { isEclpParamsValid } = useValidateEclpParams()
 
-  const isPoolCreationFormValid = poolCreationForm.formState.isValid
-  const isReClammFormValid = !isReClamm || reClammConfigForm.formState.isValid
-  const isGyroEclpFormValid = !isGyroEclp || (eclpConfigForm.formState.isValid && isEclpParamsValid)
+  const isPoolCreationFormInvalid = !poolCreationForm.formState.isValid
+  const isReClammFormInvalid = isReClammPool(poolType) && !reClammConfigForm.formState.isValid
+  const isGyroEclpFormInvalid =
+    isGyroEllipticPool(poolType) && (!eclpConfigForm.formState.isValid || !isEclpParamsValid)
 
-  const isDisabled = !isPoolCreationFormValid || !isReClammFormValid || !isGyroEclpFormValid
+  const isDisabled = isPoolCreationFormInvalid || isReClammFormInvalid || isGyroEclpFormInvalid
 
   return (
     <>
       <Box as="form" style={{ width: '100%' }}>
         <VStack align="start" spacing="xl" w="full">
-          {isReClamm && <ReClammConfiguration />}
-          {isGyroEclp && <GyroEclpConfiguration />}
+          {isReClammPool(poolType) && <ReClammConfiguration />}
+          {isGyroEllipticPool(poolType) && <GyroEclpConfiguration />}
           <PoolDetails />
           <PoolSettings />
           <PoolCreationFormAction disabled={isDisabled} />

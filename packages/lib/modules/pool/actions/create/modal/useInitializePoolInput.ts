@@ -7,7 +7,8 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
 
 export function useInitializePoolInput(chainId: number): ExtendedInitPoolInputV3 {
-  const { poolTokens } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolTokens = poolCreationForm.getValues('poolTokens')
 
   const chain = getGqlChain(chainId)
   const { tokens } = getNetworkConfig(chain)

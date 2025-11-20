@@ -10,8 +10,13 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 
 export function usePreviewReclAmmChartData() {
   const { reClammConfigForm } = usePoolCreationForm()
-  const { initialMinPrice, initialMaxPrice, initialTargetPrice, centerednessMargin } =
-    reClammConfigForm.watch()
+  const [initialMinPrice, initialMaxPrice, initialTargetPrice, centerednessMargin] =
+    reClammConfigForm.watch([
+      'initialMinPrice',
+      'initialMaxPrice',
+      'initialTargetPrice',
+      'centerednessMargin',
+    ])
 
   return useMemo(() => {
     if (

@@ -3,22 +3,22 @@ import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { validatePoolType } from '../../validatePoolCreationForm'
 import { useEffect } from 'react'
 import { usePoolHooksContract } from './usePoolHooksContract'
+import { isStableSurgePool } from '../../helpers'
 
 export function LiquidityManagement() {
-  const {
-    poolType,
-    enableDonation,
-    disableUnbalancedLiquidity,
-    poolHooksContract,
-    poolCreationForm,
-    network,
-  } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolType, enableDonation, disableUnbalancedLiquidity, poolHooksContract, network] =
+    poolCreationForm.watch([
+      'poolType',
+      'enableDonation',
+      'disableUnbalancedLiquidity',
+      'poolHooksContract',
+      'network',
+    ])
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
-  const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
 
   useEffect(() => {
     // if contract has this flag set to true, enforce `disableUnbalancedLiquidity: true` to avoid tx revert
@@ -26,12 +26,12 @@ export function LiquidityManagement() {
       poolCreationForm.setValue('disableUnbalancedLiquidity', true)
     }
     // the stable surge pool factory only supports `disableUnbalancedLiquidity: false`
-    if (isStableSurgePool) {
+    if (isStableSurgePool(poolType)) {
       poolCreationForm.setValue('disableUnbalancedLiquidity', false)
     }
-  }, [hookFlags, isStableSurgePool])
+  }, [hookFlags, poolType])
 
-  const isDisabled = isStableSurgePool || hookFlags?.enableHookAdjustedAmounts
+  const isDisabled = isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -39,7 +39,7 @@ export function LiquidityManagement() {
         <Text textAlign="start" w="full">
           Liquidity Management
         </Text>
-        <BalPopover text={'TODO'}>
+        <BalPopover text="Flags related to adding/removing liquidity">
           <InfoIcon />
         </BalPopover>
       </HStack>

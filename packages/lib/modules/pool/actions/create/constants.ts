@@ -94,7 +94,7 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   protocol: PROJECT_CONFIG.projectId,
   network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
-  poolType: PoolType.Weighted,
+  poolType: PoolType.Stable,
   poolTokens: INITIAL_POOL_TOKENS,
   name: '',
   symbol: '',

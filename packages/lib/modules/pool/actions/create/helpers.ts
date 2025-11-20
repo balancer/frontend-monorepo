@@ -2,6 +2,7 @@ import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { WeightedPoolStructure } from './constants'
 
 const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.Weighted]: GqlPoolType.Weighted,
@@ -62,8 +63,19 @@ export function isStablePool(poolType: PoolType): boolean {
   return poolType === PoolType.Stable || poolType === PoolType.StableSurge
 }
 
+export function isStableSurgePool(poolType: PoolType): boolean {
+  return poolType === PoolType.StableSurge
+}
+
 export function isWeightedPool(poolType: PoolType): boolean {
   return poolType === PoolType.Weighted
+}
+
+export function isCustomWeightedPool(
+  poolType: PoolType,
+  weightedPoolStructure: WeightedPoolStructure
+): boolean {
+  return poolType === PoolType.Weighted && weightedPoolStructure === WeightedPoolStructure.Custom
 }
 
 export function isReClammPool(poolType: PoolType): boolean {

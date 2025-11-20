@@ -6,7 +6,8 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { DEFAULT_DECIMALS } from '../../constants'
 
 export function useValidateEclpParams() {
-  const { poolType, eclpConfigForm } = usePoolCreationForm()
+  const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+  const poolType = poolCreationForm.watch('poolType')
   const { alpha, beta, c, s, lambda } = eclpConfigForm.watch()
 
   const errorMessage = useMemo(() => {
