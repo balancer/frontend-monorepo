@@ -61,7 +61,7 @@ export default function Cookies() {
   ]
 
   return (
-    <Container>
+    <Container py="2xl">
       <Prose>
         <div className="pb-4">
           <FadeInOnView>
