@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/immutability */
 'use client'
 
 // eslint-disable-next-line no-restricted-imports
@@ -40,23 +39,44 @@ export function useUserAccountLogic() {
 
   const { address, ...queryWithoutAddress } = query
 
-  async function blockUnauthorizedAddress(address: Address | undefined) {
-    if (!address || config.appEnv === 'test') {
-      setCheckingAuth(false)
-      return
-    }
+  function onEmptyUserAddress() {
+    // Clear Sentry user
+    setUser(null)
 
-    let isAuthorized = true
-    if (isAddress(address)) {
-      isAuthorized = await isAuthorizedAddress(address)
-      if (!isAuthorized) disconnect()
+    if (isConnectedToWC) {
+      setIsConnectedToWC(false)
     }
+  }
 
-    setIsBlocked(!isAuthorized)
-    setCheckingAuth(false)
+  function onNewUserAddress(result: UseUserAccountResponse) {
+    // Set Sentry user
+    setUser({
+      id: result.userAddress,
+      username: result.userAddress,
+    })
+
+    if (result.isWCConnector) {
+      setIsConnectedToWC(true)
+    }
   }
 
   useEffect(() => {
+    const blockUnauthorizedAddress = async (address: Address | undefined) => {
+      if (!address || config.appEnv === 'test') {
+        setCheckingAuth(false)
+        return
+      }
+
+      let isAuthorized = true
+      if (isAddress(address)) {
+        isAuthorized = await isAuthorizedAddress(address)
+        if (!isAuthorized) disconnect()
+      }
+
+      setIsBlocked(!isAuthorized)
+      setCheckingAuth(false)
+    }
+
     blockUnauthorizedAddress(address)
   }, [address])
 
@@ -99,27 +119,6 @@ export function useUserAccountLogic() {
       }
     },
   })
-
-  function onNewUserAddress(result: UseUserAccountResponse) {
-    // Set Sentry user
-    setUser({
-      id: result.userAddress,
-      username: result.userAddress,
-    })
-
-    if (result.isWCConnector) {
-      setIsConnectedToWC(true)
-    }
-  }
-
-  function onEmptyUserAddress() {
-    // Clear Sentry user
-    setUser(null)
-
-    if (isConnectedToWC) {
-      setIsConnectedToWC(false)
-    }
-  }
 
   useEffect(() => {
     setTag('wallet', result.connector?.id)
