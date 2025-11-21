@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/static-components */
 import { memo } from 'react'
 import { HStack, Heading, Skeleton, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
@@ -20,11 +19,11 @@ type PoolStatsValues = {
   weeklyRewards: string
 }
 
+const MemoizedMainAprTooltip = memo(MainAprTooltip)
+
 export function PoolSnapshotValues() {
   const { chain, pool, tvl, isLoading: isLoadingPool } = usePool()
   const { toCurrency } = useCurrency()
-
-  const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
   const {
     tokens,
