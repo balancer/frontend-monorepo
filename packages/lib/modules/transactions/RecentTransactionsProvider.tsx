@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/immutability */
 'use client'
 
 import { getChainId } from '@repo/lib/config/app.config'
@@ -10,9 +9,9 @@ import { captureFatalError } from '@repo/lib/shared/utils/query-errors'
 import { secs } from '@repo/lib/shared/utils/time'
 import { AlertStatus, ToastId, useToast } from '@chakra-ui/react'
 import { keyBy, orderBy, take } from 'lodash'
-import { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
+import { ReactNode, createContext, useEffect, useState } from 'react'
 import { Hash } from 'viem'
-import { useConfig, usePublicClient } from 'wagmi'
+import { useConfig } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
@@ -80,117 +79,72 @@ const TransactionStatusToastStatusMapping: Record<TransactionStatus, AlertStatus
 export function useRecentTransactionsLogic() {
   const [transactions, setTransactions] = useState<Record<string, TrackedTransaction>>({})
   const toast = useToast()
-  const publicClient = usePublicClient()
   const config = useConfig()
+
+  function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
+    localStorage.setItem(RECENT_TRANSACTIONS_KEY, JSON.stringify(customUpdate || transactions))
+  }
+
+  function clearTransactions() {
+    updateLocalStorage({})
+    setTransactions({})
+  }
+
+  function isTxTracked(txHash: Hash) {
+    return !!transactions[txHash]
+  }
 
   // when loading transactions from the localStorage cache and we identify any unconfirmed
   // transactions, we should fetch the receipt of the transactions
-  const waitForUnconfirmedTransactions = useCallback(
-    async (transactions: Record<string, TrackedTransaction>) => {
-      const unconfirmedTransactions = Object.values(transactions).filter(
-        tx => tx.type === 'standard' && tx.status === 'confirming'
-      )
+  const waitForUnconfirmedTransactions = async (
+    transactions: Record<string, TrackedTransaction>
+  ) => {
+    const unconfirmedTransactions = Object.values(transactions).filter(
+      tx => tx.type === 'standard' && tx.status === 'confirming'
+    )
 
-      const updatePayload = {
-        ...transactions,
-      }
-      // we cannot use a wagmi hook here as useWaitForTransaction does not support a list of hashes
-      // nor can we render multiple useWaitForTransaction hooks
-      // so we use the underlying viem call to get the transactions confirmation status
-      for (const tx of unconfirmedTransactions) {
-        try {
-          const receipt = await waitForTransactionReceipt(config, {
-            hash: tx.hash,
-            chainId: getChainId(tx.chain),
-            timeout: getWaitForReceiptTimeout(getChainId(tx.chain)),
-          })
-          if (receipt?.status === 'success') {
-            updatePayload[tx.hash] = {
-              ...tx,
-              status: 'confirmed',
-            }
-          } else {
-            updatePayload[tx.hash] = {
-              ...tx,
-              status: 'reverted',
-            }
-          }
-          setTransactions(updatePayload)
-        } catch (error) {
-          console.error('Error in RecentTransactionsProvider: ', error)
+    const updatePayload = { ...transactions }
+    // we cannot use a wagmi hook here as useWaitForTransaction does not support a list of hashes
+    // nor can we render multiple useWaitForTransaction hooks
+    // so we use the underlying viem call to get the transactions confirmation status
+    for (const tx of unconfirmedTransactions) {
+      try {
+        const receipt = await waitForTransactionReceipt(config, {
+          hash: tx.hash,
+          chainId: getChainId(tx.chain),
+          timeout: getWaitForReceiptTimeout(getChainId(tx.chain)),
+        })
+        if (receipt?.status === 'success') {
+          updatePayload[tx.hash] = { ...tx, status: 'confirmed' }
+        } else {
+          updatePayload[tx.hash] = { ...tx, status: 'reverted' }
+        }
+        setTransactions(updatePayload)
+      } catch (error) {
+        console.error('Error in RecentTransactionsProvider: ', error)
 
-          /* This is an edge-case that we found randomly happening in polygon.
+        /* This is an edge-case that we found randomly happening in polygon.
           Debug tip:
           Enforce a timeout in waitForTransactionReceipt inside node_modules/viem waitForTransactionReceipt
           to reproduce the issue
           */
-          captureFatalError(
-            error,
-            'waitForTransactionReceiptError',
-            'Error in waitForTransactionReceipt inside RecentTransactionsProvider',
-            { txHash: tx.hash }
-          )
-          const isTimeoutError = ensureError(error).name === 'WaitForTransactionReceiptTimeoutError'
-          updatePayload[tx.hash] = {
-            ...tx,
-            status: isTimeoutError ? 'timeout' : 'unknown',
-          }
-          setTransactions(updatePayload)
+        captureFatalError(
+          error,
+          'waitForTransactionReceiptError',
+          'Error in waitForTransactionReceipt inside RecentTransactionsProvider',
+          { txHash: tx.hash }
+        )
+        const isTimeoutError = ensureError(error).name === 'WaitForTransactionReceiptTimeoutError'
+        updatePayload[tx.hash] = {
+          ...tx,
+          status: isTimeoutError ? 'timeout' : 'unknown',
         }
+        setTransactions(updatePayload)
       }
-      updateLocalStorage(updatePayload)
-    },
-
-    [publicClient]
-  )
-
-  // fetch recent transactions from local storage
-  useEffect(() => {
-    const _recentTransactions = localStorage.getItem(RECENT_TRANSACTIONS_KEY)
-    if (_recentTransactions) {
-      const recentTransactions = JSON.parse(_recentTransactions)
-      setTransactions(recentTransactions)
-      // confirm the status of any past confirming transactions
-      // on load
-      waitForUnconfirmedTransactions(recentTransactions)
     }
-  }, [])
 
-  useInterval(() => {
-    const safeAppsSdk = new SafeAppsSDK()
-
-    const unconfirmedTransactions = Object.values(transactions).filter(
-      tx => tx.type === 'safe' && tx.status === 'confirming'
-    )
-
-    unconfirmedTransactions.forEach(safeTrackedTx => {
-      safeAppsSdk.txs.getBySafeTxHash(safeTrackedTx.hash).then(tx => {
-        updateTrackedTransaction(safeTrackedTx.hash, {
-          status: safeStatusToBalancerStatus(tx.txStatus),
-        })
-
-        if (
-          tx.txHash &&
-          !isTxTracked(tx.txHash as Hash) &&
-          safeStatusToBalancerStatus(tx.txStatus) === 'confirmed'
-        ) {
-          trackEvent(AnalyticsEvent.TransactionSubmitted)
-          addTrackedTransaction(
-            {
-              hash: tx.txHash as Hash,
-              type: 'standard',
-              status: 'confirmed',
-              chain: safeTrackedTx.chain,
-              init: safeTrackedTx.label,
-              description: safeTrackedTx.description,
-              timestamp: Date.now(),
-            },
-            false
-          )
-        }
-      })
-    })
-  }, 5000)
+    updateLocalStorage(updatePayload)
+  }
 
   function addTrackedTransaction(
     trackedTransaction: TrackedTransaction,
@@ -289,18 +243,56 @@ export function useRecentTransactionsLogic() {
     }
   }
 
-  function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
-    localStorage.setItem(RECENT_TRANSACTIONS_KEY, JSON.stringify(customUpdate || transactions))
-  }
+  // fetch recent transactions from local storage
+  useEffect(() => {
+    const fetchRecentTransactions = async () => {
+      const _recentTransactions = localStorage.getItem(RECENT_TRANSACTIONS_KEY)
+      if (_recentTransactions) {
+        const recentTransactions = JSON.parse(_recentTransactions)
+        setTransactions(recentTransactions)
+        // confirm the status of any past confirming transactions
+        // on load
+        waitForUnconfirmedTransactions(recentTransactions)
+      }
+    }
+    fetchRecentTransactions()
+  }, [])
 
-  function clearTransactions() {
-    updateLocalStorage({})
-    setTransactions({})
-  }
+  useInterval(() => {
+    const safeAppsSdk = new SafeAppsSDK()
 
-  function isTxTracked(txHash: Hash) {
-    return !!transactions[txHash]
-  }
+    const unconfirmedTransactions = Object.values(transactions).filter(
+      tx => tx.type === 'safe' && tx.status === 'confirming'
+    )
+
+    unconfirmedTransactions.forEach(safeTrackedTx => {
+      safeAppsSdk.txs.getBySafeTxHash(safeTrackedTx.hash).then(tx => {
+        updateTrackedTransaction(safeTrackedTx.hash, {
+          status: safeStatusToBalancerStatus(tx.txStatus),
+        })
+
+        if (
+          tx.txHash &&
+          !isTxTracked(tx.txHash as Hash) &&
+          safeStatusToBalancerStatus(tx.txStatus) === 'confirmed'
+        ) {
+          trackEvent(AnalyticsEvent.TransactionSubmitted)
+          addTrackedTransaction(
+            {
+              hash: tx.txHash as Hash,
+              type: 'standard',
+              status: 'confirmed',
+              chain: safeTrackedTx.chain,
+              init: safeTrackedTx.label,
+              description: safeTrackedTx.description,
+              timestamp: Date.now(),
+            },
+            false
+          )
+        }
+      })
+    })
+  }, 5000)
 
   return {
     transactions,
