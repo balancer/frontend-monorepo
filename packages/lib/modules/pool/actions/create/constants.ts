@@ -26,11 +26,36 @@ export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AM
 export const MAX_LAMBDA = 100000000
 
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
-  [PoolType.Stable]: { label: 'Stable', maxTokens: 5 },
-  [PoolType.StableSurge]: { label: 'Stable Surge', maxTokens: 5 },
-  [PoolType.Weighted]: { label: 'Weighted', maxTokens: 8 },
-  [PoolType.GyroE]: { label: 'Gyro Elliptic CLP', maxTokens: 2 },
-  [PoolType.ReClamm]: { label: 'reClamm', maxTokens: 2 },
+  [PoolType.Stable]: {
+    label: 'Stable',
+    maxTokens: 5,
+    description:
+      'Stable Pools are optimal for assets expected to consistently trade at near parity or with a known exchange rate. Stable Pools allows for swaps of significant size before encountering substantial price impact, vastly increasing capital efficiency for like-kind and correlated-kind swaps.',
+  },
+  [PoolType.StableSurge]: {
+    label: 'Stable Surge',
+    maxTokens: 5,
+    description:
+      'A Stable Pool with a “Stable Surge” hook that applies a dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',
+  },
+  [PoolType.Weighted]: {
+    label: 'Weighted',
+    maxTokens: 8,
+    description:
+      'Weighted Pools are highly versatile and configurable pools. They are ideal for general cases and enable users to build pools with different token counts and weightings.',
+  },
+  [PoolType.GyroE]: {
+    label: 'Gyro Elliptic CLP',
+    maxTokens: 2,
+    description:
+      'Concentrated liquidity pools that use an elliptical price curve to focus liquidity asymmetrically within customizable bounds. E-CLPs provide deeper liquidity and lower slippage for trades while maximizing LP capital efficiency within expected price ranges.',
+  },
+  [PoolType.ReClamm]: {
+    label: 'ReClamm',
+    maxTokens: 2,
+    description:
+      'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
+  },
 }
 
 export const PROTOCOLS = [
