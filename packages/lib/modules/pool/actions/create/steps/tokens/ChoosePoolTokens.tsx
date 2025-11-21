@@ -18,7 +18,6 @@ import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
 import { AlertTriangle } from 'react-feather'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
@@ -40,6 +39,7 @@ import {
   isReClammPool,
   isGyroEllipticPool,
 } from '../../helpers'
+import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -53,7 +53,6 @@ export function ChoosePoolTokens() {
     'poolType',
   ])
 
-  const maxTokens = validatePoolTokens.maxTokens(poolType)
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
   const { getTokensByChain } = useTokens()
@@ -108,19 +107,7 @@ export function ChoosePoolTokens() {
   return (
     <>
       <VStack align="start" spacing="md" w="full">
-        {isGyroEllipticPool(poolType) && (
-          <BalAlert
-            content="Gyroscope’s elliptic concentrated liquidity pools offer the flexibility to asymmetrically focus liquidity. You can only add 2 tokens into a Gyro E-CLP."
-            status="info"
-          />
-        )}
-        {isCustomWeightedPool(poolType, weightedPoolStructure) && (
-          <BalAlert
-            content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
-            status="info"
-            title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
-          />
-        )}
+        <ChoosePoolTokensAlert poolType={poolType} weightedPoolStructure={weightedPoolStructure} />
 
         <Heading color="font.maxContrast" size="md">
           Choose pool tokens

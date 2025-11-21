@@ -1,9 +1,9 @@
 import { type Control, Controller } from 'react-hook-form'
 import { PoolCreationForm, SupportedPoolTypes } from '../../types'
-import { VStack, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react'
+import { VStack, Text, RadioGroup, Stack, Radio, HStack } from '@chakra-ui/react'
 import { POOL_TYPES } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
-
+import { InfoIconPopover } from '../../InfoIconPopover'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
 export function ChoosePoolType({ control }: { control: Control<PoolCreationForm> }) {
@@ -28,17 +28,20 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
           >
             <Stack spacing={3}>
               {poolTypesKeys.map(poolTypeKey => (
-                <Radio key={poolTypeKey} size="lg" value={poolTypeKey}>
-                  <Text
-                    color="font.primary"
-                    textDecoration="underline"
-                    textDecorationStyle="dotted"
-                    textDecorationThickness="1px"
-                    textUnderlineOffset="3px"
-                  >
-                    {POOL_TYPES[poolTypeKey].label}
-                  </Text>
-                </Radio>
+                <HStack key={poolTypeKey}>
+                  <Radio size="lg" value={poolTypeKey}>
+                    <Text
+                      color="font.primary"
+                      textDecoration="underline"
+                      textDecorationStyle="dotted"
+                      textDecorationThickness="1px"
+                      textUnderlineOffset="3px"
+                    >
+                      {POOL_TYPES[poolTypeKey].label}
+                    </Text>
+                  </Radio>
+                  <InfoIconPopover message={POOL_TYPES[poolTypeKey].description} />
+                </HStack>
               ))}
             </Stack>
           </RadioGroup>
