@@ -177,6 +177,14 @@ export function NavActions({
     }
 
     const defaultActions = [
+      ...(shouldUseAnvilFork
+        ? [
+            {
+              el: <DevToolsDrawerButton />,
+              display: { base: 'block', lg: 'block' },
+            },
+          ]
+        : []),
       {
         el: <UserSettings />,
         display: { base: 'none', lg: 'block' },
@@ -207,13 +215,6 @@ export function NavActions({
         display: { base: 'block', lg: 'none' },
       },
     ]
-
-    if (shouldUseAnvilFork) {
-      defaultActions.push({
-        el: <DevToolsDrawerButton />,
-        display: { base: 'block', lg: 'block' },
-      })
-    }
 
     if (isConnected) {
       return [

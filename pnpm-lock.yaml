@@ -74,8 +74,8 @@ importers:
         specifier: 3.13.8
         version: 3.13.8(@types/react@19.2.2)(graphql-ws@6.0.6(crossws@0.3.5)(graphql@16.11.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@balancer/sdk':
-        specifier: 4.9.0
-        version: 4.9.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+        specifier: 4.10.0
+        version: 4.10.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@19.2.0)
@@ -195,8 +195,8 @@ importers:
         specifier: 3.13.8
         version: 3.13.8(@types/react@19.2.2)(graphql-ws@6.0.6(crossws@0.3.5)(graphql@16.11.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@balancer/sdk':
-        specifier: 4.9.0
-        version: 4.9.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
+        specifier: 4.10.0
+        version: 4.10.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
       '@chakra-ui/clickable':
         specifier: ^2.1.0
         version: 2.1.0(react@19.2.0)
@@ -433,8 +433,8 @@ importers:
         specifier: 0.0.37
         version: 0.0.37
       '@balancer/sdk':
-        specifier: 4.9.0
-        version: 4.9.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
+        specifier: 4.10.0
+        version: 4.10.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
@@ -988,6 +988,10 @@ packages:
 
   '@balancer-labs/balancer-maths@0.0.37':
     resolution: {integrity: sha512-BZ8qxuvVEBHKpHcfFEXIs108RqKSIhwiUI+RUlPt9K+7RL7tNGuQSaiLk/VcAIJSXKJZbCveRug1EW3S3JAorw==}
+    engines: {node: '>=18.x'}
+
+  '@balancer/sdk@4.10.0':
+    resolution: {integrity: sha512-XibvCq1U9o23AvCBCqvurQWTYp6nFX1I/N8N/7X8bTkZgfC30UmywqGAWdMQn3IAoNCNGau1uN1Fl7OHh7eO5g==}
     engines: {node: '>=18.x'}
 
   '@balancer/sdk@4.9.0':
@@ -9755,13 +9759,26 @@ snapshots:
 
   '@balancer-labs/balancer-maths@0.0.37': {}
 
-  '@balancer/sdk@4.9.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)':
+  '@balancer/sdk@4.10.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.27
       '@types/big.js': 6.2.2
       big.js: 6.2.2
       decimal.js-light: 2.5.1
       viem: 2.38.5(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+
+  '@balancer/sdk@4.10.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)':
+    dependencies:
+      '@balancer-labs/balancer-maths': 0.0.27
+      '@types/big.js': 6.2.2
+      big.js: 6.2.2
+      decimal.js-light: 2.5.1
+      viem: 2.38.5(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -9775,19 +9792,6 @@ snapshots:
       big.js: 6.2.2
       decimal.js-light: 2.5.1
       viem: 2.38.5(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-
-  '@balancer/sdk@4.9.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)':
-    dependencies:
-      '@balancer-labs/balancer-maths': 0.0.27
-      '@types/big.js': 6.2.2
-      big.js: 6.2.2
-      decimal.js-light: 2.5.1
-      viem: 2.38.5(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.1.12)
     transitivePeerDependencies:
       - bufferutil
       - typescript
