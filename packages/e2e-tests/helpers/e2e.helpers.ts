@@ -30,7 +30,14 @@ export async function setForkBalances(page: Page, forkOptions?: ForkOptions) {
         value: '4000',
       },
     ],
+    [146]: [
+      {
+        tokenAddress: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38', // wS
+        value: '100',
+      },
+    ],
   }
+
   const defaultChainId = 1
 
   const defaultForkOptions: ForkOptions = {
