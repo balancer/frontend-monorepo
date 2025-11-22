@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   ManagedResult,
@@ -9,7 +8,7 @@ import { TransactionBatchButton } from '@repo/lib/modules/transactions/transacti
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import {
   AddLiquidityBuildQueryParams,
@@ -50,17 +49,12 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const isComplete = () => isTransactionSuccess(transaction)
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds by AddLiquidityTimeout
     if (simulationQuery.data && isStepActivated) {
       buildCallDataQuery.refetch()
     }
   }, [simulationQuery.data])
-
-  const onSuccess = useCallback(() => {
-    refetchPoolBalances()
-  }, [])
 
   return useMemo(
     () => ({
@@ -72,10 +66,10 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
         type: 'Gas transaction',
       },
       transaction,
-      isComplete,
+      isComplete: () => isTransactionSuccess(transaction),
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
-      onSuccess,
+      onSuccess: () => refetchPoolBalances(),
       renderAction: () => {
         if (!buildCallDataQuery.data) return <DisabledTransactionButton />
         return (
@@ -109,6 +103,6 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
           }
         : undefined,
     }),
-    [transaction, simulationQuery.data, buildCallDataQuery.data]
+    [transaction, gasEstimationMeta, buildCallDataQuery.data, labels, chainId, refetchPoolBalances]
   )
 }

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
@@ -31,12 +30,10 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
   }, [poolTokens, isReversed])
 
   const secondaryFontColor = selectColor('font', 'secondary')
-
   const fontHighlightColor = selectColor('font', 'highlight')
-
   const backgroundHighlightColor = selectColor('background', 'highlight')
-
   const markPointMargin = 0.05
+
   const isSpotPriceNearLowerBound = useMemo(() => {
     return bn(poolSpotPrice || 0).lt(xMin * (1 + markPointMargin))
   }, [poolSpotPrice, xMin])
@@ -417,7 +414,21 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
         },
       ],
     }
-  }, [data, poolSpotPrice])
+  }, [
+    data,
+    poolSpotPrice,
+    xMin,
+    xMax,
+    yMax,
+    poolIsInRange,
+    toolTipTheme,
+    theme,
+    secondaryFontColor,
+    fontHighlightColor,
+    backgroundHighlightColor,
+    isSpotPriceNearLowerBound,
+    isSpotPriceNearUpperBound,
+  ])
 
   const outOfRangeText =
     'The current price is out of the set liquidity range for this Concentrated Liquidity Pool (CLP). When a CLP is not in range, liquidity is not routed through this pool and LPs do not earn swap fees.'

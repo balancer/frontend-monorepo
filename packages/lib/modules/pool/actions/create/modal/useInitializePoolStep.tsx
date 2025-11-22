@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useMemo, useState } from 'react'
 import {
   ManagedResult,
@@ -54,12 +53,13 @@ export function useInitializePoolStep({
     initPoolInput,
   })
 
-  const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in initialze LBP gas estimation', {
-    buildCallQueryData: buildCallDataQuery.data,
-    tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
-  })
-
-  const isComplete = () => !!isPoolInitialized || isTransactionSuccess(transaction)
+  const gasEstimationMeta = sentryMetaForWagmiSimulation(
+    'Error in initialize pool gas estimation',
+    {
+      buildCallQueryData: buildCallDataQuery.data,
+      tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
+    }
+  )
 
   return useMemo(
     () => ({
@@ -67,7 +67,7 @@ export function useInitializePoolStep({
       stepType: 'initializePool',
       labels,
       transaction,
-      isComplete,
+      isComplete: () => !!isPoolInitialized || isTransactionSuccess(transaction),
       onSuccess: () => {
         refetchIsPoolInitialized()
       },
@@ -104,7 +104,13 @@ export function useInitializePoolStep({
           }
         : undefined,
     }),
-
-    [transaction, labels, buildCallDataQuery.data, isPoolInitialized]
+    [
+      transaction,
+      buildCallDataQuery.data,
+      gasEstimationMeta,
+      initPoolInput.chainId,
+      refetchIsPoolInitialized,
+      isPoolInitialized,
+    ]
   )
 }

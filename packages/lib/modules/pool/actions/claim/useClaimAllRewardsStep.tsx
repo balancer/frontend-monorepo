@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { getChainId } from '@repo/lib/config/app.config'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { selectStakingService } from '@repo/lib/modules/staking/selectStakingService'
@@ -36,6 +35,7 @@ export function useClaimAllRewardsStep({
   const [isClaimQueryEnabled, setIsClaimQueryEnabled] = useState(false)
   const { isConnected } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+
   const { claimableRewards: nonBalRewards, refetchClaimableRewards } = claimableBalancesQuery
   const { balRewardsData: balRewards, refetchBalRewards } = balTokenRewardsQuery
 
@@ -51,8 +51,8 @@ export function useClaimAllRewardsStep({
   const mintBalRewardGauges = balRewards.map(r => r.gaugeAddress as Address)
   const allRewardGauges = [...claimRewardGauges, ...mintBalRewardGauges]
   const shouldClaimMany = allRewardGauges.length > 1
-
   const stakingService = selectStakingService(chain, stakingType)
+
   const { data: claimData, isLoading } = useClaimCallDataQuery({
     claimRewardGauges,
     mintBalRewardGauges,
@@ -88,12 +88,10 @@ export function useClaimAllRewardsStep({
     contractAddress: getNetworkConfig(chain).contracts.balancer.relayerV6,
     functionName: 'multicall',
     args: [claimData],
-    enabled: allRewardGauges.length > 0 && claimData && claimData.length > 0,
+    enabled: allRewardGauges.length > 0 && !!claimData && claimData.length > 0,
     txSimulationMeta,
     onTransactionChange: setTransaction,
   }
-
-  const isComplete = () => isConnected && isTransactionSuccess(transaction)
 
   const step = useMemo(
     (): TransactionStep => ({
@@ -101,7 +99,7 @@ export function useClaimAllRewardsStep({
       labels,
       stepType: 'claim',
       transaction,
-      isComplete,
+      isComplete: () => isConnected && isTransactionSuccess(transaction),
       onActivated: () => setIsClaimQueryEnabled(true),
       onDeactivated: () => setIsClaimQueryEnabled(false),
       onSuccess: () => {
@@ -110,8 +108,7 @@ export function useClaimAllRewardsStep({
       },
       renderAction: () => <ManagedTransactionButton id={claimAllRewardsStepId} {...props} />,
     }),
-
-    [transaction, claimData, isLoading]
+    [transaction, labels, refetchClaimableRewards, refetchBalRewards, isConnected, props]
   )
   return { step, isLoading }
 }
