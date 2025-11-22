@@ -1,35 +1,39 @@
-/* eslint-disable react-hooks/immutability */
 import { useEffect, useState } from 'react'
 import { isValidUrl, normalizeUrl } from '../utils/urls'
 
 export function useCheckImageUrl(url: string) {
-  const validUrlError = isValidUrl(url)
-
   const [isChecking, setChecking] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-  const [image] = useState<HTMLImageElement>(new Image())
-
-  image.onload = function () {
-    if (!image || image.width <= 0) {
-      setErrorMessage('Invalid image')
-    }
-    setChecking(false)
-  }
-
-  image.onerror = function () {
-    setErrorMessage('Unreachable URL or invalid image')
-    setChecking(false)
-  }
 
   useEffect(() => {
-    if (validUrlError !== true) return
+    if (isValidUrl(url) !== true) return
 
-    setErrorMessage(undefined)
-    setChecking(true)
-    image.src = normalizeUrl(url)
-  }, [image, validUrlError, url])
+    const image = new Image()
 
-  if (validUrlError !== true) return { isChecking: false, error: validUrlError }
+    image.onload = function () {
+      if (image.width <= 0) {
+        setErrorMessage('Invalid image')
+      }
+
+      setChecking(false)
+    }
+
+    image.onerror = function () {
+      setErrorMessage('Unreachable URL or invalid image')
+      setChecking(false)
+    }
+
+    // We use an async call to avoid linting issues like
+    // https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+    const updateImageUrl = async () => {
+      setErrorMessage(undefined)
+      setChecking(true)
+      image.src = normalizeUrl(url)
+    }
+    updateImageUrl()
+  }, [url])
+
+  if (isValidUrl(url) !== true) return { isChecking: false, error: isValidUrl(url) }
   if (isChecking) return { isChecking: true, error: undefined }
 
   return {
