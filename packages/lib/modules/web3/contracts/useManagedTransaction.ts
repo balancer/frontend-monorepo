@@ -26,6 +26,7 @@ import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { useMockedTxHash } from '@repo/lib/modules/web3/contracts/useMockedTxHash'
 import { useTenderlyGasEstimate } from '@repo/lib/modules/web3/useTenderlyGasEstimate'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useEffect, useRef } from 'react'
 
 /**
  * Allows to skip transaction confirmation step in the wallet and go directly to success state
@@ -59,6 +60,7 @@ export function useManagedTransaction({
   txSimulationMeta,
   enabled = true,
   value,
+  onTransactionChange,
 }: ManagedTransactionInput) {
   const { minConfirmations } = useNetworkConfig()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -115,6 +117,14 @@ export function useManagedTransaction({
     confirmations: minConfirmations,
     timeout: getWaitForReceiptTimeout(chainId),
   })
+  const prevTransactionStatus = useRef<typeof transactionStatusQuery.status | null>(null)
+
+  useEffect(() => {
+    if (prevTransactionStatus.current !== transactionStatusQuery.status) {
+      onTransactionChange({ ...bundle, result: transactionStatusQuery })
+      prevTransactionStatus.current = transactionStatusQuery.status
+    }
+  }, [transactionStatusQuery])
 
   const bundle = {
     chainId,

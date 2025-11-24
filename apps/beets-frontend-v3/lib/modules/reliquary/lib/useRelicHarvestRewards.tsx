@@ -5,7 +5,7 @@ import { useManagedTransaction } from '@repo/lib/modules/web3/contracts/useManag
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReliquary } from '../ReliquaryProvider'
 
-export function useRelicHarvestRewards() {
+export function useRelicHarvestRewards(onSuccess?: () => void) {
   const { isConnected, userAddress } = useUserAccount()
   const { selectedRelic } = useReliquary()
   const relicId = selectedRelic?.relicId
@@ -26,7 +26,11 @@ export function useRelicHarvestRewards() {
     functionName: 'harvest',
     args: relicId && userAddress ? [BigInt(relicId), userAddress] : null,
     enabled: isConnected && !!relicId && !!userAddress,
-    onTransactionChange: () => {},
+    onTransactionChange: tx => {
+      if (tx.result.isSuccess) {
+        onSuccess?.()
+      }
+    },
   })
 
   return {

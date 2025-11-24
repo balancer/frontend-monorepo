@@ -38,13 +38,12 @@ export default function RelicSlideApr() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { selectedRelicLevel, selectedRelicApr } = useReliquary()
   const { data, isLoading } = useGetHHRewards()
-  const { harvest, ...harvestQuery } = useRelicHarvestRewards()
-
   const {
     data: pendingRewards = [],
     refetch: refetchPendingRewards,
     isLoading: isLoadingPendingRewards,
   } = useRelicPendingRewards()
+  const { harvest, ...harvestQuery } = useRelicHarvestRewards(refetchPendingRewards)
 
   // // hack to get around next.js hydration issues with swiper
   // useEffect(() => {
@@ -139,10 +138,11 @@ export default function RelicSlideApr() {
             </BeetsTooltip>
           </HStack>
         </VStack>
-        {!pendingRewardsUsdValue && (
+        {!pendingRewardsUsdValue && data && data.totalValue > 0 && (
           <Box height="50%" position="relative" width="full">
-            {isLoading && <Skeleton h="100%" rounded="md" w="100%" />}
-            {!isLoading && data && (
+            {isLoading ? (
+              <Skeleton h="100%" rounded="md" w="100%" />
+            ) : (
               <>
                 <VStack alignItems="flex-start" height="full" spacing="0" width="full">
                   <Text color="beets.base.50" fontSize="md" fontWeight="semibold" lineHeight="1rem">
@@ -222,15 +222,12 @@ export default function RelicSlideApr() {
               </BeetsTooltip>
             ) : (
               <BeetsSubmitTransactionButton
+                disabled={pendingRewardsUsdValue < 0.01}
                 fullWidth
+                isLoading={harvestQuery.isSubmitting || harvestQuery.isPending}
+                onClick={harvest}
                 variant="primary"
                 width="full"
-                {...harvestQuery}
-                disabled={pendingRewardsUsdValue < 0.01}
-                onClick={harvest}
-                onConfirmed={() => {
-                  refetchPendingRewards()
-                }}
               >
                 Claim now
               </BeetsSubmitTransactionButton>
