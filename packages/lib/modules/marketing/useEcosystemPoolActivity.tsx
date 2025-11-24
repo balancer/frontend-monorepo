@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/purity */
 'use client'
 import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { format } from 'date-fns'
+import { format, millisecondsToSeconds, secondsToMinutes } from 'date-fns'
 import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
@@ -20,6 +19,7 @@ import {
   getBlockExplorerTxUrl,
 } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 
 type ChartInfoTokens = {
   token?: ApiToken
@@ -324,6 +324,7 @@ export function useEcosystemPoolActivityChart() {
   const [activeTab, setActiveTab] = useState<PoolActivityChartTypeTab>(tabsList[0])
   const [activeNetwork, setActiveNetwork] = useState<GqlChain | 'all'>('all')
   const theme = useChakraTheme()
+  const now = useCurrentDate()
 
   const { supportedNetworks } = PROJECT_CONFIG
 
@@ -387,13 +388,16 @@ export function useEcosystemPoolActivityChart() {
     }, getDefaultChainMeta())
 
     return data
-  }, [response, activeNetwork, activeTab])
+  }, [response, activeNetwork, activeTab, getToken])
 
   const headerInfo = useMemo(() => {
     if (!response) return { total: 0, elapsedMinutes: 0 }
 
     const elapsedMinutes = Math.floor(
-      (Date.now() / 1000 - response.poolEvents[response.poolEvents.length - 1].timestamp) / 60
+      secondsToMinutes(
+        millisecondsToSeconds(now.getTime()) -
+          response.poolEvents[response.poolEvents.length - 1].timestamp
+      )
     )
 
     const total = Object.keys(chartData).reduce((acc, chain) => {
@@ -401,7 +405,7 @@ export function useEcosystemPoolActivityChart() {
     }, 0)
 
     return { total, elapsedMinutes }
-  }, [response, chartData])
+  }, [response, chartData, now])
 
   const options = useMemo(() => {
     return supportedNetworks.map(chain => {
