@@ -10,6 +10,7 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { RemoveLiquidityType } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'
+import { HumanAmount } from '@balancer/sdk'
 
 export function RelicWithdrawProvider({
   children,
@@ -18,7 +19,7 @@ export function RelicWithdrawProvider({
   children: React.ReactNode
   urlTxHash?: Hash
 }) {
-  const { selectedRelicId: relicId } = useReliquary()
+  const { selectedRelicId: relicId, selectedRelic } = useReliquary()
 
   // Convert relicId string to number for handler
   const relicIdNumber = relicId ? parseInt(relicId, 10) : undefined
@@ -41,7 +42,11 @@ export function RelicWithdrawProvider({
   )
 
   return (
-    <RemoveLiquidityProvider handlerSelector={reliquaryHandlerSelector} urlTxHash={urlTxHash}>
+    <RemoveLiquidityProvider
+      handlerSelector={reliquaryHandlerSelector}
+      maxHumanBptIn={selectedRelic?.amount as HumanAmount | undefined}
+      urlTxHash={urlTxHash}
+    >
       {children}
     </RemoveLiquidityProvider>
   )

@@ -35,7 +35,8 @@ export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse |
 
 export function useRemoveLiquidityLogic(
   urlTxHash?: Hash,
-  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
+  maxHumanBptIn?: HumanAmount
 ) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
@@ -56,8 +57,8 @@ export function useRemoveLiquidityLogic(
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
-  const maxHumanBptIn: HumanAmount = getUserWalletBalance(pool)
-  const humanBptIn: HumanAmount = bn(maxHumanBptIn)
+  const _maxHumanBptIn: HumanAmount = maxHumanBptIn ?? getUserWalletBalance(pool)
+  const humanBptIn: HumanAmount = bn(_maxHumanBptIn)
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
@@ -322,10 +323,16 @@ export function useRemoveLiquidityLogic(
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+  maxHumanBptIn?: HumanAmount
 }>
 
-export function RemoveLiquidityProvider({ urlTxHash, handlerSelector, children }: Props) {
-  const hook = useRemoveLiquidityLogic(urlTxHash, handlerSelector)
+export function RemoveLiquidityProvider({
+  urlTxHash,
+  handlerSelector,
+  maxHumanBptIn,
+  children,
+}: Props) {
+  const hook = useRemoveLiquidityLogic(urlTxHash, handlerSelector, maxHumanBptIn)
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 

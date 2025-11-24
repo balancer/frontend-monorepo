@@ -7,7 +7,6 @@ import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/Po
 import { useRemoveLiquidity } from '@repo/lib/modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
 import { RemoveLiquidityProportional } from '@repo/lib/modules/pool/actions/remove-liquidity/form/RemoveLiquidityProportional'
 import { RemoveLiquiditySingleToken } from '@repo/lib/modules/pool/actions/remove-liquidity/form/RemoveLiquiditySingleToken'
-import { RemoveLiquidityModal } from '@repo/lib/modules/pool/actions/remove-liquidity/modal/RemoveLiquidityModal'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -18,9 +17,11 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
 import { useReliquary } from '../ReliquaryProvider'
+import { ReliquaryWithdrawModal } from '../components/ReliquaryWithdrawModal'
 
 export function ReliquaryWithdrawPage() {
   const { validTokens } = useRemoveLiquidity()
@@ -62,6 +63,9 @@ function ReliquaryWithdrawForm() {
     setSingleTokenType,
     setNeedsToAcceptHighPI,
     tokens,
+    humanBptInPercent,
+    setHumanBptInPercent,
+    isSingleTokenBalanceMoreThat25Percent,
   } = useRemoveLiquidity()
 
   const { selectedRelicId: relicId } = useReliquary()
@@ -122,6 +126,20 @@ function ReliquaryWithdrawForm() {
             size="md"
           />
 
+          <InputWithSlider
+            isNumberInputDisabled
+            isWarning={isSingleTokenBalanceMoreThat25Percent}
+            onPercentChanged={setHumanBptInPercent}
+            value={totalUSDValue}
+          >
+            <Text fontSize="sm" fontWeight="bold">
+              Amount
+            </Text>
+            <Text fontSize="sm" variant="secondary">
+              {fNum('percentage', humanBptInPercent / 100)}
+            </Text>
+          </InputWithSlider>
+
           {isProportionalTabSelected ? (
             <RemoveLiquidityProportional pool={pool} tokens={tokens} />
           ) : (
@@ -173,11 +191,12 @@ function ReliquaryWithdrawForm() {
           </Button>
         </VStack>
       </Card>
-      <RemoveLiquidityModal
+      <ReliquaryWithdrawModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
+        relicId={relicId}
       />
     </Box>
   )
