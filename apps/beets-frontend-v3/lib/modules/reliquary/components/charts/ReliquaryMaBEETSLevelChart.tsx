@@ -9,6 +9,8 @@ export function ReliquaryMaBEETSLevelChart() {
   const { pool } = usePool()
   const { colors } = useTheme()
 
+  const levels = useMemo(() => pool.staking?.reliquary?.levels, [pool.staking?.reliquary?.levels])
+
   const option = useMemo<EChartsOption>(
     () => ({
       tooltip: {
@@ -63,7 +65,7 @@ export function ReliquaryMaBEETSLevelChart() {
       },
       series: [
         {
-          data: pool.staking?.reliquary?.levels?.map(level => [
+          data: levels?.map(level => [
             level.level + 1,
             parseFloat(level.balance) * level.allocationPoints,
           ]),
@@ -80,7 +82,7 @@ export function ReliquaryMaBEETSLevelChart() {
         },
       ],
     }),
-    [JSON.stringify(pool.staking?.reliquary?.levels)]
+    [levels, colors]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

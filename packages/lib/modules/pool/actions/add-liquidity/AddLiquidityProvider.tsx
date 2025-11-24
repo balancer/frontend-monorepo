@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
-/* eslint-disable react-hooks/set-state-in-effect */
+ 
+ 
 'use client'
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -45,7 +45,8 @@ export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>
 
 export function useAddLiquidityLogic(
   urlTxHash?: Hash,
-  handlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+  handlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler,
+  customStepsHook?: typeof useAddLiquiditySteps
 ) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
   // only used by Proportional handlers that require a referenceAmount
@@ -163,7 +164,8 @@ export function useAddLiquidityLogic(
   /**
    * Step construction
    */
-  const { steps, isLoadingSteps } = useAddLiquiditySteps({
+  const stepsHook = customStepsHook || useAddLiquiditySteps
+  const { steps, isLoadingSteps } = stepsHook({
     helpers,
     handler,
     humanAmountsIn,
@@ -273,10 +275,16 @@ export function useAddLiquidityLogic(
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
   handlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+  customStepsHook?: typeof useAddLiquiditySteps
 }>
 
-export function AddLiquidityProvider({ urlTxHash, handlerSelector, children }: Props) {
-  const hook = useAddLiquidityLogic(urlTxHash, handlerSelector)
+export function AddLiquidityProvider({
+  urlTxHash,
+  handlerSelector,
+  customStepsHook,
+  children,
+}: Props) {
+  const hook = useAddLiquidityLogic(urlTxHash, handlerSelector, customStepsHook)
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

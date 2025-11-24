@@ -268,6 +268,7 @@ export function useReliquaryLogic() {
         return { rewards: [], relicIds: [], numberOfRelics: 0, fBEETSTotalBalance: '0' }
       }
     },
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     [publicClient, reliquaryAddress, beetsAddress, getAllPositions]
   )
 
@@ -354,7 +355,7 @@ export function useReliquaryLogic() {
     async (
       amount: number,
       relicId: string,
-      maxLevel: number = 5
+      customMaxLevel?: number
     ): Promise<ReliquaryDepositImpact | null> => {
       if (!publicClient || !reliquaryAddress) return null
 
@@ -377,6 +378,8 @@ export function useReliquaryLogic() {
         const entryTimestampAfterDeposit = Math.round(position.entry + maturity * weight)
         const newMaturity = nowTimestamp - entryTimestampAfterDeposit
 
+        const maxLevel = customMaxLevel || maturityLevels.length - 1
+
         let newLevel = 0
         maturityLevels.forEach((level, i) => {
           if (newMaturity >= Number(level)) {
@@ -385,11 +388,11 @@ export function useReliquaryLogic() {
         })
 
         const oldLevelProgress =
-          levelOnUpdate >= maturityLevels.length - 1
+          levelOnUpdate >= maxLevel
             ? 'max level reached'
             : `${maturity}/${maturityLevels[levelOnUpdate + 1]}`
         const newLevelProgress =
-          newLevel > maturityLevels.length
+          newLevel >= maxLevel
             ? 'max level reached'
             : `${newMaturity}/${maturityLevels[newLevel + 1]}`
 

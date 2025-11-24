@@ -13,6 +13,11 @@ interface Props {
 export function ReliquaryRelicsCountChart({ data }: Props) {
   const { colors } = useTheme()
 
+  const chartData = useMemo(
+    () => data.map(item => [item.timestamp * 1000, parseInt(item.relicCount)]),
+    [data]
+  )
+
   const option = useMemo<EChartsOption>(
     () => ({
       tooltip: {
@@ -83,7 +88,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           smooth: true,
           name: 'Relics',
           showSymbol: false,
-          data: data.map(item => [item.timestamp * 1000, parseInt(item.relicCount)]),
+          data: chartData,
           itemStyle: {
             color: `rgba(5, 214, 144, 1)`,
           },
@@ -105,7 +110,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
         },
       ],
     }),
-    [JSON.stringify(data)]
+    [chartData, colors]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

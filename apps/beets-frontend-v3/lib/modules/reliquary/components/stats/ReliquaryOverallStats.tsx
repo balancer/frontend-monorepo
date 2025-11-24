@@ -5,6 +5,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
 import { startOfWeek } from 'date-fns'
+import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { zeroAddress } from 'viem'
@@ -18,6 +19,7 @@ export default function ReliquaryOverallStats() {
   const { priceFor, getToken } = useTokens()
   const { data: snapshots, latest: globalStats } = useReliquaryGlobalStats()
   const networkConfig = useNetworkConfig()
+  const today = useCurrentDate()
 
   const data = pool.dynamicData
 
@@ -45,8 +47,6 @@ export default function ReliquaryOverallStats() {
   const maxPercentageOfLevels = relicMaturityLevels?.reduce((prev: any, curr: any) =>
     prev.percentageOfTotal > curr.percentageOfTotal ? prev : curr
   )
-
-  const today = Date.now()
   const cutOffDate = startOfWeek(today).getTime()
   const snapshotsThisWeek = snapshots?.snapshots.filter(
     (snapshot: any) => snapshot.timestamp >= cutOffDate / 1000

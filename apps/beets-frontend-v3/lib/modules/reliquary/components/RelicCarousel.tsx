@@ -13,7 +13,11 @@ interface Props extends BoxProps {
 }
 
 export function RelicCarousel({ ...rest }: Props) {
-  const { relicPositionsForFarmId: relicPositions, isLoadingRelicPositions } = useReliquary()
+  const {
+    relicPositionsForFarmId: relicPositions,
+    isLoadingRelicPositions,
+    setSelectedRelicId,
+  } = useReliquary()
   const router = useRouter()
   // hack to get around next.js hydration issues with swiper
   const [_isLoadingRelicPositions, setIsLoadingRelicPositions] = useState(false)
@@ -32,7 +36,10 @@ export function RelicCarousel({ ...rest }: Props) {
           <VStack alignItems="center" height="full" justifyContent="center" spacing="4">
             <Heading size="md">Get started by minting your own relic</Heading>
             <Button
-              onClick={() => router.push('/mabeets/add-liquidity')}
+              onClick={() => {
+                setSelectedRelicId('')
+                router.push('/mabeets/deposit')
+              }}
               size="lg"
               variant="primary"
               width="200px"

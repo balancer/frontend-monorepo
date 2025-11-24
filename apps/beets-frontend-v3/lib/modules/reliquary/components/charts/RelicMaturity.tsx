@@ -99,7 +99,7 @@ export default function RelicMaturity() {
         },
       ],
     }
-  }, [isLoading, selectedRelic])
+  }, [isLoading, selectedRelic, poolDataBefore, poolDataAfter, maturityThresholds])
   return (
     <Card h="full" height="250px" px="2" py="4" width={{ base: 'full', lg: 'full' }}>
       <VStack height="full" spacing="2">

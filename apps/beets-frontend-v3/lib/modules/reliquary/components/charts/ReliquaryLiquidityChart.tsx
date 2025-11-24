@@ -12,6 +12,11 @@ interface Props {
 export function ReliquaryLiquidityChart({ data }: Props) {
   const { colors } = useTheme()
 
+  const chartData = useMemo(
+    () => data.map(item => [item.timestamp * 1000, item.totalLiquidity]),
+    [data]
+  )
+
   const option = useMemo<EChartsOption>(
     () => ({
       tooltip: {
@@ -92,7 +97,7 @@ export function ReliquaryLiquidityChart({ data }: Props) {
       ],
       series: [
         {
-          data: data.map(item => [item.timestamp * 1000, item.totalLiquidity]),
+          data: chartData,
           name: 'TVL',
           type: 'bar',
           tooltip: {
@@ -115,7 +120,7 @@ export function ReliquaryLiquidityChart({ data }: Props) {
         },
       ],
     }),
-    [JSON.stringify(data)]
+    [chartData, colors]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

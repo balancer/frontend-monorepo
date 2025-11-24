@@ -9,7 +9,6 @@ import {
   GridItem,
   HStack,
   Skeleton,
-  Switch,
   Text,
   Tooltip,
   VStack,
@@ -25,7 +24,6 @@ import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/Ad
 import { AddLiquidityFormCheckbox } from '@repo/lib/modules/pool/actions/add-liquidity/form/AddLiquidityFormCheckbox'
 import { AddLiquidityFormTabs } from '@repo/lib/modules/pool/actions/add-liquidity/form/AddLiquidityFormTabs'
 import { AddLiquidityPotentialWeeklyYield } from '@repo/lib/modules/pool/actions/add-liquidity/form/AddLiquidityPotentialWeeklyYield'
-import { AddLiquidityModal } from '@repo/lib/modules/pool/actions/add-liquidity/modal/AddLiquidityModal'
 import { useGetPoolRewards } from '@repo/lib/modules/pool/useGetPoolRewards'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
@@ -42,6 +40,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useReliquary } from '../ReliquaryProvider'
 import { ReliquaryDepositImpactWarning } from '../components/ReliquaryDepositImpactWarning'
 import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
+import { ReliquaryDepositModal } from '../components/ReliquaryDepositModal'
 
 export function ReliquaryDepositPage() {
   const { validTokens } = useAddLiquidity()
@@ -76,7 +75,7 @@ function ReliquaryDepositForm() {
   } = useAddLiquidity()
 
   const { selectedRelicId: relicId } = useReliquary()
-  const [createNew, setCreateNew] = useState(!relicId)
+  const createNew = !relicId
 
   // Calculate deposit impact based on simulated BPT amount
   const bptAmount = simulationQuery.data?.bptOut
@@ -84,6 +83,7 @@ function ReliquaryDepositForm() {
     : 0
 
   const depositImpactQuery = useReliquaryDepositImpact(bptAmount, createNew ? undefined : relicId)
+  console.log('IMPACT', simulationQuery?.data?.bptOut, bptAmount, depositImpactQuery.data)
 
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -141,27 +141,11 @@ function ReliquaryDepositForm() {
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
-          {relicId && (
-            <HStack justify="space-between" px="md" w="full">
-              <Text color="font.secondary" fontSize="sm">
-                {createNew ? 'Create new relic' : `Deposit into Relic #${relicId}`}
-              </Text>
-              <HStack>
-                <Text color="font.secondary" fontSize="sm">
-                  Create new
-                </Text>
-                <Switch
-                  isChecked={createNew}
-                  onChange={e => setCreateNew(e.target.checked)}
-                  size="sm"
-                />
-              </HStack>
-            </HStack>
-          )}
-
           {!relicId && (
             <BalAlert content="A new relic will be created with this deposit" status="info" />
           )}
+
+          {relicId && <BalAlert content={`Depositing into Relic #${relicId}`} status="info" />}
 
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
@@ -255,11 +239,13 @@ function ReliquaryDepositForm() {
           )}
         </VStack>
       </Card>
-      <AddLiquidityModal
+      <ReliquaryDepositModal
+        createNew={createNew}
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
+        relicId={relicId}
       />
     </Box>
   )

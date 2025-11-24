@@ -3,6 +3,7 @@
 import {
   Badge,
   Box,
+  Button,
   Flex,
   Heading,
   Stack,
@@ -27,11 +28,13 @@ import { useDelegation } from './hooks/useDelegation'
 import { useReliquary } from './ReliquaryProvider'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
+import { useRouter } from 'next/navigation'
 
 export default function ReliquaryLanding() {
   const { isConnected } = useUserAccount()
-  const { totalMaBeetsVP, isLoading } = useReliquary()
+  const { totalMaBeetsVP, isLoading, setSelectedRelicId } = useReliquary()
   const { data: isDelegatedToMDs } = useDelegation()
+  const router = useRouter()
 
   return (
     <>
@@ -177,7 +180,18 @@ export default function ReliquaryLanding() {
                       {isDelegatedToMDs ? <DelegateClearButton /> : <DelegateSetButton />}
                     </Tooltip>
                   </GridItem>
-                  <GridItem area="create" justifySelf="end"></GridItem>
+                  <GridItem area="create" justifySelf="end">
+                    <Button
+                      onClick={() => {
+                        setSelectedRelicId('')
+                        router.push('/mabeets/deposit')
+                      }}
+                      size="md"
+                      variant="primary"
+                    >
+                      Create New Relic
+                    </Button>
+                  </GridItem>
                 </Grid>
                 <Box width="full">
                   <RelicCarousel />

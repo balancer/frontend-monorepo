@@ -43,8 +43,8 @@ export function ReliquaryDepositImpactWarning({
     return null
   }
 
-  // Don't show warning if no deposit impact data
-  if (!depositImpact) {
+  // Don't show warning if no deposit impact data OR no amount being deposited
+  if (!depositImpact || totalInvestValue === 0) {
     return null
   }
 

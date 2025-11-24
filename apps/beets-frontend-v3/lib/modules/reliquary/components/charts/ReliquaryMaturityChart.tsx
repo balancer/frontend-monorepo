@@ -7,6 +7,8 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 export function ReliquaryMaturityChart() {
   const { pool } = usePool()
 
+  const levels = useMemo(() => pool.staking?.reliquary?.levels, [pool.staking?.reliquary?.levels])
+
   const option = useMemo<EChartsOption>(
     () => ({
       tooltip: {
@@ -60,7 +62,7 @@ export function ReliquaryMaturityChart() {
       },
       series: [
         {
-          data: pool.staking?.reliquary?.levels?.map(level => [level.level + 1, level.balance]),
+          data: levels?.map(level => [level.level + 1, level.balance]),
           type: 'bar',
           itemStyle: {
             opacity: 1,
@@ -74,7 +76,7 @@ export function ReliquaryMaturityChart() {
         },
       ],
     }),
-    [JSON.stringify(pool.staking?.reliquary?.levels)]
+    [levels]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

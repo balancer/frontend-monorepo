@@ -5,14 +5,16 @@ import { useReliquary } from '../../ReliquaryProvider'
 import { relicGetMaturityProgress } from '../../lib/reliquary-helpers'
 import { differenceInSeconds } from 'date-fns'
 import { Box } from '@chakra-ui/react'
+import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 
 export default function RelicMaturityBarChart() {
   const { maturityThresholds, isLoading, selectedRelic } = useReliquary()
   const { entryDate } = relicGetMaturityProgress(selectedRelic, maturityThresholds)
+  const now = useCurrentDate()
 
   const weekInSeconds = 7 * 24 * 60 * 60
   const totalMaturityInSeconds = 10 * weekInSeconds
-  const timePassed = differenceInSeconds(Date.now(), entryDate)
+  const timePassed = differenceInSeconds(now, entryDate)
   const timeToGo = totalMaturityInSeconds - timePassed
 
   const chartOption: EChartsOption = useMemo(() => {
@@ -75,7 +77,7 @@ export default function RelicMaturityBarChart() {
         },
       ],
     }
-  }, [isLoading, selectedRelic])
+  }, [isLoading, selectedRelic, timePassed, timeToGo])
 
   return (
     <Box h="30%" pb="4" pt="2 " w="full">

@@ -13,11 +13,5 @@ query GetReliquaryFarmSnapshots($id: String!, $range: GqlPoolSnapshotDataRange!)
     relicCount
     totalBalance
     userCount
-    tokenBalances {
-      id
-      address
-      balance
-      symbol
-    }
   }
 }

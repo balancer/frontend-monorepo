@@ -4,11 +4,12 @@ import { AddLiquidityProvider } from '@repo/lib/modules/pool/actions/add-liquidi
 import { ReliquaryProportionalAddLiquidityHandler } from './handlers/ReliquaryProportionalAddLiquidity.handler'
 import { ReliquaryUnbalancedAddLiquidityHandler } from './handlers/ReliquaryUnbalancedAddLiquidity.handler'
 import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useReliquary } from './ReliquaryProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { useReliquaryDepositSteps } from './hooks/useReliquaryDepositSteps'
 
 export function RelicDepositProvider({
   children,
@@ -18,6 +19,10 @@ export function RelicDepositProvider({
   urlTxHash?: Hash
 }) {
   const { selectedRelicId: relicId } = useReliquary()
+
+  // If no relic is selected, we're creating a new one
+  // This will be overridden by the page's createNew state toggle if provided
+  const createNew = !relicId
 
   // Convert relicId string to number for handler
   const relicIdNumber = relicId ? parseInt(relicId, 10) : undefined
@@ -39,8 +44,25 @@ export function RelicDepositProvider({
     [relicIdNumber]
   )
 
+  // Create a wrapper hook factory that captures createNew and relicId
+  const customStepsHook = useMemo(() => {
+    // This function signature matches what AddLiquidityProvider expects
+    return (params: any) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      return useReliquaryDepositSteps({
+        ...params,
+        createNew,
+        relicId,
+      })
+    }
+  }, [createNew, relicId])
+
   return (
-    <AddLiquidityProvider handlerSelector={reliquaryHandlerSelector} urlTxHash={urlTxHash}>
+    <AddLiquidityProvider
+      customStepsHook={customStepsHook}
+      handlerSelector={reliquaryHandlerSelector}
+      urlTxHash={urlTxHash}
+    >
       {children}
     </AddLiquidityProvider>
   )
