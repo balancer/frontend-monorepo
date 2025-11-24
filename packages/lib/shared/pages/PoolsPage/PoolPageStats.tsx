@@ -13,7 +13,7 @@ import Stat from '../../components/other/Stat'
 import { bn, safeToNumber } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { AnimatedNumber } from '../../components/other/AnimatedNumber'
-import { isBalancer, isBeets } from '@repo/lib/config/getProjectConfig'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { TooltipWithTouch } from '../../components/tooltips/TooltipWithTouch'
 
 type Fee = {
@@ -75,7 +75,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
         <TooltipWithTouch
           bg="background.level0"
           fontSize="13px"
-          label={`Total Value Locked on ${isBeets ? 'Beets.' : 'Balancer v2, v3, and CoW AMM across Ethereum and all supported networks.'}`}
+          label={`Total Value Locked on ${isBalancer ? 'Balancer v2, v3, and CoW AMM across Ethereum and all supported networks.' : 'Beets.'}`}
           placement="top"
         >
           <Stat
@@ -93,7 +93,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
         <TooltipWithTouch
           bg="background.level0"
           fontSize="13px"
-          label={`Total 24h trading volume on ${isBeets ? 'Beets.' : 'Balancer v2, v3, and CoW AMM across Ethereum and all supported networks.'}`}
+          label={`Total 24h trading volume on ${isBalancer ? 'Balancer v2, v3, and CoW AMM across Ethereum and all supported networks.' : 'Beets.'}`}
           placement="top"
         >
           <Stat
