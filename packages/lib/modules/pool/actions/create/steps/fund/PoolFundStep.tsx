@@ -81,7 +81,7 @@ interface TokenAmountInputProps {
 
 function TokenAmountInput({ token, idx, poolType, poolTokens }: TokenAmountInputProps) {
   const { updatePoolToken, poolAddress, poolCreationForm } = usePoolCreationForm()
-  const [network] = poolCreationForm.watch(['network', 'poolType'])
+  const [network] = poolCreationForm.watch(['network'])
   const { reClammInitAmounts } = useReClammInitAmounts(isReClammPool(poolType), poolAddress, token)
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
