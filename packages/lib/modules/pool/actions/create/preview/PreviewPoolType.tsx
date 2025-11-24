@@ -30,7 +30,7 @@ export function PreviewPoolType() {
       value:
         POOL_TYPES[poolType].label +
         (isWeightedPool(poolType)
-          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : '2-token'} ${weightedPoolStructure}`
+          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : '2-token '}${weightedPoolStructure}`
           : ''),
     },
   ]
