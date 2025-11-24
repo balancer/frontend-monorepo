@@ -75,7 +75,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
         <TooltipWithTouch
           bg="background.level0"
           fontSize="13px"
-          label="Total Value Locked on Balancer v2, v3, and CoW AMM across Ethereum and all supported networks."
+          label={`Total Value Locked on ${isBalancer ? 'Balancer v2, v3, and CoW AMM across Ethereum and all supported networks.' : 'Beets.'}`}
           placement="top"
         >
           <Stat
@@ -93,7 +93,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
         <TooltipWithTouch
           bg="background.level0"
           fontSize="13px"
-          label="Total 24h trading volume on Balancer v2, v3, and CoW AMM across Ethereum and all supported networks."
+          label={`Total 24h trading volume on ${isBalancer ? 'Balancer v2, v3, and CoW AMM across Ethereum and all supported networks.' : 'Beets.'}`}
           placement="top"
         >
           <Stat
