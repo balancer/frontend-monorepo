@@ -40,7 +40,7 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
           const displayedPrice = bn(price).div(priceRateRatio).toNumber()
           return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
         })
-        .sort((a, b) => a[0] - b[0]) as [[number, number]])
+        .sort((a, b) => a[0] - b[0]) as [number, number][])
     : null
 
   const xMin = data ? Math.min(...data.map(([x]) => x)) : 0
