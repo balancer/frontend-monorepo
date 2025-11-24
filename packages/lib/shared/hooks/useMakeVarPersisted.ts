@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/refs */
 // adapted from https://github.com/apollographql/apollo-cache-persist/issues/361#issuecomment-912545495
 
 'use client'
 
 import { makeVar } from '@apollo/client'
-import { useRef } from 'react'
+import { useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
 export function useMakeVarPersisted<T>(
@@ -14,12 +13,11 @@ export function useMakeVarPersisted<T>(
 ) {
   const [value, setValue] = useLocalStorage(storageName, initialValue)
 
-  const isInitialized = useRef(false)
+  const [isInitialized, setInitialized] = useState(false)
 
-  const shouldLoadInitialValue = !isInitialized.current && shouldDiscardPersistedValue
-  if (!isInitialized.current) {
-    isInitialized.current = true
-  }
+  const shouldLoadInitialValue = !isInitialized && shouldDiscardPersistedValue
+  if (!isInitialized) setInitialized(true)
+
   /*
     Create a reactive var with stored/initial value
     If shouldDiscardPersistedValue is true, discard the persisted value on first render
