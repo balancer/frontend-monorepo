@@ -15,13 +15,11 @@ import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { useCheckImageUrl } from '@repo/lib/shared/hooks/url.hooks'
 import { useEffect } from 'react'
 import { normalizeHandle } from '@repo/lib/shared/utils/links'
+import { useWatch, useFormState } from 'react-hook-form'
 
 export function ProjectInfoStep() {
   const {
-    projectInfoForm: {
-      handleSubmit,
-      formState: { isValid },
-    },
+    projectInfoForm: { control, handleSubmit },
     setActiveStep,
     activeStepIndex,
   } = useLbpForm()
@@ -29,6 +27,8 @@ export function ProjectInfoStep() {
   const onSubmit: SubmitHandler<ProjectInfoForm> = () => {
     setActiveStep(activeStepIndex + 1)
   }
+
+  const { isValid } = useFormState({ control })
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
@@ -61,13 +61,10 @@ export function ProjectInfoStep() {
 
 function NameInput() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-      watch,
-    },
+    projectInfoForm: { control },
   } = useLbpForm()
-  const length = watch('name').length
+  const { errors } = useFormState({ control })
+  const length = useWatch({ control, name: 'name' }).length
   const maxLength = 24
 
   return (
@@ -103,14 +100,11 @@ function NameInput() {
 
 function DescriptionInput() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-      watch,
-    },
+    projectInfoForm: { control },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
-  const length = watch('description').length
+  const length = useWatch({ control, name: 'description' }).length
   const maxLength = 240
 
   return (
@@ -148,16 +142,11 @@ function DescriptionInput() {
 
 function TokenIconInput() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors, dirtyFields },
-      watch,
-      setValue,
-      trigger,
-    },
+    projectInfoForm: { control, setValue, trigger },
   } = useLbpForm()
 
-  const [iconUrl] = useDebounce(watch('tokenIconUrl'), defaultDebounceMs)
+  const { errors, dirtyFields } = useFormState({ control })
+  const [iconUrl] = useDebounce(useWatch({ control, name: 'tokenIconUrl' }), defaultDebounceMs)
   const { isChecking, error } = useCheckImageUrl(iconUrl)
   useEffect(() => {
     if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
@@ -195,11 +184,9 @@ function TokenIconInput() {
 
 function ProjectWebsiteUrlInput() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-    },
+    projectInfoForm: { control },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -227,11 +214,9 @@ function ProjectWebsiteUrlInput() {
 
 function ProjectXHandle() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-    },
+    projectInfoForm: { control },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -259,11 +244,9 @@ function ProjectXHandle() {
 
 function ProjectTelegramHandle() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-    },
+    projectInfoForm: { control },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -291,11 +274,9 @@ function ProjectTelegramHandle() {
 
 function ProjectDiscordUrlInput() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-    },
+    projectInfoForm: { control },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -322,13 +303,9 @@ function ProjectDiscordUrlInput() {
 
 function ProjectOwnerInput() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-      setValue,
-      trigger,
-    },
+    projectInfoForm: { control, setValue, trigger },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   const { userAddress } = useUserAccount()
 
@@ -364,13 +341,9 @@ function ProjectOwnerInput() {
 
 function PoolCreatorInput() {
   const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-      setValue,
-      trigger,
-    },
+    projectInfoForm: { control, setValue, trigger },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   const { userAddress } = useUserAccount()
 

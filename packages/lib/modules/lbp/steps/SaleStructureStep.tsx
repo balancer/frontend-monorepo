@@ -50,37 +50,36 @@ import { LbpTokenAmountInputs } from './sale-structure/LbpTokenAmountInputs'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
+import { useWatch, useFormState } from 'react-hook-form'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
 
   const {
-    saleStructureForm: {
-      handleSubmit,
-      control,
-      formState: { errors, isValid },
-      watch,
-      setValue,
-      trigger,
-    },
+    saleStructureForm: { handleSubmit, control, setValue, trigger },
     setActiveStep,
     activeStepIndex,
     resetLbpCreation,
     poolAddress,
   } = useLbpForm()
-  const saleStructureData = watch()
+
+  const {
+    selectedChain,
+    launchTokenAddress,
+    collateralTokenAddress,
+    startDateTime,
+    endDateTime,
+    customEndWeight,
+    customStartWeight,
+    weightAdjustmentType,
+    fee,
+  } = useWatch({ control }) as SaleStructureForm
+  const { isValid, errors } = useFormState({ control })
 
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {
     const chainConfig = getNetworkConfig(chain)
     return typeof chainConfig?.lbps !== 'undefined'
   })
-
-  const selectedChain = saleStructureData.selectedChain
-  const launchTokenAddress = saleStructureData.launchTokenAddress
-  const collateralTokenAddress = saleStructureData.collateralTokenAddress
-
-  const saleStart = saleStructureData.startDateTime
-  const saleEnd = saleStructureData.endDateTime
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
 
@@ -129,15 +128,15 @@ export function SaleStructureStep() {
                       control={control}
                       errors={errors}
                       triggerValidation={trigger}
-                      value={saleStart}
+                      value={startDateTime}
                     />
                   </VStack>
                   <VStack align="start" gap="sm" w="full">
                     <SaleEndInput
                       control={control}
                       errors={errors}
-                      saleStart={saleStart}
-                      value={saleEnd}
+                      saleStart={startDateTime}
+                      value={endDateTime}
                     />
                   </VStack>
                 </VStack>
@@ -151,15 +150,17 @@ export function SaleStructureStep() {
                 <WeightAdjustmentTypeInput
                   collateralTokenSymbol={collateralToken?.symbol || ''}
                   control={control}
+                  customEndWeight={customEndWeight}
+                  customStartWeight={customStartWeight}
                   launchTokenSymbol={launchTokenMetadata.symbol || ''}
                   setValue={setValue}
-                  watch={watch}
+                  weightAdjustmentType={weightAdjustmentType}
                 />
                 <UserActionsInput control={control} />
                 <FeeSelection
                   control={control}
                   errors={errors}
-                  feeValue={saleStructureData.fee}
+                  feeValue={fee}
                   setFormValue={setValue}
                 />
                 <Divider />

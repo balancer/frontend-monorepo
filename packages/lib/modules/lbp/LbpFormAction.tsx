@@ -21,7 +21,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     projectInfoForm,
     poolAddress,
   } = useLbpForm()
-  const { selectedChain } = useWatch({ control: saleStructureForm.control })
+  const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
   const { copyToClipboard, isCopied } = useCopyToClipboard()
