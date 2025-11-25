@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { claimableVeBalRewardsTokens } from '@repo/lib/modules/portfolio/PortfolioClaim/useProtocolRewards'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
@@ -53,19 +52,17 @@ export function useClaimVeBalRewardsStep({
     onTransactionChange: setTransaction,
   }
 
-  const isComplete = () => userAddress && isTransactionSuccess(transaction)
-
   return useMemo(
     () => ({
       id: claimVeBalRewardsStepId,
       stepType: 'claim',
       labels,
       transaction,
-      isComplete,
+      isComplete: () => userAddress && isTransactionSuccess(transaction),
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimVeBalRewardsStepId} {...props} />,
     }),
 
-    [transaction, userAddress]
+    [props, onSuccess, transaction, userAddress]
   )
 }

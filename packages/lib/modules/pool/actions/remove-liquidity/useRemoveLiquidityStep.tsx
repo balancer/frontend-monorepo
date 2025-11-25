@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   ManagedResult,
@@ -53,8 +52,6 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
     }
   )
 
-  const isComplete = () => isTransactionSuccess(transaction)
-
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds by RemoveLiquidityTimeout
     if (simulationQuery.data && isStepActivated) {
@@ -72,7 +69,7 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
         type: 'Gas transaction',
       },
       transaction,
-      isComplete,
+      isComplete: () => isTransactionSuccess(transaction),
       renderAction: () => {
         if (!buildCallDataQuery.data) return <DisabledTransactionButton />
         return (
@@ -105,6 +102,14 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
         ? { data: buildCallDataQuery.data.data, to: buildCallDataQuery.data.to }
         : undefined,
     }),
-    [transaction, simulationQuery.data, buildCallDataQuery.data]
+    [
+      transaction,
+      simulationQuery.data,
+      buildCallDataQuery.data,
+      gasEstimationMeta,
+      labels,
+      refetchPoolUserBalances,
+      chainId,
+    ]
   )
 }

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
@@ -48,7 +47,6 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
-
   const [totalUSDValue, setTotalUSDValue] = useState('0')
   const { pool, refetch: refetchPool, isLoading } = usePool()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
@@ -66,7 +64,7 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
 
   const handler = useMemo(
     () => selectAddLiquidityHandler(pool, wantsProportional),
-    [pool.id, isLoading, wantsProportional]
+    [pool, isLoading, wantsProportional]
   )
 
   /**
