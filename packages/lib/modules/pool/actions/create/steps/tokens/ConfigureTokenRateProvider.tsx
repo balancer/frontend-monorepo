@@ -1,7 +1,7 @@
 import { Text, HStack, VStack, RadioGroup, Stack, Radio } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
-import { PoolCreationForm } from '../../types'
+import { PoolCreationForm, PoolCreationToken } from '../../types'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { Address, parseAbi, zeroAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
@@ -16,26 +16,27 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface ConfigureTokenRateProviderProps {
+  token: PoolCreationToken
   tokenIndex: number
-  verifiedRateProviderAddress: string | undefined
+  network: GqlChain
+  verifiedRateProvider: string | undefined
 }
 
 export function ConfigureTokenRateProvider({
+  token,
   tokenIndex,
-  verifiedRateProviderAddress,
+  network,
+  verifiedRateProvider,
 }: ConfigureTokenRateProviderProps) {
   const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, network] = poolCreationForm.watch(['poolTokens', 'network'])
 
-  if (!poolTokens[tokenIndex].address) return null
-
-  const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
+  const { rateProvider: currentRateProvider, paysYieldFees } = token
 
   let rateProviderRadioValue = RateProviderOption.Null
-  if (currentRateProvider === verifiedRateProviderAddress) {
+  if (currentRateProvider === verifiedRateProvider) {
     rateProviderRadioValue = RateProviderOption.Verified
   }
-  if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProviderAddress) {
+  if (currentRateProvider !== zeroAddress && currentRateProvider !== verifiedRateProvider) {
     rateProviderRadioValue = RateProviderOption.Custom
   }
 
@@ -43,7 +44,7 @@ export function ConfigureTokenRateProvider({
     let rateProvider: Address | '' = zeroAddress
 
     if (value === RateProviderOption.Verified) {
-      rateProvider = verifiedRateProviderAddress as Address
+      rateProvider = verifiedRateProvider as Address
     } else if (value === RateProviderOption.Custom) {
       rateProvider = '' // to be updated by user input
     }
@@ -60,7 +61,7 @@ export function ConfigureTokenRateProvider({
   const showYieldFeesToggle = isCustomRateProvider || isVerifiedRateProvider
 
   const adjustedRateProviderOptions = RATE_PROVIDER_RADIO_OPTIONS.filter(
-    option => option.value !== RateProviderOption.Verified || verifiedRateProviderAddress
+    option => option.value !== RateProviderOption.Verified || verifiedRateProvider
   )
 
   return (
@@ -79,7 +80,7 @@ export function ConfigureTokenRateProvider({
                 </Radio>
                 {value === RateProviderOption.Verified && (
                   <BlockExplorerLink
-                    address={verifiedRateProviderAddress as Address}
+                    address={verifiedRateProvider as Address}
                     chain={network}
                     fontSize="md"
                   />

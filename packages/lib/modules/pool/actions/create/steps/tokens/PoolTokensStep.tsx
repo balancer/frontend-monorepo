@@ -5,12 +5,13 @@ import { ChooseWeightedPoolStructure } from './ChooseWeightedPoolStructure'
 import { ChoosePoolTokens } from './ChoosePoolTokens'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
 import { isWeightedPool } from '../../helpers'
+import { useFormState } from 'react-hook-form'
 
 export function PoolTokensStep() {
   const { poolCreationForm } = usePoolCreationForm()
   const [poolType, poolTokens] = poolCreationForm.watch(['poolType', 'poolTokens'])
 
-  const isFormStateValid = poolCreationForm.formState.isValid
+  const isFormStateValid = useFormState(poolCreationForm)
   const isValidTokenWeights = validatePoolTokens.isValidTokenWeights(poolType, poolTokens)
   const isValidTokens = validatePoolTokens.isValidTokens(poolTokens)
   const isDisabled = !isValidTokenWeights || !isFormStateValid || !isValidTokens
