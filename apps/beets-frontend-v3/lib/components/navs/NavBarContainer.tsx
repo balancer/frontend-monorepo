@@ -7,6 +7,7 @@ import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 export function NavBarContainer() {
   const {
@@ -14,7 +15,13 @@ export function NavBarContainer() {
     options: { allowCreateWallet },
   } = PROJECT_CONFIG
   const { defaultAppLinks } = useNav()
-  const allAppLinks = [...defaultAppLinks, ...appLinks]
+
+  const allAppLinks = [
+    ...defaultAppLinks,
+    ...appLinks,
+    // TODO: remove here when loops goes live
+    ...(isDev || isStaging ? [{ href: '/loops', label: 'Loop $S' }] : []),
+  ]
 
   const mobileNav = (
     <MobileNav

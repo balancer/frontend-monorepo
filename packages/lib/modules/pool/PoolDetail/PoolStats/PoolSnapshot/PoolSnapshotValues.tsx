@@ -19,11 +19,11 @@ type PoolStatsValues = {
   weeklyRewards: string
 }
 
+const MemoizedMainAprTooltip = memo(MainAprTooltip)
+
 export function PoolSnapshotValues() {
   const { chain, pool, tvl, isLoading: isLoadingPool } = usePool()
   const { toCurrency } = useCurrency()
-
-  const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
   const {
     tokens,
@@ -67,7 +67,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label="Swap vol (24h)"
-            tooltip="The swap volume routing through this pool over the last 24 hours from this UI and and aggregator partners (like CowSwap). Unlike the daily chart, which tracks volume since the last UTC midnight, this number always reflects a full 24 hour period."
+            tooltip={`The swap volume routing through this pool over the last 24 hours from this UI and aggregator partners${isBalancer ? ' (like CowSwap)' : ''}. Unlike the daily chart, which tracks volume since the last UTC midnight, this number always reflects a full 24 hour period.`}
           />
           {poolStatsValues ? (
             <Heading size="h4">{poolStatsValues.volume24h}</Heading>
@@ -80,7 +80,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label="APR for LPs"
-            tooltip="The APR for Liquidity Providers (LPs) based on the last 24h performance of the pool. It includes yield from various sources, including swap fees, staking incentives, yield-bearing tokens and Merkl incentives. APR ranges are display for pools eligible for veBAL incentives. The lower range is the minimum range for people who don't stake or have no veBAL. The maximim rate is for veBAL holders with the max 2.5x veBAL boost."
+            tooltip={`The APR for Liquidity Providers (LPs) based on the last 24h performance of the pool. It includes yield from various sources, including swap fees, staking incentives${isBalancer ? ", yield-bearing tokens and Merkl incentives. APR ranges are displayed for pools eligible for veBAL incentives. The lower range is the minimum range for people who don't stake or have no veBAL. The maximum rate is for veBAL holders with the max 2.5x veBAL boost." : ' and yield-bearing tokens.'}`}
           />
           <MemoizedMainAprTooltip
             aprItems={pool.dynamicData.aprItems}
@@ -100,7 +100,7 @@ export function PoolSnapshotValues() {
         <VStack align="flex-start" spacing="xxs" w="full">
           <LabelWithTooltip
             label={incomeLabel}
-            tooltip="The swap fees from trades routed through this pool over the last 24 hours from this UI and aggregator partners (like CowSwap). Unlike the daily fee chart, which tracks swap fees since the last UTC midnight, this number always reflects a full 24 hour period."
+            tooltip={`The swap fees from trades routed through this pool over the last 24 hours from this UI and aggregator partners${isBalancer ? ' (like CowSwap)' : ''}. Unlike the daily fee chart, which tracks swap fees since the last UTC midnight, this number always reflects a full 24 hour period.`}
           />
 
           {poolStatsValues ? (

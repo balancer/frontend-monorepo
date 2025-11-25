@@ -1,16 +1,4 @@
-import {
-  Heading,
-  VStack,
-  Text,
-  HStack,
-  Spacer,
-  Divider,
-  Checkbox,
-  Button,
-  InputGroup,
-  InputRightElement,
-  Spinner,
-} from '@chakra-ui/react'
+import { Heading, VStack, Text, HStack, Spacer, Divider, Checkbox, Button } from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
@@ -54,9 +42,10 @@ export function ProjectInfoStep() {
         <ProjectWebsiteUrlInput />
         <TokenIconInput />
         <ProjectOwnerInput />
+        <PoolCreatorInput />
         <Divider />
         <Heading color="font.maxContrast" size="md">
-          Social handles
+          Social accounts
         </Heading>
         <ProjectXHandle />
         <ProjectTelegramHandle />
@@ -163,6 +152,7 @@ function TokenIconInput() {
       control,
       formState: { errors, dirtyFields },
       watch,
+      setValue,
       trigger,
     },
   } = useLbpForm()
@@ -173,6 +163,11 @@ function TokenIconInput() {
     if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
   }, [iconUrl, isChecking, error, trigger, dirtyFields])
 
+  const paste = async () => {
+    const clipboardText = await navigator.clipboard.readText()
+    setValue('tokenIconUrl', clipboardText, { shouldDirty: true })
+  }
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Token icon URL</Text>
@@ -180,20 +175,14 @@ function TokenIconInput() {
         control={control}
         name="tokenIconUrl"
         render={({ field }) => (
-          <InputGroup>
-            <InputWithError
-              error={isChecking ? '' : errors.tokenIconUrl?.message}
-              isInvalid={!isChecking && !!errors.tokenIconUrl}
-              onChange={e => field.onChange(e.target.value)}
-              placeholder="https://project-name.com/token.svg"
-              value={field.value}
-            />
-            {isChecking && (
-              <InputRightElement>
-                <Spinner />
-              </InputRightElement>
-            )}
-          </InputGroup>
+          <InputWithError
+            error={isChecking ? '' : errors.tokenIconUrl?.message}
+            isInvalid={!isChecking && !!errors.tokenIconUrl}
+            onChange={e => field.onChange(e.target.value)}
+            pasteFn={paste}
+            placeholder="https://project-name.com/token.svg"
+            value={field.value}
+          />
         )}
         rules={{
           required: 'Token icon URL is required',
@@ -246,7 +235,7 @@ function ProjectXHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">X / Twitter handle (optional)</Text>
+      <Text color="font.primary">X / Twitter username (optional)</Text>
       <Controller
         control={control}
         name="xHandle"
@@ -278,7 +267,7 @@ function ProjectTelegramHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Telegram handle (optional)</Text>
+      <Text color="font.primary">Telegram username (optional)</Text>
       <Controller
         control={control}
         name="telegramHandle"
@@ -310,7 +299,7 @@ function ProjectDiscordUrlInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Discord URL (optional)</Text>
+      <Text color="font.primary">Discord community URL (optional)</Text>
       <Controller
         control={control}
         name="discordUrl"
@@ -336,10 +325,18 @@ function ProjectOwnerInput() {
     projectInfoForm: {
       control,
       formState: { errors },
+      setValue,
+      trigger,
     },
   } = useLbpForm()
 
   const { userAddress } = useUserAccount()
+
+  const paste = async () => {
+    const clipboardText = await navigator.clipboard.readText()
+    setValue('owner', clipboardText)
+    trigger('owner')
+  }
 
   return (
     <VStack align="start" w="full">
@@ -352,6 +349,49 @@ function ProjectOwnerInput() {
             error={errors.owner?.message}
             isInvalid={!!errors.owner}
             onChange={e => field.onChange(e.target.value)}
+            pasteFn={paste}
+            placeholder={userAddress}
+            value={field.value}
+          />
+        )}
+        rules={{
+          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
+        }}
+      />
+    </VStack>
+  )
+}
+
+function PoolCreatorInput() {
+  const {
+    projectInfoForm: {
+      control,
+      formState: { errors },
+      setValue,
+      trigger,
+    },
+  } = useLbpForm()
+
+  const { userAddress } = useUserAccount()
+
+  const paste = async () => {
+    const clipboardText = await navigator.clipboard.readText()
+    setValue('poolCreator', clipboardText)
+    trigger('poolCreator')
+  }
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Pool creator wallet address (optional)</Text>
+      <Controller
+        control={control}
+        name="poolCreator"
+        render={({ field }) => (
+          <InputWithError
+            error={errors.poolCreator?.message}
+            isInvalid={!!errors.poolCreator}
+            onChange={e => field.onChange(e.target.value)}
+            pasteFn={paste}
             placeholder={userAddress}
             value={field.value}
           />

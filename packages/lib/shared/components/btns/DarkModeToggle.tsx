@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { Button, useColorMode } from '@chakra-ui/react'
@@ -5,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Moon, Sun } from 'react-feather'
+import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
 
 export default function DarkModeToggle() {
   const [mounted, setMounted] = useState(false)
@@ -12,6 +14,7 @@ export default function DarkModeToggle() {
   const { setColorMode } = useColorMode()
 
   function toggleColorMode() {
+    trackEvent(AnalyticsEvent.ClickNavUtilitiesDarkmode)
     setTheme(theme == 'light' ? 'dark' : 'light')
   }
 

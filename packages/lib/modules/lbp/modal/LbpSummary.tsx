@@ -10,6 +10,7 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { TransactionStepsResponse } from '../../transactions/transaction-steps/useTransactionSteps'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
+import { UserActions, WeightAdjustmentType } from '@repo/lib/modules/lbp/lbp.types'
 
 export function LbpSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { saleStructureForm, saleMarketCap, launchToken } = useLbpForm()
@@ -78,25 +79,25 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
   )
 }
 
-const humanWeightShifts: Record<string, ReactNode> = {
-  linear_90_10: (
+const humanWeightShifts: Record<WeightAdjustmentType, ReactNode> = {
+  [WeightAdjustmentType.LINEAR_90_10]: (
     <HStack spacing={1}>
       <Text color="grayText">Standard linear: 90</Text>
       <ArrowRight color="grayText" size={16} />
       <Text color="grayText">10</Text>
     </HStack>
   ),
-  linear_90_50: (
+  [WeightAdjustmentType.LINEAR_90_50]: (
     <HStack spacing={1}>
       <Text color="grayText">Standard linear: 90</Text>
       <ArrowRight color="grayText" size={16} />
       <Text color="grayText">50</Text>
     </HStack>
   ),
-  custom: 'Custom',
+  [WeightAdjustmentType.CUSTOM]: 'Custom',
 }
 
-const humanUserActions: Record<string, ReactNode> = {
-  buy_only: 'Users can ‘Buy’ only',
-  buy_and_sell: 'Users can ‘Buy & Sell’',
+const humanUserActions: Record<UserActions, ReactNode> = {
+  [UserActions.BUY_ONLY]: 'Users can ‘Buy’ only',
+  [UserActions.BUY_AND_SELL]: 'Users can ‘Buy & Sell’',
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
@@ -26,13 +27,14 @@ import {
   GqlHookReviewData,
   Erc4626ReviewData,
   HookFragment,
+  GqlPoolLiquidityBootstrappingV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
-import { getWarnings, isBoosted, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
+import { getWarnings, isBoosted, isV3LBP, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
 import { InfoPopoverToken } from '@repo/lib/modules/tokens/token.types'
@@ -41,6 +43,7 @@ import { useHook } from '@repo/lib/modules/hooks/useHook'
 import { getChainId } from '@repo/lib/config/app.config'
 import { HooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
 import { Pool } from '../../pool.types'
+import { CopyAddressButton } from '@repo/lib/modules/tokens/CopyAddressButton'
 
 type RateProvider = {
   tokenAddress: Address
@@ -153,6 +156,15 @@ export function PoolContracts({ ...props }: CardProps) {
       })
     }
 
+    if (isV3LBP(pool)) {
+      const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+      contracts.push({
+        label: 'Sale token contract',
+        address: abbreviateAddress(lbpPool.projectToken as Address),
+        explorerLink: getBlockExplorerAddressUrl(lbpPool.projectToken as Address, pool.chain),
+      })
+    }
+
     return contracts
   }, [pool, hasGaugeAddress])
 
@@ -214,12 +226,17 @@ export function PoolContracts({ ...props }: CardProps) {
               </Text>
             </GridItem>
             <GridItem>
-              <Link href={contract.explorerLink} isExternal variant="link">
-                <HStack gap="xxs">
-                  <Text color="link">{abbreviateAddress(contract.address)}</Text>
-                  <ArrowUpRight size={12} />
-                </HStack>
-              </Link>
+              <HStack gap="xxs">
+                <Link href={contract.explorerLink} isExternal variant="link">
+                  <HStack gap="xxs">
+                    <Text color="link">{abbreviateAddress(contract.address)}</Text>
+                    <ArrowUpRight size={12} />
+                  </HStack>
+                </Link>
+                {contract.label === 'Pool address' && (
+                  <CopyAddressButton address={contract.address} />
+                )}
+              </HStack>
             </GridItem>
           </Grid>
         ))}

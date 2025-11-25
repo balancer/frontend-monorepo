@@ -1,20 +1,18 @@
 import { Address, parseAbi, parseUnits } from 'viem'
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationToken } from '../../types'
 import { useReadContract } from 'wagmi'
 
 export const useReClammInitAmounts = (
+  isReClamm: boolean,
   poolAddress: Address | undefined,
   token: PoolCreationToken
 ) => {
-  const { isReClamm } = usePoolCreationForm()
-
   const { address: tokenAddress, amount: tokenAmount, data } = token
   const tokenDecimals = data?.decimals
   const rawAmount = parseUnits(tokenAmount!, tokenDecimals!)
   const enabled = !!poolAddress && !!tokenAddress && !!tokenAmount && !!tokenDecimals && isReClamm
 
-  const { data: initAmounts } = useReadContract({
+  const { data: reClammInitAmounts } = useReadContract({
     address: poolAddress,
     abi: parseAbi([
       'function computeInitialBalancesRaw(address, uint256) view returns (uint256[])',
@@ -24,5 +22,5 @@ export const useReClammInitAmounts = (
     query: { enabled },
   })
 
-  return { initAmounts }
+  return { reClammInitAmounts }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { claimableVeBalRewardsTokens } from '@repo/lib/modules/portfolio/PortfolioClaim/useProtocolRewards'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'

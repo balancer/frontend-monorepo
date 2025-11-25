@@ -8,6 +8,12 @@ import { AppLink } from '../shared/components/navs/useNav'
 import { LinkSection } from '../shared/components/navs/footer.types'
 import { NetworkConfigs } from './networks'
 
+type TokenInfo = {
+  name: string
+  address: Address
+  symbol: string
+  decimals: number
+}
 export interface TokensConfig {
   addresses: {
     bal: Address
@@ -16,18 +22,9 @@ export interface TokensConfig {
     veBalBpt?: Address
     beets?: Address
   }
-  nativeAsset: {
-    name: string
-    address: Address
-    symbol: string
-    decimals: number
-  }
-  stakedAsset?: {
-    name: string
-    address: Address
-    symbol: string
-    decimals: number
-  }
+  nativeAsset: TokenInfo
+  stakedAsset?: TokenInfo
+  loopedAsset?: TokenInfo
   supportedWrappers?: {
     baseToken: Address
     wrappedToken: Address
@@ -69,6 +66,8 @@ export interface ContractsConfig {
     sfc?: Address
     lstWithdrawRequestHelper?: Address
     reliquary?: Address
+    magpieLoopedSonicRouter?: Address
+    loopedSonicVault?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address
@@ -183,7 +182,7 @@ export type PromoItem = {
 }
 
 export interface ProjectConfig {
-  projectId: 'beets' | 'balancer' | 'cow-amm'
+  projectId: 'beets' | 'balancer'
   projectUrl: string
   projectName: string
   projectLogo: string

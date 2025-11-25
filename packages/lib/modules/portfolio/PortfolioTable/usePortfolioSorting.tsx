@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { getCanStake } from '../../pool/actions/stake.helpers'

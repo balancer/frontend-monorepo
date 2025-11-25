@@ -11,15 +11,15 @@ export const v3SepoliaNestedBoosted: PoolExample = {
 }
 
 export const usdcUsdtAaveBoosted: PoolExample = {
-  name: 'usdcUsdtAaveBoosted',
-  description: 'Edge case: V3 100% Boosted (Aave  50% USDC 50% USDT)',
+  name: 'Aave USDC-USDT',
+  description: 'Edge case: V3 100% Boosted (Aave - 50% USDC 50% USDT)',
   poolId: '0x89bb794097234e5e930446c0cec0ea66b35d7570',
   poolChain: GqlChain.Mainnet,
   version: 3,
 }
 
 export const morphoStakeHouse: PoolExample = {
-  name: 'Steakhouse/Coinshift Boosted',
+  name: 'B-csUSDL-steakUSDC',
   description: 'Edge case: boosted with custom morpho stuff',
   poolId: '0x5dd88b3aa3143173eb26552923922bdf33f50949',
   poolChain: GqlChain.Mainnet,
@@ -48,7 +48,7 @@ export const partialBoostedSepolia: PoolExample = {
 }
 
 export const boostedCoinshiftUsdcUsdl: PoolExample = {
-  name: 'csUSDC/csUSDL',
+  name: 'B-csUSDC-csUSDL',
   description: 'Full Boosted csUSDC-csUSDL',
   poolId: '0x10a04efba5b880e169920fd4348527c64fb29d4d',
   poolChain: GqlChain.Mainnet,
@@ -58,7 +58,7 @@ export const boostedCoinshiftUsdcUsdl: PoolExample = {
 }
 
 export const stableSurgeBoosted: PoolExample = {
-  name: 'stableSurgeBoosted',
+  name: 'Aave USDC-Aave GHO',
   poolId: '0x7ab124ec4029316c2a42f713828ddf2a192b36db',
   description: 'Boosted pool with stable surge pool',
   poolChain: GqlChain.Base,

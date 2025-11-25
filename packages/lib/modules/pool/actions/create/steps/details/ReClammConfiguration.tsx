@@ -27,6 +27,7 @@ export function ReClammConfiguration() {
           label={option.label}
           name={option.name}
           options={option.options}
+          tooltip={option.tooltip}
           updateFn={option.updateFn}
           validateFn={option.validateFn}
         />
@@ -42,9 +43,14 @@ function ConfigOptionsGroup({
   validateFn,
   name,
   customInputLabel,
+  tooltip,
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
-  const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
+  const [initialMinPrice, initialTargetPrice, initialMaxPrice] = reClammConfigForm.watch([
+    'initialMinPrice',
+    'initialTargetPrice',
+    'initialMaxPrice',
+  ])
   const formValue = reClammConfigForm.watch(name)
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
@@ -78,7 +84,7 @@ function ConfigOptionsGroup({
     bg: 'background.level2',
     borderColor: 'transparent',
     borderRadius: 'lg',
-    borderWidth: '2px',
+    borderWidth: '1px',
     boxShadow: 'lg',
     color: 'font.secondary',
     display: 'flex',
@@ -106,7 +112,7 @@ function ConfigOptionsGroup({
         <Text textAlign="start" w="full">
           {label}
         </Text>
-        <BalPopover text="TODO">
+        <BalPopover text={tooltip}>
           <InfoIcon />
         </BalPopover>
       </HStack>
@@ -131,7 +137,13 @@ function ConfigOptionsGroup({
         })}
       </SimpleGrid>
       {customOption ? (
-        <Radio {...getRadioProps({ value: customOption.rawValue })} mt="2">
+        <Radio
+          isChecked={selectedValue === customOption.rawValue}
+          mt="2"
+          name={name}
+          onChange={() => updateFn(customOption.rawValue)}
+          value={customOption.rawValue}
+        >
           <Text color="font.secondary" fontSize="sm">
             {customOption.label}
           </Text>

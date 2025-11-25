@@ -2,7 +2,7 @@ import { Card, Flex, Heading, HStack, Progress, Stack, Text, VStack } from '@cha
 import { fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { formatUserVebal, useVebalUserStats } from './VebalStats/useVeBalUserStats'
 import { useMaxAmountOfVeBAL } from './useMaxAmountOfVeBal'
-import { VeBalIncreaseButton } from './VeBalLockButtons'
+import { VeBalExtendLockButton } from './VeBalLockButtons'
 
 export function VeBalPotentialBar() {
   const { userStats } = useVebalUserStats()
@@ -54,7 +54,8 @@ export function VeBalPotentialBar() {
             value={progressPercentage}
             w="full"
           />
-          {progressPercentage < 100 && <VeBalIncreaseButton size="md" variant="primary" />}
+
+          <VeBalExtendLockButton action="lock" size="md" sourcePage="manage" variant="primary" />
         </HStack>
       </Card>
     </VStack>

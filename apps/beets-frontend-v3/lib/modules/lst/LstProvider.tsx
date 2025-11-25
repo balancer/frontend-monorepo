@@ -22,8 +22,26 @@ import { useGetRate } from './hooks/useGetRate'
 const CHAIN = GqlChain.Sonic
 const WITHDRAW_DELAY = 1209600 // 14 days in seconds
 
+const TABS: ButtonGroupOption[] = [
+  {
+    value: '0',
+    label: 'Stake',
+    disabled: false,
+  },
+  {
+    value: '1',
+    label: 'Unstake',
+    disabled: false,
+  },
+  {
+    value: '2',
+    label: 'Withdraw',
+    disabled: false,
+  },
+]
+
 export function useLstLogic() {
-  const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
+  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(TABS[0])
   const [amountAssets, setAmountAssets] = useState('')
   const [amountShares, setAmountShares] = useState('')
   const [amountWithdraw, setAmountWithdraw] = useState(0n)
@@ -140,6 +158,7 @@ export function useLstLogic() {
     setAmountWithdraw,
     unstakeEnabled,
     setUnstakeEnabled,
+    tabs: TABS,
   }
 }
 

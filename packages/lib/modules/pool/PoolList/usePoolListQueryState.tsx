@@ -4,14 +4,24 @@ import {
   GqlChain,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
+  GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
-import { useQueryState } from 'nuqs'
+import {
+  parseAsArrayOf,
+  parseAsFloat,
+  parseAsInteger,
+  parseAsString,
+  parseAsStringEnum,
+  useQueryState,
+} from 'nuqs'
 import {
   POOL_TYPE_MAP,
   PoolFilterType,
   PoolHookTagType,
-  poolListQueryStateParsers,
+  poolHookTagFilters,
+  poolTagFilters,
+  poolTypeFilters,
   PoolTagType,
   SortingState,
 } from '../pool.types'
@@ -38,6 +48,31 @@ export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
     label: 'CoW',
   },
 ] as const
+
+const poolListQueryStateParsers = {
+  first: parseAsInteger.withDefault(20),
+  skip: parseAsInteger.withDefault(0),
+  orderBy: parseAsStringEnum<GqlPoolOrderBy>(Object.values(GqlPoolOrderBy)).withDefault(
+    GqlPoolOrderBy.TotalLiquidity
+  ),
+  orderDirection: parseAsStringEnum<GqlPoolOrderDirection>(
+    Object.values(GqlPoolOrderDirection)
+  ).withDefault(GqlPoolOrderDirection.Desc),
+  poolTypes: parseAsArrayOf(
+    parseAsStringEnum<PoolFilterType>(poolTypeFilters as unknown as PoolFilterType[])
+  ).withDefault([]),
+  networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChain))).withDefault([]),
+  protocolVersion: parseAsInteger,
+  textSearch: parseAsString,
+  userAddress: parseAsString,
+  minTvl: parseAsFloat.withDefault(0),
+  poolTags: parseAsArrayOf(
+    parseAsStringEnum<PoolTagType>(poolTagFilters as unknown as PoolTagType[])
+  ).withDefault([]),
+  poolHookTags: parseAsArrayOf(
+    parseAsStringEnum<PoolHookTagType>(poolHookTagFilters as unknown as PoolHookTagType[])
+  ).withDefault([]),
+}
 
 export function usePoolListQueryState() {
   const [first, setFirst] = useQueryState('first', poolListQueryStateParsers.first)
@@ -230,7 +265,10 @@ export function usePoolListQueryState() {
     orderBy,
     orderDirection,
     where: {
-      poolTypeIn: mappedPoolTypes,
+      poolTypeIn: mappedPoolTypes.filter(
+        poolType => poolType !== GqlPoolType.LiquidityBootstrapping
+      ),
+      poolTypeNotIn: [GqlPoolType.LiquidityBootstrapping],
       chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
       minTvl,

@@ -15,7 +15,7 @@ import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/sa
 import { useTransactionGasCost } from '../useTransactionGasCost'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { getGqlChain } from '@repo/lib/config/app.config'
-import { SMALL_AMOUNT_LABEL } from '@repo/lib/shared/utils/numbers'
+import { TxnSpeedSetting } from './TxnSpeedSetting'
 
 export function Step(props: StepProps) {
   const transaction = props.step.transaction
@@ -27,10 +27,12 @@ export function Step(props: StepProps) {
     props.isTxBatch && props.step.isBatchEnd && hasSomePendingNestedTxInBatch(props.step)
 
   return (
-    <HStack alignItems="center">
-      <StepIndicator transaction={transaction} {...props} />
+    <HStack alignItems="start" gap="10px">
+      <Box mt="4px">
+        <StepIndicator transaction={transaction} {...props} />
+      </Box>
       <VStack alignItems="start" spacing="0">
-        <Text fontWeight="bold" lineHeight="1.2" mt={isActive ? -0.3 : 0} variant={variant}>
+        <Text fontWeight="bold" lineHeight="1.05" variant={variant}>
           {shouldDisplayAsTxBatch ? 'Safe transaction bundle' : title}
         </Text>
         {!shouldDisplayAsTxBatch && (
@@ -68,12 +70,12 @@ export function StepIndicator({
       <CircularProgress
         color="font.highlight"
         size="7"
-        thickness="6"
+        thickness="5"
         trackColor="border.base"
         value={100}
       >
         <CircularProgressLabel color="font.highlight" fontSize="md" pl={1.5}>
-          <Check size={15} strokeWidth={4} />
+          <Check size={15} strokeWidth={3.5} />
         </CircularProgressLabel>
       </CircularProgress>
     )
@@ -81,15 +83,24 @@ export function StepIndicator({
 
   return (
     <CircularProgress
+      bg={isActive ? 'background.special' : 'transparent'}
       color={color}
       isIndeterminate={isActiveLoading}
+      rounded="full"
       size="7"
-      thickness={isActive ? 8 : 6}
+      thickness={isActive ? 0 : 5}
       trackColor="border.base"
       value={100}
     >
-      <CircularProgressLabel color={color} fontSize="sm" fontWeight="bold">
-        {stepNumber}
+      <CircularProgressLabel color={color}>
+        <Text
+          color={isActive ? 'background.level1' : 'font.secondary'}
+          fontSize="sm"
+          fontWeight="bold"
+          variant="special"
+        >
+          {stepNumber}
+        </Text>
       </CircularProgressLabel>
     </CircularProgress>
   )
@@ -110,7 +121,7 @@ function NestedInfo({
 }) {
   const gasCostData = useTransactionGasCost(transaction)
 
-  const isSmallAmount = gasCostData && gasCostData.costUsd?.replace('$', '') === SMALL_AMOUNT_LABEL
+  const isActual = gasCostData && gasCostData.isActual
 
   const textProps = {
     fontSize: 'sm',
@@ -122,11 +133,13 @@ function NestedInfo({
     <Box mb="0" mt="0" p="0.5" pl="0">
       <HStack align="start" gap="xxs">
         {!details?.gasless && gasCostData && gasCostData.costUsd != null ? (
-          <Text {...textProps}>
-            {gasCostData.isActual ? 'Final gas: ' : 'Estimated gas: '}
-            {(!isSmallAmount || !gasCostData.isActual) && '~'}
-            {gasCostData.costUsd}
-          </Text>
+          <HStack gap="0">
+            <Text {...textProps} mr="sm" p="0">
+              {isActual ? 'Final gas: ' : 'Estimated gas: '}
+              {gasCostData.costUsd}
+            </Text>
+            {!isActual && <TxnSpeedSetting />}
+          </HStack>
         ) : step.isComplete() ? (
           <Text {...textProps}>Previously approved</Text>
         ) : (

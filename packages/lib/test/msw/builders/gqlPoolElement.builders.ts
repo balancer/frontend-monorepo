@@ -4,6 +4,9 @@ import {
   poolId,
   wETHAddress,
   wjAuraAddress,
+  aaveEthAddress,
+  wstEthAddress,
+  poolId2,
 } from '@repo/lib/debug-helpers'
 import {
   aTokenExpandedMock,
@@ -47,6 +50,23 @@ export function aWjAuraWethPoolElementMock(...options: Partial<GqlPoolElement>[]
   const options2 = {
     id: poolId,
     address: getPoolAddress(poolId),
+    poolTokens: tokens as unknown as GqlPoolTokenDetail[],
+    protocolVersion: 2,
+    ...options,
+  }
+
+  return aGqlPoolElementMock(options2)
+}
+
+export function aWeightedV2PoolMock(...options: Partial<GqlPoolElement>[]): GqlPoolElement {
+  const tokens = [
+    aTokenExpandedMock({ address: wstEthAddress }),
+    aTokenExpandedMock({ address: aaveEthAddress }),
+  ]
+
+  const options2 = {
+    id: poolId2,
+    address: getPoolAddress(poolId2),
     poolTokens: tokens as unknown as GqlPoolTokenDetail[],
     protocolVersion: 2,
     ...options,

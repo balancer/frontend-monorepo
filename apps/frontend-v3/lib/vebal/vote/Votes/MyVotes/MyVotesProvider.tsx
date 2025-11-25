@@ -1,7 +1,7 @@
 'use client'
 
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
-import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { useMyVotesFiltersState } from '@bal/lib/vebal/vote/Votes/MyVotes/useMyVotesFiltersState'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { MyVotesTotalInfo, SortingBy } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.types'
@@ -33,6 +33,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { Address } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
+import { secondsToMilliseconds } from 'date-fns'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -90,27 +91,31 @@ export function useMyVotesLogic() {
   )
 
   // Record<VoteId, Weight>
-  const [editVotesWeights, setEditVotesWeights] = useState<Record<string, string>>(() => ({}))
+  const [editVotesOverrides, setEditVotesOverrides] = useState<Record<string, string>>(() => ({}))
 
-  useEffect(() => {
-    setEditVotesWeights(current => {
-      const result: Record<string, string> = {}
+  const editVotesWeights = useMemo<Record<string, string>>(() => {
+    const result: Record<string, string> = {}
 
-      for (const vote of myVotes) {
-        if (isPoolGaugeExpired(vote)) {
-          result[vote.id] = '0'
-        } else {
-          result[vote.id] =
-            (current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes) || '0'
-        }
+    for (const vote of myVotes) {
+      if (isPoolGaugeExpired(vote)) {
+        result[vote.id] = '0'
+        continue
       }
 
-      return result
-    })
-  }, [myVotes, isPoolGaugeExpired])
+      const override = editVotesOverrides[vote.id]
+
+      if (override !== undefined) {
+        result[vote.id] = override
+      } else {
+        result[vote.id] = vote.gaugeVotes?.userVotes || '0'
+      }
+    }
+
+    return result
+  }, [editVotesOverrides, myVotes, isPoolGaugeExpired])
 
   const onEditVotesChange = (id: string, value: string) => {
-    setEditVotesWeights(current => ({
+    setEditVotesOverrides(current => ({
       ...current,
       [id]: value,
     }))
@@ -225,9 +230,16 @@ export function useMyVotesLogic() {
   const hasExceededWeight = getExceededWeight(totalInfo.editVotes || bn(0)).gt(0)
   const hasUnallocatedWeight = getUnallocatedWeight(totalInfo.editVotes || bn(0)).gt(0)
   const hasNewVotes = newVotesSinceLastVote(myVotes, slope, lockEnd)
+  const hasUsablePools =
+    myVotes.filter(
+      vote =>
+        !!vote.gaugeVotes?.lastUserVoteTime &&
+        !isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime) &&
+        !isPoolGaugeExpired(vote)
+    ).length > 0
 
   const clearAll = () => {
-    setEditVotesWeights({})
+    setEditVotesOverrides({})
     clearSelectedVotingPools()
   }
 
@@ -320,6 +332,7 @@ export function useMyVotesLogic() {
     refetchAll,
     hasExpiredGauges,
     hasNewVotes,
+    hasUsablePools,
     selectableVotes,
     selectedVotes,
     setSelectedVotes,
@@ -337,7 +350,10 @@ function newVotesSinceLastVote(
   const votingPower = calculateVotingPower(currentSlope, lockEnd)
 
   const previousVotingPower = myVotes.reduce((acc, vote) => {
-    const votes = calculateVotingPower(vote.gaugeVotes?.userSlope || 0n, lockEnd)
+    const votes = calculateVotingPower(
+      vote.gaugeVotes?.userSlope || 0n,
+      secondsToMilliseconds(Number(vote.gaugeVotes?.userEndLock))
+    )
     return acc.plus(votes)
   }, bn(0))
 

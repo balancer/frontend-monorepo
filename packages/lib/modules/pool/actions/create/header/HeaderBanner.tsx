@@ -7,15 +7,15 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function HeaderBanner() {
   const capitalEfficiencyDescription = `
-  TODO
+  Maximize capital efficiency with boosted pools that route idle liquidity to yield markets, allowing LPs to earn both swap fees and lending interest simultaneously.
 `
 
   const accessToHooksDescription = `
-  TODO
+  Customize pool behavior with hooks by adding dynamic fees, yield strategies, or custom logic without building from scratch.
 `
 
   const immediateLiquidityDescription = `
-  TODO
+  Deploy pools instantly with no token whitelisting requirements. Your pool becomes tradeable immediately after initialization with seed liquidity.
 `
 
   return (

@@ -67,12 +67,26 @@ export function TokenRowGroup({
   const hasMultipleAmounts = aggregatedAmounts.length > 1
 
   return (
-    <VStack align="start" spacing="md">
-      <HStack justify="space-between" w="full">
-        <Text fontSize="sm" fontWeight="bold">
-          {label}
-        </Text>
-        {isLoading ? (
+    <VStack align="start" spacing="sm">
+      <HStack height="28px" justify="space-between" w="full">
+        <HStack spacing="xs">
+          <Text fontSize="sm" fontWeight="bold">
+            {label}
+          </Text>
+          {rightElement &&
+            (isLoading ? (
+              <Skeleton h="5" w="12" />
+            ) : (
+              hasMultipleAmounts && (
+                <Text fontSize="sm" fontWeight="bold">
+                  {formatFalsyValueAsDash(usdValue, toCurrency, { abbreviated: false })}
+                </Text>
+              )
+            ))}
+        </HStack>
+        {rightElement ? (
+          rightElement
+        ) : isLoading ? (
           <Skeleton h="5" w="12" />
         ) : (
           hasMultipleAmounts && (
@@ -81,7 +95,6 @@ export function TokenRowGroup({
             </Text>
           )
         )}
-        {rightElement}
       </HStack>
       {aggregatedAmounts.map(amount => {
         if (!amount.tokenAddress) return <div key={JSON.stringify(amount)}>Missing token</div>

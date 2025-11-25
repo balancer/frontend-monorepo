@@ -24,7 +24,8 @@
     "VERCEL_GIT_COMMIT_REF",
     "NEXT_PRIVATE_ALLOWED_ORIGINS",
     "VERCEL_BRANCH_URL",
-    "TZ"
+    "TZ",
+    "NEXT_PRIVATE_MAGPIE_API_KEY"
   ],
   "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {
@@ -32,26 +33,8 @@
       "cache": false,
       "persistent": true
     },
-    "dev:webpack": {
-      "cache": false,
-      "persistent": true
-    },
-    "dev:beets:webpack": {
-      "cache": false,
-      "persistent": true
-    },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "build:no-lint": {
-      "dependsOn": ["^build:no-lint"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "build:turbo": {
-      "dependsOn": ["^build:turbo"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
@@ -106,14 +89,14 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "test:e2e:build:turbo": {
-      "dependsOn": ["^build:turbo"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
-    },
     "test:e2e:build:ui": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^transit"]
+    },
+    "test:e2e:dev": {
+      "dependsOn": ["frontend-v3#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
     },
     "test:e2e:dev:ui": {
       "cache": false,

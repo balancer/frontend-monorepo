@@ -33,9 +33,14 @@ import NextLink from 'next/link'
 import { getVeBalManagePath } from '../../../vebal-navigation'
 
 export function MyVotes() {
-  const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort, shouldResubmitVotes } =
-    useVotes()
-  const { sortedMyVotes, loading: myVotesLoading, hasExpiredGauges, hasNewVotes } = useMyVotes()
+  const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort } = useVotes()
+  const {
+    sortedMyVotes,
+    loading: myVotesLoading,
+    hasExpiredGauges,
+    hasNewVotes,
+    hasUsablePools,
+  } = useMyVotes()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected } = useUserAccount()
 
@@ -129,7 +134,7 @@ export function MyVotes() {
         </>
       )}
 
-      <Grid gap="md" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
+      <Grid gap="md" mb="100px" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyVebal loading={loading} myVebalBalance={veBALBalance} />
         </GridItem>
@@ -148,7 +153,7 @@ export function MyVotes() {
             {!vebalIsExpired && !noVeBALBalance && (
               <>
                 {hasAllVotingPowerTimeLocked && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -166,7 +171,7 @@ export function MyVotes() {
                 )}
 
                 {vebalLockTooShort && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -192,29 +197,8 @@ export function MyVotes() {
                   </GridItem>
                 )}
 
-                {shouldResubmitVotes && (
-                  <GridItem colSpan={4} mt="md" w="full">
-                    <Alert status="info" variant="WideOnDesktop">
-                      <AlertIcon as={AlertTriangle} />
-                      <Stack
-                        alignItems="baseline"
-                        direction={{ base: 'column', lg: 'row' }}
-                        gap={{ base: '0', lg: 'sm' }}
-                      >
-                        <AlertTitle fontSize={{ base: 'sm', xl: 'md' }}>
-                          Resubmit your votes to utilize your full voting power
-                        </AlertTitle>
-                        <AlertDescription fontSize={{ base: 'xs', xl: 'sm' }}>
-                          {`Looks like you got more veBAL. Your old votes don't use it.
-                          Re-vote now to apply your full veBAL power.`}
-                        </AlertDescription>
-                      </Stack>
-                    </Alert>
-                  </GridItem>
-                )}
-
                 {hasExpiredGauges && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -229,8 +213,8 @@ export function MyVotes() {
                   </GridItem>
                 )}
 
-                {hasNewVotes && (
-                  <GridItem colSpan={4} mt="md" w="full">
+                {hasNewVotes && hasUsablePools && (
+                  <GridItem colSpan={4} w="full">
                     <Alert status="warning">
                       <AlertIcon as={AlertTriangle} />
                       <Stack alignItems="baseline" gap="0">
@@ -248,7 +232,7 @@ export function MyVotes() {
           </>
         )}
 
-        <GridItem colSpan={4}>
+        <GridItem colSpan={4} mt="xs">
           <MyVotesTable
             loading={myVotesLoading}
             myVotes={sortedMyVotes}

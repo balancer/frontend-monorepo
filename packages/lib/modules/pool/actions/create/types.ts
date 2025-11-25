@@ -1,7 +1,7 @@
 import { InputAmount, InitPoolInputV3, PoolType } from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { WeightedPoolStructure } from './constants'
 
@@ -16,11 +16,12 @@ export type SupportedPoolTypes =
   | PoolType.Weighted
   | PoolType.StableSurge
   | PoolType.ReClamm
-// | PoolType.GyroE
+  | PoolType.GyroE
 
 export type PoolTypeDetails = {
   label: string
   maxTokens: number
+  description: string
 }
 
 export type PoolCreationToken = {
@@ -29,7 +30,8 @@ export type PoolCreationToken = {
   paysYieldFees: boolean
   weight?: string
   amount: string
-  data?: ApiToken
+  data?: ApiOrCustomToken
+  usdPrice?: string
 }
 
 export type PoolCreationForm = {
@@ -59,4 +61,13 @@ export type ReClammConfig = {
   priceRangePercentage: string
   priceShiftDailyRate: string
   centerednessMargin: string
+}
+
+export type EclpConfigForm = {
+  alpha: string
+  beta: string
+  c: string
+  s: string
+  lambda: string
+  peakPrice: string
 }

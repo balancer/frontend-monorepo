@@ -9,10 +9,7 @@ import {
   usePoolCreationForm,
 } from '@repo/lib/modules/pool/actions/create/PoolCreationFormProvider'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 export default function PoolCreationPage() {
   return (
@@ -23,22 +20,17 @@ export default function PoolCreationPage() {
 }
 
 function PoolCreationPageContent() {
-  const { getTokensByChain, isLoadingTokens } = useTokens()
-  const { network } = usePoolCreationForm()
-
-  const initTokens = getTokensByChain(network.toUpperCase() as GqlChain)
+  const { tokenList, isLoadingTokenList } = usePoolCreationForm()
 
   return (
     <DefaultPageContainer minH="100vh">
       <TransactionStateProvider>
-        {!isLoadingTokens && (
+        {!isLoadingTokenList && (
           <TokenInputsValidationProvider>
-            <TokenBalancesProvider initTokens={initTokens}>
-              <PriceImpactProvider>
-                <Permit2SignatureProvider>
-                  <PoolCreationForm />
-                </Permit2SignatureProvider>
-              </PriceImpactProvider>
+            <TokenBalancesProvider extTokens={tokenList}>
+              <Permit2SignatureProvider>
+                <PoolCreationForm />
+              </Permit2SignatureProvider>
             </TokenBalancesProvider>
           </TokenInputsValidationProvider>
         )}

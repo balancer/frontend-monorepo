@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'

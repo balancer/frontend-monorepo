@@ -6,11 +6,16 @@ import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { Box, Link } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import NextLink from 'next/link'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 export function NavLogo() {
+  const handleLogoClick = () => {
+    trackEvent(AnalyticsEvent.ClickNavBalancerLogo)
+  }
+
   return (
     <Box as={motion.div} variants={fadeIn}>
-      <Link as={NextLink} href="/" prefetch variant="nav">
+      <Link as={NextLink} href="/" onClick={handleLogoClick} prefetch variant="nav">
         <Box>
           <Box display={{ base: 'block', md: 'none' }}>
             <BalancerLogo width="26px" />

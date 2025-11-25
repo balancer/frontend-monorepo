@@ -1,5 +1,5 @@
 import { Control, Controller, UseFormSetValue, UseFormWatch } from 'react-hook-form'
-import { SaleStructureForm } from '../lbp.types'
+import { SaleStructureForm, WeightAdjustmentType } from '../lbp.types'
 import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { ArrowRight } from 'react-feather'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
@@ -35,7 +35,7 @@ export function WeightAdjustmentTypeInput({
           </HStack>
         </HStack>
       ),
-      value: 'linear_90_10',
+      value: WeightAdjustmentType.LINEAR_90_10,
     },
     {
       label: (
@@ -52,7 +52,7 @@ export function WeightAdjustmentTypeInput({
           </HStack>
         </HStack>
       ),
-      value: 'linear_90_50',
+      value: WeightAdjustmentType.LINEAR_90_50,
     },
     {
       label: (
@@ -60,7 +60,7 @@ export function WeightAdjustmentTypeInput({
           <Text>Custom sale</Text>
         </HStack>
       ),
-      value: 'custom',
+      value: WeightAdjustmentType.CUSTOM,
     },
   ]
 
@@ -118,6 +118,7 @@ function WeightSlider({
   collateralTokenSymbol,
   customWeight,
   setValue,
+  isDisabled,
 }: {
   name: keyof SaleStructureForm
   title: string
@@ -125,6 +126,7 @@ function WeightSlider({
   collateralTokenSymbol: string
   customWeight: number
   setValue: UseFormSetValue<SaleStructureForm>
+  isDisabled?: boolean
 }) {
   return (
     <VStack align="start" w="full">
@@ -138,16 +140,23 @@ function WeightSlider({
         w="full"
       >
         <HStack justifyContent="space-between" spacing="md" w="full">
-          <Text>{`${launchTokenSymbol}: ${customWeight}`}</Text>
+          <Text
+            fontSize="sm"
+            fontWeight="bold"
+            pb="2"
+          >{`${launchTokenSymbol}: ${customWeight}%`}</Text>
           <Box textAlign="right" w="100px">
             <Text
               fontSize="sm"
+              fontWeight="bold"
+              pb="2"
               textColor="font.secondary"
             >{`${collateralTokenSymbol}: ${100 - customWeight}%`}</Text>
           </Box>
         </HStack>
         <SliderWithSteps
           aria-label="weights-slider"
+          isDisabled={isDisabled}
           max={99}
           min={1}
           onChange={value => setValue(name, value)}

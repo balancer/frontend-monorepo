@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/immutability */
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { Address } from 'viem'
-import { ApiToken, CustomToken } from './token.types'
+import { ApiOrCustomToken } from './token.types'
 
 export function useTokenInputsValidationLogic() {
   type ValidationErrorsByToken = Record<Address, string>
@@ -14,11 +15,11 @@ export function useTokenInputsValidationLogic() {
     setValidationErrors({ ...validationErrors })
   }
 
-  function hasValidationError(token: ApiToken | CustomToken | undefined) {
+  function hasValidationError(token: ApiOrCustomToken | undefined) {
     return !!getValidationError(token)
   }
 
-  function getValidationError(token: ApiToken | CustomToken | undefined): string {
+  function getValidationError(token: ApiOrCustomToken | undefined): string {
     if (!token) return ''
     const error = validationErrors[token.address as Address]
     if (!error) return ''

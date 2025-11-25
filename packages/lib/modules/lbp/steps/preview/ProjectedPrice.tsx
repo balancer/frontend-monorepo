@@ -67,7 +67,7 @@ export function ProjectedPrice({
         <HStack>
           <Heading size="sm">Projected price</Heading>
           <Spacer />
-          <Text color="font.secondary" fontWeight="bold">
+          <Text color="font.secondary" fontWeight="bold" letterSpacing="-0.04rem">
             {`Starting price: $${maxPrice}`}
           </Text>
         </HStack>

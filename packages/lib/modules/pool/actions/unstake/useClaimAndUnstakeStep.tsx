@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import {
   ManagedResult,
   TransactionLabels,
@@ -43,7 +44,7 @@ export function useClaimAndUnstakeStep({
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const { claimableRewards: nonBalrewards } = useClaimableBalances([pool])
   const { balRewardsData: balRewards } = useBalTokenRewards([pool])
-  const relayerMode = useRelayerMode(pool)
+  const relayerMode = useRelayerMode()
 
   const { contracts, chainId } = getNetworkConfig(pool.chain)
 

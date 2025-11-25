@@ -1,5 +1,5 @@
 import { addHours, differenceInDays, format, isAfter, isBefore, isValid } from 'date-fns'
-import { formatDateAxisLabel } from './chart-helpers'
+import { formatDateAxisLabel } from './helpers'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -287,7 +287,9 @@ export function WeightsChart({
     <ReactECharts option={chartInfo} style={{ height: '350px', width: '100%' }} />
   ) : (
     <Stack alignItems="center" h="350px" justifyContent="center">
-      <Text fontSize="3xl">Missing data</Text>
+      <Text color="font.secondary" fontStyle="italic" textAlign="center" w="55%">
+        Enter a valid token contract and set the time period to see the chart.
+      </Text>
     </Stack>
   )
 }

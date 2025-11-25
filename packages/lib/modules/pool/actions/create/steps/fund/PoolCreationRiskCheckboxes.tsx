@@ -1,57 +1,66 @@
-import { Checkbox, Text } from '@chakra-ui/react'
+import { Checkbox, Link, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { validatePoolType } from '../../validatePoolCreationForm'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { isWeightedPool } from '../../helpers'
 
 export function PoolCreationRiskCheckboxes() {
-  const { poolCreationForm, poolType } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolType = poolCreationForm.watch('poolType')
   const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk } = poolCreationForm.watch()
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
+
+  const linkProps = {
+    textDecoration: 'underline',
+    textDecorationStyle: 'dotted',
+    textDecorationThickness: '1px',
+    textUnderlineOffset: '3px',
+    isExternal: true,
+  } as const
+
+  const textProps = {
+    lineHeight: '1',
+    sx: { textWrap: 'pretty' },
+  }
 
   return (
     <>
-      {isWeightedPool && (
+      {isWeightedPool(poolType) && (
         <Checkbox
           alignItems="flex-start"
           isChecked={hasAcceptedTokenWeightsRisk}
           onChange={e => poolCreationForm.setValue('hasAcceptedTokenWeightsRisk', e.target.checked)}
-          size="lg"
         >
-          <Text lineHeight="1" sx={{ textWrap: 'pretty' }}>
+          <Text {...textProps}>
             I understand that I will likely get rekt if the USD values of each token are not
             proportional to the token weights.
           </Text>
         </Checkbox>
       )}
       <Checkbox
+        alignItems="flex-start"
         isChecked={hasAcceptedPoolCreationRisk}
         onChange={e => poolCreationForm.setValue('hasAcceptedPoolCreationRisk', e.target.checked)}
-        size="lg"
       >
-        <Text lineHeight="1" sx={{ textWrap: 'pretty' }}>
-          I accept the{' '}
-          <Text
-            as="span"
-            color="font.link"
-            textDecoration="underline"
-            textDecorationStyle="dotted"
-            textDecorationThickness="1px"
-            textUnderlineOffset="3px"
-          >
-            Risks
-          </Text>{' '}
-          and{' '}
-          <Text
-            as="span"
-            color="font.link"
-            textDecoration="underline"
-            textDecorationStyle="dotted"
-            textDecorationThickness="1px"
-            textUnderlineOffset="3px"
-          >
-            Terms of Use
-          </Text>{' '}
-          for creating an a pool on Balancer.
-        </Text>
+        {isBalancer ? (
+          <Text {...textProps}>
+            I accept the{' '}
+            <Link href="/risks" {...linkProps}>
+              Risks
+            </Link>{' '}
+            and{' '}
+            <Link href="/terms-of-use" {...linkProps}>
+              Terms of Use
+            </Link>{' '}
+            for creating a pool on Balancer.
+          </Text>
+        ) : (
+          <Text {...textProps}>
+            I accept the{' '}
+            <Link href="/terms-of-service" {...linkProps}>
+              Terms of Service
+            </Link>{' '}
+            for creating a pool on Beets.
+          </Text>
+        )}
       </Checkbox>
     </>
   )

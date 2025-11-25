@@ -1,19 +1,16 @@
-import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { usePool } from '../../pool/PoolProvider'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { getPoolActionableTokens } from '../../pool/pool-tokens.utils'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
+import { type ECLPLiquidityProfile } from './useGetECLPLiquidityProfile'
 
 type EclpChartContextType = ReturnType<typeof useEclpChartLogic>
 
 const EclpChartContext = createContext<EclpChartContextType | null>(null)
 
-export function useEclpChartLogic() {
-  const { pool } = usePool()
-
+export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
   const {
     data,
     poolSpotPrice,
@@ -24,14 +21,14 @@ export function useEclpChartLogic() {
     isReversed,
     toggleIsReversed,
     isLoading,
-  } = useGetECLPLiquidityProfile(pool)
+    poolTokens,
+  } = eclpLiquidityProfile
   const theme = useChakraTheme()
   const selectColor = useSelectColor()
-  const tokens = useMemo(() => {
-    const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
 
+  const tokens = useMemo(() => {
     return isReversed ? poolTokens.reverse().join(' / ') : poolTokens.join(' / ')
-  }, [pool, isReversed])
+  }, [poolTokens, isReversed])
 
   const secondaryFontColor = selectColor('font', 'secondary')
 
@@ -439,8 +436,11 @@ export function useEclpChartLogic() {
   }
 }
 
-export function EclpChartProvider({ children }: PropsWithChildren) {
-  const hook = useEclpChartLogic()
+export function EclpChartProvider({
+  children,
+  eclpLiquidityProfile,
+}: PropsWithChildren<{ eclpLiquidityProfile: ECLPLiquidityProfile }>) {
+  const hook = useEclpChartLogic(eclpLiquidityProfile)
   return <EclpChartContext.Provider value={hook}>{children}</EclpChartContext.Provider>
 }
 

@@ -1,5 +1,12 @@
 import { useLocalStorage } from 'usehooks-ts'
-import { useForm, UseFormProps, UseFormReturn, FieldValues, DefaultValues } from 'react-hook-form'
+import {
+  useForm,
+  UseFormProps,
+  UseFormReturn,
+  FieldValues,
+  DefaultValues,
+  useWatch,
+} from 'react-hook-form'
 import { useEffect, useCallback } from 'react'
 
 /**
@@ -26,8 +33,6 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
     defaultValues: initialDefaultValues,
   })
 
-  const { watch } = form
-
   // Set persisted values after form initialization
   useEffect(() => {
     if (persistedValues !== initialDefaultValues) {
@@ -36,10 +41,12 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
     }
   }, [])
 
+  const { control } = form
+  const formValues = useWatch({ control })
+
   useEffect(() => {
-    const subscription = watch(value => setPersistedValues(value as DefaultValues<TFieldValues>))
-    return () => subscription.unsubscribe()
-  }, [watch, setPersistedValues])
+    setPersistedValues(formValues as DefaultValues<TFieldValues>)
+  }, [formValues, setPersistedValues])
 
   const resetToInitial = useCallback(() => {
     setPersistedValues(initialDefaultValues)

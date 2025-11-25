@@ -2,7 +2,6 @@ import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelay
 import { getChainId } from '@repo/lib/config/app.config'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { UnstakeParams, useClaimAndUnstakeStep } from './useClaimAndUnstakeStep'
-
 import { useMemo } from 'react'
 import { useApproveMinterStep } from '@repo/lib/modules/staking/gauge/useMinterApprovalStep'
 
@@ -28,10 +27,14 @@ export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
   )
 
   const steps = useMemo((): TransactionStep[] => {
-    const steps = [relayerApprovalStep, claimAndUnstakeStep]
+    const steps: TransactionStep[] = []
+
     if (hasUnclaimedBalRewards) {
-      steps.unshift(minterApprovalStep)
+      steps.push(minterApprovalStep)
     }
+
+    steps.push(...[relayerApprovalStep, claimAndUnstakeStep])
+
     return steps
   }, [relayerApprovalStep, claimAndUnstakeStep, minterApprovalStep, hasUnclaimedBalRewards])
 

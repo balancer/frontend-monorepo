@@ -4,12 +4,10 @@ import { Button, HStack, IconButton, useDisclosure } from '@chakra-ui/react'
 import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useLbpForm } from './LbpFormProvider'
 import { LbpCreationModal } from './modal/LbpCreationModal'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
-import { Address } from 'viem'
-import { useLocalStorage } from 'usehooks-ts'
-import { LS_KEYS } from '../local-storage/local-storage.constants'
+import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 
 export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
@@ -20,23 +18,18 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     isFirstStep,
     saleStructureForm,
     projectInfoForm,
+    poolAddress,
   } = useLbpForm()
+  const { selectedChain } = saleStructureForm.watch()
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
-
-  const [poolAddress] = useLocalStorage<Address | undefined>(
-    LS_KEYS.LbpConfig.PoolAddress,
-    undefined
-  )
-
-  useEffect(() => {
-    // trigger modal open if user has begun pool creation process
-    if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
-  }, [poolAddress])
-
+  const { copyToClipboard, isCopied } = useCopyToClipboard()
   const isFormStateValid = saleStructureForm.formState.isValid && projectInfoForm.formState.isValid
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
+
+  const formButtonText = isLastStep ? `${poolAddress ? 'Initialize' : 'Create'} LBP` : 'Next'
+  const initializeUrl = `${window.location.origin}/lbp/create/${selectedChain}/${poolAddress}`
 
   return (
     <HStack spacing="md" w="full">
@@ -47,6 +40,17 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
           onClick={() => setActiveStep(activeStepIndex - 1)}
           size="lg"
         />
+      )}
+
+      {poolAddress && (
+        <Button
+          onClick={() => copyToClipboard(initializeUrl)}
+          size="lg"
+          variant="secondary"
+          w="full"
+        >
+          {isCopied ? 'Copied ✓' : 'Copy Link'}
+        </Button>
       )}
 
       <Button
@@ -62,7 +66,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
         variant="primary"
         w="full"
       >
-        {isLastStep ? 'Create LBP' : 'Next'}
+        {formButtonText}
       </Button>
 
       {isFormStateValid && isLastStep && (

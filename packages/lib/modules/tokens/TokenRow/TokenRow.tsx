@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 import {
   Box,
@@ -27,17 +28,16 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
-import { ApiToken, CustomToken } from '../token.types'
+import { ApiToken, CustomToken, ApiOrCustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
-import { AlertTriangle } from 'react-feather'
-import { Tooltip } from '@chakra-ui/react'
 import { usePoolTokenPriceWarnings } from '../../pool/usePoolTokenPriceWarnings'
+import { TokenMissingPriceWarning } from '../TokenMissingPriceWarning'
 
 export type TokenInfoProps = {
   address: Address
   symbol?: string
   chain: GqlChain
-  token?: ApiToken | CustomToken
+  token?: ApiOrCustomToken
   poolToken?: ApiToken
   pool?: Pool
   disabled?: boolean
@@ -65,26 +65,26 @@ function TokenInfo({
   iconSize = 40,
   logoURI,
 }: TokenInfoProps) {
-  const tokenSymbol = isBpt ? 'LP token' : poolToken?.symbol || token?.symbol || symbol
-  const tokenName = isBpt ? pool?.name : poolToken?.name || token?.name
+  const tokenSymbol = isBpt ? '‘LP’ pool token' : poolToken?.symbol || token?.symbol || symbol
+  const tokenName = isBpt ? pool?.symbol : poolToken?.name || token?.name
 
   const headingProps = {
     as: 'h6' as const,
-    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
     fontWeight: 'bold',
-    lineHeight: isNestedPoolToken ? '20px' : '24px',
+    lineHeight: isNestedPoolToken ? '18px' : '24px',
     variant: disabled ? 'secondary' : 'primary',
   }
 
   const tokenNameProps = {
-    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
-    lineHeight: '24px',
+    lineHeight: isNestedPoolToken ? '12px' : '18px',
     variant: 'secondary',
   }
 
   return (
-    <HStack spacing="sm">
+    <HStack spacing={{ base: 'sm', md: 'ms' }}>
       {!isBpt && (
         <TokenIcon
           address={address}
@@ -169,7 +169,7 @@ export default function TokenRow({
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
-  const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice } =
+  const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
 
   const token = customToken || getToken(address, chain)
@@ -214,15 +214,15 @@ export default function TokenRow({
 
   const headingProps = {
     as: 'h6' as const,
-    fontSize: isNestedPoolToken ? 'md' : 'lg',
-    fontWeight: isNestedPoolToken ? 'normal' : 'bold',
-    lineHeight: isNestedPoolToken ? '20px' : '24px',
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: isNestedPoolToken ? 'medium' : 'bold',
+    lineHeight: isNestedPoolToken ? '18px' : '24px',
   }
 
   const subTextProps = {
-    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
-    lineHeight: '24px',
+    lineHeight: isNestedPoolToken ? '12px' : '18px',
     variant: 'secondary',
   }
 
@@ -252,7 +252,7 @@ export default function TokenRow({
                   })}
                 </Heading>
                 {isTokenPriceMissing ? (
-                  <MissingTokenPriceWarning message={tokenPriceTip} />
+                  <TokenMissingPriceWarning message={tokenPriceTip} />
                 ) : (
                   <Text {...subTextProps}>
                     {formatFalsyValueAsDash(usdValue, toCurrency, {
@@ -275,7 +275,7 @@ export default function TokenRow({
                 <>
                   <Heading {...headingProps}>
                     {isAnyTokenWithoutPrice ? (
-                      <MissingTokenPriceWarning message="Current weight percentages cannot be calculated since the price of one or more tokens are unknown." />
+                      <TokenMissingPriceWarning message={tokenWeightTip} />
                     ) : (
                       fNum('weight', actualWeight, { abbreviated: false })
                     )}
@@ -353,16 +353,5 @@ export default function TokenRow({
         </HStack>
       </HStack>
     </VStack>
-  )
-}
-
-function MissingTokenPriceWarning({ message }: { message: string }) {
-  return (
-    <HStack color="font.warning" spacing="xs">
-      <Text color="font.warning">—</Text>
-      <Tooltip label={message} placement="top">
-        <AlertTriangle size={16} />
-      </Tooltip>
-    </HStack>
   )
 }

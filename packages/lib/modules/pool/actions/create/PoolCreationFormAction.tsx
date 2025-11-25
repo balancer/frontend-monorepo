@@ -7,26 +7,36 @@ import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
+import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
+import { isReClammPool } from './helpers'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const { isFormStateValid, poolAddress, isReClamm, poolTokens } = usePoolCreationForm()
+  const { poolAddress, poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, poolType, network] = poolCreationForm.watch([
+    'poolTokens',
+    'poolType',
+    'network',
+  ])
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
+  const { copyToClipboard, isCopied } = useCopyToClipboard()
 
   const hasTokenAmounts = poolTokens.every(token => token.amount)
 
   useEffect(() => {
-    // trigger modal open if user has begun pool creation process
-    // if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
-    // trigger modal close if reclamm and not token amounts have been set
-    if (poolAddress && isReClamm && !hasTokenAmounts) previewModalDisclosure.onClose()
-  }, [poolAddress, isReClamm, hasTokenAmounts])
+    // trigger modal close if reclamm and token amounts have not been set
+    if (poolAddress && isReClammPool(poolType) && !hasTokenAmounts) previewModalDisclosure.onClose()
+  }, [poolAddress, poolType, hasTokenAmounts])
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
   const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
+  const showBackButton = !isFirstStep && !poolAddress
+
+  const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
+  const isFormStateValid = poolCreationForm.formState.isValid
 
   return (
     <>
@@ -36,13 +46,24 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         <InvalidTotalWeightAlert />
 
         <HStack spacing="md" w="full">
-          {!isFirstStep && (
+          {showBackButton && (
             <IconButton
               aria-label="Back"
               icon={<ChevronLeftIcon h="8" w="8" />}
               onClick={previousStep}
               size="lg"
             />
+          )}
+
+          {poolAddress && (
+            <Button
+              onClick={() => copyToClipboard(initializeUrl)}
+              size="lg"
+              variant="secondary"
+              w="full"
+            >
+              {isCopied ? 'Copied ✓' : 'Copy Link'}
+            </Button>
           )}
 
           <Button

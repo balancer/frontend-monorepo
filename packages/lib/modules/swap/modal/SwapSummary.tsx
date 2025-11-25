@@ -103,7 +103,7 @@ export function SwapSummary({
         description={EXACT_IN_SWAP_DESCRIPTION}
         onChange={calculateSlippage}
         selectedIndex={0}
-        title="Slippage on 'exact in' swaps"
+        title="Slippage Simulation: ‘Exact In’ Swap"
       />
     ) : undefined
   }
@@ -135,7 +135,7 @@ export function SwapSummary({
                 description={EXACT_OUT_SWAP_DESCRIPTION}
                 onChange={calculateSlippage}
                 selectedIndex={1}
-                title="Slippage on 'exact out' swaps"
+                title="Slippage Simulation: ‘Exact Out’ Swap"
               />
             )
           }
@@ -177,7 +177,9 @@ export function SwapSummary({
           <CardPopAnim key="exchange-rate">
             <Card fontSize="sm" variant="modalSubSection">
               <HStack justify="space-between" w="full">
-                <Text color="grayText">Exchange rate</Text>
+                <Text color="grayText" fontSize="sm">
+                  Exchange rate
+                </Text>
                 <SwapRate />
               </HStack>
             </Card>

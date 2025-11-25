@@ -40,11 +40,11 @@ const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
 export function drpcUrl(chain: GqlChain, privateKey: string) {
   const chainSlug = chainToDrpcName[chain]
   if (!chainSlug) throw new Error(`Invalid chain: ${chain}`)
-  return `https://lb.drpc.org/ogrpc?network=${chainSlug}&dkey=${privateKey}`
+  return `https://lb.drpc.live/${chainSlug}/${privateKey}`
 }
 
 export function drpcUrlByChainId(chainId: number, privateKey: string) {
   const chainSlug = chainIdToDrpcName[chainId]
   if (!chainSlug) throw new Error(`Invalid chain id: ${chainId}`)
-  return `https://lb.drpc.org/ogrpc?network=${chainSlug}&dkey=${privateKey}`
+  return `https://lb.drpc.live/${chainSlug}/${privateKey}`
 }

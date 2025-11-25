@@ -61,74 +61,6 @@ export function PriceImpactAccordion({
 
   const isUnknownPriceImpact = cannotCalculatePriceImpact || priceImpactLevel === 'unknown'
 
-  function PriceImpactMessage({ action }: { action: 'swap' | 'add' | 'remove' }) {
-    switch (action) {
-      case 'swap':
-        return (
-          <>
-            <Text color="#000" fontSize="sm" pb="xs">
-              The value of output tokens is a lot less than the input tokens after price impact and
-              swap fees (per Coingecko). This is likely because your swap size is large relative to
-              the market liquidity for this pair, resulting in a high price impact by unfavorably
-              shifting the exchange rate.
-            </Text>
-            <Text color="#000" fontSize="sm">
-              To reduce price impact, lower your swap size
-              {cowLink ? (
-                <>
-                  {' '}
-                  or try{' '}
-                  <Link
-                    _hover={{
-                      color: '#fff',
-                    }}
-                    color="#000"
-                    fontSize="sm"
-                    href={cowLink}
-                    isExternal
-                    textDecor="underline"
-                  >
-                    CoW Swap
-                  </Link>
-                  .
-                </>
-              ) : (
-                ' or try another exchange.'
-              )}
-            </Text>
-          </>
-        )
-      case 'add':
-        return (
-          <>
-            <Text color="#000" fontSize="sm" pb="xs">
-              Adding custom amounts in ‘Flexible’ mode can cause high price impact, since the pool
-              rebalances by ‘swapping’ some of the excess token for the under-supplied token, which
-              unfavorably shifts the internal price.
-            </Text>
-            <Text color="#000" fontSize="sm">
-              To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Flexible’
-              mode, add tokens closer to the pool’s current ratios.
-            </Text>
-          </>
-        )
-      case 'remove':
-        return (
-          <>
-            <Text color="#000" fontSize="sm" pb="xs">
-              Removing liquidity as a single token can cause high price impact, since the pool
-              rebalances by ‘swapping’ some of non-selected tokens to replace the removed token,
-              which unfavorably shifts the internal price.
-            </Text>
-            <Text color="#000" fontSize="sm">
-              To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Single
-              token’ mode, remove a smaller amount.
-            </Text>
-          </>
-        )
-    }
-  }
-
   function getPriceImpactTitle(action: 'swap' | 'add' | 'remove'): string {
     const label = action.charAt(0).toUpperCase() + action.slice(1)
     const level = priceImpact != null ? getPriceImpactLevel(Number(priceImpact)) : priceImpactLevel
@@ -209,7 +141,7 @@ export function PriceImpactAccordion({
                         if you know exactly what you are doing.'
                       </Text>
                     ) : (
-                      <PriceImpactMessage action={action} />
+                      <PriceImpactMessage action={action} cowLink={cowLink} />
                     )}
                   </AlertDescription>
                 </Box>
@@ -277,4 +209,78 @@ export function PriceImpactAccordion({
       )}
     </Box>
   )
+}
+
+function PriceImpactMessage({
+  action,
+  cowLink,
+}: {
+  action: 'swap' | 'add' | 'remove'
+  cowLink: string | undefined
+}) {
+  switch (action) {
+    case 'swap':
+      return (
+        <>
+          <Text color="#000" fontSize="sm" pb="xs">
+            The value of output tokens is a lot less than the input tokens after price impact and
+            swap fees (per Coingecko). This is likely because your swap size is large relative to
+            the market liquidity for this pair, resulting in a high price impact by unfavorably
+            shifting the exchange rate.
+          </Text>
+          <Text color="#000" fontSize="sm">
+            To reduce price impact, lower your swap size
+            {cowLink ? (
+              <>
+                {' '}
+                or try{' '}
+                <Link
+                  _hover={{
+                    color: '#fff',
+                  }}
+                  color="#000"
+                  fontSize="sm"
+                  href={cowLink}
+                  isExternal
+                  textDecor="underline"
+                >
+                  CoW Swap
+                </Link>
+                .
+              </>
+            ) : (
+              ' or try another exchange.'
+            )}
+          </Text>
+        </>
+      )
+    case 'add':
+      return (
+        <>
+          <Text color="#000" fontSize="sm" pb="xs">
+            Adding custom amounts in ‘Flexible’ mode can cause high price impact, since the pool
+            rebalances by ‘swapping’ some of the excess token for the under-supplied token, which
+            unfavorably shifts the internal price.
+          </Text>
+          <Text color="#000" fontSize="sm">
+            To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Flexible’
+            mode, add tokens closer to the pool’s current ratios.
+          </Text>
+        </>
+      )
+    case 'remove':
+      return (
+        <>
+          <Text color="#000" fontSize="sm" pb="xs">
+            Removing liquidity as a single token can cause high price impact, since the pool
+            rebalances by ‘swapping’ some of non-selected tokens to replace the removed token, which
+            unfavorably shifts the internal price.
+          </Text>
+          <Text color="#000" fontSize="sm">
+            To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Single
+            token’ mode, remove a smaller amount.
+          </Text>
+        </>
+      )
+  }
 }

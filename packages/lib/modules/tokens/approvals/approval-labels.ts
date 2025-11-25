@@ -11,6 +11,7 @@ export type ApprovalAction =
   | 'Unwrapping'
   | 'Buying'
   | 'Selling'
+  | 'Withdrawing'
 
 export type TokenApprovalLabelArgs = {
   actionType: ApprovalAction

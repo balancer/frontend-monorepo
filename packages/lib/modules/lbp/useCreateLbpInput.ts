@@ -3,11 +3,12 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useLbpWeights } from './useLbpWeights'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { PoolType } from '@balancer/sdk'
-import { parseUnits } from 'viem'
+import { parseUnits, zeroAddress } from 'viem'
 import { Address } from 'viem'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { millisecondsToSeconds } from 'date-fns'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
+import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 
 export function useCreateLbpInput() {
   const { saleStructureForm, projectInfoForm, isCollateralNativeAsset } = useLbpForm()
@@ -20,7 +21,7 @@ export function useCreateLbpInput() {
     userActions,
     fee,
   } = saleStructureForm.watch()
-  const { name, owner } = projectInfoForm.watch()
+  const { name, owner, poolCreator } = projectInfoForm.watch()
   const { userAddress } = useUserAccount()
   const { tokens, chainId } = getNetworkConfig(selectedChain)
 
@@ -37,7 +38,7 @@ export function useCreateLbpInput() {
     reserveTokenEndWeight,
   } = useLbpWeights()
 
-  const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
+  const blockProjectTokenSwapsIn = userActions === UserActions.BUY_ONLY
 
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
@@ -49,6 +50,7 @@ export function useCreateLbpInput() {
     name: `${name} Liquidity Bootstrapping Pool`,
     swapFeePercentage: parseUnits(`${fee}`, PERCENTAGE_DECIMALS),
     chainId,
+    poolCreator: (poolCreator as Address) || zeroAddress,
     lbpParams: {
       owner: (owner as Address) || userAddress,
       blockProjectTokenSwapsIn,

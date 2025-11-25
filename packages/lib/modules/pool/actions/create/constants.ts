@@ -8,11 +8,14 @@ import {
   PoolCreationToken,
   PoolCreationForm,
   ReClammConfig,
+  EclpConfigForm,
 } from './types'
 import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
+export const NUM_FORMAT = '0.00000000' // up to 8 decimals?
 export const PERCENTAGE_DECIMALS = 16
+export const DEFAULT_DECIMALS = 18
 export const MAX_POOL_NAME_LENGTH = 32
 export const MAX_POOL_SYMBOL_LENGTH = 26
 export const MAX_SWAP_FEE_PERCENTAGE = 10
@@ -20,13 +23,39 @@ export const REQUIRED_TOTAL_WEIGHT = 100
 export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
 export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
 export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
+export const MAX_LAMBDA = 100000000
 
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
-  [PoolType.Weighted]: { label: 'Weighted', maxTokens: 8 },
-  [PoolType.Stable]: { label: 'Stable', maxTokens: 5 },
-  [PoolType.StableSurge]: { label: 'Stable Surge', maxTokens: 5 },
-  // [PoolType.GyroE]: { label: 'Gyro Elliptic CLP', maxTokens: 2 },
-  [PoolType.ReClamm]: { label: 'reClamm', maxTokens: 2 },
+  [PoolType.Stable]: {
+    label: 'Stable',
+    maxTokens: 5,
+    description:
+      'Stable Pools are optimal for assets expected to consistently trade at near parity or with a known exchange rate. Stable Pools allows for swaps of significant size before encountering substantial price impact, vastly increasing capital efficiency for like-kind and correlated-kind swaps.',
+  },
+  [PoolType.StableSurge]: {
+    label: 'Stable Surge',
+    maxTokens: 5,
+    description:
+      'A Stable Pool with a “Stable Surge” hook that applies a dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',
+  },
+  [PoolType.Weighted]: {
+    label: 'Weighted',
+    maxTokens: 8,
+    description:
+      'Weighted Pools are highly versatile and configurable pools. They are ideal for general cases and enable users to build pools with different token counts and weightings.',
+  },
+  [PoolType.GyroE]: {
+    label: 'Gyro Elliptic CLP',
+    maxTokens: 2,
+    description:
+      'Concentrated liquidity pools that use an elliptical price curve to focus liquidity asymmetrically within customizable bounds. E-CLPs provide deeper liquidity and lower slippage for trades while maximizing LP capital efficiency within expected price ranges.',
+  },
+  [PoolType.ReClamm]: {
+    label: 'ReClamm',
+    maxTokens: 2,
+    description:
+      'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
+  },
 }
 
 export const PROTOCOLS = [
@@ -84,12 +113,14 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   weight: '',
 }
 
+export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]
+
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   protocol: PROJECT_CONFIG.projectId,
   network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
-  poolType: PoolType.Weighted,
-  poolTokens: [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG],
+  poolType: PoolType.Stable,
+  poolTokens: INITIAL_POOL_TOKENS,
   name: '',
   symbol: '',
   swapFeeManager: zeroAddress,
@@ -111,4 +142,13 @@ export const INITIAL_RECLAMM_CONFIG: ReClammConfig = {
   priceRangePercentage: '',
   priceShiftDailyRate: '',
   centerednessMargin: '',
+}
+
+export const INITIAL_ECLP_CONFIG: EclpConfigForm = {
+  alpha: '',
+  beta: '',
+  c: '',
+  s: '',
+  lambda: '',
+  peakPrice: '',
 }

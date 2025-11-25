@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
-import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react'
+import { Alert, Box, BoxProps, Button, HStack, Link, Text } from '@chakra-ui/react'
 import { isDev, isStaging, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
@@ -17,8 +18,11 @@ import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
-import { isBalancer, isCowAmm } from '@repo/lib/config/getProjectConfig'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { UserFeedback } from '@repo/lib/modules/user/UserFeedback'
+import { ApiOutageAlert } from '../alerts/ApiOutageAlert'
+import { useApiHealth } from '../../hooks/useApiHealth'
+import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
 
 type Props = {
   mobileNav?: ReactNode
@@ -59,6 +63,12 @@ function NavLinks({
 }) {
   const { linkColorFor } = useNav()
 
+  const handleLinkClick = (analyticsEvent?: string) => {
+    if (analyticsEvent && AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent]) {
+      trackEvent(AnalyticsEvent[analyticsEvent as keyof typeof AnalyticsEvent])
+    }
+  }
+
   return (
     <HStack fontWeight="medium" spacing="lg" {...props}>
       {appLinks.map(link => {
@@ -70,6 +80,7 @@ function NavLinks({
               color={linkColorFor(link.href || '')}
               href={link.href}
               isExternal={link.isExternal}
+              onClick={() => handleLinkClick(link.analyticsEvent)}
               prefetch
               variant="nav"
             >
@@ -86,7 +97,7 @@ function NavLinks({
         )
       })}
       {customLinks}
-      {!isCowAmm && (isDev || isStaging) && (
+      {(isDev || isStaging) && (
         <>
           <Box as={motion.div} variants={fadeIn}>
             <Link
@@ -242,6 +253,7 @@ export function NavBar({
   allowCreateWallet,
   ...rest
 }: Props & BoxProps) {
+  const { apiOK } = useApiHealth()
   const [showShadow, setShowShadow] = useState(false)
 
   useEffect(() => {
@@ -265,6 +277,19 @@ export function NavBar({
   const backdropFilter = useMotionTemplate`blur(${blurEffect}px)`
   const top = useTransform(scrollYBoundedProgressDelayed, [0, 1], [0, -72])
   const opacity = useTransform(scrollYBoundedProgressDelayed, [0, 1], [1, 0])
+
+  const poolActions = ['add-liquidity', 'remove-liquidity', 'stake', 'unstake', 'swap']
+  const pathname = usePathname()
+  const shouldShowV2Exploit = poolActions.every(action => !pathname.includes(action))
+
+  // Determine navbar height based on alerts
+  const hasAlerts = !apiOK || (isBalancer && shouldShowV2Exploit)
+  const navbarHeight = hasAlerts ? '120px' : '72px'
+
+  // Set CSS variable on document root
+  useEffect(() => {
+    document.documentElement.style.setProperty('--navbar-height', navbarHeight)
+  }, [navbarHeight])
 
   return (
     <Box
@@ -295,6 +320,28 @@ export function NavBar({
       zIndex={100}
       {...rest}
     >
+      {!apiOK && <ApiOutageAlert />}
+
+      {isBalancer && shouldShowV2Exploit && (
+        <Alert gap="1" justifyContent="center" rounded="none" status="warning">
+          <Text color="#000" fontWeight="bold">
+            There was a recent exploit on some v2 Composable Stable pools (v3 pools not affected).
+          </Text>
+          <Link
+            _hover={{
+              color: '#555',
+            }}
+            color="#000"
+            fontWeight="bold"
+            href="https://x.com/Balancer/status/1990856260988670132"
+            isExternal
+            textDecoration="underline"
+          >
+            Read the Post-Mortem
+          </Link>
+        </Alert>
+      )}
+
       <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
         <HStack
           animate="show"

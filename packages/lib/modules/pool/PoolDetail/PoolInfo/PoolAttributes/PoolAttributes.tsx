@@ -1,10 +1,14 @@
-'use client'
-
 import { Box, Card, Stack, Heading, Text, VStack, Divider, HStack, Link } from '@chakra-ui/react'
 import { useFormattedPoolAttributes } from './useFormattedPoolAttributes'
 import { ArrowUpRight } from 'react-feather'
+import { isGyroEPool, isV3LBP } from '../../../pool.helpers'
+import { usePool } from '../../../PoolProvider'
+import { LbpPoolAttributes } from './LbpPoolAttributes'
+import { LbpPoolChartsProvider } from '../../../LbpDetail/LbpPoolCharts/LbpPoolChartsProvider'
+import { ClpPoolAttributes } from './ClpPoolAttributes'
 
 export function PoolAttributes() {
+  const { pool } = usePool()
   const formattedAttributes = useFormattedPoolAttributes()
 
   return (
@@ -45,6 +49,14 @@ export function PoolAttributes() {
             )
           })}
         </VStack>
+
+        {isV3LBP(pool) && (
+          <LbpPoolChartsProvider>
+            <LbpPoolAttributes pool={pool} />
+          </LbpPoolChartsProvider>
+        )}
+
+        {isGyroEPool(pool) && <ClpPoolAttributes pool={pool} />}
       </VStack>
     </Card>
   )

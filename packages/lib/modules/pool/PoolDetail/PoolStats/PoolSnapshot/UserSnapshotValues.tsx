@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { memo, useMemo } from 'react'
@@ -18,6 +19,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import { hasAuraStakedBalance } from '../../../user-balance.helpers'
+import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -26,6 +28,8 @@ export type PoolMyStatsValues = {
 }
 
 const POSSIBLE_STAKED_BALANCE_USD = 10000
+
+const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
 export function UserSnapshotValues() {
   const { chain, isLoading: isLoadingPool, myLiquiditySectionRef, pool } = usePool()
@@ -48,17 +52,17 @@ export function UserSnapshotValues() {
     nonBalRewards,
   })
 
-  const MemoizedMainAprTooltip = memo(MainAprTooltip)
-
   const boost = useMemo(() => {
     if (isEmpty(veBalBoostMap)) return
     return veBalBoostMap[pool.id]
   }, [veBalBoostMap])
 
   // If user has staked on Aura, use Aura APR
+  const auraApr = pool.staking?.aura?.apr !== undefined ? pool.staking?.aura?.apr : undefined
+  const hasAuraStakedBalanceValue = hasAuraStakedBalance(pool)
   const myAprRaw =
-    hasAuraStakedBalance(pool) && pool.staking?.aura?.apr
-      ? pool.staking.aura.apr
+    hasAuraStakedBalanceValue && auraApr
+      ? auraApr
       : getTotalAprRaw(pool.dynamicData.aprItems, boost)
 
   const poolMyStatsValues: PoolMyStatsValues | undefined = useMemo(() => {
@@ -118,17 +122,20 @@ export function UserSnapshotValues() {
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
-          <LabelWithTooltip
-            label={hasAuraStakedBalance(pool) && pool.staking?.aura?.apr ? 'My Aura APR' : 'My APR'}
-            tooltip={
-              hasAuraStakedBalance(pool) && pool.staking?.aura?.apr
-                ? 'The APR you are likely to earn this week from staking in this pool on Aura.'
-                : 'The APR you are likely to earn this week from staking in this pool on Balancer.'
-            }
-          />
+          {hasAuraStakedBalanceValue && auraApr ? (
+            <LabelWithTooltip
+              label="My Aura APR"
+              tooltip="The APR you are likely to earn this week from staking in this pool on Aura."
+            />
+          ) : (
+            <LabelWithTooltip
+              label="My APR"
+              tooltip={`The APR you are likely to earn this week from staking in this pool on ${PROJECT_CONFIG.projectName}.`}
+            />
+          )}
           {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
-            hasAuraStakedBalance(pool) && pool.staking?.aura?.apr ? (
-              <AuraAprTooltip auraApr={pool.staking.aura.apr} />
+            hasAuraStakedBalanceValue && auraApr ? (
+              <AuraAprTooltip auraApr={auraApr} />
             ) : (
               <MemoizedMainAprTooltip
                 aprItems={pool.dynamicData.aprItems}
@@ -155,7 +162,7 @@ export function UserSnapshotValues() {
           ) : (
             <LabelWithTooltip
               label="My potential weekly yield"
-              tooltip="The amount of incentives you could earn this week from staking in this pool based on your veBAL balance"
+              tooltip={`The amount of incentives you could earn this week from staking in this pool${isBalancer ? ' based on your veBAL balance' : ''}.`}
             />
           )}
 

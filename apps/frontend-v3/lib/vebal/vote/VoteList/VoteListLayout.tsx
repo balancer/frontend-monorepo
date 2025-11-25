@@ -60,7 +60,7 @@ export function VoteListLayout() {
         />
       )
     }
-  }, [selectedVotingPools])
+  }, [scrollToMyVotes, selectedVotingPools])
 
   return (
     <VStack align="start" minHeight="1000px" spacing="md" w="full">

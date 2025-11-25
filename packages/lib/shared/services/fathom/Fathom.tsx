@@ -4,12 +4,28 @@ import { load, trackPageview } from 'fathom-client'
 import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { isProd } from '@repo/lib/config/app.config'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export enum AnalyticsEvent {
   ClickAddLiquidity = 'click: Add liquidity',
-  TransactionSubmitted = 'transaction: Submitted',
+  ClickNavBalancerLogo = 'click: Primary nav Balancer logo',
+  ClickNavBuild = 'click: Build  primary nav',
+  ClickNavPools = 'click: Pools primary nav',
+  ClickNavPortfolio = 'click: Portfolio primary nav',
+  ClickNavSwap = 'click: Swap primary nav',
+  ClickNavUtilitiesActivity = 'click: Nav utilities activity',
+  ClickNavUtilitiesDarkmode = 'click: Nav utilities darkmode',
+  ClickNavUtilitiesFeedback = 'click: Nav utilities feedback',
+  ClickNavUtilitiesNetwork = 'click: Nav utilities network',
+  ClickNavUtilitiesSettings = 'click: Nav utilities settings',
+  ClickNavUtilitiesWalletChange = 'click: Nav utilities wallet change',
+  ClickNavUtilitiesWalletConnect = 'click: Nav utilities wallet connect',
+  ClickNavVeBal = 'click: veBAL primary nav',
+  ClickPoolListCreatePool = 'click: Pool list create pool',
+  ClickPoolListFilter = 'click: Pool list filter',
   TransactionConfirmed = 'transaction: Confirmed',
   TransactionReverted = 'transaction: Reverted',
+  TransactionSubmitted = 'transaction: Submitted',
 }
 
 /**
@@ -20,6 +36,8 @@ export enum AnalyticsEvent {
  * @param value Optional value to track, should be in cents (e.g. 1000 for $10)
  */
 export function trackEvent(event: AnalyticsEvent, value?: number) {
+  if (!isBalancer) return
+
   if (!window.fathom) return
   try {
     window.fathom.trackEvent(event, { _value: value })
@@ -42,7 +60,7 @@ function TrackPageView() {
     load('MKFEFCXC', {
       auto: false,
       // Optional but I like to explicitly choose the domains to track:
-      includedDomains: ['balancer.fi', 'zen.balancer.fi'],
+      includedDomains: ['balancer.fi'],
     })
   }, [])
 

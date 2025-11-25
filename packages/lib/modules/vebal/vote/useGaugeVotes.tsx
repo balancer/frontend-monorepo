@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { oneWeekInMs, toUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { mainnet } from 'viem/chains'
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
@@ -121,8 +121,9 @@ export interface UseGaugeVotesParams {
 
 export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   const { userAddress, isConnected } = useUserAccount()
+  const [now] = useState(() => Date.now())
 
-  const thisWeek = Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs
+  const thisWeek = Math.floor(now / oneWeekInMs) * oneWeekInMs
   const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(
     gaugeAddresses,
     toUnixTimestamp(thisWeek)
@@ -137,19 +138,13 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   const userVotesQuery = useVoteUserSlopes(isConnected ? gaugeAddresses : [], userAddress)
   const lastUserVotesQuery = useLastUserVotes(isConnected ? gaugeAddresses : [], userAddress)
 
-  const refetchAll = useCallback(() => {
-    return Promise.all([
+  const refetchAll = () =>
+    Promise.all([
       gaugeWeightThisPeriodQuery.refetch(),
       gaugeWeightNextPeriodQuery.refetch(),
       userVotesQuery.refetch(),
       lastUserVotesQuery.refetch(),
     ])
-  }, [
-    gaugeWeightThisPeriodQuery.refetch,
-    gaugeWeightNextPeriodQuery.refetch,
-    userVotesQuery.refetch,
-    lastUserVotesQuery.refetch,
-  ])
 
   const isLoading =
     gaugeWeightThisPeriodQuery.isLoading ||

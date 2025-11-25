@@ -3,7 +3,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { validatePoolType } from '../../validatePoolCreationForm'
+import { isWeightedPool } from '../../helpers'
 
 const WEIGHT_DEVIATION_TOLERANCE = 5
 
@@ -21,22 +21,23 @@ const WEIGHT_COLORS = [
 type Props = { variant?: string; displayAlert?: boolean }
 
 export function SeedAmountProportions({ variant = 'level3', displayAlert = false }: Props) {
-  const { poolTokens, poolType } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, poolType] = poolCreationForm.watch(['poolTokens', 'poolType'])
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {
     const { data, address, amount } = token
-    if (!address || !data) return { symbol: '', inputUsdValue: 0 }
+    if (!address || !data) return { symbol: '', usdValue: 0 }
     const { chain, symbol } = data
-    const inputUsdValue = Number(usdValueForTokenAddress(address, chain, amount))
-    return { symbol, inputUsdValue }
+    const usdValue = Number(usdValueForTokenAddress(address, chain, amount, token.usdPrice))
+    return { symbol, usdValue }
   })
 
-  const totalInputUsdValue = tokenAmountToUsd.reduce((acc, token) => acc + token.inputUsdValue, 0)
+  const totalSeedUsdValue = tokenAmountToUsd.reduce((acc, token) => acc + token.usdValue, 0)
 
   const tokenAmountToUsdWithWeights = tokenAmountToUsd.map(token => ({
     ...token,
-    usdWeight: totalInputUsdValue ? (token.inputUsdValue * 100) / totalInputUsdValue : 0,
+    usdWeight: totalSeedUsdValue ? (token.usdValue * 100) / totalSeedUsdValue : 0,
   }))
 
   const targetWeights = poolTokens.map(t => Number(t.weight))
@@ -47,10 +48,8 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
     return Math.abs(weight - usdWeight) < WEIGHT_DEVIATION_TOLERANCE
   })
 
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-
   const isGoingToGetRekt =
-    isWeightedPool && !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
+    isWeightedPool(poolType) && !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
 
   return (
     <VStack spacing="md" w="full">
@@ -83,7 +82,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
               weights={tokenAmountToUsdWithWeights.map(t => t.usdWeight)}
             />
 
-            {isWeightedPool && (
+            {isWeightedPool(poolType) && (
               <>
                 <WeightsBarChart
                   height="5px"

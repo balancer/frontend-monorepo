@@ -191,47 +191,98 @@ export function ClaimNetworkPools() {
             <SimpleGrid
               columns={{
                 base: 1,
-                md: 1,
+                md: 2,
                 lg: isBeets ? 2 : 3,
               }}
               spacing="md"
             >
-              {poolsWithChain.map(
-                ([chain, pools], index) =>
-                  pools[0] && (
-                    <motion.div
-                      animate={{ opacity: 1, scale: 1 }}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      key={chain}
-                      style={{ transformOrigin: 'top' }}
-                      transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
-                    >
-                      <ClaimNetworkBlock
-                        chain={pools[0].chain}
-                        networkTotalClaimableFiatBalance={totalFiatClaimableBalanceByChain[
-                          pools[0].chain
-                        ].toNumber()}
-                        onClick={() => router.push(`/portfolio/${chainToSlugMap[pools[0].chain]}`)}
-                      />
-                    </motion.div>
-                  )
-              )}
+              {(() => {
+                // Collect all claimable items
+                const claimableItems = []
 
-              {hasProtocolRewards && (
-                <motion.div
-                  animate={{ opacity: 1, scale: 1 }}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  style={{ transformOrigin: 'top' }}
-                  transition={{ duration: 0.3, delay: poolsWithChain.length * 0.08, ease: easeOut }}
-                >
-                  <ClaimNetworkBlock
-                    chain={GqlChain.Mainnet}
-                    networkTotalClaimableFiatBalance={protocolRewardsBalance.toNumber()}
-                    onClick={() => setIsOpenedProtocolRevenueModal(true)}
-                    title="Balancer protocol revenue"
-                  />
-                </motion.div>
-              )}
+                poolsWithChain.forEach(([, pools], index) => {
+                  if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
+                    claimableItems.push({
+                      type: 'chain',
+                      chain: pools[0].chain,
+                      amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+                      index,
+                    })
+                  }
+                })
+
+                if (hasProtocolRewards) {
+                  claimableItems.push({
+                    type: 'protocol',
+                    chain: GqlChain.Mainnet,
+                    amount: protocolRewardsBalance.toNumber(),
+                    index: poolsWithChain.length,
+                  })
+                }
+
+                // Sort by amount (highest first)
+                claimableItems.sort((a, b) => b.amount - a.amount)
+
+                // If no claimable items, don't render anything
+                if (claimableItems.length === 0) {
+                  return null
+                }
+
+                // Determine max columns for first row based on breakpoint
+                const maxColumns = isBeets ? 2 : 3
+
+                // Render all claimable items
+                const items = claimableItems.map((item, index) => (
+                  <motion.div
+                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    key={`item-${index}`}
+                    style={{ transformOrigin: 'top' }}
+                    transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
+                  >
+                    <ClaimNetworkBlock
+                      chain={item.chain}
+                      networkTotalClaimableFiatBalance={item.amount}
+                      onClick={
+                        item.type === 'protocol'
+                          ? () => setIsOpenedProtocolRevenueModal(true)
+                          : () => router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
+                      }
+                      title={item.type === 'protocol' ? 'Balancer protocol revenue' : undefined}
+                    />
+                  </motion.div>
+                ))
+
+                // Add placeholders only if we have fewer items than max columns
+                if (claimableItems.length < maxColumns) {
+                  const placeholdersNeeded = maxColumns - claimableItems.length
+
+                  for (let i = 0; i < placeholdersNeeded; i++) {
+                    const slotIndex = claimableItems.length + i
+
+                    // For !isBeets: slot 0-1 show on md+, slot 2 shows only on lg+
+                    // For isBeets: slots 0-1 show on md+
+                    const displayProps =
+                      !isBeets && slotIndex === 2
+                        ? { base: 'none', md: 'none', lg: 'block' }
+                        : { base: 'none', md: 'block' }
+
+                    items.push(
+                      <Card
+                        display={displayProps}
+                        flex="1"
+                        key={`placeholder-${i}`}
+                        p={['sm', 'md']}
+                        shadow="innerLg"
+                        variant="level1"
+                        w="full"
+                      />
+                    )
+                  }
+                }
+
+                return items
+              })()}
             </SimpleGrid>
             <ClaimProtocolRevenueModal
               isOpen={isOpenedProtocolRevenueModal}

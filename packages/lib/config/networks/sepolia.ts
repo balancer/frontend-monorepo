@@ -1,7 +1,7 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
-import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
+import { AddressProvider, PERMIT2 } from '@balancer/sdk'
 import { sepolia } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -36,13 +36,13 @@ const networkConfig: NetworkConfig = {
     multicall2: '0xca11bde05977b3631167028862be2a173976ca11',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      vaultV3: balancerV3Contracts.Vault[sepolia.id],
-      router: balancerV3Contracts.Router[sepolia.id],
-      batchRouter: balancerV3Contracts.BatchRouter[sepolia.id],
-      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[sepolia.id],
+      vaultV3: AddressProvider.Vault(sepolia.id),
+      router: AddressProvider.Router(sepolia.id),
+      batchRouter: AddressProvider.BatchRouter(sepolia.id),
+      compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(sepolia.id),
       relayerV6: '0x7852fB9d0895e6e8b3EedA553c03F6e2F9124dF9',
       minter: '0x1783Cd84b3d01854A96B4eD5843753C2CcbD574A',
-      vaultAdminV3: balancerV3Contracts.VaultAdmin[sepolia.id],
+      vaultAdminV3: AddressProvider.VaultAdmin(sepolia.id),
     },
     veBAL: '0x150A72e4D4d81BbF045565E232c50Ed0931ad795',
     permit2: PERMIT2[sepolia.id],

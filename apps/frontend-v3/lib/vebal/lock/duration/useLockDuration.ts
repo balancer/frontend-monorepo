@@ -1,6 +1,7 @@
 import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { useToday } from '@repo/lib/shared/hooks/date.hooks'
 import {
+  addHours,
   addMonths,
   addWeeks,
   differenceInMonths,
@@ -9,30 +10,22 @@ import {
   isEqual,
 } from 'date-fns'
 import { range } from 'lodash'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { getMinLockEndDate } from '../lock-time.utils'
 import { useLockEndDate, UseLockEndDateProps } from './useLockEndDate'
 import { startOfDayUtc } from '@repo/lib/shared/utils/time'
 import { UseVebalLockDataResult } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 
 export interface UseLockDurationProps extends UseLockEndDateProps {
-  initialValue?: number
   mainnetLockedInfo: UseVebalLockDataResult['mainnetLockedInfo']
 }
 
 export type UseLockDurationResult = ReturnType<typeof useLockDuration>
 
-export function useLockDuration({
-  initialValue = 0,
-  lockedEndDate,
-  mainnetLockedInfo,
-}: UseLockDurationProps) {
+export function useLockDuration({ lockedEndDate, mainnetLockedInfo }: UseLockDurationProps) {
   const today = useToday()
-
   const { minLockEndDate, maxLockEndDate } = useLockEndDate({ lockedEndDate })
-
   const sliderMinDate = useMemo(() => getMinLockEndDate(today), [today])
-  const sliderMaxDate = maxLockEndDate
 
   const minSliderValue = useMemo(() => {
     if (!lockedEndDate) return undefined
@@ -41,28 +34,23 @@ export function useLockDuration({
       : undefined
   }, [lockedEndDate, sliderMinDate])
 
-  const [sliderValue, setSliderValue] = useState(() => minSliderValue ?? initialValue)
-
-  const onSliderChange = (val: number) => setSliderValue(val)
-
-  useEffect(() => {
-    if (typeof minSliderValue !== 'undefined') {
-      setSliderValue(prevValue => {
-        const minValue = minSliderValue
-        if (prevValue < minValue) {
-          return minValue
-        }
-        return prevValue
-      })
-    }
-  }, [minSliderValue])
-
   const minStep = 0
+  const sliderMaxDate = maxLockEndDate
   const maxStep = differenceInWeeks(sliderMaxDate, sliderMinDate, { roundingMethod: 'ceil' })
   const stepSize = 1
+  const lowerBound = Math.min(minSliderValue ?? minStep, maxStep)
+
+  const [rawSliderValue, setRawSliderValue] = useState(() => maxStep)
+
+  const sliderValue = Math.max(lowerBound, Math.min(rawSliderValue, maxStep))
+
+  const onSliderChange = (val: number) => {
+    setRawSliderValue(Math.max(lowerBound, Math.min(val, maxStep)))
+  }
 
   const lockEndDate = useMemo(() => {
-    const value = startOfDayUtc(addWeeks(sliderMinDate, sliderValue))
+    // HACK: we have the same problem as lock-time.utils.ts with daylight savings
+    const value = startOfDayUtc(addWeeks(addHours(sliderMinDate, 2), sliderValue))
 
     if (value >= sliderMaxDate) {
       return sliderMaxDate

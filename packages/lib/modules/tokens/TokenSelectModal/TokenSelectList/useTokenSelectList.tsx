@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../../TokensProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
@@ -5,11 +6,11 @@ import { orderBy } from 'lodash'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { exclNativeAssetFilter, nativeAssetFilter } from '../../token.helpers'
 import { useCallback, useMemo } from 'react'
-import { ApiToken } from '../../token.types'
+import { ApiOrCustomToken } from '../../token.types'
 
 export function useTokenSelectList(
   chain: GqlChain,
-  tokens: ApiToken[],
+  tokens: ApiOrCustomToken[],
   excludeNativeAsset: boolean,
   pinNativeAsset: boolean,
   searchTerm?: string
@@ -65,11 +66,11 @@ export function useTokenSelectList(
   }
 }
 
-function symbolMatch(token: ApiToken, searchTerm: string) {
+function symbolMatch(token: ApiOrCustomToken, searchTerm: string) {
   return normalize(token.symbol).includes(normalize(searchTerm))
 }
 
-function nameMatch(token: ApiToken, searchTerm: string) {
+function nameMatch(token: ApiOrCustomToken, searchTerm: string) {
   return normalize(token.name).includes(normalize(searchTerm))
 }
 

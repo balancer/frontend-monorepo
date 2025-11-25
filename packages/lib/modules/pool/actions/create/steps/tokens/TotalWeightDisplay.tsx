@@ -5,7 +5,8 @@ import { validatePoolTokens } from '../../validatePoolCreationForm'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 
 export function TotalWeightDisplay() {
-  const { poolTokens } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolTokens = poolCreationForm.watch('poolTokens')
   const isTotalWeightTooLow = validatePoolTokens.isTotalWeightTooLow(poolTokens)
   const isTotalWeightTooHigh = validatePoolTokens.isTotalWeightTooHigh(poolTokens)
   const totalWeight = validatePoolTokens.totalWeight(poolTokens)

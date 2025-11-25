@@ -6,6 +6,7 @@ import { flatPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples
 import { nestedPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/nested'
 import { PoolExample } from '@repo/lib/modules/pool/__mocks__/pool-examples/pool-examples.types'
 import {
+  createPoolVarName,
   saveAllPoolApiMocksFile,
   savePoolMock,
 } from '@repo/lib/modules/pool/__mocks__/savePoolMock'
@@ -24,7 +25,9 @@ export default async function saveApiMocks({ apiUrl, poolId }: ApiMockOptions) {
 
   const promises = allPoolExamples.map(example => {
     if (shouldSkipMock(apiUrl, example) || (poolId && !isSameAddress(example.poolId, poolId))) {
-      return Promise.resolve(example.mockName)
+      return Promise.resolve(
+        example.mockName || createPoolVarName(example.name || example.poolId) + 'Mock'
+      )
     }
 
     return savePoolMock({
@@ -36,7 +39,9 @@ export default async function saveApiMocks({ apiUrl, poolId }: ApiMockOptions) {
     })
   })
 
-  const mockFileNames: string[] = (await Promise.all(promises)).filter(f => f !== undefined)
+  const mockFileNames: string[] = (await Promise.all(promises)).filter(f => {
+    return f !== undefined
+  })
 
   await saveAllPoolApiMocksFile(mockFileNames)
 

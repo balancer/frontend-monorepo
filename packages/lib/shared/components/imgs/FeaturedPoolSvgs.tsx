@@ -16,7 +16,7 @@ export function usePoolTextures() {
 
 function SvgShadowFilter({ id }: { id: string }) {
   return (
-    <filter height="full" id={id} width="full" x="0" y="0">
+    <filter height="200%" id={id} width="200%" x="-50%" y="-50%">
       <feOffset dx="2" dy="2" in="SourceAlpha" result="offOut" />
       <feColorMatrix
         in="offOut"

@@ -1,4 +1,4 @@
-import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { getNetworkConfig, hasRelayerBeenDeployed } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { balancerV2VaultAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -24,7 +24,11 @@ export function useHasApprovedRelayer(
     functionName: 'hasApprovedRelayer',
     args: [userAddress, config.contracts.balancer.relayerV6],
     query: {
-      enabled: options?.relayerMode === 'approveRelayer' && isConnected && !shouldChangeNetwork,
+      enabled:
+        hasRelayerBeenDeployed(chainId) &&
+        options?.relayerMode === 'approveRelayer' &&
+        isConnected &&
+        !shouldChangeNetwork,
     },
   })
 

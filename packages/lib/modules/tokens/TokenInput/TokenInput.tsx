@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import {
@@ -25,16 +26,16 @@ import { TokenIcon } from '../TokenIcon'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { ChevronDown } from 'react-feather'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
-import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { PriceImpactLevel } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
-import { ApiToken, CustomToken } from '../token.types'
+import { ApiOrCustomToken } from '../token.types'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 
 type TokenInputSelectorProps = {
-  token: ApiToken | CustomToken | undefined
+  token: ApiOrCustomToken | undefined
   weight?: string
   showWeight?: boolean
   onToggleTokenClicked?: () => void
@@ -103,8 +104,14 @@ export function TokenInputSelector({
   )
 }
 
+type PriceImpactProps = {
+  priceImpact: string | number | null | undefined
+  priceImpactColor: string
+  priceImpactLevel: PriceImpactLevel
+}
+
 type TokenInputFooterProps = {
-  token: ApiToken | CustomToken | undefined
+  token: ApiOrCustomToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean
@@ -113,6 +120,7 @@ type TokenInputFooterProps = {
   customUserBalance?: string
   isDisabled?: boolean
   customUsdPrice?: number
+  priceImpactProps: PriceImpactProps | undefined
 }
 
 function TokenInputFooter({
@@ -125,12 +133,12 @@ function TokenInputFooter({
   customUserBalance,
   isDisabled,
   customUsdPrice,
+  priceImpactProps,
 }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
-  const { priceImpact, priceImpactColor, priceImpactLevel } = usePriceImpact()
   const isMounted = useIsMounted()
 
   const hasError = hasValidationError(token)
@@ -145,10 +153,10 @@ function TokenInputFooter({
         ? usdValueForToken(token, value)
         : '0'
 
-  const noBalance = !token || bn(userBalance).isZero()
+  const noBalance = token && bn(userBalance).isZero()
   const _isNativeAsset = token && isNativeAsset(token.chain, token.address)
 
-  const showPriceImpact = !isLoadingPriceImpact && hasPriceImpact && priceImpact
+  const showPriceImpact = !isLoadingPriceImpact && hasPriceImpact && priceImpactProps?.priceImpact
   const hasDisabledInteraction = noBalance || _isNativeAsset || isDisabled
 
   function handleBalanceClick() {
@@ -169,13 +177,15 @@ function TokenInputFooter({
         <Skeleton h="full" w="12" />
       ) : (
         <Text
-          color={showPriceImpact ? priceImpactColor : 'font.secondary'}
+          color={showPriceImpact ? priceImpactProps?.priceImpactColor : 'font.secondary'}
           fontSize="sm"
           opacity={!priceMessage && usdValue === '0' ? 0.5 : 1}
           variant="secondary"
         >
           {priceMessage ? priceMessage : toCurrency(usdValue, { abbreviated: false })}
-          {showPriceImpact && priceImpactLevel !== 'unknown' && getPriceImpactLabel(priceImpact)}
+          {showPriceImpact &&
+            priceImpactProps?.priceImpactLevel !== 'unknown' &&
+            getPriceImpactLabel(priceImpactProps?.priceImpact)}
         </Text>
       )}
       {isBalancesLoading || !isMounted ? (
@@ -194,10 +204,17 @@ function TokenInputFooter({
               {getValidationError(token)}
             </Text>
           )}
-          <Text color={noBalance ? 'font.error' : 'inherit'} fontSize="sm">
-            {fNum('token', userBalance, { abbreviated: false })}
+          <Text
+            color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
+            fontSize="sm"
+            opacity={!token ? 0.5 : 1}
+          >
+            {!token ? '–' : fNum('token', userBalance, { abbreviated: false })}
           </Text>
-          <Box color={noBalance ? 'font.error' : undefined}>
+          <Box
+            color={!token ? 'font.secondary' : noBalance ? 'font.error' : undefined}
+            opacity={!token ? 0.5 : 1}
+          >
             <WalletIcon size={16} />
           </Box>
         </HStack>
@@ -208,7 +225,7 @@ function TokenInputFooter({
 
 type Props = {
   address?: string
-  apiToken?: ApiToken | CustomToken
+  apiToken?: ApiOrCustomToken
   chain?: GqlChain | number
   weight?: string
   value?: string
@@ -221,6 +238,7 @@ type Props = {
   disableBalanceValidation?: boolean
   customUserBalance?: string
   customUsdPrice?: number
+  priceImpactProps?: PriceImpactProps
 }
 
 export const TokenInput = forwardRef(
@@ -240,6 +258,7 @@ export const TokenInput = forwardRef(
       disableBalanceValidation = false,
       customUserBalance,
       customUsdPrice,
+      priceImpactProps,
       ...inputProps
     }: InputProps & Props,
     ref
@@ -350,6 +369,7 @@ export const TokenInput = forwardRef(
             hasPriceImpact={hasPriceImpact}
             isDisabled={inputProps.isDisabled}
             isLoadingPriceImpact={isLoadingPriceImpact}
+            priceImpactProps={priceImpactProps}
             priceMessage={priceMessage}
             token={token}
             updateValue={updateValue}

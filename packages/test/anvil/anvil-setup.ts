@@ -1,45 +1,7 @@
-import {
-  arbitrum,
-  avalanche,
-  base,
-  fantom,
-  fraxtal,
-  gnosis,
-  mainnet,
-  mode,
-  optimism,
-  polygon,
-  polygonZkEvm,
-  sepolia,
-  sonic,
-} from 'viem/chains'
+import { fantom, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { hyperEvm } from '@repo/lib/modules/chains/custom/hyperevm'
-
-// FIXME: [JUANJO] This is duplicated on rpc.ts
-const chainIdToDrpcName: Record<number, string | undefined> = {
-  [mainnet.id]: 'ethereum',
-  [arbitrum.id]: 'arbitrum',
-  [optimism.id]: 'optimism',
-  [base.id]: 'base',
-  [polygon.id]: 'polygon',
-  [avalanche.id]: 'avalanche',
-  [fantom.id]: 'fantom',
-  [sepolia.id]: 'sepolia',
-  [fraxtal.id]: 'fraxtal',
-  [gnosis.id]: 'gnosis',
-  [mode.id]: 'mode',
-  [polygonZkEvm.id]: 'polygon-zkevm',
-  [sonic.id]: 'sonic',
-  [hyperEvm.id]: 'hyperliquid',
-}
-
-export function drpcUrlByChainId(chainId: number, privateKey: string) {
-  const chainSlug = chainIdToDrpcName[chainId]
-  if (!chainSlug) throw new Error(`Invalid chain id: ${chainId}`)
-  return `https://lb.drpc.org/ogrpc?network=${chainSlug}&dkey=${privateKey}`
-}
+import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 
 type NetworksWithFork = readonly [
   typeof mainnet,

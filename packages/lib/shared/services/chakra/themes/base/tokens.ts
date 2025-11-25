@@ -20,6 +20,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           specialSecondary: colors.gradient.sunsetLight,
           highlight: colors.green['500'],
           gold: colors.gradient.goldLight,
+          warning: colors.gradient.warningLight,
         },
         border: {
           base: '#FFFFFF',
@@ -77,7 +78,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           bgFocus: '#ffffff',
           bgError: 'rgba(254, 244, 242, 0.5)',
           bgErrorFocus: 'tinycolor(colors.base.light).lighten(8)',
-          borderDefault: '#DAD3C3',
+          borderDefault: '#c9bb9a',
           borderHover: colors.purple['500'],
           borderFocus: colors.purple['500'],
           borderError: colors.red['500'],
@@ -108,6 +109,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           specialSecondary: colors.gradient.sunsetDark,
           highlight: colors.green['400'],
           gold: colors.gradient.goldDark,
+          warning: colors.gradient.warningDark,
         },
         // Border colors
         border: {
@@ -171,7 +173,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           bgFocus: tinycolor(colors.base.dark).darken(8),
           bgError: '#474046',
           bgErrorFocus: tinycolor(colors.base.dark).darken(8),
-          borderDefault: tinycolor(colors.base.dark).lighten(10),
+          borderDefault: '#535D6A',
           borderHover: colors.purple['400'],
           borderFocus: colors.purple['400'],
           borderError: colors.red['400'],

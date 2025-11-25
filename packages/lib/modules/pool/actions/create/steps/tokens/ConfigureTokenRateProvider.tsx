@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Radio, InputGroup } from '@chakra-ui/react'
+import { Text, HStack, VStack, RadioGroup, Stack, Radio } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
 import { PoolCreationForm } from '../../types'
@@ -12,6 +12,8 @@ import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { usePublicClient } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -22,13 +24,10 @@ export function ConfigureTokenRateProvider({
   tokenIndex,
   verifiedRateProviderAddress,
 }: ConfigureTokenRateProviderProps) {
-  const { poolTokens, network, updatePoolToken, poolCreationForm } = usePoolCreationForm()
+  const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, network] = poolCreationForm.watch(['poolTokens', 'network'])
 
   if (!poolTokens[tokenIndex].address) return null
-
-  if (!verifiedRateProviderAddress) {
-    return <Text color="font.secondary">No rate provider is required for this token</Text>
-  }
 
   const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
 
@@ -60,6 +59,10 @@ export function ConfigureTokenRateProvider({
   const isVerifiedRateProvider = rateProviderRadioValue === RateProviderOption.Verified
   const showYieldFeesToggle = isCustomRateProvider || isVerifiedRateProvider
 
+  const adjustedRateProviderOptions = RATE_PROVIDER_RADIO_OPTIONS.filter(
+    option => option.value !== RateProviderOption.Verified || verifiedRateProviderAddress
+  )
+
   return (
     <VStack align="start" spacing="md" w="full">
       <VStack align="start" w="full">
@@ -69,7 +72,7 @@ export function ConfigureTokenRateProvider({
         </HStack>
         <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>
           <Stack spacing={3}>
-            {RATE_PROVIDER_RADIO_OPTIONS.map(({ label, value }) => (
+            {adjustedRateProviderOptions.map(({ label, value }) => (
               <HStack key={value} spacing="xs">
                 <Radio size="lg" value={value}>
                   <Text>{label}</Text>
@@ -93,6 +96,7 @@ export function ConfigureTokenRateProvider({
           control={poolCreationForm.control}
           errors={poolCreationForm.formState.errors}
           isCustomRateProvider={isCustomRateProvider}
+          network={network}
           tokenIndex={tokenIndex}
         />
       )}
@@ -109,6 +113,7 @@ interface CustomRateProviderInputProps {
   errors: FieldErrors<PoolCreationForm>
   chainName: string
   isCustomRateProvider: boolean
+  network: GqlChain
 }
 
 function CustomRateProviderInput({
@@ -116,8 +121,9 @@ function CustomRateProviderInput({
   control,
   errors,
   chainName,
+  network,
 }: CustomRateProviderInputProps) {
-  const { updatePoolToken, poolCreationForm, network } = usePoolCreationForm()
+  const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
   const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
 
   async function paste() {
@@ -151,31 +157,29 @@ function CustomRateProviderInput({
   return (
     <VStack align="start" spacing="md" w="full">
       <VStack align="start" spacing="sm" w="full">
-        <InputGroup>
-          <Controller
-            control={control}
-            name={`poolTokens.${tokenIndex}.rateProvider`}
-            render={({ field }) => (
-              <InputWithError
-                error={rateProviderErrors?.message}
-                isInvalid={!!rateProviderErrors}
-                label={`Rate provider contract address on ${chainName}`}
-                onChange={e => field.onChange(e.target.value)}
-                pasteFn={paste}
-                placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
-                tooltip="The contract you enter must have a function named getRate"
-                value={field.value}
-              />
-            )}
-            rules={{
-              validate: validateRateProvider,
-            }}
-          />
-        </InputGroup>
+        <Controller
+          control={control}
+          name={`poolTokens.${tokenIndex}.rateProvider`}
+          render={({ field }) => (
+            <InputWithError
+              error={rateProviderErrors?.message}
+              isInvalid={!!rateProviderErrors}
+              label={`Rate provider contract address on ${chainName}`}
+              onChange={e => field.onChange(e.target.value)}
+              pasteFn={paste}
+              placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
+              tooltip="The contract you enter must have a function named getRate"
+              value={field.value}
+            />
+          )}
+          rules={{
+            validate: validateRateProvider,
+          }}
+        />
       </VStack>
 
       <BalAlert
-        content="All new Rate Provider contracts must be reviewed and approved before LPs can interact with the pool on the Balancer.fi UI. Learn more."
+        content={`All new Rate Provider contracts must be reviewed and approved before LPs can interact with the pool on the ${PROJECT_CONFIG.projectName} UI. Learn more.`}
         status="warning"
       />
     </VStack>

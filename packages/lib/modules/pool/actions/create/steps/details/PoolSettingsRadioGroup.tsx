@@ -1,4 +1,4 @@
-import { VStack, HStack, Text, RadioGroup, Radio, Stack, InputGroup } from '@chakra-ui/react'
+import { VStack, HStack, Text, RadioGroup, Radio, Stack } from '@chakra-ui/react'
 import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { Controller } from 'react-hook-form'
@@ -109,31 +109,31 @@ export function PoolSettingsRadioGroup({
                         isCustomOptionSelected &&
                         (customInputType === 'address' ? (
                           <VStack align="start" spacing="md" w="full">
-                            <InputGroup>
-                              <Controller
-                                control={control}
-                                name={name}
-                                render={({ field }) => (
-                                  <InputWithError
-                                    error={errors?.message}
-                                    isInvalid={!!errors}
-                                    label={customInputLabel}
-                                    onChange={e => field.onChange(e.target.value)}
-                                    pasteFn={handlePaste}
-                                    placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
-                                    tooltip="TODO"
-                                    value={field.value}
-                                  />
-                                )}
-                                rules={{ validate: validateAsync ? validateAsync : validate }}
-                              />
-                            </InputGroup>
-                            <BalAlert
-                              content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
-                              status="warning"
-                              title="Unrecognized contract"
-                              w="full"
+                            <Controller
+                              control={control}
+                              name={name}
+                              render={({ field }) => (
+                                <InputWithError
+                                  error={errors?.message}
+                                  isInvalid={!!errors}
+                                  label={customInputLabel}
+                                  onChange={e => field.onChange(e.target.value)}
+                                  pasteFn={handlePaste}
+                                  placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
+                                  tooltip="Paste any valid address"
+                                  value={field.value}
+                                />
+                              )}
+                              rules={{ validate: validateAsync ? validateAsync : validate }}
                             />
+                            {name === 'poolHooksContract' && (
+                              <BalAlert
+                                content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
+                                status="warning"
+                                title="Unrecognized contract"
+                                w="full"
+                              />
+                            )}
                           </VStack>
                         ) : (
                           <NumberInput
