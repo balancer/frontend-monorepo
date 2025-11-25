@@ -13,24 +13,23 @@ import { useLbpWeights } from './useLbpWeights'
 import { Address } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { LbpLearnMoreModal } from './modal/LbpLearnMoreModal'
+import { useWatch } from 'react-hook-form'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
 
-  const {
-    saleStructureForm: { watch },
-    resetLbpCreation,
-  } = useLbpForm()
-  const saleStructureData = watch()
+  const { saleStructureForm, resetLbpCreation } = useLbpForm()
+  const saleStructureData = useWatch({ control: saleStructureForm.control })
 
   const { isLastStep, projectInfoForm, updatePriceStats, maxPrice, saleMarketCap, fdvMarketCap } =
     useLbpForm()
 
-  const chain = saleStructureData.selectedChain
-  const launchTokenAddress = saleStructureData.launchTokenAddress
-  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
+  const chain = saleStructureData.selectedChain || PROJECT_CONFIG.defaultNetwork
+  const launchTokenAddress = saleStructureData.launchTokenAddress || ''
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress || '', chain)
 
-  const collateralTokenAddress = saleStructureData.collateralTokenAddress
+  const collateralTokenAddress = saleStructureData.collateralTokenAddress || ''
 
   const { projectTokenStartWeight: startWeight, projectTokenEndWeight: endWeight } = useLbpWeights()
 
@@ -82,22 +81,22 @@ export function LbpPreview() {
 
               <PoolWeights
                 collateralToken={getToken(collateralTokenAddress, chain)}
-                endDateTime={saleStructureData.endDateTime}
+                endDateTime={saleStructureData.endDateTime || ''}
                 endWeight={endWeight}
                 launchTokenMetadata={launchTokenMetadata}
-                startDateTime={saleStructureData.startDateTime}
+                startDateTime={saleStructureData.startDateTime || ''}
                 startWeight={startWeight}
               />
 
               <ProjectedPrice
                 collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
                 collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
-                endDateTime={saleStructureData.endDateTime}
+                endDateTime={saleStructureData.endDateTime || ''}
                 endWeight={endWeight}
                 launchTokenSeed={Number(saleStructureData.saleTokenAmount || 0)}
                 launchTokenSymbol={launchTokenMetadata?.symbol || ''}
                 onPriceChange={updatePriceStats}
-                startDateTime={saleStructureData.startDateTime}
+                startDateTime={saleStructureData.startDateTime || ''}
                 startWeight={startWeight}
               />
             </>

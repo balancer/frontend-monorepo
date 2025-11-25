@@ -6,15 +6,14 @@ import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfi
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
 import { isWeightedPool, isCustomWeightedPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolType() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [network, protocol, poolType, weightedPoolStructure] = poolCreationForm.watch([
-    'network',
-    'protocol',
-    'poolType',
-    'weightedPoolStructure',
-  ])
+  const [network, protocol, poolType, weightedPoolStructure] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure'],
+  })
 
   const cardInformationRows = [
     {

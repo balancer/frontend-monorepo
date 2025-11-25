@@ -23,6 +23,7 @@ import { useCreatePoolInput } from './useCreatePoolInput'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useInitializePoolInput } from './useInitializePoolInput'
 import { RestartPoolCreationModal } from './RestartPoolCreationModal'
+import { useWatch } from 'react-hook-form'
 
 type PoolCreationModalProps = {
   isOpen: boolean
@@ -39,7 +40,10 @@ export function PoolCreationModal({
 }: PoolCreationModalProps & Omit<ModalProps, 'children'>) {
   const { poolCreationForm, resetPoolCreationForm, poolAddress, setPoolAddress } =
     usePoolCreationForm()
-  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
+  const [network, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType'],
+  })
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)

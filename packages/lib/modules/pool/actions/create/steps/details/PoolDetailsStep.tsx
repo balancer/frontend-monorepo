@@ -8,10 +8,11 @@ import { SimilarPoolsModal } from '../../modal/SimilarPoolsModal'
 import { GyroEclpConfiguration } from './GyroEclpConfiguration'
 import { useValidateEclpParams } from './useValidateEclpParams'
 import { isReClammPool, isGyroEllipticPool } from '../../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PoolDetailsStep() {
   const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
-  const [poolType] = poolCreationForm.watch(['poolType'])
+  const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
   const { isEclpParamsValid } = useValidateEclpParams()
 
   const isPoolCreationFormInvalid = !poolCreationForm.formState.isValid

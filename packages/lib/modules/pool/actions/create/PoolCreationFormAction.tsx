@@ -9,14 +9,14 @@ import { useRef, useEffect } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 import { isReClammPool } from './helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { poolAddress, poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, poolType, network] = poolCreationForm.watch([
-    'poolTokens',
-    'poolType',
-    'network',
-  ])
+  const [poolTokens, poolType, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType', 'network'],
+  })
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()

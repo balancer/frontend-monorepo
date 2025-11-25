@@ -17,6 +17,7 @@ import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useRouter } from 'next/navigation'
+import { useWatch } from 'react-hook-form'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -97,16 +98,18 @@ export function useLbpFormLogic() {
     router.replace('/lbp/create')
   }
 
-  const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } =
-    saleStructureForm.watch()
+  const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } = useWatch({
+    control: saleStructureForm.control,
+  })
 
+  const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
   const { tokens } = getNetworkConfig(selectedChain)
   const isCollateralNativeAsset =
-    collateralTokenAddress.toLowerCase() === tokens.nativeAsset.address.toLowerCase()
+    (collateralTokenAddress || '').toLowerCase() === tokens.nativeAsset.address.toLowerCase()
 
   const launchTokenSeed = Number(saleTokenAmount || 0)
 
-  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress || '', chain)
 
   const [maxPrice, setMaxPrice] = useState(0)
   const [saleMarketCap, setSaleMarketCap] = useState('')
@@ -127,8 +130,8 @@ export function useLbpFormLogic() {
 
   const launchToken: CustomToken = {
     name: launchTokenMetadata.name || '',
-    chain: selectedChain,
-    chainId: getChainId(selectedChain),
+    chain,
+    chainId: getChainId(chain),
     address: launchTokenAddress as Address,
     symbol: launchTokenMetadata.symbol || '',
     logoURI: projectInfoForm.getValues().tokenIconUrl || '',

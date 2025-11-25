@@ -4,10 +4,14 @@ import { drawLiquidityECLP } from '@repo/lib/modules/eclp/helpers/drawLiquidityE
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePoolSpotPriceWithoutRate } from '../steps/details/usePoolSpotPriceWithoutRate'
 import { isGyroEllipticPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, poolType] = poolCreationForm.watch(['poolTokens', 'poolType'])
+  const [poolTokens, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType'],
+  })
   const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
 
   const poolSpotPrice = spotPriceWithoutRate.toString()
@@ -16,7 +20,7 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
 
   const priceRateRatio = bn(rateTokenA).div(bn(rateTokenB))
 
-  const eclpParams = eclpConfigForm.watch()
+  const eclpParams = useWatch({ control: eclpConfigForm.control })
   const [alpha, beta, s, c, lambda] = [
     eclpParams.alpha,
     eclpParams.beta,

@@ -20,27 +20,30 @@ import { TokenInfo } from './TokenInfo'
 import { SocialLink } from './SocialLink'
 import { OtherSaleDetails } from './OtherSaleDetails'
 import { normalizeUrl } from '@repo/lib/shared/utils/urls'
+import { useWatch } from 'react-hook-form'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { UserActions } from '../../lbp.types'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
   const { projectInfoForm, saleStructureForm } = useLbpForm()
-  const projectInfoData = projectInfoForm.watch()
-  const saleStructureData = saleStructureForm.watch()
+  const projectInfoData = useWatch({ control: projectInfoForm.control })
+  const saleStructureData = useWatch({ control: saleStructureForm.control })
 
-  const chain = saleStructureData.selectedChain
-  const launchTokenAddress = saleStructureData.launchTokenAddress
+  const chain = saleStructureData.selectedChain || PROJECT_CONFIG.defaultNetwork
+  const launchTokenAddress = saleStructureData.launchTokenAddress || ''
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
   const launchTokenSeed = saleStructureData.saleTokenAmount
-  const collateralTokenAddress = saleStructureData.collateralTokenAddress
+  const collateralTokenAddress = saleStructureData.collateralTokenAddress || ''
   const collateralToken = getToken(collateralTokenAddress, chain)
   const collateralTokenSeed = saleStructureData.collateralTokenAmount
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
 
   const saleStartTime = saleStructureData.startDateTime
   const saleEndTime = saleStructureData.endDateTime
-  const daysDiff = differenceInDays(parseISO(saleEndTime), parseISO(saleStartTime))
+  const daysDiff = differenceInDays(parseISO(saleEndTime || ''), parseISO(saleStartTime || ''))
   const hoursDiff =
-    differenceInHours(parseISO(saleEndTime), parseISO(saleStartTime)) - daysDiff * 24
+    differenceInHours(parseISO(saleEndTime || ''), parseISO(saleStartTime || '')) - daysDiff * 24
 
   return (
     <VStack align="start" gap="ms" w="full">
@@ -75,9 +78,9 @@ export function ReviewStep() {
 
           <HStack spacing="4" w={{ base: 'full', lg: 'auto' }}>
             <SocialLink
-              href={projectInfoData.websiteUrl}
+              href={projectInfoData.websiteUrl || ''}
               socialNetwork="website"
-              title={projectInfoData.websiteUrl}
+              title={projectInfoData.websiteUrl || ''}
             />
             {projectInfoData.xHandle && (
               <SocialLink
@@ -103,16 +106,16 @@ export function ReviewStep() {
         }
         <SimpleInfoCard
           info={
-            isValid(parseISO(saleStartTime))
-              ? format(parseISO(saleStartTime), 'dd/MM/yyyy h:mmaaa')
+            isValid(parseISO(saleStartTime || ''))
+              ? format(parseISO(saleStartTime || ''), 'dd/MM/yyyy h:mmaaa')
               : ''
           }
           title="LBP start time"
         />
         <SimpleInfoCard
           info={
-            isValid(parseISO(saleEndTime))
-              ? format(parseISO(saleEndTime), 'dd/MM/yyyy h:mmaaa')
+            isValid(parseISO(saleEndTime || ''))
+              ? format(parseISO(saleEndTime || ''), 'dd/MM/yyyy h:mmaaa')
               : ''
           }
           title="LBP end time"
@@ -131,7 +134,7 @@ export function ReviewStep() {
           <VStack gap="md" w="full">
             <TokenInfo
               amount={Number(launchTokenSeed || 0)}
-              iconURL={normalizeUrl(projectInfoData.tokenIconUrl)}
+              iconURL={normalizeUrl(projectInfoData.tokenIconUrl || '')}
               name={launchTokenMetadata.name || ''}
               symbol={launchTokenMetadata.symbol || ''}
             />
@@ -148,9 +151,9 @@ export function ReviewStep() {
       </Card>
 
       <OtherSaleDetails
-        fee={saleStructureData.fee}
+        fee={saleStructureData.fee || 1.0}
         launchTokenSymbol={launchTokenMetadata.symbol || ''}
-        userActions={saleStructureData.userActions}
+        userActions={saleStructureData.userActions || UserActions.BUY_AND_SELL}
       />
 
       <LbpFormAction />

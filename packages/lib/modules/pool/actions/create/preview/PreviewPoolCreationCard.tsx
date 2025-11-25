@@ -2,6 +2,8 @@ import { Card } from '@chakra-ui/react'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { useWatch } from 'react-hook-form'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   children: React.ReactNode
@@ -11,14 +13,16 @@ type Props = {
 export function PreviewPoolCreationCard({ children, stepTitle }: Props) {
   const { isBeforeStep, isStep } = usePoolCreationFormSteps()
   const { poolCreationForm } = usePoolCreationForm()
-  const { poolTokens, network } = poolCreationForm.watch()
+  const { poolTokens, network } = useWatch({ control: poolCreationForm.control })
   const { priceFor } = useTokens()
 
-  const areAllTokensChosen = poolTokens.every(token => token.address)
+  const areAllTokensChosen = (poolTokens || []).every(token => token.address)
   const isAnyTokenWithoutPrice =
     areAllTokensChosen &&
-    poolTokens.some(token => {
-      return !token.usdPrice && !priceFor(token.address || '', network)
+    (poolTokens || []).some(token => {
+      return (
+        !token.usdPrice && !priceFor(token.address || '', network || PROJECT_CONFIG.defaultNetwork)
+      )
     })
 
   let bg = 'background.level2'

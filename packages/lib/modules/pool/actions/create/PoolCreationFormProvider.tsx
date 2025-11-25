@@ -20,6 +20,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { useWatch } from 'react-hook-form'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -109,7 +110,10 @@ export function usePoolFormLogic() {
   }
 
   const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()
-  const [network, poolTokens] = poolCreationForm.watch(['network', 'poolTokens'])
+  const [network, poolTokens] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolTokens'],
+  })
 
   const tokenList = useMemo(() => {
     const networkTokens = getTokensByChain(network.toUpperCase() as GqlChain) || []

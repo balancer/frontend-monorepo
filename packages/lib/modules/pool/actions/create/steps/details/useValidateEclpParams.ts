@@ -4,11 +4,12 @@ import { computeDerivedEclpParams, PoolType } from '@balancer/sdk'
 import { parseUnits } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { DEFAULT_DECIMALS } from '../../constants'
+import { useWatch } from 'react-hook-form'
 
 export function useValidateEclpParams() {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
-  const poolType = poolCreationForm.watch('poolType')
-  const { alpha, beta, c, s, lambda } = eclpConfigForm.watch()
+  const poolType = useWatch({ control: poolCreationForm.control, name: 'poolType' })
+  const { alpha, beta, c, s, lambda } = useWatch({ control: eclpConfigForm.control })
 
   const errorMessage = useMemo(() => {
     if (poolType !== PoolType.GyroE) return null

@@ -11,6 +11,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
 import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
+import { useWatch } from 'react-hook-form'
 
 export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
@@ -46,12 +47,11 @@ function ConfigOptionsGroup({
   tooltip,
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
-  const [initialMinPrice, initialTargetPrice, initialMaxPrice] = reClammConfigForm.watch([
-    'initialMinPrice',
-    'initialTargetPrice',
-    'initialMaxPrice',
-  ])
-  const formValue = reClammConfigForm.watch(name)
+  const [initialMinPrice, initialTargetPrice, initialMaxPrice] = useWatch({
+    control: reClammConfigForm.control,
+    name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
+  })
+  const formValue = useWatch({ control: reClammConfigForm.control, name })
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
     if (option.rawValue === normalizedFormValue) return true

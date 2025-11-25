@@ -15,16 +15,21 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useGyroEclpInitAmountsRatio } from './useGyroEclpInitAmountsRatio'
 import { isWeightedPool, isReClammPool, isGyroEllipticPool } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
+import { useWatch } from 'react-hook-form'
 
 export function PoolFundStep() {
   const { poolAddress, poolCreationForm } = usePoolCreationForm()
-  const [poolType, poolTokens, hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk] =
-    poolCreationForm.watch([
-      'poolType',
-      'poolTokens',
-      'hasAcceptedTokenWeightsRisk',
-      'hasAcceptedPoolCreationRisk',
-    ])
+  const [poolType, poolTokens, hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk] = useWatch(
+    {
+      control: poolCreationForm.control,
+      name: [
+        'poolType',
+        'poolTokens',
+        'hasAcceptedTokenWeightsRisk',
+        'hasAcceptedPoolCreationRisk',
+      ],
+    }
+  )
   const { hasValidationErrors } = useTokenInputsValidation()
 
   const isTokenAmountsValid =
@@ -81,7 +86,7 @@ interface TokenAmountInputProps {
 
 function TokenAmountInput({ token, idx, poolType, poolTokens }: TokenAmountInputProps) {
   const { updatePoolToken, poolAddress, poolCreationForm } = usePoolCreationForm()
-  const [network] = poolCreationForm.watch(['network'])
+  const [network] = useWatch({ control: poolCreationForm.control, name: ['network'] })
   const { reClammInitAmounts } = useReClammInitAmounts(isReClammPool(poolType), poolAddress, token)
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 

@@ -4,6 +4,8 @@ import { useLbpForm } from './LbpFormProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
 import { type InputAmountWithSymbol } from '@repo/lib/modules/pool/actions/create/types'
+import { useWatch } from 'react-hook-form'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useInitializeLbpInput() {
   const { saleStructureForm, isCollateralNativeAsset } = useLbpForm()
@@ -13,13 +15,14 @@ export function useInitializeLbpInput() {
     collateralTokenAmount,
     launchTokenAddress,
     saleTokenAmount,
-  } = saleStructureForm.watch()
+  } = useWatch({ control: saleStructureForm.control })
 
-  const chainId = getChainId(selectedChain)
+  const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
+  const chainId = getChainId(chain)
   const wethIsEth = isCollateralNativeAsset
   const minBptAmountOut = 0n
 
-  let reserveTokenAddress = collateralTokenAddress
+  let reserveTokenAddress = collateralTokenAddress || ''
   if (isCollateralNativeAsset) {
     const { tokens } = getNetworkConfig(selectedChain)
     reserveTokenAddress = tokens.addresses.wNativeAsset
@@ -29,12 +32,12 @@ export function useInitializeLbpInput() {
     decimals: reserveTokenDecimals,
     symbol: reserveTokenSymbol,
     isLoading: isLoadingCollateralToken,
-  } = useTokenMetadata(reserveTokenAddress, selectedChain)
+  } = useTokenMetadata(reserveTokenAddress, chain)
   const {
     decimals: launchTokenDecimals,
     symbol: launchTokenSymbol,
     isLoading: isLoadingLaunchToken,
-  } = useTokenMetadata(launchTokenAddress, selectedChain)
+  } = useTokenMetadata(launchTokenAddress || '', chain)
 
   const isLoading = isLoadingLaunchToken || isLoadingCollateralToken
   const isMissingDecimal = !launchTokenDecimals || !reserveTokenDecimals
@@ -47,14 +50,14 @@ export function useInitializeLbpInput() {
   const launchTokenAmountIn: InputAmountWithSymbol = {
     address: launchTokenAddress as Address,
     decimals: launchTokenDecimals,
-    rawAmount: parseUnits(saleTokenAmount, launchTokenDecimals),
+    rawAmount: parseUnits(saleTokenAmount || '0', launchTokenDecimals),
     symbol: launchTokenSymbol,
   }
 
   const reserveTokenAmountIn: InputAmountWithSymbol = {
     address: reserveTokenAddress as Address,
     decimals: reserveTokenDecimals,
-    rawAmount: parseUnits(collateralTokenAmount, reserveTokenDecimals),
+    rawAmount: parseUnits(collateralTokenAmount || '0', reserveTokenDecimals),
     symbol: reserveTokenSymbol,
   }
 

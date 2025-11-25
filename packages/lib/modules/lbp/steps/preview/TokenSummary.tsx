@@ -22,7 +22,7 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertTriangle, Plus } from 'react-feather'
-import { Controller, UseFormReturn } from 'react-hook-form'
+import { Controller, UseFormReturn, useWatch } from 'react-hook-form'
 import { ProjectInfoForm } from '../../lbp.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
@@ -44,7 +44,7 @@ export function TokenSummary({
   launchTokenAddress,
   launchTokenMetadata,
 }: Props) {
-  const tokenIconURL = projectInfoForm.watch('tokenIconUrl')
+  const tokenIconURL = useWatch({ control: projectInfoForm.control, name: 'tokenIconUrl' })
   const hasIconErrors = projectInfoForm.formState.errors.tokenIconUrl !== undefined
 
   return (

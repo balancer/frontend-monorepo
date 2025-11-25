@@ -8,6 +8,7 @@ import { formatUnits } from 'viem'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
 import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolTokensInWallet() {
   return (
@@ -24,7 +25,7 @@ export function PreviewPoolTokensInWallet() {
 
 function PoolTokensInWalletContent() {
   const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = poolCreationForm.watch('poolTokens')
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
   const { toCurrency } = useCurrency()
   const { usdValueForTokenAddress } = useTokens()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
