@@ -22,7 +22,7 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertTriangle, Plus } from 'react-feather'
-import { Controller, UseFormReturn, useWatch } from 'react-hook-form'
+import { Controller, UseFormReturn, useFormState, useWatch } from 'react-hook-form'
 import { ProjectInfoForm } from '../../lbp.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
@@ -45,7 +45,8 @@ export function TokenSummary({
   launchTokenMetadata,
 }: Props) {
   const tokenIconURL = useWatch({ control: projectInfoForm.control, name: 'tokenIconUrl' })
-  const hasIconErrors = projectInfoForm.formState.errors.tokenIconUrl !== undefined
+  const formState = useFormState({ control: projectInfoForm.control, name: 'tokenIconUrl' })
+  const hasIconErrors = formState.errors.tokenIconUrl !== undefined
 
   return (
     <Card>
@@ -88,8 +89,8 @@ export function TokenSummary({
                       name="tokenIconUrl"
                       render={({ field }) => (
                         <InputWithError
-                          error={projectInfoForm.formState.errors.tokenIconUrl?.message}
-                          isInvalid={!!projectInfoForm.formState.errors.tokenIconUrl}
+                          error={formState.errors.tokenIconUrl?.message}
+                          isInvalid={!!formState.errors.tokenIconUrl}
                           onChange={e => field.onChange(e.target.value)}
                           placeholder="https://project-name.com/token.svg"
                           value={field.value}

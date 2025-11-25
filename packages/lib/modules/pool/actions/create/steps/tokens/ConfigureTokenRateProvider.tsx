@@ -5,7 +5,7 @@ import { PoolCreationForm } from '../../types'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { Address, parseAbi, zeroAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
-import { Control, Controller, FieldErrors, useWatch } from 'react-hook-form'
+import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
@@ -29,6 +29,7 @@ export function ConfigureTokenRateProvider({
     control: poolCreationForm.control,
     name: ['poolTokens', 'network'],
   })
+  const formState = useFormState({ control: poolCreationForm.control })
 
   if (!poolTokens[tokenIndex].address) return null
 
@@ -97,7 +98,7 @@ export function ConfigureTokenRateProvider({
         <CustomRateProviderInput
           chainName={getChainName(network)}
           control={poolCreationForm.control}
-          errors={poolCreationForm.formState.errors}
+          errors={formState.errors}
           isCustomRateProvider={isCustomRateProvider}
           network={network}
           tokenIndex={tokenIndex}

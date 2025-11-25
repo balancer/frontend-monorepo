@@ -40,7 +40,7 @@ import {
   isGyroEllipticPool,
 } from '../../helpers'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
-import { useWatch } from 'react-hook-form'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -185,6 +185,7 @@ function ConfigureToken({
   poolType,
 }: ConfigureTokenProps) {
   const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
+  const formState = useFormState({ control: poolCreationForm.control })
 
   const { priceFor } = useTokens()
 
@@ -201,7 +202,7 @@ function ConfigureToken({
   }, [cgPriceForToken, apiPriceForToken, token.usdPrice])
 
   const isInvalidWeight = !!token.weight && Number(token.weight) < 1
-  const tokenWeightErrorMsg = poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
+  const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
 
   return (
     <VStack align="start" key={index} spacing="md" w="full">
