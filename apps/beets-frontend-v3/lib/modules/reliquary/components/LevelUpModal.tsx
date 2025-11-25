@@ -16,13 +16,15 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
-import { useReliquary } from '../ReliquaryProvider'
+import { useLevelUpStep } from '../hooks/useLevelUpStep'
+import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 
 type Props = {
   isOpen: boolean
   onClose(): void
   chain: GqlChain
   nextLevel: number
+  relicId: string
 }
 
 export function LevelUpModal({
@@ -30,10 +32,13 @@ export function LevelUpModal({
   onClose,
   chain,
   nextLevel,
+  relicId,
   ...rest
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
-  const { levelUpTransactionSteps, levelUpTxHash } = useReliquary()
+  const { step: levelUpStep } = useLevelUpStep(chain, relicId)
+  const levelUpTransactionSteps = useTransactionSteps([levelUpStep], false)
+  const levelUpTxHash = levelUpTransactionSteps.lastTransaction?.result?.data?.transactionHash
 
   useResetStepIndexOnOpen(isOpen, levelUpTransactionSteps)
 

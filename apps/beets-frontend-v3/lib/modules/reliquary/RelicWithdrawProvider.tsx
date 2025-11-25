@@ -15,14 +15,19 @@ import { HumanAmount } from '@balancer/sdk'
 export function RelicWithdrawProvider({
   children,
   urlTxHash,
+  relicId,
 }: {
   children: React.ReactNode
   urlTxHash?: Hash
+  relicId: string
 }) {
-  const { selectedRelicId: relicId, selectedRelic } = useReliquary()
+  const { relicPositions } = useReliquary()
+
+  // Find the relic from positions
+  const relic = relicPositions.find(r => r.relicId === relicId)
 
   // Convert relicId string to number for handler
-  const relicIdNumber = relicId ? parseInt(relicId, 10) : undefined
+  const relicIdNumber = parseInt(relicId, 10)
 
   // Custom selector that returns reliquary handler based on removal type
   const reliquaryHandlerSelector = useCallback(
@@ -44,7 +49,7 @@ export function RelicWithdrawProvider({
   return (
     <RemoveLiquidityProvider
       handlerSelector={reliquaryHandlerSelector}
-      maxHumanBptIn={selectedRelic?.amount as HumanAmount | undefined}
+      maxHumanBptIn={relic?.amount as HumanAmount | undefined}
       urlTxHash={urlTxHash}
     >
       {children}

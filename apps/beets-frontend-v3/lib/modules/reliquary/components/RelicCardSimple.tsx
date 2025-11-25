@@ -1,31 +1,17 @@
 'use client'
 
-import {
-  Badge,
-  Box,
-  Button,
-  HStack,
-  IconButton,
-  Portal,
-  Progress,
-  SimpleGrid,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Progress, SimpleGrid, Text, VStack } from '@chakra-ui/react'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import Stat from '@repo/lib/shared/components/other/Stat'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Countdown from 'react-countdown'
-import { BarChart } from 'react-feather'
+import { formatUnits } from 'viem'
 import { BeetsSubmitTransactionButton } from '~/components/button/BeetsSubmitTransactionButton'
-import BeetsTooltip from '~/components/tooltip/BeetsTooltip'
 import { ReliquaryFarmPosition, useReliquary } from '../ReliquaryProvider'
 import RelicLevel1 from '../assets/1.png'
 import RelicLevel10 from '../assets/10.png'
@@ -39,14 +25,15 @@ import RelicLevel7 from '../assets/7.png'
 import RelicLevel8 from '../assets/8.png'
 import RelicLevel9 from '../assets/9.png'
 import { BeetsTokenSonic } from '../assets/BeetsTokenSonic'
+import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
 import { useBatchRelayerHasApprovedForAll } from '../lib/useBatchRelayerHasApprovedForAll'
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
 import { useRelicHarvestRewards } from '../lib/useRelicHarvestRewards'
-import { useRelicPendingRewards } from '../lib/useRelicPendingRewards'
 import { LevelUpModal } from './LevelUpModal'
-import RelicMaturityModal from './RelicMaturityModal'
 import { ReliquaryBatchRelayerApprovalButton } from './ReliquaryBatchRelayerApprovalButton'
+import { RelicMaturityCurveChart } from './charts/RelicMaturityCurveChart'
+import RelicStat, { StatLabel, StatValueText } from './stats/RelicStat'
 
 interface RelicCardSimpleProps {
   relic: ReliquaryFarmPosition
@@ -84,22 +71,24 @@ function getImage(level: number) {
 
 export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimpleProps) {
   const router = useRouter()
-  const { selectedRelicLevel, maturityThresholds, chain, selectedRelicApr, weightedTotalBalance } =
-    useReliquary()
-  const { relicBalanceUSD } = useRelicDepositBalance()
+  const { reliquaryLevels, maturityThresholds, chain, weightedTotalBalance } = useReliquary()
+  const { relicBalanceUSD } = useRelicDepositBalance(relic.relicId)
   const { pool } = usePool()
   const config = useNetworkConfig()
   const { priceFor } = useTokens()
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
-  const {
-    isOpen: isMaturityModalOpen,
-    onOpen: onMaturityModalOpen,
-    onClose: onMaturityModalClose,
-  } = useDisclosure()
 
-  const { data: pendingRewards = [], refetch: refetchPendingRewards } = useRelicPendingRewards()
+  // Get relic level data for this specific relic
+  const relicLevel = reliquaryLevels.find(level => level.level === relic.level)
+  const relicApr = relicLevel?.apr || '0'
+  const allocationPoints = relicLevel?.allocationPoints || 1
 
-  const { harvest, ...harvestQuery } = useRelicHarvestRewards(refetchPendingRewards)
+  const { data: pendingRewards, refetch: refetchPendingRewards } = useGetPendingReward(
+    chain,
+    relic.relicId
+  )
+
+  const { harvest, ...harvestQuery } = useRelicHarvestRewards(relic.relicId, refetchPendingRewards)
   const { data: batchRelayerHasApprovedForAll, refetch: refetchBatchRelayer } =
     useBatchRelayerHasApprovedForAll()
 
@@ -118,10 +107,9 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
   ]
 
   // Calculate pending rewards USD value
-  const pendingRewardsUsdValue = pendingRewards.reduce((sum: number, reward: any) => {
-    const price = priceFor(reward.address, config.chain)
-    return sum + parseFloat(reward.amount) * price
-  }, 0)
+  const pendingRewardsUsdValue = pendingRewards
+    ? priceFor(config.tokens.addresses.beets!, config.chain)
+    : 0
 
   // Get maturity progress
   const { progressToNextLevel, levelUpDate, isMaxMaturity, canUpgrade } = relicGetMaturityProgress(
@@ -141,12 +129,12 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
       return {
         ...item,
         title: 'BEETS reward APR',
-        apr: parseFloat(selectedRelicApr) - (baseApr?.apr || 0),
+        apr: parseFloat(relicApr) - (baseApr?.apr || 0),
       }
     } else if (item.title === 'Voting APR Boost' && item.type === 'STAKING_BOOST') {
       return {
         ...item,
-        apr: item.apr * ((selectedRelicLevel?.allocationPoints || 0) / 100),
+        apr: item.apr * (allocationPoints / 100),
       }
     } else {
       return item
@@ -156,7 +144,7 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
   const formattedApr = fNum('apr', maxTotalApr.toString())
 
   // Calculate Share percentage
-  const weightedRelicAmount = parseFloat(relic.amount) * (selectedRelicLevel?.allocationPoints || 0)
+  const weightedRelicAmount = parseFloat(relic.amount) * allocationPoints
   const relicShare = weightedTotalBalance > 0 ? weightedRelicAmount / weightedTotalBalance : 0
   const formattedShare = `${(relicShare * 100).toFixed(2)}%`
 
@@ -236,7 +224,7 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
         >
           <Button
             flex="1"
-            onClick={() => router.push('/mabeets/deposit')}
+            onClick={() => router.push(`/mabeets/deposit/${relic.relicId}`)}
             size="sm"
             variant="primary"
           >
@@ -245,7 +233,7 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
           {hasBalance ? (
             <Button
               flex="1"
-              onClick={() => router.push('/mabeets/withdraw')}
+              onClick={() => router.push(`/mabeets/withdraw/${relic.relicId}`)}
               size="sm"
               variant="secondary"
             >
@@ -314,80 +302,80 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
 
         {/* Right level number */}
         <Text color="white" fontSize="sm" fontWeight="bold">
-          {relic.level + 1}
+          {isMaxMaturity ? relic.level + 1 : relic.level + 2}
         </Text>
       </HStack>
 
       {/* Stat Cards - 2 per row SimpleGrid */}
-      <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={{ base: 'sm', lg: 'ms' }} width="full">
+      <SimpleGrid columns={{ base: 2, sm: 2 }} spacing={{ base: 'sm', lg: 'ms' }} width="full">
         {/* Liquidity Card */}
-        <Stat
-          label="Liquidity"
-          value={fNum('fiat', relicBalanceUSD)}
-          width={{ base: '100%', md: '100%' }}
-        />
+        <RelicStat>
+          <StatLabel label="Liquidity" />
+          <StatValueText>{fNum('fiat', relicBalanceUSD)} </StatValueText>
+        </RelicStat>
 
         {/* APR Card */}
-        <Stat label="APR" value={formattedApr} width={{ base: '100%', md: '100%' }} />
+        <RelicStat>
+          <StatLabel label="APR" />
+          <StatValueText>{formattedApr}</StatValueText>
+        </RelicStat>
 
         {/* Maturity Boost Card with Button */}
-        <Stat
-          label="Maturity boost"
-          value={
-            <HStack spacing="1">
-              <Text>{selectedRelicLevel?.allocationPoints || 1}x</Text>
-              <BeetsTooltip label="Click to see the maturity curve" noImage>
-                <IconButton
-                  aria-label="View maturity curve"
-                  icon={<BarChart size={14} />}
-                  minW="auto"
-                  onClick={onMaturityModalOpen}
-                  p="1"
-                  size="xs"
-                  variant="ghost"
-                />
-              </BeetsTooltip>
-            </HStack>
-          }
-          width={{ base: '100%', md: '100%' }}
-        />
+        <RelicStat>
+          <StatLabel label="Maturity boost" />
+          {/* <HStack spacing="1"> */}
+          <StatValueText>{allocationPoints}x</StatValueText>
+          {/* <BeetsTooltip label="Click to see the maturity curve" noImage>
+              <IconButton
+                aria-label="View maturity curve"
+                icon={<BarChart size={12} />}
+                minW="auto"
+                onClick={onMaturityModalOpen}
+                p="1"
+                size="xs"
+                variant="ghost"
+              />
+            </BeetsTooltip> */}
+          {/* </HStack> */}
+        </RelicStat>
 
         {/* Pending Rewards Card - Token Amounts Only */}
-        <Stat
-          label="Pending rewards"
-          value={
-            pendingRewardsUsdValue > 0 ? (
-              <VStack align="start" spacing="1">
-                {pendingRewards.map((reward: any, index: number) => {
-                  const tokenUsdValue =
-                    parseFloat(reward.amount) * priceFor(reward.address, config.chain)
-                  return (
-                    <HStack key={index} spacing="1">
-                      <BeetsTokenSonic height="16px" width="16px" />
-                      <Text>
-                        {parseFloat(reward.amount).toFixed(2)} (${tokenUsdValue.toFixed(2)})
-                      </Text>
-                    </HStack>
-                  )
-                })}
-              </VStack>
-            ) : (
-              '$0.00'
-            )
-          }
-          width={{ base: '100%', md: '100%' }}
-        />
+        <RelicStat>
+          <StatLabel label="Pending rewards" />
+          {pendingRewardsUsdValue > 0 ? (
+            <HStack spacing="1">
+              <BeetsTokenSonic height="16px" width="16px" />
+              <StatValueText>
+                {pendingRewards ? parseFloat(formatUnits(pendingRewards, 18)).toFixed(2) : 0} ($
+                {pendingRewardsUsdValue.toFixed(2)})
+              </StatValueText>
+            </HStack>
+          ) : (
+            '$0.00'
+          )}
+        </RelicStat>
 
         {/* Share Card */}
-        <Stat label="Share" value={formattedShare} width={{ base: '100%', md: '100%' }} />
+        {/* <Stat label="Share" value={formattedShare} width={{ base: '100%', md: '100%' }} /> */}
+        <RelicStat>
+          <StatLabel label="Share" />
+          <StatValueText>{formattedShare}</StatValueText>
+        </RelicStat>
 
         {/* Potential Daily Yield Card */}
-        <Stat
-          label="Potential daily yield"
-          value={`$${formattedDailyYield}`}
-          width={{ base: '100%', md: '100%' }}
-        />
+        <RelicStat>
+          <StatLabel label="Potential daily yield" />
+          <StatValueText>${formattedDailyYield}</StatValueText>
+        </RelicStat>
       </SimpleGrid>
+
+      {/* Maturity Curve Progress Chart - Full Width */}
+      <RelicStat>
+        <StatLabel label="Maturity Progress" />
+        <Box height="120px" width="full">
+          <RelicMaturityCurveChart currentLevel={relic.level} />
+        </Box>
+      </RelicStat>
 
       {/* Level Up Modal */}
       <LevelUpModal
@@ -395,12 +383,8 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
         isOpen={isLevelUpModalOpen}
         nextLevel={relic.level + 1}
         onClose={() => setIsLevelUpModalOpen(false)}
+        relicId={relic.relicId}
       />
-
-      {/* Maturity Modal */}
-      <Portal>
-        <RelicMaturityModal isOpen={isMaturityModalOpen} onClose={onMaturityModalClose} />
-      </Portal>
     </VStack>
   )
 }

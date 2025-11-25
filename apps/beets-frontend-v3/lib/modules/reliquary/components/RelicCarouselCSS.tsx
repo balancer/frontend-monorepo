@@ -12,7 +12,7 @@ export function RelicCarouselCSS() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [allRelicsVisible, setAllRelicsVisible] = useState(false)
 
-  const relicPositions = [...relics]
+  const relicPositions = [...relics, ...relics]
   useLayoutEffect(() => {
     const el = scrollContainerRef.current
     if (!el) return
@@ -99,7 +99,7 @@ export function RelicCarouselCSS() {
               setSelectedIndex(index)
               scrollToCard(index)
             }}
-            width={{ base: '90vw', md: '400px', lg: '450px' }}
+            width={{ base: '80vw', sm: '400px' }}
           >
             <RelicCardSimple isSelected={index === selectedIndex} relic={relic} />
           </Flex>

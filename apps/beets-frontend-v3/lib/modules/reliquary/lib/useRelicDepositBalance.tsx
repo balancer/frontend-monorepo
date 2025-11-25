@@ -1,11 +1,12 @@
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useReliquary } from '../ReliquaryProvider'
 
-export function useRelicDepositBalance() {
-  const { selectedRelic } = useReliquary()
+export function useRelicDepositBalance(relicId: string) {
+  const { relicPositions } = useReliquary()
   const { bptPrice } = usePool()
 
-  const relicBalanceUSD = selectedRelic ? parseFloat(selectedRelic.amount) * bptPrice : 0
+  const relic = relicPositions.find(r => r.relicId === relicId)
+  const relicBalanceUSD = relic ? parseFloat(relic.amount) * bptPrice : 0
 
   return {
     relicBalanceUSD,

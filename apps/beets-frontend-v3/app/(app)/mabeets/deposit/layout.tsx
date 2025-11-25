@@ -4,19 +4,15 @@ import { PropsWithChildren } from 'react'
 import { RelicDepositProvider } from '@/lib/modules/reliquary/RelicDepositProvider'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { isHash } from 'viem'
 
 type Props = PropsWithChildren<{
-  params: { txHash?: string[] }
+  params: { relicId?: string }
 }>
 
-export default function RelicDepositLayoutWrapper({ params: { txHash }, children }: Props) {
-  const maybeTxHash = txHash?.[0] || ''
-  const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
-
+export default function RelicDepositLayoutWrapper({ params: { relicId }, children }: Props) {
   return (
     <DefaultPageContainer>
-      <RelicDepositProvider urlTxHash={urlTxHash}>
+      <RelicDepositProvider relicId={relicId}>
         <PriceImpactProvider>{children}</PriceImpactProvider>
       </RelicDepositProvider>
     </DefaultPageContainer>

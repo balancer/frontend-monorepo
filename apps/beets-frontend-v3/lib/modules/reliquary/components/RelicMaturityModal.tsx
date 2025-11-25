@@ -1,7 +1,8 @@
+// LEGACY COMPONENT - COMMENTED OUT FOR REFERENCE
+// This component depends on RelicMaturity chart which uses selectedRelic
 import { Modal, ModalCloseButton, ModalOverlay } from '@chakra-ui/react'
 import React from 'react'
 import { BeetsModalContent } from '~/components/modal/BeetsModal'
-import RelicMaturity from './charts/RelicMaturity'
 
 interface Props {
   isOpen: boolean
@@ -13,7 +14,7 @@ export default function RelicMaturityModal({ isOpen, onClose }: Props) {
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay bg="blackAlpha.900" />
       <BeetsModalContent width="full">
-        <RelicMaturity />
+        {/* RelicMaturity chart component has been commented out */}
         <ModalCloseButton />
       </BeetsModalContent>
     </Modal>

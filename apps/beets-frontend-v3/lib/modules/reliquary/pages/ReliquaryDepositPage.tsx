@@ -37,24 +37,23 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
-import { useReliquary } from '../ReliquaryProvider'
 import { ReliquaryDepositImpactWarning } from '../components/ReliquaryDepositImpactWarning'
 import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
 import { ReliquaryDepositModal } from '../components/ReliquaryDepositModal'
 
-export function ReliquaryDepositPage() {
+export function ReliquaryDepositPage({ relicId }: { relicId?: string }) {
   const { validTokens } = useAddLiquidity()
 
   return (
     <PoolActionsLayout redirectPath="/mabeets">
       <TokenBalancesProvider extTokens={validTokens}>
-        <ReliquaryDepositForm />
+        <ReliquaryDepositForm relicId={relicId} />
       </TokenBalancesProvider>
     </PoolActionsLayout>
   )
 }
 
-function ReliquaryDepositForm() {
+function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
   const [tabIndex, setTabIndex] = useState(0)
   const nextBtn = useRef(null)
 
@@ -74,7 +73,6 @@ function ReliquaryDepositForm() {
     wantsProportional,
   } = useAddLiquidity()
 
-  const { selectedRelicId: relicId } = useReliquary()
   const createNew = !relicId
 
   // Calculate deposit impact based on simulated BPT amount
@@ -83,7 +81,6 @@ function ReliquaryDepositForm() {
     : 0
 
   const depositImpactQuery = useReliquaryDepositImpact(bptAmount, createNew ? undefined : relicId)
-  console.log('IMPACT', simulationQuery?.data?.bptOut, bptAmount, depositImpactQuery.data)
 
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()

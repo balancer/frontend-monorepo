@@ -7,17 +7,11 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useLevelUpStep } from './hooks/useLevelUpStep'
-import { ReliquaryPosition } from './reliquary.types'
-import { useClaimRewardsSteps } from './hooks/useClaimRewardsSteps'
-import { useBurnRelicStep } from './hooks/useBurnRelicStep'
 import { usePublicClient } from '@repo/lib/shared/utils/wagmi'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { formatUnits, Address } from 'viem'
 import { sumBy } from 'lodash'
-import { makeVar, useReactiveVar } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
@@ -48,14 +42,10 @@ export type TokenAmountHumanReadable = {
 
 const CHAIN = GqlChain.Sonic
 
-// Apollo Client reactive variables for state management
-const selectedRelicIdVar = makeVar<string | undefined>(undefined)
-
 export function useReliquaryLogic() {
   const { isConnected, userAddress } = useUserAccount()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
   const [range, setRange] = useState<GqlPoolSnapshotDataRange>(GqlPoolSnapshotDataRange.ThirtyDays)
-  const [selectedRelic, setSelectedRelic] = useState<ReliquaryPosition | undefined>(undefined)
   const publicClient = usePublicClient()
   const networkConfig = getNetworkConfig(CHAIN)
   const reliquaryAddress = networkConfig.contracts.beets?.reliquary
@@ -64,22 +54,6 @@ export function useReliquaryLogic() {
 
   const disabledConditions: [boolean, string][] = [[!isConnected, LABELS.walletNotConnected]]
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
-
-  const { step: levelUpStep } = useLevelUpStep(CHAIN, selectedRelic?.relicId)
-  const levelUpTransactionSteps = useTransactionSteps([levelUpStep], false)
-  const levelUpTxHash = levelUpTransactionSteps.lastTransaction?.result?.data?.transactionHash
-  const levelUpTxConfirmed = levelUpTransactionSteps.lastTransactionConfirmed
-
-  const { steps: claimRewardsSteps } = useClaimRewardsSteps(CHAIN, selectedRelic?.relicId)
-  const claimRewardsTransactionSteps = useTransactionSteps(claimRewardsSteps, false)
-  const claimRewardsTxHash =
-    claimRewardsTransactionSteps.lastTransaction?.result?.data?.transactionHash
-  const claimRewardsTxConfirmed = claimRewardsTransactionSteps.lastTransactionConfirmed
-
-  const { step: burnRelicStep } = useBurnRelicStep(CHAIN, selectedRelic?.relicId)
-  const burnRelicTransactionSteps = useTransactionSteps([burnRelicStep], false)
-  const burnRelicTxHash = burnRelicTransactionSteps.lastTransaction?.result?.data?.transactionHash
-  const burnRelicTxConfirmed = burnRelicTransactionSteps.lastTransactionConfirmed
 
   // Queries for positions and maturity thresholds
   const {
@@ -90,14 +64,11 @@ export function useReliquaryLogic() {
     queryKey: ['reliquaryAllPositions', userAddress],
     queryFn: async () => {
       const positions: ReliquaryFarmPosition[] = await getAllPositions(userAddress || '')
-
-      if (positions.length > 0 && selectedRelicIdVar() === undefined) {
-        selectedRelicIdVar(positions[0].relicId)
-      }
-
+      console.log('fetch all positions')
       return positions
     },
     enabled: !!userAddress && !!reliquaryAddress,
+    refetchOnWindowFocus: true,
   })
 
   const relicPositions = relicPositionsUnsorted.sort(
@@ -118,18 +89,11 @@ export function useReliquaryLogic() {
   })
 
   // Derived state and calculations
-  const selectedRelicIdValue = useReactiveVar(selectedRelicIdVar)
-  const selectedRelicFromPositions =
-    relicPositions.find(position => position.relicId === selectedRelicIdValue) || null
   const isLoading = isLoadingRelicPositions || isLoadingMaturityThresholds
   const relicIds = relicPositions.map(relic => parseInt(relic.relicId))
 
   const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
   const reliquaryLevels = pool?.staking?.reliquary?.levels || []
-
-  const selectedRelicLevel = reliquaryLevels.find(
-    level => level.level === selectedRelicFromPositions?.level
-  )
 
   const weightedTotalBalance = sumBy(
     reliquaryLevels,
@@ -144,10 +108,6 @@ export function useReliquaryLogic() {
     const boost = reliquaryLevels.find(level => level.level === position.level)
     return ((boost?.allocationPoints || 0) / 100) * numFBeets
   })
-
-  function setSelectedRelicId(value: string) {
-    selectedRelicIdVar(value)
-  }
 
   // Service methods using viem/wagmi (for legacy file compatibility)
   const getAllPositions = useCallback(
@@ -441,32 +401,18 @@ export function useReliquaryLogic() {
     getValidationError,
     range,
     setRange,
-    selectedRelic: selectedRelic || selectedRelicFromPositions,
-    setSelectedRelic,
-    levelUpTransactionSteps,
-    levelUpTxHash,
-    levelUpTxConfirmed,
-    claimRewardsTransactionSteps,
-    claimRewardsTxHash,
-    claimRewardsTxConfirmed,
-    burnRelicTransactionSteps,
-    burnRelicTxHash,
-    burnRelicTxConfirmed,
     // Reliquary-specific state and data
     relicPositions,
     isLoadingRelicPositions,
     isLoading,
     maturityThresholds,
-    selectedRelicId: selectedRelicIdValue,
-    selectedRelicApr: selectedRelicLevel?.apr || '0',
     beetsPerSecond,
     beetsPerDay: parseFloat(beetsPerSecond) * 86400,
-    selectedRelicLevel,
     weightedTotalBalance,
+    reliquaryLevels,
     relicIds,
     relicPositionsForFarmId,
     totalMaBeetsVP,
-    setSelectedRelicId,
     refetchRelicPositions,
     refetchMaturityThresholds,
     // Service methods (for legacy compatibility with files still using old patterns)

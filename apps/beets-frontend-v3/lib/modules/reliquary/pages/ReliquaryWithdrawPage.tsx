@@ -20,22 +20,21 @@ import ButtonGroup, {
 import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
-import { useReliquary } from '../ReliquaryProvider'
 import { ReliquaryWithdrawModal } from '../components/ReliquaryWithdrawModal'
 
-export function ReliquaryWithdrawPage() {
+export function ReliquaryWithdrawPage({ relicId }: { relicId: string }) {
   const { validTokens } = useRemoveLiquidity()
 
   return (
     <PoolActionsLayout redirectPath="/mabeets">
       <TokenBalancesProvider extTokens={validTokens}>
-        <ReliquaryWithdrawForm />
+        <ReliquaryWithdrawForm relicId={relicId} />
       </TokenBalancesProvider>
     </PoolActionsLayout>
   )
 }
 
-function ReliquaryWithdrawForm() {
+function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
   const TABS: ButtonGroupOption[] = [
     {
       value: 'proportional',
@@ -67,8 +66,6 @@ function ReliquaryWithdrawForm() {
     setHumanBptInPercent,
     isSingleTokenBalanceMoreThat25Percent,
   } = useRemoveLiquidity()
-
-  const { selectedRelicId: relicId } = useReliquary()
 
   const { pool, chain } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()

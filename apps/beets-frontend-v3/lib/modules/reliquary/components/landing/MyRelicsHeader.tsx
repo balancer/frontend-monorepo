@@ -10,7 +10,7 @@ import { useDelegation } from '../../hooks/useDelegation'
 import { useReliquary } from '../../ReliquaryProvider'
 
 export function MyRelicsHeader() {
-  const { totalMaBeetsVP, isLoading, setSelectedRelicId } = useReliquary()
+  const { totalMaBeetsVP, isLoading } = useReliquary()
   const { data: isDelegatedToMDs } = useDelegation()
   const { step: delegateSetStep } = useDelegateSetStep(GqlChain.Sonic)
   const { step: delegateClearStep } = useDelegateClearStep(GqlChain.Sonic)
@@ -60,14 +60,7 @@ export function MyRelicsHeader() {
       </GridItem>
 
       <GridItem area="create" justifySelf="end">
-        <Button
-          onClick={() => {
-            setSelectedRelicId('')
-            router.push('/mabeets/deposit')
-          }}
-          size="md"
-          variant="primary"
-        >
+        <Button onClick={() => router.push('/mabeets/deposit')} size="md" variant="primary">
           Create New Relic
         </Button>
       </GridItem>

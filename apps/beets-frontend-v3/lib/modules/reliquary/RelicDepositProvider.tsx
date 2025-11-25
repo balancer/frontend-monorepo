@@ -5,7 +5,6 @@ import { ReliquaryProportionalAddLiquidityHandler } from './handlers/ReliquaryPr
 import { ReliquaryUnbalancedAddLiquidityHandler } from './handlers/ReliquaryUnbalancedAddLiquidity.handler'
 import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
 import { useCallback, useMemo } from 'react'
-import { useReliquary } from './ReliquaryProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
@@ -14,14 +13,13 @@ import { useReliquaryDepositSteps } from './hooks/useReliquaryDepositSteps'
 export function RelicDepositProvider({
   children,
   urlTxHash,
+  relicId,
 }: {
   children: React.ReactNode
   urlTxHash?: Hash
+  relicId?: string
 }) {
-  const { selectedRelicId: relicId } = useReliquary()
-
-  // If no relic is selected, we're creating a new one
-  // This will be overridden by the page's createNew state toggle if provided
+  // If no relicId is provided, we're creating a new one
   const createNew = !relicId
 
   // Convert relicId string to number for handler
