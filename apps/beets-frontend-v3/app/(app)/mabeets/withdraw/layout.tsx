@@ -5,6 +5,7 @@ import { RelicWithdrawProvider } from '@/lib/modules/reliquary/RelicWithdrawProv
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { isHash } from 'viem'
+import { PermitSignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/PermitSignatureProvider'
 
 type Props = PropsWithChildren<{
   params: { txHash?: string[] }
@@ -16,9 +17,11 @@ export default function RelicWithdrawLayoutWrapper({ params: { txHash }, childre
 
   return (
     <DefaultPageContainer>
-      <RelicWithdrawProvider urlTxHash={urlTxHash}>
-        <PriceImpactProvider>{children}</PriceImpactProvider>
-      </RelicWithdrawProvider>
+      <PermitSignatureProvider>
+        <RelicWithdrawProvider urlTxHash={urlTxHash}>
+          <PriceImpactProvider>{children}</PriceImpactProvider>
+        </RelicWithdrawProvider>
+      </PermitSignatureProvider>
     </DefaultPageContainer>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { isSameAddress } from '@balancer/sdk'
 import { Alert, AlertIcon, Card, Text, VStack } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
@@ -50,6 +51,13 @@ export function ReliquaryWithdrawSummary({
 
   const shouldShowErrors = hasQuoteContext ? removeLiquidityTxSuccess : removeLiquidityTxHash
   const shouldShowReceipt = removeLiquidityTxHash && !isLoadingReceipt && receivedTokens.length > 0
+
+  // Filter out BPT from received tokens (user doesn't receive BPT, it gets burned)
+  const receivedTokensWithoutBpt = shouldShowReceipt
+    ? receivedTokens.filter(
+        token => !isSameAddress(token.tokenAddress, pool.address as `0x${string}`)
+      )
+    : []
 
   const tokens = allPoolTokens(pool)
     .map(token => {
@@ -110,7 +118,7 @@ export function ReliquaryWithdrawSummary({
 
       <Card variant="modalSubSection">
         <TokenRowGroup
-          amounts={shouldShowReceipt ? receivedTokens : _amountsOut}
+          amounts={shouldShowReceipt ? receivedTokensWithoutBpt : _amountsOut}
           chain={pool.chain}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
