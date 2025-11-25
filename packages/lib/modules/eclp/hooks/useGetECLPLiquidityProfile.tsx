@@ -12,7 +12,7 @@ import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
 import { isGyroEPool } from '../../pool/pool.helpers'
 
 export type ECLPLiquidityProfile = {
-  data: [[number, number]] | null
+  data: [number, number][] | null
   poolSpotPrice: string | number | null
   poolIsInRange: boolean
   xMin: number
@@ -78,7 +78,7 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
         return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
       })
 
-    return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
+    return transformedData.sort((a, b) => a[0] - b[0]) as [number, number][]
   }, [liquidityData, isReversed, priceRateRatio])
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
