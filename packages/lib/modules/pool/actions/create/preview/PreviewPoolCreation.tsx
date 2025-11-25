@@ -17,6 +17,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewGyroEclpConfig } from './PreviewGyroEclpConfig'
 import { usePreviewEclpLiquidityProfile } from './usePreviewEclpLiquidityProfile'
 import { isGyroEllipticPool, isReClammPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolCreation() {
   return (
@@ -41,7 +42,10 @@ export function PreviewPoolCreation() {
 
 function PreviewPoolHeader() {
   const { resetPoolCreationForm, poolCreationForm } = usePoolCreationForm()
-  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
+  const [network, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType'],
+  })
 
   return (
     <HStack alignItems="center" justifyContent="space-between" w="full">
@@ -69,7 +73,7 @@ function PreviewPoolHeader() {
 
 function PreviewPoolChart() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [poolType] = poolCreationForm.watch(['poolType'])
+  const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
   const { isBeforeStep } = usePoolCreationFormSteps()
 
   const eclpLiquidityProfile = usePreviewEclpLiquidityProfile()

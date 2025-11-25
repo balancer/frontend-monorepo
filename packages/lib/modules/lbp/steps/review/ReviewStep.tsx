@@ -20,27 +20,51 @@ import { TokenInfo } from './TokenInfo'
 import { SocialLink } from './SocialLink'
 import { OtherSaleDetails } from './OtherSaleDetails'
 import { normalizeUrl } from '@repo/lib/shared/utils/urls'
+import { useWatch } from 'react-hook-form'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
   const { projectInfoForm, saleStructureForm } = useLbpForm()
-  const projectInfoData = projectInfoForm.watch()
-  const saleStructureData = saleStructureForm.watch()
+  const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl] = useWatch({
+    control: projectInfoForm.control,
+    name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'],
+  })
+  const [
+    selectedChain,
+    launchTokenAddress,
+    saleTokenAmount,
+    collateralTokenAddress,
+    collateralTokenAmount,
+    startDateTime,
+    endDateTime,
+    fee,
+    userActions,
+  ] = useWatch({
+    control: saleStructureForm.control,
+    name: [
+      'selectedChain',
+      'launchTokenAddress',
+      'saleTokenAmount',
+      'collateralTokenAddress',
+      'collateralTokenAmount',
+      'startDateTime',
+      'endDateTime',
+      'fee',
+      'userActions',
+    ],
+  })
 
-  const chain = saleStructureData.selectedChain
-  const launchTokenAddress = saleStructureData.launchTokenAddress
+  const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
+
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
-  const launchTokenSeed = saleStructureData.saleTokenAmount
-  const collateralTokenAddress = saleStructureData.collateralTokenAddress
+  const launchTokenSeed = saleTokenAmount
   const collateralToken = getToken(collateralTokenAddress, chain)
-  const collateralTokenSeed = saleStructureData.collateralTokenAmount
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
 
-  const saleStartTime = saleStructureData.startDateTime
-  const saleEndTime = saleStructureData.endDateTime
-  const daysDiff = differenceInDays(parseISO(saleEndTime), parseISO(saleStartTime))
+  const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
   const hoursDiff =
-    differenceInHours(parseISO(saleEndTime), parseISO(saleStartTime)) - daysDiff * 24
+    differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
 
   return (
     <VStack align="start" gap="ms" w="full">
@@ -49,9 +73,7 @@ export function ReviewStep() {
           <HStack spacing="5">
             <Circle bg="background.level4" color="font.secondary" shadow="lg" size={24}>
               <VStack>
-                {projectInfoData.tokenIconUrl && (
-                  <Image borderRadius="full" src={normalizeUrl(projectInfoData.tokenIconUrl)} />
-                )}
+                {tokenIconUrl && <Image borderRadius="full" src={normalizeUrl(tokenIconUrl)} />}
               </VStack>
             </Circle>
             <VStack alignItems="start">
@@ -63,35 +85,27 @@ export function ReviewStep() {
           </HStack>
 
           <VStack>
-            <Text fontWeight="bold" w="full">{`Project name: ${projectInfoData.name}`}</Text>
+            <Text fontWeight="bold" w="full">{`Project name: ${name}`}</Text>
             <Text variant="secondary" w="full">{`Network: ${getChainName(chain)}`}</Text>
           </VStack>
           <VStack alignItems="start" w="full">
             <Text fontWeight="bold" variant="secondary">
               Project description:
             </Text>
-            <Text variant="secondary">{projectInfoData.description}</Text>
+            <Text variant="secondary">{description}</Text>
           </VStack>
 
           <HStack spacing="4" w={{ base: 'full', lg: 'auto' }}>
-            <SocialLink
-              href={projectInfoData.websiteUrl}
-              socialNetwork="website"
-              title={projectInfoData.websiteUrl}
-            />
-            {projectInfoData.xHandle && (
+            <SocialLink href={websiteUrl} socialNetwork="website" title={websiteUrl} />
+            {xHandle && (
               <SocialLink
-                href={`https://twitter.com/${projectInfoData.xHandle}`}
+                href={`https://twitter.com/${xHandle}`}
                 socialNetwork="x"
-                title={projectInfoData.xHandle}
+                title={xHandle}
               />
             )}
-            {projectInfoData.discordUrl && (
-              <SocialLink
-                href={projectInfoData.discordUrl}
-                socialNetwork="discord"
-                title={projectInfoData.discordUrl}
-              />
+            {discordUrl && (
+              <SocialLink href={discordUrl} socialNetwork="discord" title={discordUrl} />
             )}
           </HStack>
         </VStack>
@@ -103,16 +117,16 @@ export function ReviewStep() {
         }
         <SimpleInfoCard
           info={
-            isValid(parseISO(saleStartTime))
-              ? format(parseISO(saleStartTime), 'dd/MM/yyyy h:mmaaa')
+            isValid(parseISO(startDateTime))
+              ? format(parseISO(startDateTime), 'dd/MM/yyyy h:mmaaa')
               : ''
           }
           title="LBP start time"
         />
         <SimpleInfoCard
           info={
-            isValid(parseISO(saleEndTime))
-              ? format(parseISO(saleEndTime), 'dd/MM/yyyy h:mmaaa')
+            isValid(parseISO(endDateTime))
+              ? format(parseISO(endDateTime), 'dd/MM/yyyy h:mmaaa')
               : ''
           }
           title="LBP end time"
@@ -130,27 +144,27 @@ export function ReviewStep() {
         <CardBody>
           <VStack gap="md" w="full">
             <TokenInfo
-              amount={Number(launchTokenSeed || 0)}
-              iconURL={normalizeUrl(projectInfoData.tokenIconUrl)}
+              amount={Number(launchTokenSeed)}
+              iconURL={normalizeUrl(tokenIconUrl)}
               name={launchTokenMetadata.name || ''}
               symbol={launchTokenMetadata.symbol || ''}
             />
 
             <TokenInfo
-              amount={Number(collateralTokenSeed || 0)}
+              amount={Number(collateralTokenAmount)}
               iconURL={collateralToken?.logoURI || ''}
               name={collateralToken?.name || ''}
               symbol={collateralToken?.symbol || ''}
-              value={Number(collateralTokenSeed || 0) * collateralTokenPrice}
+              value={Number(collateralTokenAmount) * collateralTokenPrice}
             />
           </VStack>
         </CardBody>
       </Card>
 
       <OtherSaleDetails
-        fee={saleStructureData.fee}
+        fee={fee}
         launchTokenSymbol={launchTokenMetadata.symbol || ''}
-        userActions={saleStructureData.userActions}
+        userActions={userActions}
       />
 
       <LbpFormAction />

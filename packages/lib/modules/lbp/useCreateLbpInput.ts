@@ -9,10 +9,12 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { millisecondsToSeconds } from 'date-fns'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
+import { useWatch } from 'react-hook-form'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useCreateLbpInput() {
   const { saleStructureForm, projectInfoForm, isCollateralNativeAsset } = useLbpForm()
-  const {
+  const [
     launchTokenAddress,
     collateralTokenAddress,
     startDateTime,
@@ -20,12 +22,27 @@ export function useCreateLbpInput() {
     selectedChain,
     userActions,
     fee,
-  } = saleStructureForm.watch()
-  const { name, owner, poolCreator } = projectInfoForm.watch()
+  ] = useWatch({
+    control: saleStructureForm.control,
+    name: [
+      'launchTokenAddress',
+      'collateralTokenAddress',
+      'startDateTime',
+      'endDateTime',
+      'selectedChain',
+      'userActions',
+      'fee',
+    ],
+  })
+  const [name, owner, poolCreator] = useWatch({
+    control: projectInfoForm.control,
+    name: ['name', 'owner', 'poolCreator'],
+  })
   const { userAddress } = useUserAccount()
   const { tokens, chainId } = getNetworkConfig(selectedChain)
 
-  let reserveTokenAddress = collateralTokenAddress
+  const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
+  let reserveTokenAddress = collateralTokenAddress || ''
   if (isCollateralNativeAsset) {
     // pool must be created with wrapped native asset
     reserveTokenAddress = tokens.addresses.wNativeAsset
@@ -40,8 +57,8 @@ export function useCreateLbpInput() {
 
   const blockProjectTokenSwapsIn = userActions === UserActions.BUY_ONLY
 
-  const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
-  const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
+  const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress || '', chain)
+  const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, chain)
 
   return {
     protocolVersion: 3 as const,
@@ -60,8 +77,8 @@ export function useCreateLbpInput() {
       reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight}`, PERCENTAGE_DECIMALS),
       projectTokenEndWeight: parseUnits(`${projectTokenEndWeight}`, PERCENTAGE_DECIMALS),
       reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight}`, PERCENTAGE_DECIMALS),
-      startTimestamp: BigInt(millisecondsToSeconds(new Date(startDateTime).getTime())),
-      endTimestamp: BigInt(millisecondsToSeconds(new Date(endDateTime).getTime())),
+      startTimestamp: BigInt(millisecondsToSeconds(new Date(startDateTime || '').getTime())),
+      endTimestamp: BigInt(millisecondsToSeconds(new Date(endDateTime || '').getTime())),
     },
   }
 }

@@ -9,14 +9,15 @@ import { useRef, useEffect } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 import { isReClammPool } from './helpers'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { poolAddress, poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, poolType, network] = poolCreationForm.watch([
-    'poolTokens',
-    'poolType',
-    'network',
-  ])
+  const [poolTokens, poolType, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType', 'network'],
+  })
+  const formState = useFormState({ control: poolCreationForm.control })
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
@@ -36,7 +37,6 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const showBackButton = !isFirstStep && !poolAddress
 
   const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
-  const isFormStateValid = poolCreationForm.formState.isValid
 
   return (
     <>
@@ -84,7 +84,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         </HStack>
       </VStack>
 
-      {isFormStateValid && isLastStep && (
+      {formState.isValid && isLastStep && (
         <PoolCreationModal
           finalFocusRef={nextBtn}
           isOpen={previewModalDisclosure.isOpen}

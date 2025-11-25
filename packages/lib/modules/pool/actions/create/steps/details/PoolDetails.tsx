@@ -2,10 +2,11 @@ import { VStack, Heading } from '@chakra-ui/react'
 import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolDetails } from '../../validatePoolCreationForm'
+import { useWatch } from 'react-hook-form'
 
 export function PoolDetails() {
   const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = poolCreationForm.watch('poolTokens')
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const tokenSymbols = poolTokens.map(token => {
     const { data, weight } = token

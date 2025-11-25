@@ -23,11 +23,15 @@ import { TransactionStepsResponse } from '@repo/lib/modules/transactions/transac
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
 import { isReClammPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
   const { poolCreationForm, poolAddress } = usePoolCreationForm()
-  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
+  const [network, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType'],
+  })
 
   const showTokenAmountSummary = !isReClammPool(poolType) || poolAddress
 
@@ -44,7 +48,10 @@ export function PoolSummary({ transactionSteps }: { transactionSteps: Transactio
 
 function PoolTitleCard() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, symbol, network] = poolCreationForm.watch(['poolTokens', 'symbol', 'network'])
+  const [poolTokens, symbol, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'symbol', 'network'],
+  })
 
   return (
     <Card variant="modalSubSection">
@@ -82,7 +89,10 @@ function PoolTitleCard() {
 
 function PoolTokenAmountsCard() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, network] = poolCreationForm.watch(['poolTokens', 'network'])
+  const [poolTokens, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'network'],
+  })
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -126,7 +136,10 @@ function PoolTokenAmountsCard() {
 
 function PoolDetailsCard() {
   const { poolCreationForm } = usePoolCreationForm()
-  const swapFeePercentage = poolCreationForm.watch('swapFeePercentage')
+  const swapFeePercentage = useWatch({
+    control: poolCreationForm.control,
+    name: 'swapFeePercentage',
+  })
   const { isOpen, onToggle } = useDisclosure()
 
   return (
