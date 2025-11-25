@@ -15,7 +15,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useGyroEclpInitAmountsRatio } from './useGyroEclpInitAmountsRatio'
 import { isWeightedPool, isReClammPool, isGyroEllipticPool } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
-import { useWatch } from 'react-hook-form'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolFundStep() {
   const { poolAddress, poolCreationForm } = usePoolCreationForm()
@@ -40,8 +40,8 @@ export function PoolFundStep() {
     ? hasAcceptedTokenWeightsRisk && hasAcceptedPoolCreationRisk
     : hasAcceptedPoolCreationRisk
 
-  const isDisabled =
-    !poolCreationForm.formState.isValid || !hasAcceptedRisks || !isTokenAmountsValid
+  const formState = useFormState({ control: poolCreationForm.control })
+  const isDisabled = !formState.isValid || !hasAcceptedRisks || !isTokenAmountsValid
   const showTokenAmountInputs = !isReClammPool(poolType) || poolAddress
 
   return (
