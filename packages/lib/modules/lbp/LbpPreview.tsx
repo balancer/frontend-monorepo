@@ -14,23 +14,36 @@ import { Address } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { LbpLearnMoreModal } from './modal/LbpLearnMoreModal'
 import { useWatch } from 'react-hook-form'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
 
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
-  const saleStructureData = useWatch({ control: saleStructureForm.control })
+  const [
+    selectedChain,
+    launchTokenAddress,
+    collateralTokenAddress,
+    endDateTime,
+    startDateTime,
+    collateralTokenAmount,
+    saleTokenAmount,
+  ] = useWatch({
+    control: saleStructureForm.control,
+    name: [
+      'selectedChain',
+      'launchTokenAddress',
+      'collateralTokenAddress',
+      'endDateTime',
+      'startDateTime',
+      'collateralTokenAmount',
+      'saleTokenAmount',
+    ],
+  })
 
   const { isLastStep, projectInfoForm, updatePriceStats, maxPrice, saleMarketCap, fdvMarketCap } =
     useLbpForm()
 
-  const chain = saleStructureData.selectedChain || PROJECT_CONFIG.defaultNetwork
-  const launchTokenAddress = saleStructureData.launchTokenAddress || ''
-  const launchTokenMetadata = useTokenMetadata(launchTokenAddress || '', chain)
-
-  const collateralTokenAddress = saleStructureData.collateralTokenAddress || ''
-
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
   const { projectTokenStartWeight: startWeight, projectTokenEndWeight: endWeight } = useLbpWeights()
 
   const tokenLoaded = !launchTokenMetadata.isLoading && !!launchTokenMetadata.symbol
@@ -52,7 +65,7 @@ export function LbpPreview() {
             <Spacer />
             <RestartPoolCreationModal
               handleRestart={resetLbpCreation}
-              network={chain}
+              network={selectedChain}
               poolType={GqlPoolType.LiquidityBootstrapping}
             />
             <LbpLearnMoreModal buttonLabel="Get help" />
@@ -60,7 +73,7 @@ export function LbpPreview() {
           {!isLastStep && (
             <>
               <TokenSummary
-                chain={chain}
+                chain={selectedChain}
                 launchTokenAddress={launchTokenAddress as Address}
                 launchTokenMetadata={launchTokenMetadata}
                 projectInfoForm={projectInfoForm}
@@ -80,23 +93,23 @@ export function LbpPreview() {
               </HStack>
 
               <PoolWeights
-                collateralToken={getToken(collateralTokenAddress, chain)}
-                endDateTime={saleStructureData.endDateTime || ''}
+                collateralToken={getToken(collateralTokenAddress, selectedChain)}
+                endDateTime={endDateTime}
                 endWeight={endWeight}
                 launchTokenMetadata={launchTokenMetadata}
-                startDateTime={saleStructureData.startDateTime || ''}
+                startDateTime={startDateTime}
                 startWeight={startWeight}
               />
 
               <ProjectedPrice
-                collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
-                collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
-                endDateTime={saleStructureData.endDateTime || ''}
+                collateralTokenPrice={priceFor(collateralTokenAddress, selectedChain)}
+                collateralTokenSeed={Number(collateralTokenAmount)}
+                endDateTime={endDateTime}
                 endWeight={endWeight}
-                launchTokenSeed={Number(saleStructureData.saleTokenAmount || 0)}
+                launchTokenSeed={Number(saleTokenAmount)}
                 launchTokenSymbol={launchTokenMetadata?.symbol || ''}
                 onPriceChange={updatePriceStats}
-                startDateTime={saleStructureData.startDateTime || ''}
+                startDateTime={startDateTime}
                 startWeight={startWeight}
               />
             </>

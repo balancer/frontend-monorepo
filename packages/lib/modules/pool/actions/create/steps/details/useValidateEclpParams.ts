@@ -9,7 +9,10 @@ import { useWatch } from 'react-hook-form'
 export function useValidateEclpParams() {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const poolType = useWatch({ control: poolCreationForm.control, name: 'poolType' })
-  const { alpha, beta, c, s, lambda } = useWatch({ control: eclpConfigForm.control })
+  const [alpha, beta, c, s, lambda] = useWatch({
+    control: eclpConfigForm.control,
+    name: ['alpha', 'beta', 'c', 's', 'lambda'],
+  })
 
   const errorMessage = useMemo(() => {
     if (poolType !== PoolType.GyroE) return null

@@ -14,7 +14,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useCreateLbpInput() {
   const { saleStructureForm, projectInfoForm, isCollateralNativeAsset } = useLbpForm()
-  const {
+  const [
     launchTokenAddress,
     collateralTokenAddress,
     startDateTime,
@@ -22,8 +22,22 @@ export function useCreateLbpInput() {
     selectedChain,
     userActions,
     fee,
-  } = useWatch({ control: saleStructureForm.control })
-  const { name, owner, poolCreator } = useWatch({ control: projectInfoForm.control })
+  ] = useWatch({
+    control: saleStructureForm.control,
+    name: [
+      'launchTokenAddress',
+      'collateralTokenAddress',
+      'startDateTime',
+      'endDateTime',
+      'selectedChain',
+      'userActions',
+      'fee',
+    ],
+  })
+  const [name, owner, poolCreator] = useWatch({
+    control: projectInfoForm.control,
+    name: ['name', 'owner', 'poolCreator'],
+  })
   const { userAddress } = useUserAccount()
   const { tokens, chainId } = getNetworkConfig(selectedChain)
 

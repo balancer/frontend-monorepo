@@ -20,20 +20,22 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
 
   const priceRateRatio = bn(rateTokenA).div(bn(rateTokenB))
 
-  const eclpParams = useWatch({ control: eclpConfigForm.control })
-  const [alpha, beta, s, c, lambda] = [
-    eclpParams.alpha,
-    eclpParams.beta,
-    eclpParams.s,
-    eclpParams.c,
-    eclpParams.lambda,
-  ].map(Number)
+  const [alpha, beta, s, c, lambda] = useWatch({
+    control: eclpConfigForm.control,
+    name: ['alpha', 'beta', 's', 'c', 'lambda'],
+  })
 
   const tokenRateScalingFactorString = '1'
 
   const liquidityData = drawLiquidityECLP(
     isGyroEllipticPool(poolType),
-    { alpha, beta, s, c, lambda },
+    {
+      alpha: Number(alpha),
+      beta: Number(beta),
+      s: Number(s),
+      c: Number(c),
+      lambda: Number(lambda),
+    },
     tokenRateScalingFactorString
   )
 

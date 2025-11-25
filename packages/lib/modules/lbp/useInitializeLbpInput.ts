@@ -9,13 +9,22 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useInitializeLbpInput() {
   const { saleStructureForm, isCollateralNativeAsset } = useLbpForm()
-  const {
+  const [
     selectedChain,
     collateralTokenAddress,
     collateralTokenAmount,
     launchTokenAddress,
     saleTokenAmount,
-  } = useWatch({ control: saleStructureForm.control })
+  ] = useWatch({
+    control: saleStructureForm.control,
+    name: [
+      'selectedChain',
+      'collateralTokenAddress',
+      'collateralTokenAmount',
+      'launchTokenAddress',
+      'saleTokenAmount',
+    ],
+  })
 
   const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
   const chainId = getChainId(chain)
@@ -50,14 +59,14 @@ export function useInitializeLbpInput() {
   const launchTokenAmountIn: InputAmountWithSymbol = {
     address: launchTokenAddress as Address,
     decimals: launchTokenDecimals,
-    rawAmount: parseUnits(saleTokenAmount || '0', launchTokenDecimals),
+    rawAmount: parseUnits(saleTokenAmount, launchTokenDecimals),
     symbol: launchTokenSymbol,
   }
 
   const reserveTokenAmountIn: InputAmountWithSymbol = {
     address: reserveTokenAddress as Address,
     decimals: reserveTokenDecimals,
-    rawAmount: parseUnits(collateralTokenAmount || '0', reserveTokenDecimals),
+    rawAmount: parseUnits(collateralTokenAmount, reserveTokenDecimals),
     symbol: reserveTokenSymbol,
   }
 

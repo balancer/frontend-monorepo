@@ -51,7 +51,10 @@ function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
-  const { alpha, beta, peakPrice, lambda, c, s } = useWatch({ control: eclpConfigForm.control })
+  const [alpha, beta, peakPrice, lambda, c, s] = useWatch({
+    control: eclpConfigForm.control,
+    name: ['alpha', 'beta', 'peakPrice', 'lambda', 'c', 's'],
+  })
 
   const tokenPricePair = poolTokens
     .map(token => token.data?.symbol)

@@ -13,7 +13,10 @@ type Props = {
 export function PreviewPoolCreationCard({ children, stepTitle }: Props) {
   const { isBeforeStep, isStep } = usePoolCreationFormSteps()
   const { poolCreationForm } = usePoolCreationForm()
-  const { poolTokens, network } = useWatch({ control: poolCreationForm.control })
+  const [poolTokens, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'network'],
+  })
   const { priceFor } = useTokens()
 
   const areAllTokensChosen = (poolTokens || []).every(token => token.address)
