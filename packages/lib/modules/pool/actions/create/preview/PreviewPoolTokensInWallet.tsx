@@ -1,6 +1,5 @@
 import { CardBody, VStack, Text, Divider, HStack } from '@chakra-ui/react'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -8,23 +7,24 @@ import { formatUnits } from 'viem'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
 import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
+import { Control, useWatch } from 'react-hook-form'
+import { PoolCreationForm } from '../types'
 
-export function PreviewPoolTokensInWallet() {
+export function PreviewPoolTokensInWallet({ control }: { control: Control<PoolCreationForm> }) {
   return (
     <PreviewPoolCreationCard stepTitle="Tokens">
       <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token Value', '%']} />
       <CardBody>
         <VStack spacing="md">
-          <PoolTokensInWalletContent />
+          <PoolTokensInWalletContent control={control} />
         </VStack>
       </CardBody>
     </PreviewPoolCreationCard>
   )
 }
 
-function PoolTokensInWalletContent() {
-  const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = poolCreationForm.watch('poolTokens')
+function PoolTokensInWalletContent({ control }: { control: Control<PoolCreationForm> }) {
+  const [poolTokens] = useWatch({ control, name: ['poolTokens'] })
   const { toCurrency } = useCurrency()
   const { usdValueForTokenAddress } = useTokens()
   const { balanceFor, isBalancesLoading } = useTokenBalances()

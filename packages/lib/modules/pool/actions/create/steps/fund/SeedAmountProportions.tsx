@@ -1,9 +1,10 @@
 import { Box, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react'
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { isWeightedPool } from '../../helpers'
+import { Control, useWatch } from 'react-hook-form'
+import { PoolCreationForm } from '../../types'
 
 const WEIGHT_DEVIATION_TOLERANCE = 5
 
@@ -18,11 +19,14 @@ const WEIGHT_COLORS = [
   'yellow.300',
 ]
 
-type Props = { variant?: string; displayAlert?: boolean }
+type Props = { control: Control<PoolCreationForm>; variant?: string; displayAlert?: boolean }
 
-export function SeedAmountProportions({ variant = 'level3', displayAlert = false }: Props) {
-  const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, poolType] = poolCreationForm.watch(['poolTokens', 'poolType'])
+export function SeedAmountProportions({
+  control,
+  variant = 'level3',
+  displayAlert = false,
+}: Props) {
+  const [poolTokens, poolType] = useWatch({ control, name: ['poolTokens', 'poolType'] })
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {

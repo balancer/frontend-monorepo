@@ -1,5 +1,4 @@
 import { VStack, HStack, Text, CardBody, Divider, Icon } from '@chakra-ui/react'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
@@ -12,10 +11,10 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
 import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
+import { Control, useWatch } from 'react-hook-form'
 
-export function PreviewPoolTokens() {
-  const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = poolCreationForm.watch('poolTokens')
+export function PreviewPoolTokens({ control }: { control: Control<PoolCreationForm> }) {
+  const [poolTokens] = useWatch({ control, name: ['poolTokens'] })
   const { priceFor } = useTokens()
   const { toCurrency } = useCurrency()
   const { tokenPriceTip } = usePoolTokenPriceWarnings()

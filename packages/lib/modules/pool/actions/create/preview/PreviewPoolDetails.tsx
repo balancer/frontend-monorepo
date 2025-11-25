@@ -1,5 +1,4 @@
 import { CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakra-ui/react'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
@@ -7,8 +6,10 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { isStablePool } from '../helpers'
+import { Control, useWatch } from 'react-hook-form'
+import { PoolCreationForm } from '../types'
 
-export function PreviewPoolDetails() {
+export function PreviewPoolDetails({ control }: { control: Control<PoolCreationForm> }) {
   return (
     <PreviewPoolCreationCard stepTitle="Details">
       <CardHeader>
@@ -16,15 +17,14 @@ export function PreviewPoolDetails() {
       </CardHeader>
       <CardBody>
         <VStack spacing="md">
-          <PoolDetailsContent />
+          <PoolDetailsContent control={control} />
         </VStack>
       </CardBody>
     </PreviewPoolCreationCard>
   )
 }
 
-export function PoolDetailsContent() {
-  const { poolCreationForm } = usePoolCreationForm()
+export function PoolDetailsContent({ control }: { control: Control<PoolCreationForm> }) {
   const [
     network,
     name,
@@ -37,19 +37,22 @@ export function PoolDetailsContent() {
     disableUnbalancedLiquidity,
     enableDonation,
     poolType,
-  ] = poolCreationForm.watch([
-    'network',
-    'name',
-    'symbol',
-    'swapFeePercentage',
-    'swapFeeManager',
-    'pauseManager',
-    'amplificationParameter',
-    'poolHooksContract',
-    'disableUnbalancedLiquidity',
-    'enableDonation',
-    'poolType',
-  ])
+  ] = useWatch({
+    control,
+    name: [
+      'network',
+      'name',
+      'symbol',
+      'swapFeePercentage',
+      'swapFeeManager',
+      'pauseManager',
+      'amplificationParameter',
+      'poolHooksContract',
+      'disableUnbalancedLiquidity',
+      'enableDonation',
+      'poolType',
+    ],
+  })
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 

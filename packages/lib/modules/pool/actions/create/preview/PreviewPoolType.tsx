@@ -1,20 +1,18 @@
 import { VStack, Heading, HStack, Text, CardBody, Box } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { capitalize } from 'lodash'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
 import { isWeightedPool, isCustomWeightedPool } from '../helpers'
+import { useWatch, Control } from 'react-hook-form'
+import { PoolCreationForm } from '../types'
 
-export function PreviewPoolType() {
-  const { poolCreationForm } = usePoolCreationForm()
-  const [network, protocol, poolType, weightedPoolStructure] = poolCreationForm.watch([
-    'network',
-    'protocol',
-    'poolType',
-    'weightedPoolStructure',
-  ])
+export function PreviewPoolType({ control }: { control: Control<PoolCreationForm> }) {
+  const [network, protocol, poolType, weightedPoolStructure] = useWatch({
+    control,
+    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure'],
+  })
 
   const cardInformationRows = [
     {

@@ -23,28 +23,37 @@ import { TransactionStepsResponse } from '@repo/lib/modules/transactions/transac
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
 import { isReClammPool } from '../helpers'
+import { Control, useWatch } from 'react-hook-form'
+import { PoolCreationForm } from '../types'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
-  const { poolCreationForm, poolAddress } = usePoolCreationForm()
-  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
+  const {
+    poolCreationForm: { control },
+    poolAddress,
+  } = usePoolCreationForm()
+  const [network, poolType] = useWatch({ control, name: ['network', 'poolType'] })
 
   const showTokenAmountSummary = !isReClammPool(poolType) || poolAddress
 
   return (
     <AnimateHeightChange spacing={3} w="full">
       {isMobile && <MobileStepTracker chain={network} transactionSteps={transactionSteps} />}
-      <PoolTitleCard />
-      {showTokenAmountSummary && <PoolTokenAmountsCard />}
-      {showTokenAmountSummary && <SeedAmountProportions variant="modalSubSection" />}
-      <PoolDetailsCard />
+      <PoolTitleCard control={control} />
+      {showTokenAmountSummary && <PoolTokenAmountsCard control={control} />}
+      {showTokenAmountSummary && (
+        <SeedAmountProportions control={control} variant="modalSubSection" />
+      )}
+      <PoolDetailsCard control={control} />
     </AnimateHeightChange>
   )
 }
 
-function PoolTitleCard() {
-  const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, symbol, network] = poolCreationForm.watch(['poolTokens', 'symbol', 'network'])
+function PoolTitleCard({ control }: { control: Control<PoolCreationForm> }) {
+  const [poolTokens, symbol, network] = useWatch({
+    control,
+    name: ['poolTokens', 'symbol', 'network'],
+  })
 
   return (
     <Card variant="modalSubSection">
@@ -80,9 +89,8 @@ function PoolTitleCard() {
   )
 }
 
-function PoolTokenAmountsCard() {
-  const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, network] = poolCreationForm.watch(['poolTokens', 'network'])
+function PoolTokenAmountsCard({ control }: { control: Control<PoolCreationForm> }) {
+  const [poolTokens, network] = useWatch({ control, name: ['poolTokens', 'network'] })
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -124,9 +132,8 @@ function PoolTokenAmountsCard() {
   )
 }
 
-function PoolDetailsCard() {
-  const { poolCreationForm } = usePoolCreationForm()
-  const swapFeePercentage = poolCreationForm.watch('swapFeePercentage')
+function PoolDetailsCard({ control }: { control: Control<PoolCreationForm> }) {
+  const [swapFeePercentage] = useWatch({ control, name: ['swapFeePercentage'] })
   const { isOpen, onToggle } = useDisclosure()
 
   return (
@@ -153,7 +160,7 @@ function PoolDetailsCard() {
 
         <AccordionPanel p="ms">
           <VStack align="start" spacing="sm" w="full">
-            <PoolDetailsContent />
+            <PoolDetailsContent control={control} />
           </VStack>
         </AccordionPanel>
       </AccordionItem>

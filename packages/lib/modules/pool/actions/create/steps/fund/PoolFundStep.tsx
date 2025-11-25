@@ -60,7 +60,7 @@ export function PoolFundStep() {
               />
             ))}
 
-            <SeedAmountProportions displayAlert />
+            <SeedAmountProportions control={poolCreationForm.control} displayAlert />
           </>
         )}
 
