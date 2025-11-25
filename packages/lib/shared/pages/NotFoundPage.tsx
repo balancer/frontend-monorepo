@@ -1,7 +1,5 @@
-import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { Button, Heading, VStack, Text } from '@chakra-ui/react'
+import { NotFoundPageClient } from './NotFoundPageClient'
 import { headers } from 'next/headers'
-import Link from 'next/link'
 
 export async function NotFoundPage() {
   const headersList = await headers()
@@ -20,16 +18,11 @@ export async function NotFoundPage() {
   const redirectText = isPoolPageNotFound ? 'View All Pools' : 'Return Home'
 
   return (
-    <DefaultPageContainer minH="80vh">
-      <VStack align="start" spacing="md">
-        <Heading size="md">{title}</Heading>
-        <VStack align="start" spacing="xs">
-          <Text>{description}</Text>
-        </VStack>
-        <Button as={Link} href={redirectUrl} size="sm">
-          {redirectText}
-        </Button>
-      </VStack>
-    </DefaultPageContainer>
+    <NotFoundPageClient
+      description={description}
+      redirectText={redirectText}
+      redirectUrl={redirectUrl}
+      title={title}
+    />
   )
 }
