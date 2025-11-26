@@ -41,6 +41,7 @@ import {
 } from '../../helpers'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -57,11 +58,47 @@ export function ChoosePoolTokens() {
   const { getTokensByChain } = useTokens()
   const listedTokens = getTokensByChain(network)
 
+  const networkConfig = getNetworkConfig(network)
+  const nativeAsset = networkConfig.tokens.nativeAsset.address.toLowerCase()
+  const wNativeAsset = networkConfig.tokens.addresses.wNativeAsset.toLowerCase()
+  const selectedTokenAddress =
+    selectedTokenIndex !== null ? poolTokens[selectedTokenIndex].address : undefined
+
   // Filter out already selected tokens
-  const selectedTokenAddresses = poolTokens.map(token => token.address?.toLowerCase())
-  const tokens = listedTokens.filter(
-    token => !selectedTokenAddresses.includes(token.address.toLowerCase())
-  )
+  const poolTokenAddresses = new Set(poolTokens.map(token => token.address?.toLowerCase()))
+  const isNativeAssetAlreadyIncluded = poolTokenAddresses.has(nativeAsset)
+  const isWrappedNativeAssetAlreadyIncluded = poolTokenAddresses.has(wNativeAsset)
+  const isSelectedTokenNativeAsset = selectedTokenAddress === nativeAsset
+  const isSelectedTokenWrappedNativeAsset = selectedTokenAddress === wNativeAsset
+
+  const availableTokens = listedTokens.filter(listToken => {
+    const tokenAddress = listToken.address.toLowerCase()
+    const isTokenAlreadyIncluded = poolTokenAddresses.has(tokenAddress)
+    const isListTokenNativeAsset = tokenAddress === nativeAsset
+    const isListTokenWNativeAsset = tokenAddress === wNativeAsset
+
+    // UI disiables selection of same token so this helps user not get confused
+    if (tokenAddress === selectedTokenAddress) return true
+
+    // Exclude tokens already in the pool
+    if (isTokenAlreadyIncluded) return false
+
+    // If native asset is in pool and user not editing it, exclude wrapped native
+    if (isNativeAssetAlreadyIncluded && !isSelectedTokenNativeAsset && isListTokenWNativeAsset) {
+      return false
+    }
+
+    // If wrapped native is in pool and user not editing it, exclude native asset
+    if (
+      isWrappedNativeAssetAlreadyIncluded &&
+      !isSelectedTokenWrappedNativeAsset &&
+      isListTokenNativeAsset
+    ) {
+      return false
+    }
+
+    return true
+  })
 
   function getVerifiedRateProviderAddress(token: ApiToken) {
     if (!token.priceRateProviderData) return undefined
@@ -98,10 +135,6 @@ export function ChoosePoolTokens() {
     if (isReClammPool(poolType)) reClammConfigForm.resetToInitial()
     if (isGyroEllipticPool(poolType)) eclpConfigForm.resetToInitial()
   }
-
-  const currentTokenAddress = selectedTokenIndex
-    ? poolTokens[selectedTokenIndex].address
-    : undefined
 
   return (
     <>
@@ -151,13 +184,13 @@ export function ChoosePoolTokens() {
 
       <TokenSelectModal
         chain={network}
-        currentToken={currentTokenAddress}
+        currentToken={selectedTokenAddress}
         enableUnlistedToken
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
         onTokenSelect={handleTokenSelect}
-        tokens={tokens}
+        tokens={availableTokens}
       />
     </>
   )
