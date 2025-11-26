@@ -261,7 +261,7 @@ export function requiresProportionalInputReason(pool: Pool): string | undefined 
   if (isV3Pool(pool) && isUnbalancedLiquidityDisabled(pool)) {
     return 'Adding unbalanced liquidity has been disabled in this pool'
   }
-  if (isGyro(pool.type)) return requiresProportionalTemplate('Gyro (CLP)')
+  if (isGyro(pool.type) && !isV3Pool(pool)) return requiresProportionalTemplate('Gyro (CLP)')
   if (isCowAmmPool(pool.type)) return requiresProportionalTemplate('Cow AMM')
 
   return undefined
