@@ -10,8 +10,8 @@ test('Swap 1 S to USDC)', async ({ page }) => {
     forkBalances: {
       146: [
         {
-          tokenAddress: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38', // wS
-          value: '100',
+          tokenAddress: '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC
+          value: '1000',
         },
       ],
     },
@@ -22,16 +22,15 @@ test('Swap 1 S to USDC)', async ({ page }) => {
   await expect(button(page, 'Connect wallet')).not.toBeVisible()
 
   await clickButton(page, 'S')
-  await page.getByText('Wrapped Sonic').click()
-
-  await clickButton(page, 'Select token')
   await page.getByText('USDCUSDC').click()
-  await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('0.1')
+  await clickButton(page, 'Select token')
+  await page.getByText('Wrapped Sonic', { exact: true }).click()
+  await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('100')
 
   await clickButton(page, 'Next')
 
-  if (await isButtonVisible(page, 'Approve wS to swap')) {
-    await clickButton(page, 'Approve wS to swap')
+  if (await isButtonVisible(page, 'Approve USDC to swap')) {
+    await clickButton(page, 'Approve USDC to swap')
   }
 
   await clickButton(page, 'Swap')
