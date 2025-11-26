@@ -119,20 +119,50 @@ describe('shouldBlockAddLiquidity', () => {
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
     })
 
-    it('should block exploited V2 composable stable pools', () => {
+    it('should block exploited V2 composable stable pools with rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolType.ComposableStable
+      pool.poolTokens[0].priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
+      pool.poolTokens[0].priceRateProviderData = {
+        __typename: 'GqlPriceRateProviderData',
+        address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
+        reviewed: true,
+        summary: 'safe',
+      }
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
     })
 
-    it('should block exploited V2 metastable pools', () => {
+    it('should not block exploited V2 composable stable pools without rate providers', () => {
+      const pool = getApiPoolMock(sDAIWeighted)
+      pool.type = GqlPoolType.ComposableStable
+      pool.poolTokens[0].priceRateProvider = zeroAddress
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    })
+
+    it('should block exploited V2 metastable pools with rate providers', () => {
       const pool = getApiPoolMock(sDAIWeighted)
       pool.type = GqlPoolType.MetaStable
+      pool.poolTokens[0].priceRateProvider = '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f'
+      pool.poolTokens[0].priceRateProviderData = {
+        __typename: 'GqlPriceRateProviderData',
+        address: '0x1a8f81c256aee9c640e14bb0453ce247ea0dfe6f',
+        reviewed: true,
+        summary: 'safe',
+      }
 
       expect(shouldBlockAddLiquidity(pool)).toBe(true)
       expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should not block exploited V2 metastable pools without rate providers', () => {
+      const pool = getApiPoolMock(sDAIWeighted)
+      pool.type = GqlPoolType.MetaStable
+      pool.poolTokens[0].priceRateProvider = zeroAddress
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(false)
     })
 
     it('should not block liquidity if all tokens are allowed', () => {
