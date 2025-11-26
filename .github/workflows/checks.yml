@@ -93,6 +93,8 @@ jobs:
   E2E-Dev-Test-Balancer:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_PROJECT_ID: balancer
     steps:
       - uses: actions/checkout@v5
       - name: Setup
@@ -116,6 +118,8 @@ jobs:
   E2E-Dev-Test-Beets:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_PROJECT_ID: beets
     steps:
       - uses: actions/checkout@v5
       - name: Setup
