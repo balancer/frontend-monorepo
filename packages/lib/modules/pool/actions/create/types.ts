@@ -21,6 +21,7 @@ export type SupportedPoolTypes =
 export type PoolTypeDetails = {
   label: string
   maxTokens: number
+  description: string
 }
 
 export type PoolCreationToken = {

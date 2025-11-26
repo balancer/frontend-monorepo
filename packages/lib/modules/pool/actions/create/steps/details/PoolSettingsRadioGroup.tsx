@@ -120,7 +120,7 @@ export function PoolSettingsRadioGroup({
                                   onChange={e => field.onChange(e.target.value)}
                                   pasteFn={handlePaste}
                                   placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
-                                  tooltip="TODO"
+                                  tooltip="Paste any valid address"
                                   value={field.value}
                                 />
                               )}

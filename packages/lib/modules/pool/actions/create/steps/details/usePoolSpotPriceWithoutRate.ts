@@ -9,7 +9,7 @@ import { formatUnits } from 'viem'
  */
 export function usePoolSpotPriceWithoutRate() {
   const { poolCreationForm } = usePoolCreationForm()
-  const { poolTokens, network } = poolCreationForm.watch()
+  const [poolTokens, network] = poolCreationForm.watch(['poolTokens', 'network'])
   const { priceFor } = useTokens()
 
   const tokenA = poolTokens[0]

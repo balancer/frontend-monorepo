@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/static-components */
 /* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
@@ -30,6 +29,8 @@ export type PoolMyStatsValues = {
 
 const POSSIBLE_STAKED_BALANCE_USD = 10000
 
+const MemoizedMainAprTooltip = memo(MainAprTooltip)
+
 export function UserSnapshotValues() {
   const { chain, isLoading: isLoadingPool, myLiquiditySectionRef, pool } = usePool()
   const { toCurrency } = useCurrency()
@@ -50,8 +51,6 @@ export function UserSnapshotValues() {
     balRewards,
     nonBalRewards,
   })
-
-  const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
   const boost = useMemo(() => {
     if (isEmpty(veBalBoostMap)) return

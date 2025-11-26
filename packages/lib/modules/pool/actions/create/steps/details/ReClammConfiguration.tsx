@@ -27,6 +27,7 @@ export function ReClammConfiguration() {
           label={option.label}
           name={option.name}
           options={option.options}
+          tooltip={option.tooltip}
           updateFn={option.updateFn}
           validateFn={option.validateFn}
         />
@@ -42,9 +43,14 @@ function ConfigOptionsGroup({
   validateFn,
   name,
   customInputLabel,
+  tooltip,
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
-  const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
+  const [initialMinPrice, initialTargetPrice, initialMaxPrice] = reClammConfigForm.watch([
+    'initialMinPrice',
+    'initialTargetPrice',
+    'initialMaxPrice',
+  ])
   const formValue = reClammConfigForm.watch(name)
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
@@ -106,7 +112,7 @@ function ConfigOptionsGroup({
         <Text textAlign="start" w="full">
           {label}
         </Text>
-        <BalPopover text="TODO">
+        <BalPopover text={tooltip}>
           <InfoIcon />
         </BalPopover>
       </HStack>

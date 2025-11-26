@@ -5,10 +5,8 @@ import { ChooseNetwork } from './ChooseNetwork'
 import { ChoosePoolType } from './ChoosePoolType'
 
 export function PoolTypeStep() {
-  const {
-    isFormStateValid,
-    poolCreationForm: { control },
-  } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const { control, formState } = poolCreationForm
 
   return (
     <Box as="form" style={{ width: '100%' }}>
@@ -18,7 +16,7 @@ export function PoolTypeStep() {
         </Heading>
         <ChooseNetwork control={control} />
         <ChoosePoolType control={control} />
-        <PoolCreationFormAction disabled={!isFormStateValid} />
+        <PoolCreationFormAction disabled={!formState.isValid} />
       </VStack>
     </Box>
   )

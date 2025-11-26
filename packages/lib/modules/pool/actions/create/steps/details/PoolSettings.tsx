@@ -7,7 +7,7 @@ import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink
 import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
-import { validatePoolSettings, validatePoolType } from '../../validatePoolCreationForm'
+import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
 import { usePublicClient } from 'wagmi'
@@ -15,6 +15,7 @@ import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isStablePool, isStableSurgePool } from '../../helpers'
 
 export type PoolSettingsOption = {
   label: string
@@ -24,7 +25,8 @@ export type PoolSettingsOption = {
 
 export function PoolSettings() {
   const { userAddress } = useUserAccount()
-  const { network, poolType, poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const filteredPoolHooksOptions = poolHooksWhitelist.filter(
@@ -57,17 +59,14 @@ export function PoolSettings() {
     value => ({ label: value, value })
   )
 
-  const isStablePool = validatePoolType.isStablePool(poolType)
-  const isStableSurgePool = validatePoolType.isStableSurgePool(poolType)
-
   useEffect(() => {
-    if (isStableSurgePool && poolHooksWhitelist) {
+    if (isStableSurgePool(poolType) && poolHooksWhitelist) {
       const stableSurgeHookMetadata = poolHooksWhitelist.find(hook => hook.label === 'StableSurge')
       if (stableSurgeHookMetadata) {
         poolCreationForm.setValue('poolHooksContract', stableSurgeHookMetadata.value)
       }
     }
-  }, [isStableSurgePool, poolHooksWhitelist])
+  }, [poolType, poolHooksWhitelist])
 
   const publicClient = usePublicClient({ chainId: getChainId(network) })
 
@@ -107,7 +106,7 @@ export function PoolSettings() {
         name="swapFeeManager"
         options={poolManagerOptions}
         title="Swap fee manager"
-        tooltip="TODO"
+        tooltip="Account empowered to set static swap fees for a pool"
         validate={validatePoolSettings.swapFeeManager}
       />
 
@@ -117,7 +116,7 @@ export function PoolSettings() {
         name="pauseManager"
         options={poolManagerOptions}
         title="Pause manager"
-        tooltip="TODO"
+        tooltip="Account empowered to pause/unpause the pool (note that governance can always pause a pool)"
         validate={validatePoolSettings.pauseManager}
       />
 
@@ -128,18 +127,18 @@ export function PoolSettings() {
         name="swapFeePercentage"
         options={swapFeePercentageOptions}
         title="Swap fee percentage"
-        tooltip="TODO"
+        tooltip="The initial static swap fee percentage of the pool"
         validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
 
-      {isStablePool && (
+      {isStablePool(poolType) && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom amplification parameter"
           customInputType="number"
           name="amplificationParameter"
           options={amplificationParameterOptions}
           title="Amplification parameter"
-          tooltip="TODO"
+          tooltip='Controls the "flatness" of the invariant curve. Higher values = lower slippage and assumes prices are near parity. Lower values = closer to the constant product curve (e.g., more like a weighted pool). This has higher slippage and accommodates greater price volatility.'
           validate={validatePoolSettings.amplificationParameter}
         />
       )}
@@ -147,11 +146,11 @@ export function PoolSettings() {
       <PoolSettingsRadioGroup
         customInputLabel="Custom pool hooks address"
         customInputType="address"
-        isDisabled={isStableSurgePool}
+        isDisabled={isStableSurgePool(poolType)}
         name="poolHooksContract"
         options={poolHooksOptions}
         title="Pool hooks"
-        tooltip="TODO"
+        tooltip="Contract that implements the hooks for the pool"
         validateAsync={validateHooksContract}
       />
 

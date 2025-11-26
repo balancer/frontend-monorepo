@@ -23,7 +23,8 @@ export function PreviewPoolTokensInWallet() {
 }
 
 function PoolTokensInWalletContent() {
-  const { poolTokens } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolTokens = poolCreationForm.watch('poolTokens')
   const { toCurrency } = useCurrency()
   const { usdValueForTokenAddress } = useTokens()
   const { balanceFor, isBalancesLoading } = useTokenBalances()

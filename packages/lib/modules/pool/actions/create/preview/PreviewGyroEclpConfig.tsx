@@ -10,8 +10,8 @@ import { useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 export function PreviewGyroEclpConfig() {
   const { isBeforeStep } = usePoolCreationFormSteps()
   const { eclpConfigForm, poolCreationForm, invertGyroEclpPriceParams } = usePoolCreationForm()
-  const { alpha, beta, peakPrice } = eclpConfigForm.watch()
-  const { poolTokens } = poolCreationForm.watch()
+  const [alpha, beta, peakPrice] = eclpConfigForm.watch(['alpha', 'beta', 'peakPrice'])
+  const poolTokens = poolCreationForm.watch('poolTokens')
 
   const { options } = useEclpChart()
 

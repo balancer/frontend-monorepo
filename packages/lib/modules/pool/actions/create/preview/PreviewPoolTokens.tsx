@@ -14,7 +14,8 @@ import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingP
 import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
 
 export function PreviewPoolTokens() {
-  const { poolTokens } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolTokens = poolCreationForm.watch('poolTokens')
   const { priceFor } = useTokens()
   const { toCurrency } = useCurrency()
   const { tokenPriceTip } = usePoolTokenPriceWarnings()

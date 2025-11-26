@@ -19,7 +19,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     poolTokens,
     pauseManager,
     amplificationParameter,
-  } = poolCreationForm.watch()
+  } = poolCreationForm.getValues()
 
   if (!poolTokens[0]?.address || !poolTokens[1]?.address) {
     throw new Error('Pool token address missing for pool creation')
@@ -82,7 +82,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       initialTargetPrice,
       priceShiftDailyRate,
       centerednessMargin,
-    } = reClammConfigForm.watch()
+    } = reClammConfigForm.getValues()
 
     // must invert params if tokens are not in order
     const minPrice = areTokensInOrder ? initialMinPrice : invertNumber(initialMaxPrice)
@@ -109,7 +109,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
   }
 
   if (poolType === PoolType.GyroE) {
-    const { alpha, beta, s, c, lambda } = eclpConfigForm.watch()
+    const { alpha, beta, s, c, lambda } = eclpConfigForm.getValues()
 
     const eclpParams = {
       // must invert params if tokens are not in order

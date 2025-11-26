@@ -1,12 +1,13 @@
 import { type ECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { drawLiquidityECLP } from '@repo/lib/modules/eclp/helpers/drawLiquidityECLP'
-import { useMemo } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePoolSpotPriceWithoutRate } from '../steps/details/usePoolSpotPriceWithoutRate'
+import { isGyroEllipticPool } from '../helpers'
 
 export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
-  const { eclpConfigForm, isGyroEclp, poolTokens } = usePoolCreationForm()
+  const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, poolType] = poolCreationForm.watch(['poolTokens', 'poolType'])
   const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
 
   const poolSpotPrice = spotPriceWithoutRate.toString()
@@ -24,40 +25,33 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
     eclpParams.lambda,
   ].map(Number)
 
-  const tokenRateScalingFactorString = '1' // TODO: figure out if necessary?
+  const tokenRateScalingFactorString = '1'
 
-  const liquidityData = useMemo(
-    () =>
-      drawLiquidityECLP(isGyroEclp, { alpha, beta, s, c, lambda }, tokenRateScalingFactorString),
-    [isGyroEclp, alpha, beta, s, c, lambda, tokenRateScalingFactorString]
+  const liquidityData = drawLiquidityECLP(
+    isGyroEllipticPool(poolType),
+    { alpha, beta, s, c, lambda },
+    tokenRateScalingFactorString
   )
 
-  const data = useMemo(() => {
-    if (!liquidityData) return null
+  const data = liquidityData
+    ? (liquidityData
+        .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
+        .map(([price, liquidity]) => {
+          const displayedPrice = bn(price).div(priceRateRatio).toNumber()
+          return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
+        })
+        .sort((a, b) => a[0] - b[0]) as [[number, number]])
+    : null
 
-    const transformedData = liquidityData
-      .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
-      .map(([price, liquidity]) => {
-        const displayedPrice = bn(price).div(priceRateRatio).toNumber()
-        return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
-      })
+  const xMin = data ? Math.min(...data.map(([x]) => x)) : 0
+  const xMax = data ? Math.max(...data.map(([x]) => x)) : 0
+  //const yMin = data ? Math.min(...data.map(([, y]) => y)) : 0
+  const yMax = data ? Math.max(...data.map(([, y]) => y)) : 0
 
-    return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
-  }, [liquidityData, isReversed, priceRateRatio])
+  const margin = 0.00005 // if spot price is within the margin on both sides it's considered out of range
 
-  const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
-  const xMax = useMemo(() => (data ? Math.max(...data.map(([x]) => x)) : 0), [data])
-  //const yMin = useMemo(() => (data ? Math.min(...data.map(([, y]) => y)) : 0), [data])
-  const yMax = useMemo(() => (data ? Math.max(...data.map(([, y]) => y)) : 0), [data])
-
-  const poolIsInRange = useMemo(() => {
-    const margin = 0.00005 // if spot price is within the margin on both sides it's considered out of range
-
-    return (
-      bn(poolSpotPrice || 0).gt(xMin * (1 + margin)) &&
-      bn(poolSpotPrice || 0).lt(xMax * (1 - margin))
-    )
-  }, [xMin, xMax, poolSpotPrice])
+  const poolIsInRange =
+    bn(poolSpotPrice || 0).gt(xMin * (1 + margin)) && bn(poolSpotPrice || 0).lt(xMax * (1 - margin))
 
   return {
     data,
