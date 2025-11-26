@@ -218,7 +218,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
             0.1
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.purple['500']).setAlpha(
             0.2
-          )} inset, 0 0 0 1px ${colors.purple['500']}`,
+          )} inset, 0 0 0 1px ${colors.purple['500']}, 0px 0px 10px 0px rgba(255, 255, 255, 1) inset`,
           innerError: `0px 2px 4px 0px ${tinycolor(colors.red['500']).setAlpha(
             0.1
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.red['500']).setAlpha(
@@ -268,7 +268,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
             0.1
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.purple['400']).setAlpha(
             0.2
-          )} inset, 0 0 0 1px ${colors.purple['400']}`,
+          )} inset, 0 0 0 1px ${colors.purple['400']}, 0px 0px 20px 0px rgba(0, 0, 0, 0.5) inset`,
           innerError: `0px 2px 4px 0px ${tinycolor(colors.red['500']).setAlpha(
             0.2
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.red['500']).setAlpha(
