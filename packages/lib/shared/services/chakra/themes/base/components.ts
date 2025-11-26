@@ -131,6 +131,14 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
       variants: {
+        outline: {
+          field: {
+            _focusVisible: {
+              borderColor: 'input.borderFocus',
+              boxShadow: 'input.innerFocus',
+            },
+          },
+        },
         search: {
           field: {
             border: '1px solid',
