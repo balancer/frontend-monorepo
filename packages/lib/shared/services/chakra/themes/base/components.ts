@@ -106,6 +106,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             bg: 'input.bgFocus',
             borderColor: 'input.borderFocus',
             color: 'white',
+            shadow: 'input.innerFocus',
           },
           _focusVisible: {
             color: 'input.fontFocus',
@@ -158,6 +159,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             bg: 'input.bgFocus',
             borderColor: 'input.borderFocus',
             color: 'white',
+            boxShadow: 'input.innerFocus',
           },
           _focusVisible: {
             color: 'input.fontFocus',
@@ -202,6 +204,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
           color: 'white',
+          boxShadow: 'input.innerFocus',
         },
         _focusVisible: {
           color: 'input.fontFocus',
