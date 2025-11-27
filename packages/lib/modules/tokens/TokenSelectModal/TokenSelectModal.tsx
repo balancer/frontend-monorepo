@@ -25,6 +25,7 @@ type Props<T extends ApiOrCustomToken = ApiToken> = {
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
+  excludeWrappedNativeAsset?: boolean
   pinNativeAsset?: boolean
   enableUnlistedToken?: boolean
   isOpen: boolean
@@ -39,6 +40,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   chain,
   currentToken,
   excludeNativeAsset = false,
+  excludeWrappedNativeAsset = false,
   pinNativeAsset = false,
   enableUnlistedToken = false,
   isOpen,
@@ -89,6 +91,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
                   chain={chain}
                   currentToken={currentToken}
                   excludeNativeAsset={excludeNativeAsset}
+                  excludeWrappedNativeAsset={excludeWrappedNativeAsset}
                   onTokenSelect={closeOnSelect}
                 />
               </Box>

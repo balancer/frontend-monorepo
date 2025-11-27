@@ -5,7 +5,7 @@ import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTokens } from '../TokensProvider'
 import { useMemo } from 'react'
 import { TokenIcon } from '../TokenIcon'
-import { nativeAssetFilter } from '../token.helpers'
+import { nativeAssetFilter, wrappedNativeAssetFilter } from '../token.helpers'
 import { Address } from 'viem'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
@@ -13,6 +13,7 @@ type Props = {
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
+  excludeWrappedNativeAsset?: boolean
   onTokenSelect: (token: GqlToken) => void
 }
 
@@ -20,6 +21,7 @@ export function TokenSelectPopular({
   chain,
   currentToken,
   excludeNativeAsset,
+  excludeWrappedNativeAsset,
   onTokenSelect,
 }: Props) {
   const {
@@ -32,8 +34,13 @@ export function TokenSelectPopular({
       .slice(0, 7)
       ?.map(token => getToken(token, chain))
       .filter(Boolean) as GqlToken[]
-    return excludeNativeAsset ? tokens.filter(nativeAssetFilter(chain)) : tokens
-  }, [popularTokens, excludeNativeAsset, chain])
+
+    return tokens.filter(token => {
+      if (excludeNativeAsset && nativeAssetFilter(chain)(token)) return false
+      if (excludeWrappedNativeAsset && wrappedNativeAssetFilter(chain)(token)) return false
+      return true
+    })
+  }, [popularTokens, excludeNativeAsset, excludeWrappedNativeAsset, chain])
 
   const isCurrentToken = (token: GqlToken) =>
     currentToken && isSameAddress(token.address, currentToken)
