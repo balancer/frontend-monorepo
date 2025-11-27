@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "next start",
-    "build": "NEXT_PUBLIC_PROJECT_ID=balancer pnpm --filter @repo/lib graphql:gen && next build",
+    "build": "pnpm --filter @repo/lib graphql:gen && next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev --turbopack\"",
     "dev:no-gen": "next dev --turbo",
     "gen:wagmi": "pnpm wagmi generate",

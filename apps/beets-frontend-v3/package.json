@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "NEXT_PUBLIC_PROJECT_ID=beets pnpm --filter @repo/lib graphql:gen && next build",
+    "build": "pnpm --filter @repo/lib graphql:gen && next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001 --turbopack\"",
     "dev:no-gen": "next dev --turbo -p 3001",
     "gen:wagmi": "pnpm wagmi generate",
