@@ -10,7 +10,7 @@ test('Stake S to stS on /stake', async ({ page }) => {
   // Wait for dev tools panel to fully close before checking wallet button
   await expect(button(page, 'Dev tools button')).toBeVisible()
   await expect(button(page, 'Connect wallet')).not.toBeVisible()
-  await clickLink(page, 'Stake $S')
+  await clickLink(page, 'stake')
 
   // The Stake tab should be active by default
   await expect(page.getByRole('button', { name: 'Stake' })).toBeVisible()
