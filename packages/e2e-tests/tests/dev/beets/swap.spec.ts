@@ -26,7 +26,7 @@ test('Swap 1000 BEETS to stS)', async ({ page }) => {
   await clickLink(page, 'Swap')
 
   await clickButton(page, 'S')
-  await page.getByText('BEETSBEETS').click()
+  await page.getByText('BEETSBEETS', { exact: true }).click()
   await clickButton(page, 'Select token')
   await page.getByText('Beets Staked Sonic').click()
   await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('1000')
