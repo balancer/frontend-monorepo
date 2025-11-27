@@ -10,8 +10,8 @@ test('Swap 1000 wS to stS)', async ({ page }) => {
     forkBalances: {
       146: [
         {
-          tokenAddress: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38', // wS
-          value: '1000',
+          tokenAddress: '0x2d0e0814e62d80056181f5cd932274405966e4f0', // BEETS
+          value: '10000',
         },
       ],
     },
@@ -26,15 +26,15 @@ test('Swap 1000 wS to stS)', async ({ page }) => {
   await clickLink(page, 'Swap')
 
   await clickButton(page, 'S')
-  await page.getByText('Wrapped Sonic', { exact: true }).click()
+  await page.getByText('BEETSBEETS', { exact: true }).click()
   await clickButton(page, 'Select token')
-  await page.getByText('Beets Staked Sonic').click()
-  await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('1000')
+  await page.getByText('Wrapped Sonic', { exact: true }).click()
+  await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('10000')
 
   await clickButton(page, 'Next')
 
-  if (await isButtonVisible(page, 'Approve wS to swap')) {
-    await clickButton(page, 'Approve wS to swap')
+  if (await isButtonVisible(page, 'Approve BEETS to swap')) {
+    await clickButton(page, 'Approve BEETS to swap')
   }
 
   await clickButton(page, 'Swap')
