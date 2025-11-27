@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { setForkBalances } from '@/helpers/e2e.helpers'
 
-test('Swap 1 S to USDC)', async ({ page }) => {
+test('Swap 1000 BEETS to stS)', async ({ page }) => {
   await setForkBalances(page, {
     chainId: 146,
     forkBalances: {
@@ -26,7 +26,7 @@ test('Swap 1 S to USDC)', async ({ page }) => {
   await clickLink(page, 'Swap')
 
   await clickButton(page, 'S')
-  await page.getByText('Beets').click()
+  await page.getByText('BEETSBEETS').click()
   await clickButton(page, 'Select token')
   await page.getByText('Beets Staked Sonic').click()
   await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('1000')
