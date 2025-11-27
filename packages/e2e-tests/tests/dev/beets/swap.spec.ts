@@ -5,9 +5,23 @@ import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { setForkBalances } from '@/helpers/e2e.helpers'
 
 test('Swap 1 S to USDC)', async ({ page }) => {
-  await page.goto('http://localhost:3001/swap/sonic/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+  await setForkBalances(page, {
+    chainId: 146,
+    forkBalances: {
+      146: [
+        {
+          tokenAddress: '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC
+          value: '1000',
+        },
+      ],
+    },
+  })
+  await page.goto('http://localhost:3001/pools')
   await impersonate(page, defaultAnvilAccount)
+  await page.goto('http://localhost:3001/swap/sonic/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
+  // Wait for dev tools panel to fully close before checking wallet button
+  await expect(button(page, 'Dev tools button')).toBeVisible()
   await expect(button(page, 'Connect wallet')).not.toBeVisible()
 
   await clickButton(page, 'S')

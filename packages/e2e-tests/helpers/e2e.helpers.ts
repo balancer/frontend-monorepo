@@ -35,10 +35,6 @@ export async function setForkBalances(page: Page, forkOptions?: ForkOptions) {
         tokenAddress: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38', // wS
         value: '100',
       },
-      {
-        tokenAddress: '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC
-        value: '1000',
-      },
     ],
   }
 
