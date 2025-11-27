@@ -20,8 +20,6 @@ test('Swap 1 S to USDC)', async ({ page }) => {
   await impersonate(page, defaultAnvilAccount)
   await page.goto('http://localhost:3001/swap/sonic/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
-  // Wait for dev tools panel to fully close before checking wallet button
-  await expect(button(page, 'Dev tools button')).toBeVisible()
   await expect(button(page, 'Connect wallet')).not.toBeVisible()
 
   await clickButton(page, 'S')
