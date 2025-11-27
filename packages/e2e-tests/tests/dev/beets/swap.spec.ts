@@ -33,8 +33,12 @@ test('Swap 1000 BEETS to stS)', async ({ page }) => {
 
   await clickButton(page, 'Next')
 
-  if (await isButtonVisible(page, 'Approve Beets to swap')) {
-    await clickButton(page, 'Approve Beets to swap')
+  if (await isButtonVisible(page, 'Approve BEETS to swap')) {
+    await clickButton(page, 'Approve BEETS to swap')
+  }
+
+  if (await isButtonVisible(page, 'Sign permit: BEETS ')) {
+    await clickButton(page, 'Sign permit: BEETS')
   }
 
   await clickButton(page, 'Swap')
