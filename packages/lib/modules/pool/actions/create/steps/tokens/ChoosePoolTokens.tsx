@@ -67,38 +67,40 @@ export function ChoosePoolTokens() {
   // Filter out already selected tokens
   const poolTokenAddresses = new Set(poolTokens.map(token => token.address?.toLowerCase()))
   const isNativeAssetAlreadyIncluded = poolTokenAddresses.has(nativeAsset)
-  const isWrappedNativeAssetAlreadyIncluded = poolTokenAddresses.has(wNativeAsset)
+  const isWNativeAssetAlreadyIncluded = poolTokenAddresses.has(wNativeAsset)
   const isSelectedTokenNativeAsset = selectedTokenAddress === nativeAsset
-  const isSelectedTokenWrappedNativeAsset = selectedTokenAddress === wNativeAsset
+  const isSelectedTokenWNativeAsset = selectedTokenAddress === wNativeAsset
 
   const availableTokens = listedTokens.filter(listToken => {
-    const tokenAddress = listToken.address.toLowerCase()
-    const isTokenAlreadyIncluded = poolTokenAddresses.has(tokenAddress)
-    const isListTokenNativeAsset = tokenAddress === nativeAsset
-    const isListTokenWNativeAsset = tokenAddress === wNativeAsset
+    const listTokenAddress = listToken.address.toLowerCase()
+    const isTokenAlreadyIncluded = poolTokenAddresses.has(listTokenAddress)
+    const isListTokenNativeAsset = listTokenAddress === nativeAsset
+    const isListTokenWNativeAsset = listTokenAddress === wNativeAsset
 
-    // UI disiables selection of same token so this helps user not get confused
-    if (tokenAddress === selectedTokenAddress) return true
+    // UI handles disabling selection of same token
+    if (listTokenAddress === selectedTokenAddress) return true
 
     // Exclude tokens already in the pool
     if (isTokenAlreadyIncluded) return false
 
-    // If native asset is in pool and user not editing it, exclude wrapped native
+    // If native asset is in pool AND user not editing it, exclude wrapped native
     if (isNativeAssetAlreadyIncluded && !isSelectedTokenNativeAsset && isListTokenWNativeAsset) {
       return false
     }
 
-    // If wrapped native is in pool and user not editing it, exclude native asset
-    if (
-      isWrappedNativeAssetAlreadyIncluded &&
-      !isSelectedTokenWrappedNativeAsset &&
-      isListTokenNativeAsset
-    ) {
+    // If wrapped native asset already in pool AND user not editing it, exclude native asset
+    if (isWNativeAssetAlreadyIncluded && !isSelectedTokenWNativeAsset && isListTokenNativeAsset) {
       return false
     }
 
     return true
   })
+
+  // Hides the "popular token" pill options
+  const excludeWrappedNativeAsset =
+    isNativeAssetAlreadyIncluded || (isWNativeAssetAlreadyIncluded && !isSelectedTokenWNativeAsset)
+  const excludeNativeAsset =
+    isWNativeAssetAlreadyIncluded || (isNativeAssetAlreadyIncluded && !isSelectedTokenNativeAsset)
 
   function getVerifiedRateProviderAddress(token: ApiToken) {
     if (!token.priceRateProviderData) return undefined
@@ -186,6 +188,8 @@ export function ChoosePoolTokens() {
         chain={network}
         currentToken={selectedTokenAddress}
         enableUnlistedToken
+        excludeNativeAsset={excludeNativeAsset}
+        excludeWrappedNativeAsset={excludeWrappedNativeAsset}
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
