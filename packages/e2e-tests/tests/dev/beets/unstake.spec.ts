@@ -3,7 +3,7 @@ import { button, clickButton, clickLink } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
-test('Stake S to stS on /stake', async ({ page }) => {
+test('Unstake stS on /stake', async ({ page }) => {
   await page.goto('http://localhost:3001/pools')
   await impersonate(page, defaultAnvilAccount)
 
@@ -16,13 +16,19 @@ test('Stake S to stS on /stake', async ({ page }) => {
   //await expect(page.getByRole('button', { name: 'S' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Stake' })).toBeVisible()
 
-  // Fill in the amount to stake (S is the native asset)
+  // The Unstake tab should be clicked to become active
+  await page.getByRole('button', { name: 'Unstake' }).click()
+
+  // Confirm unstake tab is active
+  await expect(page.getByRole('button', { name: 'stS' })).toBeVisible()
+
+  // Fill in the amount to unstake
   await page.getByPlaceholder('0.00').nth(0).fill('1')
 
-  // Click Next to open stake modal
+  // Click Next to open unstake modal
   await clickButton(page, 'Next')
 
-  // Click the Stake button in the modal to execute the transaction
-  await clickButton(page, 'Stake')
-  await expect(page.getByText('Stake again')).toBeVisible()
+  // Click the Unstake button in the modal to execute the transaction
+  await clickButton(page, 'Unstake')
+  await expect(page.getByText('Unstake again')).toBeVisible()
 })
