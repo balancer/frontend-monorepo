@@ -6,14 +6,14 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getGqlPoolType, isWeightedPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function useCheckForSimilarPools() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [network, poolType, poolTokens] = poolCreationForm.watch([
-    'network',
-    'poolType',
-    'poolTokens',
-  ])
+  const [network, poolType, poolTokens] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType', 'poolTokens'],
+  })
 
   const { data, loading, error } = useQuery(GetPoolsDocument, {
     variables: {

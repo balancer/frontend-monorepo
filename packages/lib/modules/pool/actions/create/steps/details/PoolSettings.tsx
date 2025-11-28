@@ -16,6 +16,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isStablePool, isStableSurgePool } from '../../helpers'
+import { useWatch } from 'react-hook-form'
 
 export type PoolSettingsOption = {
   label: string
@@ -26,7 +27,10 @@ export type PoolSettingsOption = {
 export function PoolSettings() {
   const { userAddress } = useUserAccount()
   const { poolCreationForm } = usePoolCreationForm()
-  const [network, poolType] = poolCreationForm.watch(['network', 'poolType'])
+  const [network, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType'],
+  })
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const filteredPoolHooksOptions = poolHooksWhitelist.filter(

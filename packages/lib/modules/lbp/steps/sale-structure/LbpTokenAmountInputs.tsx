@@ -9,7 +9,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { TokenInput } from '../../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
-import { Control, Controller, FieldErrors } from 'react-hook-form'
+import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { VStack, Text, Heading, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
@@ -21,13 +21,13 @@ export function LbpTokenAmountInputs() {
   const { getToken } = useTokens()
   const {
     launchToken,
-    saleStructureForm: {
-      control,
-      watch,
-      formState: { errors },
-    },
+    saleStructureForm: { control },
   } = useLbpForm()
-  const { collateralTokenAddress, selectedChain, startDateTime } = watch()
+  const { errors } = useFormState({ control })
+  const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
+    control,
+    name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'],
+  })
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
   const saleStart = startDateTime
 

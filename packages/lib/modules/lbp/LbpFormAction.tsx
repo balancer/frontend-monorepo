@@ -8,6 +8,7 @@ import { useRef } from 'react'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
@@ -20,11 +21,13 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     projectInfoForm,
     poolAddress,
   } = useLbpForm()
-  const { selectedChain } = saleStructureForm.watch()
+  const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
   const { copyToClipboard, isCopied } = useCopyToClipboard()
-  const isFormStateValid = saleStructureForm.formState.isValid && projectInfoForm.formState.isValid
+  const saleFormState = useFormState({ control: saleStructureForm.control })
+  const projectInfoFormState = useFormState({ control: projectInfoForm.control })
+  const isFormStateValid = saleFormState.isValid && projectInfoFormState.isValid
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 

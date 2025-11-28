@@ -4,10 +4,14 @@ import { drawLiquidityECLP } from '@repo/lib/modules/eclp/helpers/drawLiquidityE
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePoolSpotPriceWithoutRate } from '../steps/details/usePoolSpotPriceWithoutRate'
 import { isGyroEllipticPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, poolType] = poolCreationForm.watch(['poolTokens', 'poolType'])
+  const [poolTokens, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType'],
+  })
   const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
 
   const poolSpotPrice = spotPriceWithoutRate.toString()
@@ -16,20 +20,22 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
 
   const priceRateRatio = bn(rateTokenA).div(bn(rateTokenB))
 
-  const eclpParams = eclpConfigForm.watch()
-  const [alpha, beta, s, c, lambda] = [
-    eclpParams.alpha,
-    eclpParams.beta,
-    eclpParams.s,
-    eclpParams.c,
-    eclpParams.lambda,
-  ].map(Number)
+  const [alpha, beta, s, c, lambda] = useWatch({
+    control: eclpConfigForm.control,
+    name: ['alpha', 'beta', 's', 'c', 'lambda'],
+  })
 
   const tokenRateScalingFactorString = '1'
 
   const liquidityData = drawLiquidityECLP(
     isGyroEllipticPool(poolType),
-    { alpha, beta, s, c, lambda },
+    {
+      alpha: Number(alpha),
+      beta: Number(beta),
+      s: Number(s),
+      c: Number(c),
+      lambda: Number(lambda),
+    },
     tokenRateScalingFactorString
   )
 
@@ -40,7 +46,7 @@ export function usePreviewEclpLiquidityProfile(): ECLPLiquidityProfile {
           const displayedPrice = bn(price).div(priceRateRatio).toNumber()
           return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
         })
-        .sort((a, b) => a[0] - b[0]) as [[number, number]])
+        .sort((a, b) => a[0] - b[0]) as [number, number][])
     : null
 
   const xMin = data ? Math.min(...data.map(([x]) => x)) : 0

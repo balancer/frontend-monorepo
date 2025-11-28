@@ -24,15 +24,16 @@ import { Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import NextLink from 'next/link'
+import { useWatch } from 'react-hook-form'
 
 export function SimilarPoolsModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
-  const [network, hasAcceptedSimilarPoolsWarning] = poolCreationForm.watch([
-    'network',
-    'hasAcceptedSimilarPoolsWarning',
-  ])
+  const [network, hasAcceptedSimilarPoolsWarning] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'hasAcceptedSimilarPoolsWarning'],
+  })
   const { similarPools } = useCheckForSimilarPools()
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Control, Controller, UseFormSetValue, UseFormWatch } from 'react-hook-form'
+import { Control, Controller, UseFormSetValue } from 'react-hook-form'
 import { SaleStructureForm, WeightAdjustmentType } from '../lbp.types'
 import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { ArrowRight } from 'react-feather'
@@ -10,13 +10,17 @@ export function WeightAdjustmentTypeInput({
   control,
   launchTokenSymbol,
   collateralTokenSymbol,
-  watch,
   setValue,
+  weightAdjustmentType,
+  customStartWeight,
+  customEndWeight,
 }: {
   control: Control<SaleStructureForm>
   launchTokenSymbol: string
   collateralTokenSymbol: string
-  watch: UseFormWatch<SaleStructureForm>
+  weightAdjustmentType: WeightAdjustmentType
+  customStartWeight: number
+  customEndWeight: number
   setValue: UseFormSetValue<SaleStructureForm>
 }) {
   const options = [
@@ -64,10 +68,6 @@ export function WeightAdjustmentTypeInput({
     },
   ]
 
-  const weightAdjustment = watch('weightAdjustmentType')
-  const customStartWeight = watch('customStartWeight')
-  const customEndWeight = watch('customEndWeight')
-
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Dynamic token weight adjustments</Text>
@@ -87,7 +87,7 @@ export function WeightAdjustmentTypeInput({
         )}
       />
 
-      {weightAdjustment === 'custom' && (
+      {weightAdjustmentType === 'custom' && (
         <Stack gap="md" my="md" w="full">
           <WeightSlider
             collateralTokenSymbol={collateralTokenSymbol}

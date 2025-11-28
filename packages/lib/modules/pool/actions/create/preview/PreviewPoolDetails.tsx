@@ -7,6 +7,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { isStablePool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolDetails() {
   return (
@@ -37,19 +38,22 @@ export function PoolDetailsContent() {
     disableUnbalancedLiquidity,
     enableDonation,
     poolType,
-  ] = poolCreationForm.watch([
-    'network',
-    'name',
-    'symbol',
-    'swapFeePercentage',
-    'swapFeeManager',
-    'pauseManager',
-    'amplificationParameter',
-    'poolHooksContract',
-    'disableUnbalancedLiquidity',
-    'enableDonation',
-    'poolType',
-  ])
+  ] = useWatch({
+    control: poolCreationForm.control,
+    name: [
+      'network',
+      'name',
+      'symbol',
+      'swapFeePercentage',
+      'swapFeeManager',
+      'pauseManager',
+      'amplificationParameter',
+      'poolHooksContract',
+      'disableUnbalancedLiquidity',
+      'enableDonation',
+      'poolType',
+    ],
+  })
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 

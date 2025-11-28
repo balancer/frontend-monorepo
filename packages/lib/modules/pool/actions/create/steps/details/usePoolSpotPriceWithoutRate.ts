@@ -3,13 +3,17 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useRateProvider } from '../tokens/useRateProvider'
 import { formatUnits } from 'viem'
+import { useWatch } from 'react-hook-form'
 
 /**
  * @returns the current price of the pool in terms of underlying tokens
  */
 export function usePoolSpotPriceWithoutRate() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, network] = poolCreationForm.watch(['poolTokens', 'network'])
+  const [poolTokens, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'network'],
+  })
   const { priceFor } = useTokens()
 
   const tokenA = poolTokens[0]

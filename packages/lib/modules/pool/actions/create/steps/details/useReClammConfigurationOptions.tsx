@@ -19,6 +19,7 @@ import {
   PriceAdjustmentRateStandardSVG,
   PriceAdjustmentRateFastSVG,
 } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
+import { useWatch } from 'react-hook-form'
 
 export type ReClammConfigOptionsGroup = {
   label: string
@@ -45,8 +46,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
 
-  const poolTokens = poolCreationForm.watch('poolTokens')
-  const reClammConfig = reClammConfigForm.watch()
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
+  const reClammConfig = useWatch({ control: reClammConfigForm.control })
   const { initialTargetPrice, priceRangePercentage } = reClammConfig
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
@@ -124,7 +125,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue, { shouldValidate: true })
       if (rawValue) {
-        updatePriceBounds(initialTargetPrice, rawValue)
+        updatePriceBounds(initialTargetPrice || '', rawValue)
       } else {
         reClammConfigForm.setValue('initialMinPrice', '', { shouldValidate: true })
         reClammConfigForm.setValue('initialMaxPrice', '', { shouldValidate: true })

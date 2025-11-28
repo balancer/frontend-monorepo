@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { type Control, Controller } from 'react-hook-form'
+import { type Control, Controller, useWatch } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -8,11 +8,10 @@ import { isWeightedPool } from '../../helpers'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationForm> }) {
   const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, weightedPoolStructure, poolType] = poolCreationForm.watch([
-    'poolTokens',
-    'weightedPoolStructure',
-    'poolType',
-  ])
+  const [poolTokens, weightedPoolStructure, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'weightedPoolStructure', 'poolType'],
+  })
 
   function updatePoolTokenWeights(weightedStructure: WeightedPoolStructure) {
     if (weightedStructure === WeightedPoolStructure.FiftyFifty) {

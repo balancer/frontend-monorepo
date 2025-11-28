@@ -40,18 +40,17 @@ import {
   isGyroEllipticPool,
 } from '../../helpers'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
   const tokenSelectDisclosure = useDisclosure()
   const { updatePoolToken, addPoolToken, poolCreationForm, reClammConfigForm, eclpConfigForm } =
     usePoolCreationForm()
-  const [network, poolTokens, weightedPoolStructure, poolType] = poolCreationForm.watch([
-    'network',
-    'poolTokens',
-    'weightedPoolStructure',
-    'poolType',
-  ])
+  const [network, poolTokens, weightedPoolStructure, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'],
+  })
 
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
@@ -186,6 +185,7 @@ function ConfigureToken({
   poolType,
 }: ConfigureTokenProps) {
   const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
+  const formState = useFormState({ control: poolCreationForm.control })
 
   const { priceFor } = useTokens()
 
@@ -202,7 +202,7 @@ function ConfigureToken({
   }, [cgPriceForToken, apiPriceForToken, token.usdPrice])
 
   const isInvalidWeight = !!token.weight && Number(token.weight) < 1
-  const tokenWeightErrorMsg = poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
+  const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
 
   return (
     <VStack align="start" key={index} spacing="md" w="full">

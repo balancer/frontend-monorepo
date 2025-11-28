@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { useGetTokenRates } from './useGetTokenRates'
 import { useMemo, useState } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -13,7 +12,7 @@ import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
 import { isGyroEPool } from '../../pool/pool.helpers'
 
 export type ECLPLiquidityProfile = {
-  data: [[number, number]] | null
+  data: [number, number][] | null
   poolSpotPrice: string | number | null
   poolIsInRange: boolean
   xMin: number
@@ -30,16 +29,6 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
   const { data: tokenRates, isLoading } = useGetTokenRates(pool)
   const [isReversed, setIsReversed] = useState(false)
 
-  const gyroPool = pool as GqlPoolGyro
-
-  const eclpParams = {
-    alpha: Number(gyroPool.alpha),
-    beta: Number(gyroPool.beta),
-    s: Number(gyroPool.s),
-    c: Number(gyroPool.c),
-    lambda: Number(gyroPool.lambda),
-  }
-
   function toggleIsReversed() {
     setIsReversed(!isReversed)
   }
@@ -50,10 +39,19 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
     return bn(tokenRates[0]).div(bn(tokenRates[1])).toString()
   }, [tokenRates])
 
-  const liquidityData = useMemo(
-    () => drawLiquidityECLP(isGyroEPool(pool), eclpParams, tokenRateScalingFactorString),
-    [pool, tokenRateScalingFactorString]
-  )
+  const liquidityData = useMemo(() => {
+    const gyroPool = pool as GqlPoolGyro
+
+    const eclpParams = {
+      alpha: Number(gyroPool.alpha),
+      beta: Number(gyroPool.beta),
+      s: Number(gyroPool.s),
+      c: Number(gyroPool.c),
+      lambda: Number(gyroPool.lambda),
+    }
+
+    return drawLiquidityECLP(isGyroEPool(pool), eclpParams, tokenRateScalingFactorString)
+  }, [pool, tokenRateScalingFactorString])
 
   const priceRateRatio = getPriceRateRatio(pool)
 
@@ -80,7 +78,7 @@ export function useGetECLPLiquidityProfile(): ECLPLiquidityProfile {
         return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
       })
 
-    return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
+    return transformedData.sort((a, b) => a[0] - b[0]) as [number, number][]
   }, [liquidityData, isReversed, priceRateRatio])
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])

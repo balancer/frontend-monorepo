@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/refs */
-import { useEffect, useRef, ReactNode, cloneElement, isValidElement } from 'react'
+import { useEffect, useRef, ReactNode } from 'react'
 import { Box } from '@chakra-ui/react'
 import { useScroll, useTransform, useSpring } from 'framer-motion'
 
@@ -13,7 +12,6 @@ export function SparkleIconWrapper({
   size?: number
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const svgRef = useRef<SVGSVGElement>(null)
 
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
@@ -26,7 +24,7 @@ export function SparkleIconWrapper({
   })
 
   useEffect(() => {
-    const svgElement = svgRef.current
+    const svgElement = wrapperRef.current?.querySelector('svg')
     if (!svgElement) {
       console.warn('SparkleIconWrapper: SVG ref not found.')
       return
@@ -50,10 +48,6 @@ export function SparkleIconWrapper({
     return () => unsubscribe()
   }, [rotate])
 
-  const childWithRef = isValidElement(children)
-    ? cloneElement(children as React.ReactElement<any>, { ref: svgRef, size })
-    : children
-
   return (
     <Box
       display="inline-block"
@@ -69,7 +63,7 @@ export function SparkleIconWrapper({
       }}
       width={size}
     >
-      {childWithRef}
+      {children}
     </Box>
   )
 }

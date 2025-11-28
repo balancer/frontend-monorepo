@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import {
   ManagedResult,
   TransactionLabels,
@@ -92,6 +91,6 @@ export function useCreatePoolStep({
         )
       },
     }),
-    [transaction, buildCallDataQuery.data, gasEstimationMeta, poolAddress]
+    [transaction, buildCallDataQuery.data, gasEstimationMeta, poolAddress, labels]
   )
 }

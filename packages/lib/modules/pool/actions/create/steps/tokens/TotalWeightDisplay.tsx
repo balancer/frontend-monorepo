@@ -3,10 +3,11 @@ import { AlertTriangle } from 'react-feather'
 import { Icon } from '@chakra-ui/react'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { useWatch } from 'react-hook-form'
 
 export function TotalWeightDisplay() {
   const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = poolCreationForm.watch('poolTokens')
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
   const isTotalWeightTooLow = validatePoolTokens.isTotalWeightTooLow(poolTokens)
   const isTotalWeightTooHigh = validatePoolTokens.isTotalWeightTooHigh(poolTokens)
   const totalWeight = validatePoolTokens.totalWeight(poolTokens)

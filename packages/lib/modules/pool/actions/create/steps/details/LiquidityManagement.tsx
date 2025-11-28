@@ -6,17 +6,21 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useEffect } from 'react'
 import { usePoolHooksContract } from './usePoolHooksContract'
 import { isStableSurgePool } from '../../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function LiquidityManagement() {
   const { poolCreationForm } = usePoolCreationForm()
   const [poolType, enableDonation, disableUnbalancedLiquidity, poolHooksContract, network] =
-    poolCreationForm.watch([
-      'poolType',
-      'enableDonation',
-      'disableUnbalancedLiquidity',
-      'poolHooksContract',
-      'network',
-    ])
+    useWatch({
+      control: poolCreationForm.control,
+      name: [
+        'poolType',
+        'enableDonation',
+        'disableUnbalancedLiquidity',
+        'poolHooksContract',
+        'network',
+      ],
+    })
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
 
