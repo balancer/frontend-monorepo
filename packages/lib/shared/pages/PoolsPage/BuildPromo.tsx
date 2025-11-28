@@ -62,7 +62,7 @@ export function BuildPromo() {
               <Button
                 as={NextLink}
                 flex={1}
-                href="https://pool-creator.balancer.fi/"
+                href="/create"
                 rightIcon={<ArrowUpRight size="14px" />}
                 size="lg"
                 variant="primary"

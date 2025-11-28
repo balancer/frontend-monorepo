@@ -148,8 +148,7 @@ function CreateAPool() {
             data-group
             display="flex"
             gap="xxs"
-            href="https://pool-creator.balancer.fi/"
-            isExternal
+            href="/create"
             variant="nav"
           >
             <Text
@@ -169,12 +168,7 @@ function CreateAPool() {
             </Box>
           </Link>
           <VStack align="flex-start" pt="xs" w="full">
-            <PoolLink
-              href="https://pool-creator.balancer.fi/v3"
-              icon={<BalancerIconCircular size={32} />}
-              isExternal
-              label="Balancer"
-            />
+            <PoolLink href="/create" icon={<BalancerIconCircular size={32} />} label="Balancer" />
             <PoolLink
               href="https://pool-creator.balancer.fi/cow"
               icon={<CowIconCircular size={32} />}
@@ -182,7 +176,7 @@ function CreateAPool() {
               label="CoW AMM"
             />
             <PoolLink
-              href="https://pool-creator.balancer.fi/beets"
+              href="https://beets.fi/create"
               icon={<BeetsIconCircular size={32} />}
               isExternal
               label="Beets"
