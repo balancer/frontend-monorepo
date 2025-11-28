@@ -25,7 +25,6 @@ type Props<T extends ApiOrCustomToken = ApiToken> = {
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
-  excludeWrappedNativeAsset?: boolean
   pinNativeAsset?: boolean
   enableUnlistedToken?: boolean
   isOpen: boolean
@@ -33,6 +32,7 @@ type Props<T extends ApiOrCustomToken = ApiToken> = {
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
   onTokenSelect: (token: T) => void
+  excludedTokens?: Address[]
 }
 
 export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
@@ -40,13 +40,13 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   chain,
   currentToken,
   excludeNativeAsset = false,
-  excludeWrappedNativeAsset = false,
   pinNativeAsset = false,
   enableUnlistedToken = false,
   isOpen,
   onClose,
   finalFocusRef,
   onTokenSelect,
+  excludedTokens,
   ...rest
 }: Props<T> & Omit<ModalProps, 'children'>) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -90,8 +90,8 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
                 <TokenSelectPopular
                   chain={chain}
                   currentToken={currentToken}
+                  excludedTokens={excludedTokens}
                   excludeNativeAsset={excludeNativeAsset}
-                  excludeWrappedNativeAsset={excludeWrappedNativeAsset}
                   onTokenSelect={closeOnSelect}
                 />
               </Box>

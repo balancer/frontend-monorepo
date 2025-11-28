@@ -5,7 +5,7 @@ import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTokens } from '../TokensProvider'
 import { useMemo } from 'react'
 import { TokenIcon } from '../TokenIcon'
-import { nativeAssetFilter, wrappedNativeAssetFilter } from '../token.helpers'
+import { nativeAssetFilter } from '../token.helpers'
 import { Address } from 'viem'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
@@ -13,16 +13,16 @@ type Props = {
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
-  excludeWrappedNativeAsset?: boolean
   onTokenSelect: (token: GqlToken) => void
+  excludedTokens?: Address[]
 }
 
 export function TokenSelectPopular({
   chain,
   currentToken,
   excludeNativeAsset,
-  excludeWrappedNativeAsset,
   onTokenSelect,
+  excludedTokens = [],
 }: Props) {
   const {
     tokens: { popularTokens },
@@ -35,26 +35,23 @@ export function TokenSelectPopular({
       ?.map(token => getToken(token, chain))
       .filter(Boolean) as GqlToken[]
 
-    return tokens.filter(token => {
-      if (excludeNativeAsset && nativeAssetFilter(chain)(token)) return false
-      if (excludeWrappedNativeAsset && wrappedNativeAssetFilter(chain)(token)) return false
-      return true
-    })
-  }, [popularTokens, excludeNativeAsset, excludeWrappedNativeAsset, chain])
+    return excludeNativeAsset ? tokens.filter(token => !nativeAssetFilter(chain)(token)) : tokens
+  }, [popularTokens, excludeNativeAsset, chain])
 
-  const isCurrentToken = (token: GqlToken) =>
-    currentToken && isSameAddress(token.address, currentToken)
+  const isExcludedToken = (token: GqlToken) =>
+    (currentToken && isSameAddress(token.address, currentToken)) ||
+    excludedTokens.includes(token.address as Address)
 
   return (
     <Wrap>
       {tokens?.map(token => (
         <WrapItem key={token.address}>
           <Tag
-            _hover={isCurrentToken(token) ? {} : { bg: 'background.level4', shadow: 'none' }}
-            cursor={isCurrentToken(token) ? 'not-allowed' : 'pointer'}
+            _hover={isExcludedToken(token) ? {} : { bg: 'background.level4', shadow: 'none' }}
+            cursor={isExcludedToken(token) ? 'not-allowed' : 'pointer'}
             key={token.address}
-            onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
-            opacity={isCurrentToken(token) ? 0.5 : 1}
+            onClick={() => !isExcludedToken(token) && onTokenSelect(token)}
+            opacity={isExcludedToken(token) ? 0.5 : 1}
             pl="xs"
             role="group"
             shadow="sm"

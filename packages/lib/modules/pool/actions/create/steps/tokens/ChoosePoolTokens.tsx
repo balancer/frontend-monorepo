@@ -96,12 +96,6 @@ export function ChoosePoolTokens() {
     return true
   })
 
-  // Hides the "popular token" pill options
-  const excludeWrappedNativeAsset =
-    isNativeAssetAlreadyIncluded || (isWNativeAssetAlreadyIncluded && !isSelectedTokenWNativeAsset)
-  const excludeNativeAsset =
-    isWNativeAssetAlreadyIncluded || (isNativeAssetAlreadyIncluded && !isSelectedTokenNativeAsset)
-
   function getVerifiedRateProviderAddress(token: ApiToken) {
     if (!token.priceRateProviderData) return undefined
 
@@ -137,6 +131,10 @@ export function ChoosePoolTokens() {
     if (isReClammPool(poolType)) reClammConfigForm.resetToInitial()
     if (isGyroEllipticPool(poolType)) eclpConfigForm.resetToInitial()
   }
+
+  const excludedTokens = poolTokens
+    .map(token => token.address)
+    .filter((address): address is `0x${string}` => Boolean(address))
 
   return (
     <>
@@ -188,8 +186,8 @@ export function ChoosePoolTokens() {
         chain={network}
         currentToken={selectedTokenAddress}
         enableUnlistedToken
-        excludeNativeAsset={excludeNativeAsset}
-        excludeWrappedNativeAsset={excludeWrappedNativeAsset}
+        excludedTokens={excludedTokens}
+        excludeNativeAsset={true}
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
