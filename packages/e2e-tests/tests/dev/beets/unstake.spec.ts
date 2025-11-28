@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 test('Unstake stS on /stake', async ({ page }) => {
-  await page.goto('http://localhost:3001/portfolio')
+  await page.goto('http://localhost:3001/pools')
   await impersonate(page, defaultAnvilAccount)
 
   // Wait for dev tools panel to fully close before checking wallet button
