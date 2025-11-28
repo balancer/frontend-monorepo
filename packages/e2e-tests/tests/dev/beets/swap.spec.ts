@@ -17,7 +17,7 @@ test('Swap 1000 wS to stS)', async ({ page }) => {
     },
   })
 
-  await page.goto('http://localhost:3001/pools')
+  await page.goto('http://localhost:3001/portfolio')
   await impersonate(page, defaultAnvilAccount)
 
   // Wait for dev tools panel to fully close before checking wallet button
