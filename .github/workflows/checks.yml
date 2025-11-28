@@ -5,7 +5,6 @@ on:
     types: [opened, synchronize]
 
 env:
-  NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
   NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
   NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.PRIVATE_ALCHEMY_KEY }}
   NEXT_PRIVATE_DRPC_KEY: ${{ secrets.PRIVATE_DRPC_KEY }}
@@ -95,6 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_PROJECT_ID: balancer
+      NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
     steps:
       - uses: actions/checkout@v5
       - name: Setup
@@ -120,6 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_PROJECT_ID: beets
+      NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
     steps:
       - uses: actions/checkout@v5
       - name: Setup
