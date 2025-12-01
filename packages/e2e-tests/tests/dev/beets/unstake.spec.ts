@@ -24,7 +24,7 @@ test('Unstake stS on /stake', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'stS', exact: true })).toBeVisible()
 
   // Fill in the amount to unstake
-  await page.getByPlaceholder('0.00').nth(0).fill('1')
+  await page.getByPlaceholder('0.00').nth(0).fill('0.5')
 
   // Click Next to open unstake modal
   await clickButton(page, 'Next')
