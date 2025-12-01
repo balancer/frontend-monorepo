@@ -41,7 +41,6 @@ import {
 } from '../../helpers'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
-import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -58,42 +57,18 @@ export function ChoosePoolTokens() {
   const { getTokensByChain } = useTokens()
   const listedTokens = getTokensByChain(network)
 
-  const networkConfig = getNetworkConfig(network)
-  const nativeAsset = networkConfig.tokens.nativeAsset.address.toLowerCase()
-  const wNativeAsset = networkConfig.tokens.addresses.wNativeAsset.toLowerCase()
   const selectedTokenAddress =
     selectedTokenIndex !== null ? poolTokens[selectedTokenIndex].address : undefined
 
   // Filter out already selected tokens
   const poolTokenAddresses = new Set(poolTokens.map(token => token.address?.toLowerCase()))
-  const isNativeAssetAlreadyIncluded = poolTokenAddresses.has(nativeAsset)
-  const isWNativeAssetAlreadyIncluded = poolTokenAddresses.has(wNativeAsset)
-  const isSelectedTokenNativeAsset = selectedTokenAddress === nativeAsset
-  const isSelectedTokenWNativeAsset = selectedTokenAddress === wNativeAsset
 
   const availableTokens = listedTokens.filter(listToken => {
     const listTokenAddress = listToken.address.toLowerCase()
-    const isTokenAlreadyIncluded = poolTokenAddresses.has(listTokenAddress)
-    const isListTokenNativeAsset = listTokenAddress === nativeAsset
-    const isListTokenWNativeAsset = listTokenAddress === wNativeAsset
+    const isTokenAlreadyInPool = poolTokenAddresses.has(listTokenAddress)
+    const isEditingPoolToken = listTokenAddress === selectedTokenAddress
 
-    // UI handles disabling selection of same token
-    if (listTokenAddress === selectedTokenAddress) return true
-
-    // Exclude tokens already in the pool
-    if (isTokenAlreadyIncluded) return false
-
-    // If native asset is in pool AND user not editing it, exclude wrapped native
-    if (isNativeAssetAlreadyIncluded && !isSelectedTokenNativeAsset && isListTokenWNativeAsset) {
-      return false
-    }
-
-    // If wrapped native asset already in pool AND user not editing it, exclude native asset
-    if (isWNativeAssetAlreadyIncluded && !isSelectedTokenWNativeAsset && isListTokenNativeAsset) {
-      return false
-    }
-
-    return true
+    return isEditingPoolToken || !isTokenAlreadyInPool
   })
 
   function getVerifiedRateProviderAddress(token: ApiToken) {
