@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { Box, HStack, Text, VStack, useTheme } from '@chakra-ui/react'
@@ -44,27 +43,22 @@ export default function StakedBalanceDistributionChart({
   const theme = useTheme()
   const colorMode = useThemeColorMode()
 
-  function getData() {
-    const data = []
-
-    data.push({
-      value: getUserWalletBalanceUsd(pool),
-      name: 'Unstaked balance',
-      itemStyle: {
-        color: theme.semanticTokens.colors.font.light,
-      },
-    })
-
-    data.push({
-      value: calcTotalStakedBalanceUsd(pool),
-      name: 'Staked balance',
-      itemStyle: { color: theme.semanticTokens.colors.chart.stakedBalance },
-    })
-
-    return data
-  }
-
   const chartOption = useMemo(() => {
+    const chartData = [
+      {
+        value: getUserWalletBalanceUsd(pool),
+        name: 'Unstaked balance',
+        itemStyle: {
+          color: theme.semanticTokens.colors.font.light,
+        },
+      },
+      {
+        value: calcTotalStakedBalanceUsd(pool),
+        name: 'Staked balance',
+        itemStyle: { color: theme.semanticTokens.colors.chart.stakedBalance },
+      },
+    ]
+
     return {
       ...(chartSizeValues.chartHeight && { height: chartSizeValues.chartHeight }),
       tooltip: {
@@ -99,11 +93,11 @@ export default function StakedBalanceDistributionChart({
           emphasis: {
             scale: false,
           },
-          data: getData(),
+          data: chartData,
         },
       ],
     }
-  }, [pool, colorMode])
+  }, [pool, colorMode, chartSizeValues, theme])
 
   return (
     <HStack p={{ base: 'sm', md: '0' }} spacing={{ base: 'lg', md: '2xl' }}>
