@@ -14,6 +14,7 @@ type Props = {
   currentToken?: Address
   excludeNativeAsset?: boolean
   onTokenSelect: (token: GqlToken) => void
+  excludedTokens?: Address[]
 }
 
 export function TokenSelectPopular({
@@ -21,6 +22,7 @@ export function TokenSelectPopular({
   currentToken,
   excludeNativeAsset,
   onTokenSelect,
+  excludedTokens = [],
 }: Props) {
   const {
     tokens: { popularTokens },
@@ -32,22 +34,24 @@ export function TokenSelectPopular({
       .slice(0, 7)
       ?.map(token => getToken(token, chain))
       .filter(Boolean) as GqlToken[]
-    return excludeNativeAsset ? tokens.filter(nativeAssetFilter(chain)) : tokens
+
+    return excludeNativeAsset ? tokens.filter(token => !nativeAssetFilter(chain)(token)) : tokens
   }, [popularTokens, excludeNativeAsset, chain])
 
-  const isCurrentToken = (token: GqlToken) =>
-    currentToken && isSameAddress(token.address, currentToken)
+  const isExcludedToken = (token: GqlToken) =>
+    (currentToken && isSameAddress(token.address, currentToken)) ||
+    excludedTokens.includes(token.address as Address)
 
   return (
     <Wrap>
       {tokens?.map(token => (
         <WrapItem key={token.address}>
           <Tag
-            _hover={isCurrentToken(token) ? {} : { bg: 'background.level4', shadow: 'none' }}
-            cursor={isCurrentToken(token) ? 'not-allowed' : 'pointer'}
+            _hover={isExcludedToken(token) ? {} : { bg: 'background.level4', shadow: 'none' }}
+            cursor={isExcludedToken(token) ? 'not-allowed' : 'pointer'}
             key={token.address}
-            onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
-            opacity={isCurrentToken(token) ? 0.5 : 1}
+            onClick={() => !isExcludedToken(token) && onTokenSelect(token)}
+            opacity={isExcludedToken(token) ? 0.5 : 1}
             pl="xs"
             role="group"
             shadow="sm"

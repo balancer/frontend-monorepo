@@ -57,11 +57,19 @@ export function ChoosePoolTokens() {
   const { getTokensByChain } = useTokens()
   const listedTokens = getTokensByChain(network)
 
+  const selectedTokenAddress =
+    selectedTokenIndex !== null ? poolTokens[selectedTokenIndex].address : undefined
+
   // Filter out already selected tokens
-  const selectedTokenAddresses = poolTokens.map(token => token.address?.toLowerCase())
-  const tokens = listedTokens.filter(
-    token => !selectedTokenAddresses.includes(token.address.toLowerCase())
-  )
+  const poolTokenAddresses = new Set(poolTokens.map(token => token.address?.toLowerCase()))
+
+  const availableTokens = listedTokens.filter(listToken => {
+    const listTokenAddress = listToken.address.toLowerCase()
+    const isTokenAlreadyInPool = poolTokenAddresses.has(listTokenAddress)
+    const isEditingPoolToken = listTokenAddress === selectedTokenAddress
+
+    return isEditingPoolToken || !isTokenAlreadyInPool
+  })
 
   function getVerifiedRateProviderAddress(token: ApiToken) {
     if (!token.priceRateProviderData) return undefined
@@ -99,9 +107,9 @@ export function ChoosePoolTokens() {
     if (isGyroEllipticPool(poolType)) eclpConfigForm.resetToInitial()
   }
 
-  const currentTokenAddress = selectedTokenIndex
-    ? poolTokens[selectedTokenIndex].address
-    : undefined
+  const excludedTokens = poolTokens
+    .map(token => token.address)
+    .filter((address): address is `0x${string}` => Boolean(address))
 
   return (
     <>
@@ -151,13 +159,15 @@ export function ChoosePoolTokens() {
 
       <TokenSelectModal
         chain={network}
-        currentToken={currentTokenAddress}
+        currentToken={selectedTokenAddress}
         enableUnlistedToken
+        excludedTokens={excludedTokens}
+        excludeNativeAsset={true}
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
         onTokenSelect={handleTokenSelect}
-        tokens={tokens}
+        tokens={availableTokens}
       />
     </>
   )
