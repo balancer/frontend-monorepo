@@ -33,7 +33,7 @@ export function useCheckImageUrl(url: string) {
     updateImageUrl()
   }, [url])
 
-  if (isValidUrl(url) !== true) return { isChecking: false, error: isValidUrl(url) }
+  if (isValidUrl(url) !== true) return { isChecking: false, error: isValidUrl(url) as string }
   if (isChecking) return { isChecking: true, error: undefined }
 
   return {

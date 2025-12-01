@@ -165,8 +165,8 @@ function TokenIconInput() {
         name="tokenIconUrl"
         render={({ field }) => (
           <InputWithError
-            error={isChecking ? '' : errors.tokenIconUrl?.message}
-            isInvalid={!isChecking && !!errors.tokenIconUrl}
+            error={errors.tokenIconUrl?.message}
+            isInvalid={!!errors.tokenIconUrl}
             onChange={e => field.onChange(e.target.value)}
             pasteFn={paste}
             placeholder="https://project-name.com/token.svg"
