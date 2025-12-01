@@ -3,8 +3,7 @@
 import { Box, Flex, Heading, VStack } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-// import { RelicCarousel } from './components/RelicCarousel' // OLD VERSION
-import { RelicCarouselCSS as RelicCarousel } from './components/RelicCarouselCSS' // CSS POC
+import { RelicCarousel } from './components/RelicCarousel'
 import ReliquaryHeroBanner from './components/ReliquaryHeroBanner'
 import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats'
 import { GetMaBeetsSteps } from './components/landing/GetMaBeetsSteps'

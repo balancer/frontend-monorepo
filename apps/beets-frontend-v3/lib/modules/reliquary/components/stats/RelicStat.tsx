@@ -9,7 +9,9 @@ interface StatProps {
 function Stat({ children }: StatProps) {
   return (
     <Box
+      display={'flex'}
       flex="1"
+      minH={{ base: '65px' }}
       minW={{ base: '100px', sm: '132px', lg: '132px' }}
       overflow="hidden"
       position="relative"
@@ -44,7 +46,9 @@ function Stat({ children }: StatProps) {
           />
         </Box>
       </Box>
-      <Box p="2">{children}</Box>
+      <Box alignSelf={'center'} flex="1" p="2">
+        {children}
+      </Box>
     </Box>
   )
 }

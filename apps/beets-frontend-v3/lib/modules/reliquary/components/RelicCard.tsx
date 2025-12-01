@@ -5,6 +5,7 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -69,7 +70,7 @@ function getImage(level: number) {
   }
 }
 
-export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimpleProps) {
+export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const router = useRouter()
   const { reliquaryLevels, maturityThresholds, chain, weightedTotalBalance } = useReliquary()
   const { relicBalanceUSD } = useRelicDepositBalance(relic.relicId)
@@ -254,7 +255,7 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
                 />
               ) : (
                 <BeetsSubmitTransactionButton
-                  disabled={pendingRewardsUsdValue < 0.01}
+                  disabled={pendingRewardsUsdValue < 0.001}
                   flex="1"
                   isLoading={harvestQuery.isSubmitting || harvestQuery.isPending}
                   onClick={harvest}
@@ -317,26 +318,22 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
         {/* APR Card */}
         <RelicStat>
           <StatLabel label="APR" />
-          <StatValueText>{formattedApr}</StatValueText>
+          <HStack spacing="3">
+            <StatValueText>{formattedApr}</StatValueText>
+            <MainAprTooltip
+              aprItems={dynamicDataAprItems}
+              chain={config.chain}
+              onlySparkles
+              pool={pool}
+              poolId={pool.id}
+            />
+          </HStack>
         </RelicStat>
 
         {/* Maturity Boost Card with Button */}
         <RelicStat>
           <StatLabel label="Maturity boost" />
-          {/* <HStack spacing="1"> */}
           <StatValueText>{allocationPoints}x</StatValueText>
-          {/* <BeetsTooltip label="Click to see the maturity curve" noImage>
-              <IconButton
-                aria-label="View maturity curve"
-                icon={<BarChart size={12} />}
-                minW="auto"
-                onClick={onMaturityModalOpen}
-                p="1"
-                size="xs"
-                variant="ghost"
-              />
-            </BeetsTooltip> */}
-          {/* </HStack> */}
         </RelicStat>
 
         {/* Pending Rewards Card - Token Amounts Only */}
@@ -356,7 +353,6 @@ export function RelicCardSimple({ relic, isSelected = false }: RelicCardSimplePr
         </RelicStat>
 
         {/* Share Card */}
-        {/* <Stat label="Share" value={formattedShare} width={{ base: '100%', md: '100%' }} /> */}
         <RelicStat>
           <StatLabel label="Share" />
           <StatValueText>{formattedShare}</StatValueText>
