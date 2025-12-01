@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { useMemo } from 'react'
@@ -152,7 +151,7 @@ export function useFormattedPoolAttributes() {
       return attributes.filter(a => a?.title !== 'Swap fees')
     }
     return attributes
-  }, [pool, poolOwnerData])
+  }, [pool, poolOwnerData, isV2, toCurrency, usdValueForTokenAddress])
 
   return formattedPoolAttributes
 }
