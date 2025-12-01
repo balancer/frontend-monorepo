@@ -4,8 +4,9 @@ import { BeetsIconCircular } from '@repo/lib/shared/components/icons/logos/Beets
 import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIconCircular'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
+import NextLink from 'next/link'
 
-const linkGroups = {
+const RESOURCE_LINKS = {
   'Builder resources': [
     {
       label: 'v3 Scaffold',
@@ -58,15 +59,39 @@ const linkGroups = {
   ],
 }
 
-export function BuildPopover() {
+const CREATE_POOL_LINKS = [
+  {
+    label: 'Create a pool',
+    href: '/create',
+  },
+  {
+    label: 'Balancer',
+    href: '/create',
+    icon: <BalancerIconCircular size={32} />,
+  },
+  {
+    label: 'CoW AMM',
+    href: 'https://pool-creator.balancer.fi/cow',
+    icon: <CowIconCircular size={32} />,
+    isExternal: true,
+  },
+  {
+    label: 'Beets',
+    href: 'https://beets.fi/create',
+    icon: <BeetsIconCircular size={32} />,
+    isExternal: true,
+  },
+]
+
+export function BuildPopover({ closePopover }: { closePopover?: () => void }) {
   return (
     <Flex
       align="flex-start"
       direction={{ base: 'column', sm: 'row' }}
       gap={{ base: '5', sm: '20px', md: '40px' }}
     >
-      <CreateAPool />
-      {Object.entries(linkGroups).map(([title, links]) => (
+      <CreateAPool closePopover={closePopover} />
+      {Object.entries(RESOURCE_LINKS).map(([title, links]) => (
         <VStack align="flex-start" key={title} minW={{ base: 'auto', md: '150px' }} spacing="sm">
           <Text fontWeight="bold">{title}</Text>
           <VStack align="flex-start" mt="xs">
@@ -82,6 +107,7 @@ export function BuildPopover() {
                 href={link.href}
                 isExternal={link.isExternal}
                 key={link.label}
+                onClick={closePopover}
               >
                 {link.label}{' '}
                 {link.isExternal && (
@@ -102,7 +128,7 @@ export function BuildPopover() {
   )
 }
 
-function CreateAPool() {
+function CreateAPool({ closePopover }: { closePopover?: () => void }) {
   return (
     <Flex
       _hover={{ shadow: 'lg' }}
@@ -141,62 +167,39 @@ function CreateAPool() {
         zIndex={2}
       >
         <VStack align="flex-start" spacing="sm">
-          <Link
-            _hover={{ color: 'font.highlight' }}
-            alignItems="center"
-            color="font.maxContrast"
-            data-group
-            display="flex"
-            gap="xxs"
-            href="/create"
-            variant="nav"
-          >
-            <Text
-              _groupHover={{ color: 'font.highlight' }}
-              color="font.maxContrast"
-              fontWeight="bold"
-              transition="color 0.2s var(--ease-out-cubic)"
-            >
-              Create a pool
-            </Text>
-            <Box
-              _groupHover={{ opacity: 1 }}
-              opacity="0.5"
-              transition="all 0.2s var(--ease-out-cubic)"
-            >
-              <ArrowUpRight size={12} />
-            </Box>
-          </Link>
-          <VStack align="flex-start" pt="xs" w="full">
-            <PoolLink href="/create" icon={<BalancerIconCircular size={32} />} label="Balancer" />
+          {CREATE_POOL_LINKS.map(link => (
             <PoolLink
-              href="https://pool-creator.balancer.fi/cow"
-              icon={<CowIconCircular size={32} />}
-              isExternal
-              label="CoW AMM"
+              href={link.href}
+              icon={link.icon}
+              isExternal={link.isExternal}
+              key={link.label}
+              label={link.label}
+              onClick={closePopover}
             />
-            <PoolLink
-              href="https://beets.fi/create"
-              icon={<BeetsIconCircular size={32} />}
-              isExternal
-              label="Beets"
-            />
-          </VStack>
+          ))}
         </VStack>
       </Flex>
     </Flex>
   )
 }
 
-type PoolLinkProps = { href: string; icon: React.ReactNode; isExternal?: boolean; label: string }
+type PoolLinkProps = {
+  href: string
+  icon?: React.ReactNode
+  isExternal?: boolean
+  label: string
+  onClick?: () => void
+}
 
-function PoolLink({ href, icon, isExternal, label }: PoolLinkProps) {
+function PoolLink({ href, icon, isExternal, label, onClick }: PoolLinkProps) {
   return (
     <Link
       _hover={{ color: 'font.highlight', textDecoration: 'none' }}
+      as={isExternal ? 'a' : NextLink}
       color="font.maxContrast"
       href={href}
       isExternal={isExternal}
+      onClick={onClick}
       py="xxs"
       role="group"
       rounded="md"
@@ -207,7 +210,7 @@ function PoolLink({ href, icon, isExternal, label }: PoolLinkProps) {
         color="white"
         transition="color 0.2s var(--ease-out-cubic)"
       >
-        {icon}
+        {icon && icon}
         <Text
           _groupHover={{ color: 'font.highlight' }}
           alignItems="center"
@@ -218,9 +221,11 @@ function PoolLink({ href, icon, isExternal, label }: PoolLinkProps) {
           gap="xxs"
         >
           {label}
-          <Box _groupHover={{ opacity: 1 }} as="span" opacity="0.5">
-            <ArrowUpRight size={12} />
-          </Box>
+          {isExternal && (
+            <Box _groupHover={{ opacity: 1 }} as="span" opacity="0.5">
+              <ArrowUpRight size={12} />
+            </Box>
+          )}
         </Text>
       </HStack>
     </Link>
