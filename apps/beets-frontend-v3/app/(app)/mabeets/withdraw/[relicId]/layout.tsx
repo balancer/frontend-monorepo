@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
 }>
 
 export default async function RelicWithdrawLayoutWrapper({ params, children }: Props) {
-  const relicId = await params.relicId
+  const { relicId } = await params
   return (
     <DefaultPageContainer>
       <PermitSignatureProvider>
