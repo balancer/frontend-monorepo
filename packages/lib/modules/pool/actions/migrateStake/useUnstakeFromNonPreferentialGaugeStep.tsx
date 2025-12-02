@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
@@ -9,7 +8,7 @@ import {
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { parseUnits } from 'viem'
 import { Pool } from '../../pool.types'
 import { BPT_DECIMALS } from '../../pool.constants'
@@ -39,7 +38,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
     title: 'Unstake LP tokens',
     description: 'Unstake LP tokens from deprecated gauge.',
     confirming: 'Confirming unstake...',
-    confirmed: `Unstaked!`,
+    confirmed: 'Unstaked!',
     tooltip: 'Unstake LP tokens from deprecated gauge.',
   }
 
@@ -66,10 +65,6 @@ export function useUnstakeFromNonPreferentialGaugeStep(
     onTransactionChange: setTransaction,
   }
 
-  const onSuccess = useCallback(() => {
-    refetchPoolBalances()
-  }, [])
-
   const step = useMemo(
     (): TransactionStep => ({
       id: unstakeStepId,
@@ -77,10 +72,10 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       labels,
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
-      onSuccess,
+      onSuccess: () => refetchPoolBalances(),
       renderAction: () => <ManagedTransactionButton id={unstakeStepId} {...props} />,
     }),
-    [transaction, amount, props]
+    [transaction, labels, props, refetchPoolBalances]
   )
 
   return {

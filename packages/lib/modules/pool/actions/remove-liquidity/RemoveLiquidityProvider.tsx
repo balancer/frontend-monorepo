@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
@@ -51,7 +50,6 @@ export function useRemoveLiquidityLogic(
   const [quoteBptIn, setQuoteBptIn] = useState<HumanAmount>('0')
   const [quoteAmountsOut, setQuoteAmountsOut] = useState<TokenAmount[]>([])
   const [quotePriceImpact, setQuotePriceImpact] = useState<number>()
-
   const { pool, chainId, bptPrice, isLoading } = usePool()
   const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()
@@ -74,7 +72,7 @@ export function useRemoveLiquidityLogic(
   const handler = useMemo(() => {
     const selector = handlerSelector ?? selectRemoveLiquidityHandler
     return selector(pool, removalType)
-  }, [pool.id, removalType, isLoading, handlerSelector])
+  }, [pool, removalType, isLoading, handlerSelector])
 
   const totalUsdFromBprPrice = bn(humanBptIn).times(bptPrice).toFixed()
 
@@ -117,14 +115,15 @@ export function useRemoveLiquidityLogic(
     wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress
 
   const isSingleTokenBalanceMoreThat25Percent = useMemo(() => {
-    if (!pool.userBalance || !isSingleToken) {
+    const walletBalance = pool.userBalance?.walletBalance
+    const totalShares = pool.dynamicData.totalShares
+
+    if (!walletBalance || !isSingleToken) {
       return false
     }
 
-    return bn(pool.userBalance.walletBalance)
-      .times(bn(humanBptInPercent).div(100))
-      .gt(bn(pool.dynamicData.totalShares).times(0.25))
-  }, [singleTokenOutAddress, humanBptInPercent, isSingleToken])
+    return bn(walletBalance).times(bn(humanBptInPercent).div(100)).gt(bn(totalShares).times(0.25))
+  }, [humanBptInPercent, isSingleToken, pool])
 
   /**
    * Queries

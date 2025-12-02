@@ -3,12 +3,12 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { ChooseNetwork } from './ChooseNetwork'
 import { ChoosePoolType } from './ChoosePoolType'
+import { useFormState } from 'react-hook-form'
 
 export function PoolTypeStep() {
-  const {
-    isFormStateValid,
-    poolCreationForm: { control },
-  } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const { control } = poolCreationForm
+  const formState = useFormState({ control: poolCreationForm.control })
 
   return (
     <Box as="form" style={{ width: '100%' }}>
@@ -18,7 +18,7 @@ export function PoolTypeStep() {
         </Heading>
         <ChooseNetwork control={control} />
         <ChoosePoolType control={control} />
-        <PoolCreationFormAction disabled={!isFormStateValid} />
+        <PoolCreationFormAction disabled={!formState.isValid} />
       </VStack>
     </Box>
   )

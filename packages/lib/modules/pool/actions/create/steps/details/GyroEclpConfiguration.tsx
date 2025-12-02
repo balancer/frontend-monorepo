@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { MAX_LAMBDA } from '../../constants'
 import { useValidateEclpParams } from './useValidateEclpParams'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { useWatch } from 'react-hook-form'
 
 export function GyroEclpConfiguration() {
   const { errorMessage } = useValidateEclpParams()
@@ -48,9 +49,12 @@ function EclpParamHeader() {
 
 function EclpParamInputs() {
   const suggestedEclpConfig = useSuggestedGyroEclpConfig()
-  const { eclpConfigForm, poolCreationForm, updatePoolTokens } = usePoolCreationForm()
-  const { poolTokens } = poolCreationForm.watch()
-  const { alpha, beta, peakPrice, lambda, c, s } = eclpConfigForm.watch()
+  const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
+  const [alpha, beta, peakPrice, lambda, c, s] = useWatch({
+    control: eclpConfigForm.control,
+    name: ['alpha', 'beta', 'peakPrice', 'lambda', 'c', 's'],
+  })
 
   const tokenPricePair = poolTokens
     .map(token => token.data?.symbol)
@@ -59,14 +63,17 @@ function EclpParamInputs() {
 
   // peak price is used to calculate c and s
   useEffect(() => {
-    const { c, s } = calculateRotationComponents(peakPrice)
+    const { c, s } = calculateRotationComponents(peakPrice || '')
     eclpConfigForm.setValue('c', c, { shouldValidate: true })
     eclpConfigForm.setValue('s', s, { shouldValidate: true })
   }, [peakPrice])
 
-  // since eclp init amounts are calculated based on eclp params
+  // reset init amounts when eclp params change
   useEffect(() => {
-    updatePoolTokens([...poolTokens].map(token => ({ ...token, amount: '' })))
+    poolCreationForm.setValue(
+      'poolTokens',
+      [...poolTokens].map(token => ({ ...token, amount: '' }))
+    )
   }, [alpha, beta, peakPrice, lambda, c, s])
 
   const lowerBoundPriceInput = {

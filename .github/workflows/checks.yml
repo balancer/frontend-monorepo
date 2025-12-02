@@ -90,9 +90,11 @@ jobs:
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
 
-  E2E-Dev-Test:
+  E2E-Dev-Test-Balancer:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_PROJECT_ID: balancer
     steps:
       - uses: actions/checkout@v5
       - name: Setup
@@ -103,12 +105,38 @@ jobs:
         run: anvil --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
-      - name: Run Playwright dev tests
-        run: pnpm test:e2e:dev
+      - name: Run Playwright dev tests (Balancer)
+        run: pnpm test:e2e:dev:bal
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-dev-report
+          name: playwright-dev-report-bal
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
+
+  E2E-Dev-Test-Beets:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_PROJECT_ID: beets
+      NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Set up foundry (includes anvil)
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: Start anvil fork in sonic
+        run: anvil --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+      - name: Install Playwright Browsers
+        run: pnpm playwright:install:chromium # CI only tests in chromium
+      - name: Run Playwright dev tests (Beets)
+        run: pnpm test:e2e:dev:beets
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-dev-report-beets
           path: |
             ./packages/e2e-tests/playwright-report/
           retention-days: 30

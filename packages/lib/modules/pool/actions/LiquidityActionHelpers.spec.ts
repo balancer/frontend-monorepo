@@ -915,8 +915,17 @@ describe('supportsProportionalAddLiquidityKind', () => {
 })
 
 describe('requiresProportionalInput', () => {
-  it('should require for gyro pools', () => {
+  it('should NOT require for gyro V3 pools', () => {
     const pool = getApiPoolMock(gyroV3)
+    pool.protocolVersion = 3
+
+    expect(requiresProportionalInput(pool)).toBe(false)
+    expect(requiresProportionalInputReason(pool)).toBeUndefined()
+  })
+
+  it('should require for gyro V2 pools', () => {
+    const pool = getApiPoolMock(gyroV3)
+    pool.protocolVersion = 2
 
     expect(requiresProportionalInput(pool)).toBe(true)
     expect(requiresProportionalInputReason(pool)).not.toBeUndefined()

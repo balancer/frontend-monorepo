@@ -8,10 +8,16 @@ import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
+import { isReClammPool } from './helpers'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const { isFormStateValid, poolAddress, isReClamm, poolTokens, network, poolType } =
-    usePoolCreationForm()
+  const { poolAddress, poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, poolType, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType', 'network'],
+  })
+  const formState = useFormState({ control: poolCreationForm.control })
   const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
@@ -22,8 +28,8 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   useEffect(() => {
     // trigger modal close if reclamm and token amounts have not been set
-    if (poolAddress && isReClamm && !hasTokenAmounts) previewModalDisclosure.onClose()
-  }, [poolAddress, isReClamm, hasTokenAmounts])
+    if (poolAddress && isReClammPool(poolType) && !hasTokenAmounts) previewModalDisclosure.onClose()
+  }, [poolAddress, poolType, hasTokenAmounts])
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
@@ -78,7 +84,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         </HStack>
       </VStack>
 
-      {isFormStateValid && isLastStep && (
+      {formState.isValid && isLastStep && (
         <PoolCreationModal
           finalFocusRef={nextBtn}
           isOpen={previewModalDisclosure.isOpen}

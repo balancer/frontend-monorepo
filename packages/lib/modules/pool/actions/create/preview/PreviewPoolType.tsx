@@ -2,18 +2,18 @@ import { VStack, Heading, HStack, Text, CardBody, Box } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { capitalize } from 'lodash'
-import { validatePoolType } from '../validatePoolCreationForm'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
+import { isWeightedPool, isCustomWeightedPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolType() {
-  const { network, protocol, poolType, weightedPoolStructure } = usePoolCreationForm()
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-  const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
-    poolType,
-    weightedPoolStructure
-  )
+  const { poolCreationForm } = usePoolCreationForm()
+  const [network, protocol, poolType, weightedPoolStructure] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure'],
+  })
 
   const cardInformationRows = [
     {
@@ -28,8 +28,8 @@ export function PreviewPoolType() {
       label: 'Pool type',
       value:
         POOL_TYPES[poolType].label +
-        (isWeightedPool
-          ? `: ${!isCustomWeightedPool ? '2-token' : ''} ${weightedPoolStructure}`
+        (isWeightedPool(poolType)
+          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : '2-token '}${weightedPoolStructure}`
           : ''),
     },
   ]

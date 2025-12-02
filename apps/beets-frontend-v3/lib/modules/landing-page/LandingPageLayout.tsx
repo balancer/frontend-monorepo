@@ -1,3 +1,5 @@
+'use client'
+
 import { Box } from '@chakra-ui/react'
 import { BeetsLandingHeroImg } from './components/BeetsLandingHeroImg'
 import { LandingBalancerV3Section } from './sections/LandingBalancerV3Section'

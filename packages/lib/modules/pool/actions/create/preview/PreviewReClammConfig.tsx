@@ -14,6 +14,7 @@ import { RefreshCcw } from 'react-feather'
 import { formatNumber } from '../helpers'
 import ReactECharts from 'echarts-for-react'
 import { useReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+import { useWatch } from 'react-hook-form'
 
 type Props = {
   isBeforeStep: boolean
@@ -24,9 +25,11 @@ type Props = {
 export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarginValue }: Props) {
   const { options } = useReclAmmChart()
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
-  const { initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate } =
-    reClammConfigForm.watch()
-  const { poolTokens } = poolCreationForm.watch()
+  const [initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate] = useWatch({
+    control: reClammConfigForm.control,
+    name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'],
+  })
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const reClammConfigCards = [
     {

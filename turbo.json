@@ -33,26 +33,8 @@
       "cache": false,
       "persistent": true
     },
-    "dev:webpack": {
-      "cache": false,
-      "persistent": true
-    },
-    "dev:beets:webpack": {
-      "cache": false,
-      "persistent": true
-    },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "build:no-lint": {
-      "dependsOn": ["^build:no-lint"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "build:turbo": {
-      "dependsOn": ["^build:turbo"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
@@ -107,16 +89,25 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "test:e2e:build:turbo": {
-      "dependsOn": ["^build:turbo"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
-    },
     "test:e2e:build:ui": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^transit"]
     },
-    "test:e2e:dev:ui": {
+    "test:e2e:dev:bal": {
+      "dependsOn": ["frontend-v3#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
+    },
+    "test:e2e:dev:ui:bal": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^transit"]
+    },
+    "test:e2e:dev:beets": {
+      "dependsOn": ["beets-frontend-v3#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
+    },
+    "test:e2e:dev:ui:beets": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^transit"]

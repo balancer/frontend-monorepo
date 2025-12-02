@@ -7,11 +7,14 @@ import {
 import { calculateInitialBalances } from '@repo/lib/modules/reclamm/reclAmmMath'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
+import { useWatch } from 'react-hook-form'
 
 export function usePreviewReclAmmChartData() {
   const { reClammConfigForm } = usePoolCreationForm()
-  const { initialMinPrice, initialMaxPrice, initialTargetPrice, centerednessMargin } =
-    reClammConfigForm.watch()
+  const [initialMinPrice, initialMaxPrice, initialTargetPrice, centerednessMargin] = useWatch({
+    control: reClammConfigForm.control,
+    name: ['initialMinPrice', 'initialMaxPrice', 'initialTargetPrice', 'centerednessMargin'],
+  })
 
   return useMemo(() => {
     if (

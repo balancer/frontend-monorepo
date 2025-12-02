@@ -32,6 +32,7 @@ type Props<T extends ApiOrCustomToken = ApiToken> = {
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
   onTokenSelect: (token: T) => void
+  excludedTokens?: Address[]
 }
 
 export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
@@ -45,6 +46,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   onClose,
   finalFocusRef,
   onTokenSelect,
+  excludedTokens,
   ...rest
 }: Props<T> & Omit<ModalProps, 'children'>) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -88,6 +90,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
                 <TokenSelectPopular
                   chain={chain}
                   currentToken={currentToken}
+                  excludedTokens={excludedTokens}
                   excludeNativeAsset={excludeNativeAsset}
                   onTokenSelect={closeOnSelect}
                 />

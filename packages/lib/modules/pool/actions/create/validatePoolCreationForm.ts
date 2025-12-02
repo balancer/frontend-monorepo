@@ -5,13 +5,11 @@ import {
   MAX_AMPLIFICATION_PARAMETER,
   MAX_POOL_NAME_LENGTH,
   MAX_POOL_SYMBOL_LENGTH,
-  WeightedPoolStructure,
   POOL_TYPES,
   REQUIRED_TOTAL_WEIGHT,
 } from './constants'
-import { getMinSwapFeePercentage } from './helpers'
+import { getMinSwapFeePercentage, isWeightedPool } from './helpers'
 import { PoolCreationToken, SupportedPoolTypes } from './types'
-import { PoolType } from '@balancer/sdk'
 
 export const validatePoolTokens = {
   isValidTokens: (poolTokens: PoolCreationToken[]) => {
@@ -49,34 +47,12 @@ export const validatePoolTokens = {
   },
 
   isValidTokenWeights: (poolType: SupportedPoolTypes, poolTokens: PoolCreationToken[]) => {
-    const isWeightedPool = validatePoolType.isWeightedPool(poolType)
     const isValidTotalWeight = validatePoolTokens.isValidTotalWeight(poolTokens)
-    return !isWeightedPool || isValidTotalWeight
+    return !isWeightedPool(poolType) || isValidTotalWeight
   },
 
   isValidTokenAmounts: (poolTokens: PoolCreationToken[]) => {
     return poolTokens.every(token => Number(token.amount) > 0)
-  },
-}
-
-export const validatePoolType = {
-  isWeightedPool: (poolType: SupportedPoolTypes) => {
-    return poolType === PoolType.Weighted
-  },
-
-  isCustomWeightedPool: (
-    poolType: SupportedPoolTypes,
-    weightedPoolStructure: WeightedPoolStructure
-  ) => {
-    return poolType === PoolType.Weighted && weightedPoolStructure === WeightedPoolStructure.Custom
-  },
-
-  isStablePool: (poolType: SupportedPoolTypes) => {
-    return poolType === PoolType.Stable || poolType === PoolType.StableSurge
-  },
-
-  isStableSurgePool: (poolType: SupportedPoolTypes) => {
-    return poolType === PoolType.StableSurge
   },
 }
 

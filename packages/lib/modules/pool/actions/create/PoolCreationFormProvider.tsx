@@ -13,7 +13,6 @@ import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } fr
 import { Address } from 'viem'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
-import { PoolType } from '@balancer/sdk'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { useMemo } from 'react'
@@ -21,6 +20,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { useWatch } from 'react-hook-form'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -51,29 +51,6 @@ export function usePoolFormLogic() {
     { mode: 'all' }
   )
 
-  const {
-    poolTokens,
-    poolType,
-    weightedPoolStructure,
-    protocol,
-    network,
-    name,
-    symbol,
-    swapFeeManager,
-    pauseManager,
-    swapFeePercentage,
-    poolHooksContract,
-    enableDonation,
-    disableUnbalancedLiquidity,
-    amplificationParameter,
-  } = poolCreationForm.watch()
-
-  const isReClamm = poolType === PoolType.ReClamm
-  const isStablePool = poolType === PoolType.Stable
-  const isStableSurgePool = poolType === PoolType.StableSurge
-  const isWeightedPool = poolType === PoolType.Weighted
-  const isGyroEclp = poolType === PoolType.GyroE
-
   const updatePoolToken = (index: number, updates: Partial<PoolCreationToken>) => {
     const currentPoolTokens = poolCreationForm.getValues('poolTokens')
     const newPoolTokens = [...currentPoolTokens]
@@ -81,20 +58,19 @@ export function usePoolFormLogic() {
     poolCreationForm.setValue('poolTokens', newPoolTokens)
   }
 
-  const updatePoolTokens = (updates: PoolCreationToken[]) => {
-    poolCreationForm.setValue('poolTokens', updates)
-  }
-
   const invertReClammPriceParams = () => {
-    const { initialMinPrice, initialMaxPrice, initialTargetPrice } = reClammConfigForm.watch()
+    const { initialMinPrice, initialMaxPrice, initialTargetPrice } = reClammConfigForm.getValues()
     reClammConfigForm.setValue('initialMinPrice', invertNumber(initialMaxPrice))
     reClammConfigForm.setValue('initialMaxPrice', invertNumber(initialMinPrice))
     reClammConfigForm.setValue('initialTargetPrice', invertNumber(initialTargetPrice))
-    updatePoolTokens([...poolTokens].reverse())
+
+    // keep order of pool tokens consistent with reclamm params
+    const { poolTokens } = poolCreationForm.getValues()
+    poolCreationForm.setValue('poolTokens', [...poolTokens].reverse())
   }
 
   const invertGyroEclpPriceParams = () => {
-    const { alpha, beta, peakPrice, s, c, lambda } = eclpConfigForm.watch()
+    const { alpha, beta, peakPrice, s, c, lambda } = eclpConfigForm.getValues()
     eclpConfigForm.reset({
       alpha: fNumCustom(invertNumber(beta), NUM_FORMAT),
       beta: fNumCustom(invertNumber(alpha), NUM_FORMAT),
@@ -103,19 +79,23 @@ export function usePoolFormLogic() {
       c: s,
       lambda: lambda,
     })
-    updatePoolTokens([...poolTokens].reverse())
+
+    // keep order of pool tokens consistent with gyro eclp params
+    const { poolTokens } = poolCreationForm.getValues()
+    poolCreationForm.setValue('poolTokens', [...poolTokens].reverse())
   }
 
   const addPoolToken = () => {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens.push(INITIAL_TOKEN_CONFIG)
-    poolCreationForm.setValue('poolTokens', newPoolTokens)
+    const { poolTokens } = poolCreationForm.getValues()
+    poolCreationForm.setValue('poolTokens', [...poolTokens, INITIAL_TOKEN_CONFIG])
   }
 
   const removePoolToken = (index: number) => {
-    const newPoolTokens = [...poolTokens]
-    newPoolTokens.splice(index, 1)
-    poolCreationForm.setValue('poolTokens', newPoolTokens)
+    const { poolTokens } = poolCreationForm.getValues()
+    poolCreationForm.setValue(
+      'poolTokens',
+      poolTokens.filter((_, i) => i !== index)
+    )
   }
 
   const { resetSteps } = usePoolCreationFormSteps()
@@ -130,6 +110,10 @@ export function usePoolFormLogic() {
   }
 
   const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()
+  const [network, poolTokens] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolTokens'],
+  })
 
   const tokenList = useMemo(() => {
     const networkTokens = getTokensByChain(network.toUpperCase() as GqlChain) || []
@@ -143,41 +127,19 @@ export function usePoolFormLogic() {
     return [...networkTokens, ...unknownTokens]
   }, [getTokensByChain, network, poolTokens])
 
-  // TODO: return less stuff by using poolCreationForm.watch() in components
   return {
     poolCreationForm,
     reClammConfigForm,
     eclpConfigForm,
-    isFormStateValid: poolCreationForm.formState.isValid,
-    poolTokens,
-    poolType,
-    weightedPoolStructure,
-    protocol,
-    network,
-    name,
-    symbol,
-    swapFeeManager,
-    pauseManager,
-    swapFeePercentage,
-    amplificationParameter,
-    poolHooksContract,
-    enableDonation,
-    disableUnbalancedLiquidity,
-    isReClamm,
-    isStablePool,
-    isStableSurgePool,
-    isWeightedPool,
-    isGyroEclp,
     updatePoolToken,
-    updatePoolTokens,
     removePoolToken,
     addPoolToken,
-    resetPoolCreationForm,
-    poolAddress,
     invertReClammPriceParams,
     invertGyroEclpPriceParams,
+    resetPoolCreationForm,
     tokenList,
     isLoadingTokenList,
+    poolAddress,
     setPoolAddress,
   }
 }

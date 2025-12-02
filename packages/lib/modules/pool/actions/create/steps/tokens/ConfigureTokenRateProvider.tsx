@@ -5,7 +5,7 @@ import { PoolCreationForm } from '../../types'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { Address, parseAbi, zeroAddress } from 'viem'
 import { getChainName } from '@repo/lib/config/app.config'
-import { Control, Controller, FieldErrors } from 'react-hook-form'
+import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { ShareYieldFeesCheckbox } from './ShareYieldFeesCheckbox'
@@ -13,6 +13,7 @@ import { InfoIconPopover } from '../../InfoIconPopover'
 import { usePublicClient } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -23,7 +24,12 @@ export function ConfigureTokenRateProvider({
   tokenIndex,
   verifiedRateProviderAddress,
 }: ConfigureTokenRateProviderProps) {
-  const { poolTokens, network, updatePoolToken, poolCreationForm } = usePoolCreationForm()
+  const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'network'],
+  })
+  const formState = useFormState({ control: poolCreationForm.control })
 
   if (!poolTokens[tokenIndex].address) return null
 
@@ -92,8 +98,9 @@ export function ConfigureTokenRateProvider({
         <CustomRateProviderInput
           chainName={getChainName(network)}
           control={poolCreationForm.control}
-          errors={poolCreationForm.formState.errors}
+          errors={formState.errors}
           isCustomRateProvider={isCustomRateProvider}
+          network={network}
           tokenIndex={tokenIndex}
         />
       )}
@@ -110,6 +117,7 @@ interface CustomRateProviderInputProps {
   errors: FieldErrors<PoolCreationForm>
   chainName: string
   isCustomRateProvider: boolean
+  network: GqlChain
 }
 
 function CustomRateProviderInput({
@@ -117,8 +125,9 @@ function CustomRateProviderInput({
   control,
   errors,
   chainName,
+  network,
 }: CustomRateProviderInputProps) {
-  const { updatePoolToken, poolCreationForm, network } = usePoolCreationForm()
+  const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
   const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
 
   async function paste() {

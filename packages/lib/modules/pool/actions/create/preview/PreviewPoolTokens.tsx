@@ -12,9 +12,11 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
 import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolTokens() {
-  const { poolTokens } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
   const { priceFor } = useTokens()
   const { toCurrency } = useCurrency()
   const { tokenPriceTip } = usePoolTokenPriceWarnings()

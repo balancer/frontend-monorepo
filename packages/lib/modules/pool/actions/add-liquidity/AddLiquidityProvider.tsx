@@ -1,5 +1,4 @@
  
- 
 'use client'
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -54,7 +53,6 @@ export function useAddLiquidityLogic(
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
-
   const [totalUSDValue, setTotalUSDValue] = useState('0')
   const { pool, refetch: refetchPool, isLoading } = usePool()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
@@ -73,7 +71,7 @@ export function useAddLiquidityLogic(
   const handler = useMemo(() => {
     const selector = handlerSelector ?? selectAddLiquidityHandler
     return selector(pool, wantsProportional)
-  }, [pool.id, isLoading, wantsProportional, handlerSelector])
+  }, [pool, wantsProportional, isLoading, handlerSelector])
 
   /**
    * Helper functions & variables

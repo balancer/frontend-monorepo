@@ -18,56 +18,58 @@ import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
 import { WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
 import { AlertTriangle } from 'react-feather'
 import { TotalWeightDisplay } from './TotalWeightDisplay'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
-import { validatePoolTokens, validatePoolType } from '../../validatePoolCreationForm'
+import { validatePoolTokens } from '../../validatePoolCreationForm'
 import {
   isConstantRateProvider,
   isDynamicRateProvider,
 } from '@repo/lib/modules/tokens/token.helpers'
-import { PoolCreationToken } from '../../types'
+import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 import { ArrowUpRight } from 'react-feather'
 import { InputWithSuggestion } from '../details/InputWithSuggestion'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  isWeightedPool,
+  isCustomWeightedPool,
+  isReClammPool,
+  isGyroEllipticPool,
+} from '../../helpers'
+import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
   const tokenSelectDisclosure = useDisclosure()
-  const {
-    network,
-    poolTokens,
-    weightedPoolStructure,
-    poolType,
-    updatePoolToken,
-    addPoolToken,
-    poolCreationForm,
-    reClammConfigForm,
-    eclpConfigForm,
-    isReClamm,
-    isGyroEclp,
-  } = usePoolCreationForm()
+  const { updatePoolToken, addPoolToken, poolCreationForm, reClammConfigForm, eclpConfigForm } =
+    usePoolCreationForm()
+  const [network, poolTokens, weightedPoolStructure, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'],
+  })
 
-  const isCustomWeightedPool = validatePoolType.isCustomWeightedPool(
-    poolType,
-    weightedPoolStructure
-  )
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-
-  const maxTokens = validatePoolTokens.maxTokens(poolType)
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
   const { getTokensByChain } = useTokens()
   const listedTokens = getTokensByChain(network)
 
+  const selectedTokenAddress =
+    selectedTokenIndex !== null ? poolTokens[selectedTokenIndex].address : undefined
+
   // Filter out already selected tokens
-  const selectedTokenAddresses = poolTokens.map(token => token.address?.toLowerCase())
-  const tokens = listedTokens.filter(
-    token => !selectedTokenAddresses.includes(token.address.toLowerCase())
-  )
+  const poolTokenAddresses = new Set(poolTokens.map(token => token.address?.toLowerCase()))
+
+  const availableTokens = listedTokens.filter(listToken => {
+    const listTokenAddress = listToken.address.toLowerCase()
+    const isTokenAlreadyInPool = poolTokenAddresses.has(listTokenAddress)
+    const isEditingPoolToken = listTokenAddress === selectedTokenAddress
+
+    return isEditingPoolToken || !isTokenAlreadyInPool
+  })
 
   function getVerifiedRateProviderAddress(token: ApiToken) {
     if (!token.priceRateProviderData) return undefined
@@ -99,30 +101,20 @@ export function ChoosePoolTokens() {
 
     setSelectedTokenIndex(null)
     poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
-    if (isReClamm) reClammConfigForm.resetToInitial()
-    if (isGyroEclp) eclpConfigForm.resetToInitial()
+    poolCreationForm.setValue('name', '')
+    poolCreationForm.setValue('symbol', '')
+    if (isReClammPool(poolType)) reClammConfigForm.resetToInitial()
+    if (isGyroEllipticPool(poolType)) eclpConfigForm.resetToInitial()
   }
 
-  const currentTokenAddress = selectedTokenIndex
-    ? poolTokens[selectedTokenIndex].address
-    : undefined
+  const excludedTokens = poolTokens
+    .map(token => token.address)
+    .filter((address): address is `0x${string}` => Boolean(address))
 
   return (
     <>
       <VStack align="start" spacing="md" w="full">
-        {isGyroEclp && (
-          <BalAlert
-            content="Gyroscope’s elliptic concentrated liquidity pools offer the flexibility to asymmetrically focus liquidity. You can only add 2 tokens into a Gyro E-CLP."
-            status="info"
-          />
-        )}
-        {isCustomWeightedPool && (
-          <BalAlert
-            content="Note: Most pool actions like creation and add/remove liquidity become more expensive with each additional token."
-            status="info"
-            title={`Add up to ${maxTokens} tokens in ${poolType} pools`}
-          />
-        )}
+        <ChoosePoolTokensAlert poolType={poolType} weightedPoolStructure={weightedPoolStructure} />
 
         <Heading color="font.maxContrast" size="md">
           Choose pool tokens
@@ -142,32 +134,40 @@ export function ChoosePoolTokens() {
               <ConfigureToken
                 index={index}
                 key={index}
+                network={network}
                 onToggleTokenClicked={() => {
                   setSelectedTokenIndex(index)
                   tokenSelectDisclosure.onOpen()
                 }}
+                poolTokens={poolTokens}
+                poolType={poolType}
                 rateProviderAddress={verifiedRateProviderAddress}
                 token={token}
+                weightedPoolStructure={weightedPoolStructure}
               />
             )
           })}
-          {(!isWeightedPool || isCustomWeightedPool) && (
+          {(!isWeightedPool(poolType) || isCustomWeightedPool(poolType, weightedPoolStructure)) && (
             <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
           )}
 
-          {isWeightedPool && isCustomWeightedPool && <TotalWeightDisplay />}
+          {isWeightedPool(poolType) && isCustomWeightedPool(poolType, weightedPoolStructure) && (
+            <TotalWeightDisplay />
+          )}
         </VStack>
       </VStack>
 
       <TokenSelectModal
         chain={network}
-        currentToken={currentTokenAddress}
+        currentToken={selectedTokenAddress}
         enableUnlistedToken
+        excludedTokens={excludedTokens}
+        excludeNativeAsset={true}
         isOpen={tokenSelectDisclosure.isOpen}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
         onTokenSelect={handleTokenSelect}
-        tokens={tokens}
+        tokens={availableTokens}
       />
     </>
   )
@@ -178,6 +178,10 @@ interface ConfigureTokenProps {
   index: number
   rateProviderAddress: Address | undefined
   onToggleTokenClicked: () => void
+  weightedPoolStructure: WeightedPoolStructure
+  poolTokens: PoolCreationToken[]
+  network: GqlChain
+  poolType: SupportedPoolTypes
 }
 
 function ConfigureToken({
@@ -185,16 +189,14 @@ function ConfigureToken({
   index,
   rateProviderAddress,
   onToggleTokenClicked,
+  weightedPoolStructure,
+  poolTokens,
+  network,
+  poolType,
 }: ConfigureTokenProps) {
-  const {
-    poolCreationForm,
-    isWeightedPool,
-    weightedPoolStructure,
-    poolTokens,
-    removePoolToken,
-    network,
-    updatePoolToken,
-  } = usePoolCreationForm()
+  const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
+  const formState = useFormState({ control: poolCreationForm.control })
+
   const { priceFor } = useTokens()
 
   const apiPriceForToken = priceFor(token.address || '', network)
@@ -210,7 +212,7 @@ function ConfigureToken({
   }, [cgPriceForToken, apiPriceForToken, token.usdPrice])
 
   const isInvalidWeight = !!token.weight && Number(token.weight) < 1
-  const tokenWeightErrorMsg = poolCreationForm.formState.errors.poolTokens?.[index]?.weight?.message
+  const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
 
   return (
     <VStack align="start" key={index} spacing="md" w="full">
@@ -221,7 +223,7 @@ function ConfigureToken({
           <TokenInputSelector onToggleTokenClicked={onToggleTokenClicked} token={token?.data} />
         </VStack>
 
-        {isWeightedPool && (
+        {isWeightedPool(poolType) && (
           <Box>
             <NumberInput
               control={poolCreationForm.control}
@@ -231,9 +233,7 @@ function ConfigureToken({
               label="Weight"
               name={`poolTokens.${index}.weight`}
               validate={weight => {
-                const poolType = poolCreationForm.getValues('poolType')
-                const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-                if (!isWeightedPool) return true
+                if (!isWeightedPool(poolType)) return true
                 if (weight < 1) return 'Minimum weight for each token is 1%'
                 if (weight > 99) return 'Maximum weight for a token is 99%'
                 return true
@@ -250,7 +250,7 @@ function ConfigureToken({
         )}
       </HStack>
 
-      {isWeightedPool && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
+      {isWeightedPool(poolType) && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
 
       {token.address && !apiPriceForToken && (
         <VStack align="start" spacing="sm" w="full">

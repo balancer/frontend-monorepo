@@ -2,10 +2,11 @@ import { Address, createPublicClient, createTestClient, http, isAddress } from '
 import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
-import { mainnet } from 'viem/chains'
+import { mainnet, sonic } from 'viem/chains'
 import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 import { orderBy } from 'lodash'
 import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { isBeets } from '@repo/lib/config/getProjectConfig'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
@@ -20,8 +21,8 @@ import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated
 export const defaultAnvilAccount = '0x90F79bf6EB2c4f870365E785982E1f101E93b906'
 export const defaultAnvilForkRpcUrl = 'http://127.0.0.1:8545'
 
-export const mainnetTest = {
-  ...mainnet,
+const chain = {
+  ...(isBeets ? sonic : mainnet),
   rpcUrls: {
     default: {
       http: [defaultAnvilForkRpcUrl],
@@ -30,7 +31,7 @@ export const mainnetTest = {
 }
 
 export const forkClient = createTestClient({
-  // chain: mainnetTest, // TODO: check when this could be useful
+  chain,
   mode: 'anvil',
   transport: http(defaultAnvilForkRpcUrl),
 })

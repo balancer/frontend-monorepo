@@ -16,6 +16,8 @@ import { usePreviewReclAmmChartData } from './usePreviewReclammChartData'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewGyroEclpConfig } from './PreviewGyroEclpConfig'
 import { usePreviewEclpLiquidityProfile } from './usePreviewEclpLiquidityProfile'
+import { isGyroEllipticPool, isReClammPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolCreation() {
   return (
@@ -39,7 +41,11 @@ export function PreviewPoolCreation() {
 }
 
 function PreviewPoolHeader() {
-  const { resetPoolCreationForm, network, poolType } = usePoolCreationForm()
+  const { resetPoolCreationForm, poolCreationForm } = usePoolCreationForm()
+  const [network, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType'],
+  })
 
   return (
     <HStack alignItems="center" justifyContent="space-between" w="full">
@@ -66,7 +72,8 @@ function PreviewPoolHeader() {
 }
 
 function PreviewPoolChart() {
-  const { isReClamm, isGyroEclp } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
   const { isBeforeStep } = usePoolCreationFormSteps()
 
   const eclpLiquidityProfile = usePreviewEclpLiquidityProfile()
@@ -74,7 +81,7 @@ function PreviewPoolChart() {
   const reclammChartData = usePreviewReclAmmChartData()
   const { lowerMarginValue, upperMarginValue } = reclammChartData || {}
 
-  if (isGyroEclp) {
+  if (isGyroEllipticPool(poolType)) {
     return (
       <EclpChartProvider eclpLiquidityProfile={eclpLiquidityProfile}>
         <PreviewGyroEclpConfig />
@@ -82,7 +89,7 @@ function PreviewPoolChart() {
     )
   }
 
-  if (isReClamm) {
+  if (isReClammPool(poolType)) {
     return (
       <ReclAmmChartProvider chartData={reclammChartData}>
         <PreviewReClammConfig

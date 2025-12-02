@@ -11,6 +11,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
 import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
+import { useFormState, useWatch } from 'react-hook-form'
 
 export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
@@ -27,6 +28,7 @@ export function ReClammConfiguration() {
           label={option.label}
           name={option.name}
           options={option.options}
+          tooltip={option.tooltip}
           updateFn={option.updateFn}
           validateFn={option.validateFn}
         />
@@ -42,10 +44,15 @@ function ConfigOptionsGroup({
   validateFn,
   name,
   customInputLabel,
+  tooltip,
 }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
-  const { initialMinPrice, initialTargetPrice, initialMaxPrice } = reClammConfigForm.watch()
-  const formValue = reClammConfigForm.watch(name)
+  const [initialMinPrice, initialTargetPrice, initialMaxPrice] = useWatch({
+    control: reClammConfigForm.control,
+    name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
+  })
+  const formState = useFormState({ control: reClammConfigForm.control })
+  const formValue = useWatch({ control: reClammConfigForm.control, name })
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
     if (option.rawValue === normalizedFormValue) return true
@@ -106,7 +113,7 @@ function ConfigOptionsGroup({
         <Text textAlign="start" w="full">
           {label}
         </Text>
-        <BalPopover text="TODO">
+        <BalPopover text={tooltip}>
           <InfoIcon />
         </BalPopover>
       </HStack>
@@ -147,7 +154,7 @@ function ConfigOptionsGroup({
         <VStack align="start" spacing="md" w="full">
           <NumberInput
             control={reClammConfigForm.control}
-            error={reClammConfigForm.formState.errors['initialMinPrice']?.message}
+            error={formState.errors['initialMinPrice']?.message}
             label={'Range low price'}
             name={'initialMinPrice'}
             percentageLabel={
@@ -169,7 +176,7 @@ function ConfigOptionsGroup({
           />
           <NumberInput
             control={reClammConfigForm.control}
-            error={reClammConfigForm.formState.errors['initialMaxPrice']?.message}
+            error={formState.errors['initialMaxPrice']?.message}
             label={'Range high price'}
             name={'initialMaxPrice'}
             percentageLabel={
@@ -193,7 +200,7 @@ function ConfigOptionsGroup({
       ) : isCustom ? (
         <NumberInput
           control={reClammConfigForm.control}
-          error={reClammConfigForm.formState.errors[name]?.message}
+          error={formState.errors[name]?.message}
           isPercentage={isPercentage}
           label={customInputLabel}
           name={name}

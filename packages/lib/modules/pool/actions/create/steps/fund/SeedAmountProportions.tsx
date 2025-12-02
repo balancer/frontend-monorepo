@@ -3,7 +3,8 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { validatePoolType } from '../../validatePoolCreationForm'
+import { isWeightedPool } from '../../helpers'
+import { useWatch } from 'react-hook-form'
 
 const WEIGHT_DEVIATION_TOLERANCE = 5
 
@@ -21,7 +22,11 @@ const WEIGHT_COLORS = [
 type Props = { variant?: string; displayAlert?: boolean }
 
 export function SeedAmountProportions({ variant = 'level3', displayAlert = false }: Props) {
-  const { poolTokens, poolType } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType'],
+  })
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {
@@ -47,10 +52,8 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
     return Math.abs(weight - usdWeight) < WEIGHT_DEVIATION_TOLERANCE
   })
 
-  const isWeightedPool = validatePoolType.isWeightedPool(poolType)
-
   const isGoingToGetRekt =
-    isWeightedPool && !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
+    isWeightedPool(poolType) && !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
 
   return (
     <VStack spacing="md" w="full">
@@ -83,7 +86,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
               weights={tokenAmountToUsdWithWeights.map(t => t.usdWeight)}
             />
 
-            {isWeightedPool && (
+            {isWeightedPool(poolType) && (
               <>
                 <WeightsBarChart
                   height="5px"

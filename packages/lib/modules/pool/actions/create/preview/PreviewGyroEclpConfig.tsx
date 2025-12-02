@@ -6,12 +6,16 @@ import { NUM_FORMAT } from '../constants'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import ReactECharts from 'echarts-for-react'
 import { useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewGyroEclpConfig() {
   const { isBeforeStep } = usePoolCreationFormSteps()
   const { eclpConfigForm, poolCreationForm, invertGyroEclpPriceParams } = usePoolCreationForm()
-  const { alpha, beta, peakPrice } = eclpConfigForm.watch()
-  const { poolTokens } = poolCreationForm.watch()
+  const [alpha, beta, peakPrice] = useWatch({
+    control: eclpConfigForm.control,
+    name: ['alpha', 'beta', 'peakPrice'],
+  })
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const { options } = useEclpChart()
 

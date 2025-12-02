@@ -12,11 +12,9 @@ We have two types of E2E tests: smoke tests and functional tests
 pnpm run test:e2e:build
 ```
 
-Our app is big and nextjs builds are slow (> 5 minutes) because they use webpack(turbopack is not
-yet ready for production builds). The safest way to E2E test is doing it against a real build cause
-they can catch issues that do not happen in dev but do happen after build. However, until builds are
-faster, we will keep a very reduced amount of smoke tests to avoid long CI pipelines increasing the
-feedback loop.
+The safest way to E2E test is doing it against a real build cause they can catch issues that do not
+happen in dev but do happen after build. However, until builds are faster, we will keep a very
+reduced amount of smoke tests to avoid long CI pipelines increasing the feedback loop.
 
 In every PR we:
 
@@ -39,12 +37,8 @@ anvil --fork-url https://lb.drpc.live/ethereum/<YOUR_LOCAL_NEXT_PRIVATE_DRPC_KEY
 pnpm run test:e2e:dev
 ```
 
-Running the build in turbopack mode is much faster than building it in webpack. turbopack build is
-still experimental so we will only use it in these tests, while production build and smoke tests
-will keep using webpack builds.
-
-Additionally, this tests use an anvil fork so that we can impersonate accounts and run complete
-transaction flows (using wagmi connector mock to avoid playwright interacting with a real wallet).
+This tests use an anvil fork so that we can impersonate accounts and run complete transaction flows
+(using wagmi connector mock to avoid playwright interacting with a real wallet).
 
 ## Local E2E tests
 
@@ -62,8 +56,8 @@ recommend the ui option:
 ```bash
 pnpm run test:e2e:build:ui
 # or
-# Remember to run the mainnet anvil fork locally before running dev E2E tests.
-pnpm run test:e2e:dev:ui
+# Remember to run the mainnet anvil fork locally before running dev E2E tests for Balancer.
+pnpm run test:e2e:dev:ui:bal
 ```
 
 For more info about playwright tests check the [official documentation](https://playwright.dev/) and

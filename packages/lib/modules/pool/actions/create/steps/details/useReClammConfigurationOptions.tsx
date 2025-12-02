@@ -19,6 +19,7 @@ import {
   PriceAdjustmentRateStandardSVG,
   PriceAdjustmentRateFastSVG,
 } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
+import { useWatch } from 'react-hook-form'
 
 export type ReClammConfigOptionsGroup = {
   label: string
@@ -32,6 +33,7 @@ export type ReClammConfigOptionsGroup = {
   validateFn: (value: string) => string | boolean
   name: keyof ReClammConfig
   customInputLabel: string
+  tooltip: string
 }
 
 const CUSTOM_OPTION = {
@@ -44,8 +46,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
 
-  const { poolTokens } = poolCreationForm.watch()
-  const reClammConfig = reClammConfigForm.watch()
+  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
+  const reClammConfig = useWatch({ control: reClammConfigForm.control })
   const { initialTargetPrice, priceRangePercentage } = reClammConfig
 
   const tokenSymbolsString = poolTokens.map(token => token.data?.symbol).join(' / ')
@@ -96,6 +98,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       },
       CUSTOM_OPTION,
     ],
+    tooltip: 'The initial target price of token A in terms of token B',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('initialTargetPrice', rawValue, { shouldValidate: true })
       if (priceRangePercentage) {
@@ -118,10 +121,11 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Wide', displayValue: '± 75.00%', rawValue: '75', svg: TargetRangeWideSVG },
       CUSTOM_OPTION,
     ],
+    tooltip: 'The target concentration density of liquidity',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceRangePercentage', rawValue, { shouldValidate: true })
       if (rawValue) {
-        updatePriceBounds(initialTargetPrice, rawValue)
+        updatePriceBounds(initialTargetPrice || '', rawValue)
       } else {
         reClammConfigForm.setValue('initialMinPrice', '', { shouldValidate: true })
         reClammConfigForm.setValue('initialMaxPrice', '', { shouldValidate: true })
@@ -143,6 +147,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       { label: 'Wide', displayValue: '50%', rawValue: '50', svg: MarginBufferWideSVG },
       CUSTOM_OPTION,
     ],
+    tooltip: 'How far the price can be from the center before the price range starts to move',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('centerednessMargin', rawValue, { shouldValidate: true })
     },
@@ -174,6 +179,7 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
       },
       CUSTOM_OPTION,
     ],
+    tooltip: 'Controls the speed of the price shift when out-of-range',
     updateFn: (rawValue: string) => {
       reClammConfigForm.setValue('priceShiftDailyRate', rawValue, { shouldValidate: true })
     },

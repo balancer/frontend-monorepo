@@ -22,12 +22,18 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { TransactionStepsResponse } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
+import { isReClammPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
-  const { network, isReClamm, poolAddress } = usePoolCreationForm()
+  const { poolCreationForm, poolAddress } = usePoolCreationForm()
+  const [network, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType'],
+  })
 
-  const showTokenAmountSummary = !isReClamm || poolAddress
+  const showTokenAmountSummary = !isReClammPool(poolType) || poolAddress
 
   return (
     <AnimateHeightChange spacing={3} w="full">
@@ -41,7 +47,11 @@ export function PoolSummary({ transactionSteps }: { transactionSteps: Transactio
 }
 
 function PoolTitleCard() {
-  const { poolTokens, symbol, network } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, symbol, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'symbol', 'network'],
+  })
 
   return (
     <Card variant="modalSubSection">
@@ -78,7 +88,11 @@ function PoolTitleCard() {
 }
 
 function PoolTokenAmountsCard() {
-  const { poolTokens, network } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens, network] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'network'],
+  })
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -121,7 +135,11 @@ function PoolTokenAmountsCard() {
 }
 
 function PoolDetailsCard() {
-  const { swapFeePercentage } = usePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const swapFeePercentage = useWatch({
+    control: poolCreationForm.control,
+    name: 'swapFeePercentage',
+  })
   const { isOpen, onToggle } = useDisclosure()
 
   return (

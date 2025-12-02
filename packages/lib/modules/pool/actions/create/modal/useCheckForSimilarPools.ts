@@ -5,11 +5,15 @@ import {
   GqlPoolOrderDirection,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { getGqlPoolType } from '../helpers'
+import { getGqlPoolType, isWeightedPool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function useCheckForSimilarPools() {
-  const { poolCreationForm, isWeightedPool } = usePoolCreationForm()
-  const { network, poolType, poolTokens } = poolCreationForm.watch()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [network, poolType, poolTokens] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolType', 'poolTokens'],
+  })
 
   const { data, loading, error } = useQuery(GetPoolsDocument, {
     variables: {
@@ -28,7 +32,7 @@ export function useCheckForSimilarPools() {
   const similarPools = data?.pools.filter(pool => {
     const sameNumberOfTokens = pool.poolTokens.length === poolTokens.length
     const sameWeights =
-      !isWeightedPool ||
+      !isWeightedPool(poolType) ||
       pool.poolTokens.every(
         token =>
           poolTokens.find(poolToken => poolToken.address === token.address)?.weight ===

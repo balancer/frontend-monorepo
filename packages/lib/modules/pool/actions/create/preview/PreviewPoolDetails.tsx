@@ -2,11 +2,12 @@ import { CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakr
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { validatePoolType } from '../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
+import { isStablePool } from '../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolDetails() {
   return (
@@ -24,7 +25,8 @@ export function PreviewPoolDetails() {
 }
 
 export function PoolDetailsContent() {
-  const {
+  const { poolCreationForm } = usePoolCreationForm()
+  const [
     network,
     name,
     symbol,
@@ -36,11 +38,24 @@ export function PoolDetailsContent() {
     disableUnbalancedLiquidity,
     enableDonation,
     poolType,
-  } = usePoolCreationForm()
+  ] = useWatch({
+    control: poolCreationForm.control,
+    name: [
+      'network',
+      'name',
+      'symbol',
+      'swapFeePercentage',
+      'swapFeeManager',
+      'pauseManager',
+      'amplificationParameter',
+      'poolHooksContract',
+      'disableUnbalancedLiquidity',
+      'enableDonation',
+      'poolType',
+    ],
+  })
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
-
-  const isStablePool = validatePoolType.isStablePool(poolType)
 
   function formatPoolManager(manager: string) {
     if (manager === zeroAddress) return `${PROJECT_CONFIG.projectName} DAO`
@@ -67,7 +82,7 @@ export function PoolDetailsContent() {
     'Swap fee manager': formatPoolManager(swapFeeManager),
     'Pool pause manager': formatPoolManager(pauseManager),
     'Swap fee percentage': `${swapFeePercentage}%`,
-    ...(isStablePool && { 'Amplification parameter': amplificationParameter }),
+    ...(isStablePool(poolType) && { 'Amplification parameter': amplificationParameter }),
     'Pool hook': formatPoolHook(poolHooksContract),
     'Allow flexible adds/removes': disableUnbalancedLiquidity ? 'No' : 'Yes',
     'Allow donations': enableDonation ? 'Yes' : 'No',
