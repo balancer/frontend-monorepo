@@ -507,12 +507,9 @@ export function PoolListFilters() {
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const { options, externalLinks } = PROJECT_CONFIG
-  const subPath = isCowPath ? 'cow' : 'v3'
+  const { options } = PROJECT_CONFIG
 
-  const poolCreatorUrl = isBalancer
-    ? `${externalLinks.poolComposerUrl}/${subPath}`
-    : externalLinks.poolComposerUrl
+  const poolCreatorUrl = isCowPath ? `https://pool-creator.balancer.fi/cow` : 'create'
 
   return (
     <VStack w="full">

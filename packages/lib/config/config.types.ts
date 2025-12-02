@@ -126,10 +126,6 @@ type VariantConfig = {
   }
 }
 
-interface ExternalUrls {
-  poolComposerUrl: string
-}
-
 type OptionsConfig = {
   poolDisplayType: PoolDisplayType
   hidePoolTags: string[]
@@ -192,7 +188,6 @@ export interface ProjectConfig {
   defaultNetwork: GqlChain
   ensNetwork: GqlChain
   delegateOwner: Address
-  externalLinks: ExternalUrls
   options: OptionsConfig
   links: Links
   footer: { linkSections: LinkSection[] }
