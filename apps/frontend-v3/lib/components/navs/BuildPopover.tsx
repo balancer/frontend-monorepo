@@ -1,6 +1,5 @@
 import { Box, HStack, Link, Text, VStack, Flex } from '@chakra-ui/react'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
-import { BeetsIconCircular } from '@repo/lib/shared/components/icons/logos/BeetsIconCircular'
 import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIconCircular'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
@@ -73,12 +72,6 @@ const CREATE_POOL_LINKS = [
     label: 'CoW AMM',
     href: 'https://pool-creator.balancer.fi/cow',
     icon: <CowIconCircular size={32} />,
-    isExternal: true,
-  },
-  {
-    label: 'Beets',
-    href: 'https://beets.fi/create',
-    icon: <BeetsIconCircular size={32} />,
     isExternal: true,
   },
 ]
