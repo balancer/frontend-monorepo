@@ -1,13 +1,34 @@
+'use client'
+
 import { EChartsOption, graphic } from 'echarts'
 import ReactECharts from 'echarts-for-react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { InfoButton } from '~/components/info-button/InfoButton'
-import { Box, HStack, Link, Card } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Link, Card, VStack } from '@chakra-ui/react'
 import { ExternalLink } from 'react-feather'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { useTheme } from '@chakra-ui/react'
+
+const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
+  contentProps: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 'none',
+    borderTopLeftRadius: 'none',
+    borderBottomRightRadius: 'none',
+  },
+  cardProps: {
+    position: 'relative',
+    overflow: 'hidden',
+    height: 'full',
+  },
+}
 
 export function ReliquaryCurveChart() {
   const { pool } = usePool()
+  const theme = useTheme()
 
   const data = pool.staking?.reliquary?.levels
     ?.map(level => ({
@@ -74,38 +95,42 @@ export function ReliquaryCurveChart() {
         areaStyle: {
           opacity: 0.2,
           color: new graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: `rgba(5, 214, 144, 1)` },
-            { offset: 0.5, color: `rgba(5, 214, 144, 1)` },
-            { offset: 1, color: `rgba(5, 214, 144, 0)` },
+            { offset: 0, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+            { offset: 0.5, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+            { offset: 1, color: theme.semanticTokens.colors.chart.pool.bar.volume.to },
           ]),
         },
         lineStyle: {
-          color: '#05D690',
+          color: theme.semanticTokens.colors.chart.pool.bar.volume.from,
         },
       },
     ],
   }
 
   return (
-    <Card height="full" px="4" py="4">
-      <HStack>
-        <InfoButton
-          infoText="This curve shows the maturity boost per level."
-          label="BEETronix"
-          labelProps={{
-            lineHeight: '1rem',
-            fontWeight: 'semibold',
-            fontSize: 'sm',
-            color: 'beets.base.50',
-          }}
-        />
-        <Link href="https://docs.beets.fi/tokenomics/mabeets" target="_blank">
-          <ExternalLink size="16" />
-        </Link>
-      </HStack>
-      <Box height="full">
-        <ReactECharts option={option} style={{ height: '100%' }} />
-      </Box>
+    <Card height="full">
+      <NoisyCard {...COMMON_NOISY_CARD_PROPS}>
+        <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
+          <HStack w="full">
+            <InfoButton
+              infoText="This curve shows the maturity boost per level."
+              label="BEETronix"
+              labelProps={{
+                lineHeight: '1rem',
+                fontWeight: 'semibold',
+                fontSize: 'sm',
+                color: 'beets.base.50',
+              }}
+            />
+            <Link href="https://docs.beets.fi/tokenomics/mabeets" target="_blank">
+              <ExternalLink size="16" />
+            </Link>
+          </HStack>
+          <Box h="full" w="full">
+            <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
+          </Box>
+        </VStack>
+      </NoisyCard>
     </Card>
   )
 }

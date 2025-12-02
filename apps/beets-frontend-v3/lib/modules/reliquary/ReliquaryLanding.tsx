@@ -8,6 +8,7 @@ import ReliquaryHeroBanner from './components/ReliquaryHeroBanner'
 import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats'
 import { GetMaBeetsSteps } from './components/landing/GetMaBeetsSteps'
 import { MyRelicsHeader } from './components/landing/MyRelicsHeader'
+import { VotingPowerSection } from './components/landing/VotingPowerSection'
 
 export default function ReliquaryLanding() {
   const { isConnected } = useUserAccount()
@@ -44,10 +45,11 @@ export default function ReliquaryLanding() {
             <Box width="full">
               <RelicCarousel />
             </Box>
+            <VotingPowerSection />
           </>
         )}
 
-        <VStack alignItems="flex-start" mt={{ base: '32rem', lg: '16' }} width="full">
+        <VStack alignItems="flex-start" mt={{ base: '16' }} width="full">
           <Flex>
             <Heading
               background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"

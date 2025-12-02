@@ -1,5 +1,10 @@
 import { ReliquaryWithdrawPage } from '@/lib/modules/reliquary/pages/ReliquaryWithdrawPage'
 
-export default function WithdrawFromRelicPage({ params }: { params: { relicId: string } }) {
-  return <ReliquaryWithdrawPage relicId={params.relicId} />
+export default async function WithdrawFromRelicPage({
+  params,
+}: {
+  params: Promise<{ relicId: string }>
+}) {
+  const { relicId } = await params
+  return <ReliquaryWithdrawPage relicId={relicId} />
 }

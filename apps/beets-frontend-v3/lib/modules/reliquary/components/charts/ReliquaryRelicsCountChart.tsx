@@ -3,7 +3,7 @@ import { EChartsOption, graphic } from 'echarts'
 import { format } from 'date-fns'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import ReactECharts from 'echarts-for-react'
-import { useTheme } from '@chakra-ui/react'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function ReliquaryRelicsCountChart({ data }: Props) {
-  const { colors } = useTheme()
+  const theme = useChakraTheme()
 
   const chartData = useMemo(
     () => data.map(item => [item.timestamp * 1000, parseInt(item.relicCount)]),
@@ -23,7 +23,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
       tooltip: {
         trigger: 'axis',
         type: 'shadow',
-        backgroundColor: colors.beets.base['700'],
+        backgroundColor: theme.colors.base['700'],
         borderColor: 'transparent',
         borderRadius: 8,
         textStyle: {
@@ -34,7 +34,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           animation: false,
           type: 'cross',
           lineStyle: {
-            color: colors.beets.base['100'],
+            color: theme.colors.base['100'],
             width: 2,
             opacity: 1,
           },
@@ -55,7 +55,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           formatter: (value: number, index: number) => {
             return index % 2 === 0 ? format(new Date(value), 'MMM d') : ''
           },
-          color: colors.gray['200'],
+          color: theme.colors.gray['200'],
           showMaxLabel: false,
           showMinLabel: false,
         },
@@ -90,14 +90,14 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           showSymbol: false,
           data: chartData,
           itemStyle: {
-            color: `rgba(5, 214, 144, 1)`,
+            color: theme.semanticTokens.colors.chart.pool.bar.volume.from,
           },
           areaStyle: {
             opacity: 0.2,
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: `rgba(5, 214, 144, 1)` },
-              { offset: 0.5, color: `rgba(5, 214, 144, 1)` },
-              { offset: 1, color: `rgba(5, 214, 144, 0)` },
+              { offset: 0, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 0.5, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 1, color: theme.semanticTokens.colors.chart.pool.bar.volume.to },
             ]),
           },
           axisLine: { show: false },
@@ -110,7 +110,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
         },
       ],
     }),
-    [chartData, colors]
+    [chartData, theme]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

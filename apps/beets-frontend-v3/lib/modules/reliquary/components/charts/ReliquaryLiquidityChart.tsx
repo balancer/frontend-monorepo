@@ -1,4 +1,4 @@
-import { useTheme } from '@chakra-ui/react'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function ReliquaryLiquidityChart({ data }: Props) {
-  const { colors } = useTheme()
+  const theme = useChakraTheme()
 
   const chartData = useMemo(
     () => data.map(item => [item.timestamp * 1000, item.totalLiquidity]),
@@ -36,7 +36,7 @@ export function ReliquaryLiquidityChart({ data }: Props) {
         show: false,
         data: ['TVL'],
         textStyle: {
-          color: colors.beets.base['50'],
+          color: theme.colors.base['50'],
         },
         top: '0',
         right: '2%',
@@ -56,7 +56,7 @@ export function ReliquaryLiquidityChart({ data }: Props) {
           formatter: (value: number) => {
             return format(new Date(value), 'MMM d')
           },
-          color: colors.gray['200'],
+          color: theme.colors.gray['200'],
           interval: 'auto',
 
           showMaxLabel: false,
@@ -83,7 +83,7 @@ export function ReliquaryLiquidityChart({ data }: Props) {
             formatter: function (value: number, index: number) {
               return index % 3 === 1 ? `$${fNumCustom(value, '0a')}` : ''
             },
-            color: colors.beets.base['100'],
+            color: theme.colors.base['100'],
           },
           axisPointer: {
             label: {
@@ -112,15 +112,15 @@ export function ReliquaryLiquidityChart({ data }: Props) {
             opacity: 1,
             borderRadius: [5, 5, 0, 0],
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: `rgba(5, 214, 144, 1)` },
-              { offset: 0.5, color: `rgba(5, 214, 144, 0.7)` },
-              { offset: 1, color: `rgba(5, 214, 144, 0)` },
+              { offset: 0, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 0.5, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 1, color: theme.semanticTokens.colors.chart.pool.bar.volume.to },
             ]),
           },
         },
       ],
     }),
-    [chartData, colors]
+    [chartData, theme]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

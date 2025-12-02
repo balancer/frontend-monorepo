@@ -1,4 +1,4 @@
-import { useTheme } from '@chakra-ui/react'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
@@ -7,7 +7,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 export function ReliquaryMaBEETSLevelChart() {
   const { pool } = usePool()
-  const { colors } = useTheme()
+  const theme = useChakraTheme()
 
   const levels = useMemo(() => pool.staking?.reliquary?.levels, [pool.staking?.reliquary?.levels])
 
@@ -38,7 +38,7 @@ export function ReliquaryMaBEETSLevelChart() {
         axisTick: { show: false, alignWithLabel: true },
         interval: 1,
         axisLabel: {
-          color: colors.gray['200'],
+          color: theme.colors.gray['200'],
           margin: 16,
         },
         axisLine: { show: false },
@@ -57,7 +57,7 @@ export function ReliquaryMaBEETSLevelChart() {
         axisTick: { show: false },
       },
       grid: {
-        bottom: '5.5%',
+        bottom: '6.5%',
         right: '1.5%',
         left: '4.5%',
         top: '10%',
@@ -74,15 +74,15 @@ export function ReliquaryMaBEETSLevelChart() {
             opacity: 1,
             borderRadius: [5, 5, 0, 0],
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: `rgba(5, 214, 144, 1)` },
-              { offset: 0.5, color: `rgba(5, 214, 144, 0.7)` },
-              { offset: 1, color: `rgba(5, 214, 144, 0)` },
+              { offset: 0, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 0.5, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 1, color: theme.semanticTokens.colors.chart.pool.bar.volume.to },
             ]),
           },
         },
       ],
     }),
-    [levels, colors]
+    [levels, theme]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

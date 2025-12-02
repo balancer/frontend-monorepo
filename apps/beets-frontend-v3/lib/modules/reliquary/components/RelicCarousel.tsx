@@ -7,12 +7,11 @@ import { RelicCard } from './RelicCard'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 
 export function RelicCarousel() {
-  const { relicPositions: relics } = useReliquary()
+  const { relicPositions } = useReliquary()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [allRelicsVisible, setAllRelicsVisible] = useState(false)
 
-  const relicPositions = [...relics, ...relics]
   useLayoutEffect(() => {
     const el = scrollContainerRef.current
     if (!el) return
@@ -33,10 +32,24 @@ export function RelicCarousel() {
 
   const scrollToCard = (index: number) => {
     if (scrollContainerRef.current) {
-      const cards = scrollContainerRef.current.querySelectorAll('[data-relic-card]')
+      const container = scrollContainerRef.current
+      const cards = container.querySelectorAll('[data-relic-card]')
       const targetCard = cards[index] as HTMLElement
+
       if (targetCard) {
-        targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+        // Calculate positions to center the card horizontally
+        const containerRect = container.getBoundingClientRect()
+        const cardRect = targetCard.getBoundingClientRect()
+
+        const cardCenter = cardRect.left + cardRect.width / 2
+        const containerCenter = containerRect.left + containerRect.width / 2
+        const scrollOffset = cardCenter - containerCenter
+
+        // Scroll horizontally only (no vertical scrolling)
+        container.scrollTo({
+          left: container.scrollLeft + scrollOffset,
+          behavior: 'smooth',
+        })
       }
     }
   }

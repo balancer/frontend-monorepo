@@ -1,5 +1,10 @@
 import { ReliquaryDepositPage } from '@/lib/modules/reliquary/pages/ReliquaryDepositPage'
 
-export default function DepositToRelicPage({ params }: { params: { relicId: string } }) {
-  return <ReliquaryDepositPage relicId={params.relicId} />
+export default async function DepositToRelicPage({
+  params,
+}: {
+  params: Promise<{ relicId: string }>
+}) {
+  const { relicId } = await params
+  return <ReliquaryDepositPage relicId={relicId} />
 }

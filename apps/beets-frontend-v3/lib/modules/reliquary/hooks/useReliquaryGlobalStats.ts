@@ -8,12 +8,14 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 export function useReliquaryGlobalStats() {
   const networkConfig = useNetworkConfig()
 
-  const { data, ...rest } = useQuery(GetReliquaryFarmSnapshotsDocument, {
+  const farmId = networkConfig.reliquary?.fbeets.farmId
+
+  const { data, loading, error, ...rest } = useQuery(GetReliquaryFarmSnapshotsDocument, {
     variables: {
-      id: `${networkConfig.reliquary?.fbeets.farmId}`,
+      chain: networkConfig.chain,
+      id: `${farmId}`,
       range: 'THIRTY_DAYS' as GqlPoolSnapshotDataRange,
     },
-    skip: !networkConfig.reliquary?.fbeets.farmId,
   })
 
   const latest =
@@ -25,5 +27,7 @@ export function useReliquaryGlobalStats() {
     ...rest,
     latest,
     data,
+    loading,
+    error,
   }
 }

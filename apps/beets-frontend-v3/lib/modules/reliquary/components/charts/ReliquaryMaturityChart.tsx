@@ -3,9 +3,11 @@ import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
 
 export function ReliquaryMaturityChart() {
   const { pool } = usePool()
+  const theme = useChakraTheme()
 
   const levels = useMemo(() => pool.staking?.reliquary?.levels, [pool.staking?.reliquary?.levels])
 
@@ -54,7 +56,7 @@ export function ReliquaryMaturityChart() {
         axisTick: { show: false },
       },
       grid: {
-        bottom: '5.5%',
+        bottom: '6.5%',
         right: '1.5%',
         left: '4.5%',
         top: '10%',
@@ -68,15 +70,15 @@ export function ReliquaryMaturityChart() {
             opacity: 1,
             borderRadius: [5, 5, 0, 0],
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: `rgba(5, 214, 144, 1)` },
-              { offset: 0.5, color: `rgba(5, 214, 144, 0.7)` },
-              { offset: 1, color: `rgba(5, 214, 144, 0)` },
+              { offset: 0, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 0.5, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
+              { offset: 1, color: theme.semanticTokens.colors.chart.pool.bar.volume.to },
             ]),
           },
         },
       ],
     }),
-    [levels]
+    [levels, theme]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />
