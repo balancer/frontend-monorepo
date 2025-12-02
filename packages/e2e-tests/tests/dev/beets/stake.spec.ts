@@ -13,7 +13,6 @@ test('Stake S to stS on /stake', async ({ page }) => {
   await clickLink(page, 'Stake \\$S')
 
   // The Stake tab should be active by default
-  //await expect(page.getByRole('button', { name: 'S' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Stake' })).toBeVisible()
 
   // Fill in the amount to stake (S is the native asset)

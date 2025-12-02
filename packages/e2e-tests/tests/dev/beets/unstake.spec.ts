@@ -26,11 +26,9 @@ test('Unstake stS on /stake', async ({ page }) => {
   await clickLink(page, 'Stake \\$S')
 
   // The Stake tab should be active by default
-  //await expect(page.getByRole('button', { name: 'S' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Stake' })).toBeVisible()
 
   // The Unstake tab should be clicked to become active
-  //await page.getByRole('button', { name: 'Unstake' }).click()
   await page.locator('#button-group-1').click()
 
   // Confirm unstake tab is active
