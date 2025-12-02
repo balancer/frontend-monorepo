@@ -149,6 +149,9 @@ export default function Privacy() {
                       <li>
                         <Link href="risks#hyperevm">Hyper EVM</Link>
                       </li>
+                      <li>
+                        <Link href="risks#plasma">Plasma chain</Link>
+                      </li>
                     </ul>
                   </li>
                 </ul>
@@ -1844,6 +1847,107 @@ export default function Privacy() {
                   February 2025 and users interacting may consider undiscovered bugs into the risk
                   profile.
                 </p>
+              </div>
+            </FadeInOnView>
+            <FadeInOnView>
+              <div className="subsection">
+                <h4 className="anchor" id="plasma">
+                  Plasma chain risks
+                </h4>
+                <p>
+                  <a href="https://www.plasma.to/">Plasma</a> is a high-performance layer-1
+                  blockchain focused on stablecoin payments. It uses PlasmaBFT, a pipelined
+                  implementation of Fast HotStuff-style BFT consensus, combined with a modified Reth
+                  execution layer for EVM compatibility.
+                </p>
+                <p>
+                  It focused on stablecoins with zero-fee USD₮ transfers, custom gas tokens, support
+                  for confidential payments, and the throughput to scale globally.
+                </p>
+                <p>Specific risks include:</p>
+                <ul>
+                  <li>
+                    <b>Centralization Risks:</b>
+                    <ul>
+                      <li>
+                        Plasma follows a progressive decentralization model. Currently, the
+                        validator set is centralized, creating single points of failure and
+                        governance risks. The transition to full decentralization is still in
+                        progress with three phases:
+                        <ul>
+                          <li>
+                            <b>Centralized Operation:</b> Initially all consensus nodes operated by
+                            Plasma team
+                          </li>
+                          <li>
+                            <b>Trusted Validator Set:</b> Small group of external validators
+                          </li>
+                          <li>
+                            <b>Permissionless Participation:</b> Eventually open to the public
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <b>Technical Risks:</b>
+                    <ul>
+                      <li>
+                        <b>New chain and consensus implementation risks:</b> Plasma relies on a
+                        custom BFT consensus implementation, PlasmaBFT, built around a pipelined
+                        Fast HotStuff variant and a modified Reth execution client. As with any new
+                        consensus and client stack, there is a risk of undiscovered bugs, design
+                        flaws, or implementation errors that could lead to chain halts, consensus
+                        failures, or safety violations (e.g., unexpected reorgs or double-spends).
+                      </li>
+                      <li>
+                        <b>Bridge Risks:</b> The Bitcoin bridge relies on a permissioned verifier
+                        network using MPC/threshold signatures, introducing trust assumptions around
+                        the verifier set.
+                      </li>
+                      <li>
+                        <b>Consensus Dependencies:</b> Non-validator nodes rely on trusted
+                        validators for consensus updates, creating potential sync failures if
+                        validator connections are lost.
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <b>Operational Risks:</b>
+                    <ul>
+                      <li>
+                        <b>Beta status:</b> Plasma Mainnet is currently in &quot;beta&quot;,
+                        indicating the network may experience instability or require breaking
+                        changes.
+                      </li>
+                      <li>
+                        <b>Upgrade downtime:</b> Most non-validator node upgrades require 15–30
+                        minutes of downtime. Major releases introducing new features or consensus
+                        changes may require longer sync windows.
+                      </li>
+                      <li>
+                        <b>Limited Decentralization:</b> The current trusted validator model means
+                        network governance and security depend on a small set of known operators.
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                <p>Users of Balancer on Plasma should understand that:</p>
+                <ul>
+                  <li>
+                    Balancer does not control Plasma&apos;s consensus, validators, bridge
+                    infrastructure, or governance.
+                  </li>
+                  <li>
+                    A severe incident at the Plasma network or bridge level can result in partial or
+                    total loss of funds, even if Balancer smart contracts perform exactly as
+                    specified.
+                  </li>
+                  <li>
+                    Users should evaluate Plasma&apos;s network assumptions, maturity, and bridge
+                    designs, and only deploy funds consistent with their own risk tolerance.
+                  </li>
+                </ul>
               </div>
             </FadeInOnView>
             <Divider />
