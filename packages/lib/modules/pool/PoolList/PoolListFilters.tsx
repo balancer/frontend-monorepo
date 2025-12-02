@@ -646,7 +646,7 @@ export function PoolListFilters() {
             display="flex"
             gap="2"
             href={poolCreatorUrl}
-            isExternal
+            isExternal={isCowPath}
             ml="ms"
             onClick={() => trackEvent(AnalyticsEvent.ClickPoolListCreatePool)}
             variant="tertiary"
