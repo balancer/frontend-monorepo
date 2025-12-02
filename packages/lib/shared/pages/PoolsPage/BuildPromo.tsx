@@ -59,14 +59,7 @@ export function BuildPromo() {
               maxWidth={356}
               width="full"
             >
-              <Button
-                as={NextLink}
-                flex={1}
-                href="https://pool-creator.balancer.fi/"
-                rightIcon={<ArrowUpRight size="14px" />}
-                size="lg"
-                variant="primary"
-              >
+              <Button as={NextLink} flex={1} href="/create" size="lg" variant="primary">
                 Create a pool
               </Button>
               <Button
