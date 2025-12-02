@@ -1,5 +1,3 @@
-'use client'
-
 import { PropsWithChildren } from 'react'
 import { RelicDepositProvider } from '@/lib/modules/reliquary/RelicDepositProvider'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
@@ -9,10 +7,11 @@ type Props = PropsWithChildren<{
   params: { relicId?: string }
 }>
 
-export default function RelicDepositLayoutWrapper({ params: { relicId }, children }: Props) {
+export default async function RelicDepositLayoutWrapper({ params, children }: Props) {
+  const relicId = await params
   return (
     <DefaultPageContainer>
-      <RelicDepositProvider relicId={relicId}>
+      <RelicDepositProvider relicId={relicId.relicId}>
         <PriceImpactProvider>{children}</PriceImpactProvider>
       </RelicDepositProvider>
     </DefaultPageContainer>

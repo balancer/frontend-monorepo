@@ -59,7 +59,7 @@ export function ReliquaryMaBEETSLevelChart() {
       grid: {
         bottom: '6.5%',
         right: '1.5%',
-        left: '4.5%',
+        left: '6.5%',
         top: '10%',
         containLabel: true,
       },
