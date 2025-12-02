@@ -8,24 +8,17 @@ export function useCheckImageUrl(url: string) {
     if (isValidUrl(url) !== true) return
 
     const image = new Image()
+    image.src = normalizeUrl(url)
 
-    image.onload = function () {
-      if (image.width <= 0) {
-        setErrorMessage('Invalid image')
-      }
-    }
-
-    image.onerror = function () {
-      setErrorMessage('Unreachable URL or invalid image')
-    }
-
-    // We use an async call to avoid linting issues like
-    // https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
-    const updateImageUrl = async () => {
-      setErrorMessage(undefined)
-      image.src = normalizeUrl(url)
-    }
-    updateImageUrl()
+    image
+      .decode()
+      .then(() => {
+        setErrorMessage(undefined)
+      })
+      .catch(e => {
+        console.error(e)
+        setErrorMessage('Unreachable URL or invalid image')
+      })
   }, [url])
 
   if (isValidUrl(url) !== true) return { error: isValidUrl(url) as string }
