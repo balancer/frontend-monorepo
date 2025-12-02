@@ -22,19 +22,19 @@ export function useDelegateSetStep(chain: GqlChain) {
   const networkConfig = getNetworkConfig(chain)
 
   const labels: TransactionLabels = {
-    init: 'Delegate to vote optimizer',
-    title: 'Delegate to vote optimizer',
+    init: 'Delegate',
+    title: 'Delegate',
     confirming: 'Confirming delegation...',
     confirmed: 'Delegated!',
-    tooltip: 'Delegate your voting power to the vote optimizer',
+    tooltip: 'Delegate your voting power',
   }
 
-  const props: ManagedTransactionInput = {
+  const transactionInput: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
-    contractId: 'beets.reliquary',
+    contractId: 'snapshot.delegateRegistry',
     contractAddress: networkConfig.snapshot?.contractAddress || '',
-    functionName: 'setDelegation',
+    functionName: 'setDelegate',
     args:
       networkConfig.snapshot && networkConfig.snapshot.id && networkConfig.snapshot.delegateAddress
         ? [networkConfig.snapshot.id, networkConfig.snapshot.delegateAddress]
@@ -55,9 +55,9 @@ export function useDelegateSetStep(chain: GqlChain) {
     stepType: 'delegateSet',
     isComplete,
     onSuccess: () => refetch(),
-    renderAction: () => <ManagedTransactionButton id="delegateSet" {...props} />,
+    renderAction: () => <ManagedTransactionButton id="delegateSet" {...transactionInput} />,
     transaction,
   }
 
-  return { step }
+  return { step, transactionInput }
 }

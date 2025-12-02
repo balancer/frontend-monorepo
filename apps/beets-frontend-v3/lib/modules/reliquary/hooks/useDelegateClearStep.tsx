@@ -22,19 +22,19 @@ export function useDelegateClearStep(chain: GqlChain) {
   const networkConfig = getNetworkConfig(chain)
 
   const labels: TransactionLabels = {
-    init: 'Undelegate from vote optimizer',
-    title: 'Undelegate from vote optimizer',
+    init: 'Undelegate',
+    title: 'Undelegate',
     confirming: 'Confirming undelegate...',
     confirmed: 'Undelegated!',
-    tooltip: 'Clear your delegation from the vote optimizer',
+    tooltip: 'Clear your delegation',
   }
 
-  const props: ManagedTransactionInput = {
+  const transactionInput: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
-    contractId: 'beets.reliquary',
+    contractId: 'snapshot.delegateRegistry',
     contractAddress: networkConfig.snapshot?.contractAddress || '',
-    functionName: 'undelegate',
+    functionName: 'clearDelegate',
     args: networkConfig.snapshot?.id ? [networkConfig.snapshot.id] : null,
     enabled:
       isConnected && !!networkConfig.snapshot?.contractAddress && !!networkConfig.snapshot?.id,
@@ -49,9 +49,9 @@ export function useDelegateClearStep(chain: GqlChain) {
     stepType: 'delegateClear',
     isComplete,
     onSuccess: () => refetch(),
-    renderAction: () => <ManagedTransactionButton id="delegateClear" {...props} />,
+    renderAction: () => <ManagedTransactionButton id="delegateClear" {...transactionInput} />,
     transaction,
   }
 
-  return { step }
+  return { step, transactionInput }
 }

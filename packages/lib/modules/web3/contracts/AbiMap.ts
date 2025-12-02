@@ -3,6 +3,7 @@ import { LiquidityGaugeAbi } from './abi/LiquidityGaugeAbi'
 import { GaugeWorkingBalanceHelperAbi } from './abi/GaugeWorkingBalanceHelperAbi'
 import { OmniVotingEscrowAbi } from './abi/OmniVotingEscrowAbi'
 import { GaugeControllerAbi } from './abi/GaugeControllerAbi'
+import { DelegateRegistryAbi } from './abi/DelegateRegistryAbi'
 import {
   balancerMinterAbi,
   balancerV2BalancerRelayerV6Abi,
@@ -40,6 +41,7 @@ export const AbiMap = {
   'balancer.gaugeControllerAbi': GaugeControllerAbi,
   'balancer.liquidityGaugeV5Abi': LiquidityGaugeV5Abi,
   'balancer.reClammPool': reClammPoolAbi,
+  'snapshot.delegateRegistry': DelegateRegistryAbi,
   'beets.lstStaking': sonicStakingAbi,
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,

@@ -1,12 +1,9 @@
 'use client'
 
-import { Badge, Button, Grid, GridItem, Heading, Skeleton, Tooltip } from '@chakra-ui/react'
+import { Button, Grid, GridItem, Heading } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { useReliquary } from '../../ReliquaryProvider'
 
 export function MyRelicsHeader() {
-  const { totalMaBeetsVP, isLoading } = useReliquary()
   const router = useRouter()
 
   return (
@@ -31,23 +28,9 @@ export function MyRelicsHeader() {
         </Heading>
       </GridItem>
 
-      <GridItem area="vp" mt={{ base: '2', lg: '0' }} w="full">
-        <Tooltip label="This is your current maBEETS Voting Power. Depending on when you level up or invest/withdraw, it might be different to what is shown on the latest vote on Snapshot.">
-          {!isLoading ? (
-            <Badge colorScheme="orange" p="2" rounded="md">
-              <Heading size="sm" textAlign="center" textTransform="initial">
-                {fNumCustom(totalMaBeetsVP, '0.000a')} maBEETS voting power
-              </Heading>
-            </Badge>
-          ) : (
-            <Skeleton height="24px" />
-          )}
-        </Tooltip>
-      </GridItem>
-
       <GridItem area="create" justifySelf="end">
         <Button onClick={() => router.push('/mabeets/deposit')} size="md" variant="primary">
-          Create New Relic
+          New Relic
         </Button>
       </GridItem>
     </Grid>
