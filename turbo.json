@@ -94,11 +94,20 @@
       "persistent": true,
       "dependsOn": ["^transit"]
     },
-    "test:e2e:dev": {
+    "test:e2e:dev:bal": {
       "dependsOn": ["frontend-v3#build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
     },
-    "test:e2e:dev:ui": {
+    "test:e2e:dev:ui:bal": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^transit"]
+    },
+    "test:e2e:dev:beets": {
+      "dependsOn": ["beets-frontend-v3#build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
+    },
+    "test:e2e:dev:ui:beets": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^transit"]

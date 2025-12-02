@@ -72,10 +72,10 @@ make fork-ethereum
 pnpm dev:bal:fork
 ```
 
-3. Start the playwright UI:
+3. Start the playwright UI for Balancer:
 
 ```
-pnpm test:e2e:dev:ui
+pnpm test:e2e:dev:ui:bal
 ```
 
 ### Install a package
