@@ -147,10 +147,11 @@ function TokenIconInput() {
 
   const { errors, dirtyFields } = useFormState({ control })
   const [iconUrl] = useDebounce(useWatch({ control, name: 'tokenIconUrl' }), defaultDebounceMs)
-  const { isChecking, error } = useCheckImageUrl(iconUrl)
+  const { error } = useCheckImageUrl(iconUrl)
+
   useEffect(() => {
     if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
-  }, [iconUrl, isChecking, error, trigger, dirtyFields])
+  }, [iconUrl, error, trigger, dirtyFields])
 
   const paste = async () => {
     const clipboardText = await navigator.clipboard.readText()
@@ -175,7 +176,7 @@ function TokenIconInput() {
         )}
         rules={{
           required: 'Token icon URL is required',
-          validate: () => (isChecking ? 'Checking' : error ? error : true),
+          validate: () => (error ? error : true),
         }}
       />
     </VStack>
