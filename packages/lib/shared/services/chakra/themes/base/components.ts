@@ -191,6 +191,23 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           },
         },
       },
+      variants: {
+        outline: {
+          field: {
+            _hover: {
+              borderColor: 'input.borderHover',
+            },
+            _focusVisible: {
+              borderColor: 'input.borderFocus',
+              boxShadow: 'input.innerFocus',
+            },
+            _invalid: {
+              borderColor: 'input.borderError',
+              boxShadow: 'input.innerError',
+            },
+          },
+        },
+      },
     },
     Textarea: {
       baseStyle: {
