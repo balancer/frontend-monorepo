@@ -22,7 +22,6 @@ import {
   Text,
   useColorModeValue,
   VStack,
-  Link,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
@@ -50,11 +49,12 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
-import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
+import NextLink from 'next/link'
 
 export function useFilterTagsVisible() {
   const {
@@ -509,8 +509,6 @@ export function PoolListFilters() {
 
   const { options } = PROJECT_CONFIG
 
-  const poolCreatorUrl = isCowPath ? `https://pool-creator.balancer.fi/cow` : 'create'
-
   return (
     <VStack w="full">
       <HStack gap="0" justify="end" pr={{ base: 'md', xl: '0' }} spacing="none" w="full">
@@ -640,19 +638,10 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        {!isBalancer && (
-          <Button
-            as={Link}
-            display="flex"
-            gap="2"
-            href={poolCreatorUrl}
-            isExternal={isCowPath}
-            ml="ms"
-            onClick={() => trackEvent(AnalyticsEvent.ClickPoolListCreatePool)}
-            variant="tertiary"
-          >
+        {isBeets && (
+          <Button as={NextLink} display="flex" gap="2" href="/create" ml="ms" variant="tertiary">
             <Icon as={Plus} boxSize={4} />
-            {!isMobile && 'Create pool'}
+            {!isMobile && 'Create a pool'}
           </Button>
         )}
       </HStack>
