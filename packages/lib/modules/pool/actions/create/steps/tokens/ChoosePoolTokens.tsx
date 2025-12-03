@@ -41,6 +41,7 @@ import {
 } from '../../helpers'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -224,22 +225,27 @@ function ConfigureToken({
         </VStack>
 
         {isWeightedPool(poolType) && (
-          <Box>
-            <NumberInput
-              control={poolCreationForm.control}
-              isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-              isInvalid={isInvalidWeight}
-              isPercentage
-              label="Weight"
-              name={`poolTokens.${index}.weight`}
-              validate={weight => {
-                if (!isWeightedPool(poolType)) return true
-                if (weight < 1) return 'Minimum weight for each token is 1%'
-                if (weight > 99) return 'Maximum weight for a token is 99%'
-                return true
-              }}
-            />
-          </Box>
+          <TooltipWithTouch
+            isDisabled={weightedPoolStructure === WeightedPoolStructure.Custom}
+            label={`Weight is set to ${weightedPoolStructure} based on your selection above. Select "Custom" to set your own weights.`}
+          >
+            <Box>
+              <NumberInput
+                control={poolCreationForm.control}
+                isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                isInvalid={isInvalidWeight}
+                isPercentage
+                label="Weight"
+                name={`poolTokens.${index}.weight`}
+                validate={weight => {
+                  if (!isWeightedPool(poolType)) return true
+                  if (weight < 1) return 'Minimum weight for each token is 1%'
+                  if (weight > 99) return 'Maximum weight for a token is 99%'
+                  return true
+                }}
+              />
+            </Box>
+          </TooltipWithTouch>
         )}
 
         {poolTokens.length > 2 && (
