@@ -250,6 +250,7 @@ function ConfigureToken({
                   if (weight > 99) return 'Maximum weight for a token is 99%'
                   return true
                 }}
+                width="24"
               />
             </Box>
           </TooltipWithTouch>

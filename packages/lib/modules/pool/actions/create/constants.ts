@@ -51,7 +51,7 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
       'Concentrated liquidity pools that use an elliptical price curve to focus liquidity asymmetrically within customizable bounds. E-CLPs provide deeper liquidity and lower slippage for trades while maximizing LP capital efficiency within expected price ranges.',
   },
   [PoolType.ReClamm]: {
-    label: 'ReClamm',
+    label: 'reCLAMM',
     maxTokens: 2,
     description:
       'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
