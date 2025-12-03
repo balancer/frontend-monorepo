@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import TokenRow from '../../tokens/TokenRow/TokenRow'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -250,7 +249,7 @@ export default function PoolMyLiquidity() {
       ...tab,
       disabled: tab.value !== 'total' && !canStake,
     }))
-  }, [tabs, pool])
+  }, [tabs, pool, canStake])
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
