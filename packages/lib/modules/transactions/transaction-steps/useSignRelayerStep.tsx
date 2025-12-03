@@ -5,7 +5,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { Alert, Button, VStack } from '@chakra-ui/react'
 import { TransactionStep } from './lib'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { getChainId } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -69,10 +69,7 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
     useSignRelayerApproval(chainId)
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
-  const isComplete = useCallback(
-    () => signRelayerState === SignatureState.Completed,
-    [signRelayerState]
-  )
+  const isComplete = signRelayerState === SignatureState.Completed
 
   return useMemo(
     () => ({
@@ -84,7 +81,7 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
         init: 'Sign relayer',
         tooltip: 'Sign relayer',
       },
-      isComplete,
+      isComplete: () => isComplete,
       renderAction: () => (
         <SignRelayerButton
           buttonLabel={buttonLabel}
