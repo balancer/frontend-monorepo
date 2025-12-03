@@ -58,23 +58,21 @@ const RESOURCE_LINKS = {
   ],
 }
 
-const CREATE_POOL_LINKS = [
-  {
-    label: 'Create a pool',
-    href: '/create',
-  },
-  {
-    label: 'Balancer',
-    href: '/create',
-    icon: <BalancerIconCircular size={32} />,
-  },
-  {
-    label: 'CoW AMM',
-    href: 'https://pool-creator.balancer.fi/cow',
-    icon: <CowIconCircular size={32} />,
-    isExternal: true,
-  },
-]
+const CREATE_POOL_LINKS = {
+  'Create a pool': [
+    {
+      label: 'Balancer',
+      href: '/create',
+      icon: <BalancerIconCircular size={32} />,
+    },
+    {
+      label: 'CoW AMM',
+      href: 'https://pool-creator.balancer.fi/cow',
+      icon: <CowIconCircular size={32} />,
+      isExternal: true,
+    },
+  ],
+}
 
 export function BuildPopover({ closePopover }: { closePopover?: () => void }) {
   return (
@@ -125,11 +123,10 @@ function CreateAPool({ closePopover }: { closePopover?: () => void }) {
   return (
     <Flex
       _hover={{ shadow: 'lg' }}
+      alignSelf="stretch"
       borderRadius="md"
-      flex="1"
       flexDirection="column"
-      height="100%"
-      justifyContent="center"
+      justifyContent="flex-start"
       overflow="hidden"
       p={{ base: 'ms', sm: 'md' }}
       position="relative"
@@ -153,24 +150,29 @@ function CreateAPool({ closePopover }: { closePopover?: () => void }) {
         />
       </Box>
       <Flex
-        alignItems="center"
         direction="row"
+        flex="1"
         gap={{ base: 'ms', sm: 'md', lg: 'lg' }}
         position="relative"
         zIndex={2}
       >
-        <VStack align="flex-start" spacing="sm">
-          {CREATE_POOL_LINKS.map(link => (
-            <PoolLink
-              href={link.href}
-              icon={link.icon}
-              isExternal={link.isExternal}
-              key={link.label}
-              label={link.label}
-              onClick={closePopover}
-            />
-          ))}
-        </VStack>
+        {Object.entries(CREATE_POOL_LINKS).map(([title, links]) => (
+          <VStack align="flex-start" key={title} minW={{ base: 'auto', md: '150px' }} spacing="sm">
+            <Text fontWeight="bold">{title}</Text>
+            <VStack align="flex-start" h="full" justify="space-evenly" mt="xs">
+              {links.map(link => (
+                <PoolLink
+                  href={link.href}
+                  icon={link.icon}
+                  isExternal={link.isExternal}
+                  key={link.label}
+                  label={link.label}
+                  onClick={closePopover}
+                />
+              ))}
+            </VStack>
+          </VStack>
+        ))}
       </Flex>
     </Flex>
   )
@@ -188,7 +190,7 @@ function PoolLink({ href, icon, isExternal, label, onClick }: PoolLinkProps) {
   return (
     <Link
       _hover={{ color: 'font.highlight', textDecoration: 'none' }}
-      as={isExternal ? 'a' : NextLink}
+      as={isExternal ? Link : NextLink}
       color="font.maxContrast"
       href={href}
       isExternal={isExternal}
