@@ -70,7 +70,7 @@ export function ConfigureTokenRateProvider({
   )
 
   return (
-    <FormSubsection marginLeft="4">
+    <FormSubsection marginLeft="5">
       <VStack align="start" w="full">
         <HStack spacing="xs">
           <Text fontWeight="bold">Rate Provider</Text>

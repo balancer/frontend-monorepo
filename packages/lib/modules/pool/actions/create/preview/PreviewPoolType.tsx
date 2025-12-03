@@ -1,6 +1,7 @@
 import { VStack, Heading, HStack, Text, CardBody, Box } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
+import { getChainName } from '@repo/lib/config/app.config'
 import { capitalize } from 'lodash'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
@@ -23,7 +24,7 @@ export function PreviewPoolType() {
     },
     {
       label: 'Network',
-      value: capitalize(network),
+      value: getChainName(network),
     },
     {
       label: 'Pool type',
