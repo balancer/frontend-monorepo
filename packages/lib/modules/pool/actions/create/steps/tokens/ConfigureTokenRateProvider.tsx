@@ -1,4 +1,5 @@
 import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link } from '@chakra-ui/react'
+import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
 import { PoolCreationForm } from '../../types'
@@ -69,26 +70,7 @@ export function ConfigureTokenRateProvider({
   )
 
   return (
-    <VStack
-      align="start"
-      mt="1"
-      pl="4"
-      position="relative"
-      spacing="md"
-      sx={{
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: '4px',
-          backgroundColor: 'border.base',
-          opacity: 0.5,
-        },
-      }}
-      w="full"
-    >
+    <FormSubsection marginLeft="5">
       <VStack align="start" w="full">
         <HStack spacing="xs">
           <Text fontWeight="bold">Rate Provider</Text>
@@ -127,7 +109,7 @@ export function ConfigureTokenRateProvider({
       {showYieldFeesToggle && (
         <ShareYieldFeesCheckbox paysYieldFees={paysYieldFees} tokenIndex={tokenIndex} />
       )}
-    </VStack>
+    </FormSubsection>
   )
 }
 

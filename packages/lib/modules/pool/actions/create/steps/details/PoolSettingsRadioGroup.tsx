@@ -3,6 +3,7 @@ import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { PoolSettingsOption } from './PoolSettings'
@@ -108,7 +109,7 @@ export function PoolSettingsRadioGroup({
                       {isCustomOption &&
                         isCustomOptionSelected &&
                         (customInputType === 'address' ? (
-                          <VStack align="start" spacing="md" w="full">
+                          <FormSubsection>
                             <Controller
                               control={control}
                               name={name}
@@ -128,25 +129,27 @@ export function PoolSettingsRadioGroup({
                             />
                             {name === 'poolHooksContract' && (
                               <BalAlert
-                                content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
+                                content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
                                 status="warning"
                                 title="Unrecognized contract"
                                 w="full"
                               />
                             )}
-                          </VStack>
+                          </FormSubsection>
                         ) : (
-                          <NumberInput
-                            control={control}
-                            error={errors?.message}
-                            isDisabled={false}
-                            isInvalid={false}
-                            isPercentage={!!isPercentage}
-                            label={customInputLabel}
-                            name={name}
-                            validate={value => (validate ? validate(value.toString()) : true)}
-                            width="32"
-                          />
+                          <FormSubsection>
+                            <NumberInput
+                              control={control}
+                              error={errors?.message}
+                              isDisabled={false}
+                              isInvalid={false}
+                              isPercentage={!!isPercentage}
+                              label={customInputLabel}
+                              name={name}
+                              validate={value => (validate ? validate(value.toString()) : true)}
+                              width="32"
+                            />
+                          </FormSubsection>
                         ))}
                     </VStack>
                   )

@@ -223,7 +223,7 @@ function ConfigureToken({
   const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
 
   return (
-    <VStack align="start" key={index} spacing="md" w="full">
+    <VStack align="start" key={index} spacing="sm" w="full">
       <HStack align="end" w="full">
         <VStack align="start" spacing="sm" w="full">
           <Text fontWeight="bold">Token {index + 1}</Text>
