@@ -91,16 +91,16 @@ export enum RateProviderOption {
 
 export const RATE_PROVIDER_RADIO_OPTIONS = [
   {
+    label: 'No rate provider',
+    value: RateProviderOption.Null,
+  },
+  {
     label: 'Add the verified rate provider for this token: ',
     value: RateProviderOption.Verified,
   },
   {
     label: 'Add custom rate provider',
     value: RateProviderOption.Custom,
-  },
-  {
-    label: 'No rate provider',
-    value: RateProviderOption.Null,
   },
 ] as const
 
