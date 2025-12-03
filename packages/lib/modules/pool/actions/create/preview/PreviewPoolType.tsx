@@ -7,6 +7,7 @@ import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
 import { isWeightedPool, isCustomWeightedPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function PreviewPoolType() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -18,7 +19,7 @@ export function PreviewPoolType() {
   const cardInformationRows = [
     {
       label: 'Protocol',
-      value: capitalize(protocol),
+      value: isBalancer ? 'Balancer v3' : capitalize(protocol),
     },
     {
       label: 'Network',
@@ -40,7 +41,7 @@ export function PreviewPoolType() {
         <HStack alignItems="start" justify="space-between" w="full">
           <VStack align="start" h="full" spacing="md">
             <Heading marginBottom="sm" size="md">
-              Pool Type
+              Pool type
             </Heading>
             {cardInformationRows.map(({ label, value }) => (
               <HStack align="start" key={label} spacing="lg" w="full">
