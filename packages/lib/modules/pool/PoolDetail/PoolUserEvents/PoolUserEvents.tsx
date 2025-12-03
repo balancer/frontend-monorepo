@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { Grid, GridItem, Text, Box, HStack, Link, Divider } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import {
   GetPoolEventsQuery,
@@ -171,7 +170,6 @@ export default function PoolUserEvents({
 }) {
   const { myLiquiditySectionRef, chain, pool } = usePool()
   const [height, setHeight] = useState(0)
-  const [poolEvents, setPoolEvents] = useState<PoolEventItem[]>([])
   const { toCurrency } = useCurrency()
 
   const {
@@ -189,11 +187,12 @@ export default function PoolUserEvents({
     }
   }, [])
 
-  useEffect(() => {
+  const poolEvents: PoolEventItem[] = useMemo(() => {
     if (!isLoading && userPoolEvents?.length) {
-      setPoolEvents(userPoolEvents)
+      return userPoolEvents
     }
-  }, [userPoolEvents, isLoading])
+    return []
+  }, [isLoading, userPoolEvents])
 
   function getShareTitle() {
     if (showVeBal) {
