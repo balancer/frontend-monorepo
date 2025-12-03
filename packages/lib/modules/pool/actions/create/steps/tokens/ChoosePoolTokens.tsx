@@ -226,7 +226,7 @@ function ConfigureToken({
     <VStack align="start" key={index} spacing="md" w="full">
       <HStack align="end" w="full">
         <VStack align="start" spacing="sm" w="full">
-          <Text>Token {index + 1}</Text>
+          <Text fontWeight="bold">Token {index + 1}</Text>
 
           <TokenInputSelector onToggleTokenClicked={onToggleTokenClicked} token={token?.data} />
         </VStack>

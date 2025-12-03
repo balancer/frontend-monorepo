@@ -34,7 +34,7 @@ export function InputWithError({
     <VStack align="start" data-group w="full">
       {label && (
         <HStack>
-          <Text textAlign="start" w="full">
+          <Text fontWeight="bold" textAlign="start" w="full">
             {label}
           </Text>
           {tooltip && (

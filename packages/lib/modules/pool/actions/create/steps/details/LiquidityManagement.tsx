@@ -40,7 +40,7 @@ export function LiquidityManagement() {
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack>
-        <Text textAlign="start" w="full">
+        <Text fontWeight="bold" textAlign="start" w="full">
           Liquidity Management
         </Text>
         <BalPopover text="Flags related to adding/removing liquidity">

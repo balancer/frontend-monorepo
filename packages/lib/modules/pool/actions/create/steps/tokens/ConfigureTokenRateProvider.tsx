@@ -91,7 +91,7 @@ export function ConfigureTokenRateProvider({
     >
       <VStack align="start" w="full">
         <HStack spacing="xs">
-          <Text>Rate Provider</Text>
+          <Text fontWeight="bold">Rate Provider</Text>
           <InfoIconPopover message="Tokens that accrue yield over time should use a rate provider" />
         </HStack>
         <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>

@@ -16,7 +16,7 @@ export function ShareYieldFeesCheckbox({
   return (
     <>
       <HStack spacing="xs">
-        <Text>Yield fees from interest bearing assets</Text>
+        <Text fontWeight="bold">Yield fees from interest bearing assets</Text>
         <InfoIconPopover
           message={`To properly align incentives, we recommend sharing yield fees with ${PROJECT_CONFIG.projectName}`}
           placement="right-start"

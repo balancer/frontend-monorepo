@@ -54,7 +54,7 @@ export function PoolSettingsRadioGroup({
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack>
-        <Text textAlign="start" w="full">
+        <Text fontWeight="bold" textAlign="start" w="full">
           {title}
         </Text>
 
