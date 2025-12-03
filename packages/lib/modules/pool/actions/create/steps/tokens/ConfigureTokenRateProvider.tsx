@@ -70,7 +70,7 @@ export function ConfigureTokenRateProvider({
   )
 
   return (
-    <FormSubsection marginLeft="5">
+    <FormSubsection marginLeft="4">
       <VStack align="start" w="full">
         <HStack spacing="xs">
           <Text fontWeight="bold">Rate Provider</Text>
@@ -170,7 +170,7 @@ function CustomRateProviderInput({
             <InputWithError
               error={rateProviderErrors?.message}
               isInvalid={!!rateProviderErrors}
-              label={`Rate provider contract address on ${chainName}`}
+              label={`Rate Provider contract address (on ${chainName})`}
               onChange={e => field.onChange(e.target.value)}
               pasteFn={paste}
               placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
