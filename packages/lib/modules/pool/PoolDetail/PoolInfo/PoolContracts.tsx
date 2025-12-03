@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
@@ -166,7 +165,7 @@ export function PoolContracts({ ...props }: CardProps) {
     }
 
     return contracts
-  }, [pool, hasGaugeAddress])
+  }, [pool, hasGaugeAddress, poolExplorerLink, gaugeAddress, gaugeExplorerLink])
 
   const rateProviders = useMemo(() => {
     return pool.poolTokens

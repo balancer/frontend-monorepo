@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { memo, useMemo } from 'react'
@@ -77,7 +76,7 @@ export function UserSnapshotValues() {
         myClaimableRewards: myClaimableRewards,
       }
     }
-  }, [veBalBoostMap, pool, myAprRaw])
+  }, [pool, myAprRaw, myClaimableRewards, isLoadingPool, isLoadingClaiming])
 
   function onModalClose() {
     previewModalDisclosure.onClose()
