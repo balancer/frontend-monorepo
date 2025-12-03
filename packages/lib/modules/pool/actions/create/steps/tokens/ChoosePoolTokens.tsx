@@ -16,7 +16,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { ApiToken, ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
-import { WeightedPoolStructure } from '../../constants'
+import { TOKEN_BLACKLIST, WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
 import { AlertTriangle } from 'react-feather'
@@ -56,6 +56,7 @@ export function ChoosePoolTokens() {
 
   const { getTokensByChain } = useTokens()
   const listedTokens = getTokensByChain(network)
+  const blacklistTokens = network ? TOKEN_BLACKLIST[network] : null
 
   const selectedTokenAddress =
     selectedTokenIndex !== null ? poolTokens[selectedTokenIndex].address : undefined
@@ -67,8 +68,11 @@ export function ChoosePoolTokens() {
     const listTokenAddress = listToken.address.toLowerCase()
     const isTokenAlreadyInPool = poolTokenAddresses.has(listTokenAddress)
     const isEditingPoolToken = listTokenAddress === selectedTokenAddress
+    const isBlacklisted = blacklistTokens?.has(listTokenAddress) ?? false
 
-    return isEditingPoolToken || !isTokenAlreadyInPool
+    if (isBlacklisted) return false
+    if (isEditingPoolToken) return true
+    return !isTokenAlreadyInPool
   })
 
   function getVerifiedRateProviderAddress(token: ApiToken) {
