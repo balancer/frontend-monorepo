@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../../TokensProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
@@ -59,7 +58,7 @@ export function useTokenSelectList(
     }
 
     return _tokens
-  }, [chain, pinNativeAsset, searchTerm, tokens])
+  }, [getFilteredTokens, balanceFor, usdValueForToken, chain, pinNativeAsset])
 
   return {
     orderedTokens,
