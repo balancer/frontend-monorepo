@@ -1,4 +1,5 @@
 import {
+  Box,
   HStack,
   Input,
   InputProps,
@@ -39,7 +40,14 @@ export function InputWithError({
           </Text>
           {tooltip && (
             <BalPopover text={tooltip}>
-              <InfoIcon />
+              <Box
+                _hover={{ opacity: 1 }}
+                cursor="pointer"
+                opacity="0.5"
+                transition="opacity 0.2s var(--ease-out-cubic)"
+              >
+                <InfoIcon />
+              </Box>
             </BalPopover>
           )}
         </HStack>

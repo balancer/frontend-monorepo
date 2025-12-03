@@ -1,6 +1,5 @@
 import { VStack, HStack, Text, RadioGroup, Radio, Stack } from '@chakra-ui/react'
-import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
-import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { InfoIconPopover } from '../../InfoIconPopover'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
@@ -59,9 +58,7 @@ export function PoolSettingsRadioGroup({
           {title}
         </Text>
 
-        <BalPopover text={tooltip}>
-          <InfoIcon />
-        </BalPopover>
+        <InfoIconPopover message={tooltip} />
       </HStack>
 
       <Controller

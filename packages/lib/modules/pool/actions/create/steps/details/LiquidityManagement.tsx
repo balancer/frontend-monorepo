@@ -1,6 +1,5 @@
 import { VStack, HStack, Text } from '@chakra-ui/react'
-import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
-import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { InfoIconPopover } from '../../InfoIconPopover'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useEffect } from 'react'
@@ -43,9 +42,7 @@ export function LiquidityManagement() {
         <Text fontWeight="bold" textAlign="start" w="full">
           Liquidity Management
         </Text>
-        <BalPopover text="Flags related to adding/removing liquidity">
-          <InfoIcon />
-        </BalPopover>
+        <InfoIconPopover message="Flags related to adding/removing liquidity" />
       </HStack>
       <PoolCreationCheckbox
         isChecked={!disableUnbalancedLiquidity}
