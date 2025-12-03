@@ -180,7 +180,7 @@ function CreateAPool({ closePopover }: { closePopover?: () => void }) {
 
 type PoolLinkProps = {
   href: string
-  icon?: React.ReactNode
+  icon: React.ReactNode
   isExternal?: boolean
   label: string
   onClick?: () => void
@@ -205,7 +205,7 @@ function PoolLink({ href, icon, isExternal, label, onClick }: PoolLinkProps) {
         color="white"
         transition="color 0.2s var(--ease-out-cubic)"
       >
-        {icon && icon}
+        {icon}
         <Text
           _groupHover={{ color: 'font.highlight' }}
           alignItems="center"
