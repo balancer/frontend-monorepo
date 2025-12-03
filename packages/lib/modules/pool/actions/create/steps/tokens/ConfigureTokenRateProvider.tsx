@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Radio } from '@chakra-ui/react'
+import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link } from '@chakra-ui/react'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
 import { PoolCreationForm } from '../../types'
@@ -14,6 +14,7 @@ import { usePublicClient } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { ArrowUpRight } from 'react-feather'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -68,7 +69,26 @@ export function ConfigureTokenRateProvider({
   )
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack
+      align="start"
+      mt="1"
+      pl="4"
+      position="relative"
+      spacing="md"
+      sx={{
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: '4px',
+          backgroundColor: 'border.base',
+          opacity: 0.5,
+        },
+      }}
+      w="full"
+    >
       <VStack align="start" w="full">
         <HStack spacing="xs">
           <Text>Rate Provider</Text>
@@ -159,7 +179,7 @@ function CustomRateProviderInput({
   }
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" my="4" spacing="md" w="full">
       <VStack align="start" spacing="sm" w="full">
         <Controller
           control={control}
@@ -183,7 +203,25 @@ function CustomRateProviderInput({
       </VStack>
 
       <BalAlert
-        content={`All new Rate Provider contracts must be reviewed and approved before LPs can interact with the pool on the ${PROJECT_CONFIG.projectName} UI. Learn more.`}
+        content={
+          <Text color="black">
+            All new Rate Provider contracts must be approved before LPs can interact with the pool
+            on the {PROJECT_CONFIG.projectName} UI.{' '}
+            <Link
+              _hover={{ transform: 'none !important', color: 'black !important' }}
+              alignItems="center"
+              color="black !important"
+              display="inline-flex"
+              gap="xs"
+              href="https://docs.balancer.fi/partner-onboarding/onboarding-overview/rate-providers.html#what-are-the-requirements-for-a-rate-provider-contract"
+              isExternal
+              textDecoration="underline"
+            >
+              Learn more
+              <ArrowUpRight size={14} />
+            </Link>
+          </Text>
+        }
         status="warning"
       />
     </VStack>

@@ -1,5 +1,6 @@
 import {
   VStack,
+  Divider,
   Heading,
   Text,
   useDisclosure,
@@ -149,7 +150,13 @@ export function ChoosePoolTokens() {
             )
           })}
           {(!isWeightedPool(poolType) || isCustomWeightedPool(poolType, weightedPoolStructure)) && (
-            <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
+            <>
+              <VStack align="start" gap="lg" w="full">
+                <Divider />
+                <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
+                <Divider />
+              </VStack>
+            </>
           )}
 
           {isWeightedPool(poolType) && isCustomWeightedPool(poolType, weightedPoolStructure) && (
@@ -294,7 +301,9 @@ function AddTokenButton({ isDisabled, onClick }: { isDisabled: boolean; onClick:
     <Button isDisabled={isDisabled} onClick={onClick} variant="secondary">
       <HStack spacing="sm">
         <PlusCircle size={20} />
-        <Text color="font.dark">Add token</Text>
+        <Text color="font.dark" fontWeight="bold">
+          Add token
+        </Text>
       </HStack>
     </Button>
   )
@@ -313,7 +322,7 @@ function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
 
   return (
     <HStack spacing="sm" w="full">
-      <Icon as={AlertTriangle} boxSize="18px" color="font.error" />
+      <Icon as={AlertTriangle} boxSize="18px" color="red.500" />
 
       <Text color="font.error" fontSize="sm" fontWeight="semibold" textAlign="start" w="full">
         {message}
