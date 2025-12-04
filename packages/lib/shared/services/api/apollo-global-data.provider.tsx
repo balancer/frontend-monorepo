@@ -22,6 +22,8 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ProtocolStatsProvider } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { FeeManagersProvider } from '@repo/lib/modules/fee-managers/FeeManagersProvider'
 import { getFeeManagersMetadata } from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
+import { getPoolMigrations } from '@repo/lib/modules/pool/migrations/getPoolMigrations'
+import { PoolMigrationsProvider } from '@repo/lib/modules/pool/migrations/PoolMigrationsProvider'
 
 export const revalidate = 60
 
@@ -47,6 +49,7 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     erc4626Metadata,
     poolsMetadata,
     feeManagersMetadata,
+    poolMigrations,
   ] = await Promise.all([
     getFxRates(),
     getHooksMetadata(),
@@ -54,6 +57,7 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     getErc4626Metadata(),
     getPoolsMetadata(),
     getFeeManagersMetadata(),
+    getPoolMigrations(),
   ])
 
   return (
@@ -67,7 +71,9 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
                   erc4626Metadata={erc4626Metadata}
                   poolsMetadata={poolsMetadata}
                 >
-                  {children}
+                  <PoolMigrationsProvider poolMigrations={poolMigrations}>
+                    {children}
+                  </PoolMigrationsProvider>
                 </PoolsMetadataProvider>
               </ProtocolStatsProvider>
             </FeeManagersProvider>

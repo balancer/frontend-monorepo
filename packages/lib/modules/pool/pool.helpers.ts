@@ -36,6 +36,7 @@ import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.ut
 import { PoolMetadata } from './metadata/getPoolsMetadata'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { PoolMigration } from './migrations/getPoolMigrations'
 
 /**
  * METHODS
@@ -414,6 +415,11 @@ export function isAffectedByV2Exploit(pool: Pool) {
     }
   }
   return false
+}
+
+export function needsMigration(migrations: PoolMigration[], poolId: string) {
+  console.log(migrations)
+  return migrations.some(migration => migration.old.id === poolId)
 }
 
 export function shouldBlockRemoveLiquidity(pool: Pool) {
