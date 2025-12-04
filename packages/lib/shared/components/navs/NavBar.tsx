@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { Alert, Box, BoxProps, Button, HStack, Link, Text } from '@chakra-ui/react'
@@ -226,7 +225,7 @@ export function NavActions({
     }
 
     return defaultActions
-  }, [pathname, isConnected])
+  }, [pathname, isConnected, hideDarkModeToggle, mobileNav, allowCreateWallet])
 
   return (
     <>

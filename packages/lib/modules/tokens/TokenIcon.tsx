@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
@@ -54,14 +53,8 @@ export function TokenIcon({
     ...tokenColor,
   })
 
-  function getIconSrc(): string | undefined {
-    let src: string | undefined | null
-
-    if (logoURI) {
-      src = logoURI
-    } else if (token) {
-      src = token.logoURI
-    }
+  const iconSrc = (() => {
+    const src = logoURI ?? token?.logoURI
 
     if (!src) return undefined
 
@@ -72,9 +65,7 @@ export function TokenIcon({
     } catch {
       return undefined
     }
-  }
-
-  const iconSrc = useMemo(() => getIconSrc(), [logoURI, token])
+  })()
 
   const tokenImage = (
     <SmartCircularImage
