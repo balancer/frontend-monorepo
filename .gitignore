@@ -42,6 +42,7 @@ next-env.d.ts
 # ide
 .vscode
 .idea
+.aider*
 
 # entry config file
 .sentryclirc
@@ -54,3 +55,4 @@ generated/
 
 # V8 compilation cache
 v8-compile-cache-0/
+

@@ -1,39 +1,27 @@
-/* eslint-disable react-hooks/immutability */
 import { useEffect, useState } from 'react'
 import { isValidUrl, normalizeUrl } from '../utils/urls'
 
 export function useCheckImageUrl(url: string) {
-  const validUrlError = isValidUrl(url)
-
-  const [isChecking, setChecking] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
-  const [image] = useState<HTMLImageElement>(new Image())
-
-  image.onload = function () {
-    if (!image || image.width <= 0) {
-      setErrorMessage('Invalid image')
-    }
-    setChecking(false)
-  }
-
-  image.onerror = function () {
-    setErrorMessage('Unreachable URL or invalid image')
-    setChecking(false)
-  }
 
   useEffect(() => {
-    if (validUrlError !== true) return
+    if (isValidUrl(url) !== true) return
 
-    setErrorMessage(undefined)
-    setChecking(true)
+    const image = new Image()
     image.src = normalizeUrl(url)
-  }, [image, validUrlError, url])
 
-  if (validUrlError !== true) return { isChecking: false, error: validUrlError }
-  if (isChecking) return { isChecking: true, error: undefined }
+    image
+      .decode()
+      .then(() => {
+        setErrorMessage(undefined)
+      })
+      .catch(e => {
+        console.error(e)
+        setErrorMessage('Unreachable URL or invalid image')
+      })
+  }, [url])
 
-  return {
-    isChecking: false,
-    error: errorMessage,
-  }
+  if (isValidUrl(url) !== true) return { error: isValidUrl(url) as string }
+
+  return { error: errorMessage }
 }
