@@ -89,17 +89,7 @@ export function PoolSettingsRadioGroup({
                     <VStack align="start" key={idx} w="full">
                       <Radio isDisabled={isDisabled} size="lg" value={option.value}>
                         <HStack>
-                          <Text
-                            color="font.primary"
-                            {...(isCustomOption && {
-                              textDecoration: 'underline',
-                              textDecorationStyle: 'dotted',
-                              textDecorationThickness: '1px',
-                              textUnderlineOffset: '3px',
-                            })}
-                          >
-                            {option.label}
-                          </Text>
+                          <Text color="font.primary">{option.label}</Text>
                           {option.detail && option.detail}
                         </HStack>
                       </Radio>
