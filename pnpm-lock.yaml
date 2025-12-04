@@ -112,6 +112,9 @@ importers:
       nextjs-toploader:
         specifier: 3.9.17
         version: 3.9.17(next@16.0.7(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      pino:
+        specifier: 7.11.0
+        version: 7.11.0
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -127,6 +130,12 @@ importers:
       react-use-measure:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      real-require:
+        specifier: 0.1.0
+        version: 0.1.0
+      thread-stream:
+        specifier: 0.15.2
+        version: 0.15.2
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
@@ -260,6 +269,9 @@ importers:
       nextjs-toploader:
         specifier: 3.9.17
         version: 3.9.17(next@16.0.7(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      pino:
+        specifier: 7.11.0
+        version: 7.11.0
       prismjs:
         specifier: 1.30.0
         version: 1.30.0
@@ -278,6 +290,12 @@ importers:
       react-use-measure:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      real-require:
+        specifier: 0.1.0
+        version: 0.1.0
+      thread-stream:
+        specifier: 0.15.2
+        version: 0.15.2
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
