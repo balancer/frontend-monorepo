@@ -30,9 +30,14 @@ export function getSwapFeePercentageOptions(poolType: PoolType): { value: string
       { value: '0.30', tip: 'Best for most weighted pairs' },
       { value: '1.00', tip: 'Best for exotic pairs' },
     ]
+  } else if (poolType === PoolType.GyroE) {
+    return [
+      { value: '0.30', tip: 'Best for most Gyro E-CLP pairs' },
+      { value: '1.00', tip: 'Best for exotic pairs' },
+    ]
   } else {
     return [
-      { value: '0.30', tip: 'Best for most reClamm pairs' },
+      { value: '0.30', tip: 'Best for most reCLAMM pairs' },
       { value: '1.00', tip: 'Best for exotic pairs' },
     ]
   }
