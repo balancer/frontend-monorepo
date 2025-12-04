@@ -141,7 +141,8 @@ function CustomRateProviderInput({
   const publicClient = usePublicClient({ chainId: getChainId(network) })
 
   const validateRateProvider = async (address: string) => {
-    if (address === '') return false
+    if (address === zeroAddress) return true
+    if (address === '') return 'Rate provider address is required'
     try {
       if (!publicClient) return 'missing public client for rate provider validation'
       const rate = await publicClient.readContract({
