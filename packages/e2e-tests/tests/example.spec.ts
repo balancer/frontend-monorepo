@@ -41,7 +41,7 @@ test('should connect wallet to the MetaMask Test Dapp', async ({
   await page.getByRole('button', { name: 'Proceed' }).click()
 
   // Verify the connected account address
-  await expect(page.locator('#connectedButton')).toHaveText('0xf3...2266')
+  await expect(page.locator('#connectedButton')).toHaveText('0xf3…2266')
 
   // Additional test steps can be added here, such as:
   // - Sending transactions
