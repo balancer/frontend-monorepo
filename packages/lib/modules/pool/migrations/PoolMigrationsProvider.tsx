@@ -8,7 +8,10 @@ export type UsePoolsMigrationsResult = ReturnType<typeof usePoolsMigrationsLogic
 export const PoolsMigrationsContext = createContext<UsePoolsMigrationsResult | null>(null)
 
 export function usePoolsMigrationsLogic(poolMigrations: PoolMigration[]) {
-  return poolMigrations
+  return {
+    needsMigration: (protocolVersion: number, chainId: number, poolId: string) =>
+      needsMigration(poolMigrations, protocolVersion, chainId, poolId),
+  }
 }
 
 export function PoolMigrationsProvider({
@@ -21,3 +24,17 @@ export function PoolMigrationsProvider({
 
 export const usePoolMigrations = () =>
   useMandatoryContext(PoolsMigrationsContext, 'PoolsMigrations')
+
+export function needsMigration(
+  migrations: PoolMigration[],
+  protocolVersion: number,
+  chainId: number,
+  poolId: string
+) {
+  return migrations.some(
+    migration =>
+      migration.old.protocol === protocolVersion &&
+      migration.old.chainId === chainId &&
+      migration.old.id === poolId
+  )
+}

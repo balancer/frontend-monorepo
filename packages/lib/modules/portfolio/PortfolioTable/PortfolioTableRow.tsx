@@ -23,8 +23,8 @@ import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
 import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { AlertTriangle } from 'react-feather'
-import { needsMigration } from '../../pool/pool.helpers'
 import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
+import { getChainId, isProd } from '@repo/lib/config/app.config'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -55,7 +55,7 @@ const getStakingFilterKey = (poolType: ExpandedPoolType): StakingFilterKeyType =
 export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Props) {
   const { toCurrency } = useCurrency()
   const { name } = usePoolMetadata(pool)
-  const poolMigrations = usePoolMigrations()
+  const { needsMigration } = usePoolMigrations()
   const { options } = PROJECT_CONFIG
 
   const vebalBoostValue = veBalBoostMap?.[pool.id]
@@ -106,18 +106,19 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 </Text>
               </GridItem>
             )}
-            <GridItem px="sm">
+            <GridItem display="flex" justifyContent="flex-end" px="sm">
               <HStack>
-                <Text fontWeight="medium" textAlign="right">
+                <Text fontWeight="medium">
                   {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
                 </Text>
-                {needsMigration(poolMigrations, pool.id) && (
-                  <TooltipWithTouch label="Migrate your position to the recommended pool">
-                    <Box color="font.warning">
-                      <AlertTriangle size="16" />
-                    </Box>
-                  </TooltipWithTouch>
-                )}
+                {!isProd &&
+                  needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
+                    <TooltipWithTouch label="Migrate your position to the recommended pool">
+                      <Box color="font.warning">
+                        <AlertTriangle size="16" />
+                      </Box>
+                    </TooltipWithTouch>
+                  )}
               </HStack>
             </GridItem>
             <GridItem justifySelf="end" px="sm">

@@ -27,6 +27,9 @@ import {
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { motion } from 'framer-motion'
 import { usePortfolioSorting } from './usePortfolioSorting'
+import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
+import { getChainId, isProd } from '@repo/lib/config/app.config'
+import { MigrationAlert } from '../../pool/migrations/MigrationAlert'
 
 const rowProps = (addExtraColumn: boolean, needsLastColumnWider: boolean) => ({
   px: [0, 4],
@@ -69,6 +72,12 @@ export function PortfolioTable() {
     },
   }
 
+  const { needsMigration } = usePoolMigrations()
+  const poolsThatNeedMigration = sortedPools
+    .filter(pool => needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id))
+    .sort((a, b) => (b.userBalance?.totalBalanceUsd || 0) - (a.userBalance?.totalBalanceUsd || 0))
+    .filter((item, pos, ary) => !pos || item.id != ary[pos - 1].id) // deduplication
+
   return (
     <FadeInOnView>
       <VStack align="start" spacing="md" w="full">
@@ -93,15 +102,13 @@ export function PortfolioTable() {
                   variants={variants}
                   willChange="transform"
                 >
-                  <Heading
-                    as="h2"
-                    size="h4"
-                    variant="special"
-                    w="full"
-                  >{`${projectName} portfolio`}</Heading>
+                  <Heading as="h2" size="h4" variant="special" w="full">
+                    {`${projectName} portfolio`}
+                  </Heading>
                 </Box>
               </Box>
             </HStack>
+
             {isFilterVisible && (
               <PortfolioFilterTags
                 networks={selectedNetworks}
@@ -113,6 +120,7 @@ export function PortfolioTable() {
               />
             )}
           </VStack>
+
           <Stack
             align={{ base: 'end', sm: 'center' }}
             direction="row"
@@ -124,6 +132,10 @@ export function PortfolioTable() {
             />
           </Stack>
         </Stack>
+
+        {!isProd &&
+          poolsThatNeedMigration.map(pool => <MigrationAlert key={pool.id} pool={pool} />)}
+
         {isConnected ? (
           <Card
             alignItems="flex-start"
