@@ -58,6 +58,7 @@ export function ConnectWallet({
                 </WalletButton.Custom>
               )}
               <Button
+                id="connectButton"
                 isDisabled={isLoading || !mounted}
                 loadingText={connectLabel}
                 onClick={handleConnectClick}
@@ -126,7 +127,13 @@ export function ConnectWallet({
               )}
               <Show above="sm">{chain.name}</Show>
             </Button>
-            <Button onClick={handleWalletClick} variant="tertiary" {...rest} isDisabled={isSafeApp}>
+            <Button
+              id="connectedButton"
+              onClick={handleWalletClick}
+              variant="tertiary"
+              {...rest}
+              isDisabled={isSafeApp}
+            >
               <CustomAvatar
                 address={account.address}
                 alt="Avatar"

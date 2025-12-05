@@ -56,3 +56,4 @@ generated/
 # V8 compilation cache
 v8-compile-cache-0/
 
+.cache-synpress
