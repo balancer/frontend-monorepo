@@ -33,7 +33,9 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
 
   return (
     <VStack align="start" spacing="md" w="full">
-      <Text color="font.primary">Choose network</Text>
+      <Text color="font.primary" fontWeight="bold">
+        Choose network
+      </Text>
       <Controller
         control={control}
         name="network"

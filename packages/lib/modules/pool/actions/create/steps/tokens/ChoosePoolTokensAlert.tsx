@@ -20,7 +20,7 @@ export function ChoosePoolTokensAlert({
   const maxTokens = validatePoolTokens.maxTokens(poolType)
 
   return (
-    <Box width="500px">
+    <Box mb="4" width="500px">
       <BalAlert
         content={message}
         status="info"

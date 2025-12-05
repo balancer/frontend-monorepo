@@ -1,4 +1,4 @@
-import { Checkbox, Link, Text } from '@chakra-ui/react'
+import { Checkbox, Divider, Link, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { isWeightedPool } from '../../helpers'
@@ -26,6 +26,7 @@ export function PoolCreationRiskCheckboxes() {
 
   return (
     <>
+      <Divider />
       {isWeightedPool(poolType || PoolType.Stable) && (
         <Checkbox
           alignItems="flex-start"

@@ -16,7 +16,7 @@ import {
   useDisclosure,
   Link,
 } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
+import { ArrowUpRight, HelpCircle } from 'react-feather'
 import { getDiscordLink } from '@repo/lib/shared/utils/links'
 
 type LearnMoreModalProps = {
@@ -24,6 +24,7 @@ type LearnMoreModalProps = {
   docsUrl: string
   buttonLabel: string
   headerText: string
+  showHelpIcon?: boolean
 }
 
 export function LearnMoreModal({
@@ -31,6 +32,7 @@ export function LearnMoreModal({
   docsUrl,
   headerText,
   listItems,
+  showHelpIcon = false,
 }: LearnMoreModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -39,9 +41,11 @@ export function LearnMoreModal({
       <Button
         _hover={{ color: 'font.linkHover' }}
         color="font.link"
+        gap="1.5"
         onClick={onOpen}
         variant="ghost"
       >
+        {showHelpIcon && <HelpCircle size={16} />}
         {buttonLabel}
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">

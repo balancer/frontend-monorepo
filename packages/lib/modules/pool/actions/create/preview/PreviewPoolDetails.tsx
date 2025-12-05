@@ -1,4 +1,4 @@
-import { CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakra-ui/react'
+import { CardHeader, CardBody, Heading, VStack, HStack, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
@@ -16,7 +16,7 @@ export function PreviewPoolDetails() {
         <Heading size="md">Details</Heading>
       </CardHeader>
       <CardBody>
-        <VStack spacing="md">
+        <VStack spacing="0">
           <PoolDetailsContent />
         </VStack>
       </CardBody>
@@ -91,9 +91,22 @@ export function PoolDetailsContent() {
   const { isBeforeStep } = usePoolCreationFormSteps()
 
   return Object.entries(poolDetailsMap).map(([label, value]) => (
-    <HStack align="start" justify="space-between" key={label} spacing="lg" w="full">
+    <HStack
+      _hover={{ bg: 'background.level0' }}
+      align="start"
+      justify="space-between"
+      key={label}
+      mx="-md"
+      px="md"
+      py="sm"
+      sx={{
+        '&:hover p': { color: 'font.maxContrast' },
+      }}
+      transition="1s all var(--ease-out-cubic)"
+      w="calc(100% + var(--chakra-space-md) * 2)"
+    >
       <Text color="font.secondary">{label}</Text>
-      <Box color="font.secondary">{isBeforeStep('Details') ? '—' : value}</Box>
+      <Text color="font.secondary">{isBeforeStep('Details') ? '—' : value}</Text>
     </HStack>
   ))
 }

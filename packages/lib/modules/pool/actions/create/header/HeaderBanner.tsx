@@ -4,6 +4,9 @@ import { FeatureLink } from './FeatureLink'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { ArrowUpRight } from 'react-feather'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { LbpBenefitsChartIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsChartIcon'
+import { LbpBenefitsLightningIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsLightningIcon'
+import { LbpBenefitsHookIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsHookIcon'
 
 export function HeaderBanner() {
   const capitalEfficiencyDescription = `
@@ -25,7 +28,7 @@ export function HeaderBanner() {
         overflow: 'hidden',
         rounded: 'xl',
         mb: 'xl',
-        h: '210px',
+        h: { base: 'auto', lg: '210px' },
       }}
     >
       <HStack
@@ -106,18 +109,21 @@ export function HeaderBanner() {
 
           <FeatureLink
             description={capitalEfficiencyDescription}
+            icon={<LbpBenefitsChartIcon />}
             title="Capital efficiency"
             transformBackground="rotate(90deg)"
           />
 
           <FeatureLink
             description={accessToHooksDescription}
+            icon={<LbpBenefitsHookIcon />}
             title="Access to hooks"
             transformBackground="rotate(0deg)"
           />
 
           <FeatureLink
             description={immediateLiquidityDescription}
+            icon={<LbpBenefitsLightningIcon />}
             title="Immediate liquidity"
             transformBackground="rotate(-90deg)"
           />

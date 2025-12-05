@@ -40,7 +40,7 @@ export function NumberInput({
   return (
     <VStack align="start" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
-        <Text>{label}</Text>
+        <Text fontWeight="bold">{label}</Text>
         {percentageLabel && (
           <Text
             color="font.secondary"

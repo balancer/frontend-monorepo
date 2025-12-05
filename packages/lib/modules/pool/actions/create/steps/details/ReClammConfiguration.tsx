@@ -1,6 +1,5 @@
 import { Heading, VStack, Text, HStack, Radio, SimpleGrid, useRadioGroup } from '@chakra-ui/react'
-import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
-import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { InfoIconPopover } from '../../InfoIconPopover'
 import {
   useReClammConfigurationOptions,
   ReClammConfigOptionsGroup,
@@ -113,9 +112,7 @@ function ConfigOptionsGroup({
         <Text textAlign="start" w="full">
           {label}
         </Text>
-        <BalPopover text={tooltip}>
-          <InfoIcon />
-        </BalPopover>
+        <InfoIconPopover message={tooltip} />
       </HStack>
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing="md" w="full" {...radioGroupProps}>
         {cardOptions.map((option, idx) => {

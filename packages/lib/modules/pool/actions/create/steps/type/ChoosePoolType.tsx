@@ -14,7 +14,9 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
 
   return (
     <VStack align="start" spacing="md" w="full">
-      <Text color="font.primary">Choose a pool type</Text>
+      <Text color="font.primary" fontWeight="bold">
+        Choose a pool type
+      </Text>
       <Controller
         control={control}
         name="poolType"

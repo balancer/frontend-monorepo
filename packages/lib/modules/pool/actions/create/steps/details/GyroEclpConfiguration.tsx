@@ -27,10 +27,10 @@ export function GyroEclpConfiguration() {
 function EclpParamHeader() {
   return (
     <VStack align="start" spacing="sm" w="full">
-      <Heading color="font.maxContrast" size="md">
+      <Heading color="font.maxContrast" pb="1" size="md">
         Gyro E-CLP configuration
       </Heading>
-      <HStack>
+      <HStack gap="1">
         <Text color="font.secondary">To learn more about all the parameters, </Text>
         <Link
           alignItems="center"
@@ -39,7 +39,7 @@ function EclpParamHeader() {
           href="https://docs.gyro.finance/pools/e-clps.html#reading-e-clp-parameters"
           isExternal
         >
-          read the Gyroscope docs
+          Read the Gyroscope docs
           <ArrowUpRight size={14} />
         </Link>
       </HStack>

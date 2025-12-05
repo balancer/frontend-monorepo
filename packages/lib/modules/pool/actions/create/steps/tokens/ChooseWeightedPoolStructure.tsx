@@ -60,7 +60,7 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
                 <Radio key={structure} size="lg" value={structure}>
                   <Text>
                     {structure !== WeightedPoolStructure.Custom && '2-token: '}
-                    {structure}
+                    {structure === WeightedPoolStructure.Custom ? 'Custom' : structure}
                   </Text>
                 </Radio>
               ))}
