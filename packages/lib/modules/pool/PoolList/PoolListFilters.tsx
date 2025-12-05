@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import {
@@ -60,20 +59,15 @@ export function useFilterTagsVisible() {
   const {
     queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion },
   } = usePoolList()
-  const [isVisible, setIsVisible] = useState(false)
 
-  useEffect(() => {
-    setIsVisible(
-      networks.length > 0 ||
-        poolTypes.length > 0 ||
-        minTvl > 0 ||
-        poolTags.length > 0 ||
-        poolHookTags.length > 0 ||
-        !!protocolVersion
-    )
-  }, [networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion])
-
-  return isVisible
+  return (
+    networks.length > 0 ||
+    poolTypes.length > 0 ||
+    minTvl > 0 ||
+    poolTags.length > 0 ||
+    poolHookTags.length > 0 ||
+    !!protocolVersion
+  )
 }
 
 function UserPoolFilter() {
@@ -81,19 +75,11 @@ function UserPoolFilter() {
     queryState: { userAddress, toggleUserAddress },
   } = usePoolList()
   const { userAddress: connectedUserAddress } = useUserAccount()
-  const [checked, setChecked] = useState(false)
-
-  useEffect(() => {
-    if (connectedUserAddress) {
-      setChecked(userAddress === connectedUserAddress)
-    } else {
-      setChecked(false)
-    }
-  }, [userAddress, connectedUserAddress])
+  const isChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
 
   return (
     <Checkbox
-      isChecked={checked}
+      isChecked={isChecked}
       mb="xxs"
       onChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
     >

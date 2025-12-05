@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { Pool } from '../pool.types'
 import { migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import {
@@ -31,7 +30,6 @@ export type PoolAlert = {
 export function usePoolAlerts(pool: Pool) {
   const pathname = usePathname()
   const router = useRouter()
-  const [poolAlerts, setPoolAlerts] = useState<PoolAlert[]>([])
   const { hooks } = useHook(pool)
   const poolMetadata = usePoolMetadata(pool)
   const { isAnyTokenWithoutPrice, poolWarning } = usePoolTokenPriceWarnings(pool)
@@ -317,17 +315,52 @@ export function usePoolAlerts(pool: Pool) {
     return alerts
   }
 
-  useEffect(() => {
+  const allAlerts = useMemo(() => {
     const networkPoolAlerts = getNetworkPoolAlerts(pool)
     const tokenPoolAlerts = getTokenPoolAlerts(pool)
     const userAlerts = getUserAlerts(pool)
-    const poolAlerts = getPoolAlerts(pool)
+    const poolSpecificAlerts = getPoolAlerts(pool)
 
-    setPoolAlerts([...networkPoolAlerts, ...tokenPoolAlerts, ...userAlerts, ...poolAlerts])
-  }, [pool])
+    return [...networkPoolAlerts, ...tokenPoolAlerts, ...userAlerts, ...poolSpecificAlerts]
+  }, [
+    pool,
+    hooks,
+    poolMetadata,
+    isAnyTokenWithoutPrice,
+    poolWarning,
+    pathname,
+    router,
+    getNetworkPoolAlerts,
+    getTokenPoolAlerts,
+    getUserAlerts,
+    getPoolAlerts,
+  ])
+
+  const [dismissedAlertsByPool, setDismissedAlertsByPool] = useState<Record<string, string[]>>({})
+
+  const dismissAlert = useCallback(
+    (identifier: string) => {
+      setDismissedAlertsByPool(prev => {
+        const dismissedForPool = prev[pool.id] ?? []
+        if (dismissedForPool.includes(identifier)) return prev
+
+        return {
+          ...prev,
+          [pool.id]: [...dismissedForPool, identifier],
+        }
+      })
+    },
+    [pool.id]
+  )
+
+  const poolAlerts = useMemo(() => {
+    const dismissed = dismissedAlertsByPool[pool.id] ?? []
+
+    return allAlerts.filter(alert => !dismissed.includes(alert.identifier))
+  }, [allAlerts, dismissedAlertsByPool, pool.id])
 
   return {
     poolAlerts,
-    setPoolAlerts,
+    dismissAlert,
   }
 }

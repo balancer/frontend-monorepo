@@ -8,7 +8,7 @@ import { isComposableStablePool } from '../pool.utils'
 
 export function PoolAlerts() {
   const { pool } = usePool()
-  const { poolAlerts, setPoolAlerts } = usePoolAlerts(pool)
+  const { poolAlerts, dismissAlert } = usePoolAlerts(pool)
   if (poolAlerts.length === 0) return null
 
   const affectedByV2Exploit = pool.protocolVersion === 2 && isComposableStablePool(pool)
@@ -27,7 +27,7 @@ export function PoolAlerts() {
           key={alert.identifier}
           onClose={e => {
             e.preventDefault()
-            setPoolAlerts(poolAlerts.filter(a => a.identifier !== alert.identifier))
+            dismissAlert(alert.identifier)
           }}
           {...alert}
         />
