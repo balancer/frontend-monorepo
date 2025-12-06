@@ -75,7 +75,7 @@ export function BuildNavLink() {
         >
           <PopoverArrow bg="background.level3" />
           <PopoverBody p={{ base: 'ms', md: 'md' }}>
-            <BuildPopover />
+            <BuildPopover closePopover={onClose} />
           </PopoverBody>
         </PopoverContent>
       </Portal>
