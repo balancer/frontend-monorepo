@@ -106,6 +106,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             bg: 'input.bgFocus',
             borderColor: 'input.borderFocus',
             color: 'white',
+            shadow: 'input.innerFocus',
           },
           _focusVisible: {
             color: 'input.fontFocus',
@@ -130,6 +131,14 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
       variants: {
+        outline: {
+          field: {
+            _focusVisible: {
+              borderColor: 'input.borderFocus',
+              boxShadow: 'input.innerFocus',
+            },
+          },
+        },
         search: {
           field: {
             border: '1px solid',
@@ -158,6 +167,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             bg: 'input.bgFocus',
             borderColor: 'input.borderFocus',
             color: 'white',
+            boxShadow: 'input.innerFocus',
           },
           _focusVisible: {
             color: 'input.fontFocus',
@@ -177,6 +187,23 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             _hover: {
               bg: 'input.bgHoverDisabled',
               border: 'input.borderDefault',
+            },
+          },
+        },
+      },
+      variants: {
+        outline: {
+          field: {
+            _hover: {
+              borderColor: 'input.borderHover',
+            },
+            _focusVisible: {
+              borderColor: 'input.borderFocus',
+              boxShadow: 'input.innerFocus',
+            },
+            _invalid: {
+              borderColor: 'input.borderError',
+              boxShadow: 'input.innerError',
             },
           },
         },
@@ -202,6 +229,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
           color: 'white',
+          boxShadow: 'input.innerFocus',
         },
         _focusVisible: {
           color: 'input.fontFocus',

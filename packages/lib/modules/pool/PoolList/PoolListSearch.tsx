@@ -14,6 +14,7 @@ export function PoolListSearch() {
         <FormControl w="full">
           <SearchInput
             ariaLabel="search for a pool"
+            autoFocus={false}
             isLoading={loading}
             placeholder="Search..."
             search={searchText}

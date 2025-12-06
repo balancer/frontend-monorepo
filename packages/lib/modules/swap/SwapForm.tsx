@@ -286,7 +286,7 @@ export function SwapForm({
                       customUsdPrice: customTokenUsdPrice,
                     })}
                 />
-                <Box border="red 1px solid" position="relative">
+                <Box position="relative" zIndex={10}>
                   <IconButton
                     fontSize="2xl"
                     h="8"

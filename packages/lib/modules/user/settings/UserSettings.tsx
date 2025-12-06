@@ -44,6 +44,10 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
     <VStack align="start" w="full">
       <InputGroup>
         <Input
+          _hover={{
+            bg: 'input.bgHover',
+            borderColor: 'input.borderHover',
+          }}
           autoComplete="off"
           autoCorrect="off"
           bg="background.level1"
