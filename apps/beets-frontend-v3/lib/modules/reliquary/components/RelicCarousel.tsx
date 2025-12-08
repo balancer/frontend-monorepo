@@ -1,15 +1,22 @@
 'use client'
 
 import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react'
-import { useRef, useState, useLayoutEffect } from 'react'
+import { useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { useReliquary } from '../ReliquaryProvider'
 import { RelicCard } from './RelicCard'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 
-export function RelicCarousel() {
+type Props = {
+  focusRelicId?: string | null
+}
+
+export function RelicCarousel({ focusRelicId }: Props = {}) {
   const { relicPositions } = useReliquary()
+
+  const focusRelicIndex = relicPositions.findIndex(r => r.relicId === focusRelicId)
+
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(focusRelicIndex !== -1 ? focusRelicIndex : 0)
   const [allRelicsVisible, setAllRelicsVisible] = useState(false)
 
   useLayoutEffect(() => {
@@ -29,6 +36,8 @@ export function RelicCarousel() {
     // Cleanup listener on unmount
     return () => window.removeEventListener('resize', checkOverflow)
   }, [relicPositions])
+
+  // Auto-scroll to focused relic when specified
 
   const scrollToCard = (index: number) => {
     if (scrollContainerRef.current) {
@@ -54,6 +63,47 @@ export function RelicCarousel() {
     }
   }
 
+  // Used only for URL-based focus (focusRelicId), not user navigation
+  const scrollToCardWithVerticalCenter = (index: number) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current
+      const cards = container.querySelectorAll('[data-relic-card]')
+      const targetCard = cards[index] as HTMLElement
+
+      if (targetCard) {
+        // 1. Horizontal scroll (same as scrollToCard)
+        const containerRect = container.getBoundingClientRect()
+        const cardRect = targetCard.getBoundingClientRect()
+        const cardCenter = cardRect.left + cardRect.width / 2
+        const containerCenter = containerRect.left + containerRect.width / 2
+        const scrollOffset = cardCenter - containerCenter
+
+        container.scrollTo({
+          left: container.scrollLeft + scrollOffset,
+        })
+
+        // 2. Vertical scroll to center carousel in viewport
+        // Get the carousel container's position relative to viewport
+        const containerTop = containerRect.top + window.scrollY
+        const containerHeight = containerRect.height
+        const viewportHeight = window.innerHeight
+
+        // Calculate scroll position to center the carousel vertically
+        const targetScrollY = containerTop - viewportHeight / 2 + containerHeight / 2
+
+        window.scrollTo({
+          top: targetScrollY,
+        })
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (focusRelicIndex !== -1) {
+      scrollToCardWithVerticalCenter(focusRelicIndex)
+    }
+  }, [focusRelicIndex])
+
   const scrollToNext = () => {
     const nextIndex = Math.min(selectedIndex + 1, relicPositions.length - 1)
     setSelectedIndex(nextIndex)
@@ -78,7 +128,6 @@ export function RelicCarousel() {
 
   return (
     <Box position="relative" width="full">
-      {/* Scroll Container */}
       <Box
         display="flex"
         gap="4"
@@ -88,9 +137,6 @@ export function RelicCarousel() {
         p="6"
         ref={scrollContainerRef}
         sx={{
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'none',
-          scrollBehavior: 'smooth',
           pointerEvents: 'none',
           '::-webkit-scrollbar': {
             display: 'none',
@@ -117,10 +163,8 @@ export function RelicCarousel() {
             <RelicCard isSelected={index === selectedIndex} relic={relic} />
           </Flex>
         ))}
-        {/* </Flex> */}
       </Box>
 
-      {/* Navigation Buttons with Pagination Dots */}
       <HStack justify="center" spacing="4">
         {!allRelicsVisible && (
           <Button
@@ -142,7 +186,6 @@ export function RelicCarousel() {
           </Button>
         )}
 
-        {/* Pagination Dots */}
         {!allRelicsVisible && (
           <HStack spacing="2">
             {relicPositions.map((relic, index) => (

@@ -13,13 +13,13 @@ function Stat({ children }: StatProps) {
       flex="1"
       minH={{ base: '65px' }}
       minW={{ base: '100px', sm: '132px', lg: '132px' }}
-      overflow="hidden"
+      // overflow="hidden"
       position="relative"
       rounded="md"
       shadow="md"
       width={{ base: '100%', md: '100%' }}
     >
-      <Box height="100%" position="absolute" width="100%">
+      <Box height="100%" pointerEvents="none" position="absolute" width="100%">
         <Box
           _groupHover={{
             transform: 'scale(1.01)',
@@ -27,6 +27,7 @@ function Stat({ children }: StatProps) {
           backgroundPosition="left"
           backgroundSize="cover"
           height="100%"
+          pointerEvents="none"
           position="absolute"
           transform="scale(1)"
           transition="transform 0.5s var(--ease-out-cubic)"

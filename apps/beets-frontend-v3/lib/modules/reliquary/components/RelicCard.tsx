@@ -245,39 +245,33 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
               Burn
             </Button>
           )}
-          {pendingRewardsUsdValue > 0 && (
-            <>
-              {!batchRelayerHasApprovedForAll ? (
-                <ReliquaryBatchRelayerApprovalButton
-                  onConfirmed={() => {
-                    refetchBatchRelayer()
-                  }}
-                />
-              ) : (
-                <BeetsSubmitTransactionButton
-                  disabled={pendingRewardsUsdValue < 0.001}
-                  flex="1"
-                  isLoading={harvestQuery.isSubmitting || harvestQuery.isPending}
-                  onClick={harvest}
-                  size="sm"
-                  variant="primary"
-                >
-                  Claim
-                </BeetsSubmitTransactionButton>
-              )}
-            </>
-          )}
+          <>
+            {!batchRelayerHasApprovedForAll ? (
+              <ReliquaryBatchRelayerApprovalButton
+                onConfirmed={() => {
+                  refetchBatchRelayer()
+                }}
+              />
+            ) : (
+              <BeetsSubmitTransactionButton
+                disabled={pendingRewardsUsdValue < 0.001}
+                flex="1"
+                isLoading={harvestQuery.isSubmitting || harvestQuery.isPending}
+                onClick={harvest}
+                size="sm"
+                variant="primary"
+              >
+                Claim
+              </BeetsSubmitTransactionButton>
+            )}
+          </>
         </HStack>
       </Box>
-
-      {/* Level Progress Bar */}
       <HStack spacing="2" width="full">
-        {/* Left level number */}
         <Text color="white" fontSize="sm" fontWeight="bold">
           {isMaxMaturity ? relic.level : relic.level + 1}
         </Text>
 
-        {/* Progress bar with countdown/max level text inside */}
         <Box flex="1" position="relative">
           <Progress
             colorScheme="blue"
@@ -286,7 +280,6 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             value={isMaxMaturity ? 100 : progressToNextLevel}
             width="full"
           />
-          {/* Text overlay inside progress bar */}
           <Box
             color="black"
             fontSize="xs"
@@ -300,22 +293,15 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             {isMaxMaturity ? 'Max level' : <Countdown date={levelUpDate} />}
           </Box>
         </Box>
-
-        {/* Right level number */}
         <Text color="white" fontSize="sm" fontWeight="bold">
           {isMaxMaturity ? relic.level + 1 : relic.level + 2}
         </Text>
       </HStack>
-
-      {/* Stat Cards - 2 per row SimpleGrid */}
       <SimpleGrid columns={{ base: 2, sm: 2 }} spacing={{ base: 'sm', lg: 'ms' }} width="full">
-        {/* Liquidity Card */}
         <RelicStat>
           <StatLabel label="Liquidity" />
           <StatValueText>{fNum('fiat', relicBalanceUSD)} </StatValueText>
         </RelicStat>
-
-        {/* APR Card */}
         <RelicStat>
           <StatLabel label="APR" />
           <HStack spacing="3">
@@ -329,14 +315,10 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             />
           </HStack>
         </RelicStat>
-
-        {/* Maturity Boost Card with Button */}
         <RelicStat>
           <StatLabel label="Maturity boost" />
           <StatValueText>{allocationPoints}x</StatValueText>
         </RelicStat>
-
-        {/* Pending Rewards Card - Token Amounts Only */}
         <RelicStat>
           <StatLabel label="Pending rewards" />
           {pendingRewardsUsdValue > 0 ? (
@@ -351,33 +333,25 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             '$0.00'
           )}
         </RelicStat>
-
-        {/* Share Card */}
         <RelicStat>
           <StatLabel label="Share" />
           <StatValueText>{formattedShare}</StatValueText>
         </RelicStat>
-
-        {/* Potential Daily Yield Card */}
         <RelicStat>
           <StatLabel label="Potential daily yield" />
           <StatValueText>${formattedDailyYield}</StatValueText>
         </RelicStat>
       </SimpleGrid>
-
-      {/* Maturity Curve Progress Chart - Full Width */}
       <RelicStat>
         <StatLabel label="Maturity Progress" />
         <Box height="120px" width="full">
           <RelicMaturityCurveChart currentLevel={relic.level} />
         </Box>
       </RelicStat>
-
-      {/* Level Up Modal */}
       <LevelUpModal
         chain={chain}
         isOpen={isLevelUpModalOpen}
-        nextLevel={relic.level + 1}
+        nextLevel={relic.level + 2}
         onClose={() => setIsLevelUpModalOpen(false)}
         relicId={relic.relicId}
       />

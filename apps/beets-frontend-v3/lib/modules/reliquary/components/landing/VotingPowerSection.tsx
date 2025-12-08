@@ -1,21 +1,27 @@
 'use client'
 
-import { Badge, Card, Divider, HStack, Skeleton, Switch, Text, VStack } from '@chakra-ui/react'
+import {
+  Badge,
+  Card,
+  Divider,
+  HStack,
+  Skeleton,
+  Switch,
+  Text,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { CheckCircle, XCircle } from 'react-feather'
-import { useDelegationToggle } from '../../hooks/useDelegationToggle'
+import { useReliquaryDelegationTransaction } from '../../hooks/useReliquaryDelegationTransaction'
 import { useReliquary } from '../../ReliquaryProvider'
+import { ReliquaryDelegationModal } from '../ReliquaryDelegationModal'
 
 export function VotingPowerSection() {
   const { totalMaBeetsVP, isLoading } = useReliquary()
-  const {
-    isDelegatedToMDs,
-    delegationAddress,
-    isLoading: isDelegationLoading,
-    handleToggle,
-  } = useDelegationToggle(GqlChain.Sonic)
+  const { isDelegatedToMDs, delegationAddress } = useReliquaryDelegationTransaction()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const truncateAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`
@@ -72,28 +78,34 @@ export function VotingPowerSection() {
                 </HStack>
               </HStack>
 
-              <HStack spacing="2">
-                <Switch
-                  colorScheme="green"
-                  isChecked={isDelegatedToMDs}
-                  isDisabled={isDelegationLoading}
-                  onChange={handleToggle}
-                />
-                {isDelegatedToMDs && delegationAddress ? (
-                  <Text color="gray.400" fontSize="sm">
-                    Delegated to: {truncateAddress(delegationAddress)}
-                  </Text>
-                ) : (
-                  <Text color="gray.400" fontSize="sm">
-                    Delegated to: None
-                  </Text>
-                )}
-              </HStack>
+              <VStack align="start" spacing="3" w="full">
+                <HStack spacing="2">
+                  <Switch colorScheme="green" isChecked={isDelegatedToMDs} onChange={onOpen} />
+                  {isDelegatedToMDs && delegationAddress ? (
+                    <Text color="gray.400" fontSize="sm">
+                      Delegated to: {truncateAddress(delegationAddress)}
+                    </Text>
+                  ) : (
+                    <Text color="gray.400" fontSize="sm">
+                      Delegate to Music Directors
+                    </Text>
+                  )}
+                </HStack>
 
-              <Text color="gray.500" fontSize="xs" maxW="500px">
-                Delegate your maBEETS voting power to the Music Directors. This only affects the
-                delegation for the Beets space on Snapshot.
-              </Text>
+                <Text color="gray.500" fontSize="xs" maxW="500px">
+                  Delegate your maBEETS voting power to the Music Directors. This only affects the
+                  delegation for the Beets space on Snapshot.
+                </Text>
+              </VStack>
+
+              {isOpen && (
+                <ReliquaryDelegationModal
+                  isDelegated={isDelegatedToMDs}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  onOpen={onOpen}
+                />
+              )}
             </VStack>
           </VStack>
         </NoisyCard>

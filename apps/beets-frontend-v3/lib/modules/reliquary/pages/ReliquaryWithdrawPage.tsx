@@ -26,7 +26,7 @@ export function ReliquaryWithdrawPage({ relicId }: { relicId: string }) {
   const { validTokens } = useRemoveLiquidity()
 
   return (
-    <PoolActionsLayout redirectPath="/mabeets">
+    <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
       <TokenBalancesProvider extTokens={validTokens}>
         <ReliquaryWithdrawForm relicId={relicId} />
       </TokenBalancesProvider>

@@ -1,10 +1,13 @@
 'use client'
 
-import { RemoveLiquidityProvider } from '@repo/lib/modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
+import {
+  RemoveLiquidityProvider,
+  useRemoveLiquidity,
+} from '@repo/lib/modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
 import { ReliquaryProportionalRemoveLiquidityHandler } from './handlers/ReliquaryProportionalRemoveLiquidity.handler'
 import { ReliquarySingleTokenRemoveLiquidityHandler } from './handlers/ReliquarySingleTokenRemoveLiquidity.handler'
 import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useReliquary } from './ReliquaryProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
@@ -21,7 +24,7 @@ export function RelicWithdrawProvider({
   urlTxHash?: Hash
   relicId: string
 }) {
-  const { relicPositions } = useReliquary()
+  const { relicPositions, refetchRelicPositions } = useReliquary()
 
   // Find the relic from positions
   const relic = relicPositions.find(r => r.relicId === relicId)
@@ -52,7 +55,22 @@ export function RelicWithdrawProvider({
       maxHumanBptIn={relic?.amount as HumanAmount | undefined}
       urlTxHash={urlTxHash}
     >
+      <WithdrawSuccessHandler refetchRelicPositions={refetchRelicPositions} />
       {children}
     </RemoveLiquidityProvider>
   )
+}
+
+// Helper component to handle success
+function WithdrawSuccessHandler({ refetchRelicPositions }: { refetchRelicPositions: () => void }) {
+  const { removeLiquidityTxHash } = useRemoveLiquidity()
+
+  useEffect(() => {
+    if (removeLiquidityTxHash) {
+      // Transaction succeeded, refetch reliquary positions
+      refetchRelicPositions()
+    }
+  }, [removeLiquidityTxHash, refetchRelicPositions])
+
+  return null
 }

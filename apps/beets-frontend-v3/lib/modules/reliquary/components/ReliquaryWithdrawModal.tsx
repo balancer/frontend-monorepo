@@ -80,8 +80,8 @@ export function ReliquaryWithdrawModal({
   function handleOnClose() {
     startTokenPricePolling()
     onClose()
-    // Always return to mabeets page when closing
-    router.push('/mabeets')
+    // Return to mabeets page with focus on the withdrawn relic
+    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
   }
 
   function handleReturnAction() {

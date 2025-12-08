@@ -45,7 +45,7 @@ export function ReliquaryDepositPage({ relicId }: { relicId?: string }) {
   const { validTokens } = useAddLiquidity()
 
   return (
-    <PoolActionsLayout redirectPath="/mabeets">
+    <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
       <TokenBalancesProvider extTokens={validTokens}>
         <ReliquaryDepositForm relicId={relicId} />
       </TokenBalancesProvider>

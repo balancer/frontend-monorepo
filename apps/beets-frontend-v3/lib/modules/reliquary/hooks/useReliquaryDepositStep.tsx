@@ -16,6 +16,7 @@ import {
   useAddLiquidityBuildCallDataQuery,
 } from '@repo/lib/modules/pool/actions/add-liquidity/queries/useAddLiquidityBuildCallDataQuery'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
+import { useReliquary } from '../ReliquaryProvider'
 
 const addLiquidityStepId = 'add-liquidity-to-pool'
 const reliquaryDepositStepId = 'reliquary-deposit'
@@ -32,6 +33,7 @@ export type ReliquaryDepositSteps = {
 
 export function useReliquaryDepositStep(params: ReliquaryDepositStepParams): ReliquaryDepositSteps {
   const { pool, refetch: refetchPoolBalances, chainId } = usePool()
+  const { refetchRelicPositions } = useReliquary()
   const [isStepActivated, setIsStepActivated] = useState(false)
   const { buildTenderlyUrl } = useTenderly({ chainId })
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
@@ -94,7 +96,8 @@ export function useReliquaryDepositStep(params: ReliquaryDepositStepParams): Rel
 
   const onSuccess = useCallback(() => {
     refetchPoolBalances()
-  }, [])
+    refetchRelicPositions() // Refetch reliquary positions to update landing page
+  }, [refetchPoolBalances, refetchRelicPositions])
 
   // Step 1: Add liquidity to pool (this step executes the multicall transaction)
   const addLiquidityStep: TransactionStep = useMemo(

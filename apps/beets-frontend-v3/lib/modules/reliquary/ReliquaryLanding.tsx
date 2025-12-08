@@ -9,9 +9,12 @@ import ReliquaryGlobalStats from './components/stats/ReliquaryGlobalStats'
 import { GetMaBeetsSteps } from './components/landing/GetMaBeetsSteps'
 import { MyRelicsHeader } from './components/landing/MyRelicsHeader'
 import { VotingPowerSection } from './components/landing/VotingPowerSection'
+import { useSearchParams } from 'next/navigation'
 
 export default function ReliquaryLanding() {
   const { isConnected } = useUserAccount()
+  const searchParams = useSearchParams()
+  const focusRelicId = searchParams.get('focusRelic')
 
   return (
     <>
@@ -43,7 +46,7 @@ export default function ReliquaryLanding() {
           <>
             <MyRelicsHeader />
             <Box width="full">
-              <RelicCarousel />
+              <RelicCarousel focusRelicId={focusRelicId} />
             </Box>
             <VotingPowerSection />
           </>

@@ -89,8 +89,8 @@ export function ReliquaryDepositModal({
   function handleOnClose() {
     startTokenPricePolling()
     onClose()
-    // Always return to mabeets page when closing
-    router.push('/mabeets')
+    // Return to mabeets page with focus on the deposited relic
+    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
   }
 
   function handleReturnAction() {
