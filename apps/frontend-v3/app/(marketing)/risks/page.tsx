@@ -1861,8 +1861,8 @@ export default function Privacy() {
                   execution layer for EVM compatibility.
                 </p>
                 <p>
-                  It focused on stablecoins with zero-fee USD₮ transfers, custom gas tokens, support
-                  for confidential payments, and the throughput to scale globally.
+                  Key features include stablecoins with zero-fee USD₮ transfers, custom gas tokens,
+                  support for confidential payments, and the throughput to scale globally.
                 </p>
                 <p>Specific risks include:</p>
                 <ul>
