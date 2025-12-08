@@ -1,7 +1,7 @@
 'use client'
 
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { usePoolList } from './PoolListProvider'
 
 const defaultOrderBy = [GqlPoolOrderBy.TotalLiquidity, GqlPoolOrderBy.Volume24h, GqlPoolOrderBy.Apr]
@@ -13,9 +13,9 @@ export function usePoolOrderByState() {
 
   const includeUserBalance = !!userAddress
 
-  const orderBy = useMemo(() => {
-    return includeUserBalance ? [GqlPoolOrderBy.UserbalanceUsd, ...defaultOrderBy] : defaultOrderBy
-  }, [includeUserBalance])
+  const orderBy = includeUserBalance
+    ? [GqlPoolOrderBy.UserbalanceUsd, ...defaultOrderBy]
+    : defaultOrderBy
 
   const sortingRef = useRef(sorting)
 
