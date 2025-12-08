@@ -249,7 +249,6 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
     singleTokenOutAddress,
     humanBptIn,
     humanBptInPercent,
-    quoteBptIn: humanBptIn,
     quotePriceImpact,
     totalUsdFromBprPrice,
     isSingleToken,

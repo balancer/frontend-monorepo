@@ -82,7 +82,7 @@ export function RemoveLiquidityForm() {
     isDisabled,
     disabledReason,
     simulationQuery,
-    quoteBptIn,
+    humanBptIn,
     removeLiquidityTxHash,
     isSingleTokenBalanceMoreThat25Percent,
     isSingleToken,
@@ -260,7 +260,7 @@ export function RemoveLiquidityForm() {
                   }
                   accordionPanelComponent={
                     <PoolActionsPriceImpactDetails
-                      bptAmount={BigInt(parseUnits(quoteBptIn, 18))}
+                      bptAmount={BigInt(parseUnits(humanBptIn, 18))}
                       isLoading={isFetching}
                       slippage={slippage}
                       totalUSDValue={totalUSDValue}
