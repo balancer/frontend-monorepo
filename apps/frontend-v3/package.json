@@ -77,7 +77,7 @@
     "@types/tinycolor2": "^1.4.6",
     "@viem/anvil": "^0.0.10",
     "@wagmi/cli": "2.2.0",
-    "autoprefixer": "10.4.21",
+    "autoprefixer": "10.4.22",
     "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "9.2.0",
     "cross-fetch": "4.1.0",
