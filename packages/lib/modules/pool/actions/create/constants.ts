@@ -62,7 +62,7 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
       'Concentrated liquidity pools that use an elliptical price curve to focus liquidity asymmetrically within customizable bounds. E-CLPs provide deeper liquidity and lower slippage for trades while maximizing LP capital efficiency within expected price ranges.',
   },
   [PoolType.ReClamm]: {
-    label: 'ReClamm',
+    label: 'reCLAMM',
     maxTokens: 2,
     description:
       'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
@@ -102,16 +102,16 @@ export enum RateProviderOption {
 
 export const RATE_PROVIDER_RADIO_OPTIONS = [
   {
+    label: 'No rate provider',
+    value: RateProviderOption.Null,
+  },
+  {
     label: 'Add the verified rate provider for this token: ',
     value: RateProviderOption.Verified,
   },
   {
     label: 'Add custom rate provider',
     value: RateProviderOption.Custom,
-  },
-  {
-    label: 'No rate provider',
-    value: RateProviderOption.Null,
   },
 ] as const
 

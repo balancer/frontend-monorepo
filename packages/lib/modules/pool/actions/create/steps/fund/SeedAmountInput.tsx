@@ -78,7 +78,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
 
   return (
     <VStack align="start" key={idx} spacing="sm" w="full">
-      <Text>Token {idx + 1}</Text>
+      <Text fontWeight="bold">Token {idx + 1}</Text>
       <TokenInput
         apiToken={token.data}
         chain={network}
