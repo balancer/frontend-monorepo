@@ -129,13 +129,7 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   }
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
-
-  const totalUSDValue = useMemo(() => {
-    if (isLoadingTokenPrices) return '0'
-
-    return usdValueFor(humanAmountsIn)
-  }, [humanAmountsIn, isLoadingTokenPrices, usdValueFor])
-
+  const totalUSDValue = isLoadingTokenPrices ? '0' : usdValueFor(humanAmountsIn)
   const isMinimumDepositMet = useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue })
 
   /**
