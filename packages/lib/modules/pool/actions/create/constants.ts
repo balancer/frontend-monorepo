@@ -66,6 +66,12 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
     description:
       'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
   },
+  [PoolType.CowAmm]: {
+    label: 'CoW AMM',
+    maxTokens: 2,
+    description:
+      'CoW AMM protects LPs from LVR so they can provide liquidity with less risk and more return',
+  },
 }
 
 export const PROTOCOLS = [
