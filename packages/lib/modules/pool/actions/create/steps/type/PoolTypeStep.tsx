@@ -3,7 +3,9 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { ChooseNetwork } from './ChooseNetwork'
 import { ChoosePoolType } from './ChoosePoolType'
+import { ChooseProtocol } from './ChooseProtocol'
 import { useFormState } from 'react-hook-form'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function PoolTypeStep() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -16,6 +18,7 @@ export function PoolTypeStep() {
         <Heading color="font.maxContrast" size="md">
           Pool type
         </Heading>
+        {isBalancer && <ChooseProtocol control={control} />}
         <ChooseNetwork control={control} />
         <ChoosePoolType control={control} />
         <PoolCreationFormAction disabled={!formState.isValid} />
