@@ -52,6 +52,11 @@ export function RemoveLiquidityForm() {
   const { pool } = usePool()
 
   const title = isV3LBP(pool) ? 'Get LBP funds' : 'Remove liquidity'
+  const isDisabledSingleTokenTab = isBoosted(pool) || pool.dynamicData.isInRecoveryMode
+
+  const tabTooltipLabel = isDisabledSingleTokenTab
+    ? `${isBoosted(pool) ? 'Boosted pools' : 'Pools in recovery mode'} do not support single token removes`
+    : undefined
 
   const TABS: ButtonGroupOption[] = [
     {
@@ -61,12 +66,11 @@ export function RemoveLiquidityForm() {
     {
       value: 'single',
       label: 'Single token',
-      tabTooltipLabel: isBoosted(pool)
-        ? 'Boosted pools do not support single token removes'
-        : undefined,
-      disabled: isBoosted(pool),
+      tabTooltipLabel,
+      disabled: isDisabledSingleTokenTab,
     },
   ] as const
+
   const [activeTab, setActiveTab] = useState(TABS[0])
   const isProportionalTabSelected = activeTab.value === 'proportional'
   const isSingleTabSelected = activeTab.value === 'single'
