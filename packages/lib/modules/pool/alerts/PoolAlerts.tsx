@@ -36,6 +36,8 @@ export function PoolAlerts() {
     </HStack>
   )
 
+  const userHasBalance = pool.userBalance && pool.userBalance.totalBalanceUsd > 0
+
   return (
     <VStack width="full">
       {poolAlerts.map(alert => (
@@ -51,9 +53,11 @@ export function PoolAlerts() {
 
       {affectedByV2Exploit && <BalAlert content={v2ExploitWarningContent} status="warning" />}
 
-      {!isProd && needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
-        <MigrationAlert pool={pool} />
-      )}
+      {!isProd &&
+        userHasBalance &&
+        needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
+          <MigrationAlert pool={pool} />
+        )}
     </VStack>
   )
 }
