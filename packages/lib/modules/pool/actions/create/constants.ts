@@ -1,6 +1,5 @@
 import { PoolType, STABLE_POOL_CONSTRAINTS } from '@balancer/sdk'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
-import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { zeroAddress, Address } from 'viem'
 import {
   SupportedPoolTypes,
@@ -71,16 +70,14 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
 
 export const PROTOCOLS = [
   {
-    id: ProjectConfigBalancer.projectId,
-    name: ProjectConfigBalancer.projectName,
+    name: 'Balancer v3',
     imageSrc: ProjectConfigBalancer.projectLogo,
   },
   {
-    id: ProjectConfigBeets.projectId,
-    name: ProjectConfigBeets.projectName,
-    imageSrc: ProjectConfigBeets.projectLogo,
+    name: 'CoW',
+    imageSrc: '/images/protocols/cowamm.svg',
   },
-]
+] as const
 
 export enum WeightedPoolStructure {
   FiftyFifty = '50/50',
@@ -127,7 +124,7 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
 export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]
 
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
-  protocol: PROJECT_CONFIG.projectId,
+  protocol: PROTOCOLS[0].name,
   network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
   poolType: PoolType.Stable,

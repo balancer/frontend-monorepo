@@ -2,8 +2,7 @@ import { InputAmount, InitPoolInputV3, PoolType } from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
-import { type ProjectConfig } from '@repo/lib/config/config.types'
-import { WeightedPoolStructure } from './constants'
+import { WeightedPoolStructure, PROTOCOLS } from './constants'
 
 export type InputAmountWithSymbol = InputAmount & { symbol: string }
 
@@ -35,7 +34,7 @@ export type PoolCreationToken = {
 }
 
 export type PoolCreationForm = {
-  protocol: ProjectConfig['projectId']
+  protocol: (typeof PROTOCOLS)[number]['name']
   network: GqlChain
   weightedPoolStructure: WeightedPoolStructure
   poolType: SupportedPoolTypes
