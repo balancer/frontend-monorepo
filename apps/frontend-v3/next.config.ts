@@ -4,14 +4,7 @@ import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
-  serverExternalPackages: [
-    'pino',
-    'pino-pretty',
-    'thread-stream',
-    'real-require',
-    'lokijs',
-    'encoding',
-  ],
+  serverExternalPackages: ['thread-stream', 'real-require', 'lokijs', 'encoding'],
   logging: {
     fetches: {
       fullUrl: true,
