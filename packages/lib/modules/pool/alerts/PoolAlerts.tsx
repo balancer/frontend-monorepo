@@ -8,6 +8,7 @@ import { isComposableStablePool } from '../pool.utils'
 import { usePoolMigrations } from '../migrations/PoolMigrationsProvider'
 import { getChainId, isProd } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../migrations/MigrationAlert'
+import { hasTotalBalance } from '../user-balance.helpers'
 
 export function PoolAlerts() {
   const { pool } = usePool()
@@ -36,7 +37,7 @@ export function PoolAlerts() {
     </HStack>
   )
 
-  const userHasBalance = pool.userBalance && pool.userBalance.totalBalanceUsd > 0
+  const userHasBalance = hasTotalBalance(pool)
 
   return (
     <VStack width="full">
