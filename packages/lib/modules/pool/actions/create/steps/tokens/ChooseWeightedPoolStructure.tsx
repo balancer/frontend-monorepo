@@ -37,8 +37,10 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
     if (weightedStructure !== WeightedPoolStructure.Custom) poolCreationForm.trigger('poolTokens')
   }
 
+  const shouldUpdateTokenWeights = isWeightedPool(poolType) || isCowPool(poolType)
+
   useEffect(() => {
-    if (isWeightedPool(poolType)) {
+    if (shouldUpdateTokenWeights) {
       updatePoolTokenWeights(weightedPoolStructure)
     }
   }, [])
