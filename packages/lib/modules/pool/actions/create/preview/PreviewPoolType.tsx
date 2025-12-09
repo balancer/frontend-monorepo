@@ -5,7 +5,7 @@ import { getChainName } from '@repo/lib/config/app.config'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
-import { isWeightedPool, isCustomWeightedPool } from '../helpers'
+import { isWeightedPool, isCustomWeightedPool, isCowPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolType() {
@@ -14,6 +14,8 @@ export function PreviewPoolType() {
     control: poolCreationForm.control,
     name: ['network', 'protocol', 'poolType', 'weightedPoolStructure'],
   })
+
+  const showWeightStructure = isWeightedPool(poolType) || isCowPool(poolType)
 
   const cardInformationRows = [
     {
@@ -28,8 +30,8 @@ export function PreviewPoolType() {
       label: 'Pool type',
       value:
         POOL_TYPES[poolType].label +
-        (isWeightedPool(poolType)
-          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : '2-token '}${weightedPoolStructure}`
+        (showWeightStructure
+          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : `${!isCowPool(poolType) ? '2-token ' : ''}${weightedPoolStructure}`}`
           : ''),
     },
   ]

@@ -141,7 +141,13 @@ export const ProjectConfigBalancer: ProjectConfig = {
       },
     ],
   },
-  cowSupportedNetworks: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Gnosis],
+  cowSupportedNetworks: [
+    GqlChain.Mainnet,
+    GqlChain.Arbitrum,
+    GqlChain.Base,
+    GqlChain.Gnosis,
+    ...(isProd ? [] : [GqlChain.Sepolia]),
+  ],
   partnerCards: [
     {
       backgroundImage: 'images/partners/cards/partner-xave-bg.png',

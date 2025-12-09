@@ -4,13 +4,17 @@ import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationForm } from '../../types'
-import { isWeightedPool } from '../../helpers'
+import { isWeightedPool, isCowPool } from '../../helpers'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationForm> }) {
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, weightedPoolStructure, poolType] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'weightedPoolStructure', 'poolType'],
+  })
+
+  const weightedPoolStructures = WEIGHTED_POOL_STRUCTURES.filter(structure => {
+    return isCowPool(poolType) ? structure !== WeightedPoolStructure.Custom : true
   })
 
   function updatePoolTokenWeights(weightedStructure: WeightedPoolStructure) {
@@ -56,7 +60,7 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
             value={field.value}
           >
             <Stack spacing={3}>
-              {WEIGHTED_POOL_STRUCTURES.map(structure => (
+              {weightedPoolStructures.map(structure => (
                 <Radio key={structure} size="lg" value={structure}>
                   <Text>
                     {structure !== WeightedPoolStructure.Custom && '2-token: '}

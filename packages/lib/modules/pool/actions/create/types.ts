@@ -16,6 +16,7 @@ export type SupportedPoolTypes =
   | PoolType.StableSurge
   | PoolType.ReClamm
   | PoolType.GyroE
+  | PoolType.CowAmm
 
 export type PoolTypeDetails = {
   label: string

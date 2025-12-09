@@ -39,6 +39,7 @@ import {
   isCustomWeightedPool,
   isReClammPool,
   isGyroEllipticPool,
+  isCowPool,
 } from '../../helpers'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
@@ -226,6 +227,9 @@ function ConfigureToken({
   const isInvalidWeight = !!token.weight && Number(token.weight) < 1
   const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
 
+  const showWeightInputs = isWeightedPool(poolType) || isCowPool(poolType)
+  const showRateProvider = !isCowPool(poolType)
+
   return (
     <VStack align="start" key={index} spacing="sm" w="full">
       <HStack align="end" w="full">
@@ -235,10 +239,10 @@ function ConfigureToken({
           <TokenInputSelector onToggleTokenClicked={onToggleTokenClicked} token={token?.data} />
         </VStack>
 
-        {isWeightedPool(poolType) && (
+        {showWeightInputs && (
           <TooltipWithTouch
             isDisabled={weightedPoolStructure === WeightedPoolStructure.Custom}
-            label={`Weight is set to ${weightedPoolStructure} based on your selection above. Select "Custom" to set your own weights.`}
+            label={`Weight is set to ${weightedPoolStructure} based on your selection above. ${!isCowPool(poolType) ? 'Select "Custom" to set your own weights.' : ''}`}
           >
             <Box>
               <NumberInput
@@ -293,10 +297,12 @@ function ConfigureToken({
         </VStack>
       )}
 
-      <ConfigureTokenRateProvider
-        tokenIndex={index}
-        verifiedRateProviderAddress={rateProviderAddress}
-      />
+      {showRateProvider && (
+        <ConfigureTokenRateProvider
+          tokenIndex={index}
+          verifiedRateProviderAddress={rateProviderAddress}
+        />
+      )}
     </VStack>
   )
 }

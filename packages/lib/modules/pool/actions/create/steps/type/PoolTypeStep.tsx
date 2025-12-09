@@ -12,13 +12,16 @@ export function PoolTypeStep() {
   const { control } = poolCreationForm
   const formState = useFormState({ control: poolCreationForm.control })
 
+  // Only offer protocol choice for CoW AMM creation on Balancer project (NOT beets)
+  const showChooseProtocol = isBalancer
+
   return (
     <Box as="form" style={{ width: '100%' }}>
       <VStack align="start" spacing="xl" w="full">
         <Heading color="font.maxContrast" size="md">
           Pool type
         </Heading>
-        {isBalancer && <ChooseProtocol control={control} />}
+        {showChooseProtocol && <ChooseProtocol control={control} />}
         <ChooseNetwork control={control} />
         <ChoosePoolType control={control} />
         <PoolCreationFormAction disabled={!formState.isValid} />
