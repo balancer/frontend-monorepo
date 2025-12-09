@@ -33,7 +33,11 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
 
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
   const isInRecoveryMode = pool.dynamicData.isInRecoveryMode
-  const poolTokens = isInRecoveryMode ? (pool.poolTokens as ApiToken[]) : tokens // can only withdraw top level tokens in recovery mode
+
+  // can only withdraw top level tokens in recovery mode
+  const poolTokens = isInRecoveryMode
+    ? (pool.poolTokens as ApiToken[]).filter(token => token.address !== pool.address)
+    : tokens
 
   const nativeAssets = validTokens.filter(token =>
     isNativeOrWrappedNative(token.address as Address, token.chain)
