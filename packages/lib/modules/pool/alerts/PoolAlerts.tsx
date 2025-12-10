@@ -11,7 +11,7 @@ import { MigrationAlert } from '../migrations/MigrationAlert'
 
 export function PoolAlerts() {
   const { pool } = usePool()
-  const { poolAlerts, setPoolAlerts } = usePoolAlerts(pool)
+  const { poolAlerts, dismissAlert } = usePoolAlerts(pool)
   const { needsMigration } = usePoolMigrations()
   if (poolAlerts.length === 0) return null
 
@@ -43,7 +43,7 @@ export function PoolAlerts() {
           key={alert.identifier}
           onClose={e => {
             e.preventDefault()
-            setPoolAlerts(poolAlerts.filter(a => a.identifier !== alert.identifier))
+            dismissAlert(alert.identifier)
           }}
           {...alert}
         />
