@@ -1,3 +1,5 @@
+'use client'
+
 import { Box, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { FeatureLink } from './FeatureLink'
@@ -7,8 +9,13 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LbpBenefitsChartIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsChartIcon'
 import { LbpBenefitsLightningIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsLightningIcon'
 import { LbpBenefitsHookIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsHookIcon'
+import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
+import { motion, LayoutGroup } from 'framer-motion'
+
+const MotionHeading = motion(Heading)
 
 export function HeaderBanner() {
+  const { isFirstStep } = usePoolCreationFormSteps()
   const capitalEfficiencyDescription = `
   Maximize capital efficiency with boosted pools that route idle liquidity to yield markets, allowing LPs to earn both swap fees and lending interest simultaneously.
 `
@@ -22,113 +29,138 @@ export function HeaderBanner() {
 `
 
   return (
-    <NoisyCard
-      cardProps={{
-        w: 'full',
-        overflow: 'hidden',
-        rounded: 'xl',
-        mb: 'xl',
-        h: { base: 'auto', lg: '210px' },
-      }}
-    >
-      <HStack
-        alignItems={{ base: 'start', md: 'center' }}
-        flexDirection={{ base: 'column', lg: 'row' }}
-        h="full"
-        justifyContent={{ base: 'start', lg: 'space-between' }}
-        p={{ base: 'lg', lg: 'xl' }}
-        spacing={{ base: 'md', lg: undefined }}
-        w="full"
-      >
-        <VStack
-          alignItems="start"
-          pt="sm"
-          spacing="30px"
-          w={{ base: 'full', lg: undefined }}
-          zIndex={1}
-        >
-          <VStack alignItems="start" spacing="ms">
-            <Box maxW="290px">
-              <Heading as="h1" size="lg" sx={{ textWrap: 'nowrap' }} variant="special">
-                Create a pool on {PROJECT_CONFIG.projectName} v3
-              </Heading>
-            </Box>
-
-            <Text color="font.secondary" maxW="48ch" sx={{ textWrap: 'balance' }}>
-              {PROJECT_CONFIG.projectName} v3 handles the low level tasks, like token accounting and
-              security, allowing you to focus on innovating with custom logic.
-            </Text>
-            <Link
-              href="https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html"
-              isExternal
+    <LayoutGroup>
+      <Box mb={isFirstStep ? 'lg' : '0'} w="full">
+        {isFirstStep ? (
+          <NoisyCard
+            cardProps={{
+              w: 'full',
+              overflow: 'hidden',
+              rounded: 'xl',
+              h: { base: 'auto', lg: '210px' },
+            }}
+          >
+            <HStack
+              alignItems={{ base: 'start', md: 'center' }}
+              flexDirection={{ base: 'column', lg: 'row' }}
+              h="full"
+              justifyContent={{ base: 'start', lg: 'space-between' }}
+              p={{ base: 'lg', lg: 'xl' }}
+              spacing={{ base: 'md', lg: undefined }}
+              w="full"
             >
-              <HStack
-                _hover={{ cursor: 'pointer', color: 'font.linkHover' }}
-                color="font.link"
-                gap="xxs"
+              <VStack
+                alignItems="start"
+                pt="sm"
+                spacing="30px"
+                w={{ base: 'full', lg: undefined }}
+                zIndex={1}
               >
-                <Text _hover={{ color: 'font.linkHover' }} color="font.link" variant="ghost">
-                  View Partner Onboarding docs
-                </Text>
-                <ArrowUpRight size={14} />
-              </HStack>
-            </Link>
-          </VStack>
-        </VStack>
+                <VStack alignItems="start" spacing="ms">
+                  <Box maxW="290px">
+                    <MotionHeading
+                      as="h1"
+                      layout
+                      layoutId="create-pool-heading"
+                      size="lg"
+                      sx={{ textWrap: 'nowrap' }}
+                      transition={{ duration: 0.2, ease: 'easeOut' }}
+                      variant="special"
+                    >
+                      Create a pool on {PROJECT_CONFIG.projectName} v3
+                    </MotionHeading>
+                  </Box>
 
-        <Stack
-          direction={{ base: 'column', md: 'row' }}
-          justifyContent="stretch"
-          spacing={{ base: 4, md: 2, lg: 4, xl: 8 }}
-          w="full"
-        >
-          <RadialPattern
-            circleCount={8}
-            height={600}
-            innerHeight={120}
-            innerWidth={1000}
-            left="350px"
-            padding="15px"
-            position="absolute"
-            right={{ base: -500, lg: -700, xl: -600, '2xl': -400 }}
-            top="-195px"
-            width={1500}
-          />
+                  <Text color="font.secondary" maxW="48ch" sx={{ textWrap: 'balance' }}>
+                    {PROJECT_CONFIG.projectName} v3 handles the low level tasks, like token
+                    accounting and security, allowing you to focus on innovating with custom logic.
+                  </Text>
+                  <Link
+                    href="https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html"
+                    isExternal
+                  >
+                    <HStack
+                      _hover={{ cursor: 'pointer', color: 'font.linkHover' }}
+                      color="font.link"
+                      gap="xxs"
+                    >
+                      <Text _hover={{ color: 'font.linkHover' }} color="font.link" variant="ghost">
+                        View Partner Onboarding docs
+                      </Text>
+                      <ArrowUpRight size={14} />
+                    </HStack>
+                  </Link>
+                </VStack>
+              </VStack>
 
-          <RadialPattern
-            bottom="-500px"
-            circleCount={10}
-            height={800}
-            innerHeight={150}
-            innerWidth={150}
-            left="-400px"
-            position="absolute"
-            width={800}
-            zIndex={0}
-          />
+              <Stack
+                direction={{ base: 'column', md: 'row' }}
+                justifyContent="stretch"
+                spacing={{ base: 4, md: 2, lg: 4, xl: 8 }}
+                w="full"
+              >
+                <RadialPattern
+                  circleCount={8}
+                  height={600}
+                  innerHeight={120}
+                  innerWidth={1000}
+                  left="350px"
+                  padding="15px"
+                  position="absolute"
+                  right={{ base: -500, lg: -700, xl: -600, '2xl': -400 }}
+                  top="-195px"
+                  width={1500}
+                />
 
-          <FeatureLink
-            description={capitalEfficiencyDescription}
-            icon={<LbpBenefitsChartIcon />}
-            title="Capital efficiency"
-            transformBackground="rotate(90deg)"
-          />
+                <RadialPattern
+                  bottom="-500px"
+                  circleCount={10}
+                  height={800}
+                  innerHeight={150}
+                  innerWidth={150}
+                  left="-400px"
+                  position="absolute"
+                  width={800}
+                  zIndex={0}
+                />
 
-          <FeatureLink
-            description={accessToHooksDescription}
-            icon={<LbpBenefitsHookIcon />}
-            title="Access to hooks"
-            transformBackground="rotate(0deg)"
-          />
+                <FeatureLink
+                  description={capitalEfficiencyDescription}
+                  icon={<LbpBenefitsChartIcon />}
+                  title="Capital efficiency"
+                  transformBackground="rotate(90deg)"
+                />
 
-          <FeatureLink
-            description={immediateLiquidityDescription}
-            icon={<LbpBenefitsLightningIcon />}
-            title="Immediate liquidity"
-            transformBackground="rotate(-90deg)"
-          />
-        </Stack>
-      </HStack>
-    </NoisyCard>
+                <FeatureLink
+                  description={accessToHooksDescription}
+                  icon={<LbpBenefitsHookIcon />}
+                  title="Access to hooks"
+                  transformBackground="rotate(0deg)"
+                />
+
+                <FeatureLink
+                  description={immediateLiquidityDescription}
+                  icon={<LbpBenefitsLightningIcon />}
+                  title="Immediate liquidity"
+                  transformBackground="rotate(-90deg)"
+                />
+              </Stack>
+            </HStack>
+          </NoisyCard>
+        ) : (
+          <MotionHeading
+            as="h1"
+            layout
+            layoutId="create-pool-heading"
+            size="lg"
+            sx={{ textWrap: 'nowrap' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            variant="special"
+          >
+            Create a pool on {PROJECT_CONFIG.projectName} v3
+          </MotionHeading>
+        )}
+      </Box>
+    </LayoutGroup>
   )
 }
