@@ -40,12 +40,10 @@ export function PoolFundStep() {
   return (
     <Box as="form" style={{ width: '100%' }}>
       <VStack align="start" spacing="lg" w="full">
-        <SeedPoolAlert poolType={poolType} />
-
         <Heading color="font.maxContrast" size="md">
           Seed initial pool liquidity
         </Heading>
-
+        <SeedPoolAlert poolType={poolType} />
         {showTokenAmountInputs && (
           <>
             {poolTokens.map((token, idx) => (

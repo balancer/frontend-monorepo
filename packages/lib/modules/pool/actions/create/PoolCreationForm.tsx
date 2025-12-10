@@ -10,7 +10,6 @@ import {
   Box,
   VStack,
   Divider,
-  Text,
   Stack,
   Skeleton,
 } from '@chakra-ui/react'
@@ -45,21 +44,20 @@ export function PoolCreationForm() {
           <>
             <VStack align="start" minW="500px" spacing="lg">
               <VStack align="start" spacing="md" w="full">
-                <Text color="font.secondary" fontWeight="medium" size="sm">
-                  STEPS
-                </Text>
+                <Divider />
                 <Stepper
                   index={activeStepIndex}
                   orientation={isMobile ? 'vertical' : 'horizontal'}
+                  pt="sm"
                   w="full"
                 >
                   {steps.map(step => (
                     <Step key={step.id} w="full">
                       <StepIndicator>
                         <StepStatus
-                          active={<StepNumber />}
+                          active={<StepNumber fontWeight="bold" />}
                           complete={<StepIcon />}
-                          incomplete={<StepNumber />}
+                          incomplete={<StepNumber fontWeight="bold" />}
                         />
                       </StepIndicator>
 

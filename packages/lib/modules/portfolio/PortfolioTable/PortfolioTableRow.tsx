@@ -22,6 +22,9 @@ import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolLi
 import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
 import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { AlertTriangle } from 'react-feather'
+import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
+import { getChainId, isProd } from '@repo/lib/config/app.config'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -52,6 +55,7 @@ const getStakingFilterKey = (poolType: ExpandedPoolType): StakingFilterKeyType =
 export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Props) {
   const { toCurrency } = useCurrency()
   const { name } = usePoolMetadata(pool)
+  const { needsMigration } = usePoolMigrations()
   const { options } = PROJECT_CONFIG
 
   const vebalBoostValue = veBalBoostMap?.[pool.id]
@@ -102,10 +106,20 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 </Text>
               </GridItem>
             )}
-            <GridItem px="sm">
-              <Text fontWeight="medium" textAlign="right">
-                {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
-              </Text>
+            <GridItem display="flex" justifyContent="flex-end" px="sm">
+              <HStack>
+                <Text fontWeight="medium">
+                  {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
+                </Text>
+                {!isProd &&
+                  needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
+                    <TooltipWithTouch label="Migrate your position to the recommended pool">
+                      <Box color="font.warning">
+                        <AlertTriangle size="16" />
+                      </Box>
+                    </TooltipWithTouch>
+                  )}
+              </HStack>
             </GridItem>
             <GridItem justifySelf="end" px="sm">
               {pool.poolType === ExpandedPoolType.StakedAura ? (

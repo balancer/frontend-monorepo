@@ -40,17 +40,16 @@ export function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
     <BalAlert
       content={
         <UnorderedList>
-          <ListItem color="black">Suggested seed amount: $5k+</ListItem>
           <ListItem color="black">
-            The pool will be listed on the {projectName} UI only once it is seeded.
+            The pool will only be listed on the {projectName} UI once it is seeded.
           </ListItem>
           <ListItem color="black">
-            For safety on the {projectName} UI, LPs are required to make proportional adds when the
-            liquidity of the pool is less than $50k.
+            Be very careful that the USD values you add are proportional to the target token
+            weights, or you’ll likely get rekt.{' '}
           </ListItem>
           <ListItem color="black">
-            Be very careful that the USD values are proportional to the target token weights, or
-            you’ll likely get rekt.{' '}
+            Note: LPs are required to make proportional adds when the liquidity of the pool is less
+            than $50k.
           </ListItem>
         </UnorderedList>
       }

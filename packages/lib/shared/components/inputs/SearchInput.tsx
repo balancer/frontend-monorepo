@@ -44,11 +44,13 @@ export function SearchInput({
         _focus={{
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
+          boxShadow: 'var(--chakra-shadows-input-innerFocus) !important',
+          color: 'input.fontFocus',
         }}
         _focusVisible={{
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
-          shadow: 'input.innerFocus',
+          boxShadow: 'var(--chakra-shadows-input-innerFocus) !important',
           color: 'input.fontFocus',
         }}
         _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}

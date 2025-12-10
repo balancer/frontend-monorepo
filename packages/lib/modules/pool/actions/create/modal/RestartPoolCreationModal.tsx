@@ -60,8 +60,10 @@ export function RestartPoolCreationModal({
         })}
       >
         <HStack>
-          <Icon as={Trash2} color="font.secondary" size={16} />
-          <Text color="font.secondary">{triggerTitle}</Text>
+          <Icon as={Trash2} boxSize="16px" color="font.secondary" />
+          <Text color="font.secondary" fontWeight="bold">
+            {triggerTitle}
+          </Text>
         </HStack>
       </Button>
       <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
