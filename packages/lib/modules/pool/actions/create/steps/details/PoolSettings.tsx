@@ -6,7 +6,6 @@ import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
-import { PoolType } from '@balancer/sdk'
 import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
@@ -34,7 +33,7 @@ export function PoolSettings() {
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const filteredPoolHooksOptions = poolHooksWhitelist.filter(
-    hook => hook.label !== 'StableSurge' || poolType !== PoolType.GyroE
+    hook => hook.label !== 'StableSurge' || isStablePool(poolType)
   )
 
   const poolManagerOptions: PoolSettingsOption[] = [
