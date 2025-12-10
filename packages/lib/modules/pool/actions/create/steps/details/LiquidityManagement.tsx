@@ -4,7 +4,7 @@ import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useEffect } from 'react'
 import { usePoolHooksContract } from './usePoolHooksContract'
-import { isStableSurgePool } from '../../helpers'
+import { isStableSurgePool, isReClammPool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function LiquidityManagement() {
@@ -34,7 +34,8 @@ export function LiquidityManagement() {
     }
   }, [hookFlags, poolType])
 
-  const isDisabled = isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
+  const isUnbalancedDisabled = isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
+  const isDonationDisabled = isReClammPool(poolType)
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -46,12 +47,13 @@ export function LiquidityManagement() {
       </HStack>
       <PoolCreationCheckbox
         isChecked={!disableUnbalancedLiquidity}
-        isDisabled={isDisabled}
+        isDisabled={isUnbalancedDisabled}
         label="Allow unbalanced joins and removes"
         onChange={e => poolCreationForm.setValue('disableUnbalancedLiquidity', !e.target.checked)}
       />
       <PoolCreationCheckbox
         isChecked={enableDonation}
+        isDisabled={isDonationDisabled}
         label="Allow donations"
         onChange={e => poolCreationForm.setValue('enableDonation', e.target.checked)}
       />
