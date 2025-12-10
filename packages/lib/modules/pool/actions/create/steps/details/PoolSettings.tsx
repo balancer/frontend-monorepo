@@ -16,6 +16,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isStablePool, isStableSurgePool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export type PoolSettingsOption = {
   label: string
@@ -32,9 +33,15 @@ export function PoolSettings() {
   })
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
-  const filteredPoolHooksOptions = poolHooksWhitelist.filter(
-    hook => hook.label !== 'StableSurge' || isStablePool(poolType)
-  )
+  const filteredPoolHooksOptions = poolHooksWhitelist.filter(hook => {
+    if (isStableSurgePool(poolType)) {
+      return hook.label === 'StableSurge' // this pool type requires use of stable surge hook
+    } else if (!isStablePool(poolType)) {
+      return hook.label !== 'StableSurge' // remove stable surge hook from options for non-stable pool types
+    } else {
+      return true
+    }
+  })
 
   const poolManagerOptions: PoolSettingsOption[] = [
     { label: `Delegate to the ${PROJECT_CONFIG.projectName} DAO`, value: zeroAddress },
@@ -146,17 +153,22 @@ export function PoolSettings() {
         />
       )}
 
-      <PoolSettingsRadioGroup
-        customInputLabel="Custom pool hooks address"
-        customInputType="address"
-        isDisabled={isStableSurgePool(poolType)}
-        name="poolHooksContract"
-        options={poolHooksOptions}
-        title="Pool hooks"
-        tooltip="Contract that implements the hooks for the pool"
-        validateAsync={validateHooksContract}
-      />
-
+      <TooltipWithTouch
+        isHidden={false}
+        label="The stable surge pool type must use the stable surge hooks contract"
+        placement="right"
+      >
+        <PoolSettingsRadioGroup
+          customInputLabel="Custom pool hooks address"
+          customInputType="address"
+          isDisabled={isStableSurgePool(poolType)}
+          name="poolHooksContract"
+          options={poolHooksOptions}
+          title="Pool hooks"
+          tooltip="Contract that implements the hooks for the pool"
+          validateAsync={validateHooksContract}
+        />
+      </TooltipWithTouch>
       <LiquidityManagement />
     </VStack>
   )

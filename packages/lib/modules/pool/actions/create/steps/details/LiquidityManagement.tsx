@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { usePoolHooksContract } from './usePoolHooksContract'
 import { isStableSurgePool, isReClammPool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function LiquidityManagement() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -34,8 +35,9 @@ export function LiquidityManagement() {
     }
   }, [hookFlags, poolType])
 
-  const isUnbalancedDisabled = isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
-  const isDonationDisabled = isReClammPool(poolType)
+  const isUnbalancedToggleDisabled =
+    isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
+  const isDonationToggleDisabled = isReClammPool(poolType)
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -45,18 +47,30 @@ export function LiquidityManagement() {
         </Text>
         <InfoIconPopover message="Flags related to adding/removing liquidity" />
       </HStack>
-      <PoolCreationCheckbox
-        isChecked={!disableUnbalancedLiquidity}
-        isDisabled={isUnbalancedDisabled}
-        label="Allow unbalanced joins and removes"
-        onChange={e => poolCreationForm.setValue('disableUnbalancedLiquidity', !e.target.checked)}
-      />
-      <PoolCreationCheckbox
-        isChecked={enableDonation}
-        isDisabled={isDonationDisabled}
-        label="Allow donations"
-        onChange={e => poolCreationForm.setValue('enableDonation', e.target.checked)}
-      />
+      <TooltipWithTouch
+        isHidden={!isStableSurgePool(poolType)}
+        label="The stable surge pool factory requires unbalanced joins and removes to be enabled"
+        placement="right"
+      >
+        <PoolCreationCheckbox
+          isChecked={!disableUnbalancedLiquidity}
+          isDisabled={isUnbalancedToggleDisabled}
+          label="Allow unbalanced joins and removes"
+          onChange={e => poolCreationForm.setValue('disableUnbalancedLiquidity', !e.target.checked)}
+        />
+      </TooltipWithTouch>
+      <TooltipWithTouch
+        isHidden={!isDonationToggleDisabled}
+        label="The reClamm pool factory does not allow donations"
+        placement="right"
+      >
+        <PoolCreationCheckbox
+          isChecked={enableDonation}
+          isDisabled={isDonationToggleDisabled}
+          label="Allow donations"
+          onChange={e => poolCreationForm.setValue('enableDonation', e.target.checked)}
+        />
+      </TooltipWithTouch>
     </VStack>
   )
 }
