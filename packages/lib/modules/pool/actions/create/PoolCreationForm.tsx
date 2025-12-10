@@ -26,7 +26,7 @@ import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
 
-  const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
+  const { steps, activeStepIndex, activeStep, goToStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
 
   return (
@@ -51,23 +51,36 @@ export function PoolCreationForm() {
                   pt="sm"
                   w="full"
                 >
-                  {steps.map(step => (
-                    <Step key={step.id} w="full">
-                      <StepIndicator>
-                        <StepStatus
-                          active={<StepNumber fontWeight="bold" />}
-                          complete={<StepIcon />}
-                          incomplete={<StepNumber fontWeight="bold" />}
-                        />
-                      </StepIndicator>
+                  {steps.map((step, index) => {
+                    const isCompleted = index < activeStepIndex
+                    const isActive = index === activeStepIndex
+                    return (
+                      <Step key={step.id} w="full">
+                        <Box
+                          _hover={isCompleted ? { opacity: 0.8 } : undefined}
+                          alignItems="center"
+                          cursor={isCompleted ? 'pointer' : 'default'}
+                          display="flex"
+                          gap="2"
+                          onClick={() => isCompleted && goToStep(index)}
+                        >
+                          <StepIndicator>
+                            <StepStatus
+                              active={<StepNumber fontWeight="bold" />}
+                              complete={<StepIcon />}
+                              incomplete={<StepNumber fontWeight="bold" />}
+                            />
+                          </StepIndicator>
 
-                      <Box flexShrink="0">
-                        <StepTitle>{step.title}</StepTitle>
-                      </Box>
+                          <Box flexShrink="0">
+                            <StepTitle>{step.title}</StepTitle>
+                          </Box>
+                        </Box>
 
-                      <StepSeparator w="full" />
-                    </Step>
-                  ))}
+                        <StepSeparator w="full" />
+                      </Step>
+                    )
+                  })}
                 </Stepper>
               </VStack>
 

@@ -37,6 +37,13 @@ export function usePoolCreationFormSteps() {
     setActiveStepIndex(0)
   }
 
+  const goToStep = (stepIndex: number) => {
+    if (stepIndex < activeStepIndex) {
+      setActiveStepIndex(stepIndex)
+      scrollToTop()
+    }
+  }
+
   const isBeforeStep = (stepTitle: string) => {
     const stepIndex = steps.findIndex(step => step.title === stepTitle)
     return activeStepIndex < stepIndex
@@ -58,5 +65,6 @@ export function usePoolCreationFormSteps() {
     nextStep,
     lastStep,
     resetSteps,
+    goToStep,
   }
 }
