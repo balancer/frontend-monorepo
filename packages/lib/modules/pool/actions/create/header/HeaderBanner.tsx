@@ -10,19 +10,13 @@ import { LbpBenefitsChartIcon } from '@repo/lib/shared/components/icons/lbp/LbpB
 import { LbpBenefitsLightningIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsLightningIcon'
 import { LbpBenefitsHookIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsHookIcon'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { POOL_TYPES } from '../constants'
 import { motion, LayoutGroup } from 'framer-motion'
-import { useWatch } from 'react-hook-form'
 
 const MotionHeading = motion(Heading)
 
 export function HeaderBanner() {
   const { isFirstStep } = usePoolCreationFormSteps()
-  const { poolCreationForm } = usePoolCreationForm()
-  const poolType = useWatch({ control: poolCreationForm.control, name: 'poolType' })
 
-  const poolTypeLabel = POOL_TYPES[poolType]?.label
   const capitalEfficiencyDescription = `
   Maximize capital efficiency with boosted pools that route idle liquidity to yield markets, allowing LPs to earn both swap fees and lending interest simultaneously.
 `
@@ -164,7 +158,7 @@ export function HeaderBanner() {
             transition={{ duration: 0.2, ease: 'easeOut' }}
             variant="special"
           >
-            Create a {poolTypeLabel} pool on {PROJECT_CONFIG.projectName} v3
+            Create a pool on {PROJECT_CONFIG.projectName} v3
           </MotionHeading>
         )}
       </Box>
