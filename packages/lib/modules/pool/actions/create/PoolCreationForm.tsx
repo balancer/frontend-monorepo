@@ -72,9 +72,9 @@ export function PoolCreationForm() {
                             />
                           </StepIndicator>
 
-                          <Box flexShrink="0">
-                            <StepTitle>{step.title}</StepTitle>
-                          </Box>
+                          <StepTitle fontWeight={isCompleted || isActive ? 'bold' : 'medium'}>
+                            {step.title}
+                          </StepTitle>
                         </Box>
 
                         <StepSeparator w="full" />
