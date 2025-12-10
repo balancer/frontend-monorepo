@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { getWrappedAndUnderlyingTokenFn } from '../../../pool-tokens.utils'
 import { isV3LBP } from '@repo/lib/modules/pool/pool.helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { isSameAddress } from '@balancer/sdk'
 
 type Props = { tokens: ApiToken[]; pool: Pool }
 export function RemoveLiquidityProportional({ tokens, pool }: Props) {
@@ -36,7 +37,9 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
 
   // can only withdraw top level tokens in recovery mode
   const poolTokens = isInRecoveryMode
-    ? (pool.poolTokens as ApiToken[]).filter(token => token.address !== pool.address)
+    ? (pool.poolTokens as ApiToken[]).filter(
+        token => !isSameAddress(token.address as Address, pool.address as Address)
+      )
     : tokens
 
   const nativeAssets = validTokens.filter(token =>
