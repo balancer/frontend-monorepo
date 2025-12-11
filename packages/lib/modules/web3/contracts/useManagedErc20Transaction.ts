@@ -128,8 +128,9 @@ export function useManagedErc20Transaction({
   const managedWriteAsync = async (
     overrideArgs?: ContractFunctionArgs<Erc20AbiWithIncreaseApproval, WriteAbiMutability>
   ) => {
-    const finalArgs = overrideArgs ?? args
     if (!simulateQuery.data) return
+
+    const finalArgs = overrideArgs ?? args
 
     try {
       const request = {
