@@ -93,7 +93,8 @@ function ConfigOptionsGroup({
     h: 141,
     justifyContent: 'center',
     px: 2,
-    py: 3,
+    pt: 4,
+    pb: 3,
     textAlign: 'center',
     _checked: {
       bg: '#63F2BE0D',
@@ -121,14 +122,16 @@ function ConfigOptionsGroup({
 
           return (
             <RadioCard key={key} {...radio} containerProps={cardContainerProps}>
-              <VStack align="center" h="full" justify="center" spacing="1" textAlign="center">
+              <VStack align="center" h="full" justify="center" spacing="3" textAlign="center">
                 {option.svg && <option.svg height="100%" width="100%" />}
-                <Text color="inherit" fontSize="sm">
-                  {option.label}
-                </Text>
-                <Text color="inherit" fontWeight="bold">
-                  {option.displayValue}
-                </Text>
+                <VStack spacing="1">
+                  <Text color="inherit" fontSize={{ base: 'xs', sm: 'sm' }}>
+                    {option.label}
+                  </Text>
+                  <Text color="inherit" fontWeight="bold">
+                    {option.displayValue}
+                  </Text>
+                </VStack>
               </VStack>
             </RadioCard>
           )
