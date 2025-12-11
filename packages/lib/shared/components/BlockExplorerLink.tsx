@@ -35,7 +35,7 @@ export function BlockExplorerLink({
   return (
     <Link href={href} isExternal>
       <HStack color="grayText" spacing="xs">
-        <Text fontSize={fontSize} variant="secondary">
+        <Text as="span" fontSize={fontSize} variant="secondary">
           {customLabel || label}
         </Text>
         <Icon as={ArrowUpRight} color="font.secondary" size={14} />
