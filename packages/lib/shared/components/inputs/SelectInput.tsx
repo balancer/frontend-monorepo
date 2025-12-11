@@ -9,6 +9,7 @@ import {
   SingleValue,
   DropdownIndicatorProps,
   SingleValueProps,
+  OptionProps,
 } from 'chakra-react-select'
 import { ComponentType, ReactNode, useEffect, useState } from 'react'
 
@@ -26,6 +27,7 @@ type Props = {
   DropdownIndicator?: ComponentType<
     DropdownIndicatorProps<SelectOption, false, GroupBase<SelectOption>>
   >
+  Option?: ComponentType<OptionProps<SelectOption, false, GroupBase<SelectOption>>>
   isSearchable?: boolean
   SingleValue?: ComponentType<SingleValueProps<SelectOption, false, GroupBase<SelectOption>>>
 }
@@ -37,6 +39,7 @@ export function SelectInput({
   options,
   defaultValue,
   DropdownIndicator,
+  Option,
   isSearchable = true,
   SingleValue,
 }: Props) {
@@ -49,6 +52,7 @@ export function SelectInput({
 
   const components = {
     ...(DropdownIndicator && { DropdownIndicator }),
+    ...(Option && { Option }),
     ...(SingleValue && { SingleValue }),
   }
 
