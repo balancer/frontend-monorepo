@@ -34,44 +34,48 @@ export function InputWithSuggestion({
       <Controller
         control={control}
         name={name}
-        render={({ field, fieldState: { error } }) => (
-          <InputWithError
-            error={error?.message}
-            isFiatPrice={isFiatPrice}
-            label={label}
-            onChange={e => field.onChange(e.target.value)}
-            placeholder={placeholder}
-            tooltip={tooltip}
-            value={field.value}
-          />
-        )}
+        render={({ field, fieldState: { error } }) => {
+          const isSuggestionApplied = field.value === suggestedValue
+
+          return (
+            <>
+              <InputWithError
+                error={error?.message}
+                isFiatPrice={isFiatPrice}
+                label={label}
+                onChange={e => field.onChange(e.target.value)}
+                placeholder={placeholder}
+                tooltip={tooltip}
+                value={field.value}
+              />
+              {suggestedValue && (
+                <HStack justify="space-between" w="full">
+                  <HStack spacing="xs">
+                    <Text color="font.secondary" fontSize="sm">
+                      {suggestionLabel}:
+                    </Text>
+                    <Text
+                      color={isSuggestionApplied ? 'font.secondary' : 'font.link'}
+                      cursor={isSuggestionApplied ? 'default' : 'pointer'}
+                      fontSize="sm"
+                      onClick={isSuggestionApplied ? undefined : onClickSuggestion}
+                      textDecoration={isSuggestionApplied ? 'none' : 'underline dotted 1px'}
+                      textUnderlineOffset="3px"
+                    >
+                      {suggestedValue}
+                    </Text>
+                  </HStack>
+                  {attribution && attribution}
+                </HStack>
+              )}
+            </>
+          )
+        }}
         rules={{
           required: `${label} is required`,
           validate,
         }}
       />
-      {suggestedValue && (
-        <HStack justify="space-between" w="full">
-          <HStack spacing="xs">
-            <Text color="font.secondary" fontSize="sm">
-              {suggestionLabel}:
-            </Text>
-            <Text
-              color="font.link"
-              cursor="pointer"
-              fontSize="sm"
-              onClick={onClickSuggestion}
-              textDecoration="underline"
-              textDecorationStyle="dotted"
-              textDecorationThickness="1px"
-              textUnderlineOffset="3px"
-            >
-              {suggestedValue}
-            </Text>
-          </HStack>
-          {attribution && attribution}
-        </HStack>
-      )}
     </VStack>
   )
 }
