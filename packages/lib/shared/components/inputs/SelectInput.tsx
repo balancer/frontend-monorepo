@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
@@ -11,7 +10,7 @@ import {
   SingleValueProps,
   OptionProps,
 } from 'chakra-react-select'
-import { ComponentType, ReactNode, useEffect, useState } from 'react'
+import { ComponentType, ReactNode } from 'react'
 
 export interface SelectOption extends OptionBase {
   label: ReactNode
@@ -43,11 +42,6 @@ export function SelectInput({
   isSearchable = true,
   SingleValue,
 }: Props) {
-  const defaultOption = defaultValue
-    ? options.find(option => option.value === defaultValue)
-    : undefined
-  const [optionValue, setOptionValue] = useState<SelectOption | undefined>(defaultOption)
-
   const chakraStyles = getSelectStyles<SelectOption>()
 
   const components = {
@@ -60,7 +54,9 @@ export function SelectInput({
     if (newOption) onChange(newOption.value)
   }
 
-  useEffect(() => setOptionValue(options.find(option => option.value === value)), [value])
+  const selectedOption =
+    options.find(option => option.value === value) ||
+    (defaultValue ? options.find(option => option.value === defaultValue) : undefined)
 
   return (
     <Select<SelectOption, false, GroupBase<SelectOption>>
@@ -75,7 +71,7 @@ export function SelectInput({
       styles={{
         menuPortal: base => ({ ...base, zIndex: 9999 }),
       }}
-      value={optionValue}
+      value={selectedOption}
     />
   )
 }
