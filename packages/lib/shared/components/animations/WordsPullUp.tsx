@@ -42,7 +42,7 @@ export function WordsPullUp({
     <HStack justify="center" {...rest}>
       {splittedText.map((current, i) => {
         const motionProps = {
-          animate: isInView ? 'animate' : '',
+          animate: isInView ? 'animate' : undefined,
           custom: i,
           initial: 'initial',
           variants: pullupVariant,
