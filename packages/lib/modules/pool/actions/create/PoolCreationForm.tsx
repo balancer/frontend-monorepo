@@ -46,9 +46,11 @@ export function PoolCreationForm() {
               <VStack align="start" spacing="md" w="full">
                 <Divider />
                 <Stepper
+                  gap={{ base: 1, sm: 4 }}
                   index={activeStepIndex}
-                  orientation={isMobile ? 'vertical' : 'horizontal'}
+                  orientation="horizontal"
                   pt="sm"
+                  size={{ base: 'sm', sm: 'md' }}
                   w="full"
                 >
                   {steps.map(step => (
@@ -62,7 +64,7 @@ export function PoolCreationForm() {
                       </StepIndicator>
 
                       <Box flexShrink="0">
-                        <StepTitle>{step.title}</StepTitle>
+                        <StepTitle fontSize={{ base: 'xs', sm: 'sm' }}>{step.title}</StepTitle>
                       </Box>
 
                       <StepSeparator w="full" />
