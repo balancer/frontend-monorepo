@@ -26,23 +26,34 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
         Choose protocol
       </Text>
       <SimpleGrid columns={2} spacing="md" w="full">
-        {PROTOCOLS.map(({ name, imageSrc }) => (
-          <Card
-            backgroundColor={selectedProtocol === name ? 'rgba(0, 211, 149, 0.05)' : 'transparent'}
-            border={selectedProtocol === name ? '2px solid' : '1px solid'}
-            borderColor={selectedProtocol === name ? 'green.500' : 'transparent'}
-            cursor="pointer"
-            display="flex"
-            gap="sm"
-            key={name}
-            onClick={() => handleChooseProtocol(name)}
-          >
-            <VStack spacing="sm">
-              <Image alt={`${name} logo`} height={80} src={imageSrc} width={80} />
-              <Text>{name}</Text>
-            </VStack>
-          </Card>
-        ))}
+        {PROTOCOLS.map(({ name, imageSrc }) => {
+          const cardProps = {
+            cursor: 'pointer',
+            display: 'flex',
+            gap: 'sm',
+            onClick: () => handleChooseProtocol(name),
+            ...(selectedProtocol === name
+              ? {
+                  backgroundColor: 'rgba(0, 211, 149, 0.05)',
+                  border: '1px solid',
+                  borderColor: 'green.500',
+                }
+              : {
+                  backgroundColor: 'background.level2',
+                  border: '1px solid',
+                  borderColor: 'transparent',
+                }),
+          }
+
+          return (
+            <Card {...cardProps}>
+              <VStack spacing="sm">
+                <Image alt={`${name} logo`} height={80} src={imageSrc} width={80} />
+                <Text>{name}</Text>
+              </VStack>
+            </Card>
+          )
+        })}
       </SimpleGrid>
     </VStack>
   )
