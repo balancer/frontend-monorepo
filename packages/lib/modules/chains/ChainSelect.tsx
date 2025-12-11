@@ -22,6 +22,7 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { PlugIcon } from '@repo/lib/shared/components/icons/PlugIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
+import { useMemo } from 'react'
 
 type Props = {
   value: GqlChain
@@ -67,7 +68,10 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
   const connectedChain = chainId ? getGqlChain(chainId) : undefined
   const nativeBalances = useNativeTokenBalances(chains)
 
-  const sortedChains = chains.sort((a, b) => nativeBalances[b] - nativeBalances[a])
+  const sortedChains = useMemo(
+    () => [...chains].sort((a, b) => nativeBalances[b] - nativeBalances[a]),
+    [chains, nativeBalances]
+  )
   const firstChainWithoutBalance = sortedChains.find(chain => nativeBalances[chain] === 0)
   const hasChainsWithBalance = sortedChains.find(chain => nativeBalances[chain] !== 0) !== undefined
 

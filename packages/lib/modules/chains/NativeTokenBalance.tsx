@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { Text } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { getNativeAsset } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -11,6 +10,7 @@ import { formatUnits } from 'viem'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { getBalance } from 'wagmi/actions'
 import { useTokens } from '../tokens/TokensProvider'
+import { useQueries } from '@tanstack/react-query'
 
 interface NativeTokenBalanceProps extends Omit<React.ComponentProps<typeof Text>, 'children'> {
   chain: GqlChain
@@ -41,31 +41,43 @@ export function useNativeTokenBalances(chains: GqlChain[]) {
   const config = useConfig()
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor } = useTokens()
-  const [nativeBalances, setNativeBalances] = useState<Record<string, number>>({})
 
-  useEffect(() => {
-    if (isConnected) {
-      const balances: Record<string, number> = {}
+  const balanceQueries = useQueries({
+    queries: chains.map(chain => {
+      const networkConfig = getNetworkConfig(chain)
+      return {
+        queryKey: ['native-balance', chain, userAddress],
+        queryFn: async () =>
+          getBalance(config, {
+            chainId: networkConfig.chainId,
+            address: userAddress,
+          }),
+        enabled: isConnected && !!userAddress,
+        staleTime: 30_000,
+      }
+    }),
+  })
 
-      chains.forEach(async (chain: GqlChain) => {
-        const networkConfig = getNetworkConfig(chain)
-        const balance = await getBalance(config, {
-          chainId: networkConfig.chainId,
-          address: userAddress,
-        })
-        const tokenPrice = priceFor(networkConfig.tokens.nativeAsset.address, chain)
+  return useMemo(
+    () =>
+      !isConnected
+        ? {}
+        : Object.fromEntries(
+            balanceQueries.map(({ data }, index) => {
+              const chain = chains[index]
+              const networkConfig = getNetworkConfig(chain)
+              const tokenPrice = priceFor(networkConfig.tokens.nativeAsset.address, chain) ?? 0
 
-        balances[chain] = bn(balance.value)
-          .shiftedBy(-balance.decimals)
-          .times(tokenPrice)
-          .toNumber()
-      })
+              const value =
+                data && data.value
+                  ? bn(data.value).shiftedBy(-data.decimals).times(tokenPrice).toNumber()
+                  : 0
 
-      setNativeBalances(balances)
-    }
-  }, [isConnected])
-
-  return nativeBalances
+              return [chain, value]
+            })
+          ),
+    [balanceQueries, chains, isConnected, priceFor]
+  )
 }
 
 export function NativeTokenBalance({ chain, applyOpacity, ...props }: NativeTokenBalanceProps) {
