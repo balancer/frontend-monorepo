@@ -1,6 +1,5 @@
 import {
   Box,
-  HStack,
   Input,
   InputProps,
   Text,
@@ -34,23 +33,25 @@ export function InputWithError({
   return (
     <VStack align="start" data-group w="full">
       {label && (
-        <HStack>
-          <Text fontWeight="bold" textAlign="start" w="full">
-            {label}
-          </Text>
+        <Text fontWeight="bold" textAlign="start" w="full">
+          {label}
           {tooltip && (
             <BalPopover text={tooltip}>
               <Box
                 _hover={{ opacity: 1 }}
+                as="span"
                 cursor="pointer"
+                display="inline-flex"
+                ml="1"
                 opacity="0.5"
                 transition="opacity 0.2s var(--ease-out-cubic)"
+                verticalAlign="middle"
               >
                 <InfoIcon />
               </Box>
             </BalPopover>
           )}
-        </HStack>
+        </Text>
       )}
 
       <InputGroup>
