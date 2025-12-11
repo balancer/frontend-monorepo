@@ -3,12 +3,14 @@ import { useRef, useState } from 'react'
 
 type TooltipWithTouchProps = TooltipProps & {
   fullWidth?: boolean
+  isHidden?: boolean
 }
 
 export function TooltipWithTouch({
   children,
   fullWidth = false,
   isDisabled,
+  isHidden = false,
   ...rest
 }: TooltipWithTouchProps) {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
@@ -32,6 +34,8 @@ export function TooltipWithTouch({
     if (isDisabled) return
     setIsLabelOpen(true)
   }
+
+  if (isHidden) return children
 
   return (
     <Tooltip
