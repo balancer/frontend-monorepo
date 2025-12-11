@@ -18,7 +18,7 @@ export function ReClammConfiguration() {
   return (
     <VStack align="start" spacing="xl" w="full">
       <Heading color="font.maxContrast" size="md">
-        ReClamm configuration
+        reCLAMM configuration
       </Heading>
       {reClammConfigurationOptions.map(option => (
         <ConfigOptionsGroup
@@ -114,7 +114,7 @@ function ConfigOptionsGroup({
         </Text>
         <InfoIconPopover message={tooltip} />
       </HStack>
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing="md" w="full" {...radioGroupProps}>
+      <SimpleGrid columns={3} spacing={{ base: 'sm', md: 'md' }} w="full" {...radioGroupProps}>
         {cardOptions.map((option, idx) => {
           const radio = getRadioProps({ value: option.rawValue })
           const key = `${label.replace(/\s+/g, '-')}-${idx}`
