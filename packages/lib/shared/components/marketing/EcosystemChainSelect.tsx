@@ -1,11 +1,10 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { Select, OptionBase, GroupBase, SingleValue, chakraComponents } from 'chakra-react-select'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import { ChevronDown } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
@@ -60,14 +59,12 @@ function CustomDropdownIndicator(props: any) {
 }
 
 export function EcosystemChainSelect({ value, onChange }: Props) {
-  const [chainValue, setChainValue] = useState<ChainOption | undefined>(undefined)
+  const chainValue = networkOptions.find(option => option.value === value)
   const chakraStyles = getSelectStyles<ChainOption>()
 
   function handleChange(newOption: SingleValue<ChainOption>) {
     if (newOption) onChange(newOption.value)
   }
-
-  useEffect(() => setChainValue(networkOptions.find(option => option.value === value)), [value])
 
   return (
     <Box animate={pulseOnceWithDelay} as={motion.div} data-lenis-prevent w="200px" zIndex="10">
