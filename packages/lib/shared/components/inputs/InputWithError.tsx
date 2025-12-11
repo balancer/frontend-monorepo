@@ -30,10 +30,13 @@ export function InputWithError({
   isFiatPrice,
   ...props
 }: InputWithErrorProps) {
+  const valueLength = typeof props.value === 'string' ? props.value.length : 0
+  const baseFontSize = valueLength > 36 ? '10px' : 'sm'
+
   return (
     <VStack align="start" data-group w="full">
       {label && (
-        <Text fontWeight="bold" textAlign="start" w="full">
+        <Text as="span" display="block" fontWeight="bold" textAlign="start" w="full">
           {label}
           {tooltip && (
             <BalPopover text={tooltip}>
@@ -47,7 +50,7 @@ export function InputWithError({
                 transition="opacity 0.2s var(--ease-out-cubic)"
                 verticalAlign="middle"
               >
-                <InfoIcon />
+                <InfoIcon as="span" />
               </Box>
             </BalPopover>
           )}
@@ -60,12 +63,13 @@ export function InputWithError({
             <Text>$</Text>
           </InputLeftElement>
         )}
-        <Input {...props} />
+        <Input fontSize={{ base: baseFontSize, md: 'md' }} {...props} />
 
         {pasteFn && (
           <InputRightElement w="max-content">
             <Button
               aria-label="paste"
+              fontSize={{ base: 'xs', md: 'sm' }}
               h="28px"
               letterSpacing="0.25px"
               lineHeight="1"
