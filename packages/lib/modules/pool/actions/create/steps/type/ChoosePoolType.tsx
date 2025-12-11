@@ -12,9 +12,16 @@ import { isProd } from '@repo/lib/config/app.config'
 
 export function ChoosePoolType({ control }: { control: Control<PoolCreationForm> }) {
   const protocol = useWatch({ control, name: 'protocol' })
-  const poolTypesKeys = Object.keys(POOL_TYPES).filter(key => {
-    return !isProd || key !== PoolType.ReClamm
+
+  const poolTypesKeys = Object.keys(POOL_TYPES).filter(poolType => {
+    if (isProd && poolType === PoolType.ReClamm) {
+      return false
+    }
+
+    // only show cow amm type for cow protocol selection
+    return isCowProtocol(protocol) === (poolType === PoolType.CowAmm)
   }) as SupportedPoolTypes[]
+
   const { poolCreationForm } = usePoolCreationForm()
 
   const [network] = useWatch({
