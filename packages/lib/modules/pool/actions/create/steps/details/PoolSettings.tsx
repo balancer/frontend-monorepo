@@ -16,7 +16,6 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isStablePool, isStableSurgePool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
-import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export type PoolSettingsOption = {
   label: string
@@ -104,6 +103,9 @@ export function PoolSettings() {
     }
   }
 
+  const showAmplificationParameter = isStablePool(poolType)
+  const showPoolHooks = !isStableSurgePool(poolType)
+
   return (
     <VStack align="start" spacing="lg" w="full">
       <Heading color="font.maxContrast" size="md">
@@ -141,7 +143,7 @@ export function PoolSettings() {
         validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
 
-      {isStablePool(poolType) && (
+      {showAmplificationParameter && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom amplification parameter"
           customInputType="number"
@@ -153,11 +155,7 @@ export function PoolSettings() {
         />
       )}
 
-      <TooltipWithTouch
-        isHidden={false}
-        label="The stable surge pool type must use the stable surge hooks contract"
-        placement="right"
-      >
+      {showPoolHooks && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom pool hooks address"
           customInputType="address"
@@ -168,7 +166,7 @@ export function PoolSettings() {
           tooltip="Contract that implements the hooks for the pool"
           validateAsync={validateHooksContract}
         />
-      </TooltipWithTouch>
+      )}
       <LiquidityManagement />
     </VStack>
   )
