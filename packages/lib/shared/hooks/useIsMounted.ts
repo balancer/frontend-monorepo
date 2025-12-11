@@ -1,3 +1,4 @@
+// keep this rule for now
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react'
 
