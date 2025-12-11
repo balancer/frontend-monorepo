@@ -14,11 +14,8 @@ import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { SelectInput, SelectOption } from '@repo/lib/shared/components/inputs/SelectInput'
-import {
-  NativeTokenBalance,
-  useHasNativeBalance,
-  useNativeTokenBalances,
-} from './NativeTokenBalance'
+import { NativeTokenBalance } from './NativeTokenBalance'
+import { useHasNativeBalance, useNativeTokenBalances } from './useNativeTokenBalances'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { PlugIcon } from '@repo/lib/shared/components/icons/PlugIcon'
