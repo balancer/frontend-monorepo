@@ -70,7 +70,7 @@ export function ConfigureTokenRateProvider({
   )
 
   return (
-    <FormSubsection marginLeft={{ base: 0, sm: 4, md: 5 }}>
+    <FormSubsection marginLeft={{ base: 4, md: 5 }}>
       <VStack align="start" w="full">
         <HStack spacing="xs">
           <Text fontWeight="bold">Rate Provider</Text>
