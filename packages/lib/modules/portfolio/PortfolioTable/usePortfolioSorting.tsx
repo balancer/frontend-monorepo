@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useMemo, useCallback, useReducer, useEffect } from 'react'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { getTotalApr } from '../../pool/pool.utils'
 import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
@@ -56,6 +55,23 @@ const generateStakingWeightForSort = (pool: ExpandedPoolInfo) => {
   }
 }
 
+type SortingState = PortfolioSortingData | null
+
+type SortingAction =
+  | { type: 'SET_SORTING'; payload: PortfolioSortingData }
+  | { type: 'RESET_SORTING' }
+
+function sortingReducer(state: SortingState, action: SortingAction): SortingState {
+  switch (action.type) {
+    case 'SET_SORTING':
+      return action.payload
+    case 'RESET_SORTING':
+      return null
+    default:
+      return state
+  }
+}
+
 export function usePortfolioSorting() {
   const { filteredExpandedPools, selectedNetworks, selectedPoolTypes, selectedStakingTypes } =
     usePortfolioFilters()
@@ -63,28 +79,39 @@ export function usePortfolioSorting() {
   const { portfolioData } = usePortfolio()
   const { veBalBoostMap } = useVebalBoost(portfolioData.stakedPools)
 
-  const [currentSortingObj, setCurrentSortingObj] = useState<PortfolioSortingData>({
-    id: 'staking',
-    desc: true,
-  })
+  const [manualSortingObj, dispatch] = useReducer(sortingReducer, null)
 
-  const setSorting = useCallback((sorting: PortfolioSortingData) => {
-    setCurrentSortingObj(sorting)
-  }, [])
+  // need useMemo here to prevent infinite loop in useEffect below
+  const filterStateKey = useMemo(() => {
+    return `${selectedNetworks?.length || 0}-${selectedPoolTypes?.length || 0}-${selectedStakingTypes?.length || 0}`
+  }, [selectedNetworks, selectedPoolTypes, selectedStakingTypes])
 
+  // Dispatch reset when filter state changes
   useEffect(() => {
+    dispatch({ type: 'RESET_SORTING' })
+  }, [filterStateKey])
+
+  const currentSortingObj = useMemo(() => {
+    if (manualSortingObj) {
+      return manualSortingObj
+    }
+
     // set sorting to liquidity when any filter is applied
     if (
       (selectedNetworks && selectedNetworks.length > 0) ||
       (selectedPoolTypes && selectedPoolTypes.length > 0) ||
       (selectedStakingTypes && selectedStakingTypes.length > 0)
     ) {
-      setCurrentSortingObj({ id: 'liquidity', desc: true })
+      return { id: 'liquidity' as const, desc: true }
     } else {
       // set sorting to staking when no filters are applied
-      setCurrentSortingObj({ id: 'staking', desc: true })
+      return { id: 'staking' as const, desc: true }
     }
-  }, [selectedNetworks, selectedPoolTypes, selectedStakingTypes])
+  }, [selectedNetworks, selectedPoolTypes, selectedStakingTypes, manualSortingObj])
+
+  const setSorting = useCallback((sorting: PortfolioSortingData) => {
+    dispatch({ type: 'SET_SORTING', payload: sorting })
+  }, [])
 
   const sortedPools = useMemo(() => {
     if (!filteredExpandedPools?.length) return []
