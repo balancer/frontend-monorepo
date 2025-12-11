@@ -42,7 +42,7 @@ export function PoolSettings() {
     {
       label: 'My connected wallet:',
       value: userAddress,
-      detail: <BlockExplorerLink address={userAddress} chain={network} fontSize="md" />,
+      detail: <BlockExplorerLink address={userAddress} chain={network} />,
     },
   ]
 
