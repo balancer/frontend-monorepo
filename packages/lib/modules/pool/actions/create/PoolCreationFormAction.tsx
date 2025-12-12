@@ -8,7 +8,7 @@ import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
-import { isReClammPool, isCowPool } from './helpers'
+import { isReClammPool } from './helpers'
 import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
@@ -84,7 +84,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         </HStack>
       </VStack>
 
-      {formState.isValid && isLastStep && !isCowPool(poolType) && (
+      {formState.isValid && isLastStep && (
         <PoolCreationModal
           finalFocusRef={nextBtn}
           isOpen={previewModalDisclosure.isOpen}

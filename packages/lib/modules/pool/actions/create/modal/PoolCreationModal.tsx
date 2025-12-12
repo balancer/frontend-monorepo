@@ -15,7 +15,6 @@ import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainId } from '@repo/lib/config/app.config'
-import { usePoolCreationTransactions } from './usePoolCreationTransactions'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { getGqlPoolType } from '../helpers'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
@@ -24,6 +23,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useInitializePoolInput } from './useInitializePoolInput'
 import { RestartPoolCreationModal } from './RestartPoolCreationModal'
 import { useWatch } from 'react-hook-form'
+import { usePoolCreationTransactions } from './usePoolCreationTransactions'
 
 type PoolCreationModalProps = {
   isOpen: boolean
