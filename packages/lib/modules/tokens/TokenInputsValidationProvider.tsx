@@ -10,7 +10,10 @@ export function useTokenInputsValidationLogic() {
   const [validationErrors, setValidationErrors] = useState<ValidationErrorsByToken>({})
 
   function setValidationError(tokenAddress: Address, value: string) {
-    setValidationErrors({ ...validationErrors, [tokenAddress]: value })
+    setValidationErrors(prev => {
+      if (prev[tokenAddress] === value) return prev
+      return { ...prev, [tokenAddress]: value }
+    })
   }
 
   function hasValidationError(token: ApiOrCustomToken | undefined) {
