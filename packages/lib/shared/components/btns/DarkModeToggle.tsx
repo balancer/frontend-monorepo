@@ -1,15 +1,13 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { Button, useColorMode } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Moon, Sun } from 'react-feather'
 import { AnalyticsEvent, trackEvent } from '../../services/fathom/Fathom'
 
 export default function DarkModeToggle() {
-  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const { setColorMode } = useColorMode()
 
@@ -31,20 +29,8 @@ export default function DarkModeToggle() {
   }
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
     setColorMode(theme)
   }, [theme])
-
-  if (!mounted) {
-    return (
-      <Button isDisabled p="0" variant="tertiary">
-        <Moon size={18} />
-      </Button>
-    )
-  }
 
   return (
     <Button onClick={toggleColorMode} p="0" variant="tertiary">
