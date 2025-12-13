@@ -11,7 +11,7 @@ export function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
 
   const reclammContent = poolAddress
     ? 'When you enter a seed amount for one of the ReClamm pool tokens, the other amount is proportionally autofilled to maintain the required price ratio for pool initialization.'
-    : 'The ReClamm pool type requires you to deploy the pool contract before initial token amounts can be chosen.'
+    : 'The reCLAMM pool type requires you to deploy the pool contract before initial token amounts can be chosen.'
 
   const gyroEclpContent =
     'When you enter a seed amount for one of the Gyro ECLP tokens, the other amount is proportionally autofilled to maintain the recommended price ratio for pool initialization.'

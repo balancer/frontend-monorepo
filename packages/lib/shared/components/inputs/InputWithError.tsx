@@ -1,6 +1,5 @@
 import {
   Box,
-  HStack,
   Input,
   InputProps,
   Text,
@@ -31,26 +30,31 @@ export function InputWithError({
   isFiatPrice,
   ...props
 }: InputWithErrorProps) {
+  const valueLength = typeof props.value === 'string' ? props.value.length : 0
+  const baseFontSize = valueLength > 36 ? '10px' : 'sm'
+
   return (
     <VStack align="start" data-group w="full">
       {label && (
-        <HStack>
-          <Text fontWeight="bold" textAlign="start" w="full">
-            {label}
-          </Text>
+        <Text as="span" display="block" fontWeight="bold" textAlign="start" w="full">
+          {label}
           {tooltip && (
             <BalPopover text={tooltip}>
               <Box
                 _hover={{ opacity: 1 }}
+                as="span"
                 cursor="pointer"
+                display="inline-flex"
+                ml="1"
                 opacity="0.5"
                 transition="opacity 0.2s var(--ease-out-cubic)"
+                verticalAlign="middle"
               >
-                <InfoIcon />
+                <InfoIcon as="span" />
               </Box>
             </BalPopover>
           )}
-        </HStack>
+        </Text>
       )}
 
       <InputGroup>
@@ -59,12 +63,13 @@ export function InputWithError({
             <Text>$</Text>
           </InputLeftElement>
         )}
-        <Input {...props} />
+        <Input fontSize={{ base: baseFontSize, md: 'md' }} {...props} />
 
         {pasteFn && (
           <InputRightElement w="max-content">
             <Button
               aria-label="paste"
+              fontSize={{ base: 'xs', md: 'sm' }}
               h="28px"
               letterSpacing="0.25px"
               lineHeight="1"

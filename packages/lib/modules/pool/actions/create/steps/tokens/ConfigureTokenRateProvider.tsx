@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link } from '@chakra-ui/react'
+import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link, Box } from '@chakra-ui/react'
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
@@ -70,7 +70,7 @@ export function ConfigureTokenRateProvider({
   )
 
   return (
-    <FormSubsection marginLeft="5">
+    <FormSubsection marginLeft={{ base: 2, sm: 4, md: 5 }}>
       <VStack align="start" w="full">
         <HStack spacing="xs">
           <Text fontWeight="bold">Rate Provider</Text>
@@ -79,18 +79,23 @@ export function ConfigureTokenRateProvider({
         <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>
           <Stack spacing={3}>
             {adjustedRateProviderOptions.map(({ label, value }) => (
-              <HStack key={value} spacing="xs">
+              <Stack
+                direction={{ base: 'column', md: 'row' }}
+                key={value}
+                spacing={{ base: 1, md: 'xs' }}
+              >
                 <Radio size="lg" value={value}>
                   <Text>{label}</Text>
                 </Radio>
                 {value === RateProviderOption.Verified && (
-                  <BlockExplorerLink
-                    address={verifiedRateProviderAddress as Address}
-                    chain={network}
-                    fontSize="md"
-                  />
+                  <Box pl={{ base: 7, md: 0 }}>
+                    <BlockExplorerLink
+                      address={verifiedRateProviderAddress as Address}
+                      chain={network}
+                    />
+                  </Box>
                 )}
-              </HStack>
+              </Stack>
             ))}
           </Stack>
         </RadioGroup>
@@ -171,7 +176,7 @@ function CustomRateProviderInput({
             <InputWithError
               error={rateProviderErrors?.message}
               isInvalid={!!rateProviderErrors}
-              label={`Rate Provider contract address (on ${chainName})`}
+              label={`Rate Provider address (on ${chainName})`}
               onChange={e => field.onChange(e.target.value)}
               pasteFn={paste}
               placeholder="0xba100000625a3754423978a60c9317c58a424e3D"

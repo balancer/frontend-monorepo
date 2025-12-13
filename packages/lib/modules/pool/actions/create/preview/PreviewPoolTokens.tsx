@@ -125,11 +125,13 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
                   symbol={data.symbol}
                 />,
                 <RateProviderReviewedCell hasBeenReviewed={hasBeenReviewed} />,
-                <BlockExplorerLink
-                  address={token.rateProvider || undefined}
-                  chain={data.chain}
-                  fontSize="md"
-                />,
+                <HStack justify="end">
+                  <BlockExplorerLink
+                    address={token.rateProvider || undefined}
+                    chain={data.chain}
+                    fontSize="md"
+                  />
+                </HStack>,
               ]}
               key={data.address}
             />

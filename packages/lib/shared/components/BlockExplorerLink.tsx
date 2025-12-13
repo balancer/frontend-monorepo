@@ -13,7 +13,7 @@ type Props = {
   transactionHash?: Address
   chain: GqlChain
   address?: Address
-  fontSize?: string
+  fontSize?: string | Record<string, string>
   customLabel?: string
 }
 
@@ -22,7 +22,7 @@ export function BlockExplorerLink({
   transactionHash,
   address,
   customLabel,
-  fontSize = 'sm',
+  fontSize = { base: 'sm', sm: 'md' },
 }: Props) {
   if (!transactionHash && !address) return null
 
@@ -35,7 +35,7 @@ export function BlockExplorerLink({
   return (
     <Link href={href} isExternal>
       <HStack color="grayText" spacing="xs">
-        <Text fontSize={fontSize} variant="secondary">
+        <Text as="span" fontSize={fontSize} variant="secondary">
           {customLabel || label}
         </Text>
         <Icon as={ArrowUpRight} color="font.secondary" size={14} />

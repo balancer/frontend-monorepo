@@ -158,13 +158,15 @@ export function ChoosePoolTokens() {
               <VStack align="start" gap="lg" w="full">
                 <Divider />
                 <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
-                <Divider />
               </VStack>
             </>
           )}
 
           {isWeightedPool(poolType) && isCustomWeightedPool(poolType, weightedPoolStructure) && (
-            <TotalWeightDisplay />
+            <>
+              <Divider />
+              <TotalWeightDisplay />
+            </>
           )}
         </VStack>
       </VStack>

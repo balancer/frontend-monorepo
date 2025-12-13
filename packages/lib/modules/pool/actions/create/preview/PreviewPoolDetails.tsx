@@ -106,7 +106,9 @@ export function PoolDetailsContent() {
       w="calc(100% + var(--chakra-space-md) * 2)"
     >
       <Text color="font.secondary">{label}</Text>
-      <Text color="font.secondary">{isBeforeStep('Details') ? '—' : value}</Text>
+      <Text as="span" color="font.secondary">
+        {isBeforeStep('Details') ? '—' : value}
+      </Text>
     </HStack>
   ))
 }
