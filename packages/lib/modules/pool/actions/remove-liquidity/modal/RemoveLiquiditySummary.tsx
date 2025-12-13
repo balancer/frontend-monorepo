@@ -28,7 +28,7 @@ export function RemoveLiquiditySummary({
 }: RemoveLiquidityReceiptResult) {
   const {
     transactionSteps,
-    quoteBptIn,
+    humanBptIn,
     totalUSDValue,
     amountsOut,
     hasQuoteContext,
@@ -83,7 +83,7 @@ export function RemoveLiquiditySummary({
 
       <Card variant="modalSubSection">
         <BptRow
-          bptAmount={shouldShowReceipt ? sentBptUnits : quoteBptIn}
+          bptAmount={shouldShowReceipt ? sentBptUnits : humanBptIn}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You removed' : "You're removing"}
           pool={pool}
@@ -110,7 +110,7 @@ export function RemoveLiquiditySummary({
           <Card variant="modalSubSection">
             <VStack align="start" spacing="sm">
               <PoolActionsPriceImpactDetails
-                bptAmount={BigInt(parseUnits(quoteBptIn, 18))}
+                bptAmount={BigInt(parseUnits(humanBptIn, 18))}
                 slippage={slippage}
                 totalUSDValue={totalUSDValue}
               />
