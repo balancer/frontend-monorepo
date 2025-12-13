@@ -7,13 +7,16 @@ import { ReClammConfiguration } from './ReClammConfiguration'
 import { SimilarPoolsModal } from '../../modal/SimilarPoolsModal'
 import { GyroEclpConfiguration } from './GyroEclpConfiguration'
 import { useValidateEclpParams } from './useValidateEclpParams'
-import { isReClammPool, isGyroEllipticPool } from '../../helpers'
+import { isReClammPool, isGyroEllipticPool, isCowPool } from '../../helpers'
 import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolDetailsStep() {
   const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
   const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
   const { isEclpParamsValid } = useValidateEclpParams()
+
+  // CoW AMM has no pool settings config because built on Balancer v1
+  const showPoolSettings = !isCowPool(poolType)
 
   const poolCreationFormState = useFormState({ control: poolCreationForm.control })
   const isPoolCreationFormInvalid = !poolCreationFormState.isValid
@@ -32,7 +35,7 @@ export function PoolDetailsStep() {
           {isReClammPool(poolType) && <ReClammConfiguration />}
           {isGyroEllipticPool(poolType) && <GyroEclpConfiguration />}
           <PoolDetails />
-          <PoolSettings />
+          {showPoolSettings && <PoolSettings />}
           <PoolCreationFormAction disabled={isDisabled} />
         </VStack>
       </Box>

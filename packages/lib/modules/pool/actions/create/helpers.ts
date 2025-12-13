@@ -10,6 +10,7 @@ const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.StableSurge]: GqlPoolType.Stable,
   [PoolType.GyroE]: GqlPoolType.Gyroe,
   [PoolType.ReClamm]: GqlPoolType.Reclamm,
+  [PoolType.CowAmm]: GqlPoolType.CowAmm,
 }
 
 export function getGqlPoolType(poolType: PoolType): GqlPoolType {
@@ -89,4 +90,12 @@ export function isReClammPool(poolType: PoolType): boolean {
 
 export function isGyroEllipticPool(poolType: PoolType): boolean {
   return poolType === PoolType.GyroE
+}
+
+export function isCowPool(poolType: PoolType): boolean {
+  return poolType === PoolType.CowAmm
+}
+
+export function isCowProtocol(protocol: string): boolean {
+  return protocol === 'CoW'
 }

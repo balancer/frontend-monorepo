@@ -12,14 +12,21 @@ import {
   type RadioCardOption,
 } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 import { INITIAL_POOL_CREATION_FORM } from '../../constants'
+import { isCowProtocol } from '../../helpers'
+import { useWatch } from 'react-hook-form'
 
 export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> }) {
   const { poolCreationForm } = usePoolCreationForm()
 
-  const { supportedNetworks } = PROJECT_CONFIG
+  const [protocol, poolType] = useWatch({ control, name: ['protocol', 'poolType'] })
+
+  const { supportedNetworks, cowSupportedNetworks } = PROJECT_CONFIG
+
+  const protocolNetworks = isCowProtocol(protocol) ? cowSupportedNetworks : supportedNetworks
+
   const networkOptions: RadioCardOption<GqlChain>[] = [
-    supportedNetworks[0],
-    ...supportedNetworks.slice(1).sort(),
+    protocolNetworks[0],
+    ...protocolNetworks.slice(1).sort(),
   ]
     .filter(
       network =>
@@ -44,7 +51,12 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
             name={field.name}
             onChange={(value: GqlChain) => {
               field.onChange(value)
-              poolCreationForm.reset({ ...INITIAL_POOL_CREATION_FORM, network: value })
+              poolCreationForm.reset({
+                ...INITIAL_POOL_CREATION_FORM,
+                network: value,
+                protocol,
+                poolType,
+              })
             }}
             options={networkOptions}
             radioCardProps={{
