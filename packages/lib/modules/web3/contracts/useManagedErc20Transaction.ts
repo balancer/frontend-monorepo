@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { getGqlChain } from '@repo/lib/config/app.config'
@@ -10,7 +9,6 @@ import {
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { captureWagmiExecutionError } from '@repo/lib/shared/utils/query-errors'
-import { useEffect, useState } from 'react'
 import { Address, ContractFunctionArgs, ContractFunctionName } from 'viem'
 import {
   useEstimateGas,
@@ -53,7 +51,6 @@ export function useManagedErc20Transaction({
   enabled = true,
   simulationMeta,
 }: ManagedErc20TransactionInput) {
-  const [writeArgs, setWriteArgs] = useState(args)
   const { minConfirmations } = useNetworkConfig()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
 
@@ -69,7 +66,7 @@ export function useManagedErc20Transaction({
     address: tokenAddress,
     functionName: functionName as ContractFunctionName<any, WriteAbiMutability>,
     // This any is 'safe'. The type provided to any is the same type for args that is inferred via the functionName
-    args: writeArgs as any,
+    args: args as any,
   }
 
   const simulateQuery = useSimulateContract({
@@ -128,21 +125,19 @@ export function useManagedErc20Transaction({
     hash: bundle.result.data?.transactionHash,
   })
 
-  // if parent changes args, update here
-  useEffect(() => {
-    setWriteArgs(args)
-  }, [JSON.stringify(args)])
-
   const managedWriteAsync = async (
-    args?: ContractFunctionArgs<Erc20AbiWithIncreaseApproval, WriteAbiMutability>
+    overrideArgs?: ContractFunctionArgs<Erc20AbiWithIncreaseApproval, WriteAbiMutability>
   ) => {
-    if (args) {
-      setWriteArgs(args)
-    }
     if (!simulateQuery.data) return
 
+    const finalArgs = overrideArgs ?? args
+
     try {
-      return await writeQuery.writeContractAsync(simulateQuery.data.request)
+      const request = {
+        ...simulateQuery.data.request,
+        args: finalArgs as any,
+      }
+      return await writeQuery.writeContractAsync(request)
     } catch (e: unknown) {
       captureWagmiExecutionError(e, 'Error in ERC20 transaction execution', {
         chainId,
