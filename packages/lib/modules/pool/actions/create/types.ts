@@ -1,4 +1,14 @@
-import { InputAmount, InitPoolInputV3, PoolType } from '@balancer/sdk'
+import {
+  InputAmount,
+  InitPoolInputV3,
+  PoolType,
+  CreatePoolV3WeightedInput,
+  CreatePoolV3StableInput,
+  CreatePoolStableSurgeInput,
+  CreatePoolReClammInput,
+  CreatePoolGyroECLPInput,
+  CreatePoolLiquidityBootstrappingInput,
+} from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
@@ -71,3 +81,20 @@ export type EclpConfigForm = {
   lambda: string
   peakPrice: string
 }
+
+type CreateCowAmmInput = {
+  symbol: string
+  name: string
+  poolType: PoolType.CowAmm
+  chainId: number
+  protocolVersion: 1
+}
+
+export type CreatePoolInput =
+  | CreatePoolV3WeightedInput
+  | CreatePoolV3StableInput
+  | CreatePoolStableSurgeInput
+  | CreatePoolReClammInput
+  | CreatePoolGyroECLPInput
+  | CreateCowAmmInput
+  | CreatePoolLiquidityBootstrappingInput

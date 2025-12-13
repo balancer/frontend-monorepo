@@ -13,9 +13,9 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 import { useInitializePoolStep } from './useInitializePoolStep'
-import { CreatePoolInput } from '@balancer/sdk'
+import { CreatePoolInput } from '../types'
 
-type UsePoolCreationTransactionsParams = {
+type Props = {
   createPoolInput: CreatePoolInput
   initPoolInput: ExtendedInitPoolInputV3
   poolAddress: Address | undefined
@@ -27,7 +27,7 @@ export function usePoolCreationTransactions({
   initPoolInput,
   poolAddress,
   setPoolAddress,
-}: UsePoolCreationTransactionsParams) {
+}: Props) {
   const { poolType } = createPoolInput
   const { amountsIn, wethIsEth, chainId } = initPoolInput
   const shouldBatchTransactions = useShouldBatchTransactions()
