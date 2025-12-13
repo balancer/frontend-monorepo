@@ -1,6 +1,10 @@
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 
+const scrollToTop = () => {
+  window.scrollTo(0, 0)
+}
+
 const steps = [
   { id: 'step1', title: 'Type' },
   { id: 'step2', title: 'Tokens' },
@@ -17,10 +21,12 @@ export function usePoolCreationFormSteps() {
 
   const nextStep = () => {
     setActiveStepIndex(activeStepIndex + 1)
+    scrollToTop()
   }
 
   const previousStep = () => {
     setActiveStepIndex(activeStepIndex - 1)
+    scrollToTop()
   }
 
   const lastStep = () => {
@@ -29,6 +35,13 @@ export function usePoolCreationFormSteps() {
 
   const resetSteps = () => {
     setActiveStepIndex(0)
+  }
+
+  const goToStep = (stepIndex: number) => {
+    if (stepIndex < activeStepIndex) {
+      setActiveStepIndex(stepIndex)
+      scrollToTop()
+    }
   }
 
   const isBeforeStep = (stepTitle: string) => {
@@ -52,5 +65,6 @@ export function usePoolCreationFormSteps() {
     nextStep,
     lastStep,
     resetSteps,
+    goToStep,
   }
 }
