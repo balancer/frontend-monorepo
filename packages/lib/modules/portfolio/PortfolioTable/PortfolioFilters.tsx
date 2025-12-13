@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import {
   Box,
   Text,
@@ -28,7 +27,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Filter } from 'react-feather'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { PoolFilterType } from '../../pool/pool.types'
@@ -148,15 +147,10 @@ export function StakingTypeFilters({
 
 export function usePortfolioFilterTagsVisible() {
   const { selectedNetworks, selectedPoolTypes, selectedStakingTypes } = usePortfolioFilters()
-  const [isVisible, setIsVisible] = useState(false)
 
-  useEffect(() => {
-    setIsVisible(
-      selectedNetworks.length > 0 || selectedPoolTypes.length > 0 || selectedStakingTypes.length > 0
-    )
-  }, [selectedNetworks, selectedPoolTypes, selectedStakingTypes])
-
-  return isVisible
+  return (
+    selectedNetworks.length > 0 || selectedPoolTypes.length > 0 || selectedStakingTypes.length > 0
+  )
 }
 
 export interface PortfolioFilterTagsPops {
