@@ -1,5 +1,5 @@
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { isHash, Address } from 'viem'
+import { isHash, Address, zeroAddress } from 'viem'
 import { useParams } from 'next/navigation'
 import { useCreatePoolStep } from './useCreatePoolStep'
 import { getGqlChain } from '@repo/lib/config/app.config'
@@ -28,7 +28,7 @@ export function usePoolCreationTransactions({
   poolAddress,
   setPoolAddress,
 }: Props) {
-  const { poolType } = createPoolInput
+  const { poolType, protocolVersion } = createPoolInput
   const { amountsIn, wethIsEth, chainId } = initPoolInput
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { shouldUseSignatures } = useUserSettings()
@@ -36,13 +36,18 @@ export function usePoolCreationTransactions({
   const createPoolStep = useCreatePoolStep({ createPoolInput, poolAddress, setPoolAddress })
   const chain = getGqlChain(chainId)
 
+  // cow requires pool deployment to happen before we know the spender
+  const cowSpenderAdress = poolAddress ? poolAddress : zeroAddress
+  const spenderAddress = protocolVersion === 1 ? cowSpenderAdress : getSpenderForCreatePool(chain)
+  const isPermit2 = protocolVersion === 3
+
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
-      spenderAddress: getSpenderForCreatePool(chain),
+      spenderAddress,
       chain,
       approvalAmounts: amountsIn,
       actionType: 'InitializePool',
-      isPermit2: true,
+      isPermit2,
       wethIsEth,
     })
 
@@ -67,7 +72,7 @@ export function usePoolCreationTransactions({
     permit2ApprovalSteps,
     tokenApprovalSteps,
     shouldBatchTransactions,
-    isPermit2: true,
+    isPermit2,
     addLiquidityStep: initPoolStep,
   })
 

@@ -31,6 +31,7 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
             cursor: 'pointer',
             display: 'flex',
             gap: 'sm',
+            key: name,
             onClick: () => handleChooseProtocol(name),
             ...(selectedProtocol === name
               ? {
