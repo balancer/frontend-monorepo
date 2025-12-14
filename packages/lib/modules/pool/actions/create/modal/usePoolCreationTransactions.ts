@@ -14,6 +14,8 @@ import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsPro
 import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 import { useInitializePoolStep } from './useInitializePoolStep'
 import { CreatePoolInput } from '../types'
+import { isCowPool } from '../helpers'
+import { useCreateCowSteps } from './cow-amm-steps/useCreateCowSteps'
 
 type Props = {
   createPoolInput: CreatePoolInput
@@ -64,25 +66,33 @@ export function usePoolCreationTransactions({
       enabled: !shouldUseSignatures,
     })
 
-  const initPoolStep = useInitializePoolStep({ initPoolInput, poolAddress, poolType })
+  const initV3PoolStep = useInitializePoolStep({ initPoolInput, poolAddress, poolType })
 
-  const approvalAndAddSteps = getApprovalAndAddSteps({
+  const finishV3Steps = getApprovalAndAddSteps({
     shouldUseSignatures,
     signPermit2Step,
     permit2ApprovalSteps,
     tokenApprovalSteps,
     shouldBatchTransactions,
     isPermit2,
-    addLiquidityStep: initPoolStep,
+    addLiquidityStep: initV3PoolStep,
   })
 
-  const steps = [createPoolStep, ...approvalAndAddSteps]
+  const { steps: finishCowSteps, isLoading: isLoadingFinishCowSteps } = useCreateCowSteps({
+    initPoolInput,
+    poolAddress,
+  })
+
+  const steps = isCowPool(poolType)
+    ? [createPoolStep, ...tokenApprovalSteps, ...finishCowSteps]
+    : [createPoolStep, ...finishV3Steps]
 
   const isLoadingSteps =
     isLoadingTokenApprovalSteps ||
     !signPermit2Step ||
     isLoadingTokenApprovalSteps ||
-    isLoadingPermit2ApprovalSteps
+    isLoadingPermit2ApprovalSteps ||
+    isLoadingFinishCowSteps
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
   const initPoolTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash

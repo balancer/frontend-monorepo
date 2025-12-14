@@ -124,7 +124,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
   }
 
   if (poolType === PoolType.CowAmm) {
-    return { name, symbol, poolType, chainId, protocolVersion: 1 }
+    return { name, symbol, poolType, chainId, protocolVersion: 1, poolTokens }
   }
 
   throw new Error('Invalid pool type for useCreatePoolInput')

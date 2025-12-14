@@ -14,10 +14,10 @@ import { Address } from 'viem'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { WeightedPoolStructure, PROTOCOLS } from './constants'
 
-export type InputAmountWithSymbol = InputAmount & { symbol: string }
+export type InitPoolInputAmount = InputAmount & { symbol: string; weight?: string }
 
 export type ExtendedInitPoolInputV3 = Omit<InitPoolInputV3, 'amountsIn'> & {
-  amountsIn: InputAmountWithSymbol[]
+  amountsIn: InitPoolInputAmount[]
 }
 
 export type SupportedPoolTypes =
@@ -88,6 +88,7 @@ type CreateCowAmmInput = {
   poolType: PoolType.CowAmm
   chainId: number
   protocolVersion: 1
+  poolTokens: PoolCreationToken[]
 }
 
 export type CreatePoolInput =

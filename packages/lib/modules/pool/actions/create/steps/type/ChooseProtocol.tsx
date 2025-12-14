@@ -31,7 +31,6 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
             cursor: 'pointer',
             display: 'flex',
             gap: 'sm',
-            key: name,
             onClick: () => handleChooseProtocol(name),
             ...(selectedProtocol === name
               ? {
@@ -47,7 +46,7 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
           }
 
           return (
-            <Card {...cardProps}>
+            <Card key={name} {...cardProps}>
               <VStack spacing="sm">
                 <Image alt={`${name} logo`} height={80} src={imageSrc} width={80} />
                 <Text>{name}</Text>

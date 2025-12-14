@@ -1,5 +1,5 @@
 import {
-  type InputAmountWithSymbol,
+  type InitPoolInputAmount,
   type ExtendedInitPoolInputV3,
 } from '@repo/lib/modules/pool/actions/create/types'
 import { parseUnits } from 'viem'
@@ -15,7 +15,7 @@ export function useInitializePoolInput(chainId: number): ExtendedInitPoolInputV3
   const nativeAsset = tokens.nativeAsset.address
   const wNativeAsset = tokens.addresses.wNativeAsset
 
-  const amountsIn: InputAmountWithSymbol[] = poolTokens.map(token => {
+  const amountsIn: InitPoolInputAmount[] = poolTokens.map(token => {
     const address = token.address
     const decimals = token.data?.decimals
     const symbol = token.data?.symbol
@@ -28,6 +28,7 @@ export function useInitializePoolInput(chainId: number): ExtendedInitPoolInputV3
       decimals,
       rawAmount,
       symbol,
+      weight: token.weight,
     }
   })
 
