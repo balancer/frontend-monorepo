@@ -1,5 +1,4 @@
 import { type TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
-import { InitPoolInputAmount } from '@repo/lib/modules/pool/actions/create/types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
@@ -12,13 +11,19 @@ import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/tra
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
-import { encodeFunctionData, parseAbi, parseUnits } from 'viem'
+import { encodeFunctionData, parseAbi } from 'viem'
 import { useReadContract } from 'wagmi'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { isCowPool } from '../../helpers'
 import { getChainId } from '@repo/lib/config/app.config'
+import { parseUnits, Address } from 'viem'
 
-export function useBindTokenStep(token: InitPoolInputAmount) {
+export function useBindTokenStep(token: {
+  address: Address
+  symbol: string
+  rawAmount: bigint
+  weight: string | undefined
+}) {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const { poolCreationForm, poolAddress } = usePoolCreationForm()
@@ -47,14 +52,18 @@ export function useBindTokenStep(token: InitPoolInputAmount) {
 
   let txConfig: TransactionConfig | undefined
 
-  if (isConnected && token.weight && poolAddress && isCowPool(poolType)) {
-    // bind 2 tokens with 1e18 weight for each to get a 50/50 pool, otherwise parse the 80/20 to the required precision
-    const weight = token.weight === '50' ? parseUnits('1', 18) : parseUnits(token.weight, 17)
+  if (isConnected && poolAddress && isCowPool(poolType)) {
+    if (!token.weight) {
+      throw new Error(`${token.symbol} weight is required for create cow bind token step`)
+    }
 
+    // for 50/50 pool, weight must be 1e18 for both tokens
+    // for 80/20 pool, parse human readable weight as necessary
+    const rawWeight = token.weight === '50' ? parseUnits('1', 18) : parseUnits(token.weight, 17)
     const data = encodeFunctionData({
       abi: parseAbi(['function bind(address token, uint256 balance, uint256 denorm) external']),
       functionName: 'bind',
-      args: [token.address, token.rawAmount, weight],
+      args: [token.address, token.rawAmount, rawWeight],
     })
 
     txConfig = {

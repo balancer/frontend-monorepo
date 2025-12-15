@@ -7,6 +7,7 @@ import {
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getGqlPoolType, isWeightedPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
+import { isCowPool } from '../helpers'
 
 export function useCheckForSimilarPools() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -23,7 +24,7 @@ export function useCheckForSimilarPools() {
         chainIn: [network],
         poolTypeIn: [getGqlPoolType(poolType)],
         tokensIn: poolTokens.map(({ address }) => address!),
-        protocolVersionIn: [3],
+        protocolVersionIn: [isCowPool(poolType) ? 1 : 3],
       },
     },
     skip: !network || !poolType || !poolTokens?.every(token => token.address),

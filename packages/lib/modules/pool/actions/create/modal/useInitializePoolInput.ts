@@ -28,7 +28,6 @@ export function useInitializePoolInput(chainId: number): ExtendedInitPoolInputV3
       decimals,
       rawAmount,
       symbol,
-      weight: token.weight,
     }
   })
 

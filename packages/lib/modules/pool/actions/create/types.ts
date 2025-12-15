@@ -14,7 +14,7 @@ import { Address } from 'viem'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { WeightedPoolStructure, PROTOCOLS } from './constants'
 
-export type InitPoolInputAmount = InputAmount & { symbol: string; weight?: string }
+export type InitPoolInputAmount = InputAmount & { symbol: string }
 
 export type ExtendedInitPoolInputV3 = Omit<InitPoolInputV3, 'amountsIn'> & {
   amountsIn: InitPoolInputAmount[]
