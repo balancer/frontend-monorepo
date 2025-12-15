@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 import {
   Box,
   BoxProps,
@@ -38,17 +37,17 @@ export function PaginatedTable<T>({
   loadingLength = 20,
   paginationStyles,
 }: Props<T>) {
-  const [previousPageCount, setPreviousPageCount] = useState(0)
+  const previousPageCountRef = useRef(0)
 
   useEffect(() => {
     // When the number of pages changes (eg. new filter) we have to go back to
     // the first page because the current page could not exist anymore or could
     // be a different page and that can be confusing to the user
-    if (paginationProps && paginationProps.totalPageCount !== previousPageCount) {
-      setPreviousPageCount(paginationProps.totalPageCount)
+    if (paginationProps && paginationProps.totalPageCount !== previousPageCountRef.current) {
+      previousPageCountRef.current = paginationProps.totalPageCount
       paginationProps.goToFirstPage()
     }
-  }, [paginationProps, previousPageCount])
+  }, [paginationProps])
 
   return (
     <>
