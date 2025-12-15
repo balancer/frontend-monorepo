@@ -28,11 +28,9 @@ import RelicLevel9 from '../assets/9.png'
 import { BeetsTokenSonic } from '../assets/BeetsTokenSonic'
 import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
-import { useBatchRelayerHasApprovedForAll } from '../lib/useBatchRelayerHasApprovedForAll'
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
 import { useRelicHarvestRewards } from '../lib/useRelicHarvestRewards'
 import { LevelUpModal } from './LevelUpModal'
-import { ReliquaryBatchRelayerApprovalButton } from './ReliquaryBatchRelayerApprovalButton'
 import { RelicMaturityCurveChart } from './charts/RelicMaturityCurveChart'
 import RelicStat, { StatLabel, StatValueText } from './stats/RelicStat'
 
@@ -85,13 +83,10 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const allocationPoints = relicLevel?.allocationPoints || 1
 
   const { data: pendingRewards, refetch: refetchPendingRewards } = useGetPendingReward(
-    chain,
     relic.relicId
   )
 
   const { harvest, ...harvestQuery } = useRelicHarvestRewards(relic.relicId, refetchPendingRewards)
-  const { data: batchRelayerHasApprovedForAll, refetch: refetchBatchRelayer } =
-    useBatchRelayerHasApprovedForAll()
 
   const levelNames = [
     'The Initiate',
@@ -241,30 +236,25 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
               Withdraw
             </Button>
           ) : (
-            <Button flex="1" onClick={() => {}} size="sm" variant="secondary">
+            <Button
+              flex="1"
+              onClick={() => alert('Burn relic functionality requires modal implementation')}
+              size="sm"
+              variant="secondary"
+            >
               Burn
             </Button>
           )}
-          <>
-            {!batchRelayerHasApprovedForAll ? (
-              <ReliquaryBatchRelayerApprovalButton
-                onConfirmed={() => {
-                  refetchBatchRelayer()
-                }}
-              />
-            ) : (
-              <BeetsSubmitTransactionButton
-                disabled={pendingRewardsUsdValue < 0.001}
-                flex="1"
-                isLoading={harvestQuery.isSubmitting || harvestQuery.isPending}
-                onClick={harvest}
-                size="sm"
-                variant="primary"
-              >
-                Claim
-              </BeetsSubmitTransactionButton>
-            )}
-          </>
+          <BeetsSubmitTransactionButton
+            disabled={pendingRewardsUsdValue < 0.001}
+            flex="1"
+            isLoading={harvestQuery.isSubmitting || harvestQuery.isPending}
+            onClick={harvest}
+            size="sm"
+            variant="primary"
+          >
+            Claim
+          </BeetsSubmitTransactionButton>
         </HStack>
       </Box>
       <HStack spacing="2" width="full">

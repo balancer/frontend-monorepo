@@ -9,6 +9,7 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useReliquaryDepositSteps } from './hooks/useReliquaryDepositSteps'
+import { AddLiquidityStepsParams } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 
 export function RelicDepositProvider({
   children,
@@ -45,7 +46,7 @@ export function RelicDepositProvider({
   // Create a wrapper hook factory that captures createNew and relicId
   const customStepsHook = useMemo(() => {
     // This function signature matches what AddLiquidityProvider expects
-    return (params: any) => {
+    return (params: AddLiquidityStepsParams) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       return useReliquaryDepositSteps({
         ...params,

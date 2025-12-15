@@ -26,6 +26,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useReliquaryDelegationStep, DelegationAction } from '../hooks/useReliquaryDelegationStep'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useState } from 'react'
+import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
   isOpen: boolean
@@ -50,7 +51,8 @@ export function ReliquaryDelegationModal({
 
   useResetStepIndexOnOpen(isOpen, delegationTransactionSteps)
 
-  const networkConfig = getNetworkConfig(GqlChain.Sonic)
+  const { chain } = useReliquary()
+  const networkConfig = getNetworkConfig(chain)
 
   // For UI labels
   const delegate = action === 'delegate'
@@ -88,20 +90,14 @@ export function ReliquaryDelegationModal({
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
-          <DesktopStepTracker
-            chain={GqlChain.Sonic}
-            transactionSteps={delegationTransactionSteps}
-          />
+          <DesktopStepTracker chain={chain} transactionSteps={delegationTransactionSteps} />
         )}
         <TransactionModalHeader chain={GqlChain.Sonic} label={modalLabel} txHash={txHash} />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm">
             {isMobile && (
-              <MobileStepTracker
-                chain={GqlChain.Sonic}
-                transactionSteps={delegationTransactionSteps}
-              />
+              <MobileStepTracker chain={chain} transactionSteps={delegationTransactionSteps} />
             )}
 
             {/* Info Section wrapped in Card */}

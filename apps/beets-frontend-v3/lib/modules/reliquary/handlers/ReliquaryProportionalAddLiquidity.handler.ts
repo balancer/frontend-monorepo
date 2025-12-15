@@ -121,7 +121,7 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
     return relicId !== undefined && relicId !== null
       ? this.batchRelayerService.reliquaryEncodeDeposit({
           sender: networkConfig.contracts.balancer.relayerV6,
-          token: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8', // TODO: add to config
+          token: networkConfig.reliquary!.fbeets.poolAddress,
           relicId: BigInt(relicId),
           amount,
           outputReference: 0n,
@@ -129,8 +129,8 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
       : this.batchRelayerService.reliquaryEncodeCreateRelicAndDeposit({
           sender: networkConfig.contracts.balancer.relayerV6,
           recipient: userAddress,
-          token: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8', // TODO: add to config
-          poolId: 0n, // TODO: add to config?
+          token: networkConfig.reliquary!.fbeets.poolAddress,
+          poolId: BigInt(networkConfig.reliquary!.fbeets.farmId),
           amount,
           outputReference: 0n,
         })

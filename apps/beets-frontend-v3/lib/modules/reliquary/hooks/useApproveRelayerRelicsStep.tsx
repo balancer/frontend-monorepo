@@ -1,4 +1,3 @@
-import { SupportedChainId } from '@repo/lib/config/config.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
 import { useState } from 'react'
@@ -13,20 +12,19 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 const approveRelayerRelicsStepId = 'approve-relayer-for-relics'
 
-export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
+export function useApproveRelayerRelicsStep(): {
   isLoading: boolean
   step: TransactionStep
 } {
-  const { userAddress, isConnected } = useUserAccount()
+  const { userAddress, isConnected, chainId } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
-  const config = getNetworkConfig(chainId)
+  const config = getNetworkConfig(chainId!)
 
   const relayerAddress = config.contracts.balancer.relayerV6
   const reliquaryAddress = config.contracts.beets?.reliquary
 
-  const { hasApprovedRelayerForAllRelics, isLoading, refetch } =
-    useHasApprovedRelayerForAllRelics(chainId)
+  const { hasApprovedRelayerForAllRelics, isLoading, refetch } = useHasApprovedRelayerForAllRelics()
 
   const labels: TransactionLabels = {
     title: 'Approve relayer for all relics',
@@ -42,7 +40,7 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
     contractId: 'beets.reliquary',
     functionName: 'setApprovalForAll',
     labels,
-    chainId,
+    chainId: chainId!,
     args: [relayerAddress, true],
     enabled: !!userAddress && !isLoading,
     onTransactionChange: setTransaction,

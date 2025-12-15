@@ -51,6 +51,7 @@ export function useReliquaryLogic() {
   const reliquaryAddress = networkConfig.contracts.beets?.reliquary
   const beetsAddress = networkConfig.tokens.addresses.beets
   const { pool } = usePool()
+  const farmId = networkConfig.reliquary?.fbeets.farmId?.toString() ?? '0'
 
   const disabledConditions: [boolean, string][] = [[!isConnected, LABELS.walletNotConnected]]
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
@@ -64,7 +65,6 @@ export function useReliquaryLogic() {
     queryKey: ['reliquaryAllPositions', userAddress],
     queryFn: async () => {
       const positions: ReliquaryFarmPosition[] = await getAllPositions(userAddress || '')
-      console.log('fetch all positions')
       return positions
     },
     enabled: !!userAddress && !!reliquaryAddress,
@@ -82,8 +82,7 @@ export function useReliquaryLogic() {
   } = useQuery<string[]>({
     queryKey: ['maturityThresholds', reliquaryAddress],
     queryFn: async () => {
-      // TODO: get farmId from network config
-      return await getMaturityThresholds('0')
+      return await getMaturityThresholds(farmId)
     },
     refetchOnWindowFocus: false,
   })
@@ -101,8 +100,8 @@ export function useReliquaryLogic() {
   )
 
   const relicPositionsForFarmId = relicPositions.filter(
-    position => position.farmId.toString() === '0'
-  ) // TODO: get farmId from network config
+    position => position.farmId.toString() === farmId
+  )
   const totalMaBeetsVP = sumBy(relicPositionsForFarmId, position => {
     const numFBeets = parseFloat(position.amount)
     const boost = reliquaryLevels.find(level => level.level === position.level)

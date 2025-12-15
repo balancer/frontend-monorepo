@@ -1,7 +1,6 @@
 'use client'
 
-import { getChainId } from '@repo/lib/config/app.config'
-import { getNetworkConfig } from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import {
@@ -12,12 +11,11 @@ import {
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
 
-export function useBurnRelicStep(chain: GqlChain, relicId: string | undefined) {
-  const { isConnected } = useUserAccount()
-  const { refetch } = useGetRelicPositionsOfOwner(chain)
+export function useBurnRelicStep(relicId: string | undefined) {
+  const { isConnected, chainId } = useUserAccount()
+  const { refetch } = useGetRelicPositionsOfOwner()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const labels: TransactionLabels = {
@@ -25,14 +23,14 @@ export function useBurnRelicStep(chain: GqlChain, relicId: string | undefined) {
     title: 'Burn relic',
     confirming: 'Confirming burn...',
     confirmed: 'Relic burned!',
-    tooltip: 'tooltip',
+    tooltip: 'Burn this relic to withdraw all funds',
   }
 
   const props: ManagedTransactionInput = {
     labels,
-    chainId: getChainId(chain),
+    chainId: chainId!,
     contractId: 'beets.reliquary',
-    contractAddress: getNetworkConfig(chain).contracts.beets?.reliquary || '',
+    contractAddress: getNetworkConfig(chainId!).contracts.beets?.reliquary || '',
     functionName: 'burn',
     args: relicId ? [BigInt(relicId)] : null,
     enabled: isConnected && !!relicId,

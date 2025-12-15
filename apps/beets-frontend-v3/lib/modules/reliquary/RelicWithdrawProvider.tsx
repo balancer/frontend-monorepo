@@ -7,13 +7,17 @@ import {
 import { ReliquaryProportionalRemoveLiquidityHandler } from './handlers/ReliquaryProportionalRemoveLiquidity.handler'
 import { ReliquarySingleTokenRemoveLiquidityHandler } from './handlers/ReliquarySingleTokenRemoveLiquidity.handler'
 import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useReliquary } from './ReliquaryProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { RemoveLiquidityType } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'
 import { HumanAmount } from '@balancer/sdk'
+import { useReliquaryWithdrawSteps } from './hooks/useReliquaryWithdrawSteps'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { useRemoveLiquiditySteps } from '@repo/lib/modules/pool/actions/remove-liquidity/useRemoveLiquiditySteps'
+import { RemoveLiquidityStepParams } from '@repo/lib/modules/pool/actions/remove-liquidity/useRemoveLiquidityStep'
 
 export function RelicWithdrawProvider({
   children,
@@ -49,8 +53,21 @@ export function RelicWithdrawProvider({
     [relicIdNumber]
   )
 
+  const customStepsHook = useMemo(() => {
+    return (params: RemoveLiquidityStepParams): TransactionStep[] => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const removeLiquiditySteps = useRemoveLiquiditySteps(params)
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      return useReliquaryWithdrawSteps({
+        removeLiquiditySteps,
+        relicId: relicIdNumber,
+      })
+    }
+  }, [relicIdNumber])
+
   return (
     <RemoveLiquidityProvider
+      customStepsHook={customStepsHook}
       handlerSelector={reliquaryHandlerSelector}
       maxHumanBptIn={relic?.amount as HumanAmount | undefined}
       urlTxHash={urlTxHash}

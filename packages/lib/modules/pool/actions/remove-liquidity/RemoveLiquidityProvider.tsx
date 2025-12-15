@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
+ 
 'use client'
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -35,7 +35,8 @@ export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse |
 export function useRemoveLiquidityLogic(
   urlTxHash?: Hash,
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
-  maxHumanBptIn?: HumanAmount
+  maxHumanBptIn?: HumanAmount,
+  customStepsHook?: typeof useRemoveLiquiditySteps
 ) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
@@ -157,7 +158,8 @@ export function useRemoveLiquidityLogic(
   /**
    * Step construction
    */
-  const steps = useRemoveLiquiditySteps({
+  const stepsHook = customStepsHook || useRemoveLiquiditySteps
+  const steps = stepsHook({
     handler,
     simulationQuery,
     humanBptIn,
@@ -323,15 +325,17 @@ type Props = PropsWithChildren<{
   urlTxHash?: Hash
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
   maxHumanBptIn?: HumanAmount
+  customStepsHook?: typeof useRemoveLiquiditySteps
 }>
 
 export function RemoveLiquidityProvider({
   urlTxHash,
   handlerSelector,
   maxHumanBptIn,
+  customStepsHook,
   children,
 }: Props) {
-  const hook = useRemoveLiquidityLogic(urlTxHash, handlerSelector, maxHumanBptIn)
+  const hook = useRemoveLiquidityLogic(urlTxHash, handlerSelector, maxHumanBptIn, customStepsHook)
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 

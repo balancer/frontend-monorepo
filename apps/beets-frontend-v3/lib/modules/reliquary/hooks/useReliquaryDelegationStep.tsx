@@ -1,6 +1,6 @@
 'use client'
 
-import { getNetworkConfig } from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import {
@@ -11,16 +11,15 @@ import {
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useDelegation } from './useDelegation'
 
 export type DelegationAction = 'delegate' | 'undelegate'
 
 export function useReliquaryDelegationStep(action: DelegationAction) {
-  const { isConnected } = useUserAccount()
+  const { isConnected, chainId } = useUserAccount()
   const { refetch } = useDelegation()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
-  const networkConfig = getNetworkConfig(GqlChain.Sonic)
+  const networkConfig = getNetworkConfig(chainId!)
 
   const labels: TransactionLabels =
     action === 'undelegate'

@@ -36,7 +36,7 @@ export function LevelUpModal({
   ...rest
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
-  const { step: levelUpStep } = useLevelUpStep(chain, relicId)
+  const { step: levelUpStep } = useLevelUpStep(relicId)
   const levelUpTransactionSteps = useTransactionSteps([levelUpStep], false)
   const levelUpTxHash = levelUpTransactionSteps.lastTransaction?.result?.data?.transactionHash
 
