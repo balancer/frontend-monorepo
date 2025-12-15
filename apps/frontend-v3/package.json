@@ -54,7 +54,7 @@
     "react-error-boundary": "6.0.0",
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.7",
-    "real-require": "0.1.0",
+    "real-require": "0.2.0",
     "thread-stream": "0.15.2",
     "tinycolor2": "^1.6.0",
     "usehooks-ts": "3.1.1",
