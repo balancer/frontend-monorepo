@@ -1,8 +1,8 @@
-import { parseAbi } from 'viem'
 import { useReadContract } from 'wagmi'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { getChainId } from '@repo/lib/config/app.config'
 import { isCowPool } from '../../helpers'
+import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
 
 export function useIsPoolFinalized() {
   const { poolCreationForm, poolAddress } = usePoolCreationForm()
@@ -11,12 +11,10 @@ export function useIsPoolFinalized() {
 
   const { data, isLoading, refetch } = useReadContract({
     address: poolAddress,
-    abi: parseAbi(['function isFinalized() external view returns (bool isFinalized)']),
+    abi: cowAmmPoolAbi,
     functionName: 'isFinalized',
     chainId,
-    query: {
-      enabled: !!poolAddress && isCowPool(poolType),
-    },
+    query: { enabled: !!poolAddress && isCowPool(poolType) },
   })
 
   return { isPoolFinalized: !!data, isLoadingIsFinalized: isLoading, refetchIsFinalized: refetch }

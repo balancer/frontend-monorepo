@@ -11,11 +11,12 @@ import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/tra
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
-import { encodeFunctionData, parseAbi } from 'viem'
+import { encodeFunctionData } from 'viem'
 import { useReadContract } from 'wagmi'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { isCowPool } from '../../helpers'
 import { getChainId } from '@repo/lib/config/app.config'
+import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
 
 const id = `set-swap-fee`
 
@@ -41,7 +42,7 @@ export function useSetSwapFeeStep() {
 
   const { data: swapFee, isLoading: isLoadingSwapFee } = useReadContract({
     address: poolAddress,
-    abi: parseAbi(['function getSwapFee() external view returns (uint256 swapFee)']),
+    abi: cowAmmPoolAbi,
     functionName: 'getSwapFee',
     chainId,
     query: { enabled },
@@ -49,7 +50,7 @@ export function useSetSwapFeeStep() {
 
   const { data: maxSwapFee, isLoading: isLoadingMaxSwapFee } = useReadContract({
     address: poolAddress,
-    abi: parseAbi(['function MAX_FEE() view returns (uint256)']),
+    abi: cowAmmPoolAbi,
     functionName: 'MAX_FEE',
     chainId,
     query: { enabled },
@@ -61,7 +62,7 @@ export function useSetSwapFeeStep() {
 
   if (isConnected && poolAddress && maxSwapFee && isCowPool(poolType)) {
     const data = encodeFunctionData({
-      abi: parseAbi(['function setSwapFee(uint256 swapFee)']),
+      abi: cowAmmPoolAbi,
       functionName: 'setSwapFee',
       args: [maxSwapFee],
     })
