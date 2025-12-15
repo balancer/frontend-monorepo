@@ -35,7 +35,7 @@
     "nextjs-toploader": "3.9.17",
     "react": "19.2.1",
     "react-countdown": "^2.3.6",
-    "react-dom": "19.2.1",
+    "react-dom": "19.2.3",
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.7",
     "real-require": "0.1.0",
