@@ -2,40 +2,22 @@ import { ExtendedInitPoolInputV3 } from '../../types'
 import { useBindTokenStep } from './useBindTokenStep'
 import { useSetSwapFeeStep } from './useSetSwapFeeStep'
 import { useFinalizeStep } from './useFinalizeStep'
-import { Address } from 'viem'
 
-type useCreateCowStepsParams = {
-  initPoolInput: ExtendedInitPoolInputV3
-  poolAddress: Address | undefined
-}
+export function useCreateCowSteps(initPoolInput: ExtendedInitPoolInputV3) {
+  const { amountsIn } = initPoolInput
 
-export function useCreateCowSteps({ initPoolInput, poolAddress }: useCreateCowStepsParams) {
-  const { amountsIn, chainId } = initPoolInput
+  // cow pool will always be exactly 2 tokens
+  const { step: bindToken0Step, isLoading: isLoadingBindToken0 } = useBindTokenStep(amountsIn[0])
+  const { step: bindToken1Step, isLoading: isLoadingBindToken1 } = useBindTokenStep(amountsIn[1])
 
-  // cow pool will always be only 2 tokens
-  const { step: bindToken0Step, isLoading: isLoadingBindToken0 } = useBindTokenStep({
-    token: amountsIn[0],
-    chainId,
-    poolAddress,
-  })
-  const { step: bindToken1Step, isLoading: isLoadingBindToken1 } = useBindTokenStep({
-    token: amountsIn[1],
-    chainId,
-    poolAddress,
-  })
-  const { step: setSwapFeeStep, isLoading: isLoadingSetSwapFee } = useSetSwapFeeStep({
-    poolAddress,
-    chainId,
-  })
-  const { step: finalizeStep, isLoading: isLoadingFinalize } = useFinalizeStep({
-    poolAddress,
-    chainId,
-  })
+  const { setSwapFeeStep, isLoadingSetSwapFeeStep } = useSetSwapFeeStep()
 
-  const steps = [bindToken0Step, bindToken1Step, setSwapFeeStep, finalizeStep]
+  const { finalizeStep, isLoadingFinalizeStep } = useFinalizeStep()
 
-  const isLoading =
-    isLoadingBindToken0 || isLoadingBindToken1 || isLoadingSetSwapFee || isLoadingFinalize
+  const finishCowSteps = [bindToken0Step, bindToken1Step, setSwapFeeStep, finalizeStep]
 
-  return { steps, isLoading }
+  const isLoadingFinishCowSteps =
+    isLoadingBindToken0 || isLoadingBindToken1 || isLoadingSetSwapFeeStep || isLoadingFinalizeStep
+
+  return { finishCowSteps, isLoadingFinishCowSteps }
 }

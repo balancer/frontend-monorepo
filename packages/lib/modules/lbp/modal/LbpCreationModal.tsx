@@ -69,7 +69,7 @@ export function LbpCreationModal({
 
   const hasAttemptedSaveMetadata = useRef(false)
   const chainId = getChainId(selectedChain)
-  const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+  const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress })
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()

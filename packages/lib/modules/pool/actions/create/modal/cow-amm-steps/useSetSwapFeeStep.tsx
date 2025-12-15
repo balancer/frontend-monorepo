@@ -11,13 +11,11 @@ import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/tra
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
-import { encodeFunctionData, parseAbi, Address } from 'viem'
+import { encodeFunctionData, parseAbi } from 'viem'
 import { useReadContract } from 'wagmi'
-
-type Params = {
-  poolAddress: Address | undefined
-  chainId: number
-}
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { isCowPool } from '../../helpers'
+import { getChainId } from '@repo/lib/config/app.config'
 
 const id = `set-swap-fee`
 
@@ -29,17 +27,24 @@ const labels: TransactionLabels = {
   tooltip: `Set swap fee`,
 }
 
-export function useSetSwapFeeStep({ poolAddress, chainId }: Params) {
+export function useSetSwapFeeStep() {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+
+  const { poolCreationForm, poolAddress } = usePoolCreationForm()
+  const [poolType, network] = poolCreationForm.getValues(['poolType', 'network'])
+  const chainId = getChainId(network)
 
   const { userAddress, isConnected } = useUserAccount()
   const { buildTenderlyUrl } = useTenderly({ chainId })
+
+  const enabled = !!poolAddress && isCowPool(poolType)
 
   const { data: swapFee, isLoading: isLoadingSwapFee } = useReadContract({
     address: poolAddress,
     abi: parseAbi(['function getSwapFee() external view returns (uint256 swapFee)']),
     functionName: 'getSwapFee',
     chainId,
+    query: { enabled },
   })
 
   const { data: maxSwapFee, isLoading: isLoadingMaxSwapFee } = useReadContract({
@@ -47,14 +52,14 @@ export function useSetSwapFeeStep({ poolAddress, chainId }: Params) {
     abi: parseAbi(['function MAX_FEE() view returns (uint256)']),
     functionName: 'MAX_FEE',
     chainId,
+    query: { enabled },
   })
 
-  const isLoading = isLoadingSwapFee || isLoadingMaxSwapFee
   const isSwapFeeSetToMax = swapFee !== undefined && swapFee === maxSwapFee
 
   let txConfig: TransactionConfig | undefined
 
-  if (isConnected && poolAddress && maxSwapFee) {
+  if (isConnected && poolAddress && maxSwapFee && isCowPool(poolType)) {
     const data = encodeFunctionData({
       abi: parseAbi(['function setSwapFee(uint256 swapFee)']),
       functionName: 'setSwapFee',
@@ -74,7 +79,7 @@ export function useSetSwapFeeStep({ poolAddress, chainId }: Params) {
     tenderlyUrl: buildTenderlyUrl(txConfig),
   })
 
-  const step = useMemo(
+  const setSwapFeeStep = useMemo(
     () => ({
       id,
       stepType: 'setSwapFee' as const,
@@ -97,5 +102,5 @@ export function useSetSwapFeeStep({ poolAddress, chainId }: Params) {
     [transaction, txConfig, gasEstimationMeta, labels, id, isSwapFeeSetToMax]
   )
 
-  return { step, isLoading }
+  return { setSwapFeeStep, isLoadingSetSwapFeeStep: isLoadingSwapFee || isLoadingMaxSwapFee }
 }

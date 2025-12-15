@@ -11,13 +11,11 @@ import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/tra
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
-import { encodeFunctionData, parseAbi, Address } from 'viem'
-import { useIsCowPoolFinalized } from './useIsCowPoolFinalized'
-
-type Params = {
-  poolAddress: Address | undefined
-  chainId: number
-}
+import { encodeFunctionData, parseAbi } from 'viem'
+import { useIsPoolFinalized } from './useIsPoolFinalized'
+import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { getChainId } from '@repo/lib/config/app.config'
+import { isCowPool } from '../../helpers'
 
 const id = `finalize`
 
@@ -29,20 +27,21 @@ const labels: TransactionLabels = {
   tooltip: `Finalize`,
 }
 
-export function useFinalizeStep({ poolAddress, chainId }: Params) {
+export function useFinalizeStep() {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+
+  const { poolCreationForm, poolAddress } = usePoolCreationForm()
+  const [poolType, network] = poolCreationForm.getValues(['poolType', 'network'])
+  const chainId = getChainId(network)
 
   const { userAddress, isConnected } = useUserAccount()
   const { buildTenderlyUrl } = useTenderly({ chainId })
 
-  const { isCowPoolFinalized, isLoadingIsFinalized, refetchIsFinalized } = useIsCowPoolFinalized({
-    poolAddress,
-    chainId,
-  })
+  const { isPoolFinalized, isLoadingIsFinalized, refetchIsFinalized } = useIsPoolFinalized()
 
   let txConfig: TransactionConfig | undefined
 
-  if (isConnected && poolAddress) {
+  if (isConnected && poolAddress && isCowPool(poolType)) {
     const data = encodeFunctionData({
       abi: parseAbi(['function finalize() external']),
       functionName: 'finalize',
@@ -61,13 +60,13 @@ export function useFinalizeStep({ poolAddress, chainId }: Params) {
     tenderlyUrl: buildTenderlyUrl(txConfig),
   })
 
-  const step = useMemo(
+  const finalizeStep = useMemo(
     () => ({
       id,
       stepType: 'finalizePool' as const,
       labels,
       transaction,
-      isComplete: () => isTransactionSuccess(transaction) || !!isCowPoolFinalized,
+      isComplete: () => isTransactionSuccess(transaction) || !!isPoolFinalized,
       onSuccess: () => refetchIsFinalized(),
       renderAction: () => {
         if (!txConfig) return <DisabledTransactionButton />
@@ -82,8 +81,8 @@ export function useFinalizeStep({ poolAddress, chainId }: Params) {
         )
       },
     }),
-    [transaction, txConfig, gasEstimationMeta, labels, id, isCowPoolFinalized, refetchIsFinalized]
+    [transaction, txConfig, gasEstimationMeta, labels, id, isPoolFinalized, refetchIsFinalized]
   )
 
-  return { step, isLoading: isLoadingIsFinalized }
+  return { finalizeStep, isLoadingFinalizeStep: isLoadingIsFinalized }
 }

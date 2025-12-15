@@ -34,7 +34,11 @@ export function usePoolCreationTransactions({
   const { amountsIn, wethIsEth, chainId } = initPoolInput
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { shouldUseSignatures } = useUserSettings()
-  const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+  const { isPoolInitialized } = useIsPoolInitialized({
+    chainId,
+    poolAddress,
+    isEnabled: !isCowPool(poolType),
+  })
   const createPoolStep = useCreatePoolStep({ createPoolInput, poolAddress, setPoolAddress })
   const chain = getGqlChain(chainId)
 
@@ -78,10 +82,7 @@ export function usePoolCreationTransactions({
     addLiquidityStep: initV3PoolStep,
   })
 
-  const { steps: finishCowSteps, isLoading: isLoadingFinishCowSteps } = useCreateCowSteps({
-    initPoolInput,
-    poolAddress,
-  })
+  const { finishCowSteps, isLoadingFinishCowSteps } = useCreateCowSteps(initPoolInput)
 
   const steps = isCowPool(poolType)
     ? [createPoolStep, ...tokenApprovalSteps, ...finishCowSteps]

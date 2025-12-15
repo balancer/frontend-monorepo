@@ -25,7 +25,7 @@ import { RestartPoolCreationModal } from './RestartPoolCreationModal'
 import { useWatch } from 'react-hook-form'
 import { usePoolCreationTransactions } from './usePoolCreationTransactions'
 import { isCowPool } from '../helpers'
-import { useIsCowPoolFinalized } from './cow-amm-steps/useIsCowPoolFinalized'
+import { useIsPoolFinalized } from './cow-amm-steps/useIsPoolFinalized'
 
 type PoolCreationModalProps = {
   isOpen: boolean
@@ -58,9 +58,13 @@ export function PoolCreationModal({
     initPoolInput,
   })
 
-  const { isCowPoolFinalized } = useIsCowPoolFinalized({ poolAddress, chainId })
-  const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
-  const isPoolCreationFinished = isCowPool(poolType) ? isCowPoolFinalized : isPoolInitialized
+  const { isPoolFinalized } = useIsPoolFinalized()
+  const { isPoolInitialized } = useIsPoolInitialized({
+    chainId,
+    poolAddress,
+    isEnabled: !isCowPool(poolType),
+  })
+  const isPoolCreationFinished = isCowPool(poolType) ? isPoolFinalized : isPoolInitialized
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()
