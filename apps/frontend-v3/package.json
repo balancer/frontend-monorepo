@@ -50,7 +50,7 @@
     "nextjs-toploader": "3.9.17",
     "prismjs": "1.30.0",
     "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "react-dom": "19.2.3",
     "react-error-boundary": "6.0.0",
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.7",
