@@ -1,13 +1,13 @@
-import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
-import { Relayer, RemoveLiquidity, Slippage } from '@balancer/sdk'
-import { SdkBuildRemoveLiquidityInput } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'
-import { BaseSingleTokenRemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-liquidity/handlers/BaseSingleTokenRemoveLiquidity.handler'
 import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
-import { Address, encodeAbiParameters, encodeFunctionData, Hex } from 'viem'
+import { Relayer, RemoveLiquidity, Slippage } from '@balancer/sdk'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import networkConfig from '@repo/lib/config/networks/sonic'
+import { BaseSingleTokenRemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-liquidity/handlers/BaseSingleTokenRemoveLiquidity.handler'
+import { SdkBuildRemoveLiquidityInput } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { balancerV2BalancerRelayerV6Abi } from '@repo/lib/modules/web3/contracts/abi/generated'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
+import { Address, encodeAbiParameters, encodeFunctionData, Hex } from 'viem'
 
 export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenRemoveLiquidityHandler {
   constructor(

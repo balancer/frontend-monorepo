@@ -58,9 +58,9 @@ export function RelicDepositProvider({
 
   return (
     <AddLiquidityProvider
-      customStepsHook={customStepsHook}
-      handlerSelector={reliquaryHandlerSelector}
+      addLiquidityHandlerSelector={reliquaryHandlerSelector}
       urlTxHash={urlTxHash}
+      useAddLiquiditySteps={customStepsHook}
     >
       {children}
     </AddLiquidityProvider>

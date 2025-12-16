@@ -1,13 +1,25 @@
 'use client'
 
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { HumanAmount, isSameAddress } from '@balancer/sdk'
+import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
+import { ApiToken, HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
+import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { LABELS } from '@repo/lib/shared/labels'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
+import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
+import { getPoolActionableTokens, getWrappedBoostedTokens } from '../../pool-tokens.utils'
+import { supportsWethIsEth } from '../../pool.helpers'
+import { Pool } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
-import { useAddLiquiditySimulationQuery } from './queries/useAddLiquiditySimulationQuery'
-import { useAddLiquidityPriceImpactQuery } from './queries/useAddLiquidityPriceImpactQuery'
+import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import {
   LiquidityActionHelpers,
   areEmptyAmounts,
@@ -17,34 +29,24 @@ import {
   requiresProportionalInput,
   supportsNestedActions,
 } from '../LiquidityActionHelpers'
-import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { LABELS } from '@repo/lib/shared/labels'
-import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
-import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
-import { Pool } from '../../pool.types'
-import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { useAddLiquiditySteps } from './useAddLiquiditySteps'
-import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
-import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { supportsWethIsEth } from '../../pool.helpers'
-import { getPoolActionableTokens, getWrappedBoostedTokens } from '../../pool-tokens.utils'
-import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
+import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
+import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
+import { useAddLiquidityPriceImpactQuery } from './queries/useAddLiquidityPriceImpactQuery'
+import { useAddLiquiditySimulationQuery } from './queries/useAddLiquiditySimulationQuery'
+import { useAddLiquiditySteps as useAddLiquidityStepsBase } from './useAddLiquiditySteps'
+import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
 export function useAddLiquidityLogic(
   urlTxHash?: Hash,
-  handlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler,
-  customStepsHook?: typeof useAddLiquiditySteps
+  addLiquidityHandlerSelector: (
+    pool: Pool,
+    wantsProportional: boolean
+  ) => AddLiquidityHandler = selectAddLiquidityHandler,
+  useAddLiquiditySteps: typeof useAddLiquidityStepsBase = useAddLiquidityStepsBase
 ) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
   // only used by Proportional handlers that require a referenceAmount
@@ -53,7 +55,7 @@ export function useAddLiquidityLogic(
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
   const [totalUSDValue, setTotalUSDValue] = useState('0')
-  const { pool, refetch: refetchPool, isLoading } = usePool()
+  const { pool, refetch: refetchPool } = usePool()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
   /* wantsProportional is true when:
     - the pool requires proportional input
@@ -68,9 +70,8 @@ export function useAddLiquidityLogic(
   const { slippage } = useUserSettings()
 
   const handler = useMemo(() => {
-    const selector = handlerSelector ?? selectAddLiquidityHandler
-    return selector(pool, wantsProportional)
-  }, [pool, wantsProportional, isLoading, handlerSelector])
+    return addLiquidityHandlerSelector(pool, wantsProportional)
+  }, [pool, wantsProportional, addLiquidityHandlerSelector])
 
   /**
    * Helper functions & variables
@@ -161,8 +162,7 @@ export function useAddLiquidityLogic(
   /**
    * Step construction
    */
-  const stepsHook = customStepsHook || useAddLiquiditySteps
-  const { steps, isLoadingSteps } = stepsHook({
+  const { steps, isLoadingSteps } = useAddLiquiditySteps({
     helpers,
     handler,
     humanAmountsIn,
@@ -271,17 +271,17 @@ export function useAddLiquidityLogic(
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
-  handlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
-  customStepsHook?: typeof useAddLiquiditySteps
+  addLiquidityHandlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+  useAddLiquiditySteps?: typeof useAddLiquidityStepsBase
 }>
 
 export function AddLiquidityProvider({
   urlTxHash,
-  handlerSelector,
-  customStepsHook,
+  addLiquidityHandlerSelector,
+  useAddLiquiditySteps,
   children,
 }: Props) {
-  const hook = useAddLiquidityLogic(urlTxHash, handlerSelector, customStepsHook)
+  const hook = useAddLiquidityLogic(urlTxHash, addLiquidityHandlerSelector, useAddLiquiditySteps)
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 
