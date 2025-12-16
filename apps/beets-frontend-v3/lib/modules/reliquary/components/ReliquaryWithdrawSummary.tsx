@@ -1,6 +1,6 @@
 'use client'
 
-import { isSameAddress } from '@balancer/sdk'
+import { Address, isSameAddress } from '@balancer/sdk'
 import { Alert, AlertIcon, Card, Text, VStack } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
@@ -10,7 +10,12 @@ import { allPoolTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { BptRow } from '@repo/lib/modules/tokens/TokenRow/BptRow'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import {
+  ApiToken,
+  HumanTokenAmount,
+  HumanTokenAmountWithAddress,
+} from '@repo/lib/modules/tokens/token.types'
+import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 import { RemoveLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -21,6 +26,8 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { formatUnits } from 'viem'
+import { useGetPendingReward } from '../hooks/useGetPendingReward'
 
 type Props = RemoveLiquidityReceiptResult & {
   relicId?: string
@@ -47,17 +54,24 @@ export function ReliquaryWithdrawSummary({
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const { slippage } = useUserSettings()
 
+  // Query pending rewards for display
+  const { amount: pendingRewards } = useGetPendingReward(relicId)
+  const networkConfig = getNetworkConfig(pool.chain)
+
   const _amountsOut = amountsOut.filter(amount => bn(amount.humanAmount).gt(0))
 
   const shouldShowErrors = hasQuoteContext ? removeLiquidityTxSuccess : removeLiquidityTxHash
   const shouldShowReceipt = removeLiquidityTxHash && !isLoadingReceipt && receivedTokens.length > 0
 
-  // Filter out BPT from received tokens (user doesn't receive BPT, it gets burned)
-  const receivedTokensWithoutBpt = shouldShowReceipt
-    ? receivedTokens.filter(
-        token => !isSameAddress(token.tokenAddress, pool.address as `0x${string}`)
-      )
-    : []
+  // Create rewards amount object if rewards exist (only for preview, not receipt)
+  const rewardsAmount: HumanTokenAmountWithAddress | null =
+    !shouldShowReceipt && pendingRewards && pendingRewards > 0n
+      ? {
+          tokenAddress: networkConfig.tokens.addresses.beets as `0x${string}`,
+          humanAmount: formatUnits(pendingRewards, 18),
+          symbol: 'BEETS',
+        }
+      : null
 
   const tokens = allPoolTokens(pool)
     .map(token => {
@@ -73,6 +87,27 @@ export function ReliquaryWithdrawSummary({
       return { ...token, chain: pool.chain } as ApiToken
     })
     .flat()
+
+  // Calculate USD value for rewards
+  const { usdValueFor } = useTotalUsdValue(tokens)
+  const rewardsUSDValue = rewardsAmount ? usdValueFor([rewardsAmount]) : '0'
+
+  // Filter out BPT from received tokens (user doesn't receive BPT, it gets burned)
+  const receivedTokensWithoutBpt = shouldShowReceipt
+    ? receivedTokens.filter(
+        token => !isSameAddress(token.tokenAddress, pool.address as `0x${string}`)
+      )
+    : []
+
+  const _amountsOutWithRewards: HumanTokenAmount[] = _amountsOut.map(token => {
+    if (isSameAddress(token.tokenAddress, networkConfig.tokens.addresses.beets as Address)) {
+      return {
+        ...token,
+        humanAmount: `${Number(token.humanAmount) + Number(rewardsAmount?.humanAmount)}`,
+      }
+    }
+    return token
+  })
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
@@ -116,15 +151,35 @@ export function ReliquaryWithdrawSummary({
         />
       </Card>
 
+      {/* Pending rewards section (only show in preview if rewards > 0) */}
+      {rewardsAmount && (
+        <Card variant="modalSubSection">
+          <TokenRowGroup
+            amounts={[rewardsAmount]}
+            chain={pool.chain}
+            label="Pending rewards"
+            pool={pool}
+            tokens={tokens}
+            totalUSDValue={rewardsUSDValue}
+          />
+        </Card>
+      )}
+
       <Card variant="modalSubSection">
         <TokenRowGroup
-          amounts={shouldShowReceipt ? receivedTokensWithoutBpt : _amountsOut}
+          amounts={shouldShowReceipt ? receivedTokensWithoutBpt : _amountsOutWithRewards}
           chain={pool.chain}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
-          label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
+          label={
+            shouldShowReceipt
+              ? 'You received'
+              : rewardsAmount
+                ? 'Total expected (with rewards)'
+                : "You're expected to get (if no slippage)"
+          }
           pool={pool}
           tokens={shouldShowReceipt ? tokens : undefined}
-          totalUSDValue={hasQuoteContext ? totalUSDValue : undefined}
+          totalUSDValue={hasQuoteContext ? totalUSDValue + rewardsUSDValue : undefined}
         />
       </Card>
 
