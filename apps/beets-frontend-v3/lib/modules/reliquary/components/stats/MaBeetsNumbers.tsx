@@ -13,11 +13,11 @@ import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
 
 type Props = {
-  showMore: boolean
   onToggleShowMore: () => void
+  chartsVisible: boolean
 }
 
-export function MaBeetsNumbers({ showMore, onToggleShowMore }: Props) {
+export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
   const { pool } = usePool()
   const { priceFor } = useTokens()
   const { latest: globalStats, loading, error } = useReliquaryGlobalStats()
@@ -81,7 +81,7 @@ export function MaBeetsNumbers({ showMore, onToggleShowMore }: Props) {
             onClick={onToggleShowMore}
             textDecoration="underline"
           >
-            {showMore ? 'Show less' : 'Show more'}
+            {chartsVisible ? 'Show less' : 'Show more'}
           </Link>
         </Flex>
         <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
@@ -122,7 +122,7 @@ export function MaBeetsNumbers({ showMore, onToggleShowMore }: Props) {
           onClick={onToggleShowMore}
           textDecoration="underline"
         >
-          {showMore ? 'Show less' : 'Show more'}
+          {chartsVisible ? 'Show less' : 'Show more'}
         </Link>
       </Flex>
       <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">

@@ -24,9 +24,10 @@ import { useRouter } from 'next/navigation'
 
 type Props = {
   focusRelicId?: string | null
+  isConnected: boolean
 }
 
-export function MyRelicsSection({ focusRelicId }: Props) {
+export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
   const { totalMaBeetsVP, isLoading, relicPositions } = useReliquary()
   const { isDelegatedToMDs, delegationAddress } = useReliquaryDelegationTransaction()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -51,9 +52,11 @@ export function MyRelicsSection({ focusRelicId }: Props) {
           >
             Your Relics
           </Text>
-          <Button onClick={() => router.push('/mabeets/deposit/new')} size="md" variant="primary">
-            Create New Relic
-          </Button>
+          {isConnected && (
+            <Button onClick={() => router.push('/mabeets/deposit/new')} size="md" variant="primary">
+              Create New Relic
+            </Button>
+          )}
         </Flex>
         <Card h="full" w="full">
           <NoisyCard cardProps={{ h: 'full' }}>

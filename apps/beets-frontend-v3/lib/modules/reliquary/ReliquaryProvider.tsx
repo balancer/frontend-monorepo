@@ -430,9 +430,9 @@ export type Result = ReturnType<typeof useReliquaryLogic>
 export const ReliquaryContext = createContext<Result | null>(null)
 
 export function ReliquaryProvider({ children }: PropsWithChildren) {
-  const Reliquary = useReliquaryLogic()
+  const reliquary = useReliquaryLogic()
 
-  return <ReliquaryContext.Provider value={Reliquary}>{children}</ReliquaryContext.Provider>
+  return <ReliquaryContext.Provider value={reliquary}>{children}</ReliquaryContext.Provider>
 }
 
 export const useReliquary = (): Result => useMandatoryContext(ReliquaryContext, 'Reliquary')
