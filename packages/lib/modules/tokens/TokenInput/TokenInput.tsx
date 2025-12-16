@@ -121,6 +121,7 @@ type TokenInputFooterProps = {
   isDisabled?: boolean
   customUsdPrice?: number
   priceImpactProps: PriceImpactProps | undefined
+  customValidationErrorMessage?: string
 }
 
 function TokenInputFooter({
@@ -134,6 +135,7 @@ function TokenInputFooter({
   isDisabled,
   customUsdPrice,
   priceImpactProps,
+  customValidationErrorMessage,
 }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
@@ -188,6 +190,11 @@ function TokenInputFooter({
             getPriceImpactLabel(priceImpactProps?.priceImpact)}
         </Text>
       )}
+      {customValidationErrorMessage && (
+        <Text color="font.error" fontSize="sm">
+          {customValidationErrorMessage}
+        </Text>
+      )}
       {isBalancesLoading || !isMounted ? (
         <Skeleton h="full" w="12" />
       ) : (
@@ -239,6 +246,7 @@ type Props = {
   customUserBalance?: string
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
+  customValidationErrorMessage?: string
 }
 
 export const TokenInput = forwardRef(
@@ -259,6 +267,7 @@ export const TokenInput = forwardRef(
       customUserBalance,
       customUsdPrice,
       priceImpactProps,
+      customValidationErrorMessage,
       ...inputProps
     }: InputProps & Props,
     ref
@@ -282,7 +291,7 @@ export const TokenInput = forwardRef(
       disableBalanceValidation,
     })
 
-    const hasError = hasValidationError(token)
+    const hasError = hasValidationError(token) || customValidationErrorMessage
 
     useEffect(() => {
       if (!isBalancesLoading) {
@@ -387,6 +396,7 @@ export const TokenInput = forwardRef(
           <TokenInputFooter
             customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
+            customValidationErrorMessage={customValidationErrorMessage}
             hasPriceImpact={hasPriceImpact}
             isDisabled={inputProps.isDisabled}
             isLoadingPriceImpact={isLoadingPriceImpact}

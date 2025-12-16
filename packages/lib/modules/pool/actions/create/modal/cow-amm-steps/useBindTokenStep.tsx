@@ -23,7 +23,7 @@ export function useBindTokenStep(token: {
   address: Address
   symbol: string
   rawAmount: bigint
-  weight: string | undefined
+  weight?: string
 }) {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 

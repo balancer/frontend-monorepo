@@ -3,7 +3,7 @@ import { isHash, Address, zeroAddress } from 'viem'
 import { useParams } from 'next/navigation'
 import { useCreatePoolStep } from './useCreatePoolStep'
 import { getGqlChain } from '@repo/lib/config/app.config'
-import { type ExtendedInitPoolInputV3 } from '@repo/lib/modules/pool/actions/create/types'
+import { type ExtendedInitPoolInput } from '@repo/lib/modules/pool/actions/create/types'
 import { getSpenderForCreatePool } from '@repo/lib/modules/tokens/token.helpers'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
@@ -19,7 +19,7 @@ import { useCreateCowSteps } from './cow-amm-steps/useCreateCowSteps'
 
 type Props = {
   createPoolInput: CreatePoolInput
-  initPoolInput: ExtendedInitPoolInputV3
+  initPoolInput: ExtendedInitPoolInput
   poolAddress: Address | undefined
   setPoolAddress: (poolAddress: Address) => void
 }
@@ -82,7 +82,7 @@ export function usePoolCreationTransactions({
     addLiquidityStep: initV3PoolStep,
   })
 
-  const { finishCowSteps, isLoadingFinishCowSteps } = useCreateCowSteps()
+  const { finishCowSteps, isLoadingFinishCowSteps } = useCreateCowSteps(initPoolInput)
 
   const steps = isCowPool(poolType)
     ? [createPoolStep, ...tokenApprovalSteps, ...finishCowSteps]

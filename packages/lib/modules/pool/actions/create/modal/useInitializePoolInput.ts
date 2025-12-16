@@ -1,14 +1,18 @@
 import {
   type InitPoolInputAmount,
-  type ExtendedInitPoolInputV3,
+  type ExtendedInitPoolInput,
 } from '@repo/lib/modules/pool/actions/create/types'
 import { parseUnits } from 'viem'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
+import { useWatch } from 'react-hook-form'
 
-export function useInitializePoolInput(chainId: number): ExtendedInitPoolInputV3 {
+export function useInitializePoolInput(chainId: number): ExtendedInitPoolInput {
   const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = poolCreationForm.getValues('poolTokens')
+  const poolTokens = useWatch({
+    control: poolCreationForm.control,
+    name: 'poolTokens',
+  })
 
   const chain = getGqlChain(chainId)
   const { tokens } = getNetworkConfig(chain)
@@ -28,6 +32,7 @@ export function useInitializePoolInput(chainId: number): ExtendedInitPoolInputV3
       decimals,
       rawAmount,
       symbol,
+      weight: token.weight,
     }
   })
 
