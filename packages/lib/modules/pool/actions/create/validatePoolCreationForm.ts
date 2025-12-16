@@ -50,10 +50,6 @@ export const validatePoolTokens = {
     const isValidTotalWeight = validatePoolTokens.isValidTotalWeight(poolTokens)
     return !isWeightedPool(poolType) || isValidTotalWeight
   },
-
-  isValidTokenAmounts: (poolTokens: PoolCreationToken[]) => {
-    return poolTokens.every(token => Number(token.amount) > 0)
-  },
 }
 
 export const validatePoolSettings = {

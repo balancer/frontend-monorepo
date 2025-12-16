@@ -2,13 +2,14 @@ import { Box, Heading, VStack } from '@chakra-ui/react'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationRiskCheckboxes } from './PoolCreationRiskCheckboxes'
-import { validatePoolTokens } from '../../validatePoolCreationForm'
 import { SeedAmountProportions } from './SeedAmountProportions'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { isWeightedPool, isReClammPool, isCowPool } from '../../helpers'
 import { useFormState, useWatch } from 'react-hook-form'
 import { SeedPoolAlert } from './SeedPoolAlert'
 import { SeedAmountInput } from './SeedAmountInput'
+import { useEffect } from 'react'
+import { parseUnits } from 'viem'
 
 export function PoolFundStep() {
   const { poolAddress, poolCreationForm } = usePoolCreationForm()
@@ -23,11 +24,26 @@ export function PoolFundStep() {
       ],
     }
   )
-  const { hasValidationErrors } = useTokenInputsValidation()
+  const { hasValidationErrors, setValidationError } = useTokenInputsValidation()
 
-  const isTokenAmountsValid =
-    (validatePoolTokens.isValidTokenAmounts(poolTokens) && !hasValidationErrors) ||
-    (isReClammPool(poolType) && !poolAddress)
+  useEffect(() => {
+    poolTokens.forEach(token => {
+      const isAmountEmpty = token.amount === ''
+      if (!token.address || isAmountEmpty) return
+
+      if (Number(token.amount) <= 0) {
+        setValidationError(token.address, 'Amount must be greater than 0')
+      }
+
+      const tokenDecimals = token.data?.decimals || 0
+      const rawAmount = parseUnits(token.amount, tokenDecimals)
+      if (isCowPool(poolType) && tokenDecimals < 18 && rawAmount < BigInt(1e6)) {
+        setValidationError(token.address, 'Minimum amount is 1')
+      }
+    })
+  }, [poolTokens, setValidationError])
+
+  const isTokenAmountsValid = !hasValidationErrors || (isReClammPool(poolType) && !poolAddress)
 
   const isWeightRiskRequired = isWeightedPool(poolType) || isCowPool(poolType)
 

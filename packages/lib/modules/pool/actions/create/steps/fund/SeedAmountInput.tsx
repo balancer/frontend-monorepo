@@ -1,9 +1,9 @@
 import { useReClammInitAmounts } from './useReClammInitAmounts'
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect, useRef } from 'react'
-import { formatUnits, parseUnits } from 'viem'
+import { formatUnits } from 'viem'
 import { useGyroEclpInitAmountsRatio } from './useGyroEclpInitAmountsRatio'
-import { isReClammPool, isGyroEllipticPool, isCowPool } from '../../helpers'
+import { isReClammPool, isGyroEllipticPool } from '../../helpers'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useWatch } from 'react-hook-form'
@@ -26,13 +26,6 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
 
   const otherTokenInputIdx = idx === 0 ? 1 : 0
   const otherToken = poolTokens[otherTokenInputIdx]
-
-  // for cow pool if token has less than 18 decimals, 1e6 is the min raw amount allowed
-  const tokenDecimals = token.data?.decimals || 0
-  const rawAmount = parseUnits(token.amount, tokenDecimals)
-  const isBelowMinAmount =
-    isCowPool(poolType) && tokenDecimals < 18 && rawAmount > 0n && rawAmount < BigInt(1e6)
-  const customValidationErrorMessage = isBelowMinAmount ? 'Minimum amount is 1' : undefined
 
   const handleAmountChange = (idx: number, amount: string) => {
     lastUserUpdatedAmountIdx.current = idx
@@ -88,7 +81,6 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
         apiToken={token.data}
         chain={network}
         customUsdPrice={Number(token.usdPrice)}
-        customValidationErrorMessage={customValidationErrorMessage}
         onChange={e => handleAmountChange(idx, e.currentTarget.value)}
         value={token.amount}
       />

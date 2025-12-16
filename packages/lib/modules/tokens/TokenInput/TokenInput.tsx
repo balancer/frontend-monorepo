@@ -121,7 +121,6 @@ type TokenInputFooterProps = {
   isDisabled?: boolean
   customUsdPrice?: number
   priceImpactProps: PriceImpactProps | undefined
-  customValidationErrorMessage?: string
 }
 
 function TokenInputFooter({
@@ -135,7 +134,6 @@ function TokenInputFooter({
   isDisabled,
   customUsdPrice,
   priceImpactProps,
-  customValidationErrorMessage,
 }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
@@ -190,9 +188,9 @@ function TokenInputFooter({
             getPriceImpactLabel(priceImpactProps?.priceImpact)}
         </Text>
       )}
-      {customValidationErrorMessage && (
+      {!isBalancesLoading && isMounted && hasError && (
         <Text color="font.error" fontSize="sm">
-          {customValidationErrorMessage}
+          {getValidationError(token)}
         </Text>
       )}
       {isBalancesLoading || !isMounted ? (
@@ -206,11 +204,6 @@ function TokenInputFooter({
           onClick={handleBalanceClick}
           title="Use wallet balance"
         >
-          {hasError && (
-            <Text color="inherit" fontSize="sm">
-              {getValidationError(token)}
-            </Text>
-          )}
           <Text
             color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
             fontSize="sm"
@@ -246,7 +239,6 @@ type Props = {
   customUserBalance?: string
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
-  customValidationErrorMessage?: string
 }
 
 export const TokenInput = forwardRef(
@@ -267,7 +259,6 @@ export const TokenInput = forwardRef(
       customUserBalance,
       customUsdPrice,
       priceImpactProps,
-      customValidationErrorMessage,
       ...inputProps
     }: InputProps & Props,
     ref
@@ -291,7 +282,7 @@ export const TokenInput = forwardRef(
       disableBalanceValidation,
     })
 
-    const hasError = hasValidationError(token) || customValidationErrorMessage
+    const hasError = hasValidationError(token)
 
     useEffect(() => {
       if (!isBalancesLoading) {
@@ -396,7 +387,6 @@ export const TokenInput = forwardRef(
           <TokenInputFooter
             customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
-            customValidationErrorMessage={customValidationErrorMessage}
             hasPriceImpact={hasPriceImpact}
             isDisabled={inputProps.isDisabled}
             isLoadingPriceImpact={isLoadingPriceImpact}
