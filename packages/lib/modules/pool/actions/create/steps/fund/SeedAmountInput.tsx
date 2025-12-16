@@ -8,6 +8,8 @@ import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useWatch } from 'react-hook-form'
 import { VStack, Text } from '@chakra-ui/react'
+import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { validatePoolTokens } from '../../validatePoolCreationForm'
 
 interface TokenAmountInputProps {
   token: PoolCreationToken
@@ -22,10 +24,17 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
   const { reClammInitAmounts } = useReClammInitAmounts(isReClammPool(poolType), poolAddress, token)
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
+  const { setValidationError } = useTokenInputsValidation()
+
   const lastUserUpdatedAmountIdx = useRef<number | null>(null)
 
   const otherTokenInputIdx = idx === 0 ? 1 : 0
   const otherToken = poolTokens[otherTokenInputIdx]
+
+  useEffect(() => {
+    const amountErrorMsg = validatePoolTokens.hasAmountError(token, poolType)
+    if (amountErrorMsg && token.address) setValidationError(token.address, amountErrorMsg)
+  }, [token, poolType, setValidationError])
 
   const handleAmountChange = (idx: number, amount: string) => {
     lastUserUpdatedAmountIdx.current = idx

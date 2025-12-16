@@ -2,8 +2,12 @@ import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { WeightedPoolStructure } from './constants'
-import { COW_AMM_RAW_WEIGHT_50, COW_AMM_RAW_WEIGHT_80, COW_AMM_RAW_WEIGHT_20 } from './constants'
+import {
+  WeightedPoolStructure,
+  COW_AMM_RAW_WEIGHT_50,
+  COW_AMM_RAW_WEIGHT_80,
+  COW_AMM_RAW_WEIGHT_20,
+} from './constants'
 
 const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.Weighted]: GqlPoolType.Weighted,

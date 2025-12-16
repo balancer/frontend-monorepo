@@ -8,8 +8,7 @@ import { isWeightedPool, isReClammPool, isCowPool } from '../../helpers'
 import { useFormState, useWatch } from 'react-hook-form'
 import { SeedPoolAlert } from './SeedPoolAlert'
 import { SeedAmountInput } from './SeedAmountInput'
-import { useEffect } from 'react'
-import { parseUnits } from 'viem'
+import { validatePoolTokens } from '../../validatePoolCreationForm'
 
 export function PoolFundStep() {
   const { poolAddress, poolCreationForm } = usePoolCreationForm()
@@ -24,26 +23,15 @@ export function PoolFundStep() {
       ],
     }
   )
-  const { hasValidationErrors, setValidationError } = useTokenInputsValidation()
+  const { hasValidationErrors } = useTokenInputsValidation()
 
-  useEffect(() => {
-    poolTokens.forEach(token => {
-      const isAmountEmpty = token.amount === ''
-      if (!token.address || isAmountEmpty) return
+  // temp fix to prevent form submission with invalid token amounts until hasValidationErrors is fixed for page refresh
+  const hasAmountError = poolTokens.some(token =>
+    validatePoolTokens.hasAmountError(token, poolType)
+  )
 
-      if (Number(token.amount) <= 0) {
-        setValidationError(token.address, 'Amount must be greater than 0')
-      }
-
-      const tokenDecimals = token.data?.decimals || 0
-      const rawAmount = parseUnits(token.amount, tokenDecimals)
-      if (isCowPool(poolType) && tokenDecimals < 18 && rawAmount < BigInt(1e6)) {
-        setValidationError(token.address, 'Minimum amount is 1')
-      }
-    })
-  }, [poolTokens, setValidationError])
-
-  const isTokenAmountsValid = !hasValidationErrors || (isReClammPool(poolType) && !poolAddress)
+  const isTokenAmountsValid =
+    (!hasAmountError && !hasValidationErrors) || (isReClammPool(poolType) && !poolAddress)
 
   const isWeightRiskRequired = isWeightedPool(poolType) || isCowPool(poolType)
 
