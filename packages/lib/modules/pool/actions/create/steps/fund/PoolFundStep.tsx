@@ -26,8 +26,8 @@ export function PoolFundStep() {
   const { hasValidationErrors } = useTokenInputsValidation()
 
   // temp fix to prevent form submission with invalid token amounts until hasValidationErrors is fixed for page refresh
-  const hasAmountError = poolTokens.some(token =>
-    validatePoolTokens.hasAmountError(token, poolType)
+  const hasAmountError = poolTokens.some(
+    token => validatePoolTokens.hasAmountError(token, poolType) || token.amount === ''
   )
 
   const isTokenAmountsValid =
