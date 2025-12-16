@@ -116,7 +116,7 @@ export function PoolSettingsRadioGroup({
                             />
                             {name === 'poolHooksContract' && (
                               <BalAlert
-                                content="All unapproved Hook contracts require review before a pool using it can be listed on the Balancer UI."
+                                content="All unapproved hook contracts require review before add liquidity is enabled on the Balancer UI."
                                 status="warning"
                                 title="Unrecognized hooks require review"
                                 w="full"
