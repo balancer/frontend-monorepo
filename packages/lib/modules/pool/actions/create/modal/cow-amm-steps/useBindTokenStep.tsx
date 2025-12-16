@@ -16,8 +16,9 @@ import { useReadContract } from 'wagmi'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { isCowPool } from '../../helpers'
 import { getChainId } from '@repo/lib/config/app.config'
-import { parseUnits, Address } from 'viem'
+import { Address } from 'viem'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
+import { getCowRawWeight } from '../../helpers'
 
 export function useBindTokenStep(token: {
   address: Address
@@ -54,17 +55,10 @@ export function useBindTokenStep(token: {
   let txConfig: TransactionConfig | undefined
 
   if (isConnected && poolAddress && isCowPool(poolType)) {
-    if (!token.weight) {
-      throw new Error(`${token.symbol} weight is required for create cow bind token step`)
-    }
-
-    // for 50/50 pool, weight must be 1e18 for both tokens
-    // for 80/20 pool, parse human readable weight as necessary
-    const rawWeight = token.weight === '50' ? parseUnits('1', 18) : parseUnits(token.weight, 17)
     const data = encodeFunctionData({
       abi: cowAmmPoolAbi,
       functionName: 'bind',
-      args: [token.address, token.rawAmount, rawWeight],
+      args: [token.address, token.rawAmount, getCowRawWeight(token.weight)],
     })
 
     txConfig = {

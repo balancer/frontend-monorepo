@@ -12,6 +12,7 @@ import {
 import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { parseUnits } from 'viem'
 
 const GNOSIS_BLACKLIST: Address[] = [
   '0xcB444e90D8198415266c6a2724b7900fb12FC56E', // Monerium EUR emoney (EURe)
@@ -34,6 +35,9 @@ export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
 export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
 export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 export const MAX_LAMBDA = 100000000
+export const COW_AMM_RAW_WEIGHT_50 = parseUnits('1', DEFAULT_DECIMALS) // quirk for 50/50 pool, weight must be 1e18 for both tokens
+export const COW_AMM_RAW_WEIGHT_80 = parseUnits('8', DEFAULT_DECIMALS)
+export const COW_AMM_RAW_WEIGHT_20 = parseUnits('2', DEFAULT_DECIMALS)
 
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   [PoolType.Stable]: {
