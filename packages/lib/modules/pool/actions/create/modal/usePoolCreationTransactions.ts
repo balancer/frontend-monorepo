@@ -72,7 +72,7 @@ export function usePoolCreationTransactions({
 
   const initV3PoolStep = useInitializePoolStep({ initPoolInput, poolAddress, poolType })
 
-  const finishV3Steps = getApprovalAndAddSteps({
+  const v3Steps = getApprovalAndAddSteps({
     shouldUseSignatures,
     signPermit2Step,
     permit2ApprovalSteps,
@@ -84,9 +84,8 @@ export function usePoolCreationTransactions({
 
   const { finishCowSteps, isLoadingFinishCowSteps } = useCreateCowSteps(initPoolInput)
 
-  const steps = isCowPool(poolType)
-    ? [createPoolStep, ...tokenApprovalSteps, ...finishCowSteps]
-    : [createPoolStep, ...finishV3Steps]
+  const cowSteps = [...tokenApprovalSteps, ...finishCowSteps]
+  const steps = [createPoolStep, ...(isCowPool(poolType) ? cowSteps : v3Steps)]
 
   const isLoadingSteps =
     isLoadingTokenApprovalSteps ||

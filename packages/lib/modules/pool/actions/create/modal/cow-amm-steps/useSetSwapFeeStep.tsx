@@ -18,14 +18,14 @@ import { isCowPool } from '../../helpers'
 import { getChainId } from '@repo/lib/config/app.config'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
 
-const id = `set-swap-fee`
+const id = 'set-swap-fee'
 
 const labels: TransactionLabels = {
-  init: `Set Swap Fee`,
-  title: `Set Swap Fee`,
+  init: 'Set Swap Fee',
+  title: 'Set Swap Fee',
   confirming: 'Confirming set swap fee...',
   confirmed: 'Set swap fee confirmed!',
-  tooltip: `Set swap fee`,
+  tooltip: 'Set swap fee',
 }
 
 export function useSetSwapFeeStep() {

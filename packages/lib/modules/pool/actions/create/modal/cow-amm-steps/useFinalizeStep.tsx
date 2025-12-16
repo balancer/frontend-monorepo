@@ -18,14 +18,14 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { isCowPool } from '../../helpers'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
 
-const id = `finalize`
+const id = 'finalize'
 
 const labels: TransactionLabels = {
-  init: `Finalize`,
-  title: `Finalize`,
+  init: 'Finalize',
+  title: 'Finalize',
   confirming: 'Confirming finalize...',
   confirmed: 'Finalize confirmed!',
-  tooltip: `Finalize`,
+  tooltip: 'Finalize',
 }
 
 export function useFinalizeStep() {
