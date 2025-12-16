@@ -120,7 +120,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
     return (
       <Box py="16" textAlign="center">
         <Text color="gray.400" fontSize="lg">
-          Get started by minting your own relic
+          No Relics Created
         </Text>
       </Box>
     )

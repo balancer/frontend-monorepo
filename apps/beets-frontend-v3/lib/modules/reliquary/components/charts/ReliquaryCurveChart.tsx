@@ -1,30 +1,12 @@
 'use client'
 
+import { Box, HStack, Link, useTheme, VStack } from '@chakra-ui/react'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { EChartsOption, graphic } from 'echarts'
 import ReactECharts from 'echarts-for-react'
-import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { InfoButton } from '~/components/info-button/InfoButton'
-import { Box, BoxProps, HStack, Link, Card, VStack } from '@chakra-ui/react'
 import { ExternalLink } from 'react-feather'
-import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { useTheme } from '@chakra-ui/react'
-
-const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
-  contentProps: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomLeftRadius: 'none',
-    borderTopLeftRadius: 'none',
-    borderBottomRightRadius: 'none',
-  },
-  cardProps: {
-    position: 'relative',
-    overflow: 'hidden',
-    height: 'full',
-  },
-}
+import { InfoButton } from '~/components/info-button/InfoButton'
 
 export function ReliquaryCurveChart() {
   const { pool } = usePool()
@@ -108,29 +90,25 @@ export function ReliquaryCurveChart() {
   }
 
   return (
-    <Card height="full">
-      <NoisyCard {...COMMON_NOISY_CARD_PROPS}>
-        <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
-          <HStack w="full">
-            <InfoButton
-              infoText="This curve shows the maturity boost per level."
-              label="BEETronix"
-              labelProps={{
-                lineHeight: '1rem',
-                fontWeight: 'semibold',
-                fontSize: 'sm',
-                color: 'beets.base.50',
-              }}
-            />
-            <Link href="https://docs.beets.fi/tokenomics/mabeets" target="_blank">
-              <ExternalLink size="16" />
-            </Link>
-          </HStack>
-          <Box h="full" w="full">
-            <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
-          </Box>
-        </VStack>
-      </NoisyCard>
-    </Card>
+    <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
+      <HStack w="full">
+        <InfoButton
+          infoText="This curve shows the maturity boost per level."
+          label="BEETronix"
+          labelProps={{
+            lineHeight: '1rem',
+            fontWeight: 'semibold',
+            fontSize: 'sm',
+            color: 'beets.base.50',
+          }}
+        />
+        <Link href="https://docs.beets.fi/tokenomics/mabeets" target="_blank">
+          <ExternalLink size="16" />
+        </Link>
+      </HStack>
+      <Box h="full" w="full">
+        <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
+      </Box>
+    </VStack>
   )
 }

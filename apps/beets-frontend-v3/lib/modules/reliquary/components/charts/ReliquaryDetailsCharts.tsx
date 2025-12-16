@@ -1,12 +1,11 @@
 'use client'
 
 import { useQuery } from '@apollo/client'
-import { Box, Card, HStack, Stack, VStack } from '@chakra-ui/react'
+import { Box, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import {
   GetReliquaryFarmSnapshotsDocument,
   GqlPoolSnapshotDataRange,
@@ -50,57 +49,52 @@ export function ReliquaryDetailsCharts() {
   })
 
   return (
-    <Card height="full">
-      <NoisyCard cardProps={{ h: 'full' }}>
-        <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
-          <Stack direction={{ base: 'column', md: 'row' }} w="full" wrap="wrap">
-            <HStack gap="10px" wrap="wrap">
-              <ButtonGroup
-                currentOption={selectedChartOption}
-                groupId="reliquary-chart"
-                onChange={value => setSelectedChartOption(value)}
-                options={chartTypeOptions}
-                size="xxs"
-              />
-              {selectedChartOption.value !== 'FB_LEV' &&
-                selectedChartOption.value !== 'MAB_LEV' && (
-                  <ButtonGroup
-                    currentOption={selectedRangeOption}
-                    groupId="reliquary-range"
-                    onChange={value => setRangeOption(value)}
-                    options={rangeOptions}
-                    size="xxs"
-                  />
-                )}
-            </HStack>
-          </Stack>
-          <Box h="full" overflow="hidden" position="relative" w="full">
-            <AnimatePresence mode="wait">
-              <motion.div
-                animate={{ x: '0%' }}
-                exit={{ x: '-100%' }}
-                initial={{ x: '100%' }}
-                key={selectedChartOption.value}
-                style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-              >
-                {selectedChartOption.value === 'FB_LEV' && <ReliquaryMaturityChart />}
-                {selectedChartOption.value === 'MAB_LEV' && <ReliquaryMaBEETSLevelChart />}
-                {selectedChartOption.value === 'TVL' && (
-                  <ReliquaryLiquidityChart data={data?.snapshots || []} />
-                )}
-                {selectedChartOption.value === 'RELICS' && (
-                  <ReliquaryRelicsCountChart data={data?.snapshots || []} />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </Box>
-        </VStack>
-      </NoisyCard>
-    </Card>
+    <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
+      <Stack direction={{ base: 'column', md: 'row' }} w="full" wrap="wrap">
+        <HStack gap="10px" wrap="wrap">
+          <ButtonGroup
+            currentOption={selectedChartOption}
+            groupId="reliquary-chart"
+            onChange={value => setSelectedChartOption(value)}
+            options={chartTypeOptions}
+            size="xxs"
+          />
+          {selectedChartOption.value !== 'FB_LEV' && selectedChartOption.value !== 'MAB_LEV' && (
+            <ButtonGroup
+              currentOption={selectedRangeOption}
+              groupId="reliquary-range"
+              onChange={value => setRangeOption(value)}
+              options={rangeOptions}
+              size="xxs"
+            />
+          )}
+        </HStack>
+      </Stack>
+      <Box h="full" overflow="hidden" position="relative" w="full">
+        <AnimatePresence mode="wait">
+          <motion.div
+            animate={{ x: '0%' }}
+            exit={{ x: '-100%' }}
+            initial={{ x: '100%' }}
+            key={selectedChartOption.value}
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            {selectedChartOption.value === 'FB_LEV' && <ReliquaryMaturityChart />}
+            {selectedChartOption.value === 'MAB_LEV' && <ReliquaryMaBEETSLevelChart />}
+            {selectedChartOption.value === 'TVL' && (
+              <ReliquaryLiquidityChart data={data?.snapshots || []} />
+            )}
+            {selectedChartOption.value === 'RELICS' && (
+              <ReliquaryRelicsCountChart data={data?.snapshots || []} />
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </Box>
+    </VStack>
   )
 }
