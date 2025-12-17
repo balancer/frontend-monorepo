@@ -1,4 +1,4 @@
-import { Divider, HStack, Text } from '@chakra-ui/react'
+import { HStack, Text } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
 import { Icon } from '@chakra-ui/react'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
@@ -19,22 +19,19 @@ export function TotalWeightDisplay() {
   if (isTotalWeightTooHigh) totalWeightColor = 'font.error'
 
   return (
-    <>
-      <Divider />
-      <HStack justify="space-between" w="full">
+    <HStack justify="space-between" w="full">
+      <Text color={totalWeightColor} fontWeight="bold">
+        Total pool weight
+      </Text>
+      <HStack>
+        {isInvalidTotalWeight && (
+          <Icon as={AlertTriangle} boxSize="18px" color={totalWeightColor} />
+        )}
         <Text color={totalWeightColor} fontWeight="bold">
-          Total
+          {totalWeight}
         </Text>
-        <HStack>
-          {isInvalidTotalWeight && (
-            <Icon as={AlertTriangle} boxSize="18px" color={totalWeightColor} />
-          )}
-          <Text color={totalWeightColor} fontWeight="bold">
-            {totalWeight}
-          </Text>
-          <Text color="font.secondary">%</Text>
-        </HStack>
+        <Text color="font.secondary">%</Text>
       </HStack>
-    </>
+    </HStack>
   )
 }

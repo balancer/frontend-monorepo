@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Box, BoxProps, Card, CardProps, VStack, useColorMode } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
@@ -40,19 +39,15 @@ const TABS = [
 ] as const
 
 export function PoolSnapshot({ ...props }: CardProps) {
-  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(TABS[0])
   const { pool } = usePool()
   const { colorMode } = useColorMode()
+  const defaultTab = hasTotalBalance(pool) ? TABS[1] : TABS[0]
+  const [userSelectedTab, setUserSelectedTab] = useState<ButtonGroupOption | null>(null)
+  const activeTab = userSelectedTab ?? defaultTab
 
   function handleTabChanged(option: ButtonGroupOption) {
-    setActiveTab(option)
+    setUserSelectedTab(option)
   }
-
-  useEffect(() => {
-    if (hasTotalBalance(pool)) {
-      setActiveTab(TABS[1])
-    }
-  }, [pool])
 
   return (
     <Card position="relative" {...props}>

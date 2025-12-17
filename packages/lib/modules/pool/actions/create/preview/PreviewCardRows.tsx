@@ -17,7 +17,7 @@ export function CardHeaderRow({ columnNames }: { columnNames: string[] }) {
   return (
     <CardHeader>
       <VStack align="start" w="full">
-        <SimpleGrid columns={4} spacing={5} w="full">
+        <SimpleGrid alignItems="baseline" columns={4} pb="1.5" spacing={5} w="full">
           <Heading gridColumn="span 2" size="md">
             {columnNames[0]}
           </Heading>

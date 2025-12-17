@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import {
@@ -22,7 +21,6 @@ import {
   Text,
   useColorModeValue,
   VStack,
-  Link,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
@@ -50,30 +48,26 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
-import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
+import NextLink from 'next/link'
 
 export function useFilterTagsVisible() {
   const {
     queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion },
   } = usePoolList()
-  const [isVisible, setIsVisible] = useState(false)
 
-  useEffect(() => {
-    setIsVisible(
-      networks.length > 0 ||
-        poolTypes.length > 0 ||
-        minTvl > 0 ||
-        poolTags.length > 0 ||
-        poolHookTags.length > 0 ||
-        !!protocolVersion
-    )
-  }, [networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion])
-
-  return isVisible
+  return (
+    networks.length > 0 ||
+    poolTypes.length > 0 ||
+    minTvl > 0 ||
+    poolTags.length > 0 ||
+    poolHookTags.length > 0 ||
+    !!protocolVersion
+  )
 }
 
 function UserPoolFilter() {
@@ -81,19 +75,11 @@ function UserPoolFilter() {
     queryState: { userAddress, toggleUserAddress },
   } = usePoolList()
   const { userAddress: connectedUserAddress } = useUserAccount()
-  const [checked, setChecked] = useState(false)
-
-  useEffect(() => {
-    if (connectedUserAddress) {
-      setChecked(userAddress === connectedUserAddress)
-    } else {
-      setChecked(false)
-    }
-  }, [userAddress, connectedUserAddress])
+  const isChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
 
   return (
     <Checkbox
-      isChecked={checked}
+      isChecked={isChecked}
       mb="xxs"
       onChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
     >
@@ -507,12 +493,7 @@ export function PoolListFilters() {
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const { options, externalLinks } = PROJECT_CONFIG
-  const subPath = isCowPath ? 'cow' : 'v3'
-
-  const poolCreatorUrl = isBalancer
-    ? `${externalLinks.poolComposerUrl}/${subPath}`
-    : externalLinks.poolComposerUrl
+  const { options } = PROJECT_CONFIG
 
   return (
     <VStack w="full">
@@ -643,19 +624,12 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        <Button
-          as={Link}
-          display="flex"
-          gap="2"
-          href={poolCreatorUrl}
-          isExternal
-          ml="ms"
-          onClick={() => trackEvent(AnalyticsEvent.ClickPoolListCreatePool)}
-          variant="tertiary"
-        >
-          <Icon as={Plus} boxSize={4} />
-          {!isMobile && 'Create pool'}
-        </Button>
+        {isBeets && (
+          <Button as={NextLink} display="flex" gap="2" href="/create" ml="ms" variant="tertiary">
+            <Icon as={Plus} boxSize={4} />
+            {!isMobile && 'Create a pool'}
+          </Button>
+        )}
       </HStack>
     </VStack>
   )

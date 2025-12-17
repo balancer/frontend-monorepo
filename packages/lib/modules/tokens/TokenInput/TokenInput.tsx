@@ -282,7 +282,7 @@ export const TokenInput = forwardRef(
       disableBalanceValidation,
     })
 
-    const boxShadow = hasValidationError(token) ? `0 0 0 1px ${colors.red[500]}` : undefined
+    const hasError = hasValidationError(token)
 
     useEffect(() => {
       if (!isBalancesLoading) {
@@ -293,12 +293,33 @@ export const TokenInput = forwardRef(
 
     return (
       <Box
+        _before={
+          hasError
+            ? {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                bg: 'red.500',
+                opacity: 0.05,
+                borderRadius: 'md',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }
+            : undefined
+        }
+        _focusWithin={{
+          boxShadow: hasError ? 'input.innerError' : 'input.innerFocus',
+        }}
         bg="background.level0"
         border="white"
         borderRadius="md"
-        boxShadow={boxShadow}
+        boxShadow={hasError ? `0 0 0 1px ${colors.red[500]}` : undefined}
         p={['ms', 'md']}
-        shadow="innerBase"
+        position="relative"
+        shadow={hasError ? undefined : 'innerBase'}
         w="full"
         {...boxProps}
       >

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import {
   Card,
   Modal,
@@ -20,7 +19,7 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { useRouter } from 'next/navigation'
@@ -41,9 +40,6 @@ export function ClaimModal({
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const router = useRouter()
 
-  const [quoteRewards, setQuoteRewards] = useState<HumanTokenAmountWithAddress[]>([])
-  const [quoteTotalUsd, setQuoteTotalUsd] = useState<string>('0')
-
   const { isDesktop, isMobile } = useBreakpoints()
   const { transactionSteps, claimTxHash, allClaimableRewards, totalClaimableUsd, isLoading } =
     useClaim()
@@ -60,15 +56,6 @@ export function ClaimModal({
         .filter(Boolean) as HumanTokenAmountWithAddress[],
     [allClaimableRewards]
   )
-
-  useEffect(() => {
-    if (quoteRewards.length === 0 && rewards.length > 0) {
-      setQuoteRewards(rewards)
-      setQuoteTotalUsd(totalClaimableUsd)
-    }
-  }, [rewards])
-
-  const noQuoteRewards = quoteRewards.length === 0
 
   const isSuccess = !!claimTxHash
 
@@ -94,15 +81,15 @@ export function ClaimModal({
             {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
             {isLoading ? (
               <Text>Loading data...</Text>
-            ) : noQuoteRewards ? (
+            ) : rewards.length === 0 ? (
               <Text>Nothing to claim</Text>
             ) : (
               <Card variant="modalSubSection">
                 <TokenRowGroup
-                  amounts={quoteRewards}
+                  amounts={rewards}
                   chain={chain}
                   label={claimTxHash ? 'You got' : "You'll get"}
-                  totalUSDValue={quoteTotalUsd}
+                  totalUSDValue={totalClaimableUsd}
                 />
               </Card>
             )}

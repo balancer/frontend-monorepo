@@ -46,11 +46,23 @@ export function BalAlert({
       {ssr ? <AlertIcon {...iconSize} /> : <AlertIcon as={getAlertIcon(status)} {...iconSize} />}
 
       {title ? (
-        <VStack align="start" w="full">
-          <AlertTitle color="black" display="flex" flexDirection="column" w="full">
+        <VStack align="start" gap="0.5" w="full">
+          <AlertTitle
+            color="black"
+            display="flex"
+            flexDirection="column"
+            fontWeight="bold"
+            w="full"
+          >
             {title}
           </AlertTitle>
-          <AlertDescription color="black" display="flex" flexDirection="column" w="full">
+          <AlertDescription
+            color="black"
+            display="flex"
+            flexDirection="column"
+            fontWeight="medium"
+            w="full"
+          >
             {content}
           </AlertDescription>
         </VStack>
@@ -59,7 +71,7 @@ export function BalAlert({
           color="black"
           display="flex"
           flexDirection="column"
-          fontWeight="normal"
+          fontWeight="medium"
           w="full"
           wordBreak="break-word"
         >

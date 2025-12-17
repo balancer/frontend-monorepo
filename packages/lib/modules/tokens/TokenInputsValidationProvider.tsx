@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/immutability */
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -11,8 +10,10 @@ export function useTokenInputsValidationLogic() {
   const [validationErrors, setValidationErrors] = useState<ValidationErrorsByToken>({})
 
   function setValidationError(tokenAddress: Address, value: string) {
-    validationErrors[tokenAddress] = value
-    setValidationErrors({ ...validationErrors })
+    setValidationErrors(prev => {
+      if (prev[tokenAddress] === value) return prev
+      return { ...prev, [tokenAddress]: value }
+    })
   }
 
   function hasValidationError(token: ApiOrCustomToken | undefined) {

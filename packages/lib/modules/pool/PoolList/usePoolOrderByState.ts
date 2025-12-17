@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
-import { useState, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { usePoolList } from './PoolListProvider'
 
 const defaultOrderBy = [GqlPoolOrderBy.TotalLiquidity, GqlPoolOrderBy.Volume24h, GqlPoolOrderBy.Apr]
@@ -11,19 +10,30 @@ export function usePoolOrderByState() {
   const {
     queryState: { sorting, setSorting, userAddress },
   } = usePoolList()
-  const [orderBy, setOrderBy] = useState(defaultOrderBy)
+
+  const includeUserBalance = !!userAddress
+
+  const orderBy = includeUserBalance
+    ? [GqlPoolOrderBy.UserbalanceUsd, ...defaultOrderBy]
+    : defaultOrderBy
+
+  const sortingRef = useRef(sorting)
 
   useEffect(() => {
-    if (userAddress) {
-      setOrderBy([GqlPoolOrderBy.UserbalanceUsd, ...defaultOrderBy])
-      setSorting([{ id: GqlPoolOrderBy.UserbalanceUsd, desc: true }])
-    } else {
-      setOrderBy(orderBy.filter(item => item !== GqlPoolOrderBy.UserbalanceUsd))
-      if (sorting[0]?.id === GqlPoolOrderBy.UserbalanceUsd) {
-        setSorting([{ id: GqlPoolOrderBy.TotalLiquidity, desc: true }])
+    sortingRef.current = sorting
+  }, [sorting])
+
+  useEffect(() => {
+    const current = sortingRef.current[0]
+
+    if (includeUserBalance) {
+      if (current?.id !== GqlPoolOrderBy.UserbalanceUsd) {
+        setSorting([{ id: GqlPoolOrderBy.UserbalanceUsd, desc: true }])
       }
+    } else if (current?.id === GqlPoolOrderBy.UserbalanceUsd) {
+      setSorting([{ id: GqlPoolOrderBy.TotalLiquidity, desc: true }])
     }
-  }, [userAddress])
+  }, [includeUserBalance, setSorting])
 
   return {
     orderBy,

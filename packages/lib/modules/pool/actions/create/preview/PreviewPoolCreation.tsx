@@ -65,6 +65,7 @@ function PreviewPoolHeader() {
           listItems={[
             `${PROJECT_CONFIG.projectName} offers a variety of liquidity pool types, each tailored to specific use cases`,
           ]}
+          showHelpIcon
         />
       </HStack>
     </HStack>

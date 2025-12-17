@@ -1,11 +1,9 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { PoolActivityView, usePoolActivityViewType } from './usePoolActivityViewType'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { useEffect, useState } from 'react'
 import { ChartBubbleIcon } from '@repo/lib/shared/components/icons/ChartBubbleIcon'
 import { TableIcon } from '@repo/lib/shared/components/icons/TableIcon'
 
@@ -22,16 +20,12 @@ const options: ButtonGroupOption[] = [
 
 export function PoolActivityViewType() {
   const { setPoolActivityView, isChartView } = usePoolActivityViewType()
-  const [currentOption, setCurrentOption] = useState<ButtonGroupOption>(options[0])
 
   function changeListView(option: ButtonGroupOption) {
     setPoolActivityView(option.value as PoolActivityView)
   }
 
-  useEffect(() => {
-    const newOption = isChartView ? options[0] : options[1]
-    setCurrentOption(newOption)
-  }, [isChartView])
+  const currentOption = isChartView ? options[0] : options[1]
 
   return (
     <ButtonGroup

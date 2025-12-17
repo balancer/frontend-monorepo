@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import {
@@ -133,8 +132,7 @@ export function useTokensLogic() {
         }, bn(0))
         .toString()
     },
-
-    [prices]
+    [priceFor]
   )
 
   const vebalBptToken = tokens.find(

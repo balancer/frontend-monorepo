@@ -1,5 +1,6 @@
 import {
   VStack,
+  Divider,
   Heading,
   Text,
   useDisclosure,
@@ -16,7 +17,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { ApiToken, ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { Address, zeroAddress } from 'viem'
 import { useState } from 'react'
-import { WeightedPoolStructure } from '../../constants'
+import { TOKEN_BLACKLIST, WeightedPoolStructure } from '../../constants'
 import { PlusCircle, Trash2 } from 'react-feather'
 import { ConfigureTokenRateProvider } from './ConfigureTokenRateProvider'
 import { AlertTriangle } from 'react-feather'
@@ -41,6 +42,7 @@ import {
 } from '../../helpers'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -56,6 +58,7 @@ export function ChoosePoolTokens() {
 
   const { getTokensByChain } = useTokens()
   const listedTokens = getTokensByChain(network)
+  const blacklistTokens = network ? TOKEN_BLACKLIST[network] : null
 
   const selectedTokenAddress =
     selectedTokenIndex !== null ? poolTokens[selectedTokenIndex].address : undefined
@@ -67,8 +70,11 @@ export function ChoosePoolTokens() {
     const listTokenAddress = listToken.address.toLowerCase()
     const isTokenAlreadyInPool = poolTokenAddresses.has(listTokenAddress)
     const isEditingPoolToken = listTokenAddress === selectedTokenAddress
+    const isBlacklisted = blacklistTokens?.has(listTokenAddress) ?? false
 
-    return isEditingPoolToken || !isTokenAlreadyInPool
+    if (isBlacklisted) return false
+    if (isEditingPoolToken) return true
+    return !isTokenAlreadyInPool
   })
 
   function getVerifiedRateProviderAddress(token: ApiToken) {
@@ -148,7 +154,13 @@ export function ChoosePoolTokens() {
             )
           })}
           {(!isWeightedPool(poolType) || isCustomWeightedPool(poolType, weightedPoolStructure)) && (
-            <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
+            <>
+              <VStack align="start" gap="lg" w="full">
+                <Divider />
+                <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
+                <Divider />
+              </VStack>
+            </>
           )}
 
           {isWeightedPool(poolType) && isCustomWeightedPool(poolType, weightedPoolStructure) && (
@@ -215,31 +227,37 @@ function ConfigureToken({
   const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
 
   return (
-    <VStack align="start" key={index} spacing="md" w="full">
+    <VStack align="start" key={index} spacing="sm" w="full">
       <HStack align="end" w="full">
         <VStack align="start" spacing="sm" w="full">
-          <Text>Token {index + 1}</Text>
+          <Text fontWeight="bold">Token {index + 1}</Text>
 
           <TokenInputSelector onToggleTokenClicked={onToggleTokenClicked} token={token?.data} />
         </VStack>
 
         {isWeightedPool(poolType) && (
-          <Box>
-            <NumberInput
-              control={poolCreationForm.control}
-              isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-              isInvalid={isInvalidWeight}
-              isPercentage
-              label="Weight"
-              name={`poolTokens.${index}.weight`}
-              validate={weight => {
-                if (!isWeightedPool(poolType)) return true
-                if (weight < 1) return 'Minimum weight for each token is 1%'
-                if (weight > 99) return 'Maximum weight for a token is 99%'
-                return true
-              }}
-            />
-          </Box>
+          <TooltipWithTouch
+            isDisabled={weightedPoolStructure === WeightedPoolStructure.Custom}
+            label={`Weight is set to ${weightedPoolStructure} based on your selection above. Select "Custom" to set your own weights.`}
+          >
+            <Box>
+              <NumberInput
+                control={poolCreationForm.control}
+                isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                isInvalid={isInvalidWeight}
+                isPercentage
+                label="Weight"
+                name={`poolTokens.${index}.weight`}
+                validate={weight => {
+                  if (!isWeightedPool(poolType)) return true
+                  if (weight < 1) return 'Minimum weight for each token is 1%'
+                  if (weight > 99) return 'Maximum weight for a token is 99%'
+                  return true
+                }}
+                width="24"
+              />
+            </Box>
+          </TooltipWithTouch>
         )}
 
         {poolTokens.length > 2 && (
@@ -288,7 +306,9 @@ function AddTokenButton({ isDisabled, onClick }: { isDisabled: boolean; onClick:
     <Button isDisabled={isDisabled} onClick={onClick} variant="secondary">
       <HStack spacing="sm">
         <PlusCircle size={20} />
-        <Text color="font.dark">Add token</Text>
+        <Text color="font.dark" fontWeight="bold">
+          Add token
+        </Text>
       </HStack>
     </Button>
   )
@@ -307,7 +327,7 @@ function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
 
   return (
     <HStack spacing="sm" w="full">
-      <Icon as={AlertTriangle} boxSize="18px" color="font.error" />
+      <Icon as={AlertTriangle} boxSize="18px" color="red.500" />
 
       <Text color="font.error" fontSize="sm" fontWeight="semibold" textAlign="start" w="full">
         {message}

@@ -6,7 +6,7 @@ export function TokenMissingPriceWarning({ message }: { message: string }) {
     <HStack color="font.warning" spacing="xs">
       <Text color="font.warning">—</Text>
       <Tooltip label={message} placement="top">
-        <Box zIndex="tooltip">
+        <Box zIndex="0">
           <AlertTriangle size={16} />
         </Box>
       </Tooltip>
