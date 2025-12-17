@@ -7,17 +7,15 @@ import {
   chakraComponents,
   DropdownIndicatorProps,
   SingleValueProps,
+  OptionProps,
 } from 'chakra-react-select'
 import { ChevronDown } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { SelectInput, SelectOption } from '@repo/lib/shared/components/inputs/SelectInput'
-import {
-  NativeTokenBalance,
-  useHasNativeBalance,
-  useNativeTokenBalances,
-} from './NativeTokenBalance'
+import { NativeTokenBalance } from './NativeTokenBalance'
+import { useHasNativeBalance, useNativeTokenBalances } from './useNativeTokenBalances'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { PlugIcon } from '@repo/lib/shared/components/icons/PlugIcon'
@@ -27,6 +25,10 @@ type Props = {
   value: GqlChain
   onChange(value: GqlChain): void
   chains?: GqlChain[]
+}
+
+type ChainOption = SelectOption & {
+  showDivider?: boolean
 }
 
 function DropdownIndicator({
@@ -62,19 +64,29 @@ function SingleValue({ ...props }: SingleValueProps<SelectOption, false, GroupBa
   )
 }
 
+function Option({ children, ...props }: OptionProps<ChainOption, false, GroupBase<ChainOption>>) {
+  const { showDivider } = props.data
+
+  return (
+    <Box w="full">
+      {showDivider && <Divider borderColor="background.level4" my="2" />}
+      <chakraComponents.Option {...props}>{children}</chakraComponents.Option>
+    </Box>
+  )
+}
+
 export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supportedNetworks }: Props) {
   const { chainId } = useUserAccount()
   const connectedChain = chainId ? getGqlChain(chainId) : undefined
   const nativeBalances = useNativeTokenBalances(chains)
 
-  const sortedChains = chains.sort((a, b) => nativeBalances[b] - nativeBalances[a])
+  const sortedChains = [...chains].sort((a, b) => nativeBalances[b] - nativeBalances[a])
   const firstChainWithoutBalance = sortedChains.find(chain => nativeBalances[chain] === 0)
   const hasChainsWithBalance = sortedChains.find(chain => nativeBalances[chain] !== 0) !== undefined
 
-  const networkOptions: SelectOption[] = sortedChains.map(chain => ({
+  const networkOptions: ChainOption[] = sortedChains.map(chain => ({
     label: (
       <VStack w="full">
-        {chain === firstChainWithoutBalance && hasChainsWithBalance && <Divider />}
         <HStack w="full">
           <NetworkIcon chain={chain} size={6} />
           <HStack gap="xxs">
@@ -93,6 +105,7 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
       </VStack>
     ),
     value: chain,
+    showDivider: chain === firstChainWithoutBalance && hasChainsWithBalance,
   }))
 
   return (
@@ -102,6 +115,7 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
         id="chain-select"
         isSearchable={false}
         onChange={onChange}
+        Option={Option}
         options={networkOptions}
         SingleValue={SingleValue}
         value={value}

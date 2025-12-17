@@ -1,10 +1,8 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { HStack, Box, BoxProps } from '@chakra-ui/react'
 import { motion, useInView } from 'framer-motion'
 import * as React from 'react'
-import { useEffect, useState } from 'react'
 
 const MotionBox = motion(Box)
 
@@ -19,7 +17,6 @@ export function WordsPullUp({
   pr?: BoxProps['pr']
 } & Omit<BoxProps, 'transition'>) {
   const splittedText = text.split(' ')
-  const [shouldAnimate, setShouldAnimate] = useState(false)
 
   const pullupVariant = {
     initial: { y: 10, opacity: 0, filter: 'blur(3px)', willChange: 'transform, opacity, filter' },
@@ -41,17 +38,11 @@ export function WordsPullUp({
     amount: 0.3,
   })
 
-  useEffect(() => {
-    if (isInView && !shouldAnimate) {
-      setShouldAnimate(true)
-    }
-  }, [isInView, shouldAnimate])
-
   return (
     <HStack justify="center" {...rest}>
       {splittedText.map((current, i) => {
         const motionProps = {
-          animate: shouldAnimate ? 'animate' : '',
+          animate: isInView ? 'animate' : undefined,
           custom: i,
           initial: 'initial',
           variants: pullupVariant,

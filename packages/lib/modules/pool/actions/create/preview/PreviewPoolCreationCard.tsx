@@ -62,6 +62,7 @@ export function PreviewPoolCreationCard({ children, stepTitle }: Props) {
                 WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
                 WebkitMaskComposite: 'xor',
                 maskComposite: 'exclude',
+                pointerEvents: 'none',
               },
             }
           : undefined

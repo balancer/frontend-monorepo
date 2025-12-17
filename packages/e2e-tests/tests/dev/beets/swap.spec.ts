@@ -36,6 +36,9 @@ test('Swap 1000 wS to stS)', async ({ page }) => {
   if (await isButtonVisible(page, 'Approve wS to swap')) {
     await clickButton(page, 'Approve wS to swap')
   }
+  if (await isButtonVisible(page, 'Sign permit: wS')) {
+    await clickButton(page, 'Sign permit: wS')
+  }
 
   await clickButton(page, 'Swap')
   await expect(page.getByText('Transaction confirmed')).toBeVisible()

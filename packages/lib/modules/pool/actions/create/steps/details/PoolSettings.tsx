@@ -6,7 +6,6 @@ import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
-import { PoolType } from '@balancer/sdk'
 import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
@@ -33,9 +32,15 @@ export function PoolSettings() {
   })
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
-  const filteredPoolHooksOptions = poolHooksWhitelist.filter(
-    hook => hook.label !== 'StableSurge' || poolType !== PoolType.GyroE
-  )
+  const filteredPoolHooksOptions = poolHooksWhitelist.filter(hook => {
+    if (isStableSurgePool(poolType)) {
+      return hook.label === 'StableSurge' // this pool type requires use of stable surge hook
+    } else if (!isStablePool(poolType)) {
+      return hook.label !== 'StableSurge' // remove stable surge hook from options for non-stable pool types
+    } else {
+      return true
+    }
+  })
 
   const poolManagerOptions: PoolSettingsOption[] = [
     { label: `Delegate to the ${PROJECT_CONFIG.projectName} DAO`, value: zeroAddress },
@@ -98,6 +103,9 @@ export function PoolSettings() {
     }
   }
 
+  const showAmplificationParameter = isStablePool(poolType)
+  const showPoolHooks = !isStableSurgePool(poolType)
+
   return (
     <VStack align="start" spacing="lg" w="full">
       <Heading color="font.maxContrast" size="md">
@@ -135,7 +143,7 @@ export function PoolSettings() {
         validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
 
-      {isStablePool(poolType) && (
+      {showAmplificationParameter && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom amplification parameter"
           customInputType="number"
@@ -147,17 +155,18 @@ export function PoolSettings() {
         />
       )}
 
-      <PoolSettingsRadioGroup
-        customInputLabel="Custom pool hooks address"
-        customInputType="address"
-        isDisabled={isStableSurgePool(poolType)}
-        name="poolHooksContract"
-        options={poolHooksOptions}
-        title="Pool hooks"
-        tooltip="Contract that implements the hooks for the pool"
-        validateAsync={validateHooksContract}
-      />
-
+      {showPoolHooks && (
+        <PoolSettingsRadioGroup
+          customInputLabel="Custom pool hooks address"
+          customInputType="address"
+          isDisabled={isStableSurgePool(poolType)}
+          name="poolHooksContract"
+          options={poolHooksOptions}
+          title="Pool hooks"
+          tooltip="Contract that implements the hooks for the pool"
+          validateAsync={validateHooksContract}
+        />
+      )}
       <LiquidityManagement />
     </VStack>
   )
