@@ -12,6 +12,7 @@ type ModalLayoutProps = PropsWithChildren & {
   redirectPath: string
   leftSlot?: ReactNode
   chain: GqlChain
+  closeButton?: boolean
 }
 
 export function FocussedActionLayout({
@@ -19,6 +20,7 @@ export function FocussedActionLayout({
   redirectPath,
   leftSlot,
   chain,
+  closeButton,
 }: ModalLayoutProps) {
   const bg = useColorModeValue('blackAlpha.800', 'blackAlpha.700')
   const blur = useColorModeValue('blur(8px)', 'blur(5px)')
@@ -44,7 +46,11 @@ export function FocussedActionLayout({
             shadow="lg"
             variant="level1"
           >
-            <FocussedActionNav chain={chain} redirectPath={redirectPath} />
+            <FocussedActionNav
+              chain={chain}
+              closeButton={closeButton}
+              redirectPath={redirectPath}
+            />
             {children}
           </Card>
         </Box>

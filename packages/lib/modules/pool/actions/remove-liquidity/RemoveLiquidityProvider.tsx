@@ -160,7 +160,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
 
   const hasQuoteContext = !!simulationQuery.data
 
-  const quoteAmountsOut = simulationQuery.data?.amountsOut || emptyTokenAmounts(pool)
+  const quoteAmountsOut = simulationQuery.data?.amountsOut || emptyTokenAmounts(tokens)
   const quotePriceImpact = priceImpactQuery.data
 
   /**
