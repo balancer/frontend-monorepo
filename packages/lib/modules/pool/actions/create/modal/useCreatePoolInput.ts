@@ -1,9 +1,10 @@
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { TokenType, CreatePoolInput, CreatePoolV3BaseInput, PoolType } from '@balancer/sdk'
+import { TokenType, CreatePoolV3BaseInput, PoolType } from '@balancer/sdk'
 import { parseUnits, zeroAddress } from 'viem'
 import { PERCENTAGE_DECIMALS, DEFAULT_DECIMALS } from '../constants'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
+import { CreatePoolInput } from '../types'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
   const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
@@ -120,6 +121,10 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
       lambda: parseUnits(lambda, DEFAULT_DECIMALS),
     }
     return { ...baseInput, poolType, eclpParams }
+  }
+
+  if (poolType === PoolType.CowAmm) {
+    return { name, symbol, poolType, chainId, protocolVersion: 1, poolTokens }
   }
 
   throw new Error('Invalid pool type for useCreatePoolInput')

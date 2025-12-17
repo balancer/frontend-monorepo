@@ -15,6 +15,7 @@ import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
+import { isCowPool } from '../helpers'
 
 export const initializePoolStepId = 'initialize-pool'
 
@@ -43,7 +44,11 @@ export function useInitializePoolStep({
   const { chainId } = initPoolInput
   const rpcUrl = getRpcUrl(chainId)
   const { buildTenderlyUrl } = useTenderly({ chainId })
-  const { isPoolInitialized, refetchIsPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+  const { isPoolInitialized, refetchIsPoolInitialized } = useIsPoolInitialized({
+    chainId,
+    poolAddress,
+    isEnabled: !isCowPool(poolType),
+  })
 
   const buildCallDataQuery = useInitializePoolBuildCall({
     rpcUrl,

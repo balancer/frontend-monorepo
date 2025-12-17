@@ -2,7 +2,12 @@ import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { WeightedPoolStructure } from './constants'
+import {
+  WeightedPoolStructure,
+  COW_AMM_RAW_WEIGHT_50,
+  COW_AMM_RAW_WEIGHT_80,
+  COW_AMM_RAW_WEIGHT_20,
+} from './constants'
 
 const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.Weighted]: GqlPoolType.Weighted,
@@ -55,6 +60,13 @@ export function getMinSwapFeePercentage(poolType: PoolType): number {
 export function getPercentFromPrice(value: string, price: string) {
   if (!value) return '0.00'
   return bn(value).minus(price).div(price).times(100).toFixed(2)
+}
+
+export function getCowRawWeight(weight: string | undefined) {
+  if (weight === '50') return COW_AMM_RAW_WEIGHT_50
+  if (weight === '80') return COW_AMM_RAW_WEIGHT_80
+  if (weight === '20') return COW_AMM_RAW_WEIGHT_20
+  throw new Error(`Invalid weight for cow amm: ${weight}`)
 }
 
 export const formatNumber = (value: string) => {

@@ -55,7 +55,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             />
           )}
 
-          {poolAddress && (
+          {poolAddress && !isCowPool(poolType) && (
             <Button
               onClick={() => copyToClipboard(initializeUrl)}
               size="lg"
@@ -84,7 +84,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         </HStack>
       </VStack>
 
-      {formState.isValid && isLastStep && !isCowPool(poolType) && (
+      {formState.isValid && isLastStep && (
         <PoolCreationModal
           finalFocusRef={nextBtn}
           isOpen={previewModalDisclosure.isOpen}

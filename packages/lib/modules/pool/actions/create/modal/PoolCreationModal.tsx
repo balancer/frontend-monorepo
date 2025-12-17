@@ -15,7 +15,6 @@ import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainId } from '@repo/lib/config/app.config'
-import { usePoolCreationTransactions } from './usePoolCreationTransactions'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { getGqlPoolType } from '../helpers'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
@@ -24,6 +23,9 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useInitializePoolInput } from './useInitializePoolInput'
 import { RestartPoolCreationModal } from './RestartPoolCreationModal'
 import { useWatch } from 'react-hook-form'
+import { usePoolCreationTransactions } from './usePoolCreationTransactions'
+import { isCowPool } from '../helpers'
+import { useIsPoolFinalized } from './cow-amm-steps/useIsPoolFinalized'
 
 type PoolCreationModalProps = {
   isOpen: boolean
@@ -56,7 +58,13 @@ export function PoolCreationModal({
     initPoolInput,
   })
 
-  const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+  const { isPoolFinalized } = useIsPoolFinalized()
+  const { isPoolInitialized } = useIsPoolInitialized({
+    chainId,
+    poolAddress,
+    isEnabled: !isCowPool(poolType),
+  })
+  const isPoolCreationFinished = isCowPool(poolType) ? isPoolFinalized : isPoolInitialized
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()
@@ -64,11 +72,13 @@ export function PoolCreationModal({
     onClose()
   }
 
+  const protocolVersion = isCowPool(poolType) ? 1 : 3
+
   const poolPath = getPoolPath({
     id: poolAddress as Address,
     chain: network,
     type: getGqlPoolType(poolType),
-    protocolVersion: 3 as const,
+    protocolVersion,
   })
 
   const initialFocusRef = useRef(null)
@@ -96,7 +106,7 @@ export function PoolCreationModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
-      trapFocus={!isPoolInitialized}
+      trapFocus={!isPoolCreationFinished}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!initPoolTxHash} />
@@ -109,7 +119,7 @@ export function PoolCreationModal({
               isTxBatch={shouldBatchTransactions}
               transactionSteps={transactionSteps}
             />
-            {!isPoolInitialized && (
+            {!isPoolCreationFinished && (
               <RestartPoolCreationModal
                 handleRestart={handleReset}
                 isAbsolutePosition
@@ -131,7 +141,7 @@ export function PoolCreationModal({
         <ModalBody>
           <PoolSummary transactionSteps={transactionSteps} />
 
-          {isPoolInitialized && (
+          {isPoolCreationFinished && (
             <VStack width="full">
               <Button
                 isDisabled={false}
@@ -179,7 +189,7 @@ export function PoolCreationModal({
         ) : (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
-            isSuccess={isPoolInitialized}
+            isSuccess={isPoolCreationFinished}
             returnAction={redirectToPoolPage}
             returnLabel="View pool page"
             urlTxHash={urlTxHash}

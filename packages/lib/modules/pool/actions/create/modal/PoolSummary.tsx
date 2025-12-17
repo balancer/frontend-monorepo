@@ -24,6 +24,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { PoolDetailsContent } from '../preview/PreviewPoolDetails'
 import { isReClammPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
+import { isCowPool } from '../helpers'
 
 export function PoolSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
   const { isMobile } = useBreakpoints()
@@ -136,11 +137,13 @@ function PoolTokenAmountsCard() {
 
 function PoolDetailsCard() {
   const { poolCreationForm } = usePoolCreationForm()
-  const swapFeePercentage = useWatch({
-    control: poolCreationForm.control,
-    name: 'swapFeePercentage',
-  })
+  const [swapFeePercentage, poolType] = poolCreationForm.getValues([
+    'swapFeePercentage',
+    'poolType',
+  ])
   const { isOpen, onToggle } = useDisclosure()
+
+  const showSwapFee = !isCowPool(poolType) && !isOpen
 
   return (
     <Accordion allowToggle variant="button" w="full">
@@ -155,7 +158,7 @@ function PoolDetailsCard() {
         <AccordionButton onClick={onToggle} pl="sm" pr="sm" py={3}>
           <Box as="span" flex="1" textAlign="left">
             <HStack justify="space-between" w="full">
-              {!isOpen && (
+              {showSwapFee && (
                 <Text color="font.secondary">Swap fee percentage: {swapFeePercentage}%</Text>
               )}
               <Text color="font.secondary">Details</Text>

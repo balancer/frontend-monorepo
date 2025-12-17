@@ -57,6 +57,7 @@ export interface ContractsConfig {
     relayerV6: Address
     minter: Address
     WeightedPool2TokensFactory?: Address
+    bCoWFactory?: Address
   }
   beets?: {
     lstStaking: Address

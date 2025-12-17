@@ -60,6 +60,7 @@ const networkConfig: NetworkConfig = {
       batchRouter: AddressProvider.BatchRouter(gnosis.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(gnosis.id),
       vaultAdminV3: AddressProvider.VaultAdmin(gnosis.id),
+      bCoWFactory: '0x703Bd8115E6F21a37BB5Df97f78614ca72Ad7624',
     },
     veDelegationProxy: '0x7A2535f5fB47b8e44c02Ef5D9990588313fe8F05',
     permit2: PERMIT2[gnosis.id],
