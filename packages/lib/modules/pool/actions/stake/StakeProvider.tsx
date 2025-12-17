@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
@@ -6,7 +5,7 @@ import { useTokenAllowances } from '@repo/lib/modules/web3/useTokenAllowances'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { createContext, PropsWithChildren, useEffect, useState } from 'react'
+import { createContext, PropsWithChildren, useMemo } from 'react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useStakeSteps } from './useStakeSteps'
@@ -26,10 +25,6 @@ export function useStakeLogic() {
     LABELS.walletNotConnected,
   ])
 
-  // To maintain amount in modal after confirmation
-  const [quoteAmountIn, setQuoteAmountIn] = useState<HumanAmount>('0')
-  const [quoteAmountInUsd, setQuoteAmountInUsd] = useState<HumanAmount>('0')
-
   const tokenAllowances = useTokenAllowances({
     chainId,
     userAddress,
@@ -48,15 +43,16 @@ export function useStakeLogic() {
   /**
    * Side-effects
    */
-  useEffect(() => {
+  const { quoteAmountIn, quoteAmountInUsd } = useMemo(() => {
     const stakableBalance: HumanAmount = getUserWalletBalance(pool)
     const stakableBalanceUsd: HumanAmount = getUserWalletBalanceUsd(pool).toFixed() as HumanAmount
 
     if (bn(stakableBalance).gt(0)) {
-      setQuoteAmountIn(stakableBalance)
-      setQuoteAmountInUsd(stakableBalanceUsd)
+      return { quoteAmountIn: stakableBalance, quoteAmountInUsd: stakableBalanceUsd }
     }
-  }, [pool.userBalance?.walletBalance, isLoadingOnchainUserBalances])
+
+    return { quoteAmountIn: '0' as HumanAmount, quoteAmountInUsd: '0' as HumanAmount }
+  }, [pool, isLoadingOnchainUserBalances])
 
   return {
     pool,
