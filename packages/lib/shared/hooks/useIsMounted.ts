@@ -1,4 +1,4 @@
-// keep this rule for now
+// TODO: https://github.com/balancer/frontend-monorepo/issues/1932
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react'
 
