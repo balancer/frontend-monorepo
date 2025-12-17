@@ -80,9 +80,6 @@ export function PoolCreationForm() {
                             />
                           </StepIndicator>
 
-                      <Box flexShrink="0">
-                        <StepTitle fontSize={{ base: 'xs', sm: 'sm' }}>{step.title}</StepTitle>
-                      </Box>
                           <StepTitle fontWeight={isCompleted || isActive ? 'bold' : 'medium'}>
                             {step.title}
                           </StepTitle>
