@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { HumanTokenAmount } from '@repo/lib/modules/tokens/token.types'
@@ -71,14 +70,18 @@ export function useUnstakeLogic() {
     // Avoid updating when the amountOut is zero, that is,
     // after the unstake transaction was completed and the pool balances refetched
     if (bn(amountOut).gt(0)) {
-      setQuoteAmountOut(amountOut)
+      queueMicrotask(() => setQuoteAmountOut(amountOut))
     }
   }, [amountOut])
 
   useEffect(() => {
-    setQuoteRewardAmounts(rewardAmounts)
-    setQuoteTotalClaimableUsd(totalClaimableUsd)
-  }, [isLoadingClaims])
+    if (!isLoadingClaims) {
+      queueMicrotask(() => {
+        setQuoteRewardAmounts(rewardAmounts)
+        setQuoteTotalClaimableUsd(totalClaimableUsd)
+      })
+    }
+  }, [isLoadingClaims, rewardAmounts, totalClaimableUsd])
 
   return {
     isLoading: isLoadingClaims || isLoadingSteps || isLoadingPool,
