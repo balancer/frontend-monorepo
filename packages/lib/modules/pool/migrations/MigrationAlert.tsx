@@ -7,6 +7,7 @@ import { UnstakeWarningModal } from './UnstakeWarningModal'
 import { hasAuraStakedBalance, hasBalancerStakedBalance } from '../user-balance.helpers'
 import { useRouter } from 'next/navigation'
 import { getPoolPath } from '../pool.utils'
+import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 
 type Props = {
   pool: Pool
@@ -28,8 +29,14 @@ export function MigrationAlert({ pool }: Props) {
   return (
     <>
       <BalAlert
-        action={<BalAlertButton onClick={migrate}>Migrate</BalAlertButton>}
-        content={`Migrate your position from ${pool.name} (on ${getChainName(pool.chain)}) to the recommended pool`}
+        content={
+          <BalAlertContent
+            description={`Migrate your position from ${pool.name} (on ${getChainName(pool.chain)}) to the recommended pool`}
+            forceColumnMode={true}
+          >
+            <BalAlertButton onClick={migrate}>Migrate</BalAlertButton>
+          </BalAlertContent>
+        }
         status="info"
       />
       <UnstakeWarningModal isOpen={isOpen} onClose={onClose} pool={pool} />
