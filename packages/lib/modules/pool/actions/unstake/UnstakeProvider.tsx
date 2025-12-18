@@ -8,7 +8,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { bn, isZero } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
-import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useEffect, useMemo } from 'react'
 import { PoolListItem } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
 import { useClaimsData } from '../claim/useClaimsData'
@@ -18,12 +18,9 @@ import { getUnstakeQuote } from '../stake.helpers'
 export type UseUnstakeResponse = ReturnType<typeof useUnstakeLogic>
 export const UnstakeContext = createContext<UseUnstakeResponse | null>(null)
 
-export function useUnstakeLogic() {
-  // State so that we can maintain the amounts in the modal after confirmation.
-  const [quoteAmountOut, setQuoteAmountOut] = useState<HumanAmount>('0')
-  const [quoteRewardAmounts, setQuoteRewardAmounts] = useState<HumanTokenAmount[]>([])
-  const [quoteTotalClaimableUsd, setQuoteTotalClaimableUsd] = useState<string>('0')
+let lastNonZeroAmountOut: HumanAmount = '0'
 
+export function useUnstakeLogic() {
   const { pool, refetch: refetchPoolBalances, isLoading: isLoadingPool } = usePool()
   const { isConnected } = useUserAccount()
 
@@ -63,25 +60,19 @@ export function useUnstakeLogic() {
     [isZero(amountOut) && !hasRewardAmounts, "There's no staked amount to be unstaked"]
   )
 
-  /**
-   * Side-effects
-   */
   useEffect(() => {
-    // Avoid updating when the amountOut is zero, that is,
-    // after the unstake transaction was completed and the pool balances refetched
     if (bn(amountOut).gt(0)) {
-      queueMicrotask(() => setQuoteAmountOut(amountOut))
+      lastNonZeroAmountOut = amountOut
     }
   }, [amountOut])
 
-  useEffect(() => {
-    if (!isLoadingClaims) {
-      queueMicrotask(() => {
-        setQuoteRewardAmounts(rewardAmounts)
-        setQuoteTotalClaimableUsd(totalClaimableUsd)
-      })
-    }
-  }, [isLoadingClaims, rewardAmounts, totalClaimableUsd])
+  // Avoid updating when the amountOut is zero,
+  // that is, after the unstake transaction was completed and the pool balances refetched
+  // instead return the last non-zero amountOut
+  const quoteAmountOut = useMemo(() => {
+    if (bn(amountOut).gt(0)) return amountOut
+    return lastNonZeroAmountOut
+  }, [amountOut])
 
   return {
     isLoading: isLoadingClaims || isLoadingSteps || isLoadingPool,
@@ -93,8 +84,6 @@ export function useUnstakeLogic() {
     hasNoRewards,
     unstakeTxHash,
     quoteAmountOut,
-    quoteRewardAmounts,
-    quoteTotalClaimableUsd,
     pool,
   }
 }
