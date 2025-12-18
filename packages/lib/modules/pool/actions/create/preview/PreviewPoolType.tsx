@@ -12,10 +12,16 @@ import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function PreviewPoolType() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [network, protocol, poolType, weightedPoolStructure] = useWatch({
+  const [network, protocol, poolType, weightedPoolStructure, poolTokens] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure'],
+    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure', 'poolTokens'],
   })
+
+  const selectedPoolTokens = poolTokens.filter(token => token.address)
+  const tokenAddresses = selectedPoolTokens.map(token => token.address!)
+  const tokenWeights = isWeightedPool(poolType)
+    ? selectedPoolTokens.map(token => Number(token.weight))
+    : undefined
 
   const cardInformationRows = [
     {
@@ -55,7 +61,11 @@ export function PreviewPoolType() {
           </VStack>
 
           <Box position="relative">
-            <NetworkPreviewSVG />
+            <NetworkPreviewSVG
+              chain={network}
+              tokenAddresses={tokenAddresses}
+              tokenWeights={tokenWeights}
+            />
             <Box left="50%" position="absolute" top="50%" transform="translate(-50%, -50%)">
               <NetworkIcon bg="background.level4" chain={network} shadow="lg" />
             </Box>

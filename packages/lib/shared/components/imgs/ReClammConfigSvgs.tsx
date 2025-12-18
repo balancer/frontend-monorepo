@@ -1,6 +1,142 @@
-import { SVGProps } from 'react'
+import { SVGProps, useMemo } from 'react'
+import { Address } from 'viem'
+import { GqlChain } from '../../services/api/generated/graphql'
+import { getTokenColor } from '../../../styles/token-colors'
 
-export function NetworkPreviewSVG(props: SVGProps<SVGSVGElement>) {
+type NetworkPreviewSVGProps = SVGProps<SVGSVGElement> & {
+  chain: GqlChain
+  tokenAddresses: Address[]
+  tokenWeights?: number[]
+}
+
+function polarToCartesian(cx: number, cy: number, r: number, angleRad: number) {
+  return {
+    x: cx + r * Math.cos(angleRad),
+    y: cy + r * Math.sin(angleRad),
+  }
+}
+
+function fullDonutPath(
+  cx: number,
+  cy: number,
+  outerR: number,
+  innerR: number,
+  startAngleRad: number
+) {
+  const halfTurn = Math.PI
+
+  const outerStart = polarToCartesian(cx, cy, outerR, startAngleRad)
+  const outerMid = polarToCartesian(cx, cy, outerR, startAngleRad + halfTurn)
+
+  const innerStart = polarToCartesian(cx, cy, innerR, startAngleRad)
+  const innerMid = polarToCartesian(cx, cy, innerR, startAngleRad + halfTurn)
+
+  return [
+    `M ${outerStart.x} ${outerStart.y}`,
+    `A ${outerR} ${outerR} 0 1 1 ${outerMid.x} ${outerMid.y}`,
+    `A ${outerR} ${outerR} 0 1 1 ${outerStart.x} ${outerStart.y}`,
+    `L ${innerStart.x} ${innerStart.y}`,
+    `A ${innerR} ${innerR} 0 1 0 ${innerMid.x} ${innerMid.y}`,
+    `A ${innerR} ${innerR} 0 1 0 ${innerStart.x} ${innerStart.y}`,
+    'Z',
+  ].join(' ')
+}
+
+function donutSlicePath(
+  cx: number,
+  cy: number,
+  outerR: number,
+  innerR: number,
+  startAngleRad: number,
+  endAngleRad: number
+) {
+  const sweep = endAngleRad - startAngleRad
+  if (sweep <= 0) return ''
+
+  const epsilon = 1e-6
+  if (sweep >= 2 * Math.PI - epsilon) {
+    return fullDonutPath(cx, cy, outerR, innerR, startAngleRad)
+  }
+
+  const largeArc = sweep > Math.PI ? 1 : 0
+
+  const outerStart = polarToCartesian(cx, cy, outerR, startAngleRad)
+  const outerEnd = polarToCartesian(cx, cy, outerR, endAngleRad)
+
+  const innerEnd = polarToCartesian(cx, cy, innerR, endAngleRad)
+  const innerStart = polarToCartesian(cx, cy, innerR, startAngleRad)
+
+  return [
+    `M ${outerStart.x} ${outerStart.y}`,
+    `A ${outerR} ${outerR} 0 ${largeArc} 1 ${outerEnd.x} ${outerEnd.y}`,
+    `L ${innerEnd.x} ${innerEnd.y}`,
+    `A ${innerR} ${innerR} 0 ${largeArc} 0 ${innerStart.x} ${innerStart.y}`,
+    'Z',
+  ].join(' ')
+}
+
+function normalizeWeights(tokenCount: number, tokenWeights?: number[]) {
+  if (tokenCount === 0) return []
+
+  const base = tokenWeights?.slice(0, tokenCount) ?? []
+  const weights = Array.from({ length: tokenCount }, (_, i) => {
+    const raw = base[i]
+    return typeof raw === 'number' && Number.isFinite(raw) && raw > 0 ? raw : 0
+  })
+
+  const total = weights.reduce((acc, w) => acc + w, 0)
+  if (total <= 0) return Array.from({ length: tokenCount }, () => 1 / tokenCount)
+  return weights.map(w => w / total)
+}
+
+export function NetworkPreviewSVG({
+  chain,
+  tokenAddresses,
+  tokenWeights,
+  ...props
+}: NetworkPreviewSVGProps) {
+  const normalizedAddresses = useMemo(
+    () => tokenAddresses.map(addr => addr.toLowerCase() as Address),
+    [tokenAddresses]
+  )
+
+  const fractions = useMemo(
+    () => normalizeWeights(normalizedAddresses.length, tokenWeights),
+    [normalizedAddresses.length, tokenWeights]
+  )
+
+  const animationTrigger = useMemo(() => {
+    const addrKey = normalizedAddresses.join('|')
+    const weightsKey = fractions.map(w => w.toFixed(6)).join('|')
+    return `${chain}:${addrKey}:${weightsKey}`
+  }, [chain, normalizedAddresses, fractions])
+
+  const cx = 76
+  const cy = 76
+  const outerR = 75
+  const innerR = 45
+  const startAngleBase = -Math.PI / 2
+
+  const segments = useMemo(() => {
+    if (normalizedAddresses.length === 0) return []
+
+    let current = startAngleBase
+    return normalizedAddresses.map((address, i) => {
+      const fraction = fractions[i] ?? 0
+      const sweep = 2 * Math.PI * fraction
+      const start = current
+      const end =
+        i === normalizedAddresses.length - 1 ? startAngleBase + 2 * Math.PI : current + sweep
+      current = end
+
+      const d = donutSlicePath(cx, cy, outerR, innerR, start, end)
+      const { from, to } = getTokenColor(chain, address, i)
+      const gradientId = `token-grad-${chain}-${address}-${i}`
+
+      return { d, gradientId, from, to, address, i }
+    })
+  }, [chain, fractions, normalizedAddresses])
+
   return (
     <svg
       fill="none"
@@ -10,19 +146,79 @@ export function NetworkPreviewSVG(props: SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g filter="url(#filter0_dddddddd_235_8770)">
-        <path
-          d="M76 1C56.1088 1 37.0322 8.90176 22.967 22.967C8.90177 37.0322 1 56.1088 1 76C0.999998 95.8912 8.90176 114.968 22.967 129.033C37.0322 143.098 56.1088 151 76 151L76 121C64.0653 121 52.6193 116.259 44.1802 107.82C35.7411 99.3807 31 87.9347 31 76C31 64.0653 35.7411 52.6193 44.1802 44.1802C52.6193 35.7411 64.0653 31 76 31V1Z"
-          fill="#31373F"
-        />
-      </g>
-      <g filter="url(#filter1_dddddddd_235_8770)">
-        <path
-          d="M76 151C95.8912 151 114.968 143.098 129.033 129.033C143.098 114.968 151 95.8912 151 76C151 56.1088 143.098 37.0322 129.033 22.967C114.968 8.90177 95.8913 1 76 1L76 31C87.9348 31 99.3807 35.7411 107.82 44.1802C116.259 52.6193 121 64.0653 121 76C121 87.9347 116.259 99.3807 107.82 107.82C99.3807 116.259 87.9347 121 76 121V151Z"
-          fill="#3F4650"
-        />
-      </g>
+      <style>{`
+        .balPreviewBuild {
+          transform-origin: 76px 76px;
+          animation: balPreviewBuild 450ms ease-out;
+        }
+        @keyframes balPreviewBuild {
+          from {
+            opacity: 0;
+            transform: scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
+
+      {normalizedAddresses.length === 0 ? (
+        <g className="balPreviewBuild" key={animationTrigger}>
+          <path
+            d={fullDonutPath(cx, cy, outerR, innerR, startAngleBase)}
+            fill="var(--chakra-colors-background-level0)"
+            filter="url(#emptyInnerShadow)"
+          />
+        </g>
+      ) : (
+        <g className="balPreviewBuild" key={animationTrigger}>
+          {segments.map(seg => (
+            <path d={seg.d} fill={`url(#${seg.gradientId})`} key={seg.gradientId} />
+          ))}
+        </g>
+      )}
+
       <defs>
+        {segments.map(seg => (
+          <linearGradient
+            gradientUnits="userSpaceOnUse"
+            id={seg.gradientId}
+            key={seg.gradientId}
+            x1="0"
+            x2="0"
+            y1="1"
+            y2="151"
+          >
+            <stop stopColor={seg.from} />
+            <stop offset="1" stopColor={seg.to} />
+          </linearGradient>
+        ))}
+
+        <filter
+          colorInterpolationFilters="sRGB"
+          filterUnits="userSpaceOnUse"
+          height="155"
+          id="emptyInnerShadow"
+          width="155"
+          x="0"
+          y="0"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
+          <feColorMatrix
+            in="SourceAlpha"
+            result="hardAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          />
+          <feOffset dx="0" dy="1" />
+          <feGaussianBlur stdDeviation="2" />
+          <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic" result="innerShadow" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0" />
+          <feBlend in="shape" in2="innerShadow" mode="normal" result="effect1_innerShadow" />
+        </filter>
+
         <filter
           colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
