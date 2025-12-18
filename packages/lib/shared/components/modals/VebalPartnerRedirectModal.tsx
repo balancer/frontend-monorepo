@@ -19,7 +19,6 @@ import { Picture } from '../other/Picture'
 export enum VebalRedirectPartner {
   Aura = 'aura',
   StakeDAO = 'stake',
-  HiddenHand = 'hiddenhand',
   Palladin = 'palladin',
 }
 
@@ -50,15 +49,6 @@ const partnerInfo: PartnerInfo = {
       "Aura Finance is a protocol built on top of the Balancer protocol to provide maximum incentives to Balancer liquidity providers and BAL stakers (into veBAL) through social aggregation of BAL deposits and via additional incentives of Aura's native token.",
     url: 'https://app.aura.finance',
     imageName: 'aura',
-  },
-  [VebalRedirectPartner.HiddenHand]: {
-    shortName: 'HiddenHand',
-    fullName: 'HiddenHand',
-    category: 'veBAL voting incentives',
-    description:
-      "Hidden Hand is a marketplace for voting incentives, commonly referred to as 'bribes' in DeFi. Hidden Hand allows third party protocols to offer additional weekly incentives for veBAL holders who vote for certain eligible Pool Gauges.",
-    url: 'https://hiddenhand.finance/balancer',
-    imageName: 'hiddenhand',
   },
   [VebalRedirectPartner.StakeDAO]: {
     shortName: 'Stake DAO',
