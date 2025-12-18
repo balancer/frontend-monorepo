@@ -16,7 +16,7 @@ import {
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { ReactNode, useMemo } from 'react'
+import { ReactNode } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Numberish, bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
@@ -164,7 +164,7 @@ export default function TokenRow({
   customToken,
   customUsdPrice,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken, usdValueForTokenAddress, prices, tokens } = useTokens()
+  const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
@@ -192,41 +192,21 @@ export default function TokenRow({
     logoURI,
   }
 
-  const usdValue = useMemo(() => {
-    if (!value) return undefined
+  let usdValue: string | undefined
 
-    if (customUsdPrice) {
-      return bn(customUsdPrice).times(value).toString()
-    }
-
-    if ((isBpt || isNestedBpt) && pool) {
-      return usdValueForTokenAddress(address, chain, value)
-    }
-
-    if (token) {
-      return usdValueForToken(token, value)
-    }
-
-    if (poolToken) {
-      return usdValueForToken(poolToken, value)
-    }
-
-    return undefined
-  }, [
-    address,
-    chain,
-    customUsdPrice,
-    isBpt,
-    isNestedBpt,
-    pool,
-    poolToken,
-    prices,
-    token,
-    tokens,
-    usdValueForToken,
-    usdValueForTokenAddress,
-    value,
-  ])
+  if (!value) {
+    usdValue = undefined
+  } else if (customUsdPrice) {
+    usdValue = bn(customUsdPrice).times(value).toString()
+  } else if ((isBpt || isNestedBpt) && pool) {
+    usdValue = usdValueForTokenAddress(address, chain, value)
+  } else if (token) {
+    usdValue = usdValueForToken(token, value)
+  } else if (poolToken) {
+    usdValue = usdValueForToken(poolToken, value)
+  } else {
+    usdValue = undefined
+  }
 
   const headingProps = {
     as: 'h6' as const,
