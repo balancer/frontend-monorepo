@@ -3,6 +3,7 @@ import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolDetails } from '../../validatePoolCreationForm'
 import { useWatch } from 'react-hook-form'
+import { useEffect, useRef } from 'react'
 
 export function PoolDetails() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -17,6 +18,27 @@ export function PoolDetails() {
 
   const suggestedPoolName = tokenSymbols.join(' / ')
   const suggestedPoolSymbol = tokenSymbols.join('-').replace(/% /g, '-')
+
+  const hasInitialized = useRef(false)
+
+  useEffect(() => {
+    if (hasInitialized.current) return
+    if (!suggestedPoolName || suggestedPoolName === ' / ') return
+
+    const currentName = poolCreationForm.getValues('name')
+    const currentSymbol = poolCreationForm.getValues('symbol')
+
+    if (!currentName) {
+      poolCreationForm.setValue('name', suggestedPoolName)
+      poolCreationForm.trigger('name')
+    }
+    if (!currentSymbol) {
+      poolCreationForm.setValue('symbol', suggestedPoolSymbol)
+      poolCreationForm.trigger('symbol')
+    }
+
+    hasInitialized.current = true
+  }, [suggestedPoolName, suggestedPoolSymbol, poolCreationForm])
 
   return (
     <VStack align="start" spacing="xl" w="full">
