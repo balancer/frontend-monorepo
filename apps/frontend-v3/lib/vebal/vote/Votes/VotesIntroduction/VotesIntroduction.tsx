@@ -126,7 +126,7 @@ export function VotesIntroduction() {
                 </Box>
                 <Text color="font.secondary" sx={{ textWrap: 'balance' }}>
                   Voting on pool gauges helps to direct weekly BAL emissions and earns you
-                  additional voting incentives from third-party platforms like Hidden Hand.
+                  additional voting incentives from third-party platforms like Stake DAO.
                 </Text>
               </VStack>
             </VStack>
