@@ -32,7 +32,6 @@ import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 import { ArrowUpRight } from 'react-feather'
-import { InputWithSuggestion } from '../details/InputWithSuggestion'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isWeightedPool,
@@ -274,7 +273,7 @@ function ConfigureToken({
 
       {token.address && !apiPriceForToken && (
         <VStack align="start" spacing="sm" w="full">
-          <InputWithSuggestion
+          <NumberInput
             attribution={cgPriceForToken && <CoingeckoAttribution />}
             control={poolCreationForm.control}
             isFiatPrice
@@ -285,12 +284,13 @@ function ConfigureToken({
               poolCreationForm.trigger(`poolTokens.${index}.usdPrice`)
             }}
             placeholder="Enter token price"
-            suggestedValue={cgPriceForToken ? `$${cgPriceForToken}` : undefined}
+            suggestedValue={cgPriceForToken}
             tooltip="Enter the token’s price accurately to avoid losing money to arbitrage."
-            validate={(price: string) => {
-              if (Number(price) < 0) return 'Token price must be greater than 0'
+            validate={(price: number) => {
+              if (price < 0) return 'Token price must be greater than 0'
               return true
             }}
+            width="full"
           />
         </VStack>
       )}

@@ -5,8 +5,12 @@ import {
   NumberInput as ChakraNumberInput,
   NumberInputField,
   HStack,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react'
 import { Controller, Control } from 'react-hook-form'
+import { BalPopover } from '../popover/BalPopover'
+import { InfoIcon } from '../icons/InfoIcon'
 
 interface NumberInputProps {
   name: string
@@ -23,6 +27,8 @@ interface NumberInputProps {
   attribution?: React.ReactNode
   suggestedValue?: number
   onClickSuggestion?: () => void
+  tooltip?: string
+  isFiatPrice?: boolean
 }
 
 export function NumberInput({
@@ -40,11 +46,32 @@ export function NumberInput({
   attribution,
   suggestedValue,
   onClickSuggestion,
+  tooltip,
+  isFiatPrice,
 }: NumberInputProps) {
   return (
     <VStack align="start" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
-        <Text fontWeight="bold">{label}</Text>
+        <HStack spacing="xs">
+          <Text fontWeight="bold">{label}</Text>
+          {tooltip && (
+            <BalPopover text={tooltip}>
+              <Box
+                _hover={{ opacity: 1 }}
+                as="span"
+                cursor="pointer"
+                display="inline-flex"
+                ml="1"
+                opacity="0.5"
+                transition="opacity 0.2s var(--ease-out-cubic)"
+                verticalAlign="middle"
+              >
+                <InfoIcon as="span" />
+              </Box>
+            </BalPopover>
+          )}
+        </HStack>
+
         {percentageLabel && (
           <Text
             color="font.secondary"
@@ -54,7 +81,6 @@ export function NumberInput({
             {`${Number(percentageLabel) >= 0 ? '+' : ''}${percentageLabel}%`}
           </Text>
         )}
-        {attribution && attribution}
       </HStack>
 
       <Box position="relative" w={width}>
@@ -65,28 +91,41 @@ export function NumberInput({
             const isSuggestionApplied = Number(field.value) === suggestedValue
             return (
               <>
-                <ChakraNumberInput
-                  {...field}
-                  isDisabled={isDisabled}
-                  isInvalid={isInvalid || !!fieldState.error}
-                  keepWithinRange={true}
-                  onChange={field.onChange}
-                  value={field.value}
-                >
-                  <NumberInputField max={99} min={1} placeholder={placeholder} />
-                </ChakraNumberInput>
-                {isPercentage && (
-                  <Text
-                    color="font.secondary"
-                    opacity={isDisabled ? 0.3 : 1}
-                    position="absolute"
-                    right="3"
-                    top="2.5"
-                    zIndex={1}
+                <InputGroup width={width}>
+                  {isFiatPrice && (
+                    <InputLeftElement pointerEvents="none">
+                      <Text>$</Text>
+                    </InputLeftElement>
+                  )}
+                  <ChakraNumberInput
+                    {...field}
+                    isDisabled={isDisabled}
+                    isInvalid={isInvalid || !!fieldState.error}
+                    keepWithinRange={true}
+                    onChange={field.onChange}
+                    value={field.value}
+                    w="full"
                   >
-                    %
-                  </Text>
-                )}
+                    <NumberInputField
+                      max={99}
+                      min={1}
+                      pl={isFiatPrice ? '8' : undefined}
+                      placeholder={placeholder}
+                    />
+                  </ChakraNumberInput>
+                  {isPercentage && (
+                    <Text
+                      color="font.secondary"
+                      opacity={isDisabled ? 0.3 : 1}
+                      position="absolute"
+                      right="3"
+                      top="2.5"
+                      zIndex={1}
+                    >
+                      %
+                    </Text>
+                  )}
+                </InputGroup>
 
                 {suggestedValue && (
                   <HStack justify="space-between" mt="xs" w="full">
@@ -102,6 +141,7 @@ export function NumberInput({
                         textDecoration={isSuggestionApplied ? 'none' : 'underline dotted 1px'}
                         textUnderlineOffset="3px"
                       >
+                        {isFiatPrice && '$'}
                         {suggestedValue}
                       </Text>
                     </HStack>
