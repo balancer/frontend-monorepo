@@ -10,7 +10,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
 import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
-import { useFormState, useWatch } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
@@ -50,7 +50,6 @@ function ConfigOptionsGroup({
     control: reClammConfigForm.control,
     name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
   })
-  const formState = useFormState({ control: reClammConfigForm.control })
   const formValue = useWatch({ control: reClammConfigForm.control, name })
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
@@ -154,7 +153,6 @@ function ConfigOptionsGroup({
         <VStack align="start" spacing="md" w="full">
           <NumberInput
             control={reClammConfigForm.control}
-            error={formState.errors['initialMinPrice']?.message}
             label={'Range low price'}
             name={'initialMinPrice'}
             percentageLabel={
@@ -176,7 +174,6 @@ function ConfigOptionsGroup({
           />
           <NumberInput
             control={reClammConfigForm.control}
-            error={formState.errors['initialMaxPrice']?.message}
             label={'Range high price'}
             name={'initialMaxPrice'}
             percentageLabel={
@@ -200,7 +197,6 @@ function ConfigOptionsGroup({
       ) : isCustom ? (
         <NumberInput
           control={reClammConfigForm.control}
-          error={formState.errors[name]?.message}
           isPercentage={isPercentage}
           label={customInputLabel}
           name={name}
