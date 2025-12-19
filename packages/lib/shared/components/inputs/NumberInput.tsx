@@ -21,7 +21,6 @@ interface NumberInputProps {
   isPercentage?: boolean
   validate: (value: number) => string | boolean
   width?: string
-  error?: string
   percentageLabel?: string
   placeholder?: string
   attribution?: React.ReactNode
@@ -42,7 +41,6 @@ export function NumberInput({
   validate,
   name,
   width = '20',
-  error,
   attribution,
   suggestedValue,
   onClickSuggestion,
@@ -161,12 +159,6 @@ export function NumberInput({
           rules={{ validate }}
         />
       </Box>
-
-      {error && (
-        <Text color="font.error" fontSize="sm" textAlign="start" w="full">
-          {error}
-        </Text>
-      )}
     </VStack>
   )
 }
