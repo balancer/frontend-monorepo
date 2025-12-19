@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import {
   VStack,
   Text,
@@ -485,11 +484,7 @@ function FeeSelection({
   feeValue: number
   setFormValue: UseFormSetValue<SaleStructureForm>
 }) {
-  const [value, setValue] = useState('minimum')
-
-  useEffect(() => {
-    if (feeValue !== 1.0) setValue('custom')
-  }, [feeValue])
+  const [value, setValue] = useState(() => (feeValue === 1.0 ? 'minimum' : 'custom'))
 
   const isInRange = (fee: number) => {
     if (fee < 1) return 'LBP swap fees must be set at or above 1.00%'
