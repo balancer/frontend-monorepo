@@ -1,4 +1,4 @@
-import { SVGProps, useMemo } from 'react'
+import { SVGProps, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { Address } from 'viem'
 import { GqlChain } from '../../services/api/generated/graphql'
 import { getTokenColor } from '../../../styles/token-colors'
@@ -42,39 +42,6 @@ function fullDonutPath(
   ].join(' ')
 }
 
-function donutSlicePath(
-  cx: number,
-  cy: number,
-  outerR: number,
-  innerR: number,
-  startAngleRad: number,
-  endAngleRad: number
-) {
-  const sweep = endAngleRad - startAngleRad
-  if (sweep <= 0) return ''
-
-  const epsilon = 1e-6
-  if (sweep >= 2 * Math.PI - epsilon) {
-    return fullDonutPath(cx, cy, outerR, innerR, startAngleRad)
-  }
-
-  const largeArc = sweep > Math.PI ? 1 : 0
-
-  const outerStart = polarToCartesian(cx, cy, outerR, startAngleRad)
-  const outerEnd = polarToCartesian(cx, cy, outerR, endAngleRad)
-
-  const innerEnd = polarToCartesian(cx, cy, innerR, endAngleRad)
-  const innerStart = polarToCartesian(cx, cy, innerR, startAngleRad)
-
-  return [
-    `M ${outerStart.x} ${outerStart.y}`,
-    `A ${outerR} ${outerR} 0 ${largeArc} 1 ${outerEnd.x} ${outerEnd.y}`,
-    `L ${innerEnd.x} ${innerEnd.y}`,
-    `A ${innerR} ${innerR} 0 ${largeArc} 0 ${innerStart.x} ${innerStart.y}`,
-    'Z',
-  ].join(' ')
-}
-
 function normalizeWeights(tokenCount: number, tokenWeights?: number[]) {
   if (tokenCount === 0) return []
 
@@ -95,10 +62,21 @@ export function NetworkPreviewSVG({
   tokenWeights,
   ...props
 }: NetworkPreviewSVGProps) {
+  const svgRef = useRef<SVGSVGElement | null>(null)
+
+  const globalDelayMs = 200
+  const tweenMs = 400
+
   const normalizedAddresses = useMemo(
     () => tokenAddresses.map(addr => addr.toLowerCase() as Address),
     [tokenAddresses]
   )
+
+  const prevAddressesRef = useRef<Address[]>([])
+  const prevCountRef = useRef(0)
+  const prevArcMapRef = useRef<
+    Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>
+  >(new Map())
 
   const fractions = useMemo(
     () => normalizeWeights(normalizedAddresses.length, tokenWeights),
@@ -117,54 +95,311 @@ export function NetworkPreviewSVG({
   const innerR = 45
   const startAngleBase = -Math.PI / 2
 
-  const segments = useMemo(() => {
+  const midR = (outerR + innerR) / 2
+  const strokeW = outerR - innerR
+  const circumference = 2 * Math.PI * midR
+
+  const arcs = useMemo(() => {
     if (normalizedAddresses.length === 0) return []
 
-    let current = startAngleBase
+    let cumulativeLen = 0
     return normalizedAddresses.map((address, i) => {
       const fraction = fractions[i] ?? 0
-      const sweep = 2 * Math.PI * fraction
-      const start = current
-      const end =
-        i === normalizedAddresses.length - 1 ? startAngleBase + 2 * Math.PI : current + sweep
-      current = end
+      const rawLen = circumference * fraction
 
-      const d = donutSlicePath(cx, cy, outerR, innerR, start, end)
+      const isLast = i === normalizedAddresses.length - 1
+      const dashLen = isLast ? Math.max(0, circumference - cumulativeLen) : rawLen
+      const dashOffset = -cumulativeLen
+      cumulativeLen += dashLen
+
       const { from, to } = getTokenColor(chain, address, i)
-      const gradientId = `token-grad-${chain}-${address}-${i}`
+      const gradientId = `token-grad-${chain}-${address}`
 
-      return { d, gradientId, from, to, address, i }
+      return {
+        dashLen,
+        dashOffset,
+        from,
+        gradientId,
+        i,
+        to,
+        address,
+      }
     })
-  }, [chain, fractions, normalizedAddresses])
+  }, [chain, circumference, fractions, normalizedAddresses])
+
+  useEffect(() => {
+    const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
+    for (const arc of arcs) {
+      next.set(arc.address, {
+        dashLen: arc.dashLen,
+        dashOffset: arc.dashOffset,
+        gradientId: arc.gradientId,
+      })
+    }
+    prevArcMapRef.current = next
+  }, [arcs])
+
+  useLayoutEffect(() => {
+    const svg = svgRef.current
+    if (!svg) return
+
+    const prevAddresses = prevAddressesRef.current
+    const prevCount = prevCountRef.current
+    const currentAddresses = normalizedAddresses
+
+    const added = currentAddresses.filter(addr => !prevAddresses.includes(addr))
+    const removed = prevAddresses.filter(addr => !currentAddresses.includes(addr))
+
+    // No address changes: still update refs so future diffs are correct.
+    // (This also avoids leaving any previously-hidden arcs invisible if state settles quickly on mount.)
+    if (added.length === 0 && removed.length === 0) {
+      prevAddressesRef.current = currentAddresses
+      prevCountRef.current = currentAddresses.length
+      return
+    }
+
+    // If the component mounts with tokens already selected (e.g. page refresh),
+    // don't treat all tokens as "added". Render them immediately.
+    if (
+      prevCount === 0 &&
+      prevAddresses.length === 0 &&
+      removed.length === 0 &&
+      added.length === currentAddresses.length
+    ) {
+      prevAddressesRef.current = currentAddresses
+      prevCountRef.current = currentAddresses.length
+
+      const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
+      for (const arc of arcs) {
+        next.set(arc.address, {
+          dashLen: arc.dashLen,
+          dashOffset: arc.dashOffset,
+          gradientId: arc.gradientId,
+        })
+      }
+      prevArcMapRef.current = next
+      return
+    }
+
+    const timeouts: number[] = []
+    const hiddenAdded: Address[] = []
+
+    const arcsGroup = svg.querySelector('g[data-layer="arcs"]') as SVGGElement | null
+    if (!arcsGroup) return
+
+    const getCircle = (addr: Address) =>
+      svg.querySelector(`circle[data-addr="${addr}"]`) as SVGCircleElement | null
+
+    const prevArcMap = prevArcMapRef.current
+    const arcByAddr = new Map<Address, (typeof arcs)[number]>()
+    for (const arc of arcs) arcByAddr.set(arc.address, arc)
+
+    // Base sequencing (all phases start after globalDelayMs):
+    // - removal: collapse removed (tweenMs) -> fill gap (tweenMs)
+    // - addition: (if no removal) existing arcs tween first (tweenMs), then new arc draws
+    // - swap: collapse removed -> fill gap -> draw new
+    const collapseStartMs = removed.length > 0 ? globalDelayMs : 0
+    const fillGapStartMs = removed.length > 0 ? globalDelayMs + tweenMs : 0
+    const addDrawDelayMs =
+      removed.length > 0
+        ? globalDelayMs + tweenMs * 2
+        : prevCount === 0
+          ? globalDelayMs
+          : globalDelayMs + tweenMs
+    const pulseDelayMs = addDrawDelayMs + tweenMs
+
+    // 1) Freeze current visible circles to their previous geometry so nothing animates behind the modal.
+    // For removals: freeze now, then do collapse + fill-gap later.
+    // For additions (no removals): freeze now, then let existing arcs tween to their new geometry after globalDelayMs.
+    if (removed.length > 0 || (removed.length === 0 && added.length > 0 && prevCount > 0)) {
+      for (const addr of currentAddresses) {
+        const circle = getCircle(addr)
+        const prev = prevArcMap.get(addr)
+        if (!circle || !prev) continue
+        circle.style.transition = 'none'
+        circle.setAttribute('stroke-dasharray', `${prev.dashLen} ${circumference}`)
+        circle.setAttribute('stroke-dashoffset', prev.dashOffset.toString())
+      }
+
+      // Force a flush so subsequent updates will animate.
+      void svg.getBoundingClientRect()
+
+      if (removed.length === 0 && added.length > 0 && prevCount > 0) {
+        timeouts.push(
+          window.setTimeout(() => {
+            for (const arc of arcs) {
+              const circle = getCircle(arc.address)
+              if (!circle) continue
+              circle.style.removeProperty('transition')
+              circle.setAttribute('stroke-dasharray', `${arc.dashLen} ${circumference}`)
+              circle.setAttribute('stroke-dashoffset', arc.dashOffset.toString())
+            }
+          }, globalDelayMs)
+        )
+      }
+    }
+
+    // 2) If removing, create temporary circles for removed segments and animate them to 0.
+    const tempRemovedCircles: SVGCircleElement[] = []
+    if (removed.length > 0) {
+      for (const addr of removed) {
+        const prev = prevArcMap.get(addr)
+        if (!prev) continue
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        circle.setAttribute('class', 'balArc')
+        circle.setAttribute('cx', cx.toString())
+        circle.setAttribute('cy', cy.toString())
+        circle.setAttribute('data-temp', '1')
+        circle.setAttribute('fill', 'none')
+        circle.setAttribute('r', midR.toString())
+        circle.setAttribute('stroke', `url(#${prev.gradientId})`)
+        circle.setAttribute('stroke-dasharray', `${prev.dashLen} ${circumference}`)
+        circle.setAttribute('stroke-dashoffset', prev.dashOffset.toString())
+        circle.setAttribute('stroke-linecap', 'butt')
+        circle.setAttribute('stroke-width', strokeW.toString())
+        circle.setAttribute('transform', `rotate(-90 ${cx} ${cy})`)
+
+        arcsGroup.appendChild(circle)
+        tempRemovedCircles.push(circle)
+      }
+
+      // Force flush so the subsequent dasharray change transitions.
+      void arcsGroup.getBoundingClientRect()
+
+      // Start collapse after global delay.
+      timeouts.push(
+        window.setTimeout(() => {
+          for (const circle of tempRemovedCircles) {
+            circle.setAttribute('stroke-dasharray', `0 ${circumference}`)
+          }
+        }, collapseStartMs)
+      )
+
+      // Remove temporary circles after collapse completes.
+      timeouts.push(
+        window.setTimeout(() => {
+          for (const circle of tempRemovedCircles) circle.remove()
+        }, collapseStartMs + tweenMs)
+      )
+
+      // After collapse, let remaining circles transition to new geometry (fill the gap).
+      timeouts.push(
+        window.setTimeout(() => {
+          for (const arc of arcs) {
+            const circle = getCircle(arc.address)
+            if (!circle) continue
+            circle.style.removeProperty('transition')
+            circle.setAttribute('stroke-dasharray', `${arc.dashLen} ${circumference}`)
+            circle.setAttribute('stroke-dashoffset', arc.dashOffset.toString())
+          }
+        }, fillGapStartMs)
+      )
+    }
+
+    // 3) For added tokens: hide immediately (so they don't appear before their draw starts).
+    for (const addr of added) {
+      const circle = getCircle(addr)
+      if (!circle) continue
+      circle.style.opacity = '0'
+      circle.style.animation = 'none'
+      hiddenAdded.push(addr)
+    }
+
+    const startDraw = () => {
+      for (const addr of added) {
+        const circle = getCircle(addr)
+        if (!circle) continue
+
+        // Always unhide (even if we can't animate for some reason).
+        circle.style.opacity = '1'
+
+        const arc = arcByAddr.get(addr)
+        if (!arc) continue
+        const targetDasharray = `${arc.dashLen} ${circumference}`
+
+        circle.style.transition = 'none'
+        circle.setAttribute('stroke-dasharray', `0 ${circumference}`)
+        circle.setAttribute('stroke-dashoffset', arc.dashOffset.toString())
+        // Force style flush so next change transitions.
+        void circle.getBoundingClientRect()
+        circle.style.removeProperty('transition')
+
+        requestAnimationFrame(() => {
+          circle.setAttribute('stroke-dasharray', targetDasharray)
+        })
+      }
+    }
+
+    const startPulse = () => {
+      for (const addr of added) {
+        const circle = getCircle(addr)
+        if (!circle) continue
+
+        circle.style.animation = 'none'
+        void circle.getBoundingClientRect()
+        circle.style.animation = 'balArcPulse 2000ms var(--ease-out-cubic) 0ms 1'
+      }
+    }
+
+    if (added.length > 0) {
+      timeouts.push(window.setTimeout(startDraw, addDrawDelayMs))
+
+      // Always pulse on addition, including the first token.
+      timeouts.push(window.setTimeout(startPulse, pulseDelayMs))
+    }
+
+    // Persist the "previous" state for the next diff calculation.
+    prevAddressesRef.current = currentAddresses
+    prevCountRef.current = currentAddresses.length
+
+    return () => {
+      for (const id of timeouts) window.clearTimeout(id)
+
+      // If the animation sequence was interrupted, restore any arcs we temporarily hid.
+      for (const addr of hiddenAdded) {
+        const circle = getCircle(addr)
+        if (!circle) continue
+        circle.style.removeProperty('opacity')
+        circle.style.removeProperty('animation')
+      }
+
+      // Remove any temporary removed circles that might still be present.
+      for (const el of Array.from(svg.querySelectorAll('circle[data-temp="1"]'))) {
+        el.remove()
+      }
+    }
+  }, [animationTrigger, circumference])
 
   return (
     <svg
       fill="none"
       height="150"
+      ref={svgRef}
       viewBox="0 0 155 155"
       width="150"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       <style>{`
-        .balPreviewBuild {
-          transform-origin: 76px 76px;
-          animation: balPreviewBuild 450ms ease-out;
+        .balArc {
+          transition: stroke-dasharray ${tweenMs}ms var(--ease-out-cubic), stroke-dashoffset ${tweenMs}ms var(--ease-out-cubic);
         }
-        @keyframes balPreviewBuild {
-          from {
-            opacity: 0;
-            transform: scale(0.98);
-          }
-          to {
+        @keyframes balArcPulse {
+          0% {
             opacity: 1;
-            transform: scale(1);
+          }
+          30% {
+            opacity: 0.65;
+          }
+          100% {
+            opacity: 1;
           }
         }
       `}</style>
 
       {normalizedAddresses.length === 0 ? (
-        <g className="balPreviewBuild" key={animationTrigger}>
+        <g>
           <path
             d={fullDonutPath(cx, cy, outerR, innerR, startAngleBase)}
             fill="var(--chakra-colors-background-level0)"
@@ -172,26 +407,40 @@ export function NetworkPreviewSVG({
           />
         </g>
       ) : (
-        <g className="balPreviewBuild" key={animationTrigger}>
-          {segments.map(seg => (
-            <path d={seg.d} fill={`url(#${seg.gradientId})`} key={seg.gradientId} />
+        <g data-layer="arcs">
+          {arcs.map(arc => (
+            <circle
+              className="balArc"
+              cx={cx}
+              cy={cy}
+              data-addr={arc.address}
+              fill="none"
+              key={arc.gradientId}
+              r={midR}
+              stroke={`url(#${arc.gradientId})`}
+              strokeDasharray={`${arc.dashLen} ${circumference}`}
+              strokeDashoffset={arc.dashOffset}
+              strokeLinecap="butt"
+              strokeWidth={strokeW}
+              transform={`rotate(-90 ${cx} ${cy})`}
+            />
           ))}
         </g>
       )}
 
       <defs>
-        {segments.map(seg => (
+        {arcs.map(arc => (
           <linearGradient
             gradientUnits="userSpaceOnUse"
-            id={seg.gradientId}
-            key={seg.gradientId}
+            id={arc.gradientId}
+            key={arc.gradientId}
             x1="0"
             x2="0"
             y1="1"
             y2="151"
           >
-            <stop stopColor={seg.from} />
-            <stop offset="1" stopColor={seg.to} />
+            <stop stopColor={arc.from} />
+            <stop offset="1" stopColor={arc.to} />
           </linearGradient>
         ))}
 
