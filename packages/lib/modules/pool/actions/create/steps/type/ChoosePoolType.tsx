@@ -44,15 +44,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
               {poolTypesKeys.map(poolTypeKey => (
                 <HStack key={poolTypeKey}>
                   <Radio size="lg" value={poolTypeKey}>
-                    <Text
-                      color="font.primary"
-                      textDecoration="underline"
-                      textDecorationStyle="dotted"
-                      textDecorationThickness="1px"
-                      textUnderlineOffset="3px"
-                    >
-                      {POOL_TYPES[poolTypeKey].label}
-                    </Text>
+                    <Text color="font.primary">{POOL_TYPES[poolTypeKey].label}</Text>
                   </Radio>
                   <InfoIconPopover message={POOL_TYPES[poolTypeKey].description} />
                 </HStack>

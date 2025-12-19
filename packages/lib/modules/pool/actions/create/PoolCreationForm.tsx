@@ -42,13 +42,21 @@ export function PoolCreationForm() {
           <PoolCreationSkeleton isMobile={isMobile} />
         ) : (
           <>
-            <VStack align="start" minW="500px" spacing="lg">
+            <VStack
+              align="start"
+              maxW="540px"
+              minW={{ base: 'full', md: '500px' }}
+              spacing="lg"
+              w="full"
+            >
               <VStack align="start" spacing="md" w="full">
                 <Divider />
                 <Stepper
+                  gap={{ base: 1, sm: 4 }}
                   index={activeStepIndex}
-                  orientation={isMobile ? 'vertical' : 'horizontal'}
+                  orientation="horizontal"
                   pt="sm"
+                  size={{ base: 'sm', sm: 'md' }}
                   w="full"
                 >
                   {steps.map((step, index) => {
@@ -102,7 +110,7 @@ export function PoolCreationForm() {
 function PoolCreationSkeleton({ isMobile }: { isMobile: boolean | undefined }) {
   return (
     <>
-      <VStack align="start" minW="500px" spacing="lg">
+      <VStack align="start" maxW="540px" minW={{ base: 'full', sm: '500px' }} spacing="lg" w="full">
         <Skeleton h="80px" w="full" />
         <Skeleton h="2px" w="full" />
         <Skeleton h="200px" w="full" />
