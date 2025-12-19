@@ -106,8 +106,6 @@ export function NumberInput({
                     w="full"
                   >
                     <NumberInputField
-                      max={99}
-                      min={1}
                       pl={isFiatPrice ? '8' : undefined}
                       placeholder={placeholder}
                     />
