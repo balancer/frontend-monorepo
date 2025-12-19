@@ -21,6 +21,8 @@ interface NumberInputProps {
   percentageLabel?: string
   placeholder?: string
   attribution?: React.ReactNode
+  suggestedValue?: number
+  onClickSuggestion?: () => void
 }
 
 export function NumberInput({
@@ -36,6 +38,8 @@ export function NumberInput({
   width = '20',
   error,
   attribution,
+  suggestedValue,
+  onClickSuggestion,
 }: NumberInputProps) {
   return (
     <VStack align="start" spacing="sm" w="full">
@@ -57,32 +61,56 @@ export function NumberInput({
         <Controller
           control={control}
           name={name}
-          render={({ field, fieldState }) => (
-            <>
-              <ChakraNumberInput
-                {...field}
-                isDisabled={isDisabled}
-                isInvalid={isInvalid || !!fieldState.error}
-                keepWithinRange={true}
-                onChange={field.onChange}
-                value={field.value}
-              >
-                <NumberInputField max={99} min={1} placeholder={placeholder} />
-              </ChakraNumberInput>
-              {isPercentage && (
-                <Text
-                  color="font.secondary"
-                  opacity={isDisabled ? 0.3 : 1}
-                  position="absolute"
-                  right="3"
-                  top="2.5"
-                  zIndex={1}
+          render={({ field, fieldState }) => {
+            const isSuggestionApplied = Number(field.value) === suggestedValue
+            return (
+              <>
+                <ChakraNumberInput
+                  {...field}
+                  isDisabled={isDisabled}
+                  isInvalid={isInvalid || !!fieldState.error}
+                  keepWithinRange={true}
+                  onChange={field.onChange}
+                  value={field.value}
                 >
-                  %
-                </Text>
-              )}
-            </>
-          )}
+                  <NumberInputField max={99} min={1} placeholder={placeholder} />
+                </ChakraNumberInput>
+                {isPercentage && (
+                  <Text
+                    color="font.secondary"
+                    opacity={isDisabled ? 0.3 : 1}
+                    position="absolute"
+                    right="3"
+                    top="2.5"
+                    zIndex={1}
+                  >
+                    %
+                  </Text>
+                )}
+
+                {suggestedValue && (
+                  <HStack justify="space-between" mt="xs" w="full">
+                    <HStack spacing="xs">
+                      <Text color="font.secondary" fontSize="sm">
+                        Suggested:
+                      </Text>
+                      <Text
+                        color={isSuggestionApplied ? 'font.secondary' : 'font.link'}
+                        cursor={isSuggestionApplied ? 'default' : 'pointer'}
+                        fontSize="sm"
+                        onClick={isSuggestionApplied ? undefined : onClickSuggestion}
+                        textDecoration={isSuggestionApplied ? 'none' : 'underline dotted 1px'}
+                        textUnderlineOffset="3px"
+                      >
+                        {suggestedValue}
+                      </Text>
+                    </HStack>
+                    {attribution && attribution}
+                  </HStack>
+                )}
+              </>
+            )
+          }}
           rules={{ validate }}
         />
       </Box>
