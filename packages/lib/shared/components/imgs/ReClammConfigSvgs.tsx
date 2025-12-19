@@ -66,6 +66,10 @@ export function NetworkPreviewSVG({
 
   const globalDelayMs = 200
   const tweenMs = 400
+  const dividerGapLen = 0.75
+  const pulseTotalMs = 1500
+  const pulseIterations = 2
+  const pulseCycleMs = pulseTotalMs / pulseIterations
 
   const normalizedAddresses = useMemo(
     () => tokenAddresses.map(addr => addr.toLowerCase() as Address),
@@ -102,15 +106,17 @@ export function NetworkPreviewSVG({
   const arcs = useMemo(() => {
     if (normalizedAddresses.length === 0) return []
 
+    const gap = normalizedAddresses.length > 1 ? dividerGapLen : 0
     let cumulativeLen = 0
     return normalizedAddresses.map((address, i) => {
       const fraction = fractions[i] ?? 0
       const rawLen = circumference * fraction
 
       const isLast = i === normalizedAddresses.length - 1
-      const dashLen = isLast ? Math.max(0, circumference - cumulativeLen) : rawLen
+      const fullLen = isLast ? Math.max(0, circumference - cumulativeLen) : rawLen
+      const dashLen = Math.max(0, fullLen - gap)
       const dashOffset = -cumulativeLen
-      cumulativeLen += dashLen
+      cumulativeLen += fullLen
 
       const { from, to } = getTokenColor(chain, address, i)
       const gradientId = `token-grad-${chain}-${address}`
@@ -125,7 +131,7 @@ export function NetworkPreviewSVG({
         address,
       }
     })
-  }, [chain, circumference, fractions, normalizedAddresses])
+  }, [chain, circumference, dividerGapLen, fractions, normalizedAddresses])
 
   useEffect(() => {
     const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
@@ -338,7 +344,7 @@ export function NetworkPreviewSVG({
 
         circle.style.animation = 'none'
         void circle.getBoundingClientRect()
-        circle.style.animation = 'balArcPulse 2000ms var(--ease-out-cubic) 0ms 1'
+        circle.style.animation = `balArcPulse ${pulseCycleMs}ms var(--ease-out-cubic) 0ms ${pulseIterations}`
       }
     }
 
@@ -389,8 +395,8 @@ export function NetworkPreviewSVG({
           0% {
             opacity: 1;
           }
-          30% {
-            opacity: 0.65;
+          70% {
+            opacity: 0.5;
           }
           100% {
             opacity: 1;
@@ -408,6 +414,18 @@ export function NetworkPreviewSVG({
         </g>
       ) : (
         <g data-layer="arcs">
+          <circle
+            cx={cx}
+            cy={cy}
+            fill="none"
+            r={midR}
+            stroke="var(--chakra-colors-background-level0)"
+            strokeDasharray={`${circumference} ${circumference}`}
+            strokeDashoffset={0}
+            strokeLinecap="butt"
+            strokeWidth={strokeW}
+            transform={`rotate(-90 ${cx} ${cy})`}
+          />
           {arcs.map(arc => (
             <circle
               className="balArc"
