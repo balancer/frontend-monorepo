@@ -89,6 +89,7 @@ export function NumberInput({
           name={name}
           render={({ field, fieldState }) => {
             const isSuggestionApplied = Number(field.value) === suggestedValue
+            const errorMessage = fieldState.error?.message
             return (
               <>
                 <InputGroup width={width}>
@@ -126,6 +127,12 @@ export function NumberInput({
                     </Text>
                   )}
                 </InputGroup>
+
+                {errorMessage && (
+                  <Text color="font.error" fontSize="sm" textAlign="start" w="full">
+                    {errorMessage}
+                  </Text>
+                )}
 
                 {suggestedValue && (
                   <HStack justify="space-between" mt="xs" w="full">
