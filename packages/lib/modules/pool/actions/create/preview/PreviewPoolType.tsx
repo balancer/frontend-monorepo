@@ -19,6 +19,7 @@ export function PreviewPoolType() {
 
   const selectedPoolTokens = poolTokens.filter(token => token.address)
   const tokenAddresses = selectedPoolTokens.map(token => token.address!)
+  const tokenSymbols = selectedPoolTokens.map(token => token.data?.symbol || '')
   const tokenWeights = isWeightedPool(poolType)
     ? selectedPoolTokens.map(token => Number(token.weight))
     : undefined
@@ -64,6 +65,7 @@ export function PreviewPoolType() {
             <NetworkPreviewSVG
               chain={network}
               tokenAddresses={tokenAddresses}
+              tokenSymbols={tokenSymbols}
               tokenWeights={tokenWeights}
             />
             <Box left="50%" position="absolute" top="50%" transform="translate(-50%, -50%)">
