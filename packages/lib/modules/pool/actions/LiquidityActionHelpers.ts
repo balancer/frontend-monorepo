@@ -359,8 +359,8 @@ export function roundDecimals(humanAmountsIn: HumanTokenAmountWithAddress[], max
   }))
 }
 
-export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
-  return pool.poolTokens.map(token => TokenAmount.fromHumanAmount(token as unknown as Token, '0'))
+export function emptyTokenAmounts(tokens: ApiToken[]): TokenAmount[] {
+  return tokens.map(token => TokenAmount.fromHumanAmount(token as unknown as Token, '0'))
 }
 
 export function shouldShowNativeWrappedSelector(token: ApiToken, pool: Pool) {

@@ -150,9 +150,6 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
     enabled,
   })
 
-  /**
-   * Step construction
-   */
   const { steps, isLoadingSteps } = useAddLiquiditySteps({
     helpers,
     handler,

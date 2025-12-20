@@ -10,9 +10,14 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 export interface ModalActionsNavProps {
   chain: GqlChain
   redirectPath: string
+  closeButton?: boolean
 }
 
-export function FocussedActionNav({ chain, redirectPath }: ModalActionsNavProps) {
+export function FocussedActionNav({
+  chain,
+  redirectPath,
+  closeButton = true,
+}: ModalActionsNavProps) {
   const networkConfig = getNetworkConfig(chain)
 
   return (
@@ -27,15 +32,17 @@ export function FocussedActionNav({ chain, redirectPath }: ModalActionsNavProps)
         <Image alt={networkConfig.shortName} height="24" src={networkConfig.iconPath} width="24" />
       </Card>
 
-      <IconButton
-        aria-label="Close"
-        as={Link}
-        href={redirectPath}
-        icon={<CloseIcon />}
-        isRound
-        prefetch
-        variant="outline"
-      />
+      {closeButton && (
+        <IconButton
+          aria-label="Close"
+          as={Link}
+          href={redirectPath}
+          icon={<CloseIcon />}
+          isRound
+          prefetch
+          variant="outline"
+        />
+      )}
     </HStack>
   )
 }

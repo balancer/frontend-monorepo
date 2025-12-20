@@ -11,6 +11,8 @@ export function usePoolsMigrationsLogic(poolMigrations: PoolMigration[]) {
   return {
     needsMigration: (protocolVersion: number, chainId: number, poolId: string) =>
       needsMigration(poolMigrations, protocolVersion, chainId, poolId),
+    getMigration: (protocolVersion: number, chainId: number, poolId: string) =>
+      getMigration(poolMigrations, protocolVersion, chainId, poolId),
   }
 }
 
@@ -25,13 +27,22 @@ export function PoolMigrationsProvider({
 export const usePoolMigrations = () =>
   useMandatoryContext(PoolsMigrationsContext, 'PoolsMigrations')
 
-export function needsMigration(
+function needsMigration(
   migrations: PoolMigration[],
   protocolVersion: number,
   chainId: number,
   poolId: string
 ) {
-  return migrations.some(
+  return getMigration(migrations, protocolVersion, chainId, poolId) !== undefined
+}
+
+function getMigration(
+  migrations: PoolMigration[],
+  protocolVersion: number,
+  chainId: number,
+  poolId: string
+) {
+  return migrations.find(
     migration =>
       migration.old.protocol === protocolVersion &&
       migration.old.chainId === chainId &&
