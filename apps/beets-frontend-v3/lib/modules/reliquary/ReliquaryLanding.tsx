@@ -8,6 +8,7 @@ import { MaBeetsCharts } from './components/charts/MaBeetsCharts'
 import { HowToParticipate } from './components/landing/HowToParticipate'
 import { MaBeetsHeader } from './components/landing/MaBeetsHeader'
 import { MyRelicsSection } from './components/landing/MyRelicsSection'
+import { ReliquaryFaq } from './components/landing/ReliquaryFaq'
 import { MaBeetsNumbers } from './components/stats/MaBeetsNumbers'
 import { YourMaBeetsStats } from './components/stats/YourMaBeetsStats'
 import { useReliquary } from './ReliquaryProvider'
@@ -43,9 +44,9 @@ function Content({
   const [showCharts, setShowCharts] = useState<boolean>(!hasRelics)
   const toggleCharts = () => setShowCharts(!showCharts)
   return (
-    <VStack spacing="8" width="full">
+    <VStack spacing="20" width="full">
       {/* Stats Grid */}
-      <Flex flexDirection={{ base: 'column', lg: 'row' }} gap="8" width="full">
+      <Flex flexDirection={{ base: 'column', lg: 'row' }} gap="16" width="full">
         {hasRelics ? <YourMaBeetsStats /> : <HowToParticipate />}
         <MaBeetsNumbers chartsVisible={showCharts} onToggleShowMore={toggleCharts} />
       </Flex>
@@ -55,6 +56,9 @@ function Content({
 
       {/* Relics and Voting Power Sections */}
       <MyRelicsSection focusRelicId={focusRelicId} isConnected={isConnected} />
+
+      {/* FAQ Section */}
+      <ReliquaryFaq />
     </VStack>
   )
 }

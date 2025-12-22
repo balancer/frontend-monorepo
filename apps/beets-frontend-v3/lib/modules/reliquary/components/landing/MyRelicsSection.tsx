@@ -40,7 +40,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
   }
 
   return (
-    <VStack alignItems="flex-start" spacing="8" width="full">
+    <VStack alignItems="flex-start" spacing="20" width="full">
       {/* Your Relics Section */}
       <VStack alignItems="flex-start" spacing="4" width="full">
         <Flex alignItems="center" justifyContent="space-between" width="full">
@@ -131,8 +131,9 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                     </HStack>
 
                     <Text color="gray.500" fontSize="xs" maxW="500px">
-                      Delegate your maBEETS voting power to the Music Directors. This only affects
-                      the delegation for the Beets space on Snapshot.
+                      Delegating assigns your maBEETS voting power to the Music Director for
+                      Snapshot votes. This does not affect ownership, rewards, or your ability to
+                      exit.
                     </Text>
                   </VStack>
 
@@ -147,14 +148,9 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                 </VStack>
               </VStack>
             ) : (
-              <VStack
-                alignItems="center"
-                justifyContent="center"
-                p={{ base: 'sm', md: 'md' }}
-                py="16"
-              >
+              <VStack alignItems="center" justifyContent="center" py="16">
                 <Text color="gray.400" fontSize="lg" textAlign="center">
-                  Create a Relic to unlock access to Beets Governance rights & Beets rewards
+                  Create a maBEETS position to start building maturity-adjusted voting power
                 </Text>
               </VStack>
             )}

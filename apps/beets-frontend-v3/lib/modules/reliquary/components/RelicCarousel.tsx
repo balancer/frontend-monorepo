@@ -120,7 +120,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
     return (
       <Box py="16" textAlign="center">
         <Text color="gray.400" fontSize="lg">
-          No Relics Created
+          No maBEETS positions yet — your first Relic will appear here.
         </Text>
       </Box>
     )

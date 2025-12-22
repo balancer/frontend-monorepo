@@ -8,7 +8,7 @@ export function HowToParticipate() {
   const { isConnected } = useUserAccount()
 
   return (
-    <VStack align="flex-start" flex="1" spacing="4" width="full">
+    <VStack align="flex-start" flex="1" pr="15%" spacing="4">
       <Text
         background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
         backgroundClip="text"
@@ -20,26 +20,26 @@ export function HowToParticipate() {
       <VStack align="flex-start" spacing="3" width="full">
         <Text>
           <Text as="span" fontWeight="bold">
-            1. fBeets:
+            1. Mint fBEETS:
           </Text>{' '}
           <Text as="span" variant="secondary">
-            Invest BEETS/stS (80/20) into the Fresh BEETS pool to receive fBEETS.
+            Convert BEETS into fBEETS (80% BEETS / 20% stS).
           </Text>
         </Text>
         <Text>
           <Text as="span" fontWeight="bold">
-            2. Reliquary:
+            2. Create a maBEETS Position:
           </Text>{' '}
           <Text as="span" variant="secondary">
-            Deposit fBEETS into Reliquary to unlock your maturity adjusted position.
+            Deposit fBEETS to create a maBEETS position that tracks maturity and voting power.
           </Text>
         </Text>
         <Text>
           <Text as="span" fontWeight="bold">
-            3. maBEETS:
+            3. Vote & Earn:
           </Text>{' '}
           <Text as="span" variant="secondary">
-            Receive a transferable and composable Relic that holds your maBEETS position.
+            Vote on governance decisions, direct emissions, and earn governance-aligned rewards.
           </Text>
         </Text>
       </VStack>

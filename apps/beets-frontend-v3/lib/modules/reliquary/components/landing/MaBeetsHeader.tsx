@@ -19,7 +19,7 @@ export function MaBeetsHeader() {
         Governance & Rewards
       </Heading>
       <Text sx={{ textWrap: 'balance' }} variant="secondary">
-        Maturity adjusted voting power and $BEETS rewards via Reliquary & NFTs{' '}
+        Maturity-adjusted voting with governance aligned rewards.{' '}
         <Link
           color="#05D690"
           href="https://docs.beets.fi/tokenomics/mabeets"
