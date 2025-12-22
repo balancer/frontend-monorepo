@@ -1,42 +1,40 @@
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { useRemoveLiquidity } from '../actions/remove-liquidity/RemoveLiquidityProvider'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { usePoolRedirect } from '../pool.hooks'
 import { useOnUserAccountChanged } from '../../web3/useOnUserAccountChanged'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
-import { useRemoveLiquidityReceipt } from '../../transactions/transaction-steps/receipts/receipt.hooks'
+import { useAddLiquidityReceipt } from '../../transactions/transaction-steps/receipts/receipt.hooks'
 import { Pool, ProtocolVersion } from '../pool.types'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { MigrateLiquiditySummary } from './MigrateLiquiditySummary'
 import { useMigrateLiquidity } from './MigrateLiquidityProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 
 export function PoolMigrationModal() {
   const { isDesktop } = useBreakpoints()
   const { userAddress } = useUserAccount()
-  const { oldPool, migrationSteps } = useMigrateLiquidity()
-  const { hasQuoteContext, removeLiquidityTxHash, lastTransaction, urlTxHash } =
-    useRemoveLiquidity()
+  const { oldPool, migrationSteps, hasQuoteContext } = useMigrateLiquidity()
+  const { addLiquidityTxHash, urlTxHash, lastTransaction: addLiquidityTx } = useAddLiquidity()
 
   const { redirectToPoolPage } = usePoolRedirect(oldPool as Pool)
   useOnUserAccountChanged(redirectToPoolPage)
 
-  const removeLiquidityReceipt = useRemoveLiquidityReceipt({
+  const addLiquidityReceipt = useAddLiquidityReceipt({
     chain: oldPool?.chain || GqlChain.Mainnet,
-    txHash: removeLiquidityTxHash,
+    txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: oldPool?.protocolVersion as ProtocolVersion,
-    txReceipt: lastTransaction?.result,
+    txReceipt: addLiquidityTx?.result,
   })
 
-  const isSuccess = !!removeLiquidityTxHash && removeLiquidityReceipt.hasReceipt // FIXME: [JUANJO] just check last tx?
+  const isSuccess = !!addLiquidityTxHash && addLiquidityReceipt.hasReceipt
 
   // TODO: [JUANJO] add tx batching
   // TODO: [JUANJO] add refresh countdown (refactor other actions timeout component)
-  // TODO: [JUANJO] for now we are just checking the remove liquidity info (hash, receipts, success)
 
   return (
     <Modal isCentered isOpen={true} onClose={redirectToPoolPage}>
@@ -53,9 +51,9 @@ export function PoolMigrationModal() {
 
         <TransactionModalHeader
           chain={oldPool?.chain || GqlChain.Mainnet}
-          isReceiptLoading={removeLiquidityReceipt.isLoading}
+          isReceiptLoading={addLiquidityReceipt.isLoading}
           label="Migrate liquidity"
-          txHash={removeLiquidityTxHash}
+          txHash={addLiquidityTxHash}
         />
 
         <ModalCloseButton />
