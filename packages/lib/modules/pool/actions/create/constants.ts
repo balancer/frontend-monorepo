@@ -78,9 +78,11 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   },
 }
 
-export const PROTOCOLS = [
+export const BALANCER_V3_NAME = ProjectConfigBalancer.projectName + ' v3'
+
+export const BALANCER_PROTOCOL_OPTIONS = [
   {
-    name: 'Balancer v3',
+    name: BALANCER_V3_NAME,
     imageSrc: ProjectConfigBalancer.projectLogo,
   },
   {
@@ -134,7 +136,7 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
 export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]
 
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
-  protocol: PROTOCOLS[0].name,
+  protocol: BALANCER_PROTOCOL_OPTIONS[0].name,
   network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
   poolType: PoolType.Stable,

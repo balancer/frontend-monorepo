@@ -12,7 +12,8 @@ import {
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
-import { WeightedPoolStructure, PROTOCOLS } from './constants'
+import { WeightedPoolStructure } from './constants'
+import { ProjectConfig } from '@repo/lib/config/config.types'
 
 export type InitPoolInputAmount = InputAmount & { symbol: string; weight?: string }
 
@@ -45,7 +46,7 @@ export type PoolCreationToken = {
 }
 
 export type PoolCreationForm = {
-  protocol: (typeof PROTOCOLS)[number]['name']
+  protocol: ProjectConfig['projectName'] | 'CoW'
   network: GqlChain
   weightedPoolStructure: WeightedPoolStructure
   poolType: SupportedPoolTypes

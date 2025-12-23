@@ -1,6 +1,6 @@
 import { VStack, Text, SimpleGrid, Card } from '@chakra-ui/react'
 import {
-  PROTOCOLS,
+  BALANCER_PROTOCOL_OPTIONS,
   INITIAL_POOL_CREATION_FORM,
 } from '@repo/lib/modules/pool/actions/create/constants'
 import Image from 'next/image'
@@ -26,7 +26,7 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
         Choose protocol
       </Text>
       <SimpleGrid columns={2} spacing="md" w="full">
-        {PROTOCOLS.map(({ name, imageSrc }) => {
+        {BALANCER_PROTOCOL_OPTIONS.map(({ name, imageSrc }) => {
           const cardProps = {
             cursor: 'pointer',
             display: 'flex',

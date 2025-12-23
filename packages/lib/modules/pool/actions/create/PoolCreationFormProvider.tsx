@@ -8,6 +8,7 @@ import {
   INITIAL_RECLAMM_CONFIG,
   INITIAL_ECLP_CONFIG,
   NUM_FORMAT,
+  BALANCER_V3_NAME,
 } from './constants'
 import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } from './types'
 import { Address } from 'viem'
@@ -21,6 +22,8 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useWatch } from 'react-hook-form'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -45,9 +48,11 @@ export function usePoolFormLogic() {
     { mode: 'all' }
   )
 
+  const protocolName = isBalancer ? BALANCER_V3_NAME : PROJECT_CONFIG.projectName
+
   const poolCreationForm = usePersistentForm<PoolCreationForm>(
     LS_KEYS.PoolCreation.Form,
-    INITIAL_POOL_CREATION_FORM,
+    { ...INITIAL_POOL_CREATION_FORM, protocol: protocolName },
     { mode: 'all' }
   )
 
