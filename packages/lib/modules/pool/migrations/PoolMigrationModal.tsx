@@ -17,11 +17,8 @@ import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 export function PoolMigrationModal() {
   const { isDesktop } = useBreakpoints()
   const { userAddress } = useUserAccount()
-  const { oldPool, migrationSteps, hasQuoteContext } = useMigrateLiquidity()
+  const { oldPool, newPool, migrationSteps, hasQuoteContext } = useMigrateLiquidity()
   const { addLiquidityTxHash, urlTxHash, lastTransaction: addLiquidityTx } = useAddLiquidity()
-
-  const { redirectToPoolPage } = usePoolRedirect(oldPool as Pool)
-  useOnUserAccountChanged(redirectToPoolPage)
 
   const addLiquidityReceipt = useAddLiquidityReceipt({
     chain: oldPool?.chain || GqlChain.Mainnet,
@@ -32,6 +29,11 @@ export function PoolMigrationModal() {
   })
 
   const isSuccess = !!addLiquidityTxHash && addLiquidityReceipt.hasReceipt
+
+  const { redirectToPoolPage: redirectToOldPoolPage } = usePoolRedirect(oldPool as Pool)
+  const { redirectToPoolPage: redirectToNewPoolPage } = usePoolRedirect(newPool as Pool)
+  const redirectToPoolPage = isSuccess ? redirectToNewPoolPage : redirectToOldPoolPage
+  useOnUserAccountChanged(redirectToOldPoolPage)
 
   // TODO: [JUANJO] add tx batching
   // TODO: [JUANJO] add refresh countdown (refactor other actions timeout component)
@@ -66,7 +68,7 @@ export function PoolMigrationModal() {
           currentStep={migrationSteps.currentStep}
           isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
-          returnLabel="Return to pool"
+          returnLabel="Go to new pool"
           urlTxHash={urlTxHash}
         />
       </ModalContent>
