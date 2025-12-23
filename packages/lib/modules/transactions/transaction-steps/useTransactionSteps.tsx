@@ -12,7 +12,11 @@ import { useTransactionState } from '@repo/lib/modules/transactions/transaction-
 
 export type TransactionStepsResponse = ReturnType<typeof useTransactionSteps>
 
-export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = false) {
+export function useTransactionSteps(
+  steps: TransactionStep[] = [],
+  isLoading = false,
+  mute = false
+) {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0)
   const { isOnSuccessCalled, updateOnSuccessCalled, setOnSuccessCalled } = useTransactionState()
 
@@ -104,7 +108,7 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   // On last transaction success, play success sound.
   // TODO move this to a global tx state management system in later refactor.
   useEffect(() => {
-    if (lastTransaction?.result.isSuccess && currentStep) {
+    if (lastTransaction?.result.isSuccess && currentStep && !mute) {
       playTxSound(currentStep.stepType)
     }
   }, [lastTransaction?.result.isSuccess])
