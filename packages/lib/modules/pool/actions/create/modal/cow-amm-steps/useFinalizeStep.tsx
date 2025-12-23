@@ -12,7 +12,7 @@ import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction
 import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { encodeFunctionData } from 'viem'
-import { useIsPoolFinalized } from './useIsPoolFinalized'
+import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { getChainId } from '@repo/lib/config/app.config'
 import { isCowPool } from '../../helpers'
@@ -38,7 +38,8 @@ export function useFinalizeStep() {
   const { userAddress, isConnected } = useUserAccount()
   const { buildTenderlyUrl } = useTenderly({ chainId })
 
-  const { isPoolFinalized, isLoadingIsFinalized, refetchIsFinalized } = useIsPoolFinalized()
+  const { isPoolInitialized, isLoadingPoolInitialized, refetchIsPoolInitialized } =
+    useIsPoolInitialized({ chainId, poolAddress, poolType })
 
   let txConfig: TransactionConfig | undefined
 
@@ -65,8 +66,8 @@ export function useFinalizeStep() {
       stepType: 'finalizePool' as const,
       labels,
       transaction,
-      isComplete: () => isTransactionSuccess(transaction) || !!isPoolFinalized,
-      onSuccess: () => refetchIsFinalized(),
+      isComplete: () => isTransactionSuccess(transaction) || !!isPoolInitialized,
+      onSuccess: () => refetchIsPoolInitialized(),
       renderAction: () => {
         if (!txConfig) return <DisabledTransactionButton />
         return (
@@ -80,8 +81,16 @@ export function useFinalizeStep() {
         )
       },
     }),
-    [transaction, txConfig, gasEstimationMeta, labels, id, isPoolFinalized, refetchIsFinalized]
+    [
+      transaction,
+      txConfig,
+      gasEstimationMeta,
+      labels,
+      id,
+      isPoolInitialized,
+      refetchIsPoolInitialized,
+    ]
   )
 
-  return { finalizeStep, isLoadingFinalizeStep: isLoadingIsFinalized }
+  return { finalizeStep, isLoadingFinalizeStep: isLoadingPoolInitialized }
 }

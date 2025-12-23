@@ -24,8 +24,6 @@ import { useInitializePoolInput } from './useInitializePoolInput'
 import { RestartPoolCreationModal } from './RestartPoolCreationModal'
 import { useWatch } from 'react-hook-form'
 import { usePoolCreationTransactions } from './usePoolCreationTransactions'
-import { isCowPool } from '../helpers'
-import { useIsPoolFinalized } from './cow-amm-steps/useIsPoolFinalized'
 
 type PoolCreationModalProps = {
   isOpen: boolean
@@ -49,6 +47,7 @@ export function PoolCreationModal({
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
+  const protocolVersion = createPoolInput.protocolVersion
   const initPoolInput = useInitializePoolInput(chainId)
 
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
@@ -58,21 +57,13 @@ export function PoolCreationModal({
     initPoolInput,
   })
 
-  const { isPoolFinalized } = useIsPoolFinalized()
-  const { isPoolInitialized } = useIsPoolInitialized({
-    chainId,
-    poolAddress,
-    isEnabled: !isCowPool(poolType),
-  })
-  const isPoolCreationFinished = isCowPool(poolType) ? isPoolFinalized : isPoolInitialized
+  const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress, poolType })
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()
     resetPoolCreationForm()
     onClose()
   }
-
-  const protocolVersion = isCowPool(poolType) ? 1 : 3
 
   const poolPath = getPoolPath({
     id: poolAddress as Address,
@@ -106,7 +97,7 @@ export function PoolCreationModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
-      trapFocus={!isPoolCreationFinished}
+      trapFocus={!isPoolInitialized}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!initPoolTxHash} />
@@ -119,7 +110,7 @@ export function PoolCreationModal({
               isTxBatch={shouldBatchTransactions}
               transactionSteps={transactionSteps}
             />
-            {!isPoolCreationFinished && (
+            {!isPoolInitialized && (
               <RestartPoolCreationModal
                 handleRestart={handleReset}
                 isAbsolutePosition
@@ -141,7 +132,7 @@ export function PoolCreationModal({
         <ModalBody>
           <PoolSummary transactionSteps={transactionSteps} />
 
-          {isPoolCreationFinished && (
+          {isPoolInitialized && (
             <VStack width="full">
               <Button
                 isDisabled={false}
@@ -189,7 +180,7 @@ export function PoolCreationModal({
         ) : (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
-            isSuccess={isPoolCreationFinished}
+            isSuccess={isPoolInitialized}
             returnAction={redirectToPoolPage}
             returnLabel="View pool page"
             urlTxHash={urlTxHash}

@@ -104,7 +104,7 @@ export function isGyroEllipticPool(poolType: PoolType): boolean {
   return poolType === PoolType.GyroE
 }
 
-export function isCowPool(poolType: PoolType): boolean {
+export function isCowPool(poolType: PoolType | undefined): boolean {
   return poolType === PoolType.CowAmm
 }
 
