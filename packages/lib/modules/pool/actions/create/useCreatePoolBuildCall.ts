@@ -25,8 +25,7 @@ export function useCreatePoolBuildCall({ createPoolInput, enabled }: Props) {
         data: callData,
         to,
       }
-    } else {
-      // is a CoW AMM on v1
+    } else if (createPoolInput.protocolVersion === 1) {
       const { name, symbol } = createPoolInput
       const chain = getGqlChain(createPoolInput.chainId)
       const { contracts } = getNetworkConfig(chain)
@@ -46,6 +45,8 @@ export function useCreatePoolBuildCall({ createPoolInput, enabled }: Props) {
         data,
         to,
       }
+    } else {
+      throw new Error('Unsupported protocol version for create pool build call')
     }
   }
 
