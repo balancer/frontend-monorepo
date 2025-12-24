@@ -26,8 +26,7 @@ export async function setup() {
           forkUrl: getForkUrl(chain.id, false),
           forkBlockNumber: ANVIL_NETWORKS[chain.id].forkBlockNumber,
           noMining: false,
-          mnemonic:
-            'have doctor foam invite bottom elevator cream bulb pigeon holiday razor castle',
+          mnemonic: process.env.NEXT_PRIVATE_MNEMONIC,
         },
       })
     )
