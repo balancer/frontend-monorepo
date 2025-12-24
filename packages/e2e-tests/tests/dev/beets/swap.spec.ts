@@ -12,7 +12,7 @@ test('Wrap 1 S to wS', async ({ page }) => {
   await expect(button(page, 'Connect wallet')).not.toBeVisible()
   await clickLink(page, 'Swap')
 
-  await page.getByRole('button', { name: 'Select token' }).nth(1).click()
+  await clickButton(page, 'Select token')
   await page.getByText('Wrapped Sonic', { exact: true }).click()
   await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('1')
 
