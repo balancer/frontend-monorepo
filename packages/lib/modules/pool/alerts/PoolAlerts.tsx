@@ -8,7 +8,6 @@ import { isComposableStablePool } from '../pool.utils'
 import { usePoolMigrations } from '../migrations/PoolMigrationsProvider'
 import { getChainId, isProd } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../migrations/MigrationAlert'
-import { hasTotalBalance } from '../user-balance.helpers'
 
 export function PoolAlerts() {
   const { pool } = usePool()
@@ -37,8 +36,6 @@ export function PoolAlerts() {
     </HStack>
   )
 
-  const userHasBalance = hasTotalBalance(pool)
-
   return (
     <VStack width="full">
       {poolAlerts.map(alert => (
@@ -54,11 +51,9 @@ export function PoolAlerts() {
 
       {affectedByV2Exploit && <BalAlert content={v2ExploitWarningContent} status="warning" />}
 
-      {!isProd &&
-        userHasBalance &&
-        needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
-          <MigrationAlert pool={pool} />
-        )}
+      {!isProd && needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
+        <MigrationAlert pool={pool} />
+      )}
     </VStack>
   )
 }
