@@ -1,15 +1,17 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useEffect } from 'react'
-import { GetPoolDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/client'
 import { usePoolMigrations } from './PoolMigrationsProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { Address, zeroAddress } from 'viem'
-import { Pool } from '../pool.types'
+import { Pool, ProtocolVersion } from '../pool.types'
 import { useRemoveLiquidity } from '../actions/remove-liquidity/RemoveLiquidityProvider'
 import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 import { useTransactionSteps } from '../../transactions/transaction-steps/useTransactionSteps'
+import { useRemoveLiquidityReceipt } from '../../transactions/transaction-steps/receipts/receipt.hooks'
+import { HumanTokenAmount, HumanTokenAmountWithAddress } from '../../tokens/token.types'
 
 export type UseMigrateLiquidityResponse = ReturnType<typeof useMigrateLiquidityLogic>
 export const MigrateLiquidityContext = createContext<UseMigrateLiquidityResponse | null>(null)
@@ -17,8 +19,20 @@ export const MigrateLiquidityContext = createContext<UseMigrateLiquidityResponse
 function useMigrateLiquidityLogic(protocol: number, chainId: number, poolId: string) {
   const { userAddress } = useUserAccount()
 
-  const { transactionSteps: removeLiquiditySteps, amountsOut } = useRemoveLiquidity()
-  const { transactionSteps: addLiquiditySteps, setHumanAmountsIn } = useAddLiquidity()
+  const {
+    transactionSteps: removeLiquiditySteps,
+    amountsOut,
+    removeLiquidityTxHash,
+    lastTransaction: removeLiquidityTx,
+    hasQuoteContext: removeLiquidityHasQuoteContext,
+  } = useRemoveLiquidity()
+  const {
+    transactionSteps: addLiquiditySteps,
+    humanAmountsIn,
+    setHumanAmountsIn,
+    hasQuoteContext: addLiquidityHasQuoteContext,
+  } = useAddLiquidity()
+
   const migrationSteps = useTransactionSteps(
     [...removeLiquiditySteps.steps, ...addLiquiditySteps.steps],
     removeLiquiditySteps.isLoading || addLiquiditySteps.isLoading
@@ -29,15 +43,35 @@ function useMigrateLiquidityLogic(protocol: number, chainId: number, poolId: str
 
   const { data: oldPoolData } = useFetchPool(chainId, poolId, userAddress)
   const { data: newPoolData } = useFetchPool(migration?.new.chainId, migration?.new.id, userAddress)
+  const oldPool = oldPoolData?.pool as Pool | undefined
+  const newPool = newPoolData?.pool as Pool | undefined
+
+  const removeLiquidityReceipt = useRemoveLiquidityReceipt({
+    chain: oldPool?.chain || GqlChain.Mainnet,
+    txHash: removeLiquidityTxHash,
+    userAddress,
+    protocolVersion: oldPool?.protocolVersion as ProtocolVersion,
+    txReceipt: removeLiquidityTx?.result,
+  })
+  const amounts =
+    removeLiquidityReceipt.receivedTokens.length > 0
+      ? removeLiquidityReceipt.receivedTokens
+      : amountsOut
 
   useEffect(() => {
-    setHumanAmountsIn(amountsOut)
-  }, [amountsOut])
+    if (hasDifferentAmounts(humanAmountsIn, toAmountWithAddress(amounts))) {
+      setHumanAmountsIn(toAmountWithAddress(amounts))
+    }
+  }, [amounts])
+
+  const hasQuoteContext = removeLiquidityHasQuoteContext || addLiquidityHasQuoteContext
 
   return {
-    oldPool: oldPoolData?.pool as Pool | undefined,
-    newPool: newPoolData?.pool as Pool | undefined,
+    oldPool,
+    newPool,
     migrationSteps,
+    amounts,
+    hasQuoteContext,
   }
 }
 
@@ -70,4 +104,21 @@ export function useFetchPool(
     },
     skip: !chainId || !id,
   })
+}
+
+function hasDifferentAmounts(
+  prev: HumanTokenAmountWithAddress[],
+  current: HumanTokenAmountWithAddress[]
+) {
+  return prev.reduce((acc, prevAmount) => {
+    const currentAmount = current.find(amount => amount.tokenAddress === prevAmount.tokenAddress)
+    return acc || !currentAmount || currentAmount.humanAmount !== prevAmount.humanAmount
+  }, false)
+}
+
+function toAmountWithAddress(amounts: HumanTokenAmount[]) {
+  return amounts.map(amount => ({
+    ...amount,
+    symbol: 'Unknown',
+  }))
 }

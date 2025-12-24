@@ -56,6 +56,10 @@ export const mainnetTokenBalances: TokenBalance[] = [
     value: '2000',
     decimals: 6,
   },
+  {
+    tokenAddress: '0x1D13531bf6344c102280CE4c458781FBF14Dad14',
+    value: '1',
+  },
 ]
 
 export const baseTokenBalances: TokenBalance[] = [

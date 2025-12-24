@@ -1,20 +1,19 @@
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
-import { useRemoveLiquidity } from '../actions/remove-liquidity/RemoveLiquidityProvider'
 import { Card, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { Pool } from '../pool.types'
 import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'
 import { useMigrateLiquidity } from './MigrateLiquidityProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
+import { HumanTokenAmount } from '../../tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function MigrateLiquiditySummary() {
   const { isMobile } = useBreakpoints()
-  const { hasQuoteContext, amountsOut } = useRemoveLiquidity()
-  const { oldPool, newPool, migrationSteps } = useMigrateLiquidity()
+
+  const { oldPool, newPool, migrationSteps, amounts, hasQuoteContext } = useMigrateLiquidity()
 
   return (
     <AnimateHeightChange spacing="sm">
@@ -25,7 +24,7 @@ export function MigrateLiquiditySummary() {
         />
       )}
 
-      <AmountInfo amounts={amountsOut} pool={oldPool} title="You're migrating" />
+      <AmountInfo amounts={amounts} pool={oldPool} title="You're migrating" />
       <PoolCard pool={oldPool} title="From Balancer v2" />
       <PoolCard pool={newPool} title="To Balancer v3" />
     </AnimateHeightChange>
@@ -35,7 +34,7 @@ export function MigrateLiquiditySummary() {
 type AmountInfoProps = {
   title: string
   pool: Pool | undefined
-  amounts: HumanTokenAmountWithAddress[]
+  amounts: HumanTokenAmount[]
 }
 
 function AmountInfo({ title, pool, amounts }: AmountInfoProps) {

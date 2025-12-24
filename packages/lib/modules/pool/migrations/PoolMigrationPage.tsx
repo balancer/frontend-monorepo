@@ -58,7 +58,7 @@ export function PoolMigrationPage({ id, chain, variant }: PoolPathProps) {
           <PermitSignatureProvider>
             <PoolActionsLayout closeButton={false}>
               <PriceImpactProvider>
-                <RemoveLiquidityProvider>
+                <RemoveLiquidityProvider mute={true}>
                   <TokenInputsValidationProvider>
                     <Permit2SignatureProvider>
                       <PoolProvider chain={gqlChain} data={newPool} id={migration.new.id}>

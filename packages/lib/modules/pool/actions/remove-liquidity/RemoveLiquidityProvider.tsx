@@ -29,7 +29,7 @@ import { useWrapUnderlying } from '../useWrapUnderlying'
 export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
 
-export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
+export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
   const [wethIsEth, setWethIsEth] = useState(false)
@@ -152,7 +152,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
     wethIsEth,
     singleTokenOutAddress,
   })
-  const transactionSteps = useTransactionSteps(steps)
+  const transactionSteps = useTransactionSteps(steps, false, mute)
 
   const removeLiquidityTxHash =
     urlTxHash || transactionSteps.lastTransaction?.result?.data?.transactionHash
@@ -281,10 +281,10 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   }
 }
 
-type Props = PropsWithChildren<{ urlTxHash?: Hash }>
+type Props = PropsWithChildren<{ urlTxHash?: Hash; mute?: boolean }>
 
-export function RemoveLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = useRemoveLiquidityLogic(urlTxHash)
+export function RemoveLiquidityProvider({ urlTxHash, mute, children }: Props) {
+  const hook = useRemoveLiquidityLogic(urlTxHash, mute)
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 
