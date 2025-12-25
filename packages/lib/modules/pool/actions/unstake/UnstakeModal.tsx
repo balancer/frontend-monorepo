@@ -15,6 +15,9 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { usePoolRedirect } from '../../pool.hooks'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
+import { getChainId, isProd } from '@repo/lib/config/app.config'
+import { usePoolMigrations } from '../../migrations/PoolMigrationsProvider'
+import { MigrationAlert } from './MigrationAlert'
 
 type Props = {
   isOpen: boolean
@@ -35,6 +38,7 @@ export function UnstakeModal({
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { redirectToPoolPage } = usePoolRedirect(pool)
+  const { needsMigration } = usePoolMigrations()
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
 
@@ -67,6 +71,10 @@ export function UnstakeModal({
               <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
             )}
             <UnstakePreview />
+
+            {!isProd &&
+              needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) &&
+              isSuccess && <MigrationAlert pool={pool} />}
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
