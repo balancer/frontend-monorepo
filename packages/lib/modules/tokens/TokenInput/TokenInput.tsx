@@ -185,6 +185,11 @@ function TokenInputFooter({
             getPriceImpactLabel(priceImpactProps?.priceImpact)}
         </Text>
       )}
+      {!isBalancesLoading && isMounted && hasError && (
+        <Text color="font.error" fontSize="sm">
+          {getValidationError(token)}
+        </Text>
+      )}
       {isBalancesLoading || !isMounted ? (
         <Skeleton h="full" w="12" />
       ) : (
@@ -196,11 +201,6 @@ function TokenInputFooter({
           onClick={handleBalanceClick}
           title="Use wallet balance"
         >
-          {hasError && (
-            <Text color="inherit" fontSize="sm">
-              {getValidationError(token)}
-            </Text>
-          )}
           <Text
             color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
             fontSize="sm"

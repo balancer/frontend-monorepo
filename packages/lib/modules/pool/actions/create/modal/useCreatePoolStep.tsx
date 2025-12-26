@@ -5,7 +5,7 @@ import {
 import { useState } from 'react'
 import { getGqlChain, getChainName } from '@repo/lib/config/app.config'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { CreatePoolInput } from '@balancer/sdk'
+import { CreatePoolInput } from '../types'
 import { useCreatePoolBuildCall } from '@repo/lib/modules/pool/actions/create/useCreatePoolBuildCall'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'

@@ -18,7 +18,6 @@ import { isStablePool, isWeightedPool, isReClammPool, isGyroEllipticPool } from 
 import { formatUnits } from 'viem'
 import { PERCENTAGE_DECIMALS, WeightedPoolStructure } from './constants'
 import { PoolCreationToken } from './types'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { calculatePeakPrice } from './steps/details/gyro.helpers'
 
 const POOL_FUNCTION_NAMES = ['name', 'symbol'] as const
@@ -274,7 +273,7 @@ export function useUninitializedPool() {
     }
 
     return {
-      protocol: PROJECT_CONFIG.projectId,
+      protocol: 'Balancer v3' as const,
       network,
       poolType,
       name: nameResult,

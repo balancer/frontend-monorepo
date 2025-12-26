@@ -3,10 +3,10 @@ import { signPermit2Initialization } from '@repo/lib/modules/tokens/approvals/pe
 import { SignPermit2Fn as SignPermit2Fn } from '@repo/lib/modules/tokens/approvals/permit2/useSignPermit2'
 import { useSignPermit2Step } from '@repo/lib/modules/transactions/transaction-steps/useSignPermit2Step'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { ExtendedInitPoolInputV3 } from '@repo/lib/modules/pool/actions/create/types'
+import { ExtendedInitPoolInput } from '@repo/lib/modules/pool/actions/create/types'
 
 type Params = {
-  initPoolInput: ExtendedInitPoolInputV3
+  initPoolInput: ExtendedInitPoolInput
   isComplete: boolean
 }
 

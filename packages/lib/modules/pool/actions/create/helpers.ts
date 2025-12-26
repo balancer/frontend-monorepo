@@ -2,7 +2,12 @@ import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
-import { WeightedPoolStructure } from './constants'
+import {
+  WeightedPoolStructure,
+  COW_AMM_RAW_WEIGHT_50,
+  COW_AMM_RAW_WEIGHT_80,
+  COW_AMM_RAW_WEIGHT_20,
+} from './constants'
 
 const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.Weighted]: GqlPoolType.Weighted,
@@ -10,6 +15,7 @@ const sdkToGqlPoolType: Partial<Record<PoolType, GqlPoolType>> = {
   [PoolType.StableSurge]: GqlPoolType.Stable,
   [PoolType.GyroE]: GqlPoolType.Gyroe,
   [PoolType.ReClamm]: GqlPoolType.Reclamm,
+  [PoolType.CowAmm]: GqlPoolType.CowAmm,
 }
 
 export function getGqlPoolType(poolType: PoolType): GqlPoolType {
@@ -56,6 +62,13 @@ export function getPercentFromPrice(value: string, price: string) {
   return bn(value).minus(price).div(price).times(100).toFixed(2)
 }
 
+export function getCowRawWeight(weight: string | undefined) {
+  if (weight === '50') return COW_AMM_RAW_WEIGHT_50
+  if (weight === '80') return COW_AMM_RAW_WEIGHT_80
+  if (weight === '20') return COW_AMM_RAW_WEIGHT_20
+  throw new Error(`Invalid weight for cow amm: ${weight}`)
+}
+
 export const formatNumber = (value: string) => {
   let numFormat = '0.000000'
   if (Number(value) > 1000) numFormat = '0,000.00'
@@ -89,4 +102,12 @@ export function isReClammPool(poolType: PoolType): boolean {
 
 export function isGyroEllipticPool(poolType: PoolType): boolean {
   return poolType === PoolType.GyroE
+}
+
+export function isCowPool(poolType: PoolType | undefined): boolean {
+  return poolType === PoolType.CowAmm
+}
+
+export function isCowProtocol(protocol: string): boolean {
+  return protocol === 'CoW'
 }

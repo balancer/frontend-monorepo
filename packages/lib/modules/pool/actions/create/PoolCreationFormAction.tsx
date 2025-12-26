@@ -8,7 +8,7 @@ import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
 import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
-import { isReClammPool } from './helpers'
+import { isReClammPool, isCowPool } from './helpers'
 import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
@@ -55,7 +55,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             />
           )}
 
-          {poolAddress && (
+          {poolAddress && !isCowPool(poolType) && (
             <Button
               onClick={() => copyToClipboard(initializeUrl)}
               size="lg"
