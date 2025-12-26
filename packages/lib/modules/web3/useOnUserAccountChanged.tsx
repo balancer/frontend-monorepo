@@ -1,19 +1,33 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useUserAccount } from './UserAccountProvider'
 import { Address } from 'viem'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { emptyAddress } from './contracts/wagmi-helpers'
 
 export function useOnUserAccountChanged(callback: () => void) {
-  const [prevUserAddress, setPrevUserAddress] = useState<Address>()
+  const prevUserAddressRef = useRef<Address | undefined>(undefined)
+  const callbackRef = useRef(callback)
   const { userAddress } = useUserAccount()
   const isMounted = useIsMounted()
 
   useEffect(() => {
-    if (isMounted && prevUserAddress !== emptyAddress) {
-      callback()
+    callbackRef.current = callback
+  }, [callback])
+
+  useEffect(() => {
+    if (!isMounted) {
+      prevUserAddressRef.current = userAddress
+      return
     }
-    setPrevUserAddress(userAddress)
-  }, [userAddress])
+
+    if (
+      prevUserAddressRef.current !== undefined &&
+      prevUserAddressRef.current !== emptyAddress &&
+      prevUserAddressRef.current !== userAddress
+    ) {
+      callbackRef.current()
+    }
+
+    prevUserAddressRef.current = userAddress
+  }, [userAddress, isMounted])
 }

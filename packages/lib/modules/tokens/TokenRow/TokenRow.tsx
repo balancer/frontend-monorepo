@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 import {
   Box,
@@ -17,7 +16,7 @@ import {
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Numberish, bn, fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
@@ -165,10 +164,8 @@ export default function TokenRow({
   customToken,
   customUsdPrice,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken, usdValueForTokenAddress, prices, tokens } = useTokens()
+  const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
-  const [amount, setAmount] = useState<string>('')
-  const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
 
@@ -195,22 +192,21 @@ export default function TokenRow({
     logoURI,
   }
 
-  useEffect(() => {
-    if (value) {
-      if (customUsdPrice) {
-        setUsdValue(bn(customUsdPrice).times(value).toString())
-      } else if ((isBpt || isNestedBpt) && pool) {
-        setUsdValue(usdValueForTokenAddress(address, chain, value))
-      } else if (token) {
-        setUsdValue(usdValueForToken(token, value))
-      } else if (poolToken) {
-        // For not allowed tokens, token is undefined so we fallback to poolToken
-        setUsdValue(usdValueForToken(poolToken, value))
-      }
+  let usdValue: string | undefined
 
-      setAmount(value.toString())
-    }
-  }, [value, prices, tokens])
+  if (!value) {
+    usdValue = undefined
+  } else if (customUsdPrice) {
+    usdValue = bn(customUsdPrice).times(value).toString()
+  } else if ((isBpt || isNestedBpt) && pool) {
+    usdValue = usdValueForTokenAddress(address, chain, value)
+  } else if (token) {
+    usdValue = usdValueForToken(token, value)
+  } else if (poolToken) {
+    usdValue = usdValueForToken(poolToken, value)
+  } else {
+    usdValue = undefined
+  }
 
   const headingProps = {
     as: 'h6' as const,
@@ -247,7 +243,7 @@ export default function TokenRow({
             ) : (
               <>
                 <Heading {...headingProps} title={value.toString()}>
-                  {formatFalsyValueAsDash(amount, val => fNum('token', val), {
+                  {formatFalsyValueAsDash(value, val => fNum('token', val), {
                     showZeroAmountAsDash,
                   })}
                 </Heading>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { Button, VStack } from '@chakra-ui/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
@@ -8,7 +7,7 @@ import { ensureError } from '@repo/lib/shared/utils/errors'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import SafeAppsSDK, { GatewayTransactionDetails } from '@safe-global/safe-apps-sdk'
 import { noop } from 'lodash'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useInterval } from 'usehooks-ts'
 import { Address, Hex } from 'viem'
 import { useWaitForTransactionReceipt } from 'wagmi'
@@ -47,7 +46,7 @@ export function TransactionBatchButton({
   const [txHash, setTxHash] = useState<Hex | undefined>()
   const [isLoading, setIsLoading] = useState(false)
   const [sendCallsError, setSendCallsError] = useState<Error>()
-  const [receiptReceived, setReceiptReceived] = useState<boolean>(false)
+  const receiptReceivedRef = useRef(false)
 
   /*
     More info about GatewayTransactionDetails:
@@ -68,10 +67,15 @@ export function TransactionBatchButton({
     },
   })
 
+  // needed because a re-render will not reset a ref
+  useEffect(() => {
+    receiptReceivedRef.current = false
+  }, [chainId, txHash])
+
   useEffect(() => {
     if (!chainId) return
     if (!transactionStatusQuery.isSuccess) return
-    if (receiptReceived) return
+    if (receiptReceivedRef.current) return
 
     const successFullTransaction: ManagedResult = {
       chainId,
@@ -86,9 +90,9 @@ export function TransactionBatchButton({
       executeAsync: noop,
       isSafeTxLoading: false,
     }
+    receiptReceivedRef.current = true
     onTransactionChange(successFullTransaction)
-    setReceiptReceived(true)
-  }, [transactionStatusQuery])
+  }, [chainId, onTransactionChange, transactionStatusQuery])
 
   const txBatch = buildTxBatch(currentStep)
 
