@@ -60,19 +60,25 @@ pnpm test:integration
 
 To run e2e tests with playwright UI:
 
-1. Start a local anvil fork:
+1. Copy the root `.env.template` file to `.env.local`
+
+```
+cp .env.template .env.local
+```
+
+2. Start a local anvil fork:
 
 ```
 make fork-ethereum
 ```
 
-2. Start the local development server in fork mode:
+3. Start the local development server in fork mode:
 
 ```
 pnpm dev:bal:fork
 ```
 
-3. Start the playwright UI for Balancer:
+4. Start the playwright UI for Balancer:
 
 ```
 pnpm test:e2e:dev:ui:bal
