@@ -6,8 +6,8 @@ import { usePoolOrderByState } from './usePoolOrderByState'
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { ReactNode, useMemo } from 'react'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from './PoolListProvider'
+import { useIsMounted } from 'usehooks-ts'
 
 interface SortOption extends OptionBase {
   label: ReactNode
@@ -47,7 +47,7 @@ export function PoolListSortType() {
     option => option.value[0].id === sorting[0].id && option.value[0].desc === sorting[0].desc
   )
 
-  if (!isMounted) return null
+  if (!isMounted()) return null
 
   return (
     <Box w="48">

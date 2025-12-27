@@ -9,10 +9,10 @@ import { Address, isAddress } from 'viem'
 import { setTag, setUser } from '@sentry/nextjs'
 import { config, isProd, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useSafeAppConnectionGuard } from './useSafeAppConnectionGuard'
 import { useWCConnectionLocalStorage } from './wallet-connect/useWCConnectionLocalStorage'
 import { clearImpersonatedAddressLS } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { useIsMounted } from 'usehooks-ts'
 
 async function isAuthorizedAddress(address: Address): Promise<boolean> {
   try {
@@ -85,14 +85,14 @@ export function useUserAccountLogic() {
   // than the state on the client side rehydration.
   const result = {
     ...queryWithoutAddress,
-    isLoading: !isMounted || query.isConnecting || checkingAuth,
-    isConnecting: !isMounted || query.isConnecting || checkingAuth,
+    isLoading: !isMounted() || query.isConnecting || checkingAuth,
+    isConnecting: !isMounted() || query.isConnecting || checkingAuth,
     // We use an emptyAddress when the user is not connected to avoid undefined value and satisfy the TS compiler
-    userAddress: isMounted ? query.address || emptyAddress : emptyAddress,
-    isConnected: isMounted && !!query.address && !checkingAuth,
-    connector: isMounted ? query.connector : undefined,
+    userAddress: isMounted() ? query.address || emptyAddress : emptyAddress,
+    isConnected: isMounted() && !!query.address && !checkingAuth,
+    connector: isMounted() ? query.connector : undefined,
     isBlocked,
-    isWCConnector: isMounted ? query.connector?.id === 'walletConnect' : false,
+    isWCConnector: isMounted() ? query.connector?.id === 'walletConnect' : false,
   }
 
   useSafeAppConnectionGuard(result.connector, result.chainId)

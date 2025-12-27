@@ -4,9 +4,8 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { SupportedCurrency } from '@repo/lib/shared/utils/currencies'
 import { PropsWithChildren, createContext } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useLocalStorage } from 'usehooks-ts'
+import { useIsMounted, useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '../../local-storage/local-storage.constants'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 
 export type YesNo = 'yes' | 'no'
 
@@ -41,7 +40,7 @@ export function useUserSettingsLogic({
     LS_KEYS.UserSettings.Currency,
     initCurrency
   )
-  const currency = isMounted ? _currency : initCurrency
+  const currency = isMounted() ? _currency : initCurrency
 
   const [_slippage, setSlippage] = useLocalStorage<string>(
     LS_KEYS.UserSettings.Slippage,
@@ -52,16 +51,16 @@ export function useUserSettingsLogic({
     LS_KEYS.UserSettings.EnableSignatures,
     initEnableSignatures
   )
-  const enableSignatures = isMounted ? _enableSignatures : initEnableSignatures
+  const enableSignatures = isMounted() ? _enableSignatures : initEnableSignatures
   const shouldUseSignatures = enableSignatures === 'yes'
 
   const [_allowSounds, setAllowSounds] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.AllowSounds,
     initAllowSounds
   )
-  const allowSounds = isMounted ? _allowSounds : initAllowSounds
+  const allowSounds = isMounted() ? _allowSounds : initAllowSounds
 
-  const slippage = isMounted ? _slippage : initSlippage
+  const slippage = isMounted() ? _slippage : initSlippage
   const slippageDecimal = bn(slippage).div(100).toString()
   const slippageBps = bn(slippage).times(100).toString()
 
@@ -69,13 +68,13 @@ export function useUserSettingsLogic({
     LS_KEYS.UserSettings.AcceptedPolicies,
     initAcceptedPolicies
   )
-  const acceptedPolicies = isMounted ? _acceptedPolicies : initAcceptedPolicies
+  const acceptedPolicies = isMounted() ? _acceptedPolicies : initAcceptedPolicies
 
   const [_enableTxBundling, setEnableTxBundling] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.EnableTxBundling,
     initEnableTxBundling
   )
-  const enableTxBundling = isMounted ? _enableTxBundling : initEnableTxBundling
+  const enableTxBundling = isMounted() ? _enableTxBundling : initEnableTxBundling
   const shouldUseTxBundling = enableTxBundling === 'yes'
 
   return {

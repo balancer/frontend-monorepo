@@ -30,7 +30,6 @@ import { SwapRate } from './SwapRate'
 import { SwapDetails } from './SwapDetails'
 import { capitalize } from 'lodash'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
@@ -50,6 +49,7 @@ import { useIsSafeAccount } from '../web3/safe.hooks'
 import { buildCowSwapUrl } from '../cow/cow.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { useIsMounted } from 'usehooks-ts'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -107,7 +107,7 @@ export function SwapForm({
   const { priceImpact, priceImpactColor, priceImpactLevel } = usePriceImpact()
 
   const isLoadingSwaps = simulationQuery.isLoading
-  const isLoading = isLoadingSwaps || !isMounted
+  const isLoading = isLoadingSwaps || !isMounted()
   const loadingText = isLoading ? 'Fetching swap...' : undefined
 
   function copyDeepLink() {
@@ -348,7 +348,7 @@ export function SwapForm({
             {isConnected ? (
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
-                  isDisabled={isDisabled || !isMounted}
+                  isDisabled={isDisabled || !isMounted()}
                   isLoading={isLoading}
                   loadingText={loadingText}
                   onClick={() => !isDisabled && previewModalDisclosure.onOpen()}

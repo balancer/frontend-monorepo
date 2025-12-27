@@ -16,7 +16,6 @@ import {
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useRef, useState } from 'react'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -43,6 +42,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { YouWillReceive } from '@/lib/components/shared/YouWillReceive'
 import { StatRow } from '@/lib/components/shared/StatRow'
+import { useIsMounted } from 'usehooks-ts'
 
 const CHAIN = GqlChain.Sonic
 
@@ -98,7 +98,7 @@ function LstForm() {
     tabs,
   } = useLst()
 
-  const isLoading = !isMounted || isBalancesLoading
+  const isLoading = !isMounted() || isBalancesLoading
 
   const loadingText = isLoading ? 'Loading...' : undefined
 

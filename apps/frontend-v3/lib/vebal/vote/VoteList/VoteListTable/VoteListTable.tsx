@@ -5,10 +5,10 @@ import { VoteListTableHeader } from './VoteListTableHeader'
 import { VoteListTableRow } from './VoteListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { Card, Skeleton } from '@chakra-ui/react'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useVoteList } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
 import { useMemo } from 'react'
+import { useIsMounted } from 'usehooks-ts'
 
 interface Props {
   voteList: VotingPoolWithData[]
@@ -44,7 +44,7 @@ export function VoteListTable({ voteList, count, loading }: Props) {
     }
   }, [])
 
-  if (!isMounted) return <Skeleton height="500px" w="full" />
+  if (!isMounted()) return <Skeleton height="500px" w="full" />
 
   return (
     <Card

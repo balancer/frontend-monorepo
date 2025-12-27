@@ -136,6 +136,9 @@ importers:
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
+      usehooks-ts:
+        specifier: 3.1.1
+        version: 3.1.1(react@19.2.3)
       viem:
         specifier: 2.39.3
         version: 2.39.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.24.4)

@@ -17,7 +17,6 @@ import {
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useEffect, useRef, useState } from 'react'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -43,6 +42,7 @@ import { LoopsWithdraw } from './components/LoopsWithdraw'
 import { LoopsWithdrawModal } from './modals/LoopsWithdrawModal'
 import { useLoopsGetFlyQuote } from './hooks/useLoopsGetFlyQuote'
 import { formatUnits } from 'viem'
+import { useIsMounted } from 'usehooks-ts'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -95,7 +95,7 @@ function LoopsForm() {
 
   const { wethAmountOut, isLoading: isLoadingFlyQuote } = useLoopsGetFlyQuote(amountShares, chain)
 
-  const isLoading = !isMounted || isBalancesLoading || isLoadingFlyQuote
+  const isLoading = !isMounted() || isBalancesLoading || isLoadingFlyQuote
   const loadingText = isLoading ? 'Loading...' : undefined
 
   const tabs: ButtonGroupOption[] = [
