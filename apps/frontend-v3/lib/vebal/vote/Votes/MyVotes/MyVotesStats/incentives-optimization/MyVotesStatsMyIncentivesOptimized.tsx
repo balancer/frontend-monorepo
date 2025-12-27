@@ -133,7 +133,9 @@ export function MyVotesStatsMyIncentivesOptimized() {
 
   const allVotesTimelocked = areAllVotesTimelocked(myVotes)
   const votesAlreadyOptimized = totalInfo.totalRewardValue.toNumber() === optimizedRewardValue
-  const disabledButton = !canReceiveIncentives(userAddress) || votesAlreadyOptimized
+
+  const disabledButton = true // TODO: enable again during migration to Stake DAO?
+  // const disabledButton = !canReceiveIncentives(userAddress) || votesAlreadyOptimized
 
   let tooltipLabelText: string
   if (allVotesTimelocked) {
