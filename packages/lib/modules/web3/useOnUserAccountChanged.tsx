@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useUserAccount } from './UserAccountProvider'
 import { Address } from 'viem'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { emptyAddress } from './contracts/wagmi-helpers'
+import { useIsMounted } from 'usehooks-ts'
 
 export function useOnUserAccountChanged(callback: () => void) {
   const prevUserAddressRef = useRef<Address | undefined>(undefined)
@@ -15,7 +15,7 @@ export function useOnUserAccountChanged(callback: () => void) {
   }, [callback])
 
   useEffect(() => {
-    if (!isMounted) {
+    if (!isMounted()) {
       prevUserAddressRef.current = userAddress
       return
     }
@@ -29,5 +29,5 @@ export function useOnUserAccountChanged(callback: () => void) {
     }
 
     prevUserAddressRef.current = userAddress
-  }, [userAddress, isMounted])
+  }, [userAddress, isMounted()])
 }

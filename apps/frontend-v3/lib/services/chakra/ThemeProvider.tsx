@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 import { theme as balTheme } from './themes/bal/bal.theme'
 import { theme as cowTheme } from './themes/cow/cow.theme'
 import { useCow } from '@repo/lib/modules/cow/useCow'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { useIsMounted } from 'usehooks-ts'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const { isCowPath, isCowVariant } = useCow()
@@ -14,7 +14,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const theme = isCowPath || isCowVariant ? cowTheme : balTheme
 
   // Avoid hydration error in turbopack mode
-  if (!isMounted) return null
+  if (!isMounted()) return null
 
   return (
     <ChakraProvider

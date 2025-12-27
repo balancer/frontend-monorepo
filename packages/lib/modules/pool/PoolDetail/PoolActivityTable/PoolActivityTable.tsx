@@ -5,9 +5,9 @@ import { PoolActivityTableHeader } from './PoolActivityTableHeader'
 import { PoolActivityTableRow } from './PoolActivityTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { Box, Skeleton } from '@chakra-ui/react'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
+import { useIsMounted } from 'usehooks-ts'
 
 export function PoolActivityTable() {
   const isMounted = useIsMounted()
@@ -27,7 +27,7 @@ export function PoolActivityTable() {
     gap: { base: 'xxs', xl: 'lg' },
   }
 
-  if (!isMounted) return <Skeleton height="500px" w="full" />
+  if (!isMounted()) return <Skeleton height="500px" w="full" />
 
   return (
     <>

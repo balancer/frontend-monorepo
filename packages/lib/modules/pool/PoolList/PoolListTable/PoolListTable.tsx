@@ -6,9 +6,9 @@ import { PoolListTableRow } from './PoolListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { PoolListItem } from '../../pool.types'
 import { Card, Skeleton } from '@chakra-ui/react'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from '../PoolListProvider'
 import { useCallback, useMemo } from 'react'
+import { useIsMounted } from 'usehooks-ts'
 
 interface Props {
   pools: PoolListItem[]
@@ -55,7 +55,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
 
   const renderTableHeader = useCallback(() => <PoolListTableHeader {...rowProps} />, [rowProps])
 
-  if (!isMounted) return <Skeleton height="500px" w="full" />
+  if (!isMounted()) return <Skeleton height="500px" w="full" />
 
   return (
     <Card

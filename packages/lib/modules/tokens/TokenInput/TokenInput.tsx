@@ -27,11 +27,11 @@ import { ChevronDown } from 'react-feather'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { PriceImpactLevel } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useEffect } from 'react'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
 import { ApiOrCustomToken } from '../token.types'
 import { useUserAccount } from '../../web3/UserAccountProvider'
+import { useIsMounted } from 'usehooks-ts'
 
 type TokenInputSelectorProps = {
   token: ApiOrCustomToken | undefined
@@ -170,7 +170,7 @@ function TokenInputFooter({
 
   return (
     <HStack h="4" justify="space-between" w="full">
-      {isBalancesLoading || !isMounted ? (
+      {isBalancesLoading || !isMounted() ? (
         <Skeleton h="full" w="12" />
       ) : (
         <Text
@@ -185,12 +185,12 @@ function TokenInputFooter({
             getPriceImpactLabel(priceImpactProps?.priceImpact)}
         </Text>
       )}
-      {!isBalancesLoading && isMounted && hasError && (
+      {!isBalancesLoading && isMounted() && hasError && (
         <Text color="font.error" fontSize="sm">
           {getValidationError(token)}
         </Text>
       )}
-      {isBalancesLoading || !isMounted ? (
+      {isBalancesLoading || !isMounted() ? (
         <Skeleton h="full" w="12" />
       ) : (
         <HStack

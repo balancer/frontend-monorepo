@@ -4,13 +4,13 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { MyVotesTableHeader } from './MyVotesTableHeader'
 import { MyVotesTableRow } from './MyVotesTableRow'
 import { Card, Skeleton } from '@chakra-ui/react'
-import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useMemo } from 'react'
 import { MyVotesTotalRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableTotalRow'
 import { MyVotesSubmitRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableSubmitRow'
 import { useTotalVotes } from '../../../useTotalVotes'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useIsMounted } from 'usehooks-ts'
 
 interface Props {
   myVotes: VotingPoolWithData[]
@@ -92,7 +92,7 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
     }
   }, [totalVotes])
 
-  if (!isMounted) return <Skeleton height="500px" w="full" />
+  if (!isMounted()) return <Skeleton height="500px" w="full" />
 
   return (
     <Card
