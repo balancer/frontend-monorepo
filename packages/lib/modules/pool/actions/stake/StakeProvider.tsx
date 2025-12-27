@@ -12,7 +12,12 @@ import { useStakeSteps } from './useStakeSteps'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
-import { getUserWalletBalance, getUserWalletBalanceUsd } from '../../user-balance.helpers'
+import {
+  getStakedBalance,
+  getUserWalletBalance,
+  getUserWalletBalanceUsd,
+} from '../../user-balance.helpers'
+import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type UseStakeResponse = ReturnType<typeof useStakeLogic>
 export const StakeContext = createContext<UseStakeResponse | null>(null)
@@ -43,6 +48,7 @@ export function useStakeLogic() {
   /**
    * Side-effects
    */
+  const stakedBalance = getStakedBalance(pool, GqlPoolStakingType.Gauge)
   const { quoteAmountIn, quoteAmountInUsd } = useMemo(() => {
     const stakableBalance: HumanAmount = getUserWalletBalance(pool)
     const stakableBalanceUsd: HumanAmount = getUserWalletBalanceUsd(pool).toFixed() as HumanAmount
@@ -61,6 +67,7 @@ export function useStakeLogic() {
     disabledReason,
     quoteAmountIn,
     quoteAmountInUsd,
+    stakedBalance,
     tokenAllowances,
     stakeTxHash,
     isLoading: isLoadingSteps,
