@@ -19,11 +19,12 @@ export function useHiddenHandVotingIncentives(timestamp?: number) {
     queryFn,
     ...onlyExplicitRefetch,
   })
+  console.log({ hiddenHandQuery: { data, isLoading, error } })
 
   return {
-    incentives: data,
-    incentivesError: error,
-    incentivesAreLoading: isLoading,
+    incentives: [] as HiddenHandIncentives[],
+    incentivesError: null,
+    incentivesAreLoading: false,
   }
 }
 

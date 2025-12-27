@@ -2,7 +2,6 @@ import { MotionValue, motion, useMotionValue, useSpring, useTransform } from 'fr
 import { ReactNode, useRef, useState } from 'react'
 import { Box, BoxProps, Flex, Text, useDisclosure, VStack, Stack, Heading } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { HiddenhandIcon } from '@repo/lib/shared/components/icons/logos/HiddenhandIcon'
 import { StakedaoIcon } from '@repo/lib/shared/components/icons/logos/StakedaoIcon'
 import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
 import { PaladinIcon } from '@repo/lib/shared/components/icons/logos/PaladinIcon'
@@ -23,12 +22,6 @@ export function VebalEcosystem() {
 
   const logos = [
     { icon: AuraIcon, name: 'Aura', partner: VebalRedirectPartner.Aura, size: 48 },
-    {
-      icon: HiddenhandIcon,
-      name: 'Hiddenhand',
-      partner: VebalRedirectPartner.HiddenHand,
-      size: 48,
-    },
     { icon: StakedaoIcon, name: 'Stakedao', partner: VebalRedirectPartner.StakeDAO, size: 48 },
     { icon: PaladinIcon, name: 'Paladin', partner: VebalRedirectPartner.Palladin, size: 48 },
   ]

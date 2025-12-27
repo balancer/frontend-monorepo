@@ -18,7 +18,7 @@ export function MyVotesStatsMyIncentives() {
     <MyVotesStatsCard
       headerText={
         <TooltipWithTouch
-          label="The extra incentives you could earn from bribes on Hidden Hand, based on your voting choices. Hidden Hand is an unaffiliated 3rd party vote market. Note: This doesn't include bribes from other vote markets like Paladin and Stake DAO."
+          label="The extra incentives you could earn from bribes on Stake DAO, based on your voting choices. Stake DAO is an unaffiliated 3rd party vote market. Note: This doesn't include bribes from other vote markets like Paladin"
           placement="top"
         >
           <Text
