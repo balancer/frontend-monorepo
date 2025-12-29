@@ -64,7 +64,7 @@
     "lokijs": "^1.5.12"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": "24.x"
   },
   "engineStrict": true
 }
