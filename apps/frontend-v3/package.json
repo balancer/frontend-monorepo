@@ -51,7 +51,7 @@
     "prismjs": "1.30.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-error-boundary": "6.0.0",
+    "react-error-boundary": "6.0.1",
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.7",
     "real-require": "0.1.0",
