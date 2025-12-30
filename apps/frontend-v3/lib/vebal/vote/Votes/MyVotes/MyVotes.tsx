@@ -20,7 +20,7 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { MyVotesStatsMyVebal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyVebal'
 import { MyVotesStatsAverageReward } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsAverageReward'
 import { MyVotesStatsMyIncentives } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentives'
-import { MyVotesStatsMyIncentivesOptimized } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/incentives-optimization/MyVotesStatsMyIncentivesOptimized'
+// import { MyVotesStatsMyIncentivesOptimized } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/incentives-optimization/MyVotesStatsMyIncentivesOptimized'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { MyVotesHintModal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesHintModal'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -144,9 +144,9 @@ export function MyVotes() {
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsAverageReward />
         </GridItem>
-        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+        {/* <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyIncentivesOptimized />
-        </GridItem>
+        </GridItem> */}
 
         {isConnected && (
           <>

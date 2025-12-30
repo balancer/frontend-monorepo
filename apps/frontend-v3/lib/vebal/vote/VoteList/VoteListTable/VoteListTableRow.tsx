@@ -52,7 +52,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
     : 'Connect your wallet to select and vote on pool gauges.'
 
   const missingDataReason =
-    'There is currently no bribe data for this pool as we are transitioning from Hidden Hand to Stake DAO'
+    'Bribe data is temporarily unavailable during the transition from Hidden Hand to Stake DAO'
 
   return (
     <FadeInOnView>
