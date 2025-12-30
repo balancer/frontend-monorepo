@@ -50,6 +50,22 @@ export function MyVotes() {
 
   return (
     <VStack align="start" spacing="md" w="full">
+      <GridItem w="full">
+        <Alert status="info" variant="WideOnDesktop">
+          <AlertIcon />
+          <Stack
+            alignItems="baseline"
+            direction={{ base: 'column', lg: 'row' }}
+            gap={{ base: '0', lg: 'sm' }}
+          >
+            <AlertTitle>Hidden Hand sunset on December 31, 2025</AlertTitle>
+            <AlertDescription>
+              Bribe market data will be available after the migration to StakeDAO is complete
+            </AlertDescription>
+          </Stack>
+        </Alert>
+      </GridItem>
+
       <HStack alignItems="baseline" justifyContent="space-between" w="full">
         <Heading
           as="h2"
