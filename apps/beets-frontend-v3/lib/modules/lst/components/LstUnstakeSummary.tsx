@@ -45,6 +45,7 @@ export function LstUnstakeSummary() {
             description="After initiating the unstake, you will need to return to the UI after 14 days to claim $S on the Withdraw tab"
             forceColumnMode
             title="Please note"
+            wrapText
           />
         }
         status="info"
