@@ -12,7 +12,6 @@ import { useLst } from '../LstProvider'
 import { LstWithdrawSummary } from '../components/LstWithdrawSummary'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useLstWithdrawReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 
 type Props = {
   isOpen: boolean
@@ -36,8 +35,6 @@ export function LstWithdrawModal({
     chain,
     protocolVersion: 2, // TODO: make this optional
   })
-
-  useResetStepIndexOnOpen(isOpen, withdrawTransactionSteps)
 
   function handleOnClose() {
     withdrawTransactionSteps.resetTransactionSteps()

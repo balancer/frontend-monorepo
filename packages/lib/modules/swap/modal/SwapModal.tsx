@@ -12,7 +12,6 @@ import { TransactionModalHeader } from '../../../shared/components/modals/Transa
 import { chainToSlugMap } from '../../pool/pool.utils'
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { useResetStepIndexOnOpen } from '../../pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '../../web3/useOnUserAccountChanged'
 import { SwapSummary } from './SwapSummary'
 import { useSwapReceipt } from '../../transactions/transaction-steps/receipts/receipt.hooks'
@@ -60,8 +59,6 @@ export function SwapPreviewModal({
     protocolVersion,
     txReceipt: lastTransaction?.result,
   })
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   useEffect(() => {
     if (!isWrap && swapTxHash && !window.location.pathname.includes(swapTxHash) && !isLbpSwap) {

@@ -1,8 +1,6 @@
-// TODO: https://github.com/balancer/frontend-monorepo/issues/1957
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { getTransactionState, Retry, TransactionState, TransactionStep } from './lib'
 import { useTxSound } from './useTxSound'
 import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
@@ -18,7 +16,7 @@ export function useTransactionSteps(
   isLoading = false,
   mute = false
 ) {
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0)
+  const currentStepIndex = findCurrentIndex(steps)
   const { isOnSuccessCalled, updateOnSuccessCalled, setOnSuccessCalled } = useTransactionState()
 
   const { playTxSound } = useTxSound()
@@ -27,7 +25,6 @@ export function useTransactionSteps(
 
   const currentTransaction = currentStep?.transaction
 
-  const isCurrentStepComplete = currentStep?.isComplete() || false
   const lastStepIndex = steps?.length ? steps.length - 1 : 0
   const lastStep = steps?.[lastStepIndex]
   const lastTransaction = lastStep?.transaction
@@ -43,7 +40,6 @@ export function useTransactionSteps(
   }
 
   function resetTransactionSteps() {
-    setCurrentStepIndex(0)
     setOnSuccessCalled({})
     steps.forEach(step => {
       if (step.transaction) resetTransaction(step.transaction)
@@ -82,13 +78,6 @@ export function useTransactionSteps(
     }
   }, [currentTransaction?.result.isSuccess, currentStep?.onSuccess])
 
-  // Control step flow here.
-  useEffect(() => {
-    if (isCurrentStepComplete && currentStepIndex < lastStepIndex) {
-      setCurrentStepIndex(currentStepIndex + 1)
-    }
-  }, [isCurrentStepComplete, currentStepIndex])
-
   // On step change, call activation callbacks if they exist
   useEffect(() => {
     // Run deactivation callbacks first
@@ -98,13 +87,6 @@ export function useTransactionSteps(
 
     steps?.[currentStepIndex]?.onActivated?.()
   }, [currentStepIndex, isLoading, steps.length])
-
-  // If steps length changes reset to first step
-  useEffect(() => {
-    if (steps.length && currentStepIndex > 0) {
-      setCurrentStepIndex(0)
-    }
-  }, [steps.length])
 
   // On last transaction success, play success sound.
   // TODO move this to a global tx state management system in later refactor.
@@ -125,7 +107,14 @@ export function useTransactionSteps(
     lastTransactionConfirmingOrConfirmed,
     lastTransactionConfirmed,
     isLastStep,
-    setCurrentStepIndex,
     resetTransactionSteps,
   }
+}
+
+function findCurrentIndex(steps: TransactionStep[]) {
+  if (steps.length === 0) return 0
+  const index = steps.findIndex(step => !step.isComplete())
+  if (index === -1) return steps.length - 1
+
+  return index
 }

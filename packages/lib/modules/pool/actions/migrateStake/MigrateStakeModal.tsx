@@ -13,7 +13,6 @@ import { MigrateStakePreview } from './MigrateStakePreview'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { usePoolRedirect } from '../../pool.hooks'
-import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 
 type Props = {
@@ -35,8 +34,6 @@ export function MigrateStakeModal({
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { redirectToPoolPage } = usePoolRedirect(pool)
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   const isSuccess = !!restakeTxHash
 

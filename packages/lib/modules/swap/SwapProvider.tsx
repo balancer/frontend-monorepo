@@ -633,10 +633,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   useEffect(() => {
     const wrapper = getWrapperForBaseToken(swapState.tokenIn.address, selectedChain)
     if (wrapper) setTokenOut(wrapper.wrappedToken)
-
-    // If the token in address changes we should reset tx step index because
-    // the first approval will be different.
-    transactionSteps.setCurrentStepIndex(0)
   }, [swapState.tokenIn.address])
 
   // Check if tokenOut is a base wrap token and set tokenIn as the wrapped token.

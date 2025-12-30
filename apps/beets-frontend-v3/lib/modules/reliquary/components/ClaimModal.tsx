@@ -17,7 +17,6 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useReliquary } from '../ReliquaryProvider'
 import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
@@ -47,8 +46,6 @@ export function ClaimModal({
 
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   const isSuccess = !!claimRewardsTxHash
 

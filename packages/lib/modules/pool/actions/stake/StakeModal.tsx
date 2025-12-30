@@ -13,7 +13,6 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { usePoolRedirect } from '../../pool.hooks'
-import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 
 type Props = {
@@ -35,8 +34,6 @@ export function StakeModal({
   const { pool } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { isMobile } = useBreakpoints()
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   const isSuccess = !!stakeTxHash
 

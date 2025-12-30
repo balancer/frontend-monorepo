@@ -21,7 +21,6 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useMemo } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { useRouter } from 'next/navigation'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
@@ -43,8 +42,6 @@ export function ClaimModal({
   const { isDesktop, isMobile } = useBreakpoints()
   const { transactionSteps, claimTxHash, allClaimableRewards, totalClaimableUsd, isLoading } =
     useClaim()
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   const rewards = useMemo(
     () =>
