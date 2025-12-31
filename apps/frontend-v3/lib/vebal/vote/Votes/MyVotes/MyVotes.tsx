@@ -58,9 +58,9 @@ export function MyVotes() {
             direction={{ base: 'column', lg: 'row' }}
             gap={{ base: '0', lg: 'sm' }}
           >
-            <AlertTitle>Hidden Hand incentives end on December 31, 2025</AlertTitle>
+            <AlertTitle>Hidden Hand incentives sunset on December 31, 2025</AlertTitle>
             <AlertDescription>
-              Bribe market data will be available once the migration to StakeDAO is complete
+              Bribe market data will be available again after the migration to Stake DAO is complete
             </AlertDescription>
           </Stack>
         </Alert>
