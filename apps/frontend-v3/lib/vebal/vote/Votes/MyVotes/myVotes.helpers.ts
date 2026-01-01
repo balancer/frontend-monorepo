@@ -125,7 +125,7 @@ export const orderByHash: Record<SortingBy, { label: string; title?: string }> =
   bribes: {
     label: 'Bribes',
     title:
-      'Voting incentives (referred to as ‘Bribes’ in DeFi) are provided by unaffiliated 3rd parties through the Hidden Hand platform to incentivize liquidity to certain pools.',
+      'Voting incentives (referred to as ‘Bribes’ in DeFi) are provided by unaffiliated 3rd parties through the Stake DAO platform to incentivize liquidity to certain pools.',
   },
   bribesPerVebal: {
     label: 'Bribes/veBAL',
