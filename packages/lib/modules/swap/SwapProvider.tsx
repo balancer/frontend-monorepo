@@ -1,6 +1,7 @@
 'use client'
 
-import { ApolloClient, useApolloClient, useReactiveVar } from '@apollo/client'
+import { useApolloClient, useReactiveVar } from '@apollo/client/react'
+import { ApolloClient } from '@apollo/client'
 import { HumanAmount } from '@balancer/sdk'
 import { useDisclosure } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
@@ -79,7 +80,7 @@ function selectSwapHandler(
   tokenOutAddress: Address,
   chain: GqlChain,
   swapType: GqlSorSwapType,
-  apolloClient: ApolloClient<object>,
+  apolloClient: ApolloClient,
   tokens: ApiToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {

@@ -11,6 +11,8 @@ export default async function PoolsPageWrapper() {
     variables: {},
   })
 
+  if (!stakedSonicData) return null
+
   return (
     <PoolsPage rewardsClaimed24h={stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h}>
       {/* TODO: add <PromoBanners /> at a later date */}

@@ -25,7 +25,7 @@
     "test:integration:watch": "vitest -c ./vitest.config.integration.ts"
   },
   "dependencies": {
-    "@apollo/client": "3.13.8",
+    "@apollo/client": "4.0.11",
     "@balancer/sdk": "4.10.1",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
