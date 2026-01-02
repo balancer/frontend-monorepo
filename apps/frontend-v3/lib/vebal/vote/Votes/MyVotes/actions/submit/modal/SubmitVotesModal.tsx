@@ -11,7 +11,6 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { SubmitVotesPreview } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/modal/SubmitVotesPreview'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useSubmittingVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmittingVotes'
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 
@@ -32,8 +31,6 @@ export function SubmitVotesModal({
   const initialFocusRef = useRef(null)
   const { transactionSteps, txHash, totalInfo, timeLockedVotes, unchangedVotes } = useMyVotes()
   const { isPoolGaugeExpired } = useVotes()
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   const chain = mainnetNetworkConfig.chain
 

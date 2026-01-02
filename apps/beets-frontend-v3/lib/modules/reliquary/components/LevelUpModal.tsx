@@ -15,7 +15,6 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
@@ -34,8 +33,6 @@ export function LevelUpModal({
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
   const { levelUpTransactionSteps, levelUpTxHash } = useReliquary()
-
-  useResetStepIndexOnOpen(isOpen, levelUpTransactionSteps)
 
   function handleOnClose() {
     levelUpTransactionSteps.resetTransactionSteps()

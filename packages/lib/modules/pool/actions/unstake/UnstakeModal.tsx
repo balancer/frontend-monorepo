@@ -13,7 +13,6 @@ import { UnstakePreview } from './UnstakePreview'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { usePoolRedirect } from '../../pool.hooks'
-import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { getChainId, isProd } from '@repo/lib/config/app.config'
 import { usePoolMigrations } from '../../migrations/PoolMigrationsProvider'
@@ -39,8 +38,6 @@ export function UnstakeModal({
   const { isMobile } = useBreakpoints()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { needsMigration } = usePoolMigrations()
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   const isSuccess = !!unstakeTxHash
 
