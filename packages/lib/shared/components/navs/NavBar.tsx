@@ -321,7 +321,7 @@ export function NavBar({
         <HStack
           animate="show"
           as={motion.div}
-          initial="hidden"
+          initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
           onClick={e => e.stopPropagation()}
           spacing="xl"
           variants={staggeredFadeIn}
@@ -342,7 +342,7 @@ export function NavBar({
         <HStack
           animate="show"
           as={motion.div}
-          initial="hidden"
+          initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
           onClick={e => e.stopPropagation()}
           order={{ md: '2' }}
           variants={staggeredFadeIn}
