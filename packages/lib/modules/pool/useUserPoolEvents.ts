@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { usePoolEvents } from './usePoolEvents'
 import { usePool } from './PoolProvider'
 import { useUserAccount } from '../web3/UserAccountProvider'
@@ -28,15 +28,11 @@ export function useUserPoolEvents() {
     return () => stopPolling()
   }, [])
 
-  const userPoolEvents = userPoolEventsData?.poolEvents
-
-  const hasPoolEvents = useMemo(() => {
-    return userPoolEvents && userPoolEvents.length > 0
-  }, [userPoolEvents])
+  const userPoolEvents = userPoolEventsData?.poolEvents || []
 
   return {
     userPoolEvents,
     isLoadingUserPoolEvents,
-    hasPoolEvents,
+    hasPoolEvents: userPoolEvents.length > 0,
   }
 }
