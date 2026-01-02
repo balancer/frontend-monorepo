@@ -67,9 +67,8 @@ const CREATE_POOL_LINKS = {
     },
     {
       label: 'CoW AMM',
-      href: 'https://pool-creator.balancer.fi/cow',
+      href: '/create',
       icon: <CowIconCircular size={32} />,
-      isExternal: true,
     },
   ],
 }
@@ -164,7 +163,6 @@ function CreateAPool({ closePopover }: { closePopover?: () => void }) {
                 <PoolLink
                   href={link.href}
                   icon={link.icon}
-                  isExternal={link.isExternal}
                   key={link.label}
                   label={link.label}
                   onClick={closePopover}

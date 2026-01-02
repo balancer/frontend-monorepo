@@ -23,13 +23,11 @@ const CREATE_POOL_LINKS = [
     label: 'Balancer',
     href: '/create',
     icon: <BalancerIconCircular size={24} />,
-    isExternal: false,
   },
   {
     label: 'CoW AMM',
-    href: 'https://pool-creator.balancer.fi/cow',
+    href: '/create',
     icon: <CowIconCircular size={24} />,
-    isExternal: true,
   },
 ]
 
@@ -73,9 +71,8 @@ export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
                 {CREATE_POOL_LINKS.map(link => (
                   <Link
                     _hover={{ color: 'font.highlight', textDecoration: 'none' }}
-                    as={link.isExternal ? undefined : NextLink}
+                    as={NextLink}
                     href={link.href}
-                    isExternal={link.isExternal}
                     key={link.label}
                     onClick={onClose}
                     pb="0.5"
@@ -93,11 +90,6 @@ export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
                         gap="xs"
                       >
                         {link.label}
-                        {link.isExternal && (
-                          <Box as="span" color="grayText">
-                            <ArrowUpRight size={12} />
-                          </Box>
-                        )}
                       </Text>
                     </HStack>
                   </Link>
