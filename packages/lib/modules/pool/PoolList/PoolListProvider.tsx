@@ -6,7 +6,7 @@ import {
   GqlChain,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'

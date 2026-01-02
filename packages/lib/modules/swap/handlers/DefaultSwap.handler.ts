@@ -13,7 +13,7 @@ import {
 export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   name = 'DefaultSwapHandler'
 
-  constructor(public apolloClient: ApolloClient<object>) {
+  constructor(public apolloClient: ApolloClient) {
     super()
   }
 
@@ -23,7 +23,6 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
         query: SorGetSwapPathsDocument,
         variables: { ...variables },
         fetchPolicy: 'no-cache',
-        notifyOnNetworkStatusChange: true,
       })
       .catch(e => {
         const error = ensureError(e)
@@ -33,8 +32,8 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
         throw error
       })
 
-    const hopCount: number = data.swaps.routes[0]?.hops?.length || 0
-    const paths = data.swaps.paths.map(
+    const hopCount: number = data?.swaps.routes[0]?.hops?.length || 0
+    const paths = data?.swaps.paths.map(
       path =>
         ({
           ...path,
@@ -44,8 +43,8 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
     )
 
     return this.runSimulation({
-      protocolVersion: data.swaps.protocolVersion as ProtocolVersion,
-      paths,
+      protocolVersion: data?.swaps.protocolVersion as ProtocolVersion,
+      paths: paths || [],
       hopCount,
       swapInputs: variables,
     })

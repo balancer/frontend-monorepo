@@ -1,7 +1,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useEffect } from 'react'
 import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { usePoolMigrations } from './PoolMigrationsProvider'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { useUserAccount } from '../../web3/UserAccountProvider'

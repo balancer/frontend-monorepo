@@ -1,7 +1,7 @@
 'use client'
 
 import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useProtocolRewards } from './PortfolioClaim/useProtocolRewards'
 import { ClaimableReward, useClaimableBalances } from './PortfolioClaim/useClaimableBalances'
@@ -62,7 +62,6 @@ export function usePortfolioLogic() {
         },
       },
       fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true,
       skip: !isConnected || !userAddress,
     }
   )
@@ -76,7 +75,6 @@ export function usePortfolioLogic() {
       },
     },
     fetchPolicy: 'no-cache',
-    notifyOnNetworkStatusChange: true,
     skip: !isConnected || idIn.length === 0,
   })
 
