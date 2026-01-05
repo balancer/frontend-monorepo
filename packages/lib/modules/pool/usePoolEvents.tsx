@@ -5,7 +5,7 @@ import {
   GetPoolEventsQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { FetchPolicy } from '@apollo/client'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 
 type PoolEventList = GetPoolEventsQuery['poolEvents']
 export type PoolEventItem = PoolEventList[0]

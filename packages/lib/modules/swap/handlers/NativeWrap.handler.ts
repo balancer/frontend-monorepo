@@ -15,7 +15,7 @@ import { Hex } from 'viem'
 export class NativeWrapHandler implements SwapHandler {
   name = 'NativeWrapHandler'
 
-  constructor(public apolloClient: ApolloClient<object>) {}
+  constructor(public apolloClient: ApolloClient) {}
 
   async simulate({ ...variables }: SimulateSwapInputs): Promise<SimulateSwapResponse> {
     return {

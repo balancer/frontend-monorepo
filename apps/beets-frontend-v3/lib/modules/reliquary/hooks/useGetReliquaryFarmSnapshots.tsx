@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { GetReliquaryFarmSnapshotsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { useReliquary } from '../ReliquaryProvider'
 
