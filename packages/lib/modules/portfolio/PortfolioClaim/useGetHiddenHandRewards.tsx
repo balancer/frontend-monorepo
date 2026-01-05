@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useUserAccount } from '../../web3/UserAccountProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 const HIDDEN_HAND_API_BASE_URL = 'https://api.hiddenhand.finance/reward/0'
 
@@ -29,6 +30,11 @@ export interface HiddenHandRewardResponse {
   error: boolean
   data: HiddenHandRewardData[]
   totalValueUsd: number
+  aggregatedRewards: {
+    tokenAddress: string
+    claimable: string
+    value: number
+  }[]
 }
 
 export function useGetHiddenHandRewards() {
@@ -51,10 +57,33 @@ export function useGetHiddenHandRewards() {
       const balancerRewards = result.data.filter(reward => reward.protocol === 'balancer')
       const totalValueUsd = balancerRewards.reduce((sum, reward) => sum + reward.value, 0)
 
+      // Aggregate rewards by token address
+      const aggregatedRewards = balancerRewards
+        .filter(reward => bn(reward.claimable).gt(0))
+        .reduce(
+          (acc, reward) => {
+            const tokenAddress = reward.token
+            if (!acc[tokenAddress]) {
+              acc[tokenAddress] = {
+                tokenAddress,
+                claimable: '0',
+                value: 0,
+              }
+            }
+            acc[tokenAddress].claimable = bn(acc[tokenAddress].claimable)
+              .plus(reward.claimable)
+              .toString()
+            acc[tokenAddress].value += reward.value
+            return acc
+          },
+          {} as Record<string, { tokenAddress: string; claimable: string; value: number }>
+        )
+
       return {
         ...result,
         data: balancerRewards,
         totalValueUsd,
+        aggregatedRewards: Object.values(aggregatedRewards).sort((a, b) => b.value - a.value),
       }
     },
     enabled: !!userAddress && isConnected,

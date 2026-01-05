@@ -5,10 +5,10 @@ import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useTransactionSteps } from '../../transactions/transaction-steps/useTransactionSteps'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'
@@ -32,37 +32,14 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
   const transactionSteps = useTransactionSteps([step])
   const claimTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
 
-  const rewards: HumanTokenAmount[] = (() => {
-    if (!hiddenHandRewardsData?.data) return []
-
-    const aggregatedRewards = hiddenHandRewardsData.data
+  const rewards: HumanTokenAmount[] =
+    hiddenHandRewardsData?.aggregatedRewards
       .filter(reward => bn(reward.claimable).gt(0))
-      .reduce(
-        (acc, reward) => {
-          const tokenAddress = reward.token as Address
-          if (!acc[tokenAddress]) {
-            acc[tokenAddress] = {
-              tokenAddress,
-              claimable: '0',
-              value: 0,
-            }
-          }
-          acc[tokenAddress].claimable = bn(acc[tokenAddress].claimable)
-            .plus(reward.claimable)
-            .toString()
-          acc[tokenAddress].value += reward.value
-          return acc
-        },
-        {} as Record<Address, { tokenAddress: Address; claimable: string; value: number }>
-      )
-
-    return Object.values(aggregatedRewards)
       .sort((a, b) => b.value - a.value)
       .map(reward => ({
-        tokenAddress: reward.tokenAddress,
+        tokenAddress: reward.tokenAddress as Address,
         humanAmount: reward.claimable as HumanAmount,
-      }))
-  })()
+      })) || []
 
   const isSuccess = !!claimTxHash
 
