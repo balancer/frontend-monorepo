@@ -18,6 +18,7 @@ import { chainToSlugMap } from '../../../pool/pool.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useState } from 'react'
 import ClaimProtocolRevenueModal from '../ClaimProtocolRevenueModal'
+import ClaimHiddenHandRewardsModal from '../ClaimHiddenHandRewardsModal'
 import { useRouter } from 'next/navigation'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
@@ -67,13 +68,16 @@ export function ClaimNetworkPools() {
     poolsWithOnchainUserBalances,
     isLoadingRewards,
     isLoadingPortfolio,
+    hiddenHandRewardsData,
   } = usePortfolio()
 
   const [isOpenedProtocolRevenueModal, setIsOpenedProtocolRevenueModal] = useState(false)
+  const [isOpenedHiddenHandRewardsModal, setIsOpenedHiddenHandRewardsModal] = useState(false)
   const { isConnected } = useUserAccount()
   const router = useRouter()
 
   const hasProtocolRewards = protocolRewardsBalance && protocolRewardsBalance.isGreaterThan(0)
+  const hasHiddenHandRewards = hiddenHandRewardsData && hiddenHandRewardsData.totalValueUsd > 0
 
   const chainIds = PROJECT_CONFIG.merklRewardsChains.map(chain => getChainId(chain))
   const { hasMerklRewards } = useHasMerklRewards(poolsWithOnchainUserBalances, chainIds)
@@ -220,6 +224,15 @@ export function ClaimNetworkPools() {
                   })
                 }
 
+                if (hasHiddenHandRewards) {
+                  claimableItems.push({
+                    type: 'hidden-hand',
+                    chain: GqlChain.Mainnet,
+                    amount: hiddenHandRewardsData.totalValueUsd,
+                    index: poolsWithChain.length + 1,
+                  })
+                }
+
                 // Sort by amount (highest first)
                 claimableItems.sort((a, b) => b.amount - a.amount)
 
@@ -232,26 +245,48 @@ export function ClaimNetworkPools() {
                 const maxColumns = isBeets ? 2 : 3
 
                 // Render all claimable items
-                const items = claimableItems.map((item, index) => (
-                  <motion.div
-                    animate={{ opacity: 1, scale: 1 }}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    key={`item-${index}`}
-                    style={{ transformOrigin: 'top' }}
-                    transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
-                  >
-                    <ClaimNetworkBlock
-                      chain={item.chain}
-                      networkTotalClaimableFiatBalance={item.amount}
-                      onClick={
-                        item.type === 'protocol'
-                          ? () => setIsOpenedProtocolRevenueModal(true)
-                          : () => router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
-                      }
-                      title={item.type === 'protocol' ? 'Balancer protocol revenue' : undefined}
-                    />
-                  </motion.div>
-                ))
+                const items = claimableItems.map((item, index) => {
+                  const handleClick = () => {
+                    switch (item.type) {
+                      case 'protocol':
+                        setIsOpenedProtocolRevenueModal(true)
+                        break
+                      case 'hidden-hand':
+                        setIsOpenedHiddenHandRewardsModal(true)
+                        break
+                      default:
+                        router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
+                    }
+                  }
+
+                  const getTitle = () => {
+                    switch (item.type) {
+                      case 'protocol':
+                        return 'Balancer protocol revenue'
+                      case 'hidden-hand':
+                        return 'Hidden Hand rewards'
+                      default:
+                        return undefined
+                    }
+                  }
+
+                  return (
+                    <motion.div
+                      animate={{ opacity: 1, scale: 1 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      key={`item-${index}`}
+                      style={{ transformOrigin: 'top' }}
+                      transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
+                    >
+                      <ClaimNetworkBlock
+                        chain={item.chain}
+                        networkTotalClaimableFiatBalance={item.amount}
+                        onClick={handleClick}
+                        title={getTitle()}
+                      />
+                    </motion.div>
+                  )
+                })
 
                 // Add placeholders only if we have fewer items than max columns
                 if (claimableItems.length < maxColumns) {
@@ -287,6 +322,10 @@ export function ClaimNetworkPools() {
             <ClaimProtocolRevenueModal
               isOpen={isOpenedProtocolRevenueModal}
               onClose={() => setIsOpenedProtocolRevenueModal(false)}
+            />
+            <ClaimHiddenHandRewardsModal
+              isOpen={isOpenedHiddenHandRewardsModal}
+              onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
             />
           </>
         )}
