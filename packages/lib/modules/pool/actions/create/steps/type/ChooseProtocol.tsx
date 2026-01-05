@@ -9,9 +9,12 @@ import { type PoolCreationForm } from '../../types'
 import { Control, useWatch } from 'react-hook-form'
 import { isCowProtocol } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
+import { useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 
 export function ChooseProtocol({ control }: { control: Control<PoolCreationForm> }) {
   const { poolCreationForm } = usePoolCreationForm()
+  const searchParams = useSearchParams()
 
   const selectedProtocol = useWatch({ control, name: 'protocol' })
 
@@ -20,6 +23,12 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
 
     poolCreationForm.reset({ ...INITIAL_POOL_CREATION_FORM, protocol, poolType })
   }
+
+  useEffect(() => {
+    const protocol = searchParams.get('protocol')
+    if (protocol === 'cow') handleChooseProtocol('CoW')
+  }, [searchParams])
+
   return (
     <VStack align="start" spacing="md" w="full">
       <Text color="font.primary" fontWeight="bold">

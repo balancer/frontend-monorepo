@@ -67,7 +67,7 @@ const CREATE_POOL_LINKS = {
     },
     {
       label: 'CoW AMM',
-      href: '/create',
+      href: '/create?protocol=cow',
       icon: <CowIconCircular size={32} />,
     },
   ],
