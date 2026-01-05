@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const HIDDEN_HAND_API_BASE_URL = 'https://api.hiddenhand.finance/reward/0'
 
@@ -54,11 +55,14 @@ export function useGetHiddenHandRewards() {
       }
 
       const result: HiddenHandRewardResponse = await response.json()
-      const balancerRewards = result.data.filter(reward => reward.protocol === 'balancer')
-      const totalValueUsd = balancerRewards.reduce((sum, reward) => sum + reward.value, 0)
+
+      const filteredRewards = result.data.filter(
+        reward => reward.protocol === PROJECT_CONFIG.projectName
+      )
+      const totalValueUsd = filteredRewards.reduce((sum, reward) => sum + reward.value, 0)
 
       // Aggregate rewards by token address
-      const aggregatedRewards = balancerRewards
+      const aggregatedRewards = filteredRewards
         .filter(reward => bn(reward.claimable).gt(0))
         .reduce(
           (acc, reward) => {
@@ -81,7 +85,7 @@ export function useGetHiddenHandRewards() {
 
       return {
         ...result,
-        data: balancerRewards,
+        data: filteredRewards,
         totalValueUsd,
         aggregatedRewards: Object.values(aggregatedRewards).sort((a, b) => b.value - a.value),
       }
