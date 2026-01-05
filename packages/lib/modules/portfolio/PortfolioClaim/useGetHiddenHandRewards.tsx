@@ -57,8 +57,9 @@ export function useGetHiddenHandRewards() {
       const result: HiddenHandRewardResponse = await response.json()
 
       const filteredRewards = result.data.filter(
-        reward => reward.protocol === PROJECT_CONFIG.projectName
+        reward => reward.protocol === PROJECT_CONFIG.projectId
       )
+
       const totalValueUsd = filteredRewards.reduce((sum, reward) => sum + reward.value, 0)
 
       // Aggregate rewards by token address
