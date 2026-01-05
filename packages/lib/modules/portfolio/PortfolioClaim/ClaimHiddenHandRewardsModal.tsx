@@ -2,7 +2,6 @@
 
 import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -18,6 +17,7 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useClaimHiddenHandRewardsStep } from '../../pool/actions/claim/useClaimHiddenHandRewardsStep'
 import { HumanAmount } from '@balancer/sdk'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   isOpen: boolean
@@ -31,6 +31,8 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
   const step = useClaimHiddenHandRewardsStep({ onSuccess: refetchHiddenHandRewards })
   const transactionSteps = useTransactionSteps([step])
   const claimTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
+
+  const chain = PROJECT_CONFIG.defaultNetwork
 
   const rewards: HumanTokenAmount[] =
     hiddenHandRewardsData?.aggregatedRewards
@@ -48,25 +50,21 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
       <SuccessOverlay startAnimation={!!claimTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && (
-          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-        )}
+        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
         <TransactionModalHeader
-          chain={GqlChain.Mainnet}
+          chain={chain}
           label="Claim Hidden Hand rewards"
           txHash={claimTxHash}
         />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm" w="full">
-            {isMobile && (
-              <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-            )}
+            {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
 
             <Card variant="modalSubSection">
               <TokenRowGroup
                 amounts={rewards}
-                chain={GqlChain.Mainnet}
+                chain={chain}
                 label="You'll get"
                 totalUSDValue={hiddenHandRewardsData?.totalValueUsd?.toString() || '0'}
               />

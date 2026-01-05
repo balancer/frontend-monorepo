@@ -10,6 +10,8 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useMemo, useState } from 'react'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getChainId } from '@repo/lib/config/app.config'
 
 const labels: TransactionLabels = {
   init: 'Claim',
@@ -54,7 +56,7 @@ export function useClaimHiddenHandRewardsStep({
 
   const props: ManagedTransactionInput = {
     labels,
-    chainId: 1, // only on mainnet
+    chainId: getChainId(PROJECT_CONFIG.defaultNetwork),
     contractAddress: '0xa9b08B4CeEC1EF29EdEC7F9C94583270337D6416',
     contractId: 'balancer.rewardDistributor',
     functionName: 'claim',
