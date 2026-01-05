@@ -33,9 +33,14 @@ export function useTokenInputsValidationLogic() {
 
   const hasValidationErrors = Object.values(validationErrors).some(error => error !== '')
 
+  function removeValidationErrors(tokenAddress: Address, errors: string[]) {
+    if (errors.includes(validationErrors[tokenAddress])) setValidationError(tokenAddress, '')
+  }
+
   return {
     setValidationError,
     getValidationError,
+    removeValidationErrors,
     hasValidationError,
     hasValidationErrors,
     resetValidationErrors,
