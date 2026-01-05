@@ -15,7 +15,6 @@ import { ToggleHyperBlockSize } from './ToggleHyperBlockSize'
 import { useHyperEvm } from '@repo/lib/modules/chains/hyperevm/useHyperEvm'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainId } from '@repo/lib/config/app.config'
-import { usePoolCreationTransactions } from './usePoolCreationTransactions'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { getGqlPoolType } from '../helpers'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
@@ -24,6 +23,7 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useInitializePoolInput } from './useInitializePoolInput'
 import { RestartPoolCreationModal } from './RestartPoolCreationModal'
 import { useWatch } from 'react-hook-form'
+import { usePoolCreationTransactions } from './usePoolCreationTransactions'
 
 type PoolCreationModalProps = {
   isOpen: boolean
@@ -47,6 +47,7 @@ export function PoolCreationModal({
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
+  const protocolVersion = createPoolInput.protocolVersion
   const initPoolInput = useInitializePoolInput(chainId)
 
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
@@ -56,7 +57,7 @@ export function PoolCreationModal({
     initPoolInput,
   })
 
-  const { isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+  const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress, poolType })
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()
@@ -68,7 +69,7 @@ export function PoolCreationModal({
     id: poolAddress as Address,
     chain: network,
     type: getGqlPoolType(poolType),
-    protocolVersion: 3 as const,
+    protocolVersion,
   })
 
   const initialFocusRef = useRef(null)

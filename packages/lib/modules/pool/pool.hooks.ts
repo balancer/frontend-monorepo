@@ -6,8 +6,8 @@ import { isCowAmmPool } from './pool.helpers'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-export function usePoolRedirect(pool: Pool) {
-  const path = getPoolPath(pool)
+export function usePoolRedirect(pool: Pool | undefined) {
+  const path = pool ? getPoolPath(pool) : '/'
 
   const { redirectToPage: redirectToPoolPage } = useRedirect(path)
 

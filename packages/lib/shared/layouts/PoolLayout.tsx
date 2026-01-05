@@ -3,14 +3,13 @@ import { ChainSlug, getChainSlug, getPoolTypeLabel } from '@repo/lib/modules/poo
 import { PropsWithChildren, Suspense } from 'react'
 import { PoolDetailSkeleton } from '@repo/lib/modules/pool/PoolDetail/PoolDetailSkeleton'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-import { GetPoolDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { Metadata } from 'next'
 import { PoolProvider } from '@repo/lib/modules/pool/PoolProvider'
 import { arrayToSentence } from '@repo/lib/shared/utils/strings'
-import { ensureError } from '@repo/lib/shared/utils/errors'
 import { notFound } from 'next/navigation'
 import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getPoolQuery } from '@repo/lib/modules/pool/queries/fetchPool'
 
 type PoolLayoutProps = PropsWithChildren<{
   chain: ChainSlug
@@ -18,36 +17,17 @@ type PoolLayoutProps = PropsWithChildren<{
   variant?: PoolVariant
 }>
 
-async function getPoolQuery(chain: ChainSlug, id: string) {
-  const _chain = getChainSlug(chain)
-  const variables = { id: id.toLowerCase(), chain: _chain }
-
-  try {
-    const result = await getApolloServerClient().query({
-      query: GetPoolDocument,
-      variables,
-      context: {
-        fetchOptions: {
-          next: { revalidate: 30 },
-        },
-      },
-    })
-    return { data: result.data, error: null }
-  } catch (error: unknown) {
-    return { data: null, error: ensureError(error) }
-  }
-}
-
 export type PoolMetadata = {
   metadata: Metadata
   pool?: Pool
 }
+
 export async function generatePoolMetadata({
   id,
   chain,
   variant,
 }: PoolLayoutProps): Promise<PoolMetadata> {
-  const { data } = await getPoolQuery(chain, id)
+  const { data } = await getPoolQuery(getApolloServerClient(), chain, id)
 
   const pool = data?.pool
   if (!pool) return { metadata: {} }
@@ -70,7 +50,7 @@ export async function generatePoolMetadata({
 export async function PoolLayout({ id, chain, variant, children }: PoolLayoutProps) {
   const _chain = getChainSlug(chain)
 
-  const { data, error } = await getPoolQuery(chain, id)
+  const { data, error } = await getPoolQuery(getApolloServerClient(), chain, id)
 
   if (error) {
     if (error?.message === 'Pool with id does not exist') {

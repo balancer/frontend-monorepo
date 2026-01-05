@@ -52,6 +52,16 @@ export default async function Home() {
     variables: {},
   })
 
+  if (
+    protocolData === undefined ||
+    stakedSonicData === undefined ||
+    protocolDataSonic === undefined ||
+    protocolDataOptimism === undefined ||
+    protocolDataFantom === undefined
+  ) {
+    return null
+  }
+
   return (
     <LandingPageLayout
       protocolData={protocolData}

@@ -2,13 +2,11 @@ import { VStack, Heading, HStack, Text, CardBody, Box } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getChainName } from '@repo/lib/config/app.config'
-import { capitalize } from 'lodash'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
-import { isWeightedPool, isCustomWeightedPool } from '../helpers'
+import { isWeightedPool, isCustomWeightedPool, isCowPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
-import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function PreviewPoolType() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -23,11 +21,12 @@ export function PreviewPoolType() {
   const tokenWeights = isWeightedPool(poolType)
     ? selectedPoolTokens.map(token => Number(token.weight))
     : undefined
+  const showWeightStructure = isWeightedPool(poolType) || isCowPool(poolType)
 
   const cardInformationRows = [
     {
       label: 'Protocol',
-      value: isBalancer ? 'Balancer v3' : capitalize(protocol),
+      value: protocol,
     },
     {
       label: 'Network',
@@ -37,8 +36,8 @@ export function PreviewPoolType() {
       label: 'Pool type',
       value:
         POOL_TYPES[poolType].label +
-        (isWeightedPool(poolType)
-          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : '2-token '}${weightedPoolStructure}`
+        (showWeightStructure
+          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : `${!isCowPool(poolType) ? '2-token ' : ''}${weightedPoolStructure}`}`
           : ''),
     },
   ]

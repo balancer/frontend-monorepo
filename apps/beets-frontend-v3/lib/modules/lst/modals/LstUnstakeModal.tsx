@@ -8,7 +8,6 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLst } from '../LstProvider'
@@ -31,8 +30,6 @@ export function LstUnstakeModal({
   const initialFocusRef = useRef(null)
   const { stopTokenPricePolling } = useTokens()
   const { unstakeTransactionSteps, chain, lstUnstakeTxHash, setUnstakeEnabled } = useLst()
-
-  useResetStepIndexOnOpen(isOpen, unstakeTransactionSteps)
 
   useEffect(() => {
     if (isOpen) {

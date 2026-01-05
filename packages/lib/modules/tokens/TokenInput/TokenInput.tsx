@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import {
@@ -27,7 +26,7 @@ import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { ChevronDown } from 'react-feather'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { PriceImpactLevel } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
@@ -53,16 +52,14 @@ export function TokenInputSelector({
   onToggleTokenClicked,
   showWeight = true,
 }: TokenInputSelectorProps) {
-  const [tokenConfig, setTokenConfig] = useState<TokenSelectorConfigProps | undefined>(undefined)
   const DEFAULT_TOKEN_LABEL = 'Select token'
 
-  useEffect(() => {
-    if (token) {
-      setTokenConfig({ label: token.symbol, variant: 'tertiary', showIcon: true })
-    } else if (onToggleTokenClicked) {
-      setTokenConfig({ label: DEFAULT_TOKEN_LABEL, variant: 'secondary', showIcon: false })
-    }
-  }, [token])
+  const tokenConfig: TokenSelectorConfigProps | undefined = token
+    ? { label: token.symbol, variant: 'tertiary', showIcon: true }
+    : onToggleTokenClicked
+      ? { label: DEFAULT_TOKEN_LABEL, variant: 'secondary', showIcon: false }
+      : undefined
+
   const tokenSymbolColor = tokenConfig?.label === DEFAULT_TOKEN_LABEL ? 'font.dark' : 'font.primary'
 
   return tokenConfig ? (
@@ -188,6 +185,11 @@ function TokenInputFooter({
             getPriceImpactLabel(priceImpactProps?.priceImpact)}
         </Text>
       )}
+      {!isBalancesLoading && isMounted && hasError && (
+        <Text color="font.error" fontSize="sm">
+          {getValidationError(token)}
+        </Text>
+      )}
       {isBalancesLoading || !isMounted ? (
         <Skeleton h="full" w="12" />
       ) : (
@@ -199,11 +201,6 @@ function TokenInputFooter({
           onClick={handleBalanceClick}
           title="Use wallet balance"
         >
-          {hasError && (
-            <Text color="inherit" fontSize="sm">
-              {getValidationError(token)}
-            </Text>
-          )}
           <Text
             color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
             fontSize="sm"
@@ -266,8 +263,6 @@ export const TokenInput = forwardRef(
     const { userAddress } = useUserAccount()
     const { isBalancesLoading } = useTokenBalances()
 
-    const [inputTitle, setInputTitle] = useState<string>('')
-
     const { colors } = useTheme()
     const { getToken } = useTokens()
     const tokenFromAddress = address && chain ? getToken(address, chain) : undefined
@@ -287,7 +282,6 @@ export const TokenInput = forwardRef(
     useEffect(() => {
       if (!isBalancesLoading) {
         validateInput(value || '')
-        setInputTitle(value || '')
       }
     }, [value, token?.address, isBalancesLoading, userAddress])
 
@@ -357,7 +351,7 @@ export const TokenInput = forwardRef(
                 ref={ref}
                 shadow="none"
                 step="any"
-                title={inputTitle}
+                title={value || ''}
                 type="number"
                 value={value}
                 {...inputProps}

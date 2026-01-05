@@ -127,7 +127,6 @@ export function PoolSettingsRadioGroup({
                           <FormSubsection>
                             <NumberInput
                               control={control}
-                              error={errors?.message}
                               isDisabled={false}
                               isInvalid={false}
                               isPercentage={!!isPercentage}

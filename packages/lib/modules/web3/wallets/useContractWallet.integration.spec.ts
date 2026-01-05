@@ -1,11 +1,7 @@
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { useContractWallet } from './useContractWallet'
 import { waitFor } from '@testing-library/react'
-import {
-  connectWith,
-  connectWithDefaultUser,
-  disconnectDefaultUser,
-} from '@repo/test/utils/wagmi/wagmi-connections'
+import { connectWith, disconnectDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 
 const TEST_EOA_ADDRESS = '0x71e3aae9588c928ed01590bcac4d3d6a8c70550c'
 
@@ -30,7 +26,7 @@ describe('Smart contract wallets', () => {
 
   it('should return true when contract wallet', async () => {
     // Default test user for Anvil has an underlying contract
-    await connectWithDefaultUser()
+    await connectWith('0x90F79bf6EB2c4f870365E785982E1f101E93b906')
 
     const { result } = testHook(() => useContractWallet())
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())

@@ -38,7 +38,10 @@ type SocialLinkProps = {
 
 type MobileNavProps = NavLinkProps &
   EcosystemLinkProps &
-  SocialLinkProps & { LogoType: React.FC<any> }
+  SocialLinkProps & {
+    LogoType: React.FC<any>
+    buildSection?: React.ReactNode | ((onClose: () => void) => React.ReactNode)
+  }
 
 function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
   const { linkColorFor } = useNav()
@@ -113,6 +116,7 @@ function SocialLinks({ socialLinks }: SocialLinkProps) {
 
 export function MobileNav({
   appLinks,
+  buildSection,
   ecosystemLinks,
   socialLinks,
   LogoType,
@@ -141,6 +145,7 @@ export function MobileNav({
           </DrawerHeader>
           <DrawerBody>
             <NavLinks appLinks={appLinks} customLinks={customLinks} onClick={onClose} />
+            {typeof buildSection === 'function' ? buildSection(onClose) : buildSection}
             <Divider my={4} />
             <EcosystemLinks ecosystemLinks={ecosystemLinks} />
           </DrawerBody>

@@ -6,7 +6,7 @@ import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
-import { isStablePool } from '../helpers'
+import { isStablePool, isCowPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolDetails() {
@@ -76,16 +76,21 @@ export function PoolDetailsContent() {
     )
   }
 
+  const showPoolSettings = !isCowPool(poolType)
+  const showAmplificationParameter = isStablePool(poolType)
+
   const poolDetailsMap = {
     'Pool name': name,
     'Pool symbol': symbol,
-    'Swap fee manager': formatPoolManager(swapFeeManager),
-    'Pool pause manager': formatPoolManager(pauseManager),
-    'Swap fee percentage': `${swapFeePercentage}%`,
-    ...(isStablePool(poolType) && { 'Amplification parameter': amplificationParameter }),
-    'Pool hook': formatPoolHook(poolHooksContract),
-    'Allow flexible adds/removes': disableUnbalancedLiquidity ? 'No' : 'Yes',
-    'Allow donations': enableDonation ? 'Yes' : 'No',
+    ...(showPoolSettings && {
+      'Swap fee manager': formatPoolManager(swapFeeManager),
+      'Pool pause manager': formatPoolManager(pauseManager),
+      'Swap fee percentage': `${swapFeePercentage}%`,
+      ...(showAmplificationParameter && { 'Amplification parameter': amplificationParameter }),
+      'Pool hook': formatPoolHook(poolHooksContract),
+      'Allow flexible adds/removes': disableUnbalancedLiquidity ? 'No' : 'Yes',
+      'Allow donations': enableDonation ? 'Yes' : 'No',
+    }),
   }
 
   const { isBeforeStep } = usePoolCreationFormSteps()
@@ -106,7 +111,9 @@ export function PoolDetailsContent() {
       w="calc(100% + var(--chakra-space-md) * 2)"
     >
       <Text color="font.secondary">{label}</Text>
-      <Text color="font.secondary">{isBeforeStep('Details') ? '—' : value}</Text>
+      <Text as="span" color="font.secondary">
+        {isBeforeStep('Details') ? '—' : value}
+      </Text>
     </HStack>
   ))
 }

@@ -12,6 +12,7 @@ export function FormSubsection({ children, marginLeft = '2', ...props }: FormSub
   return (
     <VStack
       align="start"
+      maxW="full"
       ml={marginLeft}
       mt="3"
       pl="5"
@@ -29,7 +30,7 @@ export function FormSubsection({ children, marginLeft = '2', ...props }: FormSub
           opacity: 0.5,
         },
       }}
-      w="full"
+      w={{ base: 'calc(100% - var(--chakra-space-5))', xl: 'full' }}
       {...props}
     >
       {children}

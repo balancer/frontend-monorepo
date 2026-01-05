@@ -18,7 +18,7 @@ test('Generates expected query keys', () => {
     [
       "remove-liquidity",
       "price-impact",
-      "ProportionalRemoveLiquidityHandler:0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266:0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512:0.2:1:undefined::undefined",
+      "ProportionalRemoveLiquidityHandler:0x3B7D260597A3e3f90274563a9e481618C6B951Eb:0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512:0.2:1:undefined::undefined",
     ]
   `)
 

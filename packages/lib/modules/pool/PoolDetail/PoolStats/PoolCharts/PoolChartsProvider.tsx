@@ -5,7 +5,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
@@ -195,7 +195,6 @@ export function usePoolSnapshots(
       range,
       chainId,
     },
-    notifyOnNetworkStatusChange: true,
   })
 }
 

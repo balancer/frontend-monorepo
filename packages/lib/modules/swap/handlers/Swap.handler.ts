@@ -8,7 +8,7 @@ import { ApiToken } from '../../tokens/token.types'
  * They take standard inputs from the UI and return frontend standardised outputs.
  */
 export interface SwapHandler {
-  apolloClient?: ApolloClient<object>
+  apolloClient?: ApolloClient
   tokens?: ApiToken[]
   name: string
 

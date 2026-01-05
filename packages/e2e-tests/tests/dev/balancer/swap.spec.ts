@@ -10,7 +10,7 @@ test('Swap 1 ETH to USDC)', async ({ page }) => {
   await expect(button(page, 'Connect wallet')).not.toBeVisible()
 
   await clickButton(page, 'ETH')
-  await page.getByText('Wrapped Ether').click()
+  await page.getByText('Wrapped Ether', { exact: true }).click()
 
   await clickButton(page, 'Select token')
   await page.getByText('USDCUSDC').click()

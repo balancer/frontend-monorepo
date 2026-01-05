@@ -43,7 +43,12 @@ function Content({
 }) {
   return (
     <VStack align="start">
-      <BalAlertContent description={content.description} forceColumnMode title={content.title} />
+      <BalAlertContent
+        description={content.description}
+        forceColumnMode
+        title={content.title}
+        wrapText
+      />
       {/*
         It is not possible to link to custom pool pages within balancer.fi/pools as the Safe App will not recognize them as valid Safe Apps :(
       */}

@@ -1,6 +1,5 @@
 import { PoolType, STABLE_POOL_CONSTRAINTS } from '@balancer/sdk'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
-import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { zeroAddress, Address } from 'viem'
 import {
   SupportedPoolTypes,
@@ -13,6 +12,7 @@ import {
 import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { parseUnits } from 'viem'
 
 const GNOSIS_BLACKLIST: Address[] = [
   '0xcB444e90D8198415266c6a2724b7900fb12FC56E', // Monerium EUR emoney (EURe)
@@ -35,6 +35,9 @@ export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
 export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
 export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 export const MAX_LAMBDA = 100000000
+export const COW_AMM_RAW_WEIGHT_50 = parseUnits('1', DEFAULT_DECIMALS) // quirk for 50/50 pool, weight must be 1e18 for both tokens
+export const COW_AMM_RAW_WEIGHT_80 = parseUnits('8', DEFAULT_DECIMALS)
+export const COW_AMM_RAW_WEIGHT_20 = parseUnits('2', DEFAULT_DECIMALS)
 
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   [PoolType.Stable]: {
@@ -67,20 +70,26 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
     description:
       'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
   },
+  [PoolType.CowAmm]: {
+    label: 'CoW AMM',
+    maxTokens: 2,
+    description:
+      'CoW AMM protects LPs from LVR so they can provide liquidity with less risk and more return',
+  },
 }
 
-export const PROTOCOLS = [
+export const BALANCER_V3_NAME = ProjectConfigBalancer.projectName + ' v3'
+
+export const BALANCER_PROTOCOL_OPTIONS = [
   {
-    id: ProjectConfigBalancer.projectId,
-    name: ProjectConfigBalancer.projectName,
+    name: BALANCER_V3_NAME,
     imageSrc: ProjectConfigBalancer.projectLogo,
   },
   {
-    id: ProjectConfigBeets.projectId,
-    name: ProjectConfigBeets.projectName,
-    imageSrc: ProjectConfigBeets.projectLogo,
+    name: 'CoW',
+    imageSrc: '/images/protocols/cowamm.svg',
   },
-]
+] as const
 
 export enum WeightedPoolStructure {
   FiftyFifty = '50/50',
@@ -127,7 +136,7 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
 export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]
 
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
-  protocol: PROJECT_CONFIG.projectId,
+  protocol: BALANCER_PROTOCOL_OPTIONS[0].name,
   network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
   poolType: PoolType.Stable,

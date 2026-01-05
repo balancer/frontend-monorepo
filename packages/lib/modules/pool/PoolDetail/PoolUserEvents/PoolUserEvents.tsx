@@ -163,10 +163,8 @@ function SwapTokens({ swapEvent, chain }: { swapEvent: GqlPoolSwapEventV3; chain
 
 export default function PoolUserEvents({
   userPoolEvents,
-  isLoading,
 }: {
-  userPoolEvents: GetPoolEventsQuery['poolEvents'] | undefined
-  isLoading: boolean
+  userPoolEvents: GetPoolEventsQuery['poolEvents']
 }) {
   const { myLiquiditySectionRef, chain, pool } = usePool()
   const [height, setHeight] = useState(0)
@@ -186,13 +184,6 @@ export default function PoolUserEvents({
       setHeight(myLiquiditySectionRef.current.offsetHeight)
     }
   }, [])
-
-  const poolEvents: PoolEventItem[] = useMemo(() => {
-    if (!isLoading && userPoolEvents?.length) {
-      return userPoolEvents
-    }
-    return []
-  }, [isLoading, userPoolEvents])
 
   function getShareTitle() {
     if (showVeBal) {
@@ -231,12 +222,12 @@ export default function PoolUserEvents({
           </HStack>
         </>
       }
-      hasNoTransactions={isEmpty(poolEvents)}
+      hasNoTransactions={isEmpty(userPoolEvents)}
       headerTemplateColumns={GRID_COLUMNS}
-      isLoading={isLoading}
+      isLoading={false}
       title="My transactions"
     >
-      {poolEvents.map(poolEvent => (
+      {userPoolEvents.map(poolEvent => (
         <PoolEventRow
           chain={chain}
           key={poolEvent.id}

@@ -22,7 +22,6 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { Address } from 'viem'
 import { VebalLockDetails } from '@bal/lib/vebal/lock/VebalLockDetails'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
@@ -91,8 +90,6 @@ export function VebalLockModal({
   )
 
   const { transactionSteps, lockTxHash } = useBuildLockSteps(buildLockStepsArgs)
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   const isLoading = vebalLockIsLoading || vebalLockDataIsLoading || userAccountIsLoading
 

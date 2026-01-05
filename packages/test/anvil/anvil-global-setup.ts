@@ -26,6 +26,7 @@ export async function setup() {
           forkUrl: getForkUrl(chain.id, false),
           forkBlockNumber: ANVIL_NETWORKS[chain.id].forkBlockNumber,
           noMining: false,
+          mnemonic: process.env.TEST_ACCOUNT_MNEMONIC,
         },
       })
     )

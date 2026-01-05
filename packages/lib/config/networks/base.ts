@@ -51,6 +51,7 @@ const networkConfig: NetworkConfig = {
       vaultAdminV3: AddressProvider.VaultAdmin(base.id),
       router: AddressProvider.Router(base.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(base.id),
+      bCoWFactory: '0x03362f847B4fAbC12e1Ce98b6b59F94401E4588e',
     },
     veDelegationProxy: '0xD87F44Df0159DC78029AB9CA7D7e57E7249F5ACD',
     permit2: PERMIT2[base.id],

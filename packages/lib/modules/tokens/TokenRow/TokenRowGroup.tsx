@@ -69,21 +69,9 @@ export function TokenRowGroup({
   return (
     <VStack align="start" spacing="sm">
       <HStack height="28px" justify="space-between" w="full">
-        <HStack spacing="xs">
-          <Text fontSize="sm" fontWeight="bold">
-            {label}
-          </Text>
-          {rightElement &&
-            (isLoading ? (
-              <Skeleton h="5" w="12" />
-            ) : (
-              hasMultipleAmounts && (
-                <Text fontSize="sm" fontWeight="bold">
-                  {formatFalsyValueAsDash(usdValue, toCurrency, { abbreviated: false })}
-                </Text>
-              )
-            ))}
-        </HStack>
+        <Text fontSize="sm" fontWeight="bold">
+          {label}
+        </Text>
         {rightElement ? (
           rightElement
         ) : isLoading ? (

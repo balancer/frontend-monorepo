@@ -20,7 +20,7 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { MyVotesStatsMyVebal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyVebal'
 import { MyVotesStatsAverageReward } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsAverageReward'
 import { MyVotesStatsMyIncentives } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentives'
-import { MyVotesStatsMyIncentivesOptimized } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/incentives-optimization/MyVotesStatsMyIncentivesOptimized'
+// import { MyVotesStatsMyIncentivesOptimized } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/incentives-optimization/MyVotesStatsMyIncentivesOptimized'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { MyVotesHintModal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesHintModal'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -50,6 +50,22 @@ export function MyVotes() {
 
   return (
     <VStack align="start" spacing="md" w="full">
+      <GridItem w="full">
+        <Alert status="info" variant="WideOnDesktop">
+          <AlertIcon />
+          <Stack
+            alignItems="baseline"
+            direction={{ base: 'column', lg: 'row' }}
+            gap={{ base: '0', lg: 'sm' }}
+          >
+            <AlertTitle>Hidden Hand incentives sunset on December 31, 2025</AlertTitle>
+            <AlertDescription>
+              Bribe market data will be available again after the migration to Stake DAO is complete
+            </AlertDescription>
+          </Stack>
+        </Alert>
+      </GridItem>
+
       <HStack alignItems="baseline" justifyContent="space-between" w="full">
         <Heading
           as="h2"
@@ -144,9 +160,9 @@ export function MyVotes() {
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsAverageReward />
         </GridItem>
-        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+        {/* <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyIncentivesOptimized />
-        </GridItem>
+        </GridItem> */}
 
         {isConnected && (
           <>

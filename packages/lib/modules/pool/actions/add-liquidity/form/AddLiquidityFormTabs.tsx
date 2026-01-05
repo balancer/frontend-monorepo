@@ -60,6 +60,7 @@ function PoolWeightsInfo() {
               </Box>
             }
             forceColumnMode
+            wrapText
           >
             <UnorderedList>
               <ListItem
@@ -101,6 +102,7 @@ function OutOfRangeWarning() {
         <BalAlertContent
           title="This CLP is currently out of range"
           tooltipLabel="No swap fees accrue when CLP is outside the price range. Fees resume automatically when prices return to the range."
+          wrapText
         />
       }
       status="warning"

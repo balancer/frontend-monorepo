@@ -1,14 +1,24 @@
-import { InputAmount, InitPoolInputV3, PoolType } from '@balancer/sdk'
+import {
+  InputAmount,
+  InitPoolInputV3,
+  PoolType,
+  CreatePoolV3WeightedInput,
+  CreatePoolV3StableInput,
+  CreatePoolStableSurgeInput,
+  CreatePoolReClammInput,
+  CreatePoolGyroECLPInput,
+  CreatePoolLiquidityBootstrappingInput,
+} from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
-import { type ProjectConfig } from '@repo/lib/config/config.types'
 import { WeightedPoolStructure } from './constants'
+import { ProjectConfig } from '@repo/lib/config/config.types'
 
-export type InputAmountWithSymbol = InputAmount & { symbol: string }
+export type InitPoolInputAmount = InputAmount & { symbol: string; weight?: string }
 
-export type ExtendedInitPoolInputV3 = Omit<InitPoolInputV3, 'amountsIn'> & {
-  amountsIn: InputAmountWithSymbol[]
+export type ExtendedInitPoolInput = Omit<InitPoolInputV3, 'amountsIn'> & {
+  amountsIn: InitPoolInputAmount[]
 }
 
 export type SupportedPoolTypes =
@@ -17,6 +27,7 @@ export type SupportedPoolTypes =
   | PoolType.StableSurge
   | PoolType.ReClamm
   | PoolType.GyroE
+  | PoolType.CowAmm
 
 export type PoolTypeDetails = {
   label: string
@@ -35,7 +46,7 @@ export type PoolCreationToken = {
 }
 
 export type PoolCreationForm = {
-  protocol: ProjectConfig['projectId']
+  protocol: ProjectConfig['projectName'] | 'CoW'
   network: GqlChain
   weightedPoolStructure: WeightedPoolStructure
   poolType: SupportedPoolTypes
@@ -71,3 +82,21 @@ export type EclpConfigForm = {
   lambda: string
   peakPrice: string
 }
+
+type CreateCowAmmInput = {
+  symbol: string
+  name: string
+  poolType: PoolType.CowAmm
+  chainId: number
+  protocolVersion: 1
+  poolTokens: PoolCreationToken[]
+}
+
+export type CreatePoolInput =
+  | CreatePoolV3WeightedInput
+  | CreatePoolV3StableInput
+  | CreatePoolStableSurgeInput
+  | CreatePoolReClammInput
+  | CreatePoolGyroECLPInput
+  | CreateCowAmmInput
+  | CreatePoolLiquidityBootstrappingInput

@@ -12,7 +12,6 @@ import { ActionModalFooter } from '../../../../../shared/components/modals/Actio
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { usePoolRedirect } from '../../../pool.hooks'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
-import { useResetStepIndexOnOpen } from '../../useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 import { AddLiquiditySummary } from './AddLiquiditySummary'
 import { useAddLiquidityReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
@@ -60,8 +59,6 @@ export function AddLiquidityModal({
     protocolVersion: pool.protocolVersion as ProtocolVersion,
     txReceipt,
   })
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   useEffect(() => {
     if (isOpen) {

@@ -6,7 +6,6 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 import { useLoopsDepositReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -31,8 +30,6 @@ export function LoopsDepositModal({
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
   const { depositTransactionSteps, chain, loopsDepositTxHash, lastTransaction } = useLoops()
-
-  useResetStepIndexOnOpen(isOpen, depositTransactionSteps)
 
   const loopsDepositReceipt = useLoopsDepositReceipt({
     txHash: loopsDepositTxHash,

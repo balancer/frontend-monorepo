@@ -32,13 +32,13 @@ import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
 import { ArrowUpRight } from 'react-feather'
-import { InputWithSuggestion } from '../details/InputWithSuggestion'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isWeightedPool,
   isCustomWeightedPool,
   isReClammPool,
   isGyroEllipticPool,
+  isCowPool,
 } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
@@ -164,12 +164,16 @@ export function ChoosePoolTokens() {
                   poolType={poolType}
                 />
                 <Divider />
+                <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
               </VStack>
             </>
           )}
 
           {isWeightedPool(poolType) && isCustomWeightedPool(poolType, weightedPoolStructure) && (
-            <TotalWeightDisplay />
+            <>
+              <Divider />
+              <TotalWeightDisplay />
+            </>
           )}
         </VStack>
       </VStack>
@@ -231,6 +235,9 @@ function ConfigureToken({
   const isInvalidWeight = !!token.weight && Number(token.weight) < 1
   const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
 
+  const showWeightInputs = isWeightedPool(poolType) || isCowPool(poolType)
+  const showRateProvider = !isCowPool(poolType)
+
   return (
     <VStack align="start" key={index} spacing="sm" w="full">
       <HStack align="end" w="full">
@@ -240,10 +247,10 @@ function ConfigureToken({
           <TokenInputSelector onToggleTokenClicked={onToggleTokenClicked} token={token?.data} />
         </VStack>
 
-        {isWeightedPool(poolType) && (
+        {showWeightInputs && (
           <TooltipWithTouch
             isDisabled={weightedPoolStructure === WeightedPoolStructure.Custom}
-            label={`Weight is set to ${weightedPoolStructure} based on your selection above. Select "Custom" to set your own weights.`}
+            label={`Weight is set to ${weightedPoolStructure} based on your selection above. ${!isCowPool(poolType) ? 'Select "Custom" to set your own weights.' : ''}`}
           >
             <Box>
               <NumberInput
@@ -277,7 +284,7 @@ function ConfigureToken({
 
       {token.address && !apiPriceForToken && (
         <VStack align="start" spacing="sm" w="full">
-          <InputWithSuggestion
+          <NumberInput
             attribution={cgPriceForToken && <CoingeckoAttribution />}
             control={poolCreationForm.control}
             isFiatPrice
@@ -288,20 +295,23 @@ function ConfigureToken({
               poolCreationForm.trigger(`poolTokens.${index}.usdPrice`)
             }}
             placeholder="Enter token price"
-            suggestedValue={cgPriceForToken ? `$${cgPriceForToken}` : undefined}
+            suggestedValue={cgPriceForToken}
             tooltip="Enter the token’s price accurately to avoid losing money to arbitrage."
-            validate={(price: string) => {
-              if (Number(price) < 0) return 'Token price must be greater than 0'
+            validate={(price: number) => {
+              if (price < 0) return 'Token price must be greater than 0'
               return true
             }}
+            width="full"
           />
         </VStack>
       )}
 
-      <ConfigureTokenRateProvider
-        tokenIndex={index}
-        verifiedRateProviderAddress={rateProviderAddress}
-      />
+      {showRateProvider && (
+        <ConfigureTokenRateProvider
+          tokenIndex={index}
+          verifiedRateProviderAddress={rateProviderAddress}
+        />
+      )}
     </VStack>
   )
 }

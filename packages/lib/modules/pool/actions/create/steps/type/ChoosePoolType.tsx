@@ -5,14 +5,23 @@ import { POOL_TYPES, INITIAL_POOL_CREATION_FORM } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { isCowProtocol } from '../../helpers'
+import { PoolType } from '@balancer/sdk'
 import { useWatch } from 'react-hook-form'
 import { isProd } from '@repo/lib/config/app.config'
-import { PoolType } from '@balancer/sdk'
 
 export function ChoosePoolType({ control }: { control: Control<PoolCreationForm> }) {
-  const poolTypesKeys = Object.keys(POOL_TYPES).filter(key => {
-    return !isProd || key !== PoolType.ReClamm
+  const protocol = useWatch({ control, name: 'protocol' })
+
+  const poolTypesKeys = Object.keys(POOL_TYPES).filter(poolType => {
+    if (isProd && poolType === PoolType.ReClamm) {
+      return false
+    }
+
+    // only show cow amm type for cow protocol selection
+    return isCowProtocol(protocol) === (poolType === PoolType.CowAmm)
   }) as SupportedPoolTypes[]
+
   const { poolCreationForm } = usePoolCreationForm()
 
   const [network] = useWatch({
@@ -44,15 +53,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
               {poolTypesKeys.map(poolTypeKey => (
                 <HStack key={poolTypeKey}>
                   <Radio size="lg" value={poolTypeKey}>
-                    <Text
-                      color="font.primary"
-                      textDecoration="underline"
-                      textDecorationStyle="dotted"
-                      textDecorationThickness="1px"
-                      textUnderlineOffset="3px"
-                    >
-                      {POOL_TYPES[poolTypeKey].label}
-                    </Text>
+                    <Text color="font.primary">{POOL_TYPES[poolTypeKey].label}</Text>
                   </Radio>
                   <InfoIconPopover message={POOL_TYPES[poolTypeKey].description} />
                 </HStack>

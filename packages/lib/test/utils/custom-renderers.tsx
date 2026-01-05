@@ -13,7 +13,6 @@ import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettin
 import { UserAccountProvider } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
-import { ApolloProvider } from '@apollo/client'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { RenderHookOptions, act, renderHook, waitFor } from '@testing-library/react'
 import { PropsWithChildren, ReactNode } from 'react'
@@ -25,6 +24,7 @@ import { testQueryClient } from './react-query'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { PermitSignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/PermitSignatureProvider'
 import { sleep } from '@repo/lib/shared/utils/sleep'
+import { ApolloProvider } from '@apollo/client/react'
 
 export type Wrapper = ({ children }: PropsWithChildren) => ReactNode
 
