@@ -60,7 +60,8 @@ export function MyVotes() {
           >
             <AlertTitle>Hidden Hand incentives sunset on December 31, 2025</AlertTitle>
             <AlertDescription>
-              Bribe market data will be available again after the migration to Stake DAO is complete
+              Bribe market data will be available again after the migration to Votemarket is
+              complete
             </AlertDescription>
           </Stack>
         </Alert>

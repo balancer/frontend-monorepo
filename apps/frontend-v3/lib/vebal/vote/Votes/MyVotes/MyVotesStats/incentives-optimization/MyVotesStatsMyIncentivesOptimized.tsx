@@ -72,7 +72,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const headerText =
     !isConnected || noVeBALBalance || !canReceiveIncentives(userAddress) ? (
       <TooltipWithTouch
-        label="The average APR veBAL holders may get from 3rd party bribes on Stake DAO for voting on eligible pool gauges. Stake DAO is an unaffiliated 3rd party vote market."
+        label="The average APR veBAL holders may get from 3rd party bribes on Votemarket for voting on eligible pool gauges. Votemarket is an unaffiliated 3rd party vote market."
         placement="top"
       >
         <Text
@@ -95,7 +95,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
       </TooltipWithTouch>
     ) : (
       <TooltipWithTouch
-        label="The potential amount you can earn from 3rd party bribes on Stake DAO by tapping 'Apply' to optimize your votes for maximum returns. Stake DAO is an unaffiliated 3rd party vote market."
+        label="The potential amount you can earn from 3rd party bribes on Votemarket by tapping 'Apply' to optimize your votes for maximum returns. Votemarket is an unaffiliated 3rd party vote market."
         placement="top"
       >
         <Text
@@ -134,7 +134,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const allVotesTimelocked = areAllVotesTimelocked(myVotes)
   const votesAlreadyOptimized = totalInfo.totalRewardValue.toNumber() === optimizedRewardValue
 
-  const disabledButton = true // TODO: enable again during migration to Stake DAO?
+  const disabledButton = true // TODO: enable again during migration to Votemarket?
   // const disabledButton = !canReceiveIncentives(userAddress) || votesAlreadyOptimized
 
   let tooltipLabelText: string
@@ -144,7 +144,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
     tooltipLabelText = 'Your optimized votes have already been applied'
   } else {
     tooltipLabelText =
-      'This selects pool gauges and applies the optimal vote combinations to maximize your rewards from the Stake DAO vote market.'
+      'This selects pool gauges and applies the optimal vote combinations to maximize your rewards from the Votemarket vote market.'
   }
 
   return (
