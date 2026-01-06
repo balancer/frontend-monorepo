@@ -3,12 +3,8 @@ import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
 import { Footer } from '@repo/lib/shared/components/navs/Footer'
 import NextTopLoader from 'nextjs-toploader'
 import { PropsWithChildren } from 'react'
-import { LzBeetsMigrate } from '@/lib/modules/lzbeets-migrate/LzBeetsMigrate'
 
-export function BaseLayout({
-  children,
-  renderLzBeetsModal = true,
-}: PropsWithChildren & { renderLzBeetsModal?: boolean }) {
+export function BaseLayout({ children }: PropsWithChildren) {
   return (
     <div
       style={{
@@ -19,7 +15,6 @@ export function BaseLayout({
       <NextTopLoader color="#7f6ae8" showSpinner={false} />
       <NavBarContainer />
       {children}
-      {renderLzBeetsModal && <LzBeetsMigrate />}
       <Footer
         logoType={<BeetsLogoType />}
         subTitle="Beets is your ultimate destination for liquid-staked tokens, real yield, and AMM innovation."
