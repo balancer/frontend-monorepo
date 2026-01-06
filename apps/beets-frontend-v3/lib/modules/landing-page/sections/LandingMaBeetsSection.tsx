@@ -1,17 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Center, Grid, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { MaBeetsAddLiquiditySvg } from '../components/MaBeetsAddLiquiditySvg'
@@ -19,7 +8,6 @@ import { MaBeetsFairerRewardsSvg } from '../components/MaBeetsFairerRewardsSvg'
 import { MaBeetsGrowEarnSvg } from '../components/MaBeetsGrowEarnSvg'
 import { MaBeetsMaturityVsLockingSvg } from '../components/MaBeetsMaturityVsLocking'
 import { MaBeetsMintMabeetsSvg } from '../components/MaBeetsMintMabeetsSvg'
-import { MaBeetsNavLink } from '@/lib/components/navs/MaBeetsNavLink'
 
 function FeatureCard({
   title,
@@ -78,6 +66,11 @@ function HowItWorksCard({
 export function LandingMaBeetsSection() {
   return (
     <LandingSectionContainer
+      button={{
+        text: 'Get maBEETS',
+        href: 'https://ma.beets.fi',
+        isExternal: true,
+      }}
       subtitle="Shape the Future. Earn as You Grow. maBEETS unlocks maturity-adjusted voting power,
             allowing you to participate in governance decisions and earn rewards without locking
             your assets."
@@ -136,15 +129,6 @@ export function LandingMaBeetsSection() {
           />
         </Grid>
       </Box>
-      <Flex justify="center" pt="2xl">
-        <MaBeetsNavLink
-          triggerEl={
-            <Button minWidth="160px" variant="primary">
-              Get maBEETS
-            </Button>
-          }
-        />
-      </Flex>
     </LandingSectionContainer>
   )
 }

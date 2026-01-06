@@ -1,7 +1,8 @@
-import { Center, Heading, VStack, Text, Button, Flex, Link } from '@chakra-ui/react'
+import { Center, Heading, VStack, Text, Button, Flex, Link, Box, HStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import React from 'react'
 import NextLink from 'next/link'
+import { ArrowUpRight } from 'react-feather'
 
 export function LandingSectionContainer({
   children,
@@ -41,7 +42,14 @@ export function LandingSectionContainer({
               variant="primary"
               {...(button.isExternal ? { isExternal: true } : {})}
             >
-              {button.text}
+              {button.isExternal ? (
+                <HStack>
+                  <Box>{button.text}</Box>
+                  <ArrowUpRight size={16} />
+                </HStack>
+              ) : (
+                button.text
+              )}
             </Button>
           </Flex>
         )}
