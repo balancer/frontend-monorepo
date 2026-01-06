@@ -5,59 +5,64 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useGetMinimumWrapAmount } from '@repo/lib/shared/hooks/useGetMinimumWrapAmount'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { Address, formatUnits } from 'viem'
+import { Address, formatUnits, zeroAddress } from 'viem'
 import { getCompositionTokens } from '../../pool-tokens.utils'
 import { isBoosted } from '../../pool.helpers'
 import { usePool } from '../../PoolProvider'
+import { useGetMinimumTradeAmount } from '@repo/lib/shared/hooks/useGetMinimumTradeAmount'
 
 type Props = { humanAmountsIn: HumanTokenAmountWithAddress[]; totalUSDValue: string }
 
 export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props) {
   const { chain, pool } = usePool()
-  const { usdValueForToken, calcTotalUsdValue, calcWeightForBalance } = useTokens()
+  const { usdValueForTokenAddress } = useTokens()
   const { minimumWrapAmount } = useGetMinimumWrapAmount(chain)
-
-  const compositionTokens = getCompositionTokens(pool)
-  const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
-
-  const weights = compositionTokens.map(poolToken => {
-    return calcWeightForBalance(poolToken.address, poolToken.balance, totalLiquidity, chain)
-  })
-
-  // get the minimum bpt amount in usd for the minimum wrap amount and weights
-  // sorted so highest amount is first in the array
-  const minBptUsd = compositionTokens
-    .map((token, index) => {
-      if (!token.underlyingToken) return { amount: '0', token }
-
-      const minimumWrapAmountFormatted = formatUnits(minimumWrapAmount, token.decimals)
-      const minimumDepositAmount = bn(minimumWrapAmountFormatted).times(token.priceRate).toString()
-      const minimumDepositAmountUsd = usdValueForToken(token, minimumDepositAmount)
-
-      return { amount: bn(minimumDepositAmountUsd).div(weights[index]).toString(), token }
-    })
-    .sort((a, b) => (bn(a.amount).lt(bn(b.amount)) ? -1 : bn(a.amount).gt(bn(b.amount)) ? 1 : 0))
-    .reverse()
+  const { minimumTradeAmount } = useGetMinimumTradeAmount(chain)
 
   if (!isBoosted(pool)) return true
 
-  // check if the amount is either higher than the minimum deposit amount or is empty
-  const amountsValid = humanAmountsIn.map(amount => {
+  const compositionTokens = getCompositionTokens(pool)
+
+  const minBptAmount = formatUnits(minimumTradeAmount, 18)
+  const minBptAmountInDollars = usdValueForTokenAddress(pool.address, pool.chain, minBptAmount)
+  const isBptEnough = bn(totalUSDValue).gt(minBptAmountInDollars)
+
+  const areIndividualAmountsEnough = humanAmountsIn.reduce((prev, amount) => {
+    if (amount.humanAmount === '' || bn(amount.humanAmount).isZero()) return prev
+
     const token = compositionTokens.find(token => {
-      const address = token.underlyingToken ? token.underlyingToken.address : token.address
-      return isSameAddress(address as Address, amount.tokenAddress)
+      return (
+        isSameAddress(token.address as Address, amount.tokenAddress) ||
+        isSameAddress(
+          (token.underlyingToken?.address || zeroAddress) as Address,
+          amount.tokenAddress
+        )
+      )
     })
+    if (!token) return prev
 
-    const minimumWrapAmountFormatted = formatUnits(minimumWrapAmount, token?.decimals || 18)
+    if (
+      token.underlyingToken &&
+      isSameAddress((token.underlyingToken?.address || zeroAddress) as Address, amount.tokenAddress)
+    ) {
+      const minTradeAmount = formatUnits(minimumWrapAmount, token.underlyingToken.decimals)
+      if (bn(amount.humanAmount).lt(minTradeAmount)) return false
 
-    const minimumDepositAmount = bn(minimumWrapAmountFormatted)
-      .times(token?.priceRate || '1')
-      .toString()
+      // We have an underlying token that will have to be wrapped
+      // (checking amounts before and after the wrap)
+      let minWrapAmount = formatUnits(minimumWrapAmount, token.underlyingToken.decimals)
+      if (bn(amount.humanAmount).lt(minWrapAmount)) return false
 
-    return bn(amount.humanAmount).gte(minimumDepositAmount) || amount.humanAmount === ''
-  })
+      const wrapperAmount = bn(amount.humanAmount).div(token.priceRate)
+      minWrapAmount = formatUnits(minimumWrapAmount, token.decimals)
+      if (bn(wrapperAmount).lt(minWrapAmount)) return false
+    } else {
+      const minTradeAmount = formatUnits(minimumWrapAmount, token.decimals)
+      if (bn(amount.humanAmount).lt(minTradeAmount)) return false
+    }
 
-  // check total deposit amounts in usd against the highest minimum bpt amount and all deposit amounts are valid
-  const highestMinimumBptUsd = minBptUsd[0]?.amount ?? '0'
-  return bn(totalUSDValue).gt(bn(highestMinimumBptUsd)) && amountsValid.every(Boolean)
+    return prev
+  }, true)
+
+  return isBptEnough && areIndividualAmountsEnough
 }
