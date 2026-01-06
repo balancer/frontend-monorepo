@@ -24,7 +24,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
   const { reClammInitAmounts } = useReClammInitAmounts(isReClammPool(poolType), poolAddress, token)
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
-  const { setValidationError } = useTokenInputsValidation()
+  const { setValidationError, removeValidationErrors } = useTokenInputsValidation()
 
   const lastUserUpdatedAmountIdx = useRef<number | null>(null)
 
@@ -32,8 +32,11 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
   const otherToken = poolTokens[otherTokenInputIdx]
 
   useEffect(() => {
-    const amountErrorMsg = validatePoolTokens.hasAmountError(token, poolType)
-    if (amountErrorMsg && token.address) setValidationError(token.address, amountErrorMsg)
+    if (!token.address) return
+
+    const { error, possibleErrors } = validatePoolTokens.hasAmountError(token, poolType)
+    removeValidationErrors(token.address, possibleErrors)
+    if (error) setValidationError(token.address, error)
   }, [token, poolType, setValidationError])
 
   const handleAmountChange = (idx: number, amount: string) => {

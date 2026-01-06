@@ -33,9 +33,19 @@ export function useTokenInputsValidationLogic() {
 
   const hasValidationErrors = Object.values(validationErrors).some(error => error !== '')
 
+  // As we are using state to store the errors, those are not checked in a centralized place
+  // and we used to use a pattern of removing the errors and then calculating them, we had the
+  // problem that errors could disappear on page refresh. We have moved to a new pattern of
+  // only removing the errors being rechecked that, although probably more complicated
+  // than it should be, should work for now.
+  function removeValidationErrors(tokenAddress: Address, errors: string[]) {
+    if (errors.includes(validationErrors[tokenAddress])) setValidationError(tokenAddress, '')
+  }
+
   return {
     setValidationError,
     getValidationError,
+    removeValidationErrors,
     hasValidationError,
     hasValidationErrors,
     resetValidationErrors,
