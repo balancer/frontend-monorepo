@@ -1,6 +1,6 @@
 import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { VotesData } from './useGaugeVotes'
-import { HiddenHandIncentives } from '@repo/lib/shared/services/hidden-hand/useHiddenHandVotingIncentives'
+import { VoteMarketData } from '@repo/lib/shared/services/votemarket/votemarket.types'
 
 export type VoteList = GetVeBalVotingListQuery['veBalGetVotingList']
 
@@ -8,7 +8,7 @@ export type VoteListItem = VoteList[0]
 
 export type VotingPoolWithData = VoteListItem & {
   gaugeVotes: VotesData | undefined
-  votingIncentive: HiddenHandIncentives | undefined
+  votingIncentive: VoteMarketData | undefined
 }
 
 export enum VotesState {

@@ -8,7 +8,7 @@ import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { mockTokenPricesList } from '@repo/lib/test/msw/handlers/Tokens.handlers'
 import { aTokenPriceMock } from '@repo/lib/modules/tokens/__mocks__/token.builders'
-import { HiddenHandIncentives } from '@repo/lib/shared/services/hidden-hand/useHiddenHandVotingIncentives'
+import { VoteMarketData } from '@repo/lib/shared/services/votemarket/votemarket.types'
 
 const one_month_ago = subDays(new Date(), 30)
 const BAL = '0xba100000625a3754423978a60c9317c58a424e3d'
@@ -217,15 +217,9 @@ function setPoolVotes(votingPool: VotingPoolWithData, votesPrct: number) {
   return votingPool
 }
 
-function incentivesWithAmount(amount: number, maxTokensPerVote: number): HiddenHandIncentives {
+function incentivesWithAmount(amount: number, maxTokensPerVote: number): VoteMarketData {
   return {
-    proposal: '',
-    proposalHash: '',
-    title: '',
-    proposalDeadline: 0,
     totalValue: 0,
-    maxTotalValue: 0,
-    voteCount: -1,
     maxValuePerVote: -1,
     valuePerVote: -1,
     incentives: [
@@ -239,12 +233,8 @@ function incentivesWithAmount(amount: number, maxTokensPerVote: number): HiddenH
         maxValue: 0,
         maxTokensPerVote: maxTokensPerVote,
         briber: '',
-        periodIndex: 1,
-        refunds: 0,
-        periodCount: 1,
       },
     ],
-    efficiency: 0,
     poolId: '',
   }
 }
