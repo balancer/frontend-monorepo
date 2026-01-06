@@ -108,7 +108,7 @@
     "@types/tinycolor2": "^1.4.6",
     "@viem/anvil": "^0.0.10",
     "@vitejs/plugin-react": "^4.2.1",
-    "@wagmi/cli": "2.2.0",
+    "@wagmi/cli": "2.8.0",
     "autoprefixer": "10.4.23",
     "cross-fetch": "4.1.0",
     "eslint": "9.27.0",
