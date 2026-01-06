@@ -42,10 +42,14 @@ export function LandingSectionContainer({
               variant="primary"
               {...(button.isExternal ? { isExternal: true } : {})}
             >
-              <HStack>
-                <Box as="span">{button.text}</Box>
-                {button.isExternal && <ArrowUpRight size={16} />}
-              </HStack>
+              {button.isExternal ? (
+                <HStack>
+                  <Box>{button.text}</Box>
+                  <ArrowUpRight size={16} />
+                </HStack>
+              ) : (
+                button.text
+              )}
             </Button>
           </Flex>
         )}
