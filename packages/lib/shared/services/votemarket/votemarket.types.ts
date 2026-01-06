@@ -1,4 +1,4 @@
-export interface VoteMarketData {
+export interface PoolVoteIncentives {
   totalValue: number
   maxValuePerVote: number
   valuePerVote: number
@@ -13,7 +13,6 @@ export interface Incentive {
   chainId: number
   value: number
   decimals: number
-  maxValue: number
   maxTokensPerVote: number
   briber: string
 }
@@ -78,8 +77,44 @@ export interface VoteMarketCampaign {
   liquidityScore: number
 }
 
-export type StakeDaoVoteMarketResponse = {
+export interface StakeDaoVoteMarketResponse {
   lastBlock: number
   campaignCount: number
   campaigns: VoteMarketCampaign[]
+}
+
+interface Coin {
+  name: string
+  symbol: string
+  address: string
+  decimals: number
+}
+
+interface LiquidityPool {
+  name: string
+  symbol: string
+  address: string
+  decimals: number
+}
+
+interface Gauge {
+  gauge: string
+  childGauge: string
+  manager: string
+  name: string
+  weight: string
+  relativeWeight: string
+  futureRelativeWeight: string
+  isKilled: boolean
+  chainId: number
+  pool: string
+  lp: LiquidityPool
+  coins: Coin[]
+  inController: boolean
+}
+
+export interface Balancer {
+  totalGaugesWeight: string
+  lastUpdate: number
+  gauges: Gauge[]
 }
