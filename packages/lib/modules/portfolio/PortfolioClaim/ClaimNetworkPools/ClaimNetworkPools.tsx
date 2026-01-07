@@ -227,7 +227,7 @@ export function ClaimNetworkPools() {
                 if (hasHiddenHandRewards) {
                   claimableItems.push({
                     type: 'hidden-hand',
-                    chain: GqlChain.Mainnet,
+                    chain: PROJECT_CONFIG.defaultNetwork,
                     amount: hiddenHandRewardsData.totalValueUsd,
                     index: poolsWithChain.length + 1,
                   })
