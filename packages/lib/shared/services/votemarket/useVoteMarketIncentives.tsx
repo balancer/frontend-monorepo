@@ -1,5 +1,5 @@
 import {
-  PoolVoteIncentives,
+  PoolVoteIncentivesPerWeek,
   StakeDaoVoteMarketResponse,
 } from '@repo/lib/shared/services/votemarket/votemarket.types'
 import { mins } from '@repo/lib/shared/utils/time'
@@ -21,30 +21,36 @@ export function useVoteMarketIncentives() {
   }
 }
 
-async function getStakeDaoIncentives(): Promise<PoolVoteIncentives[]> {
+async function getStakeDaoIncentives(): Promise<PoolVoteIncentivesPerWeek[]> {
   const stakeDaoVoteMarket = await fetchStakeDaoVoteMarket()
 
   return stakeDaoVoteMarket.campaigns
     .filter(campaign => campaign.status.voteOpen)
-    .map(campaign => ({
-      gauge: campaign.gauge.toLowerCase(),
-      status: campaign.status,
-      totalValue: Number(campaign.currentPeriod.rewardPerPeriod),
-      valuePerVote: Number(campaign.currentPeriod.rewardPerVote),
-      incentives: [
-        {
-          symbol: campaign.rewardToken.symbol,
-          token: campaign.rewardToken.address,
-          amount: Number(campaign.currentPeriod.rewardPerPeriod),
-          chainId: campaign.rewardChainId,
-          value: campaign.rewardToken.price,
-          decimals: campaign.rewardToken.decimals,
-          maxTokensPerVote: Number(campaign.maxRewardPerVote),
-          briber: campaign.manager,
-          isBlacklist: campaign.isBlacklist,
-        },
-      ],
-    }))
+    .map(campaign => {
+      const rewardPerWeek = Number(campaign.currentPeriod.rewardPerPeriod)
+      const rewardPerVote = Number(campaign.currentPeriod.rewardPerVote)
+      const maxRewardPerVote = Number(campaign.maxRewardPerVote)
+
+      return {
+        gauge: campaign.gauge.toLowerCase(),
+        status: campaign.status,
+        totalValue: rewardPerWeek,
+        valuePerVote: rewardPerVote,
+        incentives: [
+          {
+            symbol: campaign.rewardToken.symbol,
+            token: campaign.rewardToken.address,
+            amount: rewardPerWeek,
+            chainId: campaign.rewardChainId,
+            value: campaign.rewardToken.price,
+            decimals: campaign.rewardToken.decimals,
+            maxTokensPerVote: maxRewardPerVote,
+            briber: campaign.manager,
+            isBlacklist: campaign.isBlacklist,
+          },
+        ],
+      }
+    })
 }
 
 async function fetchStakeDaoVoteMarket(): Promise<StakeDaoVoteMarketResponse> {
