@@ -5,12 +5,12 @@ import {
 import { mins } from '@repo/lib/shared/utils/time'
 import { useQuery } from '@tanstack/react-query'
 
-const STAKE_DAO_BASE_URL = 'https://api-v3.stakedao.org'
+const STAKE_DAO_VOTE_MARKET_URL = 'https://api-v3.stakedao.org/votemarket/balancer'
 
 export function useVoteMarketIncentives() {
   const { data, error, isLoading } = useQuery({
     queryKey: ['votemarket-incentives'],
-    queryFn: async () => getAllVoteMarketsIncentives(),
+    queryFn: async () => getStakeDaoIncentives(),
     refetchInterval: mins(1).toSecs(),
   })
 
@@ -21,22 +21,15 @@ export function useVoteMarketIncentives() {
   }
 }
 
-async function getAllVoteMarketsIncentives() {
-  const stakeDaoIncentives = await getStakeDaoIncentives()
-
-  return stakeDaoIncentives
-}
-
 async function getStakeDaoIncentives(): Promise<PoolVoteIncentives[]> {
-  const stakeDaoResponse = await fetchStakeDaoVoteMarket()
+  const stakeDaoVoteMarket = await fetchStakeDaoVoteMarket()
 
-  return stakeDaoResponse.campaigns
+  return stakeDaoVoteMarket.campaigns
     .filter(campaign => campaign.status.voteOpen)
     .map(campaign => ({
       gauge: campaign.gauge.toLowerCase(),
       status: campaign.status,
       totalValue: Number(campaign.currentPeriod.rewardPerPeriod),
-      maxValuePerVote: Number(campaign.maxRewardPerVote),
       valuePerVote: Number(campaign.currentPeriod.rewardPerVote),
       incentives: [
         {
@@ -55,7 +48,7 @@ async function getStakeDaoIncentives(): Promise<PoolVoteIncentives[]> {
 }
 
 async function fetchStakeDaoVoteMarket(): Promise<StakeDaoVoteMarketResponse> {
-  const res = await fetch(`${STAKE_DAO_BASE_URL}/votemarket/balancer`)
+  const res = await fetch(STAKE_DAO_VOTE_MARKET_URL)
 
   if (!res.ok) throw new Error(`Failed to fetch Stake Dao votemarket: ${res.status}`)
 
