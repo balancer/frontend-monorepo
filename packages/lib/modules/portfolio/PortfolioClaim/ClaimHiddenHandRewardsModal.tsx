@@ -4,7 +4,6 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { Address } from 'viem'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useTransactionSteps } from '../../transactions/transaction-steps/useTransactionSteps'
@@ -35,13 +34,10 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
   const chain = PROJECT_CONFIG.defaultNetwork
 
   const rewards: HumanTokenAmount[] =
-    hiddenHandRewardsData?.aggregatedRewards
-      .filter(reward => bn(reward.claimable).gt(0))
-      .sort((a, b) => b.value - a.value)
-      .map(reward => ({
-        tokenAddress: reward.tokenAddress as Address,
-        humanAmount: reward.claimable as HumanAmount,
-      })) || []
+    hiddenHandRewardsData?.aggregatedRewards.map(reward => ({
+      tokenAddress: reward.tokenAddress as Address,
+      humanAmount: reward.claimable as HumanAmount,
+    })) || []
 
   const isSuccess = !!claimTxHash
 
