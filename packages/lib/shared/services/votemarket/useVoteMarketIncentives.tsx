@@ -27,24 +27,27 @@ async function getStakeDaoIncentives(): Promise<PoolVoteIncentivesPerWeek[]> {
   return stakeDaoVoteMarket.campaigns
     .filter(campaign => campaign.status.voteOpen)
     .map(campaign => {
-      const rewardPerWeek = Number(campaign.currentPeriod.rewardPerPeriod)
-      const rewardPerVote = Number(campaign.currentPeriod.rewardPerVote)
-      const maxRewardPerVote = Number(campaign.maxRewardPerVote)
+      const rewardTokenAmount = Number(campaign.currentPeriod.rewardPerPeriod)
+      const valuePerToken = Number(campaign.rewardToken.price)
+      const rewardPerWeek = rewardTokenAmount * valuePerToken
+
+      const rewardTokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
+      const valuePerVote = rewardTokenAmountPerVote * valuePerToken
 
       return {
         gauge: campaign.gauge.toLowerCase(),
         status: campaign.status,
         totalValue: rewardPerWeek,
-        valuePerVote: rewardPerVote,
+        valuePerVote,
         incentives: [
           {
             symbol: campaign.rewardToken.symbol,
             token: campaign.rewardToken.address,
             amount: rewardPerWeek,
             chainId: campaign.rewardChainId,
-            value: campaign.rewardToken.price,
+            value: valuePerToken,
             decimals: campaign.rewardToken.decimals,
-            maxTokensPerVote: maxRewardPerVote,
+            maxTokensPerVote: Number(campaign.maxRewardPerVote),
             briber: campaign.manager,
             isBlacklist: campaign.isBlacklist,
           },

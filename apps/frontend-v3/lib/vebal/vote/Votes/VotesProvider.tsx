@@ -49,6 +49,11 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
     }))
   }, [votingList, gaugeVotes, incentives])
 
+  console.log(
+    'votingPools',
+    votingPools.filter(pool => Number(pool.votingIncentive?.totalValue) > 0)
+  )
+
   const votedPools = useMemo(
     () => votingPools.filter(vote => bn(vote.gaugeVotes?.userVotes || '0').gt(0)),
     [votingPools]
