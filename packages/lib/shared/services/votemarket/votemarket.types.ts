@@ -76,44 +76,8 @@ export interface VoteMarketCampaign {
   liquidityScore: number
 }
 
-export interface StakeDaoVoteMarketResponse {
+export interface VoteMarketResponse {
   lastBlock: number
   campaignCount: number
   campaigns: VoteMarketCampaign[]
-}
-
-interface Coin {
-  name: string
-  symbol: string
-  address: string
-  decimals: number
-}
-
-interface LiquidityPool {
-  name: string
-  symbol: string
-  address: string
-  decimals: number
-}
-
-interface Gauge {
-  gauge: string
-  childGauge: string
-  manager: string
-  name: string
-  weight: string
-  relativeWeight: string
-  futureRelativeWeight: string
-  isKilled: boolean
-  chainId: number
-  pool: string
-  lp: LiquidityPool
-  coins: Coin[]
-  inController: boolean
-}
-
-export interface Balancer {
-  totalGaugesWeight: string
-  lastUpdate: number
-  gauges: Gauge[]
 }

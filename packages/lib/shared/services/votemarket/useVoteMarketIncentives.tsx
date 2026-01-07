@@ -1,6 +1,6 @@
 import {
   PoolVoteIncentivesPerWeek,
-  StakeDaoVoteMarketResponse,
+  VoteMarketResponse,
 } from '@repo/lib/shared/services/votemarket/votemarket.types'
 import { mins } from '@repo/lib/shared/utils/time'
 import { useQuery } from '@tanstack/react-query'
@@ -53,10 +53,10 @@ async function getStakeDaoIncentives(): Promise<PoolVoteIncentivesPerWeek[]> {
     })
 }
 
-async function fetchStakeDaoVoteMarket(): Promise<StakeDaoVoteMarketResponse> {
+async function fetchStakeDaoVoteMarket(): Promise<VoteMarketResponse> {
   const res = await fetch(STAKE_DAO_VOTE_MARKET_URL)
 
-  if (!res.ok) throw new Error(`Failed to fetch Stake Dao votemarket: ${res.status}`)
+  if (!res.ok) throw new Error(`Failed to fetch Stake Dao Votemarket data: ${res.status}`)
 
   return res.json()
 }
