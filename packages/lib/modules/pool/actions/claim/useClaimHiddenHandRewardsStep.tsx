@@ -11,7 +11,7 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useMemo, useState } from 'react'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 
 const labels: TransactionLabels = {
   init: 'Claim',
@@ -32,6 +32,7 @@ export function useClaimHiddenHandRewardsStep({
   const { userAddress } = useUserAccount()
   const { hiddenHandRewardsData } = usePortfolio()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  const networkConfig = getNetworkConfig(PROJECT_CONFIG.defaultNetwork)
 
   const rewards = hiddenHandRewardsData?.data || []
 
@@ -49,7 +50,7 @@ export function useClaimHiddenHandRewardsStep({
     'Error in wagmi tx simulation (Claim Hidden Hand rewards transaction)',
     {
       userAddress,
-      rewardDistributor: '0xa9b08B4CeEC1EF29EdEC7F9C94583270337D6416',
+      rewardDistributor: networkConfig.contracts.rewardDistributor,
       claimArgs,
     }
   )
@@ -57,11 +58,15 @@ export function useClaimHiddenHandRewardsStep({
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(PROJECT_CONFIG.defaultNetwork),
-    contractAddress: '0xa9b08B4CeEC1EF29EdEC7F9C94583270337D6416',
+    contractAddress: networkConfig.contracts.rewardDistributor || '',
     contractId: 'balancer.rewardDistributor',
     functionName: 'claim',
     args: [claimArgs] as any,
-    enabled: !!userAddress && !!rewards && rewards.length > 0,
+    enabled:
+      !!userAddress &&
+      !!rewards &&
+      rewards.length > 0 &&
+      !!networkConfig.contracts.rewardDistributor,
     txSimulationMeta,
     onTransactionChange: setTransaction,
   }
