@@ -130,7 +130,10 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
   const totalUSDValue = isLoadingTokenPrices ? '0' : usdValueFor(humanAmountsIn)
-  const isMinimumDepositMet = useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue })
+  const { isMinimumDepositMet, errors: minimumDepositErrors } = useIsMinimumDepositMet({
+    humanAmountsIn,
+    totalUSDValue,
+  })
 
   /**
    * Queries
@@ -249,6 +252,8 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
     setWrapUnderlyingByIndex,
     wrapUnderlying,
     setInitialHumanAmountsIn,
+    isMinimumDepositMet,
+    minimumDepositErrors,
   }
 }
 
