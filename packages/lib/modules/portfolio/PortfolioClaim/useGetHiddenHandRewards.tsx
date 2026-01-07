@@ -58,6 +58,10 @@ export function useGetHiddenHandRewards() {
 
       const result: HiddenHandRewardResponse = await response.json()
 
+      if (result.error || !result.data) {
+        throw new Error('HiddenHand API returned an error')
+      }
+
       const filteredRewards = result.data.filter(
         reward => reward.protocol === PROJECT_CONFIG.projectId
       )
