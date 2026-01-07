@@ -1,9 +1,9 @@
 export interface PoolVoteIncentives {
+  gauge: string
   totalValue: number
   maxValuePerVote: number
   valuePerVote: number
   incentives: Incentive[]
-  poolId: string
 }
 
 export interface Incentive {

@@ -45,7 +45,9 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
     return votingList.map(vote => ({
       ...vote,
       gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
-      votingIncentive: incentives?.find(incentive => incentive.poolId === vote.id),
+      votingIncentive: incentives?.find(
+        incentive => incentive.gauge === vote.gauge.address.toLowerCase()
+      ),
     }))
   }, [votingList, gaugeVotes, incentives])
 

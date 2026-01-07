@@ -103,10 +103,15 @@ export function useVoteListLogic({}: UseVoteListArgs) {
       ...vote,
       gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
       votingIncentive: incentives
-        ? incentives.find(incentive => incentive.poolId === vote.id)
+        ? incentives.find(incentive => incentive.gauge === vote.gauge.address.toLowerCase())
         : undefined,
     }))
   }, [voteListData, gaugeVotes, incentives])
+
+  console.log(
+    'votingPoolsList',
+    votingPoolsList.filter(pool => pool.votingIncentive !== undefined)
+  )
 
   const filteredVoteList = useMemo(() => {
     return filterVoteList(

@@ -234,7 +234,7 @@ function incentivesWithAmount(amount: number, maxTokensPerVote: number): PoolVot
         briber: '',
       },
     ],
-    poolId: '',
+    gauge: '',
   }
 }
 
