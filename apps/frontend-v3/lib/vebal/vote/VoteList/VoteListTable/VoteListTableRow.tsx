@@ -51,8 +51,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
     ? 'Get veBAL to select and vote on pool gauges'
     : 'Connect your wallet to select and vote on pool gauges.'
 
-  const missingDataReason =
-    'Bribe data is temporarily unavailable during the transition from Hidden Hand to Votemarket'
+  const missingDataReason = 'There is currently no bribe data for this pool'
 
   return (
     <FadeInOnView>
