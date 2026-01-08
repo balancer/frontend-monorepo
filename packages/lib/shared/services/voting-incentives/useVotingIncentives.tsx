@@ -2,8 +2,8 @@ import {
   PoolVotingIncentivesPerWeek,
   VoteMarketResponse,
 } from '@repo/lib/shared/services/voting-incentives/incentives.types'
-import { mins } from '@repo/lib/shared/utils/time'
 import { useQuery } from '@tanstack/react-query'
+import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 
 const STAKE_DAO_VOTE_MARKET_URL = 'https://api-v3.stakedao.org/votemarket/balancer'
 
@@ -11,7 +11,7 @@ export function useVotingIncentives() {
   const { data, error, isLoading } = useQuery({
     queryKey: ['voting-incentives'],
     queryFn: async () => getAllVotingIncentives(),
-    refetchInterval: mins(1).toSecs(),
+    ...onlyExplicitRefetch,
   })
 
   return { incentives: data, incentivesError: error, incentivesAreLoading: isLoading }
@@ -77,6 +77,7 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
 }
 
 async function fetchStakeDaoVoteMarket(): Promise<VoteMarketResponse> {
+  console.log('Stake DAO API fetching at', new Date().toISOString())
   const res = await fetch(STAKE_DAO_VOTE_MARKET_URL)
 
   if (!res.ok) throw new Error(`Failed to fetch Stake Dao Votemarket data: ${res.status}`)
