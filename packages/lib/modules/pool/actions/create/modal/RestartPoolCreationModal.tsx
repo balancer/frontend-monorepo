@@ -20,8 +20,14 @@ import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/g
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useRef } from 'react'
+import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
+import { isCowProtocol } from '@repo/lib/modules/pool/actions/create/helpers'
+import { usePoolCreationForm } from '../PoolCreationFormProvider'
+import { PoolType } from '@balancer/sdk'
 
-type Props = {
+interface RestartPoolCreationModalProps {
   modalTitle?: string
   triggerTitle?: string
   poolAddress?: Address | undefined
@@ -39,11 +45,48 @@ export function RestartPoolCreationModal({
   handleRestart,
   poolAddress,
   isAbsolutePosition,
-}: Props) {
+}: RestartPoolCreationModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const searchParams = useSearchParams()
   const chainName = getChainName(network)
   const poolTypeName = getPoolTypeLabel(poolType)
+  const { isFirstStep } = usePoolCreationFormSteps()
+  const protocolSearchParam = searchParams.get('protocol')
+  const { poolCreationForm } = usePoolCreationForm()
+  const hasHandledProtocolParamRef = useRef(false)
+
+  const isSearchParamCow = protocolSearchParam && isCowProtocol(protocolSearchParam)
+  const isCowAmm = poolType === GqlPoolType.CowAmm
+  const showCowAmmWarning = isSearchParamCow && !isCowAmm && !isFirstStep
+
+  const setupCowCreation = () => {
+    poolCreationForm.setValue('protocol', 'CoW')
+    poolCreationForm.setValue('poolType', PoolType.CowAmm)
+    poolCreationForm.trigger('protocol')
+    poolCreationForm.trigger('poolType')
+  }
+
+  useEffect(() => {
+    if (showCowAmmWarning) {
+      onOpen()
+      hasHandledProtocolParamRef.current = true
+    } else if (isSearchParamCow && !hasHandledProtocolParamRef.current) {
+      // Defer to next tick to ensure form is fully hydrated from localStorage
+      setTimeout(() => {
+        setupCowCreation()
+        hasHandledProtocolParamRef.current = true
+      }, 0)
+    }
+  }, [showCowAmmWarning, isSearchParamCow])
+
+  const handleFormReset = () => {
+    handleRestart()
+    if (showCowAmmWarning) setupCowCreation()
+    onClose()
+  }
+
+  const resetButtonText = poolAddress ? 'Abandon set up' : 'Delete and start over'
+  const beforeDeploymentContent = `You have begun the process of creating a new ${poolTypeName} pool on the ${chainName} network. Are you sure you want to delete all progress ${showCowAmmWarning ? 'to begin creation of a new CoW AMM?' : 'and start again from scratch?'}`
 
   return (
     <>
@@ -74,23 +117,13 @@ export function RestartPoolCreationModal({
           <ModalBody pb="lg">
             <VStack>
               {poolAddress ? (
-                <VStack align="start" spacing="md">
-                  <Text>
-                    You have deployed a v3 {poolType} pool but have not seeded it with liquidity.
-                    Pool address:
-                  </Text>
-                  <Text color="font.link">{poolAddress}</Text>
-                  <Text>
-                    Although it has been created on the {getChainName(network)} network, it will not
-                    appear on the {PROJECT_CONFIG.projectName} UI and it will not be accessible to
-                    liquidity providers if you abandon it now.
-                  </Text>
-                  <Text>Are you sure you want to abandon it and delete all associated data?</Text>
-                </VStack>
+                <AfterDeploymentContent
+                  network={network}
+                  poolAddress={poolAddress}
+                  poolType={poolType}
+                />
               ) : (
-                <Text color="font.primary">
-                  {`You have begun the process of creating a new ${poolTypeName} pool on the ${chainName} network. Are you sure you want to delete all progress and start again from scratch?`}
-                </Text>
+                <Text color="font.primary">{beforeDeploymentContent}</Text>
               )}
               <HStack gap="ms" mt="md" w="full">
                 <Button
@@ -98,14 +131,11 @@ export function RestartPoolCreationModal({
                   flex="1"
                   gap="1"
                   minWidth="184px"
-                  onClick={() => {
-                    handleRestart()
-                    onClose()
-                  }}
+                  onClick={handleFormReset}
                   size="lg"
                   variant="danger"
                 >
-                  {poolAddress ? 'Abandon set up' : 'Delete and start over'}
+                  {resetButtonText}
                 </Button>
                 <Button
                   display="flex"
@@ -124,5 +154,28 @@ export function RestartPoolCreationModal({
         </ModalContent>
       </Modal>
     </>
+  )
+}
+
+interface AfterDeploymentContentProps {
+  network: GqlChain
+  poolType: GqlPoolType
+  poolAddress: Address
+}
+
+function AfterDeploymentContent({ network, poolType, poolAddress }: AfterDeploymentContentProps) {
+  return (
+    <VStack align="start" spacing="md">
+      <Text>
+        You have deployed a v3 {poolType} pool but have not seeded it with liquidity. Pool address:
+      </Text>
+      <Text color="font.link">{poolAddress}</Text>
+      <Text>
+        Although it has been created on the {getChainName(network)} network, it will not appear on
+        the {PROJECT_CONFIG.projectName} UI and it will not be accessible to liquidity providers if
+        you abandon it now.
+      </Text>
+      <Text>Are you sure you want to abandon it and delete all associated data?</Text>
+    </VStack>
   )
 }

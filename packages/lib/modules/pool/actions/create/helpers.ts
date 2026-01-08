@@ -109,5 +109,5 @@ export function isCowPool(poolType: PoolType | undefined): boolean {
 }
 
 export function isCowProtocol(protocol: string): boolean {
-  return protocol === 'CoW'
+  return protocol.toLowerCase() === 'cow'
 }

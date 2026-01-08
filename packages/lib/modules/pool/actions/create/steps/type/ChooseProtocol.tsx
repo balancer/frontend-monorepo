@@ -9,25 +9,19 @@ import { type PoolCreationForm } from '../../types'
 import { Control, useWatch } from 'react-hook-form'
 import { isCowProtocol } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
-import { useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export function ChooseProtocol({ control }: { control: Control<PoolCreationForm> }) {
   const { poolCreationForm } = usePoolCreationForm()
-  const searchParams = useSearchParams()
+  const router = useRouter()
 
   const selectedProtocol = useWatch({ control, name: 'protocol' })
 
   const handleChooseProtocol = (protocol: PoolCreationForm['protocol']) => {
     const poolType = isCowProtocol(protocol) ? PoolType.CowAmm : PoolType.Stable
-
+    router.replace(`/create`) // clean up search params in case user enters page via "create cow amm" then changes to balancer v3
     poolCreationForm.reset({ ...INITIAL_POOL_CREATION_FORM, protocol, poolType })
   }
-
-  useEffect(() => {
-    const protocol = searchParams.get('protocol')
-    if (protocol === 'cow') handleChooseProtocol('CoW')
-  }, [searchParams])
 
   return (
     <VStack align="start" spacing="md" w="full">
