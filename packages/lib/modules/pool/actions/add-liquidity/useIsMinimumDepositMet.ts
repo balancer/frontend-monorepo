@@ -1,6 +1,6 @@
 'use client'
 
-import { isSameAddress } from '@balancer/sdk'
+import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useGetMinimumWrapAmount } from '@repo/lib/shared/hooks/useGetMinimumWrapAmount'
@@ -29,10 +29,10 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
 
   const errors: MinimumDepositErrors = {}
 
-  const minBptAmount = formatUnits(minimumTradeAmount, 18)
+  const minBptAmount = addBuffer(formatUnits(minimumTradeAmount, 18))
   const minBptAmountInDollars = usdValueForTokenAddress(pool.address, pool.chain, minBptAmount)
   const isBptEnough = bn(totalUSDValue).gte(minBptAmountInDollars)
-  if (!isBptEnough) errors['BPT'] = bn(minBptAmount)
+  if (!isBptEnough) errors['BPT'] = minBptAmount
 
   const individualAmountErrors = humanAmountsIn.reduce((prev, amount) => {
     if (amount.humanAmount === '' || bn(amount.humanAmount).isZero()) return prev
@@ -46,33 +46,32 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
     ) {
       const underlying = token.underlyingToken
 
-      const minUnderlyingTradeAmount = formatUnits(
-        minimumWrapAmount,
-        token.underlyingToken.decimals
+      const minUnderlyingTradeAmount = addBuffer(
+        formatUnits(minimumWrapAmount, token.underlyingToken.decimals)
       )
       if (bn(amount.humanAmount).lt(minUnderlyingTradeAmount)) {
-        prev[underlying.symbol] = bn(minUnderlyingTradeAmount)
+        prev[underlying.symbol] = minUnderlyingTradeAmount
       }
 
       // We have an underlying token that will have to be wrapped
       // (checking amounts before and after the wrap)
-      let minWrapAmount = formatUnits(minimumWrapAmount, underlying.decimals)
+      let minWrapAmount = addBuffer(formatUnits(minimumWrapAmount, underlying.decimals))
       if (bn(amount.humanAmount).lt(minWrapAmount)) {
-        prev[underlying.symbol] = bn(minWrapAmount)
+        prev[underlying.symbol] = minWrapAmount
       }
 
       const wrapperAmount = bn(amount.humanAmount).div(token.priceRate)
-      minWrapAmount = formatUnits(minimumWrapAmount, token.decimals)
+      minWrapAmount = addBuffer(formatUnits(minimumWrapAmount, token.decimals))
       if (bn(wrapperAmount).lt(minWrapAmount)) {
         const minUnderlyingAmount = bn(minWrapAmount).times(token.priceRate)
         if (minUnderlyingAmount.gt(prev[underlying.symbol] || 0)) {
-          prev[underlying.symbol] = bn(minUnderlyingAmount.toFixed(underlying.decimals))
+          prev[underlying.symbol] = minUnderlyingAmount
         }
       }
     } else {
-      const minTradeAmount = formatUnits(minimumWrapAmount, token.decimals)
+      const minTradeAmount = addBuffer(formatUnits(minimumWrapAmount, token.decimals))
       if (bn(amount.humanAmount).lt(minTradeAmount)) {
-        prev[token.symbol] = bn(minTradeAmount)
+        prev[token.symbol] = minTradeAmount
       }
     }
 
@@ -101,14 +100,14 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
       decimals = token.underlyingToken.decimals
     }
 
-    const minTradeAmount = formatUnits(minimumWrapAmount, decimals)
+    const minTradeAmount = addBuffer(formatUnits(minimumWrapAmount, decimals))
 
     const weight = calcWeightForBalance(address, balance, totalPoolLiquidity, chain)
     const tokenShareInDollars = bn(totalUSDValue).times(weight)
     const tokenPrice = priceFor(amount.tokenAddress, pool.chain)
     const tokenShare = tokenShareInDollars.div(tokenPrice)
     if (tokenShare.lte(minTradeAmount)) {
-      const minTotalUSD = bn(minTradeAmount).times(tokenPrice).div(weight)
+      const minTotalUSD = minTradeAmount.times(tokenPrice).div(weight)
       if (minTotalUSD.gt(prev['PriceImpact'] ? prev['PriceImpact'] : 0)) {
         prev['PriceImpact'] = minTotalUSD
       }
@@ -133,4 +132,15 @@ function findToken(tokens: PoolToken[], address: Address) {
       isSameAddress((token.underlyingToken?.address || zeroAddress) as Address, address)
     )
   })
+}
+
+// When calculating mins on the contracts they add and remove wei's so
+// numbers are rounded in a way that makes it more difficult to exploit
+// this can give bigger min amounts that the calculated here. The solution
+// for that is to add some buffer to our calculations
+const BUFFER_PERCENTAGE = 1
+function addBuffer(n: HumanAmount) {
+  return bn(n)
+    .times(100 + BUFFER_PERCENTAGE)
+    .div(100)
 }
