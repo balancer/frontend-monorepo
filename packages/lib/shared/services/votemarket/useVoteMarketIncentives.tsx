@@ -24,9 +24,15 @@ export function useVoteMarketIncentives() {
 async function getStakeDaoIncentives(): Promise<PoolVoteIncentivesPerWeek[]> {
   const stakeDaoVoteMarket = await fetchStakeDaoVoteMarket()
 
-  return stakeDaoVoteMarket.campaigns
-    .filter(campaign => campaign.status.voteOpen)
-    .map(campaign => {
+  const voteOpenCampaigns = stakeDaoVoteMarket.campaigns.filter(
+    campaign => campaign.status.voteOpen
+  )
+
+  // Group campaigns by gauge address and sum values
+  const campaignsByGauge = voteOpenCampaigns.reduce(
+    (acc, campaign) => {
+      const gaugeAddress = campaign.gauge.toLowerCase()
+
       const rewardTokenAmount = Number(campaign.currentPeriod.rewardPerPeriod)
       const valuePerToken = Number(campaign.rewardToken.price)
       const rewardPerWeek = rewardTokenAmount * valuePerToken
@@ -34,26 +40,46 @@ async function getStakeDaoIncentives(): Promise<PoolVoteIncentivesPerWeek[]> {
       const rewardTokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
       const valuePerVote = rewardTokenAmountPerVote * valuePerToken
 
-      return {
-        gauge: campaign.gauge.toLowerCase(),
-        status: campaign.status,
-        totalValue: rewardPerWeek,
-        valuePerVote,
-        incentives: [
-          {
-            symbol: campaign.rewardToken.symbol,
-            token: campaign.rewardToken.address,
-            amount: rewardPerWeek,
-            chainId: campaign.rewardChainId,
-            value: valuePerToken,
-            decimals: campaign.rewardToken.decimals,
-            maxTokensPerVote: Number(campaign.maxRewardPerVote),
-            briber: campaign.manager,
-            isBlacklist: campaign.isBlacklist,
-          },
-        ],
+      if (!acc[gaugeAddress]) {
+        acc[gaugeAddress] = {
+          gauge: gaugeAddress,
+          totalValue: rewardPerWeek,
+          valuePerVote,
+          incentives: [
+            {
+              symbol: campaign.rewardToken.symbol,
+              token: campaign.rewardToken.address,
+              amount: rewardPerWeek,
+              chainId: campaign.rewardChainId,
+              value: valuePerToken,
+              decimals: campaign.rewardToken.decimals,
+              maxTokensPerVote: Number(campaign.maxRewardPerVote),
+              briber: campaign.manager,
+            },
+          ],
+        }
+      } else {
+        // Merge with existing gauge entry
+        acc[gaugeAddress].totalValue += rewardPerWeek
+        acc[gaugeAddress].valuePerVote += valuePerVote
+        acc[gaugeAddress].incentives.push({
+          symbol: campaign.rewardToken.symbol,
+          token: campaign.rewardToken.address,
+          amount: rewardPerWeek,
+          chainId: campaign.rewardChainId,
+          value: valuePerToken,
+          decimals: campaign.rewardToken.decimals,
+          maxTokensPerVote: Number(campaign.maxRewardPerVote),
+          briber: campaign.manager,
+        })
       }
-    })
+
+      return acc
+    },
+    {} as Record<string, PoolVoteIncentivesPerWeek>
+  )
+
+  return Object.values(campaignsByGauge)
 }
 
 async function fetchStakeDaoVoteMarket(): Promise<VoteMarketResponse> {
