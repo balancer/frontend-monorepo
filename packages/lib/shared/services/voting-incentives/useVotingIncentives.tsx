@@ -5,7 +5,7 @@ import {
 import { mins } from '@repo/lib/shared/utils/time'
 import { useQuery } from '@tanstack/react-query'
 
-const STAKE_DAO_VOTE_MARKET_URL = 'https://api-v3.stakedao.org/voting-incentives/balancer'
+const STAKE_DAO_VOTE_MARKET_URL = 'https://api-v3.stakedao.org/votemarket/balancer'
 
 export function useVotingIncentives() {
   const { data, error, isLoading } = useQuery({
