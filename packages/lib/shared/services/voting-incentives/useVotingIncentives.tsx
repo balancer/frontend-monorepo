@@ -14,11 +14,7 @@ export function useVotingIncentives() {
     refetchInterval: mins(1).toSecs(),
   })
 
-  return {
-    incentives: data,
-    incentivesError: error,
-    incentivesAreLoading: isLoading,
-  }
+  return { incentives: data, incentivesError: error, incentivesAreLoading: isLoading }
 }
 
 async function getAllVotingIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
