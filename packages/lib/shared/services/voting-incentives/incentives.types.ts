@@ -1,4 +1,4 @@
-export interface PoolVoteIncentivesPerWeek {
+export interface PoolVotingIncentivesPerWeek {
   gauge: string
   totalValue: number
   valuePerVote: number

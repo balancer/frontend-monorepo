@@ -12,7 +12,7 @@ import { sumBy } from 'lodash'
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { useExpiredGauges } from '@bal/lib/vebal/vote/useExpiredGaugesQuery'
-import { useVoteMarketIncentives } from '@repo/lib/shared/services/votemarket/useVoteMarketIncentives'
+import { useVotingIncentives } from '@repo/lib/shared/services/voting-incentives/useVotingIncentives'
 import { isGaugeExpired } from '@repo/lib/modules/vebal/vote/vote.helpers'
 import { filterVotingPoolsForAnvilFork } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
@@ -33,7 +33,7 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
 
   const gaugeAddresses = useMemo(() => votingList.map(vote => vote.gauge.address), [votingList])
   const { expiredGauges, isLoading: isExpiredGaugesLoading } = useExpiredGauges({ gaugeAddresses })
-  const { incentives, incentivesError, incentivesAreLoading } = useVoteMarketIncentives()
+  const { incentives, incentivesError, incentivesAreLoading } = useVotingIncentives()
 
   const {
     gaugeVotes,
