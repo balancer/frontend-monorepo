@@ -66,22 +66,20 @@ export function useGetHiddenHandRewards() {
         reward => reward.protocol === PROJECT_CONFIG.projectId
       )
 
-      // Return raw data without price calculations
       return {
         ...result,
         data: filteredRewards,
-        totalValueUsd: 0, // Will be calculated in select
-        aggregatedRewards: [], // Will be calculated in select
+        // values below are calculated in select
+        totalValueUsd: 0,
+        aggregatedRewards: [],
       }
     },
     enabled: !!userAddress && isConnected,
-    staleTime: 60000, // 1 minute
-    refetchInterval: 300000, // 5 minutes
+    staleTime: 60000,
+    refetchInterval: 300000,
     select: data => {
-      // Calculate prices and aggregate outside of queryFn
       const filteredRewards = data.data.filter(reward => bn(reward.claimable).gt(0))
 
-      // Aggregate rewards by token address and calculate USD values
       const aggregatedRewards = filteredRewards.reduce(
         (acc, reward) => {
           const tokenAddress = reward.token

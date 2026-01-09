@@ -26,12 +26,12 @@ type Props = {
 export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) {
   const { hiddenHandRewardsData, refetchHiddenHandRewards } = usePortfolio()
   const { isDesktop, isMobile } = useBreakpoints()
-
   const step = useClaimHiddenHandRewardsStep({ onSuccess: refetchHiddenHandRewards })
   const transactionSteps = useTransactionSteps([step])
-  const claimTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
 
+  const claimTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
   const chain = PROJECT_CONFIG.defaultNetwork
+  const isSuccess = !!claimTxHash
 
   const rewards: HumanTokenAmount[] =
     hiddenHandRewardsData?.aggregatedRewards.map(reward => ({
@@ -39,12 +39,9 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
       humanAmount: reward.claimable as HumanAmount,
     })) || []
 
-  const isSuccess = !!claimTxHash
-
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap trapFocus={!isSuccess}>
-      <SuccessOverlay startAnimation={!!claimTxHash} />
-
+      <SuccessOverlay startAnimation={isSuccess} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
         <TransactionModalHeader
@@ -56,7 +53,6 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
         <ModalBody>
           <AnimateHeightChange spacing="sm" w="full">
             {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
-
             <Card variant="modalSubSection">
               <TokenRowGroup
                 amounts={rewards}
