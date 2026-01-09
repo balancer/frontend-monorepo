@@ -13,10 +13,12 @@ import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { encodeFunctionData } from 'viem'
 import { useReadContract } from 'wagmi'
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { isCowPool } from '../../helpers'
 import { getChainId } from '@repo/lib/config/app.config'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { PoolType } from '@balancer/sdk'
+import { Address } from 'viem'
 
 const id = 'set-swap-fee'
 
@@ -28,11 +30,15 @@ const labels: TransactionLabels = {
   tooltip: 'Set swap fee',
 }
 
-export function useSetSwapFeeStep() {
+interface UseSetSwapFeeStepParams {
+  poolAddress: Address | undefined
+  network: GqlChain
+  poolType: PoolType
+}
+
+export function useSetSwapFeeStep({ poolAddress, network, poolType }: UseSetSwapFeeStepParams) {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
-  const { poolCreationForm, poolAddress } = usePoolCreationForm()
-  const [poolType, network] = poolCreationForm.getValues(['poolType', 'network'])
   const chainId = getChainId(network)
 
   const { userAddress, isConnected } = useUserAccount()
