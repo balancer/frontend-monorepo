@@ -13,41 +13,52 @@ import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { encodeFunctionData } from 'viem'
 import { useReadContract } from 'wagmi'
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { isCowPool } from '../../helpers'
 import { getChainId } from '@repo/lib/config/app.config'
 import { Address } from 'viem'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
 import { getCowRawWeight } from '../../helpers'
+import { PoolType } from '@balancer/sdk'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useBindTokenStep(token: {
-  address: Address
-  symbol: string
-  rawAmount: bigint
-  weight?: string
-}) {
+interface UseBindTokenStepParams {
+  token: {
+    address: Address
+    symbol: string
+    rawAmount: bigint
+    weight?: string
+  }
+  network: GqlChain
+  poolType: PoolType
+  poolAddress: Address | undefined
+}
+
+export function useBindTokenStep({
+  token,
+  network,
+  poolType,
+  poolAddress,
+}: UseBindTokenStepParams) {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
-  const { poolCreationForm, poolAddress } = usePoolCreationForm()
-  const [poolType, network] = poolCreationForm.getValues(['poolType', 'network'])
   const chainId = getChainId(network)
 
   const { userAddress, isConnected } = useUserAccount()
   const { buildTenderlyUrl } = useTenderly({ chainId })
 
   const labels: TransactionLabels = {
-    init: `Add ${token.symbol}`,
-    title: `Add ${token.symbol}`,
+    init: `Add ${token?.symbol}`,
+    title: `Add ${token?.symbol}`,
     confirming: 'Confirming add...',
     confirmed: 'Add confirmed!',
-    tooltip: `Add ${token.symbol}`,
+    tooltip: `Add ${token?.symbol}`,
   }
 
   const { data: isTokenBound, isLoading: isLoadingIsTokenBound } = useReadContract({
     address: poolAddress,
     abi: cowAmmPoolAbi,
     functionName: 'isBound',
-    args: [token.address],
+    args: [token?.address],
     chainId,
     query: { enabled: !!poolAddress && isCowPool(poolType) },
   })
@@ -58,7 +69,7 @@ export function useBindTokenStep(token: {
     const data = encodeFunctionData({
       abi: cowAmmPoolAbi,
       functionName: 'bind',
-      args: [token.address, token.rawAmount, getCowRawWeight(token.weight)],
+      args: [token?.address, token?.rawAmount, getCowRawWeight(token?.weight)],
     })
 
     txConfig = {
@@ -70,14 +81,14 @@ export function useBindTokenStep(token: {
   }
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation(
-    `Error in bind token gas estimation for ${token.symbol}`,
+    `Error in bind token gas estimation for ${token?.symbol}`,
     {
       buildCallQueryData: txConfig,
       tenderlyUrl: buildTenderlyUrl(txConfig),
     }
   )
 
-  const id = `bind-token-${token.symbol}`
+  const id = `bind-token-${token?.symbol}`
 
   const step = useMemo(
     () => ({

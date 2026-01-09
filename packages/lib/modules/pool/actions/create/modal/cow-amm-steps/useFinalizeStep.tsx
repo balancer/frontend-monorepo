@@ -13,10 +13,12 @@ import { useState } from 'react'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { encodeFunctionData } from 'viem'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
-import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { getChainId } from '@repo/lib/config/app.config'
 import { isCowPool } from '../../helpers'
 import { cowAmmPoolAbi } from '@repo/lib/modules/web3/contracts/abi/cowAmmAbi'
+import { Address } from 'viem'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { PoolType } from '@balancer/sdk'
+import { getChainId } from '@repo/lib/config/app.config'
 
 const id = 'finalize'
 
@@ -28,11 +30,15 @@ const labels: TransactionLabels = {
   tooltip: 'Finalize',
 }
 
-export function useFinalizeStep() {
+interface UseFinalizeStepParams {
+  poolAddress: Address | undefined
+  network: GqlChain
+  poolType: PoolType
+}
+
+export function useFinalizeStep({ poolAddress, network, poolType }: UseFinalizeStepParams) {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
-  const { poolCreationForm, poolAddress } = usePoolCreationForm()
-  const [poolType, network] = poolCreationForm.getValues(['poolType', 'network'])
   const chainId = getChainId(network)
 
   const { userAddress, isConnected } = useUserAccount()
