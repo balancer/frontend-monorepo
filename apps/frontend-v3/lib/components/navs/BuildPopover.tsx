@@ -4,6 +4,10 @@ import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIcon
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import NextLink from 'next/link'
+import {
+  COW_PROTOCOL_ID,
+  BALANCER_PROTOCOL_ID,
+} from '@repo/lib/modules/pool/actions/create/constants'
 
 const RESOURCE_LINKS = {
   'Builder resources': [
@@ -62,12 +66,12 @@ const CREATE_POOL_LINKS = {
   'Create a pool': [
     {
       label: 'Balancer',
-      href: '/create',
+      href: `/create?protocol=${BALANCER_PROTOCOL_ID.toLowerCase()}`,
       icon: <BalancerIconCircular size={32} />,
     },
     {
       label: 'CoW AMM',
-      href: '/create?protocol=cow',
+      href: `/create?protocol=${COW_PROTOCOL_ID.toLowerCase()}`,
       icon: <CowIconCircular size={32} />,
     },
   ],

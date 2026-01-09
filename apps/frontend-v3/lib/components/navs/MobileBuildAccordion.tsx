@@ -17,16 +17,20 @@ import NextLink from 'next/link'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
 import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIconCircular'
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
+import {
+  COW_PROTOCOL_ID,
+  BALANCER_PROTOCOL_ID,
+} from '@repo/lib/modules/pool/actions/create/constants'
 
 const CREATE_POOL_LINKS = [
   {
     label: 'Balancer',
-    href: '/create',
+    href: `/create?protocol=${BALANCER_PROTOCOL_ID.toLowerCase()}`,
     icon: <BalancerIconCircular size={24} />,
   },
   {
     label: 'CoW AMM',
-    href: '/create?protocol=cow',
+    href: `/create?protocol=${COW_PROTOCOL_ID.toLowerCase()}`,
     icon: <CowIconCircular size={24} />,
   },
 ]

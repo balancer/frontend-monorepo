@@ -20,12 +20,7 @@ import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/g
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
-import { isCowProtocol } from '@repo/lib/modules/pool/actions/create/helpers'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { PoolType } from '@balancer/sdk'
+import { useProtocolSearchParams } from './useProtocolSearchParams'
 
 interface RestartPoolCreationModalProps {
   modalTitle?: string
@@ -47,37 +42,15 @@ export function RestartPoolCreationModal({
   isAbsolutePosition,
 }: RestartPoolCreationModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const searchParams = useSearchParams()
   const chainName = getChainName(network)
   const poolTypeName = getPoolTypeLabel(poolType)
-  const { isFirstStep } = usePoolCreationFormSteps()
-  const protocolSearchParam = searchParams.get('protocol')
-  const { poolCreationForm } = usePoolCreationForm()
-  const hasHandledProtocolParamRef = useRef(false)
 
-  const isSearchParamCow = protocolSearchParam && isCowProtocol(protocolSearchParam)
-  const isCowAmm = poolType === GqlPoolType.CowAmm
-  const showCowAmmWarning = isSearchParamCow && !isCowAmm && !isFirstStep
+  const { setupCowCreation, showCowAmmWarning, showBalancerWarning } = useProtocolSearchParams({
+    onOpen,
+    poolType,
+  })
 
-  const setupCowCreation = () => {
-    poolCreationForm.setValue('protocol', 'CoW')
-    poolCreationForm.setValue('poolType', PoolType.CowAmm)
-    poolCreationForm.trigger('protocol')
-    poolCreationForm.trigger('poolType')
-  }
-
-  useEffect(() => {
-    if (showCowAmmWarning) {
-      onOpen()
-      hasHandledProtocolParamRef.current = true
-    } else if (isSearchParamCow && !hasHandledProtocolParamRef.current) {
-      // Defer to next tick to ensure form is fully hydrated from localStorage
-      setTimeout(() => {
-        setupCowCreation()
-        hasHandledProtocolParamRef.current = true
-      }, 0)
-    }
-  }, [showCowAmmWarning, isSearchParamCow])
+  console.log({ showBalancerWarning })
 
   const handleFormReset = () => {
     handleRestart()
@@ -86,7 +59,7 @@ export function RestartPoolCreationModal({
   }
 
   const resetButtonText = poolAddress ? 'Abandon set up' : 'Delete and start over'
-  const beforeDeploymentContent = `You have begun the process of creating a new ${poolTypeName} pool on the ${chainName} network. Are you sure you want to delete all progress ${showCowAmmWarning ? 'to begin creation of a new CoW AMM?' : 'and start again from scratch?'}`
+  const beforeDeploymentContent = `You have begun the process of creating a new ${poolTypeName} pool on the ${chainName} network. Are you sure you want to delete all progress ${showCowAmmWarning ? 'to begin creation of a new CoW AMM?' : showBalancerWarning ? 'to begin creation of a new Balancer v3 pool?' : 'and start again from scratch?'}`
 
   return (
     <>
