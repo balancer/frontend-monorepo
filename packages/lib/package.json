@@ -24,7 +24,7 @@
   "dependencies": {
     "@apollo/client": "4.0.11",
     "@balancer-labs/balancer-maths": "0.0.37",
-    "@balancer/sdk": "4.10.1",
+    "@balancer/sdk": "5.0.1",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
@@ -39,7 +39,7 @@
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@nktkas/hyperliquid": "0.23.1",
-    "@rainbow-me/rainbowkit": "2.2.9",
+    "@rainbow-me/rainbowkit": "2.2.10",
     "@safe-global/safe-apps-sdk": "9.1.0",
     "@sentry/nextjs": "10.32.1",
     "@tanstack/react-query": "5.90.5",
@@ -76,8 +76,8 @@
     "use-debounce": "10.0.6",
     "use-sound": "^4.0.1",
     "usehooks-ts": "3.1.1",
-    "viem": "2.39.3",
-    "wagmi": "2.19.5"
+    "viem": "2.43.5",
+    "wagmi": "3.2.0"
   },
   "devDependencies": {
     "@apollo/client-integration-nextjs": "0.14.3",
