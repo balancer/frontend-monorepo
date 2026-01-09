@@ -30,6 +30,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { isAfter } from 'date-fns'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -224,7 +225,11 @@ export function ClaimNetworkPools() {
                   })
                 }
 
-                if (hasHiddenHandRewards) {
+                // hidden hand claims end after 30 June 2026
+                const julyFirstMidnightUTC = new Date(Date.UTC(2026, 6, 1, 0, 0, 0))
+                const isPastJulyFirst = isAfter(new Date(), julyFirstMidnightUTC)
+
+                if (hasHiddenHandRewards && !isPastJulyFirst) {
                   claimableItems.push({
                     type: 'hidden-hand',
                     chain: PROJECT_CONFIG.defaultNetwork,
