@@ -134,8 +134,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const allVotesTimelocked = areAllVotesTimelocked(myVotes)
   const votesAlreadyOptimized = totalInfo.totalRewardValue.toNumber() === optimizedRewardValue
 
-  const disabledButton = true // TODO: enable again during migration to Votemarket?
-  // const disabledButton = !canReceiveIncentives(userAddress) || votesAlreadyOptimized
+  const disabledButton = !canReceiveIncentives(userAddress) || votesAlreadyOptimized
 
   let tooltipLabelText: string
   if (allVotesTimelocked) {

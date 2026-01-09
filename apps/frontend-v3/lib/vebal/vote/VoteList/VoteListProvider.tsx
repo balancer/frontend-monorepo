@@ -85,32 +85,18 @@ export interface UseVoteListArgs {}
 export function useVoteListLogic({}: UseVoteListArgs) {
   const {
     votingPools,
-    incentives,
     incentivesError,
     incentivesAreLoading,
     votingListLoading,
     gaugeVotesIsLoading,
     isExpiredGaugesLoading,
-    gaugeVotes,
   } = useVotes()
 
   const filtersState = useVoteListFiltersState()
 
-  const voteListData = votingPools
-
-  const votingPoolsList = useMemo<VotingPoolWithData[]>(() => {
-    return voteListData.map(vote => ({
-      ...vote,
-      gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
-      votingIncentive: incentives
-        ? incentives.find(incentive => incentive.poolId === vote.id)
-        : undefined,
-    }))
-  }, [voteListData, gaugeVotes, incentives])
-
   const filteredVoteList = useMemo(() => {
     return filterVoteList(
-      votingPoolsList,
+      votingPools,
       filtersState.searchText,
       filtersState.networks,
       filtersState.poolTypes,
@@ -118,7 +104,7 @@ export function useVoteListLogic({}: UseVoteListArgs) {
       filtersState.protocolVersion
     )
   }, [
-    votingPoolsList,
+    votingPools,
     filtersState.searchText,
     filtersState.networks,
     filtersState.poolTypes,
