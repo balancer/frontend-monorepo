@@ -29,10 +29,11 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
 
   const errors: MinimumDepositErrors = {}
 
-  const minBptAmount = addBuffer(formatUnits(minimumTradeAmount, 18))
+  const BPT_DECIMALS = 18
+  const minBptAmount = addBuffer(formatUnits(minimumTradeAmount, BPT_DECIMALS))
   const minBptAmountInDollars = usdValueForTokenAddress(pool.address, pool.chain, minBptAmount)
   const isBptEnough = bn(totalUSDValue).gte(minBptAmountInDollars)
-  if (!isBptEnough) errors['BPT'] = minBptAmount
+  if (!isBptEnough) errors['BPT'] = round(minBptAmount, BPT_DECIMALS)
 
   const individualAmountErrors = humanAmountsIn.reduce((prev, amount) => {
     if (amount.humanAmount === '' || bn(amount.humanAmount).isZero()) return prev
@@ -47,17 +48,17 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
       const underlying = token.underlyingToken
 
       const minUnderlyingTradeAmount = addBuffer(
-        formatUnits(minimumWrapAmount, token.underlyingToken.decimals)
+        formatUnits(minimumWrapAmount, underlying.decimals)
       )
       if (bn(amount.humanAmount).lt(minUnderlyingTradeAmount)) {
-        prev[underlying.symbol] = minUnderlyingTradeAmount
+        prev[underlying.symbol] = round(minUnderlyingTradeAmount, underlying.decimals)
       }
 
       // We have an underlying token that will have to be wrapped
       // (checking amounts before and after the wrap)
       let minWrapAmount = addBuffer(formatUnits(minimumWrapAmount, underlying.decimals))
       if (bn(amount.humanAmount).lt(minWrapAmount)) {
-        prev[underlying.symbol] = minWrapAmount
+        prev[underlying.symbol] = round(minWrapAmount, underlying.decimals)
       }
 
       const wrapperAmount = bn(amount.humanAmount).div(token.priceRate)
@@ -65,13 +66,13 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
       if (bn(wrapperAmount).lt(minWrapAmount)) {
         const minUnderlyingAmount = bn(minWrapAmount).times(token.priceRate)
         if (minUnderlyingAmount.gt(prev[underlying.symbol] || 0)) {
-          prev[underlying.symbol] = minUnderlyingAmount
+          prev[underlying.symbol] = round(minUnderlyingAmount, underlying.decimals)
         }
       }
     } else {
       const minTradeAmount = addBuffer(formatUnits(minimumWrapAmount, token.decimals))
       if (bn(amount.humanAmount).lt(minTradeAmount)) {
-        prev[token.symbol] = minTradeAmount
+        prev[token.symbol] = round(minTradeAmount, token.decimals)
       }
     }
 
@@ -109,7 +110,7 @@ export function useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue }: Props)
     if (tokenShare.lte(minTradeAmount)) {
       const minTotalUSD = minTradeAmount.times(tokenPrice).div(weight)
       if (minTotalUSD.gt(prev['PriceImpact'] ? prev['PriceImpact'] : 0)) {
-        prev['PriceImpact'] = minTotalUSD
+        prev['PriceImpact'] = round(minTotalUSD, 6)
       }
     }
 
@@ -138,9 +139,11 @@ function findToken(tokens: PoolToken[], address: Address) {
 // numbers are rounded in a way that makes it more difficult to exploit
 // this can give bigger min amounts that the calculated here. The solution
 // for that is to add some buffer to our calculations
-const BUFFER_PERCENTAGE = 1
+const BUFFER_MULTIPLIER = 1.01
 function addBuffer(n: HumanAmount) {
-  return bn(n)
-    .times(100 + BUFFER_PERCENTAGE)
-    .div(100)
+  return bn(n).times(BUFFER_MULTIPLIER)
+}
+
+function round(n: BigNumber, decimals: number) {
+  return bn(n.toFixed(decimals))
 }
