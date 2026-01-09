@@ -33,7 +33,7 @@ function MinimumDepositErrorAlert({ errorType, min }: { errorType: string; min: 
 
   const toCurrencyWithoutLimit = (min: BigNumber) => {
     const symbol = hasFxRates ? symbolForCurrency(currency) : '$'
-    return `${symbol}${min.toString()}`
+    return `${symbol}${min.toFixed()}`
   }
 
   return (
@@ -43,7 +43,7 @@ function MinimumDepositErrorAlert({ errorType, min }: { errorType: string; min: 
           ? `The minimum amount to add should be ${toCurrencyWithoutLimit(min)}`
           : errorType === 'PriceImpact'
             ? `To calculate the price impact a minimum add of ${toCurrencyWithoutLimit(min)} is needed`
-            : `The minimum add for ${errorType} should be at least ${min.toString()}`}
+            : `The minimum add for ${errorType} should be at least ${min.toFixed()}`}
       </Text>
     </ListItem>
   )
