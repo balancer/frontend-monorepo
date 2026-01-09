@@ -31,6 +31,8 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { isAfter } from 'date-fns'
+import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
+import { ReactNode } from 'react'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -264,12 +266,26 @@ export function ClaimNetworkPools() {
                     }
                   }
 
-                  const getTitle = () => {
+                  const getTitle = (): ReactNode => {
                     switch (item.type) {
                       case 'protocol':
                         return 'Balancer protocol revenue'
                       case 'hidden-hand':
-                        return 'Hidden Hand rewards'
+                        return (
+                          <LabelWithTooltip
+                            bgClip="text"
+                            bgColor="rgb(229, 211, 190)"
+                            color="transparent"
+                            fontSize="16px"
+                            fontWeight="700"
+                            label="Hidden Hand rewards"
+                            mb={0}
+                            mt={0}
+                            placement="top"
+                            textTransform="capitalize"
+                            tooltip="Available until June 30, 2026"
+                          />
+                        )
                       default:
                         return undefined
                     }
