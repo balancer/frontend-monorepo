@@ -33,6 +33,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { isAfter } from 'date-fns'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import { ReactNode } from 'react'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -97,16 +98,24 @@ export function ClaimNetworkPools() {
   )
 
   const hasChainRewards = poolsWithChain.length > 0
-
   const noRewards = !hasProtocolRewards && !hasChainRewards
+
+  // hidden hand claims expire after 30 June 2026
+  const julyFirstMidnightUTC = new Date(Date.UTC(2026, 6, 1, 0, 0, 0))
+  const isPastJulyFirst = isAfter(new Date(), julyFirstMidnightUTC)
 
   return (
     <FadeInOnView>
       <Stack gap={5}>
+        {!isPastJulyFirst && (
+          <BalAlert
+            content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
+            status="warning"
+          />
+        )}
         <Heading size="h4" variant="special">
           Claimable incentives
         </Heading>
-
         {isLoadingRewards || isLoadingPortfolio ? (
           <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: isBeets ? 2 : 3 }} spacing="md">
             <Skeleton height="85px" w="full" />
@@ -226,10 +235,6 @@ export function ClaimNetworkPools() {
                     index: poolsWithChain.length,
                   })
                 }
-
-                // hidden hand claims end after 30 June 2026
-                const julyFirstMidnightUTC = new Date(Date.UTC(2026, 6, 1, 0, 0, 0))
-                const isPastJulyFirst = isAfter(new Date(), julyFirstMidnightUTC)
 
                 if (hasHiddenHandRewards && !isPastJulyFirst) {
                   claimableItems.push({
