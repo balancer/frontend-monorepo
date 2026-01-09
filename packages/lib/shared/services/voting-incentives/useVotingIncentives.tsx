@@ -77,7 +77,6 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
 }
 
 async function fetchStakeDaoVoteMarket(): Promise<VoteMarketResponse> {
-  console.log('Stake DAO API fetching at', new Date().toISOString())
   const res = await fetch(STAKE_DAO_VOTE_MARKET_URL)
 
   if (!res.ok) throw new Error(`Failed to fetch Stake Dao Votemarket data: ${res.status}`)
