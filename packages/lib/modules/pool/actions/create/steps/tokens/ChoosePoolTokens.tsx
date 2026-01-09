@@ -163,8 +163,6 @@ export function ChoosePoolTokens() {
                   onClick={() => addPoolToken()}
                   poolType={poolType}
                 />
-                <Divider />
-                <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
               </VStack>
             </>
           )}
