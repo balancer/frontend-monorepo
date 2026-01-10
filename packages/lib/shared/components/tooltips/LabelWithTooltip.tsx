@@ -1,16 +1,17 @@
 'use client'
 
-import { Text, TextProps } from '@chakra-ui/react'
+import { PlacementWithLogical, Text, TextProps } from '@chakra-ui/react'
 import { TooltipWithTouch } from './TooltipWithTouch'
 
 interface LabelWithTooltipProps extends TextProps {
   label: string
   tooltip: string
+  placement?: PlacementWithLogical
 }
 
-export function LabelWithTooltip({ label, tooltip, ...rest }: LabelWithTooltipProps) {
+export function LabelWithTooltip({ label, tooltip, placement, ...rest }: LabelWithTooltipProps) {
   return (
-    <TooltipWithTouch label={tooltip}>
+    <TooltipWithTouch label={tooltip} placement={placement}>
       <Text
         _after={{
           content: '""',

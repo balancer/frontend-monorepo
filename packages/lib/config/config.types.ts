@@ -77,6 +77,7 @@ export interface ContractsConfig {
   omniVotingEscrow?: Address
   gaugeWorkingBalanceHelper?: Address
   gaugeController?: Address
+  rewardDistributor?: Address // hidden hand rewards distributor
 }
 export interface PoolsConfig {
   issues: Partial<Record<PoolIssue, string[]>>

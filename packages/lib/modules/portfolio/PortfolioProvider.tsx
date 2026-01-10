@@ -22,6 +22,7 @@ import {
 } from '../pool/user-balance.helpers'
 import { getTimestamp } from '@repo/lib/shared/utils/time'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { useGetHiddenHandRewards } from './PortfolioClaim/useGetHiddenHandRewards'
 
 export interface ClaimableBalanceResult {
   status: 'success' | 'error'
@@ -139,6 +140,13 @@ export function usePortfolioLogic() {
   const { protocolRewardsData, isLoadingProtocolRewards, refetchProtocolRewards } =
     useProtocolRewards()
 
+  // Hidden Hand rewards
+  const {
+    data: hiddenHandRewardsData,
+    isLoading: isLoadingHiddenHandRewards,
+    refetch: refetchHiddenHandRewards,
+  } = useGetHiddenHandRewards()
+
   // Other tokens rewards
   const {
     claimableRewards,
@@ -243,7 +251,14 @@ export function usePortfolioLogic() {
     isLoadingClaimableRewards,
     isLoadingPortfolio:
       isLoadingPoolsUserAddress || isLoadingOnchainUserBalances || isLoadingPoolsId,
-    isLoadingRewards: isLoadingBalRewards || isLoadingClaimableRewards || isLoadingProtocolRewards,
+    isLoadingRewards:
+      isLoadingBalRewards ||
+      isLoadingClaimableRewards ||
+      isLoadingProtocolRewards ||
+      isLoadingHiddenHandRewards,
+    hiddenHandRewardsData,
+    isLoadingHiddenHandRewards,
+    refetchHiddenHandRewards,
   }
 }
 

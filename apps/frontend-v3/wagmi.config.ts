@@ -93,6 +93,10 @@ export default defineConfig(() => {
             name: 'LiquidityBootstrappingPool',
             address: '0xa1E9e74BbDBDE4B8F9F624E71641F54e3b7F11bf',
           },
+          {
+            name: 'RewardDistributor',
+            address: '0xa9b08B4CeEC1EF29EdEC7F9C94583270337D6416',
+          },
         ],
       }),
     ],

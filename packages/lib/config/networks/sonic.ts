@@ -76,6 +76,7 @@ const networkConfig: NetworkConfig = {
       loopedSonicVault: '0xc76995054ce51dfbbc954840d699b2f33d2538ee',
     },
     permit2: PERMIT2[sonic.id],
+    rewardDistributor: '0xf5a665732c78847c63cf897e200cf3a3c2d652a6',
   },
   pools: convertHexToLowerCase({ issues: {} }),
 }

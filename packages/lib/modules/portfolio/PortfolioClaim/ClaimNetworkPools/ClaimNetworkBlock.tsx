@@ -1,5 +1,6 @@
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { Button, Card, Flex, HStack, Heading, IconButton, Stack } from '@chakra-ui/react'
+import { ReactNode } from 'react'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -9,7 +10,7 @@ import { ChevronRight } from 'react-feather'
 type Props = {
   chain: GqlChain
   networkTotalClaimableFiatBalance: number
-  title?: string
+  title?: ReactNode
   onClick(): void
 }
 
