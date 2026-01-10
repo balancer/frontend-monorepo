@@ -205,7 +205,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Unknown]: 'Unknown',
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'Weighted',
+  [GqlPoolType.CowAmm]: 'CoW AMM',
   [GqlPoolType.QuantAmmWeighted]: 'BTF',
   [GqlPoolType.Reclamm]: 'reCLAMM',
 }

@@ -78,15 +78,16 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   },
 }
 
-export const BALANCER_V3_NAME = ProjectConfigBalancer.projectName + ' v3'
+export const BALANCER_PROTOCOL_ID = 'Balancer v3'
+export const COW_PROTOCOL_ID = 'CoW'
 
 export const BALANCER_PROTOCOL_OPTIONS = [
   {
-    name: BALANCER_V3_NAME,
+    name: BALANCER_PROTOCOL_ID,
     imageSrc: ProjectConfigBalancer.projectLogo,
   },
   {
-    name: 'CoW',
+    name: COW_PROTOCOL_ID,
     imageSrc: '/images/protocols/cowamm.svg',
   },
 ] as const

@@ -8,7 +8,7 @@ import {
   INITIAL_RECLAMM_CONFIG,
   INITIAL_ECLP_CONFIG,
   NUM_FORMAT,
-  BALANCER_V3_NAME,
+  BALANCER_PROTOCOL_ID,
 } from './constants'
 import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } from './types'
 import { Address } from 'viem'
@@ -48,11 +48,11 @@ export function usePoolFormLogic() {
     { mode: 'all' }
   )
 
-  const protocolName = isBalancer ? BALANCER_V3_NAME : PROJECT_CONFIG.projectName
+  const protocol = isBalancer ? BALANCER_PROTOCOL_ID : PROJECT_CONFIG.projectName
 
   const poolCreationForm = usePersistentForm<PoolCreationForm>(
     LS_KEYS.PoolCreation.Form,
-    { ...INITIAL_POOL_CREATION_FORM, protocol: protocolName },
+    { ...INITIAL_POOL_CREATION_FORM, protocol },
     { mode: 'all' }
   )
 
