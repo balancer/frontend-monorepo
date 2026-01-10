@@ -10,11 +10,17 @@ import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolType() {
   const { poolCreationForm } = usePoolCreationForm()
-  const [network, protocol, poolType, weightedPoolStructure] = useWatch({
+  const [network, protocol, poolType, weightedPoolStructure, poolTokens] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure'],
+    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure', 'poolTokens'],
   })
 
+  const selectedPoolTokens = poolTokens.filter(token => token.address)
+  const tokenAddresses = selectedPoolTokens.map(token => token.address!)
+  const tokenSymbols = selectedPoolTokens.map(token => token.data?.symbol || '')
+  const tokenWeights = isWeightedPool(poolType)
+    ? selectedPoolTokens.map(token => Number(token.weight))
+    : undefined
   const showWeightStructure = isWeightedPool(poolType) || isCowPool(poolType)
 
   const cardInformationRows = [
@@ -55,7 +61,12 @@ export function PreviewPoolType() {
           </VStack>
 
           <Box position="relative">
-            <NetworkPreviewSVG />
+            <NetworkPreviewSVG
+              chain={network}
+              tokenAddresses={tokenAddresses}
+              tokenSymbols={tokenSymbols}
+              tokenWeights={tokenWeights}
+            />
             <Box left="50%" position="absolute" top="50%" transform="translate(-50%, -50%)">
               <NetworkIcon bg="background.level4" chain={network} shadow="lg" />
             </Box>
