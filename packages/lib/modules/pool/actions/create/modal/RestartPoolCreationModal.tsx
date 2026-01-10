@@ -21,6 +21,7 @@ import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useProtocolSearchParams } from './useProtocolSearchParams'
+import { useRouter } from 'next/navigation'
 
 interface RestartPoolCreationModalProps {
   modalTitle?: string
@@ -42,15 +43,12 @@ export function RestartPoolCreationModal({
   isAbsolutePosition,
 }: RestartPoolCreationModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const chainName = getChainName(network)
-  const poolTypeName = getPoolTypeLabel(poolType)
+  const router = useRouter()
 
   const { setupCowCreation, showCowAmmWarning, showBalancerWarning } = useProtocolSearchParams({
     onOpen,
     poolType,
   })
-
-  console.log({ showBalancerWarning })
 
   const handleFormReset = () => {
     handleRestart()
@@ -58,8 +56,10 @@ export function RestartPoolCreationModal({
     onClose()
   }
 
-  const resetButtonText = poolAddress ? 'Abandon set up' : 'Delete and start over'
-  const beforeDeploymentContent = `You have begun the process of creating a new ${poolTypeName} pool on the ${chainName} network. Are you sure you want to delete all progress ${showCowAmmWarning ? 'to begin creation of a new CoW AMM?' : showBalancerWarning ? 'to begin creation of a new Balancer v3 pool?' : 'and start again from scratch?'}`
+  const handleCloseModal = () => {
+    onClose()
+    router.replace('/create')
+  }
 
   return (
     <>
@@ -89,14 +89,19 @@ export function RestartPoolCreationModal({
           <ModalCloseButton />
           <ModalBody pb="lg">
             <VStack>
-              {poolAddress ? (
-                <AfterDeploymentContent
+              {!poolAddress ? (
+                <BeforePoolDeployedWarning
+                  network={network}
+                  poolType={poolType}
+                  showBalancerWarning={showBalancerWarning}
+                  showCowAmmWarning={showCowAmmWarning}
+                />
+              ) : (
+                <AfterPoolDeployedWarning
                   network={network}
                   poolAddress={poolAddress}
                   poolType={poolType}
                 />
-              ) : (
-                <Text color="font.primary">{beforeDeploymentContent}</Text>
               )}
               <HStack gap="ms" mt="md" w="full">
                 <Button
@@ -108,14 +113,14 @@ export function RestartPoolCreationModal({
                   size="lg"
                   variant="danger"
                 >
-                  {resetButtonText}
+                  {poolAddress ? 'Abandon set up' : 'Delete and start over'}
                 </Button>
                 <Button
                   display="flex"
                   flex="1"
                   gap="1"
                   minWidth="184px"
-                  onClick={onClose}
+                  onClick={handleCloseModal}
                   size="lg"
                   variant="tertiary"
                 >
@@ -130,13 +135,50 @@ export function RestartPoolCreationModal({
   )
 }
 
-interface AfterDeploymentContentProps {
+interface BeforePoolDeployedWarningProps {
+  network: GqlChain
+  poolType: GqlPoolType
+  showCowAmmWarning: boolean
+  showBalancerWarning: boolean
+}
+
+function BeforePoolDeployedWarning({
+  network,
+  poolType,
+  showCowAmmWarning,
+  showBalancerWarning,
+}: BeforePoolDeployedWarningProps) {
+  const poolTypeName = getPoolTypeLabel(poolType)
+  const chainName = getChainName(network)
+
+  let deleteProgressReason: string
+  if (showCowAmmWarning) {
+    deleteProgressReason = 'to begin creation of a new CoW AMM?'
+  } else if (showBalancerWarning) {
+    deleteProgressReason = 'to begin creation of a new Balancer v3 pool?'
+  } else {
+    deleteProgressReason = 'and start again from scratch?'
+  }
+
+  return (
+    <Text color="font.primary">
+      You have begun the process of creating a new {poolTypeName} pool on the {chainName} network.
+      Are you sure you want to delete all progress {deleteProgressReason}
+    </Text>
+  )
+}
+
+interface AfterPoolDeployedWarningProps {
   network: GqlChain
   poolType: GqlPoolType
   poolAddress: Address
 }
 
-function AfterDeploymentContent({ network, poolType, poolAddress }: AfterDeploymentContentProps) {
+function AfterPoolDeployedWarning({
+  network,
+  poolType,
+  poolAddress,
+}: AfterPoolDeployedWarningProps) {
   return (
     <VStack align="start" spacing="md">
       <Text>

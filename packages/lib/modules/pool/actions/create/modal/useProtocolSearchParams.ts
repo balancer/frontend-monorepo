@@ -12,20 +12,23 @@ interface UseProtocolSearchParams {
 }
 
 export function useProtocolSearchParams({ onOpen, poolType }: UseProtocolSearchParams) {
+  const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
+  const { isFirstStep } = usePoolCreationFormSteps()
   const searchParams = useSearchParams()
 
   const protocolSearchParam = searchParams.get('protocol')
-  const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
-  const { isFirstStep } = usePoolCreationFormSteps()
 
   const isProtocolParamCow = !!protocolSearchParam && isCowProtocol(protocolSearchParam)
-  const isCowAmm = poolType === GqlPoolType.CowAmm
-  const showCowAmmWarning = isProtocolParamCow && !isCowAmm && !isFirstStep
-
   const isProtocolParamBalancer = !!protocolSearchParam && isBalancerProtocol(protocolSearchParam)
+  const isCowAmm = poolType === GqlPoolType.CowAmm
 
+  const showCowAmmWarning = isProtocolParamCow && !isCowAmm && !isFirstStep
   const showBalancerWarning = isProtocolParamBalancer && isCowAmm && !isFirstStep
-  const showWarningModal = showCowAmmWarning || showBalancerWarning
+
+  const shouldShowWarningModal = showCowAmmWarning || showBalancerWarning
+  const shouldSwitchToCowProtocol = isProtocolParamCow && !showCowAmmWarning && isFirstStep
+  const shouldSwitchToBalancerProtocol =
+    isProtocolParamBalancer && !showBalancerWarning && isFirstStep
 
   const setupCowCreation = () => {
     poolCreationForm.setValue('protocol', 'CoW')
@@ -35,19 +38,16 @@ export function useProtocolSearchParams({ onOpen, poolType }: UseProtocolSearchP
   }
 
   useEffect(() => {
-    if (showWarningModal && !isFirstStep) {
+    if (shouldShowWarningModal) {
       onOpen()
-    } else if (isProtocolParamCow && !showCowAmmWarning && isFirstStep) {
-      // Defer to next tick to ensure form is fully hydrated from localStorage
-      setTimeout(() => {
-        setupCowCreation()
-      }, 0)
-    } else if (isProtocolParamBalancer && !showBalancerWarning && isFirstStep) {
-      setTimeout(() => {
-        resetPoolCreationForm()
-      }, 0)
+    } else if (shouldSwitchToCowProtocol) {
+      // setTimeout defers to next tick to ensure form is fully hydrated from localStorage,
+      // otherwise form state fails to update when user navigating from another page that is not "/create"
+      setTimeout(() => setupCowCreation(), 0)
+    } else if (shouldSwitchToBalancerProtocol) {
+      setTimeout(() => resetPoolCreationForm(), 0)
     }
-  }, [showWarningModal, isProtocolParamCow, isProtocolParamBalancer])
+  }, [shouldShowWarningModal, shouldSwitchToCowProtocol, shouldSwitchToBalancerProtocol])
 
   return { setupCowCreation, showCowAmmWarning, showBalancerWarning }
 }
