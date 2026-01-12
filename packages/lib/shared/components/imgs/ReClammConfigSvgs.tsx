@@ -66,6 +66,42 @@ function normalizeWeights(tokenCount: number, tokenWeights?: number[]) {
   return weights.map(w => w / total)
 }
 
+function computeArcs(
+  normalizedAddresses: Address[],
+  fractions: number[],
+  circumference: number,
+  dividerGapLen: number,
+  chain: GqlChain
+) {
+  if (normalizedAddresses.length === 0) return []
+
+  const gap = normalizedAddresses.length > 1 ? dividerGapLen : 0
+  let cumulativeLen = 0
+  return normalizedAddresses.map((address, i) => {
+    const fraction = fractions[i] ?? 0
+    const rawLen = circumference * fraction
+
+    const isLast = i === normalizedAddresses.length - 1
+    const fullLen = isLast ? Math.max(0, circumference - cumulativeLen) : rawLen
+    const dashLen = Math.max(0, fullLen - gap)
+    const dashOffset = -cumulativeLen
+    cumulativeLen += fullLen
+
+    const { from, to } = getTokenColor(chain, address, i)
+    const gradientId = `token-grad-${chain}-${address}`
+
+    return {
+      dashLen,
+      dashOffset,
+      from,
+      gradientId,
+      i,
+      to,
+      address,
+    }
+  })
+}
+
 export function NetworkPreviewSVG({
   chain,
   tokenAddresses,
@@ -95,10 +131,7 @@ export function NetworkPreviewSVG({
     Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>
   >(new Map())
 
-  const fractions = useMemo(
-    () => normalizeWeights(normalizedAddresses.length, tokenWeights),
-    [normalizedAddresses.length, tokenWeights]
-  )
+  const fractions = normalizeWeights(normalizedAddresses.length, tokenWeights)
 
   const animationTrigger = useMemo(() => {
     const addrKey = normalizedAddresses.join('|')
@@ -116,35 +149,7 @@ export function NetworkPreviewSVG({
   const strokeW = outerR - innerR
   const circumference = 2 * Math.PI * midR
 
-  const arcs = useMemo(() => {
-    if (normalizedAddresses.length === 0) return []
-
-    const gap = normalizedAddresses.length > 1 ? dividerGapLen : 0
-    let cumulativeLen = 0
-    return normalizedAddresses.map((address, i) => {
-      const fraction = fractions[i] ?? 0
-      const rawLen = circumference * fraction
-
-      const isLast = i === normalizedAddresses.length - 1
-      const fullLen = isLast ? Math.max(0, circumference - cumulativeLen) : rawLen
-      const dashLen = Math.max(0, fullLen - gap)
-      const dashOffset = -cumulativeLen
-      cumulativeLen += fullLen
-
-      const { from, to } = getTokenColor(chain, address, i)
-      const gradientId = `token-grad-${chain}-${address}`
-
-      return {
-        dashLen,
-        dashOffset,
-        from,
-        gradientId,
-        i,
-        to,
-        address,
-      }
-    })
-  }, [chain, circumference, dividerGapLen, fractions, normalizedAddresses])
+  const arcs = computeArcs(normalizedAddresses, fractions, circumference, dividerGapLen, chain)
 
   useEffect(() => {
     const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
