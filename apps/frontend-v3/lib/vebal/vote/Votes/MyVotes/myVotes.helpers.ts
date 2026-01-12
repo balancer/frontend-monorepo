@@ -5,8 +5,6 @@ import { SortingBy } from './myVotes.types'
 import BigNumber from 'bignumber.js'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { formatUnits } from 'viem'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { getGqlChain } from '@repo/lib/config/app.config'
 
 export const WEIGHT_VOTE_DELAY = 10 * oneDayInMs
 
@@ -53,8 +51,7 @@ export function calculateMyVoteRewardsValue(
   slope: bigint,
   lockEnd: number | undefined,
   totalVotes: bigint,
-  blacklistedVotes: BigNumber = bn(0),
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: BigNumber = bn(0)
 ) {
   const votingPower = calculateVotingPower(slope, lockEnd)
   const oldWeight = votingPool.gaugeVotes?.userVotes || '0'
@@ -69,7 +66,7 @@ export function calculateMyVoteRewardsValue(
   if (!votingPool?.votingIncentive?.incentives) return bn(0)
 
   const valuePerVote = votingPool?.votingIncentive?.incentives.reduce((acc, incentive) => {
-    const incentiveTokenPrice = bn(priceFor(incentive.token, getGqlChain(incentive.chainId)))
+    const incentiveTokenPrice = bn(incentive.value)
     const totalIncentives = incentiveTokenPrice.times(incentive.amount)
     const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokensPerVote)
     const expectedValuePerVote = bn(totalIncentives).div(newPoolVoteCount)
@@ -92,8 +89,7 @@ export function calculateMyValuePerVote(
   slope: bigint,
   lockEnd: number | undefined,
   totalVotes: bigint,
-  blacklistedVotes: BigNumber = bn(0),
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: BigNumber = bn(0)
 ) {
   const votingPower = calculateVotingPower(slope, lockEnd)
   const newUserVotes = votingPower.times(bpsToPercentage(newWeight))
@@ -103,8 +99,7 @@ export function calculateMyValuePerVote(
     slope,
     lockEnd,
     totalVotes,
-    blacklistedVotes,
-    priceFor
+    blacklistedVotes
   )
 
   return bn(myRewards).div(newUserVotes)

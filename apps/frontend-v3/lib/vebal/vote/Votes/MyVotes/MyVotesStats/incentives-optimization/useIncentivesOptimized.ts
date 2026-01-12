@@ -5,9 +5,8 @@ import { bn, MAX_BIGNUMBER, sum } from '@repo/lib/shared/utils/numbers'
 import { Element, heap, push, pop, Heap } from './heap'
 import { useQuery } from '@tanstack/react-query'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { getGqlChain } from '@repo/lib/config/app.config'
 import BigNumber from 'bignumber.js'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type OptimizedVote = {
   gaugeAddress: Address
@@ -45,7 +44,7 @@ export function useIncentivesOptimized(
   blacklistedVotes: Record<Address, BigNumber | undefined>,
   inputsLoading: boolean
 ): OptimizedVotes {
-  const { priceFor, isLoadingTokenPrices } = useTokens()
+  const { isLoadingTokenPrices } = useTokens()
 
   const { data, isPending } = useQuery({
     queryKey: ['optimized-incentives'],
@@ -55,8 +54,7 @@ export function useIncentivesOptimized(
         myVotes,
         userVotingPower,
         totalVotes,
-        blacklistedVotes,
-        priceFor
+        blacklistedVotes
       ),
     enabled: !inputsLoading && !isLoadingTokenPrices,
   })
@@ -68,8 +66,7 @@ export function useIncentivesOptimized(
     timelockedVotes,
     userVotingPower,
     totalVotes,
-    blacklistedVotes,
-    priceFor
+    blacklistedVotes
   )
 
   return { votes, totalIncentives, isLoading: isPending }
@@ -80,8 +77,7 @@ export function calculateIncentivesOptimized(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber | undefined>,
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ): OptimizedVote[] {
   const [timelockedVotes, timelockedPrct] = filterTimelockedVotes(myVotes)
 
@@ -96,8 +92,7 @@ export function calculateIncentivesOptimized(
     myVotes,
     userVotingPower,
     totalVotes,
-    blacklistedVotes,
-    priceFor
+    blacklistedVotes
   )
 
   const stepVoteAmount = userVotingPower.times(PERCENT_STEP)
@@ -123,13 +118,12 @@ export function calculateIncentivesOptimized(
 }
 
 function findByGaugeAddress(voteOrPools: VotingPoolWithData[], gaugeAddress: Address) {
-  return voteOrPools.find(item => item.gauge.address === gaugeAddress)
+  return voteOrPools.find(item => isSameAddress(item.gauge.address, gaugeAddress))
 }
 
 function extractVoteAmountAndIncentives(
   votingPools: VotingPoolWithData[],
-  totalVotes: BigNumber,
-  priceFor: (address: string, chain: GqlChain) => number
+  totalVotes: BigNumber
 ): PoolInfo[] {
   return votingPools
     .map(pool => {
@@ -137,11 +131,9 @@ function extractVoteAmountAndIncentives(
       const incentives = !pool.votingIncentive?.incentives
         ? []
         : pool.votingIncentive.incentives.map(incentive => {
-            const tokenPrice = priceFor(incentive.token, getGqlChain(incentive.chainId))
-
             return {
               incentivesAmount: incentive.amount,
-              incentivesTokenPrice: tokenPrice,
+              incentivesTokenPrice: incentive.value,
               maxTokenPerVote: incentive.maxTokensPerVote,
             }
           })
@@ -162,10 +154,9 @@ function buildPoolsWithPriorities(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber | undefined>,
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
-  const votesAndIncentives = extractVoteAmountAndIncentives(votingPools, totalVotes, priceFor)
+  const votesAndIncentives = extractVoteAmountAndIncentives(votingPools, totalVotes)
   removeCurrentVotesFromGauges(votesAndIncentives, myVotes, userVotingPower)
   removeBlacklistedVotes(votesAndIncentives, blacklistedVotes)
 
@@ -284,8 +275,7 @@ function sumTotalIncentives(
   timelockedVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber | undefined>,
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
   const optimizedVotesAmount = sum(optimizedVotes, vote => bn(vote.incentivesAmount))
 
@@ -302,7 +292,7 @@ function sumTotalIncentives(
     if (!vote.votingIncentive?.incentives) return acc
 
     const valuePerVote = vote?.votingIncentive?.incentives.reduce((acc, incentive) => {
-      const incentiveTokenPrice = bn(priceFor(incentive.token, getGqlChain(incentive.chainId)))
+      const incentiveTokenPrice = bn(incentive.value)
       const totalIncentives = incentiveTokenPrice.times(incentive.amount)
       const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokensPerVote)
       const expectedValuePerVote = bn(totalIncentives).div(poolVotes)
