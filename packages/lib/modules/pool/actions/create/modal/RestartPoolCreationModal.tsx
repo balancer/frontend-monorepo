@@ -20,8 +20,8 @@ import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/g
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { useProtocolSearchParams } from './useProtocolSearchParams'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 interface RestartPoolCreationModalProps {
   modalTitle?: string
@@ -31,6 +31,9 @@ interface RestartPoolCreationModalProps {
   network: GqlChain
   handleRestart: () => void
   isAbsolutePosition?: boolean
+  showBalancerWarning?: boolean
+  showCowAmmWarning?: boolean
+  onOpenForSearchParams?: () => void
 }
 
 export function RestartPoolCreationModal({
@@ -41,18 +44,14 @@ export function RestartPoolCreationModal({
   handleRestart,
   poolAddress,
   isAbsolutePosition,
+  showBalancerWarning,
+  showCowAmmWarning,
 }: RestartPoolCreationModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
 
-  const { setupCowCreation, showCowAmmWarning, showBalancerWarning } = useProtocolSearchParams({
-    onOpen,
-    poolType,
-  })
-
   const handleFormReset = () => {
     handleRestart()
-    if (showCowAmmWarning) setupCowCreation()
     onClose()
   }
 
@@ -60,6 +59,10 @@ export function RestartPoolCreationModal({
     onClose()
     router.replace('/create')
   }
+
+  useEffect(() => {
+    if (showBalancerWarning || showCowAmmWarning) onOpen()
+  }, [showBalancerWarning, showCowAmmWarning])
 
   return (
     <>
@@ -138,8 +141,8 @@ export function RestartPoolCreationModal({
 interface BeforePoolDeployedWarningProps {
   network: GqlChain
   poolType: GqlPoolType
-  showCowAmmWarning: boolean
-  showBalancerWarning: boolean
+  showCowAmmWarning?: boolean
+  showBalancerWarning?: boolean
 }
 
 function BeforePoolDeployedWarning({
