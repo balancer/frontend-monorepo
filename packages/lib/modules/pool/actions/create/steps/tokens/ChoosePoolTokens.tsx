@@ -40,6 +40,7 @@ import {
   isGyroEllipticPool,
   isCowPool,
 } from '../../helpers'
+import { PoolType } from '@balancer/sdk'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
@@ -157,7 +158,11 @@ export function ChoosePoolTokens() {
             <>
               <VStack align="start" gap="lg" w="full">
                 <Divider />
-                <AddTokenButton isDisabled={isPoolAtMaxTokens} onClick={() => addPoolToken()} />
+                <AddTokenButton
+                  isDisabled={isPoolAtMaxTokens}
+                  onClick={() => addPoolToken()}
+                  poolType={poolType}
+                />
               </VStack>
             </>
           )}
@@ -309,9 +314,62 @@ function ConfigureToken({
   )
 }
 
-function AddTokenButton({ isDisabled, onClick }: { isDisabled: boolean; onClick: () => void }) {
+function AddTokenButton({
+  isDisabled,
+  onClick,
+  poolType,
+}: {
+  isDisabled: boolean
+  onClick: () => void
+  poolType: SupportedPoolTypes
+}) {
+  const getTooltipMessage = () => {
+    if (!isDisabled) return undefined
+
+    switch (poolType) {
+      case PoolType.Weighted:
+        return 'Only 8 tokens can be added to a Weighted pool'
+      case PoolType.Stable:
+      case PoolType.StableSurge:
+        return 'Only 5 tokens can be added to a Stable pool'
+      case PoolType.ReClamm:
+        return 'Only 2 tokens can be added to a reCLAMM pool'
+      case PoolType.GyroE:
+        return 'Only 2 tokens can be added to a Gyro pool'
+      default:
+        return undefined
+    }
+  }
+
+  const tooltipMessage = getTooltipMessage()
+
+  if (tooltipMessage) {
+    return (
+      <TooltipWithTouch hasArrow isDisabled={false} label={tooltipMessage}>
+        <Button
+          cursor={isDisabled ? 'not-allowed' : 'pointer'}
+          isDisabled={isDisabled}
+          onClick={onClick}
+          variant="secondary"
+        >
+          <HStack spacing="sm">
+            <PlusCircle size={20} />
+            <Text color="font.dark" fontWeight="bold">
+              Add token
+            </Text>
+          </HStack>
+        </Button>
+      </TooltipWithTouch>
+    )
+  }
+
   return (
-    <Button isDisabled={isDisabled} onClick={onClick} variant="secondary">
+    <Button
+      cursor={isDisabled ? 'not-allowed' : 'pointer'}
+      isDisabled={isDisabled}
+      onClick={onClick}
+      variant="secondary"
+    >
       <HStack spacing="sm">
         <PlusCircle size={20} />
         <Text color="font.dark" fontWeight="bold">
