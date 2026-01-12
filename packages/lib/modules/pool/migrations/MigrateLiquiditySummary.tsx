@@ -10,6 +10,8 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { ApiToken, HumanTokenAmount } from '../../tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTotalUsdValue } from '../../tokens/useTotalUsdValue'
+import { PoolActionsPriceImpactDetails } from '../actions/PoolActionsPriceImpactDetails'
+import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 
 export function MigrateLiquiditySummary() {
   const { isMobile } = useBreakpoints()
@@ -36,6 +38,7 @@ export function MigrateLiquiditySummary() {
       />
       <PoolCard pool={oldPool} title="From Balancer v2" />
       <PoolCard pool={newPool} title="To Balancer v3" />
+      <PriceImpactCard />
     </AnimateHeightChange>
   )
 }
@@ -109,6 +112,31 @@ function PoolCard({ title, pool }: PoolCardProps) {
             />
           )}
         </HStack>
+      </VStack>
+    </Card>
+  )
+}
+
+function PriceImpactCard() {
+  const { totalUSDValue, simulationQuery, slippage } = useAddLiquidity()
+  const { migrationSteps } = useMigrateLiquidity()
+
+  const removeLiquidityStep = migrationSteps.steps.find(step => step.stepType === 'removeLiquidity')
+  const isComplete = removeLiquidityStep && removeLiquidityStep.isComplete()
+
+  if (!isComplete) return null
+
+  return (
+    <Card variant="modalSubSection">
+      <VStack align="start" spacing="sm">
+        <Text fontSize="sm" fontWeight="bold">
+          Add liquidity
+        </Text>
+        <PoolActionsPriceImpactDetails
+          bptAmount={simulationQuery.data?.bptOut.amount}
+          slippage={slippage}
+          totalUSDValue={totalUSDValue}
+        />
       </VStack>
     </Card>
   )
