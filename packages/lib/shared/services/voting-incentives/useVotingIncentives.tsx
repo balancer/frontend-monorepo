@@ -36,35 +36,35 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
     (acc, campaign) => {
       const gaugeAddress = campaign.gauge.toLowerCase()
 
-      const rewardTokenAmount = Number(campaign.currentPeriod.rewardPerPeriod)
-      const valuePerToken = Number(campaign.rewardToken.price)
-      const rewardPerWeek = rewardTokenAmount * valuePerToken
+      const tokenAmountPerWeek = Number(campaign.currentPeriod.rewardPerPeriod)
+      const usdPerToken = Number(campaign.rewardToken.price)
+      const usdPerWeek = tokenAmountPerWeek * usdPerToken
 
-      const rewardTokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
-      const valuePerVote = rewardTokenAmountPerVote * valuePerToken
+      const tokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
+      const usdPerVote = tokenAmountPerVote * usdPerToken
 
       const incentive = {
         symbol: campaign.rewardToken.symbol,
         token: campaign.rewardToken.address,
-        amount: rewardPerWeek,
+        amount: usdPerWeek,
         chainId: campaign.rewardChainId,
-        value: valuePerToken,
+        value: usdPerToken,
         decimals: campaign.rewardToken.decimals,
-        maxTokensPerVote: Number(campaign.maxRewardPerVote),
+        maxTokensPerVote: Number(campaign.maxRewardPerVote), // this is suspicious
         briber: campaign.manager,
       }
 
       if (!acc[gaugeAddress]) {
         acc[gaugeAddress] = {
           gauge: gaugeAddress,
-          totalValue: rewardPerWeek,
-          valuePerVote,
+          totalValue: usdPerWeek,
+          valuePerVote: usdPerVote,
           incentives: [incentive],
         }
       } else {
         // Merge with existing gauge entry
-        acc[gaugeAddress].totalValue += rewardPerWeek
-        acc[gaugeAddress].valuePerVote += valuePerVote
+        acc[gaugeAddress].totalValue += usdPerWeek
+        acc[gaugeAddress].valuePerVote += usdPerVote
         acc[gaugeAddress].incentives.push(incentive)
       }
 
