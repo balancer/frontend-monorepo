@@ -1,5 +1,3 @@
-'use client'
-
 import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { Address } from 'viem'
