@@ -2,7 +2,7 @@ import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BaseVariant, Pool } from '../pool.types'
-import { Link, Text, useDisclosure } from '@chakra-ui/react'
+import { HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
 import { UnstakeWarningModal } from './UnstakeWarningModal'
 import {
   hasAuraStakedBalance,
@@ -11,8 +11,8 @@ import {
 } from '../user-balance.helpers'
 import { useRouter } from 'next/navigation'
 import { chainToSlugMap, getPoolPath } from '../pool.utils'
-import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { usePoolMigrations } from './PoolMigrationsProvider'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 
 type Props = {
   pool: Pool
@@ -31,6 +31,11 @@ export function MigrationAlert({ pool }: Props) {
 function AlertWithBalance({ pool }: Props) {
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const { getMigration } = usePoolMigrations()
+  const migration = getMigration(pool.protocolVersion, getChainId(pool.chain), pool.id)
+  const poolPath = `/pools/${chainToSlugMap[pool.chain]}/${BaseVariant.v3}/${migration?.new.id || ''}`
+
   const hasStakedBalance = hasBalancerStakedBalance(pool) || hasAuraStakedBalance(pool)
 
   const migrate = () => {
@@ -45,12 +50,15 @@ function AlertWithBalance({ pool }: Props) {
     <>
       <BalAlert
         content={
-          <BalAlertContent
-            description={`Migrate your position from ${pool.name} (on ${getChainName(pool.chain)}) to the recommended pool`}
-            forceColumnMode={true}
-          >
+          <HStack justifyContent="space-between" w="full">
+            <Text color="black">
+              {`Migrate your position from ${pool.name} (on ${getChainName(pool.chain)}) to the recommended v3 pool:`}
+              <Link href={poolPath} textDecoration="underline">
+                {abbreviateAddress(pool.address)}
+              </Link>
+            </Text>
             <BalAlertButton onClick={migrate}>Migrate</BalAlertButton>
-          </BalAlertContent>
+          </HStack>
         }
         status="info"
       />
