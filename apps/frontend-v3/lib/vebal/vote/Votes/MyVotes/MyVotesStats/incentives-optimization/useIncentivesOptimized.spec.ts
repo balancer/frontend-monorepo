@@ -221,17 +221,22 @@ function incentivesWithAmount(
   amount: number,
   maxTokensPerVote: number
 ): PoolVotingIncentivesPerWeek {
+  const price = 0.55
   return {
     totalValue: 0,
     valuePerVote: -1,
     incentives: [
       {
-        symbol: 'BAL',
-        token: '0xba100000625a3754423978a60c9317c58a424e3d',
-        amount: amount,
-        chainId: 1,
-        value: 0,
-        decimals: 18,
+        token: {
+          symbol: 'BAL',
+          address: '0xba100000625a3754423978a60c9317c58a424e3d',
+          amount,
+          chainId: 1,
+          price,
+          decimals: 18,
+          name: 'Balancer',
+        },
+        amountFiat: amount * price,
         maxTokensPerVote: maxTokensPerVote,
         briber: '',
       },

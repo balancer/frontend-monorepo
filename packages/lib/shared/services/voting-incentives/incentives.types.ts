@@ -6,12 +6,8 @@ export interface PoolVotingIncentivesPerWeek {
 }
 
 export interface Incentive {
-  symbol: string
-  token: string
-  amount: number
-  chainId: number
-  value: number
-  decimals: number
+  token: VoteMarketToken & { amount: number }
+  amountFiat: number
   maxTokensPerVote: number
   briber: string
 }

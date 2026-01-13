@@ -36,20 +36,24 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
     (acc, campaign) => {
       const gaugeAddress = campaign.gauge.toLowerCase()
 
-      const tokenAmountPerWeek = Number(campaign.currentPeriod.rewardPerPeriod)
-      const usdPerToken = Number(campaign.rewardToken.price)
-      const usdPerWeek = tokenAmountPerWeek * usdPerToken
+      const tokenAmount = Number(campaign.currentPeriod.rewardPerPeriod)
+      const tokenPrice = Number(campaign.rewardToken.price)
+      const amountFiat = tokenAmount * tokenPrice
 
       const tokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
-      const usdPerVote = tokenAmountPerVote * usdPerToken
+      const valuePerVote = tokenAmountPerVote * tokenPrice
 
       const incentive = {
-        symbol: campaign.rewardToken.symbol,
-        token: campaign.rewardToken.address,
-        amount: usdPerWeek,
-        chainId: campaign.rewardChainId,
-        value: usdPerToken,
-        decimals: campaign.rewardToken.decimals,
+        token: {
+          name: campaign.rewardToken.name,
+          symbol: campaign.rewardToken.symbol,
+          address: campaign.rewardToken.address,
+          decimals: campaign.rewardToken.decimals,
+          chainId: campaign.rewardChainId,
+          price: tokenPrice,
+          amount: tokenAmount,
+        },
+        amountFiat,
         maxTokensPerVote: Number(campaign.maxRewardPerVote), // this is suspicious
         briber: campaign.manager,
       }
@@ -57,14 +61,14 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
       if (!acc[gaugeAddress]) {
         acc[gaugeAddress] = {
           gauge: gaugeAddress,
-          totalValue: usdPerWeek,
-          valuePerVote: usdPerVote,
+          totalValue: amountFiat,
+          valuePerVote,
           incentives: [incentive],
         }
       } else {
         // Merge with existing gauge entry
-        acc[gaugeAddress].totalValue += usdPerWeek
-        acc[gaugeAddress].valuePerVote += usdPerVote
+        acc[gaugeAddress].totalValue += amountFiat
+        acc[gaugeAddress].valuePerVote += valuePerVote
         acc[gaugeAddress].incentives.push(incentive)
       }
 
