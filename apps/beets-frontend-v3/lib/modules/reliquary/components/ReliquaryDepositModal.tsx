@@ -10,7 +10,6 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 import { useAddLiquidityReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -63,8 +62,6 @@ export function ReliquaryDepositModal({
     protocolVersion: pool.protocolVersion as ProtocolVersion,
     txReceipt,
   })
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   useEffect(() => {
     if (isOpen) {

@@ -42,7 +42,7 @@ export function ReliquaryWithdrawSummary({
 }: Props) {
   const {
     transactionSteps,
-    quoteBptIn,
+    humanBptIn,
     totalUSDValue,
     amountsOut,
     hasQuoteContext,
@@ -140,7 +140,7 @@ export function ReliquaryWithdrawSummary({
 
       <Card variant="modalSubSection">
         <BptRow
-          bptAmount={shouldShowReceipt ? sentBptUnits : quoteBptIn}
+          bptAmount={shouldShowReceipt ? sentBptUnits : humanBptIn}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={
             shouldShowReceipt

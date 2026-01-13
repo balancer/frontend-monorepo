@@ -18,7 +18,6 @@ import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/trans
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
@@ -48,8 +47,6 @@ export function ReliquaryDelegationModal({
   const { step: delegationStep } = useReliquaryDelegationStep(action)
   const delegationTransactionSteps = useTransactionSteps([delegationStep], false)
   const delegationTxHash = delegationTransactionSteps.lastTransaction?.result?.data?.transactionHash
-
-  useResetStepIndexOnOpen(isOpen, delegationTransactionSteps)
 
   const { chain } = useReliquary()
   const networkConfig = getNetworkConfig(chain)
