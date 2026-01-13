@@ -24,7 +24,6 @@ type PoolInfo = {
   gaugeAddress: Address
   votes: BigNumber
   incentives: {
-    fiatAmount: number
     tokenPrice: number
     tokenAmount: number
     maxTokenPerVote: number
@@ -133,7 +132,6 @@ function extractVoteAmountAndIncentives(
         ? []
         : pool.votingIncentive.incentives.map(incentive => {
             return {
-              fiatAmount: incentive.fiatAmount,
               tokenPrice: incentive.token.price,
               tokenAmount: incentive.token.amount,
               maxTokenPerVote: incentive.maxTokensPerVote,

@@ -237,7 +237,6 @@ function incentivesWithAmount(
           decimals: 18,
           name: 'Balancer',
         },
-        fiatAmount: amount * price,
         maxTokensPerVote: maxTokensPerVote,
         briber: '',
       },
