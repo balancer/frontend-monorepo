@@ -12,6 +12,7 @@ import { PoolVotingIncentivesPerWeek } from '@repo/lib/shared/services/voting-in
 
 const one_month_ago = subDays(new Date(), 30)
 const BAL = '0xba100000625a3754423978a60c9317c58a424e3d'
+const BAL_PRICE = 1
 
 function renderHook(
   votingPools: VotingPoolWithData[],
@@ -37,7 +38,7 @@ function renderHook(
 
 describe('Incentives optimization', () => {
   beforeEach(() => {
-    mockTokenPricesList([aTokenPriceMock({ address: BAL, price: 1 })])
+    mockTokenPricesList([aTokenPriceMock({ address: BAL, price: BAL_PRICE })])
   })
 
   it('should return loading when input votes and pools still loading', () => {
@@ -158,7 +159,7 @@ describe('Incentives optimization', () => {
 
   it('should cap incentives on maxTokensPerVote', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
-    pool1.votingIncentive = incentivesWithAmount(100, 0.5)
+    pool1.votingIncentive = incentivesWithAmount(100, 0.5, 0.5)
     mockTokenPricesList([aTokenPriceMock({ address: BAL, price: 0.5 })])
 
     const result = renderHook([pool1], [], total(100), total(100), {}, false)
@@ -219,9 +220,9 @@ function setPoolVotes(votingPool: VotingPoolWithData, votesPrct: number) {
 
 function incentivesWithAmount(
   amount: number,
-  maxTokensPerVote: number
+  maxTokensPerVote: number,
+  price: number = BAL_PRICE
 ): PoolVotingIncentivesPerWeek {
-  const price = 0.55
   return {
     totalValue: 0,
     valuePerVote: -1,
