@@ -1,5 +1,9 @@
-query GetReliquaryFarmSnapshots($id: String!, $range: GqlPoolSnapshotDataRange!) {
-  snapshots: beetsPoolGetReliquaryFarmSnapshots(id: $id, range: $range) {
+query GetReliquaryFarmSnapshots(
+  $id: String!
+  $range: GqlPoolSnapshotDataRange!
+  $chain: GqlChain!
+) {
+  snapshots: beetsPoolGetReliquaryFarmSnapshots(id: $id, range: $range, chain: $chain) {
     id
     timestamp
     totalBalance
