@@ -26,7 +26,7 @@ export const lockingIncentivesTooltipText = `The protocol revenue share for Liqu
                                             with 1-year locked Balancer ve8020 tokens.`
 
 export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who
-                        participate in weekly gauge voting by third parties on platforms like Hidden Hand.
+                        participate in weekly gauge voting by third parties on platforms like Votemarket.
                         Your incentives are determined by your veBAL voting power compared to other voters.
                         The listed APR represents an average rather than a guaranteed return for active participants.`
 

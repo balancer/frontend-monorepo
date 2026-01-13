@@ -1,14 +1,14 @@
-import { Checkbox, Link, Text } from '@chakra-ui/react'
+import { Checkbox, Divider, Link, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
-import { isWeightedPool } from '../../helpers'
+import { isWeightedPool, isCowPool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
-import { PoolType } from '@balancer/sdk'
 
 export function PoolCreationRiskCheckboxes() {
   const { poolCreationForm } = usePoolCreationForm()
-  const { hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk, poolType } = useWatch({
+  const [hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk, poolType] = useWatch({
     control: poolCreationForm.control,
+    name: ['hasAcceptedTokenWeightsRisk', 'hasAcceptedPoolCreationRisk', 'poolType'],
   })
 
   const linkProps = {
@@ -24,9 +24,12 @@ export function PoolCreationRiskCheckboxes() {
     sx: { textWrap: 'pretty' },
   }
 
+  const showTokenWeightsRiskCheckbox = isWeightedPool(poolType) || isCowPool(poolType)
+
   return (
     <>
-      {isWeightedPool(poolType || PoolType.Stable) && (
+      <Divider />
+      {showTokenWeightsRiskCheckbox && (
         <Checkbox
           alignItems="flex-start"
           isChecked={hasAcceptedTokenWeightsRisk}

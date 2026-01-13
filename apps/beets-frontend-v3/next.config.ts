@@ -2,7 +2,7 @@ import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
 const config: NextConfig = {
-  serverExternalPackages: ['pino-pretty', 'lokijs', 'encoding'],
+  serverExternalPackages: ['thread-stream', 'real-require', 'lokijs', 'encoding'],
   logging: {
     fetches: {
       fullUrl: true,

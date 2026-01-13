@@ -43,6 +43,7 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0x7852fB9d0895e6e8b3EedA553c03F6e2F9124dF9',
       minter: '0x1783Cd84b3d01854A96B4eD5843753C2CcbD574A',
       vaultAdminV3: AddressProvider.VaultAdmin(sepolia.id),
+      bCoWFactory: '0x1E3D76AC2BB67a2D7e8395d3A624b30AA9056DF9',
     },
     veBAL: '0x150A72e4D4d81BbF045565E232c50Ed0931ad795',
     permit2: PERMIT2[sepolia.id],

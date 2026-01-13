@@ -1,6 +1,5 @@
 import { Heading, VStack, Text, HStack, Radio, SimpleGrid, useRadioGroup } from '@chakra-ui/react'
-import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
-import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { InfoIconPopover } from '../../InfoIconPopover'
 import {
   useReClammConfigurationOptions,
   ReClammConfigOptionsGroup,
@@ -11,7 +10,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
 import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
-import { useFormState, useWatch } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
@@ -19,7 +18,7 @@ export function ReClammConfiguration() {
   return (
     <VStack align="start" spacing="xl" w="full">
       <Heading color="font.maxContrast" size="md">
-        ReClamm configuration
+        reCLAMM configuration
       </Heading>
       {reClammConfigurationOptions.map(option => (
         <ConfigOptionsGroup
@@ -51,7 +50,6 @@ function ConfigOptionsGroup({
     control: reClammConfigForm.control,
     name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
   })
-  const formState = useFormState({ control: reClammConfigForm.control })
   const formValue = useWatch({ control: reClammConfigForm.control, name })
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
@@ -94,7 +92,8 @@ function ConfigOptionsGroup({
     h: 141,
     justifyContent: 'center',
     px: 2,
-    py: 3,
+    pt: 4,
+    pb: 3,
     textAlign: 'center',
     _checked: {
       bg: '#63F2BE0D',
@@ -113,25 +112,25 @@ function ConfigOptionsGroup({
         <Text textAlign="start" w="full">
           {label}
         </Text>
-        <BalPopover text={tooltip}>
-          <InfoIcon />
-        </BalPopover>
+        <InfoIconPopover message={tooltip} />
       </HStack>
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing="md" w="full" {...radioGroupProps}>
+      <SimpleGrid columns={3} spacing={{ base: 'sm', md: 'md' }} w="full" {...radioGroupProps}>
         {cardOptions.map((option, idx) => {
           const radio = getRadioProps({ value: option.rawValue })
           const key = `${label.replace(/\s+/g, '-')}-${idx}`
 
           return (
             <RadioCard key={key} {...radio} containerProps={cardContainerProps}>
-              <VStack align="center" h="full" justify="center" spacing="1" textAlign="center">
+              <VStack align="center" h="full" justify="center" spacing="3" textAlign="center">
                 {option.svg && <option.svg height="100%" width="100%" />}
-                <Text color="inherit" fontSize="sm">
-                  {option.label}
-                </Text>
-                <Text color="inherit" fontWeight="bold">
-                  {option.displayValue}
-                </Text>
+                <VStack spacing="1">
+                  <Text color="inherit" fontSize={{ base: 'xs', sm: 'sm' }}>
+                    {option.label}
+                  </Text>
+                  <Text color="inherit" fontWeight="bold">
+                    {option.displayValue}
+                  </Text>
+                </VStack>
               </VStack>
             </RadioCard>
           )
@@ -154,7 +153,6 @@ function ConfigOptionsGroup({
         <VStack align="start" spacing="md" w="full">
           <NumberInput
             control={reClammConfigForm.control}
-            error={formState.errors['initialMinPrice']?.message}
             label={'Range low price'}
             name={'initialMinPrice'}
             percentageLabel={
@@ -176,7 +174,6 @@ function ConfigOptionsGroup({
           />
           <NumberInput
             control={reClammConfigForm.control}
-            error={formState.errors['initialMaxPrice']?.message}
             label={'Range high price'}
             name={'initialMaxPrice'}
             percentageLabel={
@@ -200,7 +197,6 @@ function ConfigOptionsGroup({
       ) : isCustom ? (
         <NumberInput
           control={reClammConfigForm.control}
-          error={formState.errors[name]?.message}
           isPercentage={isPercentage}
           label={customInputLabel}
           name={name}

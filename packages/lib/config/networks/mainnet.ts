@@ -85,6 +85,7 @@ const networkConfig: NetworkConfig = {
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(mainnet.id),
       WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
       vaultAdminV3: AddressProvider.VaultAdmin(mainnet.id),
+      bCoWFactory: '0xf76c421bAb7df8548604E60deCCcE50477C10462',
     },
     feeDistributor: '0xD3cf852898b21fc233251427c2DC93d3d604F3BB',
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',

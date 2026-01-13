@@ -8,6 +8,8 @@ import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useWatch } from 'react-hook-form'
 import { VStack, Text } from '@chakra-ui/react'
+import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { validatePoolTokens } from '../../validatePoolCreationForm'
 
 interface TokenAmountInputProps {
   token: PoolCreationToken
@@ -22,10 +24,20 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
   const { reClammInitAmounts } = useReClammInitAmounts(isReClammPool(poolType), poolAddress, token)
   const eclpInitAmountsRatio = useGyroEclpInitAmountsRatio()
 
+  const { setValidationError, removeValidationErrors } = useTokenInputsValidation()
+
   const lastUserUpdatedAmountIdx = useRef<number | null>(null)
 
   const otherTokenInputIdx = idx === 0 ? 1 : 0
   const otherToken = poolTokens[otherTokenInputIdx]
+
+  useEffect(() => {
+    if (!token.address) return
+
+    const { error, possibleErrors } = validatePoolTokens.hasAmountError(token, poolType)
+    removeValidationErrors(token.address, possibleErrors)
+    if (error) setValidationError(token.address, error)
+  }, [token, poolType, setValidationError])
 
   const handleAmountChange = (idx: number, amount: string) => {
     lastUserUpdatedAmountIdx.current = idx
@@ -58,8 +70,6 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
 
     if (!otherToken?.address || !otherToken?.data?.decimals) return
 
-    console.log('reClammInitAmounts', reClammInitAmounts)
-
     // Use sorted token addresses to find the index of the other tokenAmount in the sorted array
     const sortedAddresses = poolTokens
       .map(t => t.address?.toLowerCase())
@@ -78,7 +88,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
 
   return (
     <VStack align="start" key={idx} spacing="sm" w="full">
-      <Text>Token {idx + 1}</Text>
+      <Text fontWeight="bold">Token {idx + 1}</Text>
       <TokenInput
         apiToken={token.data}
         chain={network}

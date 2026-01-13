@@ -15,7 +15,6 @@ import {
   Text,
   VStack,
   chakra,
-  Link,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -239,7 +238,7 @@ export function LandingBeetsData({
             </GridItem>
           </Grid>
         </Box>
-        <Grid gap="none" templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)' }} w="full">
+        <Grid gap="none" templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} w="full">
           <GridItem bg="rgba(255, 255, 255, 0.05)">
             <ChainDataCard
               button={
@@ -255,7 +254,7 @@ export function LandingBeetsData({
               totalTvl={totalTvl}
             />
           </GridItem>
-          <GridItem bg="rgba(0, 0, 0, 0.05)">
+          <GridItem bg="rgba(0, 0, 0, 0.2)">
             <ChainDataCard
               button={
                 <Button as={NextLink} href="/pools?networks=OPTIMISM" variant="primary">
@@ -265,20 +264,6 @@ export function LandingBeetsData({
               chain={GqlChain.Optimism}
               networkColor="red"
               protocolData={chainData[getChainId(GqlChain.Optimism)]}
-              stakedSonicData={stakedSonicData}
-              totalTvl={totalTvl}
-            />
-          </GridItem>
-          <GridItem bg="rgba(0, 0, 0, 0.2)">
-            <ChainDataCard
-              button={
-                <Button as={Link} href="https://ftm.beets.fi/pools" isExternal variant="primary">
-                  Fantom Pools
-                </Button>
-              }
-              chain={GqlChain.Fantom}
-              networkColor="deepskyblue"
-              protocolData={chainData[getChainId(GqlChain.Fantom)]}
               stakedSonicData={stakedSonicData}
               totalTvl={totalTvl}
             />

@@ -4,7 +4,7 @@ import { BaseLayout } from '../layouts/base-layout'
 
 export default function MarketingLayout({ children }: PropsWithChildren) {
   return (
-    <BaseLayout renderLzBeetsModal={false}>
+    <BaseLayout>
       <Box>{children}</Box>
     </BaseLayout>
   )

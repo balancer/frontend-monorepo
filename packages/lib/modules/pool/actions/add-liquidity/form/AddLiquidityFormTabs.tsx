@@ -32,6 +32,7 @@ import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertCont
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { MinimumDepositErrorsAlert } from '../MinimumDepositErrorsAlert'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -60,6 +61,7 @@ function PoolWeightsInfo() {
               </Box>
             }
             forceColumnMode
+            wrapText
           >
             <UnorderedList>
               <ListItem
@@ -101,6 +103,7 @@ function OutOfRangeWarning() {
         <BalAlertContent
           title="This CLP is currently out of range"
           tooltipLabel="No swap fees accrue when CLP is outside the price range. Fees resume automatically when prices return to the range."
+          wrapText
         />
       }
       status="warning"
@@ -121,7 +124,7 @@ export function AddLiquidityFormTabs({
   setFlexibleTab: () => void
   setProportionalTab: () => void
 }) {
-  const { clearAmountsIn } = useAddLiquidity()
+  const { clearAmountsIn, isMinimumDepositMet, minimumDepositErrors } = useAddLiquidity()
   const { isLoading, pool } = usePool()
   const { toCurrency } = useCurrency()
   const { poolIsInRange } = useGetECLPLiquidityProfile()
@@ -232,6 +235,7 @@ export function AddLiquidityFormTabs({
         </Popover>
         <Divider w="full" />
       </HStack>
+      {!isMinimumDepositMet && <MinimumDepositErrorsAlert errors={minimumDepositErrors} />}
       {isOutOfRange && <OutOfRangeWarning />}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>

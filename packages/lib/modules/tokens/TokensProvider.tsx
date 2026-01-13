@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import {
@@ -10,7 +9,7 @@ import {
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback } from 'react'
 import { Address } from 'viem'
 import {
@@ -59,7 +58,6 @@ export function useTokensLogic() {
     initialFetchPolicy: isDev ? undefined : 'no-cache',
     nextFetchPolicy: 'cache-and-network',
     pollInterval: POLL_INTERVAL,
-    notifyOnNetworkStatusChange: true,
   })
   const prices = tokenPricesData?.tokenPrices || []
 
@@ -133,8 +131,7 @@ export function useTokensLogic() {
         }, bn(0))
         .toString()
     },
-
-    [prices]
+    [priceFor]
   )
 
   const vebalBptToken = tokens.find(

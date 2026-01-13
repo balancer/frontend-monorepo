@@ -1,6 +1,5 @@
 import { VStack, Heading, Text, HStack, Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
-import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
 import { calculateRotationComponents } from './gyro.helpers'
@@ -9,6 +8,7 @@ import { MAX_LAMBDA } from '../../constants'
 import { useValidateEclpParams } from './useValidateEclpParams'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useWatch } from 'react-hook-form'
+import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 
 export function GyroEclpConfiguration() {
   const { errorMessage } = useValidateEclpParams()
@@ -27,10 +27,10 @@ export function GyroEclpConfiguration() {
 function EclpParamHeader() {
   return (
     <VStack align="start" spacing="sm" w="full">
-      <Heading color="font.maxContrast" size="md">
+      <Heading color="font.maxContrast" pb="1" size="md">
         Gyro E-CLP configuration
       </Heading>
-      <HStack>
+      <HStack gap="1">
         <Text color="font.secondary">To learn more about all the parameters, </Text>
         <Link
           alignItems="center"
@@ -39,7 +39,7 @@ function EclpParamHeader() {
           href="https://docs.gyro.finance/pools/e-clps.html#reading-e-clp-parameters"
           isExternal
         >
-          read the Gyroscope docs
+          Read the Gyroscope docs
           <ArrowUpRight size={14} />
         </Link>
       </HStack>
@@ -80,18 +80,18 @@ function EclpParamInputs() {
     label: `Lower bound price: ${tokenPricePair}`,
     name: 'alpha' as const,
     placeholder: suggestedEclpConfig.alpha,
-    suggestedValue: suggestedEclpConfig.alpha,
+    suggestedValue: Number(suggestedEclpConfig.alpha),
     tooltip: 'The lowest price the pool will provide liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
       eclpConfigForm.setValue('alpha', suggestedEclpConfig.alpha, { shouldValidate: true })
     },
-    validate: (value: string) => {
-      if (Number(value) < 0) return 'Lower bound price must be greater than 0'
-      if (Number(value) >= Number(peakPrice)) {
+    validate: (value: number) => {
+      if (value < 0) return 'Lower bound price must be greater than 0'
+      if (value >= Number(peakPrice)) {
         return 'Lower bound price must be less than peak price'
       }
-      if (Number(value) >= Number(beta)) {
+      if (value >= Number(beta)) {
         return 'Lower bound price must be less than upper bound price'
       }
       return true
@@ -102,16 +102,16 @@ function EclpParamInputs() {
     label: `Peak price: ${tokenPricePair}`,
     name: 'peakPrice' as const,
     placeholder: suggestedEclpConfig.peakPrice,
-    suggestedValue: suggestedEclpConfig.peakPrice,
+    suggestedValue: Number(suggestedEclpConfig.peakPrice),
     tooltip: 'The price where the pool will provide the deepest liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
       eclpConfigForm.setValue('peakPrice', suggestedEclpConfig.peakPrice, { shouldValidate: true })
     },
-    validate: (value: string) => {
-      if (Number(value) < 0) return 'Peak price must be greater than 0'
-      if (Number(value) <= Number(alpha)) return 'Peak price must be greater than lower bound price'
-      if (Number(value) >= Number(beta)) return 'Peak price must be less than upper bound price'
+    validate: (value: number) => {
+      if (value < 0) return 'Peak price must be greater than 0'
+      if (value <= Number(alpha)) return 'Peak price must be greater than lower bound price'
+      if (value >= Number(beta)) return 'Peak price must be less than upper bound price'
       return true
     },
   }
@@ -120,18 +120,18 @@ function EclpParamInputs() {
     label: `Upper bound price: ${tokenPricePair}`,
     name: 'beta' as const,
     placeholder: suggestedEclpConfig.beta,
-    suggestedValue: suggestedEclpConfig.beta,
+    suggestedValue: Number(suggestedEclpConfig.beta),
     tooltip: 'The highest price the pool will provide liquidity',
     control: eclpConfigForm.control,
     onClickSuggestion: () => {
       eclpConfigForm.setValue('beta', suggestedEclpConfig.beta, { shouldValidate: true })
     },
-    validate: (value: string) => {
-      if (Number(value) < 0) return 'Upper bound price must be greater than 0'
-      if (Number(value) <= Number(alpha)) {
+    validate: (value: number) => {
+      if (value < 0) return 'Upper bound price must be greater than 0'
+      if (value <= Number(alpha)) {
         return 'Upper bound price must be greater than lower bound price'
       }
-      if (Number(value) <= Number(peakPrice)) {
+      if (value <= Number(peakPrice)) {
         return 'Upper bound price must be greater than peak price'
       }
       return true
@@ -144,9 +144,9 @@ function EclpParamInputs() {
     placeholder: suggestedEclpConfig.lambda,
     tooltip: 'The concentration of liquidity around the peak price',
     control: eclpConfigForm.control,
-    validate: (value: string) => {
-      if (Number(value) <= 0) return 'Stretching factor must be greater than 0'
-      if (Number(value) > MAX_LAMBDA) return `Maximum value for stretching factor is ${MAX_LAMBDA}`
+    validate: (value: number) => {
+      if (value <= 0) return 'Stretching factor must be greater than 0'
+      if (value > MAX_LAMBDA) return `Maximum value for stretching factor is ${MAX_LAMBDA}`
       return true
     },
   }
@@ -161,7 +161,7 @@ function EclpParamInputs() {
   return (
     <>
       {eclpConfigInputs.map(input => (
-        <InputWithSuggestion key={input.name} {...input} />
+        <NumberInput key={input.name} {...input} width="full" />
       ))}
     </>
   )

@@ -21,12 +21,14 @@ type Params = {
   onChange?: (event: { currentTarget: { value: string } }) => void
 }
 
+const EXCEEDS_BALANCE_ERROR = 'Exceeds balance'
+
 export function useTokenInput({
   token,
   disableBalanceValidation = false,
   onChange: parentOnChange,
 }: Params) {
-  const { setValidationError } = useTokenInputsValidation()
+  const { setValidationError, removeValidationErrors } = useTokenInputsValidation()
   const { balanceFor } = useTokenBalances()
 
   function updateValue(value: string) {
@@ -41,13 +43,12 @@ export function useTokenInput({
     const tokenAddress = token.address as Address
     const userBalance = balanceFor(tokenAddress)
 
+    removeValidationErrors(tokenAddress, [EXCEEDS_BALANCE_ERROR])
     if (value && userBalance !== undefined && !disableBalanceValidation) {
       if (bn(value).gt(bn(userBalance.formatted))) {
-        return setValidationError(tokenAddress, 'Exceeds balance')
+        return setValidationError(tokenAddress, EXCEEDS_BALANCE_ERROR)
       }
     }
-
-    setValidationError(tokenAddress, '')
   }
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {

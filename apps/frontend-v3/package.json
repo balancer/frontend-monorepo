@@ -25,8 +25,8 @@
     "test:integration:watch": "vitest -c ./vitest.config.integration.ts"
   },
   "dependencies": {
-    "@apollo/client": "3.13.8",
-    "@balancer/sdk": "4.10.1",
+    "@apollo/client": "4.0.11",
+    "@balancer/sdk": "5.0.1",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/icons": "2.2.4",
@@ -36,7 +36,7 @@
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
     "@repo/test": "workspace:*",
-    "@sentry/nextjs": "10.23.0",
+    "@sentry/nextjs": "10.32.1",
     "@tanstack/react-query": "5.90.5",
     "@vercel/speed-insights": "1.1.0",
     "bignumber.js": "9.3.1",
@@ -45,18 +45,20 @@
     "echarts-for-react": "3.0.2",
     "framer-motion": "12.23.24",
     "lodash": "^4.17.21",
-    "next": "16.0.2",
+    "next": "16.0.10",
     "next-themes": "0.4.6",
     "nextjs-toploader": "3.9.17",
     "prismjs": "1.30.0",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "react-error-boundary": "6.0.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-error-boundary": "6.0.1",
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.7",
+    "real-require": "0.1.0",
+    "thread-stream": "0.15.2",
     "tinycolor2": "^1.6.0",
     "usehooks-ts": "3.1.1",
-    "viem": "2.39.3"
+    "viem": "2.43.5"
   },
   "devDependencies": {
     "@chakra-ui/cli": "2.5.8",
@@ -64,17 +66,17 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@testing-library/react": "16.3.0",
+    "@testing-library/react": "16.3.1",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "4.17.20",
     "@types/node": "22.15.19",
     "@types/prismjs": "^1.26.5",
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "^1.4.6",
     "@viem/anvil": "^0.0.10",
-    "@wagmi/cli": "2.2.0",
-    "autoprefixer": "10.4.21",
+    "@wagmi/cli": "2.8.0",
+    "autoprefixer": "10.4.23",
     "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "9.2.0",
     "cross-fetch": "4.1.0",
@@ -82,7 +84,7 @@
     "lokijs": "^1.5.12"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": "24.x"
   },
   "engineStrict": true
 }

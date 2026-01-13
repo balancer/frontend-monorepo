@@ -16,9 +16,6 @@ export const ProjectConfigBeets: ProjectConfig = {
   defaultNetwork: GqlChain.Sonic,
   ensNetwork: GqlChain.Sonic,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic & optimism,
-  externalLinks: {
-    poolComposerUrl: 'https://pool-creator.balancer.fi/beets',
-  },
   merklRewardsChains: [GqlChain.Sonic],
   options: {
     poolDisplayType: PoolDisplayType.Name,

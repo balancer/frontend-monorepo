@@ -37,9 +37,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
   defaultNetwork: GqlChain.Mainnet,
   ensNetwork: GqlChain.Mainnet,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
-  externalLinks: {
-    poolComposerUrl: 'https://pool-creator.balancer.fi',
-  },
   merklRewardsChains: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Mode],
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
@@ -55,7 +52,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   links: {
     appLinks: [{ analyticsEvent: 'ClickNavVeBal', href: '/vebal', label: 'veBAL' }],
     ecosystemLinks: [
-      { label: 'Pool creator', href: 'https://pool-creator.balancer.fi/' },
+      { label: 'Pool creator', href: '/create' },
       { label: 'Blog', href: 'https://medium.com/balancer-protocol' },
       { label: 'Docs', href: 'https://docs.balancer.fi/' },
       { label: 'Governance', href: 'https://vote.balancer.fi/#/' },
@@ -144,7 +141,13 @@ export const ProjectConfigBalancer: ProjectConfig = {
       },
     ],
   },
-  cowSupportedNetworks: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Gnosis],
+  cowSupportedNetworks: [
+    GqlChain.Mainnet,
+    GqlChain.Arbitrum,
+    GqlChain.Base,
+    GqlChain.Gnosis,
+    ...(isProd ? [] : [GqlChain.Sepolia]),
+  ],
   partnerCards: [
     {
       backgroundImage: 'images/partners/cards/partner-xave-bg.png',

@@ -21,11 +21,10 @@ export type NetworkSetup = {
 }
 
 export const defaultAnvilTestPrivateKey =
-  '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
+  '0x7dab599bf65d431bbe35d626d2c479f90b024c4981ec034c8b229468a05ea3d3'
 
-// anvil account address: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 export const defaultTestUserAccount = privateKeyToAccount(defaultAnvilTestPrivateKey as Hex).address
-export const alternativeTestUserAccount = '0xa0Ee7A142d267C1f36714E4a8F75612F20a79720'
+export const alternativeTestUserAccount = '0x625Ac6ECB5FE349398368e468cA037E3cC19592A'
 export const userStakedInNonPreferentialGauge = '0x8163A459AC37f79D7E6845D4A3839AAa7F7f1bAd'
 
 export const testAccounts: Address[] = [

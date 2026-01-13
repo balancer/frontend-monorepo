@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'
@@ -36,7 +35,7 @@ export function TokenSelectPopular({
       .filter(Boolean) as GqlToken[]
 
     return excludeNativeAsset ? tokens.filter(token => !nativeAssetFilter(chain)(token)) : tokens
-  }, [popularTokens, excludeNativeAsset, chain])
+  }, [popularTokens, excludeNativeAsset, chain, getToken])
 
   const isExcludedToken = (token: GqlToken) =>
     (currentToken && isSameAddress(token.address, currentToken)) ||

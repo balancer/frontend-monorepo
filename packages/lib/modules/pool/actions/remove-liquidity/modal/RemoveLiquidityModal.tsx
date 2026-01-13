@@ -12,7 +12,6 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { ActionModalFooter } from '../../../../../shared/components/modals/ActionModalFooter'
 import { usePoolRedirect } from '../../../pool.hooks'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
-import { useResetStepIndexOnOpen } from '../../useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 import { RemoveLiquiditySummary } from './RemoveLiquiditySummary'
 import { useRemoveLiquidityReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
@@ -52,8 +51,6 @@ export function RemoveLiquidityModal({
     protocolVersion: pool.protocolVersion as ProtocolVersion,
     txReceipt: lastTransaction?.result,
   })
-
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   useEffect(() => {
     if (isOpen) {

@@ -10,7 +10,6 @@ import {
   Box,
   VStack,
   Divider,
-  Text,
   Stack,
   Skeleton,
 } from '@chakra-ui/react'
@@ -27,7 +26,7 @@ import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
 
-  const { steps, activeStepIndex, activeStep } = usePoolCreationFormSteps()
+  const { steps, activeStepIndex, activeStep, goToStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
 
   return (
@@ -43,33 +42,53 @@ export function PoolCreationForm() {
           <PoolCreationSkeleton isMobile={isMobile} />
         ) : (
           <>
-            <VStack align="start" minW="500px" spacing="lg">
+            <VStack
+              align="start"
+              maxW="540px"
+              minW={{ base: 'full', md: '500px' }}
+              spacing="lg"
+              w="full"
+            >
               <VStack align="start" spacing="md" w="full">
-                <Text color="font.secondary" fontWeight="medium" size="sm">
-                  STEPS
-                </Text>
+                <Divider />
                 <Stepper
+                  gap={{ base: 1, sm: 4 }}
                   index={activeStepIndex}
-                  orientation={isMobile ? 'vertical' : 'horizontal'}
+                  orientation="horizontal"
+                  pt="sm"
+                  size={{ base: 'sm', sm: 'md' }}
                   w="full"
                 >
-                  {steps.map(step => (
-                    <Step key={step.id} w="full">
-                      <StepIndicator>
-                        <StepStatus
-                          active={<StepNumber />}
-                          complete={<StepIcon />}
-                          incomplete={<StepNumber />}
-                        />
-                      </StepIndicator>
+                  {steps.map((step, index) => {
+                    const isCompleted = index < activeStepIndex
+                    const isActive = index === activeStepIndex
+                    return (
+                      <Step key={step.id} w="full">
+                        <Box
+                          _hover={isCompleted ? { opacity: 0.8 } : undefined}
+                          alignItems="center"
+                          cursor={isCompleted ? 'pointer' : 'default'}
+                          display="flex"
+                          gap="2"
+                          onClick={() => isCompleted && goToStep(index)}
+                        >
+                          <StepIndicator>
+                            <StepStatus
+                              active={<StepNumber fontWeight="bold" />}
+                              complete={<StepIcon />}
+                              incomplete={<StepNumber fontWeight="bold" />}
+                            />
+                          </StepIndicator>
 
-                      <Box flexShrink="0">
-                        <StepTitle>{step.title}</StepTitle>
-                      </Box>
+                          <StepTitle fontWeight={isCompleted || isActive ? 'bold' : 'medium'}>
+                            {step.title}
+                          </StepTitle>
+                        </Box>
 
-                      <StepSeparator w="full" />
-                    </Step>
-                  ))}
+                        <StepSeparator w="full" />
+                      </Step>
+                    )
+                  })}
                 </Stepper>
               </VStack>
 
@@ -91,7 +110,7 @@ export function PoolCreationForm() {
 function PoolCreationSkeleton({ isMobile }: { isMobile: boolean | undefined }) {
   return (
     <>
-      <VStack align="start" minW="500px" spacing="lg">
+      <VStack align="start" maxW="540px" minW={{ base: 'full', sm: '500px' }} spacing="lg" w="full">
         <Skeleton h="80px" w="full" />
         <Skeleton h="2px" w="full" />
         <Skeleton h="200px" w="full" />

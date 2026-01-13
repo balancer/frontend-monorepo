@@ -9,6 +9,7 @@ env:
   NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
   NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.PRIVATE_ALCHEMY_KEY }}
   NEXT_PRIVATE_DRPC_KEY: ${{ secrets.PRIVATE_DRPC_KEY }}
+  TEST_ACCOUNT_MNEMONIC: ${{ secrets.TEST_ACCOUNT_MNEMONIC }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
@@ -102,7 +103,7 @@ jobs:
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@v1
       - name: Start anvil fork in mainnet
-        run: anvil --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests (Balancer)
@@ -128,7 +129,7 @@ jobs:
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@v1
       - name: Start anvil fork in sonic
-        run: anvil --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+        run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests (Beets)

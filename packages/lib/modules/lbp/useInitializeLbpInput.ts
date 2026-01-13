@@ -3,7 +3,7 @@ import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { useLbpForm } from './LbpFormProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
-import { type InputAmountWithSymbol } from '@repo/lib/modules/pool/actions/create/types'
+import { type InitPoolInputAmount } from '@repo/lib/modules/pool/actions/create/types'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
@@ -56,14 +56,14 @@ export function useInitializeLbpInput() {
     return { amountsIn: [], minBptAmountOut, chainId, wethIsEth }
   }
 
-  const launchTokenAmountIn: InputAmountWithSymbol = {
+  const launchTokenAmountIn: InitPoolInputAmount = {
     address: launchTokenAddress as Address,
     decimals: launchTokenDecimals,
     rawAmount: parseUnits(saleTokenAmount, launchTokenDecimals),
     symbol: launchTokenSymbol,
   }
 
-  const reserveTokenAmountIn: InputAmountWithSymbol = {
+  const reserveTokenAmountIn: InitPoolInputAmount = {
     address: reserveTokenAddress as Address,
     decimals: reserveTokenDecimals,
     rawAmount: parseUnits(collateralTokenAmount, reserveTokenDecimals),

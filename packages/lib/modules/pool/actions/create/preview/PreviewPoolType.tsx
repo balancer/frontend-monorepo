@@ -1,11 +1,11 @@
 import { VStack, Heading, HStack, Text, CardBody, Box } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { capitalize } from 'lodash'
+import { getChainName } from '@repo/lib/config/app.config'
 import { NetworkPreviewSVG } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { POOL_TYPES } from '../constants'
-import { isWeightedPool, isCustomWeightedPool } from '../helpers'
+import { isWeightedPool, isCustomWeightedPool, isCowPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolType() {
@@ -15,21 +15,23 @@ export function PreviewPoolType() {
     name: ['network', 'protocol', 'poolType', 'weightedPoolStructure'],
   })
 
+  const showWeightStructure = isWeightedPool(poolType) || isCowPool(poolType)
+
   const cardInformationRows = [
     {
       label: 'Protocol',
-      value: capitalize(protocol),
+      value: protocol,
     },
     {
       label: 'Network',
-      value: capitalize(network),
+      value: getChainName(network),
     },
     {
       label: 'Pool type',
       value:
         POOL_TYPES[poolType].label +
-        (isWeightedPool(poolType)
-          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : '2-token '}${weightedPoolStructure}`
+        (showWeightStructure
+          ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? '' : `${!isCowPool(poolType) ? '2-token ' : ''}${weightedPoolStructure}`}`
           : ''),
     },
   ]
@@ -40,7 +42,7 @@ export function PreviewPoolType() {
         <HStack alignItems="start" justify="space-between" w="full">
           <VStack align="start" h="full" spacing="md">
             <Heading marginBottom="sm" size="md">
-              Pool Type
+              Pool type
             </Heading>
             {cardInformationRows.map(({ label, value }) => (
               <HStack align="start" key={label} spacing="lg" w="full">

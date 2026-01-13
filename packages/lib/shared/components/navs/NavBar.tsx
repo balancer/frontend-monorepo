@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
-import { Alert, Box, BoxProps, Button, HStack, Link, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react'
 import { isDev, isStaging, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
@@ -226,7 +225,7 @@ export function NavActions({
     }
 
     return defaultActions
-  }, [pathname, isConnected])
+  }, [pathname, isConnected, hideDarkModeToggle, mobileNav, allowCreateWallet])
 
   return (
     <>
@@ -278,12 +277,8 @@ export function NavBar({
   const top = useTransform(scrollYBoundedProgressDelayed, [0, 1], [0, -72])
   const opacity = useTransform(scrollYBoundedProgressDelayed, [0, 1], [1, 0])
 
-  const poolActions = ['add-liquidity', 'remove-liquidity', 'stake', 'unstake', 'swap']
-  const pathname = usePathname()
-  const shouldShowV2Exploit = poolActions.every(action => !pathname.includes(action))
-
   // Determine navbar height based on alerts
-  const hasAlerts = !apiOK || (isBalancer && shouldShowV2Exploit)
+  const hasAlerts = !apiOK
   const navbarHeight = hasAlerts ? '120px' : '72px'
 
   // Set CSS variable on document root
@@ -322,31 +317,11 @@ export function NavBar({
     >
       {!apiOK && <ApiOutageAlert />}
 
-      {isBalancer && shouldShowV2Exploit && (
-        <Alert gap="1" justifyContent="center" rounded="none" status="warning">
-          <Text color="#000" fontWeight="bold">
-            There was a recent exploit on some v2 Composable Stable pools (v3 pools not affected).
-          </Text>
-          <Link
-            _hover={{
-              color: '#555',
-            }}
-            color="#000"
-            fontWeight="bold"
-            href="https://x.com/Balancer/status/1990856260988670132"
-            isExternal
-            textDecoration="underline"
-          >
-            Read the Post-Mortem
-          </Link>
-        </Alert>
-      )}
-
       <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
         <HStack
           animate="show"
           as={motion.div}
-          initial="hidden"
+          initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
           onClick={e => e.stopPropagation()}
           spacing="xl"
           variants={staggeredFadeIn}
@@ -367,7 +342,7 @@ export function NavBar({
         <HStack
           animate="show"
           as={motion.div}
-          initial="hidden"
+          initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
           onClick={e => e.stopPropagation()}
           order={{ md: '2' }}
           variants={staggeredFadeIn}

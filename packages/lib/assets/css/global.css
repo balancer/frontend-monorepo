@@ -7,11 +7,17 @@
 :focus,
 :focus-visible,
 *[data-focus] {
-  box-shadow: none !important;
+  box-shadow: none;
   outline: none !important;
   outline-width: 0 !important;
   outline-color: transparent !important;
   border-color: inherit !important;
+}
+
+:focus:not(input),
+:focus-visible:not(input),
+*[data-focus]:not(input) {
+  box-shadow: none !important;
 }
 
 html,

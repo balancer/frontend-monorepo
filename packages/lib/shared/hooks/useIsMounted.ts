@@ -1,14 +1,15 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useState } from 'react'
+import { useDeferredValue, useSyncExternalStore } from 'react'
 
-// The usage of mounted helps to overcome nextjs hydration mismatch
-// errors where the state of the user on the server pass is different
-// than the state on the client side rehydration.
+// https://tkdodo.eu/blog/avoiding-hydration-mismatches-with-use-sync-external-store
+// The new versions of useIsMounted (e.g. usehooks-ts) that try to do it
+// with a ref don't work for this problem (they are designed to prevent
+// memory leaks) as they will not re-render the component on change.
 export function useIsMounted() {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const isClient = useSyncExternalStore(
+    () => () => {}, // noop
+    () => true, // Client
+    () => false // Server
+  )
 
-  return mounted
+  return useDeferredValue(isClient)
 }

@@ -1,4 +1,4 @@
-import { CardHeader, CardBody, Heading, VStack, HStack, Text, Box } from '@chakra-ui/react'
+import { CardHeader, CardBody, Heading, VStack, HStack, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
@@ -6,7 +6,7 @@ import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
-import { isStablePool } from '../helpers'
+import { isStablePool, isCowPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolDetails() {
@@ -16,7 +16,7 @@ export function PreviewPoolDetails() {
         <Heading size="md">Details</Heading>
       </CardHeader>
       <CardBody>
-        <VStack spacing="md">
+        <VStack spacing="0">
           <PoolDetailsContent />
         </VStack>
       </CardBody>
@@ -76,24 +76,44 @@ export function PoolDetailsContent() {
     )
   }
 
+  const showPoolSettings = !isCowPool(poolType)
+  const showAmplificationParameter = isStablePool(poolType)
+
   const poolDetailsMap = {
     'Pool name': name,
     'Pool symbol': symbol,
-    'Swap fee manager': formatPoolManager(swapFeeManager),
-    'Pool pause manager': formatPoolManager(pauseManager),
-    'Swap fee percentage': `${swapFeePercentage}%`,
-    ...(isStablePool(poolType) && { 'Amplification parameter': amplificationParameter }),
-    'Pool hook': formatPoolHook(poolHooksContract),
-    'Allow flexible adds/removes': disableUnbalancedLiquidity ? 'No' : 'Yes',
-    'Allow donations': enableDonation ? 'Yes' : 'No',
+    ...(showPoolSettings && {
+      'Swap fee manager': formatPoolManager(swapFeeManager),
+      'Pool pause manager': formatPoolManager(pauseManager),
+      'Swap fee percentage': `${swapFeePercentage}%`,
+      ...(showAmplificationParameter && { 'Amplification parameter': amplificationParameter }),
+      'Pool hook': formatPoolHook(poolHooksContract),
+      'Allow flexible adds/removes': disableUnbalancedLiquidity ? 'No' : 'Yes',
+      'Allow donations': enableDonation ? 'Yes' : 'No',
+    }),
   }
 
   const { isBeforeStep } = usePoolCreationFormSteps()
 
   return Object.entries(poolDetailsMap).map(([label, value]) => (
-    <HStack align="start" justify="space-between" key={label} spacing="lg" w="full">
+    <HStack
+      _hover={{ bg: 'background.level0' }}
+      align="start"
+      justify="space-between"
+      key={label}
+      mx="-md"
+      px="md"
+      py="sm"
+      sx={{
+        '&:hover p': { color: 'font.maxContrast' },
+      }}
+      transition="1s all var(--ease-out-cubic)"
+      w="calc(100% + var(--chakra-space-md) * 2)"
+    >
       <Text color="font.secondary">{label}</Text>
-      <Box color="font.secondary">{isBeforeStep('Details') ? '—' : value}</Box>
+      <Text as="span" color="font.secondary">
+        {isBeforeStep('Details') ? '—' : value}
+      </Text>
     </HStack>
   ))
 }

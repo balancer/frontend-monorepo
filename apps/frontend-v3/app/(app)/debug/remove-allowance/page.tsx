@@ -11,22 +11,23 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { Center, Input, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Address } from 'viem'
+import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 
 export default function Page() {
   const [tokenAddress, setTokenAddress] = useState<Address>('' as Address)
-
-  const labels = buildTokenApprovalLabels({ actionType: 'Swapping', symbol: 'Token' })
-
   const { chain, userAddress } = useUserAccount()
 
+  const labels = buildTokenApprovalLabels({ actionType: 'Swapping', symbol: 'Token' })
   const chainId = chain?.id || 1
+
+  const networkConfig = getNetworkConfig(getGqlChain(chainId))
 
   const props: ManagedErc20TransactionInput = {
     tokenAddress,
     functionName: 'approve',
     labels,
     chainId,
-    args: [userAddress, 0n],
+    args: [networkConfig.contracts.balancer.vaultV2, 0n],
     enabled: !!userAddress,
     simulationMeta: sentryMetaForWagmiSimulation('Error in wagmi tx simulation: Approving token', {
       tokenAmountToApprove: 0n,

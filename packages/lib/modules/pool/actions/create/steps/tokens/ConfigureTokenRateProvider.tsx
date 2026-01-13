@@ -1,4 +1,5 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Radio } from '@chakra-ui/react'
+import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link, Box } from '@chakra-ui/react'
+import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
 import { PoolCreationForm } from '../../types'
@@ -14,6 +15,7 @@ import { usePublicClient } from 'wagmi'
 import { getChainId } from '@repo/lib/config/app.config'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { ArrowUpRight } from 'react-feather'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -68,27 +70,32 @@ export function ConfigureTokenRateProvider({
   )
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <FormSubsection marginLeft={{ base: 2, sm: 4, md: 5 }}>
       <VStack align="start" w="full">
         <HStack spacing="xs">
-          <Text>Rate Provider</Text>
+          <Text fontWeight="bold">Rate Provider</Text>
           <InfoIconPopover message="Tokens that accrue yield over time should use a rate provider" />
         </HStack>
         <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>
           <Stack spacing={3}>
             {adjustedRateProviderOptions.map(({ label, value }) => (
-              <HStack key={value} spacing="xs">
+              <Stack
+                direction={{ base: 'column', md: 'row' }}
+                key={value}
+                spacing={{ base: 1, md: 'xs' }}
+              >
                 <Radio size="lg" value={value}>
                   <Text>{label}</Text>
                 </Radio>
                 {value === RateProviderOption.Verified && (
-                  <BlockExplorerLink
-                    address={verifiedRateProviderAddress as Address}
-                    chain={network}
-                    fontSize="md"
-                  />
+                  <Box pl={{ base: 7, md: 0 }}>
+                    <BlockExplorerLink
+                      address={verifiedRateProviderAddress as Address}
+                      chain={network}
+                    />
+                  </Box>
                 )}
-              </HStack>
+              </Stack>
             ))}
           </Stack>
         </RadioGroup>
@@ -107,7 +114,7 @@ export function ConfigureTokenRateProvider({
       {showYieldFeesToggle && (
         <ShareYieldFeesCheckbox paysYieldFees={paysYieldFees} tokenIndex={tokenIndex} />
       )}
-    </VStack>
+    </FormSubsection>
   )
 }
 
@@ -139,7 +146,8 @@ function CustomRateProviderInput({
   const publicClient = usePublicClient({ chainId: getChainId(network) })
 
   const validateRateProvider = async (address: string) => {
-    if (address === '') return false
+    if (address === zeroAddress) return true
+    if (address === '') return 'Rate provider address is required'
     try {
       if (!publicClient) return 'missing public client for rate provider validation'
       const rate = await publicClient.readContract({
@@ -159,7 +167,7 @@ function CustomRateProviderInput({
   }
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" my="4" spacing="md" w="full">
       <VStack align="start" spacing="sm" w="full">
         <Controller
           control={control}
@@ -168,7 +176,7 @@ function CustomRateProviderInput({
             <InputWithError
               error={rateProviderErrors?.message}
               isInvalid={!!rateProviderErrors}
-              label={`Rate provider contract address on ${chainName}`}
+              label={`Rate Provider address (on ${chainName})`}
               onChange={e => field.onChange(e.target.value)}
               pasteFn={paste}
               placeholder="0xba100000625a3754423978a60c9317c58a424e3D"
@@ -183,7 +191,25 @@ function CustomRateProviderInput({
       </VStack>
 
       <BalAlert
-        content={`All new Rate Provider contracts must be reviewed and approved before LPs can interact with the pool on the ${PROJECT_CONFIG.projectName} UI. Learn more.`}
+        content={
+          <Text color="black">
+            All new Rate Provider contracts must be approved before LPs can interact with the pool
+            on the {PROJECT_CONFIG.projectName} UI.{' '}
+            <Link
+              _hover={{ transform: 'none !important', color: 'black !important' }}
+              alignItems="center"
+              color="black !important"
+              display="inline-flex"
+              gap="xs"
+              href="https://docs.balancer.fi/partner-onboarding/onboarding-overview/rate-providers.html#what-are-the-requirements-for-a-rate-provider-contract"
+              isExternal
+              textDecoration="underline"
+            >
+              Learn more
+              <ArrowUpRight size={14} />
+            </Link>
+          </Text>
+        }
         status="warning"
       />
     </VStack>

@@ -66,6 +66,9 @@ export type StepType =
   | 'enableRecovery'
   | 'depositLoops'
   | 'withdrawLoops'
+  | 'bindToken'
+  | 'setSwapFee'
+  | 'finalizePool'
 
 export type TxActionId =
   | 'SignBatchRelayer'

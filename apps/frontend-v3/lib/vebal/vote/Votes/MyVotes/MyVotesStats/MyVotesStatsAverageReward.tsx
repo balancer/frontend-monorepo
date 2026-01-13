@@ -17,7 +17,7 @@ export function MyVotesStatsAverageReward() {
     <MyVotesStatsCard
       headerText={
         <TooltipWithTouch
-          label="The amount of bribes you could earn on Hidden Hand for the next period per veBAL vote. Hidden Hand is an unaffiliated 3rd party vote market."
+          label="The amount of bribes you could earn on Votemarket for the next period per veBAL vote. Votemarket is an unaffiliated 3rd party vote market."
           placement="top"
         >
           <Text

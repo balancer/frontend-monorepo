@@ -59,6 +59,7 @@ const networkConfig: NetworkConfig = {
       vaultAdminV3: AddressProvider.VaultAdmin(arbitrum.id),
       router: AddressProvider.Router(arbitrum.id),
       compositeLiquidityRouterBoosted: AddressProvider.CompositeLiquidityRouter(arbitrum.id),
+      bCoWFactory: '0xE0e2Ba143EE5268DA87D529949a2521115987302',
     },
     veDelegationProxy: '0x81cFAE226343B24BA12EC6521Db2C79E7aeeb310',
     permit2: PERMIT2[arbitrum.id],

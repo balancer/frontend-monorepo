@@ -56,7 +56,7 @@ export function MyVotesHintModal({ isOpen = false, onClose = () => {} }: UseDisc
                 <Text>
                   There are vote incentives offered by 3rd parties (also known as bribes). If you
                   vote on pools with bribes, you can claim these bribes on third party platforms
-                  like Hidden Hand and Paladin.
+                  like Votemarket and Paladin.
                 </Text>
               </ListItem>
               <ListItem mb="xs">

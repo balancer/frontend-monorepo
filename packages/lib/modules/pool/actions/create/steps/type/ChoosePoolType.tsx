@@ -1,28 +1,51 @@
 import { type Control, Controller } from 'react-hook-form'
 import { PoolCreationForm, SupportedPoolTypes } from '../../types'
 import { VStack, Text, RadioGroup, Stack, Radio, HStack } from '@chakra-ui/react'
-import { POOL_TYPES } from '../../constants'
+import { POOL_TYPES, INITIAL_POOL_CREATION_FORM } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { isCowProtocol } from '../../helpers'
+import { PoolType } from '@balancer/sdk'
+import { useWatch } from 'react-hook-form'
+import { isProd } from '@repo/lib/config/app.config'
 
 export function ChoosePoolType({ control }: { control: Control<PoolCreationForm> }) {
-  const poolTypesKeys = Object.keys(POOL_TYPES) as SupportedPoolTypes[]
-  const {
-    poolCreationForm: { setValue },
-  } = usePoolCreationForm()
+  const protocol = useWatch({ control, name: 'protocol' })
+
+  const poolTypesKeys = Object.keys(POOL_TYPES).filter(poolType => {
+    if (isProd && poolType === PoolType.ReClamm) {
+      return false
+    }
+
+    // only show cow amm type for cow protocol selection
+    return isCowProtocol(protocol) === (poolType === PoolType.CowAmm)
+  }) as SupportedPoolTypes[]
+
+  const { poolCreationForm } = usePoolCreationForm()
+
+  const [network] = useWatch({
+    control,
+    name: ['network'],
+  })
 
   return (
     <VStack align="start" spacing="md" w="full">
-      <Text color="font.primary">Choose a pool type</Text>
+      <Text color="font.primary" fontWeight="bold">
+        Choose a pool type
+      </Text>
       <Controller
         control={control}
         name="poolType"
         render={({ field }) => (
           <RadioGroup
             onChange={(value: SupportedPoolTypes) => {
-              setValue('swapFeePercentage', getSwapFeePercentageOptions(value)[0].value)
-              field.onChange(value)
+              poolCreationForm.reset({
+                ...INITIAL_POOL_CREATION_FORM,
+                network,
+                swapFeePercentage: getSwapFeePercentageOptions(value)[0].value,
+                poolType: value,
+              })
             }}
             value={field.value}
           >
@@ -30,15 +53,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
               {poolTypesKeys.map(poolTypeKey => (
                 <HStack key={poolTypeKey}>
                   <Radio size="lg" value={poolTypeKey}>
-                    <Text
-                      color="font.primary"
-                      textDecoration="underline"
-                      textDecorationStyle="dotted"
-                      textDecorationThickness="1px"
-                      textUnderlineOffset="3px"
-                    >
-                      {POOL_TYPES[poolTypeKey].label}
-                    </Text>
+                    <Text color="font.primary">{POOL_TYPES[poolTypeKey].label}</Text>
                   </Radio>
                   <InfoIconPopover message={POOL_TYPES[poolTypeKey].description} />
                 </HStack>

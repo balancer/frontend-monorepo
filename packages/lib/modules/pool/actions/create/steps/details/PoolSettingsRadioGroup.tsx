@@ -1,8 +1,8 @@
 import { VStack, HStack, Text, RadioGroup, Radio, Stack } from '@chakra-ui/react'
-import { BalPopover } from '@repo/lib/shared/components/popover/BalPopover'
-import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { InfoIconPopover } from '../../InfoIconPopover'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
+import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { PoolSettingsOption } from './PoolSettings'
@@ -54,13 +54,11 @@ export function PoolSettingsRadioGroup({
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack>
-        <Text textAlign="start" w="full">
+        <Text fontWeight="bold" textAlign="start" w="full">
           {title}
         </Text>
 
-        <BalPopover text={tooltip}>
-          <InfoIcon />
-        </BalPopover>
+        <InfoIconPopover message={tooltip} />
       </HStack>
 
       <Controller
@@ -91,24 +89,14 @@ export function PoolSettingsRadioGroup({
                     <VStack align="start" key={idx} w="full">
                       <Radio isDisabled={isDisabled} size="lg" value={option.value}>
                         <HStack>
-                          <Text
-                            color="font.primary"
-                            {...(isCustomOption && {
-                              textDecoration: 'underline',
-                              textDecorationStyle: 'dotted',
-                              textDecorationThickness: '1px',
-                              textUnderlineOffset: '3px',
-                            })}
-                          >
-                            {option.label}
-                          </Text>
+                          <Text color="font.primary">{option.label}</Text>
                           {option.detail && option.detail}
                         </HStack>
                       </Radio>
                       {isCustomOption &&
                         isCustomOptionSelected &&
                         (customInputType === 'address' ? (
-                          <VStack align="start" spacing="md" w="full">
+                          <FormSubsection>
                             <Controller
                               control={control}
                               name={name}
@@ -128,25 +116,26 @@ export function PoolSettingsRadioGroup({
                             />
                             {name === 'poolHooksContract' && (
                               <BalAlert
-                                content="All new Hook contracts need to be reviewed before a pool using it can be listed on the balancer.fi UI. Learn more."
+                                content="All new hook contracts must pass a review before 'Add Liquidity' is enabled for users on the Balancer UI."
                                 status="warning"
-                                title="Unrecognized contract"
+                                title="Unrecognized hooks require review"
                                 w="full"
                               />
                             )}
-                          </VStack>
+                          </FormSubsection>
                         ) : (
-                          <NumberInput
-                            control={control}
-                            error={errors?.message}
-                            isDisabled={false}
-                            isInvalid={false}
-                            isPercentage={!!isPercentage}
-                            label={customInputLabel}
-                            name={name}
-                            validate={value => (validate ? validate(value.toString()) : true)}
-                            width="32"
-                          />
+                          <FormSubsection>
+                            <NumberInput
+                              control={control}
+                              isDisabled={false}
+                              isInvalid={false}
+                              isPercentage={!!isPercentage}
+                              label={customInputLabel}
+                              name={name}
+                              validate={value => (validate ? validate(value.toString()) : true)}
+                              width="32"
+                            />
+                          </FormSubsection>
                         ))}
                     </VStack>
                   )

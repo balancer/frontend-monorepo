@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   ManagedResult,
@@ -128,6 +127,14 @@ export function useSwapStep({
         )
       },
     }),
-    [transaction, simulationQuery.data, buildSwapQuery.data]
+    [
+      transaction,
+      simulationQuery.data,
+      buildSwapQuery.data,
+      refetchBalances,
+      labels,
+      gasEstimationMeta,
+      isComplete,
+    ]
   )
 }

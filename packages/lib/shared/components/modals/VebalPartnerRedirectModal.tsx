@@ -19,7 +19,6 @@ import { Picture } from '../other/Picture'
 export enum VebalRedirectPartner {
   Aura = 'aura',
   StakeDAO = 'stake',
-  HiddenHand = 'hiddenhand',
   Palladin = 'palladin',
 }
 
@@ -51,21 +50,12 @@ const partnerInfo: PartnerInfo = {
     url: 'https://app.aura.finance',
     imageName: 'aura',
   },
-  [VebalRedirectPartner.HiddenHand]: {
-    shortName: 'HiddenHand',
-    fullName: 'HiddenHand',
-    category: 'veBAL voting incentives',
-    description:
-      "Hidden Hand is a marketplace for voting incentives, commonly referred to as 'bribes' in DeFi. Hidden Hand allows third party protocols to offer additional weekly incentives for veBAL holders who vote for certain eligible Pool Gauges.",
-    url: 'https://hiddenhand.finance/balancer',
-    imageName: 'hiddenhand',
-  },
   [VebalRedirectPartner.StakeDAO]: {
-    shortName: 'Stake DAO',
-    fullName: 'Stake DAO',
+    shortName: 'Votemarket',
+    fullName: 'Votemarket',
     category: 'DeFi liquid locker',
     description:
-      "Stake DAO is a key participant in veBAL through its 'Liquid Locker' product for BAL tokens. Stake DAO enables users and DAOs to lock BAL in the 80BAL/20WETH Balancer pool, minting sdBAL—a liquid wrapper that provides the benefits of veBAL for LPs (voting power, boosted rewards, and protocol fees) without sacrificing liquidity.",
+      "Votemarket is a key participant in veBAL through its 'Liquid Locker' product for BAL tokens. Votemarket enables users and DAOs to lock BAL in the 80BAL/20WETH Balancer pool, minting sdBAL—a liquid wrapper that provides the benefits of veBAL for LPs (voting power, boosted rewards, and protocol fees) without sacrificing liquidity.",
     url: 'https://www.stakedao.org/lockers/bal',
     imageName: 'stakedao',
   },

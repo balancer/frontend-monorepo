@@ -1,4 +1,3 @@
- 
 'use client'
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -8,7 +7,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { bn, isTooSmallToRemoveUsd, isZero, safeSum } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
-import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
+import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import { selectRemoveLiquidityHandler } from './handlers/selectRemoveLiquidityHandler'
 import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
@@ -34,6 +33,7 @@ export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse |
 
 export function useRemoveLiquidityLogic(
   urlTxHash?: Hash,
+  mute?: boolean,
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
   maxHumanBptIn?: HumanAmount,
   customStepsHook?: typeof useRemoveLiquiditySteps
@@ -46,11 +46,6 @@ export function useRemoveLiquidityLogic(
     RemoveLiquidityType.Proportional
   )
 
-  // Quote state, fixed when remove liquidity tx goes into confirming/confirmed
-  // state. This is required to maintain amounts in preview dialog on success.
-  const [quoteBptIn, setQuoteBptIn] = useState<HumanAmount>('0')
-  const [quoteAmountsOut, setQuoteAmountsOut] = useState<TokenAmount[]>([])
-  const [quotePriceImpact, setQuotePriceImpact] = useState<number>()
   const { pool, chainId, bptPrice, isLoading } = usePool()
   const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()
@@ -166,13 +161,16 @@ export function useRemoveLiquidityLogic(
     wethIsEth,
     singleTokenOutAddress,
   })
-  const transactionSteps = useTransactionSteps(steps)
+  const transactionSteps = useTransactionSteps(steps, false, mute)
 
   const removeLiquidityTxHash =
     urlTxHash || transactionSteps.lastTransaction?.result?.data?.transactionHash
   const removeLiquidityTxSuccess = transactionSteps.lastTransactionConfirmed
 
   const hasQuoteContext = !!simulationQuery.data
+
+  const quoteAmountsOut = simulationQuery.data?.amountsOut || emptyTokenAmounts(tokens)
+  const quotePriceImpact = priceImpactQuery.data
 
   /**
    * Methods
@@ -185,17 +183,6 @@ export function useRemoveLiquidityLogic(
   const usdOutForToken = (tokenAddress: Address): HumanAmount => {
     const usdOut = usdAmountOutMap[tokenAddress]
     return usdOut ? usdOut : '0'
-  }
-
-  function updateQuoteState(
-    bptIn: HumanAmount,
-    amountsOut: TokenAmount[] | undefined,
-    priceImpact: number | undefined
-  ) {
-    setQuoteBptIn(bptIn)
-    if (!amountsOut) setQuoteAmountsOut(emptyTokenAmounts(pool))
-    if (amountsOut) setQuoteAmountsOut(amountsOut)
-    if (priceImpact) setQuotePriceImpact(priceImpact)
   }
 
   // If wethIsEth is true, we need to return the native asset address for the token amount
@@ -261,22 +248,6 @@ export function useRemoveLiquidityLogic(
     [priceImpactQuery.isError, 'Error fetching price impact']
   )
 
-  /**
-   * Side-effects
-   */
-  // If amounts change, update quote state unless the final transaction is
-  // confirming or confirmed.
-  useEffect(() => {
-    if (!transactionSteps.lastTransactionConfirmingOrConfirmed) {
-      updateQuoteState(humanBptIn, simulationQuery.data?.amountsOut, priceImpactQuery.data)
-    }
-  }, [
-    humanBptIn,
-    simulationQuery.data,
-    priceImpactQuery.data,
-    transactionSteps.lastTransactionState,
-  ])
-
   const previewModalDisclosure = useModalWithPoolRedirect(pool, removeLiquidityTxHash)
 
   return {
@@ -287,7 +258,6 @@ export function useRemoveLiquidityLogic(
     singleTokenOutAddress,
     humanBptIn,
     humanBptInPercent,
-    quoteBptIn,
     quotePriceImpact,
     totalUsdFromBprPrice,
     isSingleToken,
@@ -317,12 +287,12 @@ export function useRemoveLiquidityLogic(
     setNeedsToAcceptHighPI,
     setWethIsEth,
     setWrapUnderlyingByIndex,
-    updateQuoteState,
   }
 }
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
+  mute?: boolean
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
   maxHumanBptIn?: HumanAmount
   customStepsHook?: typeof useRemoveLiquiditySteps
@@ -330,12 +300,19 @@ type Props = PropsWithChildren<{
 
 export function RemoveLiquidityProvider({
   urlTxHash,
+  mute,
   handlerSelector,
   maxHumanBptIn,
   customStepsHook,
   children,
 }: Props) {
-  const hook = useRemoveLiquidityLogic(urlTxHash, handlerSelector, maxHumanBptIn, customStepsHook)
+  const hook = useRemoveLiquidityLogic(
+    urlTxHash,
+    mute,
+    handlerSelector,
+    maxHumanBptIn,
+    customStepsHook
+  )
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 

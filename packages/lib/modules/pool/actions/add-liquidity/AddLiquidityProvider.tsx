@@ -13,7 +13,7 @@ import { LABELS } from '@repo/lib/shared/labels'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
+import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
 import { getPoolActionableTokens, getWrappedBoostedTokens } from '../../pool-tokens.utils'
 import { supportsWethIsEth } from '../../pool.helpers'
@@ -29,13 +29,23 @@ import {
   requiresProportionalInput,
   supportsNestedActions,
 } from '../LiquidityActionHelpers'
-import { useWrapUnderlying } from '../useWrapUnderlying'
 import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
 import { useAddLiquidityPriceImpactQuery } from './queries/useAddLiquidityPriceImpactQuery'
 import { useAddLiquiditySimulationQuery } from './queries/useAddLiquiditySimulationQuery'
 import { useAddLiquiditySteps as useAddLiquidityStepsBase } from './useAddLiquiditySteps'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
+import { useWrapUnderlying } from '../useWrapUnderlying'
+
+function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithAddress[] {
+  return tokens.map(
+    token =>
+      ({
+        tokenAddress: token.address as Address,
+        humanAmount: '',
+      }) as HumanTokenAmountWithAddress
+  )
+}
 
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -48,23 +58,27 @@ export function useAddLiquidityLogic(
   ) => AddLiquidityHandler = selectAddLiquidityHandler,
   useAddLiquiditySteps: typeof useAddLiquidityStepsBase = useAddLiquidityStepsBase
 ) {
-  const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
+  const { pool, refetch: refetchPool } = usePool()
+  const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
+
+  // Actionable tokens selected in the add form
+  const tokens = getPoolActionableTokens(pool, wrapUnderlying)
+
+  const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>(() =>
+    mapTokensToEmptyHumanAmounts(tokens)
+  )
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
-  const [totalUSDValue, setTotalUSDValue] = useState('0')
-  const { pool, refetch: refetchPool } = usePool()
-  const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
+
   /* wantsProportional is true when:
     - the pool requires proportional input
     - the user selected the proportional tab
   */
   const [wantsProportional, setWantsProportional] = useState(requiresProportionalInput(pool))
-
   const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
-
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage } = useUserSettings()
@@ -82,9 +96,6 @@ export function useAddLiquidityLogic(
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
 
-  // Actionable tokens selected in the add form
-  const tokens = getPoolActionableTokens(pool, wrapUnderlying)
-
   // All tokens that can be used in the pool form
   // standard tokens + wrapped/native asset (when wrapped native asset is present) + wrapped/underlying tokens (when the token is boosted)
   const validTokens = [
@@ -95,14 +106,7 @@ export function useAddLiquidityLogic(
   const { usdValueFor } = useTotalUsdValue(validTokens)
 
   function setInitialHumanAmountsIn() {
-    const amountsIn = tokens.map(
-      token =>
-        ({
-          tokenAddress: token.address,
-          humanAmount: '',
-        }) as HumanTokenAmountWithAddress
-    )
-    setHumanAmountsIn(amountsIn)
+    setHumanAmountsIn(mapTokensToEmptyHumanAmounts(tokens))
   }
 
   function setHumanAmountIn(token: ApiToken, humanAmount: HumanAmount | '') {
@@ -132,14 +136,11 @@ export function useAddLiquidityLogic(
   }
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
-
-  useEffect(() => {
-    if (!isLoadingTokenPrices) {
-      setTotalUSDValue(usdValueFor(humanAmountsIn))
-    }
-  }, [humanAmountsIn, isLoadingTokenPrices])
-
-  const isMinimumDepositMet = useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue })
+  const totalUSDValue = isLoadingTokenPrices ? '0' : usdValueFor(humanAmountsIn)
+  const { isMinimumDepositMet, errors: minimumDepositErrors } = useIsMinimumDepositMet({
+    humanAmountsIn,
+    totalUSDValue,
+  })
 
   /**
    * Queries
@@ -159,9 +160,6 @@ export function useAddLiquidityLogic(
     enabled,
   })
 
-  /**
-   * Step construction
-   */
   const { steps, isLoadingSteps } = useAddLiquiditySteps({
     helpers,
     handler,
@@ -190,18 +188,13 @@ export function useAddLiquidityLogic(
     await Promise.all([simulationQuery.refetch(), priceImpactQuery.refetch()])
   }
 
-  // On initial render, set the initial humanAmountsIn
-  useEffect(() => {
-    setInitialHumanAmountsIn()
-  }, [])
-
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
     [
       areEmptyAmounts(humanAmountsIn),
       'You need to input one or more valid token amounts in the fields above',
     ],
-    [!isMinimumDepositMet, 'Minimum deposit not met for a Boosted Pool'],
+    [!isMinimumDepositMet, 'Minimum deposit not met for the pool'],
     [hasValidationErrors, 'Fix the errors in token inputs'],
     [
       needsToAcceptHighPI,
@@ -266,6 +259,8 @@ export function useAddLiquidityLogic(
     setWrapUnderlyingByIndex,
     wrapUnderlying,
     setInitialHumanAmountsIn,
+    isMinimumDepositMet,
+    minimumDepositErrors,
   }
 }
 

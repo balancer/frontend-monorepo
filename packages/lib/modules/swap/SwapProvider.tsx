@@ -1,6 +1,7 @@
 'use client'
 
-import { ApolloClient, useApolloClient, useReactiveVar } from '@apollo/client'
+import { useApolloClient, useReactiveVar } from '@apollo/client/react'
+import { ApolloClient } from '@apollo/client'
 import { HumanAmount } from '@balancer/sdk'
 import { useDisclosure } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
@@ -79,7 +80,7 @@ function selectSwapHandler(
   tokenOutAddress: Address,
   chain: GqlChain,
   swapType: GqlSorSwapType,
-  apolloClient: ApolloClient<object>,
+  apolloClient: ApolloClient,
   tokens: ApiToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
@@ -633,10 +634,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   useEffect(() => {
     const wrapper = getWrapperForBaseToken(swapState.tokenIn.address, selectedChain)
     if (wrapper) setTokenOut(wrapper.wrappedToken)
-
-    // If the token in address changes we should reset tx step index because
-    // the first approval will be different.
-    transactionSteps.setCurrentStepIndex(0)
   }, [swapState.tokenIn.address])
 
   // Check if tokenOut is a base wrap token and set tokenIn as the wrapped token.

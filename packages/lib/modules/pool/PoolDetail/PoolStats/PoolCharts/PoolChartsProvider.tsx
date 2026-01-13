@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { ColorMode, theme as defaultTheme, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { addHours, differenceInDays, format } from 'date-fns'
 import {
@@ -6,7 +5,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
@@ -196,7 +195,6 @@ export function usePoolSnapshots(
       range,
       chainId,
     },
-    notifyOnNetworkStatusChange: true,
   })
 }
 
@@ -487,7 +485,7 @@ export function usePoolChartsLogic() {
         },
       ],
     }
-  }, [activeTab.value, defaultChartOptions, processedChartData])
+  }, [activeTab.value, defaultChartOptions, poolChartTypeOptions, processedChartData])
 
   const handleAxisMoved = useCallback(
     ({ dataIndex }: { dataIndex: number }) => {

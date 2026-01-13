@@ -15,7 +15,7 @@ import {
   Center,
   Divider,
 } from '@chakra-ui/react'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
 import tinycolor from 'tinycolor2'
@@ -97,9 +97,9 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
   const votesColor =
     votesState === 'normal' ? undefined : votesState === 'close' ? 'font.warning' : 'red.400'
 
-  const trendIcon = !voteDiff ? undefined : voteDiff > 0 ? TrendUpIcon() : TrendDownIcon()
+  const trendIcon = !voteDiff ? undefined : voteDiff > 0 ? <TrendUpIcon /> : <TrendDownIcon />
 
-  const thisWeek = Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs
+  const [thisWeek] = useState(() => Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs)
   const { totalAmount: totalVeBAL } = useVeBALTotal(thisWeek)
   const votesThisWeek = totalVeBAL && votesShare ? (votesShare * totalVeBAL).toFixed(2) : undefined
 

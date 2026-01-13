@@ -13,7 +13,7 @@ export default async function Home() {
   const client = getApolloServerClient()
 
   const variables = {
-    chains: [...PROJECT_CONFIG.supportedNetworks, GqlChain.Fantom], // manually adding Fantom to the list to get the data for the landing page
+    chains: PROJECT_CONFIG.supportedNetworks,
   }
 
   const { data: protocolData } = await client.query({
@@ -40,22 +40,24 @@ export default async function Home() {
     },
   })
 
-  const { data: protocolDataFantom } = await client.query({
-    query: GetProtocolStatsPerChainDocument,
-    variables: {
-      chain: GqlChain.Fantom,
-    },
-  })
-
   const { data: stakedSonicData } = await client.query({
     query: GetStakedSonicDataDocument,
     variables: {},
   })
 
+  if (
+    protocolData === undefined ||
+    stakedSonicData === undefined ||
+    protocolDataSonic === undefined ||
+    protocolDataOptimism === undefined
+  ) {
+    return null
+  }
+
   return (
     <LandingPageLayout
       protocolData={protocolData}
-      protocolDataPerChain={[protocolDataSonic, protocolDataOptimism, protocolDataFantom]}
+      protocolDataPerChain={[protocolDataSonic, protocolDataOptimism]}
       stakedSonicData={stakedSonicData}
     />
   )

@@ -51,6 +51,8 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
     ? 'Get veBAL to select and vote on pool gauges'
     : 'Connect your wallet to select and vote on pool gauges.'
 
+  const missingDataReason = 'There is currently no bribe data for this pool'
+
   return (
     <FadeInOnView>
       <Box
@@ -107,7 +109,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                 <Portal>
                   <PopoverContent maxW="300px" p="sm" w="auto">
                     <Text fontSize="sm" textAlign="left" variant="secondary">
-                      There is currently no bribe data on this pool from Hidden Hand
+                      {missingDataReason}
                     </Text>
                   </PopoverContent>
                 </Portal>
@@ -132,7 +134,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                 <Portal>
                   <PopoverContent maxW="300px" p="sm" w="auto">
                     <Text fontSize="sm" textAlign="left" variant="secondary">
-                      There is currently no bribe data on this pool from Hidden Hand
+                      {missingDataReason}
                     </Text>
                   </PopoverContent>
                 </Portal>

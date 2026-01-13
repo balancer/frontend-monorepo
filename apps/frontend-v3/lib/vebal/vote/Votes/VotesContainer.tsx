@@ -1,5 +1,4 @@
 import { GetVeBalVotingListDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { mins } from '@repo/lib/shared/utils/time'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import { VotesProvider } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 import { VoteListLayout } from '@bal/lib/vebal/vote/VoteList/VoteListLayout'
@@ -20,7 +19,7 @@ export async function VotesContainer() {
       variables: { includeKilled: true },
       context: {
         fetchOptions: {
-          next: { revalidate: mins(1).toSecs() },
+          cache: 'no-store', // Disable Next.js cache for large responses (>2MB)
         },
       },
     })

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/preserve-manual-memoization */
 import { Box, VStack, useTheme } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -168,7 +167,7 @@ export function FeaturedPoolWeightChart({
         },
       ],
     }
-  }, [displayTokens, colorMode])
+  }, [chartSizeValues, chain, displayTokens, colorMode])
 
   return (
     <VStack>

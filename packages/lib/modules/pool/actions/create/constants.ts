@@ -1,7 +1,6 @@
 import { PoolType, STABLE_POOL_CONSTRAINTS } from '@balancer/sdk'
 import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
-import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
-import { zeroAddress } from 'viem'
+import { zeroAddress, Address } from 'viem'
 import {
   SupportedPoolTypes,
   PoolTypeDetails,
@@ -12,6 +11,18 @@ import {
 } from './types'
 import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { parseUnits } from 'viem'
+
+const GNOSIS_BLACKLIST: Address[] = [
+  '0xcB444e90D8198415266c6a2724b7900fb12FC56E', // Monerium EUR emoney (EURe)
+  '0x417bc5b940475203A18C2f320a5ba470D6c5E463', // Wrapped Aave Gnosis EURe (waGnoEURe)
+  '0x420CA0f9B9b604cE0fd9C18EF134C705e5Fa3430', //Monerium EURe (EURe)
+]
+
+export const TOKEN_BLACKLIST: Partial<Record<GqlChain, Set<string>>> = {
+  [GqlChain.Gnosis]: new Set(GNOSIS_BLACKLIST.map(addr => addr.toLowerCase())),
+}
 
 export const NUM_FORMAT = '0.00000000' // up to 8 decimals?
 export const PERCENTAGE_DECIMALS = 16
@@ -24,6 +35,9 @@ export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
 export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
 export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 export const MAX_LAMBDA = 100000000
+export const COW_AMM_RAW_WEIGHT_50 = parseUnits('1', DEFAULT_DECIMALS) // quirk for 50/50 pool, weight must be 1e18 for both tokens
+export const COW_AMM_RAW_WEIGHT_80 = parseUnits('8', DEFAULT_DECIMALS)
+export const COW_AMM_RAW_WEIGHT_20 = parseUnits('2', DEFAULT_DECIMALS)
 
 export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
   [PoolType.Stable]: {
@@ -51,25 +65,31 @@ export const POOL_TYPES: Record<SupportedPoolTypes, PoolTypeDetails> = {
       'Concentrated liquidity pools that use an elliptical price curve to focus liquidity asymmetrically within customizable bounds. E-CLPs provide deeper liquidity and lower slippage for trades while maximizing LP capital efficiency within expected price ranges.',
   },
   [PoolType.ReClamm]: {
-    label: 'ReClamm',
+    label: 'reCLAMM',
     maxTokens: 2,
     description:
       'A concentrated liquidity pool with self-adjusting parameters. A "fire-and-forget" solution to maintenance-free concentrated liquidity provision.',
   },
+  [PoolType.CowAmm]: {
+    label: 'CoW AMM',
+    maxTokens: 2,
+    description:
+      'CoW AMM protects LPs from LVR so they can provide liquidity with less risk and more return',
+  },
 }
 
-export const PROTOCOLS = [
+export const BALANCER_V3_NAME = ProjectConfigBalancer.projectName + ' v3'
+
+export const BALANCER_PROTOCOL_OPTIONS = [
   {
-    id: ProjectConfigBalancer.projectId,
-    name: ProjectConfigBalancer.projectName,
+    name: BALANCER_V3_NAME,
     imageSrc: ProjectConfigBalancer.projectLogo,
   },
   {
-    id: ProjectConfigBeets.projectId,
-    name: ProjectConfigBeets.projectName,
-    imageSrc: ProjectConfigBeets.projectLogo,
+    name: 'CoW',
+    imageSrc: '/images/protocols/cowamm.svg',
   },
-]
+] as const
 
 export enum WeightedPoolStructure {
   FiftyFifty = '50/50',
@@ -91,16 +111,16 @@ export enum RateProviderOption {
 
 export const RATE_PROVIDER_RADIO_OPTIONS = [
   {
+    label: 'No rate provider',
+    value: RateProviderOption.Null,
+  },
+  {
     label: 'Add the verified rate provider for this token: ',
     value: RateProviderOption.Verified,
   },
   {
     label: 'Add custom rate provider',
     value: RateProviderOption.Custom,
-  },
-  {
-    label: 'No rate provider',
-    value: RateProviderOption.Null,
   },
 ] as const
 
@@ -116,7 +136,7 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
 export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]
 
 export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
-  protocol: PROJECT_CONFIG.projectId,
+  protocol: BALANCER_PROTOCOL_OPTIONS[0].name,
   network: PROJECT_CONFIG.defaultNetwork,
   weightedPoolStructure: WeightedPoolStructure.FiftyFifty,
   poolType: PoolType.Stable,

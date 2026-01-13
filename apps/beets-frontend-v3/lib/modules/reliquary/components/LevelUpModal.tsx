@@ -15,7 +15,6 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useLevelUpStep } from '../hooks/useLevelUpStep'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 
@@ -39,8 +38,6 @@ export function LevelUpModal({
   const { step: levelUpStep } = useLevelUpStep(relicId)
   const levelUpTransactionSteps = useTransactionSteps([levelUpStep], false)
   const levelUpTxHash = levelUpTransactionSteps.lastTransaction?.result?.data?.transactionHash
-
-  useResetStepIndexOnOpen(isOpen, levelUpTransactionSteps)
 
   function handleOnClose() {
     levelUpTransactionSteps.resetTransactionSteps()

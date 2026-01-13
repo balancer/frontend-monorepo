@@ -56,6 +56,10 @@ export const mainnetTokenBalances: TokenBalance[] = [
     value: '2000',
     decimals: 6,
   },
+  {
+    tokenAddress: '0x1D13531bf6344c102280CE4c458781FBF14Dad14',
+    value: '1',
+  },
 ]
 
 export const baseTokenBalances: TokenBalance[] = [
@@ -102,7 +106,7 @@ export const gnosisTokenBalances: TokenBalance[] = [
 export const sonicTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWING
-    value: '20000',
+    value: '100000',
   },
   {
     tokenAddress: '0x3bce5cb273f0f148010bbea2470e7b5df84c7812', // scETH

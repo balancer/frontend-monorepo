@@ -3,7 +3,7 @@ import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
-import { Address, Log, erc20Abi, formatUnits, parseAbiItem, parseEventLogs } from 'viem'
+import { Address, Log, erc20Abi, formatUnits, parseAbiItem, parseAbi, parseEventLogs } from 'viem'
 import { HumanTokenAmount } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
@@ -154,13 +154,17 @@ export function parseLstWithdrawReceipt({ receiptLogs, userAddress, chain }: Par
 
 export function parsePoolCreationReceipt({ receiptLogs }: ParseProps) {
   const logs = parseEventLogs({
-    abi: [parseAbiItem('event PoolCreated(address indexed pool)')],
+    abi: parseAbi([
+      'event LOG_NEW_POOL(address indexed caller, address indexed bPool)',
+      'event PoolCreated(address indexed pool)',
+    ]),
     logs: receiptLogs,
   })
-  const poolAddress = logs[0]?.args?.pool
-  return {
-    poolAddress,
-  }
+
+  const log = logs[0]
+  if (!log) return { poolAddress: undefined }
+
+  return { poolAddress: log.eventName === 'PoolCreated' ? log.args.pool : log.args.bPool }
 }
 
 export function parseRecoveryModeChangedReceipt({ receiptLogs }: ParseProps) {

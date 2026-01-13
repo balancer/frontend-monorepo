@@ -36,7 +36,7 @@ export const LbpBenefitsChartIcon = forwardRef<SVGSVGElement, LbpBenefitsChartIc
           </mask>
           <g mask="url(#mask0_77_335-lbp1)">
             <g className="gold-texture">
-              <path d="M-3.078-27.202h105.674V93.773H-3.078z" fill="url(#pattern0_77_335-lbp)" />
+              <path d="M-3.078-27.202h105.674V93.773H-3.078z" fill="url(#pattern0_77_335-lbp1)" />
             </g>
           </g>
         </g>

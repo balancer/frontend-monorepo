@@ -29,13 +29,7 @@ export function PoolDetail() {
   const pathname = usePathname()
   const { banners } = usePoolVariant()
 
-  const userEvents = useUserPoolEvents()
-
-  const {
-    userPoolEvents,
-    isLoadingUserPoolEvents,
-    hasPoolEvents: userHasPoolEvents,
-  } = userEvents || {}
+  const { userPoolEvents, hasPoolEvents } = useUserPoolEvents()
 
   const userHasLiquidity = hasTotalBalance(pool)
 
@@ -63,7 +57,7 @@ export function PoolDetail() {
 
                 <PoolStatsLayout />
               </VStack>
-              {(userHasLiquidity || userHasPoolEvents) && (
+              {(userHasLiquidity || hasPoolEvents) && (
                 <Stack
                   direction={{ base: 'column', xl: 'row' }}
                   justifyContent="stretch"
@@ -71,10 +65,7 @@ export function PoolDetail() {
                   w="full"
                 >
                   <PoolMyLiquidity />
-                  <PoolUserEvents
-                    isLoading={isLoadingUserPoolEvents}
-                    userPoolEvents={userPoolEvents}
-                  />
+                  <PoolUserEvents userPoolEvents={userPoolEvents} />
                 </Stack>
               )}
               <PoolQuantAMMBanner />

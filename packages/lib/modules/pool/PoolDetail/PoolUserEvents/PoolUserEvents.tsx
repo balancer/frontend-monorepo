@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { Grid, GridItem, Text, Box, HStack, Link, Divider } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import {
   GetPoolEventsQuery,
@@ -164,14 +163,11 @@ function SwapTokens({ swapEvent, chain }: { swapEvent: GqlPoolSwapEventV3; chain
 
 export default function PoolUserEvents({
   userPoolEvents,
-  isLoading,
 }: {
-  userPoolEvents: GetPoolEventsQuery['poolEvents'] | undefined
-  isLoading: boolean
+  userPoolEvents: GetPoolEventsQuery['poolEvents']
 }) {
   const { myLiquiditySectionRef, chain, pool } = usePool()
   const [height, setHeight] = useState(0)
-  const [poolEvents, setPoolEvents] = useState<PoolEventItem[]>([])
   const { toCurrency } = useCurrency()
 
   const {
@@ -188,12 +184,6 @@ export default function PoolUserEvents({
       setHeight(myLiquiditySectionRef.current.offsetHeight)
     }
   }, [])
-
-  useEffect(() => {
-    if (!isLoading && userPoolEvents?.length) {
-      setPoolEvents(userPoolEvents)
-    }
-  }, [userPoolEvents, isLoading])
 
   function getShareTitle() {
     if (showVeBal) {
@@ -232,12 +222,12 @@ export default function PoolUserEvents({
           </HStack>
         </>
       }
-      hasNoTransactions={isEmpty(poolEvents)}
+      hasNoTransactions={isEmpty(userPoolEvents)}
       headerTemplateColumns={GRID_COLUMNS}
-      isLoading={isLoading}
+      isLoading={false}
       title="My transactions"
     >
-      {poolEvents.map(poolEvent => (
+      {userPoolEvents.map(poolEvent => (
         <PoolEventRow
           chain={chain}
           key={poolEvent.id}
