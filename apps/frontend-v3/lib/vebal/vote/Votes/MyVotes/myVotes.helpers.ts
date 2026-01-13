@@ -66,8 +66,8 @@ export function calculateMyVoteRewardsValue(
   if (!votingPool?.votingIncentive?.incentives) return bn(0)
 
   const valuePerVote = votingPool?.votingIncentive?.incentives.reduce((acc, incentive) => {
-    const incentiveTokenPrice = bn(incentive.value)
-    const totalIncentives = incentiveTokenPrice.times(incentive.amount)
+    const incentiveTokenPrice = bn(incentive.token.price)
+    const totalIncentives = incentiveTokenPrice.times(incentive.token.amount)
     const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokensPerVote)
     const expectedValuePerVote = bn(totalIncentives).div(newPoolVoteCount)
     const valuePerVote = BigNumber.min(

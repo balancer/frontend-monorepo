@@ -24,8 +24,9 @@ type PoolInfo = {
   gaugeAddress: Address
   votes: BigNumber
   incentives: {
-    incentivesAmount: number
-    incentivesTokenPrice: number
+    amountFiat: number
+    tokenPrice: number
+    tokenAmount: number
     maxTokenPerVote: number
   }[]
   userVotes: BigNumber
@@ -132,8 +133,9 @@ function extractVoteAmountAndIncentives(
         ? []
         : pool.votingIncentive.incentives.map(incentive => {
             return {
-              incentivesAmount: incentive.amount,
-              incentivesTokenPrice: incentive.value,
+              amountFiat: incentive.amountFiat,
+              tokenPrice: incentive.token.price,
+              tokenAmount: incentive.token.amount,
               maxTokenPerVote: incentive.maxTokensPerVote,
             }
           })
@@ -170,8 +172,8 @@ function incentivePerVote(pool: Element<PoolInfo>) {
   if (!pool || pool.incentives.length === 0) return 0
 
   const valuePerVote = pool.incentives.reduce((acc, incentive) => {
-    const incentiveTokenPrice = bn(incentive.incentivesTokenPrice)
-    const totalIncentives = incentiveTokenPrice.times(incentive.incentivesAmount)
+    const incentiveTokenPrice = bn(incentive.tokenPrice)
+    const totalIncentives = incentiveTokenPrice.times(incentive.tokenAmount)
     const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokenPerVote)
     const expectedValuePerVote = bn(totalIncentives).div(pool.votes.shiftedBy(-18))
     const valuePerVote = BigNumber.min(
@@ -292,8 +294,8 @@ function sumTotalIncentives(
     if (!vote.votingIncentive?.incentives) return acc
 
     const valuePerVote = vote?.votingIncentive?.incentives.reduce((acc, incentive) => {
-      const incentiveTokenPrice = bn(incentive.value)
-      const totalIncentives = incentiveTokenPrice.times(incentive.amount)
+      const incentiveTokenPrice = bn(incentive.token.price)
+      const totalIncentives = incentiveTokenPrice.times(incentive.token.amount)
       const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokensPerVote)
       const expectedValuePerVote = bn(totalIncentives).div(poolVotes)
       const valuePerVote = BigNumber.min(
