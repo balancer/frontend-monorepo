@@ -4,27 +4,36 @@ import {
 } from '@repo/lib/shared/services/voting-incentives/incentives.types'
 import { useQuery } from '@tanstack/react-query'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { useTokens, UseTokensResult } from '@repo/lib/modules/tokens/TokensProvider'
+import { getGqlChain } from '@repo/lib/config/app.config'
 
 const STAKE_DAO_VOTE_MARKET_URL = 'https://api-v3.stakedao.org/votemarket/balancer'
 
+type PriceForFn = UseTokensResult['priceFor']
+
 export function useVotingIncentives() {
+  const { priceFor, isLoadingTokenPrices } = useTokens()
+
   const { data, error, isLoading } = useQuery({
     queryKey: ['voting-incentives'],
-    queryFn: async () => getAllVotingIncentives(),
+    queryFn: async () => getAllVotingIncentives(priceFor),
+    enabled: !isLoadingTokenPrices,
     ...onlyExplicitRefetch,
   })
 
   return { incentives: data, incentivesError: error, incentivesAreLoading: isLoading }
 }
 
-async function getAllVotingIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
+async function getAllVotingIncentives(
+  priceFor: PriceForFn
+): Promise<PoolVotingIncentivesPerWeek[]> {
   // add new voting incentive sources here
-  const stakeDaoIncentives = await getStakeDaoIncentives()
+  const stakeDaoIncentives = await getStakeDaoIncentives(priceFor)
 
   return [...stakeDaoIncentives]
 }
 
-async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
+async function getStakeDaoIncentives(priceFor: PriceForFn): Promise<PoolVotingIncentivesPerWeek[]> {
   const stakeDaoVoteMarket = await fetchStakeDaoVoteMarket()
 
   const voteOpenCampaigns = stakeDaoVoteMarket.campaigns.filter(
@@ -35,9 +44,14 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
   const campaignsByGauge = voteOpenCampaigns.reduce(
     (acc, campaign) => {
       const gaugeAddress = campaign.gauge.toLowerCase()
+      const chainId = campaign.rewardChainId
+      const chain = getGqlChain(chainId)
 
+      // prioritize price from balancer API with fallback to stake dao API
+      const balancerApiTokenPrice = priceFor(campaign.rewardToken.address, chain)
+      const stakeDaoTokenPrice = Number(campaign.rewardToken.price)
+      const tokenPrice = balancerApiTokenPrice || stakeDaoTokenPrice
       const tokenAmount = Number(campaign.currentPeriod.rewardPerPeriod)
-      const tokenPrice = Number(campaign.rewardToken.price)
       const fiatValue = tokenAmount * tokenPrice
 
       const tokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
@@ -49,7 +63,7 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
           symbol: campaign.rewardToken.symbol,
           address: campaign.rewardToken.address,
           decimals: campaign.rewardToken.decimals,
-          chainId: campaign.rewardChainId,
+          chainId,
           price: tokenPrice,
           amount: tokenAmount,
         },
