@@ -124,7 +124,7 @@ export function ClaimNetworkPools() {
           </SimpleGrid>
         ) : !isConnected ? (
           <ConnectButton.Custom>
-            {({ openConnectModal }) => (
+            {({ openConnectModal }: { openConnectModal: () => void }) => (
               <SimpleGrid
                 columns={{
                   base: 1,
@@ -290,7 +290,7 @@ export function ClaimNetworkPools() {
                             textTransform="capitalize"
                             tooltip="Available until June 30, 2026"
                           />
-                        )
+                        ) as ReactNode
                       default:
                         return undefined
                     }
