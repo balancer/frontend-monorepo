@@ -6,8 +6,8 @@ runs:
     - name: Set up pnpm
       uses: pnpm/action-setup@v4
       with:
-        version: 9.8.0
-        node-version: 24
+        version: 10.28.0
+        cache: true
 
     - name: Install Node.js
       uses: actions/setup-node@v6
