@@ -63,7 +63,6 @@ export function useIncentivesOptimized(
   })
 
   const votes = data || []
-  console.log({ votes })
   const [timelockedVotes] = filterTimelockedVotes(myVotes)
   const totalIncentives = sumTotalIncentives(
     votes,
@@ -100,6 +99,7 @@ export function calculateIncentivesOptimized(
   )
 
   const stepVoteAmount = userVotingPower.times(PERCENT_STEP)
+  const cappedPools: PoolInfo[] = []
 
   while (prctToDistribute.gt(0)) {
     const bestPool = pop(prioritizedPools)
@@ -110,7 +110,8 @@ export function calculateIncentivesOptimized(
       const votesState = getVotesState(bestPool.relativeWeightCap, newVotesNextPeriodWeight)
 
       if (votesState === VotesState.Exceeded) {
-        console.log({ newVotesNextPeriodWeight, votesState, bestPool })
+        // Preserve capped pool only if it has accumulated votes
+        if (bestPool.userPrct.gt(0)) cappedPools.push(bestPool)
         continue
       }
 
@@ -128,9 +129,7 @@ export function calculateIncentivesOptimized(
     pool => !findByGaugeAddress(timelockedVotes, pool.gauge.address as Address)
   )
 
-  console.log({ prioritizedPools })
-
-  const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools)
+  const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools, cappedPools)
 
   return votes
 }
@@ -257,8 +256,14 @@ function resetVotes(myVotes: VotingPoolWithData[]) {
   }, [] as OptimizedVote[])
 }
 
-function mergeOptimizedVotes(votes: OptimizedVote[], poolVotes: Heap<Element<PoolInfo>>) {
-  return poolVotes.elements.reduce((acc, pool) => {
+function mergeOptimizedVotes(
+  votes: OptimizedVote[],
+  poolVotes: Heap<Element<PoolInfo>>,
+  cappedPools: PoolInfo[] = []
+) {
+  const allPools = [...poolVotes.elements, ...cappedPools]
+
+  return allPools.reduce((acc, pool) => {
     if (pool && bn(pool.userVotes).gt(0)) {
       const incentives = pool.userVotes.shiftedBy(-18).times(incentivePerVote(pool))
 
