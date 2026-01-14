@@ -7,13 +7,14 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { VotingPool } from '@repo/lib/modules/pool/pool.types'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { getChainId } from '@repo/lib/config/app.config'
+import { isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
 
-export function getVotesState(relativeWeightCap: number, votesNextPeriod: number) {
-  if (relativeWeightCap === 0 || votesNextPeriod === 0) return VotesState.Normal
-  if (votesNextPeriod > relativeWeightCap) {
+export function getVotesState(relativeWeightCap: number, votesNextPeriodWeight: number) {
+  if (relativeWeightCap === 0 || votesNextPeriodWeight === 0) return VotesState.Normal
+  if (votesNextPeriodWeight > relativeWeightCap) {
     return VotesState.Exceeded
   }
-  if (relativeWeightCap - votesNextPeriod <= 0.01) {
+  if (relativeWeightCap - votesNextPeriodWeight <= 0.01) {
     return VotesState.Close
   }
   return VotesState.Normal
@@ -49,6 +50,14 @@ export function isGaugeExpired(expiredGauges: string[] | undefined, gaugeAddress
 
 export function isPoolExpired(pool: VotingPoolWithData) {
   return pool.gauge.isKilled
+}
+
+export function getRelativeWeightCap(relativeWeightCap: string | undefined | null, poolId: string) {
+  if (isVebalPool(poolId)) {
+    return 0.1
+  }
+
+  return !relativeWeightCap || relativeWeightCap === '1' ? 0 : Number(relativeWeightCap)
 }
 
 export const orderByHash: Record<SortVotesBy, { label: string; title?: string }> = {
