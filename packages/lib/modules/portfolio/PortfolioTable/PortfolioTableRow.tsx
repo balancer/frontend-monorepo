@@ -24,7 +24,7 @@ import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { AlertTriangle } from 'react-feather'
 import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
-import { getChainId, isProd } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -111,14 +111,13 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 <Text fontWeight="medium">
                   {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
                 </Text>
-                {!isProd &&
-                  needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
-                    <TooltipWithTouch label="Migrate your position to the recommended pool">
-                      <Box color="font.warning">
-                        <AlertTriangle size="16" />
-                      </Box>
-                    </TooltipWithTouch>
-                  )}
+                {needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
+                  <TooltipWithTouch label="Migrate your position to the recommended pool">
+                    <Box color="font.warning">
+                      <AlertTriangle size="16" />
+                    </Box>
+                  </TooltipWithTouch>
+                )}
               </HStack>
             </GridItem>
             <GridItem justifySelf="end" px="sm">
