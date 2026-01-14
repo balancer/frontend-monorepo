@@ -7,24 +7,30 @@ import { HumanAmount } from '@balancer/sdk'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { hasNonPreferentialStakedBalance, hasPreferentialGauge } from './actions/stake.helpers'
 
-export function calcTotalStakedBalance(pool: Pool | PoolListItem): HumanAmount {
+export function calcStakedBalance(
+  pool: Pool | PoolListItem,
+  stakingType?: GqlPoolStakingType
+): HumanAmount {
   const userBalance = pool.userBalance
   if (!userBalance) return '0'
 
-  return safeSum(
-    userBalance.stakedBalances.map(stakedBalance => bn(stakedBalance.balance))
-  ) as HumanAmount
+  const filteredBalances = stakingType
+    ? userBalance.stakedBalances.filter(stakedBalance => stakedBalance.stakingType === stakingType)
+    : userBalance.stakedBalances
+
+  return safeSum(filteredBalances.map(stakedBalance => bn(stakedBalance.balance))) as HumanAmount
+}
+
+export function calcTotalStakedBalance(pool: Pool | PoolListItem): HumanAmount {
+  return calcStakedBalance(pool)
 }
 
 export function calcGaugeStakedBalance(pool: Pool | PoolListItem): HumanAmount {
-  const userBalance = pool.userBalance
-  if (!userBalance) return '0'
+  return calcStakedBalance(pool, GqlPoolStakingType.Gauge)
+}
 
-  return safeSum(
-    userBalance.stakedBalances
-      .filter(stakedBalance => stakedBalance.stakingType === GqlPoolStakingType.Gauge)
-      .map(stakedBalance => bn(stakedBalance.balance))
-  ) as HumanAmount
+export function calcAuraStakedBalance(pool: Pool | PoolListItem): HumanAmount {
+  return calcStakedBalance(pool, GqlPoolStakingType.Aura)
 }
 
 export function calcTotalStakedBalanceUsd(pool: Pool): number {
@@ -138,6 +144,14 @@ export function calcStakedBalanceInt(pool: Pool, stakingType: GqlPoolStakingType
 
 export function calcStakedBalanceUsd(pool: Pool, stakingType: GqlPoolStakingType): number {
   return Number(bn(getStakedBalance(pool, stakingType).balanceUsd))
+}
+
+export function calcGaugeStakedBalanceUsd(pool: Pool): number {
+  return calcStakedBalanceUsd(pool, GqlPoolStakingType.Gauge)
+}
+
+export function calcAuraStakedBalanceUsd(pool: Pool): number {
+  return calcStakedBalanceUsd(pool, GqlPoolStakingType.Aura)
 }
 
 export function hasTotalBalance(pool: Pool) {
