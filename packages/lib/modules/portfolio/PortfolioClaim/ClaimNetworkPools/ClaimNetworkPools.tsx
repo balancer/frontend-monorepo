@@ -92,12 +92,14 @@ export function ClaimNetworkPools() {
   const currentNetworks = isBeets ? beetsNetworksConfig : balancerNetworksConfig
 
   const poolsWithChain = Object.entries(poolsByChainMap).sort(
-    (a, b) =>
-      (totalFiatClaimableBalanceByChain[b[0]]?.toNumber() || 0) -
-      (totalFiatClaimableBalanceByChain[a[0]]?.toNumber() || 0)
+    ([a], [b]) =>
+      (totalFiatClaimableBalanceByChain[b]?.toNumber() || 0) -
+      (totalFiatClaimableBalanceByChain[a]?.toNumber() || 0)
   )
 
-  const hasChainRewards = poolsWithChain.length > 0
+  const hasChainRewards = Object.values(totalFiatClaimableBalanceByChain).some(
+    balance => balance.toNumber() > 0
+  )
   const noRewards = !hasProtocolRewards && !hasChainRewards
 
   // hidden hand claims expire after 30 June 2026
