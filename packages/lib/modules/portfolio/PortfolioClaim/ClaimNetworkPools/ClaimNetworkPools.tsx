@@ -32,7 +32,6 @@ import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { isAfter } from 'date-fns'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
-import { ReactNode } from 'react'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 interface NetworkConfig {
@@ -273,7 +272,7 @@ export function ClaimNetworkPools() {
                     }
                   }
 
-                  const getTitle = (): ReactNode => {
+                  const getTitle = () => {
                     switch (item.type) {
                       case 'protocol':
                         return 'Balancer protocol revenue'
@@ -292,7 +291,7 @@ export function ClaimNetworkPools() {
                             textTransform="capitalize"
                             tooltip="Available until June 30, 2026"
                           />
-                        ) as ReactNode
+                        )
                       default:
                         return undefined
                     }

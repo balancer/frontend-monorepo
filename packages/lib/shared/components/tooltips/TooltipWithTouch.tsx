@@ -35,7 +35,7 @@ export function TooltipWithTouch({
     setIsLabelOpen(true)
   }
 
-  if (isHidden) return children
+  if (isHidden) return <>{children}</>
 
   return (
     <Tooltip
