@@ -1,6 +1,6 @@
 'use client'
 
-import { SimpleGrid, Text, VStack } from '@chakra-ui/react'
+import { SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
@@ -13,12 +13,19 @@ import { useQuery } from '@tanstack/react-query'
 import { zeroAddress } from 'viem'
 
 export function YourMaBeetsStats() {
-  const { relicPositions, totalMaBeetsVP, getPendingRewards } = useReliquary()
+  const {
+    relicPositions,
+    totalMaBeetsVP,
+    getPendingRewards,
+    isLoading: isLoadingReliquary,
+  } = useReliquary()
   const { bptPrice } = usePool()
   const { priceFor } = useTokens()
-  const { latest: globalStats } = useReliquaryGlobalStats()
+  const { latest: globalStats, loading: isLoadingGlobalStats } = useReliquaryGlobalStats()
   const { userAddress } = useUserAccount()
   const networkConfig = useNetworkConfig()
+
+  const isLoading = isLoadingReliquary || isLoadingGlobalStats
 
   // Calculate total user fBEETS balance - used by multiple stats below
   const userTotalBalance = relicPositions.reduce((sum, relic) => sum + parseFloat(relic.amount), 0)
@@ -68,27 +75,39 @@ export function YourMaBeetsStats() {
       <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>
           <StatLabel label="Your Relics" />
-          <StatValueText>{relicPositions.length}</StatValueText>
+          <Skeleton isLoaded={!isLoading} width="50%">
+            <StatValueText>{relicPositions.length}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Liquidity" />
-          <StatValueText>${fNum('fiat', totalLiquidity)}</StatValueText>
+          <Skeleton isLoaded={!isLoading} width="50%">
+            <StatValueText>${fNum('fiat', totalLiquidity)}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Maturity Lvl" />
-          <StatValueText>{fNumCustom(avgMaturityLevel, '0.00')}</StatValueText>
+          <Skeleton isLoaded={!isLoading} width="50%">
+            <StatValueText>{fNumCustom(avgMaturityLevel, '0.00')}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Pending Rewards" />
-          <StatValueText>${fNum('fiat', totalPendingRewardsUSD)}</StatValueText>
+          <Skeleton isLoaded={!isLoading} width="50%">
+            <StatValueText>${fNum('fiat', totalPendingRewardsUSD)}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Relic Share" />
-          <StatValueText>{fNum('sharePercent', relicShareDecimal)}</StatValueText>
+          <Skeleton isLoaded={!isLoading} width="50%">
+            <StatValueText>{fNum('sharePercent', relicShareDecimal)}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Voting Power" />
-          <StatValueText>{fNumCustom(totalMaBeetsVP, '0.000a')} maBEETS</StatValueText>
+          <Skeleton isLoaded={!isLoading} width="50%">
+            <StatValueText>{fNumCustom(totalMaBeetsVP, '0.000a')} maBEETS</StatValueText>
+          </Skeleton>
         </RelicStat>
       </SimpleGrid>
     </VStack>

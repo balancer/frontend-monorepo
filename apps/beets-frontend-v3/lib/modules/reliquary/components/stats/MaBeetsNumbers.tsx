@@ -20,7 +20,7 @@ type Props = {
 export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
   const { pool } = usePool()
   const { priceFor } = useTokens()
-  const { latest: globalStats, loading, error } = useReliquaryGlobalStats()
+  const { latest: globalStats, loading } = useReliquaryGlobalStats()
   const networkConfig = useNetworkConfig()
 
   const data = pool.dynamicData
@@ -62,49 +62,6 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
     }
   })
 
-  // Loading state
-  if (loading) {
-    return (
-      <VStack align="flex-start" flex="1" spacing="4" width="full">
-        <Flex justify="space-between" width="full">
-          <Text
-            background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
-            backgroundClip="text"
-            fontSize="xl"
-            fontWeight="bold"
-          >
-            maBeets Numbers
-          </Text>
-          <Link
-            color="#05D690"
-            cursor="pointer"
-            onClick={onToggleShowMore}
-            textDecoration="underline"
-          >
-            {chartsVisible ? 'Show less' : 'Show more'}
-          </Link>
-        </Flex>
-        <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton height="65px" key={i} width="full" />
-          ))}
-        </SimpleGrid>
-      </VStack>
-    )
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <VStack align="flex-start" flex="1" w="full">
-        <Text color="red.400">Error loading reliquary stats</Text>
-        <Text color="gray.400" fontSize="sm">
-          {error.message}
-        </Text>
-      </VStack>
-    )
-  }
-
   return (
     <VStack align="flex-start" flex="1" spacing="4" width="full">
       <Flex justify="space-between" width="full">
@@ -128,43 +85,55 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
       <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>
           <StatLabel label="APR" />
-          <HStack>
-            <div className="apr-stripes">{getTotalAprLabel(dynamicDataAprItems)}</div>
-            <MainAprTooltip
-              aprItems={dynamicDataAprItems}
-              chain={networkConfig.chain}
-              onlySparkles
-              pool={pool}
-              poolId={pool.id}
-            />
-          </HStack>
+          <Skeleton isLoaded={!loading}>
+            <HStack>
+              <div className="apr-stripes">{getTotalAprLabel(dynamicDataAprItems)}</div>
+              <MainAprTooltip
+                aprItems={dynamicDataAprItems}
+                chain={networkConfig.chain}
+                onlySparkles
+                pool={pool}
+                poolId={pool.id}
+              />
+            </HStack>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="TVL" />
-          <StatValueText>{fNumCustom(tvl, '$0,0.00a')}</StatValueText>
+          <Skeleton isLoaded={!loading} width="50%">
+            <StatValueText>{fNumCustom(tvl, '$0,0.00a')}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <HStack alignItems={'start'}>
             <StatLabel label="Incentives" />
             <InfoIconPopover message="Liquidity incentives are additional incentives which are available for maBEETS holders. The daily value is an approximation based on current token prices and emissions." />
           </HStack>
-          <VStack align="flex-start" spacing="0">
-            <StatValueText>~{fNumCustom(incentivesDailyValue, '$0,0.00a')}/day</StatValueText>
-          </VStack>
+          <Skeleton isLoaded={!loading} width="50%">
+            <VStack align="flex-start" spacing="0">
+              <StatValueText>~{fNumCustom(incentivesDailyValue, '$0,0.00a')}/day</StatValueText>
+            </VStack>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Maturity Level" />
-          <StatValueText>{avgRelicMaturity}</StatValueText>
+          <Skeleton isLoaded={!loading} width="50%">
+            <StatValueText>{avgRelicMaturity}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <HStack>
             <StatLabel label="Total Relics" />
           </HStack>
-          <StatValueText>{fNumCustom(globalStats?.relicCount || 0, '0,0')}</StatValueText>
+          <Skeleton isLoaded={!loading} width="50%">
+            <StatValueText>{fNumCustom(globalStats?.relicCount || 0, '0,0')}</StatValueText>
+          </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Value Per Relic" />
-          <StatValueText>${fNum('fiat', avgValuePerRelic)}</StatValueText>
+          <Skeleton isLoaded={!loading} width="50%">
+            <StatValueText>${fNum('fiat', avgValuePerRelic)}</StatValueText>
+          </Skeleton>
         </RelicStat>
       </SimpleGrid>
     </VStack>
