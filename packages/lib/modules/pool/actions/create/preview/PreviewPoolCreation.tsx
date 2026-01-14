@@ -18,6 +18,7 @@ import { PreviewGyroEclpConfig } from './PreviewGyroEclpConfig'
 import { usePreviewEclpLiquidityProfile } from './usePreviewEclpLiquidityProfile'
 import { isGyroEllipticPool, isReClammPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
+import { useProtocolSearchParams } from '../modal/useProtocolSearchParams'
 
 export function PreviewPoolCreation() {
   return (
@@ -47,6 +48,17 @@ function PreviewPoolHeader() {
     name: ['network', 'poolType'],
   })
 
+  const gqlPoolType = getGqlPoolType(poolType)
+
+  const { setupCowCreation, showCowAmmWarning, showBalancerWarning } = useProtocolSearchParams({
+    poolType: gqlPoolType,
+  })
+
+  const handleRestart = () => {
+    resetPoolCreationForm()
+    if (showCowAmmWarning) setupCowCreation()
+  }
+
   return (
     <HStack alignItems="center" justifyContent="space-between" w="full">
       <Heading color="font.maxContrast" size="md">
@@ -54,9 +66,11 @@ function PreviewPoolHeader() {
       </Heading>
       <HStack cursor="pointer" spacing="xs" zIndex={1}>
         <RestartPoolCreationModal
-          handleRestart={resetPoolCreationForm}
+          handleRestart={handleRestart}
           network={network}
-          poolType={getGqlPoolType(poolType)}
+          poolType={gqlPoolType}
+          showBalancerWarning={showBalancerWarning}
+          showCowAmmWarning={showCowAmmWarning}
         />
         <LearnMoreModal
           buttonLabel="Get help"

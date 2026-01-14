@@ -7,13 +7,19 @@ import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'
 import { useMigrateLiquidity } from './MigrateLiquidityProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { HumanTokenAmount } from '../../tokens/token.types'
+import { ApiToken, HumanTokenAmount } from '../../tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useTotalUsdValue } from '../../tokens/useTotalUsdValue'
+import { PoolActionsPriceImpactDetails } from '../actions/PoolActionsPriceImpactDetails'
+import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 
 export function MigrateLiquiditySummary() {
   const { isMobile } = useBreakpoints()
 
   const { oldPool, newPool, migrationSteps, amounts, hasQuoteContext } = useMigrateLiquidity()
+
+  const { usdValueFor } = useTotalUsdValue((oldPool?.poolTokens || []) as ApiToken[])
+  const totalUSDValue = usdValueFor(amounts)
 
   return (
     <AnimateHeightChange spacing="sm">
@@ -24,9 +30,15 @@ export function MigrateLiquiditySummary() {
         />
       )}
 
-      <AmountInfo amounts={amounts} pool={oldPool} title="You're migrating" />
+      <AmountInfo
+        amounts={amounts}
+        pool={oldPool}
+        title="You're migrating"
+        totalAmount={totalUSDValue}
+      />
       <PoolCard pool={oldPool} title="From Balancer v2" />
       <PoolCard pool={newPool} title="To Balancer v3" />
+      <PriceImpactCard />
     </AnimateHeightChange>
   )
 }
@@ -35,11 +47,12 @@ type AmountInfoProps = {
   title: string
   pool: Pool | undefined
   amounts: HumanTokenAmount[]
+  totalAmount: string
 }
 
-function AmountInfo({ title, pool, amounts }: AmountInfoProps) {
+function AmountInfo({ title, pool, amounts, totalAmount }: AmountInfoProps) {
   const { toCurrency } = useCurrency()
-  const totalAmount = toCurrency(pool?.userBalance?.totalBalanceUsd || 0)
+  const totalAmountFormatted = toCurrency(totalAmount)
 
   return (
     <Card variant="modalSubSection">
@@ -49,7 +62,7 @@ function AmountInfo({ title, pool, amounts }: AmountInfoProps) {
           chain={pool.chain}
           label={title}
           pool={pool}
-          rightElement={<Text>{totalAmount}</Text>}
+          rightElement={<Text>{totalAmountFormatted}</Text>}
         />
       ) : (
         <Skeleton h="40px" w="full" />
@@ -99,6 +112,31 @@ function PoolCard({ title, pool }: PoolCardProps) {
             />
           )}
         </HStack>
+      </VStack>
+    </Card>
+  )
+}
+
+function PriceImpactCard() {
+  const { totalUSDValue, simulationQuery, slippage } = useAddLiquidity()
+  const { migrationSteps } = useMigrateLiquidity()
+
+  const removeLiquidityStep = migrationSteps.steps.find(step => step.stepType === 'removeLiquidity')
+  const isComplete = removeLiquidityStep && removeLiquidityStep.isComplete()
+
+  if (!isComplete) return null
+
+  return (
+    <Card variant="modalSubSection">
+      <VStack align="start" spacing="sm">
+        <Text fontSize="sm" fontWeight="bold">
+          Add liquidity
+        </Text>
+        <PoolActionsPriceImpactDetails
+          bptAmount={simulationQuery.data?.bptOut.amount}
+          slippage={slippage}
+          totalUSDValue={totalUSDValue}
+        />
       </VStack>
     </Card>
   )

@@ -1,376 +1,946 @@
-import { SVGProps } from 'react'
+import {
+  type MouseEvent,
+  SVGProps,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { createPortal } from 'react-dom'
+import { Address } from 'viem'
+import { GqlChain } from '../../services/api/generated/graphql'
+import { getTokenColor } from '../../../styles/token-colors'
 
-export function NetworkPreviewSVG(props: SVGProps<SVGSVGElement>) {
+type NetworkPreviewSVGProps = SVGProps<SVGSVGElement> & {
+  chain: GqlChain
+  tokenAddresses: Address[]
+  tokenSymbols?: string[]
+  tokenWeights?: number[]
+}
+
+function polarToCartesian(cx: number, cy: number, r: number, angleRad: number) {
+  return {
+    x: cx + r * Math.cos(angleRad),
+    y: cy + r * Math.sin(angleRad),
+  }
+}
+
+function fullDonutPath(
+  cx: number,
+  cy: number,
+  outerR: number,
+  innerR: number,
+  startAngleRad: number
+) {
+  const halfTurn = Math.PI
+
+  const outerStart = polarToCartesian(cx, cy, outerR, startAngleRad)
+  const outerMid = polarToCartesian(cx, cy, outerR, startAngleRad + halfTurn)
+
+  const innerStart = polarToCartesian(cx, cy, innerR, startAngleRad)
+  const innerMid = polarToCartesian(cx, cy, innerR, startAngleRad + halfTurn)
+
+  return [
+    `M ${outerStart.x} ${outerStart.y}`,
+    `A ${outerR} ${outerR} 0 1 1 ${outerMid.x} ${outerMid.y}`,
+    `A ${outerR} ${outerR} 0 1 1 ${outerStart.x} ${outerStart.y}`,
+    `L ${innerStart.x} ${innerStart.y}`,
+    `A ${innerR} ${innerR} 0 1 0 ${innerMid.x} ${innerMid.y}`,
+    `A ${innerR} ${innerR} 0 1 0 ${innerStart.x} ${innerStart.y}`,
+    'Z',
+  ].join(' ')
+}
+
+function normalizeWeights(tokenCount: number, tokenWeights?: number[]) {
+  if (tokenCount === 0) return []
+
+  const base = tokenWeights?.slice(0, tokenCount) ?? []
+  const weights = Array.from({ length: tokenCount }, (_, i) => {
+    const raw = base[i]
+    return typeof raw === 'number' && Number.isFinite(raw) && raw > 0 ? raw : 0
+  })
+
+  const total = weights.reduce((acc, w) => acc + w, 0)
+  if (total <= 0) return Array.from({ length: tokenCount }, () => 1 / tokenCount)
+  return weights.map(w => w / total)
+}
+
+function computeArcs(
+  normalizedAddresses: Address[],
+  fractions: number[],
+  circumference: number,
+  dividerGapLen: number,
+  chain: GqlChain
+) {
+  if (normalizedAddresses.length === 0) return []
+
+  const gap = normalizedAddresses.length > 1 ? dividerGapLen : 0
+  let cumulativeLen = 0
+  return normalizedAddresses.map((address, i) => {
+    const fraction = fractions[i] ?? 0
+    const rawLen = circumference * fraction
+
+    const isLast = i === normalizedAddresses.length - 1
+    const fullLen = isLast ? Math.max(0, circumference - cumulativeLen) : rawLen
+    const dashLen = Math.max(0, fullLen - gap)
+    const dashOffset = -cumulativeLen
+    cumulativeLen += fullLen
+
+    const { from, to } = getTokenColor(chain, address, i)
+    const gradientId = `token-grad-${chain}-${address}`
+
+    return {
+      dashLen,
+      dashOffset,
+      from,
+      gradientId,
+      i,
+      to,
+      address,
+    }
+  })
+}
+
+export function NetworkPreviewSVG({
+  chain,
+  tokenAddresses,
+  tokenSymbols,
+  tokenWeights,
+  ...props
+}: NetworkPreviewSVGProps) {
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [hoverClientPoint, setHoverClientPoint] = useState<{ x: number; y: number } | null>(null)
+
+  const globalDelayMs = 200
+  const tweenMs = 400
+  const dividerGapLen = 0.75
+  const pulseTotalMs = 1500
+  const pulseIterations = 2
+  const pulseCycleMs = pulseTotalMs / pulseIterations
+
+  const normalizedAddresses = useMemo(
+    () => tokenAddresses.map(addr => addr.toLowerCase() as Address),
+    [tokenAddresses]
+  )
+
+  const prevAddressesRef = useRef<Address[]>([])
+  const prevCountRef = useRef(0)
+  const prevArcMapRef = useRef<
+    Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>
+  >(new Map())
+
+  const fractions = normalizeWeights(normalizedAddresses.length, tokenWeights)
+
+  const animationTrigger = useMemo(() => {
+    const addrKey = normalizedAddresses.join('|')
+    const weightsKey = fractions.map(w => w.toFixed(6)).join('|')
+    return `${chain}:${addrKey}:${weightsKey}`
+  }, [chain, normalizedAddresses, fractions])
+
+  const cx = 76
+  const cy = 76
+  const outerR = 75
+  const innerR = 45
+  const startAngleBase = -Math.PI / 2
+
+  const midR = (outerR + innerR) / 2
+  const strokeW = outerR - innerR
+  const circumference = 2 * Math.PI * midR
+
+  const arcs = computeArcs(normalizedAddresses, fractions, circumference, dividerGapLen, chain)
+
+  useEffect(() => {
+    const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
+    for (const arc of arcs) {
+      next.set(arc.address, {
+        dashLen: arc.dashLen,
+        dashOffset: arc.dashOffset,
+        gradientId: arc.gradientId,
+      })
+    }
+    prevArcMapRef.current = next
+  }, [arcs])
+
+  useLayoutEffect(() => {
+    const svg = svgRef.current
+    if (!svg) return
+
+    const prevAddresses = prevAddressesRef.current
+    const prevCount = prevCountRef.current
+    const currentAddresses = normalizedAddresses
+
+    const added = currentAddresses.filter(addr => !prevAddresses.includes(addr))
+    const removed = prevAddresses.filter(addr => !currentAddresses.includes(addr))
+
+    // No address changes: still update refs so future diffs are correct.
+    // (This also avoids leaving any previously-hidden arcs invisible if state settles quickly on mount.)
+    if (added.length === 0 && removed.length === 0) {
+      prevAddressesRef.current = currentAddresses
+      prevCountRef.current = currentAddresses.length
+      return
+    }
+
+    // If the component mounts with tokens already selected (e.g. page refresh),
+    // don't treat all tokens as "added". Render them immediately.
+    if (
+      prevCount === 0 &&
+      prevAddresses.length === 0 &&
+      removed.length === 0 &&
+      added.length === currentAddresses.length
+    ) {
+      prevAddressesRef.current = currentAddresses
+      prevCountRef.current = currentAddresses.length
+
+      const next = new Map<Address, { dashLen: number; dashOffset: number; gradientId: string }>()
+      for (const arc of arcs) {
+        next.set(arc.address, {
+          dashLen: arc.dashLen,
+          dashOffset: arc.dashOffset,
+          gradientId: arc.gradientId,
+        })
+      }
+      prevArcMapRef.current = next
+      return
+    }
+
+    const timeouts: number[] = []
+    const hiddenAdded: Address[] = []
+
+    const arcsGroup = svg.querySelector('g[data-layer="arcs"]') as SVGGElement | null
+    if (!arcsGroup) return
+
+    const getCircle = (addr: Address) =>
+      svg.querySelector(`circle[data-addr="${addr}"]`) as SVGCircleElement | null
+
+    const prevArcMap = prevArcMapRef.current
+    const arcByAddr = new Map<Address, (typeof arcs)[number]>()
+    for (const arc of arcs) arcByAddr.set(arc.address, arc)
+
+    // Base sequencing (all phases start after globalDelayMs):
+    // - removal: collapse removed (tweenMs) -> fill gap (tweenMs)
+    // - addition: (if no removal) existing arcs tween first (tweenMs), then new arc draws
+    // - swap: collapse removed -> fill gap -> draw new
+    const collapseStartMs = removed.length > 0 ? globalDelayMs : 0
+    const fillGapStartMs = removed.length > 0 ? globalDelayMs + tweenMs : 0
+    const addDrawDelayMs =
+      removed.length > 0
+        ? globalDelayMs + tweenMs * 2
+        : prevCount === 0
+          ? globalDelayMs
+          : globalDelayMs + tweenMs
+    const pulseDelayMs = addDrawDelayMs + tweenMs
+
+    // 1) Freeze current visible circles to their previous geometry so nothing animates behind the modal.
+    // For removals: freeze now, then do collapse + fill-gap later.
+    // For additions (no removals): freeze now, then let existing arcs tween to their new geometry after globalDelayMs.
+    if (removed.length > 0 || (removed.length === 0 && added.length > 0 && prevCount > 0)) {
+      for (const addr of currentAddresses) {
+        const circle = getCircle(addr)
+        const prev = prevArcMap.get(addr)
+        if (!circle || !prev) continue
+        circle.style.transition = 'none'
+        circle.setAttribute('stroke-dasharray', `${prev.dashLen} ${circumference}`)
+        circle.setAttribute('stroke-dashoffset', prev.dashOffset.toString())
+      }
+
+      // Force a flush so subsequent updates will animate.
+      void svg.getBoundingClientRect()
+
+      if (removed.length === 0 && added.length > 0 && prevCount > 0) {
+        timeouts.push(
+          window.setTimeout(() => {
+            for (const arc of arcs) {
+              const circle = getCircle(arc.address)
+              if (!circle) continue
+              circle.style.removeProperty('transition')
+              circle.setAttribute('stroke-dasharray', `${arc.dashLen} ${circumference}`)
+              circle.setAttribute('stroke-dashoffset', arc.dashOffset.toString())
+            }
+          }, globalDelayMs)
+        )
+      }
+    }
+
+    // 2) If removing, create temporary circles for removed segments and animate them to 0.
+    const tempRemovedCircles: SVGCircleElement[] = []
+    if (removed.length > 0) {
+      for (const addr of removed) {
+        const prev = prevArcMap.get(addr)
+        if (!prev) continue
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        circle.setAttribute('class', 'balArc')
+        circle.setAttribute('cx', cx.toString())
+        circle.setAttribute('cy', cy.toString())
+        circle.setAttribute('data-temp', '1')
+        circle.setAttribute('fill', 'none')
+        circle.setAttribute('r', midR.toString())
+        circle.setAttribute('stroke', `url(#${prev.gradientId})`)
+        circle.setAttribute('stroke-dasharray', `${prev.dashLen} ${circumference}`)
+        circle.setAttribute('stroke-dashoffset', prev.dashOffset.toString())
+        circle.setAttribute('stroke-linecap', 'butt')
+        circle.setAttribute('stroke-width', strokeW.toString())
+        circle.setAttribute('transform', `rotate(-90 ${cx} ${cy})`)
+
+        arcsGroup.appendChild(circle)
+        tempRemovedCircles.push(circle)
+      }
+
+      // Force flush so the subsequent dasharray change transitions.
+      void arcsGroup.getBoundingClientRect()
+
+      // Start collapse after global delay.
+      timeouts.push(
+        window.setTimeout(() => {
+          for (const circle of tempRemovedCircles) {
+            circle.setAttribute('stroke-dasharray', `0 ${circumference}`)
+          }
+        }, collapseStartMs)
+      )
+
+      // Remove temporary circles after collapse completes.
+      timeouts.push(
+        window.setTimeout(() => {
+          for (const circle of tempRemovedCircles) circle.remove()
+        }, collapseStartMs + tweenMs)
+      )
+
+      // After collapse, let remaining circles transition to new geometry (fill the gap).
+      timeouts.push(
+        window.setTimeout(() => {
+          for (const arc of arcs) {
+            const circle = getCircle(arc.address)
+            if (!circle) continue
+            circle.style.removeProperty('transition')
+            circle.setAttribute('stroke-dasharray', `${arc.dashLen} ${circumference}`)
+            circle.setAttribute('stroke-dashoffset', arc.dashOffset.toString())
+          }
+        }, fillGapStartMs)
+      )
+    }
+
+    // 3) For added tokens: hide immediately (so they don't appear before their draw starts).
+    for (const addr of added) {
+      const circle = getCircle(addr)
+      if (!circle) continue
+      circle.style.opacity = '0'
+      circle.style.animation = 'none'
+      hiddenAdded.push(addr)
+    }
+
+    const startDraw = () => {
+      for (const addr of added) {
+        const circle = getCircle(addr)
+        if (!circle) continue
+
+        // Always unhide (even if we can't animate for some reason).
+        circle.style.opacity = '1'
+
+        const arc = arcByAddr.get(addr)
+        if (!arc) continue
+        const targetDasharray = `${arc.dashLen} ${circumference}`
+
+        circle.style.transition = 'none'
+        circle.setAttribute('stroke-dasharray', `0 ${circumference}`)
+        circle.setAttribute('stroke-dashoffset', arc.dashOffset.toString())
+        // Force style flush so next change transitions.
+        void circle.getBoundingClientRect()
+        circle.style.removeProperty('transition')
+
+        requestAnimationFrame(() => {
+          circle.setAttribute('stroke-dasharray', targetDasharray)
+        })
+      }
+    }
+
+    const startPulse = () => {
+      for (const addr of added) {
+        const circle = getCircle(addr)
+        if (!circle) continue
+
+        circle.style.animation = 'none'
+        void circle.getBoundingClientRect()
+        circle.style.animation = `balArcPulse ${pulseCycleMs}ms var(--ease-out-cubic) 0ms ${pulseIterations}`
+      }
+    }
+
+    if (added.length > 0) {
+      timeouts.push(window.setTimeout(startDraw, addDrawDelayMs))
+
+      // Always pulse on addition, including the first token.
+      timeouts.push(window.setTimeout(startPulse, pulseDelayMs))
+    }
+
+    // Persist the "previous" state for the next diff calculation.
+    prevAddressesRef.current = currentAddresses
+    prevCountRef.current = currentAddresses.length
+
+    return () => {
+      for (const id of timeouts) window.clearTimeout(id)
+
+      // If the animation sequence was interrupted, restore any arcs we temporarily hid.
+      for (const addr of hiddenAdded) {
+        const circle = getCircle(addr)
+        if (!circle) continue
+        circle.style.removeProperty('opacity')
+        circle.style.removeProperty('animation')
+      }
+
+      // Remove any temporary removed circles that might still be present.
+      for (const el of Array.from(svg.querySelectorAll('circle[data-temp="1"]'))) {
+        el.remove()
+      }
+    }
+  }, [animationTrigger, circumference])
+
+  const isWeighted = !!tokenWeights
+
+  const updateHoverPoint = (e: MouseEvent<SVGCircleElement>, index: number) => {
+    setHoveredIndex(index)
+    setHoverClientPoint({ x: e.clientX, y: e.clientY })
+  }
+
+  const clearHover = () => {
+    setHoveredIndex(null)
+    setHoverClientPoint(null)
+  }
+
+  const tooltipPortal =
+    hoveredIndex !== null && hoverClientPoint && typeof document !== 'undefined'
+      ? (() => {
+          const symbol = tokenSymbols?.[hoveredIndex] || ''
+          const header = symbol || normalizedAddresses[hoveredIndex] || ''
+          const pct = isWeighted ? `${(fractions[hoveredIndex] * 100).toFixed(2)}%` : ''
+          const showPct = isWeighted && pct.length > 0
+
+          const padding = 12
+          const gapY = 5
+
+          const estCharW = 7.5
+          const estW = Math.max(
+            120,
+            Math.ceil(Math.max(header.length, pct.length) * estCharW) + padding * 2
+          )
+          const estH = padding * 2 + 18 + (showPct ? gapY + 16 : 0)
+
+          let left = hoverClientPoint.x + 12
+          let top = hoverClientPoint.y - 12 - estH
+
+          if (typeof window !== 'undefined') {
+            left = Math.max(8, Math.min(window.innerWidth - estW - 8, left))
+            top = Math.max(8, Math.min(window.innerHeight - estH - 8, top))
+          }
+
+          return createPortal(
+            <div
+              style={{
+                position: 'fixed',
+                left,
+                top,
+                zIndex: 10000,
+                pointerEvents: 'none',
+                background: 'var(--chakra-colors-background-level0)',
+                border: '0.5px solid var(--chakra-colors-border-base)',
+                borderRadius: 8,
+                padding,
+                opacity: 0.98,
+                boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                color: 'var(--chakra-colors-font-primary)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <div style={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>{header}</div>
+              {showPct ? (
+                <div
+                  style={{
+                    marginTop: gapY,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    lineHeight: '16px',
+                    color: 'var(--chakra-colors-font-secondary)',
+                  }}
+                >
+                  {pct}
+                </div>
+              ) : null}
+            </div>,
+            document.body
+          )
+        })()
+      : null
+
   return (
-    <svg
-      fill="none"
-      height="150"
-      viewBox="0 0 155 155"
-      width="150"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <g filter="url(#filter0_dddddddd_235_8770)">
-        <path
-          d="M76 1C56.1088 1 37.0322 8.90176 22.967 22.967C8.90177 37.0322 1 56.1088 1 76C0.999998 95.8912 8.90176 114.968 22.967 129.033C37.0322 143.098 56.1088 151 76 151L76 121C64.0653 121 52.6193 116.259 44.1802 107.82C35.7411 99.3807 31 87.9347 31 76C31 64.0653 35.7411 52.6193 44.1802 44.1802C52.6193 35.7411 64.0653 31 76 31V1Z"
-          fill="#31373F"
-        />
-      </g>
-      <g filter="url(#filter1_dddddddd_235_8770)">
-        <path
-          d="M76 151C95.8912 151 114.968 143.098 129.033 129.033C143.098 114.968 151 95.8912 151 76C151 56.1088 143.098 37.0322 129.033 22.967C114.968 8.90177 95.8913 1 76 1L76 31C87.9348 31 99.3807 35.7411 107.82 44.1802C116.259 52.6193 121 64.0653 121 76C121 87.9347 116.259 99.3807 107.82 107.82C99.3807 116.259 87.9347 121 76 121V151Z"
-          fill="#3F4650"
-        />
-      </g>
-      <defs>
-        <filter
-          colorInterpolationFilters="sRGB"
-          filterUnits="userSpaceOnUse"
-          height="211"
-          id="filter0_dddddddd_235_8770"
-          width="136"
-          x="0"
-          y="0"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="dilate"
-            radius="1"
-            result="effect1_dropShadow_235_8770"
-          />
-          <feOffset />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
-          <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_235_8770" />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="0.5"
-            result="effect2_dropShadow_235_8770"
-          />
-          <feOffset dx="1" dy="1" />
-          <feGaussianBlur stdDeviation="0.5" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect1_dropShadow_235_8770"
-            mode="normal"
-            result="effect2_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="1.5"
-            result="effect3_dropShadow_235_8770"
-          />
-          <feOffset dx="3" dy="3" />
-          <feGaussianBlur stdDeviation="1.5" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect2_dropShadow_235_8770"
-            mode="normal"
-            result="effect3_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="3"
-            result="effect4_dropShadow_235_8770"
-          />
-          <feOffset dx="6" dy="6" />
-          <feGaussianBlur stdDeviation="3" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect3_dropShadow_235_8770"
-            mode="normal"
-            result="effect4_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="6"
-            result="effect5_dropShadow_235_8770"
-          />
-          <feOffset dx="12" dy="12" />
-          <feGaussianBlur stdDeviation="6" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect4_dropShadow_235_8770"
-            mode="normal"
-            result="effect5_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="12"
-            result="effect6_dropShadow_235_8770"
-          />
-          <feOffset dx="24" dy="24" />
-          <feGaussianBlur stdDeviation="12" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect5_dropShadow_235_8770"
-            mode="normal"
-            result="effect6_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="24"
-            result="effect7_dropShadow_235_8770"
-          />
-          <feOffset dx="42" dy="42" />
-          <feGaussianBlur stdDeviation="21" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect6_dropShadow_235_8770"
-            mode="normal"
-            result="effect7_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feOffset dx="-0.5" dy="-0.5" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.15 0" />
-          <feBlend
-            in2="effect7_dropShadow_235_8770"
-            mode="normal"
-            result="effect8_dropShadow_235_8770"
-          />
-          <feBlend
-            in="SourceGraphic"
-            in2="effect8_dropShadow_235_8770"
-            mode="normal"
-            result="shape"
-          />
-        </filter>
-        <filter
-          colorInterpolationFilters="sRGB"
-          filterUnits="userSpaceOnUse"
-          height="211"
-          id="filter1_dddddddd_235_8770"
-          width="136"
-          x="75"
-          y="0"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="dilate"
-            radius="1"
-            result="effect1_dropShadow_235_8770"
-          />
-          <feOffset />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
-          <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_235_8770" />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="0.5"
-            result="effect2_dropShadow_235_8770"
-          />
-          <feOffset dx="1" dy="1" />
-          <feGaussianBlur stdDeviation="0.5" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect1_dropShadow_235_8770"
-            mode="normal"
-            result="effect2_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="1.5"
-            result="effect3_dropShadow_235_8770"
-          />
-          <feOffset dx="3" dy="3" />
-          <feGaussianBlur stdDeviation="1.5" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect2_dropShadow_235_8770"
-            mode="normal"
-            result="effect3_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="3"
-            result="effect4_dropShadow_235_8770"
-          />
-          <feOffset dx="6" dy="6" />
-          <feGaussianBlur stdDeviation="3" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect3_dropShadow_235_8770"
-            mode="normal"
-            result="effect4_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="6"
-            result="effect5_dropShadow_235_8770"
-          />
-          <feOffset dx="12" dy="12" />
-          <feGaussianBlur stdDeviation="6" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect4_dropShadow_235_8770"
-            mode="normal"
-            result="effect5_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="12"
-            result="effect6_dropShadow_235_8770"
-          />
-          <feOffset dx="24" dy="24" />
-          <feGaussianBlur stdDeviation="12" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect5_dropShadow_235_8770"
-            mode="normal"
-            result="effect6_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feMorphology
-            in="SourceAlpha"
-            operator="erode"
-            radius="24"
-            result="effect7_dropShadow_235_8770"
-          />
-          <feOffset dx="42" dy="42" />
-          <feGaussianBlur stdDeviation="21" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-          <feBlend
-            in2="effect6_dropShadow_235_8770"
-            mode="normal"
-            result="effect7_dropShadow_235_8770"
-          />
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          />
-          <feOffset dx="-0.5" dy="-0.5" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.15 0" />
-          <feBlend
-            in2="effect7_dropShadow_235_8770"
-            mode="normal"
-            result="effect8_dropShadow_235_8770"
-          />
-          <feBlend
-            in="SourceGraphic"
-            in2="effect8_dropShadow_235_8770"
-            mode="normal"
-            result="shape"
-          />
-        </filter>
-      </defs>
-    </svg>
+    <>
+      <svg
+        fill="none"
+        height="150"
+        ref={svgRef}
+        viewBox="0 0 155 155"
+        width="150"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+      >
+        <style>{`
+        .balArc {
+          transition: stroke-dasharray ${tweenMs}ms var(--ease-out-cubic), stroke-dashoffset ${tweenMs}ms var(--ease-out-cubic);
+        }
+        @keyframes balArcPulse {
+          0% {
+            opacity: 1;
+          }
+          70% {
+            opacity: 0.5;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+      `}</style>
+
+        {normalizedAddresses.length === 0 ? (
+          <g>
+            <path
+              d={fullDonutPath(cx, cy, outerR, innerR, startAngleBase)}
+              fill="var(--chakra-colors-background-level0)"
+              filter="url(#emptyInnerShadow)"
+            />
+          </g>
+        ) : (
+          <g data-layer="arcs">
+            <circle
+              cx={cx}
+              cy={cy}
+              fill="none"
+              pointerEvents="none"
+              r={midR}
+              stroke="var(--chakra-colors-background-level0)"
+              strokeDasharray={`${circumference} ${circumference}`}
+              strokeDashoffset={0}
+              strokeLinecap="butt"
+              strokeWidth={strokeW}
+              transform={`rotate(-90 ${cx} ${cy})`}
+            />
+            {arcs.map(arc => (
+              <circle
+                className="balArc"
+                cx={cx}
+                cy={cy}
+                data-addr={arc.address}
+                fill="none"
+                key={arc.gradientId}
+                onMouseEnter={e => updateHoverPoint(e, arc.i)}
+                onMouseLeave={clearHover}
+                onMouseMove={e => updateHoverPoint(e, arc.i)}
+                r={midR}
+                stroke={`url(#${arc.gradientId})`}
+                strokeDasharray={`${arc.dashLen} ${circumference}`}
+                strokeDashoffset={arc.dashOffset}
+                strokeLinecap="butt"
+                strokeWidth={strokeW}
+                transform={`rotate(-90 ${cx} ${cy})`}
+              />
+            ))}
+          </g>
+        )}
+
+        <defs>
+          {arcs.map(arc => (
+            <linearGradient
+              gradientUnits="userSpaceOnUse"
+              id={arc.gradientId}
+              key={arc.gradientId}
+              x1="0"
+              x2="0"
+              y1="1"
+              y2="151"
+            >
+              <stop stopColor={arc.from} />
+              <stop offset="1" stopColor={arc.to} />
+            </linearGradient>
+          ))}
+
+          <filter
+            colorInterpolationFilters="sRGB"
+            filterUnits="userSpaceOnUse"
+            height="155"
+            id="emptyInnerShadow"
+            width="155"
+            x="0"
+            y="0"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape" />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feOffset dx="0" dy="1" />
+            <feGaussianBlur stdDeviation="2" />
+            <feComposite
+              in2="hardAlpha"
+              k2="-1"
+              k3="1"
+              operator="arithmetic"
+              result="innerShadow"
+            />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0" />
+            <feBlend in="shape" in2="innerShadow" mode="normal" result="effect1_innerShadow" />
+          </filter>
+
+          <filter
+            colorInterpolationFilters="sRGB"
+            filterUnits="userSpaceOnUse"
+            height="211"
+            id="filter0_dddddddd_235_8770"
+            width="136"
+            x="0"
+            y="0"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="dilate"
+              radius="1"
+              result="effect1_dropShadow_235_8770"
+            />
+            <feOffset />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+            <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_235_8770" />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="0.5"
+              result="effect2_dropShadow_235_8770"
+            />
+            <feOffset dx="1" dy="1" />
+            <feGaussianBlur stdDeviation="0.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect1_dropShadow_235_8770"
+              mode="normal"
+              result="effect2_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="1.5"
+              result="effect3_dropShadow_235_8770"
+            />
+            <feOffset dx="3" dy="3" />
+            <feGaussianBlur stdDeviation="1.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect2_dropShadow_235_8770"
+              mode="normal"
+              result="effect3_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="3"
+              result="effect4_dropShadow_235_8770"
+            />
+            <feOffset dx="6" dy="6" />
+            <feGaussianBlur stdDeviation="3" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect3_dropShadow_235_8770"
+              mode="normal"
+              result="effect4_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="6"
+              result="effect5_dropShadow_235_8770"
+            />
+            <feOffset dx="12" dy="12" />
+            <feGaussianBlur stdDeviation="6" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect4_dropShadow_235_8770"
+              mode="normal"
+              result="effect5_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="12"
+              result="effect6_dropShadow_235_8770"
+            />
+            <feOffset dx="24" dy="24" />
+            <feGaussianBlur stdDeviation="12" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect5_dropShadow_235_8770"
+              mode="normal"
+              result="effect6_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="24"
+              result="effect7_dropShadow_235_8770"
+            />
+            <feOffset dx="42" dy="42" />
+            <feGaussianBlur stdDeviation="21" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect6_dropShadow_235_8770"
+              mode="normal"
+              result="effect7_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feOffset dx="-0.5" dy="-0.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.15 0" />
+            <feBlend
+              in2="effect7_dropShadow_235_8770"
+              mode="normal"
+              result="effect8_dropShadow_235_8770"
+            />
+            <feBlend
+              in="SourceGraphic"
+              in2="effect8_dropShadow_235_8770"
+              mode="normal"
+              result="shape"
+            />
+          </filter>
+          <filter
+            colorInterpolationFilters="sRGB"
+            filterUnits="userSpaceOnUse"
+            height="211"
+            id="filter1_dddddddd_235_8770"
+            width="136"
+            x="75"
+            y="0"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="dilate"
+              radius="1"
+              result="effect1_dropShadow_235_8770"
+            />
+            <feOffset />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+            <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_235_8770" />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="0.5"
+              result="effect2_dropShadow_235_8770"
+            />
+            <feOffset dx="1" dy="1" />
+            <feGaussianBlur stdDeviation="0.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect1_dropShadow_235_8770"
+              mode="normal"
+              result="effect2_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="1.5"
+              result="effect3_dropShadow_235_8770"
+            />
+            <feOffset dx="3" dy="3" />
+            <feGaussianBlur stdDeviation="1.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect2_dropShadow_235_8770"
+              mode="normal"
+              result="effect3_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="3"
+              result="effect4_dropShadow_235_8770"
+            />
+            <feOffset dx="6" dy="6" />
+            <feGaussianBlur stdDeviation="3" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect3_dropShadow_235_8770"
+              mode="normal"
+              result="effect4_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="6"
+              result="effect5_dropShadow_235_8770"
+            />
+            <feOffset dx="12" dy="12" />
+            <feGaussianBlur stdDeviation="6" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect4_dropShadow_235_8770"
+              mode="normal"
+              result="effect5_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="12"
+              result="effect6_dropShadow_235_8770"
+            />
+            <feOffset dx="24" dy="24" />
+            <feGaussianBlur stdDeviation="12" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect5_dropShadow_235_8770"
+              mode="normal"
+              result="effect6_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feMorphology
+              in="SourceAlpha"
+              operator="erode"
+              radius="24"
+              result="effect7_dropShadow_235_8770"
+            />
+            <feOffset dx="42" dy="42" />
+            <feGaussianBlur stdDeviation="21" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
+            <feBlend
+              in2="effect6_dropShadow_235_8770"
+              mode="normal"
+              result="effect7_dropShadow_235_8770"
+            />
+            <feColorMatrix
+              in="SourceAlpha"
+              result="hardAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            />
+            <feOffset dx="-0.5" dy="-0.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.15 0" />
+            <feBlend
+              in2="effect7_dropShadow_235_8770"
+              mode="normal"
+              result="effect8_dropShadow_235_8770"
+            />
+            <feBlend
+              in="SourceGraphic"
+              in2="effect8_dropShadow_235_8770"
+              mode="normal"
+              result="shape"
+            />
+          </filter>
+        </defs>
+      </svg>
+      {tooltipPortal}
+    </>
   )
 }
 

@@ -17,19 +17,21 @@ import NextLink from 'next/link'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
 import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIconCircular'
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
+import {
+  COW_PROTOCOL_ID,
+  BALANCER_PROTOCOL_ID,
+} from '@repo/lib/modules/pool/actions/create/constants'
 
 const CREATE_POOL_LINKS = [
   {
     label: 'Balancer',
-    href: '/create',
+    href: `/create?protocol=${BALANCER_PROTOCOL_ID.toLowerCase()}`,
     icon: <BalancerIconCircular size={24} />,
-    isExternal: false,
   },
   {
     label: 'CoW AMM',
-    href: 'https://pool-creator.balancer.fi/cow',
+    href: `/create?protocol=${COW_PROTOCOL_ID.toLowerCase()}`,
     icon: <CowIconCircular size={24} />,
-    isExternal: true,
   },
 ]
 
@@ -73,9 +75,8 @@ export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
                 {CREATE_POOL_LINKS.map(link => (
                   <Link
                     _hover={{ color: 'font.highlight', textDecoration: 'none' }}
-                    as={link.isExternal ? undefined : NextLink}
+                    as={NextLink}
                     href={link.href}
-                    isExternal={link.isExternal}
                     key={link.label}
                     onClick={onClose}
                     pb="0.5"
@@ -93,11 +94,6 @@ export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
                         gap="xs"
                       >
                         {link.label}
-                        {link.isExternal && (
-                          <Box as="span" color="grayText">
-                            <ArrowUpRight size={12} />
-                          </Box>
-                        )}
                       </Text>
                     </HStack>
                   </Link>

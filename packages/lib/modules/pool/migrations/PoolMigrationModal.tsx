@@ -35,9 +35,6 @@ export function PoolMigrationModal() {
   const redirectToPoolPage = isSuccess ? redirectToNewPoolPage : redirectToOldPoolPage
   useOnUserAccountChanged(redirectToOldPoolPage)
 
-  // TODO: [JUANJO] add tx batching
-  // TODO: [JUANJO] add refresh countdown (refactor other actions timeout component)
-
   return (
     <Modal isCentered isOpen={true} onClose={redirectToPoolPage}>
       <ModalOverlay />

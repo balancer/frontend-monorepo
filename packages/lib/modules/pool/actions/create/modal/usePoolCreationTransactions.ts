@@ -77,7 +77,11 @@ export function usePoolCreationTransactions({
     addLiquidityStep: initV3PoolStep,
   })
 
-  const { finishCowSteps, isLoadingFinishCowSteps } = useCreateCowSteps(initPoolInput)
+  const { finishCowSteps, isLoadingFinishCowSteps } = useCreateCowSteps({
+    initPoolInput,
+    network: chain,
+    poolType,
+  })
   const cowSteps = [...tokenApprovalSteps, ...finishCowSteps]
 
   const steps = [createPoolStep, ...(isCowPool(poolType) ? cowSteps : v3Steps)]
