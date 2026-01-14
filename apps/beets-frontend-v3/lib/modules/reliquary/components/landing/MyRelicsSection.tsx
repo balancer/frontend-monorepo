@@ -41,31 +41,6 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
 
   return (
     <VStack alignItems="flex-start" spacing="20" width="full">
-      {/* Your Relics Section */}
-      <VStack alignItems="flex-start" spacing="4" width="full">
-        <Flex alignItems="center" justifyContent="space-between" width="full">
-          <Text
-            background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
-            backgroundClip="text"
-            fontSize="xl"
-            fontWeight="bold"
-          >
-            Your Relics
-          </Text>
-          {isConnected && (
-            <Button onClick={() => router.push('/mabeets/deposit/new')} size="md" variant="primary">
-              Create New Relic
-            </Button>
-          )}
-        </Flex>
-        <Card h="full" w="full">
-          <NoisyCard cardProps={{ h: 'full' }}>
-            <RelicCarousel focusRelicId={focusRelicId} />
-          </NoisyCard>
-        </Card>
-      </VStack>
-
-      {/* Your Beets Voting Power Section */}
       <VStack alignItems="flex-start" spacing="4" width="full">
         <Text
           background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
@@ -78,8 +53,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
         <Card h="full" w="full">
           <NoisyCard cardProps={{ h: 'full' }}>
             {hasRelics ? (
-              <VStack alignItems="flex-start" p={{ base: 'sm', md: 'md' }} spacing="6" w="full">
-                {/* Total Voting Power */}
+              <HStack alignItems="flex-start" p={{ base: 'sm', md: 'md' }} spacing="6" w="full">
                 <VStack alignItems="flex-start" spacing="2" width="full">
                   <Text color="beets.base.50" fontSize="sm" fontWeight="semibold">
                     Total Voting Power
@@ -92,10 +66,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                     <Skeleton height="32px" width="150px" />
                   )}
                 </VStack>
-
-                <Divider />
-
-                {/* Delegation Status */}
+                <Divider borderColor="gray.600" height="90px" orientation="vertical" />
                 <VStack alignItems="flex-start" spacing="3" width="full">
                   <HStack justifyContent="space-between" spacing="2" width="full">
                     <HStack spacing="2">
@@ -115,7 +86,6 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                       )}
                     </HStack>
                   </HStack>
-
                   <VStack align="start" spacing="3" w="full">
                     <HStack spacing="2">
                       <Switch colorScheme="green" isChecked={isDelegatedToMDs} onChange={onOpen} />
@@ -129,14 +99,12 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                         </Text>
                       )}
                     </HStack>
-
                     <Text color="gray.500" fontSize="xs" maxW="500px">
                       Delegating assigns your maBEETS voting power to the Music Director for
                       Snapshot votes. This does not affect ownership, rewards, or your ability to
                       exit.
                     </Text>
                   </VStack>
-
                   {isOpen && (
                     <ReliquaryDelegationModal
                       isDelegated={isDelegatedToMDs}
@@ -146,7 +114,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                     />
                   )}
                 </VStack>
-              </VStack>
+              </HStack>
             ) : (
               <VStack alignItems="center" justifyContent="center" py="16">
                 <Text color="gray.400" fontSize="lg" textAlign="center">
@@ -154,6 +122,28 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                 </Text>
               </VStack>
             )}
+          </NoisyCard>
+        </Card>
+      </VStack>
+      <VStack alignItems="flex-start" spacing="4" width="full">
+        <Flex alignItems="center" justifyContent="space-between" width="full">
+          <Text
+            background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
+            backgroundClip="text"
+            fontSize="xl"
+            fontWeight="bold"
+          >
+            Your Relics
+          </Text>
+          {isConnected && (
+            <Button onClick={() => router.push('/mabeets/deposit/new')} size="md" variant="primary">
+              Create New Relic
+            </Button>
+          )}
+        </Flex>
+        <Card h="full" w="full">
+          <NoisyCard cardProps={{ h: 'full' }}>
+            <RelicCarousel focusRelicId={focusRelicId} />
           </NoisyCard>
         </Card>
       </VStack>
