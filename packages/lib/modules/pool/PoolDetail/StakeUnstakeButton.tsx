@@ -110,8 +110,8 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
   const auraStakedBalanceUsdFormatted = toCurrency(calcAuraStakedBalanceUsd(pool))
 
   const hidePopover = !getNetworkConfig(pool.chain).hasAura
-  const stakeOnBalancer = () => router.push(`${pathname}/stake`)
-  const unstakeFromBalancer = () => router.push(`${pathname}/unstake`)
+  const stakeOnProtocol = () => router.push(`${pathname}/stake`)
+  const unstakeFromProtocol = () => router.push(`${pathname}/unstake`)
   const redirectToAura = () => auraDisclosure.onOpen()
 
   const isStakeAction = action === 'stake'
@@ -135,7 +135,7 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
         flex="1"
         isDisabled={isDisabled}
         maxW="120px"
-        onClick={isStakeAction ? stakeOnBalancer : unstakeFromBalancer}
+        onClick={isStakeAction ? stakeOnProtocol : unstakeFromProtocol}
         variant={buttonVariant}
       >
         {isStakeAction ? 'Stake' : 'Unstake'}
@@ -188,7 +188,7 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
                       isStakeAction ? !(canStake && hasUnstakedBalance) : !hasGaugeStakedBalance
                     }
                     icon={<BalancerIconCircular />}
-                    onClick={isStakeAction ? stakeOnBalancer : unstakeFromBalancer}
+                    onClick={isStakeAction ? stakeOnProtocol : unstakeFromProtocol}
                     title="Balancer"
                     usdValue={isStakeAction ? undefined : gaugeStakedBalanceUsdFormatted}
                   />
