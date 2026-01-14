@@ -109,7 +109,7 @@ export function ClaimNetworkPools() {
   return (
     <FadeInOnView>
       <Stack gap={5}>
-        {!isPastJulyFirst && (
+        {hasHiddenHandRewards && !isPastJulyFirst && (
           <BalAlert
             content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
             status="warning"
