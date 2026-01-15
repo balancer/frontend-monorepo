@@ -134,7 +134,9 @@ export function ReliquaryWithdrawSummary({
       {!shouldShowReceipt && relicId && (
         <Alert mb="sm" status="info">
           <AlertIcon />
-          <Text fontSize="sm">Withdrawing from Relic #{relicId} and harvesting rewards</Text>
+          <Text color="black" fontSize="sm">
+            Withdrawing from Relic #{relicId} and harvesting rewards
+          </Text>
         </Alert>
       )}
 
