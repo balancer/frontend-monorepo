@@ -23,7 +23,7 @@ export function useLevelUpStep(relicId: string | undefined) {
     title: 'Level up',
     confirming: 'Confirming level up...',
     confirmed: 'Level up!',
-    tooltip: 'Upgrade your relic to the next maturity level',
+    tooltip: 'Upgrade your Relic to the next maturity level',
   }
 
   const props: ManagedTransactionInput = {

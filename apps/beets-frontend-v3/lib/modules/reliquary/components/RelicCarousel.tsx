@@ -37,7 +37,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
     return () => window.removeEventListener('resize', checkOverflow)
   }, [relicPositions])
 
-  // Auto-scroll to focused relic when specified
+  // Auto-scroll to focused Relic when specified
 
   const scrollToCard = (index: number) => {
     if (scrollContainerRef.current) {

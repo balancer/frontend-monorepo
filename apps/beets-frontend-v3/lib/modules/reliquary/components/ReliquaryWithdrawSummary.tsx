@@ -194,7 +194,7 @@ export function ReliquaryWithdrawSummary({
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your tokens are now in your wallet. Return to the maBEETS page to view your
-                  remaining relics.
+                  remaining Relics.
                 </Text>
               </VStack>
             </Card>

@@ -39,7 +39,7 @@ export class ReliquaryProportionalRemoveLiquidityHandler extends BaseProportiona
       recipient: account,
     })
 
-    // Get withdraw from relic call data
+    // Get withdraw from Relic call data
     const withdrawCallData = this.getRelicWithdrawAndHarvestCallData({
       account,
       relicId,

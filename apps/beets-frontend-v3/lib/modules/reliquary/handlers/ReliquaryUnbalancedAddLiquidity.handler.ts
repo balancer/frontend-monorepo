@@ -51,7 +51,7 @@ export class ReliquaryUnbalancedAddLiquidityHandler extends BaseUnbalancedAddLiq
       fromInternalBalance: true,
     })
 
-    // Get relic deposit data
+    // Get Relic deposit data
     const relicDepositData = this.getRelicDepositOrCreateAndDeposit({
       userAddress: account,
       relicId,

@@ -4,7 +4,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useMemo } from 'react'
 
 interface RelicMaturityCurveChartProps {
-  currentLevel: number // The relic's current level (0-10)
+  currentLevel: number // The Relic's current level (0-10)
 }
 
 export function RelicMaturityCurveChart({ currentLevel }: RelicMaturityCurveChartProps) {

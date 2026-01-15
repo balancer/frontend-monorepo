@@ -162,7 +162,7 @@ export function useReliquaryLogic() {
 
         return [{ address: beetsAddress, amount: formatUnits(pendingReward as bigint, 18) }]
       } catch (error) {
-        console.error('Error getting pending rewards for relic:', error)
+        console.error('Error getting pending rewards for Relic:', error)
         return []
       }
     },

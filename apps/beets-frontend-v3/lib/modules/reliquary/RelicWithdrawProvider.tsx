@@ -30,7 +30,7 @@ export function RelicWithdrawProvider({
 }) {
   const { relicPositions, refetchRelicPositions } = useReliquary()
 
-  // Find the relic from positions
+  // Find the Relic from positions
   const relic = relicPositions.find(r => r.relicId === relicId)
 
   // Convert relicId string to number for handler

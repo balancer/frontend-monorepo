@@ -77,7 +77,7 @@ export function ReliquaryWithdrawModal({
   function handleOnClose() {
     startTokenPricePolling()
     onClose()
-    // Return to mabeets page with focus on the withdrawn relic
+    // Return to mabeets page with focus on the withdrawn Relic
     router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
   }
 
@@ -85,7 +85,7 @@ export function ReliquaryWithdrawModal({
     handleOnClose()
   }
 
-  const modalLabel = relicId ? `Withdraw from Relic #${relicId}` : 'Withdraw from relic'
+  const modalLabel = relicId ? `Withdraw from Relic #${relicId}` : 'Withdraw from Relic'
 
   return (
     <Modal

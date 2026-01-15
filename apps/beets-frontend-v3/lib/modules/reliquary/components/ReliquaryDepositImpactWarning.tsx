@@ -38,7 +38,7 @@ export function ReliquaryDepositImpactWarning({
 
   const isLoading = depositImpactQuery.isLoading || depositImpactQuery.isFetching
 
-  // Don't show warning if creating new relic
+  // Don't show warning if creating new Relic
   if (createNew) {
     return null
   }
@@ -48,7 +48,7 @@ export function ReliquaryDepositImpactWarning({
     return null
   }
 
-  // Don't show warning if relic stays at max level
+  // Don't show warning if Relic stays at max level
   if (depositImpact.staysMax) {
     return null
   }
@@ -59,12 +59,12 @@ export function ReliquaryDepositImpactWarning({
         <AlertIcon alignSelf="center" />
         {!isLoading ? (
           <>
-            Depositing {fNum('token', totalInvestValue)} fBEETS into this relic will affect its
+            Depositing {fNum('token', totalInvestValue)} fBEETS into this Relic will affect its
             maturity. It will take an additional {maturityDuration} to reach maximum maturity.
             {depositImpact.oldLevel !== depositImpact.newLevel && (
               <>
                 {' '}
-                Your relic will change from level {depositImpact.oldLevel + 1} to level{' '}
+                Your Relic will change from level {depositImpact.oldLevel + 1} to level{' '}
                 {depositImpact.newLevel + 1}.
               </>
             )}

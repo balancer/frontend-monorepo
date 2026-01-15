@@ -132,7 +132,7 @@ export function ReliquaryDepositSummary({
         <Alert mb="sm" status="warning">
           <AlertIcon />
           <Text color="black" fontSize="sm">
-            Depositing {fNum('fiat', totalUSDValue)} into this relic will affect its maturity. It
+            Depositing {fNum('fiat', totalUSDValue)} into this Relic will affect its maturity. It
             will take an additional {maturityDuration} to reach maximum maturity.
           </Text>
         </Alert>
@@ -168,24 +168,12 @@ export function ReliquaryDepositSummary({
                 : receivedBptUnits
             }
             isLoading={isLoadingReceipt}
-            label={
-              createNew
-                ? 'Created relic with'
-                : relicId
-                  ? `Deposited into Relic #${relicId}`
-                  : 'Deposited into relic'
-            }
+            label={createNew ? 'Created Relic with' : `Deposited into Relic #${relicId}`}
           />
         ) : (
           <QuoteBptOut
             isLoading={isLoadingTokens}
-            label={
-              createNew
-                ? 'Creating relic with'
-                : relicId
-                  ? `Depositing into Relic #${relicId}`
-                  : 'Depositing into relic'
-            }
+            label={createNew ? 'Creating Relic with' : `Depositing into Relic #${relicId}`}
           />
         )}
       </Card>
@@ -198,12 +186,12 @@ export function ReliquaryDepositSummary({
               <VStack align="start" spacing="md" w="full">
                 <Text color="font.highlight">
                   {createNew
-                    ? "You've successfully created a new relic and deposited!"
+                    ? "You've successfully created a new Relic and deposited into it!"
                     : `You've successfully deposited into Relic #${relicId}!`}
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your maBEETS are now earning rewards. Return to the maBEETS page to manage your
-                  relic.
+                  Relic.
                 </Text>
               </VStack>
             </Card>

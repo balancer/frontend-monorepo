@@ -42,7 +42,7 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
     // TokenOut is present in sdkQueryOutput for single token removals but not in the base type
     const tokenOut = (queryOutput.sdkQueryOutput as any).tokenOut as Address
 
-    // Get withdraw from relic call data
+    // Get withdraw from Relic call data
     const withdrawCallData = this.getRelicWithdrawAndHarvestCallData({
       account,
       relicId,

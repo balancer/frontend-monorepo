@@ -216,7 +216,7 @@ export default function ReliquaryOverallStats() {
                 </Text>
               </Text>
               <Text fontSize="1rem" lineHeight="1rem">
-                {`${fNumCustom(maxPercentageOfLevels?.percentageOfTotal || 0, '0%')} of all relics are level ${maxPercentageOfLevels?.level}`}
+                {`${fNumCustom(maxPercentageOfLevels?.percentageOfTotal || 0, '0%')} of all Relics are level ${maxPercentageOfLevels?.level}`}
               </Text>
             </VStack>
             <VStack alignItems="flex-start" spacing="0">
@@ -224,7 +224,7 @@ export default function ReliquaryOverallStats() {
                 <Text color="beets.base.50" fontSize="sm" fontWeight="semibold" lineHeight="1rem">
                   Total Relics
                 </Text>
-                <InfoIconPopover message="The total number of 'active' relics, which have been minted. Burnt relics are not counted." />
+                <InfoIconPopover message="The total number of 'active' Relics, which have been minted. Burnt Relics are not counted." />
               </HStack>
               <Text color="white" fontSize="1.75rem">
                 {fNumCustom(globalStats?.relicCount || 0, '0,0')}
@@ -233,10 +233,10 @@ export default function ReliquaryOverallStats() {
                 </Text>
               </Text>
               <Text fontSize="1rem" lineHeight="1rem">
-                {`Average value per relic is $${fNum('fiat', avgValuePerRelic)}`}
+                {`Average value per Relic is $${fNum('fiat', avgValuePerRelic)}`}
               </Text>
               <Text fontSize="1rem" lineHeight="1rem" pt="2">
-                {`${numberOfRelicsThisWeek} relics minted this week`}
+                {`${numberOfRelicsThisWeek} Relics minted this week`}
               </Text>
             </VStack>
           </VStack>

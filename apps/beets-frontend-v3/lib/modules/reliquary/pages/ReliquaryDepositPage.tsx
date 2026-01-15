@@ -139,7 +139,7 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
           {!relicId && (
-            <BalAlert content="A new relic will be created with this deposit" status="info" />
+            <BalAlert content="A new Relic will be created with this deposit" status="info" />
           )}
 
           {relicId && <BalAlert content={`Depositing into Relic #${relicId}`} status="info" />}

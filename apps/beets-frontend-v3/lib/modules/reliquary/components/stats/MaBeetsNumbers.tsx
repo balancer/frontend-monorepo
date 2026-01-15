@@ -29,7 +29,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
   const incentivesDailyValue =
     beetsPerDay * priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain)
 
-  // Calculate relic maturity levels
+  // Calculate Relic maturity levels
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
     level: parseInt(balance.level) + 1,
     percentageOfTotal: parseFloat(balance.balance) / parseFloat(globalStats.totalBalance),

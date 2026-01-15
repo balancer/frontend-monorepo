@@ -86,7 +86,7 @@ export function ReliquaryDepositModal({
   function handleOnClose() {
     startTokenPricePolling()
     onClose()
-    // Return to mabeets page with focus on the deposited relic
+    // Return to mabeets page with focus on the deposited Relic
     router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
   }
 
@@ -94,11 +94,7 @@ export function ReliquaryDepositModal({
     handleOnClose()
   }
 
-  const modalLabel = createNew
-    ? 'Create new relic & deposit'
-    : relicId
-      ? `Deposit into Relic #${relicId}`
-      : 'Deposit into relic'
+  const modalLabel = createNew ? 'Create new Relic & deposit' : `Deposit into Relic #${relicId}`
 
   return (
     <Modal

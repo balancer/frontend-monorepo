@@ -100,21 +100,21 @@ export function useReliquaryDepositStep(params: ReliquaryDepositStepParams): Rel
   // Labels for the multicall transaction (joinPool + depositIntoReliquary)
   const addLiquidityLabels: TransactionLabels = createNew
     ? {
-        init: 'Create relic & deposit',
-        title: 'Create relic and deposit liquidity',
-        description: `Create a new maBEETS relic and deposit liquidity to ${pool.name || 'pool'}.`,
-        confirming: 'Creating relic and depositing...',
+        init: 'Create Relic & deposit',
+        title: 'Create Relic and deposit liquidity',
+        description: `Create a new maBEETS Relic and deposit liquidity to ${pool.name || 'pool'}.`,
+        confirming: 'Creating Relic and depositing...',
         confirmed: 'Relic created and liquidity deposited!',
-        tooltip: `Create a new maBEETS relic and deposit liquidity to ${pool.name || 'pool'}.`,
+        tooltip: `Create a new maBEETS Relic and deposit liquidity to ${pool.name || 'pool'}.`,
         poolId: pool.id,
       }
     : {
-        init: 'Deposit into relic',
-        title: `Deposit into relic #${relicId}`,
-        description: `Deposit liquidity into ${pool.name || 'pool'} and relic #${relicId}.`,
-        confirming: 'Depositing into relic...',
-        confirmed: 'Deposited into relic!',
-        tooltip: `Deposit liquidity into ${pool.name || 'pool'} and relic #${relicId}`,
+        init: 'Deposit into Relic',
+        title: `Deposit into Relic #${relicId}`,
+        description: `Deposit liquidity into ${pool.name || 'pool'} and Relic #${relicId}.`,
+        confirming: 'Depositing into Relic...',
+        confirmed: 'Deposited into Relic!',
+        tooltip: `Deposit liquidity into ${pool.name || 'pool'} and Relic #${relicId}`,
         poolId: pool.id,
       }
 

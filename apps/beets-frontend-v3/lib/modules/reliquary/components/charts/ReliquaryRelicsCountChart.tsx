@@ -40,7 +40,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           },
         },
         // any -> https://github.com/apache/echarts/issues/14277
-        formatter: (params: any) => `# of relics: ${fNumCustom(params[0].data[1], '0a')}`,
+        formatter: (params: any) => `# of Relics: ${fNumCustom(params[0].data[1], '0a')}`,
       },
       textStyle: {
         color: '#D3D3D3',

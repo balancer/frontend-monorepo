@@ -19,11 +19,11 @@ export function useBurnRelicStep(relicId: string | undefined) {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const labels: TransactionLabels = {
-    init: 'Burn relic',
-    title: 'Burn relic',
+    init: 'Burn Relic',
+    title: 'Burn Relic',
     confirming: 'Confirming burn...',
     confirmed: 'Relic burned!',
-    tooltip: 'Burn this relic to withdraw all funds',
+    tooltip: 'Burn this Relic to withdraw all funds',
   }
 
   const props: ManagedTransactionInput = {

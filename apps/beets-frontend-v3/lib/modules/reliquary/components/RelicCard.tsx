@@ -77,7 +77,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const { priceFor } = useTokens()
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
 
-  // Get relic level data for this specific relic
+  // Get Relic level data for this specific Relic
   const relicLevel = reliquaryLevels.find(level => level.level === relic.level)
   const relicApr = relicLevel?.apr || '0'
   const allocationPoints = relicLevel?.allocationPoints || 1
@@ -113,7 +113,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
     maturityThresholds
   )
 
-  // Check if relic has balance
+  // Check if Relic has balance
   const hasBalance = parseFloat(relic.amount) > 0
 
   // Calculate APR with boost

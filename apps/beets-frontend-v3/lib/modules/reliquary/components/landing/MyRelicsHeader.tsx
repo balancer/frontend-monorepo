@@ -24,7 +24,7 @@ export function MyRelicsHeader() {
           backgroundClip="text"
           size="lg"
         >
-          My relics
+          My Relics
         </Heading>
       </GridItem>
 

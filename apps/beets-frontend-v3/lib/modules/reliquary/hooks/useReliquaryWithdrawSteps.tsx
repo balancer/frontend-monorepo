@@ -53,7 +53,7 @@ export function useReliquaryWithdrawSteps({
   return useMemo(() => {
     let steps = [...removeLiquiditySteps]
 
-    // 1. Prepend reliquary NFT approval if withdrawing from relic
+    // 1. Prepend reliquary NFT approval if withdrawing from Relic
     if (relicId && !hasApprovedRelayerForAllRelics) {
       steps = [approveRelayerRelicsStep, ...steps]
     }
