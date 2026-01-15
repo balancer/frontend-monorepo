@@ -128,26 +128,10 @@ export function ReliquaryDepositSummary({
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
-
-      {/* Relic Info Card */}
-      {!shouldShowReceipt && (
-        <Card mb="sm" p="ms" variant="level">
-          <VStack align="start" spacing="xs">
-            <Text color="font.secondary" fontSize="sm">
-              {createNew ? 'Creating new relic' : `Depositing into Relic #${relicId}`}
-            </Text>
-            <Text fontSize="lg" fontWeight="bold">
-              maBEETS
-            </Text>
-          </VStack>
-        </Card>
-      )}
-
-      {/* Deposit Impact Warning */}
       {showDepositImpactWarning && !shouldShowReceipt && (
         <Alert mb="sm" status="warning">
           <AlertIcon />
-          <Text fontSize="sm">
+          <Text color="black" fontSize="sm">
             Depositing {fNum('fiat', totalUSDValue)} into this relic will affect its maturity. It
             will take an additional {maturityDuration} to reach maximum maturity.
           </Text>
