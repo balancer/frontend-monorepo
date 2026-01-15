@@ -133,7 +133,7 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>Deposit into Relic</span>
+            <Box as="span">Deposit into Relic</Box>
             <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>

@@ -108,7 +108,7 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>Withdraw from Relic</span>
+            <Box as="span">Withdraw from Relic</Box>
             <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>
