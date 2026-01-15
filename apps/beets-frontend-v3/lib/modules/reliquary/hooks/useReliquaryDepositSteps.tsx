@@ -61,7 +61,7 @@ export function useReliquaryDepositSteps({
     })
 
   // Reliquary deposit steps (multicall: joinPool + depositIntoReliquary)
-  const { addLiquidityStep, depositIntoRelicStep } = useReliquaryDepositStep({
+  const { multicallStep } = useReliquaryDepositStep({
     handler,
     humanAmountsIn,
     simulationQuery,
@@ -70,7 +70,6 @@ export function useReliquaryDepositSteps({
     relicId,
   })
 
-  // Build steps in correct order
   const allSteps = useMemo<TransactionStep[]>(() => {
     // 1. Get token approval + add liquidity steps
     let steps = getApprovalAndAddSteps({
@@ -79,28 +78,16 @@ export function useReliquaryDepositSteps({
       shouldBatchTransactions,
       permit2ApprovalSteps: [],
       tokenApprovalSteps,
-      addLiquidityStep,
+      addLiquidityStep: multicallStep,
     })
 
-    // 2. Add deposit into relic step (auto-completes with add liquidity)
-    steps = [...steps, depositIntoRelicStep]
-
-    // 3. Prepend reliquary NFT approval if depositing to existing relic
-    if (!createNew && relicId && !hasApprovedRelayerForAllRelics) {
-      steps = [approveRelayerRelicsStep, ...steps]
-    }
-
-    // 4. Prepend VAULT relayer approval if needed
-    if (!hasApprovedRelayer) {
-      steps = [approveRelayerStep, ...steps]
-    }
+    steps = [approveRelayerRelicsStep, approveRelayerStep, ...steps]
 
     return steps
   }, [
     shouldBatchTransactions,
     tokenApprovalSteps,
-    addLiquidityStep,
-    depositIntoRelicStep,
+    multicallStep,
     createNew,
     relicId,
     hasApprovedRelayerForAllRelics,
