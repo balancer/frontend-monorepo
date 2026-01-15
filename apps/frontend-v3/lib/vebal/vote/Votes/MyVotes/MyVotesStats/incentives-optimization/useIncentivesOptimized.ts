@@ -1,4 +1,4 @@
-import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { VotingPoolWithData, VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
 import { Address } from 'viem'
 import { isVotingTimeLocked } from '../../myVotes.helpers'
 import { bn, MAX_BIGNUMBER, sum } from '@repo/lib/shared/utils/numbers'
@@ -7,6 +7,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import BigNumber from 'bignumber.js'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { getRelativeWeightCap } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { getVotesState } from '@repo/lib/modules/vebal/vote/vote.helpers'
 
 type OptimizedVote = {
   gaugeAddress: Address
@@ -30,6 +32,7 @@ type PoolInfo = {
   }[]
   userVotes: BigNumber
   userPrct: BigNumber
+  relativeWeightCap: number
 }
 
 // The smallest step that could be voted for is 0.01%, but in the past this has caused
@@ -96,14 +99,29 @@ export function calculateIncentivesOptimized(
   )
 
   const stepVoteAmount = userVotingPower.times(PERCENT_STEP)
+  const cappedPools: PoolInfo[] = []
 
   while (prctToDistribute.gt(0)) {
     const bestPool = pop(prioritizedPools)
-    if (bestPool) {
-      bestPool.votes = bestPool.votes.plus(stepVoteAmount)
-      bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
-      bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
+
+    if (!bestPool) break
+
+    const newVotes = bestPool.votes.plus(stepVoteAmount)
+    const newVotesWeight = newVotes.dividedBy(totalVotes).toNumber()
+
+    const votesState = getVotesState(bestPool.relativeWeightCap, newVotesWeight)
+
+    if (votesState === VotesState.Exceeded) {
+      // Preserve capped pool only if it has accumulated votes
+      if (bestPool.userPrct.gt(0)) cappedPools.push(bestPool)
+      continue
     }
+
+    // Add votes to the best pool
+    bestPool.votes = newVotes
+    bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
+    bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
+
     push(prioritizedPools, bestPool)
     prctToDistribute = prctToDistribute.minus(PERCENT_STEP)
   }
@@ -112,7 +130,7 @@ export function calculateIncentivesOptimized(
     pool => !findByGaugeAddress(timelockedVotes, pool.gauge.address as Address)
   )
 
-  const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools)
+  const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools, cappedPools)
 
   return votes
 }
@@ -144,6 +162,7 @@ function extractVoteAmountAndIncentives(
         incentives,
         userVotes: bn(0),
         userPrct: bn(0),
+        relativeWeightCap: getRelativeWeightCap(pool.gauge.relativeWeightCap, pool.id),
       }
     })
     .filter(poolInfo => poolInfo.incentives.length !== 0)
@@ -195,7 +214,6 @@ function removeCurrentVotesFromGauges(
     const oldVotePrct = bn(oldVote?.gaugeVotes?.userVotes || 0).div(10000)
     const oldVotesAmount = userVotingPower.times(oldVotePrct)
     pool.votes = pool.votes.minus(oldVotesAmount)
-
     return pool
   })
 }
@@ -206,7 +224,8 @@ function removeBlacklistedVotes(
 ) {
   return votingPools.map(pool => {
     const blacklistedVotesAmount = blacklistedVotes[pool.gaugeAddress] || 0
-    pool.votes = pool.votes.minus(blacklistedVotesAmount)
+    pool.votes = pool.votes.minus(bn(blacklistedVotesAmount))
+    return pool
   })
 }
 
@@ -240,8 +259,14 @@ function resetVotes(myVotes: VotingPoolWithData[]) {
   }, [] as OptimizedVote[])
 }
 
-function mergeOptimizedVotes(votes: OptimizedVote[], poolVotes: Heap<Element<PoolInfo>>) {
-  return poolVotes.elements.reduce((acc, pool) => {
+function mergeOptimizedVotes(
+  votes: OptimizedVote[],
+  poolVotes: Heap<Element<PoolInfo>>,
+  cappedPools: PoolInfo[] = []
+) {
+  const allPools = [...poolVotes.elements, ...cappedPools]
+
+  return allPools.reduce((acc, pool) => {
     if (pool && bn(pool.userVotes).gt(0)) {
       const incentives = pool.userVotes.shiftedBy(-18).times(incentivePerVote(pool))
 

@@ -4,15 +4,7 @@ import { HStack } from '@chakra-ui/react'
 import { VoteCapTooltip } from '@bal/lib/vebal/vote/VoteCapTooltip'
 import { VoteRateTooltip } from '@bal/lib/vebal/vote/VoteRateTooltip'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
-
-function getRelativeWeightCap(relativeWeightCap: string | undefined | null, poolId: string) {
-  if (isVebalPool(poolId)) {
-    return 0.1
-  }
-
-  return !relativeWeightCap || relativeWeightCap === '1' ? 0 : Number(relativeWeightCap)
-}
+import { getRelativeWeightCap } from '@repo/lib/modules/vebal/vote/vote.helpers'
 
 interface Props {
   vote: VotingPoolWithData
