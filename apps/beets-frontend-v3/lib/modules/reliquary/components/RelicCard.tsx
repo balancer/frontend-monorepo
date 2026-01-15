@@ -4,7 +4,6 @@ import { Badge, Box, Button, HStack, Progress, SimpleGrid, Text, VStack } from '
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import Image from 'next/image'
@@ -12,7 +11,6 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Countdown from 'react-countdown'
 import { formatUnits } from 'viem'
-import { BeetsSubmitTransactionButton } from '~/components/button/BeetsSubmitTransactionButton'
 import { ReliquaryFarmPosition, useReliquary } from '../ReliquaryProvider'
 import RelicLevel1 from '../assets/1.png'
 import RelicLevel10 from '../assets/10.png'
@@ -29,10 +27,11 @@ import { BeetsTokenSonic } from '../assets/BeetsTokenSonic'
 import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
-import { useRelicHarvestRewards } from '../lib/useRelicHarvestRewards'
 import { LevelUpModal } from './LevelUpModal'
+import { ReliquaryClaimModal } from './ReliquaryClaimModal'
 import { RelicMaturityCurveChart } from './charts/RelicMaturityCurveChart'
 import RelicStat, { StatLabel, StatValueText } from './stats/RelicStat'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 interface RelicCardSimpleProps {
   relic: ReliquaryFarmPosition
@@ -74,19 +73,17 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const { relicBalanceUSD } = useRelicDepositBalance(relic.relicId)
   const { pool } = usePool()
   const config = useNetworkConfig()
-  const { priceFor } = useTokens()
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
+  const { data: pendingRewards, usdValue: pendingRewardsUsdValue } = useGetPendingReward(
+    relic.relicId
+  )
+  const { toCurrency } = useCurrency()
 
   // Get Relic level data for this specific Relic
   const relicLevel = reliquaryLevels.find(level => level.level === relic.level)
   const relicApr = relicLevel?.apr || '0'
   const allocationPoints = relicLevel?.allocationPoints || 1
-
-  const { data: pendingRewards, refetch: refetchPendingRewards } = useGetPendingReward(
-    relic.relicId
-  )
-
-  const { harvest, ...harvestQuery } = useRelicHarvestRewards(relic.relicId, refetchPendingRewards)
 
   const levelNames = [
     'The Initiate',
@@ -101,11 +98,6 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
     'The Scholar',
     'The Awakened',
   ]
-
-  // Calculate pending rewards USD value
-  const pendingRewardsUsdValue = pendingRewards
-    ? priceFor(config.tokens.addresses.beets!, config.chain)
-    : 0
 
   // Get maturity progress
   const { progressToNextLevel, levelUpDate, isMaxMaturity, canUpgrade } = relicGetMaturityProgress(
@@ -245,23 +237,21 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
               Burn
             </Button>
           )}
-          <BeetsSubmitTransactionButton
-            disabled={pendingRewardsUsdValue < 0.001}
+          <Button
             flex="1"
-            isLoading={harvestQuery.isSubmitting || harvestQuery.isPending}
-            onClick={harvest}
+            isDisabled={pendingRewardsUsdValue.lt(0.01)}
+            onClick={() => setIsClaimModalOpen(true)}
             size="sm"
-            variant="primary"
+            variant="secondary"
           >
             Claim
-          </BeetsSubmitTransactionButton>
+          </Button>
         </HStack>
       </Box>
       <HStack spacing="2" width="full">
         <Text color="white" fontSize="sm" fontWeight="bold">
           {isMaxMaturity ? relic.level : relic.level + 1}
         </Text>
-
         <Box flex="1" position="relative">
           <Progress
             colorScheme="blue"
@@ -311,16 +301,16 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         </RelicStat>
         <RelicStat>
           <StatLabel label="Pending rewards" />
-          {pendingRewardsUsdValue > 0 ? (
+          {pendingRewardsUsdValue.gt(0.01) ? (
             <HStack spacing="1">
               <BeetsTokenSonic height="16px" width="16px" />
               <StatValueText>
-                {pendingRewards ? parseFloat(formatUnits(pendingRewards, 18)).toFixed(2) : 0} ($
-                {pendingRewardsUsdValue.toFixed(2)})
+                {pendingRewards ? parseFloat(formatUnits(pendingRewards, 18)).toFixed(6) : 0} (
+                {toCurrency(pendingRewardsUsdValue)})
               </StatValueText>
             </HStack>
           ) : (
-            '$0.00'
+            '-'
           )}
         </RelicStat>
         <RelicStat>
@@ -343,6 +333,12 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         isOpen={isLevelUpModalOpen}
         nextLevel={relic.level + 2}
         onClose={() => setIsLevelUpModalOpen(false)}
+        relicId={relic.relicId}
+      />
+      <ReliquaryClaimModal
+        isOpen={isClaimModalOpen}
+        onClose={() => setIsClaimModalOpen(false)}
+        onOpen={() => setIsClaimModalOpen(true)}
         relicId={relic.relicId}
       />
     </VStack>
