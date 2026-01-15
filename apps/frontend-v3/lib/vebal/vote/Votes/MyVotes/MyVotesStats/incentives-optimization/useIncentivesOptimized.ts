@@ -103,23 +103,24 @@ export function calculateIncentivesOptimized(
 
   while (prctToDistribute.gt(0)) {
     const bestPool = pop(prioritizedPools)
-    if (bestPool) {
-      const newVotes = bestPool.votes.plus(stepVoteAmount)
-      const newVotesWeight = newVotes.dividedBy(totalVotes).toNumber()
 
-      const votesState = getVotesState(bestPool.relativeWeightCap, newVotesWeight)
+    if (!bestPool) break
 
-      if (votesState === VotesState.Exceeded) {
-        // Preserve capped pool only if it has accumulated votes
-        if (bestPool.userPrct.gt(0)) cappedPools.push(bestPool)
-        continue
-      }
+    const newVotes = bestPool.votes.plus(stepVoteAmount)
+    const newVotesWeight = newVotes.dividedBy(totalVotes).toNumber()
 
-      // Add votes to the best pool
-      bestPool.votes = newVotes
-      bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
-      bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
+    const votesState = getVotesState(bestPool.relativeWeightCap, newVotesWeight)
+
+    if (votesState === VotesState.Exceeded) {
+      // Preserve capped pool only if it has accumulated votes
+      if (bestPool.userPrct.gt(0)) cappedPools.push(bestPool)
+      continue
     }
+
+    // Add votes to the best pool
+    bestPool.votes = newVotes
+    bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
+    bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
 
     push(prioritizedPools, bestPool)
     prctToDistribute = prctToDistribute.minus(PERCENT_STEP)
@@ -223,7 +224,7 @@ function removeBlacklistedVotes(
 ) {
   return votingPools.map(pool => {
     const blacklistedVotesAmount = blacklistedVotes[pool.gaugeAddress] || 0
-    pool.votes = pool.votes.minus(bn(blacklistedVotesAmount).shiftedBy(-18))
+    pool.votes = pool.votes.minus(bn(blacklistedVotesAmount))
     return pool
   })
 }
