@@ -40,16 +40,19 @@ import { useEffect, useRef, useState } from 'react'
 import { ReliquaryDepositImpactWarning } from '../components/ReliquaryDepositImpactWarning'
 import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
 import { ReliquaryDepositModal } from '../components/ReliquaryDepositModal'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 export function ReliquaryDepositPage({ relicId }: { relicId?: string }) {
   const { validTokens } = useAddLiquidity()
 
   return (
-    <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
-      <TokenBalancesProvider extTokens={validTokens}>
-        <ReliquaryDepositForm relicId={relicId} />
-      </TokenBalancesProvider>
-    </PoolActionsLayout>
+    <PriceImpactProvider>
+      <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
+        <TokenBalancesProvider extTokens={validTokens}>
+          <ReliquaryDepositForm relicId={relicId} />
+        </TokenBalancesProvider>
+      </PoolActionsLayout>
+    </PriceImpactProvider>
   )
 }
 

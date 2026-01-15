@@ -35,16 +35,19 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
 import { ReliquaryWithdrawModal } from '../components/ReliquaryWithdrawModal'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 export function ReliquaryWithdrawPage({ relicId }: { relicId: string }) {
   const { validTokens } = useRemoveLiquidity()
 
   return (
-    <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
-      <TokenBalancesProvider extTokens={validTokens}>
-        <ReliquaryWithdrawForm relicId={relicId} />
-      </TokenBalancesProvider>
-    </PoolActionsLayout>
+    <PriceImpactProvider>
+      <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
+        <TokenBalancesProvider extTokens={validTokens}>
+          <ReliquaryWithdrawForm relicId={relicId} />
+        </TokenBalancesProvider>
+      </PoolActionsLayout>
+    </PriceImpactProvider>
   )
 }
 
