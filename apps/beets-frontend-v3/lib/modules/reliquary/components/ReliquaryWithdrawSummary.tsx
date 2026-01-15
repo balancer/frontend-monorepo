@@ -135,7 +135,7 @@ export function ReliquaryWithdrawSummary({
         <Alert mb="sm" status="info">
           <AlertIcon />
           <Text color="black" fontSize="sm">
-            Withdrawing from Relic #{relicId} and harvesting rewards
+            Withdraw from Relic #{relicId} and claim rewards
           </Text>
         </Alert>
       )}
