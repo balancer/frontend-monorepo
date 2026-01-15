@@ -12,6 +12,11 @@ import { PoolVotingIncentivesPerWeek } from '@repo/lib/shared/services/voting-in
 
 const one_month_ago = subDays(new Date(), 30)
 const BAL = '0xba100000625a3754423978a60c9317c58a424e3d'
+const BAL_PRICE = 1
+const ADDRESSS_POOL_1 = '0xd75026f8723b94d9a360a282080492d905c6a558'
+const SYMBOL_POOL_1 = 'pool1'
+const ADDRESSS_POOL_2 = '0xd75026f8723b94d9a360a282080492d905c6a559'
+const SYMBOL_POOL_2 = 'pool2'
 
 function renderHook(
   votingPools: VotingPoolWithData[],
@@ -37,7 +42,7 @@ function renderHook(
 
 describe('Incentives optimization', () => {
   beforeEach(() => {
-    mockTokenPricesList([aTokenPriceMock({ address: BAL, price: 1 })])
+    mockTokenPricesList([aTokenPriceMock({ address: BAL, price: BAL_PRICE })])
   })
 
   it('should return loading when input votes and pools still loading', () => {
@@ -49,8 +54,8 @@ describe('Incentives optimization', () => {
   })
 
   it('should filter out time locked votes', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
-    const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     pool2.votingIncentive = incentivesWithAmount(10, 0)
     const timelockedVote = timelock(vote(pool1, 0.05, new Date()))
 
@@ -63,9 +68,9 @@ describe('Incentives optimization', () => {
   })
 
   it('should zero out killed pools', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
     const killedPool = kill(pool1)
-    const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     pool2.votingIncentive = incentivesWithAmount(10, 0)
     const vote1 = vote(pool1, 0.05, one_month_ago)
 
@@ -80,10 +85,10 @@ describe('Incentives optimization', () => {
   })
 
   it('should distribute votes to the pool with biggest reward / vote', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
     setPoolVotes(pool1, 0.5)
     pool1.votingIncentive = incentivesWithAmount(10, 0)
-    const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     setPoolVotes(pool2, 0.5)
     pool2.votingIncentive = incentivesWithAmount(100, 0)
 
@@ -96,10 +101,10 @@ describe('Incentives optimization', () => {
   })
 
   it('should remove old votes from gauges total', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
     setPoolVotes(pool1, 0.5)
     pool1.votingIncentive = incentivesWithAmount(100, 0)
-    const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     setPoolVotes(pool2, 0.5)
     pool2.votingIncentive = incentivesWithAmount(100, 0)
     const vote1 = vote(pool1, 1.0, one_month_ago)
@@ -113,13 +118,13 @@ describe('Incentives optimization', () => {
   })
 
   it('should remove blacklisted votes from gauges total', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
     setPoolVotes(pool1, 0.5)
     pool1.votingIncentive = incentivesWithAmount(100, 0)
-    const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     setPoolVotes(pool2, 0.5)
     pool2.votingIncentive = incentivesWithAmount(100, 0)
-    const blacklistedVotes = { '0xd75026f8723b94d9a360a282080492d905c6a559': total(1) }
+    const blacklistedVotes = { [ADDRESSS_POOL_2]: total(1) } as Record<Address, BigNumber>
 
     const result = renderHook([pool1, pool2], [], total(1), total(100), blacklistedVotes, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
@@ -130,7 +135,7 @@ describe('Incentives optimization', () => {
   })
 
   it('should calculate the amount of incentives', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
     setPoolVotes(pool1, 0.0)
     pool1.votingIncentive = incentivesWithAmount(100, 0)
 
@@ -142,10 +147,10 @@ describe('Incentives optimization', () => {
   })
 
   it('should return the total number of incentives (timelocked + optimized)', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
     pool1.votingIncentive = incentivesWithAmount(100, 0)
     setPoolVotes(pool1, 0.0)
-    const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     pool2.votingIncentive = incentivesWithAmount(100, 0)
     setPoolVotes(pool2, 0.05)
     const timelockedVote = timelock(vote(pool2, 0.05, new Date()))
@@ -157,14 +162,83 @@ describe('Incentives optimization', () => {
   })
 
   it('should cap incentives on maxTokensPerVote', async () => {
-    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
-    pool1.votingIncentive = incentivesWithAmount(100, 0.5)
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
+    pool1.votingIncentive = incentivesWithAmount(100, 0.5, 0.5)
     mockTokenPricesList([aTokenPriceMock({ address: BAL, price: 0.5 })])
 
     const result = renderHook([pool1], [], total(100), total(100), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
     expect(result.current.totalIncentives).toBe(25)
+  })
+
+  it('should respect relativeWeightCap and distribute remaining votes to other pools', async () => {
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
+    setPoolVotes(pool1, 0.05)
+    pool1.votingIncentive = incentivesWithAmount(100, 0)
+    pool1.gauge.relativeWeightCap = '0.1'
+
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
+    setPoolVotes(pool2, 0.05)
+    pool2.votingIncentive = incentivesWithAmount(50, 0)
+
+    // User has 10% of total votes to distribute
+    const result = renderHook([pool1, pool2], [], total(10), total(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    const vote1 = getVote(result.current, pool1.gauge.address as Address)
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
+
+    // Pool1 can receive 5% more weight (to reach 10% cap)
+    // With user's 10% voting power, that requires 50% of user's votes (5/10 = 0.5)
+    // Pool2 receives the remaining 50% of user's votes despite the lower incentives
+    expect(vote1?.votePrct).toBe(0.5)
+    expect(vote2?.votePrct).toBe(0.5)
+  })
+
+  it('should skip pools that already exceed their relativeWeightCap', async () => {
+    // Pool 1 already has 15% of total votes with a 10% cap
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
+    setPoolVotes(pool1, 0.15)
+    pool1.votingIncentive = incentivesWithAmount(200, 0)
+    pool1.gauge.relativeWeightCap = '0.1' // 10% cap, but already at 15%
+
+    // Pool2 has no cap
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
+    setPoolVotes(pool2, 0.05)
+    pool2.votingIncentive = incentivesWithAmount(50, 0)
+
+    const result = renderHook([pool1, pool2], [], total(10), total(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    const vote1 = getVote(result.current, pool1.gauge.address as Address)
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
+
+    expect(vote1).toBeUndefined() // Pool1 should receive no votes since it already exceeds cap
+    expect(vote2?.votePrct).toBe(1.0) // Pool2 should receive all user votes
+  })
+
+  it('should not allocate votes if all pools have reached their cap', async () => {
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
+    setPoolVotes(pool1, 0.15)
+    pool1.votingIncentive = incentivesWithAmount(200, 0)
+    pool1.gauge.relativeWeightCap = '0.1' // 10% cap, but already at 15%
+
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
+    setPoolVotes(pool2, 0.12)
+    pool2.votingIncentive = incentivesWithAmount(100, 0)
+    pool2.gauge.relativeWeightCap = '0.1' // 10% cap, but already at 12%
+
+    const result = renderHook([pool1, pool2], [], total(10), total(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    const vote1 = getVote(result.current, pool1.gauge.address as Address)
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
+
+    // No votes should be distributed since all pools exceed their caps
+    expect(vote1).toBeUndefined()
+    expect(vote2).toBeUndefined()
+    expect(result.current.votes.length).toBe(0)
   })
 })
 
@@ -219,19 +293,23 @@ function setPoolVotes(votingPool: VotingPoolWithData, votesPrct: number) {
 
 function incentivesWithAmount(
   amount: number,
-  maxTokensPerVote: number
+  maxTokensPerVote: number,
+  price: number = BAL_PRICE
 ): PoolVotingIncentivesPerWeek {
   return {
     totalValue: 0,
     valuePerVote: -1,
     incentives: [
       {
-        symbol: 'BAL',
-        token: '0xba100000625a3754423978a60c9317c58a424e3d',
-        amount: amount,
-        chainId: 1,
-        value: 0,
-        decimals: 18,
+        token: {
+          symbol: 'BAL',
+          address: '0xba100000625a3754423978a60c9317c58a424e3d',
+          amount,
+          chainId: 1,
+          price,
+          decimals: 18,
+          name: 'Balancer',
+        },
         maxTokensPerVote: maxTokensPerVote,
         briber: '',
       },

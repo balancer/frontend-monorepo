@@ -117,6 +117,7 @@ The anvil fork will be too slow when used with > 700 gauges so we filter the lis
 export function filterVotingPoolsForAnvilFork(votingPools: VotingPools) {
   const killedGaugesToInclude = [
     '0xcf5938ca6d9f19c73010c7493e19c02acfa8d24d', // gauge of tetuBal pool
+    '0xc13a3315806f097cee00e39c4285f5bf250dd8a4', // gauge of vgUSDC / xUSDC pool
   ]
   // Order by isKilled first
   return orderBy(votingPools, ['gauge.isKilled'], ['desc']).filter(vote => {
