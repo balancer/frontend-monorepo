@@ -1,6 +1,19 @@
 'use client'
 
-import { Box, Button, Card, CardHeader, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Card,
+  CardHeader,
+  Divider,
+  HStack,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Skeleton,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
@@ -21,6 +34,7 @@ import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSli
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
 import { ReliquaryWithdrawModal } from '../components/ReliquaryWithdrawModal'
+import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 
 export function ReliquaryWithdrawPage({ relicId }: { relicId: string }) {
   const { validTokens } = useRemoveLiquidity()
@@ -114,14 +128,51 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
           {relicId && <BalAlert content={`Withdrawing from Relic #${relicId}`} status="info" />}
-
-          <ButtonGroup
-            currentOption={activeTab}
-            groupId="remove-type"
-            onChange={toggleTab}
-            options={TABS}
-            size="md"
-          />
+          <HStack w="full">
+            <ButtonGroup
+              currentOption={activeTab}
+              fontSize="md"
+              groupId="remove-type"
+              minWidth="116px"
+              onChange={toggleTab}
+              options={TABS}
+              size="sm"
+            />
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <Box
+                  _hover={{ opacity: 1 }}
+                  opacity="0.6"
+                  transition="opacity 0.2s var(--ease-out-cubic)"
+                >
+                  <InfoIcon />
+                </Box>
+              </PopoverTrigger>
+              <PopoverContent maxW="300px" p="sm" w="auto">
+                <VStack align="start" spacing="sm">
+                  <Box>
+                    <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                      Proportional Removal
+                    </Text>
+                    <Text fontSize="sm" variant="secondary">
+                      Proportional liquidity removal keeps token prices unchanged, ensuring zero
+                      price impact to maximize your returns.
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                      Single token Removal
+                    </Text>
+                    <Text fontSize="sm" variant="secondary">
+                      Single-token removal can be convenient but may lower your returns due to price
+                      impact.
+                    </Text>
+                  </Box>
+                </VStack>
+              </PopoverContent>
+            </Popover>
+            <Divider w="full" />
+          </HStack>
 
           <InputWithSlider
             isNumberInputDisabled
