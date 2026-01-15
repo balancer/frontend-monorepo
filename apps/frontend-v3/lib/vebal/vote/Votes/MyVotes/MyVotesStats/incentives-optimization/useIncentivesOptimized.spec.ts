@@ -124,8 +124,7 @@ describe('Incentives optimization', () => {
     const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     setPoolVotes(pool2, 0.5)
     pool2.votingIncentive = incentivesWithAmount(100, 0)
-    // Blacklist 25% of total votes from pool2, making pool2's incentive/vote higher (100/25=4 vs 100/50=2)
-    const blacklistedVotes = { [ADDRESSS_POOL_2]: total(25) } as Record<Address, BigNumber>
+    const blacklistedVotes = { [ADDRESSS_POOL_2]: total(1) } as Record<Address, BigNumber>
 
     const result = renderHook([pool1, pool2], [], total(1), total(100), blacklistedVotes, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
@@ -177,7 +176,7 @@ describe('Incentives optimization', () => {
     const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
     setPoolVotes(pool1, 0.05)
     pool1.votingIncentive = incentivesWithAmount(100, 0)
-    pool1.gauge.relativeWeightCap = '0.1' // 10% cap
+    pool1.gauge.relativeWeightCap = '0.1'
 
     const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
     setPoolVotes(pool2, 0.05)
@@ -217,6 +216,29 @@ describe('Incentives optimization', () => {
 
     expect(vote1).toBeUndefined() // Pool1 should receive no votes since it already exceeds cap
     expect(vote2?.votePrct).toBe(1.0) // Pool2 should receive all user votes
+  })
+
+  it('should not allocate votes if all pools have reached their cap', async () => {
+    const pool1 = votingPool(ADDRESSS_POOL_1, SYMBOL_POOL_1)
+    setPoolVotes(pool1, 0.15)
+    pool1.votingIncentive = incentivesWithAmount(200, 0)
+    pool1.gauge.relativeWeightCap = '0.1' // 10% cap, but already at 15%
+
+    const pool2 = votingPool(ADDRESSS_POOL_2, SYMBOL_POOL_2)
+    setPoolVotes(pool2, 0.12)
+    pool2.votingIncentive = incentivesWithAmount(100, 0)
+    pool2.gauge.relativeWeightCap = '0.1' // 10% cap, but already at 12%
+
+    const result = renderHook([pool1, pool2], [], total(10), total(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    const vote1 = getVote(result.current, pool1.gauge.address as Address)
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
+
+    // No votes should be distributed since all pools exceed their caps
+    expect(vote1).toBeUndefined()
+    expect(vote2).toBeUndefined()
+    expect(result.current.votes.length).toBe(0)
   })
 })
 
