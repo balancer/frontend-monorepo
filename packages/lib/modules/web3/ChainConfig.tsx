@@ -67,7 +67,7 @@ export const rpcOverrides: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Sepolia]: getPrivateRpcUrl(GqlChain.Sepolia),
   [GqlChain.Mode]: getPrivateRpcUrl(GqlChain.Mode),
   [GqlChain.Fraxtal]: getPrivateRpcUrl(GqlChain.Fraxtal),
-  // [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic), // Sonic uses public RPC from fallbacks
+  [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic),
   [GqlChain.Hyperevm]: getPrivateRpcUrl(GqlChain.Hyperevm),
   [GqlChain.Plasma]: getPrivateRpcUrl(GqlChain.Plasma),
 }
