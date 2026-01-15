@@ -104,10 +104,10 @@ export function calculateIncentivesOptimized(
   while (prctToDistribute.gt(0)) {
     const bestPool = pop(prioritizedPools)
     if (bestPool) {
-      const newVotesNextPeriod = bestPool.votes.plus(stepVoteAmount)
-      const newVotesNextPeriodWeight = newVotesNextPeriod.dividedBy(totalVotes).toNumber()
+      const newVotes = bestPool.votes.plus(stepVoteAmount)
+      const newVotesWeight = newVotes.dividedBy(totalVotes).toNumber()
 
-      const votesState = getVotesState(bestPool.relativeWeightCap, newVotesNextPeriodWeight)
+      const votesState = getVotesState(bestPool.relativeWeightCap, newVotesWeight)
 
       if (votesState === VotesState.Exceeded) {
         // Preserve capped pool only if it has accumulated votes
@@ -116,7 +116,7 @@ export function calculateIncentivesOptimized(
       }
 
       // Add votes to the best pool
-      bestPool.votes = newVotesNextPeriod
+      bestPool.votes = newVotes
       bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
       bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
     }
@@ -208,11 +208,12 @@ function removeCurrentVotesFromGauges(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber
 ) {
-  votingPools.forEach(pool => {
+  return votingPools.map(pool => {
     const oldVote = findOldVote(myVotes, pool.gaugeAddress)
     const oldVotePrct = bn(oldVote?.gaugeVotes?.userVotes || 0).div(10000)
     const oldVotesAmount = userVotingPower.times(oldVotePrct)
     pool.votes = pool.votes.minus(oldVotesAmount)
+    return pool
   })
 }
 
@@ -220,9 +221,10 @@ function removeBlacklistedVotes(
   votingPools: PoolInfo[],
   blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
-  votingPools.forEach(pool => {
+  return votingPools.map(pool => {
     const blacklistedVotesAmount = blacklistedVotes[pool.gaugeAddress] || 0
-    pool.votes = pool.votes.minus(blacklistedVotesAmount)
+    pool.votes = pool.votes.minus(bn(blacklistedVotesAmount).shiftedBy(-18))
+    return pool
   })
 }
 
