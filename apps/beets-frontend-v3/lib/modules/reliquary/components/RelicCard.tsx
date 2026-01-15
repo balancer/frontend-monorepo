@@ -28,6 +28,7 @@ import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
 import { LevelUpModal } from './LevelUpModal'
+import { BurnModal } from './BurnModal'
 import { ReliquaryClaimModal } from './ReliquaryClaimModal'
 import { RelicMaturityCurveChart } from './charts/RelicMaturityCurveChart'
 import RelicStat, { StatLabel, StatValueText } from './stats/RelicStat'
@@ -75,6 +76,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const config = useNetworkConfig()
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
+  const [isBurnModalOpen, setIsBurnModalOpen] = useState(false)
   const { data: pendingRewards, usdValue: pendingRewardsUsdValue } = useGetPendingReward(
     relic.relicId
   )
@@ -228,12 +230,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
               Withdraw
             </Button>
           ) : (
-            <Button
-              flex="1"
-              onClick={() => alert('Burn relic functionality requires modal implementation')}
-              size="sm"
-              variant="secondary"
-            >
+            <Button flex="1" onClick={() => setIsBurnModalOpen(true)} size="sm" variant="secondary">
               Burn
             </Button>
           )}
@@ -339,6 +336,12 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         isOpen={isClaimModalOpen}
         onClose={() => setIsClaimModalOpen(false)}
         onOpen={() => setIsClaimModalOpen(true)}
+        relicId={relic.relicId}
+      />
+      <BurnModal
+        chain={chain}
+        isOpen={isBurnModalOpen}
+        onClose={() => setIsBurnModalOpen(false)}
         relicId={relic.relicId}
       />
     </VStack>
