@@ -16,7 +16,6 @@ import { RemoveLiquidityType } from '@repo/lib/modules/pool/actions/remove-liqui
 import { HumanAmount } from '@balancer/sdk'
 import { useReliquaryWithdrawSteps } from './hooks/useReliquaryWithdrawSteps'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { useRemoveLiquiditySteps } from '@repo/lib/modules/pool/actions/remove-liquidity/useRemoveLiquiditySteps'
 import { RemoveLiquidityStepParams } from '@repo/lib/modules/pool/actions/remove-liquidity/useRemoveLiquidityStep'
 
 export function RelicWithdrawProvider({
@@ -56,10 +55,9 @@ export function RelicWithdrawProvider({
   const customStepsHook = useMemo(() => {
     return (params: RemoveLiquidityStepParams): TransactionStep[] => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const removeLiquiditySteps = useRemoveLiquiditySteps(params)
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       return useReliquaryWithdrawSteps({
-        removeLiquiditySteps,
+        handler: params.handler,
+        simulationQuery: params.simulationQuery,
         relicId: relicIdNumber,
       })
     }
