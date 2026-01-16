@@ -14,6 +14,7 @@ import { formatUnits, Address } from 'viem'
 import { sumBy } from 'lodash'
 import { useQuery } from '@tanstack/react-query'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { secondsToMilliseconds } from 'date-fns'
 
 // Export types for legacy compatibility
 export type ReliquaryFarmPosition = {
@@ -41,6 +42,7 @@ export type TokenAmountHumanReadable = {
 }
 
 const CHAIN = GqlChain.Sonic
+const MAX_MATURITY = 6048000 // 10 weeks in seconds
 
 export function useReliquaryLogic() {
   const { isConnected, userAddress } = useUserAccount()
@@ -336,7 +338,6 @@ export function useReliquaryLogic() {
         const maturity = nowTimestamp - position.entry
         const entryTimestampAfterDeposit = Math.round(position.entry + maturity * weight)
         const newMaturity = nowTimestamp - entryTimestampAfterDeposit
-
         const maxLevel = customMaxLevel || maturityLevels.length - 1
 
         let newLevel = 0
@@ -350,12 +351,14 @@ export function useReliquaryLogic() {
           levelOnUpdate >= maxLevel
             ? 'max level reached'
             : `${maturity}/${maturityLevels[levelOnUpdate + 1]}`
+
         const newLevelProgress =
           newLevel >= maxLevel
             ? 'max level reached'
             : `${newMaturity}/${maturityLevels[newLevel + 1]}`
 
-        const depositImpactTimeInMilliseconds = (maturity - newMaturity) * 1000
+        const depositImpactTimeInMilliseconds = secondsToMilliseconds(MAX_MATURITY - newMaturity)
+
         const staysMax = levelOnUpdate === maxLevel && newLevel === maxLevel
 
         return {
