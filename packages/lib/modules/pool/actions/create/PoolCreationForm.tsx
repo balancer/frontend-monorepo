@@ -13,6 +13,8 @@ import {
   Stack,
   Skeleton,
 } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { PoolTypeStep } from './steps/type/PoolTypeStep'
 import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
@@ -22,12 +24,33 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
 import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
+import { usePoolCreationForm } from './PoolCreationFormProvider'
+import { useWatch } from 'react-hook-form'
+import { validatePoolTokens } from './validatePoolCreationForm'
 
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
+  const { poolCreationForm } = usePoolCreationForm()
+  const [poolTokens] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens'],
+  })
 
   const { steps, activeStepIndex, activeStep, goToStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
+  const router = useRouter()
+
+  const hasValidTokens = validatePoolTokens.isValidTokens(poolTokens)
+  const isFormHydrated = poolCreationForm.isHydrated
+
+  // Redirect to step 1 if user tries to access step 3 or 4 without valid tokens
+  // Wait until form is hydrated to avoid false positives during loading
+  useEffect(() => {
+    if (!isFormHydrated) return
+    if (activeStepIndex >= 2 && !hasValidTokens) {
+      router.replace('/create/step-1-type')
+    }
+  }, [activeStepIndex, hasValidTokens, isFormHydrated, router])
 
   return (
     <VStack spacing="lg">
@@ -94,10 +117,10 @@ export function PoolCreationForm() {
 
               <Divider />
 
-              {activeStep.id === 'step1' && <PoolTypeStep />}
-              {activeStep.id === 'step2' && <PoolTokensStep />}
-              {activeStep.id === 'step3' && <PoolDetailsStep />}
-              {activeStep.id === 'step4' && <PoolFundStep />}
+              {activeStep.id === 'step-1-type' && <PoolTypeStep />}
+              {activeStep.id === 'step-2-tokens' && <PoolTokensStep />}
+              {activeStep.id === 'step-3-details' && hasValidTokens && <PoolDetailsStep />}
+              {activeStep.id === 'step-4-fund' && hasValidTokens && <PoolFundStep />}
             </VStack>
             {!isMobile && <PreviewPoolCreation />}
           </>
