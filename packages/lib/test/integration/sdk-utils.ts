@@ -272,8 +272,6 @@ export async function getSdkTestUtils({
     isVyperMapping: boolean[] = Array(getPoolTokens().length).fill(false),
     slots?: number[]
   ): Promise<void> {
-    // await client.impersonateAccount({ address: account })
-
     const tokens = getPoolTokens().map(token => token.address)
 
     let _slots: number[]

@@ -1,4 +1,3 @@
-import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { useSetErc20Balance } from '@repo/lib/test/anvil/useSetErc20Balance'
 import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'
 import {
@@ -52,31 +51,29 @@ export function useImpersonateAccount() {
     isReconnecting?: boolean
   }) {
     if (!impersonatedAddress) return
+
+    const { chainId } = await getOptions()
+
+    console.log('🥸 Impersonating with ', {
+      impersonatedAddress,
+      chainId,
+    })
+
     const { connectors, updatedConfig } = impersonateWagmiConfig(impersonatedAddress)
     setImpersonatedAddressLS(impersonatedAddress)
 
-    // E2E dev tests impersonate account in the fork to be able to sign and run transactions against the anvil fork
-    if (shouldUseAnvilFork) {
-      await forkClient.impersonateAccount({
-        address: impersonatedAddress,
-      })
+    await forkClient.impersonateAccount({
+      address: impersonatedAddress,
+    })
 
-      const { chainId } = await getOptions()
+    await setForkBalances({
+      impersonatedAddress,
+      wagmiConfig: updatedConfig,
+      isReconnecting,
+    })
 
-      console.log('🥸 Impersonating with ', {
-        impersonatedAddress,
-        chainId,
-      })
-
-      await setForkBalances({
-        impersonatedAddress,
-        wagmiConfig: updatedConfig,
-        isReconnecting,
-      })
-
-      // if you don't pass chainId you will be prompted to switch chain (check if it uses mainnet by default)
-      await connectAsync({ connector: connectors[connectors.length - 1], chainId })
-    }
+    // if you don't pass chainId you will be prompted to switch chain (check if it uses mainnet by default)
+    await connectAsync({ connector: connectors[connectors.length - 1], chainId })
   }
 
   async function reset() {
@@ -94,7 +91,7 @@ export function useImpersonateAccount() {
 
   async function getOptions() {
     /*
-      Using window to globally set the fork options from E2E tests. Explore better ways to do this.
+      TODO: Using window to globally set the fork options from E2E tests. Explore better ways to do this.
       Getting chain id from the current running fork until we support multiple forks
     */
     const runningForkChain = await publicForkClient.getChainId()
