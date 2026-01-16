@@ -41,6 +41,7 @@ import { ReliquaryDepositImpactWarning } from '../components/ReliquaryDepositImp
 import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
 import { ReliquaryDepositModal } from '../components/ReliquaryDepositModal'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { TOSCheckbox } from '@/lib/modules/reliquary/components/TOSCheckbox'
 
 export function ReliquaryDepositPage({ relicId }: { relicId?: string }) {
   const { validTokens } = useAddLiquidity()
@@ -58,6 +59,7 @@ export function ReliquaryDepositPage({ relicId }: { relicId?: string }) {
 
 function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
   const [tabIndex, setTabIndex] = useState(0)
+  const [tosAccepted, setTosAccepted] = useState(false)
   const nextBtn = useRef(null)
 
   const {
@@ -144,9 +146,7 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
           {!relicId && (
             <BalAlert content="A new Relic will be created with this deposit" status="info" />
           )}
-
           {relicId && <BalAlert content={`Depositing into Relic #${relicId}`} status="info" />}
-
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             setFlexibleTab={setFlexibleTab}
@@ -154,13 +154,11 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
             tabIndex={tabIndex}
             totalUSDValue={totalUSDValue}
           />
-
           <ReliquaryDepositImpactWarning
             createNew={createNew}
             depositImpactQuery={depositImpactQuery}
             simulationQuery={simulationQuery}
           />
-
           <VStack align="start" spacing="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
@@ -194,7 +192,6 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
               />
             )}
           </VStack>
-
           <Grid gap="sm" templateColumns="1fr 1fr" w="full">
             <GridItem>
               <Card minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
@@ -217,13 +214,16 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
               />
             </GridItem>
           </Grid>
-
-          {showAcceptPoolRisks && <AddLiquidityFormCheckbox />}
-
+          {showAcceptPoolRisks && (
+            <>
+              <TOSCheckbox checked={tosAccepted} onChange={setTosAccepted} />
+              <AddLiquidityFormCheckbox />
+            </>
+          )}
           {isConnected ? (
             <Tooltip label={isDisabled ? disabledReason : ''}>
               <Button
-                isDisabled={isDisabled}
+                isDisabled={isDisabled || !tosAccepted}
                 isLoading={isLoading}
                 onClick={() => !isDisabled && onModalOpen()}
                 ref={nextBtn}
