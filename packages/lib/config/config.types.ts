@@ -109,6 +109,20 @@ export interface NetworkConfig {
     collateralTokens: string[]
   }
   hasAura?: boolean
+  snapshot?: {
+    contractAddress: Address
+    delegateAddress: Address
+    id: `0x${string}`
+  }
+  reliquary?: {
+    address: Address
+    fbeets: {
+      poolId: string
+      poolAddress: Address
+      farmId: number
+      maxLevel: number
+    }
+  }
 }
 
 export interface Config {

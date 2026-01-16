@@ -21,14 +21,16 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
+import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { useAddLiquiditySteps } from './useAddLiquiditySteps'
+import { useAddLiquiditySteps as useAddLiquidityStepsBase } from './useAddLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
+import { Pool } from '../../pool.types'
 import { getPoolActionableTokens, getWrappedBoostedTokens } from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
@@ -49,8 +51,15 @@ function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithA
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
-export function useAddLiquidityLogic(urlTxHash?: Hash) {
-  const { pool, refetch: refetchPool, isLoading } = usePool()
+export function useAddLiquidityLogic(
+  urlTxHash?: Hash,
+  addLiquidityHandlerSelector: (
+    pool: Pool,
+    wantsProportional: boolean
+  ) => AddLiquidityHandler = selectAddLiquidityHandler,
+  useAddLiquiditySteps: typeof useAddLiquidityStepsBase = useAddLiquidityStepsBase
+) {
+  const { pool, refetch: refetchPool } = usePool()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
   // Actionable tokens selected in the add form
@@ -75,10 +84,9 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage } = useUserSettings()
 
-  const handler = useMemo(
-    () => selectAddLiquidityHandler(pool, wantsProportional),
-    [pool, isLoading, wantsProportional]
-  )
+  const handler = useMemo(() => {
+    return addLiquidityHandlerSelector(pool, wantsProportional)
+  }, [pool, wantsProportional, addLiquidityHandlerSelector])
 
   /**
    * Helper functions & variables
@@ -259,10 +267,17 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
+  addLiquidityHandlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+  useAddLiquiditySteps?: typeof useAddLiquidityStepsBase
 }>
 
-export function AddLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = useAddLiquidityLogic(urlTxHash)
+export function AddLiquidityProvider({
+  urlTxHash,
+  addLiquidityHandlerSelector,
+  useAddLiquiditySteps,
+  children,
+}: Props) {
+  const hook = useAddLiquidityLogic(urlTxHash, addLiquidityHandlerSelector, useAddLiquiditySteps)
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

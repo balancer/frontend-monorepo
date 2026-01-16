@@ -1,0 +1,83 @@
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { useMemo } from 'react'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { useGetPendingReward } from '../hooks/useGetPendingReward'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { getNetworkConfig } from '@repo/lib/config/networks'
+import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
+import { useCallback, useState } from 'react'
+import {
+  ManagedResult,
+  TransactionLabels,
+} from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+
+const claimStepId = 'reliquary-claim-rewards'
+
+export function useReliquaryClaimSteps(relicId: string) {
+  const { pool, chainId } = usePool()
+  const { userAddress } = useUserAccount()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+
+  const {
+    data: pendingRewards,
+    refetch: refetchPendingRewards,
+    usdValue: pendingRewardsUsdValue,
+  } = useGetPendingReward(relicId)
+
+  const labels: TransactionLabels = {
+    init: 'Claim rewards',
+    title: `Claim rewards from Relic #${relicId}`,
+    description: `Claim pending BEETS rewards from Relic #${relicId}.`,
+    confirming: 'Claiming rewards...',
+    confirmed: 'Rewards claimed!',
+    tooltip: `Claim pending BEETS rewards from Relic #${relicId}`,
+    poolId: pool.id,
+  }
+
+  const isComplete = () => isTransactionSuccess(transaction)
+
+  const onSuccess = useCallback(() => {
+    refetchPendingRewards()
+  }, [refetchPendingRewards])
+
+  const props: ManagedTransactionInput = useMemo(
+    () => ({
+      enabled: !pendingRewardsUsdValue.lt(0.01) && !!userAddress,
+      labels,
+      chainId,
+      contractId: 'beets.reliquary' as const,
+      contractAddress: getNetworkConfig(GqlChain.Sonic).contracts.beets?.reliquary as string,
+      functionName: 'harvest' as const,
+      args: [BigInt(relicId), userAddress],
+      onTransactionChange: setTransaction,
+    }),
+    [labels, pendingRewardsUsdValue, relicId, userAddress, setTransaction]
+  )
+
+  const claimStep: TransactionStep = useMemo(
+    () => ({
+      id: claimStepId,
+      stepType: 'claim',
+      labels,
+      details: {
+        gasless: false,
+        type: 'Gas transaction',
+      },
+      transaction,
+      isComplete,
+      onActivated: () => {},
+      onDeactivated: () => {},
+      onSuccess,
+      renderAction: () => <ManagedTransactionButton id={claimStepId} {...props} />,
+    }),
+    [transaction, pendingRewardsUsdValue, labels, isComplete, onSuccess, props]
+  )
+
+  return {
+    isLoadingSteps: !pendingRewards,
+    steps: [claimStep],
+  }
+}

@@ -1,23 +1,21 @@
 'use client'
 
-import { getChainId } from '@repo/lib/config/app.config'
-import { getNetworkConfig } from '@repo/lib/config/networks'
-import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { useState } from 'react'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
+import { useState } from 'react'
+import { useReliquary } from '../ReliquaryProvider'
 
-export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
-  const { isConnected } = useUserAccount()
-  const { refetch } = useGetRelicPositionsOfOwner(chain)
+export function useLevelUpStep(relicId: string | undefined) {
+  const { isConnected, chainId } = useUserAccount()
+  const { refetchRelicPositions } = useReliquary()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const labels: TransactionLabels = {
@@ -25,14 +23,14 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     title: 'Level up',
     confirming: 'Confirming level up...',
     confirmed: 'Level up!',
-    tooltip: 'tooltip',
+    tooltip: 'Upgrade your Relic to the next maturity level',
   }
 
   const props: ManagedTransactionInput = {
     labels,
-    chainId: getChainId(chain),
+    chainId: chainId!,
     contractId: 'beets.reliquary',
-    contractAddress: getNetworkConfig(chain).contracts.beets?.reliquary || '',
+    contractAddress: getNetworkConfig(chainId!).contracts.beets?.reliquary || '',
     functionName: 'updatePosition',
     args: relicId ? [relicId] : null,
     enabled: isConnected && !!relicId,
@@ -46,7 +44,7 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     labels,
     stepType: 'levelUp',
     isComplete,
-    onSuccess: () => refetch(),
+    onSuccess: () => refetchRelicPositions(),
     renderAction: () => <ManagedTransactionButton id="levelUp" {...props} />,
     transaction,
   }

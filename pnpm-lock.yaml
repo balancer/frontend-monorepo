@@ -97,6 +97,12 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
+      echarts:
+        specifier: 5.6.0
+        version: 5.6.0
+      echarts-for-react:
+        specifier: 3.0.2
+        version: 3.0.2(echarts@5.6.0)(react@19.2.3)
       framer-motion:
         specifier: 12.26.1
         version: 12.26.1(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -4911,9 +4917,6 @@ packages:
   cjs-module-lexer@1.4.1:
     resolution: {integrity: sha512-cuSVIHi9/9E/+821Qjdvngor+xpnlwnuwIyZOaLmHBVdXL+gP+I6QQB9VkO7RI77YIcTV+S1W9AreJ5eN63JBA==}
 
-  cjs-module-lexer@2.2.0:
-    resolution: {integrity: sha512-4bHTS2YuzUvtoLjdy+98ykbNB5jS0+07EvFNXerqZQJ89F7DI6ET7OQo/HJuW6K0aVsKA9hj9/RVb2kQVOrPDQ==}
-
   clear-any-console@1.16.3:
     resolution: {integrity: sha512-x174l55a86DGVU0KvnLITsXhRgqwd/xNDTy16OyKKOiJU+1pXF9DrV9YvlepfMc/JuJ3a7CMNLEF4O7qwk0mEw==}
 
@@ -6254,9 +6257,6 @@ packages:
 
   import-in-the-middle@2.0.1:
     resolution: {integrity: sha512-bruMpJ7xz+9jwGzrwEhWgvRrlKRYCRDBrfU+ur3FcasYXLJDxTruJ//8g2Noj+QFyRBeqbpj8Bhn4Fbw6HjvhA==}
-
-  import-in-the-middle@2.0.3:
-    resolution: {integrity: sha512-BhJ3Rc6x+kA3EE0apAuGc4rsihsUrEj31lCkXRfwGzLKqgzlSyBLvthIinsvLg6J4bCCTgVAoAgD+KwkISjmBQ==}
 
   import-lazy@4.0.0:
     resolution: {integrity: sha512-rKtvo6a868b5Hu3heneU+L4yEQ4jYKLtjpnPeUdK7h0yzXGmyBTypknlkCvHFBqfX9YlorEiMM6Dnq/5atfHkw==}
@@ -10832,7 +10832,7 @@ snapshots:
     dependencies:
       graphql: 16.12.0
       lodash.sortby: 4.7.0
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   '@graphql-tools/executor-common@0.0.4(graphql@16.12.0)':
     dependencies:
@@ -11710,7 +11710,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.3.4
+      debug: 4.4.3
       pony-cause: 2.1.11
       semver: 7.7.3
       uuid: 9.0.1
@@ -11725,7 +11725,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.3.4
+      debug: 4.4.3
       pony-cause: 2.1.11
       semver: 7.7.3
       uuid: 9.0.1
@@ -12058,7 +12058,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.208.0
-      import-in-the-middle: 2.0.3
+      import-in-the-middle: 2.0.1
       require-in-the-middle: 8.0.1
     transitivePeerDependencies:
       - supports-color
@@ -12838,7 +12838,7 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.38.0
       '@sentry/core': 10.33.0
       '@sentry/opentelemetry': 10.33.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.38.0)
-      import-in-the-middle: 2.0.3
+      import-in-the-middle: 2.0.1
     transitivePeerDependencies:
       - supports-color
 
@@ -12877,7 +12877,7 @@ snapshots:
       '@sentry/core': 10.33.0
       '@sentry/node-core': 10.33.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.208.0(@opentelemetry/api@1.9.0))(@opentelemetry/resources@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.38.0)
       '@sentry/opentelemetry': 10.33.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.38.0)
-      import-in-the-middle: 2.0.3
+      import-in-the-middle: 2.0.1
       minimatch: 9.0.5
     transitivePeerDependencies:
       - supports-color
@@ -14717,8 +14717,6 @@ snapshots:
 
   cjs-module-lexer@1.4.1: {}
 
-  cjs-module-lexer@2.2.0: {}
-
   clear-any-console@1.16.3(react@19.2.3)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
       langbase: 1.1.65(react@19.2.3)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))
@@ -16318,13 +16316,6 @@ snapshots:
       cjs-module-lexer: 1.4.1
       module-details-from-path: 1.0.4
 
-  import-in-the-middle@2.0.3:
-    dependencies:
-      acorn: 8.15.0
-      acorn-import-attributes: 1.9.5(acorn@8.15.0)
-      cjs-module-lexer: 2.2.0
-      module-details-from-path: 1.0.4
-
   import-lazy@4.0.0: {}
 
   imurmurhash@0.1.4: {}
@@ -17421,11 +17412,11 @@ snapshots:
   ox@0.6.7(typescript@5.9.2)(zod@4.3.5):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
-      '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.9.2)(zod@4.3.5)
+      '@noble/curves': 1.9.7
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      abitype: 1.2.3(typescript@5.9.2)(zod@4.3.5)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.2

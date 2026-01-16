@@ -17,7 +17,7 @@ import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/perm
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 
-type AddLiquidityStepsParams = AddLiquidityStepParams & {
+export type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
 }
 

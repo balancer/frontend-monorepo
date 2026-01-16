@@ -10,6 +10,8 @@ import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import { selectRemoveLiquidityHandler } from './handlers/selectRemoveLiquidityHandler'
+import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
+import { Pool } from '../../pool.types'
 import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidityPriceImpactQuery'
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, formatUnits, Hash } from 'viem'
@@ -29,7 +31,13 @@ import { useWrapUnderlying } from '../useWrapUnderlying'
 export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
 
-export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
+export function useRemoveLiquidityLogic(
+  urlTxHash?: Hash,
+  mute?: boolean,
+  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
+  maxHumanBptIn?: HumanAmount,
+  customStepsHook?: typeof useRemoveLiquiditySteps
+) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
   const [wethIsEth, setWethIsEth] = useState(false)
@@ -43,8 +51,8 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
-  const maxHumanBptIn: HumanAmount = getUserWalletBalance(pool)
-  const humanBptIn: HumanAmount = bn(maxHumanBptIn)
+  const _maxHumanBptIn: HumanAmount = maxHumanBptIn ?? getUserWalletBalance(pool)
+  const humanBptIn: HumanAmount = bn(_maxHumanBptIn)
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
@@ -57,10 +65,10 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
     isWrappedNativeAsset(token.address as Address, chain)
   )
 
-  const handler = useMemo(
-    () => selectRemoveLiquidityHandler(pool, removalType),
-    [pool, removalType, isLoading]
-  )
+  const handler = useMemo(() => {
+    const selector = handlerSelector ?? selectRemoveLiquidityHandler
+    return selector(pool, removalType)
+  }, [pool, removalType, isLoading, handlerSelector])
 
   const totalUsdFromBprPrice = bn(humanBptIn).times(bptPrice).toFixed()
 
@@ -145,7 +153,8 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
   /**
    * Step construction
    */
-  const steps = useRemoveLiquiditySteps({
+  const stepsHook = customStepsHook || useRemoveLiquiditySteps
+  const steps = stepsHook({
     handler,
     simulationQuery,
     humanBptIn,
@@ -281,10 +290,29 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
   }
 }
 
-type Props = PropsWithChildren<{ urlTxHash?: Hash; mute?: boolean }>
+type Props = PropsWithChildren<{
+  urlTxHash?: Hash
+  mute?: boolean
+  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+  maxHumanBptIn?: HumanAmount
+  customStepsHook?: typeof useRemoveLiquiditySteps
+}>
 
-export function RemoveLiquidityProvider({ urlTxHash, mute, children }: Props) {
-  const hook = useRemoveLiquidityLogic(urlTxHash, mute)
+export function RemoveLiquidityProvider({
+  urlTxHash,
+  mute,
+  handlerSelector,
+  maxHumanBptIn,
+  customStepsHook,
+  children,
+}: Props) {
+  const hook = useRemoveLiquidityLogic(
+    urlTxHash,
+    mute,
+    handlerSelector,
+    maxHumanBptIn,
+    customStepsHook
+  )
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 
