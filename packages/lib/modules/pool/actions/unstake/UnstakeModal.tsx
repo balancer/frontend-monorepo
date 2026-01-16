@@ -14,7 +14,7 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { usePoolRedirect } from '../../pool.hooks'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { getChainId, isProd } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { usePoolMigrations } from '../../migrations/PoolMigrationsProvider'
 import { MigrationAlert } from './MigrationAlert'
 
@@ -69,9 +69,9 @@ export function UnstakeModal({
             )}
             <UnstakePreview />
 
-            {!isProd &&
-              needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) &&
-              isSuccess && <MigrationAlert pool={pool} />}
+            {needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && isSuccess && (
+              <MigrationAlert pool={pool} />
+            )}
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
