@@ -216,14 +216,14 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
           </Grid>
           {showAcceptPoolRisks && (
             <>
-              <TOSCheckbox checked={tosAccepted} onChange={setTosAccepted} />
+              {!relicId && <TOSCheckbox checked={tosAccepted} onChange={setTosAccepted} />}
               <AddLiquidityFormCheckbox />
             </>
           )}
           {isConnected ? (
             <Tooltip label={isDisabled ? disabledReason : ''}>
               <Button
-                isDisabled={isDisabled || !tosAccepted}
+                isDisabled={isDisabled || (!relicId && !tosAccepted)}
                 isLoading={isLoading}
                 onClick={() => !isDisabled && onModalOpen()}
                 ref={nextBtn}
