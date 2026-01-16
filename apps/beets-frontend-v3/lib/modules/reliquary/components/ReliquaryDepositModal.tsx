@@ -19,6 +19,7 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 import { ReliquaryDepositSummary } from './ReliquaryDepositSummary'
 import { useRouter } from 'next/navigation'
+import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
   isOpen: boolean
@@ -52,6 +53,7 @@ export function ReliquaryDepositModal({
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling, startTokenPricePolling } = useTokens()
   const router = useRouter()
+  const { refetchRelicPositions } = useReliquary()
 
   const txReceipt = lastTransaction?.result
 
@@ -85,6 +87,7 @@ export function ReliquaryDepositModal({
 
   function handleOnClose() {
     startTokenPricePolling()
+    refetchRelicPositions()
     onClose()
     // Return to mabeets page with focus on the deposited Relic
     router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
