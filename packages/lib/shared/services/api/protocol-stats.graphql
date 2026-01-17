@@ -1,4 +1,4 @@
-query GetProtocolStats($chains: [GqlChain!]) {
+query GetProtocolStats($chains: [GqlChain!]!) {
   protocolMetricsAggregated(chains: $chains) {
     totalLiquidity
     numLiquidityProviders
@@ -11,7 +11,7 @@ query GetProtocolStats($chains: [GqlChain!]) {
   }
 }
 
-query GetProtocolStatsPerChain($chain: GqlChain) {
+query GetProtocolStatsPerChain($chain: GqlChain!) {
   protocolMetricsChain(chain: $chain) {
     chainId
     numLiquidityProviders

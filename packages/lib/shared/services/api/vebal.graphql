@@ -1,11 +1,5 @@
-query GetVeBalUser(
-  $address: String!,
-  $chain: GqlChain
-) {
-  veBalGetUser(
-    address: $address,
-    chain: $chain,
-  ) {
+query GetVeBalUser($address: String!, $chain: GqlChain!) {
+  veBalGetUser(address: $address, chain: $chain) {
     balance
     rank
     lockSnapshots {
@@ -17,6 +11,6 @@ query GetVeBalUser(
   }
 }
 
-query GetVeBalTotalSupply($chain: GqlChain) {
+query GetVeBalTotalSupply($chain: GqlChain!) {
   veBalGetTotalSupply(chain: $chain)
 }

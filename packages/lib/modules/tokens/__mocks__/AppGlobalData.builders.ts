@@ -5,8 +5,6 @@ import { aGqlTokenPriceMock } from '@repo/lib/test/msw/builders/gqlTokenPrice.bu
 export function anAppGlobalData(options?: Partial<GetAppGlobalPollingDataQuery>) {
   const defaultAppGlobalData: GetAppGlobalPollingDataQuery = {
     __typename: 'Query',
-    blocksGetAverageBlockTime: 1000,
-    blocksGetBlocksPerDay: 100,
     tokenGetCurrentPrices: [
       aGqlTokenPriceMock({ address: fakeTokenBySymbol('ETH').address }),
       aGqlTokenPriceMock({ address: fakeTokenBySymbol('BAL').address }),
