@@ -1,5 +1,6 @@
 import { Button, HStack, IconButton, useDisclosure, Divider, VStack } from '@chakra-ui/react'
 import { ChevronLeftIcon } from '@chakra-ui/icons'
+import NextLink from 'next/link'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
@@ -18,7 +19,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
     name: ['poolTokens', 'poolType', 'network'],
   })
   const formState = useFormState({ control: poolCreationForm.control })
-  const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
+  const { previousStepPath, nextStepPath, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
@@ -33,7 +34,6 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
-  const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
   const showBackButton = !isFirstStep && !poolAddress
 
   const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
@@ -46,11 +46,12 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         <InvalidTotalWeightAlert />
 
         <HStack spacing="md" w="full">
-          {showBackButton && (
+          {showBackButton && previousStepPath && (
             <IconButton
               aria-label="Back"
+              as={NextLink}
+              href={previousStepPath}
               icon={<ChevronLeftIcon h="8" w="8" />}
-              onClick={previousStep}
               size="lg"
             />
           )}
@@ -66,21 +67,28 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             </Button>
           )}
 
-          <Button
-            disabled={disabled}
-            onClick={() => {
-              if (isLastStep) {
-                previewModalDisclosure.onOpen()
-              } else {
-                nextStep()
-              }
-            }}
-            size="lg"
-            variant="primary"
-            w="full"
-          >
-            {buttonText}
-          </Button>
+          {isLastStep ? (
+            <Button
+              disabled={disabled}
+              onClick={previewModalDisclosure.onOpen}
+              size="lg"
+              variant="primary"
+              w="full"
+            >
+              {poolAddress ? 'Initialize Pool' : 'Create Pool'}
+            </Button>
+          ) : (
+            <Button
+              as={NextLink}
+              disabled={disabled}
+              href={nextStepPath || ''}
+              size="lg"
+              variant="primary"
+              w="full"
+            >
+              Next
+            </Button>
+          )}
         </HStack>
       </VStack>
 

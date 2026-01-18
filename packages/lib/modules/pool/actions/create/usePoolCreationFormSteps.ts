@@ -1,6 +1,6 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useLocalStorage } from 'usehooks-ts'
-import { ComponentType, useEffect } from 'react'
+import { ComponentType, useEffect, useRef } from 'react'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { PoolTypeStep } from './steps/type/PoolTypeStep'
 import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
@@ -36,31 +36,34 @@ export function usePoolCreationFormSteps() {
   const [savedStepIndex, setSavedStepIndex] = useLocalStorage(LS_KEYS.PoolCreation.StepIndex, 0)
 
   const stepIndexFromUrl = getStepIndexFromPathname(pathname)
-  const hasValidUrlStep = stepIndexFromUrl !== null
-  const currentStepIndex = hasValidUrlStep ? stepIndexFromUrl : savedStepIndex
   const hasProtocolParam = searchParams.has('protocol')
+
+  // URL drives current step; localStorage is fallback for initial load only
+  const currentStepIndex = stepIndexFromUrl ?? savedStepIndex
 
   const isLastStep = currentStepIndex === steps.length - 1
   const isFirstStep = currentStepIndex === 0
   const currentStep = steps[currentStepIndex]
 
-  // Redirect to saved step when landing on /create without a step slug
-  // Skip redirect if protocol param is present - let useProtocolSearchParams handle that flow
+  // On initial load without valid URL step, redirect to saved step from localStorage
+  const hasRedirected = useRef(false)
   useEffect(() => {
-    if (!hasValidUrlStep && savedStepIndex > 0 && !hasProtocolParam) {
-      const step = steps[savedStepIndex]
-      if (step) {
-        router.replace(`/create/${step.id}`)
+    if (hasRedirected.current || hasProtocolParam) return
+    if (stepIndexFromUrl === null) {
+      const savedStep = steps[savedStepIndex]
+      if (savedStep) {
+        router.replace(`/create/${savedStep.id}`)
       }
     }
-  }, [hasValidUrlStep, savedStepIndex, hasProtocolParam, router])
+    hasRedirected.current = true
+  }, [stepIndexFromUrl, savedStepIndex, hasProtocolParam, router])
 
-  // Keep localStorage in sync when URL changes
+  // Sync localStorage from URL when URL has a valid step (persists progress)
   useEffect(() => {
-    if (hasValidUrlStep && stepIndexFromUrl !== savedStepIndex) {
+    if (stepIndexFromUrl !== null && stepIndexFromUrl !== savedStepIndex) {
       setSavedStepIndex(stepIndexFromUrl)
     }
-  }, [hasValidUrlStep, stepIndexFromUrl, savedStepIndex, setSavedStepIndex])
+  }, [stepIndexFromUrl, savedStepIndex, setSavedStepIndex])
 
   const navigateToStep = (stepIndex: number) => {
     const step = steps[stepIndex]
@@ -70,20 +73,15 @@ export function usePoolCreationFormSteps() {
     }
   }
 
-  const nextStep = () => {
-    navigateToStep(currentStepIndex + 1)
-  }
-
-  const previousStep = () => {
-    navigateToStep(currentStepIndex - 1)
-  }
+  const getStepPath = (index: number) => steps[index] && `/create/${steps[index].id}`
+  const nextStepPath = getStepPath(currentStepIndex + 1)
+  const previousStepPath = getStepPath(currentStepIndex - 1)
 
   const lastStep = () => {
     navigateToStep(steps.length - 1)
   }
 
   const resetSteps = () => {
-    setSavedStepIndex(0)
     router.replace(`/create/${steps[0].id}`)
   }
 
@@ -110,8 +108,8 @@ export function usePoolCreationFormSteps() {
     currentStep,
     isBeforeStep,
     isStep,
-    previousStep,
-    nextStep,
+    nextStepPath,
+    previousStepPath,
     lastStep,
     resetSteps,
     goToStep,
