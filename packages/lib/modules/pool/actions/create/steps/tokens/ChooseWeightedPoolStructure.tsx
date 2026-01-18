@@ -43,7 +43,7 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
     if (shouldUpdateTokenWeights) {
       updatePoolTokenWeights(weightedPoolStructure)
     }
-  }, [])
+  }, [shouldUpdateTokenWeights])
 
   return (
     <VStack align="start" spacing="md" w="full">
