@@ -21,10 +21,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: 4.3.1
-        version: 4.3.1(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2))
+        version: 4.3.1(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))
       '@vitest/coverage-v8':
         specifier: 3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2))
+        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2))
       happy-dom:
         specifier: 20.0.10
         version: 20.0.10
@@ -63,10 +63,10 @@ importers:
         version: 5.9.2
       vitest:
         specifier: 3.2.4
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2)
       vitest-mock-extended:
         specifier: 3.1.0
-        version: 3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2))
+        version: 3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2))
 
   apps/beets-frontend-v3:
     dependencies:
@@ -470,10 +470,10 @@ importers:
         version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.3))(react@19.2.3)
       '@dicebear/collection':
         specifier: 9.2.2
-        version: 9.2.2(@dicebear/core@9.2.4)
+        version: 9.2.2(@dicebear/core@9.3.0)
       '@dicebear/core':
-        specifier: 9.2.4
-        version: 9.2.4
+        specifier: 9.3.0
+        version: 9.3.0
       '@emotion/react':
         specifier: 11.14.0
         version: 11.14.0(@types/react@19.2.7)(react@19.2.3)
@@ -690,7 +690,7 @@ importers:
         version: 0.0.10(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.3.1(vite@7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2))
+        version: 4.3.1(vite@7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))
       '@wagmi/cli':
         specifier: 2.8.0
         version: 2.8.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)
@@ -1309,8 +1309,8 @@ packages:
     peerDependencies:
       '@dicebear/core': ^9.0.0
 
-  '@dicebear/core@9.2.4':
-    resolution: {integrity: sha512-hz6zArEcUwkZzGOSJkWICrvqnEZY7BKeiq9rqKzVJIc1tRVv0MkR0FGvIxSvXiK9TTIgKwu656xCWAGAl6oh+w==}
+  '@dicebear/core@9.3.0':
+    resolution: {integrity: sha512-ZzIKk9Xaiee5rYAEDvSfD5qyCQddiHeg/u0dwehXgxAL+FpZgr2qlEq2Ea4hkJHv0lCulZzKTL5hkLexaUHU1w==}
     engines: {node: '>=18.0.0'}
 
   '@dicebear/croodles-neutral@9.2.2':
@@ -4896,9 +4896,9 @@ packages:
     resolution: {integrity: sha512-n8enUVCED/KVRQlab1hr3MVpcVMvxtZjmEa956u+4YijlmQED223XMSYj2tLuKvr4jcCTzNNMpQDUer72MMmzA==}
     engines: {node: '>= 14.16.0'}
 
-  chokidar@4.0.3:
-    resolution: {integrity: sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA==}
-    engines: {node: '>= 14.16.0'}
+  chokidar@5.0.0:
+    resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
+    engines: {node: '>= 20.19.0'}
 
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
@@ -6095,8 +6095,8 @@ packages:
     resolution: {integrity: sha512-DKKrynuQRne0PNpEbzuEdHlYOMksHSUI8Zc9Unei5gTsMNA2/vMpoMz/yKba50pejK56qj98qM0SjYxAKi13gQ==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
-  h3@1.15.4:
-    resolution: {integrity: sha512-z5cFQWDffyOe4vQ9xIqNfCZdV4p//vy6fBnr8Q1AWnVZ0teurKMG66rLj++TKwKPUP3u7iMUvrvKaEUiQw2QWQ==}
+  h3@1.15.5:
+    resolution: {integrity: sha512-xEyq3rSl+dhGX2Lm0+eFQIAzlDN6Fs0EcC4f7BNUmzaRX/PTzeuM+Tr2lHB8FoXggsQIeXLj8EDVgs5ywxyxmg==}
 
   happy-dom@20.0.10:
     resolution: {integrity: sha512-6umCCHcjQrhP5oXhrHQQvLB0bwb1UzHAHdsXy+FjtKoYjUhmNZsQL8NivwM1vDvNEChJabVrUYxUnp/ZdYmy2g==}
@@ -6776,6 +6776,10 @@ packages:
 
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
+
+  lru-cache@11.2.4:
+    resolution: {integrity: sha512-B5Y16Jr9LB9dHVkh6ZevG+vAbOsNOYCX+sXvFWFu7B3Iz5mijW3zdbMyhsh8ANd2mSWBYdJgnqi+mL7/LrOPYg==}
+    engines: {node: 20 || >=22}
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -7764,6 +7768,10 @@ packages:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
 
+  readdirp@5.0.0:
+    resolution: {integrity: sha512-9u/XQ1pvrQtYyMpZe7DXKv2p5CNvyVwzUB6uhLAnQwHMSgKMBR62lc7AHljaeteeHXn11XTAaLLUVZYVZyuRBQ==}
+    engines: {node: '>= 20.19.0'}
+
   real-require@0.1.0:
     resolution: {integrity: sha512-r/H9MzAWtrv8aSVjPCMFpDMl5q66GqtmmRkRjpHTsp4zBAa+snZyiQNlMONiUmEJcsnaw0wCauJ2GWODr/aFkg==}
     engines: {node: '>= 12.13.0'}
@@ -8331,8 +8339,8 @@ packages:
       uglify-js:
         optional: true
 
-  terser@5.44.1:
-    resolution: {integrity: sha512-t/R3R/n0MSwnnazuPpPNVO60LX0SKL45pyl9YlvxIdkH0Of7D5qM2EVe+yASRIlY5pZ73nclYJfNANGWPwFDZw==}
+  terser@5.46.0:
+    resolution: {integrity: sha512-jTwoImyr/QbOWFFso3YoU3ik0jBBDJ6JTOQiy/J2YxVJdZCc+5u7skhNwiOR3FQIygFqVUPHl7qbbxtjW2K3Qg==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -8565,8 +8573,8 @@ packages:
     resolution: {integrity: sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==}
     hasBin: true
 
-  ufo@1.6.2:
-    resolution: {integrity: sha512-heMioaxBcG9+Znsda5Q8sQbWnLJSl98AFDXTO80wELWEzX3hordXsTdxrIfMQoO9IY1MEnoGoPjpoKpMj+Yx0Q==}
+  ufo@1.6.3:
+    resolution: {integrity: sha512-yDJTmhydvl5lJzBmy/hyOAA0d+aqCBuwl818haVdYCRrWV84o7YyeVm4QlVHStqNrrJSTb6jKuFAVqAFsr+K3Q==}
 
   uint8arrays@3.1.0:
     resolution: {integrity: sha512-ei5rfKtoRO8OyOIor2Rz5fhzjThwIHJZ3uyDPnDHTXbP0aMQ1RN/6AI5B5d9dBxJOU+BvOAk7ZQ1xphsX8Lrog==}
@@ -8609,8 +8617,8 @@ packages:
   unplugin@1.0.1:
     resolution: {integrity: sha512-aqrHaVBWW1JVKBHmGo33T5TxeL0qWzfvjWokObHA9bYmN7eNDkwOxmLjhioHl9878qDFMAaT51XNroRyuz7WxA==}
 
-  unstorage@1.17.3:
-    resolution: {integrity: sha512-i+JYyy0DoKmQ3FximTHbGadmIYb8JEpq7lxUjnjeB702bCPum0vzo6oy5Mfu0lpqISw7hCyMW2yj4nWC8bqJ3Q==}
+  unstorage@1.17.4:
+    resolution: {integrity: sha512-fHK0yNg38tBiJKp/Vgsq4j0JEsCmgqH58HAn707S7zGkArbZsVr/CwINoi+nh3h98BRCwKvx1K3Xg9u3VV83sw==}
     peerDependencies:
       '@azure/app-configuration': ^1.8.0
       '@azure/cosmos': ^4.2.0
@@ -8618,14 +8626,14 @@ packages:
       '@azure/identity': ^4.6.0
       '@azure/keyvault-secrets': ^4.9.0
       '@azure/storage-blob': ^12.26.0
-      '@capacitor/preferences': ^6.0.3 || ^7.0.0
+      '@capacitor/preferences': ^6 || ^7 || ^8
       '@deno/kv': '>=0.9.0'
       '@netlify/blobs': ^6.5.0 || ^7.0.0 || ^8.1.0 || ^9.0.0 || ^10.0.0
       '@planetscale/database': ^1.19.0
       '@upstash/redis': ^1.34.3
       '@vercel/blob': '>=0.27.1'
       '@vercel/functions': ^2.2.12 || ^3.0.0
-      '@vercel/kv': ^1.0.1
+      '@vercel/kv': ^1 || ^2 || ^3
       aws4fetch: ^1.0.20
       db0: '>=0.2.1'
       idb-keyval: ^6.2.1
@@ -8911,8 +8919,8 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
 
-  watchpack@2.5.0:
-    resolution: {integrity: sha512-e6vZvY6xboSwLz2GD36c16+O/2Z6fKvIf4pOXptw2rY9MVwE/TXc6RGqxD3I3x0a28lwBY7DE+76uTPSsBrrCA==}
+  watchpack@2.5.1:
+    resolution: {integrity: sha512-Zn5uXdcFNIA1+1Ei5McRd+iRzfhENPCe7LeABkJtNulSxjma+l7ltNx55BWZkRlwRnpOgHqxnjyaDgJnNXnqzg==}
     engines: {node: '>=10.13.0'}
 
   web-streams-polyfill@3.3.3:
@@ -8977,6 +8985,10 @@ packages:
 
   which-typed-array@1.1.19:
     resolution: {integrity: sha512-rEvr90Bck4WZt9HHFC4DJMsjvu7x+r6bImz0/BrbWb7A2djJ8hnZMrWnHo9F8ssv0OMErasDhftrfROTyqSDrw==}
+    engines: {node: '>= 0.4'}
+
+  which-typed-array@1.1.20:
+    resolution: {integrity: sha512-LYfpUkmqwl0h9A2HL09Mms427Q1RZWuOHsukfVcKRq9q95iQxdw0ix1JQrqbcDR9PH1QDwf5Qo8OZb5lksZ8Xg==}
     engines: {node: '>= 0.4'}
 
   which@1.3.1:
@@ -9956,163 +9968,163 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.0.0
 
-  '@dicebear/adventurer-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/adventurer-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/adventurer@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/adventurer@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/avataaars-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/avataaars-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/avataaars@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/avataaars@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/big-ears-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/big-ears-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/big-ears@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/big-ears@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/big-smile@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/big-smile@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/bottts-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/bottts-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/bottts@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/bottts@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/collection@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/collection@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/adventurer': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/adventurer-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/avataaars': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/avataaars-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/big-ears': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/big-ears-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/big-smile': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/bottts': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/bottts-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/core': 9.2.4
-      '@dicebear/croodles': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/croodles-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/dylan': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/fun-emoji': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/glass': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/icons': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/identicon': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/initials': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/lorelei': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/lorelei-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/micah': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/miniavs': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/notionists': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/notionists-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/open-peeps': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/personas': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/pixel-art': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/pixel-art-neutral': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/rings': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/shapes': 9.2.2(@dicebear/core@9.2.4)
-      '@dicebear/thumbs': 9.2.2(@dicebear/core@9.2.4)
+      '@dicebear/adventurer': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/adventurer-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/avataaars': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/avataaars-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/big-ears': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/big-ears-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/big-smile': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/bottts': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/bottts-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/core': 9.3.0
+      '@dicebear/croodles': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/croodles-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/dylan': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/fun-emoji': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/glass': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/icons': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/identicon': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/initials': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/lorelei': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/lorelei-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/micah': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/miniavs': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/notionists': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/notionists-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/open-peeps': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/personas': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/pixel-art': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/pixel-art-neutral': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/rings': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/shapes': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/thumbs': 9.2.2(@dicebear/core@9.3.0)
 
-  '@dicebear/core@9.2.4':
+  '@dicebear/core@9.3.0':
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@dicebear/croodles-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/croodles-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/croodles@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/croodles@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/dylan@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/dylan@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/fun-emoji@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/fun-emoji@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/glass@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/glass@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/icons@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/icons@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/identicon@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/identicon@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/initials@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/initials@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/lorelei-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/lorelei-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/lorelei@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/lorelei@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/micah@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/micah@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/miniavs@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/miniavs@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/notionists-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/notionists-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/notionists@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/notionists@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/open-peeps@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/open-peeps@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/personas@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/personas@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/pixel-art-neutral@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/pixel-art-neutral@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/pixel-art@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/pixel-art@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/rings@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/rings@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/shapes@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/shapes@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
-  '@dicebear/thumbs@9.2.2(@dicebear/core@9.2.4)':
+  '@dicebear/thumbs@9.2.2(@dicebear/core@9.3.0)':
     dependencies:
-      '@dicebear/core': 9.2.4
+      '@dicebear/core': 9.3.0
 
   '@dual-bundle/import-meta-resolve@4.1.0': {}
 
@@ -11710,7 +11722,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.3.4
+      debug: 4.4.3
       pony-cause: 2.1.11
       semver: 7.7.3
       uuid: 9.0.1
@@ -11725,7 +11737,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.3.4
+      debug: 4.4.3
       pony-cause: 2.1.11
       semver: 7.7.3
       uuid: 9.0.1
@@ -13381,29 +13393,29 @@ snapshots:
       - debug
       - utf-8-validate
 
-  '@vitejs/plugin-react@4.3.1(vite@7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2))':
+  '@vitejs/plugin-react@4.3.1(vite@7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))':
     dependencies:
       '@babel/core': 7.26.10
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.10)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.10)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2)
+      vite: 7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-react@4.3.1(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2))':
+  '@vitejs/plugin-react@4.3.1(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))':
     dependencies:
       '@babel/core': 7.26.10
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.10)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.10)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2)
+      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2))':
+  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -13418,7 +13430,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -13430,14 +13442,14 @@ snapshots:
       chai: 5.2.1
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.2.4(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2))':
+  '@vitest/mocker@3.2.4(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))':
     dependencies:
       '@vitest/spy': 3.2.4
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
       msw: 2.11.6(@types/node@24.0.3)(typescript@5.9.2)
-      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2)
+      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2)
 
   '@vitest/pretty-format@3.2.4':
     dependencies:
@@ -13716,7 +13728,7 @@ snapshots:
     dependencies:
       '@walletconnect/safe-json': 1.0.2
       idb-keyval: 6.2.2
-      unstorage: 1.17.3(idb-keyval@6.2.2)
+      unstorage: 1.17.4(idb-keyval@6.2.2)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -14706,9 +14718,9 @@ snapshots:
     dependencies:
       readdirp: 4.1.2
 
-  chokidar@4.0.3:
+  chokidar@5.0.0:
     dependencies:
-      readdirp: 4.1.2
+      readdirp: 5.0.0
     optional: true
 
   chrome-trace-event@1.0.4: {}
@@ -16160,7 +16172,7 @@ snapshots:
 
   graphql@16.12.0: {}
 
-  h3@1.15.4:
+  h3@1.15.5:
     dependencies:
       cookie-es: 1.2.2
       crossws: 0.3.5
@@ -16169,7 +16181,7 @@ snapshots:
       iron-webcrypto: 1.2.1
       node-mock-http: 1.0.4
       radix3: 1.1.2
-      ufo: 1.6.2
+      ufo: 1.6.3
       uncrypto: 0.1.3
     optional: true
 
@@ -16867,6 +16879,9 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
+  lru-cache@11.2.4:
+    optional: true
+
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -17286,7 +17301,7 @@ snapshots:
     dependencies:
       destr: 2.0.5
       node-fetch-native: 1.6.7
-      ufo: 1.6.2
+      ufo: 1.6.3
     optional: true
 
   on-exit-leak-free@0.2.0:
@@ -17421,11 +17436,11 @@ snapshots:
   ox@0.6.7(typescript@5.9.2)(zod@4.3.5):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
-      '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.9.2)(zod@4.3.5)
+      '@noble/curves': 1.9.7
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      abitype: 1.2.3(typescript@5.9.2)(zod@4.3.5)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.2
@@ -17961,6 +17976,9 @@ snapshots:
       picomatch: 2.3.1
 
   readdirp@4.1.2: {}
+
+  readdirp@5.0.0:
+    optional: true
 
   real-require@0.1.0: {}
 
@@ -18766,10 +18784,10 @@ snapshots:
       jest-worker: 27.5.1
       schema-utils: 4.3.3
       serialize-javascript: 6.0.2
-      terser: 5.44.1
+      terser: 5.46.0
       webpack: 5.94.0
 
-  terser@5.44.1:
+  terser@5.46.0:
     dependencies:
       '@jridgewell/source-map': 0.3.11
       acorn: 8.15.0
@@ -18988,7 +19006,7 @@ snapshots:
 
   ua-parser-js@1.0.41: {}
 
-  ufo@1.6.2:
+  ufo@1.6.3:
     optional: true
 
   uint8arrays@3.1.0:
@@ -19039,16 +19057,16 @@ snapshots:
       webpack-sources: 3.3.3
       webpack-virtual-modules: 0.5.0
 
-  unstorage@1.17.3(idb-keyval@6.2.2):
+  unstorage@1.17.4(idb-keyval@6.2.2):
     dependencies:
       anymatch: 3.1.3
-      chokidar: 4.0.3
+      chokidar: 5.0.0
       destr: 2.0.5
-      h3: 1.15.4
-      lru-cache: 10.4.3
+      h3: 1.15.5
+      lru-cache: 11.2.4
       node-fetch-native: 1.6.7
       ofetch: 1.5.1
-      ufo: 1.6.2
+      ufo: 1.6.3
     optionalDependencies:
       idb-keyval: 6.2.2
     optional: true
@@ -19157,7 +19175,7 @@ snapshots:
       is-arguments: 1.2.0
       is-generator-function: 1.1.2
       is-typed-array: 1.1.15
-      which-typed-array: 1.1.19
+      which-typed-array: 1.1.20
     optional: true
 
   utils-merge@1.0.1: {}
@@ -19232,13 +19250,13 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite-node@3.2.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2):
+  vite-node@3.2.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2):
     dependencies:
       cac: 6.7.14
       debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2)
+      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -19253,7 +19271,7 @@ snapshots:
       - tsx
       - yaml
 
-  vite@7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2):
+  vite@7.0.4(@types/node@22.15.19)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2):
     dependencies:
       esbuild: 0.25.6
       fdir: 6.4.6(picomatch@4.0.2)
@@ -19265,10 +19283,10 @@ snapshots:
       '@types/node': 22.15.19
       fsevents: 2.3.3
       jiti: 2.6.1
-      terser: 5.44.1
+      terser: 5.46.0
       yaml: 2.8.2
 
-  vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2):
+  vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2):
     dependencies:
       esbuild: 0.25.6
       fdir: 6.4.6(picomatch@4.0.2)
@@ -19280,20 +19298,20 @@ snapshots:
       '@types/node': 24.0.3
       fsevents: 2.3.3
       jiti: 2.6.1
-      terser: 5.44.1
+      terser: 5.46.0
       yaml: 2.8.2
 
-  vitest-mock-extended@3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2)):
+  vitest-mock-extended@3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2)):
     dependencies:
       ts-essentials: 10.1.1(typescript@5.9.2)
       typescript: 5.9.2
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2)
 
-  vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.44.1)(yaml@2.8.2):
+  vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.0)(yaml@2.8.2):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
-      '@vitest/mocker': 3.2.4(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2))
+      '@vitest/mocker': 3.2.4(msw@2.11.6(@types/node@24.0.3)(typescript@5.9.2))(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))
       '@vitest/pretty-format': 3.2.4
       '@vitest/runner': 3.2.4
       '@vitest/snapshot': 3.2.4
@@ -19311,8 +19329,8 @@ snapshots:
       tinyglobby: 0.2.14
       tinypool: 1.1.1
       tinyrainbow: 2.0.0
-      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2)
-      vite-node: 3.2.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.2)
+      vite: 7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2)
+      vite-node: 3.2.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/debug': 4.1.12
@@ -19366,7 +19384,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  watchpack@2.5.0:
+  watchpack@2.5.1:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
@@ -19407,7 +19425,7 @@ snapshots:
       schema-utils: 3.3.0
       tapable: 2.3.0
       terser-webpack-plugin: 5.3.16(webpack@5.94.0)
-      watchpack: 2.5.0
+      watchpack: 2.5.1
       webpack-sources: 3.3.3
     transitivePeerDependencies:
       - '@swc/core'
@@ -19474,6 +19492,17 @@ snapshots:
       get-proto: 1.0.1
       gopd: 1.2.0
       has-tostringtag: 1.0.2
+
+  which-typed-array@1.1.20:
+    dependencies:
+      available-typed-arrays: 1.0.7
+      call-bind: 1.0.8
+      call-bound: 1.0.4
+      for-each: 0.3.5
+      get-proto: 1.0.1
+      gopd: 1.2.0
+      has-tostringtag: 1.0.2
+    optional: true
 
   which@1.3.1:
     dependencies:
