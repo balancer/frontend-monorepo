@@ -20,12 +20,11 @@ import { useWatch, useFormState } from 'react-hook-form'
 export function ProjectInfoStep() {
   const {
     projectInfoForm: { control, handleSubmit },
-    setActiveStep,
-    activeStepIndex,
+    goToNextStep,
   } = useLbpForm()
 
   const onSubmit: SubmitHandler<ProjectInfoForm> = () => {
-    setActiveStep(activeStepIndex + 1)
+    goToNextStep()
   }
 
   const { isValid } = useFormState({ control })

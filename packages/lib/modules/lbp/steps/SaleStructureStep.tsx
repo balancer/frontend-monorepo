@@ -56,8 +56,7 @@ export function SaleStructureStep() {
 
   const {
     saleStructureForm: { handleSubmit, control, setValue, trigger },
-    setActiveStep,
-    activeStepIndex,
+    goToNextStep,
     resetLbpCreation,
     poolAddress,
   } = useLbpForm()
@@ -86,7 +85,7 @@ export function SaleStructureStep() {
   const launchTokenIsValid = isAddress(launchTokenAddress) && !!launchTokenMetadata.symbol
 
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
-    setActiveStep(activeStepIndex + 1)
+    goToNextStep()
   }
 
   const isPoolCreated = !!poolAddress

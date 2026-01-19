@@ -9,10 +9,10 @@ import {
   INITIAL_ECLP_CONFIG,
   NUM_FORMAT,
   BALANCER_PROTOCOL_ID,
+  POOL_CREATION_FORM_STEPS,
 } from './constants'
 import { PoolCreationForm, PoolCreationToken, ReClammConfig, EclpConfigForm } from './types'
 import { Address } from 'viem'
-import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useLocalStorage } from 'usehooks-ts'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
 import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
@@ -23,6 +23,9 @@ import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useWatch } from 'react-hook-form'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { isAddress } from 'viem'
+import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -100,14 +103,25 @@ export function usePoolFormLogic() {
     )
   }
 
-  const { resetSteps } = usePoolCreationFormSteps()
+  const pathname = usePathname()
+  const lastSegment = pathname.split('/').pop() ?? ''
+  const isPathForLoadPoolInit = isAddress(lastSegment)
+  const searchParams = useSearchParams()
+  const isPathForChooseProtocol = searchParams.has('protocol')
+
+  const formSteps = useFormSteps({
+    steps: POOL_CREATION_FORM_STEPS,
+    basePath: '/create',
+    localStorageKey: LS_KEYS.PoolCreation.StepIndex,
+    shouldSkipRedirect: isPathForChooseProtocol || isPathForLoadPoolInit,
+  })
 
   const resetPoolCreationForm = () => {
     setPoolAddress(undefined)
     poolCreationForm.resetToInitial()
     reClammConfigForm.resetToInitial()
     eclpConfigForm.resetToInitial()
-    resetSteps()
+    formSteps.resetSteps()
   }
 
   const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()
@@ -129,6 +143,7 @@ export function usePoolFormLogic() {
   }, [getTokensByChain, network, poolTokens])
 
   return {
+    ...formSteps,
     poolCreationForm,
     reClammConfigForm,
     eclpConfigForm,

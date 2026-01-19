@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
@@ -26,13 +25,12 @@ import { validatePoolTokens } from './validatePoolCreationForm'
 
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
-  const { poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm, steps, currentStepIndex, currentStep, goToStep } = usePoolCreationForm()
   const [poolTokens] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens'],
   })
 
-  const { steps, currentStepIndex, currentStep, goToStep } = usePoolCreationFormSteps()
   const { isMobile } = useBreakpoints()
   const router = useRouter()
 

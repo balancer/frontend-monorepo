@@ -13,10 +13,10 @@ import { useFormState, useWatch } from 'react-hook-form'
 export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
   const {
-    activeStepIndex,
-    setActiveStep,
     isLastStep,
     isFirstStep,
+    goToNextStep,
+    goToPreviousStep,
     saleStructureForm,
     projectInfoForm,
     poolAddress,
@@ -40,7 +40,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
         <IconButton
           aria-label="Back"
           icon={<ChevronLeftIcon h="8" w="8" />}
-          onClick={() => setActiveStep(activeStepIndex - 1)}
+          onClick={goToPreviousStep}
           size="lg"
         />
       )}
@@ -62,7 +62,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
           if (isLastStep) {
             previewModalDisclosure.onOpen()
           } else {
-            setActiveStep(activeStepIndex + 1)
+            goToNextStep()
           }
         }}
         size="lg"
