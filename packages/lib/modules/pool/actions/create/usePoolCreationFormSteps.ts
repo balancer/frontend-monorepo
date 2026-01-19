@@ -1,6 +1,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useLocalStorage } from 'usehooks-ts'
 import { ComponentType, useEffect, useRef } from 'react'
+import { isAddress } from 'viem'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { PoolTypeStep } from './steps/type/PoolTypeStep'
 import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
@@ -29,6 +30,11 @@ function getStepIndexFromPathname(pathname: string): number | null {
   return index >= 0 ? index : null
 }
 
+function endsWithEthereumAddress(pathname: string): boolean {
+  const lastSegment = pathname.split('/').pop() ?? ''
+  return isAddress(lastSegment)
+}
+
 export function usePoolCreationFormSteps() {
   const pathname = usePathname()
   const router = useRouter()
@@ -36,7 +42,8 @@ export function usePoolCreationFormSteps() {
   const [savedStepIndex, setSavedStepIndex] = useLocalStorage(LS_KEYS.PoolCreation.StepIndex, 0)
 
   const stepIndexFromUrl = getStepIndexFromPathname(pathname)
-  const hasProtocolParam = searchParams.has('protocol')
+  const isPathForChooseProtocol = searchParams.has('protocol')
+  const isPathForLoadPoolInit = endsWithEthereumAddress(pathname)
 
   // URL drives current step; localStorage is fallback for initial load only
   const currentStepIndex = stepIndexFromUrl ?? savedStepIndex
@@ -48,7 +55,7 @@ export function usePoolCreationFormSteps() {
   // On initial load without valid URL step, redirect to saved step from localStorage
   const hasRedirected = useRef(false)
   useEffect(() => {
-    if (hasRedirected.current || hasProtocolParam) return
+    if (hasRedirected.current || isPathForChooseProtocol || isPathForLoadPoolInit) return
     if (stepIndexFromUrl === null) {
       const savedStep = steps[savedStepIndex]
       if (savedStep) {
@@ -56,7 +63,7 @@ export function usePoolCreationFormSteps() {
       }
     }
     hasRedirected.current = true
-  }, [stepIndexFromUrl, savedStepIndex, hasProtocolParam, router])
+  }, [stepIndexFromUrl, savedStepIndex, isPathForChooseProtocol, isPathForLoadPoolInit, router])
 
   // Sync localStorage from URL when URL has a valid step (persists progress)
   useEffect(() => {
