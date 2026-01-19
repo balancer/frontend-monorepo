@@ -33,6 +33,7 @@ import { ReliquaryClaimModal } from './ReliquaryClaimModal'
 import { RelicMaturityCurveChart } from './charts/RelicMaturityCurveChart'
 import RelicStat, { StatLabel, StatValueText } from './stats/RelicStat'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 interface RelicCardSimpleProps {
   relic: ReliquaryFarmPosition
@@ -232,15 +233,19 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
               Burn
             </Button>
           )}
-          <Button
-            flex="1"
-            isDisabled={pendingRewardsUsdValue.lt(0.01)}
-            onClick={() => setIsClaimModalOpen(true)}
-            size="sm"
-            variant="secondary"
-          >
-            Claim
-          </Button>
+          <Box flex="1">
+            <TooltipWithTouch label={`The minimum amount to claim is ${toCurrency(0.01)}`}>
+              <Button
+                isDisabled={pendingRewardsUsdValue.lt(0.01)}
+                onClick={() => setIsClaimModalOpen(true)}
+                size="sm"
+                variant="secondary"
+                w="full"
+              >
+                Claim
+              </Button>
+            </TooltipWithTouch>
+          </Box>
         </HStack>
       </Box>
       <HStack spacing="2" width="full">
