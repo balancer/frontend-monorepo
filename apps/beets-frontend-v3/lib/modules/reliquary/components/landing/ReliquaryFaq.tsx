@@ -78,7 +78,7 @@ export function ReliquaryFaq() {
         </Text>
         <Link
           color="#05D690"
-          href="https://docs.beets.fi/mabeets"
+          href="https://docs.beets.fi/tokenomics/mabeets"
           isExternal
           textDecoration="underline"
         >
