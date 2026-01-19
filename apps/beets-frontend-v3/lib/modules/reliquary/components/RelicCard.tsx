@@ -102,10 +102,8 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   ]
 
   // Get maturity progress
-  const { progressToNextLevel, levelUpDate, isMaxMaturity, canUpgrade } = relicGetMaturityProgress(
-    relic,
-    maturityThresholds
-  )
+  const { progressToNextLevel, levelUpDate, isMaxMaturity, canUpgrade, canUpgradeTo } =
+    relicGetMaturityProgress(relic, maturityThresholds)
 
   // Check if Relic has balance
   const hasBalance = parseFloat(relic.amount) > 0
@@ -246,9 +244,11 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         </HStack>
       </Box>
       <HStack spacing="2" width="full">
-        <Text color="white" fontSize="sm" fontWeight="bold">
-          {isMaxMaturity ? relic.level : relic.level + 1}
-        </Text>
+        {!isMaxMaturity && (
+          <Text color="white" fontSize="sm" fontWeight="bold">
+            {relic.level + 1}
+          </Text>
+        )}
         <Box flex="1" position="relative">
           <Progress
             colorScheme="blue"
@@ -267,12 +267,20 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             transform="translate(-50%, -50%)"
             zIndex="1"
           >
-            {isMaxMaturity ? 'Max level' : <Countdown date={levelUpDate} />}
+            {canUpgrade ? (
+              `Level up to ${canUpgradeTo}`
+            ) : isMaxMaturity ? (
+              'Max level'
+            ) : (
+              <Countdown date={levelUpDate} />
+            )}
           </Box>
         </Box>
-        <Text color="white" fontSize="sm" fontWeight="bold">
-          {isMaxMaturity ? relic.level + 1 : relic.level + 2}
-        </Text>
+        {!isMaxMaturity && (
+          <Text color="white" fontSize="sm" fontWeight="bold">
+            {relic.level + 2}
+          </Text>
+        )}
       </HStack>
       <SimpleGrid columns={{ base: 2, sm: 2 }} spacing={{ base: 'sm', lg: 'ms' }} width="full">
         <RelicStat>
