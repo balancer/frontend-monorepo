@@ -8,7 +8,6 @@ import {
   Flex,
   HStack,
   Skeleton,
-  Switch,
   Text,
   VStack,
   useDisclosure,
@@ -21,6 +20,7 @@ import { useReliquary } from '../../ReliquaryProvider'
 import { ReliquaryDelegationModal } from '../ReliquaryDelegationModal'
 import { RelicCarousel } from '../RelicCarousel'
 import { useRouter } from 'next/navigation'
+import { InfoButton } from '@/lib/components/info-button/InfoButton'
 
 type Props = {
   focusRelicId?: string | null
@@ -29,14 +29,19 @@ type Props = {
 
 export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
   const { totalMaBeetsVP, isLoading, relicPositions } = useReliquary()
-  const { isDelegatedToMDs, delegationAddress } = useReliquaryDelegationTransaction()
+  const { isDelegatedToMDs } = useReliquaryDelegationTransaction()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
 
   const hasRelics = relicPositions.length > 0
 
-  const truncateAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`
+  const badgeProps = {
+    alignItems: 'center',
+    borderRadius: 'lg',
+    display: 'flex',
+    gap: '1',
+    px: '4',
+    py: '2',
   }
 
   return (
@@ -68,43 +73,32 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                 </VStack>
                 <Divider borderColor="gray.600" height="90px" orientation="vertical" />
                 <VStack alignItems="flex-start" spacing="3" width="full">
-                  <HStack justifyContent="space-between" spacing="2" width="full">
-                    <HStack spacing="2">
-                      <Text color="beets.base.50" fontSize="sm" fontWeight="semibold">
-                        Delegation Status
-                      </Text>
-                      {isDelegatedToMDs ? (
-                        <Badge alignItems="center" colorScheme="green" display="flex" gap="1">
-                          <CheckCircle size={12} />
-                          <Text>Active</Text>
-                        </Badge>
-                      ) : (
-                        <Badge alignItems="center" colorScheme="gray" display="flex" gap="1">
-                          <XCircle size={12} />
-                          <Text>Inactive</Text>
-                        </Badge>
-                      )}
-                    </HStack>
+                  <InfoButton
+                    infoText="Delegate or undelegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets space on Snapshot."
+                    label="Vote Optimizer Status"
+                    labelProps={{
+                      lineHeight: '1rem',
+                      fontWeight: 'semibold',
+                      fontSize: 'sm',
+                      color: 'beets.base.50',
+                    }}
+                  />
+                  <HStack>
+                    {isDelegatedToMDs ? (
+                      <Badge {...badgeProps} colorScheme="green">
+                        <CheckCircle size={12} />
+                        <Text>Active</Text>
+                      </Badge>
+                    ) : (
+                      <Badge {...badgeProps} colorScheme="gray">
+                        <XCircle size={12} />
+                        <Text>Inactive</Text>
+                      </Badge>
+                    )}
+                    <Button onClick={onOpen} size="sm" variant="primary">
+                      {isDelegatedToMDs ? 'Deactivate' : 'Activate'}
+                    </Button>
                   </HStack>
-                  <VStack align="start" spacing="3" w="full">
-                    <HStack spacing="2">
-                      <Switch colorScheme="green" isChecked={isDelegatedToMDs} onChange={onOpen} />
-                      {isDelegatedToMDs && delegationAddress ? (
-                        <Text color="gray.400" fontSize="sm">
-                          Delegated to: {truncateAddress(delegationAddress)}
-                        </Text>
-                      ) : (
-                        <Text color="gray.400" fontSize="sm">
-                          Delegate to Music Directors
-                        </Text>
-                      )}
-                    </HStack>
-                    <Text color="gray.500" fontSize="xs" maxW="500px">
-                      Delegating assigns your maBEETS voting power to the Music Director for
-                      Snapshot votes. This does not affect ownership, rewards, or your ability to
-                      exit.
-                    </Text>
-                  </VStack>
                   {isOpen && (
                     <ReliquaryDelegationModal
                       isDelegated={isDelegatedToMDs}
