@@ -6,7 +6,7 @@ import {
   PriceImpact,
   Slippage,
 } from '@balancer/sdk'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Address, Hex } from 'viem'
@@ -25,7 +25,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
     this.helpers = new LiquidityActionHelpers(pool)
   }
 
-  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number> {
+  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
     if (areEmptyAmounts(humanAmountsIn)) {
       // Avoid price impact calculation when there are no amounts in
       return 0
@@ -40,7 +40,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     userAddress: Address
   ): Promise<NestedQueryAddLiquidityOutputV3> {
     const addLiquidity = new AddLiquidityNested()
@@ -101,7 +101,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
    * PRIVATE METHODS
    */
   private constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithSymbol[]
   ): AddLiquidityNestedInputV3 {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 

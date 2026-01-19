@@ -6,7 +6,7 @@ import {
   wjAuraAddress,
   wstEthAddress,
 } from '@repo/lib/debug-helpers'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import {
   aWeightedV2PoolMock,
@@ -23,7 +23,7 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
   test('calculates price impact', async () => {
     const handler = selectAddLiquidityHandler(aWeightedV2PoolMock())
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: wstEthAddress, humanAmount: '1', symbol: 'wstETH' },
       { tokenAddress: aaveEthAddress, humanAmount: '1', symbol: 'AAVE' },
     ]
@@ -35,7 +35,7 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
   test('returns zero price impact when amounts in are zero or empty', async () => {
     const handler = selectUnbalancedHandler()
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '0', tokenAddress: wETHAddress, symbol: 'WETH' },
       { humanAmount: '', tokenAddress: balAddress, symbol: 'BAL' },
     ]
@@ -46,7 +46,7 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
   })
 
   test('queries bptOut', async () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
       { humanAmount: '1', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
     ]
@@ -59,7 +59,7 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
   })
 
   test('builds Tx Config', async () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
       { humanAmount: '1', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
     ]

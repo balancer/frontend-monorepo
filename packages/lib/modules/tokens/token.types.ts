@@ -26,7 +26,7 @@ export type HumanTokenAmount = {
   tokenAddress: Address
 }
 
-export type HumanTokenAmountWithAddress = {
+export type HumanTokenAmountWithSymbol = {
   humanAmount: HumanAmount | ''
   tokenAddress: Address
   symbol: string

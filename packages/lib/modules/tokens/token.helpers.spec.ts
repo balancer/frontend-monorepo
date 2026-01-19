@@ -5,7 +5,7 @@ import {
   swapNativeWithWrapped,
   swapWrappedWithNative,
 } from './token.helpers'
-import { HumanTokenAmountWithAddress } from './token.types'
+import { HumanTokenAmountWithSymbol } from './token.types'
 import { ethAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { InputAmount } from '@balancer/sdk'
 import { v3SepoliaNestedBoostedMock } from '../pool/__mocks__/api-mocks/v3SepoliaNestedBoostedMock'
@@ -16,7 +16,7 @@ test('isWrappedNativeAsset', () => {
 })
 
 test('swapWrappedWithNative', () => {
-  const inputAmounts: HumanTokenAmountWithAddress[] = [
+  const inputAmounts: HumanTokenAmountWithSymbol[] = [
     {
       humanAmount: '1',
       tokenAddress: wETHAddress,

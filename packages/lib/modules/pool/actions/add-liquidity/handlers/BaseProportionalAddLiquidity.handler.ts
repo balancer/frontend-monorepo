@@ -12,7 +12,7 @@ import { Pool } from '../../../pool.types'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
@@ -31,7 +31,7 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     userAddress: Address,
     _referenceAmountAddress?: Address,
     slippage?: number
