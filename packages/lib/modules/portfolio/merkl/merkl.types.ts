@@ -29,6 +29,7 @@ export type MerklReward = {
     chainId: number
     symbol: string
     decimals: number
+    price?: number
   }
   breakdowns: Array<MerklRewardBreakdown>
 }
