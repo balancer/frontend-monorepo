@@ -285,7 +285,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       <SimpleGrid columns={{ base: 2, sm: 2 }} spacing={{ base: 'sm', lg: 'ms' }} width="full">
         <RelicStat>
           <StatLabel label="Liquidity" />
-          <StatValueText>{fNum('fiat', relicBalanceUSD)} </StatValueText>
+          <StatValueText>{toCurrency(relicBalanceUSD)}</StatValueText>
         </RelicStat>
         <RelicStat>
           <StatLabel label="APR" />
