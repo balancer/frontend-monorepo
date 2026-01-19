@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 'use client'
 
 import { useState, PropsWithChildren, createContext, useCallback } from 'react'
@@ -13,6 +14,7 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { formatUnits, Address } from 'viem'
 import { sumBy } from 'lodash'
 import { useQuery } from '@tanstack/react-query'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { secondsToMilliseconds } from 'date-fns'
 
@@ -49,9 +51,11 @@ export function useReliquaryLogic() {
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
   const [range, setRange] = useState<GqlPoolSnapshotDataRange>(GqlPoolSnapshotDataRange.ThirtyDays)
   const publicClient = usePublicClient()
+  const { priceFor } = useTokens()
+
   const networkConfig = getNetworkConfig(CHAIN)
   const reliquaryAddress = networkConfig.contracts.beets?.reliquary
-  const beetsAddress = networkConfig.tokens.addresses.beets
+  const beetsAddress = networkConfig.tokens.addresses.beets!
   const { pool } = usePool()
   const farmId = networkConfig.reliquary?.fbeets.farmId?.toString() ?? '0'
 
@@ -90,7 +94,6 @@ export function useReliquaryLogic() {
   })
 
   // Derived state and calculations
-  const isLoading = isLoadingRelicPositions || isLoadingMaturityThresholds
   const relicIds = relicPositions.map(relic => parseInt(relic.relicId))
 
   const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
@@ -229,7 +232,6 @@ export function useReliquaryLogic() {
         return { rewards: [], relicIds: [], numberOfRelics: 0, fBEETSTotalBalance: '0' }
       }
     },
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     [publicClient, reliquaryAddress, beetsAddress, getAllPositions]
   )
 
@@ -358,7 +360,6 @@ export function useReliquaryLogic() {
             : `${newMaturity}/${maturityLevels[newLevel + 1]}`
 
         const depositImpactTimeInMilliseconds = secondsToMilliseconds(MAX_MATURITY - newMaturity)
-
         const staysMax = levelOnUpdate === maxLevel && newLevel === maxLevel
 
         return {
@@ -395,6 +396,23 @@ export function useReliquaryLogic() {
     [getAllPositions]
   )
 
+  const { data: pendingRewardsData, isLoading: isLoadingPendingRewards } = useQuery({
+    queryKey: ['reliquaryPendingRewards', userAddress],
+    queryFn: async () => {
+      const farmId = networkConfig.reliquary?.fbeets.farmId?.toString() ?? '0'
+      return await getPendingRewards([farmId], userAddress || '')
+    },
+    enabled: !!userAddress && relicPositions.length > 0,
+  })
+
+  const beetsPrice = priceFor(beetsAddress, networkConfig.chain)
+
+  const totalPendingRewardsUSD =
+    parseFloat(pendingRewardsData?.rewards[0]?.amount || '0') * beetsPrice
+
+  const isLoading =
+    isLoadingRelicPositions || isLoadingMaturityThresholds || isLoadingPendingRewards
+
   return {
     chain: CHAIN,
     isDisabled,
@@ -426,6 +444,8 @@ export function useReliquaryLogic() {
     getLevelOnUpdate,
     getDepositImpact,
     getUserStakedBalance,
+    totalPendingRewardsUSD,
+    pendingRewardsData,
   }
 }
 

@@ -5,25 +5,17 @@ import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
-import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { useQuery } from '@tanstack/react-query'
-import { zeroAddress } from 'viem'
 
 export function YourMaBeetsStats() {
   const {
     relicPositions,
     totalMaBeetsVP,
-    getPendingRewards,
+    totalPendingRewardsUSD,
     isLoading: isLoadingReliquary,
   } = useReliquary()
   const { bptPrice } = usePool()
-  const { priceFor } = useTokens()
   const { latest: globalStats, loading: isLoadingGlobalStats } = useReliquaryGlobalStats()
-  const { userAddress } = useUserAccount()
-  const networkConfig = useNetworkConfig()
 
   const isLoading = isLoadingReliquary || isLoadingGlobalStats
 
@@ -41,22 +33,6 @@ export function YourMaBeetsStats() {
           return sum + (relic.level + 1) * weight // +1 because levels are 0-indexed
         }, 0)
       : 0
-
-  // Fetch pending rewards asynchronously
-  const { data: pendingRewardsData } = useQuery({
-    queryKey: ['reliquaryPendingRewards', userAddress],
-    queryFn: async () => {
-      const farmId = networkConfig.reliquary?.fbeets.farmId?.toString() ?? '0'
-      return await getPendingRewards([farmId], userAddress || '')
-    },
-    enabled: !!userAddress && relicPositions.length > 0,
-  })
-
-  // Calculate Total Pending Rewards in USD
-  const beetsAddress = networkConfig.tokens.addresses.beets || zeroAddress
-  const beetsPrice = priceFor(beetsAddress, networkConfig.chain)
-  const totalPendingRewardsUSD =
-    parseFloat(pendingRewardsData?.rewards[0]?.amount || '0') * beetsPrice
 
   // Calculate Total Relic Share as percentage
   const globalTotalBalance = parseFloat(globalStats?.totalBalance || '1') // Avoid division by zero
@@ -86,7 +62,7 @@ export function YourMaBeetsStats() {
           </Skeleton>
         </RelicStat>
         <RelicStat>
-          <StatLabel label="Avg Maturity Lvl" />
+          <StatLabel label="Avg Maturity Level" />
           <Skeleton isLoaded={!isLoading} width="50%">
             <StatValueText>{fNumCustom(avgMaturityLevel, '0.00')}</StatValueText>
           </Skeleton>
