@@ -24,7 +24,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
-import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -33,7 +33,8 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { isAfter } from 'date-fns'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { useRecoveredFunds } from '../recovered-funds/useRecoveredFunds'
+import { RecoveredTokenClaim, useRecoveredFunds } from '../recovered-funds/useRecoveredFunds'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -75,7 +76,7 @@ export function ClaimNetworkPools() {
     hiddenHandRewardsData,
   } = usePortfolio()
 
-  const { hasRecoveredFunds } = useRecoveredFunds()
+  const { hasRecoveredFunds, claims: recoveredFundsClaims } = useRecoveredFunds()
 
   const [isOpenedProtocolRevenueModal, setIsOpenedProtocolRevenueModal] = useState(false)
   const [isOpenedHiddenHandRewardsModal, setIsOpenedHiddenHandRewardsModal] = useState(false)
@@ -229,13 +230,12 @@ export function ClaimNetworkPools() {
                 // Collect all claimable items
                 const claimableItems = []
 
-                poolsWithChain.forEach(([, pools], index) => {
+                poolsWithChain.forEach(([, pools]) => {
                   if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
                     claimableItems.push({
                       type: 'chain',
                       chain: pools[0].chain,
                       amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
-                      index,
                     })
                   }
                 })
@@ -245,7 +245,6 @@ export function ClaimNetworkPools() {
                     type: 'protocol',
                     chain: GqlChain.Mainnet,
                     amount: protocolRewardsBalance.toNumber(),
-                    index: poolsWithChain.length,
                   })
                 }
 
@@ -254,7 +253,15 @@ export function ClaimNetworkPools() {
                     type: 'hidden-hand',
                     chain: PROJECT_CONFIG.defaultNetwork,
                     amount: hiddenHandRewardsData.totalValueUsd,
-                    index: poolsWithChain.length + 1,
+                  })
+                }
+
+                if (isBalancer && hasRecoveredFunds) {
+                  claimableItems.push({
+                    type: 'recovered-funds',
+                    chain: PROJECT_CONFIG.defaultNetwork,
+                    amount: sumRecoveredFundsTotal(recoveredFundsClaims),
+                    icon: '/images/icons/heart.svg',
                   })
                 }
 
@@ -279,6 +286,9 @@ export function ClaimNetworkPools() {
                       case 'hidden-hand':
                         setIsOpenedHiddenHandRewardsModal(true)
                         break
+                      case 'recovered-funds':
+                        alert('TODO')
+                        break
                       default:
                         router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
                     }
@@ -294,6 +304,7 @@ export function ClaimNetworkPools() {
                     >
                       <ClaimNetworkBlock
                         chain={item.chain}
+                        icon={item.icon}
                         networkTotalClaimableFiatBalance={item.amount}
                         onClick={handleClick}
                         title={getCardTitle(item.type)}
@@ -368,7 +379,15 @@ function getCardTitle(itemType: string) {
           tooltip="Available until June 30, 2026"
         />
       )
+    case 'recovered-funds':
+      return 'v2 incident recovered funds'
     default:
       return undefined
   }
+}
+
+function sumRecoveredFundsTotal(claims: RecoveredTokenClaim[]) {
+  return claims.reduce((acc, claim) => {
+    return bn(claim.amount.humanAmount).times(claim.price).plus(acc).toNumber()
+  }, 0)
 }
