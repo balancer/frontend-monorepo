@@ -86,63 +86,65 @@ export function ReliquaryFaq() {
         </Link>
       </HStack>
 
-      <SimpleGrid columns={{ base: 1, lg: 2 }} gap="8" w="full">
-        {/* Column 1 */}
-        <Accordion allowToggle w="full">
-          {FAQ_COLUMN_1.map(item => (
-            <AccordionItem
-              bg="transparent"
-              borderBottom="1px solid"
-              borderColor="border.base"
-              borderTop="none"
-              key={item.question}
-              py="3"
-            >
-              <h2>
-                <AccordionButton _hover={{ bg: 'transparent' }} px="0">
-                  <Box as="span" flex="1" textAlign="left">
-                    {item.question}
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb="md" px="0">
-                <Text color="font.primary" fontSize="lg" fontWeight="thin">
-                  {item.answer}
-                </Text>
-              </AccordionPanel>
-            </AccordionItem>
-          ))}
-        </Accordion>
+      <Box h="400px" w="full">
+        <SimpleGrid columns={{ base: 1, lg: 2 }} gap="8" h="full" w="full">
+          {/* Column 1 */}
+          <Accordion allowToggle w="full">
+            {FAQ_COLUMN_1.map(item => (
+              <AccordionItem
+                bg="transparent"
+                borderBottom="1px solid"
+                borderColor="border.base"
+                borderTop="none"
+                key={item.question}
+                py="3"
+              >
+                <h2>
+                  <AccordionButton _hover={{ bg: 'transparent' }} px="0">
+                    <Box as="span" flex="1" textAlign="left">
+                      {item.question}
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb="md" px="0">
+                  <Text color="font.primary" fontSize="lg" fontWeight="thin">
+                    {item.answer}
+                  </Text>
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
 
-        {/* Column 2 */}
-        <Accordion allowToggle w="full">
-          {FAQ_COLUMN_2.map(item => (
-            <AccordionItem
-              bg="transparent"
-              borderBottom="1px solid"
-              borderColor="border.base"
-              borderTop="none"
-              key={item.question}
-              py="3"
-            >
-              <h2>
-                <AccordionButton _hover={{ bg: 'transparent' }} px="0">
-                  <Box as="span" flex="1" textAlign="left">
-                    {item.question}
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb="md" px="0">
-                <Text color="font.primary" fontSize="lg" fontWeight="thin">
-                  {item.answer}
-                </Text>
-              </AccordionPanel>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </SimpleGrid>
+          {/* Column 2 */}
+          <Accordion allowToggle w="full">
+            {FAQ_COLUMN_2.map(item => (
+              <AccordionItem
+                bg="transparent"
+                borderBottom="1px solid"
+                borderColor="border.base"
+                borderTop="none"
+                key={item.question}
+                py="3"
+              >
+                <h2>
+                  <AccordionButton _hover={{ bg: 'transparent' }} px="0">
+                    <Box as="span" flex="1" textAlign="left">
+                      {item.question}
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb="md" px="0">
+                  <Text color="font.primary" fontSize="lg" fontWeight="thin">
+                    {item.answer}
+                  </Text>
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </SimpleGrid>
+      </Box>
     </VStack>
   )
 }
