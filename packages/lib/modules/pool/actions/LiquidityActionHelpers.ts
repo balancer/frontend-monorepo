@@ -29,7 +29,7 @@ import {
   isWrappedNativeAsset,
   swapNativeWithWrapped,
 } from '../../tokens/token.helpers'
-import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '../../tokens/token.types'
 import { Pool } from '../pool.types'
 import {
   isComposableStableV1,
@@ -121,7 +121,7 @@ export class LiquidityActionHelpers {
   }
 
   public getAmountsToApprove(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     isPermit2 = false
   ): TokenAmountToApprove[] {
     return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount, symbol }) => {
@@ -135,7 +135,7 @@ export class LiquidityActionHelpers {
     })
   }
 
-  public toInputAmounts(humanAmountsIn: HumanTokenAmountWithAddress[]): InputAmountWithSymbol[] {
+  public toInputAmounts(humanAmountsIn: HumanTokenAmountWithSymbol[]): InputAmountWithSymbol[] {
     if (!humanAmountsIn.length) return []
 
     return humanAmountsIn
@@ -178,11 +178,11 @@ export class LiquidityActionHelpers {
    1. Converts humanAmountsIn into SDK InputAmounts
    2. When the input includes it, it swaps the native asset with the wrapped native asset
   */
-  public toSdkInputAmounts(humanAmountsIn: HumanTokenAmountWithAddress[]): InputAmount[] {
+  public toSdkInputAmounts(humanAmountsIn: HumanTokenAmountWithSymbol[]): InputAmount[] {
     return swapNativeWithWrapped(this.toInputAmounts(humanAmountsIn), this.pool.chain)
   }
 
-  public isNativeAssetIn(humanAmountsIn: HumanTokenAmountWithAddress[]): boolean {
+  public isNativeAssetIn(humanAmountsIn: HumanTokenAmountWithSymbol[]): boolean {
     const nativeAssetAddress = this.networkConfig.tokens.nativeAsset.address
 
     return humanAmountsIn.some(amountIn => isSameAddress(amountIn.tokenAddress, nativeAssetAddress))
@@ -195,25 +195,25 @@ export class LiquidityActionHelpers {
   }
 }
 
-export const isEmptyAmount = (amountIn: HumanTokenAmountWithAddress) =>
+export const isEmptyAmount = (amountIn: HumanTokenAmountWithSymbol) =>
   isEmptyHumanAmount(amountIn.humanAmount)
 
 export const isEmptyHumanAmount = (humanAmount: HumanAmount | '') =>
   !humanAmount || bn(humanAmount).eq(0)
 
-export const areEmptyAmounts = (humanAmountsIn: HumanTokenAmountWithAddress[]) =>
+export const areEmptyAmounts = (humanAmountsIn: HumanTokenAmountWithSymbol[]) =>
   !humanAmountsIn || humanAmountsIn.length === 0 || humanAmountsIn.every(isEmptyAmount)
 
 export function toHumanAmount(tokenAmount: TokenAmount): HumanAmount {
   return formatUnits(tokenAmount.amount, tokenAmount.token.decimals) as HumanAmount
 }
 
-export function toHumanAmountWithAddress(tokenAmount: TokenAmount): HumanTokenAmountWithAddress {
+export function toHumanAmountWithAddress(tokenAmount: TokenAmount): HumanTokenAmountWithSymbol {
   return {
     tokenAddress: tokenAmount.token.address,
     humanAmount: formatUnits(tokenAmount.amount, tokenAmount.token.decimals),
     symbol: tokenAmount.token.symbol,
-  } as HumanTokenAmountWithAddress
+  } as HumanTokenAmountWithSymbol
 }
 
 export function ensureLastQueryResponse<Q>(
@@ -330,13 +330,13 @@ export function toPoolState(pool: Pool): PoolState {
  * - is native and the wrapped native token is already in the array and
  * - is wrapped native and the native token is already in the array
  *
- * @param {HumanTokenAmountWithAddress[]} humanAmountsIn - The array of human amounts to filter.
+ * @param {HumanTokenAmountWithSymbol[]} humanAmountsIn - The array of human amounts to filter.
  * @param {Address} tokenAddress - The token address to compare against.
  * @param {GqlChain} chain - The chain type for comparison.
- * @return {HumanTokenAmountWithAddress[]} The filtered array of human amounts.
+ * @return {HumanTokenAmountWithSymbol[]} The filtered array of human amounts.
  */
 export function filterHumanAmountsIn(
-  humanAmountsIn: HumanTokenAmountWithAddress[],
+  humanAmountsIn: HumanTokenAmountWithSymbol[],
   tokenAddress: Address,
   chain: GqlChain
 ) {
@@ -352,7 +352,7 @@ export function filterHumanAmountsIn(
  * Used to avoid problems with proportional SDK priceImpact queries
  * Rounds down to avoid balance overflow issues
  */
-export function roundDecimals(humanAmountsIn: HumanTokenAmountWithAddress[], maxDecimals = 10) {
+export function roundDecimals(humanAmountsIn: HumanTokenAmountWithSymbol[], maxDecimals = 10) {
   return humanAmountsIn.map(({ humanAmount, tokenAddress }) => ({
     humanAmount: bn(humanAmount).toFixed(maxDecimals, BigNumber.ROUND_DOWN) as HumanAmount,
     tokenAddress,

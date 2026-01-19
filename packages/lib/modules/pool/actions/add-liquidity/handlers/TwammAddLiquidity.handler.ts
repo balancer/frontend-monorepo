@@ -4,7 +4,7 @@ import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import { Token, TokenAmount } from '@balancer/sdk'
 import { BuildAddLiquidityInput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 
 /**
  * TwammAddLiquidityHandler is a handler that implements the
@@ -12,12 +12,12 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
  * This is just a fake example to show how to implement edge-case handlers.
  */
 export class TwammAddLiquidityHandler implements AddLiquidityHandler {
-  humanAmountsIn?: HumanTokenAmountWithAddress[]
+  humanAmountsIn?: HumanTokenAmountWithSymbol[]
 
   constructor(private chainId: SupportedChainId) {}
 
   // TODO: This is a non-sense example implementation
-  public async simulate(humanAmountsIn: HumanTokenAmountWithAddress[]) {
+  public async simulate(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
     this.humanAmountsIn = humanAmountsIn
     const tokenAmount = TokenAmount.fromHumanAmount(
       {} as unknown as Token,
@@ -28,7 +28,7 @@ export class TwammAddLiquidityHandler implements AddLiquidityHandler {
   }
 
   // TODO: This is a non-sense example implementation
-  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number> {
+  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
     return Number(humanAmountsIn[0].humanAmount)
   }
 

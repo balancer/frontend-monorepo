@@ -12,7 +12,7 @@ import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections
 import { Address } from 'viem'
 import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { useManagedSendTransaction } from './useManagedSendTransaction'
-import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '../../tokens/token.types'
 
 const chainId = ChainId.MAINNET
 const account = defaultTestUserAccount
@@ -37,7 +37,7 @@ describe('weighted add flow', () => {
       aWjAuraWethPoolElementMock()
     ) as UnbalancedAddLiquidityV2Handler
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = poolTokens.map(t => ({
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = poolTokens.map(t => ({
       humanAmount: '0.1',
       tokenAddress: t.address,
       symbol: t.symbol || 'Unknown',

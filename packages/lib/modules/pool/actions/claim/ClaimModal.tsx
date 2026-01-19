@@ -18,7 +18,7 @@ import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-s
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useMemo } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
@@ -50,7 +50,7 @@ export function ClaimModal({
           humanAmount: (reward?.humanBalance || '0') as HumanAmount,
           tokenAddress: (reward?.tokenAddress || '') as Address,
         }))
-        .filter(Boolean) as HumanTokenAmountWithAddress[],
+        .filter(Boolean) as HumanTokenAmountWithSymbol[],
     [allClaimableRewards]
   )
 

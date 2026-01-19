@@ -15,7 +15,7 @@ import {
   waUsdtAddress,
   wjAuraAddress,
 } from '@repo/lib/debug-helpers'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { mock } from 'vitest-mock-extended'
 import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
@@ -57,7 +57,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
   it('for v2 weighted pool with no nested tokens', () => {
     const pool = getApiPoolMock(balWeth8020) // 80BAL-20WETH
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '100', tokenAddress: balAddress, symbol: 'BAL' },
     ]
 
@@ -77,7 +77,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
   it('for v2 composable stable pool with a nested phantom BPT', async () => {
     const nestedPool = getApiPoolMock(osETHPhantom)
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '100', tokenAddress: osEthAddress, symbol: 'osETH' },
     ]
 
@@ -102,7 +102,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
   it('allPoolTokens for v2 STABLE pool with non-phantom BPT', async () => {
     const sdBalPool = getApiPoolMock(auraBal) // MAINNET Balancer auraBAL Stable Pool
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       // User can add liquidity with BPT token
       { humanAmount: '100', tokenAddress: bal80Weth20Address, symbol: '80BAL-20WETH' },
     ]
@@ -131,7 +131,7 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
 
   const helpers = new LiquidityActionHelpers(v3BoostedPool)
 
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { humanAmount: '0.1', tokenAddress: usdcAddress, symbol: 'USDC' },
   ]
 
@@ -279,7 +279,7 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
   const aaveUSDCAddress = '0x8a88124522dbbf1e56352ba3de1d9f78c143751e'
   const aaveUSDTAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
 
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { humanAmount: '0.1', tokenAddress: usdtSepoliaAddress, symbol: 'USDT' },
   ]
 
@@ -481,7 +481,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
 
   const helpers = new LiquidityActionHelpers(v3Pool)
 
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { humanAmount: '0.1', tokenAddress: gnoAddress, symbol: 'GNO' },
   ]
 
@@ -594,7 +594,7 @@ describe('Liquidity helpers for GNOSIS V2 pool with isErc4626 tokens (v2 pools a
 
   const helpers = new LiquidityActionHelpers(v2Pool)
 
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { humanAmount: '0.1', tokenAddress: sDaiAddress, symbol: 'sDAI' },
   ]
 
@@ -638,7 +638,7 @@ describe('Liquidity helpers for V2 B-auraBAL-STABLE pool with BPT token in the a
 
   const helpers = new LiquidityActionHelpers(v2Pool)
 
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { humanAmount: '0.1', tokenAddress: balWeth8020BptAddress, symbol: '80BAL-20WETH' },
   ]
 
@@ -691,7 +691,7 @@ describe('Liquidity helpers for V2 B-auraBAL-STABLE pool with BPT token in the a
 
 describe('areEmptyAmounts', () => {
   test('when all humanAmounts are empty, zero or zero with decimals', () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F', humanAmount: '', symbol: '' },
       { tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', humanAmount: '0', symbol: '' },
       {
@@ -704,7 +704,7 @@ describe('areEmptyAmounts', () => {
   })
 
   test('when  humanAmounts is an empty array', () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = []
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = []
     expect(areEmptyAmounts(humanAmountsIn)).toBeTruthy()
   })
 })
@@ -763,13 +763,13 @@ it('returns NestedPoolState for nested pools', () => {
 describe('toInputAmounts', () => {
   it('when the token input is empty', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
-    const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = []
+    const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = []
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([])
   })
 
   it('when the token input includes the wrapped native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
-    const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
+    const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: wjAuraAddress, humanAmount: '10', symbol: '' },
       { tokenAddress: wETHAddress, humanAmount: '20', symbol: 'BAL' },
     ]
@@ -791,7 +791,7 @@ describe('toInputAmounts', () => {
 
   it('when the token input is the native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
-    const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
+    const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: ethAddress, humanAmount: '30', symbol: 'ETH' },
     ]
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([
@@ -806,7 +806,7 @@ describe('toInputAmounts', () => {
 
   it('when the token input is zero', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
-    const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
+    const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: wETHAddress, humanAmount: '0', symbol: 'WETH' },
     ]
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([])
@@ -816,7 +816,7 @@ describe('toInputAmounts', () => {
 describe('toSdkInputAmounts', () => {
   it('swaps the native asset by the wrapped native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
-    const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
+    const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
       { tokenAddress: ethAddress, humanAmount: '30', symbol: 'wjAura' },
     ]
     const wethAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
@@ -832,7 +832,7 @@ describe('toSdkInputAmounts', () => {
 })
 
 test('trimDecimals', () => {
-  const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
+  const humanTokenAmountsWithAddress: HumanTokenAmountWithSymbol[] = [
     { tokenAddress: ethAddress, humanAmount: '0.001013801345314809', symbol: 'ETH' },
     { tokenAddress: wETHAddress, humanAmount: '0.001302248169953014', symbol: 'WETH' },
   ]

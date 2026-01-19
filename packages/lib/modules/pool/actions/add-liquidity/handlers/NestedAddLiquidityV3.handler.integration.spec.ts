@@ -1,5 +1,5 @@
 import { sepoliaCompositeRouterBoosted } from '@repo/lib/debug-helpers'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { sepoliaTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
@@ -24,7 +24,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
   test('has zero price impact', async () => {
     const handler = selectNestedHandler(nestedPool)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '100', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
     ]
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
@@ -34,7 +34,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
   test('with single token input', async () => {
     const handler = selectNestedHandler(nestedPool)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
     ]
 
@@ -46,7 +46,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
   test('with multiple token input', async () => {
     const handler = selectNestedHandler(nestedPool)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '0.1', tokenAddress: wethAddress, symbol: 'WETH' },
       { humanAmount: '0.1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
       { humanAmount: '0.1', tokenAddress: usdtAaveAddress, symbol: 'USDT' },
@@ -58,7 +58,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
   })
 
   test('builds Tx Config', async () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
     ]
 

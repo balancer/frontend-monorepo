@@ -1,4 +1,4 @@
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { Pool } from '../../../pool.types'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
@@ -14,7 +14,7 @@ export type AddLiquidityParams = {
   userAddress: string
   pool: Pool
   slippage: string
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
   hasPermit2?: boolean
   relicId?: string
 }
@@ -36,7 +36,7 @@ function liquidityParams({
 
 export function stringifyHumanAmountsIn(
   pool: Pool,
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
 ): string {
   if (humanAmountsIn.length === 0) return ''
   if (requiresProportionalInput(pool)) {

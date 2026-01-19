@@ -1,5 +1,5 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { Pool } from '../../../pool.types'
@@ -16,7 +16,7 @@ describe.skip('When adding unbalanced liquidity for a V3 pool', async () => {
 
   const handler = selectAddLiquidityHandler(v3Pool) as UnbalancedAddLiquidityV3Handler
 
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { humanAmount: '0.1', tokenAddress: balAddress, symbol: 'BAL' },
   ]
 

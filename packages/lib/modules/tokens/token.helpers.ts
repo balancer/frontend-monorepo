@@ -7,7 +7,7 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { includesAddress, isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
-import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
+import { HumanTokenAmountWithSymbol, TokenBase } from './token.types'
 import { InputAmount } from '@balancer/sdk'
 import { Pool } from '../pool/pool.types'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
@@ -91,16 +91,13 @@ export function swapNativeWithWrapped(inputAmounts: InputAmount[], chain: GqlCha
 /*
   If the given array contains the wrapped native asset, it is replaced with the native asset
 */
-export function swapWrappedWithNative(
-  inputAmounts: HumanTokenAmountWithAddress[],
-  chain: GqlChain
-) {
+export function swapWrappedWithNative(inputAmounts: HumanTokenAmountWithSymbol[], chain: GqlChain) {
   return inputAmounts.map(inputAmount => {
     if (isWrappedNativeAsset(inputAmount.tokenAddress, chain)) {
       return {
         ...inputAmount,
         tokenAddress: getNativeAssetAddress(chain),
-      } as HumanTokenAmountWithAddress
+      } as HumanTokenAmountWithSymbol
     }
     return inputAmount
   })

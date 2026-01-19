@@ -10,14 +10,14 @@ import { AddLiquidityParams, addLiquidityKeys } from './add-liquidity-keys'
 import { useQuery } from '@tanstack/react-query'
 import { usePool } from '../../../PoolProvider'
 import { sentryMetaForAddLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
 import { isInvariantRatioPIErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { hasSurgeHook } from '../../../pool.helpers'
 
 type Params = {
   handler: AddLiquidityHandler
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
   enabled: boolean
 }
 

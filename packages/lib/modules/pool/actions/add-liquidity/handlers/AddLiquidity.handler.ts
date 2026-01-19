@@ -1,4 +1,4 @@
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { BuildAddLiquidityInput, QueryAddLiquidityOutput } from '../add-liquidity.types'
 import { Address } from 'viem'
@@ -20,14 +20,14 @@ export interface AddLiquidityHandler {
   // Query the expected output of adding liquidity and store it inside the handler instance
   // Also returns bptOut to be used by the UI
   simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     sender: Address,
     referenceAmountAddress?: Address, // only used by Proportional handlers that require a referenceAmount
     slippage?: number
   ): Promise<QueryAddLiquidityOutput>
 
   // Calculate the price impact of adding liquidity
-  getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number>
+  getPriceImpact(humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number>
   /*
     Build tx callData payload for adding liquidity
     It is responsibility of the UI to avoid calling buildAddLiquidityCallData before the last queryAddLiquidity was finished

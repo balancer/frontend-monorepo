@@ -5,9 +5,9 @@ import { waitFor } from '@testing-library/react'
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { selectAddLiquidityHandler } from '../handlers/selectAddLiquidityHandler'
 import { useAddLiquiditySimulationQuery } from './useAddLiquiditySimulationQuery'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 
-async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
+async function testQuery(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
   const handler = selectAddLiquidityHandler(aWjAuraWethPoolElementMock())
   const { result } = testHook(
     () => useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enabled: true }),
@@ -19,7 +19,7 @@ async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
 }
 
 test('queries btp out for add liquidity', async () => {
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { tokenAddress: wETHAddress, humanAmount: '100', symbol: 'WETH' },
     { tokenAddress: wjAuraAddress, humanAmount: '1', symbol: 'wjAura' },
   ]
