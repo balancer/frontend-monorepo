@@ -18,7 +18,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
     name: ['poolTokens', 'poolType', 'network'],
   })
   const formState = useFormState({ control: poolCreationForm.control })
-  const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
+  const { nextStep, previousStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
@@ -33,7 +33,6 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
-  const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
   const showBackButton = !isFirstStep && !poolAddress
 
   const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
@@ -66,21 +65,21 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             </Button>
           )}
 
-          <Button
-            disabled={disabled}
-            onClick={() => {
-              if (isLastStep) {
-                previewModalDisclosure.onOpen()
-              } else {
-                nextStep()
-              }
-            }}
-            size="lg"
-            variant="primary"
-            w="full"
-          >
-            {buttonText}
-          </Button>
+          {isLastStep ? (
+            <Button
+              disabled={disabled}
+              onClick={previewModalDisclosure.onOpen}
+              size="lg"
+              variant="primary"
+              w="full"
+            >
+              {poolAddress ? 'Initialize Pool' : 'Create Pool'}
+            </Button>
+          ) : (
+            <Button disabled={disabled} onClick={nextStep} size="lg" variant="primary" w="full">
+              Next
+            </Button>
+          )}
         </HStack>
       </VStack>
 

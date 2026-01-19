@@ -39,7 +39,7 @@ export type PoolCreationToken = {
   address: Address | undefined
   rateProvider: Address | ''
   paysYieldFees: boolean
-  weight?: string
+  weight: string
   amount: string
   data?: ApiOrCustomToken
   usdPrice?: string
