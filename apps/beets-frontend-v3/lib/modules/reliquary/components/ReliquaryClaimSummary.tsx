@@ -48,10 +48,9 @@ export function ReliquaryClaimSummary({
         tokenAddress: beetsAddress,
         humanAmount: formatUnits(pendingRewards || 0n, 18),
         symbol: 'BEETS',
-        usdValue: pendingRewardsUsdValue.toNumber(),
       },
     ]
-  }, [pendingRewards, pendingRewardsUsdValue, pool])
+  }, [pendingRewards, pool])
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
