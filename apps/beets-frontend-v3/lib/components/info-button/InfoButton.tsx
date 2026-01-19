@@ -1,5 +1,5 @@
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
-import { Text, TextProps } from '@chakra-ui/react'
+import { HStack, Text, TextProps } from '@chakra-ui/react'
 
 interface InfoButtonProps {
   label: string
@@ -9,9 +9,9 @@ interface InfoButtonProps {
 
 export function InfoButton({ label, infoText, labelProps }: InfoButtonProps) {
   return (
-    <>
+    <HStack>
       <Text {...labelProps}>{label}</Text>
       <InfoIconPopover message={infoText} />
-    </>
+    </HStack>
   )
 }
