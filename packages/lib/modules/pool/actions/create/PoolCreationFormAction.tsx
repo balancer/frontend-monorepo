@@ -1,6 +1,5 @@
 import { Button, HStack, IconButton, useDisclosure, Divider, VStack } from '@chakra-ui/react'
 import { ChevronLeftIcon } from '@chakra-ui/icons'
-import NextLink from 'next/link'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
@@ -19,7 +18,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
     name: ['poolTokens', 'poolType', 'network'],
   })
   const formState = useFormState({ control: poolCreationForm.control })
-  const { previousStepPath, nextStepPath, isLastStep, isFirstStep } = usePoolCreationFormSteps()
+  const { nextStep, previousStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
@@ -46,12 +45,11 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
         <InvalidTotalWeightAlert />
 
         <HStack spacing="md" w="full">
-          {showBackButton && previousStepPath && (
+          {showBackButton && (
             <IconButton
               aria-label="Back"
-              as={NextLink}
-              href={previousStepPath}
               icon={<ChevronLeftIcon h="8" w="8" />}
+              onClick={previousStep}
               size="lg"
             />
           )}
@@ -78,14 +76,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
               {poolAddress ? 'Initialize Pool' : 'Create Pool'}
             </Button>
           ) : (
-            <Button
-              as={NextLink}
-              disabled={disabled}
-              href={nextStepPath || ''}
-              size="lg"
-              variant="primary"
-              w="full"
-            >
+            <Button disabled={disabled} onClick={nextStep} size="lg" variant="primary" w="full">
               Next
             </Button>
           )}

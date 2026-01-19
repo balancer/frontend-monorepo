@@ -98,6 +98,14 @@ export function usePoolCreationFormSteps() {
     }
   }
 
+  const nextStep = () => {
+    navigateToStep(currentStepIndex + 1)
+  }
+
+  const previousStep = () => {
+    navigateToStep(currentStepIndex - 1)
+  }
+
   const isBeforeStep = (stepTitle: string) => {
     const stepIndex = steps.findIndex(step => step.title === stepTitle)
     return currentStepIndex < stepIndex
@@ -117,6 +125,8 @@ export function usePoolCreationFormSteps() {
     isStep,
     nextStepPath,
     previousStepPath,
+    nextStep,
+    previousStep,
     lastStep,
     resetSteps,
     goToStep,
