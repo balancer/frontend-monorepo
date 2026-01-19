@@ -396,7 +396,11 @@ export function useReliquaryLogic() {
     [getAllPositions]
   )
 
-  const { data: pendingRewardsData, isLoading: isLoadingPendingRewards } = useQuery({
+  const {
+    data: pendingRewardsData,
+    isLoading: isLoadingPendingRewards,
+    refetch: refetchPendingRewards,
+  } = useQuery({
     queryKey: ['reliquaryPendingRewards', userAddress],
     queryFn: async () => {
       const farmId = networkConfig.reliquary?.fbeets.farmId?.toString() ?? '0'
@@ -435,6 +439,9 @@ export function useReliquaryLogic() {
     totalMaBeetsVP,
     refetchRelicPositions,
     refetchMaturityThresholds,
+    totalPendingRewardsUSD,
+    pendingRewardsData,
+    refetchPendingRewards,
     // Service methods (for legacy compatibility with files still using old patterns)
     getAllPositions,
     getPendingRewardsForRelic,
@@ -444,8 +451,6 @@ export function useReliquaryLogic() {
     getLevelOnUpdate,
     getDepositImpact,
     getUserStakedBalance,
-    totalPendingRewardsUSD,
-    pendingRewardsData,
   }
 }
 

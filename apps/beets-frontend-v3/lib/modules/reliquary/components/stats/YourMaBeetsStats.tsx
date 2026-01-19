@@ -1,21 +1,28 @@
 'use client'
 
-import { SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Button, HStack, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
+import { useState } from 'react'
+import { ReliquaryClaimAllRewardsModal } from '../ReliquaryClaimAllRewardsModal'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 export function YourMaBeetsStats() {
+  const [isClaimAllModalOpen, setIsClaimAllModalOpen] = useState(false)
+  const { bptPrice } = usePool()
+  const { latest: globalStats, loading: isLoadingGlobalStats } = useReliquaryGlobalStats()
+  const { toCurrency } = useCurrency()
+
   const {
     relicPositions,
     totalMaBeetsVP,
     totalPendingRewardsUSD,
     isLoading: isLoadingReliquary,
   } = useReliquary()
-  const { bptPrice } = usePool()
-  const { latest: globalStats, loading: isLoadingGlobalStats } = useReliquaryGlobalStats()
 
   const isLoading = isLoadingReliquary || isLoadingGlobalStats
 
@@ -68,10 +75,26 @@ export function YourMaBeetsStats() {
           </Skeleton>
         </RelicStat>
         <RelicStat>
-          <StatLabel label="Total Pending Rewards" />
-          <Skeleton isLoaded={!isLoading} width="50%">
-            <StatValueText>${fNum('fiat', totalPendingRewardsUSD)}</StatValueText>
-          </Skeleton>
+          <HStack w="full">
+            <VStack alignItems="flex-start" w="full">
+              <StatLabel label="Total Pending Rewards" />
+              <Skeleton isLoaded={!isLoading} width="50%">
+                <StatValueText>${fNum('fiat', totalPendingRewardsUSD)}</StatValueText>
+              </Skeleton>
+            </VStack>
+            <TooltipWithTouch label={`The minimum amount to claim is ${toCurrency(0.01)}`}>
+              <Button
+                isDisabled={totalPendingRewardsUSD < 0.01}
+                ml="auto"
+                onClick={() => setIsClaimAllModalOpen(true)}
+                size="sm"
+                variant="primary"
+                w="full"
+              >
+                Claim all rewards
+              </Button>
+            </TooltipWithTouch>
+          </HStack>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Relic Share" />
@@ -86,6 +109,11 @@ export function YourMaBeetsStats() {
           </Skeleton>
         </RelicStat>
       </SimpleGrid>
+      <ReliquaryClaimAllRewardsModal
+        isOpen={isClaimAllModalOpen}
+        onClose={() => setIsClaimAllModalOpen(false)}
+        onOpen={() => setIsClaimAllModalOpen(true)}
+      />
     </VStack>
   )
 }

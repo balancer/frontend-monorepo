@@ -8,6 +8,7 @@ import {
 import type {
   EncodeReliquaryCreateRelicAndDepositInput,
   EncodeReliquaryDepositInput,
+  EncodeReliquaryHarvestAllInput,
   EncodeReliquaryWithdrawAndHarvestInput,
 } from './reliquary-types'
 import { Hex } from 'viem'
@@ -37,5 +38,9 @@ export class BeetsBatchRelayerService extends BatchRelayerService {
 
   public reliquaryEncodeWithdrawAndHarvest(params: EncodeReliquaryWithdrawAndHarvestInput): Hex {
     return this.reliquaryActionsService.encodeWithdrawAndHarvest(params)
+  }
+
+  public reliquaryEncodeHarvestAll(params: EncodeReliquaryHarvestAllInput): Hex {
+    return this.reliquaryActionsService.encodeHarvestAll(params)
   }
 }

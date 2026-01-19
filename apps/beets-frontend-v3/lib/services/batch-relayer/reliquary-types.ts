@@ -23,3 +23,8 @@ export interface EncodeReliquaryWithdrawAndHarvestInput {
   amount: bigint
   outputReference: bigint
 }
+
+export interface EncodeReliquaryHarvestAllInput {
+  relicIds: bigint[]
+  recipient: Address
+}
