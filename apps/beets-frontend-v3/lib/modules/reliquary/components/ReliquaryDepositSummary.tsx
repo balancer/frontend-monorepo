@@ -11,7 +11,7 @@ import {
   ReceiptBptOut,
 } from '@repo/lib/modules/pool/actions/add-liquidity/modal/BptOut'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { AddLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
@@ -77,7 +77,7 @@ export function ReliquaryDepositSummary({
       humanAmount: bn(amount?.humanAmount || 0)
         .times(1 - selectedSlippage)
         .toString(),
-    })) as HumanTokenAmountWithAddress[]
+    })) as HumanTokenAmountWithSymbol[]
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0

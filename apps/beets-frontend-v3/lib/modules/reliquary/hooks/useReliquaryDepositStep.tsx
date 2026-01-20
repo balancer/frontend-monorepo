@@ -12,7 +12,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useQuery } from '@tanstack/react-query'
 import { ensureLastQueryResponse } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { AddLiquidityHandler } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/AddLiquidity.handler'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { useReliquary } from '../ReliquaryProvider'
@@ -23,7 +23,7 @@ const reliquaryMulticallStepId = 'reliquary-multicall-deposit'
 
 export type ReliquaryDepositStepParams = {
   handler: AddLiquidityHandler // Accept base type but check for reliquary handlers in runtime
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
   simulationQuery: any
   slippage: string
   createNew: boolean
@@ -43,7 +43,7 @@ function useReliquaryBuildCallDataQuery({
   enabled,
 }: {
   handler: AddLiquidityHandler
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
   simulationQuery: any
   slippage: string
   enabled: boolean

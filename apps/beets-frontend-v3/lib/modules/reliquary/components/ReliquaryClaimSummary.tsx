@@ -5,7 +5,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { Card, VStack, Text, Alert, AlertIcon } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
@@ -37,7 +37,7 @@ export function ReliquaryClaimSummary({
 
   const shouldShowReceipt = !!claimTxHash
 
-  const claimTokens: HumanTokenAmountWithAddress[] = useMemo(() => {
+  const claimTokens: HumanTokenAmountWithSymbol[] = useMemo(() => {
     if (!pendingRewards || !pool) return []
 
     const networkConfig = getNetworkConfig(pool.chain as GqlChain)

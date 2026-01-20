@@ -13,7 +13,7 @@ import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import {
   ApiToken,
   HumanTokenAmount,
-  HumanTokenAmountWithAddress,
+  HumanTokenAmountWithSymbol,
 } from '@repo/lib/modules/tokens/token.types'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
@@ -64,7 +64,7 @@ export function ReliquaryWithdrawSummary({
   const shouldShowReceipt = removeLiquidityTxHash && !isLoadingReceipt && receivedTokens.length > 0
 
   // Create rewards amount object if rewards exist (only for preview, not receipt)
-  const rewardsAmount: HumanTokenAmountWithAddress | null =
+  const rewardsAmount: HumanTokenAmountWithSymbol | null =
     !shouldShowReceipt && pendingRewards && pendingRewards > 0n
       ? {
           tokenAddress: networkConfig.tokens.addresses.beets as `0x${string}`,
