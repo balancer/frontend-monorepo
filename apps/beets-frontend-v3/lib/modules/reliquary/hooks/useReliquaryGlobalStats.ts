@@ -3,10 +3,12 @@ import {
   GetReliquaryFarmSnapshotsDocument,
   GqlPoolSnapshotDataRange,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { useReliquary } from '../ReliquaryProvider'
 
 export function useReliquaryGlobalStats() {
-  const networkConfig = useNetworkConfig()
+  const { chain } = useReliquary()
+  const networkConfig = getNetworkConfig(chain)
 
   const farmId = networkConfig.reliquary?.fbeets.farmId
 
