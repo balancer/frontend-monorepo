@@ -78,13 +78,12 @@ export function ReliquaryDelegationModal({
     <Modal
       isCentered
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleOnClose}
       preserveScrollBarGap
       trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={isSuccess} />
-
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
           <DesktopStepTracker chain={chain} transactionSteps={delegationTransactionSteps} />
@@ -96,16 +95,13 @@ export function ReliquaryDelegationModal({
             {isMobile && (
               <MobileStepTracker chain={chain} transactionSteps={delegationTransactionSteps} />
             )}
-
-            {/* Info Section wrapped in Card */}
             <Card variant="modalSubSection">
               <VStack align="start" spacing="sm" w="full">
                 <Text color="gray.400" fontSize="sm">
                   {delegate
-                    ? 'Delegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets space on Snapshot.'
+                    ? 'Delegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets Gauge Votes space on Snapshot.'
                     : 'Remove your delegation and manage your own voting power. This only affects the delegation for the Beets space on Snapshot.'}
                 </Text>
-
                 {delegate && delegateAddress && (
                   <Box>
                     <Text color="gray.500" fontSize="xs" fontWeight="semibold">
