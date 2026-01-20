@@ -45,13 +45,16 @@ export function useReliquaryLogic() {
   const { priceFor } = useTokens()
 
   const networkConfig = getNetworkConfig(CHAIN)
-  const beetsAddress = networkConfig.tokens.addresses.beets!
-  const farmId = networkConfig.reliquary?.fbeets.farmId?.toString() ?? '0'
+
   const disabledConditions: [boolean, string][] = [[!isConnected, LABELS.walletNotConnected]]
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
 
-  // Queries for positions and maturity thresholds
+  // these values are always available on Sonic
+  const beetsAddress = networkConfig.tokens.addresses.beets!
+  const farmId = networkConfig.reliquary!.fbeets.farmId!.toString()
+
   const relicPositionsOfOwnerQuery = useGetRelicPositionsOfOwner(CHAIN)
+
   const {
     relics: relicPositionsRaw = [],
     isLoading: isLoadingRelicPositions,
@@ -67,15 +70,14 @@ export function useReliquaryLogic() {
   }))
 
   const levelInfoQuery = useGetLevelInfo(farmId, CHAIN)
+
   const {
     maturityThresholds: maturityThresholds = [],
     isLoading: isLoadingMaturityThresholds,
     refetch: refetchMaturityThresholds,
   } = levelInfoQuery
 
-  // Derived state and calculations
   const relicIds = relicPositions.map(relic => parseInt(relic.relicId))
-
   const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
   const reliquaryLevels = pool?.staking?.reliquary?.levels || []
 
@@ -98,6 +100,7 @@ export function useReliquaryLogic() {
     farmIds: [farmId],
     relicPositions,
   })
+
   const {
     data: pendingRewardsData,
     isLoading: isLoadingPendingRewards,
@@ -120,7 +123,6 @@ export function useReliquaryLogic() {
     getValidationError,
     range,
     setRange,
-    // Reliquary-specific state and data
     relicPositions,
     isLoadingRelicPositions,
     isLoading,
