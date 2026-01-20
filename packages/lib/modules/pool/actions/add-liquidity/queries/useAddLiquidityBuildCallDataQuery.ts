@@ -9,7 +9,7 @@ import { sentryMetaForAddLiquidityHandler } from '@repo/lib/shared/utils/query-e
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
 import { AddLiquiditySimulationQueryResult } from './useAddLiquiditySimulationQuery'
 import { useDebounce } from 'use-debounce'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
 import { usePermit2Signature } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { isV3Pool } from '../../../pool.helpers'
@@ -18,7 +18,7 @@ export type AddLiquidityBuildQueryResponse = ReturnType<typeof useAddLiquidityBu
 
 export type AddLiquidityBuildQueryParams = {
   handler: AddLiquidityHandler
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
   simulationQuery: AddLiquiditySimulationQueryResult
   slippage: string
 }

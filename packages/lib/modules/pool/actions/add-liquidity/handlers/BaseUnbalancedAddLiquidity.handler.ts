@@ -1,4 +1,4 @@
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import {
@@ -25,7 +25,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     userAddress: Address
   ): Promise<SdkQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidity()
@@ -36,7 +36,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
     return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
 
-  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number> {
+  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
     if (areEmptyAmounts(humanAmountsIn)) {
       // Avoid price impact calculation when there are no amounts in
       return 0
@@ -58,7 +58,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
    * PRIVATE METHODS
    */
   protected constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     userAddress?: Address
   ): AddLiquidityUnbalancedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)

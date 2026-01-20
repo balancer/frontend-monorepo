@@ -5,7 +5,7 @@ import { act } from '@testing-library/react'
 import { useTotalUsdValue } from './useTotalUsdValue'
 import { mockTokenPricesList } from '@repo/lib/test/msw/handlers/Tokens.handlers'
 import { aTokenPriceMock } from '@repo/lib/modules/tokens/__mocks__/token.builders'
-import { HumanTokenAmountWithAddress } from './token.types'
+import { HumanTokenAmountWithSymbol } from './token.types'
 
 const balPrice = 2
 const wethPrice = 3
@@ -21,7 +21,7 @@ test('calculates total USD for human amounts in', async () => {
     return useTotalUsdValue(tokens)
   })
 
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { tokenAddress: balAddress, humanAmount: '100', symbol: 'BAL' },
     { tokenAddress: wETHAddress, humanAmount: '50', symbol: 'WETH' },
   ]

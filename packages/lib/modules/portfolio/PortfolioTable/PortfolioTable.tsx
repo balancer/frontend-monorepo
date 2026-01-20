@@ -28,7 +28,7 @@ import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { motion } from 'framer-motion'
 import { usePortfolioSorting } from './usePortfolioSorting'
 import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
-import { getChainId, isProd } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../../pool/migrations/MigrationAlert'
 
 const rowProps = (addExtraColumn: boolean, needsLastColumnWider: boolean) => ({
@@ -133,8 +133,9 @@ export function PortfolioTable() {
           </Stack>
         </Stack>
 
-        {!isProd &&
-          poolsThatNeedMigration.map(pool => <MigrationAlert key={pool.id} pool={pool} />)}
+        {poolsThatNeedMigration.map(pool => (
+          <MigrationAlert key={pool.id} pool={pool} />
+        ))}
 
         {isConnected ? (
           <Card

@@ -26,7 +26,7 @@ import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsVa
 import { useAddLiquiditySteps as useAddLiquidityStepsBase } from './useAddLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
@@ -38,13 +38,13 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
 
-function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithAddress[] {
+function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithSymbol[] {
   return tokens.map(
     token =>
       ({
         tokenAddress: token.address as Address,
         humanAmount: '',
-      }) as HumanTokenAmountWithAddress
+      }) as HumanTokenAmountWithSymbol
   )
 }
 
@@ -65,7 +65,7 @@ export function useAddLiquidityLogic(
   // Actionable tokens selected in the add form
   const tokens = getPoolActionableTokens(pool, wrapUnderlying)
 
-  const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>(() =>
+  const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithSymbol[]>(() =>
     mapTokensToEmptyHumanAmounts(tokens)
   )
   // only used by Proportional handlers that require a referenceAmount
@@ -123,7 +123,7 @@ export function useAddLiquidityLogic(
     ])
   }
 
-  function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
+  function clearAmountsIn(changedAmount?: HumanTokenAmountWithSymbol) {
     setHumanAmountsIn(
       humanAmountsIn.map(({ tokenAddress, symbol }) => {
         // Keeps user inputs like '0' or '0.' instead of replacing them with ''

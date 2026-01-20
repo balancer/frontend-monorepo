@@ -4,27 +4,36 @@ import {
 } from '@repo/lib/shared/services/voting-incentives/incentives.types'
 import { useQuery } from '@tanstack/react-query'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { useTokens, UseTokensResult } from '@repo/lib/modules/tokens/TokensProvider'
+import { getGqlChain } from '@repo/lib/config/app.config'
 
 const STAKE_DAO_VOTE_MARKET_URL = 'https://api-v3.stakedao.org/votemarket/balancer'
 
+type PriceForFn = UseTokensResult['priceFor']
+
 export function useVotingIncentives() {
+  const { priceFor, isLoadingTokenPrices } = useTokens()
+
   const { data, error, isLoading } = useQuery({
     queryKey: ['voting-incentives'],
-    queryFn: async () => getAllVotingIncentives(),
+    queryFn: async () => getAllVotingIncentives(priceFor),
+    enabled: !isLoadingTokenPrices,
     ...onlyExplicitRefetch,
   })
 
   return { incentives: data, incentivesError: error, incentivesAreLoading: isLoading }
 }
 
-async function getAllVotingIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
+async function getAllVotingIncentives(
+  priceFor: PriceForFn
+): Promise<PoolVotingIncentivesPerWeek[]> {
   // add new voting incentive sources here
-  const stakeDaoIncentives = await getStakeDaoIncentives()
+  const stakeDaoIncentives = await getStakeDaoIncentives(priceFor)
 
   return [...stakeDaoIncentives]
 }
 
-async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
+async function getStakeDaoIncentives(priceFor: PriceForFn): Promise<PoolVotingIncentivesPerWeek[]> {
   const stakeDaoVoteMarket = await fetchStakeDaoVoteMarket()
 
   const voteOpenCampaigns = stakeDaoVoteMarket.campaigns.filter(
@@ -35,21 +44,29 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
   const campaignsByGauge = voteOpenCampaigns.reduce(
     (acc, campaign) => {
       const gaugeAddress = campaign.gauge.toLowerCase()
+      const chainId = campaign.rewardChainId
+      const chain = getGqlChain(chainId)
 
-      const rewardTokenAmount = Number(campaign.currentPeriod.rewardPerPeriod)
-      const valuePerToken = Number(campaign.rewardToken.price)
-      const rewardPerWeek = rewardTokenAmount * valuePerToken
+      // prioritize price from balancer API with fallback to stake dao API
+      const balancerApiTokenPrice = priceFor(campaign.rewardToken.address, chain)
+      const stakeDaoTokenPrice = Number(campaign.rewardToken.price)
+      const tokenPrice = balancerApiTokenPrice || stakeDaoTokenPrice
+      const tokenAmount = Number(campaign.currentPeriod.rewardPerPeriod)
+      const fiatValue = tokenAmount * tokenPrice
 
-      const rewardTokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
-      const valuePerVote = rewardTokenAmountPerVote * valuePerToken
+      const tokenAmountPerVote = Number(campaign.currentPeriod.rewardPerVote)
+      const valuePerVote = tokenAmountPerVote * tokenPrice
 
       const incentive = {
-        symbol: campaign.rewardToken.symbol,
-        token: campaign.rewardToken.address,
-        amount: rewardPerWeek,
-        chainId: campaign.rewardChainId,
-        value: valuePerToken,
-        decimals: campaign.rewardToken.decimals,
+        token: {
+          name: campaign.rewardToken.name,
+          symbol: campaign.rewardToken.symbol,
+          address: campaign.rewardToken.address,
+          decimals: campaign.rewardToken.decimals,
+          chainId,
+          price: tokenPrice,
+          amount: tokenAmount,
+        },
         maxTokensPerVote: Number(campaign.maxRewardPerVote),
         briber: campaign.manager,
       }
@@ -57,13 +74,13 @@ async function getStakeDaoIncentives(): Promise<PoolVotingIncentivesPerWeek[]> {
       if (!acc[gaugeAddress]) {
         acc[gaugeAddress] = {
           gauge: gaugeAddress,
-          totalValue: rewardPerWeek,
+          totalValue: fiatValue,
           valuePerVote,
           incentives: [incentive],
         }
       } else {
         // Merge with existing gauge entry
-        acc[gaugeAddress].totalValue += rewardPerWeek
+        acc[gaugeAddress].totalValue += fiatValue
         acc[gaugeAddress].valuePerVote += valuePerVote
         acc[gaugeAddress].incentives.push(incentive)
       }

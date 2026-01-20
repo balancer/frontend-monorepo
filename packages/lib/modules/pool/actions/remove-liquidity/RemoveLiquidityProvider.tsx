@@ -22,7 +22,7 @@ import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
@@ -198,14 +198,14 @@ export function useRemoveLiquidityLogic(
   /**
    * Derived state
    */
-  const amountOutMap: Record<Address, HumanTokenAmountWithAddress> = Object.fromEntries(
+  const amountOutMap: Record<Address, HumanTokenAmountWithSymbol> = Object.fromEntries(
     quoteAmountsOut.map(tokenAmount => [
       getAddressForTokenAmount(tokenAmount),
       toHumanAmountWithAddress(tokenAmount),
     ])
   )
 
-  const amountsOut: HumanTokenAmountWithAddress[] = quoteAmountsOut.map(tokenAmount => ({
+  const amountsOut: HumanTokenAmountWithSymbol[] = quoteAmountsOut.map(tokenAmount => ({
     tokenAddress: getAddressForTokenAmount(tokenAmount),
     humanAmount: formatUnits(tokenAmount.amount, tokenAmount.token.decimals),
     symbol: tokenAmount.token.symbol || 'Unknown',

@@ -5,7 +5,7 @@ import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -21,7 +21,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
   test('has zero price impact', async () => {
     const handler = selectNestedHandler(nestedPool)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '100', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
@@ -31,7 +31,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
   test('with single token input', async () => {
     const handler = selectNestedHandler(nestedPool)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
 
@@ -43,7 +43,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
   test('with multiple token input', async () => {
     const handler = selectNestedHandler(nestedPool)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
       { humanAmount: '1', tokenAddress: daiAddress, symbol: 'DAI' },
       { humanAmount: '1', tokenAddress: usdcAddress, symbol: 'USDC' },
@@ -56,7 +56,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
   })
 
   test('builds Tx Config', async () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
 

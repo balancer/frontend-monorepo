@@ -1,13 +1,14 @@
-import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { VotingPoolWithData, VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
 import { Address } from 'viem'
 import { isVotingTimeLocked } from '../../myVotes.helpers'
 import { bn, MAX_BIGNUMBER, sum } from '@repo/lib/shared/utils/numbers'
 import { Element, heap, push, pop, Heap } from './heap'
 import { useQuery } from '@tanstack/react-query'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { getGqlChain } from '@repo/lib/config/app.config'
 import BigNumber from 'bignumber.js'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { getRelativeWeightCap } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { getVotesState } from '@repo/lib/modules/vebal/vote/vote.helpers'
 
 type OptimizedVote = {
   gaugeAddress: Address
@@ -25,12 +26,13 @@ type PoolInfo = {
   gaugeAddress: Address
   votes: BigNumber
   incentives: {
-    incentivesAmount: number
-    incentivesTokenPrice: number
+    tokenPrice: number
+    tokenAmount: number
     maxTokenPerVote: number
   }[]
   userVotes: BigNumber
   userPrct: BigNumber
+  relativeWeightCap: number
 }
 
 // The smallest step that could be voted for is 0.01%, but in the past this has caused
@@ -45,7 +47,7 @@ export function useIncentivesOptimized(
   blacklistedVotes: Record<Address, BigNumber | undefined>,
   inputsLoading: boolean
 ): OptimizedVotes {
-  const { priceFor, isLoadingTokenPrices } = useTokens()
+  const { isLoadingTokenPrices } = useTokens()
 
   const { data, isPending } = useQuery({
     queryKey: ['optimized-incentives'],
@@ -55,8 +57,7 @@ export function useIncentivesOptimized(
         myVotes,
         userVotingPower,
         totalVotes,
-        blacklistedVotes,
-        priceFor
+        blacklistedVotes
       ),
     enabled: !inputsLoading && !isLoadingTokenPrices,
   })
@@ -68,8 +69,7 @@ export function useIncentivesOptimized(
     timelockedVotes,
     userVotingPower,
     totalVotes,
-    blacklistedVotes,
-    priceFor
+    blacklistedVotes
   )
 
   return { votes, totalIncentives, isLoading: isPending }
@@ -80,8 +80,7 @@ export function calculateIncentivesOptimized(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber | undefined>,
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ): OptimizedVote[] {
   const [timelockedVotes, timelockedPrct] = filterTimelockedVotes(myVotes)
 
@@ -96,19 +95,33 @@ export function calculateIncentivesOptimized(
     myVotes,
     userVotingPower,
     totalVotes,
-    blacklistedVotes,
-    priceFor
+    blacklistedVotes
   )
 
   const stepVoteAmount = userVotingPower.times(PERCENT_STEP)
+  const cappedPools: PoolInfo[] = []
 
   while (prctToDistribute.gt(0)) {
     const bestPool = pop(prioritizedPools)
-    if (bestPool) {
-      bestPool.votes = bestPool.votes.plus(stepVoteAmount)
-      bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
-      bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
+
+    if (!bestPool) break
+
+    const newVotes = bestPool.votes.plus(stepVoteAmount)
+    const newVotesWeight = newVotes.dividedBy(totalVotes).toNumber()
+
+    const votesState = getVotesState(bestPool.relativeWeightCap, newVotesWeight)
+
+    if (votesState === VotesState.Exceeded) {
+      // Preserve capped pool only if it has accumulated votes
+      if (bestPool.userPrct.gt(0)) cappedPools.push(bestPool)
+      continue
     }
+
+    // Add votes to the best pool
+    bestPool.votes = newVotes
+    bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
+    bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
+
     push(prioritizedPools, bestPool)
     prctToDistribute = prctToDistribute.minus(PERCENT_STEP)
   }
@@ -117,19 +130,18 @@ export function calculateIncentivesOptimized(
     pool => !findByGaugeAddress(timelockedVotes, pool.gauge.address as Address)
   )
 
-  const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools)
+  const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools, cappedPools)
 
   return votes
 }
 
 function findByGaugeAddress(voteOrPools: VotingPoolWithData[], gaugeAddress: Address) {
-  return voteOrPools.find(item => item.gauge.address === gaugeAddress)
+  return voteOrPools.find(item => isSameAddress(item.gauge.address, gaugeAddress))
 }
 
 function extractVoteAmountAndIncentives(
   votingPools: VotingPoolWithData[],
-  totalVotes: BigNumber,
-  priceFor: (address: string, chain: GqlChain) => number
+  totalVotes: BigNumber
 ): PoolInfo[] {
   return votingPools
     .map(pool => {
@@ -137,11 +149,9 @@ function extractVoteAmountAndIncentives(
       const incentives = !pool.votingIncentive?.incentives
         ? []
         : pool.votingIncentive.incentives.map(incentive => {
-            const tokenPrice = priceFor(incentive.token, getGqlChain(incentive.chainId))
-
             return {
-              incentivesAmount: incentive.amount,
-              incentivesTokenPrice: tokenPrice,
+              tokenPrice: incentive.token.price,
+              tokenAmount: incentive.token.amount,
               maxTokenPerVote: incentive.maxTokensPerVote,
             }
           })
@@ -152,6 +162,7 @@ function extractVoteAmountAndIncentives(
         incentives,
         userVotes: bn(0),
         userPrct: bn(0),
+        relativeWeightCap: getRelativeWeightCap(pool.gauge.relativeWeightCap, pool.id),
       }
     })
     .filter(poolInfo => poolInfo.incentives.length !== 0)
@@ -162,10 +173,9 @@ function buildPoolsWithPriorities(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber | undefined>,
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
-  const votesAndIncentives = extractVoteAmountAndIncentives(votingPools, totalVotes, priceFor)
+  const votesAndIncentives = extractVoteAmountAndIncentives(votingPools, totalVotes)
   removeCurrentVotesFromGauges(votesAndIncentives, myVotes, userVotingPower)
   removeBlacklistedVotes(votesAndIncentives, blacklistedVotes)
 
@@ -179,8 +189,8 @@ function incentivePerVote(pool: Element<PoolInfo>) {
   if (!pool || pool.incentives.length === 0) return 0
 
   const valuePerVote = pool.incentives.reduce((acc, incentive) => {
-    const incentiveTokenPrice = bn(incentive.incentivesTokenPrice)
-    const totalIncentives = incentiveTokenPrice.times(incentive.incentivesAmount)
+    const incentiveTokenPrice = bn(incentive.tokenPrice)
+    const totalIncentives = incentiveTokenPrice.times(incentive.tokenAmount)
     const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokenPerVote)
     const expectedValuePerVote = bn(totalIncentives).div(pool.votes.shiftedBy(-18))
     const valuePerVote = BigNumber.min(
@@ -204,7 +214,6 @@ function removeCurrentVotesFromGauges(
     const oldVotePrct = bn(oldVote?.gaugeVotes?.userVotes || 0).div(10000)
     const oldVotesAmount = userVotingPower.times(oldVotePrct)
     pool.votes = pool.votes.minus(oldVotesAmount)
-
     return pool
   })
 }
@@ -215,7 +224,8 @@ function removeBlacklistedVotes(
 ) {
   return votingPools.map(pool => {
     const blacklistedVotesAmount = blacklistedVotes[pool.gaugeAddress] || 0
-    pool.votes = pool.votes.minus(blacklistedVotesAmount)
+    pool.votes = pool.votes.minus(bn(blacklistedVotesAmount))
+    return pool
   })
 }
 
@@ -249,8 +259,14 @@ function resetVotes(myVotes: VotingPoolWithData[]) {
   }, [] as OptimizedVote[])
 }
 
-function mergeOptimizedVotes(votes: OptimizedVote[], poolVotes: Heap<Element<PoolInfo>>) {
-  return poolVotes.elements.reduce((acc, pool) => {
+function mergeOptimizedVotes(
+  votes: OptimizedVote[],
+  poolVotes: Heap<Element<PoolInfo>>,
+  cappedPools: PoolInfo[] = []
+) {
+  const allPools = [...poolVotes.elements, ...cappedPools]
+
+  return allPools.reduce((acc, pool) => {
     if (pool && bn(pool.userVotes).gt(0)) {
       const incentives = pool.userVotes.shiftedBy(-18).times(incentivePerVote(pool))
 
@@ -284,8 +300,7 @@ function sumTotalIncentives(
   timelockedVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber | undefined>,
-  priceFor: (address: string, chain: GqlChain) => number
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
   const optimizedVotesAmount = sum(optimizedVotes, vote => bn(vote.incentivesAmount))
 
@@ -302,8 +317,8 @@ function sumTotalIncentives(
     if (!vote.votingIncentive?.incentives) return acc
 
     const valuePerVote = vote?.votingIncentive?.incentives.reduce((acc, incentive) => {
-      const incentiveTokenPrice = bn(priceFor(incentive.token, getGqlChain(incentive.chainId)))
-      const totalIncentives = incentiveTokenPrice.times(incentive.amount)
+      const incentiveTokenPrice = bn(incentive.token.price)
+      const totalIncentives = incentiveTokenPrice.times(incentive.token.amount)
       const maxValuePerVote = incentiveTokenPrice.times(incentive.maxTokensPerVote)
       const expectedValuePerVote = bn(totalIncentives).div(poolVotes)
       const valuePerVote = BigNumber.min(

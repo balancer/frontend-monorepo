@@ -6,9 +6,9 @@ import { aWeightedV2PoolMock } from '@repo/lib/test/msw/builders/gqlPoolElement.
 import { selectAddLiquidityHandler } from '../handlers/selectAddLiquidityHandler'
 import { useAddLiquidityPriceImpactQuery } from './useAddLiquidityPriceImpactQuery'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 
-async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
+async function testQuery(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
   const handler = selectAddLiquidityHandler(aWeightedV2PoolMock())
   const { result } = testHook(
     () => useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabled: true }),
@@ -21,7 +21,7 @@ async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
 
 test('queries price impact for add liquidity', async () => {
   await connectWithDefaultUser()
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     { tokenAddress: wstEthAddress, humanAmount: '1', symbol: 'wstETH' },
     { tokenAddress: aaveEthAddress, humanAmount: '1', symbol: 'AAVE' },
   ]

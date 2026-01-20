@@ -1,16 +1,15 @@
-import { useEffect } from 'react'
 import { type Control, Controller, useWatch } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
 import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationForm } from '../../types'
-import { isWeightedPool, isCowPool } from '../../helpers'
+import { isCowPool } from '../../helpers'
 
 export function ChooseWeightedPoolStructure({ control }: { control: Control<PoolCreationForm> }) {
   const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens, weightedPoolStructure, poolType] = useWatch({
+  const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'weightedPoolStructure', 'poolType'],
+    name: ['poolTokens', 'poolType'],
   })
 
   const weightedPoolStructures = WEIGHTED_POOL_STRUCTURES.filter(structure => {
@@ -36,14 +35,6 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
 
     if (weightedStructure !== WeightedPoolStructure.Custom) poolCreationForm.trigger('poolTokens')
   }
-
-  const shouldUpdateTokenWeights = isWeightedPool(poolType) || isCowPool(poolType)
-
-  useEffect(() => {
-    if (shouldUpdateTokenWeights) {
-      updatePoolTokenWeights(weightedPoolStructure)
-    }
-  }, [])
 
   return (
     <VStack align="start" spacing="md" w="full">

@@ -32,7 +32,6 @@ import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { isAfter } from 'date-fns'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
-import { ReactNode } from 'react'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 interface NetworkConfig {
@@ -92,12 +91,14 @@ export function ClaimNetworkPools() {
   const currentNetworks = isBeets ? beetsNetworksConfig : balancerNetworksConfig
 
   const poolsWithChain = Object.entries(poolsByChainMap).sort(
-    (a, b) =>
-      (totalFiatClaimableBalanceByChain[b[0]]?.toNumber() || 0) -
-      (totalFiatClaimableBalanceByChain[a[0]]?.toNumber() || 0)
+    ([a], [b]) =>
+      (totalFiatClaimableBalanceByChain[b]?.toNumber() || 0) -
+      (totalFiatClaimableBalanceByChain[a]?.toNumber() || 0)
   )
 
-  const hasChainRewards = poolsWithChain.length > 0
+  const hasChainRewards = Object.values(totalFiatClaimableBalanceByChain).some(
+    balance => balance.toNumber() > 0
+  )
   const noRewards = !hasProtocolRewards && !hasChainRewards
 
   // hidden hand claims expire after 30 June 2026
@@ -107,7 +108,7 @@ export function ClaimNetworkPools() {
   return (
     <FadeInOnView>
       <Stack gap={5}>
-        {!isPastJulyFirst && (
+        {hasHiddenHandRewards && !isPastJulyFirst && (
           <BalAlert
             content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
             status="warning"
@@ -124,7 +125,7 @@ export function ClaimNetworkPools() {
           </SimpleGrid>
         ) : !isConnected ? (
           <ConnectButton.Custom>
-            {({ openConnectModal }) => (
+            {({ openConnectModal }: { openConnectModal: () => void }) => (
               <SimpleGrid
                 columns={{
                   base: 1,
@@ -271,7 +272,7 @@ export function ClaimNetworkPools() {
                     }
                   }
 
-                  const getTitle = (): ReactNode => {
+                  const getTitle = () => {
                     switch (item.type) {
                       case 'protocol':
                         return 'Balancer protocol revenue'

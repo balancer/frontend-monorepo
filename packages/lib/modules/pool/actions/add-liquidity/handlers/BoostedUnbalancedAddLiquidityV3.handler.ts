@@ -6,7 +6,7 @@ import {
   PriceImpact,
   PriceImpactAmount,
 } from '@balancer/sdk'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { BaseUnbalancedAddLiquidityHandler } from './BaseUnbalancedAddLiquidity.handler'
@@ -14,7 +14,7 @@ import { constructBaseBuildCallInput } from './add-liquidity.utils'
 import { areEmptyAmounts } from '../../LiquidityActionHelpers'
 
 export class BoostedUnbalancedAddLiquidityV3Handler extends BaseUnbalancedAddLiquidityHandler {
-  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number> {
+  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithSymbol[]): Promise<number> {
     if (areEmptyAmounts(humanAmountsIn)) {
       // Avoid price impact calculation when there are no amounts in
       return 0
@@ -31,7 +31,7 @@ export class BoostedUnbalancedAddLiquidityV3Handler extends BaseUnbalancedAddLiq
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithSymbol[]
   ): Promise<SdkQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidityBoostedV3()
     const addLiquidityInput: AddLiquidityBoostedInput = this.constructSdkInput(humanAmountsIn)

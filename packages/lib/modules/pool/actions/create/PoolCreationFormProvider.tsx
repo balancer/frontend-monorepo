@@ -19,7 +19,6 @@ import { ApiOrCustomToken } from '@repo/lib/modules/tokens/token.types'
 import { useMemo } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useRouter } from 'next/navigation'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useWatch } from 'react-hook-form'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
@@ -29,8 +28,6 @@ export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
 
 export function usePoolFormLogic() {
-  const router = useRouter()
-
   const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.PoolCreation.Address,
     undefined
@@ -111,7 +108,6 @@ export function usePoolFormLogic() {
     reClammConfigForm.resetToInitial()
     eclpConfigForm.resetToInitial()
     resetSteps()
-    router.replace('/create')
   }
 
   const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()

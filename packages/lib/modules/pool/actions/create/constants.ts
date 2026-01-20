@@ -131,7 +131,7 @@ export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   paysYieldFees: false,
   data: undefined,
   amount: '',
-  weight: '',
+  weight: '50',
 }
 
 export const INITIAL_POOL_TOKENS = [INITIAL_TOKEN_CONFIG, INITIAL_TOKEN_CONFIG]

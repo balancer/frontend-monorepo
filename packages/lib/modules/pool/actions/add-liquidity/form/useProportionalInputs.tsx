@@ -10,7 +10,7 @@ import {
   calculateProportionalAmountsBoosted,
 } from '@balancer/sdk'
 import { swapWrappedWithNative } from '@repo/lib/modules/tokens/token.helpers'
-import { ApiToken, HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { ApiToken, HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
@@ -101,7 +101,7 @@ export function _calculateProportionalHumanAmountsIn({
   wethIsEth,
   wrapUnderlying,
   poolStateWithBalances,
-}: Params): HumanTokenAmountWithAddress[] {
+}: Params): HumanTokenAmountWithSymbol[] {
   const tokenAddress = token.address as Address
   const symbol = token.symbol
   const referenceAmount: InputAmount = helpers.toSdkInputAmounts([
@@ -129,7 +129,7 @@ export function _calculateProportionalHumanAmountsIn({
         tokenAddress: address,
         humanAmount: formatUnits(rawAmount, decimals) as HumanAmount,
         symbol,
-      } as HumanTokenAmountWithAddress
+      } as HumanTokenAmountWithSymbol
     })
     // user updated token must be in the first place of the array because the Proportional handler always calculates bptOut based on the first position
     .sort(sortUpdatedTokenFirst(tokenAddress))
@@ -140,7 +140,7 @@ export function _calculateProportionalHumanAmountsIn({
     : proportionalAmounts
 
   function sortUpdatedTokenFirst(tokenAddress: Address | null) {
-    return (a: HumanTokenAmountWithAddress, b: HumanTokenAmountWithAddress) => {
+    return (a: HumanTokenAmountWithSymbol, b: HumanTokenAmountWithSymbol) => {
       if (!tokenAddress) return 0
       if (isSameAddress(a.tokenAddress, tokenAddress)) return -1
       if (isSameAddress(b.tokenAddress, tokenAddress)) return 1
