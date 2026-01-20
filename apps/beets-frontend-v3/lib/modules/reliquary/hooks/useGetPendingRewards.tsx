@@ -4,6 +4,7 @@ import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generat
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContracts } from '@repo/lib/shared/utils/wagmi'
 import { formatUnits } from 'viem'
+import { minutesToMilliseconds } from 'date-fns'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { sumBy } from 'lodash'
 import { ReliquaryFarmPosition } from '../ReliquaryProvider'
@@ -47,6 +48,7 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
     contracts,
     query: {
       enabled: isConnected && contracts.length > 0 && !!config.contracts.beets?.reliquary,
+      refetchInterval: minutesToMilliseconds(5),
     },
   })
 

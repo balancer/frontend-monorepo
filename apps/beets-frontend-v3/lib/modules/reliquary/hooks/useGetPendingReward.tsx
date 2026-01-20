@@ -6,6 +6,7 @@ import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { minutesToMilliseconds } from 'date-fns'
 
 export function useGetPendingReward(relicId: string | undefined, chain: GqlChain) {
   const chainId = getChainId(chain)
@@ -19,7 +20,7 @@ export function useGetPendingReward(relicId: string | undefined, chain: GqlChain
     address: config.contracts.beets?.reliquary,
     functionName: 'pendingReward',
     args: relicId ? [BigInt(relicId)] : undefined,
-    query: { enabled: isConnected && !!relicId },
+    query: { enabled: isConnected && !!relicId, refetchInterval: minutesToMilliseconds(5) },
   })
 
   return {
