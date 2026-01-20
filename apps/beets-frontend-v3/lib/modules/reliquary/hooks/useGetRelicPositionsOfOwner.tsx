@@ -1,6 +1,5 @@
 import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
-import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { formatUnits } from 'viem'
@@ -10,7 +9,6 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 export function useGetRelicPositionsOfOwner(chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
-  const { shouldChangeNetwork } = useChainSwitch(chainId)
   const { isConnected, userAddress } = useUserAccount()
 
   const query = useReadContract({
@@ -19,7 +17,7 @@ export function useGetRelicPositionsOfOwner(chain: GqlChain) {
     address: config.contracts.beets?.reliquary,
     functionName: 'relicPositionsOfOwner',
     args: [userAddress],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress },
+    query: { enabled: isConnected && !!userAddress },
   })
 
   return {

@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
-import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContracts } from '@repo/lib/shared/utils/wagmi'
 import { formatUnits } from 'viem'
@@ -25,7 +24,6 @@ type Params = {
 export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
-  const { shouldChangeNetwork } = useChainSwitch(chainId)
   const { isConnected } = useUserAccount()
 
   const filteredPositions = useMemo(
@@ -48,11 +46,7 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
   const query = useReadContracts({
     contracts,
     query: {
-      enabled:
-        isConnected &&
-        !shouldChangeNetwork &&
-        contracts.length > 0 &&
-        !!config.contracts.beets?.reliquary,
+      enabled: isConnected && contracts.length > 0 && !!config.contracts.beets?.reliquary,
     },
   })
 

@@ -1,7 +1,6 @@
 import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
-import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -11,7 +10,6 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 export function useGetPendingReward(relicId: string | undefined, chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
-  const { shouldChangeNetwork } = useChainSwitch(chainId)
   const { isConnected } = useUserAccount()
   const { priceFor } = useTokens()
 
@@ -21,7 +19,7 @@ export function useGetPendingReward(relicId: string | undefined, chain: GqlChain
     address: config.contracts.beets?.reliquary,
     functionName: 'pendingReward',
     args: relicId ? [BigInt(relicId)] : undefined,
-    query: { enabled: isConnected && !shouldChangeNetwork && !!relicId },
+    query: { enabled: isConnected && !!relicId },
   })
 
   return {
