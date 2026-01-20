@@ -23,11 +23,10 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isPool } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
-interface Props
-  extends Omit<
-    BaseAprTooltipProps,
-    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolType'
-  > {
+interface Props extends Omit<
+  BaseAprTooltipProps,
+  'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolType'
+> {
   textProps?: TextProps
   onlySparkles?: boolean
   aprLabel?: boolean
