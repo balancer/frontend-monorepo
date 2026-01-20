@@ -9,7 +9,7 @@ const networkConfig: NetworkConfig = {
   name: 'Ethereum Testnet Sepolia',
   shortName: 'Sepolia',
   chain: GqlChain.Sepolia,
-  iconPath: '/images/chains/MAINNET.svg',
+  iconPath: '/images/chains/SEPOLIA.svg',
   blockExplorer: {
     baseUrl: 'https://sepolia.etherscan.io',
     name: 'Etherscan',
