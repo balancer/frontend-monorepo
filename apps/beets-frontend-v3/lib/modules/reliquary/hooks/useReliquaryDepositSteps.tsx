@@ -11,6 +11,8 @@ import { ReliquaryDepositStepParams, useReliquaryDepositStep } from './useReliqu
 import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 import { useApproveRelayerRelicsStep } from './useApproveRelayerRelicsStep'
 import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
+import { getChainId } from '@repo/lib/config/app.config'
+import { useReliquary } from '../ReliquaryProvider'
 
 export type ReliquaryDepositStepsParams = ReliquaryDepositStepParams & {
   helpers: LiquidityActionHelpers
@@ -25,8 +27,11 @@ export function useReliquaryDepositSteps({
   createNew,
   relicId,
 }: ReliquaryDepositStepsParams) {
-  const { pool, chainId } = usePool()
+  const { pool } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
+  const { chain } = useReliquary()
+
+  const chainId = getChainId(chain)
 
   // always use gas txn for approval
   const reliquaryRelayerMode = 'approveRelayer'
