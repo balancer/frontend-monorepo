@@ -34,7 +34,7 @@ export function BurnModal({
   ...rest
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
-  const { step: burnStep } = useBurnRelicStep(relicId)
+  const { step: burnStep } = useBurnRelicStep(relicId, chain)
   const { refetchRelicPositions } = useReliquary()
   const burnTransactionSteps = useTransactionSteps([burnStep], false)
   const burnTxHash = burnTransactionSteps.lastTransaction?.result?.data?.transactionHash

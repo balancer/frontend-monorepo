@@ -3,7 +3,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { Card, VStack, Text, Alert, AlertIcon } from '@chakra-ui/react'
-import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -15,7 +14,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { formatUnits } from 'viem'
 import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { getNetworkConfig } from '@repo/lib/config/networks'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
   relicId: string
@@ -30,17 +29,20 @@ export function ReliquaryClaimSummary({
   transactionSteps,
   isLoadingSteps,
 }: Props) {
-  const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
-  const { data: pendingRewards, usdValue: pendingRewardsUsdValue } = useGetPendingReward(relicId)
+  const { chain } = useReliquary()
+  const { data: pendingRewards, usdValue: pendingRewardsUsdValue } = useGetPendingReward(
+    relicId,
+    chain
+  )
 
   const shouldShowReceipt = !!claimTxHash
 
   const claimTokens: HumanTokenAmountWithSymbol[] = useMemo(() => {
-    if (!pendingRewards || !pool) return []
+    if (!pendingRewards) return []
 
-    const networkConfig = getNetworkConfig(pool.chain as GqlChain)
+    const networkConfig = getNetworkConfig(chain)
     const beetsAddress = networkConfig.tokens.addresses.beets!
 
     return [
@@ -50,7 +52,7 @@ export function ReliquaryClaimSummary({
         symbol: 'BEETS',
       },
     ]
-  }, [pendingRewards, pool])
+  }, [pendingRewards, chain])
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
@@ -58,7 +60,7 @@ export function ReliquaryClaimSummary({
 
   return (
     <AnimateHeightChange spacing="ms">
-      {isMobile && <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+      {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
       {!shouldShowReceipt && pendingRewardsUsdValue.eq(0) && (
         <Alert mb="sm" status="warning">
           <AlertIcon />
@@ -70,7 +72,7 @@ export function ReliquaryClaimSummary({
       <Card p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={claimTokens}
-          chain={pool.chain}
+          chain={chain}
           isLoading={isLoadingSteps}
           label={shouldShowReceipt ? 'You claimed' : 'You will claim'}
           tokens={[]}
@@ -79,7 +81,7 @@ export function ReliquaryClaimSummary({
       </Card>
       {shouldShowReceipt ? (
         <>
-          <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
+          <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="success-message">
             <Card variant="modalSubSection">
               <VStack align="start" spacing="md" w="full">

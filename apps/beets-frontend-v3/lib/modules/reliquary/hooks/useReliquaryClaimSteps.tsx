@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { useCallback, useState } from 'react'
@@ -13,11 +12,14 @@ import {
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { useReliquary } from '../ReliquaryProvider'
+import { getChainId } from '@repo/lib/config/app.config'
 
 const claimStepId = 'reliquary-claim-rewards'
 
 export function useReliquaryClaimSteps(relicId: string) {
-  const { pool, chainId } = usePool()
+  const { pool } = usePool()
+  const { chain } = useReliquary()
   const { userAddress } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
@@ -25,7 +27,9 @@ export function useReliquaryClaimSteps(relicId: string) {
     data: pendingRewards,
     refetch: refetchPendingRewards,
     usdValue: pendingRewardsUsdValue,
-  } = useGetPendingReward(relicId)
+  } = useGetPendingReward(relicId, chain)
+
+  const chainId = getChainId(chain)
 
   const labels: TransactionLabels = {
     init: 'Claim rewards',
@@ -49,7 +53,7 @@ export function useReliquaryClaimSteps(relicId: string) {
       labels,
       chainId,
       contractId: 'beets.reliquary' as const,
-      contractAddress: getNetworkConfig(GqlChain.Sonic).contracts.beets?.reliquary as string,
+      contractAddress: getNetworkConfig(chain).contracts.beets?.reliquary as string,
       functionName: 'harvest' as const,
       args: [BigInt(relicId), userAddress],
       onTransactionChange: setTransaction,

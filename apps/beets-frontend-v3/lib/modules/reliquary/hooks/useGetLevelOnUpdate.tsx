@@ -3,10 +3,9 @@ import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generat
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
-import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetLevelOnUpdate(relicId: string) {
-  const { chain } = useReliquary()
+export function useGetLevelOnUpdate(relicId: string, chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
   const { shouldChangeNetwork } = useChainSwitch(chainId)

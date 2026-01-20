@@ -12,13 +12,12 @@ import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
-import { useReliquary } from '../ReliquaryProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useBurnRelicStep(relicId: string | undefined) {
+export function useBurnRelicStep(relicId: string | undefined, chain: GqlChain) {
   const { isConnected } = useUserAccount()
-  const { refetch } = useGetRelicPositionsOfOwner()
+  const { refetch } = useGetRelicPositionsOfOwner(chain)
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
-  const { chain } = useReliquary()
 
   const chainId = getChainId(chain)
 

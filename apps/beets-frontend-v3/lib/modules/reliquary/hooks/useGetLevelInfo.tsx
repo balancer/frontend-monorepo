@@ -3,10 +3,9 @@ import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generat
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
-import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetLevelInfo(poolId: string | undefined) {
-  const { chain } = useReliquary()
+export function useGetLevelInfo(poolId: string, chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -23,6 +22,6 @@ export function useGetLevelInfo(poolId: string | undefined) {
 
   return {
     ...query,
-    maturityThresholds: query.data?.requiredMaturities.map(maturity => maturity.toString()),
+    maturityThresholds: query.data?.requiredMaturities.map(maturity => maturity.toString()) || [],
   }
 }

@@ -6,10 +6,9 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
-import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetPendingReward(relicId: string | undefined) {
-  const { chain } = useReliquary()
+export function useGetPendingReward(relicId: string | undefined, chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -33,5 +32,14 @@ export function useGetPendingReward(relicId: string | undefined) {
           priceFor(config.tokens.addresses.beets!, config.chain)
         )
       : bn(0),
+    formattedAmount: query.data ? formatUnits(query.data, 18) : '0',
+    tokenAmount: query.data
+      ? [
+          {
+            address: config.tokens.addresses.beets!,
+            amount: formatUnits(query.data, 18),
+          },
+        ]
+      : [],
   }
 }

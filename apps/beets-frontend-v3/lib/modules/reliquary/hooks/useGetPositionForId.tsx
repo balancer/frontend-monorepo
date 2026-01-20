@@ -3,10 +3,10 @@ import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generat
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
-import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
+import { formatUnits } from 'viem'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetPositionForId(relicId: string) {
-  const { chain } = useReliquary()
+export function useGetPositionForId(relicId: string, chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -23,11 +23,14 @@ export function useGetPositionForId(relicId: string) {
 
   return {
     ...query,
-    position: {
-      ...query.data,
-      level: query.data?.level.toString(),
-      poolId: query.data?.poolId.toString(),
-      entry: Number(query.data?.entry.toString()),
-    },
+    position: query.data
+      ? {
+          farmId: query.data.poolId.toString(),
+          relicId,
+          amount: formatUnits(query.data.amount, 18),
+          entry: Number(query.data.entry.toString()),
+          level: Number(query.data.level.toString()),
+        }
+      : null,
   }
 }

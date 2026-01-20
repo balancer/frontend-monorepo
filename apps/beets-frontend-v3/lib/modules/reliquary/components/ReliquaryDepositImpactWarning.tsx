@@ -1,16 +1,15 @@
 import { Alert, AlertIcon, Box, SkeletonText } from '@chakra-ui/react'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { UseQueryResult } from '@tanstack/react-query'
-import { ReliquaryDepositImpact } from '../ReliquaryProvider'
 import { AddLiquiditySimulationQueryResult } from '@repo/lib/modules/pool/actions/add-liquidity/queries/useAddLiquiditySimulationQuery'
 import { useMemo } from 'react'
 import { formatUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
+import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
 
 type Props = {
   createNew: boolean
-  depositImpactQuery: UseQueryResult<ReliquaryDepositImpact | null | undefined>
+  depositImpactQuery: ReturnType<typeof useReliquaryDepositImpact>
   simulationQuery: AddLiquiditySimulationQueryResult
 }
 

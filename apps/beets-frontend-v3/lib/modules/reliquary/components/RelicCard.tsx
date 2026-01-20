@@ -79,7 +79,8 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
   const [isBurnModalOpen, setIsBurnModalOpen] = useState(false)
   const { data: pendingRewards, usdValue: pendingRewardsUsdValue } = useGetPendingReward(
-    relic.relicId
+    relic.relicId,
+    chain
   )
   const { toCurrency } = useCurrency()
 

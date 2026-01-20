@@ -5,10 +5,9 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { formatUnits } from 'viem'
 import { ReliquaryPosition } from '../reliquary.types'
-import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetRelicPositionsOfOwner() {
-  const { chain } = useReliquary()
+export function useGetRelicPositionsOfOwner(chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
   const { shouldChangeNetwork } = useChainSwitch(chainId)

@@ -28,6 +28,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetPendingReward } from '../hooks/useGetPendingReward'
+import { useReliquary } from '../ReliquaryProvider'
 
 type Props = RemoveLiquidityReceiptResult & {
   relicId?: string
@@ -53,10 +54,11 @@ export function ReliquaryWithdrawSummary({
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const { slippage } = useUserSettings()
+  const { chain } = useReliquary()
 
   // Query pending rewards for display
-  const { amount: pendingRewards } = useGetPendingReward(relicId)
-  const networkConfig = getNetworkConfig(pool.chain)
+  const { amount: pendingRewards } = useGetPendingReward(relicId, chain)
+  const networkConfig = getNetworkConfig(chain)
 
   const _amountsOut = amountsOut.filter(amount => bn(amount.humanAmount).gt(0))
 
@@ -76,15 +78,15 @@ export function ReliquaryWithdrawSummary({
   const tokens = allPoolTokens(pool)
     .map(token => {
       // also add native asset if wrapped native asset is in the pool
-      if (isWrappedNativeAsset(token.address, pool.chain)) {
-        const nativeAsset = getNetworkConfig(pool.chain).tokens.nativeAsset
+      if (isWrappedNativeAsset(token.address, chain)) {
+        const nativeAsset = getNetworkConfig(chain).tokens.nativeAsset
 
         return [
-          { ...token, chain: pool.chain },
-          { ...nativeAsset, chain: pool.chain },
+          { ...token, chain },
+          { ...nativeAsset, chain },
         ] as ApiToken[]
       }
-      return { ...token, chain: pool.chain } as ApiToken
+      return { ...token, chain } as ApiToken
     })
     .flat()
 
@@ -127,7 +129,7 @@ export function ReliquaryWithdrawSummary({
   return (
     <AnimateHeightChange spacing="sm">
       {isMobile && hasQuoteContext && (
-        <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
+        <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />
       )}
 
       {/* Relic Info Alert */}
@@ -158,7 +160,7 @@ export function ReliquaryWithdrawSummary({
         <Card variant="modalSubSection">
           <TokenRowGroup
             amounts={[rewardsAmount]}
-            chain={pool.chain}
+            chain={chain}
             label="Pending rewards"
             pool={pool}
             tokens={tokens}
@@ -170,7 +172,7 @@ export function ReliquaryWithdrawSummary({
       <Card variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? receivedTokensWithoutBpt : _amountsOutWithRewards}
-          chain={pool.chain}
+          chain={chain}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={
             shouldShowReceipt
@@ -187,7 +189,7 @@ export function ReliquaryWithdrawSummary({
 
       {shouldShowReceipt ? (
         <>
-          <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
+          <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="success-message">
             <Card variant="modalSubSection">
               <VStack align="start" spacing="md" w="full">
