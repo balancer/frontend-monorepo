@@ -1,13 +1,18 @@
-import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { useReliquary } from '@/lib/modules/reliquary/ReliquaryProvider'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 
 export function useHasApprovedRelayerForAllRelics() {
-  const { isConnected, userAddress, chainId } = useUserAccount()
-  const { shouldChangeNetwork } = useChainSwitch(chainId!)
-  const config = getNetworkConfig(chainId!)
+  const { isConnected, userAddress } = useUserAccount()
+  const { chain } = useReliquary()
+
+  const chainId = getChainId(chain)
+  const config = getNetworkConfig(chainId)
+
+  const { shouldChangeNetwork } = useChainSwitch(chainId)
 
   const query = useReadContract({
     chainId,
