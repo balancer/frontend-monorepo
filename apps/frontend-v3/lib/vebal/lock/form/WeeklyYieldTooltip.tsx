@@ -10,17 +10,16 @@ import BaseAprTooltip, {
 import { SparklesIcon } from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { ArrowRight } from 'react-feather'
 
-interface Props
-  extends Omit<
-    BaseAprTooltipProps,
-    | 'children'
-    | 'totalBaseText'
-    | 'totalBaseVeBalText'
-    | 'maxVeBalText'
-    | 'poolId'
-    | 'poolType'
-    | 'chain'
-  > {
+interface Props extends Omit<
+  BaseAprTooltipProps,
+  | 'children'
+  | 'totalBaseText'
+  | 'totalBaseVeBalText'
+  | 'maxVeBalText'
+  | 'poolId'
+  | 'poolType'
+  | 'chain'
+> {
   totalUsdValue: string
   weeklyYield: string
   currentWeeklyYield: string
