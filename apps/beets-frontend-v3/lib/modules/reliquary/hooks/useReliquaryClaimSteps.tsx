@@ -1,7 +1,7 @@
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { useMemo } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
-import { useGetPendingReward } from '../hooks/useGetPendingReward'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
@@ -19,15 +19,13 @@ const claimStepId = 'reliquary-claim-rewards'
 
 export function useReliquaryClaimSteps(relicId: string) {
   const { pool } = usePool()
-  const { chain } = useReliquary()
+  const { chain, pendingRewardsByRelicId, beetsPrice, pendingRewardsQuery, refetchPendingRewards } =
+    useReliquary()
   const { userAddress } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
-  const {
-    data: pendingRewards,
-    refetch: refetchPendingRewards,
-    usdValue: pendingRewardsUsdValue,
-  } = useGetPendingReward(relicId, chain)
+  const pendingRewardsAmount = pendingRewardsByRelicId[relicId] ?? '0'
+  const pendingRewardsUsdValue = bn(pendingRewardsAmount).times(beetsPrice)
 
   const chainId = getChainId(chain)
 
@@ -81,7 +79,7 @@ export function useReliquaryClaimSteps(relicId: string) {
   )
 
   return {
-    isLoadingSteps: !pendingRewards,
+    isLoadingSteps: pendingRewardsQuery.isLoading,
     steps: [claimStep],
   }
 }

@@ -11,6 +11,7 @@ import { ReliquaryFarmPosition } from '../ReliquaryProvider'
 
 export type PendingRewardsResult = {
   rewards: { address: string; amount: string }[]
+  relicRewards: { relicId: string; amount: string }[]
   relicIds: number[]
   numberOfRelics: number
   fBEETSTotalBalance: string
@@ -54,7 +55,13 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
 
   const data = useMemo<PendingRewardsResult>(() => {
     if (!query.data || query.data.length === 0) {
-      return { rewards: [], relicIds: [], numberOfRelics: 0, fBEETSTotalBalance: '0' }
+      return {
+        rewards: [],
+        relicRewards: [],
+        relicIds: [],
+        numberOfRelics: 0,
+        fBEETSTotalBalance: '0',
+      }
     }
 
     const beetsAddress = config.tokens.addresses.beets!
@@ -80,6 +87,10 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
 
     return {
       rewards: [{ address: beetsAddress, amount: totalAmount }],
+      relicRewards: validRewards.map(reward => ({
+        relicId: reward.relicId,
+        amount: reward.amount,
+      })),
       relicIds,
       numberOfRelics: relicIds.length,
       fBEETSTotalBalance: sumBy(validRewards, reward =>

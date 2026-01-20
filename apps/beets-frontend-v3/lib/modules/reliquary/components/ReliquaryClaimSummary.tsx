@@ -11,8 +11,7 @@ import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-s
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useMemo } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { formatUnits } from 'viem'
-import { useGetPendingReward } from '../hooks/useGetPendingReward'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { useReliquary } from '../ReliquaryProvider'
 
@@ -31,16 +30,14 @@ export function ReliquaryClaimSummary({
 }: Props) {
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
-  const { chain } = useReliquary()
-  const { data: pendingRewards, usdValue: pendingRewardsUsdValue } = useGetPendingReward(
-    relicId,
-    chain
-  )
+  const { chain, pendingRewardsByRelicId, beetsPrice } = useReliquary()
+  const pendingRewardsAmount = pendingRewardsByRelicId[relicId] ?? '0'
+  const pendingRewardsUsdValue = bn(pendingRewardsAmount).times(beetsPrice)
 
   const shouldShowReceipt = !!claimTxHash
 
   const claimTokens: HumanTokenAmountWithSymbol[] = useMemo(() => {
-    if (!pendingRewards) return []
+    if (!pendingRewardsAmount || pendingRewardsUsdValue.eq(0)) return []
 
     const networkConfig = getNetworkConfig(chain)
     const beetsAddress = networkConfig.tokens.addresses.beets!
@@ -48,11 +45,11 @@ export function ReliquaryClaimSummary({
     return [
       {
         tokenAddress: beetsAddress,
-        humanAmount: formatUnits(pendingRewards || 0n, 18),
+        humanAmount: pendingRewardsAmount as `${number}` | '',
         symbol: 'BEETS',
       },
     ]
-  }, [pendingRewards, chain])
+  }, [pendingRewardsAmount, pendingRewardsUsdValue, chain])
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />

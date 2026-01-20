@@ -5,12 +5,11 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Countdown from 'react-countdown'
-import { formatUnits } from 'viem'
 import { ReliquaryFarmPosition, useReliquary } from '../ReliquaryProvider'
 import RelicLevel1 from '../assets/1.png'
 import RelicLevel10 from '../assets/10.png'
@@ -24,7 +23,6 @@ import RelicLevel7 from '../assets/7.png'
 import RelicLevel8 from '../assets/8.png'
 import RelicLevel9 from '../assets/9.png'
 import { BeetsTokenSonic } from '../assets/BeetsTokenSonic'
-import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
 import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
 import { LevelUpModal } from './LevelUpModal'
@@ -71,17 +69,22 @@ function getImage(level: number) {
 
 export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const router = useRouter()
-  const { reliquaryLevels, maturityThresholds, chain, weightedTotalBalance } = useReliquary()
+  const {
+    reliquaryLevels,
+    maturityThresholds,
+    chain,
+    weightedTotalBalance,
+    pendingRewardsByRelicId,
+    beetsPrice,
+  } = useReliquary()
   const { relicBalanceUSD } = useRelicDepositBalance(relic.relicId)
   const { pool } = usePool()
   const config = useNetworkConfig()
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
   const [isBurnModalOpen, setIsBurnModalOpen] = useState(false)
-  const { data: pendingRewards, usdValue: pendingRewardsUsdValue } = useGetPendingReward(
-    relic.relicId,
-    chain
-  )
+  const pendingRewardsAmount = pendingRewardsByRelicId[relic.relicId] ?? '0'
+  const pendingRewardsUsdValue = bn(pendingRewardsAmount).times(beetsPrice)
   const { toCurrency } = useCurrency()
 
   // Get Relic level data for this specific Relic
@@ -316,8 +319,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             <HStack spacing="1">
               <BeetsTokenSonic height="16px" width="16px" />
               <StatValueText>
-                {pendingRewards ? parseFloat(formatUnits(pendingRewards, 18)).toFixed(6) : 0} (
-                {toCurrency(pendingRewardsUsdValue)})
+                {parseFloat(pendingRewardsAmount).toFixed(6)} ({toCurrency(pendingRewardsUsdValue)})
               </StatValueText>
             </HStack>
           ) : (

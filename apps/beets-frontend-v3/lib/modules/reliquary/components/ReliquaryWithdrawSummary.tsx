@@ -26,8 +26,6 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { formatUnits } from 'viem'
-import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = RemoveLiquidityReceiptResult & {
@@ -54,10 +52,8 @@ export function ReliquaryWithdrawSummary({
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const { slippage } = useUserSettings()
-  const { chain } = useReliquary()
-
-  // Query pending rewards for display
-  const { amount: pendingRewards } = useGetPendingReward(relicId, chain)
+  const { chain, pendingRewardsByRelicId } = useReliquary()
+  const pendingRewardsAmount = relicId ? (pendingRewardsByRelicId[relicId] ?? '0') : '0'
   const networkConfig = getNetworkConfig(chain)
 
   const _amountsOut = amountsOut.filter(amount => bn(amount.humanAmount).gt(0))
@@ -67,10 +63,10 @@ export function ReliquaryWithdrawSummary({
 
   // Create rewards amount object if rewards exist (only for preview, not receipt)
   const rewardsAmount: HumanTokenAmountWithSymbol | null =
-    !shouldShowReceipt && pendingRewards && pendingRewards > 0n
+    !shouldShowReceipt && parseFloat(pendingRewardsAmount) > 0
       ? {
           tokenAddress: networkConfig.tokens.addresses.beets as `0x${string}`,
-          humanAmount: formatUnits(pendingRewards, 18),
+          humanAmount: pendingRewardsAmount as `${number}` | '',
           symbol: 'BEETS',
         }
       : null
