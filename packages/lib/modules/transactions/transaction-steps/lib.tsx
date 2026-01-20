@@ -68,6 +68,7 @@ export type StepType =
   | 'bindToken'
   | 'setSwapFee'
   | 'finalizePool'
+  | 'signature'
 
 export type TxActionId =
   | 'SignBatchRelayer'

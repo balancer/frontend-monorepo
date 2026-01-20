@@ -7,7 +7,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 
 const MERKL_API_URL = 'https://api.merkl.xyz/v4'
-const CHAINS = [1]
+export const CHAINS = [1]
 
 export type RecoveredTokenClaim = {
   amount: HumanTokenAmountWithSymbol
@@ -62,4 +62,10 @@ function toRecoveredTokenClaim(item: MerklReward): RecoveredTokenClaim {
     chainId: item.token.chainId,
     price: item.token.price || 0,
   }
+}
+
+export function sumRecoveredFundsTotal(claims: RecoveredTokenClaim[]) {
+  return claims.reduce((acc, claim) => {
+    return bn(claim.amount.humanAmount).times(claim.price).plus(acc).toNumber()
+  }, 0)
 }

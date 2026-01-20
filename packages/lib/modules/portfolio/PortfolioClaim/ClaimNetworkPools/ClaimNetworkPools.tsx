@@ -10,6 +10,7 @@ import {
   Flex,
   HStack,
   Button,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
@@ -33,8 +34,8 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { isAfter } from 'date-fns'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { RecoveredTokenClaim, useRecoveredFunds } from '../recovered-funds/useRecoveredFunds'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { sumRecoveredFundsTotal, useRecoveredFunds } from '../recovered-funds/useRecoveredFunds'
+import { ClaimRecoveredFundsModal } from '../recovered-funds/ClaimRecoveredFundsModal'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -80,6 +81,11 @@ export function ClaimNetworkPools() {
 
   const [isOpenedProtocolRevenueModal, setIsOpenedProtocolRevenueModal] = useState(false)
   const [isOpenedHiddenHandRewardsModal, setIsOpenedHiddenHandRewardsModal] = useState(false)
+  const {
+    isOpen: isClaimRecoveredFundModalOpen,
+    onOpen: openClaimRecoveredFundModal,
+    onClose: onClaimRecoveredFundModalClose,
+  } = useDisclosure()
   const { isConnected } = useUserAccount()
   const router = useRouter()
 
@@ -287,7 +293,7 @@ export function ClaimNetworkPools() {
                         setIsOpenedHiddenHandRewardsModal(true)
                         break
                       case 'recovered-funds':
-                        alert('TODO')
+                        openClaimRecoveredFundModal()
                         break
                       default:
                         router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
@@ -344,6 +350,7 @@ export function ClaimNetworkPools() {
                 return items
               })()}
             </SimpleGrid>
+
             <ClaimProtocolRevenueModal
               isOpen={isOpenedProtocolRevenueModal}
               onClose={() => setIsOpenedProtocolRevenueModal(false)}
@@ -351,6 +358,10 @@ export function ClaimNetworkPools() {
             <ClaimHiddenHandRewardsModal
               isOpen={isOpenedHiddenHandRewardsModal}
               onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
+            />
+            <ClaimRecoveredFundsModal
+              isOpen={isClaimRecoveredFundModalOpen}
+              onClose={onClaimRecoveredFundModalClose}
             />
           </>
         )}
@@ -384,10 +395,4 @@ function getCardTitle(itemType: string) {
     default:
       return undefined
   }
-}
-
-function sumRecoveredFundsTotal(claims: RecoveredTokenClaim[]) {
-  return claims.reduce((acc, claim) => {
-    return bn(claim.amount.humanAmount).times(claim.price).plus(acc).toNumber()
-  }, 0)
 }
