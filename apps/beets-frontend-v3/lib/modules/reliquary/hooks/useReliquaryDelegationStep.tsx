@@ -12,14 +12,19 @@ import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useDelegation } from './useDelegation'
+import { useReliquary } from '../ReliquaryProvider'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export type DelegationAction = 'delegate' | 'undelegate'
 
 export function useReliquaryDelegationStep(action: DelegationAction) {
-  const { isConnected, chainId } = useUserAccount()
+  const { isConnected } = useUserAccount()
   const { refetch } = useDelegation()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
-  const networkConfig = getNetworkConfig(chainId!)
+  const { chain } = useReliquary()
+
+  const chainId = getChainId(chain)
+  const networkConfig = getNetworkConfig(chainId)
 
   const labels: TransactionLabels =
     action === 'undelegate'

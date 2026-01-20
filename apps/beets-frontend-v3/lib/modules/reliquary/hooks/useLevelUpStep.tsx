@@ -1,6 +1,6 @@
 'use client'
 
-import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import {
   ManagedResult,
   TransactionLabels,
@@ -14,9 +14,12 @@ import { useState } from 'react'
 import { useReliquary } from '../ReliquaryProvider'
 
 export function useLevelUpStep(relicId: string | undefined) {
-  const { isConnected, chainId } = useUserAccount()
+  const { isConnected } = useUserAccount()
   const { refetchRelicPositions } = useReliquary()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  const { chain } = useReliquary()
+
+  const chainId = getChainId(chain)
 
   const labels: TransactionLabels = {
     init: 'Level up',
@@ -28,9 +31,9 @@ export function useLevelUpStep(relicId: string | undefined) {
 
   const props: ManagedTransactionInput = {
     labels,
-    chainId: chainId!,
+    chainId,
     contractId: 'beets.reliquary',
-    contractAddress: getNetworkConfig(chainId!).contracts.beets?.reliquary || '',
+    contractAddress: getNetworkConfig(chainId).contracts.beets?.reliquary || '',
     functionName: 'updatePosition',
     args: relicId ? [relicId] : null,
     enabled: isConnected && !!relicId,

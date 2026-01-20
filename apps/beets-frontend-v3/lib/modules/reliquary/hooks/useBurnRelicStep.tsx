@@ -1,6 +1,6 @@
 'use client'
 
-import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import {
@@ -12,11 +12,15 @@ import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
+import { useReliquary } from '../ReliquaryProvider'
 
 export function useBurnRelicStep(relicId: string | undefined) {
-  const { isConnected, chainId } = useUserAccount()
+  const { isConnected } = useUserAccount()
   const { refetch } = useGetRelicPositionsOfOwner()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  const { chain } = useReliquary()
+
+  const chainId = getChainId(chain)
 
   const labels: TransactionLabels = {
     init: 'Burn Relic',
@@ -28,9 +32,9 @@ export function useBurnRelicStep(relicId: string | undefined) {
 
   const props: ManagedTransactionInput = {
     labels,
-    chainId: chainId!,
+    chainId,
     contractId: 'beets.reliquary',
-    contractAddress: getNetworkConfig(chainId!).contracts.beets?.reliquary || '',
+    contractAddress: getNetworkConfig(chainId).contracts.beets?.reliquary || '',
     functionName: 'burn',
     args: relicId ? [BigInt(relicId)] : null,
     enabled: isConnected && !!relicId,
