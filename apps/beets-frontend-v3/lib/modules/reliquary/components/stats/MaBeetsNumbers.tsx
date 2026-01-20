@@ -1,7 +1,6 @@
 'use client'
 
 import { Flex, HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
 import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
@@ -11,6 +10,8 @@ import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { zeroAddress } from 'viem'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
+import { useReliquary } from '../../ReliquaryProvider'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 type Props = {
   onToggleShowMore: () => void
@@ -21,11 +22,15 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
   const { pool } = usePool()
   const { priceFor } = useTokens()
   const { latest: globalStats, loading } = useReliquaryGlobalStats()
-  const networkConfig = useNetworkConfig()
+  const { chain } = useReliquary()
+  const networkConfig = getNetworkConfig(chain)
 
   const data = pool.dynamicData
 
   const beetsPerDay = parseFloat(pool.staking?.reliquary?.beetsPerSecond || '0') * 86400
+
+  console.log({ beetsPerDay })
+
   const incentivesDailyValue =
     beetsPerDay * priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain)
 
