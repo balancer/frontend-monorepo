@@ -65,7 +65,7 @@ export function YourMaBeetsStats() {
         <RelicStat>
           <StatLabel label="Total Liquidity" />
           <Skeleton isLoaded={!isLoading} width="50%">
-            <StatValueText>${fNum('fiat', totalLiquidity)}</StatValueText>
+            <StatValueText>{toCurrency(totalLiquidity)}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
@@ -79,7 +79,7 @@ export function YourMaBeetsStats() {
             <VStack alignItems="flex-start" w="full">
               <StatLabel label="Total Pending Rewards" />
               <Skeleton isLoaded={!isLoading} width="50%">
-                <StatValueText>${fNum('fiat', totalPendingRewardsUSD)}</StatValueText>
+                <StatValueText>{toCurrency(totalPendingRewardsUSD)}</StatValueText>
               </Skeleton>
             </VStack>
             <TooltipWithTouch label={`The minimum amount to claim is ${toCurrency(0.01)}`}>

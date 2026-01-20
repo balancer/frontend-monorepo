@@ -6,12 +6,13 @@ import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { zeroAddress } from 'viem'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
 import { useReliquary } from '../../ReliquaryProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type Props = {
   onToggleShowMore: () => void
@@ -23,13 +24,11 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
   const { priceFor } = useTokens()
   const { latest: globalStats, loading } = useReliquaryGlobalStats()
   const { chain } = useReliquary()
+  const { toCurrency } = useCurrency()
+
   const networkConfig = getNetworkConfig(chain)
-
   const data = pool.dynamicData
-
   const beetsPerDay = parseFloat(pool.staking?.reliquary?.beetsPerSecond || '0') * 86400
-
-  console.log({ beetsPerDay })
 
   const incentivesDailyValue =
     beetsPerDay * priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain)
@@ -106,7 +105,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
         <RelicStat>
           <StatLabel label="TVL" />
           <Skeleton isLoaded={!loading} width="50%">
-            <StatValueText>{fNumCustom(tvl, '$0,0.00a')}</StatValueText>
+            <StatValueText>{toCurrency(tvl)}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
@@ -116,7 +115,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
           </HStack>
           <Skeleton isLoaded={!loading} width="50%">
             <VStack align="flex-start" spacing="0">
-              <StatValueText>~{fNumCustom(incentivesDailyValue, '$0,0.00a')}/day</StatValueText>
+              <StatValueText>~{toCurrency(incentivesDailyValue)}/day</StatValueText>
             </VStack>
           </Skeleton>
         </RelicStat>
@@ -137,7 +136,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
         <RelicStat>
           <StatLabel label="Avg Value Per Relic" />
           <Skeleton isLoaded={!loading} width="50%">
-            <StatValueText>${fNum('fiat', avgValuePerRelic)}</StatValueText>
+            <StatValueText>{toCurrency(avgValuePerRelic)}</StatValueText>
           </Skeleton>
         </RelicStat>
       </SimpleGrid>
