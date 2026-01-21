@@ -67,7 +67,11 @@ export function LevelUpModal({
             {isMobile && (
               <MobileStepTracker chain={chain} transactionSteps={levelUpTransactionSteps} />
             )}
-            <Card variant="modalSubSection">The next level is {nextLevel}!</Card>
+            <Card variant="modalSubSection">
+              {isSuccess
+                ? `Successfully levelled up to ${nextLevel - 1}.`
+                : `The next level is ${nextLevel}.`}
+            </Card>
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
