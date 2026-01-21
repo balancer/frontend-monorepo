@@ -3,17 +3,13 @@ import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
 import { LbpFormAction } from '../LbpFormAction'
-import { validateUrlFormat } from '@repo/lib/shared/utils/urls'
+import { validateUrlFormat, validateImageUrl } from '@repo/lib/shared/utils/urls'
 import { isValidTelegramHandle, isValidTwitterHandle } from '@repo/lib/shared/utils/strings'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWithError'
 import NextLink from 'next/link'
 import { isAddress } from 'viem'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useDebounce } from 'use-debounce'
-import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
-import { useCheckImageUrl } from '@repo/lib/shared/hooks/url.hooks'
-import { useEffect } from 'react'
 import { normalizeHandle } from '@repo/lib/shared/utils/links'
 import { useWatch, useFormState } from 'react-hook-form'
 
@@ -147,16 +143,10 @@ function DescriptionInput() {
 
 function TokenIconInput() {
   const {
-    projectInfoForm: { control, setValue, trigger },
+    projectInfoForm: { control, setValue },
   } = useLbpForm()
 
-  const { errors, dirtyFields } = useFormState({ control })
-  const [iconUrl] = useDebounce(useWatch({ control, name: 'tokenIconUrl' }), defaultDebounceMs)
-  const { error } = useCheckImageUrl(iconUrl)
-
-  useEffect(() => {
-    if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
-  }, [iconUrl, error, trigger, dirtyFields])
+  const { errors } = useFormState({ control })
 
   const paste = async () => {
     const clipboardText = await navigator.clipboard.readText()
@@ -184,7 +174,7 @@ function TokenIconInput() {
         )}
         rules={{
           required: 'Token icon URL is required',
-          validate: () => (error ? error : true),
+          validate: validateImageUrl,
         }}
       />
     </VStack>

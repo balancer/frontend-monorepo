@@ -35,3 +35,20 @@ export function normalizeUrl(url: string, options: { useImageProxy?: boolean } =
   // Proxy certain external images to avoid CORS issues (optional)
   return useImageProxy ? proxyExternalImageUrl(url) : url
 }
+
+export async function validateImageUrl(url: string): Promise<string | true> {
+  if (!url) return true // Empty is valid (required rule handles this separately)
+
+  const formatErrorMessage = validateUrlFormat(url)
+  const isFormatErrorMessage = formatErrorMessage !== true
+  if (isFormatErrorMessage) return formatErrorMessage
+
+  try {
+    const image = new Image()
+    image.src = normalizeUrl(url)
+    await image.decode()
+    return true
+  } catch {
+    return 'Unreachable URL or invalid image'
+  }
+}
