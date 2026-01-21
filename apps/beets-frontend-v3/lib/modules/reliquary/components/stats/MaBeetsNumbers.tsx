@@ -1,8 +1,7 @@
 'use client'
 
-import { Flex, HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
-import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
@@ -88,19 +87,17 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
       </Flex>
       <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>
-          <StatLabel label="APR" />
-          <Skeleton isLoaded={!loading}>
-            <HStack>
-              <div className="apr-stripes">{getTotalAprLabel(dynamicDataAprItems)}</div>
+          <Box mt="-5px">
+            <StatLabel label="APR" />
+            <Skeleton isLoaded={!loading}>
               <MainAprTooltip
                 aprItems={dynamicDataAprItems}
                 chain={networkConfig.chain}
-                onlySparkles
                 pool={pool}
                 poolId={pool.id}
               />
-            </HStack>
-          </Skeleton>
+            </Skeleton>
+          </Box>
         </RelicStat>
         <RelicStat>
           <StatLabel label="TVL" />
