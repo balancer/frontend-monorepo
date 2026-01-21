@@ -69,7 +69,9 @@ function NameInput() {
   return (
     <VStack align="start" w="full">
       <HStack w="full">
-        <Text color="font.primary">Project name</Text>
+        <Text as="label" color="font.primary" htmlFor="project-name">
+          Project name
+        </Text>
         <Spacer />
         <Text
           className="tabular-number"
@@ -83,6 +85,7 @@ function NameInput() {
         render={({ field }) => (
           <InputWithError
             error={errors.name?.message}
+            id="project-name"
             isInvalid={!!errors.name}
             maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
@@ -109,7 +112,9 @@ function DescriptionInput() {
   return (
     <VStack align="start" w="full">
       <HStack w="full">
-        <Text color="font.primary">Project description</Text>
+        <Text as="label" color="font.primary" htmlFor="project-description">
+          Project description
+        </Text>
         <Spacer />
         <Text
           className="tabular-number"
@@ -123,6 +128,7 @@ function DescriptionInput() {
         render={({ field }) => (
           <TextareaWithError
             error={errors.description?.message}
+            id="project-description"
             isInvalid={!!errors.description}
             maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
@@ -159,13 +165,16 @@ function TokenIconInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Token icon URL</Text>
+      <Text as="label" color="font.primary" htmlFor="token-icon-url">
+        Token icon URL
+      </Text>
       <Controller
         control={control}
         name="tokenIconUrl"
         render={({ field }) => (
           <InputWithError
             error={errors.tokenIconUrl?.message}
+            id="token-icon-url"
             isInvalid={!!errors.tokenIconUrl}
             onChange={e => field.onChange(e.target.value)}
             pasteFn={paste}
@@ -190,13 +199,16 @@ function ProjectWebsiteUrlInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Project website URL</Text>
+      <Text as="label" color="font.primary" htmlFor="project-website-url">
+        Project website URL
+      </Text>
       <Controller
         control={control}
         name="websiteUrl"
         render={({ field }) => (
           <InputWithError
             error={errors.websiteUrl?.message}
+            id="project-website-url"
             isInvalid={!!errors.websiteUrl}
             onChange={e => field.onChange(e.target.value)}
             placeholder="https://project-name.com"
@@ -220,13 +232,16 @@ function ProjectXHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">X / Twitter username (optional)</Text>
+      <Text as="label" color="font.primary" htmlFor="x-handle">
+        X / Twitter username (optional)
+      </Text>
       <Controller
         control={control}
         name="xHandle"
         render={({ field }) => (
           <InputWithError
             error={errors.xHandle?.message}
+            id="x-handle"
             isInvalid={!!errors.xHandle}
             onChange={e => field.onChange(e.target.value)}
             placeholder="@project-handle"
@@ -250,13 +265,16 @@ function ProjectTelegramHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Telegram username (optional)</Text>
+      <Text as="label" color="font.primary" htmlFor="telegram-handle">
+        Telegram username (optional)
+      </Text>
       <Controller
         control={control}
         name="telegramHandle"
         render={({ field }) => (
           <InputWithError
             error={errors.telegramHandle?.message}
+            id="telegram-handle"
             isInvalid={!!errors.telegramHandle}
             onChange={e => field.onChange(e.target.value)}
             placeholder="@project-handle"
@@ -280,13 +298,16 @@ function ProjectDiscordUrlInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Discord community URL (optional)</Text>
+      <Text as="label" color="font.primary" htmlFor="discord-url">
+        Discord community URL (optional)
+      </Text>
       <Controller
         control={control}
         name="discordUrl"
         render={({ field }) => (
           <InputWithError
             error={errors.discordUrl?.message}
+            id="discord-url"
             isInvalid={!!errors.discordUrl}
             onChange={e => field.onChange(e.target.value)}
             placeholder="https://yourdomain.com"
@@ -317,13 +338,16 @@ function ProjectOwnerInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Project owner wallet address (optional)</Text>
+      <Text as="label" color="font.primary" htmlFor="project-owner">
+        Project owner wallet address (optional)
+      </Text>
       <Controller
         control={control}
         name="owner"
         render={({ field }) => (
           <InputWithError
             error={errors.owner?.message}
+            id="project-owner"
             isInvalid={!!errors.owner}
             onChange={e => field.onChange(e.target.value)}
             pasteFn={paste}
@@ -355,13 +379,16 @@ function PoolCreatorInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Pool creator wallet address (optional)</Text>
+      <Text as="label" color="font.primary" htmlFor="pool-creator">
+        Pool creator wallet address (optional)
+      </Text>
       <Controller
         control={control}
         name="poolCreator"
         render={({ field }) => (
           <InputWithError
             error={errors.poolCreator?.message}
+            id="pool-creator"
             isInvalid={!!errors.poolCreator}
             onChange={e => field.onChange(e.target.value)}
             pasteFn={paste}

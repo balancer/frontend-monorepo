@@ -2,12 +2,17 @@ import { impersonate } from '@/helpers/e2e.helpers'
 import { clickButton, button } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/constants'
 
 const BASE_URL = 'http://localhost:3000/create'
+const FIRST_STEP_URL = BASE_URL + '/' + POOL_CREATION_FORM_STEPS[0].id
+const SECOND_STEP_URL = BASE_URL + '/' + POOL_CREATION_FORM_STEPS[1].id
+const THIRD_STEP_URL = BASE_URL + '/' + POOL_CREATION_FORM_STEPS[2].id
+const FOURTH_STEP_URL = BASE_URL + '/' + POOL_CREATION_FORM_STEPS[3].id
 
 test('Create pool form step navigation', async ({ page }) => {
   await page.goto(`${BASE_URL}`)
-  await expect(page).toHaveURL(`${BASE_URL}/step-1-type`)
+  await expect(page).toHaveURL(FIRST_STEP_URL)
 
   await impersonate(page, defaultAnvilAccount)
 
@@ -15,7 +20,7 @@ test('Create pool form step navigation', async ({ page }) => {
   await expect(page.getByText('Choose network')).toBeVisible()
 
   await clickButton(page, 'Next')
-  await expect(page).toHaveURL(`${BASE_URL}/step-2-tokens`)
+  await expect(page).toHaveURL(SECOND_STEP_URL)
   await expect(page.getByText('Choose pool tokens')).toBeVisible()
   const step2NextButton = button(page, 'Next')
   await expect(step2NextButton).toBeDisabled()
@@ -26,12 +31,12 @@ test('Create pool form step navigation', async ({ page }) => {
   await expect(step2NextButton).toBeEnabled()
 
   await clickButton(page, 'Next')
-  await expect(page).toHaveURL(`${BASE_URL}/step-3-details`)
+  await expect(page).toHaveURL(THIRD_STEP_URL)
   await expect(page.getByText('Pool details')).toBeVisible()
   await expect(page.getByText('Pool settings')).toBeVisible()
 
   await clickButton(page, 'Next')
-  await expect(page).toHaveURL(`${BASE_URL}/step-4-fund`)
+  await expect(page).toHaveURL(FOURTH_STEP_URL)
   await expect(page.getByText('Seed initial pool liquidity')).toBeVisible()
   await expect(button(page, 'Create Pool')).toBeDisabled()
 })
@@ -56,12 +61,12 @@ test.describe('Build popover to pool page', () => {
   test.describe('Triggers warning modal', () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(`${BASE_URL}`)
-      await expect(page).toHaveURL(`${BASE_URL}/step-1-type`)
+      await expect(page).toHaveURL(FIRST_STEP_URL)
 
       await impersonate(page, defaultAnvilAccount)
 
       await clickButton(page, 'Next')
-      await expect(page).toHaveURL(`${BASE_URL}/step-2-tokens`)
+      await expect(page).toHaveURL(SECOND_STEP_URL)
 
       const buildLink = page.getByText('Build', { exact: true })
       await expect(buildLink).toBeVisible()
@@ -75,13 +80,13 @@ test.describe('Build popover to pool page', () => {
 
     test('can continue progress', async ({ page }) => {
       await clickButton(page, 'Continue set up')
-      await expect(page).toHaveURL(`${BASE_URL}/step-2-tokens`)
+      await expect(page).toHaveURL(SECOND_STEP_URL)
       await expect(page.getByText('Choose pool tokens')).toBeVisible()
     })
 
     test('can reset progress', async ({ page }) => {
       await clickButton(page, 'Delete and start over')
-      await expect(page).toHaveURL(`${BASE_URL}/step-1-type`)
+      await expect(page).toHaveURL(FIRST_STEP_URL)
       await expect(page.getByText('Choose protocol')).toBeVisible()
     })
   })

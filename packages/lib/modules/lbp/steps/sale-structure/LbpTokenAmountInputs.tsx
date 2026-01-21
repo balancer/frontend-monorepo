@@ -108,7 +108,9 @@ function SaleTokenAmountInput({
 
   return (
     <VStack align="start" data-group w="full">
-      <Text color="font.primary">Sale token</Text>
+      <Text as="label" color="font.primary" htmlFor="sale-token-amount">
+        Sale token
+      </Text>
       <Controller
         control={control}
         name="saleTokenAmount"
@@ -118,6 +120,7 @@ function SaleTokenAmountInput({
             apiToken={launchToken}
             chain={selectedChain}
             customUserBalance={formatUnits(balanceData?.value || 0n, launchToken.decimals)}
+            id="sale-token-amount"
             onChange={e => field.onChange(e.currentTarget.value)}
             priceMessage="Price: N/A"
             value={field.value}
@@ -180,7 +183,9 @@ function CollateralTokenAmountInput({
 
   return (
     <VStack align="start" data-group w="full">
-      <Text color="font.primary">Collateral token</Text>
+      <Text as="label" color="font.primary" htmlFor="collateral-token-amount">
+        Collateral token
+      </Text>
       <Controller
         control={control}
         name="collateralTokenAmount"
@@ -188,6 +193,7 @@ function CollateralTokenAmountInput({
           <TokenInput
             address={collateralTokenAddress}
             chain={selectedChain}
+            id="collateral-token-amount"
             onChange={e => field.onChange(e.currentTarget.value)}
             value={field.value}
           />
