@@ -69,6 +69,14 @@ function getImage(level: number) {
 
 export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const router = useRouter()
+  const { relicBalanceUSD } = useRelicDepositBalance(relic.relicId)
+  const { pool } = usePool()
+  const config = useNetworkConfig()
+  const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
+  const [isBurnModalOpen, setIsBurnModalOpen] = useState(false)
+  const { toCurrency } = useCurrency()
+
   const {
     reliquaryLevels,
     maturityThresholds,
@@ -77,15 +85,9 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
     pendingRewardsByRelicId,
     beetsPrice,
   } = useReliquary()
-  const { relicBalanceUSD } = useRelicDepositBalance(relic.relicId)
-  const { pool } = usePool()
-  const config = useNetworkConfig()
-  const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
-  const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
-  const [isBurnModalOpen, setIsBurnModalOpen] = useState(false)
+
   const pendingRewardsAmount = pendingRewardsByRelicId[relic.relicId] ?? '0'
   const pendingRewardsUsdValue = bn(pendingRewardsAmount).times(beetsPrice)
-  const { toCurrency } = useCurrency()
 
   // Get Relic level data for this specific Relic
   const relicLevel = reliquaryLevels.find(level => level.level === relic.level)
@@ -111,7 +113,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
     relicGetMaturityProgress(relic, maturityThresholds)
 
   // Check if Relic has balance
-  const hasBalance = parseFloat(relic.amount) > 0
+  const hasBalance = bn(relic.amount).gt(0)
 
   // Calculate APR with boost
   const baseApr = pool.dynamicData.aprItems.find(
@@ -133,17 +135,19 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       return item
     }
   })
+
   const [, maxTotalApr] = getTotalApr(dynamicDataAprItems)
   const formattedApr = fNum('apr', maxTotalApr.toString())
 
   // Calculate Share percentage
-  const weightedRelicAmount = parseFloat(relic.amount) * allocationPoints
-  const relicShare = weightedTotalBalance > 0 ? weightedRelicAmount / weightedTotalBalance : 0
-  const formattedShare = `${(relicShare * 100).toFixed(2)}%`
+  const weightedRelicAmount = bn(relic.amount).times(allocationPoints)
+  const relicShare =
+    weightedTotalBalance > 0 ? weightedRelicAmount.div(weightedTotalBalance) : bn(0)
+  const formattedShare = `${fNum('sharePercent', relicShare.toNumber())}`
 
   // Calculate Potential Daily Yield
-  const dailyYield = (relicBalanceUSD * maxTotalApr.toNumber()) / 365
-  const formattedDailyYield = fNum('fiat', dailyYield)
+  const dailyYield = bn(relicBalanceUSD).times(maxTotalApr).div(365)
+  const formattedDailyYield = toCurrency(dailyYield.toNumber())
 
   return (
     <VStack
@@ -156,7 +160,6 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       transition="all 300ms ease"
       width="full"
     >
-      {/* Badges */}
       <HStack justify="space-between" width="full">
         <Badge colorScheme="green" fontSize="sm" px="3" py="1">
           Level {relic.level + 1} - {levelNames[relic.level] || 'Unknown'}
@@ -165,8 +168,6 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           Relic #{relic.relicId}
         </Badge>
       </HStack>
-
-      {/* Relic Image */}
       <Box
         alignItems="center"
         borderRadius="lg"
@@ -186,8 +187,6 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           style={{ margin: '0 auto', userSelect: 'none' }}
           width={400}
         />
-
-        {/* Level Up Button - Center Overlay */}
         {canUpgrade && (
           <Button
             colorScheme="green"
@@ -202,8 +201,6 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             Level Up
           </Button>
         )}
-
-        {/* Action Buttons Overlay at Bottom */}
         <HStack
           bottom="0"
           left="0"
@@ -319,7 +316,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             <HStack spacing="1">
               <BeetsTokenSonic height="16px" width="16px" />
               <StatValueText>
-                {parseFloat(pendingRewardsAmount).toFixed(6)} ({toCurrency(pendingRewardsUsdValue)})
+                {fNum('token', pendingRewardsAmount)} ({toCurrency(pendingRewardsUsdValue)})
               </StatValueText>
             </HStack>
           ) : (
@@ -332,7 +329,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         </RelicStat>
         <RelicStat>
           <StatLabel label="Potential daily yield" />
-          <StatValueText>${formattedDailyYield}</StatValueText>
+          <StatValueText>{formattedDailyYield}</StatValueText>
         </RelicStat>
       </SimpleGrid>
       <RelicStat>
