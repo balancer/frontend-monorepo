@@ -95,6 +95,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
                 chain={networkConfig.chain}
                 pool={pool}
                 poolId={pool.id}
+                textProps={{ fontWeight: '700' }}
               />
             </Skeleton>
           </Box>
