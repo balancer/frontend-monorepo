@@ -24,7 +24,7 @@ export default function Terms() {
               Unless otherwise indicated, the defined and capitalized terms used below incorporate
               the same meaning as the terms used in the BeethovenX DAO LLC operating agreement (the
               “Agreement”), available{' '}
-              <Link color="white" href="https://docs.beets.fi/operating-agreement" isExternal>
+              <Link color="white" href="https://docs.beets.fi/dao/operating-agreement" isExternal>
                 here
               </Link>
               . The NFT is referred to as the “Token” in the Agreement.
