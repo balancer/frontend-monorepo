@@ -8,9 +8,16 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 type Props = {
   children: React.ReactNode
   stepTitle: string
+  hasWarning?: boolean
+  isConnected?: boolean
 }
 
-export function PreviewPoolCreationCard({ children, stepTitle }: Props) {
+export function PreviewPoolCreationCard({
+  children,
+  stepTitle,
+  hasWarning = false,
+  isConnected = true,
+}: Props) {
   const { isBeforeStep, isStep } = usePoolCreationFormSteps()
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, network] = useWatch({
@@ -32,7 +39,11 @@ export function PreviewPoolCreationCard({ children, stepTitle }: Props) {
   let borderGradient: string | undefined
 
   if (isStep(stepTitle)) {
-    if (isAnyTokenWithoutPrice) {
+    if (hasWarning && isConnected) {
+      bg = 'hsla(31, 97%, 72%, 0.07)'
+      borderGradient =
+        'linear-gradient(45deg, hsla(31, 97%, 72%, 0.05) 0%, hsla(31, 97%, 72%, 0.8) 100%)'
+    } else if (isAnyTokenWithoutPrice && isConnected) {
       bg = 'background.warning'
       borderGradient = 'linear-gradient(180deg, #FDBA74 0%, rgba(151, 111, 69, 0.5) 100%)'
     } else {
