@@ -41,7 +41,7 @@ test('Create LBP form step navigation', async ({ page }) => {
   await page.getByLabel('Project website URL').fill('https://example.com')
   await page
     .getByLabel('Token icon URL')
-    .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png') // should find safer
+    .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
   await page.getByRole('checkbox').check({ force: true })
   await expect(nextButton).toBeEnabled()
   await nextButton.click()

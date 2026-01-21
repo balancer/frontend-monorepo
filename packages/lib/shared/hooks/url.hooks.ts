@@ -2,31 +2,42 @@ import { useEffect, useState } from 'react'
 import { validateUrlFormat, normalizeUrl } from '../utils/urls'
 
 export function useCheckImageUrl(url: string) {
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+  const [lastCheck, setLastCheck] = useState({ url: '', error: '' })
 
-  const isUrlFormatInvalid = validateUrlFormat(url) !== true
-  const isUrlEmpty = !url
-  const shouldCheckUrl = !isUrlFormatInvalid && !isUrlEmpty
+  const urlFormatErrorMsg = validateUrlFormat(url)
+  const hasFormatError = urlFormatErrorMsg !== true // validateUrlFormat returns true if format valid
+  const isEmpty = !url
+  const shouldCheckImage = !isEmpty && !hasFormatError
 
   useEffect(() => {
-    if (!shouldCheckUrl) return
+    if (!shouldCheckImage) return
+
+    let isStale = false
 
     const image = new Image()
     image.src = normalizeUrl(url)
-
     image
       .decode()
       .then(() => {
-        setErrorMessage(undefined)
+        if (!isStale) setLastCheck({ url, error: '' })
       })
       .catch(e => {
         console.error(e)
-        setErrorMessage('Unreachable URL or invalid image')
+        if (!isStale) setLastCheck({ url, error: 'Unreachable URL or invalid image' })
       })
-  }, [url, shouldCheckUrl])
 
-  if (isUrlEmpty) return { error: undefined }
-  if (isUrlFormatInvalid) return { error: validateUrlFormat(url) as string }
+    // Cleanup: if url changes before image loads, mark this check as stale
+    return () => {
+      isStale = true
+    }
+  }, [url, shouldCheckImage])
 
-  return { error: errorMessage }
+  const getError = (): string | undefined => {
+    if (isEmpty) return undefined
+    if (hasFormatError) return urlFormatErrorMsg
+    if (lastCheck.url === url) return lastCheck.error || undefined
+    return undefined // Still loading
+  }
+
+  return { error: getError() }
 }
