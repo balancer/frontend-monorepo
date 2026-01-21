@@ -4,8 +4,12 @@ import { isValidUrl, normalizeUrl } from '../utils/urls'
 export function useCheckImageUrl(url: string) {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
+  const isUrlFormatInvalid = isValidUrl(url) !== true
+  const isUrlEmpty = !url
+  const shouldCheckUrl = !isUrlFormatInvalid && !isUrlEmpty
+
   useEffect(() => {
-    if (isValidUrl(url) !== true) return
+    if (!shouldCheckUrl) return
 
     const image = new Image()
     image.src = normalizeUrl(url)
@@ -19,9 +23,10 @@ export function useCheckImageUrl(url: string) {
         console.error(e)
         setErrorMessage('Unreachable URL or invalid image')
       })
-  }, [url])
+  }, [url, shouldCheckUrl])
 
-  if (isValidUrl(url) !== true) return { error: isValidUrl(url) as string }
+  if (isUrlEmpty) return { error: undefined }
+  if (isUrlFormatInvalid) return { error: isValidUrl(url) as string }
 
   return { error: errorMessage }
 }

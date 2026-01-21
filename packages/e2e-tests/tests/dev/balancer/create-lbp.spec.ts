@@ -6,15 +6,13 @@ import { oneDayInMs, oneWeekInMs, toISOString } from '@repo/lib/shared/utils/tim
 import { LBP_FORM_STEPS } from '@repo/lib/modules/lbp/constants.lbp'
 
 const BASE_URL = 'http://localhost:3000/lbp/create'
-const FIRST_STEP_URL = BASE_URL + '/' + LBP_FORM_STEPS[0].id
-const SECOND_STEP_URL = BASE_URL + '/' + LBP_FORM_STEPS[1].id
-const THIRD_STEP_URL = BASE_URL + '/' + LBP_FORM_STEPS[2].id
+const stepUrl = (index: number) => `${BASE_URL}/${LBP_FORM_STEPS[index].id}`
 
 test('Create LBP form step navigation', async ({ page }) => {
   await page.goto(`${BASE_URL}`)
   await impersonate(page, defaultAnvilAccount)
 
-  await expect(page).toHaveURL(FIRST_STEP_URL)
+  await expect(page).toHaveURL(stepUrl(0))
   await expect(page.getByText('Launch token details')).toBeVisible()
   const nextButton = button(page, 'Next')
   await expect(nextButton).toBeDisabled()
@@ -34,19 +32,21 @@ test('Create LBP form step navigation', async ({ page }) => {
   await expect(nextButton).toBeEnabled()
   await nextButton.click()
 
-  await expect(page).toHaveURL(SECOND_STEP_URL)
+  await expect(page).toHaveURL(stepUrl(1))
   await expect(page.getByRole('heading', { name: 'Project info', level: 2 })).toBeVisible()
   await page.getByLabel('Project name').fill('The Phoenix Project')
   await page
     .getByLabel('Project description')
     .fill('Rises from the ashes every time a developer is hit by a bus')
   await page.getByLabel('Project website URL').fill('https://example.com')
-  await page.getByLabel('Token icon URL').fill('https://avatars.githubusercontent.com/u/0')
+  await page
+    .getByLabel('Token icon URL')
+    .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png') // should find safer
   await page.getByRole('checkbox').check({ force: true })
   await expect(nextButton).toBeEnabled()
   await nextButton.click()
 
-  await expect(page).toHaveURL(THIRD_STEP_URL)
+  await expect(page).toHaveURL(stepUrl(2))
   await clickButton(page, 'Create LBP')
 
   await expect(button(page, 'Deploy pool on Ethereum Mainnet')).toBeVisible()
