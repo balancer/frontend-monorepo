@@ -93,22 +93,22 @@ export function PoolDetailsContent() {
     }),
   }
 
-  const { isBeforeStep } = usePoolCreationFormSteps()
+  const { isBeforeStep, isStep } = usePoolCreationFormSteps()
+  const isDetailsActive = isStep('Details')
 
   return Object.entries(poolDetailsMap).map(([label, value]) => (
     <HStack
-      _hover={{ bg: 'background.level0' }}
+      _hover={isDetailsActive ? { bg: 'background.level0' } : undefined}
       align="start"
       justify="space-between"
       key={label}
-      mx="-md"
       px="md"
       py="sm"
       sx={{
-        '&:hover p': { color: 'font.maxContrast' },
+        '&:hover p': isDetailsActive ? { color: 'font.maxContrast' } : {},
       }}
       transition="1s all var(--ease-out-cubic)"
-      w="calc(100% + var(--chakra-space-md) * 2)"
+      w="calc((100% + var(--chakra-space-md) * 2) - 2px)"
     >
       <Text color="font.secondary">{label}</Text>
       <Text as="span" color="font.secondary">
