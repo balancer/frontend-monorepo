@@ -26,7 +26,7 @@ type Props = {
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
-  relicId?: string
+  relicId: string
 }
 
 export function ReliquaryWithdrawModal({
@@ -77,22 +77,23 @@ export function ReliquaryWithdrawModal({
   const isSuccess = !!removeLiquidityTxHash && receiptProps.hasReceipt
 
   function baseOnClose() {
+    transactionSteps.resetTransactionSteps()
     startTokenPricePolling()
     refetchRelicPositions()
     onClose()
   }
 
   function handleOnClose() {
-    router.push(`/mabeets/withdraw/${relicId ? relicId : ''}`)
+    router.push(`/mabeets/withdraw/${relicId}`)
     baseOnClose()
   }
 
   function handleReturnAction() {
-    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
+    router.push(`/mabeets?focusRelic=${relicId}`)
     baseOnClose()
   }
 
-  const modalLabel = relicId ? `Withdraw from Relic #${relicId}` : 'Withdraw from Relic'
+  const modalLabel = `Withdraw from Relic #${relicId}`
 
   return (
     <Modal

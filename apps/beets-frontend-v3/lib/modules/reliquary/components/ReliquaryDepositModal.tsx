@@ -86,6 +86,7 @@ export function ReliquaryDepositModal({
   const isSuccess = !!addLiquidityTxHash && receiptProps.hasReceipt
 
   function baseOnClose() {
+    transactionSteps.resetTransactionSteps()
     startTokenPricePolling()
     refetchRelicPositions()
     onClose()
