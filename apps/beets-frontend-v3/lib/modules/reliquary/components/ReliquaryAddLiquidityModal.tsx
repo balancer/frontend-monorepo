@@ -17,7 +17,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
-import { ReliquaryDepositSummary } from './ReliquaryDepositSummary'
+import { ReliquaryAddLiquiditySummary } from './ReliquaryAddLiquiditySummary'
 import { useRouter } from 'next/navigation'
 import { useReliquary } from '../ReliquaryProvider'
 
@@ -30,7 +30,7 @@ type Props = {
   relicId?: string
 }
 
-export function ReliquaryDepositModal({
+export function ReliquaryAddLiquidityModal({
   isOpen,
   onClose,
   finalFocusRef,
@@ -77,8 +77,8 @@ export function ReliquaryDepositModal({
   useEffect(() => {
     if (addLiquidityTxHash && !window.location.pathname.includes(addLiquidityTxHash)) {
       const txPath = relicId
-        ? `/mabeets/deposit/${relicId}/${addLiquidityTxHash}`
-        : `/mabeets/deposit/new/${addLiquidityTxHash}`
+        ? `/mabeets/add-liquidity/${relicId}/${addLiquidityTxHash}`
+        : `/mabeets/add-liquidity/new/${addLiquidityTxHash}`
       window.history.replaceState({}, '', txPath)
     }
   }, [addLiquidityTxHash, relicId])
@@ -98,7 +98,7 @@ export function ReliquaryDepositModal({
   }
 
   function handleOnClose() {
-    const closePath = relicId ? `/mabeets/deposit/${relicId}` : '/mabeets/deposit/new'
+    const closePath = relicId ? `/mabeets/add-liquidity/${relicId}` : '/mabeets/add-liquidity/new'
     router.push(closePath)
     baseOnClose()
   }
@@ -108,7 +108,9 @@ export function ReliquaryDepositModal({
     baseOnClose()
   }
 
-  const modalLabel = createNew ? 'Create new Relic & deposit' : `Deposit into Relic #${relicId}`
+  const modalLabel = createNew
+    ? 'Create new Relic & add liquidity'
+    : `Add liquidity to Relic #${relicId}`
 
   return (
     <Modal
@@ -139,7 +141,7 @@ export function ReliquaryDepositModal({
         <ModalCloseButton />
         <ModalBody>
           {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
-          <ReliquaryDepositSummary {...receiptProps} createNew={createNew} relicId={relicId} />
+          <ReliquaryAddLiquiditySummary {...receiptProps} createNew={createNew} relicId={relicId} />
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}

@@ -8,11 +8,11 @@ import { useCallback, useMemo } from 'react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { useReliquaryDepositSteps } from './hooks/useReliquaryDepositSteps'
+import { useReliquaryAddLiquiditySteps } from './hooks/useReliquaryAddLiquiditySteps'
 import { AddLiquidityStepsParams } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
-export function RelicDepositProvider({
+export function RelicAddLiquidityProvider({
   children,
   urlTxHash,
   relicId,
@@ -49,7 +49,7 @@ export function RelicDepositProvider({
     // This function signature matches what AddLiquidityProvider expects
     return (params: AddLiquidityStepsParams) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      return useReliquaryDepositSteps({
+      return useReliquaryAddLiquiditySteps({
         ...params,
         createNew,
         relicId,

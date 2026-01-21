@@ -8,7 +8,7 @@ import { useGetPositionForId } from './useGetPositionForId'
 
 const MAX_MATURITY = 6048000 // 10 weeks in seconds
 
-export function useReliquaryDepositImpact(amount: number, relicId?: string) {
+export function useReliquaryAddLiquidityMaturityImpact(amount: number, relicId?: string) {
   const { chain } = useReliquary()
   const { position, isLoading: isLoadingPosition } = useGetPositionForId(relicId || '', chain)
 
@@ -29,9 +29,9 @@ export function useReliquaryDepositImpact(amount: number, relicId?: string) {
     maturityThresholds.length > 0 &&
     levelOnUpdate !== undefined
 
-  const depositImpactQuery = useQuery({
+  const addLiquidityMaturityImpactQuery = useQuery({
     queryKey: [
-      'relicDepositImpact',
+      'relicAddLiquidityMaturityImpact',
       relicId,
       amount,
       position?.entry,
@@ -47,8 +47,8 @@ export function useReliquaryDepositImpact(amount: number, relicId?: string) {
       const weight = bn(amount).div(bn(amount).plus(position.amount)).toNumber()
       const nowTimestamp = Math.floor(millisecondsToSeconds(Date.now()))
       const maturity = nowTimestamp - position.entry
-      const entryTimestampAfterDeposit = Math.round(position.entry + maturity * weight)
-      const newMaturity = nowTimestamp - entryTimestampAfterDeposit
+      const entryTimestampAfterAddLiquidity = Math.round(position.entry + maturity * weight)
+      const newMaturity = nowTimestamp - entryTimestampAfterAddLiquidity
       const maxLevel = maturityLevels.length - 1
 
       let newLevel = 0
@@ -68,7 +68,9 @@ export function useReliquaryDepositImpact(amount: number, relicId?: string) {
           ? 'max level reached'
           : `${newMaturity}/${maturityLevels[newLevel + 1]}`
 
-      const depositImpactTimeInMilliseconds = secondsToMilliseconds(MAX_MATURITY - newMaturity)
+      const addLiquidityMaturityImpactTimeInMilliseconds = secondsToMilliseconds(
+        MAX_MATURITY - newMaturity
+      )
       const staysMax = levelOnUpdate === maxLevel && newLevel === maxLevel
 
       return {
@@ -78,7 +80,7 @@ export function useReliquaryDepositImpact(amount: number, relicId?: string) {
         newLevel,
         oldLevelProgress,
         newLevelProgress,
-        depositImpactTimeInMilliseconds,
+        addLiquidityMaturityImpactTimeInMilliseconds,
         staysMax,
       }
     },
@@ -86,11 +88,11 @@ export function useReliquaryDepositImpact(amount: number, relicId?: string) {
   })
 
   return {
-    ...depositImpactQuery,
+    ...addLiquidityMaturityImpactQuery,
     isLoading:
       isLoadingPosition ||
       isLoadingLevelOnUpdate ||
       isLoadingLevelInfo ||
-      depositImpactQuery.isLoading,
+      addLiquidityMaturityImpactQuery.isLoading,
   }
 }

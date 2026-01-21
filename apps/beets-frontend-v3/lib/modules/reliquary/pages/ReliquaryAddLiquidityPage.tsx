@@ -37,27 +37,27 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum, formatFalsyValueAsDash } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
-import { ReliquaryDepositImpactWarning } from '../components/ReliquaryDepositImpactWarning'
-import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
-import { ReliquaryDepositModal } from '../components/ReliquaryDepositModal'
+import { ReliquaryAddLiquidityMaturityImpactWarning } from '../components/ReliquaryAddLiquidityMaturityImpactWarning'
+import { useReliquaryAddLiquidityMaturityImpact } from '../hooks/useReliquaryAddLiquidityMaturityImpact'
+import { ReliquaryAddLiquidityModal } from '../components/ReliquaryAddLiquidityModal'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { TOSCheckbox } from '@/lib/modules/reliquary/components/TOSCheckbox'
 
-export function ReliquaryDepositPage({ relicId }: { relicId?: string }) {
+export function ReliquaryAddLiquidityPage({ relicId }: { relicId?: string }) {
   const { validTokens } = useAddLiquidity()
 
   return (
     <PriceImpactProvider>
       <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
         <TokenBalancesProvider extTokens={validTokens}>
-          <ReliquaryDepositForm relicId={relicId} />
+          <ReliquaryAddLiquidityForm relicId={relicId} />
         </TokenBalancesProvider>
       </PoolActionsLayout>
     </PriceImpactProvider>
   )
 }
 
-function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
+function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
   const [tabIndex, setTabIndex] = useState(0)
   const [tosAccepted, setTosAccepted] = useState(false)
   const nextBtn = useRef(null)
@@ -80,12 +80,15 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
 
   const createNew = !relicId
 
-  // Calculate deposit impact based on simulated BPT amount
+  // Calculate add liquidity impact based on simulated BPT amount
   const bptAmount = simulationQuery.data?.bptOut
     ? Number(simulationQuery.data.bptOut) / 1e18 // Convert from wei to human amount
     : 0
 
-  const depositImpactQuery = useReliquaryDepositImpact(bptAmount, createNew ? undefined : relicId)
+  const addLiquidityMaturityImpactQuery = useReliquaryAddLiquidityMaturityImpact(
+    bptAmount,
+    createNew ? undefined : relicId
+  )
 
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -138,15 +141,15 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <Box as="span">Deposit into Relic</Box>
+            <Box as="span">Add liquidity to Relic</Box>
             <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
           {!relicId && (
-            <BalAlert content="A new Relic will be created with this deposit" status="info" />
+            <BalAlert content="A new Relic will be created with this add liquidity" status="info" />
           )}
-          {relicId && <BalAlert content={`Depositing into Relic #${relicId}`} status="info" />}
+          {relicId && <BalAlert content={`Adding liquidity to Relic #${relicId}`} status="info" />}
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             setFlexibleTab={setFlexibleTab}
@@ -154,9 +157,9 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
             tabIndex={tabIndex}
             totalUSDValue={totalUSDValue}
           />
-          <ReliquaryDepositImpactWarning
+          <ReliquaryAddLiquidityMaturityImpactWarning
+            addLiquidityMaturityImpactQuery={addLiquidityMaturityImpactQuery}
             createNew={createNew}
-            depositImpactQuery={depositImpactQuery}
             simulationQuery={simulationQuery}
           />
           <VStack align="start" spacing="sm" w="full">
@@ -239,7 +242,7 @@ function ReliquaryDepositForm({ relicId }: { relicId?: string }) {
           )}
         </VStack>
       </Card>
-      <ReliquaryDepositModal
+      <ReliquaryAddLiquidityModal
         createNew={createNew}
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}

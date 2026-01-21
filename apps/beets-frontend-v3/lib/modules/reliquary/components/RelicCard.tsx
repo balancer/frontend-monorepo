@@ -24,7 +24,7 @@ import RelicLevel8 from '../assets/8.png'
 import RelicLevel9 from '../assets/9.png'
 import { BeetsTokenSonic } from '../assets/BeetsTokenSonic'
 import { relicGetMaturityProgress } from '../lib/reliquary-helpers'
-import { useRelicDepositBalance } from '../lib/useRelicDepositBalance'
+import { useRelicAddLiquidityBalance } from '../lib/useRelicAddLiquidityBalance'
 import { LevelUpModal } from './LevelUpModal'
 import { BurnModal } from './BurnModal'
 import { ReliquaryClaimModal } from './ReliquaryClaimModal'
@@ -69,7 +69,7 @@ function getImage(level: number) {
 
 export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const router = useRouter()
-  const { relicBalanceUSD } = useRelicDepositBalance(relic.relicId)
+  const { relicBalanceUSD } = useRelicAddLiquidityBalance(relic.relicId)
   const { pool } = usePool()
   const config = useNetworkConfig()
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
@@ -216,11 +216,11 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         >
           <Button
             flex="1"
-            onClick={() => router.push(`/mabeets/deposit/${relic.relicId}`)}
+            onClick={() => router.push(`/mabeets/add-liquidity/${relic.relicId}`)}
             size="sm"
             variant="primary"
           >
-            Deposit
+            Add
           </Button>
           {hasBalance ? (
             <Button

@@ -51,8 +51,8 @@ export class ReliquaryUnbalancedAddLiquidityHandler extends BaseUnbalancedAddLiq
       fromInternalBalance: true,
     })
 
-    // Get Relic deposit data
-    const relicDepositData = this.getRelicDepositOrCreateAndDeposit({
+    // Get Relic add liquidity data
+    const relicAddLiquidityData = this.getRelicAddLiquidityOrCreateAndAddLiquidity({
       userAddress: account,
       relicId,
       amount: Relayer.toChainedReference(0n, false),
@@ -65,7 +65,7 @@ export class ReliquaryUnbalancedAddLiquidityHandler extends BaseUnbalancedAddLiq
       data: encodeFunctionData({
         abi: balancerV2BalancerRelayerV6Abi,
         functionName: 'multicall',
-        args: [[joinCallData, relicDepositData]],
+        args: [[joinCallData, relicAddLiquidityData]],
       }),
       to: networkConfig.contracts.balancer.relayerV6,
     }
@@ -108,7 +108,7 @@ export class ReliquaryUnbalancedAddLiquidityHandler extends BaseUnbalancedAddLiq
     }) as Hex
   }
 
-  private getRelicDepositOrCreateAndDeposit({
+  private getRelicAddLiquidityOrCreateAndAddLiquidity({
     userAddress,
     relicId,
     amount,
@@ -118,14 +118,14 @@ export class ReliquaryUnbalancedAddLiquidityHandler extends BaseUnbalancedAddLiq
     amount: bigint
   }) {
     return relicId !== undefined && relicId !== null
-      ? this.batchRelayerService.reliquaryEncodeDeposit({
+      ? this.batchRelayerService.reliquaryEncodeAddLiquidity({
           sender: networkConfig.contracts.balancer.relayerV6,
           token: networkConfig.reliquary!.fbeets.poolAddress,
           relicId: BigInt(relicId),
           amount,
           outputReference: 0n,
         })
-      : this.batchRelayerService.reliquaryEncodeCreateRelicAndDeposit({
+      : this.batchRelayerService.reliquaryEncodeCreateRelicAndAddLiquidity({
           sender: networkConfig.contracts.balancer.relayerV6,
           recipient: userAddress,
           token: networkConfig.reliquary!.fbeets.poolAddress,

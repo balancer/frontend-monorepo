@@ -22,7 +22,8 @@ const steps: Step[] = [
   {
     stepNumber: 'Step2',
     title: 'Reliquary',
-    description: 'Deposit fBEETS into Reliquary to unlock your maturity adjusted position.',
+    description:
+      'Add liquidity with fBEETS in Reliquary to unlock your maturity adjusted position.',
     icon: FBeetsTokenSonic,
   },
   {

@@ -25,14 +25,14 @@ export type ReliquaryFarmPosition = {
   level: number
 }
 
-export type ReliquaryDepositImpact = {
+export type ReliquaryAddLiquidityMaturityImpact = {
   oldMaturity: number
   newMaturity: number
   oldLevel: number
   newLevel: number
   oldLevelProgress: string
   newLevelProgress: string
-  depositImpactTimeInMilliseconds: number
+  addLiquidityMaturityImpactTimeInMilliseconds: number
   staysMax: boolean
 }
 

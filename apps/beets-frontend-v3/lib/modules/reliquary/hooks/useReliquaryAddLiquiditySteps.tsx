@@ -7,18 +7,21 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { ReliquaryDepositStepParams, useReliquaryDepositStep } from './useReliquaryDepositStep'
+import {
+  ReliquaryAddLiquidityStepParams,
+  useReliquaryAddLiquidityStep,
+} from './useReliquaryAddLiquidityStep'
 import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 import { useApproveRelayerRelicsStep } from './useApproveRelayerRelicsStep'
 import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useReliquary } from '../ReliquaryProvider'
 
-export type ReliquaryDepositStepsParams = ReliquaryDepositStepParams & {
+export type ReliquaryAddLiquidityStepsParams = ReliquaryAddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
 }
 
-export function useReliquaryDepositSteps({
+export function useReliquaryAddLiquiditySteps({
   helpers,
   handler,
   humanAmountsIn,
@@ -26,7 +29,7 @@ export function useReliquaryDepositSteps({
   slippage,
   createNew,
   relicId,
-}: ReliquaryDepositStepsParams) {
+}: ReliquaryAddLiquidityStepsParams) {
   const { pool } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { chain } = useReliquary()
@@ -65,8 +68,8 @@ export function useReliquaryDepositSteps({
       isPermit2: false, // V2 pools don't use permit2
     })
 
-  // Reliquary deposit steps (multicall: joinPool + depositIntoReliquary)
-  const { multicallStep } = useReliquaryDepositStep({
+  // Reliquary add liquidity steps (multicall: joinPool + add liquidity into Reliquary)
+  const { multicallStep } = useReliquaryAddLiquidityStep({
     handler,
     humanAmountsIn,
     simulationQuery,

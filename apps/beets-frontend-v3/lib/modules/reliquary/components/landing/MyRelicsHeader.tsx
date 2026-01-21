@@ -28,7 +28,11 @@ export function MyRelicsHeader() {
         </Heading>
       </GridItem>
       <GridItem area="create" justifySelf="end">
-        <Button onClick={() => router.push('/mabeets/deposit/new')} size="md" variant="primary">
+        <Button
+          onClick={() => router.push('/mabeets/add-liquidity/new')}
+          size="md"
+          variant="primary"
+        >
           New Relic
         </Button>
       </GridItem>

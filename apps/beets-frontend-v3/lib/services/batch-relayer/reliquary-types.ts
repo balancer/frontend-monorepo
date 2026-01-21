@@ -1,6 +1,6 @@
 import { Address } from 'viem'
 
-export interface EncodeReliquaryCreateRelicAndDepositInput {
+export interface EncodeReliquaryCreateRelicAndAddLiquidityInput {
   sender: Address
   recipient: Address
   token: Address
@@ -9,7 +9,7 @@ export interface EncodeReliquaryCreateRelicAndDepositInput {
   outputReference: bigint
 }
 
-export interface EncodeReliquaryDepositInput {
+export interface EncodeReliquaryAddLiquidityInput {
   sender: Address
   token: Address
   relicId: bigint

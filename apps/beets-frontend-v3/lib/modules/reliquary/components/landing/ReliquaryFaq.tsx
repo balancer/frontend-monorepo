@@ -39,7 +39,7 @@ const FAQ_COLUMN_2 = [
   {
     question: 'What do I receive when I create a maBEETS position?',
     answer:
-      'You receive a maBEETS deposit NFT that represents your maBEETS position and tracks maturity, voting power, and reward share.',
+      'You receive a maBEETS position NFT that represents your maBEETS position and tracks maturity, voting power, and reward share.',
   },
   {
     question: 'How do maBEETS rewards work?',

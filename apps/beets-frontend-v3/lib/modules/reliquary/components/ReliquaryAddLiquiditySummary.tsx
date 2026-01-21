@@ -25,18 +25,18 @@ import {
   SlippageSelector,
 } from '@repo/lib/modules/pool/actions/SlippageSelector'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
+import { useReliquaryAddLiquidityMaturityImpact } from '../hooks/useReliquaryAddLiquidityMaturityImpact'
 import { intervalToDuration, formatDuration } from 'date-fns'
-import { fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type Props = AddLiquidityReceiptResult & {
   createNew: boolean
   relicId?: string
 }
 
-export function ReliquaryDepositSummary({
+export function ReliquaryAddLiquiditySummary({
   isLoading: isLoadingReceipt,
   error,
   sentTokens,
@@ -59,13 +59,17 @@ export function ReliquaryDepositSummary({
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
+  const { toCurrency } = useCurrency()
 
-  // Calculate deposit impact based on simulated BPT amount
+  // Calculate add liquidity impact based on simulated BPT amount
   const bptAmount = simulationQuery.data?.bptOut
     ? bn(formatUnits(simulationQuery.data.bptOut.amount, BPT_DECIMALS)).toNumber()
     : 0
 
-  const depositImpactQuery = useReliquaryDepositImpact(bptAmount, createNew ? undefined : relicId)
+  const addLiquidityMaturityImpactQuery = useReliquaryAddLiquidityMaturityImpact(
+    bptAmount,
+    createNew ? undefined : relicId
+  )
 
   // Order amountsIn like the form inputs which uses the tokens array
   const [selectedSlippage, setSelectedSlippage] = useState(0)
@@ -87,17 +91,18 @@ export function ReliquaryDepositSummary({
     return isLoadingReceipt
   }, [hasQuoteContext, isLoadingReceipt, shouldShowReceipt])
 
-  const depositImpact = depositImpactQuery.data
-  const showDepositImpactWarning = !createNew && relicId && depositImpact && !depositImpact.staysMax
+  const addLiquidityMaturityImpact = addLiquidityMaturityImpactQuery.data
+  const showAddLiquidityMaturityImpactWarning =
+    !createNew && relicId && addLiquidityMaturityImpact && !addLiquidityMaturityImpact.staysMax
 
   const maturityDuration = useMemo(() => {
-    if (!depositImpact) return null
+    if (!addLiquidityMaturityImpact) return null
     const duration = intervalToDuration({
       start: 0,
-      end: depositImpact.depositImpactTimeInMilliseconds,
+      end: addLiquidityMaturityImpact.addLiquidityMaturityImpactTimeInMilliseconds,
     })
     return formatDuration(duration, { delimiter: ', ' })
-  }, [depositImpact])
+  }, [addLiquidityMaturityImpact])
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
@@ -128,12 +133,12 @@ export function ReliquaryDepositSummary({
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
-      {showDepositImpactWarning && !shouldShowReceipt && (
+      {showAddLiquidityMaturityImpactWarning && !shouldShowReceipt && (
         <Alert mb="sm" status="warning">
           <AlertIcon />
           <Text color="black" fontSize="sm">
-            Depositing {fNum('fiat', totalUSDValue)} into this Relic will affect its maturity. It
-            will take an additional {maturityDuration} to reach maximum maturity.
+            Adding {toCurrency(totalUSDValue)} to this Relic will affect its maturity. It will take
+            an additional {maturityDuration} to reach maximum maturity.
           </Text>
         </Alert>
       )}
@@ -166,12 +171,12 @@ export function ReliquaryDepositSummary({
                 : receivedBptUnits
             }
             isLoading={isLoadingReceipt}
-            label={createNew ? 'Created Relic with' : `Deposited into Relic #${relicId}`}
+            label={createNew ? 'Created Relic with' : `Added liquidity to Relic #${relicId}`}
           />
         ) : (
           <QuoteBptOut
             isLoading={isLoadingTokens}
-            label={createNew ? 'Creating Relic with' : `Depositing into Relic #${relicId}`}
+            label={createNew ? 'Creating Relic with' : `Adding liquidity to Relic #${relicId}`}
           />
         )}
       </Card>
@@ -183,8 +188,8 @@ export function ReliquaryDepositSummary({
               <VStack align="start" spacing="md" w="full">
                 <Text color="font.highlight">
                   {createNew
-                    ? "You've successfully created a new Relic and deposited into it!"
-                    : `You've successfully deposited into Relic #${relicId}!`}
+                    ? "You've successfully created a new Relic and added liquidity to it!"
+                    : `You've successfully added liquidity to Relic #${relicId}!`}
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your maBEETS are now earning rewards. Return to the maBEETS page to manage your

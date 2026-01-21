@@ -6,8 +6,8 @@ import {
   ReliquaryActionsService,
 } from './extensions/reliquary-actions.service'
 import type {
-  EncodeReliquaryCreateRelicAndDepositInput,
-  EncodeReliquaryDepositInput,
+  EncodeReliquaryAddLiquidityInput,
+  EncodeReliquaryCreateRelicAndAddLiquidityInput,
   EncodeReliquaryHarvestAllInput,
   EncodeReliquaryWithdrawAndHarvestInput,
 } from './reliquary-types'
@@ -26,14 +26,14 @@ export class BeetsBatchRelayerService extends BatchRelayerService {
   }
 
   // Reliquary-specific methods
-  public reliquaryEncodeCreateRelicAndDeposit(
-    params: EncodeReliquaryCreateRelicAndDepositInput
+  public reliquaryEncodeCreateRelicAndAddLiquidity(
+    params: EncodeReliquaryCreateRelicAndAddLiquidityInput
   ): Hex {
-    return this.reliquaryActionsService.encodeCreateRelicAndDeposit(params)
+    return this.reliquaryActionsService.encodeCreateRelicAndAddLiquidity(params)
   }
 
-  public reliquaryEncodeDeposit(params: EncodeReliquaryDepositInput): Hex {
-    return this.reliquaryActionsService.encodeDeposit(params)
+  public reliquaryEncodeAddLiquidity(params: EncodeReliquaryAddLiquidityInput): Hex {
+    return this.reliquaryActionsService.encodeAddLiquidity(params)
   }
 
   public reliquaryEncodeWithdrawAndHarvest(params: EncodeReliquaryWithdrawAndHarvestInput): Hex {

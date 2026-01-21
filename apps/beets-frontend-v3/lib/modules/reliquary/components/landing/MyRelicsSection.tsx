@@ -130,7 +130,11 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
             Your Relics
           </Text>
           {isConnected && (
-            <Button onClick={() => router.push('/mabeets/deposit/new')} size="md" variant="primary">
+            <Button
+              onClick={() => router.push('/mabeets/add-liquidity/new')}
+              size="md"
+              variant="primary"
+            >
               Create New Relic
             </Button>
           )}

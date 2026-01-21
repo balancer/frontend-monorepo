@@ -31,7 +31,8 @@ export function HowToParticipate() {
             2. Create a maBEETS Position:
           </Text>{' '}
           <Text as="span" variant="secondary">
-            Deposit fBEETS to create a maBEETS position that tracks maturity and voting power.
+            Add liquidity with fBEETS to create a maBEETS position that tracks maturity and voting
+            power.
           </Text>
         </Text>
         <Text>

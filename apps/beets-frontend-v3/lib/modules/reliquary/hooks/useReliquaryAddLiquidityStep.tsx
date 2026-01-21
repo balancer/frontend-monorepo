@@ -19,9 +19,9 @@ import { useReliquary } from '../ReliquaryProvider'
 import { ReliquaryProportionalAddLiquidityHandler } from '../handlers/ReliquaryProportionalAddLiquidity.handler'
 import { ReliquaryUnbalancedAddLiquidityHandler } from '../handlers/ReliquaryUnbalancedAddLiquidity.handler'
 
-const reliquaryMulticallStepId = 'reliquary-multicall-deposit'
+const reliquaryMulticallStepId = 'reliquary-multicall-add-liquidity'
 
-export type ReliquaryDepositStepParams = {
+export type ReliquaryAddLiquidityStepParams = {
   handler: AddLiquidityHandler // Accept base type but check for reliquary handlers in runtime
   humanAmountsIn: HumanTokenAmountWithSymbol[]
   simulationQuery: any
@@ -30,7 +30,7 @@ export type ReliquaryDepositStepParams = {
   relicId?: string
 }
 
-export type ReliquaryDepositSteps = {
+export type ReliquaryAddLiquiditySteps = {
   multicallStep: TransactionStep
 }
 
@@ -56,7 +56,10 @@ function useReliquaryBuildCallDataQuery({
       handler instanceof ReliquaryProportionalAddLiquidityHandler ||
       handler instanceof ReliquaryUnbalancedAddLiquidityHandler
     ) {
-      const queryOutput = ensureLastQueryResponse('Reliquary deposit query', simulationQuery.data)
+      const queryOutput = ensureLastQueryResponse(
+        'Reliquary add liquidity query',
+        simulationQuery.data
+      )
       const response = await handler.buildCallData({
         account: userAddress,
         humanAmountsIn,
@@ -80,7 +83,9 @@ function useReliquaryBuildCallDataQuery({
   })
 }
 
-export function useReliquaryDepositStep(params: ReliquaryDepositStepParams): ReliquaryDepositSteps {
+export function useReliquaryAddLiquidityStep(
+  params: ReliquaryAddLiquidityStepParams
+): ReliquaryAddLiquiditySteps {
   const { pool, refetch: refetchPoolBalances, chainId } = usePool()
   const { refetchRelicPositions } = useReliquary()
   const [isStepActivated, setIsStepActivated] = useState(false)
@@ -97,29 +102,29 @@ export function useReliquaryDepositStep(params: ReliquaryDepositStepParams): Rel
     enabled: isStepActivated,
   })
 
-  // Labels for the multicall transaction (joinPool + depositIntoReliquary)
+  // Labels for the multicall transaction (joinPool + add liquidity into Reliquary)
   const addLiquidityLabels: TransactionLabels = createNew
     ? {
-        init: 'Create Relic & deposit',
-        title: 'Create Relic and deposit liquidity',
-        description: `Create a new maBEETS Relic and deposit liquidity to ${pool.name || 'pool'}.`,
-        confirming: 'Creating Relic and depositing...',
-        confirmed: 'Relic created and liquidity deposited!',
-        tooltip: `Create a new maBEETS Relic and deposit liquidity to ${pool.name || 'pool'}.`,
+        init: 'Create Relic & add liquidity',
+        title: 'Create Relic and add liquidity',
+        description: `Create a new maBEETS Relic and add liquidity to ${pool.name || 'pool'}.`,
+        confirming: 'Creating Relic and adding liquidity...',
+        confirmed: 'Relic created and liquidity added!',
+        tooltip: `Create a new maBEETS Relic and add liquidity to ${pool.name || 'pool'}.`,
         poolId: pool.id,
       }
     : {
-        init: 'Deposit into Relic',
-        title: `Deposit into Relic #${relicId}`,
-        description: `Deposit liquidity into ${pool.name || 'pool'} and Relic #${relicId}.`,
-        confirming: 'Depositing into Relic...',
-        confirmed: 'Deposited into Relic!',
-        tooltip: `Deposit liquidity into ${pool.name || 'pool'} and Relic #${relicId}`,
+        init: 'Add liquidity to Relic',
+        title: `Add liquidity to Relic #${relicId}`,
+        description: `Add liquidity to ${pool.name || 'pool'} and Relic #${relicId}.`,
+        confirming: 'Adding liquidity to Relic...',
+        confirmed: 'Liquidity added to Relic!',
+        tooltip: `Add liquidity to ${pool.name || 'pool'} and Relic #${relicId}`,
         poolId: pool.id,
       }
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation(
-    'Error in Reliquary deposit gas estimation',
+    'Error in Reliquary add liquidity gas estimation',
     {
       simulationQueryData: simulationQuery.data,
       buildCallQueryData: buildCallDataQuery.data,
@@ -140,7 +145,7 @@ export function useReliquaryDepositStep(params: ReliquaryDepositStepParams): Rel
     refetchRelicPositions() // Refetch reliquary positions to update landing page
   }, [refetchPoolBalances, refetchRelicPositions])
 
-  // Execute multicall transaction (joinPool + depositIntoReliquary)
+  // Execute multicall transaction (joinPool + add liquidity into Reliquary)
   const multicallStep: TransactionStep = useMemo(
     () => ({
       id: reliquaryMulticallStepId,

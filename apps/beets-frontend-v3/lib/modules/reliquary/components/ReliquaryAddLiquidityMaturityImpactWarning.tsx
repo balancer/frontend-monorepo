@@ -5,50 +5,51 @@ import { AddLiquiditySimulationQueryResult } from '@repo/lib/modules/pool/action
 import { useMemo } from 'react'
 import { formatUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
-import { useReliquaryDepositImpact } from '../hooks/useReliquaryDepositImpact'
+import { useReliquaryAddLiquidityMaturityImpact } from '../hooks/useReliquaryAddLiquidityMaturityImpact'
 
 type Props = {
   createNew: boolean
-  depositImpactQuery: ReturnType<typeof useReliquaryDepositImpact>
+  addLiquidityMaturityImpactQuery: ReturnType<typeof useReliquaryAddLiquidityMaturityImpact>
   simulationQuery: AddLiquiditySimulationQueryResult
 }
 
-export function ReliquaryDepositImpactWarning({
+export function ReliquaryAddLiquidityMaturityImpactWarning({
   createNew,
-  depositImpactQuery,
+  addLiquidityMaturityImpactQuery,
   simulationQuery,
 }: Props) {
-  const depositImpact = depositImpactQuery.data
+  const addLiquidityMaturityImpact = addLiquidityMaturityImpactQuery.data
 
   // Calculate duration for maturity impact (pure function, no Date.now())
   // Must be before early returns to satisfy Rules of Hooks
   const maturityDuration = useMemo(() => {
-    if (!depositImpact) return null
+    if (!addLiquidityMaturityImpact) return null
     const duration = intervalToDuration({
       start: 0,
-      end: depositImpact.depositImpactTimeInMilliseconds,
+      end: addLiquidityMaturityImpact.addLiquidityMaturityImpactTimeInMilliseconds,
     })
     return formatDuration(duration, { delimiter: ', ' })
-  }, [depositImpact])
+  }, [addLiquidityMaturityImpact])
 
   // Calculate total invest value from simulation
   const bptOut = simulationQuery.data?.bptOut
   const totalInvestValue = bptOut ? bn(formatUnits(bptOut.amount, BPT_DECIMALS)).toNumber() : 0
 
-  const isLoading = depositImpactQuery.isLoading || depositImpactQuery.isFetching
+  const isLoading =
+    addLiquidityMaturityImpactQuery.isLoading || addLiquidityMaturityImpactQuery.isFetching
 
   // Don't show warning if creating new Relic
   if (createNew) {
     return null
   }
 
-  // Don't show warning if no deposit impact data OR no amount being deposited
-  if (!depositImpact || totalInvestValue === 0) {
+  // Don't show warning if no add liquidity impact data OR no amount being added
+  if (!addLiquidityMaturityImpact || totalInvestValue === 0) {
     return null
   }
 
   // Don't show warning if Relic stays at max level
-  if (depositImpact.staysMax) {
+  if (addLiquidityMaturityImpact.staysMax) {
     return null
   }
 
@@ -58,13 +59,13 @@ export function ReliquaryDepositImpactWarning({
         <AlertIcon alignSelf="center" />
         {!isLoading ? (
           <>
-            Depositing {fNum('token', totalInvestValue)} fBEETS into this Relic will affect its
-            maturity. It will take an additional {maturityDuration} to reach maximum maturity.
-            {depositImpact.oldLevel !== depositImpact.newLevel && (
+            Adding {fNum('token', totalInvestValue)} fBEETS to this Relic will affect its maturity.
+            It will take an additional {maturityDuration} to reach maximum maturity.
+            {addLiquidityMaturityImpact.oldLevel !== addLiquidityMaturityImpact.newLevel && (
               <>
                 {' '}
-                Your Relic will change from level {depositImpact.oldLevel + 1} to level{' '}
-                {depositImpact.newLevel + 1}.
+                Your Relic will change from level {addLiquidityMaturityImpact.oldLevel + 1} to level{' '}
+                {addLiquidityMaturityImpact.newLevel + 1}.
               </>
             )}
           </>
