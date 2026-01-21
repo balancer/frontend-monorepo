@@ -60,6 +60,7 @@ export function RelicDepositProvider({
   return (
     <AddLiquidityProvider
       addLiquidityHandlerSelector={reliquaryHandlerSelector}
+      enablePoolRedirect={false}
       urlTxHash={urlTxHash}
       useAddLiquiditySteps={customStepsHook}
     >

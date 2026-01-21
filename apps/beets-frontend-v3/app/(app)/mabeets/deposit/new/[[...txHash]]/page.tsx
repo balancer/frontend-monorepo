@@ -1,5 +1,5 @@
 import { ReliquaryDepositPage } from '@/lib/modules/reliquary/pages/ReliquaryDepositPage'
 
-export default function DepositNewRelicPage() {
+export default function DepositNewRelicTxPage() {
   return <ReliquaryDepositPage />
 }

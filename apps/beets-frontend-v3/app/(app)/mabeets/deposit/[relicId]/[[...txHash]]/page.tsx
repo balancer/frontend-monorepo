@@ -1,6 +1,6 @@
 import { ReliquaryDepositPage } from '@/lib/modules/reliquary/pages/ReliquaryDepositPage'
 
-export default async function DepositToRelicPage({
+export default async function DepositToRelicTxPage({
   params,
 }: {
   params: Promise<{ relicId: string }>

@@ -57,7 +57,8 @@ export function useAddLiquidityLogic(
     pool: Pool,
     wantsProportional: boolean
   ) => AddLiquidityHandler = selectAddLiquidityHandler,
-  useAddLiquiditySteps: typeof useAddLiquidityStepsBase = useAddLiquidityStepsBase
+  useAddLiquiditySteps: typeof useAddLiquidityStepsBase = useAddLiquidityStepsBase,
+  enablePoolRedirect = true
 ) {
   const { pool, refetch: refetchPool } = usePool()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
@@ -220,7 +221,11 @@ export function useAddLiquidityLogic(
   ]
   const { isDisabled, disabledReason } = isDisabledWithReason(...allDisabledConditions)
 
-  const previewModalDisclosure = useModalWithPoolRedirect(pool, addLiquidityTxHash)
+  const previewModalDisclosure = useModalWithPoolRedirect(
+    pool,
+    addLiquidityTxHash,
+    enablePoolRedirect
+  )
 
   return {
     transactionSteps,
@@ -269,15 +274,22 @@ type Props = PropsWithChildren<{
   urlTxHash?: Hash
   addLiquidityHandlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
   useAddLiquiditySteps?: typeof useAddLiquidityStepsBase
+  enablePoolRedirect?: boolean
 }>
 
 export function AddLiquidityProvider({
   urlTxHash,
   addLiquidityHandlerSelector,
   useAddLiquiditySteps,
+  enablePoolRedirect,
   children,
 }: Props) {
-  const hook = useAddLiquidityLogic(urlTxHash, addLiquidityHandlerSelector, useAddLiquiditySteps)
+  const hook = useAddLiquidityLogic(
+    urlTxHash,
+    addLiquidityHandlerSelector,
+    useAddLiquiditySteps,
+    enablePoolRedirect
+  )
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

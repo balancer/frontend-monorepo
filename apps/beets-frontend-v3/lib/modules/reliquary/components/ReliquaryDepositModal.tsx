@@ -65,6 +65,8 @@ export function ReliquaryDepositModal({
     txReceipt,
   })
 
+  // TODO: get relicId from tx after creating new relic
+
   useEffect(() => {
     if (isOpen) {
       // stop polling for token prices when modal is opened to prevent unwanted re-renders
@@ -74,9 +76,12 @@ export function ReliquaryDepositModal({
 
   useEffect(() => {
     if (addLiquidityTxHash && !window.location.pathname.includes(addLiquidityTxHash)) {
-      window.history.replaceState({}, '', `./deposit/${addLiquidityTxHash}`)
+      const txPath = relicId
+        ? `/mabeets/deposit/${relicId}/${addLiquidityTxHash}`
+        : `/mabeets/deposit/new/${addLiquidityTxHash}`
+      window.history.replaceState({}, '', txPath)
     }
-  }, [addLiquidityTxHash])
+  }, [addLiquidityTxHash, relicId])
 
   useOnUserAccountChanged(() => {
     setInitialHumanAmountsIn()
@@ -93,7 +98,8 @@ export function ReliquaryDepositModal({
   }
 
   function handleOnClose() {
-    router.push(`/mabeets/deposit/${relicId ? relicId : ''}`)
+    const closePath = relicId ? `/mabeets/deposit/${relicId}` : '/mabeets/deposit/new'
+    router.push(closePath)
     baseOnClose()
   }
 
