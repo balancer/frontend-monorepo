@@ -25,9 +25,11 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
   const { copyToClipboard, isCopied } = useCopyToClipboard()
-  const saleFormState = useFormState({ control: saleStructureForm.control })
-  const projectInfoFormState = useFormState({ control: projectInfoForm.control })
-  const isFormStateValid = saleFormState.isValid && projectInfoFormState.isValid
+  const { errors: saleErrors } = useFormState({ control: saleStructureForm.control })
+  const { errors: projectErrors } = useFormState({ control: projectInfoForm.control })
+
+  // Check errors instead of isValid - isValid is unreliable when Controllers unmount between steps
+  const isFormStateValid = !Object.keys(saleErrors).length && !Object.keys(projectErrors).length
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
