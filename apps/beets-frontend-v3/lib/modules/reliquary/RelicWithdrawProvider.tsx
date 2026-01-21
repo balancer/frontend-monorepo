@@ -60,6 +60,7 @@ export function RelicWithdrawProvider({
         handler: params.handler,
         simulationQuery: params.simulationQuery,
         relicId: relicIdNumber,
+        singleTokenOutAddress: params.singleTokenOutAddress,
       })
     }
   }, [relicIdNumber])

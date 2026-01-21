@@ -22,7 +22,10 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
     account,
     queryOutput,
     slippagePercent,
-  }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
+    tokenOut,
+  }: SdkBuildRemoveLiquidityInput & {
+    tokenOut: Address
+  }): Promise<TransactionConfig> {
     const relicId = this.relicId
 
     if (relicId === undefined || relicId === null) {
@@ -38,9 +41,6 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
       sender: account,
       recipient: account,
     })
-
-    // TokenOut is present in sdkQueryOutput for single token removals but not in the base type
-    const tokenOut = (queryOutput.sdkQueryOutput as any).tokenOut as Address
 
     // Get withdraw from Relic call data
     const withdrawCallData = this.getRelicWithdrawAndHarvestCallData({

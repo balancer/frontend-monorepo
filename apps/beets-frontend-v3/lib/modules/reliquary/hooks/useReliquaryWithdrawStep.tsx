@@ -17,6 +17,7 @@ import { ReliquaryProportionalRemoveLiquidityHandler } from '../handlers/Reliqua
 import { ReliquarySingleTokenRemoveLiquidityHandler } from '../handlers/ReliquarySingleTokenRemoveLiquidity.handler'
 import { RemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-liquidity/handlers/RemoveLiquidity.handler'
 import { useReliquary } from '../ReliquaryProvider'
+import { Address, zeroAddress } from 'viem'
 
 const reliquaryMulticallStepId = 'reliquary-multicall-withdraw'
 
@@ -25,6 +26,7 @@ export type ReliquaryWithdrawStepParams = {
   simulationQuery: any
   slippage: string
   relicId: number
+  singleTokenOutAddress?: Address
 }
 
 export type ReliquaryWithdrawSteps = {
@@ -37,29 +39,45 @@ function useReliquaryBuildCallDataQuery({
   simulationQuery,
   slippage,
   enabled,
+  singleTokenOutAddress,
 }: {
   handler: RemoveLiquidityHandler
   simulationQuery: any
   slippage: string
   enabled: boolean
+  singleTokenOutAddress?: Address
 }) {
   const { userAddress, isConnected } = useUserAccount()
 
   const queryFn = async () => {
-    // Check if handler is a reliquary handler
-    if (
-      handler instanceof ReliquaryProportionalRemoveLiquidityHandler ||
-      handler instanceof ReliquarySingleTokenRemoveLiquidityHandler
-    ) {
+    if (handler instanceof ReliquarySingleTokenRemoveLiquidityHandler) {
       const queryOutput = ensureLastQueryResponse('Reliquary withdraw query', simulationQuery.data)
+
+      const response = await handler.buildCallData({
+        account: userAddress,
+        slippagePercent: slippage,
+        queryOutput,
+        tokenOut: singleTokenOutAddress || zeroAddress,
+      })
+
+      console.log('Reliquary withdraw call data built:', response)
+      return response
+    }
+
+    if (handler instanceof ReliquaryProportionalRemoveLiquidityHandler) {
+      const queryOutput = ensureLastQueryResponse('Reliquary withdraw query', simulationQuery.data)
+
       const response = await handler.buildCallData({
         account: userAddress,
         slippagePercent: slippage,
         queryOutput,
       })
+
       console.log('Reliquary withdraw call data built:', response)
       return response
-    } else {
+    }
+
+    {
       throw new Error(
         'Handler must be a ReliquaryProportionalRemoveLiquidityHandler or ReliquarySingleTokenRemoveLiquidityHandler'
       )
@@ -90,6 +108,7 @@ export function useReliquaryWithdrawStep(
     simulationQuery: params.simulationQuery,
     slippage: params.slippage,
     enabled: isStepActivated,
+    singleTokenOutAddress: params.singleTokenOutAddress,
   })
 
   // Labels for the multicall transaction (withdrawFromReliquary + exitPool)
