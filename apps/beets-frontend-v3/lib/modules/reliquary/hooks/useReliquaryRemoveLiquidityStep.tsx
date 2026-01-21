@@ -19,9 +19,9 @@ import { RemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-li
 import { useReliquary } from '../ReliquaryProvider'
 import { Address, zeroAddress } from 'viem'
 
-const reliquaryMulticallStepId = 'reliquary-multicall-withdraw'
+const reliquaryMulticallStepId = 'reliquary-multicall-remove-liquidity'
 
-export type ReliquaryWithdrawStepParams = {
+export type ReliquaryRemoveLiquidityStepParams = {
   handler: RemoveLiquidityHandler // Accept base type but check for reliquary handlers in runtime
   simulationQuery: any
   slippage: string
@@ -29,7 +29,7 @@ export type ReliquaryWithdrawStepParams = {
   singleTokenOutAddress?: Address
 }
 
-export type ReliquaryWithdrawSteps = {
+export type ReliquaryRemoveLiquiditySteps = {
   multicallStep: TransactionStep
 }
 
@@ -51,7 +51,10 @@ function useReliquaryBuildCallDataQuery({
 
   const queryFn = async () => {
     if (handler instanceof ReliquarySingleTokenRemoveLiquidityHandler) {
-      const queryOutput = ensureLastQueryResponse('Reliquary withdraw query', simulationQuery.data)
+      const queryOutput = ensureLastQueryResponse(
+        'Reliquary remove liquidity query',
+        simulationQuery.data
+      )
 
       const response = await handler.buildCallData({
         account: userAddress,
@@ -60,12 +63,15 @@ function useReliquaryBuildCallDataQuery({
         tokenOut: singleTokenOutAddress || zeroAddress,
       })
 
-      console.log('Reliquary withdraw call data built:', response)
+      console.log('Reliquary remove liquidity call data built:', response)
       return response
     }
 
     if (handler instanceof ReliquaryProportionalRemoveLiquidityHandler) {
-      const queryOutput = ensureLastQueryResponse('Reliquary withdraw query', simulationQuery.data)
+      const queryOutput = ensureLastQueryResponse(
+        'Reliquary remove liquidity query',
+        simulationQuery.data
+      )
 
       const response = await handler.buildCallData({
         account: userAddress,
@@ -73,7 +79,7 @@ function useReliquaryBuildCallDataQuery({
         queryOutput,
       })
 
-      console.log('Reliquary withdraw call data built:', response)
+      console.log('Reliquary remove liquidity call data built:', response)
       return response
     }
 
@@ -85,16 +91,16 @@ function useReliquaryBuildCallDataQuery({
   }
 
   return useQuery({
-    queryKey: ['reliquaryWithdrawBuildCallData', userAddress, slippage],
+    queryKey: ['reliquaryRemoveLiquidityBuildCallData', userAddress, slippage],
     queryFn,
     enabled: enabled && isConnected && !!simulationQuery.data,
     gcTime: 0,
   })
 }
 
-export function useReliquaryWithdrawStep(
-  params: ReliquaryWithdrawStepParams
-): ReliquaryWithdrawSteps {
+export function useReliquaryRemoveLiquidityStep(
+  params: ReliquaryRemoveLiquidityStepParams
+): ReliquaryRemoveLiquiditySteps {
   const { pool, refetch: refetchPoolBalances, chainId } = usePool()
   const { refetchRelicPositions } = useReliquary()
   const [isStepActivated, setIsStepActivated] = useState(false)
@@ -111,19 +117,19 @@ export function useReliquaryWithdrawStep(
     singleTokenOutAddress: params.singleTokenOutAddress,
   })
 
-  // Labels for the multicall transaction (withdrawFromReliquary + exitPool)
-  const withdrawLabels: TransactionLabels = {
-    init: 'Withdraw from Relic',
-    title: `Withdraw from Relic #${relicId}`,
-    description: `Withdraw liquidity from ${pool.name || 'pool'} and Relic #${relicId}.`,
-    confirming: 'Withdrawing from Relic...',
-    confirmed: 'Withdrawn from Relic!',
-    tooltip: `Withdraw liquidity from ${pool.name || 'pool'} and Relic #${relicId}`,
+  // Labels for the multicall transaction (removeLiquidityFromReliquary + exitPool)
+  const removeLiquidityLabels: TransactionLabels = {
+    init: 'Remove liquidity from Relic',
+    title: `Remove liquidity from Relic #${relicId}`,
+    description: `Remove liquidity from ${pool.name || 'pool'} and Relic #${relicId}.`,
+    confirming: 'Removing liquidity from Relic...',
+    confirmed: 'Liquidity removed from Relic!',
+    tooltip: `Remove liquidity from ${pool.name || 'pool'} and Relic #${relicId}`,
     poolId: pool.id,
   }
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation(
-    'Error in Reliquary withdraw gas estimation',
+    'Error in Reliquary remove liquidity gas estimation',
     {
       simulationQueryData: simulationQuery.data,
       buildCallQueryData: buildCallDataQuery.data,
@@ -138,12 +144,12 @@ export function useReliquaryWithdrawStep(
     refetchRelicPositions() // Refetch reliquary positions to update landing page
   }, [refetchPoolBalances, refetchRelicPositions])
 
-  // Execute multicall transaction (withdrawFromReliquary + exitPool)
+  // Execute multicall transaction (removeLiquidityFromReliquary + exitPool)
   const multicallStep: TransactionStep = useMemo(
     () => ({
       id: reliquaryMulticallStepId,
       stepType: 'removeLiquidity',
-      labels: withdrawLabels,
+      labels: removeLiquidityLabels,
       details: {
         gasless: false,
         type: 'Gas transaction',
@@ -159,7 +165,7 @@ export function useReliquaryWithdrawStep(
           <ManagedSendTransactionButton
             gasEstimationMeta={gasEstimationMeta}
             id={reliquaryMulticallStepId}
-            labels={withdrawLabels}
+            labels={removeLiquidityLabels}
             onTransactionChange={setTransaction}
             txConfig={buildCallDataQuery.data}
           />
@@ -171,7 +177,7 @@ export function useReliquaryWithdrawStep(
       simulationQuery.data,
       buildCallDataQuery.data,
       gasEstimationMeta,
-      withdrawLabels,
+      removeLiquidityLabels,
       isComplete,
       onSuccess,
     ]

@@ -3,7 +3,7 @@ import {
   EncodeReliquaryAddLiquidityInput,
   EncodeReliquaryCreateRelicAndAddLiquidityInput,
   EncodeReliquaryHarvestAllInput,
-  EncodeReliquaryWithdrawAndHarvestInput,
+  EncodeReliquaryRemoveLiquidityAndClaimInput,
 } from '../reliquary-types'
 import { beetsV2BatchRelayerLibraryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 
@@ -33,7 +33,7 @@ export class ReliquaryActionsService {
     })
   }
 
-  public encodeWithdrawAndHarvest(params: EncodeReliquaryWithdrawAndHarvestInput): Hex {
+  public encodeRemoveLiquidityAndClaim(params: EncodeReliquaryRemoveLiquidityAndClaimInput): Hex {
     return encodeFunctionData({
       abi: beetsV2BatchRelayerLibraryAbi,
       functionName: 'reliquaryWithdrawAndHarvest',

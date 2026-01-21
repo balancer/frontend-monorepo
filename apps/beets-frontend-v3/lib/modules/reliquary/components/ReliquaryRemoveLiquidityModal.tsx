@@ -17,7 +17,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
-import { ReliquaryWithdrawSummary } from './ReliquaryWithdrawSummary'
+import { ReliquaryRemoveLiquiditySummary } from './ReliquaryRemoveLiquiditySummary'
 import { useRouter } from 'next/navigation'
 import { useReliquary } from '../ReliquaryProvider'
 
@@ -29,7 +29,7 @@ type Props = {
   relicId: string
 }
 
-export function ReliquaryWithdrawModal({
+export function ReliquaryRemoveLiquidityModal({
   isOpen,
   onClose,
   finalFocusRef,
@@ -66,7 +66,11 @@ export function ReliquaryWithdrawModal({
 
   useEffect(() => {
     if (removeLiquidityTxHash && !window.location.pathname.includes(removeLiquidityTxHash)) {
-      window.history.replaceState({}, '', `/mabeets/withdraw/${relicId}/${removeLiquidityTxHash}`)
+      window.history.replaceState(
+        {},
+        '',
+        `/mabeets/remove-liquidity/${relicId}/${removeLiquidityTxHash}`
+      )
     }
   }, [removeLiquidityTxHash, relicId])
 
@@ -85,7 +89,7 @@ export function ReliquaryWithdrawModal({
 
   // TODO: refresh 100% amount on close?
   function handleOnClose() {
-    router.push(`/mabeets/withdraw/${relicId}`)
+    router.push(`/mabeets/remove-liquidity/${relicId}`)
     baseOnClose()
   }
 
@@ -94,7 +98,7 @@ export function ReliquaryWithdrawModal({
     baseOnClose()
   }
 
-  const modalLabel = `Withdraw from Relic #${relicId}`
+  const modalLabel = `Remove liquidity from Relic #${relicId}`
 
   return (
     <Modal
@@ -125,7 +129,7 @@ export function ReliquaryWithdrawModal({
         <ModalCloseButton />
         <ModalBody>
           {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
-          <ReliquaryWithdrawSummary {...receiptProps} relicId={relicId} />
+          <ReliquaryRemoveLiquiditySummary {...receiptProps} relicId={relicId} />
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}

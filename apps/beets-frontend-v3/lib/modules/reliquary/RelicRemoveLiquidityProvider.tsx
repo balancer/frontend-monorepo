@@ -14,12 +14,12 @@ import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { RemoveLiquidityType } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'
 import { HumanAmount } from '@balancer/sdk'
-import { useReliquaryWithdrawSteps } from './hooks/useReliquaryWithdrawSteps'
+import { useReliquaryRemoveLiquiditySteps } from './hooks/useReliquaryRemoveLiquiditySteps'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { RemoveLiquidityStepParams } from '@repo/lib/modules/pool/actions/remove-liquidity/useRemoveLiquidityStep'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
-export function RelicWithdrawProvider({
+export function RelicRemoveLiquidityProvider({
   children,
   urlTxHash,
   relicId,
@@ -56,7 +56,7 @@ export function RelicWithdrawProvider({
   const customStepsHook = useMemo(() => {
     return (params: RemoveLiquidityStepParams): TransactionStep[] => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      return useReliquaryWithdrawSteps({
+      return useReliquaryRemoveLiquiditySteps({
         handler: params.handler,
         simulationQuery: params.simulationQuery,
         relicId: relicIdNumber,
@@ -73,14 +73,18 @@ export function RelicWithdrawProvider({
       maxHumanBptIn={relic?.amount as HumanAmount | undefined}
       urlTxHash={urlTxHash}
     >
-      <WithdrawSuccessHandler refetchRelicPositions={refetchRelicPositions} />
+      <RemoveLiquiditySuccessHandler refetchRelicPositions={refetchRelicPositions} />
       {children}
     </RemoveLiquidityProvider>
   )
 }
 
 // Helper component to handle success
-function WithdrawSuccessHandler({ refetchRelicPositions }: { refetchRelicPositions: () => void }) {
+function RemoveLiquiditySuccessHandler({
+  refetchRelicPositions,
+}: {
+  refetchRelicPositions: () => void
+}) {
   const { removeLiquidityTxHash } = useRemoveLiquidity()
 
   useEffect(() => {

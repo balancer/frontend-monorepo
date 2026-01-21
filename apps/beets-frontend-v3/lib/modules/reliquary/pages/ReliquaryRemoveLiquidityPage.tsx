@@ -33,25 +33,25 @@ import ButtonGroup, {
 import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
-import { ReliquaryWithdrawModal } from '../components/ReliquaryWithdrawModal'
+import { ReliquaryRemoveLiquidityModal } from '../components/ReliquaryRemoveLiquidityModal'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
-export function ReliquaryWithdrawPage({ relicId }: { relicId: string }) {
+export function ReliquaryRemoveLiquidityPage({ relicId }: { relicId: string }) {
   const { validTokens } = useRemoveLiquidity()
 
   return (
     <PriceImpactProvider>
       <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
         <TokenBalancesProvider extTokens={validTokens}>
-          <ReliquaryWithdrawForm relicId={relicId} />
+          <ReliquaryRemoveLiquidityForm relicId={relicId} />
         </TokenBalancesProvider>
       </PoolActionsLayout>
     </PriceImpactProvider>
   )
 }
 
-function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
+function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
   const TABS: ButtonGroupOption[] = [
     {
       value: 'proportional',
@@ -83,6 +83,8 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
     setHumanBptInPercent,
     isSingleTokenBalanceMoreThat25Percent,
   } = useRemoveLiquidity()
+
+  console.log({ totalUSDValue })
 
   const { pool, chain } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -125,12 +127,14 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <Box as="span">Withdraw from Relic</Box>
+            <Box as="span">Remove liquidity from Relic</Box>
             <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
-          {relicId && <BalAlert content={`Withdrawing from Relic #${relicId}`} status="info" />}
+          {relicId && (
+            <BalAlert content={`Removing liquidity from Relic #${relicId}`} status="info" />
+          )}
           <HStack w="full">
             <ButtonGroup
               currentOption={activeTab}
@@ -238,7 +242,7 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
           </Button>
         </VStack>
       </Card>
-      <ReliquaryWithdrawModal
+      <ReliquaryRemoveLiquidityModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}
         onClose={onModalClose}

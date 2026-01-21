@@ -26,7 +26,7 @@ export function useBurnRelicStep(relicId: string | undefined, chain: GqlChain) {
     title: 'Burn Relic',
     confirming: 'Confirming burn...',
     confirmed: 'Relic burned!',
-    tooltip: 'Burn this Relic to withdraw all funds',
+    tooltip: 'Burn this Relic to remove all liquidity',
   }
 
   const props: ManagedTransactionInput = {

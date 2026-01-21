@@ -32,7 +32,7 @@ type Props = RemoveLiquidityReceiptResult & {
   relicId?: string
 }
 
-export function ReliquaryWithdrawSummary({
+export function ReliquaryRemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
   receivedTokens,
   sentBptUnits,
@@ -131,7 +131,7 @@ export function ReliquaryWithdrawSummary({
         <Alert mb="sm" status="info">
           <AlertIcon />
           <Text color="black" fontSize="sm">
-            Withdraw from Relic #{relicId} and claim rewards
+            Remove liquidity from Relic #{relicId} and claim rewards
           </Text>
         </Alert>
       )}
@@ -141,8 +141,8 @@ export function ReliquaryWithdrawSummary({
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={
             shouldShowReceipt
-              ? `Withdrawn from Relic #${relicId || ''}`
-              : `Withdrawing from Relic #${relicId || ''}`
+              ? `Removed liquidity from Relic #${relicId || ''}`
+              : `Removing liquidity from Relic #${relicId || ''}`
           }
           pool={pool}
         />
@@ -183,7 +183,7 @@ export function ReliquaryWithdrawSummary({
             <Card variant="modalSubSection">
               <VStack align="start" spacing="md" w="full">
                 <Text color="font.highlight">
-                  Successfully withdrawn from Relic #{relicId}! Rewards have been harvested.
+                  Successfully removed liquidity from Relic #{relicId}! Rewards have been harvested.
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your tokens are now in your wallet. Return to the maBEETS page to view your

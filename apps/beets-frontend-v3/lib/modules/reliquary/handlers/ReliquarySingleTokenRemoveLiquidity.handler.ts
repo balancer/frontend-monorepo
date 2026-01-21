@@ -42,8 +42,8 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
       recipient: account,
     })
 
-    // Get withdraw from Relic call data
-    const withdrawCallData = this.getRelicWithdrawAndHarvestCallData({
+    // Get remove liquidity from Relic call data
+    const removeLiquidityCallData = this.getRelicRemoveLiquidityAndClaimCallData({
       account,
       relicId,
       bptAmount: queryOutput.sdkQueryOutput.bptIn.amount,
@@ -69,13 +69,13 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
       data: encodeFunctionData({
         abi: balancerV2BalancerRelayerV6Abi,
         functionName: 'multicall',
-        args: [[withdrawCallData, exitCallData]],
+        args: [[removeLiquidityCallData, exitCallData]],
       }),
       to: networkConfig.contracts.balancer.relayerV6,
     }
   }
 
-  private getRelicWithdrawAndHarvestCallData({
+  private getRelicRemoveLiquidityAndClaimCallData({
     account,
     relicId,
     bptAmount,
@@ -86,7 +86,7 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
     bptAmount: bigint
     outputReference: bigint
   }) {
-    return this.batchRelayerService.reliquaryEncodeWithdrawAndHarvest({
+    return this.batchRelayerService.reliquaryEncodeRemoveLiquidityAndClaim({
       recipient: account,
       relicId: BigInt(relicId),
       amount: bptAmount,

@@ -3,22 +3,22 @@ import { TransactionStep } from '@repo/lib/modules/transactions/transaction-step
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useApproveRelayerRelicsStep } from './useApproveRelayerRelicsStep'
-import { useReliquaryWithdrawStep } from './useReliquaryWithdrawStep'
+import { useReliquaryRemoveLiquidityStep } from './useReliquaryRemoveLiquidityStep'
 import { Address } from 'viem'
 
-type UseReliquaryWithdrawStepsParams = {
+type UseReliquaryRemoveLiquidityStepsParams = {
   handler: any
   simulationQuery: any
   relicId: number
   singleTokenOutAddress?: Address
 }
 
-export function useReliquaryWithdrawSteps({
+export function useReliquaryRemoveLiquiditySteps({
   handler,
   simulationQuery,
   relicId,
   singleTokenOutAddress,
-}: UseReliquaryWithdrawStepsParams): TransactionStep[] {
+}: UseReliquaryRemoveLiquidityStepsParams): TransactionStep[] {
   const { chainId } = usePool()
   const { slippage } = useUserSettings()
 
@@ -30,8 +30,8 @@ export function useReliquaryWithdrawSteps({
 
   const { step: approveRelayerRelicsStep } = useApproveRelayerRelicsStep()
 
-  // Get the multicall withdraw step
-  const { multicallStep } = useReliquaryWithdrawStep({
+  // Get the multicall remove liquidity step
+  const { multicallStep } = useReliquaryRemoveLiquidityStep({
     handler,
     simulationQuery,
     slippage,

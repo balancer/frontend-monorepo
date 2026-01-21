@@ -173,6 +173,8 @@ export function useRemoveLiquidityLogic(
   const quoteAmountsOut = simulationQuery.data?.amountsOut || emptyTokenAmounts(tokens)
   const quotePriceImpact = priceImpactQuery.data
 
+  console.log({ quoteAmountsOut, simulationQuery })
+
   /**
    * Methods
    */

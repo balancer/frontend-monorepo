@@ -225,11 +225,11 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           {hasBalance ? (
             <Button
               flex="1"
-              onClick={() => router.push(`/mabeets/withdraw/${relic.relicId}`)}
+              onClick={() => router.push(`/mabeets/remove-liquidity/${relic.relicId}`)}
               size="sm"
               variant="secondary"
             >
-              Withdraw
+              Remove
             </Button>
           ) : (
             <Button flex="1" onClick={() => setIsBurnModalOpen(true)} size="sm" variant="secondary">

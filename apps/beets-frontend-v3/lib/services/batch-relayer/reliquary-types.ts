@@ -17,7 +17,7 @@ export interface EncodeReliquaryAddLiquidityInput {
   outputReference: bigint
 }
 
-export interface EncodeReliquaryWithdrawAndHarvestInput {
+export interface EncodeReliquaryRemoveLiquidityAndClaimInput {
   recipient: Address
   relicId: bigint
   amount: bigint
