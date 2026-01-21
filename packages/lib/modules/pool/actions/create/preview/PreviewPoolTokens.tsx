@@ -25,7 +25,7 @@ export function PreviewPoolTokens() {
 
   return (
     <PreviewPoolCreationCard stepTitle="Tokens">
-      <CardHeaderRow columnNames={['Tokens', 'Price', 'Market Cap']} />
+      <CardHeaderRow columnNames={['Tokens', 'Price', 'Market cap']} />
       <CardBody>
         <VStack spacing="md">
           {poolTokens.map((token, idx) => {

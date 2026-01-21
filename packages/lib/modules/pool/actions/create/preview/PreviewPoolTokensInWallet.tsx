@@ -24,7 +24,7 @@ export function PreviewPoolTokensInWallet() {
       isConnected={isConnected}
       stepTitle="Tokens"
     >
-      <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token Value', '%']} />
+      <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token value', '%']} />
       <CardBody>
         <VStack spacing="md">
           <PoolTokensInWalletContent
