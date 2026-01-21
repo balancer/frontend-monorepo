@@ -36,7 +36,8 @@ export function useRemoveLiquidityLogic(
   mute?: boolean,
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
   maxHumanBptIn?: HumanAmount,
-  customStepsHook?: typeof useRemoveLiquiditySteps
+  customStepsHook?: typeof useRemoveLiquiditySteps,
+  enablePoolRedirect = true
 ) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
@@ -248,7 +249,11 @@ export function useRemoveLiquidityLogic(
     [priceImpactQuery.isError, 'Error fetching price impact']
   )
 
-  const previewModalDisclosure = useModalWithPoolRedirect(pool, removeLiquidityTxHash)
+  const previewModalDisclosure = useModalWithPoolRedirect(
+    pool,
+    removeLiquidityTxHash,
+    enablePoolRedirect
+  )
 
   return {
     transactionSteps,
@@ -296,6 +301,7 @@ type Props = PropsWithChildren<{
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
   maxHumanBptIn?: HumanAmount
   customStepsHook?: typeof useRemoveLiquiditySteps
+  enablePoolRedirect?: boolean
 }>
 
 export function RemoveLiquidityProvider({
@@ -304,6 +310,7 @@ export function RemoveLiquidityProvider({
   handlerSelector,
   maxHumanBptIn,
   customStepsHook,
+  enablePoolRedirect,
   children,
 }: Props) {
   const hook = useRemoveLiquidityLogic(
@@ -311,7 +318,8 @@ export function RemoveLiquidityProvider({
     mute,
     handlerSelector,
     maxHumanBptIn,
-    customStepsHook
+    customStepsHook,
+    enablePoolRedirect
   )
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }

@@ -66,9 +66,9 @@ export function ReliquaryWithdrawModal({
 
   useEffect(() => {
     if (removeLiquidityTxHash && !window.location.pathname.includes(removeLiquidityTxHash)) {
-      window.history.replaceState({}, '', `./withdraw/${removeLiquidityTxHash}`)
+      window.history.replaceState({}, '', `/mabeets/withdraw/${relicId}/${removeLiquidityTxHash}`)
     }
-  }, [removeLiquidityTxHash])
+  }, [removeLiquidityTxHash, relicId])
 
   useOnUserAccountChanged(() => {
     onClose()
@@ -83,6 +83,7 @@ export function ReliquaryWithdrawModal({
     onClose()
   }
 
+  // TODO: refresh 100% amount on close?
   function handleOnClose() {
     router.push(`/mabeets/withdraw/${relicId}`)
     baseOnClose()

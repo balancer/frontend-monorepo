@@ -68,6 +68,7 @@ export function RelicWithdrawProvider({
   return (
     <RemoveLiquidityProvider
       customStepsHook={customStepsHook}
+      enablePoolRedirect={false}
       handlerSelector={reliquaryHandlerSelector}
       maxHumanBptIn={relic?.amount as HumanAmount | undefined}
       urlTxHash={urlTxHash}

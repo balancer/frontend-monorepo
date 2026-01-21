@@ -1,6 +1,6 @@
 import { ReliquaryWithdrawPage } from '@/lib/modules/reliquary/pages/ReliquaryWithdrawPage'
 
-export default async function WithdrawFromRelicPage({
+export default async function WithdrawFromRelicTxPage({
   params,
 }: {
   params: Promise<{ relicId: string }>
