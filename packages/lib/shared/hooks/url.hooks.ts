@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { isValidUrl, normalizeUrl } from '../utils/urls'
+import { validateUrlFormat, normalizeUrl } from '../utils/urls'
 
 export function useCheckImageUrl(url: string) {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
-  const isUrlFormatInvalid = isValidUrl(url) !== true
+  const isUrlFormatInvalid = validateUrlFormat(url) !== true
   const isUrlEmpty = !url
   const shouldCheckUrl = !isUrlFormatInvalid && !isUrlEmpty
 
@@ -26,7 +26,7 @@ export function useCheckImageUrl(url: string) {
   }, [url, shouldCheckUrl])
 
   if (isUrlEmpty) return { error: undefined }
-  if (isUrlFormatInvalid) return { error: isValidUrl(url) as string }
+  if (isUrlFormatInvalid) return { error: validateUrlFormat(url) as string }
 
   return { error: errorMessage }
 }

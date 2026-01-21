@@ -3,7 +3,7 @@ import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
 import { LbpFormAction } from '../LbpFormAction'
-import { isValidUrl } from '@repo/lib/shared/utils/urls'
+import { validateUrlFormat } from '@repo/lib/shared/utils/urls'
 import { isValidTelegramHandle, isValidTwitterHandle } from '@repo/lib/shared/utils/strings'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWithError'
@@ -217,7 +217,7 @@ function ProjectWebsiteUrlInput() {
         )}
         rules={{
           required: 'Website URL is required',
-          validate: isValidUrl,
+          validate: validateUrlFormat,
         }}
       />
     </VStack>
@@ -315,7 +315,7 @@ function ProjectDiscordUrlInput() {
           />
         )}
         rules={{
-          validate: isValidUrl,
+          validate: validateUrlFormat,
         }}
       />
     </VStack>

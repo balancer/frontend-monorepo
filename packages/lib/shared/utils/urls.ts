@@ -18,7 +18,7 @@ const WEB_URL =
   // eslint-disable-next-line max-len
   /^(https?:\/\/)?([a-zA-Z0-9\p{L}](?:[a-zA-Z0-9\p{L}-]{0,61}[a-zA-Z0-9\p{L}])?\.)+[a-zA-Z\p{L}]{2,}(?:\/[\p{L}\p{N}\p{P}\p{S}\p{M}\-._~!$&'()*+,;=:@%]*)*\/?(?:\?[\p{L}\p{N}\p{P}\p{S}\p{M}\-._~!$&'()*+,;=:@%/?]*)?$/u
 
-export function isValidUrl(maybeUrl?: string): string | true {
+export function validateUrlFormat(maybeUrl?: string): string | true {
   if (!maybeUrl) return true
   if (hasWhitespace(maybeUrl)) return 'URLs containing whitespace are not allowed'
 
