@@ -85,16 +85,20 @@ export function ReliquaryDepositModal({
 
   const isSuccess = !!addLiquidityTxHash && receiptProps.hasReceipt
 
-  function handleOnClose() {
+  function baseOnClose() {
     startTokenPricePolling()
     refetchRelicPositions()
     onClose()
-    // Return to mabeets page with focus on the deposited Relic
-    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
+  }
+
+  function handleOnClose() {
+    router.push(`/mabeets/deposit/${relicId ? relicId : ''}`)
+    baseOnClose()
   }
 
   function handleReturnAction() {
-    handleOnClose()
+    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
+    baseOnClose()
   }
 
   const modalLabel = createNew ? 'Create new Relic & deposit' : `Deposit into Relic #${relicId}`
@@ -111,7 +115,6 @@ export function ReliquaryDepositModal({
       {...rest}
     >
       <SuccessOverlay startAnimation={!!addLiquidityTxHash && hasQuoteContext} />
-
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
         {isDesktop && hasQuoteContext && (
           <DesktopStepTracker

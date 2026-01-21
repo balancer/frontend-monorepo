@@ -19,6 +19,7 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 import { ReliquaryWithdrawSummary } from './ReliquaryWithdrawSummary'
 import { useRouter } from 'next/navigation'
+import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
   isOpen: boolean
@@ -44,6 +45,7 @@ export function ReliquaryWithdrawModal({
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling, startTokenPricePolling } = useTokens()
   const router = useRouter()
+  const { refetchRelicPositions } = useReliquary()
 
   const txReceipt = lastTransaction?.result
 
@@ -74,15 +76,20 @@ export function ReliquaryWithdrawModal({
 
   const isSuccess = !!removeLiquidityTxHash && receiptProps.hasReceipt
 
-  function handleOnClose() {
+  function baseOnClose() {
     startTokenPricePolling()
+    refetchRelicPositions()
     onClose()
-    // Return to mabeets page with focus on the withdrawn Relic
-    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
+  }
+
+  function handleOnClose() {
+    router.push(`/mabeets/withdraw/${relicId ? relicId : ''}`)
+    baseOnClose()
   }
 
   function handleReturnAction() {
-    handleOnClose()
+    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
+    baseOnClose()
   }
 
   const modalLabel = relicId ? `Withdraw from Relic #${relicId}` : 'Withdraw from Relic'
