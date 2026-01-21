@@ -24,7 +24,7 @@ export default function Terms() {
               Unless otherwise indicated, the defined and capitalized terms used below incorporate
               the same meaning as the terms used in the BeethovenX DAO LLC operating agreement (the
               “Agreement”), available{' '}
-              <Link color="white" href="https://docs.beets.fi/operating-agreement" isExternal>
+              <Link color="white" href="https://docs.beets.fi/dao/operating-agreement" isExternal>
                 here
               </Link>
               . The NFT is referred to as the “Token” in the Agreement.
@@ -33,9 +33,9 @@ export default function Terms() {
               By using this NFT to participate in the governance and operations of BeethovenX , the
               holder of this NFT agrees to be subject to the terms of the Agreement, including as a
               Member of its entity structure. BeethovenX formed a nonprofit LLC under the laws of
-              the Republic of the Marshall Islands on <i>TBD</i>. Participation in the governance
-              and operations of BeethovenX includes, but is not limited to, utilizing the NFT to:
-              (1) vote on Proposals to become Governance Resolutions, (2) attend events and
+              the Republic of the Marshall Islands on <i>April 5th, 2023</i>. Participation in the
+              governance and operations of BeethovenX includes, but is not limited to, utilizing the
+              NFT to: (1) vote on Proposals to become Governance Resolutions, (2) attend events and
               otherwise communicate with the BeethovenX community, and (3) interact with the Beets
               protocol.
             </p>
