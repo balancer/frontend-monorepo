@@ -18,7 +18,6 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     goToNextStep,
     goToPreviousStep,
     saleStructureForm,
-    projectInfoForm,
     poolAddress,
   } = useLbpForm()
   const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
@@ -26,8 +25,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const nextBtn = useRef(null)
   const { copyToClipboard, isCopied } = useCopyToClipboard()
   const saleFormState = useFormState({ control: saleStructureForm.control })
-  const projectFormState = useFormState({ control: projectInfoForm.control })
-  const isFormStateValid = saleFormState.isValid && projectFormState.isValid
+  const isFormStateValid = saleFormState.isValid
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
