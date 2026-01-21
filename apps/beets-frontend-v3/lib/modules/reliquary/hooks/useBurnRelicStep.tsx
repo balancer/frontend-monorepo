@@ -11,12 +11,10 @@ import {
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useBurnRelicStep(relicId: string | undefined, chain: GqlChain) {
   const { isConnected } = useUserAccount()
-  const { refetch } = useGetRelicPositionsOfOwner(chain)
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const chainId = getChainId(chain)
@@ -47,7 +45,7 @@ export function useBurnRelicStep(relicId: string | undefined, chain: GqlChain) {
     labels,
     stepType: 'burnRelic',
     isComplete,
-    onSuccess: () => refetch(),
+    onSuccess: () => {},
     renderAction: () => <ManagedTransactionButton id="burnRelic" {...props} />,
     transaction,
   }
