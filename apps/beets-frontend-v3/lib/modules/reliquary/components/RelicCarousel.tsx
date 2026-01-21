@@ -164,7 +164,6 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
           </Flex>
         ))}
       </Box>
-
       <HStack justify="center" spacing="4">
         {!allRelicsVisible && (
           <Button
@@ -185,7 +184,6 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
             Previous
           </Button>
         )}
-
         {!allRelicsVisible && (
           <HStack spacing="2">
             {relicPositions.map((relic, index) => (
@@ -208,7 +206,6 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
             ))}
           </HStack>
         )}
-
         {!allRelicsVisible && (
           <Button
             _disabled={{

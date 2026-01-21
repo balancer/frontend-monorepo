@@ -37,11 +37,9 @@ export function VotingPowerSection() {
       >
         Voting Power
       </Text>
-
       <Card h="full" w="full">
         <NoisyCard cardProps={{ h: 'full' }}>
           <VStack alignItems="flex-start" p={{ base: 'sm', md: 'md' }} spacing="6" w="full">
-            {/* Total Voting Power */}
             <VStack alignItems="flex-start" spacing="2" width="full">
               <Text color="beets.base.50" fontSize="sm" fontWeight="semibold">
                 Total Voting Power
@@ -54,10 +52,7 @@ export function VotingPowerSection() {
                 <Skeleton height="32px" width="150px" />
               )}
             </VStack>
-
             <Divider />
-
-            {/* Delegation Status */}
             <VStack alignItems="flex-start" spacing="3" width="full">
               <HStack justifyContent="space-between" spacing="2" width="full">
                 <HStack spacing="2">
@@ -77,7 +72,6 @@ export function VotingPowerSection() {
                   )}
                 </HStack>
               </HStack>
-
               <VStack align="start" spacing="3" w="full">
                 <HStack spacing="2">
                   <Switch colorScheme="green" isChecked={isDelegatedToMDs} onChange={onOpen} />
@@ -91,13 +85,11 @@ export function VotingPowerSection() {
                     </Text>
                   )}
                 </HStack>
-
                 <Text color="gray.500" fontSize="xs" maxW="500px">
                   Delegate your maBEETS voting power to the Music Directors. This only affects the
                   delegation for the Beets space on Snapshot.
                 </Text>
               </VStack>
-
               {isOpen && (
                 <ReliquaryDelegationModal
                   isDelegated={isDelegatedToMDs}

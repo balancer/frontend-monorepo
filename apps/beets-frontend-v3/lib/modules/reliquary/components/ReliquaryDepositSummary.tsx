@@ -137,7 +137,6 @@ export function ReliquaryDepositSummary({
           </Text>
         </Alert>
       )}
-
       <Card p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
@@ -158,7 +157,6 @@ export function ReliquaryDepositSummary({
           totalUSDValue={hasQuoteContext ? totalUSDValue : undefined}
         />
       </Card>
-
       <Card p="ms" variant="modalSubSection">
         {shouldShowReceipt ? (
           <ReceiptBptOut
@@ -177,7 +175,6 @@ export function ReliquaryDepositSummary({
           />
         )}
       </Card>
-
       {shouldShowReceipt ? (
         <>
           <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />

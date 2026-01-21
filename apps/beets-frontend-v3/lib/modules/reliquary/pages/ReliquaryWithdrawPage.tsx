@@ -176,7 +176,6 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
             </Popover>
             <Divider w="full" />
           </HStack>
-
           <InputWithSlider
             isNumberInputDisabled
             isWarning={isSingleTokenBalanceMoreThat25Percent}
@@ -190,13 +189,11 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
               {fNum('percentage', humanBptInPercent / 100)}
             </Text>
           </InputWithSlider>
-
           {isProportionalTabSelected ? (
             <RemoveLiquidityProportional pool={pool} tokens={tokens} />
           ) : (
             <RemoveLiquiditySingleToken chain={chain} tokens={tokens} />
           )}
-
           <VStack align="start" spacing="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
@@ -228,7 +225,6 @@ function ReliquaryWithdrawForm({ relicId }: { relicId: string }) {
               />
             )}
           </VStack>
-
           <Button
             isDisabled={isDisabled}
             isLoading={isLoading}

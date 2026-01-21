@@ -23,7 +23,6 @@ export default function ReliquaryLanding() {
 
   return (
     <VStack py="4" spacing="32" width="full">
-      {/* Header */}
       <MaBeetsHeader />
       {isLoadingRelicPositions ? (
         <LoadingSkeletons />
@@ -47,19 +46,12 @@ function Content({
   const toggleCharts = () => setShowCharts(!showCharts)
   return (
     <VStack spacing="20" width="full">
-      {/* Stats Grid */}
       <Flex flexDirection={{ base: 'column', lg: 'row' }} gap="16" width="full">
         {hasRelics ? <YourMaBeetsStats /> : <HowToParticipate />}
         <MaBeetsNumbers chartsVisible={showCharts} onToggleShowMore={toggleCharts} />
       </Flex>
-
-      {/* Charts - conditional visibility */}
       {showCharts && <MaBeetsCharts />}
-
-      {/* Relics and Voting Power Sections */}
       <MyRelicsSection focusRelicId={focusRelicId} isConnected={isConnected} />
-
-      {/* FAQ Section */}
       <ReliquaryFaq />
     </VStack>
   )

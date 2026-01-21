@@ -158,7 +158,6 @@ export default function ReliquaryGlobalStats() {
           <StatValueText>${fNum('fiat', avgValuePerRelic)}</StatValueText>
         </RelicStat>
       </SimpleGrid>
-
       <VStack spacing="6" w="full">
         <Box h={{ base: '450px' }} w="full">
           <ReliquaryDetailsCharts />

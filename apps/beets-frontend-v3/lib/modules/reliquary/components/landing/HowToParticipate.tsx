@@ -43,7 +43,6 @@ export function HowToParticipate() {
           </Text>
         </Text>
       </VStack>
-
       {!isConnected && (
         <VStack align="flex-start" pt="4" spacing="3" width="full">
           <Text fontWeight="bold">Get started by connecting your wallet</Text>

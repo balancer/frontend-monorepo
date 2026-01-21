@@ -106,7 +106,6 @@ export function ReliquaryWithdrawModal({
       {...rest}
     >
       <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
-
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
         {isDesktop && hasQuoteContext && (
           <DesktopStepTracker

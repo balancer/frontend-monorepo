@@ -23,7 +23,6 @@ export function MaBeetsCharts() {
           </NoisyCard>
         </Card>
       </VStack>
-
       <VStack align="flex-start" flex="1" minWidth="300px" spacing="4">
         <Text
           background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"

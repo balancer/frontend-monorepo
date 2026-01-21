@@ -127,8 +127,6 @@ export function ReliquaryWithdrawSummary({
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />
       )}
-
-      {/* Relic Info Alert */}
       {!shouldShowReceipt && relicId && (
         <Alert mb="sm" status="info">
           <AlertIcon />
@@ -137,7 +135,6 @@ export function ReliquaryWithdrawSummary({
           </Text>
         </Alert>
       )}
-
       <Card variant="modalSubSection">
         <BptRow
           bptAmount={shouldShowReceipt ? sentBptUnits : humanBptIn}
@@ -150,8 +147,6 @@ export function ReliquaryWithdrawSummary({
           pool={pool}
         />
       </Card>
-
-      {/* Pending rewards section (only show in preview if rewards > 0) */}
       {rewardsAmount && (
         <Card variant="modalSubSection">
           <TokenRowGroup
@@ -164,7 +159,6 @@ export function ReliquaryWithdrawSummary({
           />
         </Card>
       )}
-
       <Card variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? receivedTokensWithoutBpt : _amountsOutWithRewards}
@@ -182,7 +176,6 @@ export function ReliquaryWithdrawSummary({
           totalUSDValue={hasQuoteContext ? totalUSDValue + rewardsUSDValue : undefined}
         />
       </Card>
-
       {shouldShowReceipt ? (
         <>
           <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
