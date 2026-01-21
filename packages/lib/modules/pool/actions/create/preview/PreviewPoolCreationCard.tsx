@@ -37,19 +37,21 @@ export function PreviewPoolCreationCard({
 
   let bg = 'background.level2'
   let borderGradient: string | undefined
+  let backgroundGradient: string | undefined
 
   if (isStep(stepTitle)) {
     if (hasWarning && isConnected) {
-      bg = 'hsla(31, 97%, 72%, 0.07)'
+      backgroundGradient = 'hsla(31, 97%, 72%, 0.12)'
       borderGradient =
         'linear-gradient(45deg, hsla(31, 97%, 72%, 0.05) 0%, hsla(31, 97%, 72%, 0.8) 100%)'
     } else if (isAnyTokenWithoutPrice && isConnected) {
       bg = 'background.warning'
       borderGradient = 'linear-gradient(180deg, #FDBA74 0%, rgba(151, 111, 69, 0.5) 100%)'
     } else {
-      bg = 'background.specialAlpha15'
+      backgroundGradient =
+        'linear-gradient(45deg, hsla(245, 97%, 76%,0.08) 0%, hsla(266, 85%, 69%,0.12) 40%, hsla(9, 85%, 71%,0.25) 100%)'
       borderGradient =
-        'linear-gradient(266.76deg, rgba(234, 168, 121, 0.5) -20.29%, rgba(179, 174, 245, 0.5) 45.08%, rgba(234, 168, 121, 0) 110.45%)'
+        'linear-gradient(266.76deg, rgba(234, 168, 121, 0.75) -20.29%, rgba(179, 174, 245, 0.75) 45.08%, rgba(234, 168, 121, 0.05) 110.45%)'
     }
   }
 
@@ -60,9 +62,10 @@ export function PreviewPoolCreationCard({
       opacity={isBeforeStep(stepTitle) ? 0.5 : 1}
       position="relative"
       sx={
-        borderGradient
+        borderGradient || backgroundGradient || isBeforeStep(stepTitle)
           ? {
               border: 'none',
+              boxShadow: isStep(stepTitle) ? undefined : 'none',
               '&::before': {
                 content: '""',
                 position: 'absolute',
@@ -74,6 +77,22 @@ export function PreviewPoolCreationCard({
                 WebkitMaskComposite: 'xor',
                 maskComposite: 'exclude',
                 pointerEvents: 'none',
+              },
+              ...(backgroundGradient && {
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: 'inherit',
+                  background: backgroundGradient,
+                  pointerEvents: 'none',
+                  zIndex: 0,
+                  opacity: 0.4,
+                },
+              }),
+              '& > *': {
+                position: 'relative',
+                zIndex: 1,
               },
             }
           : undefined
