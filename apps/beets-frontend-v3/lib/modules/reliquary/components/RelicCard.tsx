@@ -124,12 +124,14 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       return {
         ...item,
         title: 'BEETS reward APR',
-        apr: parseFloat(relicApr) - (baseApr?.apr || 0),
+        apr: bn(relicApr)
+          .minus(baseApr?.apr || 0)
+          .toNumber(),
       }
     } else if (item.title === 'Voting APR Boost' && item.type === 'STAKING_BOOST') {
       return {
         ...item,
-        apr: item.apr * (allocationPoints / 100),
+        apr: bn(item.apr).times(allocationPoints).div(100).toNumber(),
       }
     } else {
       return item

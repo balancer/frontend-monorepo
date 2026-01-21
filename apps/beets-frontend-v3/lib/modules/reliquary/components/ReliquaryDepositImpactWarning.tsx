@@ -1,6 +1,6 @@
 import { Alert, AlertIcon, Box, SkeletonText } from '@chakra-ui/react'
 import { formatDuration, intervalToDuration } from 'date-fns'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AddLiquiditySimulationQueryResult } from '@repo/lib/modules/pool/actions/add-liquidity/queries/useAddLiquiditySimulationQuery'
 import { useMemo } from 'react'
 import { formatUnits } from 'viem'
@@ -33,7 +33,7 @@ export function ReliquaryDepositImpactWarning({
 
   // Calculate total invest value from simulation
   const bptOut = simulationQuery.data?.bptOut
-  const totalInvestValue = bptOut ? parseFloat(formatUnits(bptOut.amount, BPT_DECIMALS)) : 0
+  const totalInvestValue = bptOut ? bn(formatUnits(bptOut.amount, BPT_DECIMALS)).toNumber() : 0
 
   const isLoading = depositImpactQuery.isLoading || depositImpactQuery.isFetching
 

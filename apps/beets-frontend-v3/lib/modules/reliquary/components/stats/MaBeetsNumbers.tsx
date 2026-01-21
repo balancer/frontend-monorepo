@@ -6,7 +6,7 @@ import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { zeroAddress } from 'viem'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
@@ -28,16 +28,17 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
 
   const networkConfig = getNetworkConfig(chain)
   const data = pool.dynamicData
-  const beetsPerDay = parseFloat(pool.staking?.reliquary?.beetsPerSecond || '0') * 86400
+  const beetsPerDay = bn(pool.staking?.reliquary?.beetsPerSecond || '0').times(86400)
 
-  const incentivesDailyValue =
-    beetsPerDay * priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain)
+  const incentivesDailyValue = bn(beetsPerDay).times(
+    priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain)
+  )
 
-  // Calculate Relic maturity levels
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
-    level: parseInt(balance.level) + 1,
-    percentageOfTotal: parseFloat(balance.balance) / parseFloat(globalStats.totalBalance),
+    level: bn(balance.level).plus(1),
+    percentageOfTotal: bn(balance.balance).div(globalStats.totalBalance),
   }))
+
   const avgRelicMaturity = fNumCustom(
     relicMaturityLevels?.reduce(
       (total: number, obj: any) => total + obj.level * obj.percentageOfTotal,
@@ -46,10 +47,9 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
     '0.00'
   )
 
-  const reliquaryPoolRatio =
-    parseFloat(globalStats?.totalBalance || '') / parseFloat(data.totalShares)
-  const tvl = reliquaryPoolRatio * parseFloat(data.totalLiquidity)
-  const avgValuePerRelic = tvl / parseInt(globalStats?.relicCount || '')
+  const reliquaryPoolRatio = bn(globalStats?.totalBalance || '').div(data.totalShares)
+  const tvl = reliquaryPoolRatio.times(data.totalLiquidity)
+  const avgValuePerRelic = tvl.div(globalStats?.relicCount || '')
 
   const baseApr = pool.dynamicData.aprItems.find(
     item => item.title === 'BEETS reward APR' && item.type === 'MABEETS_EMISSIONS'

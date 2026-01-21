@@ -62,7 +62,7 @@ export function ReliquaryDepositSummary({
 
   // Calculate deposit impact based on simulated BPT amount
   const bptAmount = simulationQuery.data?.bptOut
-    ? parseFloat(formatUnits(simulationQuery.data.bptOut.amount, BPT_DECIMALS))
+    ? bn(formatUnits(simulationQuery.data.bptOut.amount, BPT_DECIMALS)).toNumber()
     : 0
 
   const depositImpactQuery = useReliquaryDepositImpact(bptAmount, createNew ? undefined : relicId)

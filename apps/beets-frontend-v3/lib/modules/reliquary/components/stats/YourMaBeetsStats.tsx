@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, HStack, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
@@ -27,23 +27,27 @@ export function YourMaBeetsStats() {
   const isLoading = isLoadingReliquary || isLoadingGlobalStats
 
   // Calculate total user fBEETS balance - used by multiple stats below
-  const userTotalBalance = relicPositions.reduce((sum, relic) => sum + parseFloat(relic.amount), 0)
+  const userTotalBalance = relicPositions.reduce(
+    (sum, relic) => bn(sum).plus(relic.amount).toNumber(),
+    0
+  )
 
   // Calculate Total Liquidity
-  const totalLiquidity = userTotalBalance * bptPrice
+  const totalLiquidity = bn(userTotalBalance).times(bptPrice).toNumber()
 
   // Calculate Average Maturity Level (weighted by balance)
   const avgMaturityLevel =
     relicPositions.length > 0 && userTotalBalance > 0
       ? relicPositions.reduce((sum, relic) => {
-          const weight = parseFloat(relic.amount) / userTotalBalance
+          const weight = bn(relic.amount).div(userTotalBalance).toNumber()
           return sum + (relic.level + 1) * weight // +1 because levels are 0-indexed
         }, 0)
       : 0
 
   // Calculate Total Relic Share as percentage
-  const globalTotalBalance = parseFloat(globalStats?.totalBalance || '1') // Avoid division by zero
-  const relicShareDecimal = globalTotalBalance > 0 ? userTotalBalance / globalTotalBalance : 0
+  const globalTotalBalance = bn(globalStats?.totalBalance || '1').toNumber() // Avoid division by zero
+  const relicShareDecimal =
+    globalTotalBalance > 0 ? bn(userTotalBalance).div(globalTotalBalance).toNumber() : 0
 
   return (
     <VStack align="flex-start" flex="1" spacing="4" width="full">

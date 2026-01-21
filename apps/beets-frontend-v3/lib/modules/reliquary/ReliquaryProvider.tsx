@@ -9,6 +9,7 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { sumBy } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useGetRelicPositionsOfOwner } from './hooks/useGetRelicPositionsOfOwner'
@@ -77,22 +78,23 @@ export function useReliquaryLogic() {
     refetch: refetchMaturityThresholds,
   } = levelInfoQuery
 
-  const relicIds = relicPositions.map(relic => parseInt(relic.relicId))
+  const relicIds = relicPositions.map(relic => bn(relic.relicId).toNumber())
   const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
   const reliquaryLevels = pool?.staking?.reliquary?.levels || []
 
-  const weightedTotalBalance = sumBy(
-    reliquaryLevels,
-    level => parseFloat(level.balance) * level.allocationPoints
+  const weightedTotalBalance = sumBy(reliquaryLevels, level =>
+    bn(level.balance).times(level.allocationPoints).toNumber()
   )
 
   const relicPositionsForFarmId = relicPositions.filter(
     position => position.farmId.toString() === farmId
   )
   const totalMaBeetsVP = sumBy(relicPositionsForFarmId, position => {
-    const numFBeets = parseFloat(position.amount)
     const boost = reliquaryLevels.find(level => level.level === position.level)
-    return ((boost?.allocationPoints || 0) / 100) * numFBeets
+
+    return bn(position.amount)
+      .times(bn(boost?.allocationPoints || 0).div(100))
+      .toNumber()
   })
 
   const pendingRewardsQuery = useGetPendingRewards({
@@ -109,8 +111,9 @@ export function useReliquaryLogic() {
 
   const beetsPrice = priceFor(beetsAddress, networkConfig.chain)
 
-  const totalPendingRewardsUSD =
-    parseFloat(pendingRewardsData?.rewards[0]?.amount || '0') * beetsPrice
+  const totalPendingRewardsUSD = bn(pendingRewardsData?.rewards[0]?.amount || '0')
+    .times(beetsPrice)
+    .toNumber()
 
   const pendingRewardsByRelicId = useMemo(
     () =>
@@ -137,7 +140,7 @@ export function useReliquaryLogic() {
     maturityThresholds,
     levelInfoQuery,
     beetsPerSecond,
-    beetsPerDay: parseFloat(beetsPerSecond) * 86400,
+    beetsPerDay: bn(beetsPerSecond).times(86400).toNumber(),
     weightedTotalBalance,
     reliquaryLevels,
     relicIds,

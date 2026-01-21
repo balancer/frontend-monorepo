@@ -63,7 +63,7 @@ export function ReliquaryWithdrawSummary({
 
   // Create rewards amount object if rewards exist (only for preview, not receipt)
   const rewardsAmount: HumanTokenAmountWithSymbol | null =
-    !shouldShowReceipt && parseFloat(pendingRewardsAmount) > 0
+    !shouldShowReceipt && bn(pendingRewardsAmount).gt(0)
       ? {
           tokenAddress: networkConfig.tokens.addresses.beets as `0x${string}`,
           humanAmount: pendingRewardsAmount as `${number}` | '',

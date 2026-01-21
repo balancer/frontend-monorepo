@@ -1,5 +1,6 @@
 import { addSeconds, fromUnixTime } from 'date-fns'
 import { ReliquaryFarmPosition } from '../ReliquaryProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReliquaryPosition } from '../reliquary.types'
 
 export function relicGetMaturityProgress(
@@ -27,21 +28,21 @@ export function relicGetMaturityProgress(
   const nextLevelMaturityIndex =
     maturities.length -
     1 -
-    maturitiesReversed.findIndex(maturity => timeElapsedSinceStart >= parseInt(maturity, 10))
+    maturitiesReversed.findIndex(maturity => bn(timeElapsedSinceStart).gte(bn(maturity)))
 
-  const isMaxMaturity = timeElapsedSinceStart > parseInt(maturities[maturities.length - 1], 10)
+  const isMaxMaturity = bn(timeElapsedSinceStart).gt(bn(maturities[maturities.length - 1]))
   const canUpgradeTo = isMaxMaturity ? maturities.length : nextLevelMaturityIndex + 1
 
   const canUpgrade =
     (isMaxMaturity && relic.level < maturities.length - 1) ||
     (nextLevelMaturityIndex > 0 && nextLevelMaturityIndex > relic.level)
 
-  const currentLevelMaturity = parseInt(maturities[relic.level], 10)
+  const currentLevelMaturity = bn(maturities[relic.level]).toNumber()
   const timeElapsedSinceCurrentLevel = Date.now() / 1000 - (currentLevelMaturity + relic.entry)
 
   const timeBetweenEntryAndNextLevel = isMaxMaturity
     ? 3600
-    : parseInt(maturities[relic.level + 1], 10)
+    : bn(maturities[relic.level + 1]).toNumber()
 
   const progressToNextLevel = canUpgrade
     ? 100

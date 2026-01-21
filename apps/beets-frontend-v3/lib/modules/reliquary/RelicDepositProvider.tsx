@@ -10,6 +10,7 @@ import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useReliquaryDepositSteps } from './hooks/useReliquaryDepositSteps'
 import { AddLiquidityStepsParams } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function RelicDepositProvider({
   children,
@@ -24,7 +25,7 @@ export function RelicDepositProvider({
   const createNew = !relicId
 
   // Convert relicId string to number for handler
-  const relicIdNumber = relicId ? parseInt(relicId, 10) : undefined
+  const relicIdNumber = relicId ? bn(relicId).toNumber() : undefined
 
   // Custom selector that returns reliquary handler based on mode
   const reliquaryHandlerSelector = useCallback(

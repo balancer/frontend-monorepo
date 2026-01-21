@@ -7,6 +7,7 @@ import { formatUnits } from 'viem'
 import { minutesToMilliseconds } from 'date-fns'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { sumBy } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { ReliquaryFarmPosition } from '../ReliquaryProvider'
 
 export type PendingRewardsResult = {
@@ -82,8 +83,8 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
     const validRewards = rewards.filter(
       (reward): reward is NonNullable<typeof reward> => reward !== null
     )
-    const relicIds = validRewards.map(reward => parseInt(reward.relicId))
-    const totalAmount = sumBy(validRewards, reward => parseFloat(reward.amount)).toString()
+    const relicIds = validRewards.map(reward => bn(reward.relicId).toNumber())
+    const totalAmount = sumBy(validRewards, reward => bn(reward.amount).toNumber()).toString()
 
     return {
       rewards: [{ address: beetsAddress, amount: totalAmount }],
@@ -94,7 +95,7 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
       relicIds,
       numberOfRelics: relicIds.length,
       fBEETSTotalBalance: sumBy(validRewards, reward =>
-        parseFloat(reward.fBEETSBalance)
+        bn(reward.fBEETSBalance).toNumber()
       ).toString(),
     }
   }, [config.tokens.addresses.beets, filteredPositions, query.data])

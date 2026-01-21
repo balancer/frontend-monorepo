@@ -8,7 +8,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
-import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { startOfWeek } from 'date-fns'
 import { zeroAddress } from 'viem'
 import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
@@ -25,14 +25,17 @@ export default function ReliquaryGlobalStats() {
 
   const data = pool.dynamicData
 
-  const beetsPerDay = parseFloat(pool.staking?.reliquary?.beetsPerSecond || '0') * 86400
-  const incentivesDailyValue =
-    beetsPerDay * priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain)
+  const beetsPerDay = bn(pool.staking?.reliquary?.beetsPerSecond || '0')
+    .times(86400)
+    .toNumber()
+  const incentivesDailyValue = bn(beetsPerDay)
+    .times(priceFor(networkConfig.tokens.addresses.beets || zeroAddress, networkConfig.chain))
+    .toNumber()
 
   // Calculate Relic maturity levels
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
-    level: parseInt(balance.level) + 1,
-    percentageOfTotal: parseFloat(balance.balance) / parseFloat(globalStats.totalBalance),
+    level: bn(balance.level).plus(1).toNumber(),
+    percentageOfTotal: bn(balance.balance).div(globalStats.totalBalance).toNumber(),
   }))
   const avgRelicMaturity = fNumCustom(
     relicMaturityLevels?.reduce(
@@ -49,18 +52,23 @@ export default function ReliquaryGlobalStats() {
 
   let numberOfRelicsThisWeek = 0
   if (snapshotsThisWeek) {
-    numberOfRelicsThisWeek =
-      parseInt(snapshotsThisWeek[snapshotsThisWeek.length - 1]?.relicCount || '') -
-      parseInt(snapshotsThisWeek[0]?.relicCount || '')
+    numberOfRelicsThisWeek = bn(snapshotsThisWeek[snapshotsThisWeek.length - 1]?.relicCount || '0')
+      .minus(bn(snapshotsThisWeek[0]?.relicCount || '0'))
+      .toNumber()
     if (Number.isNaN(numberOfRelicsThisWeek)) {
       numberOfRelicsThisWeek = 0
     }
   }
 
-  const reliquaryPoolRatio =
-    parseFloat(globalStats?.totalBalance || '') / parseFloat(data.totalShares)
-  const tvl = reliquaryPoolRatio * parseFloat(data.totalLiquidity)
-  const avgValuePerRelic = tvl / parseInt(globalStats?.relicCount || '')
+  const reliquaryPoolRatio = bn(globalStats?.totalBalance || '0')
+    .div(bn(data.totalShares || '1'))
+    .toNumber()
+  const tvl = bn(reliquaryPoolRatio).times(data.totalLiquidity).toNumber()
+  const avgValuePerRelic = bn(globalStats?.relicCount || '0').gt(0)
+    ? bn(tvl)
+        .div(globalStats?.relicCount || '0')
+        .toNumber()
+    : 0
 
   const baseApr = pool.dynamicData.aprItems.find(
     item => item.title === 'BEETS reward APR' && item.type === 'MABEETS_EMISSIONS'

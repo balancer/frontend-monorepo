@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
 import { useReliquary } from '../ReliquaryProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useGetLevelInfo } from './useGetLevelInfo'
 import { useGetLevelOnUpdate } from './useGetLevelOnUpdate'
 import { useGetPositionForId } from './useGetPositionForId'
@@ -43,7 +44,7 @@ export function useReliquaryDepositImpact(amount: number, relicId?: string) {
       }
 
       const maturityLevels = maturityThresholds.map(maturity => BigInt(maturity))
-      const weight = amount / (amount + parseFloat(position.amount))
+      const weight = bn(amount).div(bn(amount).plus(position.amount)).toNumber()
       const nowTimestamp = Math.floor(millisecondsToSeconds(Date.now()))
       const maturity = nowTimestamp - position.entry
       const entryTimestampAfterDeposit = Math.round(position.entry + maturity * weight)

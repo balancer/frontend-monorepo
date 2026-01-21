@@ -17,6 +17,7 @@ import { HumanAmount } from '@balancer/sdk'
 import { useReliquaryWithdrawSteps } from './hooks/useReliquaryWithdrawSteps'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { RemoveLiquidityStepParams } from '@repo/lib/modules/pool/actions/remove-liquidity/useRemoveLiquidityStep'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function RelicWithdrawProvider({
   children,
@@ -33,7 +34,7 @@ export function RelicWithdrawProvider({
   const relic = relicPositions.find(r => r.relicId === relicId)
 
   // Convert relicId string to number for handler
-  const relicIdNumber = parseInt(relicId, 10)
+  const relicIdNumber = bn(relicId).toNumber()
 
   // Custom selector that returns reliquary handler based on removal type
   const reliquaryHandlerSelector = useCallback(
