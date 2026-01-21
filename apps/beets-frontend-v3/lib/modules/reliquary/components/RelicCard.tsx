@@ -191,13 +191,13 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         />
         {canUpgrade && (
           <Button
-            colorScheme="green"
             left="50%"
             onClick={() => setIsLevelUpModalOpen(true)}
             position="absolute"
             size="lg"
             top="50%"
             transform="translate(-50%, -50%)"
+            variant="primary"
             zIndex="2"
           >
             Level Up
