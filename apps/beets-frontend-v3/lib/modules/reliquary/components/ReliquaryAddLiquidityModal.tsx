@@ -2,7 +2,7 @@
 
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
-import { RefObject, useEffect, useRef } from 'react'
+import { RefObject, useEffect, useMemo, useRef } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -53,7 +53,7 @@ export function ReliquaryAddLiquidityModal({
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling, startTokenPricePolling } = useTokens()
   const router = useRouter()
-  const { refetchRelicPositions } = useReliquary()
+  const { refetchRelicPositions, relicPositions } = useReliquary()
 
   const txReceipt = lastTransaction?.result
 
@@ -90,6 +90,15 @@ export function ReliquaryAddLiquidityModal({
 
   const isSuccess = !!addLiquidityTxHash && receiptProps.hasReceipt
 
+  const latestRelicId = useMemo(() => {
+    if (!createNew) return relicId
+    if (!relicPositions.length) return undefined
+    return relicPositions.reduce((maxRelicId, relic) => {
+      const currentId = Number(relic.relicId)
+      return currentId > Number(maxRelicId) ? relic.relicId : maxRelicId
+    }, relicPositions[0].relicId)
+  }, [createNew, relicId, relicPositions])
+
   function baseOnClose() {
     transactionSteps.resetTransactionSteps()
     startTokenPricePolling()
@@ -104,7 +113,8 @@ export function ReliquaryAddLiquidityModal({
   }
 
   function handleReturnAction() {
-    router.push(`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`)
+    const focusRelic = latestRelicId ?? relicId
+    router.push(`/mabeets${focusRelic ? `?focusRelic=${focusRelic}` : ''}`)
     baseOnClose()
   }
 
