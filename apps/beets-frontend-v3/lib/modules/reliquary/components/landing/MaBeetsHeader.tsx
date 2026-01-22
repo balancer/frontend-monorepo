@@ -14,7 +14,7 @@ export function MaBeetsHeader() {
             backgroundClip: 'text',
           }}
         >
-          maBEETs
+          maBEETS
         </span>{' '}
         Governance & Rewards
       </Heading>

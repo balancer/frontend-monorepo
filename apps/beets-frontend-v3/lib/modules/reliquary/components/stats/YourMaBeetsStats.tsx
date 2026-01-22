@@ -57,7 +57,7 @@ export function YourMaBeetsStats() {
         fontSize="xl"
         fontWeight="bold"
       >
-        Your maBEETs Summary
+        Your maBEETS Summary
       </Text>
       <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>

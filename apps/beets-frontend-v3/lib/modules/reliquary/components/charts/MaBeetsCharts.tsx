@@ -15,7 +15,7 @@ export function MaBeetsCharts() {
           fontSize="xl"
           fontWeight="bold"
         >
-          maBEETs Metrics
+          maBEETS Metrics
         </Text>
         <Card h="400" w="full">
           <NoisyCard cardProps={{ h: 'full' }}>
@@ -30,7 +30,7 @@ export function MaBeetsCharts() {
           fontSize="xl"
           fontWeight="bold"
         >
-          maBEETs Maturity Curve
+          maBEETS Maturity Curve
         </Text>
         <Card h="400" w="full">
           <NoisyCard cardProps={{ h: 'full' }}>
