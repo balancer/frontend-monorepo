@@ -56,7 +56,6 @@ export type StepType =
   | 'levelUp'
   | 'claimRelicReward'
   | 'burnRelic'
-  | 'depositRelic'
   | 'approveBatchRelayerForAllRelics'
   | 'delegateClear'
   | 'delegateSet'
