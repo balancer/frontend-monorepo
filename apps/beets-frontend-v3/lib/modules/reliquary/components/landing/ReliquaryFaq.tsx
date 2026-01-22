@@ -47,9 +47,9 @@ const FAQ_COLUMN_2 = [
       'Rewards are earned by holding a maBEETS position, with additional incentives available through governance participation such as gauge voting.',
   },
   {
-    question: 'What is MD delegation?',
+    question: 'What is the "vote optimizer"?',
     answer:
-      'MD delegation lets you delegate your maBEETS voting power to the Music Director for governance votes. Ownership, maturity progression, rewards, and exit rights remain unchanged.',
+      'Activating the vote optimizer delegates your maBEETS voting power —specifically within the Beets Gauge Votes space— to the Music Directors. They vote on your behalf with a clear goal: maximizing value for you through higher voting incentives, while also strengthening the protocol with increased staking rewards for a core pool. Your ownership, maturity progression, rewards, and exit rights stay exactly the same.',
   },
   {
     question: 'What happens if I transfer or sell my maBEETS NFT?',
