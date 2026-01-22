@@ -1,14 +1,19 @@
 import { EChartsOption, graphic } from 'echarts'
 import ReactECharts from 'echarts-for-react'
+import { addWeeks, format, fromUnixTime } from 'date-fns'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useMemo } from 'react'
+import { ReliquaryFarmPosition } from '../../ReliquaryProvider'
 
 interface RelicMaturityCurveChartProps {
-  currentLevel: number // The Relic's current level (0-10)
+  relic: ReliquaryFarmPosition
+  isFocused?: boolean
 }
 
-export function RelicMaturityCurveChart({ currentLevel }: RelicMaturityCurveChartProps) {
+export function RelicMaturityCurveChart({ relic, isFocused = true }: RelicMaturityCurveChartProps) {
   const { pool } = usePool()
+
+  const { level: currentLevel, entry } = relic
 
   const allLevelsData = useMemo(() => {
     return (
@@ -38,7 +43,7 @@ export function RelicMaturityCurveChart({ currentLevel }: RelicMaturityCurveChar
 
     return {
       tooltip: {
-        show: true,
+        show: isFocused,
         trigger: 'axis',
         axisPointer: {
           type: 'line',
@@ -49,9 +54,13 @@ export function RelicMaturityCurveChart({ currentLevel }: RelicMaturityCurveChar
           },
         },
         formatter: (params: any) => {
-          const level = params[0]?.axisValue || params[0]?.data?.[0]
-          const boost = params[0]?.data?.[1] || params[0]?.value
-          return `Level ${level}: ${boost}x boost`
+          const level = Number(params[0]?.axisValue ?? params[0]?.data?.[0])
+          const levelData = allLevelsData.find(dataPoint => dataPoint.level === level)
+          const boost = levelData?.allocationPoints ?? params[0]?.data?.[1] ?? params[0]?.value
+          const entryDate = fromUnixTime(entry)
+          const maturityDate = addWeeks(entryDate, Math.max(level - 1, 0))
+          const formattedMaturityDate = format(maturityDate, 'dd/MM/yy HH:mm')
+          return `Level: ${level}<br/>Boost: ${boost}x<br/>Maturity date: ${formattedMaturityDate}`
         },
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         borderColor: '#3182CE',
@@ -142,7 +151,7 @@ export function RelicMaturityCurveChart({ currentLevel }: RelicMaturityCurveChar
         },
       ],
     }
-  }, [allLevelsData, currentLevel])
+  }, [allLevelsData, currentLevel, entry, isFocused])
 
   return <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
 }

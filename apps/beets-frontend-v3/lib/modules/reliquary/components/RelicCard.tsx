@@ -334,12 +334,14 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           <StatValueText>{formattedDailyYield}</StatValueText>
         </RelicStat>
       </SimpleGrid>
-      <RelicStat>
-        <StatLabel label="Maturity Progress" />
-        <Box height="120px" width="full">
-          <RelicMaturityCurveChart currentLevel={relic.level} />
-        </Box>
-      </RelicStat>
+      {relic.level < 10 && (
+        <RelicStat>
+          <StatLabel label="Maturity Progress" />
+          <Box height="120px" width="full">
+            <RelicMaturityCurveChart isFocused={isSelected} relic={relic} />
+          </Box>
+        </RelicStat>
+      )}
       <LevelUpModal
         chain={chain}
         isOpen={isLevelUpModalOpen}
