@@ -44,6 +44,7 @@ export function RelicMaturityCurveChart({ relic, isFocused = true }: RelicMaturi
     return {
       tooltip: {
         show: isFocused,
+        appendToBody: true,
         trigger: 'axis',
         axisPointer: {
           type: 'line',
