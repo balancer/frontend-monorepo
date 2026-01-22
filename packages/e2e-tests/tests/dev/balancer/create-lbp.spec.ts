@@ -1,6 +1,6 @@
 import { impersonate } from '@/helpers/e2e.helpers'
 import { clickButton, button } from '@/helpers/user.helpers'
-import { expect, test } from '@playwright/test'
+import { expect, test, Page } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { oneDayInMs, oneWeekInMs, toISOString } from '@repo/lib/shared/utils/time'
 import { LBP_FORM_STEPS } from '@repo/lib/modules/lbp/constants.lbp'
@@ -8,31 +8,19 @@ import { LBP_FORM_STEPS } from '@repo/lib/modules/lbp/constants.lbp'
 const BASE_URL = 'http://localhost:3000/lbp/create'
 const stepUrl = (index: number) => `${BASE_URL}/${LBP_FORM_STEPS[index].id}`
 
-test('Create LBP form step navigation', async ({ page }) => {
-  await page.goto(`${BASE_URL}`)
-  await impersonate(page, defaultAnvilAccount)
-
-  await expect(page).toHaveURL(stepUrl(0))
-  await expect(page.getByText('Launch token details')).toBeVisible()
+async function setSaleStructure(page: Page) {
   const launchTokenInput = page.getByPlaceholder('Enter token address')
-  await expect(launchTokenInput).toBeEmpty()
   await launchTokenInput.fill('0xc3d21f79c3120a4ffda7a535f8005a7c297799bf')
-  await expect(page.getByRole('heading', { name: 'Sale period' })).toBeVisible()
 
   const dateInputs = page.locator('input[type="datetime-local"]')
-  const startInput = dateInputs.first()
-  const endInput = dateInputs.last()
-  await startInput.fill(toISOString(Date.now() + oneDayInMs).slice(0, 16))
-  await endInput.fill(toISOString(Date.now() + oneWeekInMs).slice(0, 16))
-  await expect(page.getByRole('heading', { name: 'Seed initial pool liquidity' })).toBeVisible()
+  await dateInputs.first().fill(toISOString(Date.now() + oneDayInMs).slice(0, 16))
+  await dateInputs.last().fill(toISOString(Date.now() + oneWeekInMs).slice(0, 16))
+
   await page.getByLabel('Sale token').fill('100')
   await page.getByLabel('Collateral token').fill('1')
-  const nextButton = button(page, 'Next')
-  await expect(nextButton).toBeEnabled()
-  await nextButton.click()
+}
 
-  await expect(page).toHaveURL(stepUrl(1))
-  await expect(page.getByRole('heading', { name: 'Project info', level: 2 })).toBeVisible()
+async function setProjectInfo(page: Page) {
   await page.getByLabel('Project name').fill('The Phoenix Project')
   await page
     .getByLabel('Project description')
@@ -42,22 +30,84 @@ test('Create LBP form step navigation', async ({ page }) => {
     .getByLabel('Token icon URL')
     .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
   await page.getByRole('checkbox').check({ force: true })
-  await expect(nextButton).toBeEnabled()
-  await nextButton.click()
+}
 
-  await expect(page).toHaveURL(stepUrl(2))
-  await clickButton(page, 'Create LBP')
+async function clickResetAndConfirm(page: Page) {
+  await page.getByRole('button', { name: 'Delete & restart' }).click()
+  await page.getByRole('button', { name: 'Delete and start over' }).click()
+}
 
-  await clickButton(page, 'Deploy pool on Ethereum Mainnet')
+async function expectStep0Empty(page: Page) {
+  await expect(page).toHaveURL(stepUrl(0))
+  await expect(page.getByPlaceholder('Enter token address')).toBeEmpty()
+}
 
-  await clickButton(page, 'Approve WETH')
+test.describe('LBP creation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(BASE_URL)
+    await impersonate(page, defaultAnvilAccount)
+  })
 
-  await clickButton(page, 'Approve TERM')
+  test('can create an LBP', async ({ page }) => {
+    await expect(page).toHaveURL(stepUrl(0))
+    await expect(page.getByText('Launch token details')).toBeVisible()
+    await expect(page.getByPlaceholder('Enter token address')).toBeEmpty()
+    await setSaleStructure(page)
+    await expect(page.getByRole('heading', { name: 'Sale period' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Seed initial pool liquidity' })).toBeVisible()
+    const nextButton = button(page, 'Next')
+    await expect(nextButton).toBeEnabled()
+    await nextButton.click()
 
-  await clickButton(page, 'Sign approvals: WETH, TERM')
+    await expect(page).toHaveURL(stepUrl(1))
+    await expect(page.getByRole('heading', { name: 'Project info', level: 2 })).toBeVisible()
+    await setProjectInfo(page)
+    await expect(nextButton).toBeEnabled()
+    await nextButton.click()
 
-  await clickButton(page, 'Seed pool liquidity')
+    await expect(page).toHaveURL(stepUrl(2))
+    await clickButton(page, 'Create LBP')
+    await clickButton(page, 'Deploy pool on Ethereum Mainnet')
+    await clickButton(page, 'Approve WETH')
+    await clickButton(page, 'Approve TERM')
+    await clickButton(page, 'Sign approvals: WETH, TERM')
+    await clickButton(page, 'Seed pool liquidity')
 
-  // API sync fails because pool only created on fork so does not exist on mainnet
-  await expect(button(page, 'Retry sync metadata')).toBeVisible()
+    // API sync fails because pool only exists on fork
+    await expect(button(page, 'Retry sync metadata')).toBeVisible()
+  })
+
+  test.describe('Reset form', () => {
+    test('sale structure step', async ({ page }) => {
+      await expect(page).toHaveURL(stepUrl(0))
+      await setSaleStructure(page)
+
+      await clickResetAndConfirm(page)
+      await expectStep0Empty(page)
+    })
+
+    test('project info step', async ({ page }) => {
+      await setSaleStructure(page)
+      await button(page, 'Next').click()
+      await expect(page).toHaveURL(stepUrl(1))
+
+      await setProjectInfo(page)
+      await clickResetAndConfirm(page)
+
+      await expectStep0Empty(page)
+    })
+
+    test('review step', async ({ page }) => {
+      await setSaleStructure(page)
+      await button(page, 'Next').click()
+
+      await setProjectInfo(page)
+      await button(page, 'Next').click()
+
+      await expect(page).toHaveURL(stepUrl(2))
+
+      await clickResetAndConfirm(page)
+      await expectStep0Empty(page)
+    })
+  })
 })

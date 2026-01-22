@@ -9,14 +9,13 @@ const stepUrl = (index: number) => `${BASE_URL}/${POOL_CREATION_FORM_STEPS[index
 
 test('Create pool form step navigation', async ({ page }) => {
   await page.goto(`${BASE_URL}`)
-  await expect(page).toHaveURL(stepUrl(0))
-
   await impersonate(page, defaultAnvilAccount)
 
+  await expect(page).toHaveURL(stepUrl(0))
   await expect(page.getByText('Choose protocol')).toBeVisible()
   await expect(page.getByText('Choose network')).toBeVisible()
-
   await clickButton(page, 'Next')
+
   await expect(page).toHaveURL(stepUrl(1))
   await expect(page.getByText('Choose pool tokens')).toBeVisible()
   const step2NextButton = button(page, 'Next')
@@ -26,17 +25,21 @@ test('Create pool form step navigation', async ({ page }) => {
   await button(page, 'Select token').first().click()
   await page.getByText('Aave Token', { exact: true }).click()
   await expect(step2NextButton).toBeEnabled()
-
   await clickButton(page, 'Next')
+
   await expect(page).toHaveURL(stepUrl(2))
   await expect(page.getByText('Pool details')).toBeVisible()
   await expect(page.getByText('Pool settings')).toBeVisible()
-
   await clickButton(page, 'Next')
+
   await expect(page).toHaveURL(stepUrl(3))
   await expect(page.getByText('Seed initial pool liquidity')).toBeVisible()
   await expect(button(page, 'Create Pool')).toBeDisabled()
+
+  // test tx flow
 })
+
+// test reset at each step?
 
 test.describe('Build popover to pool page', () => {
   test('Sets form state for protocol', async ({ page }) => {

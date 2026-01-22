@@ -15,7 +15,7 @@ import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
-import { useWatch, useFormState } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
 
@@ -41,7 +41,14 @@ export function useLbpFormLogic() {
   )
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
-  const { isValid: isSaleFormValid } = useFormState({ control: saleStructureForm.control })
+  const [startDateTime, endDateTime] = useWatch({
+    control: saleStructureForm.control,
+    name: ['startDateTime', 'endDateTime'],
+  })
+
+  const isSaleFormValid = !!(startDateTime && endDateTime)
+  // isSaleFormValid breaks reset on review step for some unknown reason because it stays true after from data reset
+  // const { isValid: isSaleFormValid } = useFormState({ control: saleStructureForm.control })
 
   const formSteps = useFormSteps({
     steps: LBP_FORM_STEPS,
@@ -50,6 +57,7 @@ export function useLbpFormLogic() {
     isFormHydrated: saleStructureForm.isHydrated && projectInfoForm.isHydrated,
     shouldSkipRedirectToSavedStep: false,
     canRenderStepFn: (stepIndex: number) => {
+      console.log({ stepIndex, isSaleFormValid })
       if (stepIndex > 0) return isSaleFormValid
       return true
     },
