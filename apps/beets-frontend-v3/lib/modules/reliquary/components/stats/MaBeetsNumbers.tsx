@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -67,24 +67,14 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
 
   return (
     <VStack align="flex-start" flex="1" spacing="4" width="full">
-      <Flex justify="space-between" width="full">
-        <Text
-          background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
-          backgroundClip="text"
-          fontSize="xl"
-          fontWeight="bold"
-        >
-          maBeets Numbers
-        </Text>
-        <Link
-          color="#05D690"
-          cursor="pointer"
-          onClick={onToggleShowMore}
-          textDecoration="underline"
-        >
-          {chartsVisible ? 'Show less' : 'Show more'}
-        </Link>
-      </Flex>
+      <Text
+        background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
+        backgroundClip="text"
+        fontSize="xl"
+        fontWeight="bold"
+      >
+        maBeets Numbers
+      </Text>
       <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>
           <Box mt="-5px">
@@ -138,6 +128,15 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
           </Skeleton>
         </RelicStat>
       </SimpleGrid>
+      <Link
+        color="#05D690"
+        cursor="pointer"
+        ml="auto"
+        onClick={onToggleShowMore}
+        textDecoration="underline"
+      >
+        {chartsVisible ? 'Show less' : 'Show more'}
+      </Link>
     </VStack>
   )
 }
