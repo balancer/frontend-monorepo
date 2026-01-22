@@ -37,10 +37,27 @@ async function doDetailsStep(page: Page, { continue: shouldContinue = false } = 
   if (shouldContinue) await clickButton(page, 'Next')
 }
 
+async function doTransactionSteps(page: Page) {
+  await clickButton(page, 'Create Pool')
+  await clickButton(page, 'Deploy pool on Ethereum Mainnet')
+  await clickButton(page, 'Approve WETH')
+  await clickButton(page, 'Approve AAVE')
+  await clickButton(page, 'Sign approvals: WETH, AAVE')
+  await clickButton(page, 'Seed pool liquidity')
+  await expect(button(page, 'View pool page')).toBeVisible()
+  await expect(button(page, 'Create another pool')).toBeVisible()
+}
+
 async function doFundStep(page: Page) {
   await expect(page).toHaveURL(stepUrl(3))
   await expect(page.getByText('Seed initial pool liquidity')).toBeVisible()
   await expect(button(page, 'Create Pool')).toBeDisabled()
+
+  await page.getByLabel('Token 1').fill('10')
+  await page.getByLabel('Token 2').fill('188')
+  await page.getByRole('checkbox').check({ force: true })
+
+  await doTransactionSteps(page)
 }
 
 async function clickResetAndConfirm(page: Page) {
