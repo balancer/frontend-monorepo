@@ -74,7 +74,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                 <Divider borderColor="gray.600" height="90px" orientation="vertical" />
                 <VStack alignItems="flex-start" spacing="3" width="full">
                   <InfoButton
-                    infoText="Delegate or undelegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets space on Snapshot."
+                    infoText="Delegate or undelegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets Gauge Votes space on Snapshot."
                     label="Vote Optimizer Status"
                     labelProps={{
                       lineHeight: '1rem',

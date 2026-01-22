@@ -98,9 +98,11 @@ export function ReliquaryDelegationModal({
             <Card variant="modalSubSection">
               <VStack align="start" spacing="sm" w="full">
                 <Text color="gray.400" fontSize="sm">
-                  {delegate
-                    ? 'Delegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets Gauge Votes space on Snapshot.'
-                    : 'Remove your delegation and manage your own voting power. This only affects the delegation for the Beets space on Snapshot.'}
+                  {`${
+                    delegate
+                      ? 'Delegate your maBEETS voting power to the Music Directors.'
+                      : 'Remove your delegation and manage your own voting power.'
+                  } This only affects the delegation for the Beets Gauge Votes space on Snapshot.`}
                 </Text>
                 {delegate && delegateAddress && (
                   <Box>
