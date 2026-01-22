@@ -7,7 +7,7 @@ import {
 import { ReliquaryProportionalRemoveLiquidityHandler } from './handlers/ReliquaryProportionalRemoveLiquidity.handler'
 import { ReliquarySingleTokenRemoveLiquidityHandler } from './handlers/ReliquarySingleTokenRemoveLiquidity.handler'
 import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useReliquary } from './ReliquaryProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
@@ -53,25 +53,22 @@ export function RelicRemoveLiquidityProvider({
     [relicIdNumber]
   )
 
-  const customStepsHook = useMemo(() => {
-    return (params: RemoveLiquidityStepParams): TransactionStep[] => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      return useReliquaryRemoveLiquiditySteps({
-        handler: params.handler,
-        simulationQuery: params.simulationQuery,
-        relicId: relicIdNumber,
-        singleTokenOutAddress: params.singleTokenOutAddress,
-      })
-    }
-  }, [relicIdNumber])
+  function useReliquarySteps(params: RemoveLiquidityStepParams): TransactionStep[] {
+    return useReliquaryRemoveLiquiditySteps({
+      handler: params.handler,
+      simulationQuery: params.simulationQuery,
+      relicId: relicIdNumber,
+      singleTokenOutAddress: params.singleTokenOutAddress,
+    })
+  }
 
   return (
     <RemoveLiquidityProvider
-      customStepsHook={customStepsHook}
       enablePoolRedirect={false}
       handlerSelector={reliquaryHandlerSelector}
       maxHumanBptIn={relic?.amount as HumanAmount | undefined}
       urlTxHash={urlTxHash}
+      useRemoveLiquiditySteps={useReliquarySteps}
     >
       <RemoveLiquiditySuccessHandler refetchRelicPositions={refetchRelicPositions} />
       {children}

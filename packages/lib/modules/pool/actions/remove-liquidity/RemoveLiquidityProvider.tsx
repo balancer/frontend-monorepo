@@ -20,13 +20,15 @@ import { isCowAmmPool } from '../../pool.helpers'
 import { getActionableTokenAddresses, getPoolActionableTokens } from '../../pool-tokens.utils'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
-import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
+import { useRemoveLiquiditySteps as useRemoveLiquidityStepsBase } from './useRemoveLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useWrapUnderlying } from '../useWrapUnderlying'
+
+type UseRemoveLiquidityStepsHook = typeof useRemoveLiquidityStepsBase
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -36,7 +38,7 @@ export function useRemoveLiquidityLogic(
   mute?: boolean,
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
   maxHumanBptIn?: HumanAmount,
-  customStepsHook?: typeof useRemoveLiquiditySteps,
+  useRemoveLiquiditySteps: UseRemoveLiquidityStepsHook = useRemoveLiquidityStepsBase,
   enablePoolRedirect = true
 ) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
@@ -154,8 +156,7 @@ export function useRemoveLiquidityLogic(
   /**
    * Step construction
    */
-  const stepsHook = customStepsHook || useRemoveLiquiditySteps
-  const steps = stepsHook({
+  const steps = useRemoveLiquiditySteps({
     handler,
     simulationQuery,
     humanBptIn,
@@ -302,7 +303,7 @@ type Props = PropsWithChildren<{
   mute?: boolean
   handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
   maxHumanBptIn?: HumanAmount
-  customStepsHook?: typeof useRemoveLiquiditySteps
+  useRemoveLiquiditySteps?: UseRemoveLiquidityStepsHook
   enablePoolRedirect?: boolean
 }>
 
@@ -311,7 +312,7 @@ export function RemoveLiquidityProvider({
   mute,
   handlerSelector,
   maxHumanBptIn,
-  customStepsHook,
+  useRemoveLiquiditySteps,
   enablePoolRedirect,
   children,
 }: Props) {
@@ -320,7 +321,7 @@ export function RemoveLiquidityProvider({
     mute,
     handlerSelector,
     maxHumanBptIn,
-    customStepsHook,
+    useRemoveLiquiditySteps,
     enablePoolRedirect
   )
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>

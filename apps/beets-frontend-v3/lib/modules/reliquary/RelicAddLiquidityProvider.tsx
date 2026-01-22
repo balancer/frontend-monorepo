@@ -4,7 +4,7 @@ import { AddLiquidityProvider } from '@repo/lib/modules/pool/actions/add-liquidi
 import { ReliquaryProportionalAddLiquidityHandler } from './handlers/ReliquaryProportionalAddLiquidity.handler'
 import { ReliquaryUnbalancedAddLiquidityHandler } from './handlers/ReliquaryUnbalancedAddLiquidity.handler'
 import { BeetsBatchRelayerService } from '@/lib/services/batch-relayer/beets-batch-relayer.service'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Hash } from 'viem'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
@@ -44,25 +44,20 @@ export function RelicAddLiquidityProvider({
     [relicIdNumber]
   )
 
-  // Create a wrapper hook factory that captures createNew and relicId
-  const customStepsHook = useMemo(() => {
-    // This function signature matches what AddLiquidityProvider expects
-    return (params: AddLiquidityStepsParams) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      return useReliquaryAddLiquiditySteps({
-        ...params,
-        createNew,
-        relicId,
-      })
-    }
-  }, [createNew, relicId])
+  function useReliquarySteps(params: AddLiquidityStepsParams) {
+    return useReliquaryAddLiquiditySteps({
+      ...params,
+      createNew,
+      relicId,
+    })
+  }
 
   return (
     <AddLiquidityProvider
       addLiquidityHandlerSelector={reliquaryHandlerSelector}
       enablePoolRedirect={false}
       urlTxHash={urlTxHash}
-      useAddLiquiditySteps={customStepsHook}
+      useAddLiquiditySteps={useReliquarySteps}
     >
       {children}
     </AddLiquidityProvider>
