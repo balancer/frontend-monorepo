@@ -8,6 +8,7 @@ import {
   Flex,
   HStack,
   Skeleton,
+  Stack,
   Text,
   VStack,
   useDisclosure,
@@ -58,7 +59,13 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
         <Card h="full" w="full">
           <NoisyCard cardProps={{ h: 'full' }}>
             {hasRelics ? (
-              <HStack alignItems="flex-start" p={{ base: 'sm', md: 'md' }} spacing="6" w="full">
+              <Stack
+                alignItems="flex-start"
+                direction={{ base: 'column', md: 'row' }}
+                p={{ base: 'sm', md: 'md' }}
+                spacing="6"
+                w="full"
+              >
                 <VStack alignItems="flex-start" spacing="2" width="full">
                   <Text color="beets.base.50" fontSize="sm" fontWeight="semibold">
                     Total Voting Power
@@ -71,7 +78,18 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                     <Skeleton height="32px" width="150px" />
                   )}
                 </VStack>
-                <Divider borderColor="gray.600" height="90px" orientation="vertical" />
+                <Divider
+                  borderColor="gray.600"
+                  display={{ base: 'block', md: 'none' }}
+                  orientation="horizontal"
+                  width="full"
+                />
+                <Divider
+                  borderColor="gray.600"
+                  display={{ base: 'none', md: 'block' }}
+                  height="90px"
+                  orientation="vertical"
+                />
                 <VStack alignItems="flex-start" spacing="3" width="full">
                   <InfoButton
                     infoText="Delegate or undelegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets Gauge Votes space on Snapshot."
@@ -108,7 +126,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                     />
                   )}
                 </VStack>
-              </HStack>
+              </Stack>
             ) : (
               <VStack alignItems="center" justifyContent="center" py="16">
                 <Text color="gray.400" fontSize="lg" textAlign="center">

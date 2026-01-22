@@ -85,7 +85,7 @@ export function ReliquaryFaq() {
           Learn more
         </Link>
       </HStack>
-      <Box h="400px" w="full">
+      <Box h={{ base: 'auto', md: '400px' }} w="full">
         <SimpleGrid columns={{ base: 1, lg: 2 }} gap="8" h="full" w="full">
           <Accordion allowToggle w="full">
             {FAQ_COLUMN_1.map(item => (

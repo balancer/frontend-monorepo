@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, HStack, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Button, SimpleGrid, Skeleton, Stack, Text, VStack } from '@chakra-ui/react'
 import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
@@ -79,8 +79,8 @@ export function YourMaBeetsStats() {
           </Skeleton>
         </RelicStat>
         <RelicStat>
-          <HStack w="full">
-            <VStack alignItems="flex-start" w="full">
+          <Stack direction={{ base: 'column', md: 'row' }} w="full">
+            <VStack alignItems="flex-start" spacing="0" w="full">
               <StatLabel label="Total Pending Rewards" />
               <Skeleton isLoaded={!isLoading} width="50%">
                 <StatValueText>{toCurrency(totalPendingRewardsUSD)}</StatValueText>
@@ -98,7 +98,7 @@ export function YourMaBeetsStats() {
                 Claim all rewards
               </Button>
             </TooltipWithTouch>
-          </HStack>
+          </Stack>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Relic Share" />
