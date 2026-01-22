@@ -15,7 +15,7 @@ import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
-import { useWatch } from 'react-hook-form'
+import { useWatch, useFormState } from 'react-hook-form'
 import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
 
@@ -23,12 +23,6 @@ export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
 
 export function useLbpFormLogic() {
-  const formSteps = useFormSteps({
-    steps: LBP_FORM_STEPS,
-    basePath: '/lbp/create',
-    localStorageKey: LS_KEYS.LbpConfig.StepIndex,
-  })
-
   const saleStructureForm = usePersistentForm<SaleStructureForm>(
     LS_KEYS.LbpConfig.SaleStructure,
     INITIAL_SALE_STRUCTURE,
@@ -47,12 +41,26 @@ export function useLbpFormLogic() {
   )
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
+  const { isValid: isSaleFormValid } = useFormState({ control: saleStructureForm.control })
+
+  const formSteps = useFormSteps({
+    steps: LBP_FORM_STEPS,
+    basePath: '/lbp/create',
+    localStorageKey: LS_KEYS.LbpConfig.StepIndex,
+    isFormHydrated: saleStructureForm.isHydrated && projectInfoForm.isHydrated,
+    shouldSkipRedirectToSavedStep: false,
+    canRenderStepFn: (stepIndex: number) => {
+      if (stepIndex > 0) return isSaleFormValid
+      return true
+    },
+  })
+
   const resetLbpCreation = () => {
+    formSteps.resetSteps()
     setPoolAddress(undefined)
     saleStructureForm.resetToInitial()
     projectInfoForm.resetToInitial()
     setIsMetadataSaved(false)
-    formSteps.resetSteps()
   }
 
   const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } = useWatch({

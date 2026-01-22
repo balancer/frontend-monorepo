@@ -14,8 +14,6 @@ test('Create LBP form step navigation', async ({ page }) => {
 
   await expect(page).toHaveURL(stepUrl(0))
   await expect(page.getByText('Launch token details')).toBeVisible()
-  const nextButton = button(page, 'Next')
-  await expect(nextButton).toBeDisabled()
   const launchTokenInput = page.getByPlaceholder('Enter token address')
   await expect(launchTokenInput).toBeEmpty()
   await launchTokenInput.fill('0xc3d21f79c3120a4ffda7a535f8005a7c297799bf')
@@ -29,6 +27,7 @@ test('Create LBP form step navigation', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Seed initial pool liquidity' })).toBeVisible()
   await page.getByLabel('Sale token').fill('100')
   await page.getByLabel('Collateral token').fill('1')
+  const nextButton = button(page, 'Next')
   await expect(nextButton).toBeEnabled()
   await nextButton.click()
 
@@ -49,5 +48,16 @@ test('Create LBP form step navigation', async ({ page }) => {
   await expect(page).toHaveURL(stepUrl(2))
   await clickButton(page, 'Create LBP')
 
-  await expect(button(page, 'Deploy pool on Ethereum Mainnet')).toBeVisible()
+  await clickButton(page, 'Deploy pool on Ethereum Mainnet')
+
+  await clickButton(page, 'Approve WETH')
+
+  await clickButton(page, 'Approve TERM')
+
+  await clickButton(page, 'Sign approvals: WETH, TERM')
+
+  await clickButton(page, 'Seed pool liquidity')
+
+  // API sync fails because pool only created on fork so does not exist on mainnet
+  await expect(button(page, 'Retry sync metadata')).toBeVisible()
 })

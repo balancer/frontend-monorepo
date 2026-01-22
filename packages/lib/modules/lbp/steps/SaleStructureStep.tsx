@@ -61,7 +61,7 @@ export function SaleStructureStep() {
     poolAddress,
   } = useLbpForm()
 
-  const {
+  const [
     selectedChain,
     launchTokenAddress,
     collateralTokenAddress,
@@ -71,7 +71,20 @@ export function SaleStructureStep() {
     customStartWeight,
     weightAdjustmentType,
     fee,
-  } = useWatch({ control }) as SaleStructureForm
+  ] = useWatch({
+    control,
+    name: [
+      'selectedChain',
+      'launchTokenAddress',
+      'collateralTokenAddress',
+      'startDateTime',
+      'endDateTime',
+      'customEndWeight',
+      'customStartWeight',
+      'weightAdjustmentType',
+      'fee',
+    ],
+  })
   const { isValid, errors } = useFormState({ control })
 
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {

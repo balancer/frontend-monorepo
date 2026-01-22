@@ -1,6 +1,7 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { useLocalStorage } from 'usehooks-ts'
 import { ComponentType, useEffect, useRef } from 'react'
+import { isAddress } from 'viem'
 
 const scrollToTop = () => {
   window.scrollTo(0, 0)
@@ -16,7 +17,9 @@ export interface UseFormStepsConfig {
   steps: FormStep[]
   basePath: string
   localStorageKey: string
-  shouldSkipRedirect?: boolean
+  canRenderStepFn: (currentStepIndex: number) => boolean
+  isFormHydrated: boolean
+  shouldSkipRedirectToSavedStep: boolean
 }
 
 function getStepIndexFromPathname(pathname: string, steps: FormStep[]): number | null {
@@ -25,9 +28,20 @@ function getStepIndexFromPathname(pathname: string, steps: FormStep[]): number |
 }
 
 export function useFormSteps(config: UseFormStepsConfig) {
-  const { steps, basePath, localStorageKey, shouldSkipRedirect = false } = config
+  const {
+    steps,
+    basePath,
+    localStorageKey,
+    canRenderStepFn,
+    isFormHydrated,
+    shouldSkipRedirectToSavedStep,
+  } = config
 
   const pathname = usePathname()
+  const lastSegment = pathname.split('/').pop() ?? ''
+  const isPathForLoadingPool = isAddress(lastSegment)
+  const shouldRedirectToSavedStep = !isPathForLoadingPool && !shouldSkipRedirectToSavedStep
+
   const router = useRouter()
   const [savedStepIndex, setSavedStepIndex] = useLocalStorage(localStorageKey, 0)
 
@@ -39,11 +53,12 @@ export function useFormSteps(config: UseFormStepsConfig) {
   const isLastStep = currentStepIndex === steps.length - 1
   const isFirstStep = currentStepIndex === 0
   const currentStep = steps[currentStepIndex]
+  const canRenderStep = isFormHydrated && canRenderStepFn(currentStepIndex)
 
   // On initial load without valid URL step, redirect to saved step from localStorage
   const hasRedirected = useRef(false)
   useEffect(() => {
-    if (hasRedirected.current || shouldSkipRedirect) return
+    if (hasRedirected.current || !shouldRedirectToSavedStep) return
     if (stepIndexFromUrl === null) {
       const savedStep = steps[savedStepIndex]
       if (savedStep) {
@@ -51,14 +66,15 @@ export function useFormSteps(config: UseFormStepsConfig) {
       }
     }
     hasRedirected.current = true
-  }, [stepIndexFromUrl, savedStepIndex, shouldSkipRedirect, router, basePath, steps])
+  }, [stepIndexFromUrl, savedStepIndex, shouldRedirectToSavedStep, router, basePath, steps])
 
-  // Sync localStorage from URL when URL has a valid step (persists progress)
   useEffect(() => {
-    if (stepIndexFromUrl !== null && stepIndexFromUrl !== savedStepIndex) {
-      setSavedStepIndex(stepIndexFromUrl)
-    }
-  }, [stepIndexFromUrl, savedStepIndex, setSavedStepIndex])
+    if (!isFormHydrated) return
+    // if render attempt would crash page, redirect to first step
+    if (!canRenderStep) router.replace(`${basePath}/${steps[0].id}`)
+    const shouldSyncLocalStorage = stepIndexFromUrl !== null && stepIndexFromUrl !== savedStepIndex
+    if (shouldSyncLocalStorage) setSavedStepIndex(stepIndexFromUrl)
+  }, [stepIndexFromUrl, savedStepIndex, setSavedStepIndex, isFormHydrated, canRenderStep])
 
   const navigateToStep = (stepIndex: number) => {
     const step = steps[stepIndex]
@@ -106,6 +122,7 @@ export function useFormSteps(config: UseFormStepsConfig) {
 
   return {
     steps,
+    canRenderStep,
     currentStepIndex,
     currentStep,
     isLastStep,

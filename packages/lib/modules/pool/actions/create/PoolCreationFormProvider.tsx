@@ -23,9 +23,9 @@ import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useWatch } from 'react-hook-form'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { isAddress } from 'viem'
+import { useSearchParams } from 'next/navigation'
 import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
+import { validatePoolTokens } from './validatePoolCreationForm'
 
 export type UsePoolCreationFormResult = ReturnType<typeof usePoolFormLogic>
 export const PoolCreationFormContext = createContext<UsePoolCreationFormResult | null>(null)
@@ -103,17 +103,25 @@ export function usePoolFormLogic() {
     )
   }
 
-  const pathname = usePathname()
-  const lastSegment = pathname.split('/').pop() ?? ''
-  const isPathForLoadPoolInit = isAddress(lastSegment)
+  const [network, poolTokens] = useWatch({
+    control: poolCreationForm.control,
+    name: ['network', 'poolTokens'],
+  })
+
   const searchParams = useSearchParams()
-  const isPathForChooseProtocol = searchParams.has('protocol')
 
   const formSteps = useFormSteps({
     steps: POOL_CREATION_FORM_STEPS,
     basePath: '/create',
     localStorageKey: LS_KEYS.PoolCreation.StepIndex,
-    shouldSkipRedirect: isPathForChooseProtocol || isPathForLoadPoolInit,
+    isFormHydrated: poolCreationForm.isHydrated,
+    shouldSkipRedirectToSavedStep: searchParams.has('protocol'),
+    canRenderStepFn: (currentStepIndex: number) => {
+      const stepRequiresValidTokens = currentStepIndex >= 2
+      const hasValidTokens = validatePoolTokens.isValidTokens(poolTokens)
+      const canRenderStep = stepRequiresValidTokens ? hasValidTokens : true
+      return canRenderStep
+    },
   })
 
   const resetPoolCreationForm = () => {
@@ -125,10 +133,6 @@ export function usePoolFormLogic() {
   }
 
   const { getTokensByChain, isLoadingTokens: isLoadingTokenList } = useTokens()
-  const [network, poolTokens] = useWatch({
-    control: poolCreationForm.control,
-    name: ['network', 'poolTokens'],
-  })
 
   const tokenList = useMemo(() => {
     const networkTokens = getTokensByChain(network.toUpperCase() as GqlChain) || []

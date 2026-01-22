@@ -18,7 +18,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
 
 export function LbpForm() {
-  const { steps, currentStepIndex, currentStep } = useLbpForm()
+  const { steps, currentStepIndex, currentStep, canRenderStep } = useLbpForm()
   const { isMobile } = useBreakpoints()
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function LbpForm() {
       <Divider />
 
       <VStack spacing="lg" w="full">
-        <currentStep.Component />
+        {canRenderStep && <currentStep.Component />}
       </VStack>
     </VStack>
   )
