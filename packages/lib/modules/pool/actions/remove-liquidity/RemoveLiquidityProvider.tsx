@@ -49,7 +49,7 @@ export function useRemoveLiquidityLogic(
     RemoveLiquidityType.Proportional
   )
 
-  const { pool, chainId, bptPrice, isLoading } = usePool()
+  const { pool, chainId, bptPrice } = usePool()
   const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
@@ -71,7 +71,7 @@ export function useRemoveLiquidityLogic(
   const handler = useMemo(() => {
     const selector = handlerSelector ?? selectRemoveLiquidityHandler
     return selector(pool, removalType)
-  }, [pool, removalType, isLoading, handlerSelector])
+  }, [pool, removalType, handlerSelector])
 
   const totalUsdFromBprPrice = bn(humanBptIn).times(bptPrice).toFixed()
 
