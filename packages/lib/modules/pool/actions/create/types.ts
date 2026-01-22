@@ -53,6 +53,7 @@ export type PoolCreationForm = {
   poolTokens: PoolCreationToken[]
   name: string
   symbol: string
+  poolCreator: Address
   swapFeeManager: Address | ''
   pauseManager: Address | ''
   swapFeePercentage: string
