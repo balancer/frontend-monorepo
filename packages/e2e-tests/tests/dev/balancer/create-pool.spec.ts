@@ -56,8 +56,6 @@ async function doFundStep(page: Page) {
   await page.getByLabel('Token 1').fill('10')
   await page.getByLabel('Token 2').fill('188')
   await page.getByRole('checkbox').check({ force: true })
-
-  await doTransactionSteps(page)
 }
 
 async function clickResetAndConfirm(page: Page) {
@@ -80,6 +78,7 @@ test.describe('Create pool page', () => {
     await doTokenStep(page, { continue: true })
     await doDetailsStep(page, { continue: true })
     await doFundStep(page)
+    await doTransactionSteps(page)
   })
 
   test.describe('Form reset', () => {
