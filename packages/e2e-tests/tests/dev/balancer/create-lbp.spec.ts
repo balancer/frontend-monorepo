@@ -22,14 +22,21 @@ async function doSaleStructureStep(page: Page, { continue: shouldContinue = fals
   await dateInputs.last().fill(toISOString(Date.now() + oneWeekInMs).slice(0, 16))
 
   await expect(page.getByRole('heading', { name: 'Seed initial pool liquidity' })).toBeVisible()
+
+  const nextButton = button(page, 'Next')
+
+  await expect(nextButton).toBeDisabled()
   await page.getByLabel('Sale token').fill('100')
   await page.getByLabel('Collateral token').fill('1')
+  await expect(nextButton).toBeEnabled()
 
-  if (shouldContinue) await clickButton(page, 'Next')
+  if (shouldContinue) await nextButton.click()
 }
 
 async function doProjectInfoStep(page: Page, { continue: shouldContinue = false } = {}) {
   await expect(page).toHaveURL(stepUrl(1))
+
+  const nextButton = button(page, 'Next')
 
   await page.getByLabel('Project name').fill('The Phoenix Project')
   await page
@@ -39,9 +46,12 @@ async function doProjectInfoStep(page: Page, { continue: shouldContinue = false 
   await page
     .getByLabel('Token icon URL')
     .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
-  await page.getByRole('checkbox').check({ force: true })
 
-  if (shouldContinue) await clickButton(page, 'Next')
+  await expect(nextButton).toBeDisabled()
+  await page.getByRole('checkbox').check({ force: true })
+  await expect(nextButton).toBeEnabled()
+
+  if (shouldContinue) await nextButton.click()
 }
 
 async function doReviewStep(page: Page) {

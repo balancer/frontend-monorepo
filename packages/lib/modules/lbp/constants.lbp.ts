@@ -7,8 +7,8 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 
 export const LBP_FORM_STEPS: FormStep[] = [
-  { id: 'step-1-structure', title: 'Sale structure', Component: SaleStructureStep },
-  { id: 'step-2-info', title: 'Project info', Component: ProjectInfoStep },
+  { id: 'step-1-sale-structure', title: 'Sale structure', Component: SaleStructureStep },
+  { id: 'step-2-project-info', title: 'Project info', Component: ProjectInfoStep },
   { id: 'step-3-review', title: 'Review', Component: ReviewStep },
 ]
 
