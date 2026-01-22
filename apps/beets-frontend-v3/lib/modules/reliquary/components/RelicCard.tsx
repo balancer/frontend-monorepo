@@ -185,7 +185,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           draggable={false}
           height={400}
           placeholder="blur"
-          src={getImage(relic?.level + 1)}
+          src={getImage(relic.level + 1)}
           style={{ margin: '0 auto', userSelect: 'none' }}
           width={400}
         />

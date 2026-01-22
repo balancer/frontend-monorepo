@@ -12,7 +12,6 @@ import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useMemo } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { getNetworkConfig } from '@repo/lib/config/networks'
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
@@ -30,7 +29,7 @@ export function ReliquaryClaimSummary({
 }: Props) {
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
-  const { chain, pendingRewardsByRelicId, beetsPrice } = useReliquary()
+  const { chain, pendingRewardsByRelicId, beetsPrice, beetsAddress } = useReliquary()
   const pendingRewardsAmount = pendingRewardsByRelicId[relicId] ?? '0'
   const pendingRewardsUsdValue = bn(pendingRewardsAmount).times(beetsPrice)
 
@@ -39,9 +38,6 @@ export function ReliquaryClaimSummary({
   const claimTokens: HumanTokenAmountWithSymbol[] = useMemo(() => {
     if (!pendingRewardsAmount || pendingRewardsUsdValue.eq(0)) return []
 
-    const networkConfig = getNetworkConfig(chain)
-    const beetsAddress = networkConfig.tokens.addresses.beets!
-
     return [
       {
         tokenAddress: beetsAddress,
@@ -49,7 +45,7 @@ export function ReliquaryClaimSummary({
         symbol: 'BEETS',
       },
     ]
-  }, [pendingRewardsAmount, pendingRewardsUsdValue, chain])
+  }, [pendingRewardsAmount, pendingRewardsUsdValue, chain, beetsAddress])
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />

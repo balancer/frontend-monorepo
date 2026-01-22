@@ -17,7 +17,11 @@ export function TOSCheckbox({
             <Text as="div" fontSize="md" lineHeight="1" sx={{ textWrap: 'pretty' }}>
               <TextShine animationDuration="1.5s">
                 I agree to the terms of service as stated&nbsp;
-                <Link href="https://beets.fi/terms-of-service" isExternal>
+                <Link
+                  href="https://beets.fi/terms-of-service"
+                  isExternal
+                  onClick={e => e.stopPropagation()}
+                >
                   here
                 </Link>
               </TextShine>

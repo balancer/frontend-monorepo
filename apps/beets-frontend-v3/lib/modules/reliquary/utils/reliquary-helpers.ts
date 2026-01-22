@@ -12,6 +12,7 @@ export function relicGetMaturityProgress(
       canUpgrade: false,
       canUpgradeTo: -1,
       progressToNextLevel: 0,
+      isMaxMaturity: false,
       entryDate: new Date(),
       levelUpDate: new Date(),
     }

@@ -176,7 +176,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
             }}
             bg="transparent"
             color="white"
-            disabled={selectedIndex === 0}
+            isDisabled={selectedIndex === 0}
             leftIcon={<ChevronLeft size={20} />}
             onClick={scrollToPrev}
             size="sm"

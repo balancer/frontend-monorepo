@@ -13,8 +13,6 @@ import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useMemo } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useReliquary } from '../ReliquaryProvider'
-import { getNetworkConfig } from '@repo/lib/config/networks'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 type Props = {
   claimTxHash?: string
@@ -26,15 +24,12 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
-  const { totalPendingRewardsUSD, pendingRewardsData } = useReliquary()
+  const { totalPendingRewardsUSD, pendingRewardsData, beetsAddress } = useReliquary()
 
   const shouldShowReceipt = !!claimTxHash
 
   const claimTokens: HumanTokenAmountWithSymbol[] = useMemo(() => {
     if (!pendingRewardsData?.rewards[0]?.amount || !pool) return []
-
-    const networkConfig = getNetworkConfig(pool.chain as GqlChain)
-    const beetsAddress = networkConfig.tokens.addresses.beets!
 
     return [
       {
@@ -43,7 +38,7 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
         symbol: 'BEETS',
       },
     ]
-  }, [pendingRewardsData, totalPendingRewardsUSD, pool])
+  }, [pendingRewardsData, totalPendingRewardsUSD, pool, beetsAddress])
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />

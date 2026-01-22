@@ -1,5 +1,4 @@
 import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelayerStep'
-import { useHasApprovedRelayer } from '@repo/lib/modules/relayer/useHasApprovedRelayer'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { getSpenderForAddLiquidity } from '@repo/lib/modules/tokens/token.helpers'
 import { useMemo } from 'react'
@@ -13,7 +12,6 @@ import {
 } from './useReliquaryAddLiquidityStep'
 import { getApprovalAndAddSteps } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 import { useApproveRelayerRelicsStep } from './useApproveRelayerRelicsStep'
-import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useReliquary } from '../ReliquaryProvider'
 
@@ -44,14 +42,9 @@ export function useReliquaryAddLiquiditySteps({
     { relayerMode: reliquaryRelayerMode }
   )
 
-  const { hasApprovedRelayer } = useHasApprovedRelayer(chainId, {
-    relayerMode: reliquaryRelayerMode,
-  })
-
   // Reliquary NFT approval
   const { step: approveRelayerRelicsStep, isLoading: isLoadingRelayerRelicsApproval } =
     useApproveRelayerRelicsStep()
-  const { hasApprovedRelayerForAllRelics } = useHasApprovedRelayerForAllRelics()
 
   // Token approvals (V2 only - no permit2)
   const inputAmounts = useMemo(
@@ -96,11 +89,7 @@ export function useReliquaryAddLiquiditySteps({
     shouldBatchTransactions,
     tokenApprovalSteps,
     multicallStep,
-    createNew,
-    relicId,
-    hasApprovedRelayerForAllRelics,
     approveRelayerRelicsStep,
-    hasApprovedRelayer,
     approveRelayerStep,
   ])
 

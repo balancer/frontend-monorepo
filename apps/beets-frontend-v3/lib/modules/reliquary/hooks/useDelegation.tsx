@@ -18,7 +18,10 @@ export function useDelegation() {
     },
   })
 
-  const isDelegatedToMDs = delegationAddress === networkConfig.snapshot?.delegateAddress
+  const isDelegatedToMDs =
+    !!delegationAddress &&
+    !!networkConfig.snapshot?.delegateAddress &&
+    delegationAddress === networkConfig.snapshot.delegateAddress
 
   return {
     data: isDelegatedToMDs,

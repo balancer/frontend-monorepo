@@ -173,7 +173,9 @@ export function ReliquaryRemoveLiquiditySummary({
           }
           pool={pool}
           tokens={shouldShowReceipt ? tokens : undefined}
-          totalUSDValue={hasQuoteContext ? totalUSDValue + rewardsUSDValue : undefined}
+          totalUSDValue={
+            hasQuoteContext ? bn(totalUSDValue).plus(rewardsUSDValue).toString() : undefined
+          }
         />
       </Card>
       {shouldShowReceipt ? (

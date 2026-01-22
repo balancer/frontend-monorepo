@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
 import { format } from 'date-fns'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import ReactECharts from 'echarts-for-react'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
-import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { secondsToMilliseconds } from 'date-fns'
 
 interface Props {
@@ -44,7 +43,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
         formatter: (params: any) => `# of Relics: ${fNumCustom(params[0].data[1], '0a')}`,
       },
       textStyle: {
-        color: '#D3D3D3',
+        color: theme.colors.gray['200'],
       },
       xAxis: {
         show: true,
@@ -106,7 +105,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           splitLine: { show: false },
 
           tooltip: {
-            valueFormatter: value => fNum('fiat', value as number),
+            valueFormatter: value => fNumCustom(value as number, '0a'),
           },
         },
       ],

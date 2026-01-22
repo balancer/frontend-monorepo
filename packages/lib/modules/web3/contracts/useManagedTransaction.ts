@@ -119,13 +119,6 @@ export function useManagedTransaction({
   })
   const prevTransactionStatus = useRef<typeof transactionStatusQuery.status | null>(null)
 
-  useEffect(() => {
-    if (prevTransactionStatus.current !== transactionStatusQuery.status) {
-      onTransactionChange({ ...bundle, result: transactionStatusQuery })
-      prevTransactionStatus.current = transactionStatusQuery.status
-    }
-  }, [transactionStatusQuery])
-
   const bundle = {
     chainId,
     simulation: estimateGasQuery as TransactionSimulation,
@@ -133,6 +126,13 @@ export function useManagedTransaction({
     result: transactionStatusQuery,
     isSafeTxLoading,
   }
+
+  useEffect(() => {
+    if (prevTransactionStatus.current !== transactionStatusQuery.status) {
+      onTransactionChange(bundle)
+      prevTransactionStatus.current = transactionStatusQuery.status
+    }
+  }, [transactionStatusQuery.status, bundle, onTransactionChange])
 
   // on successful submission to chain, add tx to cache
   useOnTransactionSubmission({

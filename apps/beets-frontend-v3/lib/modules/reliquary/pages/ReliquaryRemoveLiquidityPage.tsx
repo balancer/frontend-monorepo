@@ -84,8 +84,6 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
     isSingleTokenBalanceMoreThat25Percent,
   } = useRemoveLiquidity()
 
-  console.log({ totalUSDValue })
-
   const { pool, chain } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { startTokenPricePolling } = useTokens()

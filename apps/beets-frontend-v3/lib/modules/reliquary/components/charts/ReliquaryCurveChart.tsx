@@ -102,7 +102,7 @@ export function ReliquaryCurveChart() {
             color: 'beets.base.50',
           }}
         />
-        <Link href="https://docs.beets.fi/tokenomics/mabeets" target="_blank">
+        <Link href="https://docs.beets.fi/tokenomics/mabeets" isExternal>
           <ExternalLink size="16" />
         </Link>
       </HStack>

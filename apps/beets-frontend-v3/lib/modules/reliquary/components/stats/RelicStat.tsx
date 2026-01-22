@@ -35,7 +35,7 @@ function Stat({ children }: StatProps) {
           zIndex="-1"
         >
           <Picture
-            altText="MEV Capture Promo Background"
+            altText="Relic Stat bg"
             defaultImgType="jpg"
             directory="/images/homepage/"
             height="100%"

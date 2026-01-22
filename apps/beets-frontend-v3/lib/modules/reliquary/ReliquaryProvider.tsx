@@ -154,6 +154,7 @@ export function useReliquaryLogic() {
     pendingRewardsQuery,
     refetchPendingRewards,
     pendingRewardsByRelicId,
+    beetsAddress,
   }
 }
 

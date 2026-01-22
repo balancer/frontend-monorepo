@@ -21,7 +21,6 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useReliquaryDelegationStep, DelegationAction } from '../hooks/useReliquaryDelegationStep'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useState } from 'react'
@@ -88,7 +87,7 @@ export function ReliquaryDelegationModal({
         {isDesktop && (
           <DesktopStepTracker chain={chain} transactionSteps={delegationTransactionSteps} />
         )}
-        <TransactionModalHeader chain={GqlChain.Sonic} label={modalLabel} txHash={txHash} />
+        <TransactionModalHeader chain={chain} label={modalLabel} txHash={txHash} />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm">
