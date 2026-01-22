@@ -388,7 +388,14 @@ function AddTokenButton({
 
 function RemoveTokenButton({ onClick, isDisabled }: { onClick: () => void; isDisabled: boolean }) {
   return (
-    <Button color="font.secondary" isDisabled={isDisabled} onClick={onClick} variant="unstyled">
+    <Button
+      _focus={{ color: 'font.error' }}
+      _hover={{ color: 'font.error' }}
+      color="font.secondary"
+      isDisabled={isDisabled}
+      onClick={onClick}
+      variant="unstyled"
+    >
       <Trash2 size={16} />
     </Button>
   )
