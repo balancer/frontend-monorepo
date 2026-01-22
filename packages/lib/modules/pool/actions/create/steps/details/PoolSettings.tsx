@@ -5,7 +5,7 @@ import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
-import { getSwapFeePercentageOptions } from '../../helpers'
+import { getSwapFeePercentageOptions, isSonicNetwork } from '../../helpers'
 import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
@@ -30,6 +30,9 @@ export function PoolSettings() {
     control: poolCreationForm.control,
     name: ['network', 'poolType'],
   })
+
+  const isPoolCreatorAllowed = !isSonicNetwork(network) // contracts yet to be deployed on sonic
+
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const filteredPoolHooksOptions = poolHooksWhitelist.filter(hook => {
@@ -112,15 +115,17 @@ export function PoolSettings() {
         Pool settings
       </Heading>
 
-      <PoolSettingsRadioGroup
-        customInputLabel="Custom pool creator address"
-        customInputType="address"
-        name="poolCreator"
-        options={poolRoleAccountOptions}
-        title="Pool Creator"
-        tooltip="Account empowered to set a pool creator fee (or 0 if all fees go to the protocol and LPs)"
-        validate={validatePoolSettings.poolRoleAccount}
-      />
+      {isPoolCreatorAllowed && (
+        <PoolSettingsRadioGroup
+          customInputLabel="Custom pool creator address"
+          customInputType="address"
+          name="poolCreator"
+          options={poolRoleAccountOptions}
+          title="Pool Creator"
+          tooltip="Account empowered to set a pool creator fee (or 0 if all fees go to the protocol and LPs)"
+          validate={validatePoolSettings.poolRoleAccount}
+        />
+      )}
 
       <PoolSettingsRadioGroup
         customInputLabel="Custom swap fee manager address"

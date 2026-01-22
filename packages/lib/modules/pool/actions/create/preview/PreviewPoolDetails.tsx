@@ -6,7 +6,7 @@ import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
-import { isStablePool, isCowPool, isWeightedPool } from '../helpers'
+import { isStablePool, isCowPool, isWeightedPool, isSonicNetwork } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolDetails() {
@@ -80,7 +80,8 @@ export function PoolDetailsContent() {
 
   const showPoolSettings = !isCowPool(poolType)
   const showAmplificationParameter = isStablePool(poolType)
-  const showPoolCreator = isStablePool(poolType) || isWeightedPool(poolType)
+  const showPoolCreator =
+    !isSonicNetwork(network) && (isStablePool(poolType) || isWeightedPool(poolType))
 
   const poolDetailsMap = {
     'Pool name': name,

@@ -1,6 +1,6 @@
 import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolType, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import {
   WeightedPoolStructure,
@@ -116,4 +116,8 @@ export function isCowProtocol(protocol: string): boolean {
 
 export function isBalancerProtocol(protocol: string): boolean {
   return protocol.toLowerCase() === BALANCER_PROTOCOL_ID.toLowerCase()
+}
+
+export function isSonicNetwork(chain: GqlChain): boolean {
+  return chain === GqlChain.Sonic
 }
