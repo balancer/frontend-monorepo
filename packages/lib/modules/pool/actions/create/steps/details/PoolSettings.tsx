@@ -42,7 +42,7 @@ export function PoolSettings() {
     }
   })
 
-  const poolManagerOptions: PoolSettingsOption[] = [
+  const poolRoleAccountOptions: PoolSettingsOption[] = [
     { label: `Delegate to the ${PROJECT_CONFIG.projectName} DAO`, value: zeroAddress },
     {
       label: 'My connected wallet:',
@@ -113,23 +113,33 @@ export function PoolSettings() {
       </Heading>
 
       <PoolSettingsRadioGroup
+        customInputLabel="Custom pool creator address"
+        customInputType="address"
+        name="poolCreator"
+        options={poolRoleAccountOptions}
+        title="Pool Creator"
+        tooltip="Account empowered to set a pool creator fee (or 0 if all fees go to the protocol and LPs)"
+        validate={validatePoolSettings.poolRoleAccount}
+      />
+
+      <PoolSettingsRadioGroup
         customInputLabel="Custom swap fee manager address"
         customInputType="address"
         name="swapFeeManager"
-        options={poolManagerOptions}
+        options={poolRoleAccountOptions}
         title="Swap fee manager"
         tooltip="Account empowered to set static swap fees for a pool"
-        validate={validatePoolSettings.swapFeeManager}
+        validate={validatePoolSettings.poolRoleAccount}
       />
 
       <PoolSettingsRadioGroup
         customInputLabel="Custom pause manager address"
         customInputType="address"
         name="pauseManager"
-        options={poolManagerOptions}
+        options={poolRoleAccountOptions}
         title="Pause manager"
         tooltip="Account empowered to pause/unpause the pool (note that governance can always pause a pool)"
-        validate={validatePoolSettings.pauseManager}
+        validate={validatePoolSettings.poolRoleAccount}
       />
 
       <PoolSettingsRadioGroup

@@ -13,6 +13,7 @@ export interface PoolSettingsRadioGroupProps {
   tooltip: string
   isDisabled?: boolean
   name:
+    | 'poolCreator'
     | 'swapFeeManager'
     | 'pauseManager'
     | 'swapFeePercentage'
