@@ -5,7 +5,6 @@ import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { isStablePool, isCowPool } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
@@ -25,7 +24,7 @@ export function PreviewPoolDetails() {
 }
 
 export function PoolDetailsContent() {
-  const { poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm, isBeforeStep } = usePoolCreationForm()
   const [
     network,
     name,
@@ -92,8 +91,6 @@ export function PoolDetailsContent() {
       'Allow donations': enableDonation ? 'Yes' : 'No',
     }),
   }
-
-  const { isBeforeStep } = usePoolCreationFormSteps()
 
   return Object.entries(poolDetailsMap).map(([label, value]) => (
     <HStack

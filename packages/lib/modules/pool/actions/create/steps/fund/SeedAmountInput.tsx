@@ -91,6 +91,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
       <Text fontWeight="bold">Token {idx + 1}</Text>
       <TokenInput
         apiToken={token.data}
+        aria-label={`Token ${idx + 1}`}
         chain={network}
         customUsdPrice={Number(token.usdPrice)}
         onChange={e => handleAmountChange(idx, e.currentTarget.value)}

@@ -13,39 +13,16 @@ import {
   Stack,
   Skeleton,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
 import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
-import { useWatch } from 'react-hook-form'
-import { validatePoolTokens } from './validatePoolCreationForm'
 
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
-  const { poolCreationForm } = usePoolCreationForm()
-  const [poolTokens] = useWatch({
-    control: poolCreationForm.control,
-    name: ['poolTokens'],
-  })
-
-  const { steps, currentStepIndex, currentStep, goToStep } = usePoolCreationFormSteps()
+  const { steps, currentStepIndex, currentStep, goToStep, canRenderStep } = usePoolCreationForm()
   const { isMobile } = useBreakpoints()
-  const router = useRouter()
-
-  const isFormHydrated = poolCreationForm.isHydrated
-  const stepRequiresValidTokens = currentStepIndex >= 2
-  const hasValidTokens = validatePoolTokens.isValidTokens(poolTokens)
-  const canRenderStep = stepRequiresValidTokens ? hasValidTokens : true
-
-  useEffect(() => {
-    // wait for local storage to load form data
-    if (!isFormHydrated) return
-    if (!canRenderStep) router.replace('/create/step-1-type')
-  }, [isFormHydrated, stepRequiresValidTokens, hasValidTokens])
 
   return (
     <VStack spacing="lg">

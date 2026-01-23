@@ -7,7 +7,7 @@ import {
   DefaultValues,
   useWatch,
 } from 'react-hook-form'
-import { useEffect, useCallback, useState, startTransition } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 
 /**
  * Combines react-hook-form with useLocalStorage to persist form data.
@@ -36,11 +36,14 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
 
   // Set persisted values after form initialization
   useEffect(() => {
-    if (persistedValues !== initialDefaultValues) {
-      form.reset(persistedValues, { keepDefaultValues: true })
-      form.trigger()
+    async function initForm() {
+      if (persistedValues !== initialDefaultValues) {
+        form.reset(persistedValues, { keepDefaultValues: true })
+      }
+      await form.trigger()
+      setIsHydrated(true)
     }
-    startTransition(() => setIsHydrated(true))
+    initForm()
   }, [])
 
   const { control } = form

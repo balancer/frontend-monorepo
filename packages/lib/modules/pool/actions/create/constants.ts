@@ -13,6 +13,18 @@ import { getSwapFeePercentageOptions } from './helpers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { parseUnits } from 'viem'
+import { FormStep } from '@repo/lib/shared/hooks/useFormSteps'
+import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
+import { PoolDetailsStep } from './steps/details/PoolDetailsStep'
+import { PoolFundStep } from './steps/fund/PoolFundStep'
+import { PoolTypeStep } from './steps/type/PoolTypeStep'
+
+export const POOL_CREATION_FORM_STEPS: FormStep[] = [
+  { id: 'step-1-type', title: 'Type', Component: PoolTypeStep },
+  { id: 'step-2-tokens', title: 'Tokens', Component: PoolTokensStep },
+  { id: 'step-3-details', title: 'Details', Component: PoolDetailsStep },
+  { id: 'step-4-fund', title: 'Fund', Component: PoolFundStep },
+]
 
 const GNOSIS_BLACKLIST: Address[] = [
   '0xcB444e90D8198415266c6a2724b7900fb12FC56E', // Monerium EUR emoney (EURe)

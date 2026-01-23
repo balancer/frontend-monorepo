@@ -4,15 +4,13 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { isCowProtocol, isBalancerProtocol } from '../helpers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolType } from '@balancer/sdk'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 
 interface UseProtocolSearchParams {
   poolType: GqlPoolType
 }
 
 export function useProtocolSearchParams({ poolType }: UseProtocolSearchParams) {
-  const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
-  const { isFirstStep } = usePoolCreationFormSteps()
+  const { poolCreationForm, resetPoolCreationForm, isFirstStep } = usePoolCreationForm()
   const searchParams = useSearchParams()
 
   const protocolSearchParam = searchParams.get('protocol')

@@ -13,12 +13,11 @@ import { useFormState, useWatch } from 'react-hook-form'
 export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
   const {
-    activeStepIndex,
-    setActiveStep,
     isLastStep,
     isFirstStep,
+    goToNextStep,
+    goToPreviousStep,
     saleStructureForm,
-    projectInfoForm,
     poolAddress,
   } = useLbpForm()
   const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
@@ -26,8 +25,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const nextBtn = useRef(null)
   const { copyToClipboard, isCopied } = useCopyToClipboard()
   const saleFormState = useFormState({ control: saleStructureForm.control })
-  const projectInfoFormState = useFormState({ control: projectInfoForm.control })
-  const isFormStateValid = saleFormState.isValid && projectInfoFormState.isValid
+  const isFormStateValid = saleFormState.isValid
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
@@ -40,7 +38,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
         <IconButton
           aria-label="Back"
           icon={<ChevronLeftIcon h="8" w="8" />}
-          onClick={() => setActiveStep(activeStepIndex - 1)}
+          onClick={goToPreviousStep}
           size="lg"
         />
       )}
@@ -62,7 +60,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
           if (isLastStep) {
             previewModalDisclosure.onOpen()
           } else {
-            setActiveStep(activeStepIndex + 1)
+            goToNextStep()
           }
         }}
         size="lg"

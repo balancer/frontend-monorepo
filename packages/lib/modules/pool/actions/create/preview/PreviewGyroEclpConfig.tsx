@@ -3,14 +3,13 @@ import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { NUM_FORMAT } from '../constants'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import ReactECharts from 'echarts-for-react'
 import { useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 import { useWatch } from 'react-hook-form'
 
 export function PreviewGyroEclpConfig() {
-  const { isBeforeStep } = usePoolCreationFormSteps()
-  const { eclpConfigForm, poolCreationForm, invertGyroEclpPriceParams } = usePoolCreationForm()
+  const { eclpConfigForm, poolCreationForm, invertGyroEclpPriceParams, isBeforeStep } =
+    usePoolCreationForm()
   const [alpha, beta, peakPrice] = useWatch({
     control: eclpConfigForm.control,
     name: ['alpha', 'beta', 'peakPrice'],
