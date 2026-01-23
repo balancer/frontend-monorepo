@@ -3,7 +3,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRecoveredFundsClaims } from './RecoveredFundsClaimsProvider'
-import { Card, Checkbox, Divider, HStack, Text, VStack } from '@chakra-ui/react'
+import { Badge, Card, Checkbox, Divider, HStack, Text, VStack } from '@chakra-ui/react'
 import {
   RecoveredTokenClaim,
   useRecoveredFunds,
@@ -12,7 +12,7 @@ import {
 } from './useRecoveredFunds'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import Image from 'next/image'
-import { getChainName, getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useUnderlyingToken } from './useUnderlyingToken'
 
@@ -71,7 +71,10 @@ function ChainClaimCard({ claims, chainId }: ChainClaimCardProps) {
 
   const networkConfig = getNetworkConfig(chainId)
   const chainClaims = claims.filter(claim => claim.chainId === chainId)
+  if (chainClaims.length === 0) return null
+
   const totalAmount = sumRecoveredFundsTotal(chainClaims)
+  const hasBeenClaimed = chainClaims.every(claim => claim.rawAmount === claim.claimedAmount)
 
   return (
     <Card paddingX={0} variant="modalSubSection">
@@ -85,11 +88,23 @@ function ChainClaimCard({ claims, chainId }: ChainClaimCardProps) {
               width={20}
             />
             <Text fontSize="sm" fontWeight="bold">
-              {`${getChainName(chainId)} claims`}
+              {`${networkConfig.name} claims`}
             </Text>
           </HStack>
 
-          <Text>{toCurrency(totalAmount)}</Text>
+          {hasBeenClaimed ? (
+            <Badge
+              background="green.400"
+              color="font.dark"
+              fontSize="sm"
+              textTransform="unset"
+              userSelect="none"
+            >
+              Claimed
+            </Badge>
+          ) : (
+            <Text>{toCurrency(totalAmount)}</Text>
+          )}
         </HStack>
 
         <Divider p="0" />

@@ -18,11 +18,13 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
   const { isDesktop } = useBreakpoints()
   const { redirectToPage: redirectToPortfolioPage } = useRedirect('/portfolio')
   const { steps } = useRecoveredFundsClaims()
-  const txHash = undefined // FIXME: [JUANJO] we can have multiple transaction hashes
-  const isSuccess = false
+  const isSuccess = steps.isLastStep(steps.currentStepIndex) && steps.currentStep.isComplete()
+  const txHash =
+    isSuccess && steps.currentTransaction
+      ? steps.lastTransaction?.result?.data?.transactionHash
+      : undefined
 
   const closeModal = () => {
-    // FIXME: [JUANJO] Going back and forth breaks this
     redirectToPortfolioPage()
     onClose()
   }
