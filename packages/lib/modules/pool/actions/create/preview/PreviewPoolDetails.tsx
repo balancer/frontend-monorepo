@@ -5,7 +5,6 @@ import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { isStablePool, isCowPool, isWeightedPool, isSonicNetwork } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
