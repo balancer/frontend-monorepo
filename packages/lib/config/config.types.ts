@@ -70,6 +70,9 @@ export interface ContractsConfig {
     magpieLoopedSonicRouter?: Address
     loopedSonicVault?: Address
   }
+  merkl?: {
+    claims: Address
+  }
   feeDistributor?: Address
   veDelegationProxy?: Address
   veBAL?: Address
