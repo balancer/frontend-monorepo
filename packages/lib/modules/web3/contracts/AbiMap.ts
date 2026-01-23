@@ -25,6 +25,7 @@ import {
 } from './abi/beets/generated'
 import { LiquidityGaugeV5Abi } from './abi/LiquidityGaugeV5Abi'
 import { permit2Abi } from '@balancer/sdk'
+import { merklClaimsAbi } from './abi/merkAbi'
 
 export const AbiMap = {
   'balancer.vaultV2': balancerV2VaultAbi,
@@ -50,6 +51,7 @@ export const AbiMap = {
   'beets.loopedSonicRouter': magpieLoopedSonicRouterAbi,
   'beets.loopedSonicVault': loopedSonicVaultAbi,
   permit2: permit2Abi,
+  'merkl.claims': merklClaimsAbi,
 }
 
 export type AbiMapType = keyof typeof AbiMap | undefined
