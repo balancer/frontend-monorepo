@@ -63,6 +63,9 @@ const networkConfig: NetworkConfig = {
     },
     veDelegationProxy: '0x81cFAE226343B24BA12EC6521Db2C79E7aeeb310',
     permit2: PERMIT2[arbitrum.id],
+    merkl: {
+      claims: '0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae',
+    },
   },
   pools: convertHexToLowerCase({
     issues: {

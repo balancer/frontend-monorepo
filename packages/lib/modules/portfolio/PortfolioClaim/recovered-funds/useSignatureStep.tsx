@@ -28,9 +28,6 @@ export function useSignatureStep() {
     stepType: 'signature',
     details: { gasless: true },
     isComplete: () => isConnected && signed,
-    onSuccess: () => {
-      // FIXME: [JUANJO] reload claims from API
-    },
     renderAction: () => (
       <Button
         isDisabled={!isConnected || !hasAcceptedDisclaimer}

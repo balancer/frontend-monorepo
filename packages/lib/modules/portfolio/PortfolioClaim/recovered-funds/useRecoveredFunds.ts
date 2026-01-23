@@ -5,25 +5,31 @@ import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types
 import { Address } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
+import { minutesToMilliseconds } from 'date-fns'
+import { useState } from 'react'
 
 const MERKL_API_URL = 'https://api.merkl.xyz/v4'
-export const CHAINS = [1]
+export const CHAINS = [1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */]
 
 export type RecoveredTokenClaim = {
   amount: HumanTokenAmountWithSymbol
   chainId: number
   price: number
+  proofs: string[]
+  rawAmount: bigint
+  claimedAmount: bigint
 }
 
 export function useRecoveredFunds() {
   const { userAddress } = useUserAccount()
+  const [lastClaimedChain, setLastClaimedChain] = useState<number | undefined>()
 
   const result = useQuery({
     queryKey: ['fetch-recovered-funds'],
     queryFn: async () => {
-      //
       const chains = CHAINS.join(',')
-      const endpoint = `${MERKL_API_URL}/users/${userAddress}/rewards?chainId=${chains}&test=true`
+      const reloadChainId = lastClaimedChain ? `&reloadChainId=${lastClaimedChain}` : ''
+      const endpoint = `${MERKL_API_URL}/users/${userAddress}/rewards?chainId=${chains}${reloadChainId}&test=true`
       const response = await fetch(endpoint)
 
       if (!response.ok) {
@@ -36,18 +42,20 @@ export function useRecoveredFunds() {
       return (await response.json()) as MerklRewardsResponse
     },
     enabled: !!userAddress,
+    staleTime: minutesToMilliseconds(10),
   })
 
   const claims =
     !result.isLoading && result.data
-      ? result.data
-          .flatMap(chain => chain.rewards)
-          .filter(claim => Number(claim.claimed) < Number(claim.amount))
-          .map(toRecoveredTokenClaim)
+      ? result.data.flatMap(chain => chain.rewards).map(toRecoveredTokenClaim)
       : []
 
   return {
     hasRecoveredFunds: claims.length > 0,
+    refetchClaims: (chainId: number) => {
+      setLastClaimedChain(chainId)
+      result.refetch()
+    },
     claims,
   }
 }
@@ -61,6 +69,9 @@ function toRecoveredTokenClaim(item: MerklReward): RecoveredTokenClaim {
     },
     chainId: item.token.chainId,
     price: item.token.price || 0,
+    proofs: item.proofs,
+    rawAmount: BigInt(item.amount),
+    claimedAmount: BigInt(item.claimed),
   }
 }
 

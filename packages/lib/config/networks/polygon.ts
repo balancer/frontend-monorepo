@@ -53,6 +53,9 @@ const networkConfig: NetworkConfig = {
       WeightedPool2TokensFactory: '0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0',
     },
     veDelegationProxy: '0x0f08eEf2C785AA5e7539684aF04755dEC1347b7c',
+    merkl: {
+      claims: '0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae',
+    },
   },
   pools: convertHexToLowerCase({
     issues: {
