@@ -1,7 +1,7 @@
 'use client'
 
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { Text } from '@chakra-ui/react'
 import { BalAlert } from '../../../shared/components/alerts/BalAlert'
@@ -11,7 +11,7 @@ import { formatUnits } from 'viem'
 
 type Props = {
   validTokens: ApiToken[]
-  amounts: HumanTokenAmountWithAddress[]
+  amounts: HumanTokenAmountWithSymbol[]
   operation: 'add' | 'remove'
 }
 
