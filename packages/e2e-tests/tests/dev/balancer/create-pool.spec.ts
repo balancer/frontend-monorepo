@@ -9,7 +9,7 @@ test.describe('Create pool page', () => {
 
   test.beforeEach(async ({ page }) => {
     createPool = new CreatePoolPage(page)
-    await createPool.goto()
+    await createPool.goToPage()
     await impersonate(page, defaultAnvilAccount)
   })
 

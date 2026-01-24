@@ -15,7 +15,7 @@ export class CreatePoolPage {
 
   constructor(private page: Page) {}
 
-  async goto() {
+  async goToPage() {
     await this.page.goto(this.urls.base)
   }
 

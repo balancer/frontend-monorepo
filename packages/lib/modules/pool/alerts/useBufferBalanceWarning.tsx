@@ -52,13 +52,13 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         const wrappedToken = validTokens.find(
           validToken => tokenAddress === validToken.underlyingToken?.address
         )
-        const wrappedBufferBalance = bufferBalances?.find(
+        const bufferBalance = bufferBalances?.find(
           bufferBalance => bufferBalance.wrappedTokenAddress === wrappedToken?.address
         )
 
-        if (!wrappedBufferBalance || !wrappedToken || !wrappedToken.priceRate) return null
+        if (!bufferBalance || !wrappedToken || !wrappedToken.priceRate) return null
 
-        const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped } = wrappedBufferBalance
+        const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped } = bufferBalance
 
         const wrappedAmountRequired = bn(humanAmount).div(wrappedToken.priceRate)
         const exceedsBufferBalance = wrappedAmountRequired.gt(bufferBalanceOfWrapped)
@@ -78,13 +78,13 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
       } else {
         // if operation is remove liquidity, the user is offering wrapped tokens which requires sufficient buffer balance of underlying tokens
         const underlyingToken = validTokens.find(validToken => tokenAddress === validToken.address)
-        const underlyingBufferBalance = bufferBalances?.find(
+        const bufferBalance = bufferBalances?.find(
           bufferBalance => bufferBalance.underlyingTokenAddress === underlyingToken?.address
         )
 
-        if (!underlyingBufferBalance || !underlyingSymbol) return null
-        const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } =
-          underlyingBufferBalance
+        if (!bufferBalance || !underlyingSymbol) return null
+
+        const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } = bufferBalance
 
         const underlyingAmountRequired = bn(humanAmount)
         const exceedsBufferBalance = underlyingAmountRequired.gt(bufferBalanceOfUnderlying)
@@ -114,6 +114,8 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
     const action = operation === 'add' ? 'deposit' : 'withdrawal'
     const isRemoveLiquidity = operation === 'remove'
 
+    const selectedTokenSymbol = isRemoveLiquidity ? underlyingSymbol : wrappedSymbol
+
     return (
       <BalAlert
         content={
@@ -123,8 +125,8 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
               between the wrapped yield generating tokens and the unwrapped underlying tokens.
             </Text>
             <Text color="black">
-              Unfortunately, the {underlyingSymbol} in this pool's buffer is too small to allow for
-              your {action}. Instead, you can {action} any amount as {wrappedSymbol} (the
+              Unfortunately, the {selectedTokenSymbol} in this pool's buffer is too small to allow
+              for your {action}. Instead, you can {action} any amount as {wrappedSymbol} (the
               yield-bearing token)
               {isRemoveLiquidity && ', which you can then unwrap later on the lending protocol'}.
             </Text>
