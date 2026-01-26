@@ -11,8 +11,8 @@ function Stat({ children }: StatProps) {
     <Box
       display="flex"
       flex="1"
-      minH={{ base: '65px' }}
-      minW={{ base: '100px', sm: '132px', lg: '132px' }}
+      minH="65px"
+      minW={{ base: '100px', sm: '132px' }}
       position="relative"
       rounded="md"
       shadow="md"
