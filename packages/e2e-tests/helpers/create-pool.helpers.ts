@@ -6,7 +6,7 @@ const BASE_URL = 'http://localhost:3000/create'
 
 type PoolCreationConfig = {
   type: string
-  tokens: { symbol: string; amount: string }[]
+  tokens: { symbol: string; amount: string | undefined }[]
 }
 
 export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
@@ -20,8 +20,15 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
   {
     type: 'Weighted',
     tokens: [
+      { symbol: 'AAVE', amount: '1' },
+      { symbol: 'BAL', amount: '333' },
+    ],
+  },
+  {
+    type: 'Gyro Elliptic CLP',
+    tokens: [
       { symbol: 'WETH', amount: '1' },
-      { symbol: 'BAL', amount: '6000' },
+      { symbol: 'wstETH', amount: undefined },
     ],
   },
 ]
@@ -50,9 +57,7 @@ export class CreatePoolPage {
     await expect(this.page.getByText('Choose network')).toBeVisible()
     await expect(this.page.getByText('Choose a pool type')).toBeVisible()
 
-    await this.page
-      .getByRole('radio', { name: this.config.type, exact: true })
-      .click({ force: true })
+    await this.page.getByLabel(this.config.type, { exact: true }).click({ force: true })
 
     if (shouldContinue) await clickButton(this.page, 'Next')
   }
@@ -96,7 +101,10 @@ export class CreatePoolPage {
     await expect(button(this.page, 'Create Pool')).toBeDisabled()
 
     for (let i = 0; i < this.config.tokens.length; i++) {
-      await this.page.getByLabel(`Token ${i + 1}`).fill(this.config.tokens[i].amount)
+      const tokenAmount = this.config.tokens[i].amount
+      if (tokenAmount) {
+        await this.page.getByLabel(`Token ${i + 1}`).fill(tokenAmount)
+      }
     }
 
     if (this.config.type === 'Weighted') {
@@ -115,6 +123,7 @@ export class CreatePoolPage {
     await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
     for (const token of this.config.tokens) {
       await clickButton(this.page, `Approve ${token.symbol}`)
+      await expect(this.page.getByText(`${token.symbol} approved!`)).toBeVisible()
     }
     await clickButton(
       this.page,

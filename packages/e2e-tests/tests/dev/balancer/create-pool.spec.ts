@@ -4,19 +4,21 @@ import { CreatePoolPage, POOL_CREATION_CONFIGS } from '@/helpers/create-pool.hel
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
-for (const config of POOL_CREATION_CONFIGS) {
-  test(`Can create ${config.type} pool`, async ({ page }) => {
-    const createPool = new CreatePoolPage(page, config)
-    await createPool.goToPage()
-    await impersonate(page, defaultAnvilAccount)
+test.describe('Can create each pool type', () => {
+  for (const config of POOL_CREATION_CONFIGS) {
+    test(config.type, async ({ page }) => {
+      const createPool = new CreatePoolPage(page, config)
+      await createPool.goToPage()
+      await impersonate(page, defaultAnvilAccount)
 
-    await createPool.typeStep({ continue: true })
-    await createPool.tokensStep({ continue: true })
-    await createPool.detailsStep({ continue: true })
-    await createPool.fundStep()
-    await createPool.transactionSteps()
-  })
-}
+      await createPool.typeStep({ continue: true })
+      await createPool.tokensStep({ continue: true })
+      await createPool.detailsStep({ continue: true })
+      await createPool.fundStep()
+      await createPool.transactionSteps()
+    })
+  }
+})
 
 test.describe('Can reset form on each step', () => {
   let createPool: CreatePoolPage

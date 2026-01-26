@@ -2,7 +2,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useRateProvider } from '../tokens/useRateProvider'
-import { formatUnits } from 'viem'
+import { formatUnits, zeroAddress } from 'viem'
 import { useWatch } from 'react-hook-form'
 
 /**
@@ -22,8 +22,19 @@ export function usePoolSpotPriceWithoutRate() {
   const priceTokenA = tokenA.usdPrice || priceFor(tokenA?.address || '', network)
   const priceTokenB = tokenB.usdPrice || priceFor(tokenB?.address || '', network)
 
-  const { rate: rawRateTokenA } = useRateProvider(tokenA?.rateProvider, network)
-  const { rate: rawRateTokenB } = useRateProvider(tokenB?.rateProvider, network)
+  const { rate: rawRateTokenA, isRatePending: isRateAPending } = useRateProvider(
+    tokenA?.rateProvider,
+    network
+  )
+  const { rate: rawRateTokenB, isRatePending: isRateBPending } = useRateProvider(
+    tokenB?.rateProvider,
+    network
+  )
+
+  // Rate is loading if a token has a rate provider and the rate hasn't loaded yet
+  const hasRateProviderA = tokenA?.rateProvider && tokenA.rateProvider !== zeroAddress
+  const hasRateProviderB = tokenB?.rateProvider && tokenB.rateProvider !== zeroAddress
+  const isRateLoading = (hasRateProviderA && isRateAPending) || (hasRateProviderB && isRateBPending)
 
   // if token has no rate provider, the rate is simply '1'
   const rateTokenA = rawRateTokenA ? formatUnits(rawRateTokenA, 18) : '1'
@@ -35,5 +46,5 @@ export function usePoolSpotPriceWithoutRate() {
 
   const spotPriceWithoutRate = adjustedPriceTokenA.div(adjustedPriceTokenB)
 
-  return { spotPriceWithoutRate, rateTokenA, rateTokenB }
+  return { spotPriceWithoutRate, rateTokenA, rateTokenB, isRateLoading }
 }

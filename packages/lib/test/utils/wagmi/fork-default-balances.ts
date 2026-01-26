@@ -51,6 +51,10 @@ export const mainnetTokenBalances: TokenBalance[] = [
     value: '6000',
   },
   {
+    tokenAddress: '0xe07f9d810a48ab5c3c914ba3ca53af14e4491e8a', // GYD
+    value: '10000',
+  },
+  {
     tokenAddress: '0xc3d21f79c3120a4ffda7a535f8005a7c297799bf', // TERM
     value: '10000',
     slot: BigInt('0x52c63247e1f47db19d5ce0460030c497f067ca4cebf71ba98eeadabe20bace00'),
@@ -58,6 +62,11 @@ export const mainnetTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
     value: '2000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7', // USDT
+    value: '10000',
     decimals: 6,
   },
   {
