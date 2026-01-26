@@ -77,8 +77,6 @@ export function useReliquaryClaimAllSteps() {
       },
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
-      onActivated: () => {},
-      onDeactivated: () => {},
       onSuccess: refetchPendingRewards,
       renderAction: () => <ManagedTransactionButton id={claimAllStepId} {...props} />,
     }),

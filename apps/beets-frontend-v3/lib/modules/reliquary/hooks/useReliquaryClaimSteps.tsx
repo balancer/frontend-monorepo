@@ -70,8 +70,6 @@ export function useReliquaryClaimSteps(relicId: string) {
       },
       transaction,
       isComplete,
-      onActivated: () => {},
-      onDeactivated: () => {},
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimStepId} {...props} />,
     }),

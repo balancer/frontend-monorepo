@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, PropsWithChildren, createContext } from 'react'
+import { useState, PropsWithChildren, createContext } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { GqlChain, GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -115,12 +115,8 @@ export function useReliquaryLogic() {
     .times(beetsPrice)
     .toNumber()
 
-  const pendingRewardsByRelicId = useMemo(
-    () =>
-      Object.fromEntries(
-        (pendingRewardsData?.relicRewards ?? []).map(reward => [reward.relicId, reward.amount])
-      ),
-    [pendingRewardsData]
+  const pendingRewardsByRelicId = Object.fromEntries(
+    (pendingRewardsData?.relicRewards ?? []).map(reward => [reward.relicId, reward.amount])
   )
 
   const isLoading =
