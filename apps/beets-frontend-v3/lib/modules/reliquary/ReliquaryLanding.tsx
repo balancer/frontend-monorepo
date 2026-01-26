@@ -71,15 +71,13 @@ function LoadingSkeletons() {
           </SimpleGrid>
         </VStack>
         <VStack align="flex-start" flex="1" spacing="4" width="full">
-          <Flex justify="space-between" width="full">
-            <Skeleton height="32px" width="180px" />
-            <Skeleton height="20px" width="80px" />
-          </Flex>
+          <Skeleton height="32px" width="180px" />
           <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
             {[...Array(6)].map((_, i) => (
               <Skeleton height="65px" key={`numbers-${i}`} width="full" />
             ))}
           </SimpleGrid>
+          <Skeleton alignSelf="flex-end" height="18px" width="80px" />
         </VStack>
       </Flex>
       <VStack align="flex-start" spacing="4" width="full">
