@@ -54,8 +54,7 @@ export function useRemoveLiquidityLogic(
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
-  const _maxHumanBptIn: HumanAmount = maxHumanBptIn ?? getUserWalletBalance(pool)
-  const humanBptIn: HumanAmount = bn(_maxHumanBptIn)
+  const humanBptIn: HumanAmount = bn(maxHumanBptIn ?? getUserWalletBalance(pool))
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
