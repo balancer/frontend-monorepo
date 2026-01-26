@@ -1,5 +1,3 @@
-'use client'
-
 import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import {
   ManagedResult,

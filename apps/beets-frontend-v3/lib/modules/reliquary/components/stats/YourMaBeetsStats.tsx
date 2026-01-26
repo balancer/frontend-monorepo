@@ -1,5 +1,3 @@
-'use client'
-
 import { Button, SimpleGrid, Skeleton, Stack, Text, VStack } from '@chakra-ui/react'
 import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'

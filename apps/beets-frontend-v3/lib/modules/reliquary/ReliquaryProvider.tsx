@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, PropsWithChildren, createContext } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { GqlChain, GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'

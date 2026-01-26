@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, HStack, Link, useTheme, VStack } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'

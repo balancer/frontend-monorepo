@@ -1,5 +1,3 @@
-'use client'
-
 import { Card, Flex, Text, VStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ReliquaryCurveChart } from './ReliquaryCurveChart'

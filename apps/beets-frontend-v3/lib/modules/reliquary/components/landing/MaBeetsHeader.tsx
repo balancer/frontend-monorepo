@@ -1,5 +1,3 @@
-'use client'
-
 import { Heading, Link, Text, VStack } from '@chakra-ui/react'
 
 export function MaBeetsHeader() {

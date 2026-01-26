@@ -44,6 +44,7 @@ function Content({
 }) {
   const [showCharts, setShowCharts] = useState<boolean>(!hasRelics)
   const toggleCharts = () => setShowCharts(!showCharts)
+
   return (
     <VStack spacing="20" width="full">
       <Flex flexDirection={{ base: 'column', lg: 'row' }} gap="16" width="full">

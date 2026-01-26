@@ -1,5 +1,3 @@
-'use client'
-
 import { Address, isSameAddress } from '@balancer/sdk'
 import { Alert, AlertIcon, Card, Text, VStack } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'

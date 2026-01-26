@@ -1,5 +1,3 @@
-'use client'
-
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'

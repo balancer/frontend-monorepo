@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react'
 import { useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { useReliquary } from '../ReliquaryProvider'

@@ -1,5 +1,3 @@
-'use client'
-
 import { Text, VStack } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'

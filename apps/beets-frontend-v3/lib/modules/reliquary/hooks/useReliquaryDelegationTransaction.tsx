@@ -1,5 +1,3 @@
-'use client'
-
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import {
   getTransactionState,

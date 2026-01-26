@@ -1,5 +1,3 @@
-'use client'
-
 import { Badge, Box, Button, HStack, Progress, SimpleGrid, Text, VStack } from '@chakra-ui/react'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'

@@ -1,5 +1,3 @@
-'use client'
-
 import { useQuery } from '@apollo/client/react'
 import { Box, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'

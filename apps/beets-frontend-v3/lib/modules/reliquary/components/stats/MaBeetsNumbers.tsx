@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'

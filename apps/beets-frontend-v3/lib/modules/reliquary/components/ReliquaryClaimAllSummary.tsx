@@ -1,5 +1,3 @@
-'use client'
-
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { Card, VStack, Text } from '@chakra-ui/react'
