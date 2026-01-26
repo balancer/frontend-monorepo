@@ -71,20 +71,18 @@ export function ReliquaryRemoveLiquiditySummary({
         }
       : null
 
-  const tokens = allPoolTokens(pool)
-    .map(token => {
-      // also add native asset if wrapped native asset is in the pool
-      if (isWrappedNativeAsset(token.address, chain)) {
-        const nativeAsset = getNetworkConfig(chain).tokens.nativeAsset
+  const tokens = allPoolTokens(pool).flatMap(token => {
+    // also add native asset if wrapped native asset is in the pool
+    if (isWrappedNativeAsset(token.address, chain)) {
+      const nativeAsset = getNetworkConfig(chain).tokens.nativeAsset
 
-        return [
-          { ...token, chain },
-          { ...nativeAsset, chain },
-        ] as ApiToken[]
-      }
-      return { ...token, chain } as ApiToken
-    })
-    .flat()
+      return [
+        { ...token, chain },
+        { ...nativeAsset, chain },
+      ] as ApiToken[]
+    }
+    return { ...token, chain } as ApiToken
+  })
 
   // Calculate USD value for rewards
   const { usdValueFor } = useTotalUsdValue(tokens)

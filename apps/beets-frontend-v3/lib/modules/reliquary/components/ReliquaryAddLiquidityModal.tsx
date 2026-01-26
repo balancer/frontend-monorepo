@@ -65,8 +65,6 @@ export function ReliquaryAddLiquidityModal({
     txReceipt,
   })
 
-  // TODO: get relicId from tx after creating new relic
-
   useEffect(() => {
     if (isOpen) {
       // stop polling for token prices when modal is opened to prevent unwanted re-renders

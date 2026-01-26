@@ -13,7 +13,6 @@ function Stat({ children }: StatProps) {
       flex="1"
       minH={{ base: '65px' }}
       minW={{ base: '100px', sm: '132px', lg: '132px' }}
-      // overflow="hidden"
       position="relative"
       rounded="md"
       shadow="md"
