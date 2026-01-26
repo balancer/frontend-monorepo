@@ -149,6 +149,8 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const dailyYield = bn(relicBalanceUSD).times(maxTotalApr).div(365)
   const formattedDailyYield = toCurrency(dailyYield.toNumber())
 
+  const isDisabledButton = pendingRewardsUsdValue.lt(0.01)
+
   return (
     <VStack
       _hover={{
@@ -235,9 +237,12 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             </Button>
           )}
           <Box flex="1">
-            <TooltipWithTouch label={`The minimum amount to claim is ${toCurrency(0.01)}`}>
+            <TooltipWithTouch
+              isDisabled={!isDisabledButton}
+              label={`The minimum amount to claim is ${toCurrency(0.01)}`}
+            >
               <Button
-                isDisabled={pendingRewardsUsdValue.lt(0.01)}
+                isDisabled={isDisabledButton}
                 onClick={() => setIsClaimModalOpen(true)}
                 size="sm"
                 variant="secondary"

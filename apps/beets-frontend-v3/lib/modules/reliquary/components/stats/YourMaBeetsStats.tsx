@@ -47,6 +47,8 @@ export function YourMaBeetsStats() {
   const relicShareDecimal =
     globalTotalBalance > 0 ? bn(userTotalBalance).div(globalTotalBalance).toNumber() : 0
 
+  const isDisabledButton = totalPendingRewardsUSD < 0.01
+
   return (
     <VStack align="flex-start" flex="1" spacing="4" width="full">
       <Text
@@ -84,9 +86,12 @@ export function YourMaBeetsStats() {
                 <StatValueText>{toCurrency(totalPendingRewardsUSD)}</StatValueText>
               </Skeleton>
             </VStack>
-            <TooltipWithTouch label={`The minimum amount to claim is ${toCurrency(0.01)}`}>
+            <TooltipWithTouch
+              isDisabled={!isDisabledButton}
+              label={`The minimum amount to claim is ${toCurrency(0.01)}`}
+            >
               <Button
-                isDisabled={totalPendingRewardsUSD < 0.01}
+                isDisabled={isDisabledButton}
                 ml="auto"
                 onClick={() => setIsClaimAllModalOpen(true)}
                 size="sm"
