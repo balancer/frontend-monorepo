@@ -93,7 +93,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
           </Skeleton>
         </RelicStat>
         <RelicStat>
-          <HStack alignItems={'start'}>
+          <HStack alignItems="start" h="full">
             <StatLabel label="Incentives" />
             <InfoIconPopover message="Liquidity incentives are additional incentives which are available for maBEETS holders. The daily value is an approximation based on current token prices and emissions." />
           </HStack>
@@ -110,9 +110,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
           </Skeleton>
         </RelicStat>
         <RelicStat>
-          <HStack>
-            <StatLabel label="Total Relics" />
-          </HStack>
+          <StatLabel label="Total Relics" />
           <Skeleton isLoaded={!loading} width="50%">
             <StatValueText>{fNumCustom(globalStats?.relicCount || 0, '0,0')}</StatValueText>
           </Skeleton>

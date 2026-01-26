@@ -79,8 +79,8 @@ export function YourMaBeetsStats() {
           </Skeleton>
         </RelicStat>
         <RelicStat>
-          <Stack direction={{ base: 'column', md: 'row' }} w="full">
-            <VStack alignItems="flex-start" spacing="0" w="full">
+          <Stack alignItems="center" direction={{ base: 'column', md: 'row' }} h="full" w="full">
+            <VStack alignItems="flex-start" h="full" spacing="0" w="full">
               <StatLabel label="Total Pending Rewards" />
               <Skeleton isLoaded={!isLoading} width="50%">
                 <StatValueText>{toCurrency(totalPendingRewardsUSD)}</StatValueText>

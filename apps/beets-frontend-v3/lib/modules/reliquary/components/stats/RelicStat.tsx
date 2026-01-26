@@ -11,7 +11,8 @@ function Stat({ children }: StatProps) {
     <Box
       display="flex"
       flex="1"
-      minH="65px"
+      h="full"
+      minH="60px"
       minW={{ base: '100px', sm: '132px' }}
       position="relative"
       rounded="md"
@@ -63,20 +64,13 @@ function Stat({ children }: StatProps) {
 export default Stat
 
 export const StatLabel = ({ label }: { label: string }) => (
-  <Text
-    cursor="default"
-    fontSize="xs"
-    mb="1.5"
-    position="relative"
-    variant="secondary"
-    w="fit-content"
-  >
+  <Text cursor="default" fontSize="xs" h="full" variant="secondary" w="fit-content">
     {label}
   </Text>
 )
 
 export const StatValueText = ({ children }: { children: React.ReactNode }) => (
-  <Text className="home-stats" fontSize="md" fontWeight="bold" letterSpacing="-0.6px">
+  <Text className="home-stats" fontSize="md" fontWeight="bold" h="full" letterSpacing="-0.6px">
     {children}
   </Text>
 )
