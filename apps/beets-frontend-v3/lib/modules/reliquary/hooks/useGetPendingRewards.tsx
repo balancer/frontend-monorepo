@@ -29,22 +29,15 @@ export function useGetPendingRewards({ chain, farmIds, relicPositions }: Params)
   const config = getNetworkConfig(chainId)
   const { isConnected } = useUserAccount()
 
-  const filteredPositions = useMemo(
-    () => relicPositions.filter(position => farmIds.includes(position.farmId)),
-    [relicPositions, farmIds]
-  )
+  const filteredPositions = relicPositions.filter(position => farmIds.includes(position.farmId))
 
-  const contracts = useMemo(
-    () =>
-      filteredPositions.map(position => ({
-        chainId,
-        abi: reliquaryAbi,
-        address: config.contracts.beets?.reliquary,
-        functionName: 'pendingReward' as const,
-        args: [BigInt(position.relicId)] as const,
-      })),
-    [chainId, config.contracts.beets?.reliquary, filteredPositions]
-  )
+  const contracts = filteredPositions.map(position => ({
+    chainId,
+    abi: reliquaryAbi,
+    address: config.contracts.beets?.reliquary,
+    functionName: 'pendingReward' as const,
+    args: [BigInt(position.relicId)] as const,
+  }))
 
   const query = useReadContracts({
     contracts,
