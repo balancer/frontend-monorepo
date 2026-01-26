@@ -4,6 +4,28 @@ import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/
 
 const BASE_URL = 'http://localhost:3000/create'
 
+type PoolCreationConfig = {
+  type: string
+  tokens: { symbol: string; amount: string }[]
+}
+
+export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
+  {
+    type: 'Stable',
+    tokens: [
+      { symbol: 'USDC', amount: '10' },
+      { symbol: 'GHO', amount: '10' },
+    ],
+  },
+  {
+    type: 'Weighted',
+    tokens: [
+      { symbol: 'WETH', amount: '1' },
+      { symbol: 'BAL', amount: '6000' },
+    ],
+  },
+]
+
 export class CreatePoolPage {
   readonly urls = {
     base: BASE_URL,
@@ -13,7 +35,10 @@ export class CreatePoolPage {
     fund: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[3].id}`,
   }
 
-  constructor(private page: Page) {}
+  constructor(
+    private page: Page,
+    private config: PoolCreationConfig = POOL_CREATION_CONFIGS[0],
+  ) {}
 
   async goToPage() {
     await this.page.goto(this.urls.base)
@@ -23,13 +48,25 @@ export class CreatePoolPage {
     await expect(this.page).toHaveURL(this.urls.type)
     await expect(this.page.getByText('Choose protocol')).toBeVisible()
     await expect(this.page.getByText('Choose network')).toBeVisible()
+    await expect(this.page.getByText('Choose a pool type')).toBeVisible()
+
+    await this.page
+      .getByRole('radio', { name: this.config.type, exact: true })
+      .click({ force: true })
 
     if (shouldContinue) await clickButton(this.page, 'Next')
   }
 
   async selectToken(tokenName: string) {
     await button(this.page, 'Select token').first().click()
-    await this.page.getByTitle(tokenName).click()
+    const modalHeader = this.page.getByText('Select a token: Ethereum', { exact: true })
+    await modalHeader.waitFor({ state: 'visible' })
+    const modal = this.page.getByRole('dialog').filter({ has: modalHeader })
+    await modal
+      .getByRole('group')
+      .filter({ has: this.page.getByText(tokenName, { exact: true }) })
+      .first()
+      .click()
   }
 
   async tokensStep({ continue: shouldContinue = false } = {}) {
@@ -37,8 +74,9 @@ export class CreatePoolPage {
     await expect(this.page.getByText('Choose pool tokens')).toBeVisible()
 
     await expect(button(this.page, 'Next')).toBeDisabled()
-    await this.selectToken('Wrapped liquid staked Ether 2.0')
-    await this.selectToken('Aave Token')
+    for (const token of this.config.tokens) {
+      await this.selectToken(token.symbol)
+    }
     await expect(button(this.page, 'Next')).toBeEnabled()
 
     if (shouldContinue) await clickButton(this.page, 'Next')
@@ -57,17 +95,31 @@ export class CreatePoolPage {
     await expect(this.page.getByText('Seed initial pool liquidity')).toBeVisible()
     await expect(button(this.page, 'Create Pool')).toBeDisabled()
 
-    await this.page.getByLabel('Token 1').fill('10')
-    await this.page.getByLabel('Token 2').fill('188')
-    await this.page.getByRole('checkbox').check({ force: true })
+    for (let i = 0; i < this.config.tokens.length; i++) {
+      await this.page.getByLabel(`Token ${i + 1}`).fill(this.config.tokens[i].amount)
+    }
+
+    if (this.config.type === 'Weighted') {
+      await this.page
+        .getByRole('checkbox', { name: 'I understand that I will' })
+        .check({ force: true })
+    }
+
+    await this.page
+      .getByRole('checkbox', { name: 'I accept the Risks and Terms' })
+      .check({ force: true })
   }
 
   async transactionSteps() {
     await clickButton(this.page, 'Create Pool')
     await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
-    await clickButton(this.page, 'Approve wstETH')
-    await clickButton(this.page, 'Approve AAVE')
-    await clickButton(this.page, 'Sign approvals: wstETH, AAVE')
+    for (const token of this.config.tokens) {
+      await clickButton(this.page, `Approve ${token.symbol}`)
+    }
+    await clickButton(
+      this.page,
+      `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`,
+    )
     await clickButton(this.page, 'Seed pool liquidity')
     await expect(button(this.page, 'View pool page')).toBeVisible()
     await expect(button(this.page, 'Create another pool')).toBeVisible()

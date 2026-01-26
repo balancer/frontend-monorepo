@@ -51,7 +51,7 @@ function DevToolsDrawer({ isOpen, onClose }: Props) {
     <Drawer isOpen={isOpen} onClose={onClose} placement="right" size="lg">
       <DrawerOverlay />
 
-      <DrawerContent>
+      <DrawerContent data-testid="dev-tools-drawer">
         <DrawerCloseButton aria-label="Dev tools close button" />
         <DrawerHeader>Dev tools</DrawerHeader>
 

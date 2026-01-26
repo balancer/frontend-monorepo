@@ -15,6 +15,10 @@ import { TokenBalance } from './fork-options'
 
 export const mainnetTokenBalances: TokenBalance[] = [
   {
+    tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d', // BAL
+    value: '10000',
+  },
+  {
     tokenAddress: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56', // B-80BAL-20WETH
     value: '6000',
   },
