@@ -3,7 +3,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRecoveredFundsClaims } from './RecoveredFundsClaimsProvider'
-import { Badge, Card, Checkbox, Divider, HStack, Text, VStack } from '@chakra-ui/react'
+import { Badge, Card, Checkbox, Divider, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import {
   RecoveredTokenClaim,
   useRecoveredFunds,
@@ -15,8 +15,13 @@ import Image from 'next/image'
 import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useUnderlyingToken } from './useUnderlyingToken'
+import { Dispatch, SetStateAction } from 'react'
 
-export function ClaimsSummary() {
+export function ClaimsSummary({
+  setShowSettlementTerms,
+}: {
+  setShowSettlementTerms: Dispatch<SetStateAction<boolean>>
+}) {
   const { isMobile } = useBreakpoints()
   const { steps, hasAcceptedDisclaimer, setHasAcceptedDisclaimer } = useRecoveredFundsClaims()
   const { claims } = useRecoveredFunds()
@@ -53,8 +58,15 @@ export function ClaimsSummary() {
         size="lg"
       >
         <Text fontSize="sm">
-          By accepting my share of the recovered funds from the v2 Composable Stable pool security
-          incident, I hereby waive any future legal claims against Balancer.
+          I have read and agree to the terms and confirm my acceptance of the {''}
+          <Link
+            alignItems="center"
+            display="inline-flex"
+            onClick={() => setShowSettlementTerms(true)}
+            textDecoration="underline"
+          >
+            Claim Settlement Terms
+          </Link>
         </Text>
       </Checkbox>
     </AnimateHeightChange>
