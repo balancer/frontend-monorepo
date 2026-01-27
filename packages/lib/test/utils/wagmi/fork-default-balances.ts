@@ -31,6 +31,10 @@ export const mainnetTokenBalances: TokenBalance[] = [
     value: '6000',
   },
   {
+    tokenAddress: '0x2411802d8bea09be0af8fd8d08314a63e706b29c', // fwstETH
+    value: '6000',
+  },
+  {
     tokenAddress: '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9', // AAVE
     value: '7000',
   },
@@ -131,7 +135,12 @@ export const sonicTokenBalances: TokenBalance[] = [
   },
   {
     tokenAddress: '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC.e
-    value: '50',
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae', // scUSD
+    value: '1000',
     decimals: 6,
   },
 ]

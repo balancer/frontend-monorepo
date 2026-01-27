@@ -27,8 +27,8 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
   {
     type: 'Gyro Elliptic CLP',
     tokens: [
-      { symbol: 'WETH', amount: '1' },
-      { symbol: 'wstETH', amount: undefined },
+      { symbol: 'wstETH', amount: '1' },
+      { symbol: 'fwstETH', amount: undefined },
     ],
   },
 ]
@@ -109,13 +109,17 @@ export class CreatePoolPage {
 
     if (this.config.type === 'Weighted') {
       await this.page
-        .getByRole('checkbox', { name: 'I understand that I will' })
-        .check({ force: true })
+        .locator('label')
+        .filter({ hasText: 'I understand that I will' })
+        .locator('.chakra-checkbox__control')
+        .click()
     }
 
     await this.page
-      .getByRole('checkbox', { name: 'I accept the Risks and Terms' })
-      .check({ force: true })
+      .locator('label')
+      .filter({ hasText: 'I accept the Risks and Terms' })
+      .locator('.chakra-checkbox__control')
+      .click()
   }
 
   async transactionSteps() {
