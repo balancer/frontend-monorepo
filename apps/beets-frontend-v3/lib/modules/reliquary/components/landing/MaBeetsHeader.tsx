@@ -19,9 +19,9 @@ export function MaBeetsHeader() {
       <Text sx={{ textWrap: 'balance' }} variant="secondary">
         Maturity-adjusted voting with governance aligned rewards.{' '}
         <Link
-          color="#05D690"
+          color="font.highlight"
           href="https://docs.beets.fi/tokenomics/mabeets"
-          target="_blank"
+          isExternal
           textDecoration="underline"
         >
           Learn more

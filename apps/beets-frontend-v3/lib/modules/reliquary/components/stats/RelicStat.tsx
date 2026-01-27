@@ -17,33 +17,33 @@ function Stat({ children }: StatProps) {
       position="relative"
       rounded="md"
       shadow="md"
-      width={{ base: '100%', md: '100%' }}
+      w="full"
     >
-      <Box height="100%" pointerEvents="none" position="absolute" width="100%">
+      <Box h="full" pointerEvents="none" position="absolute" w="full">
         <Box
           _groupHover={{
             transform: 'scale(1.01)',
           }}
           backgroundPosition="left"
           backgroundSize="cover"
-          height="100%"
+          h="full"
           pointerEvents="none"
           position="absolute"
           transform="scale(1)"
           transition="transform 0.5s var(--ease-out-cubic)"
-          width="100%"
+          w="full"
           zIndex="-1"
         >
           <Picture
             altText="Relic Stat bg"
             defaultImgType="jpg"
             directory="/images/homepage/"
-            height="100%"
+            height="full"
             imgAvif
             imgAvifDark
             imgJpg
             imgName="stone"
-            width="100%"
+            width="full"
           />
         </Box>
       </Box>
@@ -64,7 +64,14 @@ function Stat({ children }: StatProps) {
 export default Stat
 
 export const StatLabel = ({ label }: { label: string }) => (
-  <Text cursor="default" fontSize="xs" h="full" variant="secondary" w="fit-content">
+  <Text
+    color="font.highlight"
+    cursor="default"
+    fontSize="sm"
+    h="full"
+    variant="primary"
+    w="fit-content"
+  >
     {label}
   </Text>
 )
