@@ -85,7 +85,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                 <Divider
                   borderColor="gray.600"
                   display={{ base: 'none', md: 'block' }}
-                  height="90px"
+                  height="60px"
                   orientation="vertical"
                 />
                 <VStack alignItems="flex-start" spacing="3" width="full">
