@@ -68,7 +68,7 @@ export const StatLabel = ({ label }: { label: string }) => (
     color="font.highlight"
     cursor="default"
     fontSize="sm"
-    h="full"
+    h="23px"
     variant="primary"
     w="fit-content"
   >

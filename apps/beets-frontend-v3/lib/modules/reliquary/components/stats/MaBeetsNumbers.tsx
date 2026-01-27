@@ -88,7 +88,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
         </RelicStat>
         <RelicStat>
           <StatLabel label="TVL" />
-          <Skeleton isLoaded={!loading} width="50%">
+          <Skeleton isLoaded={!loading}>
             <StatValueText>{toCurrency(tvl)}</StatValueText>
           </Skeleton>
         </RelicStat>
@@ -97,25 +97,25 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
             <StatLabel label="Incentives" />
             <InfoIconPopover message="Liquidity incentives are additional incentives which are available for maBEETS holders. The daily value is an approximation based on current token prices and emissions." />
           </HStack>
-          <Skeleton isLoaded={!loading} width="60%">
+          <Skeleton isLoaded={!loading}>
             <StatValueText>~{toCurrency(incentivesDailyValue)} per day</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Maturity Level" />
-          <Skeleton isLoaded={!loading} width="50%">
+          <Skeleton isLoaded={!loading}>
             <StatValueText>{avgRelicMaturity}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Relics" />
-          <Skeleton isLoaded={!loading} width="50%">
+          <Skeleton isLoaded={!loading}>
             <StatValueText>{fNumCustom(globalStats?.relicCount || 0, '0,0')}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Value Per Relic" />
-          <Skeleton isLoaded={!loading} width="50%">
+          <Skeleton isLoaded={!loading}>
             <StatValueText>{toCurrency(avgValuePerRelic)}</StatValueText>
           </Skeleton>
         </RelicStat>
