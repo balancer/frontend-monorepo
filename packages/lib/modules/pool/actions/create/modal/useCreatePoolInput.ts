@@ -5,7 +5,6 @@ import { PERCENTAGE_DECIMALS, DEFAULT_DECIMALS } from '../constants'
 import { getNetworkConfig, getGqlChain } from '@repo/lib/config/app.config'
 import { invertNumber } from '@repo/lib/shared/utils/numbers'
 import { CreatePoolInput } from '../types'
-import { isSonicNetwork } from '@repo/lib/modules/pool/actions/create/helpers'
 
 export function useCreatePoolInput(chainId: number): CreatePoolInput {
   const { poolCreationForm, reClammConfigForm, eclpConfigForm } = usePoolCreationForm()
@@ -63,7 +62,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     return {
       ...baseInput,
       poolType,
-      poolCreator: isSonicNetwork(chain) ? zeroAddress : poolCreator,
+      poolCreator,
       amplificationParameter: BigInt(amplificationParameter),
     }
   }
@@ -72,7 +71,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     return {
       ...baseInput,
       poolType,
-      poolCreator: isSonicNetwork(chain) ? zeroAddress : poolCreator,
+      poolCreator,
       tokens: baseInput.tokens.map((token, index) => ({
         ...token,
         weight: parseUnits(poolTokens[index].weight, PERCENTAGE_DECIMALS),

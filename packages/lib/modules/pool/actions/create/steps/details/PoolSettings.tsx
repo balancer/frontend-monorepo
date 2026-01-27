@@ -5,7 +5,7 @@ import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
 import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
-import { getSwapFeePercentageOptions, isSonicNetwork } from '../../helpers'
+import { getSwapFeePercentageOptions } from '../../helpers'
 import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
 import { useEffect } from 'react'
@@ -14,7 +14,7 @@ import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { isStablePool, isStableSurgePool } from '../../helpers'
+import { isStablePool, isStableSurgePool, isPoolCreatorEnabled } from '../../helpers'
 import { useWatch } from 'react-hook-form'
 
 export type PoolSettingsOption = {
@@ -30,8 +30,6 @@ export function PoolSettings() {
     control: poolCreationForm.control,
     name: ['network', 'poolType'],
   })
-
-  const isPoolCreatorAllowed = !isSonicNetwork(network) // contracts yet to be deployed on sonic
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
@@ -115,7 +113,7 @@ export function PoolSettings() {
         Pool settings
       </Heading>
 
-      {isPoolCreatorAllowed && (
+      {isPoolCreatorEnabled(poolType) && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom pool creator address"
           customInputType="address"

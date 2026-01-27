@@ -24,7 +24,7 @@
   "dependencies": {
     "@apollo/client": "4.0.11",
     "@balancer-labs/balancer-maths": "0.0.37",
-    "@balancer/sdk": "5.1.0",
+    "@balancer/sdk": "5.1.1",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
@@ -76,7 +76,7 @@
     "use-debounce": "10.0.6",
     "use-sound": "^4.0.1",
     "usehooks-ts": "3.1.1",
-    "viem": "2.44.4",
+    "viem": "2.45.0",
     "wagmi": "3.2.0"
   },
   "devDependencies": {
