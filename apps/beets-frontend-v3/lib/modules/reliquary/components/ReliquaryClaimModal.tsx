@@ -10,6 +10,7 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { ReliquaryClaimSummary } from './ReliquaryClaimSummary'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
   isOpen: boolean
@@ -31,12 +32,14 @@ export function ReliquaryClaimModal({
   const { pool } = usePool()
   const { isLoadingSteps, steps } = useReliquaryClaimSteps(String(relicId))
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
+  const { refetchPendingRewards } = useReliquary()
 
   const claimTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
   const isSuccess = !!claimTxHash
 
   const onCloseModal = () => {
     transactionSteps.resetTransactionSteps()
+    refetchPendingRewards()
     onClose()
   }
 

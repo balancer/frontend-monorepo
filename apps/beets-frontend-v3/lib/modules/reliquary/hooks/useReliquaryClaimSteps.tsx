@@ -5,7 +5,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import {
   ManagedResult,
   TransactionLabels,
@@ -19,8 +19,7 @@ const claimStepId = 'reliquary-claim-rewards'
 
 export function useReliquaryClaimSteps(relicId: string) {
   const { pool } = usePool()
-  const { chain, pendingRewardsByRelicId, beetsPrice, pendingRewardsQuery, refetchPendingRewards } =
-    useReliquary()
+  const { chain, pendingRewardsByRelicId, beetsPrice, pendingRewardsQuery } = useReliquary()
   const { userAddress } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
@@ -40,10 +39,6 @@ export function useReliquaryClaimSteps(relicId: string) {
   }
 
   const isComplete = () => isTransactionSuccess(transaction)
-
-  const onSuccess = useCallback(() => {
-    refetchPendingRewards()
-  }, [refetchPendingRewards])
 
   const props: ManagedTransactionInput = useMemo(
     () => ({
@@ -70,10 +65,9 @@ export function useReliquaryClaimSteps(relicId: string) {
       },
       transaction,
       isComplete,
-      onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimStepId} {...props} />,
     }),
-    [transaction, pendingRewardsUsdValue, labels, isComplete, onSuccess, props]
+    [transaction, pendingRewardsUsdValue, labels, isComplete, props]
   )
 
   return {

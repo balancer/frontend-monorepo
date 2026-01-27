@@ -23,7 +23,7 @@ export function useReliquaryClaimAllSteps() {
   const { pool } = usePool()
   const { userAddress } = useUserAccount()
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
-  const { relicIds, refetchPendingRewards } = useReliquary()
+  const { relicIds } = useReliquary()
 
   const { contracts, chainId } = getNetworkConfig(pool.chain)
   const reliquaryRelayerMode = 'approveRelayer'
@@ -77,10 +77,9 @@ export function useReliquaryClaimAllSteps() {
       },
       transaction,
       isComplete: () => isTransactionSuccess(transaction),
-      onSuccess: refetchPendingRewards,
       renderAction: () => <ManagedTransactionButton id={claimAllStepId} {...props} />,
     }),
-    [transaction, labels, isTransactionSuccess, props, refetchPendingRewards]
+    [transaction, labels, isTransactionSuccess, props]
   )
 
   const steps: TransactionStep[] = [approveRelayerStep, approveRelayerRelicsStep, claimAllStep]
