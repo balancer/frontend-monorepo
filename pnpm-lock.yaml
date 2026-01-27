@@ -366,6 +366,9 @@ importers:
 
   packages/e2e-tests:
     devDependencies:
+      '@balancer/sdk':
+        specifier: 5.1.1
+        version: 5.1.1(typescript@5.9.2)
       '@playwright/test':
         specifier: 1.53.1
         version: 1.53.1
@@ -9709,6 +9712,16 @@ snapshots:
       - utf-8-validate
       - zod
 
+  '@balancer/sdk@5.1.1(typescript@5.9.2)':
+    dependencies:
+      '@balancer-labs/balancer-maths': 0.0.38
+      viem: 2.45.0(typescript@5.9.2)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+
   '@bcoe/v8-coverage@1.0.2': {}
 
   '@chakra-ui/anatomy@2.2.2': {}
@@ -14204,7 +14217,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.2
       zod: 3.22.4
-    optional: true
 
   abitype@1.2.3(typescript@5.9.2)(zod@4.3.5):
     optionalDependencies:
@@ -16592,6 +16604,10 @@ snapshots:
     dependencies:
       ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
+  isows@1.0.7(ws@8.18.3):
+    dependencies:
+      ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
   isows@1.0.7(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
       ws: 8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -17363,6 +17379,21 @@ snapshots:
       get-intrinsic: 1.3.0
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
+
+  ox@0.11.3(typescript@5.9.2):
+    dependencies:
+      '@adraffy/ens-normalize': 1.11.1
+      '@noble/ciphers': 1.3.0
+      '@noble/curves': 1.9.1
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      abitype: 1.2.3(typescript@5.9.2)(zod@3.22.4)
+      eventemitter3: 5.0.1
+    optionalDependencies:
+      typescript: 5.9.2
+    transitivePeerDependencies:
+      - zod
 
   ox@0.11.3(typescript@5.9.2)(zod@3.22.4):
     dependencies:
@@ -19206,6 +19237,23 @@ snapshots:
       abitype: 1.2.3(typescript@5.9.2)(zod@4.3.5)
       isows: 1.0.7(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       ox: 0.11.3(typescript@5.9.2)(zod@4.3.5)
+      ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    optionalDependencies:
+      typescript: 5.9.2
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+      - zod
+
+  viem@2.45.0(typescript@5.9.2):
+    dependencies:
+      '@noble/curves': 1.9.1
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      abitype: 1.2.3(typescript@5.9.2)(zod@3.22.4)
+      isows: 1.0.7(ws@8.18.3)
+      ox: 0.11.3(typescript@5.9.2)
       ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     optionalDependencies:
       typescript: 5.9.2

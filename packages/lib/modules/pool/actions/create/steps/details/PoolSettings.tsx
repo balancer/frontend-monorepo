@@ -119,7 +119,7 @@ export function PoolSettings() {
           customInputType="address"
           name="poolCreator"
           options={poolRoleAccountOptions}
-          title="Pool Creator"
+          title="Pool creator"
           tooltip="The address empowered to set a pool creator fee. Choose the Balancer DAO option to give all fees to the protocol and LPs."
           validate={validatePoolSettings.poolRoleAccount}
         />

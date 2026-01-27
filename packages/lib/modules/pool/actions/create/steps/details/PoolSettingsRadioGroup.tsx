@@ -72,6 +72,7 @@ export function PoolSettingsRadioGroup({
 
           return (
             <RadioGroup
+              aria-label={title}
               onChange={value => {
                 if (value === '') {
                   resetField(name, { defaultValue: '' })

@@ -1,31 +1,34 @@
 import { clickButton, button } from '@/helpers/user.helpers'
 import { expect, Page } from '@playwright/test'
 import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/constants'
+import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
+import { PoolType } from '@balancer/sdk'
+import { isPoolCreatorEnabled } from '@repo/lib/modules/pool/actions/create/helpers'
 
 const BASE_URL = 'http://localhost:3000/create'
 
 export type PoolCreationConfig = {
-  type: string
+  type: PoolType
   tokens: { symbol: string; amount: string | undefined }[]
 }
 
 export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
   {
-    type: 'Stable',
+    type: PoolType.Stable,
     tokens: [
       { symbol: 'USDC', amount: '10' },
       { symbol: 'GHO', amount: '10' },
     ],
   },
   {
-    type: 'Weighted',
+    type: PoolType.Weighted,
     tokens: [
       { symbol: 'AAVE', amount: '1' },
       { symbol: 'BAL', amount: '333' },
     ],
   },
   {
-    type: 'Gyro Elliptic CLP',
+    type: PoolType.GyroE,
     tokens: [
       { symbol: 'wstETH', amount: '1' },
       { symbol: 'fwstETH', amount: undefined },
@@ -57,7 +60,10 @@ export class CreatePoolPage {
     await expect(this.page.getByText('Choose network')).toBeVisible()
     await expect(this.page.getByText('Choose a pool type')).toBeVisible()
 
-    await this.page.getByLabel(this.config.type, { exact: true }).click({ force: true })
+    await this.page
+      .getByRole('radiogroup', { name: 'Choose a pool type' })
+      .getByText(POOL_TYPES[this.config.type].label, { exact: true })
+      .click()
 
     if (shouldContinue) await clickButton(this.page, 'Next')
   }
@@ -91,6 +97,13 @@ export class CreatePoolPage {
     await expect(this.page).toHaveURL(this.urls.details)
     await expect(this.page.getByText('Pool details')).toBeVisible()
     await expect(this.page.getByText('Pool settings')).toBeVisible()
+
+    if (isPoolCreatorEnabled(this.config.type)) {
+      await this.page
+        .getByRole('radiogroup', { name: 'Pool creator' })
+        .getByText('My connected wallet:', { exact: false })
+        .click()
+    }
 
     if (shouldContinue) await clickButton(this.page, 'Next')
   }
