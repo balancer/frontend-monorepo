@@ -17,7 +17,7 @@ export function MaBeetsHeader() {
         Governance & Rewards
       </Heading>
       <Text sx={{ textWrap: 'balance' }} variant="secondary">
-        Maturity-adjusted voting with governance aligned rewards.{' '}
+        Maturity-adjusted governance power without the lock-ups.{' '}
         <Link
           color="font.highlight"
           href="https://docs.beets.fi/tokenomics/mabeets"

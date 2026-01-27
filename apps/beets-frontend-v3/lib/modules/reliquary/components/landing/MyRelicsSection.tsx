@@ -90,7 +90,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                 />
                 <VStack alignItems="flex-start" spacing="3" width="full">
                   <InfoButton
-                    infoText="Delegate or undelegate your maBEETS voting power to the Music Directors. This only affects the delegation for the Beets Gauge Votes space on Snapshot."
+                    infoText="When active your maBEETS voting power is assigned to the Music Directors for the Beets Gauge Votes space on Snapshot. You can always override this by voting manually. An active delegation does not affect ownership, rewards, or your ability to exit."
                     label="Vote Optimizer Status"
                     labelProps={{
                       lineHeight: '1rem',
