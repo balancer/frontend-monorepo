@@ -4,7 +4,7 @@ import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/
 
 const BASE_URL = 'http://localhost:3000/create'
 
-type PoolCreationConfig = {
+export type PoolCreationConfig = {
   type: string
   tokens: { symbol: string; amount: string | undefined }[]
 }
