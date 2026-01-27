@@ -42,21 +42,8 @@ export function useReliquaryDelegationStep(action: DelegationAction) {
         }
 
   const props: ManagedTransactionInput =
-    action === 'undelegate'
+    action === 'delegate'
       ? {
-          labels,
-          chainId: networkConfig.chainId,
-          contractId: 'snapshot.delegateRegistry',
-          contractAddress: networkConfig.snapshot?.contractAddress || '',
-          functionName: 'clearDelegate',
-          args: networkConfig.snapshot?.id ? [networkConfig.snapshot.id] : null,
-          enabled:
-            isConnected &&
-            !!networkConfig.snapshot?.contractAddress &&
-            !!networkConfig.snapshot?.id,
-          onTransactionChange: setTransaction,
-        }
-      : {
           labels,
           chainId: networkConfig.chainId,
           contractId: 'snapshot.delegateRegistry',
@@ -73,6 +60,19 @@ export function useReliquaryDelegationStep(action: DelegationAction) {
             !!networkConfig.snapshot?.contractAddress &&
             !!networkConfig.snapshot?.id &&
             !!networkConfig.snapshot?.delegateAddress,
+          onTransactionChange: setTransaction,
+        }
+      : {
+          labels,
+          chainId: networkConfig.chainId,
+          contractId: 'snapshot.delegateRegistry',
+          contractAddress: networkConfig.snapshot?.contractAddress || '',
+          functionName: 'clearDelegate',
+          args: networkConfig.snapshot?.id ? [networkConfig.snapshot.id] : null,
+          enabled:
+            isConnected &&
+            !!networkConfig.snapshot?.contractAddress &&
+            !!networkConfig.snapshot?.id,
           onTransactionChange: setTransaction,
         }
 

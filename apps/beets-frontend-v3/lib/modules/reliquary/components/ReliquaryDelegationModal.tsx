@@ -49,7 +49,7 @@ export function ReliquaryDelegationModal({
   const networkConfig = getNetworkConfig(chain)
 
   // For UI labels
-  const delegate = action === 'delegate'
+  const canDelegate = action === 'delegate'
 
   // Get transaction hash
   const txHash = delegationTxHash
@@ -66,7 +66,7 @@ export function ReliquaryDelegationModal({
     onClose()
   }
 
-  const modalLabel = action === 'delegate' ? 'Delegate voting power' : 'Remove delegation'
+  const modalLabel = `${action === 'delegate' ? 'Activate ' : 'Deactivate'} voting power delegation`
 
   // Get the actual delegation address (Music Directors)
   const delegateAddress = networkConfig.snapshot?.delegateAddress
@@ -93,25 +93,35 @@ export function ReliquaryDelegationModal({
               <MobileStepTracker chain={chain} transactionSteps={delegationTransactionSteps} />
             )}
             <Card variant="modalSubSection">
-              <VStack align="start" spacing="sm" w="full">
+              {isSuccess ? (
                 <Text color="gray.400" fontSize="sm">
                   {`${
-                    delegate
-                      ? 'Delegate your maBEETS voting power to the Music Directors.'
-                      : 'Remove your delegation and manage your own voting power.'
+                    canDelegate
+                      ? 'Successfully delegated your maBEETS voting power to the Music Directors.'
+                      : 'Successfully removed your delegation so you can manage your own voting power.'
                   } This only affects the delegation for the Beets Gauge Votes space on Snapshot.`}
                 </Text>
-                {delegate && delegateAddress && (
-                  <Box>
-                    <Text color="gray.500" fontSize="xs" fontWeight="semibold">
-                      Delegate to:
-                    </Text>
-                    <Text color="gray.500" fontFamily="monospace" fontSize="xs">
-                      {delegateAddress}
-                    </Text>
-                  </Box>
-                )}
-              </VStack>
+              ) : (
+                <VStack align="start" spacing="sm" w="full">
+                  <Text color="gray.400" fontSize="sm">
+                    {`${
+                      canDelegate
+                        ? 'Delegate your maBEETS voting power to the Music Directors.'
+                        : 'Remove your delegation and manage your own voting power.'
+                    } This only affects the delegation for the Beets Gauge Votes space on Snapshot.`}
+                  </Text>
+                  {canDelegate && delegateAddress && (
+                    <Box>
+                      <Text color="gray.500" fontSize="xs" fontWeight="semibold">
+                        Delegate to:
+                      </Text>
+                      <Text color="gray.500" fontFamily="monospace" fontSize="xs">
+                        Music Directors ({delegateAddress})
+                      </Text>
+                    </Box>
+                  )}
+                </VStack>
+              )}
             </Card>
           </AnimateHeightChange>
         </ModalBody>
