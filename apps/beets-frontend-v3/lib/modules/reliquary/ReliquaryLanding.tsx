@@ -14,17 +14,18 @@ import { YourMaBeetsStats } from './components/stats/YourMaBeetsStats'
 import { useReliquary } from './ReliquaryProvider'
 
 export default function ReliquaryLanding() {
-  const { isConnected } = useUserAccount()
+  const { isConnected, isLoading: isAccountLoading } = useUserAccount()
   const { relicPositions, isLoadingRelicPositions } = useReliquary()
   const searchParams = useSearchParams()
   const focusRelicId = searchParams.get('focusRelic')
 
   const hasRelics = relicPositions.length > 0
+  const isLoading = isAccountLoading || isLoadingRelicPositions
 
   return (
     <VStack py="4" spacing="32" width="full">
       <MaBeetsHeader />
-      {isLoadingRelicPositions ? (
+      {isLoading ? (
         <LoadingSkeletons />
       ) : (
         <Content focusRelicId={focusRelicId} hasRelics={hasRelics} isConnected={isConnected} />
