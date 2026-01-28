@@ -140,7 +140,6 @@ export const nestedPoolMock: GqlPoolElement = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'HAS_SOME_PHANTOM_BPT',
   poolTokens: [
     {
       id: '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0-0x79c58f70905f734641735bc61e45c19dd9ad60bc',

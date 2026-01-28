@@ -50,40 +50,7 @@ export const composableStablePoolMock: Pool = {
     fees24hAtlTimestamp: 1686960000,
     yieldCapture24h: '0.18',
     yieldCapture48h: '0.37',
-    apr: {
-      hasRewardApr: false,
-      thirdPartyApr: { total: '0' },
-      nativeRewardApr: { total: '0' },
-      swapApr: '0',
-      apr: { total: '0.02302921486892855' },
-      items: [
-        {
-          id: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570-vETH-yield-apr',
-          title: 'vETH APR',
-          apr: { total: '0.02302921486892855' },
-          subItems: [],
-        },
-      ],
-    },
   },
-  displayTokens: [
-    {
-      id: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570-0x4bc3263eb5bb2ef7ad9ab6fb68be80e43b43801f',
-      address: '0x4bc3263eb5bb2ef7ad9ab6fb68be80e43b43801f',
-      name: 'Voucher Ethereum 2.0',
-      weight: null,
-      symbol: 'vETH',
-      nestedTokens: null,
-    },
-    {
-      id: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      name: 'Wrapped Ether',
-      weight: null,
-      symbol: 'WETH',
-      nestedTokens: null,
-    },
-  ],
   staking: {
     id: '0x1d157cf1f1339864a3c291d1bbe786d6ee682434',
     type: 'GAUGE',
@@ -114,7 +81,6 @@ export const composableStablePoolMock: Pool = {
     totalBalanceUsd: 0,
   },
   amp: '50',
-  nestingType: 'NO_NESTING',
   bptPriceRate: '1.018385877232728716',
   poolTokens: [
     {
@@ -139,7 +105,6 @@ export const composableStablePoolMock: Pool = {
         createTime: 1686959963,
         totalShares: '1.160614615757644766',
         totalLiquidity: '2857.493507546285',
-        nestingType: 'NO_NESTING',
         swapFee: '0.0004',
         amp: '50',
         bptPriceRate: '1.018385877232728716',

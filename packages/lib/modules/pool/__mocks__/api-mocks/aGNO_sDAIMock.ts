@@ -122,7 +122,6 @@ export const aGNO_sDAIMock = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'NO_NESTING',
   poolTokens: [
     {
       id: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522-0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644',

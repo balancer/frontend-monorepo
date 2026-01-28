@@ -107,7 +107,6 @@ export const staBAL3_WETH_WBTC_BPTMock = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'HAS_SOME_PHANTOM_BPT',
   poolTokens: [
     {
       id: '0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053-0x2086f52651837600180de173b09470f54ef74910',

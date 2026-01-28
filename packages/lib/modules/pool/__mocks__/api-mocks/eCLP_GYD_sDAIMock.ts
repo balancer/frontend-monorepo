@@ -170,7 +170,6 @@ export const eCLP_GYD_sDAIMock = {
   c: '0.707106781186547524',
   dSq: '0.9999999999999999988662409334210612',
   lambda: '4000',
-  nestingType: 'NO_NESTING',
   root3Alpha: '',
   s: '0.707106781186547524',
   sqrtAlpha: '',

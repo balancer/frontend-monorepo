@@ -96,7 +96,6 @@ export const bCoW_50WETH_50GNOMock = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'NO_NESTING',
   poolTokens: [
     {
       id: '0x079d2094e16210c42457438195042898a3cff72d-0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1',
