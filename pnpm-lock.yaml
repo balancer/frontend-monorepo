@@ -74,8 +74,8 @@ importers:
         specifier: 4.0.11
         version: 4.0.11(graphql-ws@6.0.6(crossws@0.3.5)(graphql@16.12.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer/sdk':
-        specifier: 5.1.1
-        version: 5.1.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
+        specifier: 5.1.2
+        version: 5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@19.2.4)
@@ -207,8 +207,8 @@ importers:
         specifier: 4.0.11
         version: 4.0.11(graphql-ws@6.0.6(crossws@0.3.5)(graphql@16.12.0)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer/sdk':
-        specifier: 5.1.1
-        version: 5.1.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
+        specifier: 5.1.2
+        version: 5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@chakra-ui/clickable':
         specifier: ^2.1.0
         version: 2.1.0(react@19.2.4)
@@ -454,8 +454,8 @@ importers:
         specifier: 0.0.37
         version: 0.0.37
       '@balancer/sdk':
-        specifier: 5.1.1
-        version: 5.1.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
+        specifier: 5.1.2
+        version: 5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
@@ -730,8 +730,8 @@ importers:
         specifier: 4.0.11
         version: 4.0.11(graphql-ws@6.0.6(crossws@0.3.5)(graphql@16.12.0)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer/sdk':
-        specifier: 5.1.1
-        version: 5.1.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
+        specifier: 5.1.2
+        version: 5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -1096,6 +1096,10 @@ packages:
 
   '@balancer/sdk@5.1.1':
     resolution: {integrity: sha512-9HWiUVHcsEGYtXhb58yG2T4fmfAJaOklo3MZTjSqfgQcEMr+PeDy3ycYwHc1I2NLdT1YmEdQo1d+2haHEE0g6Q==}
+    engines: {node: '>=18.x'}
+
+  '@balancer/sdk@5.1.2':
+    resolution: {integrity: sha512-ht6kHlpaQN9+1bmURQ/6bhIAc/YGZLvIwDirV4Y+S/k6OdI7/ExzLHmkf07UHsPGO7g1PXj+lu2eJq2OoJ6AzQ==}
     engines: {node: '>=18.x'}
 
   '@bcoe/v8-coverage@1.0.2':
@@ -9715,20 +9719,20 @@ snapshots:
 
   '@balancer-labs/balancer-maths@0.0.38': {}
 
-  '@balancer/sdk@5.1.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)':
+  '@balancer/sdk@5.1.1(typescript@5.9.2)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.38
-      viem: 2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
+      viem: 2.45.0(typescript@5.9.2)
     transitivePeerDependencies:
       - bufferutil
       - typescript
       - utf-8-validate
       - zod
 
-  '@balancer/sdk@5.1.1(typescript@5.9.2)':
+  '@balancer/sdk@5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.38
-      viem: 2.45.0(typescript@5.9.2)
+      viem: 2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
     transitivePeerDependencies:
       - bufferutil
       - typescript

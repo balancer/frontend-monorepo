@@ -18,8 +18,8 @@ const networkConfig: NetworkConfig = {
   chain: GqlChain.Monad,
   iconPath: '/images/chains/MONAD.svg',
   blockExplorer: {
-    baseUrl: monad.blockExplorers.default.url,
-    name: monad.blockExplorers.default.name,
+    baseUrl: monad.blockExplorers.monadscan.url,
+    name: monad.blockExplorers.monadscan.name,
   },
   tokens: {
     addresses: {
