@@ -4,6 +4,7 @@ import { createContext, PropsWithChildren } from 'react'
 import { useSignatureStep } from './useSignatureStep'
 import { useRecoveredFunds } from './useRecoveredFunds'
 import { useClaimSteps } from './useClaimSteps'
+import { mainnet } from 'viem/chains'
 
 type UseRecoveredFundsClaimsResponse = ReturnType<typeof useRecoveredFundsClaimsLogic>
 const UseRecoveredFundsClaimsContext = createContext<UseRecoveredFundsClaimsResponse | null>(null)
@@ -11,7 +12,9 @@ const UseRecoveredFundsClaimsContext = createContext<UseRecoveredFundsClaimsResp
 function useRecoveredFundsClaimsLogic() {
   const { claims } = useRecoveredFunds()
 
-  const { signatureStep, hasAcceptedDisclaimer, setHasAcceptedDisclaimer } = useSignatureStep()
+  const signatureChain = claims.length > 0 ? claims[0].chainId : mainnet.id
+  const { signatureStep, hasAcceptedDisclaimer, setHasAcceptedDisclaimer } =
+    useSignatureStep(signatureChain)
   const claimSteps = useClaimSteps(claims)
   const steps = useTransactionSteps([signatureStep, ...claimSteps])
 

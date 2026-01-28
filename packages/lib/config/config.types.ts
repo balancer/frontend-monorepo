@@ -81,7 +81,9 @@ export interface ContractsConfig {
   gaugeWorkingBalanceHelper?: Address
   gaugeController?: Address
   rewardDistributor?: Address // hidden hand rewards distributor
+  signatureRegistry?: Address
 }
+
 export interface PoolsConfig {
   issues: Partial<Record<PoolIssue, string[]>>
   disallowNestedActions?: string[] // pool ids
