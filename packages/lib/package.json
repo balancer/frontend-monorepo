@@ -50,7 +50,7 @@
     "date-fns": "^4.1.0",
     "deepmerge": "^4.3.1",
     "echarts": "5.6.0",
-    "echarts-for-react": "3.0.2",
+    "echarts-for-react": "3.0.6",
     "fathom-client": "^3.7.0",
     "framer-motion": "12.26.1",
     "graphql": "16.12.0",
