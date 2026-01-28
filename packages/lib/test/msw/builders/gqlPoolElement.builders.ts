@@ -73,7 +73,7 @@ export function aWeightedV2PoolMock(...options: Partial<GqlPoolElement>[]): GqlP
 }
 
 export function toGqlWeighedPoolMock(poolElement: GqlPoolElement): GqlPoolWeighted {
-  const pool: GqlPoolWeighted = {
+  const pool: any = {
     ...poolElement,
     __typename: 'GqlPoolWeighted',
   }
