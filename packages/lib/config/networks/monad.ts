@@ -9,7 +9,6 @@ import type { NetworkConfig } from '../config.types'
 
 const chainId = ChainId.MONAD
 
-// name, symbol & wrapped are always defined in the sdk
 const nativeAsset = NATIVE_ASSETS[chainId]
 
 const networkConfig: NetworkConfig = {
@@ -62,7 +61,7 @@ const networkConfig: NetworkConfig = {
     permit2: PERMIT2[chainId],
   },
   pools: convertHexToLowerCase({
-    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Xlayer] },
+    issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Monad] },
   }),
   supportsVeBalSync: false,
 }
