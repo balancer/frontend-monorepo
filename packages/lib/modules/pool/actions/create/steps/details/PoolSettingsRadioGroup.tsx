@@ -13,6 +13,7 @@ export interface PoolSettingsRadioGroupProps {
   tooltip: string
   isDisabled?: boolean
   name:
+    | 'poolCreator'
     | 'swapFeeManager'
     | 'pauseManager'
     | 'swapFeePercentage'
@@ -71,6 +72,7 @@ export function PoolSettingsRadioGroup({
 
           return (
             <RadioGroup
+              aria-label={title}
               onChange={value => {
                 if (value === '') {
                   resetField(name, { defaultValue: '' })

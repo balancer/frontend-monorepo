@@ -76,6 +76,16 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         version
         workingSupply
       }
+      reliquary {
+        levels {
+          level
+          balance
+          apr
+          allocationPoints
+        }
+        beetsPerSecond
+        totalBalance
+      }
       id
       type
     }

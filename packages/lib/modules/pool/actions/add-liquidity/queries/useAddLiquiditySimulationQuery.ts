@@ -10,7 +10,7 @@ import { AddLiquidityParams, addLiquidityKeys } from './add-liquidity-keys'
 import { useQuery } from '@tanstack/react-query'
 import { usePool } from '../../../PoolProvider'
 import { sentryMetaForAddLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
 import { isInvariantRatioSimulationErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { Address } from 'viem'
@@ -20,7 +20,7 @@ export type AddLiquiditySimulationQueryResult = ReturnType<typeof useAddLiquidit
 
 type Params = {
   handler: AddLiquidityHandler
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
   enabled: boolean
   referenceAmountAddress?: Address // only used by Proportional handlers that require a referenceAmount
 }

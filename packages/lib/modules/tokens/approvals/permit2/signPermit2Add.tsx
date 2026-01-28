@@ -9,7 +9,7 @@ import {
   PublicWalletClient,
   TokenAmount,
 } from '@balancer/sdk'
-import { HumanTokenAmountWithAddress } from '../../token.types'
+import { HumanTokenAmountWithSymbol } from '../../token.types'
 import { NoncesByTokenAddress } from './usePermit2Allowance'
 import { constructBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -20,7 +20,7 @@ import { maximizeAmountsInForPermit2 } from './permit2.helpers'
 type SignPermit2AddParams = {
   sdkClient?: PublicWalletClient
   pool: Pool
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
   nonces?: NoncesByTokenAddress
   wethIsEth: boolean
   account: Address

@@ -6,7 +6,7 @@ import { usePoolAlerts } from './usePoolAlerts'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { isComposableStablePool } from '../pool.utils'
 import { usePoolMigrations } from '../migrations/PoolMigrationsProvider'
-import { getChainId, isProd } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../migrations/MigrationAlert'
 
 export function PoolAlerts() {
@@ -51,7 +51,7 @@ export function PoolAlerts() {
 
       {affectedByV2Exploit && <BalAlert content={v2ExploitWarningContent} status="warning" />}
 
-      {!isProd && needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
+      {needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
         <MigrationAlert pool={pool} />
       )}
     </VStack>

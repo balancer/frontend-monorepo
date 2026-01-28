@@ -1,7 +1,7 @@
 'use client'
 
 import { HumanAmount, isSameAddress } from '@balancer/sdk'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useGetMinimumWrapAmount } from '@repo/lib/shared/hooks/useGetMinimumWrapAmount'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -11,7 +11,7 @@ import { usePool } from '../../PoolProvider'
 import { useGetMinimumTradeAmount } from '@repo/lib/shared/hooks/useGetMinimumTradeAmount'
 import { PoolToken } from '../../pool.types'
 
-type Props = { humanAmountsIn: HumanTokenAmountWithAddress[]; totalUSDValue: string }
+type Props = { humanAmountsIn: HumanTokenAmountWithSymbol[]; totalUSDValue: string }
 export type MinimumDepositErrors = Record<string, BigNumber>
 
 // The contracts have limits for the minimum amount that can be traded and

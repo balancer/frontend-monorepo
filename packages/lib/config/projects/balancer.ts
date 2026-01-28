@@ -113,11 +113,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
           { label: 'Swap tokens', href: '/swap' },
           { label: 'View portfolio', href: '/portfolio' },
           { label: 'Get veBAL', href: '/vebal' },
-          {
-            label: 'Create an LBP',
-            href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
-            isExternal: true,
-          },
         ],
       },
       {

@@ -5,7 +5,7 @@
   "type": "module",
   "devDependencies": {
     "@apollo/client": "4.0.11",
-    "@balancer/sdk": "5.0.1",
+    "@balancer/sdk": "5.1.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -15,7 +15,7 @@
     "@viem/anvil": "^0.0.10",
     "cross-fetch": "4.1.0",
     "eslint": "9.27.0",
-    "viem": "2.43.5",
+    "viem": "2.45.0",
     "wagmi": "3.2.0"
   },
   "publishConfig": {

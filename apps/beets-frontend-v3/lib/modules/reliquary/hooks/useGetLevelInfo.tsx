@@ -1,16 +1,13 @@
-import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
-import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetLevelInfo(chain: GqlChain, poolId: string | undefined) {
-  const { isConnected } = useUserAccount()
+export function useGetLevelInfo(poolId: string, chain: GqlChain) {
   const chainId = getChainId(chain)
-
-  const { shouldChangeNetwork } = useChainSwitch(chainId)
   const config = getNetworkConfig(chainId)
+  const { isConnected } = useUserAccount()
 
   const query = useReadContract({
     chainId,
@@ -18,11 +15,11 @@ export function useGetLevelInfo(chain: GqlChain, poolId: string | undefined) {
     address: config.contracts.beets?.reliquary,
     functionName: 'getLevelInfo',
     args: poolId ? [BigInt(poolId)] : undefined,
-    query: { enabled: isConnected && !shouldChangeNetwork && !!poolId },
+    query: { enabled: isConnected && !!poolId },
   })
 
   return {
     ...query,
-    maturityThresholds: query.data?.requiredMaturities.map(maturity => maturity.toString()),
+    maturityThresholds: query.data?.requiredMaturities.map(maturity => maturity.toString()) || [],
   }
 }

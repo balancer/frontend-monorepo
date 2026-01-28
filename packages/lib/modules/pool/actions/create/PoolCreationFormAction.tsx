@@ -2,7 +2,6 @@ import { Button, HStack, IconButton, useDisclosure, Divider, VStack } from '@cha
 import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
 import { PoolCreationModal } from './modal/PoolCreationModal'
 import { useRef, useEffect } from 'react'
@@ -12,13 +11,13 @@ import { isReClammPool, isCowPool } from './helpers'
 import { useFormState, useWatch } from 'react-hook-form'
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
-  const { poolAddress, poolCreationForm } = usePoolCreationForm()
+  const { poolAddress, poolCreationForm, goToNextStep, goToPreviousStep, isLastStep, isFirstStep } =
+    usePoolCreationForm()
   const [poolTokens, poolType, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'poolType', 'network'],
   })
   const formState = useFormState({ control: poolCreationForm.control })
-  const { previousStep, nextStep, isLastStep, isFirstStep } = usePoolCreationFormSteps()
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
   const nextBtn = useRef(null)
@@ -33,7 +32,6 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
-  const buttonText = isLastStep ? (poolAddress ? 'Initialize Pool' : 'Create Pool') : 'Next'
   const showBackButton = !isFirstStep && !poolAddress
 
   const initializeUrl = `${window.location.origin}/create/${network}/${poolType}/${poolAddress}`
@@ -50,7 +48,7 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             <IconButton
               aria-label="Back"
               icon={<ChevronLeftIcon h="8" w="8" />}
-              onClick={previousStep}
+              onClick={goToPreviousStep}
               size="lg"
             />
           )}
@@ -66,21 +64,21 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
             </Button>
           )}
 
-          <Button
-            disabled={disabled}
-            onClick={() => {
-              if (isLastStep) {
-                previewModalDisclosure.onOpen()
-              } else {
-                nextStep()
-              }
-            }}
-            size="lg"
-            variant="primary"
-            w="full"
-          >
-            {buttonText}
-          </Button>
+          {isLastStep ? (
+            <Button
+              disabled={disabled}
+              onClick={previewModalDisclosure.onOpen}
+              size="lg"
+              variant="primary"
+              w="full"
+            >
+              {poolAddress ? 'Initialize Pool' : 'Create Pool'}
+            </Button>
+          ) : (
+            <Button disabled={disabled} onClick={goToNextStep} size="lg" variant="primary" w="full">
+              Next
+            </Button>
+          )}
         </HStack>
       </VStack>
 

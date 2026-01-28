@@ -68,8 +68,7 @@ export function LandingMaBeetsSection() {
     <LandingSectionContainer
       button={{
         text: 'Get maBEETS',
-        href: 'https://ma.beets.fi',
-        isExternal: true,
+        href: 'https://beets.fi/mabeets',
       }}
       subtitle="Shape the Future. Earn as You Grow. maBEETS unlocks maturity-adjusted voting power,
             allowing you to participate in governance decisions and earn rewards without locking
@@ -118,7 +117,7 @@ export function LandingMaBeetsSection() {
             title="Add Liquidity"
           />
           <HowItWorksCard
-            description="Deposit your fBEETS to create a maBEETS position tied to a Relic NFT."
+            description="Deposit your fBEETS to create a maBEETS position tied to a relic NFT."
             image={<MaBeetsMintMabeetsSvg />}
             title="Mint maBEETS"
           />

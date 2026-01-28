@@ -39,6 +39,7 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
         name="poolType"
         render={({ field }) => (
           <RadioGroup
+            aria-label="Choose a pool type"
             onChange={(value: SupportedPoolTypes) => {
               poolCreationForm.reset({
                 ...INITIAL_POOL_CREATION_FORM,

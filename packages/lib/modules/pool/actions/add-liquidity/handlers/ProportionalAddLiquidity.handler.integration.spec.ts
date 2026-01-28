@@ -5,7 +5,7 @@ import { gyroPoolMock } from '../../../__mocks__/gyroPoolMock'
 import { Pool } from '../../../pool.types'
 import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usdcAddress, wETHAddress } from '@repo/lib/debug-helpers'
@@ -29,7 +29,7 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
   test('simulates given a single human amount', async () => {
     const handler = selectProportionalHandler(cowAmmPool)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
     ]
 
@@ -47,7 +47,7 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
   })
 
   test('builds Tx Config', async () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '0.1', tokenAddress: wETHAddress, symbol: 'WETH' },
     ]
 
@@ -84,7 +84,7 @@ describe('When adding proportional liquidity for a gyro pool', () => {
   test('simulates given a single human amount', async () => {
     const handler = selectProportionalHandler(gyroPoolMock)
 
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: polygonUsdcAddress, symbol: 'USDC' },
     ]
 
@@ -101,7 +101,7 @@ describe('When adding proportional liquidity for a gyro pool', () => {
   })
 
   test('builds Tx Config', async () => {
-    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
       { humanAmount: '1', tokenAddress: polygonUsdcAddress, symbol: 'USDC' },
     ]
 

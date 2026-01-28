@@ -9,7 +9,7 @@ import { useWatch } from 'react-hook-form'
 const BOUNDARY_FACTOR = 0.1 // 10%
 
 export function useSuggestedGyroEclpConfig() {
-  const { spotPriceWithoutRate } = usePoolSpotPriceWithoutRate()
+  const { spotPriceWithoutRate, isRateLoading } = usePoolSpotPriceWithoutRate()
   const { eclpConfigForm } = usePoolCreationForm()
   const formValues = useWatch({ control: eclpConfigForm.control })
   const isEmptyEclpConfig = Object.values(formValues).every(value => value === '')
@@ -28,8 +28,8 @@ export function useSuggestedGyroEclpConfig() {
   }
 
   useEffect(() => {
-    if (isEmptyEclpConfig) eclpConfigForm.reset(suggestedEclpConfig)
-  }, [isEmptyEclpConfig, suggestedEclpConfig])
+    if (isEmptyEclpConfig && !isRateLoading) eclpConfigForm.reset(suggestedEclpConfig)
+  }, [isEmptyEclpConfig, isRateLoading, suggestedEclpConfig])
 
   return suggestedEclpConfig
 }

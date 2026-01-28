@@ -8,7 +8,7 @@ import {
   InputAmount,
   isSameAddress,
 } from '@balancer/sdk'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Pool } from '../../../pool.types'
@@ -31,7 +31,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     userAddress: Address,
     referenceAmountAddress?: Address,
     slippage?: number
@@ -110,7 +110,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
    */
   private constructSdkInput(
     referenceAmount: InputAmount,
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithSymbol[],
     userAddress: Address
   ): AddLiquidityBoostedProportionalInput {
     return {

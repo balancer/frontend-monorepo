@@ -12,9 +12,11 @@ import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsPro
 export function ReceiptBptOut({
   actualBptOut,
   isLoading,
+  label = 'You got',
 }: {
   actualBptOut: string
   isLoading?: boolean
+  label?: string
 }) {
   const { pool } = usePool()
   const { simulationQuery } = useAddLiquidity()
@@ -38,7 +40,7 @@ export function ReceiptBptOut({
     <BptRow
       bptAmount={actualBptOut}
       isLoading={isLoading}
-      label="You got"
+      label={label}
       pool={pool}
       rightElement={
         <Text color="grayText" fontSize="sm">

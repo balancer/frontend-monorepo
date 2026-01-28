@@ -13,20 +13,15 @@ import {
   Stack,
   Skeleton,
 } from '@chakra-ui/react'
-import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
-import { PoolTypeStep } from './steps/type/PoolTypeStep'
-import { PoolTokensStep } from './steps/tokens/PoolTokensStep'
-import { PoolDetailsStep } from './steps/details/PoolDetailsStep'
-import { PoolFundStep } from './steps/fund/PoolFundStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { HeaderBanner } from '@repo/lib/modules/pool/actions/create/header/HeaderBanner'
 import { PreviewPoolCreation } from '@repo/lib/modules/pool/actions/create/preview/PreviewPoolCreation'
 import { useHydratePoolCreationForm } from './useHydratePoolCreationForm'
+import { usePoolCreationForm } from './PoolCreationFormProvider'
 
 export function PoolCreationForm() {
   const { isLoadingPool } = useHydratePoolCreationForm()
-
-  const { steps, activeStepIndex, activeStep, goToStep } = usePoolCreationFormSteps()
+  const { steps, currentStepIndex, currentStep, goToStep, canRenderStep } = usePoolCreationForm()
   const { isMobile } = useBreakpoints()
 
   return (
@@ -53,15 +48,15 @@ export function PoolCreationForm() {
                 <Divider />
                 <Stepper
                   gap={{ base: 1, sm: 4 }}
-                  index={activeStepIndex}
+                  index={currentStepIndex}
                   orientation="horizontal"
                   pt="sm"
                   size={{ base: 'sm', sm: 'md' }}
                   w="full"
                 >
                   {steps.map((step, index) => {
-                    const isCompleted = index < activeStepIndex
-                    const isActive = index === activeStepIndex
+                    const isCompleted = index < currentStepIndex
+                    const isActive = index === currentStepIndex
                     return (
                       <Step key={step.id} w="full">
                         <Box
@@ -94,10 +89,7 @@ export function PoolCreationForm() {
 
               <Divider />
 
-              {activeStep.id === 'step1' && <PoolTypeStep />}
-              {activeStep.id === 'step2' && <PoolTokensStep />}
-              {activeStep.id === 'step3' && <PoolDetailsStep />}
-              {activeStep.id === 'step4' && <PoolFundStep />}
+              {canRenderStep && <currentStep.Component />}
             </VStack>
             {!isMobile && <PreviewPoolCreation />}
           </>

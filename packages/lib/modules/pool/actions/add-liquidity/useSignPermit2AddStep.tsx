@@ -8,7 +8,7 @@ import { SdkQueryAddLiquidityOutput } from './add-liquidity.types'
 import { AddLiquiditySimulationQueryResult } from './queries/useAddLiquiditySimulationQuery'
 import { requiresPermit2Approval } from '../../pool.helpers'
 import { usePool } from '../../PoolProvider'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { toTokenAmountsIn } from '../LiquidityActionHelpers'
 import { Address } from 'viem'
@@ -16,7 +16,7 @@ import { Address } from 'viem'
 type Props = {
   wethIsEth: boolean
   simulationQuery: AddLiquiditySimulationQueryResult
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
 }
 
 export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQuery }: Props) {

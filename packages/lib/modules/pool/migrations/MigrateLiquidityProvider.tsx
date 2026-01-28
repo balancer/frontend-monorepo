@@ -11,7 +11,7 @@ import { useRemoveLiquidity } from '../actions/remove-liquidity/RemoveLiquidityP
 import { useAddLiquidity } from '../actions/add-liquidity/AddLiquidityProvider'
 import { useTransactionSteps } from '../../transactions/transaction-steps/useTransactionSteps'
 import { useRemoveLiquidityReceipt } from '../../transactions/transaction-steps/receipts/receipt.hooks'
-import { HumanTokenAmount, HumanTokenAmountWithAddress } from '../../tokens/token.types'
+import { HumanTokenAmount, HumanTokenAmountWithSymbol } from '../../tokens/token.types'
 
 export type UseMigrateLiquidityResponse = ReturnType<typeof useMigrateLiquidityLogic>
 export const MigrateLiquidityContext = createContext<UseMigrateLiquidityResponse | null>(null)
@@ -107,8 +107,8 @@ export function useFetchPool(
 }
 
 function hasDifferentAmounts(
-  prev: HumanTokenAmountWithAddress[],
-  current: HumanTokenAmountWithAddress[]
+  prev: HumanTokenAmountWithSymbol[],
+  current: HumanTokenAmountWithSymbol[]
 ) {
   return prev.reduce((acc, prevAmount) => {
     const currentAmount = current.find(amount => amount.tokenAddress === prevAmount.tokenAddress)

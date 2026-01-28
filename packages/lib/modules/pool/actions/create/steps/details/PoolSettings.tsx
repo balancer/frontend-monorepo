@@ -14,7 +14,7 @@ import { reClammPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { isStablePool, isStableSurgePool } from '../../helpers'
+import { isStablePool, isStableSurgePool, isPoolCreatorEnabled } from '../../helpers'
 import { useWatch } from 'react-hook-form'
 
 export type PoolSettingsOption = {
@@ -30,6 +30,7 @@ export function PoolSettings() {
     control: poolCreationForm.control,
     name: ['network', 'poolType'],
   })
+
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
   const filteredPoolHooksOptions = poolHooksWhitelist.filter(hook => {
@@ -42,7 +43,7 @@ export function PoolSettings() {
     }
   })
 
-  const poolManagerOptions: PoolSettingsOption[] = [
+  const poolRoleAccountOptions: PoolSettingsOption[] = [
     { label: `Delegate to the ${PROJECT_CONFIG.projectName} DAO`, value: zeroAddress },
     {
       label: 'My connected wallet:',
@@ -112,24 +113,36 @@ export function PoolSettings() {
         Pool settings
       </Heading>
 
+      {isPoolCreatorEnabled(poolType) && (
+        <PoolSettingsRadioGroup
+          customInputLabel="Custom pool creator address"
+          customInputType="address"
+          name="poolCreator"
+          options={poolRoleAccountOptions}
+          title="Pool creator"
+          tooltip="The address empowered to set a pool creator fee. Choose the Balancer DAO option to give all fees to the protocol and LPs."
+          validate={validatePoolSettings.poolRoleAccount}
+        />
+      )}
+
       <PoolSettingsRadioGroup
         customInputLabel="Custom swap fee manager address"
         customInputType="address"
         name="swapFeeManager"
-        options={poolManagerOptions}
+        options={poolRoleAccountOptions}
         title="Swap fee manager"
         tooltip="Account empowered to set static swap fees for a pool"
-        validate={validatePoolSettings.swapFeeManager}
+        validate={validatePoolSettings.poolRoleAccount}
       />
 
       <PoolSettingsRadioGroup
         customInputLabel="Custom pause manager address"
         customInputType="address"
         name="pauseManager"
-        options={poolManagerOptions}
+        options={poolRoleAccountOptions}
         title="Pause manager"
         tooltip="Account empowered to pause/unpause the pool (note that governance can always pause a pool)"
-        validate={validatePoolSettings.pauseManager}
+        validate={validatePoolSettings.poolRoleAccount}
       />
 
       <PoolSettingsRadioGroup

@@ -21,14 +21,16 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
+import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { useAddLiquiditySteps } from './useAddLiquiditySteps'
+import { useAddLiquiditySteps as useAddLiquidityStepsBase } from './useAddLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
+import { Pool } from '../../pool.types'
 import { getPoolActionableTokens, getWrappedBoostedTokens } from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
@@ -36,27 +38,35 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
 
-function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithAddress[] {
+function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithSymbol[] {
   return tokens.map(
     token =>
       ({
         tokenAddress: token.address as Address,
         humanAmount: '',
-      }) as HumanTokenAmountWithAddress
+      }) as HumanTokenAmountWithSymbol
   )
 }
 
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
-export function useAddLiquidityLogic(urlTxHash?: Hash) {
-  const { pool, refetch: refetchPool, isLoading } = usePool()
+export function useAddLiquidityLogic(
+  urlTxHash?: Hash,
+  addLiquidityHandlerSelector: (
+    pool: Pool,
+    wantsProportional: boolean
+  ) => AddLiquidityHandler = selectAddLiquidityHandler,
+  useAddLiquiditySteps: typeof useAddLiquidityStepsBase = useAddLiquidityStepsBase,
+  enablePoolRedirect = true
+) {
+  const { pool, refetch: refetchPool } = usePool()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
   // Actionable tokens selected in the add form
   const tokens = getPoolActionableTokens(pool, wrapUnderlying)
 
-  const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>(() =>
+  const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithSymbol[]>(() =>
     mapTokensToEmptyHumanAmounts(tokens)
   )
   // only used by Proportional handlers that require a referenceAmount
@@ -75,10 +85,9 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage } = useUserSettings()
 
-  const handler = useMemo(
-    () => selectAddLiquidityHandler(pool, wantsProportional),
-    [pool, isLoading, wantsProportional]
-  )
+  const handler = useMemo(() => {
+    return addLiquidityHandlerSelector(pool, wantsProportional)
+  }, [pool, wantsProportional, addLiquidityHandlerSelector])
 
   /**
    * Helper functions & variables
@@ -115,7 +124,7 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
     ])
   }
 
-  function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
+  function clearAmountsIn(changedAmount?: HumanTokenAmountWithSymbol) {
     setHumanAmountsIn(
       humanAmountsIn.map(({ tokenAddress, symbol }) => {
         // Keeps user inputs like '0' or '0.' instead of replacing them with ''
@@ -212,7 +221,11 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
   ]
   const { isDisabled, disabledReason } = isDisabledWithReason(...allDisabledConditions)
 
-  const previewModalDisclosure = useModalWithPoolRedirect(pool, addLiquidityTxHash)
+  const previewModalDisclosure = useModalWithPoolRedirect(
+    pool,
+    addLiquidityTxHash,
+    enablePoolRedirect
+  )
 
   return {
     transactionSteps,
@@ -259,10 +272,24 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
+  addLiquidityHandlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+  useAddLiquiditySteps?: typeof useAddLiquidityStepsBase
+  enablePoolRedirect?: boolean
 }>
 
-export function AddLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = useAddLiquidityLogic(urlTxHash)
+export function AddLiquidityProvider({
+  urlTxHash,
+  addLiquidityHandlerSelector,
+  useAddLiquiditySteps,
+  enablePoolRedirect,
+  children,
+}: Props) {
+  const hook = useAddLiquidityLogic(
+    urlTxHash,
+    addLiquidityHandlerSelector,
+    useAddLiquiditySteps,
+    enablePoolRedirect
+  )
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

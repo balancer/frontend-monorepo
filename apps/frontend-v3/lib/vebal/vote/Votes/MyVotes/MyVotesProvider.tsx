@@ -31,7 +31,6 @@ import { useBlacklistedVotes } from './incentivesBlacklist'
 import { useLastUserSlope } from '../../useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { Address } from 'viem'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { secondsToMilliseconds } from 'date-fns'
 
@@ -133,7 +132,6 @@ export function useMyVotesLogic() {
   const { blacklistedVotes, isLoading: blacklistedLoading } = useBlacklistedVotes(votingPools)
   const { userAddress, isLoading: userAccountLoading } = useUserAccount()
   const { slope, isLoading: slopeLoading } = useLastUserSlope(userAddress)
-  const { priceFor } = useTokens()
 
   const totalInfo: MyVotesTotalInfo = useMemo(() => {
     const infos = availableMyVotes.map(myVote => {
@@ -147,8 +145,7 @@ export function useMyVotesLogic() {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[myVote.gauge.address as Address],
-        priceFor
+        blacklistedVotes[myVote.gauge.address as Address]
       )
 
       return {
@@ -171,8 +168,7 @@ export function useMyVotesLogic() {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address as Address],
-        priceFor
+        blacklistedVotes[vote.gauge.address as Address]
       )
     )
 
@@ -183,8 +179,7 @@ export function useMyVotesLogic() {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address as Address],
-        priceFor
+        blacklistedVotes[vote.gauge.address as Address]
       )
     )
 
@@ -215,7 +210,6 @@ export function useMyVotesLogic() {
     slope,
     blacklistedVotes,
     lockEnd,
-    priceFor,
   ])
 
   const hasVotedBefore = votedPools.length > 0

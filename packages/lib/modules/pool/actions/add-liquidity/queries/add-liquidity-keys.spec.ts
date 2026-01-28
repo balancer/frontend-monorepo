@@ -4,10 +4,10 @@ import { addLiquidityKeys } from './add-liquidity-keys'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { UnbalancedAddLiquidityV2Handler } from '../handlers/UnbalancedAddLiquidityV2.handler'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 
 function testGenerateLiquidityKeys(pool: Pool) {
-  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
     {
       tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F',
       humanAmount: '0',
