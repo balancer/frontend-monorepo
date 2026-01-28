@@ -10,6 +10,7 @@ import {
   Box,
   Link,
 } from '@chakra-ui/react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -62,7 +63,7 @@ export function ChoosePoolTokens() {
   const blacklistTokens = network ? TOKEN_BLACKLIST[network] : null
 
   const selectedTokenAddress =
-    selectedTokenIndex !== null ? poolTokens[selectedTokenIndex].address : undefined
+    selectedTokenIndex !== null ? poolTokens[selectedTokenIndex]?.address : undefined
 
   // Filter out already selected tokens
   const poolTokenAddresses = new Set(poolTokens.map(token => token.address?.toLowerCase()))
@@ -127,51 +128,61 @@ export function ChoosePoolTokens() {
           Choose pool tokens
         </Heading>
 
-        <VStack align="start" spacing="xl" w="full">
-          {poolTokens.map((token, index) => {
-            const tokenData = listedTokens.find(
-              t => t.address.toLowerCase() === token.address?.toLowerCase()
-            ) as ApiToken
+        <VStack align="start" spacing="0" w="full">
+          <AnimatePresence initial={false}>
+            {poolTokens.map((token, index) => {
+              const tokenData = listedTokens.find(
+                t => t.address.toLowerCase() === token.address?.toLowerCase()
+              ) as ApiToken
 
-            const verifiedRateProviderAddress = tokenData
-              ? getVerifiedRateProviderAddress(tokenData)
-              : undefined
+              const verifiedRateProviderAddress = tokenData
+                ? getVerifiedRateProviderAddress(tokenData)
+                : undefined
 
-            return (
-              <ConfigureToken
-                index={index}
-                key={index}
-                network={network}
-                onToggleTokenClicked={() => {
-                  setSelectedTokenIndex(index)
-                  tokenSelectDisclosure.onOpen()
-                }}
-                poolTokens={poolTokens}
-                poolType={poolType}
-                rateProviderAddress={verifiedRateProviderAddress}
-                token={token}
-                weightedPoolStructure={weightedPoolStructure}
-              />
-            )
-          })}
+              return (
+                <motion.div
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0, height: 0 }}
+                  key={token.address || `token-${index}`}
+                  style={{ width: '100%', zIndex: 1000 }}
+                  transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                >
+                  <Box pb="xl">
+                    <ConfigureToken
+                      index={index}
+                      network={network}
+                      onToggleTokenClicked={() => {
+                        setSelectedTokenIndex(index)
+                        tokenSelectDisclosure.onOpen()
+                      }}
+                      poolTokens={poolTokens}
+                      poolType={poolType}
+                      rateProviderAddress={verifiedRateProviderAddress}
+                      token={token}
+                      weightedPoolStructure={weightedPoolStructure}
+                    />
+                  </Box>
+                </motion.div>
+              )
+            })}
+          </AnimatePresence>
           {(!isWeightedPool(poolType) || isCustomWeightedPool(poolType, weightedPoolStructure)) && (
-            <>
-              <VStack align="start" gap="lg" w="full">
-                <Divider />
-                <AddTokenButton
-                  isDisabled={isPoolAtMaxTokens}
-                  onClick={() => addPoolToken()}
-                  poolType={poolType}
-                />
-              </VStack>
-            </>
+            <VStack align="start" gap="lg" w="full">
+              <Divider />
+              <AddTokenButton
+                isDisabled={isPoolAtMaxTokens}
+                onClick={() => addPoolToken()}
+                poolType={poolType}
+              />
+            </VStack>
           )}
 
           {isWeightedPool(poolType) && isCustomWeightedPool(poolType, weightedPoolStructure) && (
-            <>
+            <VStack align="start" gap="lg" w="full">
               <Divider />
               <TotalWeightDisplay />
-            </>
+            </VStack>
           )}
         </VStack>
       </VStack>
@@ -218,17 +229,20 @@ function ConfigureToken({
 
   const { priceFor } = useTokens()
 
-  const apiPriceForToken = priceFor(token.address || '', network)
-  const { cgPriceForToken } = useCoingeckoTokenPrice({ token: token.address, network })
+  const apiPriceForToken = priceFor(token?.address || '', network)
+  const { cgPriceForToken } = useCoingeckoTokenPrice({ token: token?.address, network })
 
   useEffect(() => {
     // automatically hydrate form with coingecko price for unlisted tokens
-    if (!apiPriceForToken && cgPriceForToken && !token.usdPrice) {
+    if (!apiPriceForToken && cgPriceForToken && token?.usdPrice) {
       updatePoolToken(index, {
         usdPrice: cgPriceForToken.toString(),
       })
     }
-  }, [cgPriceForToken, apiPriceForToken, token.usdPrice])
+  }, [cgPriceForToken, apiPriceForToken, token?.usdPrice])
+
+  // Early return if token doesn't exist
+  if (!token) return null
 
   const isInvalidWeight = !!token.weight && Number(token.weight) < 1
   const tokenWeightErrorMsg = formState.errors.poolTokens?.[index]?.weight?.message
@@ -304,7 +318,7 @@ function ConfigureToken({
         </VStack>
       )}
 
-      {showRateProvider && (
+      {showRateProvider && token.address && (
         <ConfigureTokenRateProvider
           tokenIndex={index}
           verifiedRateProviderAddress={rateProviderAddress}
@@ -343,46 +357,45 @@ function AddTokenButton({
 
   const tooltipMessage = getTooltipMessage()
 
+  const buttonContent = (
+    <motion.div transition={{ duration: 0.2 }} whileTap={{ scale: isDisabled ? 1 : 0.98 }}>
+      <Button
+        cursor={isDisabled ? 'not-allowed' : 'pointer'}
+        isDisabled={isDisabled}
+        onClick={onClick}
+        variant="secondary"
+      >
+        <HStack spacing="sm">
+          <PlusCircle size={20} />
+          <Text color="font.dark" fontWeight="bold">
+            Add token
+          </Text>
+        </HStack>
+      </Button>
+    </motion.div>
+  )
+
   if (tooltipMessage) {
     return (
       <TooltipWithTouch hasArrow isDisabled={false} label={tooltipMessage}>
-        <Button
-          cursor={isDisabled ? 'not-allowed' : 'pointer'}
-          isDisabled={isDisabled}
-          onClick={onClick}
-          variant="secondary"
-        >
-          <HStack spacing="sm">
-            <PlusCircle size={20} />
-            <Text color="font.dark" fontWeight="bold">
-              Add token
-            </Text>
-          </HStack>
-        </Button>
+        {buttonContent}
       </TooltipWithTouch>
     )
   }
 
-  return (
-    <Button
-      cursor={isDisabled ? 'not-allowed' : 'pointer'}
-      isDisabled={isDisabled}
-      onClick={onClick}
-      variant="secondary"
-    >
-      <HStack spacing="sm">
-        <PlusCircle size={20} />
-        <Text color="font.dark" fontWeight="bold">
-          Add token
-        </Text>
-      </HStack>
-    </Button>
-  )
+  return buttonContent
 }
 
 function RemoveTokenButton({ onClick, isDisabled }: { onClick: () => void; isDisabled: boolean }) {
   return (
-    <Button color="font.secondary" isDisabled={isDisabled} onClick={onClick} variant="unstyled">
+    <Button
+      _focus={{ color: 'font.error' }}
+      _hover={{ color: 'font.error' }}
+      color="font.secondary"
+      isDisabled={isDisabled}
+      onClick={onClick}
+      variant="unstyled"
+    >
       <Trash2 size={16} />
     </Button>
   )
