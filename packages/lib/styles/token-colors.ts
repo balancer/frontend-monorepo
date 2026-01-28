@@ -141,7 +141,7 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x6eaf19b2fc24552925db245f9ff613157a7dbb4c': { from: '#00AEEC', to: '#61D5FF' }, // 'xUSD'
   },
   [GqlChain.Monad]: {
-    '0x3bd359c1119da7da1d913d1c4d2b7c461115433a': { from: '#F2F3F7', to: '#CECDFE' }, // 'WMON'
+    '0x3bd359c1119da7da1d913d1c4d2b7c461115433a': { from: '#6E54FF', to: '#DDD7FE' }, // 'WMON'
     '0x754704bc059f8c67012fed69bc8a327a5aafb603': { from: '#1075E2', to: '#62A8F4' }, // 'USDC'
     '0xe7cd86e13ac4309349f30b3435a9d337750fc82d': { from: '#27A17C', to: '#42EBB8' }, // 'USDT0'
     '0x10aeaf63194db8d453d4d85a06e5efe1dd0b5417': { from: '#00A3FF', to: '#99DAFF' }, // 'wstETH'
