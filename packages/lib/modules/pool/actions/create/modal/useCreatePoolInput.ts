@@ -20,6 +20,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     poolTokens,
     pauseManager,
     amplificationParameter,
+    poolCreator,
   } = poolCreationForm.getValues()
 
   if (!poolTokens[0]?.address || !poolTokens[1]?.address) {
@@ -61,6 +62,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     return {
       ...baseInput,
       poolType,
+      poolCreator,
       amplificationParameter: BigInt(amplificationParameter),
     }
   }
@@ -69,6 +71,7 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
     return {
       ...baseInput,
       poolType,
+      poolCreator,
       tokens: baseInput.tokens.map((token, index) => ({
         ...token,
         weight: parseUnits(poolTokens[index].weight, PERCENTAGE_DECIMALS),

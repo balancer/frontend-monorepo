@@ -78,12 +78,7 @@ export const validatePoolTokens = {
 }
 
 export const validatePoolSettings = {
-  pauseManager: (address: string) => {
-    if (!isAddress(address)) return 'Invalid address'
-    return true
-  },
-
-  swapFeeManager: (address: string) => {
+  poolRoleAccount: (address: string) => {
     if (!isAddress(address)) return 'Invalid address'
     return true
   },
