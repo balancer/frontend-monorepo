@@ -97,6 +97,7 @@ const networkConfig: NetworkConfig = {
     merkl: {
       claims: '0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae',
     },
+    signatureRegistry: '0x07b1a0bAb2BaB6FD4DeE2dDCc512B2725abABC55',
   },
   pools: convertHexToLowerCase({
     issues: {
