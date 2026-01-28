@@ -15,13 +15,15 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useReliquary } from '../ReliquaryProvider'
+import { useLevelUpStep } from '../hooks/useLevelUpStep'
+import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 
 type Props = {
   isOpen: boolean
   onClose(): void
   chain: GqlChain
   nextLevel: number
+  relicId: string
 }
 
 export function LevelUpModal({
@@ -29,10 +31,13 @@ export function LevelUpModal({
   onClose,
   chain,
   nextLevel,
+  relicId,
   ...rest
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
-  const { levelUpTransactionSteps, levelUpTxHash } = useReliquary()
+  const { step: levelUpStep } = useLevelUpStep(relicId)
+  const levelUpTransactionSteps = useTransactionSteps([levelUpStep], false)
+  const levelUpTxHash = levelUpTransactionSteps.lastTransaction?.result?.data?.transactionHash
 
   function handleOnClose() {
     levelUpTransactionSteps.resetTransactionSteps()
@@ -62,7 +67,11 @@ export function LevelUpModal({
             {isMobile && (
               <MobileStepTracker chain={chain} transactionSteps={levelUpTransactionSteps} />
             )}
-            <Card variant="modalSubSection">The next level is {nextLevel}!</Card>
+            <Card variant="modalSubSection">
+              {isSuccess
+                ? `Successfully levelled up to ${nextLevel - 1}.`
+                : `The next level is ${nextLevel}.`}
+            </Card>
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter

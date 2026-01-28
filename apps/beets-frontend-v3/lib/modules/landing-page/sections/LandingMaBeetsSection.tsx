@@ -118,7 +118,7 @@ export function LandingMaBeetsSection() {
             title="Add Liquidity"
           />
           <HowItWorksCard
-            description="Deposit your fBEETS to create a maBEETS position tied to a Relic NFT."
+            description="Deposit your fBEETS to create a maBEETS position tied to a relic NFT."
             image={<MaBeetsMintMabeetsSvg />}
             title="Mint maBEETS"
           />

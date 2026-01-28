@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, PropsWithChildren, createContext } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { GqlChain, GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'
@@ -7,32 +5,120 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useLevelUpStep } from './hooks/useLevelUpStep'
-import { ReliquaryPosition } from './reliquary.types'
-import { useClaimRewardsSteps } from './hooks/useClaimRewardsSteps'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { sumBy } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { useGetRelicPositionsOfOwner } from './hooks/useGetRelicPositionsOfOwner'
+import { useGetLevelInfo } from './hooks/useGetLevelInfo'
+import { useGetPendingRewards } from './hooks/useGetPendingRewards'
+
+// Export types for legacy compatibility
+export type ReliquaryFarmPosition = {
+  farmId: string
+  relicId: string
+  amount: string
+  entry: number
+  level: number
+}
+
+export type ReliquaryAddLiquidityMaturityImpact = {
+  oldMaturity: number
+  newMaturity: number
+  oldLevel: number
+  newLevel: number
+  oldLevelProgress: string
+  newLevelProgress: string
+  addLiquidityMaturityImpactTimeInMilliseconds: number
+  staysMax: boolean
+}
 
 const CHAIN = GqlChain.Sonic
 
 export function useReliquaryLogic() {
+  const { pool } = usePool()
   const { isConnected } = useUserAccount()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
   const [range, setRange] = useState<GqlPoolSnapshotDataRange>(GqlPoolSnapshotDataRange.ThirtyDays)
-  const [selectedRelic, setSelectedRelic] = useState<ReliquaryPosition | undefined>(undefined)
+  const { priceFor } = useTokens()
+
+  const networkConfig = getNetworkConfig(CHAIN)
 
   const disabledConditions: [boolean, string][] = [[!isConnected, LABELS.walletNotConnected]]
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
 
-  const { step: levelUpStep } = useLevelUpStep(CHAIN, selectedRelic?.relicId)
-  const levelUpTransactionSteps = useTransactionSteps([levelUpStep], false)
-  const levelUpTxHash = levelUpTransactionSteps.lastTransaction?.result?.data?.transactionHash
-  const levelUpTxConfirmed = levelUpTransactionSteps.lastTransactionConfirmed
+  // these values are always available on Sonic
+  const beetsAddress = networkConfig.tokens.addresses.beets!
+  const farmId = networkConfig.reliquary!.fbeets.farmId!.toString()
 
-  const { steps: claimRewardsSteps } = useClaimRewardsSteps(CHAIN, selectedRelic?.relicId)
-  const claimRewardsTransactionSteps = useTransactionSteps(claimRewardsSteps, false)
-  const claimRewardsTxHash =
-    claimRewardsTransactionSteps.lastTransaction?.result?.data?.transactionHash
-  const claimRewardsTxConfirmed = claimRewardsTransactionSteps.lastTransactionConfirmed
+  const relicPositionsOfOwnerQuery = useGetRelicPositionsOfOwner(CHAIN)
+
+  const {
+    relics: relicPositionsRaw = [],
+    isLoading: isLoadingRelicPositions,
+    refetch: refetchRelicPositions,
+  } = relicPositionsOfOwnerQuery
+
+  const relicPositions = relicPositionsRaw.map(position => ({
+    farmId: position.poolId,
+    relicId: position.relicId,
+    amount: position.amount,
+    entry: position.entry,
+    level: position.level,
+  }))
+
+  const levelInfoQuery = useGetLevelInfo(farmId, CHAIN)
+
+  const {
+    maturityThresholds: maturityThresholds = [],
+    isLoading: isLoadingMaturityThresholds,
+    refetch: refetchMaturityThresholds,
+  } = levelInfoQuery
+
+  const relicIds = relicPositions.map(relic => bn(relic.relicId).toNumber())
+  const beetsPerSecond = pool?.staking?.reliquary?.beetsPerSecond || '0'
+  const reliquaryLevels = pool?.staking?.reliquary?.levels || []
+
+  const weightedTotalBalance = sumBy(reliquaryLevels, level =>
+    bn(level.balance).times(level.allocationPoints).toNumber()
+  )
+
+  const relicPositionsForFarmId = relicPositions.filter(
+    position => position.farmId.toString() === farmId
+  )
+  const totalMaBeetsVP = sumBy(relicPositionsForFarmId, position => {
+    const boost = reliquaryLevels.find(level => level.level === position.level)
+
+    return bn(position.amount)
+      .times(bn(boost?.allocationPoints || 0).div(100))
+      .toNumber()
+  })
+
+  const pendingRewardsQuery = useGetPendingRewards({
+    chain: CHAIN,
+    farmIds: [farmId],
+    relicPositions,
+  })
+
+  const {
+    data: pendingRewardsData,
+    isLoading: isLoadingPendingRewards,
+    refetch: refetchPendingRewards,
+  } = pendingRewardsQuery
+
+  const beetsPrice = priceFor(beetsAddress, networkConfig.chain)
+
+  const totalPendingRewardsUSD = bn(pendingRewardsData?.rewards[0]?.amount || '0')
+    .times(beetsPrice)
+    .toNumber()
+
+  const pendingRewardsByRelicId = Object.fromEntries(
+    (pendingRewardsData?.relicRewards ?? []).map(reward => [reward.relicId, reward.amount])
+  )
+
+  const isLoading =
+    isLoadingRelicPositions || isLoadingMaturityThresholds || isLoadingPendingRewards
 
   return {
     chain: CHAIN,
@@ -42,14 +128,27 @@ export function useReliquaryLogic() {
     getValidationError,
     range,
     setRange,
-    selectedRelic,
-    setSelectedRelic,
-    levelUpTransactionSteps,
-    levelUpTxHash,
-    levelUpTxConfirmed,
-    claimRewardsTransactionSteps,
-    claimRewardsTxHash,
-    claimRewardsTxConfirmed,
+    relicPositions,
+    isLoadingRelicPositions,
+    isLoading,
+    maturityThresholds,
+    levelInfoQuery,
+    beetsPerSecond,
+    beetsPerDay: bn(beetsPerSecond).times(86400).toNumber(),
+    weightedTotalBalance,
+    reliquaryLevels,
+    relicIds,
+    relicPositionsForFarmId,
+    totalMaBeetsVP,
+    refetchRelicPositions,
+    refetchMaturityThresholds,
+    beetsPrice,
+    totalPendingRewardsUSD,
+    pendingRewardsData,
+    pendingRewardsQuery,
+    refetchPendingRewards,
+    pendingRewardsByRelicId,
+    beetsAddress,
   }
 }
 
@@ -57,9 +156,9 @@ export type Result = ReturnType<typeof useReliquaryLogic>
 export const ReliquaryContext = createContext<Result | null>(null)
 
 export function ReliquaryProvider({ children }: PropsWithChildren) {
-  const Reliquary = useReliquaryLogic()
+  const reliquary = useReliquaryLogic()
 
-  return <ReliquaryContext.Provider value={Reliquary}>{children}</ReliquaryContext.Provider>
+  return <ReliquaryContext.Provider value={reliquary}>{children}</ReliquaryContext.Provider>
 }
 
 export const useReliquary = (): Result => useMandatoryContext(ReliquaryContext, 'Reliquary')
