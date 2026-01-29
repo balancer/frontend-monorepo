@@ -7,9 +7,13 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { minutesToMilliseconds } from 'date-fns'
 import { useState } from 'react'
+import { WRAPPER_TOKENS } from './wrapper-tokens'
 
 const MERKL_API_URL = 'https://api.merkl.xyz/v4'
-export const CHAINS = [1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */]
+export const CHAINS = [
+  1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */, 10 /* Optimism*/,
+]
+const wrapperTokens = WRAPPER_TOKENS.map(address => address.toLowerCase())
 
 export type RecoveredTokenClaim = {
   amount: HumanTokenAmountWithSymbol
@@ -47,7 +51,10 @@ export function useRecoveredFunds() {
 
   const claims =
     !result.isLoading && result.data
-      ? result.data.flatMap(chain => chain.rewards).map(toRecoveredTokenClaim)
+      ? result.data
+          .flatMap(chain => chain.rewards)
+          .map(toRecoveredTokenClaim)
+          .filter(claim => wrapperTokens.includes(claim.amount.tokenAddress.toLowerCase()))
       : []
 
   return {
