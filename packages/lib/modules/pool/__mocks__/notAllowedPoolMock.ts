@@ -1,8 +1,4 @@
-import {
-  GqlChain,
-  GqlPoolNestingType,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
 
 export const notAllowedPoolMock: Pool = {
@@ -44,7 +40,6 @@ export const notAllowedPoolMock: Pool = {
     stakedBalances: [],
     __typename: 'GqlPoolUserBalance',
   },
-  nestingType: GqlPoolNestingType.NoNesting,
   poolTokens: [
     {
       id: '0x241df159b03a90455edee61625655fc0ea5fa3dd0002000000000000000003fc-0x2aeb3acbeb4c604451c560d89d88d95d54c2c2cc',

@@ -47,40 +47,7 @@ export const gyroPoolMock: GqlPoolElement = {
     fees24hAtlTimestamp: 1674172800,
     yieldCapture24h: '0.00',
     yieldCapture48h: '0.00',
-    apr: {
-      hasRewardApr: false,
-      thirdPartyApr: { total: '0' },
-      nativeRewardApr: { total: '0' },
-      swapApr: '0.001938225906294751',
-      apr: { total: '0.001938225906294751' },
-      items: [
-        {
-          id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b-swap-apr',
-          title: 'Swap fees APR',
-          apr: { total: '0.001938225906294751' },
-          subItems: [],
-        },
-      ],
-    },
   },
-  displayTokens: [
-    {
-      id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b-0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-      address: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-      name: 'USD Coin (PoS)',
-      weight: null,
-      symbol: 'USDC',
-      nestedTokens: null,
-    },
-    {
-      id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b-0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
-      address: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
-      name: '(PoS) Dai Stablecoin',
-      weight: null,
-      symbol: 'DAI',
-      nestedTokens: null,
-    },
-  ],
   staking: null,
   userBalance: {
     stakedBalance: '0',
@@ -107,7 +74,6 @@ export const gyroPoolMock: GqlPoolElement = {
   v: '',
   w: '',
   z: '',
-  nestingType: 'NO_NESTING',
   poolTokens: [
     {
       id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b-0x2791bca1f2de4661ed88a30c99a7a9449aa84174',

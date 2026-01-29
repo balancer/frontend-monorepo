@@ -56,7 +56,6 @@ export const partialBoostedSepoliaWethStataUsdtMock = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'NO_NESTING',
   poolTokens: [
     {
       id: '0x445a49d1ad280b68026629fe029ed0fbef549a94-0x7b79995e5f793a07bc00c21412e50ecae098e7f9',

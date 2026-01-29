@@ -145,7 +145,6 @@ export const osETH_wETH_BPTMock = {
     stakedBalances: [],
   },
   amp: '200.0',
-  nestingType: 'NO_NESTING',
   bptPriceRate: '1.017916643917343006',
   poolTokens: [
     {

@@ -1,16 +1,14 @@
-query GetAppGlobalPollingData {
-  tokenGetCurrentPrices {
+query GetAppGlobalPollingData($chains: [GqlChain!]!, $chain: GqlChain!) {
+  tokenGetCurrentPrices(chains: $chains) {
     price
     address
   }
-  protocolMetricsChain {
+  protocolMetricsChain(chain: $chain) {
     totalLiquidity
     poolCount
     swapFee24h
     swapVolume24h
   }
-  blocksGetBlocksPerDay
-  blocksGetAverageBlockTime
 }
 
 query GetTokens($chains: [GqlChain!]!) {
@@ -44,8 +42,8 @@ query GetTokenPrices($chains: [GqlChain!]!) {
   }
 }
 
-query GetTokensDynamicData($addresses: [String!]!) {
-  dynamicData: tokenGetTokensDynamicData(addresses: $addresses) {
+query GetTokensDynamicData($addresses: [String!]!, $chain: GqlChain!) {
+  dynamicData: tokenGetTokensDynamicData(addresses: $addresses, chain: $chain) {
     ath
     atl
     fdv
@@ -62,9 +60,4 @@ query GetTokensDynamicData($addresses: [String!]!) {
     tokenAddress
     updatedAt
   }
-}
-
-query GetBlocksPerDay {
-  blocksPerDay: blocksGetBlocksPerDay
-  avgBlockTime: blocksGetAverageBlockTime
 }

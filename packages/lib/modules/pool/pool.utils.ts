@@ -4,7 +4,6 @@ import {
   GqlChain,
   GqlPoolAprItem,
   GqlPoolAprItemType,
-  GqlPoolComposableStableNested,
   GqlPoolTokenDetail,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -240,11 +239,8 @@ export const poolMouseEnterHandler = (
   router.prefetch(poolPath)
 }
 
-export function isComposableStablePool(pool: GetPoolQuery['pool'] | GqlPoolComposableStableNested) {
-  return (
-    pool.__typename === 'GqlPoolComposableStable' ||
-    pool.__typename == 'GqlPoolComposableStableNested'
-  )
+export function isComposableStablePool(pool: GetPoolQuery['pool']) {
+  return pool.__typename === 'GqlPoolComposableStable'
 }
 
 export function getProportionalExitAmountsForBptIn(

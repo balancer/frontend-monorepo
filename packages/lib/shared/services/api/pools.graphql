@@ -27,34 +27,6 @@ query GetPools(
     hook {
       ...Hook
     }
-    poolTokens {
-      id
-      address
-      symbol
-      weight
-      name
-      canUseBufferForSwaps
-      useWrappedForAddRemove
-      useUnderlyingForAddRemove
-      logoURI
-      nestedPool {
-        id
-        address
-        symbol
-        name
-        tokens {
-          id
-          address
-          symbol
-          weight
-          name
-          canUseBufferForSwaps
-          useWrappedForAddRemove
-          useUnderlyingForAddRemove
-          logoURI
-        }
-      }
-    }
     dynamicData {
       totalLiquidity
       lifetimeVolume
