@@ -227,3 +227,17 @@ export const plasmaTokenBalances: TokenBalance[] = [
     decimals: 6,
   },
 ]
+
+export const xlayerTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x4ae46a509f6b1d9056937ba4500cb143933d2dc8', // USDG
+    value: '50000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0x779ded0c9e1022225f8e0630b35a9b54be713736', // USDT0
+    value: '50000',
+    decimals: 6,
+    slot: 51n,
+  },
+]
