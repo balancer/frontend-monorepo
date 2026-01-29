@@ -64,8 +64,45 @@ export class CreatePoolPage {
     private config: PoolCreationConfig = POOL_CREATION_CONFIGS[0],
   ) {}
 
+  get isReClamm() {
+    return this.config.type === PoolType.ReClamm
+  }
+
+  get isGyroEclp() {
+    return this.config.type === PoolType.GyroE
+  }
+
+  get isWeighted() {
+    return this.config.type === PoolType.Weighted
+  }
+
   async goToPage() {
     await this.page.goto(this.urls.base)
+  }
+
+  async selectToken(tokenName: string) {
+    await button(this.page, 'Select token').first().click()
+    const modalHeader = this.page.getByText('Select a token: Ethereum', { exact: true })
+    await modalHeader.waitFor({ state: 'visible' })
+    const modal = this.page.getByRole('dialog').filter({ has: modalHeader })
+    await modal
+      .getByRole('group')
+      .filter({ has: this.page.getByText(tokenName, { exact: true }) })
+      .first()
+      .click()
+  }
+
+  async fillTokenAmounts() {
+    const shouldOnlyFillOneAmount = this.isReClamm || this.isGyroEclp
+
+    if (shouldOnlyFillOneAmount) {
+      await this.page.getByLabel('Token 1').fill(this.config.tokens[0].amount)
+    } else {
+      for (let i = 0; i < this.config.tokens.length; i++) {
+        const tokenAmount = this.config.tokens[i].amount
+        await this.page.getByLabel(`Token ${i + 1}`).fill(tokenAmount)
+      }
+    }
   }
 
   async typeStep({ continue: shouldContinue = false } = {}) {
@@ -80,18 +117,6 @@ export class CreatePoolPage {
       .click()
 
     if (shouldContinue) await clickButton(this.page, 'Next')
-  }
-
-  async selectToken(tokenName: string) {
-    await button(this.page, 'Select token').first().click()
-    const modalHeader = this.page.getByText('Select a token: Ethereum', { exact: true })
-    await modalHeader.waitFor({ state: 'visible' })
-    const modal = this.page.getByRole('dialog').filter({ has: modalHeader })
-    await modal
-      .getByRole('group')
-      .filter({ has: this.page.getByText(tokenName, { exact: true }) })
-      .first()
-      .click()
   }
 
   async tokensStep({ continue: shouldContinue = false } = {}) {
@@ -132,21 +157,15 @@ export class CreatePoolPage {
       .filter({ hasText: 'I accept the Risks and Terms' })
       .locator('.chakra-checkbox__control')
 
-    if (this.config.type === PoolType.ReClamm) {
+    if (this.isReClamm) {
       await acceptRisksCheckbox.click()
       await clickButton(this.page, 'Create Pool')
       await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
-      await this.page.getByLabel('Token 1').fill(this.config.tokens[0].amount)
     }
 
-    for (let i = 0; i < this.config.tokens.length; i++) {
-      const tokenAmount = this.config.tokens[i].amount
-      if (tokenAmount) {
-        await this.page.getByLabel(`Token ${i + 1}`).fill(tokenAmount)
-      }
-    }
+    await this.fillTokenAmounts()
 
-    if (this.config.type === PoolType.Weighted) {
+    if (this.isWeighted) {
       await this.page
         .locator('label')
         .filter({ hasText: 'I understand that I will' })
@@ -154,11 +173,11 @@ export class CreatePoolPage {
         .click()
     }
 
-    if (this.config.type !== PoolType.ReClamm) await acceptRisksCheckbox.click()
+    if (!this.isReClamm) await acceptRisksCheckbox.click()
   }
 
   async transactionSteps() {
-    if (this.config.type === PoolType.ReClamm) {
+    if (this.isReClamm) {
       await clickButton(this.page, 'Initialize Pool')
     } else {
       await clickButton(this.page, 'Create Pool')
