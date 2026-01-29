@@ -39,7 +39,8 @@ export function SaleTokenAmountInput({
       return `Your wallet has no ${launchToken.symbol}. You will need some to seed this pool and sell it during the LBP`
     }
 
-    if (bn(balanceData.value).shiftedBy(balanceData.decimals).lt(value)) {
+    // TODO: do we need this? TokenInput alread has 'Exceeds balance'
+    if (bn(formatUnits(balanceData.value, balanceData.decimals)).lt(value)) {
       return `Your wallet does not have enough ${launchToken.symbol}`
     }
 
@@ -59,7 +60,9 @@ export function SaleTokenAmountInput({
             address={launchToken.address}
             apiToken={launchToken}
             chain={selectedChain}
-            customUserBalance={formatUnits(balanceData?.value || 0n, launchToken.decimals)}
+            customUserBalance={
+              balanceData ? formatUnits(balanceData.value, balanceData.decimals) : undefined
+            }
             id="sale-token-amount"
             onChange={e => field.onChange(e.currentTarget.value)}
             priceMessage={`Price: ${launchTokenPriceFiat ? toCurrency(launchTokenPriceFiat) : 'N/A'}`}

@@ -36,9 +36,10 @@ export function FixedLbpTokenAmountInputs() {
     (token): token is NonNullable<typeof token> => Boolean(token)
   )
 
-  const launchTokenPriceFiat = collateralToken
-    ? bn(launchTokenPrice).times(priceFor(collateralToken.address, collateralToken.chain))
-    : '0'
+  const launchTokenPriceFiat =
+    collateralToken && launchTokenPrice
+      ? bn(launchTokenPrice).times(priceFor(collateralToken.address, collateralToken.chain))
+      : '0'
 
   const totalValue =
     collateralToken && saleTokenAmount ? bn(saleTokenAmount).times(launchTokenPriceFiat) : '0'
@@ -174,7 +175,7 @@ function LaunchTokenPriceInput({
           {errors.launchTokenPrice.message}
         </Text>
       )}
-      {launchTokenPriceFiat && (
+      {bn(launchTokenPriceFiat).gt(0) && (
         <Text color="font.secondary" fontSize="sm">
           At current prices, 1 {launchTokenSymbol} will be sold for{' '}
           {toCurrency(launchTokenPriceFiat)}

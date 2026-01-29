@@ -13,6 +13,7 @@ import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { format, parseISO } from 'date-fns'
 import { isSaleStartValid, saleStartsSoon } from './helpers'
 import { SaleTokenAmountInput } from './SaleTokenAmountInput'
+import { formatUnits } from 'viem'
 
 export function DynamicLbpTokenAmountInputs() {
   const { getToken } = useTokens()
@@ -102,7 +103,8 @@ function CollateralTokenAmountInput({
       return `Your wallet has no ${collateralTokenSymbol}. You need some to seed this pool.\nSuggested seed liquidity amount: $5k+`
     }
 
-    if (bn(balance.amount).shiftedBy(balance.decimals).lt(value)) {
+    // TODO: do we need this? TokenInput alread has 'Exceeds balance'
+    if (bn(formatUnits(balance.amount, balance.decimals)).lt(value)) {
       return `Your wallet does not have enough ${collateralTokenSymbol}`
     }
 
