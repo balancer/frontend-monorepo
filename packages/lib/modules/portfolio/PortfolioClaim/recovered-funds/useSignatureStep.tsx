@@ -67,17 +67,19 @@ export function useSignatureStep(signatureChain: number) {
       await sdkClient.writeContract(request)
 
       await refetchSignature()
-      setIsSigning(false)
+      //setIsSigning(false)
     } catch (err) {
-      console.log(err)
       if (err instanceof BaseError) {
         const revertError = err.walk(err => err instanceof ContractFunctionRevertedError)
         if (revertError instanceof ContractFunctionRevertedError) {
-          setStoreSignatureError(revertError.data?.errorName ?? '')
+          setStoreSignatureError(revertError.data?.errorName ?? err.shortMessage)
+          setIsSigning(false)
           return
         }
       }
+
       setStoreSignatureError((err as Error).message)
+      setIsSigning(false)
     }
   }
 
@@ -98,7 +100,7 @@ export function useSignatureStep(signatureChain: number) {
 
         {!shouldChangeNetwork && isConnected ? (
           <Button
-            isDisabled={!isConnected || !hasAcceptedDisclaimer || isSigning}
+            isDisabled={!isConnected || !hasAcceptedDisclaimer || (isSigning && !hasAlreadySigned)}
             onClick={() => {
               setIsSigning(true)
               storeSignature()
@@ -107,7 +109,9 @@ export function useSignatureStep(signatureChain: number) {
             variant="primary"
             w="full"
           >
-            <LabelWithIcon icon="sign">{isSigning ? labels.confirming : labels.init}</LabelWithIcon>
+            <LabelWithIcon icon="sign">
+              {isSigning && !hasAlreadySigned ? labels.confirming : labels.init}
+            </LabelWithIcon>
           </Button>
         ) : null}
       </VStack>
