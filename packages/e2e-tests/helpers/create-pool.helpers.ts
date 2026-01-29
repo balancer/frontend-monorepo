@@ -154,7 +154,7 @@ export class CreatePoolPage {
         .click()
     }
 
-    if (this.config.type !== PoolType.ReClamm) acceptRisksCheckbox.click()
+    if (this.config.type !== PoolType.ReClamm) await acceptRisksCheckbox.click()
   }
 
   async transactionSteps() {
@@ -165,9 +165,8 @@ export class CreatePoolPage {
       await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
     }
 
-    const signButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
-    const signApprovalsButton = button(this.page, signButtonText)
-
+    const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
+    const signApprovalsButton = button(this.page, signApprovalsButtonText)
     const firstApproveButton = button(this.page, `Approve ${this.config.tokens[0].symbol}`)
 
     // after first pool creation test runs, some tokens may have already been approved
