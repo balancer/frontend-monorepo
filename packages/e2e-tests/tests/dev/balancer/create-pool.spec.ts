@@ -2,7 +2,7 @@ import { clickButton } from '@/helpers/user.helpers'
 import { POOL_CREATION_CONFIGS } from '@/helpers/create-pool.helpers'
 import { test, expect } from './create-pool.fixture'
 
-test.describe('Can create each pool type', () => {
+test.describe('Create each pool type', () => {
   for (const config of POOL_CREATION_CONFIGS) {
     test(config.type, async ({ createPoolWithConfig }) => {
       const createPool = await createPoolWithConfig(config)
@@ -16,7 +16,7 @@ test.describe('Can create each pool type', () => {
   }
 })
 
-test.describe('Can reset form on each step', () => {
+test.describe('Reset form on each step', () => {
   test('type', async ({ page, createPool }) => {
     await page.getByText('Plasma').click()
     await page.getByText('Weighted', { exact: true }).click()
@@ -50,7 +50,7 @@ test.describe('Can reset form on each step', () => {
 })
 
 test.describe('Build popover', () => {
-  test('Sets form state for protocol', async ({ page, createPool }) => {
+  test('protocol link sets form state for protocol', async ({ page, createPool }) => {
     const buildLink = page.getByText('Build', { exact: true })
     await expect(buildLink).toBeVisible()
     await buildLink.click()
@@ -60,7 +60,7 @@ test.describe('Build popover', () => {
     await expect(page.getByText('CoW AMM: 50/50')).toBeVisible()
   })
 
-  test.describe('If pool creation in progress', () => {
+  test.describe('When pool creation already in progress', () => {
     test('can continue', async ({ page, createPoolInProgress }) => {
       await clickButton(page, 'Continue set up')
       // await expect(page).toHaveURL(createPoolInProgress.urls.tokens) // fix me in useFormSteps hook

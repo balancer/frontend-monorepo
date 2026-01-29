@@ -21,6 +21,13 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
     ],
   },
   {
+    type: PoolType.StableSurge,
+    tokens: [
+      { symbol: 'USDC', amount: '10' },
+      { symbol: 'GHO', amount: '10' },
+    ],
+  },
+  {
     type: PoolType.Weighted,
     tokens: [
       { symbol: 'AAVE', amount: '1' },
@@ -32,6 +39,13 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
     tokens: [
       { symbol: 'wstETH', amount: '1' },
       { symbol: 'fwstETH', amount: undefined },
+    ],
+  },
+  {
+    type: PoolType.ReClamm,
+    tokens: [
+      { symbol: 'WETH', amount: '1' },
+      { symbol: 'USDC', amount: undefined },
     ],
   },
 ]
@@ -113,6 +127,18 @@ export class CreatePoolPage {
     await expect(this.page.getByText('Seed initial pool liquidity')).toBeVisible()
     await expect(button(this.page, 'Create Pool')).toBeDisabled()
 
+    const acceptRisksCheckbox = this.page
+      .locator('label')
+      .filter({ hasText: 'I accept the Risks and Terms' })
+      .locator('.chakra-checkbox__control')
+
+    if (this.config.type === PoolType.ReClamm) {
+      await acceptRisksCheckbox.click()
+      await clickButton(this.page, 'Create Pool')
+      await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
+      await this.page.getByLabel('Token 1').fill(this.config.tokens[0].amount)
+    }
+
     for (let i = 0; i < this.config.tokens.length; i++) {
       const tokenAmount = this.config.tokens[i].amount
       if (tokenAmount) {
@@ -120,7 +146,7 @@ export class CreatePoolPage {
       }
     }
 
-    if (this.config.type === 'Weighted') {
+    if (this.config.type === PoolType.Weighted) {
       await this.page
         .locator('label')
         .filter({ hasText: 'I understand that I will' })
@@ -128,25 +154,36 @@ export class CreatePoolPage {
         .click()
     }
 
-    await this.page
-      .locator('label')
-      .filter({ hasText: 'I accept the Risks and Terms' })
-      .locator('.chakra-checkbox__control')
-      .click()
+    if (this.config.type !== PoolType.ReClamm) acceptRisksCheckbox.click()
   }
 
   async transactionSteps() {
-    await clickButton(this.page, 'Create Pool')
-    await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
-    for (const token of this.config.tokens) {
-      await clickButton(this.page, `Approve ${token.symbol}`)
-      await expect(this.page.getByText(`${token.symbol} approved!`)).toBeVisible()
+    if (this.config.type === PoolType.ReClamm) {
+      await clickButton(this.page, 'Initialize Pool')
+    } else {
+      await clickButton(this.page, 'Create Pool')
+      await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
     }
-    await clickButton(
-      this.page,
-      `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`,
-    )
+
+    const signButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
+    const signApprovalsButton = button(this.page, signButtonText)
+
+    const firstApproveButton = button(this.page, `Approve ${this.config.tokens[0].symbol}`)
+
+    // after first pool creation test runs, some tokens may have already been approved
+    await firstApproveButton.or(signApprovalsButton).waitFor()
+
+    for (const token of this.config.tokens) {
+      const approveButton = button(this.page, `Approve ${token.symbol}`)
+      if (await approveButton.isVisible()) {
+        await approveButton.click()
+        await expect(this.page.getByText(`${token.symbol} approved!`)).toBeVisible()
+      }
+    }
+
+    await signApprovalsButton.click()
     await clickButton(this.page, 'Seed pool liquidity')
+
     await expect(button(this.page, 'View pool page')).toBeVisible()
     await expect(button(this.page, 'Create another pool')).toBeVisible()
   }
