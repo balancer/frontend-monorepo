@@ -130,6 +130,7 @@ export function useHydrateLbpForm() {
       const saleStructureFormValues: SaleStructureForm = {
         selectedChain: params.chain,
         launchTokenAddress: projectToken.result,
+        saleType: '',
         collateralTokenAddress: reserveToken.result,
         saleTokenAmount: '',
         collateralTokenAmount: '',

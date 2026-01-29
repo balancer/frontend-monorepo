@@ -6,6 +6,11 @@ export enum UserActions {
   BUY_ONLY = 'buy_only',
 }
 
+export enum SaleType {
+  DYNAMIC_PRICE_LBP = 'dynamic_price_lbp',
+  FIXED_PRICE_LBP = 'fixed_price_lbp',
+}
+
 export enum WeightAdjustmentType {
   LINEAR_90_10 = 'linear_90_10',
   LINEAR_90_50 = 'linear_90_50',
@@ -15,6 +20,7 @@ export enum WeightAdjustmentType {
 export type SaleStructureForm = {
   selectedChain: GqlChain
   launchTokenAddress: string
+  saleType: SaleType | ''
   startDateTime: string
   endDateTime: string
   collateralTokenAddress: string

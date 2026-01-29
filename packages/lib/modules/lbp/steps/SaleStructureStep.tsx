@@ -50,6 +50,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
 import { useWatch, useFormState } from 'react-hook-form'
+import { SaleTypeInput } from './sale-structure/SaleTypeInput'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -113,6 +114,7 @@ export function SaleStructureStep() {
             </Heading>
 
             <VStack align="start" spacing="lg" w="full">
+              <SaleTypeInput control={control} />
               <NetworkSelectInput chains={supportedChains} control={control} />
               <LaunchTokenAddressInput
                 chainId={selectedChain}

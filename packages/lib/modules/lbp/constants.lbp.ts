@@ -15,6 +15,7 @@ export const LBP_FORM_STEPS: FormStep[] = [
 export const INITIAL_SALE_STRUCTURE: SaleStructureForm = {
   selectedChain: PROJECT_CONFIG.defaultNetwork,
   launchTokenAddress: '',
+  saleType: '',
   userActions: UserActions.BUY_AND_SELL,
   fee: 1.0,
   startDateTime: '',
