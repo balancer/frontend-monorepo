@@ -141,6 +141,7 @@ export function useHydrateLbpForm() {
         fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
         startDateTime: formatLbpTimestamp(lbpImmutableData.result.startTime),
         endDateTime: formatLbpTimestamp(lbpImmutableData.result.endTime),
+        launchTokenPrice: '',
       }
 
       saleStructureForm.reset(saleStructureFormValues)

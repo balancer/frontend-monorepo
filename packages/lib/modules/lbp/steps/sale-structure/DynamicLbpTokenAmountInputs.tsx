@@ -54,12 +54,18 @@ export function DynamicLbpTokenAmountInputs() {
               </Alert>
             )}
           </VStack>
-          <SaleTokenAmountInput
-            control={control}
-            errors={errors}
-            launchToken={launchToken}
-            selectedChain={selectedChain}
-          />
+          <VStack align="start" w="full">
+            <SaleTokenAmountInput
+              control={control}
+              errors={errors}
+              launchToken={launchToken}
+              selectedChain={selectedChain}
+              title="Sale token"
+            />
+            <Text color="font.secondary" fontSize="sm">
+              This is the max amount of tokens that can be sold during the LBP
+            </Text>
+          </VStack>
           <CollateralTokenAmountInput
             collateralTokenAddress={collateralTokenAddress}
             collateralTokenSymbol={collateralToken?.symbol || ''}
@@ -125,15 +131,7 @@ function CollateralTokenAmountInput({
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
-      <Text
-        _groupFocusWithin={{ opacity: '1' }}
-        _groupHover={{ opacity: '1' }}
-        fontSize="sm"
-        opacity="0.5"
-        pt="xs"
-        transition="opacity 0.2s var(--ease-out-cubic)"
-        variant="secondary"
-      >
+      <Text color="font.secondary" fontSize="sm">
         Add $5k+ of the collateral token to ensure a smooth start.
       </Text>
       {errors.collateralTokenAmount && (

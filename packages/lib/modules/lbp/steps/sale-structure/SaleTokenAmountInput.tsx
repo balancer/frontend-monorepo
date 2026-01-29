@@ -3,9 +3,10 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { SaleStructureForm } from '@repo/lib/modules/lbp/lbp.types'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
+import { bn, isGreaterThanZeroValidation, Numberish } from '@repo/lib/shared/utils/numbers'
 import { Control, FieldErrors, Controller } from 'react-hook-form'
 import { formatUnits } from 'viem'
 
@@ -14,12 +15,18 @@ export function SaleTokenAmountInput({
   errors,
   selectedChain,
   launchToken,
+  launchTokenPriceFiat,
+  title,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
   launchToken: CustomToken
+  launchTokenPriceFiat?: Numberish
+  title: string
 }) {
+  const { toCurrency } = useCurrency()
+
   const { balanceData, isLoading } = useUserBalance({
     chainId: getChainId(selectedChain),
     token: launchToken.address,
@@ -40,9 +47,9 @@ export function SaleTokenAmountInput({
   }
 
   return (
-    <VStack align="start" data-group w="full">
+    <VStack align="start" w="full">
       <Text as="label" color="font.primary" htmlFor="sale-token-amount">
-        Sale token
+        {title}
       </Text>
       <Controller
         control={control}
@@ -55,7 +62,7 @@ export function SaleTokenAmountInput({
             customUserBalance={formatUnits(balanceData?.value || 0n, launchToken.decimals)}
             id="sale-token-amount"
             onChange={e => field.onChange(e.currentTarget.value)}
-            priceMessage="Price: N/A"
+            priceMessage={`Price: ${launchTokenPriceFiat ? toCurrency(launchTokenPriceFiat) : 'N/A'}`}
             value={field.value}
           />
         )}
@@ -64,17 +71,6 @@ export function SaleTokenAmountInput({
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
-      <Text
-        _groupFocusWithin={{ opacity: '1' }}
-        _groupHover={{ opacity: '1' }}
-        fontSize="sm"
-        opacity="0.5"
-        pt="xs"
-        transition="opacity 0.2s var(--ease-out-cubic)"
-        variant="secondary"
-      >
-        This is the max amount of tokens that can be sold during the LBP
-      </Text>
       {errors.saleTokenAmount && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full">
           {errors.saleTokenAmount.message}

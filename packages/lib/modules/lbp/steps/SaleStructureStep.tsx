@@ -46,6 +46,7 @@ import {
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { LbpFormAction } from '../LbpFormAction'
 import { DynamicLbpTokenAmountInputs } from './sale-structure/DynamicLbpTokenAmountInputs'
+import { FixedLbpTokenAmountInputs } from './sale-structure/FixedLbpTokenAmountInputs'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
@@ -190,7 +191,7 @@ export function SaleStructureStep() {
           </>
         )}
         {isDynamicSale && <DynamicLbpTokenAmountInputs />}
-        {isFixedSale && <Text>TBA</Text>}
+        {isFixedSale && <FixedLbpTokenAmountInputs />}
         <Divider />
         <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
       </VStack>
