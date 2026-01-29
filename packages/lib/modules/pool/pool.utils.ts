@@ -44,6 +44,7 @@ export enum ChainSlug {
   Sonic = 'sonic',
   HyperEVM = 'hyperevm',
   Plasma = 'plasma',
+  Monad = 'monad',
 }
 
 // Maps GraphQL chain enum to URL slug
@@ -63,6 +64,7 @@ export const chainToSlugMap: Partial<Record<GqlChainValues, ChainSlug>> = {
   [GqlChain.Sonic]: ChainSlug.Sonic,
   [GqlChain.Hyperevm]: ChainSlug.HyperEVM,
   [GqlChain.Plasma]: ChainSlug.Plasma,
+  [GqlChain.Monad]: ChainSlug.Monad,
 }
 
 export function getChainSlug(chainSlug: ChainSlug): GqlChain {

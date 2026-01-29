@@ -227,3 +227,20 @@ export const plasmaTokenBalances: TokenBalance[] = [
     decimals: 6,
   },
 ]
+
+export const monadTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x3bd359c1119da7da1d913d1c4d2b7c461115433a', // WMON
+    value: '10000',
+  },
+  {
+    tokenAddress: '0x754704bc059f8c67012fed69bc8a327a5aafb603', // USDC
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0x0555e30da8f98308edb960aa94c0db47230d2b9c', // WBTC
+    value: '10',
+    decimals: 8,
+  },
+]
