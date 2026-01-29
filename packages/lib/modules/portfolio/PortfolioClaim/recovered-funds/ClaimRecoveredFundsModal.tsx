@@ -46,6 +46,7 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
 
   const closeModal = () => {
     redirectToPortfolioPage()
+    steps.resetTransactionSteps()
     onClose()
   }
 
