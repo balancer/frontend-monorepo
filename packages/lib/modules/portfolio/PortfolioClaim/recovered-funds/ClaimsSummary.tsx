@@ -52,7 +52,7 @@ export function ClaimsSummary({
 
       <Checkbox
         alignItems="flex-start"
-        isChecked={hasAcceptedDisclaimer}
+        isChecked={hasAcceptedDisclaimer || signatureStep?.isComplete()}
         isDisabled={signatureStep?.isComplete()}
         onChange={e => setHasAcceptedDisclaimer(e.target.checked)}
         size="lg"
