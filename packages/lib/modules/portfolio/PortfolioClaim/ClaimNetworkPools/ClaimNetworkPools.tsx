@@ -129,7 +129,7 @@ export function ClaimNetworkPools() {
           Claimable incentives
         </Heading>
 
-        {hasRecoveredFunds && (
+        {isBalancer && hasRecoveredFunds && (
           <BalAlert
             content="Claim your share of recovered funds from the November 2025 security incident affecting some v2 Composable Stable pools."
             status="warning"

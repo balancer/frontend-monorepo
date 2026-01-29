@@ -25,7 +25,7 @@ import {
 } from './abi/beets/generated'
 import { LiquidityGaugeV5Abi } from './abi/LiquidityGaugeV5Abi'
 import { permit2Abi } from '@balancer/sdk'
-import { merklClaimsAbi } from './abi/merkAbi'
+import { merklClaimsAbi } from './abi/merklClaimsAbi'
 
 export const AbiMap = {
   'balancer.vaultV2': balancerV2VaultAbi,
