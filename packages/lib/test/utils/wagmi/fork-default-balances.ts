@@ -241,5 +241,6 @@ export const monadTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0x0555e30da8f98308edb960aa94c0db47230d2b9c', // WBTC
     value: '10',
+    decimals: 8,
   },
 ]
