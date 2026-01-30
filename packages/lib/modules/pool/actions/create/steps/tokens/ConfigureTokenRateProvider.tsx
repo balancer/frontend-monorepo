@@ -33,7 +33,8 @@ export function ConfigureTokenRateProvider({
   })
   const formState = useFormState({ control: poolCreationForm.control })
 
-  if (!poolTokens[tokenIndex].address) return null
+  // Early return if token doesn't exist or has no address
+  if (!poolTokens?.[tokenIndex] || !poolTokens[tokenIndex].address) return null
 
   const { rateProvider: currentRateProvider, paysYieldFees } = poolTokens[tokenIndex]
 
@@ -58,7 +59,10 @@ export function ConfigureTokenRateProvider({
 
     updatePoolToken(tokenIndex, { rateProvider, paysYieldFees })
     // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above)
-    poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
+    // Only trigger if token still exists
+    if (poolTokens[tokenIndex]) {
+      poolCreationForm.trigger(`poolTokens.${tokenIndex}.rateProvider`)
+    }
   }
 
   const isCustomRateProvider = rateProviderRadioValue === RateProviderOption.Custom
