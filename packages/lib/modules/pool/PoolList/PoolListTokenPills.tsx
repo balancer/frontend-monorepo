@@ -66,12 +66,12 @@ function WeightedTokenPills({
 } & BadgeProps) {
   return (
     <Wrap spacing="xs">
-      {tokens.map(token => {
+      {tokens.map((token, index) => {
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
 
         return (
           <Badge
-            key={token.address}
+            key={`${token.address}-${index}`}
             {...badgeProps}
             alignItems="center"
             bg="background.level2"
