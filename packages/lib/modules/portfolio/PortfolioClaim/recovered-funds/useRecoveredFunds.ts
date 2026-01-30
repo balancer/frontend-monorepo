@@ -11,7 +11,7 @@ import { WRAPPER_TOKENS } from './wrapper-tokens'
 
 const MERKL_API_URL = 'https://api.merkl.xyz/v4'
 export const CHAINS = [
-  1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */, 10 /* Optimism*/,
+  1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */, 10 /* Optimism */,
 ]
 const wrapperTokens = WRAPPER_TOKENS.map(address => address.toLowerCase())
 
@@ -57,8 +57,10 @@ export function useRecoveredFunds() {
           .filter(claim => wrapperTokens.includes(claim.amount.tokenAddress.toLowerCase()))
       : []
 
+  const hasBeenClaimed = claims.every(claim => claim.rawAmount === claim.claimedAmount)
+
   return {
-    hasRecoveredFunds: claims.length > 0,
+    hasRecoveredFunds: claims.length > 0 && !hasBeenClaimed,
     refetchClaims: (chainId: number) => {
       setLastClaimedChain(chainId)
       result.refetch()

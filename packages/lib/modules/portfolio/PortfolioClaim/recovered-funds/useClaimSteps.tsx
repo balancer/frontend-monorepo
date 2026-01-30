@@ -20,7 +20,7 @@ export function useClaimSteps(claims: RecoveredTokenClaim[]) {
   return CHAINS.map(chainId => {
     const chainClaims = claims.filter(claim => claim.chainId === chainId)
     if (chainClaims.length === 0) return undefined
-    const claimData = buildClaimData(chainClaims)
+    const claimData = buildClaimData(userAddress, chainClaims)
 
     const labels = getLabels(chainId)
 
@@ -40,12 +40,7 @@ export function useClaimSteps(claims: RecoveredTokenClaim[]) {
       contractId: 'merkl.claims',
       contractAddress: getNetworkConfig(chainId).contracts.merkl?.claims || zeroAddress,
       functionName: 'claim',
-      args: [
-        [userAddress],
-        claimData.tokens.slice(0, 1),
-        claimData.amounts.slice(0, 1),
-        claimData.proofs.slice(0, 1),
-      ],
+      args: [claimData.users, claimData.tokens, claimData.amounts, claimData.proofs],
       enabled: !!userAddress,
       txSimulationMeta,
       onTransactionChange: setTransactionFn(stepId),
@@ -66,15 +61,17 @@ export function useClaimSteps(claims: RecoveredTokenClaim[]) {
   }).filter(Boolean) as TransactionStep[]
 }
 
-function buildClaimData(claims: RecoveredTokenClaim[]) {
+function buildClaimData(userAddress: Address, claims: RecoveredTokenClaim[]) {
   return claims.reduce(
     (acc, claim) => {
+      acc.users.push(userAddress)
       acc.tokens.push(claim.amount.tokenAddress)
       acc.amounts.push(claim.rawAmount)
       acc.proofs.push(claim.proofs as Address[])
       return acc
     },
     {
+      users: [] as Address[],
       tokens: [] as Address[],
       amounts: [] as bigint[],
       proofs: [] as Address[][],
