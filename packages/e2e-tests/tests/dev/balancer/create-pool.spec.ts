@@ -54,6 +54,7 @@ test.describe('Build popover', () => {
     test('can continue', async ({ page, poolAtTokensStep }) => {
       await poolAtTokensStep.clickBuildPopoverToCowAmm()
       await clickButton(page, 'Continue set up')
+      await expect(page).toHaveURL(poolAtTokensStep.urls.tokens)
       await expect(page.getByText('Choose pool tokens')).toBeVisible()
     })
 

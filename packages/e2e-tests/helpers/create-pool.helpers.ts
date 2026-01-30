@@ -64,6 +64,7 @@ export class CreatePoolPage {
     tokens: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[1].id}`,
     details: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[2].id}`,
     fund: `${BASE_URL}/${POOL_CREATION_FORM_STEPS[3].id}`,
+    buildCow: `${BASE_URL}?protocol=cow`,
   }
 
   constructor(
@@ -94,7 +95,7 @@ export class CreatePoolPage {
   async clickBuildPopoverToCowAmm() {
     await this.page.getByText('Build', { exact: true }).click()
     await this.page.getByText('CoW AMM', { exact: true }).click()
-    await expect(this.page).toHaveURL(`${this.urls.base}?protocol=cow`)
+    await expect(this.page).toHaveURL(this.urls.buildCow)
   }
 
   async chooseProtocol(protocol: string) {
