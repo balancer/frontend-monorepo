@@ -79,6 +79,9 @@ export function LbpPreview() {
         w: 'full',
         overflow: 'hidden',
         rounded: 'xl',
+        h: 'fit-content',
+        position: 'sticky',
+        top: 'lg',
       }}
     >
       <VStack align="start" px="lg" py="md" spacing="md" w="full">
