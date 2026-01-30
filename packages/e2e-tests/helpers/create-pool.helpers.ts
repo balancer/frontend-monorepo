@@ -48,6 +48,13 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
       { symbol: 'USDC', amount: undefined },
     ],
   },
+  // {
+  //   type: PoolType.CowAmm,
+  //   tokens: [
+  //     { symbol: 'AAVE', amount: '1' },
+  //     { symbol: 'BAL', amount: '333' },
+  //   ],
+  // },
 ]
 
 export class CreatePoolPage {
@@ -76,8 +83,18 @@ export class CreatePoolPage {
     return this.config.type === PoolType.Weighted
   }
 
+  get isCowAmm() {
+    return this.config.type === PoolType.CowAmm
+  }
+
   async goToPage() {
     await this.page.goto(this.urls.base)
+  }
+
+  async clickBuildPopoverToCowAmm() {
+    await this.page.getByText('Build', { exact: true }).click()
+    await this.page.getByText('CoW AMM', { exact: true }).click()
+    await expect(this.page).toHaveURL(`${this.urls.base}?protocol=cow`)
   }
 
   async selectToken(tokenName: string) {
@@ -105,21 +122,35 @@ export class CreatePoolPage {
     }
   }
 
-  async typeStep({ continue: shouldContinue = false } = {}) {
+  async chooseProtocol(protocol: string) {
+    await this.page.getByText(protocol, { exact: true }).click()
+  }
+
+  async chooseNetwork(network: string) {
+    await this.page.getByText(network).click()
+  }
+
+  async choosePoolType(poolType: PoolType) {
+    await this.page
+      .getByRole('radiogroup', { name: 'Choose a pool type' })
+      .getByText(POOL_TYPES[poolType].label, { exact: true })
+      .click()
+  }
+
+  async typeStep(goToNextStep?: boolean) {
     await expect(this.page).toHaveURL(this.urls.type)
     await expect(this.page.getByText('Choose protocol')).toBeVisible()
     await expect(this.page.getByText('Choose network')).toBeVisible()
     await expect(this.page.getByText('Choose a pool type')).toBeVisible()
 
-    await this.page
-      .getByRole('radiogroup', { name: 'Choose a pool type' })
-      .getByText(POOL_TYPES[this.config.type].label, { exact: true })
-      .click()
+    // if (this.isCowAmm) await this.chooseProtocol('CoW')
 
-    if (shouldContinue) await clickButton(this.page, 'Next')
+    await this.choosePoolType(this.config.type)
+
+    if (goToNextStep) await clickButton(this.page, 'Next')
   }
 
-  async tokensStep({ continue: shouldContinue = false } = {}) {
+  async tokensStep(goToNextStep?: boolean) {
     await expect(this.page).toHaveURL(this.urls.tokens)
     await expect(this.page.getByText('Choose pool tokens')).toBeVisible()
 
@@ -129,10 +160,10 @@ export class CreatePoolPage {
     }
     await expect(button(this.page, 'Next')).toBeEnabled()
 
-    if (shouldContinue) await clickButton(this.page, 'Next')
+    if (goToNextStep) await clickButton(this.page, 'Next')
   }
 
-  async detailsStep({ continue: shouldContinue = false } = {}) {
+  async detailsStep(goToNextStep?: boolean) {
     await expect(this.page).toHaveURL(this.urls.details)
     await expect(this.page.getByText('Pool details')).toBeVisible()
     await expect(this.page.getByText('Pool settings')).toBeVisible()
@@ -144,7 +175,7 @@ export class CreatePoolPage {
         .click()
     }
 
-    if (shouldContinue) await clickButton(this.page, 'Next')
+    if (goToNextStep) await clickButton(this.page, 'Next')
   }
 
   async fundStep() {
