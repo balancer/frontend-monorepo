@@ -5,13 +5,12 @@ import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types
 import { Address } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
-import { minutesToMilliseconds } from 'date-fns'
 import { useState } from 'react'
 import { WRAPPER_TOKENS } from './wrapper-tokens'
 
 const MERKL_API_URL = 'https://api.merkl.xyz/v4'
 export const CHAINS = [
-  1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */, 10 /* Optimism*/,
+  1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */, 10 /* Optimism */,
 ]
 const wrapperTokens = WRAPPER_TOKENS.map(address => address.toLowerCase())
 
@@ -29,7 +28,7 @@ export function useRecoveredFunds() {
   const [lastClaimedChain, setLastClaimedChain] = useState<number | undefined>()
 
   const result = useQuery({
-    queryKey: ['fetch-recovered-funds'],
+    queryKey: ['fetch-recovered-funds', lastClaimedChain],
     queryFn: async () => {
       const chains = CHAINS.join(',')
       const reloadChainId = lastClaimedChain ? `&reloadChainId=${lastClaimedChain}` : ''
@@ -46,7 +45,6 @@ export function useRecoveredFunds() {
       return (await response.json()) as MerklRewardsResponse
     },
     enabled: !!userAddress,
-    staleTime: minutesToMilliseconds(10),
   })
 
   const claims =
@@ -57,8 +55,10 @@ export function useRecoveredFunds() {
           .filter(claim => wrapperTokens.includes(claim.amount.tokenAddress.toLowerCase()))
       : []
 
+  const hasBeenClaimed = claims.every(claim => claim.rawAmount === claim.claimedAmount)
+
   return {
-    hasRecoveredFunds: claims.length > 0,
+    hasRecoveredFunds: claims.length > 0 && !hasBeenClaimed,
     refetchClaims: (chainId: number) => {
       setLastClaimedChain(chainId)
       result.refetch()
