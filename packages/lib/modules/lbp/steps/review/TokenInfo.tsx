@@ -7,7 +7,7 @@ export function TokenInfo({
   symbol,
   name,
   amount,
-  value,
+  value, // already formatted for Fixed Price
   showValue = true,
   isFixedSale,
 }: {
@@ -41,11 +41,7 @@ export function TokenInfo({
           <Text variant="secondary">{name}</Text>
           {showValue && (
             <Text ml="auto" variant="secondary">
-              {value
-                ? isFixedSale
-                  ? `at ~${toCurrency(value)} each`
-                  : toCurrency(value)
-                : 'Value TBD'}
+              {value ? (isFixedSale ? `at ~${value} each` : toCurrency(value)) : 'Value TBD'}
             </Text>
           )}
         </HStack>

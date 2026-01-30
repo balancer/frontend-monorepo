@@ -8,18 +8,16 @@ import { TokenSummary } from './steps/preview/TokenSummary'
 import { PoolWeights } from './steps/preview/PoolWeights'
 import { ProjectedPrice } from './steps/preview/ProjectedPrice'
 import { SimpleInfoCard } from './steps/SimpleInfoCard'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
 import { Address } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { LbpLearnMoreModal } from './modal/LbpLearnMoreModal'
 import { useWatch } from 'react-hook-form'
 import { isDynamicSaleType, isFixedSaleType } from './steps/sale-structure/helpers'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
-  const { toCurrency } = useCurrency()
 
   const {
     saleStructureForm,
@@ -30,6 +28,8 @@ export function LbpPreview() {
     maxPrice,
     saleMarketCap,
     fdvMarketCap,
+    launchTokenPriceFiat,
+    totalValue,
   } = useLbpForm()
 
   const [
@@ -41,7 +41,6 @@ export function LbpPreview() {
     collateralTokenAmount,
     saleTokenAmount,
     saleType,
-    launchTokenPrice,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -53,7 +52,6 @@ export function LbpPreview() {
       'collateralTokenAmount',
       'saleTokenAmount',
       'saleType',
-      'launchTokenPrice',
     ],
   })
 
@@ -65,13 +63,6 @@ export function LbpPreview() {
   const isFixedSale = isFixedSaleType(saleType)
 
   const collateralTokenPrice = priceFor(collateralTokenAddress, selectedChain)
-
-  const launchTokenPriceFiat =
-    collateralTokenPrice && launchTokenPrice
-      ? bn(launchTokenPrice).times(collateralTokenPrice)
-      : '0'
-
-  const totalValue = saleTokenAmount ? bn(saleTokenAmount).times(launchTokenPriceFiat) : '0'
 
   return (
     <NoisyCard
@@ -110,18 +101,18 @@ export function LbpPreview() {
             {isFixedSale && (
               <HStack alignItems="stretch" gap="ms" w="full">
                 <SimpleInfoCard
-                  info={toCurrency(launchTokenPriceFiat)}
+                  info={launchTokenPriceFiat}
                   title={`${launchTokenMetadata.symbol} sale price`}
                 />
                 <SimpleInfoCard info={fNum('token', saleTokenAmount)} title="Tokens for sale" />
-                <SimpleInfoCard info={toCurrency(totalValue)} title="Max sale total" />
+                <SimpleInfoCard info={totalValue} title="Max sale total" />
               </HStack>
             )}
             {isDynamicSale && (
               <>
                 <HStack alignItems="stretch" gap="ms" w="full">
                   <SimpleInfoCard
-                    info={toCurrency(maxPrice)}
+                    info={maxPrice}
                     title={`${launchTokenMetadata.symbol} start price`}
                   />
                   <SimpleInfoCard info={saleMarketCap} title="Sale market cap" />

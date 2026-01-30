@@ -11,10 +11,15 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { TransactionStepsResponse } from '../../transactions/transaction-steps/useTransactionSteps'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 import { UserActions, WeightAdjustmentType } from '@repo/lib/modules/lbp/lbp.types'
+import { isDynamicSaleType, isFixedSaleType } from '../steps/sale-structure/helpers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 
 export function LbpSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
-  const { saleStructureForm, saleMarketCap, launchToken } = useLbpForm()
+  const { saleStructureForm, saleMarketCap, launchToken, launchTokenPriceFiat } = useLbpForm()
   const { isMobile } = useBreakpoints()
+  const { getToken } = useTokens()
+
   const {
     collateralTokenAddress,
     collateralTokenAmount,
@@ -25,7 +30,14 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     endDateTime,
     weightAdjustmentType,
     userActions,
+    saleType,
+    launchTokenPrice,
   } = saleStructureForm.getValues()
+
+  const isDynamicSale = isDynamicSaleType(saleType)
+  const isFixedSale = isFixedSaleType(saleType)
+
+  const collateralToken = getToken(collateralTokenAddress, selectedChain)
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
@@ -61,17 +73,38 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
             <Text color="grayText">{formatDateTimeShort(new Date(endDateTime))}</Text>
           </HStack>
           <HStack justify="space-between" w="full">
-            <Text color="grayText">Dynamic weight shifts</Text>
-            {humanWeightShifts[weightAdjustmentType]}
-          </HStack>
-          <HStack justify="space-between" w="full">
             <Text color="grayText">Sale Type</Text>
             <Text color="grayText">{humanUserActions[userActions]}</Text>
           </HStack>
-          <HStack justify="space-between" w="full">
-            <Text color="grayText">Sale Market Cap Range</Text>
-            <Text color="grayText">{saleMarketCap}</Text>
-          </HStack>
+          {isDynamicSale && (
+            <>
+              <HStack justify="space-between" w="full">
+                <Text color="grayText">Dynamic weight shifts</Text>
+                {humanWeightShifts[weightAdjustmentType]}
+              </HStack>
+              <HStack justify="space-between" w="full">
+                <Text color="grayText">Sale Market Cap Range</Text>
+                <Text color="grayText">{saleMarketCap}</Text>
+              </HStack>
+            </>
+          )}
+          {isFixedSale && (
+            <>
+              <HStack justify="space-between" w="full">
+                <Text color="grayText">{launchToken.symbol} token price</Text>
+                <Text color="grayText">
+                  {launchTokenPrice} / {collateralToken?.symbol} (~{launchTokenPriceFiat})
+                </Text>
+              </HStack>
+              <HStack justify="space-between" w="full">
+                <Text color="grayText">Collateral token max if sold out</Text>
+                <Text color="grayText">
+                  {fNum('token', bn(saleTokenAmount).times(launchTokenPrice).toString())}{' '}
+                  {collateralToken?.symbol}
+                </Text>
+              </HStack>
+            </>
+          )}
         </VStack>
       </Card>
       <GasCostSummaryCard chain={selectedChain} transactionSteps={transactionSteps.steps} />

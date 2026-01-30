@@ -27,7 +27,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
-  const { projectInfoForm, saleStructureForm } = useLbpForm()
+  const { projectInfoForm, saleStructureForm, launchTokenPriceFiat } = useLbpForm()
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl] = useWatch({
     control: projectInfoForm.control,
     name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'],
@@ -43,7 +43,6 @@ export function ReviewStep() {
     fee,
     userActions,
     saleType,
-    launchTokenPrice,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -57,7 +56,6 @@ export function ReviewStep() {
       'fee',
       'userActions',
       'saleType',
-      'launchTokenPrice',
     ],
   })
 
@@ -67,11 +65,6 @@ export function ReviewStep() {
   const launchTokenSeed = saleTokenAmount
   const collateralToken = getToken(collateralTokenAddress, chain)
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
-
-  const launchTokenPriceFiat =
-    collateralTokenPrice && launchTokenPrice
-      ? bn(launchTokenPrice).times(collateralTokenPrice)
-      : '0'
 
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
   const hoursDiff =
@@ -184,7 +177,7 @@ export function ReviewStep() {
                 isFixedSale={isFixedSale}
                 name={launchTokenMetadata.name || ''}
                 symbol={launchTokenMetadata.symbol || ''}
-                value={launchTokenPriceFiat.toString()}
+                value={launchTokenPriceFiat}
               />
             </CardBody>
           </Card>

@@ -3,28 +3,27 @@ import { InputGroup, Input, InputRightElement, Button, Box } from '@chakra-ui/re
 import { TokenBalancesProvider } from '../../../tokens/TokenBalancesProvider'
 import { useLbpForm } from '../../LbpFormProvider'
 import { useTokens } from '../../../tokens/TokensProvider'
-import { isGreaterThanZeroValidation, Numberish } from '@repo/lib/shared/utils/numbers'
+import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
 import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { VStack, Text, Heading } from '@chakra-ui/react'
 import { SaleTokenAmountInput } from './SaleTokenAmountInput'
-import { bn } from '@repo/lib/shared/utils/numbers'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 export function FixedLbpTokenAmountInputs() {
-  const { getToken, priceFor } = useTokens()
-  const { toCurrency } = useCurrency()
+  const { getToken } = useTokens()
 
   const {
     launchToken,
+    launchTokenPriceFiat,
+    totalValue,
     saleStructureForm: { control },
   } = useLbpForm()
 
   const { errors } = useFormState({ control })
 
-  const [collateralTokenAddress, selectedChain, launchTokenPrice, saleTokenAmount] = useWatch({
+  const [collateralTokenAddress, selectedChain] = useWatch({
     control,
-    name: ['collateralTokenAddress', 'selectedChain', 'launchTokenPrice', 'saleTokenAmount'],
+    name: ['collateralTokenAddress', 'selectedChain'],
   })
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
@@ -35,14 +34,6 @@ export function FixedLbpTokenAmountInputs() {
   const balanceTokens = [collateralToken, launchToken].filter(
     (token): token is NonNullable<typeof token> => Boolean(token)
   )
-
-  const launchTokenPriceFiat =
-    collateralToken && launchTokenPrice
-      ? bn(launchTokenPrice).times(priceFor(collateralToken.address, collateralToken.chain))
-      : '0'
-
-  const totalValue =
-    collateralToken && saleTokenAmount ? bn(saleTokenAmount).times(launchTokenPriceFiat) : '0'
 
   return (
     <TokenInputsValidationProvider>
@@ -72,7 +63,7 @@ export function FixedLbpTokenAmountInputs() {
                 Transfer all of the tokens to be sold in the token sale right now.
               </Text>
               <Text color="font.secondary" fontSize="sm">
-                At current prices, if all tokens are sold, you will raise: ~{toCurrency(totalValue)}
+                At current prices, if all tokens are sold, you will raise: ~{totalValue}
               </Text>
             </VStack>
           </VStack>
@@ -93,10 +84,8 @@ function LaunchTokenPriceInput({
   errors: FieldErrors<SaleStructureForm>
   collateralTokenSymbol: string
   launchTokenSymbol: string
-  launchTokenPriceFiat: Numberish
+  launchTokenPriceFiat: string
 }) {
-  const { toCurrency } = useCurrency()
-
   return (
     <VStack align="start" w="full">
       <Text as="label" color="font.primary" htmlFor="launch-token-price">
@@ -175,12 +164,9 @@ function LaunchTokenPriceInput({
           {errors.launchTokenPrice.message}
         </Text>
       )}
-      {bn(launchTokenPriceFiat).gt(0) && (
-        <Text color="font.secondary" fontSize="sm">
-          At current prices, 1 {launchTokenSymbol} will be sold for{' '}
-          {toCurrency(launchTokenPriceFiat)}
-        </Text>
-      )}
+      <Text color="font.secondary" fontSize="sm">
+        At current prices, 1 {launchTokenSymbol} will be sold for {launchTokenPriceFiat}
+      </Text>
     </VStack>
   )
 }

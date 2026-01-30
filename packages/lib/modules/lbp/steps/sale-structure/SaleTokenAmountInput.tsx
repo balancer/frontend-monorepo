@@ -3,10 +3,9 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { SaleStructureForm } from '@repo/lib/modules/lbp/lbp.types'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { bn, isGreaterThanZeroValidation, Numberish } from '@repo/lib/shared/utils/numbers'
+import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
 import { Control, FieldErrors, Controller } from 'react-hook-form'
 import { formatUnits } from 'viem'
 
@@ -22,11 +21,9 @@ export function SaleTokenAmountInput({
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
   launchToken: CustomToken
-  launchTokenPriceFiat?: Numberish
+  launchTokenPriceFiat?: string
   title: string
 }) {
-  const { toCurrency } = useCurrency()
-
   const { balanceData, isLoading } = useUserBalance({
     chainId: getChainId(selectedChain),
     token: launchToken.address,
@@ -65,7 +62,7 @@ export function SaleTokenAmountInput({
             }
             id="sale-token-amount"
             onChange={e => field.onChange(e.currentTarget.value)}
-            priceMessage={`Price: ${launchTokenPriceFiat ? toCurrency(launchTokenPriceFiat) : 'N/A'}`}
+            priceMessage={`Price: ${launchTokenPriceFiat || 'N/A'}`}
             value={field.value}
           />
         )}
