@@ -48,13 +48,13 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
       { symbol: 'USDC', amount: undefined },
     ],
   },
-  // {
-  //   type: PoolType.CowAmm,
-  //   tokens: [
-  //     { symbol: 'AAVE', amount: '1' },
-  //     { symbol: 'BAL', amount: '333' },
-  //   ],
-  // },
+  {
+    type: PoolType.CowAmm,
+    tokens: [
+      { symbol: 'AAVE', amount: '1' },
+      { symbol: 'BAL', amount: '333' },
+    ],
+  },
 ]
 
 export class CreatePoolPage {
@@ -97,6 +97,21 @@ export class CreatePoolPage {
     await expect(this.page).toHaveURL(`${this.urls.base}?protocol=cow`)
   }
 
+  async chooseProtocol(protocol: string) {
+    await this.page.getByText(protocol, { exact: true }).click()
+  }
+
+  async chooseNetwork(network: string) {
+    await this.page.getByText(network).click()
+  }
+
+  async choosePoolType(poolType: PoolType) {
+    await this.page
+      .getByRole('radiogroup', { name: 'Choose a pool type' })
+      .getByText(POOL_TYPES[poolType].label, { exact: true })
+      .click()
+  }
+
   async selectToken(tokenName: string) {
     await button(this.page, 'Select token').first().click()
     const modalHeader = this.page.getByText('Select a token: Ethereum', { exact: true })
@@ -122,28 +137,22 @@ export class CreatePoolPage {
     }
   }
 
-  async chooseProtocol(protocol: string) {
-    await this.page.getByText(protocol, { exact: true }).click()
+  async resetAndConfirm() {
+    await this.page.getByRole('button', { name: 'Delete & restart' }).click()
+    await this.page.getByRole('button', { name: 'Delete and start over' }).click()
   }
 
-  async chooseNetwork(network: string) {
-    await this.page.getByText(network).click()
-  }
-
-  async choosePoolType(poolType: PoolType) {
-    await this.page
-      .getByRole('radiogroup', { name: 'Choose a pool type' })
-      .getByText(POOL_TYPES[poolType].label, { exact: true })
-      .click()
-  }
-
-  async typeStep(goToNextStep?: boolean) {
+  async expectInitialFormState() {
     await expect(this.page).toHaveURL(this.urls.type)
     await expect(this.page.getByText('Choose protocol')).toBeVisible()
     await expect(this.page.getByText('Choose network')).toBeVisible()
     await expect(this.page.getByText('Choose a pool type')).toBeVisible()
+  }
 
-    // if (this.isCowAmm) await this.chooseProtocol('CoW')
+  async typeStep(goToNextStep?: boolean) {
+    await this.expectInitialFormState()
+
+    if (this.isCowAmm) await this.chooseProtocol('CoW')
 
     await this.choosePoolType(this.config.type)
 
@@ -166,7 +175,8 @@ export class CreatePoolPage {
   async detailsStep(goToNextStep?: boolean) {
     await expect(this.page).toHaveURL(this.urls.details)
     await expect(this.page.getByText('Pool details')).toBeVisible()
-    await expect(this.page.getByText('Pool settings')).toBeVisible()
+
+    if (!this.isCowAmm) await expect(this.page.getByText('Pool settings')).toBeVisible()
 
     if (isPoolCreatorEnabled(this.config.type)) {
       await this.page
@@ -196,7 +206,7 @@ export class CreatePoolPage {
 
     await this.fillTokenAmounts()
 
-    if (this.isWeighted) {
+    if (this.isCowAmm || this.isWeighted) {
       await this.page
         .locator('label')
         .filter({ hasText: 'I understand that I will' })
@@ -213,6 +223,7 @@ export class CreatePoolPage {
     } else {
       await clickButton(this.page, 'Create Pool')
       await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
+      await expect(this.page.getByText('Pool creation confirmed!')).toBeVisible()
     }
 
     const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
@@ -223,25 +234,21 @@ export class CreatePoolPage {
       const approveButton = button(this.page, `Approve ${token.symbol}`)
       await approveButton.or(signApprovalsButton).waitFor()
 
-      if (await approveButton.isVisible()) {
-        await approveButton.click()
-        await expect(this.page.getByText(`${token.symbol} approved!`)).toBeVisible()
-      }
+      if (await approveButton.isVisible()) await approveButton.click()
     }
 
-    await signApprovalsButton.click()
-    await clickButton(this.page, 'Seed pool liquidity')
+    if (this.isCowAmm) {
+      for (const token of this.config.tokens) {
+        await clickButton(this.page, `Add ${token.symbol}`)
+      }
+      await clickButton(this.page, 'Set Swap Fee')
+      await clickButton(this.page, 'Finalize')
+    } else {
+      await signApprovalsButton.click()
+      await clickButton(this.page, 'Seed pool liquidity')
+    }
 
     await expect(button(this.page, 'View pool page')).toBeVisible()
     await expect(button(this.page, 'Create another pool')).toBeVisible()
-  }
-
-  async resetAndConfirm() {
-    await this.page.getByRole('button', { name: 'Delete & restart' }).click()
-    await this.page.getByRole('button', { name: 'Delete and start over' }).click()
-  }
-
-  async expectInitialFormState() {
-    await this.typeStep()
   }
 }
