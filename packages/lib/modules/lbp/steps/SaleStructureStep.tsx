@@ -45,11 +45,14 @@ import {
 } from 'date-fns'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { LbpFormAction } from '../LbpFormAction'
-import { LbpTokenAmountInputs } from './sale-structure/LbpTokenAmountInputs'
+import { DynamicLbpTokenAmountInputs } from './sale-structure/DynamicLbpTokenAmountInputs'
+import { FixedLbpTokenAmountInputs } from './sale-structure/FixedLbpTokenAmountInputs'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
 import { useWatch, useFormState } from 'react-hook-form'
+import { SaleTypeInput } from './sale-structure/SaleTypeInput'
+import { isDynamicSaleType, isFixedSaleType } from './sale-structure/helpers'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -71,6 +74,7 @@ export function SaleStructureStep() {
     customStartWeight,
     weightAdjustmentType,
     fee,
+    saleType,
   ] = useWatch({
     control,
     name: [
@@ -83,6 +87,7 @@ export function SaleStructureStep() {
       'customStartWeight',
       'weightAdjustmentType',
       'fee',
+      'saleType',
     ],
   })
   const { isValid, errors } = useFormState({ control })
@@ -103,6 +108,9 @@ export function SaleStructureStep() {
 
   const isPoolCreated = !!poolAddress
 
+  const isDynamicSale = isDynamicSaleType(saleType)
+  const isFixedSale = isFixedSaleType(saleType)
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
       <VStack align="start" spacing="lg" w="full">
@@ -113,6 +121,7 @@ export function SaleStructureStep() {
             </Heading>
 
             <VStack align="start" spacing="lg" w="full">
+              <SaleTypeInput control={control} />
               <NetworkSelectInput chains={supportedChains} control={control} />
               <LaunchTokenAddressInput
                 chainId={selectedChain}
@@ -158,16 +167,18 @@ export function SaleStructureStep() {
                   LBP mechanism
                 </Heading>
                 <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
-                <WeightAdjustmentTypeInput
-                  collateralTokenSymbol={collateralToken?.symbol || ''}
-                  control={control}
-                  customEndWeight={customEndWeight}
-                  customStartWeight={customStartWeight}
-                  launchTokenSymbol={launchTokenMetadata.symbol || ''}
-                  setValue={setValue}
-                  weightAdjustmentType={weightAdjustmentType}
-                />
-                <UserActionsInput control={control} />
+                {isDynamicSale && (
+                  <WeightAdjustmentTypeInput
+                    collateralTokenSymbol={collateralToken?.symbol || ''}
+                    control={control}
+                    customEndWeight={customEndWeight}
+                    customStartWeight={customStartWeight}
+                    launchTokenSymbol={launchTokenMetadata.symbol || ''}
+                    setValue={setValue}
+                    weightAdjustmentType={weightAdjustmentType}
+                  />
+                )}
+                <UserActionsInput control={control} isFixedSale={isFixedSale} setValue={setValue} />
                 <FeeSelection
                   control={control}
                   errors={errors}
@@ -179,7 +190,8 @@ export function SaleStructureStep() {
             )}
           </>
         )}
-        <LbpTokenAmountInputs />
+        {isDynamicSale && <DynamicLbpTokenAmountInputs />}
+        {isFixedSale && <FixedLbpTokenAmountInputs />}
         <Divider />
         <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
       </VStack>
@@ -465,7 +477,22 @@ function CollateralTokenAddressInput({
   )
 }
 
-function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) {
+function UserActionsInput({
+  control,
+  isFixedSale,
+  setValue,
+}: {
+  control: Control<SaleStructureForm>
+  isFixedSale?: boolean
+  setValue?: UseFormSetValue<SaleStructureForm>
+}) {
+  // For fixed sale types, force "Buy only" and disable the other option
+  useEffect(() => {
+    if (isFixedSale && setValue) {
+      setValue('userActions', UserActions.BUY_ONLY)
+    }
+  }, [isFixedSale, setValue])
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Available user actions</Text>
@@ -475,7 +502,9 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack direction="row" gap="md">
-              <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
+              <Radio isDisabled={isFixedSale} value={UserActions.BUY_AND_SELL}>
+                Buy & sell
+              </Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
             </Stack>
           </RadioGroup>

@@ -9,7 +9,7 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { useLocalStorage } from 'usehooks-ts'
 import { useState } from 'react'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
@@ -18,11 +18,15 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { useWatch } from 'react-hook-form'
 import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
+import { useTokens } from '../tokens/TokensProvider'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
 
 export function useLbpFormLogic() {
+  const { toCurrency } = useCurrency()
+
   const saleStructureForm = usePersistentForm<SaleStructureForm>(
     LS_KEYS.LbpConfig.SaleStructure,
     INITIAL_SALE_STRUCTURE,
@@ -71,9 +75,17 @@ export function useLbpFormLogic() {
     setIsMetadataSaved(false)
   }
 
-  const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } = useWatch({
+  const {
+    saleTokenAmount,
+    launchTokenAddress,
+    selectedChain,
+    collateralTokenAddress,
+    launchTokenPrice,
+  } = useWatch({
     control: saleStructureForm.control,
   })
+
+  const { priceFor } = useTokens()
 
   const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
   const { tokens } = getNetworkConfig(selectedChain)
@@ -87,6 +99,17 @@ export function useLbpFormLogic() {
   const [maxPrice, setMaxPrice] = useState(0)
   const [saleMarketCap, setSaleMarketCap] = useState('')
   const [fdvMarketCap, setFdvMarketCap] = useState('')
+
+  const collateralTokenPrice = collateralTokenAddress ? priceFor(collateralTokenAddress, chain) : 0
+
+  const launchTokenPriceFiat =
+    collateralTokenPrice && launchTokenPrice
+      ? bn(launchTokenPrice).times(collateralTokenPrice).toString()
+      : '0'
+
+  const totalValue = saleTokenAmount
+    ? bn(saleTokenAmount).times(launchTokenPriceFiat).toString()
+    : '0'
 
   const updatePriceStats = (prices: LbpPrice[]) => {
     const minPrice = min(prices)
@@ -115,7 +138,7 @@ export function useLbpFormLogic() {
     ...formSteps,
     saleStructureForm,
     projectInfoForm,
-    maxPrice,
+    maxPrice: toCurrency(maxPrice),
     saleMarketCap,
     fdvMarketCap,
     updatePriceStats,
@@ -126,6 +149,8 @@ export function useLbpFormLogic() {
     isCollateralNativeAsset,
     poolAddress,
     setPoolAddress,
+    launchTokenPriceFiat: toCurrency(launchTokenPriceFiat),
+    totalValue: toCurrency(totalValue),
   }
 }
 

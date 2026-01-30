@@ -130,6 +130,7 @@ export function useHydrateLbpForm() {
       const saleStructureFormValues: SaleStructureForm = {
         selectedChain: params.chain,
         launchTokenAddress: projectToken.result,
+        saleType: '',
         collateralTokenAddress: reserveToken.result,
         saleTokenAmount: '',
         collateralTokenAmount: '',
@@ -140,6 +141,7 @@ export function useHydrateLbpForm() {
         fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
         startDateTime: formatLbpTimestamp(lbpImmutableData.result.startTime),
         endDateTime: formatLbpTimestamp(lbpImmutableData.result.endTime),
+        launchTokenPrice: '',
       }
 
       saleStructureForm.reset(saleStructureFormValues)

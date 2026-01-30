@@ -22,10 +22,12 @@ import { OtherSaleDetails } from './OtherSaleDetails'
 import { normalizeUrl } from '@repo/lib/shared/utils/urls'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isDynamicSaleType, isFixedSaleType } from '../../steps/sale-structure/helpers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
-  const { projectInfoForm, saleStructureForm } = useLbpForm()
+  const { projectInfoForm, saleStructureForm, launchTokenPriceFiat } = useLbpForm()
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl] = useWatch({
     control: projectInfoForm.control,
     name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'],
@@ -40,6 +42,7 @@ export function ReviewStep() {
     endDateTime,
     fee,
     userActions,
+    saleType,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -52,6 +55,7 @@ export function ReviewStep() {
       'endDateTime',
       'fee',
       'userActions',
+      'saleType',
     ],
   })
 
@@ -65,6 +69,9 @@ export function ReviewStep() {
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
   const hoursDiff =
     differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
+
+  const isDynamicSale = isDynamicSaleType(saleType)
+  const isFixedSale = isFixedSaleType(saleType)
 
   return (
     <VStack align="start" gap="ms" w="full">
@@ -98,11 +105,7 @@ export function ReviewStep() {
           <HStack spacing="4" w={{ base: 'full', lg: 'auto' }}>
             <SocialLink href={websiteUrl} socialNetwork="website" title={websiteUrl} />
             {xHandle && (
-              <SocialLink
-                href={`https://twitter.com/${xHandle}`}
-                socialNetwork="x"
-                title={xHandle}
-              />
+              <SocialLink href={`https://x.com/${xHandle}`} socialNetwork="x" title={xHandle} />
             )}
             {discordUrl && (
               <SocialLink href={discordUrl} socialNetwork="discord" title={discordUrl} />
@@ -137,33 +140,68 @@ export function ReviewStep() {
         />
       </HStack>
 
-      <Card>
-        <CardHeader>
-          <Heading size="md">Seed liquidity</Heading>
-        </CardHeader>
-        <CardBody>
-          <VStack gap="md" w="full">
-            <TokenInfo
-              amount={Number(launchTokenSeed)}
-              iconURL={normalizeUrl(tokenIconUrl)}
-              name={launchTokenMetadata.name || ''}
-              symbol={launchTokenMetadata.symbol || ''}
-            />
-
-            <TokenInfo
-              amount={Number(collateralTokenAmount)}
-              iconURL={collateralToken?.logoURI || ''}
-              name={collateralToken?.name || ''}
-              symbol={collateralToken?.symbol || ''}
-              value={Number(collateralTokenAmount) * collateralTokenPrice}
-            />
-          </VStack>
-        </CardBody>
-      </Card>
+      {isDynamicSale && (
+        <Card>
+          <CardHeader>
+            <Heading size="md">Seed liquidity</Heading>
+          </CardHeader>
+          <CardBody>
+            <VStack gap="md" w="full">
+              <TokenInfo
+                amount={launchTokenSeed}
+                iconURL={normalizeUrl(tokenIconUrl)}
+                name={launchTokenMetadata.name || ''}
+                symbol={launchTokenMetadata.symbol || ''}
+              />
+              <TokenInfo
+                amount={collateralTokenAmount}
+                iconURL={collateralToken?.logoURI || ''}
+                name={collateralToken?.name || ''}
+                symbol={collateralToken?.symbol || ''}
+                value={bn(collateralTokenAmount).times(collateralTokenPrice).toString()}
+              />
+            </VStack>
+          </CardBody>
+        </Card>
+      )}
+      {isFixedSale && (
+        <>
+          <Card>
+            <CardHeader>
+              <Heading size="md">Token for sale</Heading>
+            </CardHeader>
+            <CardBody>
+              <TokenInfo
+                amount={launchTokenSeed}
+                iconURL={normalizeUrl(tokenIconUrl)}
+                isFixedSale={isFixedSale}
+                name={launchTokenMetadata.name || ''}
+                symbol={launchTokenMetadata.symbol || ''}
+                value={launchTokenPriceFiat}
+              />
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Heading size="md">Collateral token</Heading>
+            </CardHeader>
+            <CardBody>
+              <TokenInfo
+                amount={collateralTokenAmount}
+                iconURL={collateralToken?.logoURI || ''}
+                name={collateralToken?.name || ''}
+                showValue={false}
+                symbol={collateralToken?.symbol || ''}
+              />
+            </CardBody>
+          </Card>
+        </>
+      )}
 
       <OtherSaleDetails
         fee={fee}
         launchTokenSymbol={launchTokenMetadata.symbol || ''}
+        lbpText={`${isDynamicSale ? 'Dynamic' : 'Fixed'} Price`}
         userActions={userActions}
       />
 
