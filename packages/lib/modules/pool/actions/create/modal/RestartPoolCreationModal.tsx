@@ -21,7 +21,7 @@ import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useEffect } from 'react'
-
+import { useRouter } from 'next/navigation'
 interface RestartPoolCreationModalProps {
   modalTitle?: string
   triggerTitle?: string
@@ -47,9 +47,15 @@ export function RestartPoolCreationModal({
   showCowAmmWarning,
 }: RestartPoolCreationModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter()
 
   const handleFormReset = () => {
     handleRestart()
+    onClose()
+  }
+
+  const handleContinueSetup = () => {
+    if (showCowAmmWarning) router.replace('/create')
     onClose()
   }
 
@@ -116,7 +122,7 @@ export function RestartPoolCreationModal({
                   flex="1"
                   gap="1"
                   minWidth="184px"
-                  onClick={onClose}
+                  onClick={handleContinueSetup}
                   size="lg"
                   variant="tertiary"
                 >

@@ -65,7 +65,7 @@ export const mainnetTokenBalances: TokenBalance[] = [
   },
   {
     tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
-    value: '2000',
+    value: '100000',
     decimals: 6,
   },
   {
