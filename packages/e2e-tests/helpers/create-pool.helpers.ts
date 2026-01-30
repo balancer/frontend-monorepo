@@ -186,13 +186,12 @@ export class CreatePoolPage {
 
     const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
     const signApprovalsButton = button(this.page, signApprovalsButtonText)
-    const firstApproveButton = button(this.page, `Approve ${this.config.tokens[0].symbol}`)
 
     // after first pool creation test runs, some tokens may have already been approved
-    await firstApproveButton.or(signApprovalsButton).waitFor()
-
     for (const token of this.config.tokens) {
       const approveButton = button(this.page, `Approve ${token.symbol}`)
+      await approveButton.or(signApprovalsButton).waitFor()
+
       if (await approveButton.isVisible()) {
         await approveButton.click()
         await expect(this.page.getByText(`${token.symbol} approved!`)).toBeVisible()
