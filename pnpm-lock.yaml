@@ -373,8 +373,8 @@ importers:
   packages/e2e-tests:
     devDependencies:
       '@balancer/sdk':
-        specifier: 5.1.1
-        version: 5.1.1(typescript@5.9.2)
+        specifier: 5.1.2
+        version: 5.1.2(typescript@5.9.2)
       '@playwright/test':
         specifier: 1.53.1
         version: 1.53.1
@@ -840,6 +840,10 @@ packages:
     resolution: {integrity: sha512-JYgintcMjRiCvS8mMECzaEn+m3PfoQiyqukOMCCVQtoJGYJw8j/8LBJEiqkHLkfwCcs74E3pbAUFNg7d9VNJ+Q==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/code-frame@7.29.0':
+    resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/compat-data@7.26.8':
     resolution: {integrity: sha512-oH5UPLMWR3L2wEFLnFJ1TZXqHufiTKAiLfqw5zkhS4dKXLJ10yVztfil/twG8EDTA4F/tvVNw9nOl4ZMslB8rQ==}
     engines: {node: '>=6.9.0'}
@@ -1092,10 +1096,6 @@ packages:
 
   '@balancer-labs/balancer-maths@0.0.38':
     resolution: {integrity: sha512-J6qXOyAPnPBg9H3YqWC3geOZ2uMadQ5/cfqAMf3eMUi8W0mlWkkw37/ikBveWPIQEJwUUMLNGWnCRFv9m6VpdA==}
-    engines: {node: '>=18.x'}
-
-  '@balancer/sdk@5.1.1':
-    resolution: {integrity: sha512-9HWiUVHcsEGYtXhb58yG2T4fmfAJaOklo3MZTjSqfgQcEMr+PeDy3ycYwHc1I2NLdT1YmEdQo1d+2haHEE0g6Q==}
     engines: {node: '>=18.x'}
 
   '@balancer/sdk@5.1.2':
@@ -9196,8 +9196,8 @@ packages:
       use-sync-external-store:
         optional: true
 
-  zustand@5.0.10:
-    resolution: {integrity: sha512-U1AiltS1O9hSy3rul+Ub82ut2fqIAefiSuwECWt6jlMVUGejvf+5omLcRBSzqbRagSM3hQZbtzdeRc6QVScXTg==}
+  zustand@5.0.11:
+    resolution: {integrity: sha512-fdZY+dk7zn/vbWNCYmzZULHRrss0jx5pPFiOuMZ/5HJN6Yv3u+1Wswy/4MpZEkEGhtNH+pwxZB8OKgUBPzYAGg==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '19.2'
@@ -9338,6 +9338,12 @@ snapshots:
       picocolors: 1.1.1
 
   '@babel/code-frame@7.28.6':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.28.5
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
+  '@babel/code-frame@7.29.0':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
       js-tokens: 4.0.0
@@ -9719,20 +9725,20 @@ snapshots:
 
   '@balancer-labs/balancer-maths@0.0.38': {}
 
-  '@balancer/sdk@5.1.1(typescript@5.9.2)':
+  '@balancer/sdk@5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.38
-      viem: 2.45.0(typescript@5.9.2)
+      viem: 2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
     transitivePeerDependencies:
       - bufferutil
       - typescript
       - utf-8-validate
       - zod
 
-  '@balancer/sdk@5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)':
+  '@balancer/sdk@5.1.2(typescript@5.9.2)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.38
-      viem: 2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
+      viem: 2.45.0(typescript@5.9.2)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -12944,7 +12950,7 @@ snapshots:
 
   '@testing-library/dom@10.4.0':
     dependencies:
-      '@babel/code-frame': 7.28.6
+      '@babel/code-frame': 7.29.0
       '@babel/runtime': 7.28.6
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
@@ -17607,7 +17613,7 @@ snapshots:
       ox: 0.9.17(typescript@5.9.2)(zod@4.3.5)
       viem: 2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
       zod: 4.3.5
-      zustand: 5.0.10(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4))
+      zustand: 5.0.11(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4))
     optionalDependencies:
       '@tanstack/react-query': 5.90.5(react@19.2.4)
       react: 19.2.4
@@ -19626,7 +19632,7 @@ snapshots:
       react: 19.2.4
       use-sync-external-store: 1.4.0(react@19.2.4)
 
-  zustand@5.0.10(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4)):
+  zustand@5.0.11(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4)):
     optionalDependencies:
       '@types/react': 19.2.10
       react: 19.2.4
