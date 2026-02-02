@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
-import { SaleStructureForm, UserActions } from '../lbp.types'
+import { SaleStructureForm, UserActions, WeightAdjustmentType } from '../lbp.types'
 import {
   Control,
   Controller,
@@ -167,11 +167,11 @@ export function SaleStructureStep() {
                   <WeightAdjustmentTypeInput
                     collateralTokenSymbol={collateralToken?.symbol || ''}
                     control={control}
-                    customEndWeight={customEndWeight}
-                    customStartWeight={customStartWeight}
+                    customEndWeight={customEndWeight ?? 10}
+                    customStartWeight={customStartWeight ?? 90}
                     launchTokenSymbol={launchTokenMetadata.symbol || ''}
                     setValue={setValue}
-                    weightAdjustmentType={weightAdjustmentType}
+                    weightAdjustmentType={weightAdjustmentType ?? WeightAdjustmentType.LINEAR_90_10}
                   />
                 )}
                 <UserActionsInput control={control} isFixedSale={isFixedSale} setValue={setValue} />
@@ -365,7 +365,7 @@ function SaleEndInput({
   value: string
   saleStart: string
 }) {
-  const validateSaleEnd = (value: string | number) => {
+  const validateSaleEnd = (value: string | number | undefined) => {
     if (typeof value !== 'string') return 'End time must be type string'
     if (!isAfter(parseISO(value), addDays(parseISO(saleStart), 1))) {
       return 'End time must be at least 24 hours after start time'
@@ -411,7 +411,7 @@ function DateTimeInput({
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   min?: string
-  validate: (value: string | number) => string | true
+  validate: (value: string | number | undefined) => string | true
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
 

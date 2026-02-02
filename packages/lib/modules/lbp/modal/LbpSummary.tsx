@@ -40,6 +40,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
   } = saleStructureForm.getValues()
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
+  const weightShiftSummary = weightAdjustmentType ? humanWeightShifts[weightAdjustmentType] : null
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
@@ -82,7 +83,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
             <>
               <HStack justify="space-between" w="full">
                 <Text color="grayText">Dynamic weight shifts</Text>
-                {humanWeightShifts[weightAdjustmentType]}
+                {weightShiftSummary}
               </HStack>
               <HStack justify="space-between" w="full">
                 <Text color="grayText">Sale Market Cap Range</Text>
@@ -101,7 +102,12 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
               <HStack justify="space-between" w="full">
                 <Text color="grayText">Collateral token max if sold out</Text>
                 <Text color="grayText">
-                  {fNum('token', bn(saleTokenAmount).times(launchTokenRate).toString())}{' '}
+                  {fNum(
+                    'token',
+                    bn(saleTokenAmount)
+                      .times(launchTokenRate || 0)
+                      .toString()
+                  )}{' '}
                   {collateralToken?.symbol}
                 </Text>
               </HStack>

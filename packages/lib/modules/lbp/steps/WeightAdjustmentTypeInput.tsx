@@ -82,7 +82,7 @@ export function WeightAdjustmentTypeInput({
               field.onChange(newValue as GqlChain)
             }}
             options={options}
-            value={field.value}
+            value={field.value ?? options[0].value}
           />
         )}
       />

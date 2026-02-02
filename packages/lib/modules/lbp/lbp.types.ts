@@ -24,12 +24,12 @@ export type SaleStructureForm = {
   startDateTime: string
   endDateTime: string
   collateralTokenAddress: string
-  weightAdjustmentType: WeightAdjustmentType
-  customStartWeight: number
-  customEndWeight: number
+  weightAdjustmentType?: WeightAdjustmentType
+  customStartWeight?: number
+  customEndWeight?: number
   userActions: UserActions
   fee: number
-  launchTokenRate: HumanAmount | ''
+  launchTokenRate?: HumanAmount | ''
   saleTokenAmount: HumanAmount | ''
   collateralTokenAmount: HumanAmount | ''
 }
