@@ -1,4 +1,4 @@
-import { clickButton, button } from '@/helpers/user.helpers'
+import { clickButton, clickRadio, button, checkbox } from '@/helpers/user.helpers'
 import { expect, Page } from '@playwright/test'
 import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/constants'
 import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
@@ -37,8 +37,8 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
   {
     type: PoolType.GyroE,
     tokens: [
-      { symbol: 'wstETH', amount: '1' },
-      { symbol: 'fwstETH', amount: undefined },
+      { symbol: 'USDC', amount: '1' },
+      { symbol: 'GHO', amount: undefined },
     ],
   },
   {
@@ -107,10 +107,7 @@ export class CreatePoolPage {
   }
 
   async choosePoolType(poolType: PoolType) {
-    await this.page
-      .getByRole('radiogroup', { name: 'Choose a pool type' })
-      .getByText(POOL_TYPES[poolType].label, { exact: true })
-      .click()
+    await clickRadio(this.page, 'Choose a pool type', POOL_TYPES[poolType].label)
   }
 
   async selectToken(tokenName: string) {
@@ -152,24 +149,17 @@ export class CreatePoolPage {
 
   async typeStep(goToNextStep?: boolean) {
     await this.expectInitialFormState()
-
     if (this.isCowAmm) await this.chooseProtocol('CoW')
-
     await this.choosePoolType(this.config.type)
-
     if (goToNextStep) await clickButton(this.page, 'Next')
   }
 
   async tokensStep(goToNextStep?: boolean) {
     await expect(this.page).toHaveURL(this.urls.tokens)
     await expect(this.page.getByText('Choose pool tokens')).toBeVisible()
-
     await expect(button(this.page, 'Next')).toBeDisabled()
-    for (const token of this.config.tokens) {
-      await this.selectToken(token.symbol)
-    }
+    for (const token of this.config.tokens) await this.selectToken(token.symbol)
     await expect(button(this.page, 'Next')).toBeEnabled()
-
     if (goToNextStep) await clickButton(this.page, 'Next')
   }
 
@@ -180,10 +170,7 @@ export class CreatePoolPage {
     if (!this.isCowAmm) await expect(this.page.getByText('Pool settings')).toBeVisible()
 
     if (isPoolCreatorEnabled(this.config.type)) {
-      await this.page
-        .getByRole('radiogroup', { name: 'Pool creator' })
-        .getByText('My connected wallet:', { exact: false })
-        .click()
+      await clickRadio(this.page, 'Pool creator', 'My connected wallet:', false)
     }
 
     if (goToNextStep) await clickButton(this.page, 'Next')
@@ -194,13 +181,10 @@ export class CreatePoolPage {
     await expect(this.page.getByText('Seed initial pool liquidity')).toBeVisible()
     await expect(button(this.page, 'Create Pool')).toBeDisabled()
 
-    const acceptRisksCheckbox = this.page
-      .locator('label')
-      .filter({ hasText: 'I accept the Risks and Terms' })
-      .locator('.chakra-checkbox__control')
+    const generalRisksCheckbox = await checkbox(this.page, 'I accept the Risks and Terms')
 
     if (this.isReClamm) {
-      await acceptRisksCheckbox.click()
+      await generalRisksCheckbox.click()
       await clickButton(this.page, 'Create Pool')
       await clickButton(this.page, 'Deploy pool on Ethereum Mainnet')
     }
@@ -208,14 +192,11 @@ export class CreatePoolPage {
     await this.fillTokenAmounts()
 
     if (this.isCowAmm || this.isWeighted) {
-      await this.page
-        .locator('label')
-        .filter({ hasText: 'I understand that I will' })
-        .locator('.chakra-checkbox__control')
-        .click()
+      const proportionalRiskCheckbox = await checkbox(this.page, 'I understand that I will')
+      await proportionalRiskCheckbox.click()
     }
 
-    if (!this.isReClamm) await acceptRisksCheckbox.click()
+    if (!this.isReClamm) await generalRisksCheckbox.click()
   }
 
   async transactionSteps() {
