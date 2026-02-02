@@ -11,12 +11,18 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { TransactionStepsResponse } from '../../transactions/transaction-steps/useTransactionSteps'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 import { UserActions, WeightAdjustmentType } from '@repo/lib/modules/lbp/lbp.types'
-import { isDynamicSaleType, isFixedSaleType } from '../steps/sale-structure/helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 
 export function LbpSummary({ transactionSteps }: { transactionSteps: TransactionStepsResponse }) {
-  const { saleStructureForm, saleMarketCap, launchToken, launchTokenPriceFiat } = useLbpForm()
+  const {
+    saleStructureForm,
+    saleMarketCap,
+    launchToken,
+    launchTokenPriceFiat,
+    isDynamicSale,
+    isFixedSale,
+  } = useLbpForm()
   const { isMobile } = useBreakpoints()
   const { getToken } = useTokens()
 
@@ -30,12 +36,8 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     endDateTime,
     weightAdjustmentType,
     userActions,
-    saleType,
     launchTokenPrice,
   } = saleStructureForm.getValues()
-
-  const isDynamicSale = isDynamicSaleType(saleType)
-  const isFixedSale = isFixedSaleType(saleType)
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
 

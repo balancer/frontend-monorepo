@@ -20,6 +20,7 @@ import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
 import { useTokens } from '../tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { SaleType } from './lbp.types'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -81,6 +82,7 @@ export function useLbpFormLogic() {
     selectedChain,
     collateralTokenAddress,
     launchTokenPrice,
+    saleType,
   } = useWatch({
     control: saleStructureForm.control,
   })
@@ -134,6 +136,9 @@ export function useLbpFormLogic() {
     decimals: launchTokenMetadata.decimals || 0,
   }
 
+  const isDynamicSale = saleType !== '' && saleType === SaleType.DYNAMIC_PRICE_LBP
+  const isFixedSale = saleType !== '' && saleType === SaleType.FIXED_PRICE_LBP
+
   return {
     ...formSteps,
     saleStructureForm,
@@ -151,6 +156,8 @@ export function useLbpFormLogic() {
     setPoolAddress,
     launchTokenPriceFiat: toCurrency(launchTokenPriceFiat),
     totalValue: toCurrency(totalValue),
+    isDynamicSale,
+    isFixedSale,
   }
 }
 

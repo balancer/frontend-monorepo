@@ -52,7 +52,6 @@ import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
 import { useWatch, useFormState } from 'react-hook-form'
 import { SaleTypeInput } from './sale-structure/SaleTypeInput'
-import { isDynamicSaleType, isFixedSaleType } from './sale-structure/helpers'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -62,6 +61,8 @@ export function SaleStructureStep() {
     goToNextStep,
     resetLbpCreation,
     poolAddress,
+    isDynamicSale,
+    isFixedSale,
   } = useLbpForm()
 
   const [
@@ -74,7 +75,6 @@ export function SaleStructureStep() {
     customStartWeight,
     weightAdjustmentType,
     fee,
-    saleType,
   ] = useWatch({
     control,
     name: [
@@ -107,9 +107,6 @@ export function SaleStructureStep() {
   }
 
   const isPoolCreated = !!poolAddress
-
-  const isDynamicSale = isDynamicSaleType(saleType)
-  const isFixedSale = isFixedSaleType(saleType)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>

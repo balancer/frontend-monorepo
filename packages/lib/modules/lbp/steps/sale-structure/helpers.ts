@@ -1,7 +1,6 @@
 import { differenceInDays, format } from 'date-fns'
 import { isBefore, isAfter, addHours, addDays, parseISO } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
-import { SaleType } from '@repo/lib/modules/lbp/lbp.types'
 
 /**
  * Formats date axis labels dynamically based on the total date range
@@ -53,12 +52,4 @@ export function saleStartsSoon(saleStart: string) {
   return (
     saleStart && isSaleStartValid(saleStart) && isBefore(parseISO(saleStart), addDays(now(), 1))
   )
-}
-
-export function isDynamicSaleType(saleType: SaleType | '') {
-  return saleType !== '' && saleType === SaleType.DYNAMIC_PRICE_LBP
-}
-
-export function isFixedSaleType(saleType: SaleType | '') {
-  return saleType !== '' && saleType === SaleType.FIXED_PRICE_LBP
 }

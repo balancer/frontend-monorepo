@@ -22,12 +22,12 @@ import { OtherSaleDetails } from './OtherSaleDetails'
 import { normalizeUrl } from '@repo/lib/shared/utils/urls'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { isDynamicSaleType, isFixedSaleType } from '../../steps/sale-structure/helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
-  const { projectInfoForm, saleStructureForm, launchTokenPriceFiat } = useLbpForm()
+  const { projectInfoForm, saleStructureForm, launchTokenPriceFiat, isDynamicSale, isFixedSale } =
+    useLbpForm()
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl] = useWatch({
     control: projectInfoForm.control,
     name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'],
@@ -42,7 +42,6 @@ export function ReviewStep() {
     endDateTime,
     fee,
     userActions,
-    saleType,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -69,9 +68,6 @@ export function ReviewStep() {
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
   const hoursDiff =
     differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
-
-  const isDynamicSale = isDynamicSaleType(saleType)
-  const isFixedSale = isFixedSaleType(saleType)
 
   return (
     <VStack align="start" gap="ms" w="full">

@@ -14,7 +14,6 @@ import { Address } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { LbpLearnMoreModal } from './modal/LbpLearnMoreModal'
 import { useWatch } from 'react-hook-form'
-import { isDynamicSaleType, isFixedSaleType } from './steps/sale-structure/helpers'
 
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
@@ -30,6 +29,8 @@ export function LbpPreview() {
     fdvMarketCap,
     launchTokenPriceFiat,
     totalValue,
+    isDynamicSale,
+    isFixedSale,
   } = useLbpForm()
 
   const [
@@ -40,7 +41,6 @@ export function LbpPreview() {
     startDateTime,
     collateralTokenAmount,
     saleTokenAmount,
-    saleType,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -59,8 +59,6 @@ export function LbpPreview() {
   const { projectTokenStartWeight: startWeight, projectTokenEndWeight: endWeight } = useLbpWeights()
 
   const tokenLoaded = !launchTokenMetadata.isLoading && !!launchTokenMetadata.symbol
-  const isDynamicSale = isDynamicSaleType(saleType)
-  const isFixedSale = isFixedSaleType(saleType)
 
   const collateralTokenPrice = priceFor(collateralTokenAddress, selectedChain)
 
