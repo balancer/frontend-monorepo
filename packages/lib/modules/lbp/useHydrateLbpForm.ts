@@ -2,15 +2,25 @@ import { useParams } from 'next/navigation'
 import { getChainId } from '@repo/lib/config/app.config'
 import { getLbpPathParams } from './getLbpPathParams'
 import { useLbpForm } from './LbpFormProvider'
-import { useReadContracts } from 'wagmi'
+import { useReadContract, useReadContracts } from 'wagmi'
 import { Address, formatUnits } from 'viem'
 import { liquidityBootstrappingPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { useEffect, useRef } from 'react'
-import { SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
+import { SaleStructureForm, UserActions, WeightAdjustmentType, SaleType } from './lbp.types'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
+import { FixedPriceLBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/FixedPriceLBPoolAbi'
 
 type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
+
+type PoolVersionResponse = {
+  name: string
+  version: number
+  deployment: string
+}
+
+type LBPoolType = 'LBPool' | 'FixedPriceLBPool'
+
 type LBPoolImmutableData = {
   startTime: bigint
   endTime: bigint
@@ -21,35 +31,63 @@ type LBPoolImmutableData = {
   tokens: [Address, Address]
 }
 
-type LbpDataResponse = [
+type FixedPriceLBPoolImmutableData = {
+  tokens: [Address, Address]
+  decimalScalingFactors: [bigint, bigint]
+  startTime: bigint
+  endTime: bigint
+  projectTokenIndex: number
+  reserveTokenIndex: number
+  projectTokenRate: bigint
+}
+
+type CommonLbpResponse = [
   ReadContractResponse<Address>, // owner
   ReadContractResponse<string>, // name
   ReadContractResponse<string>, // symbol
   ReadContractResponse<Address>, // projectToken
   ReadContractResponse<Address>, // reserveToken
   ReadContractResponse<bigint>, // staticSwapFeePercentage
-  ReadContractResponse<LBPoolImmutableData>, // lbpImmutableData
   ReadContractResponse<boolean>, // isProjectTokenSwapInBlocked
 ]
 
+type LbpDataResponse = [
+  ...CommonLbpResponse,
+  ReadContractResponse<LBPoolImmutableData>, // lbpImmutableData
+]
+
+type FixedPriceLbpDataResponse = [
+  ...CommonLbpResponse,
+  ReadContractResponse<FixedPriceLBPoolImmutableData>, // fixedPriceImmutableData
+]
+
+type ContractDataResponse = LbpDataResponse | FixedPriceLbpDataResponse
+
+function formatLbpTimestamp(timestamp: bigint): string {
+  return toISOString(toJsTimestamp(Number(timestamp))).slice(0, 16)
+}
+
 export function useHydrateLbpForm() {
   const { slug } = useParams()
-  const params = getLbpPathParams(slug as string[] | undefined)
+  const hasHydratedRef = useRef(false)
   const { poolAddress, setPoolAddress, saleStructureForm } = useLbpForm()
-  const chainId = params.chain ? getChainId(params.chain) : undefined
 
+  const params = getLbpPathParams(slug as string[] | undefined)
+  const chainId = params.chain ? getChainId(params.chain) : undefined
   const areAllParamsDefined = !!params.chain && !!params.poolAddress
   const shouldHydrateLbpForm = !poolAddress && areAllParamsDefined
 
-  const hasHydratedRef = useRef(false)
+  const { data: poolVersionData, isLoading: isVersionLoading } = useReadContract({
+    address: params.poolAddress,
+    abi: liquidityBootstrappingPoolAbi,
+    chainId,
+    functionName: 'version',
+    query: { enabled: shouldHydrateLbpForm },
+  })
 
-  useEffect(() => {
-    // clean up LS and ref in case user wants to load another pool
-    if (areAllParamsDefined) {
-      setPoolAddress(undefined)
-      hasHydratedRef.current = false
-    }
-  }, [areAllParamsDefined, setPoolAddress])
+  const poolType: LBPoolType | undefined = poolVersionData
+    ? ((JSON.parse(poolVersionData as string) as PoolVersionResponse).name as LBPoolType)
+    : undefined
 
   const lbpFunctionNames = [
     'owner',
@@ -58,108 +96,187 @@ export function useHydrateLbpForm() {
     'getProjectToken',
     'getReserveToken',
     'getStaticSwapFeePercentage',
-    'getLBPoolImmutableData',
     'isProjectTokenSwapInBlocked',
+    ...(poolType === 'LBPool'
+      ? ['getLBPoolImmutableData']
+      : poolType === 'FixedPriceLBPool'
+        ? ['getFixedPriceLBPoolImmutableData']
+        : []),
   ]
 
-  const lbpContractReads = lbpFunctionNames.map(functionName => ({
-    address: params.poolAddress,
-    abi: liquidityBootstrappingPoolAbi,
-    chainId,
-    functionName,
-  }))
+  const lbpContractReads = poolType
+    ? lbpFunctionNames.map(functionName => ({
+        address: params.poolAddress,
+        abi: poolType === 'LBPool' ? liquidityBootstrappingPoolAbi : FixedPriceLBPoolAbi,
+        chainId,
+        functionName,
+      }))
+    : []
 
-  const { data: lbpData, isLoading: isLbpLoading } = useReadContracts({
+  const enabled = !!poolType && lbpContractReads.length > 0 && shouldHydrateLbpForm
+
+  const { data: contractData, isLoading: isContractLoading } = useReadContracts({
     contracts: lbpContractReads,
-    query: { enabled: lbpContractReads.length > 0 && shouldHydrateLbpForm },
-  }) as { data: LbpDataResponse; isLoading: boolean }
+    query: {
+      enabled,
+    },
+  }) as { data: ContractDataResponse; isLoading: boolean }
+
+  function handleLBPoolData(lbpData: LbpDataResponse) {
+    const [
+      owner,
+      name,
+      symbol,
+      projectToken,
+      reserveToken,
+      staticSwapFeePercentage,
+      isProjectTokenSwapInBlocked,
+      lbpImmutableData,
+    ] = lbpData
+
+    if (
+      owner.result === undefined ||
+      name.result === undefined ||
+      symbol.result === undefined ||
+      projectToken.result === undefined ||
+      reserveToken.result === undefined ||
+      staticSwapFeePercentage.result === undefined ||
+      lbpImmutableData.result === undefined ||
+      isProjectTokenSwapInBlocked.result === undefined ||
+      params.chain === undefined
+    ) {
+      return
+    }
+
+    const userActions = isProjectTokenSwapInBlocked.result
+      ? UserActions.BUY_ONLY
+      : UserActions.BUY_AND_SELL
+
+    const { startWeights, endWeights, projectTokenIndex } = lbpImmutableData.result
+
+    const projectTokenStartWeight = +formatUnits(
+      startWeights[projectTokenIndex],
+      PERCENTAGE_DECIMALS
+    )
+    const projectTokenEndWeight = +formatUnits(endWeights[projectTokenIndex], PERCENTAGE_DECIMALS)
+
+    let weightAdjustmentType: WeightAdjustmentType
+    let customStartWeight = 90
+    let customEndWeight = 10
+
+    if (projectTokenStartWeight === 90 && projectTokenEndWeight === 10) {
+      weightAdjustmentType = WeightAdjustmentType.LINEAR_90_10
+    } else if (projectTokenStartWeight === 90 && projectTokenEndWeight === 50) {
+      weightAdjustmentType = WeightAdjustmentType.LINEAR_90_50
+    } else {
+      weightAdjustmentType = WeightAdjustmentType.CUSTOM
+      customStartWeight = projectTokenStartWeight
+      customEndWeight = projectTokenEndWeight
+    }
+
+    const saleStructureFormValues: SaleStructureForm = {
+      selectedChain: params.chain,
+      launchTokenAddress: projectToken.result,
+      saleType: SaleType.DYNAMIC_PRICE_LBP,
+      collateralTokenAddress: reserveToken.result,
+      saleTokenAmount: '',
+      collateralTokenAmount: '',
+      userActions,
+      weightAdjustmentType,
+      customStartWeight,
+      customEndWeight,
+      fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
+      startDateTime: formatLbpTimestamp(lbpImmutableData.result.startTime),
+      endDateTime: formatLbpTimestamp(lbpImmutableData.result.endTime),
+    }
+
+    saleStructureForm.reset(saleStructureFormValues)
+    setPoolAddress(params.poolAddress)
+    hasHydratedRef.current = true
+  }
+
+  function handleFixedPriceLBPoolData(fixedPriceData: FixedPriceLbpDataResponse) {
+    const [
+      owner,
+      name,
+      symbol,
+      projectToken,
+      reserveToken,
+      staticSwapFeePercentage,
+      isProjectTokenSwapInBlocked,
+      fixedPriceImmutableData,
+    ] = fixedPriceData
+
+    if (
+      owner.result === undefined ||
+      name.result === undefined ||
+      symbol.result === undefined ||
+      projectToken.result === undefined ||
+      reserveToken.result === undefined ||
+      staticSwapFeePercentage.result === undefined ||
+      fixedPriceImmutableData.result === undefined ||
+      isProjectTokenSwapInBlocked.result === undefined ||
+      params.chain === undefined
+    ) {
+      return
+    }
+
+    const userActions = isProjectTokenSwapInBlocked.result
+      ? UserActions.BUY_ONLY
+      : UserActions.BUY_AND_SELL
+
+    const { startTime, endTime } = fixedPriceImmutableData.result
+
+    const saleStructureFormValues: SaleStructureForm = {
+      selectedChain: params.chain,
+      launchTokenAddress: projectToken.result,
+      saleType: SaleType.FIXED_PRICE_LBP,
+      collateralTokenAddress: reserveToken.result,
+      saleTokenAmount: '',
+      collateralTokenAmount: '',
+      userActions,
+      fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
+      startDateTime: formatLbpTimestamp(startTime),
+      endDateTime: formatLbpTimestamp(endTime),
+      launchTokenRate: formatUnits(fixedPriceImmutableData.result.projectTokenRate, 18), // Assuming 18 decimals
+    }
+
+    saleStructureForm.reset(saleStructureFormValues)
+    setPoolAddress(params.poolAddress)
+    hasHydratedRef.current = true
+  }
 
   useEffect(() => {
-    if (!isLbpLoading && !!lbpData && shouldHydrateLbpForm && !hasHydratedRef.current) {
-      const [
-        owner,
-        name,
-        symbol,
-        projectToken,
-        reserveToken,
-        staticSwapFeePercentage,
-        lbpImmutableData,
-        isProjectTokenSwapInBlocked,
-      ] = lbpData
-
-      if (
-        owner.result === undefined ||
-        name.result === undefined ||
-        symbol.result === undefined ||
-        projectToken.result === undefined ||
-        reserveToken.result === undefined ||
-        staticSwapFeePercentage.result === undefined ||
-        lbpImmutableData.result === undefined ||
-        isProjectTokenSwapInBlocked.result === undefined ||
-        params.chain === undefined
-      ) {
-        return
+    if (!isVersionLoading && poolType && shouldHydrateLbpForm && !hasHydratedRef.current) {
+      if (poolType === 'LBPool' && !isContractLoading && contractData) {
+        handleLBPoolData(contractData as LbpDataResponse)
+      } else if (poolType === 'FixedPriceLBPool' && !isContractLoading && contractData) {
+        handleFixedPriceLBPoolData(contractData as FixedPriceLbpDataResponse)
       }
-
-      const userActions = isProjectTokenSwapInBlocked.result
-        ? UserActions.BUY_ONLY
-        : UserActions.BUY_AND_SELL
-
-      const { startWeights, endWeights, projectTokenIndex } = lbpImmutableData.result
-
-      const projectTokenStartWeight = +formatUnits(
-        startWeights[projectTokenIndex],
-        PERCENTAGE_DECIMALS
-      )
-      const projectTokenEndWeight = +formatUnits(endWeights[projectTokenIndex], PERCENTAGE_DECIMALS)
-
-      let weightAdjustmentType: WeightAdjustmentType
-      let customStartWeight = 90
-      let customEndWeight = 10
-
-      if (projectTokenStartWeight === 90 && projectTokenEndWeight === 10) {
-        weightAdjustmentType = WeightAdjustmentType.LINEAR_90_10
-      } else if (projectTokenStartWeight === 90 && projectTokenEndWeight === 50) {
-        weightAdjustmentType = WeightAdjustmentType.LINEAR_90_50
-      } else {
-        weightAdjustmentType = WeightAdjustmentType.CUSTOM
-        customStartWeight = projectTokenStartWeight
-        customEndWeight = projectTokenEndWeight
-      }
-
-      const saleStructureFormValues: SaleStructureForm = {
-        selectedChain: params.chain,
-        launchTokenAddress: projectToken.result,
-        saleType: '',
-        collateralTokenAddress: reserveToken.result,
-        saleTokenAmount: '',
-        collateralTokenAmount: '',
-        userActions,
-        weightAdjustmentType,
-        customStartWeight,
-        customEndWeight,
-        fee: +formatUnits(staticSwapFeePercentage.result, PERCENTAGE_DECIMALS),
-        startDateTime: formatLbpTimestamp(lbpImmutableData.result.startTime),
-        endDateTime: formatLbpTimestamp(lbpImmutableData.result.endTime),
-        launchTokenRate: '',
-      }
-
-      saleStructureForm.reset(saleStructureFormValues)
-      setPoolAddress(params.poolAddress)
-      hasHydratedRef.current = true
     }
   }, [
     params.chain,
     params.poolAddress,
-    lbpData,
-    isLbpLoading,
+    poolType,
+    isVersionLoading,
+    contractData,
+    isContractLoading,
     shouldHydrateLbpForm,
     saleStructureForm,
     setPoolAddress,
   ])
-  return { isLbpLoading }
-}
 
-function formatLbpTimestamp(timestamp: bigint): string {
-  return toISOString(toJsTimestamp(Number(timestamp))).slice(0, 16)
+  useEffect(() => {
+    // clean up LS and ref in case user wants to load another pool
+    if (!areAllParamsDefined || !poolAddress) {
+      return
+    }
+
+    if (params.poolAddress && poolAddress !== params.poolAddress) {
+      setPoolAddress(undefined)
+      hasHydratedRef.current = false
+    }
+  }, [areAllParamsDefined, params.poolAddress, poolAddress, setPoolAddress])
+
+  return { isLbpLoading: isVersionLoading || isContractLoading }
 }
