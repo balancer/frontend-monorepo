@@ -14,14 +14,14 @@ export function SaleTokenAmountInput({
   errors,
   selectedChain,
   launchToken,
-  launchTokenPriceFiat,
+  launchTokenPriceUsd,
   title,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
   launchToken: CustomToken
-  launchTokenPriceFiat?: string
+  launchTokenPriceUsd?: string
   title: string
 }) {
   const { balanceData, isLoading } = useUserBalance({
@@ -62,7 +62,7 @@ export function SaleTokenAmountInput({
             }
             id="sale-token-amount"
             onChange={e => field.onChange(e.currentTarget.value)}
-            priceMessage={`Price: ${launchTokenPriceFiat || 'N/A'}`}
+            priceMessage={`Price: ${launchTokenPriceUsd || 'N/A'}`}
             value={field.value}
           />
         )}

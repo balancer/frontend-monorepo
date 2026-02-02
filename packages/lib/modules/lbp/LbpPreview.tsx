@@ -27,7 +27,7 @@ export function LbpPreview() {
     maxPrice,
     saleMarketCap,
     fdvMarketCap,
-    launchTokenPriceFiat,
+    launchTokenPriceUsd,
     totalValue,
     isDynamicSale,
     isFixedSale,
@@ -99,7 +99,7 @@ export function LbpPreview() {
             {isFixedSale && (
               <HStack alignItems="stretch" gap="ms" w="full">
                 <SimpleInfoCard
-                  info={launchTokenPriceFiat}
+                  info={launchTokenPriceUsd}
                   title={`${launchTokenMetadata.symbol} sale price`}
                 />
                 <SimpleInfoCard info={fNum('token', saleTokenAmount)} title="Tokens for sale" />

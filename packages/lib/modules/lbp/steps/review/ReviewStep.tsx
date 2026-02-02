@@ -26,7 +26,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
-  const { projectInfoForm, saleStructureForm, launchTokenPriceFiat, isDynamicSale, isFixedSale } =
+  const { projectInfoForm, saleStructureForm, launchTokenPriceUsd, isDynamicSale, isFixedSale } =
     useLbpForm()
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl] = useWatch({
     control: projectInfoForm.control,
@@ -173,7 +173,7 @@ export function ReviewStep() {
                 isFixedSale={isFixedSale}
                 name={launchTokenMetadata.name || ''}
                 symbol={launchTokenMetadata.symbol || ''}
-                value={launchTokenPriceFiat}
+                value={launchTokenPriceUsd}
               />
             </CardBody>
           </Card>

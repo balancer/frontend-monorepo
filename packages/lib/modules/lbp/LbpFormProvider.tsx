@@ -81,7 +81,7 @@ export function useLbpFormLogic() {
     launchTokenAddress,
     selectedChain,
     collateralTokenAddress,
-    launchTokenPrice,
+    launchTokenRate,
     saleType,
   } = useWatch({
     control: saleStructureForm.control,
@@ -104,13 +104,13 @@ export function useLbpFormLogic() {
 
   const collateralTokenPrice = collateralTokenAddress ? priceFor(collateralTokenAddress, chain) : 0
 
-  const launchTokenPriceFiat =
-    collateralTokenPrice && launchTokenPrice
-      ? bn(launchTokenPrice).times(collateralTokenPrice).toString()
+  const launchTokenPriceUsd =
+    collateralTokenPrice && launchTokenRate
+      ? bn(launchTokenRate).times(collateralTokenPrice).toString()
       : '0'
 
   const totalValue = saleTokenAmount
-    ? bn(saleTokenAmount).times(launchTokenPriceFiat).toString()
+    ? bn(saleTokenAmount).times(launchTokenPriceUsd).toString()
     : '0'
 
   const updatePriceStats = (prices: LbpPrice[]) => {
@@ -154,7 +154,7 @@ export function useLbpFormLogic() {
     isCollateralNativeAsset,
     poolAddress,
     setPoolAddress,
-    launchTokenPriceFiat: toCurrency(launchTokenPriceFiat),
+    launchTokenPriceUsd: toCurrency(launchTokenPriceUsd),
     totalValue: toCurrency(totalValue),
     isDynamicSale,
     isFixedSale,

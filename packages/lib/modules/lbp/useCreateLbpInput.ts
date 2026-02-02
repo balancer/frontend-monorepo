@@ -24,7 +24,7 @@ export function useCreateLbpInput(): CreatePoolInput {
     selectedChain,
     userActions,
     fee,
-    launchTokenPrice,
+    launchTokenRate,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -35,7 +35,7 @@ export function useCreateLbpInput(): CreatePoolInput {
       'selectedChain',
       'userActions',
       'fee',
-      'launchTokenPrice',
+      'launchTokenRate',
     ],
   })
   const [name, owner, poolCreator] = useWatch({
@@ -83,7 +83,7 @@ export function useCreateLbpInput(): CreatePoolInput {
 
   const fixedPriceLbpParams = {
     ...baseLbpProps,
-    projectTokenRate: parseUnits(`${launchTokenPrice}`, DEFAULT_DECIMALS),
+    projectTokenRate: parseUnits(`${launchTokenRate}`, DEFAULT_DECIMALS),
   }
 
   const basePoolProps = {

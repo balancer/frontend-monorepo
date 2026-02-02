@@ -29,7 +29,7 @@ export type SaleStructureForm = {
   customEndWeight: number
   userActions: UserActions
   fee: number
-  launchTokenPrice: HumanAmount | ''
+  launchTokenRate: HumanAmount | ''
   saleTokenAmount: HumanAmount | ''
   collateralTokenAmount: HumanAmount | ''
 }

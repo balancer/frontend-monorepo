@@ -19,7 +19,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     saleStructureForm,
     saleMarketCap,
     launchToken,
-    launchTokenPriceFiat,
+    launchTokenPriceUsd,
     isDynamicSale,
     isFixedSale,
   } = useLbpForm()
@@ -36,7 +36,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     endDateTime,
     weightAdjustmentType,
     userActions,
-    launchTokenPrice,
+    launchTokenRate,
   } = saleStructureForm.getValues()
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
@@ -95,13 +95,13 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
               <HStack justify="space-between" w="full">
                 <Text color="grayText">{launchToken.symbol} token price</Text>
                 <Text color="grayText">
-                  {launchTokenPrice} / {collateralToken?.symbol} (~{launchTokenPriceFiat})
+                  {launchTokenRate} / {collateralToken?.symbol} (~{launchTokenPriceUsd})
                 </Text>
               </HStack>
               <HStack justify="space-between" w="full">
                 <Text color="grayText">Collateral token max if sold out</Text>
                 <Text color="grayText">
-                  {fNum('token', bn(saleTokenAmount).times(launchTokenPrice).toString())}{' '}
+                  {fNum('token', bn(saleTokenAmount).times(launchTokenRate).toString())}{' '}
                   {collateralToken?.symbol}
                 </Text>
               </HStack>

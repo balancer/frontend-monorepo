@@ -14,7 +14,7 @@ export function FixedLbpTokenAmountInputs() {
 
   const {
     launchToken,
-    launchTokenPriceFiat,
+    launchTokenPriceUsd,
     totalValue,
     saleStructureForm: { control },
   } = useLbpForm()
@@ -43,11 +43,11 @@ export function FixedLbpTokenAmountInputs() {
             <Heading color="font.maxContrast" size="md">
               Sale configuration
             </Heading>
-            <LaunchTokenPriceInput
+            <LaunchTokenRateInput
               collateralTokenSymbol={collateralTokenSymbol}
               control={control}
               errors={errors}
-              launchTokenPriceFiat={launchTokenPriceFiat}
+              launchTokenPriceUsd={launchTokenPriceUsd}
               launchTokenSymbol={launchTokenSymbol}
             />
             <VStack align="start" w="full">
@@ -55,7 +55,7 @@ export function FixedLbpTokenAmountInputs() {
                 control={control}
                 errors={errors}
                 launchToken={launchToken}
-                launchTokenPriceFiat={launchTokenPriceFiat}
+                launchTokenPriceUsd={launchTokenPriceUsd}
                 selectedChain={selectedChain}
                 title="How many tokens do you want to sell in this sale?"
               />
@@ -73,18 +73,18 @@ export function FixedLbpTokenAmountInputs() {
   )
 }
 
-function LaunchTokenPriceInput({
+function LaunchTokenRateInput({
   control,
   errors,
   collateralTokenSymbol,
   launchTokenSymbol,
-  launchTokenPriceFiat,
+  launchTokenPriceUsd,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   collateralTokenSymbol: string
   launchTokenSymbol: string
-  launchTokenPriceFiat: string
+  launchTokenPriceUsd: string
 }) {
   return (
     <VStack align="start" w="full">
@@ -93,7 +93,7 @@ function LaunchTokenPriceInput({
       </Text>
       <Controller
         control={control}
-        name="launchTokenPrice"
+        name="launchTokenRate"
         render={({ field }) => (
           <Box
             _focusWithin={{
@@ -159,13 +159,13 @@ function LaunchTokenPriceInput({
           validate: { isGreaterThanZeroValidation },
         }}
       />
-      {errors.launchTokenPrice && (
+      {errors.launchTokenRate && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full" whiteSpace="pre-wrap">
-          {errors.launchTokenPrice.message}
+          {errors.launchTokenRate.message}
         </Text>
       )}
       <Text color="font.secondary" fontSize="sm">
-        At current prices, 1 {launchTokenSymbol} will be sold for {launchTokenPriceFiat}
+        At current prices, 1 {launchTokenSymbol} will be sold for {launchTokenPriceUsd}
       </Text>
     </VStack>
   )

@@ -24,7 +24,7 @@ export const INITIAL_SALE_STRUCTURE: SaleStructureForm = {
   weightAdjustmentType: WeightAdjustmentType.LINEAR_90_10,
   customStartWeight: 90,
   customEndWeight: 10,
-  launchTokenPrice: '',
+  launchTokenRate: '',
   saleTokenAmount: '',
   collateralTokenAmount: '',
 }
