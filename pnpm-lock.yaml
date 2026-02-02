@@ -586,8 +586,8 @@ importers:
         specifier: 7.65.0
         version: 7.65.0(react@19.2.4)
       react-hotkeys-hook:
-        specifier: 5.2.0
-        version: 5.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: 5.2.4
+        version: 5.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react-swipeable:
         specifier: 7.0.2
         version: 7.0.2(react@19.2.4)
@@ -838,6 +838,10 @@ packages:
 
   '@babel/code-frame@7.28.6':
     resolution: {integrity: sha512-JYgintcMjRiCvS8mMECzaEn+m3PfoQiyqukOMCCVQtoJGYJw8j/8LBJEiqkHLkfwCcs74E3pbAUFNg7d9VNJ+Q==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/code-frame@7.29.0':
+    resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/compat-data@7.26.8':
@@ -7682,8 +7686,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
-  react-hotkeys-hook@5.2.0:
-    resolution: {integrity: sha512-6hhPHVuofG8De4yU3jr8Q4EjHsxEnob5I1Dag+OxgDRXX1oARHbmURreXyo2CDTYyz0POmFqdBlW6eAa0MwNLw==}
+  react-hotkeys-hook@5.2.4:
+    resolution: {integrity: sha512-BgKg+A1+TawkYluh5Bo4cTmcgMN5L29uhJbDUQdHwPX+qgXRjIPYU5kIDHyxnAwCkCBiu9V5OpB2mpyeluVF2A==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -9196,8 +9200,8 @@ packages:
       use-sync-external-store:
         optional: true
 
-  zustand@5.0.10:
-    resolution: {integrity: sha512-U1AiltS1O9hSy3rul+Ub82ut2fqIAefiSuwECWt6jlMVUGejvf+5omLcRBSzqbRagSM3hQZbtzdeRc6QVScXTg==}
+  zustand@5.0.11:
+    resolution: {integrity: sha512-fdZY+dk7zn/vbWNCYmzZULHRrss0jx5pPFiOuMZ/5HJN6Yv3u+1Wswy/4MpZEkEGhtNH+pwxZB8OKgUBPzYAGg==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '19.2'
@@ -9338,6 +9342,12 @@ snapshots:
       picocolors: 1.1.1
 
   '@babel/code-frame@7.28.6':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.28.5
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
+  '@babel/code-frame@7.29.0':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
       js-tokens: 4.0.0
@@ -12944,7 +12954,7 @@ snapshots:
 
   '@testing-library/dom@10.4.0':
     dependencies:
-      '@babel/code-frame': 7.28.6
+      '@babel/code-frame': 7.29.0
       '@babel/runtime': 7.28.6
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
@@ -17607,7 +17617,7 @@ snapshots:
       ox: 0.9.17(typescript@5.9.2)(zod@4.3.5)
       viem: 2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
       zod: 4.3.5
-      zustand: 5.0.10(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4))
+      zustand: 5.0.11(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4))
     optionalDependencies:
       '@tanstack/react-query': 5.90.5(react@19.2.4)
       react: 19.2.4
@@ -17827,7 +17837,7 @@ snapshots:
     dependencies:
       react: 19.2.4
 
-  react-hotkeys-hook@5.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  react-hotkeys-hook@5.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
@@ -19626,7 +19636,7 @@ snapshots:
       react: 19.2.4
       use-sync-external-store: 1.4.0(react@19.2.4)
 
-  zustand@5.0.10(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4)):
+  zustand@5.0.11(@types/react@19.2.10)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4)):
     optionalDependencies:
       '@types/react': 19.2.10
       react: 19.2.4
