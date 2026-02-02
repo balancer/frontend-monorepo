@@ -87,7 +87,6 @@ export function SaleStructureStep() {
       'customStartWeight',
       'weightAdjustmentType',
       'fee',
-      'saleType',
     ],
   })
   const { isValid, errors } = useFormState({ control })

@@ -51,7 +51,6 @@ export function LbpPreview() {
       'startDateTime',
       'collateralTokenAmount',
       'saleTokenAmount',
-      'saleType',
     ],
   })
 

@@ -54,7 +54,6 @@ export function ReviewStep() {
       'endDateTime',
       'fee',
       'userActions',
-      'saleType',
     ],
   })
 
