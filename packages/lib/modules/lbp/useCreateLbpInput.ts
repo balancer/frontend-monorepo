@@ -7,13 +7,15 @@ import { parseUnits, zeroAddress } from 'viem'
 import { Address } from 'viem'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { millisecondsToSeconds } from 'date-fns'
-import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
+import { DEFAULT_DECIMALS, PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-export function useCreateLbpInput() {
-  const { saleStructureForm, projectInfoForm, isCollateralNativeAsset } = useLbpForm()
+import { CreatePoolInput } from '@repo/lib/modules/pool/actions/create/types'
+
+export function useCreateLbpInput(): CreatePoolInput {
+  const { saleStructureForm, projectInfoForm, isCollateralNativeAsset, isFixedSale } = useLbpForm()
   const [
     launchTokenAddress,
     collateralTokenAddress,
@@ -22,6 +24,7 @@ export function useCreateLbpInput() {
     selectedChain,
     userActions,
     fee,
+    launchTokenPrice,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -32,6 +35,7 @@ export function useCreateLbpInput() {
       'selectedChain',
       'userActions',
       'fee',
+      'launchTokenPrice',
     ],
   })
   const [name, owner, poolCreator] = useWatch({
@@ -60,25 +64,48 @@ export function useCreateLbpInput() {
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress || '', chain)
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, chain)
 
-  return {
+  const baseLbpProps = {
+    owner: (owner as Address) || userAddress,
+    projectToken: launchTokenAddress as Address,
+    reserveToken: reserveTokenAddress as Address,
+    startTimestamp: BigInt(millisecondsToSeconds(new Date(startDateTime || '').getTime())),
+    endTimestamp: BigInt(millisecondsToSeconds(new Date(endDateTime || '').getTime())),
+  }
+
+  const lbpParams = {
+    ...baseLbpProps,
+    blockProjectTokenSwapsIn,
+    projectTokenStartWeight: parseUnits(`${projectTokenStartWeight}`, PERCENTAGE_DECIMALS),
+    reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight}`, PERCENTAGE_DECIMALS),
+    projectTokenEndWeight: parseUnits(`${projectTokenEndWeight}`, PERCENTAGE_DECIMALS),
+    reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight}`, PERCENTAGE_DECIMALS),
+  }
+
+  const fixedPriceLbpParams = {
+    ...baseLbpProps,
+    projectTokenRate: parseUnits(`${launchTokenPrice}`, DEFAULT_DECIMALS),
+  }
+
+  const basePoolProps = {
     protocolVersion: 3 as const,
-    poolType: PoolType.LiquidityBootstrapping as const,
     symbol: `${launchTokenSymbol}-${reserveTokenSymbol}-LBP`,
-    name: `${name} Liquidity Bootstrapping Pool`,
+    name: `${name} ${isFixedSale ? 'Fixed' : 'Dynamic'} Price Liquidity Bootstrapping Pool`,
     swapFeePercentage: parseUnits(`${fee}`, PERCENTAGE_DECIMALS),
     chainId,
     poolCreator: (poolCreator as Address) || zeroAddress,
-    lbpParams: {
-      owner: (owner as Address) || userAddress,
-      blockProjectTokenSwapsIn,
-      projectToken: launchTokenAddress as Address,
-      reserveToken: reserveTokenAddress as Address,
-      projectTokenStartWeight: parseUnits(`${projectTokenStartWeight}`, PERCENTAGE_DECIMALS),
-      reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight}`, PERCENTAGE_DECIMALS),
-      projectTokenEndWeight: parseUnits(`${projectTokenEndWeight}`, PERCENTAGE_DECIMALS),
-      reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight}`, PERCENTAGE_DECIMALS),
-      startTimestamp: BigInt(millisecondsToSeconds(new Date(startDateTime || '').getTime())),
-      endTimestamp: BigInt(millisecondsToSeconds(new Date(endDateTime || '').getTime())),
-    },
+  }
+
+  if (isFixedSale) {
+    return {
+      ...basePoolProps,
+      poolType: PoolType.LiquidityBootstrappingFixedPrice,
+      fixedPriceLbpParams,
+    }
+  } else {
+    return {
+      ...basePoolProps,
+      poolType: PoolType.LiquidityBootstrapping,
+      lbpParams,
+    }
   }
 }
