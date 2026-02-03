@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Text } from '@chakra-ui/react'
 import { Picture } from './Picture'
 import { ReactNode } from 'react'
 
@@ -9,11 +9,13 @@ interface StatProps {
   imageBackgroundPosition?: string
   imageTransform?: string
   popover?: boolean
+  width?: BoxProps['width']
 }
 
 function Stat({
   label,
   value,
+  width = { base: '100%', md: 'max-content' },
   imageBackgroundSize = 'cover',
   imageBackgroundPosition = 'left',
   imageTransform = 'scale(1)',
@@ -27,7 +29,7 @@ function Stat({
       position="relative"
       rounded="md"
       shadow="md"
-      width={{ base: '100%', md: 'max-content' }}
+      width={width}
     >
       <Box height="100%" position="absolute" width="100%">
         <Box

@@ -59,6 +59,7 @@ export function NoisyCard({
         h="full"
         inset="-1px"
         opacity="0"
+        pointerEvents="none"
         position="absolute"
         style={{
           background: gradient,
@@ -70,6 +71,7 @@ export function NoisyCard({
       <Box
         content=""
         height="full"
+        pointerEvents="none"
         position="absolute"
         shadow="innerXl"
         width="full"

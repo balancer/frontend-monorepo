@@ -139,7 +139,6 @@ export const b_50sDAI_50wstETHMock = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'NO_NESTING',
   poolTokens: [
     {
       id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-0x6c76971f98945ae98dd7d4dfca8711ebea946ea6',

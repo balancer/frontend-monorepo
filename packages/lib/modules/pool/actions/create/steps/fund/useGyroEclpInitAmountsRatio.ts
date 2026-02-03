@@ -4,7 +4,8 @@ import { isGyroEllipticPool } from '../../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function useGyroEclpInitAmountsRatio() {
-  const { spotPriceWithoutRate, rateTokenA, rateTokenB } = usePoolSpotPriceWithoutRate()
+  const { spotPriceWithoutRate, rateTokenA, rateTokenB, isRateLoading } =
+    usePoolSpotPriceWithoutRate()
   const { eclpConfigForm, poolCreationForm } = usePoolCreationForm()
   const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
   const eclpParams = useWatch({ control: eclpConfigForm.control })
@@ -22,6 +23,7 @@ export function useGyroEclpInitAmountsRatio() {
   const hasRequiredData =
     isGyroEllipticPool(poolType) &&
     isValidEclpParams &&
+    !isRateLoading &&
     !!rateA &&
     !!rateB &&
     !!spotPriceWithoutRate

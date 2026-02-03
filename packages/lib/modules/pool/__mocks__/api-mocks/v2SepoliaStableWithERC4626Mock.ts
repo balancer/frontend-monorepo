@@ -48,7 +48,6 @@ export const v2SepoliaStableWithERC4626Mock = {
     stakedBalances: [],
   },
   amp: '100.0',
-  nestingType: 'NO_NESTING',
   bptPriceRate: '1.0',
   poolTokens: [
     {

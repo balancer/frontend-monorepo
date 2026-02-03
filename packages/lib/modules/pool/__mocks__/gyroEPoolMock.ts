@@ -49,52 +49,7 @@ export const gyroEPoolMock: GqlPoolElement = {
     fees24hAtlTimestamp: 1693180800,
     yieldCapture24h: '567.81',
     yieldCapture48h: '1167.66',
-    apr: {
-      hasRewardApr: true,
-      thirdPartyApr: { min: '0', max: '0' },
-      nativeRewardApr: { min: '0.0224090905875736', max: '0.056022726468934' },
-      swapApr: '0.0008473094638100379',
-      apr: { min: '0.04031122946854132', max: '0.07392486534990171' },
-      items: [
-        {
-          id: '0xdf54d2dd06f8be3b0c4ffc157be54ec9cca91f3c-BAL-apr',
-          title: 'BAL reward APR',
-          apr: { min: '0.0224090905875736', max: '0.056022726468934' },
-          subItems: [],
-        },
-        {
-          id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-swap-apr',
-          title: 'Swap fees APR',
-          apr: { total: '0.0008473094638100379' },
-          subItems: [],
-        },
-        {
-          id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-wstETH-yield-apr',
-          title: 'wstETH APR',
-          apr: { total: '0.01705482941715768' },
-          subItems: [],
-        },
-      ],
-    },
   },
-  displayTokens: [
-    {
-      id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      address: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      name: 'Wrapped liquid staked Ether 2.0',
-      weight: null,
-      symbol: 'wstETH',
-      nestedTokens: null,
-    },
-    {
-      id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      name: 'Wrapped Ether',
-      weight: null,
-      symbol: 'WETH',
-      nestedTokens: null,
-    },
-  ],
   staking: {
     id: '0xdf54d2dd06f8be3b0c4ffc157be54ec9cca91f3c',
     type: 'GAUGE',
@@ -141,7 +96,6 @@ export const gyroEPoolMock: GqlPoolElement = {
   v: '0.290369255600130042147650652296121',
   w: '0.1355149244812121776018229293854268',
   z: '-0.041579812808856621982290771533576495',
-  nestingType: 'NO_NESTING',
   poolTokens: [
     {
       id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',

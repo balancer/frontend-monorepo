@@ -195,7 +195,7 @@ export function useUninitializedPool() {
         rateProvider: config.rateProvider,
         paysYieldFees: config.paysYieldFees,
         amount: '',
-        weight: tokenWeights ? tokenWeights[idx] : undefined,
+        weight: tokenWeights ? tokenWeights[idx] : '50',
         data,
       })
     }

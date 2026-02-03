@@ -1,0 +1,201 @@
+'use client'
+
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { Text } from '@chakra-ui/react'
+import { BalAlert } from '../../../shared/components/alerts/BalAlert'
+import { useReadContracts } from 'wagmi'
+import { vaultAdminAbi_V3, AddressProvider } from '@balancer/sdk'
+import { formatUnits } from 'viem'
+
+type Props = {
+  validTokens: ApiToken[]
+  amounts: HumanTokenAmountWithSymbol[]
+  operation: 'add' | 'remove'
+}
+
+export function useBufferBalanceWarning({ amounts, validTokens, operation }: Props) {
+  const humanUnderlyingAmounts = amounts.filter(amount =>
+    validTokens.some(
+      token =>
+        token.address === amount.tokenAddress &&
+        token.wrappedToken &&
+        token.useUnderlyingForAddRemove
+    )
+  )
+
+  const wrappedTokens =
+    operation === 'add'
+      ? validTokens.filter(token => token.underlyingToken)
+      : validTokens.map(token => token.wrappedToken).filter(token => token !== undefined)
+  const { bufferBalances, isLoadingBufferBalances } = useBufferBalances(wrappedTokens)
+
+  if (isLoadingBufferBalances) return null
+
+  // validTokens always have symbol but amounts do not
+  const underlyingAmounts = humanUnderlyingAmounts.map(({ tokenAddress, humanAmount }) => {
+    const tokenSymbol = validTokens.find(
+      token => token.address.toLowerCase() === tokenAddress.toLowerCase()
+    )?.symbol
+    return {
+      tokenAddress,
+      humanAmount: humanAmount,
+      symbol: tokenSymbol,
+    }
+  })
+
+  const bufferLimitViolations = underlyingAmounts
+    .map(({ tokenAddress, humanAmount, symbol: underlyingSymbol }) => {
+      if (operation === 'add') {
+        // if operation is add liquidity, the user is offering underlying tokens which requires sufficient buffer balance of wrapped tokens
+        const wrappedToken = validTokens.find(
+          validToken => tokenAddress === validToken.underlyingToken?.address
+        )
+        const bufferBalance = bufferBalances?.find(
+          bufferBalance => bufferBalance.wrappedTokenAddress === wrappedToken?.address
+        )
+
+        if (!bufferBalance || !wrappedToken || !wrappedToken.priceRate) return null
+
+        const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped } = bufferBalance
+
+        const wrappedAmountRequired = bn(humanAmount).div(wrappedToken.priceRate)
+        const exceedsBufferBalance = wrappedAmountRequired.gt(bufferBalanceOfWrapped)
+
+        const maxDeposit = bn(wrappedToken?.maxDeposit ?? 0)
+        const exceedsVaultCapacity = maxDeposit.lt(
+          halfOfBufferTotalLiquidityAsWrapped.plus(
+            wrappedAmountRequired.minus(bufferBalanceOfWrapped)
+          )
+        )
+
+        if (exceedsBufferBalance && exceedsVaultCapacity) {
+          return { underlyingSymbol, wrappedSymbol: wrappedToken.symbol }
+        }
+
+        return null
+      } else {
+        // if operation is remove liquidity, the user is offering wrapped tokens which requires sufficient buffer balance of underlying tokens
+        const underlyingToken = validTokens.find(validToken => tokenAddress === validToken.address)
+        const bufferBalance = bufferBalances?.find(
+          bufferBalance => bufferBalance.underlyingTokenAddress === underlyingToken?.address
+        )
+
+        if (!bufferBalance || !underlyingSymbol) return null
+
+        const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } = bufferBalance
+
+        const underlyingAmountRequired = bn(humanAmount)
+        const exceedsBufferBalance = underlyingAmountRequired.gt(bufferBalanceOfUnderlying)
+
+        const maxWithdraw = bn(underlyingToken?.maxWithdraw ?? 0)
+        const exceedsVaultCapacity = maxWithdraw.lt(
+          halfOfBufferTotalLiquidityAsUnderlying.plus(
+            underlyingAmountRequired.minus(bufferBalanceOfUnderlying)
+          )
+        )
+
+        if (exceedsBufferBalance && exceedsVaultCapacity) {
+          return {
+            underlyingSymbol,
+            wrappedSymbol: underlyingToken?.wrappedToken?.symbol,
+          }
+        }
+
+        return null
+      }
+    })
+    .filter(bufferViolation => bufferViolation !== null)
+
+  if (bufferLimitViolations.length === 0) return null
+
+  return bufferLimitViolations.map(({ underlyingSymbol, wrappedSymbol }, idx) => {
+    const action = operation === 'add' ? 'deposit' : 'withdrawal'
+    const isRemoveLiquidity = operation === 'remove'
+
+    const selectedTokenSymbol = isRemoveLiquidity ? underlyingSymbol : wrappedSymbol
+
+    return (
+      <BalAlert
+        content={
+          <>
+            <Text color="black" mb="sm">
+              Liquidity buffers in v3 Boosted pools facilitate instant, gas-efficient transitions
+              between the wrapped yield generating tokens and the unwrapped underlying tokens.
+            </Text>
+            <Text color="black">
+              Unfortunately, the {selectedTokenSymbol} in this pool's buffer is too small to allow
+              for your {action}. Instead, you can {action} any amount as {wrappedSymbol} (the
+              yield-bearing token)
+              {isRemoveLiquidity && ', which you can then unwrap later on the lending protocol'}.
+            </Text>
+          </>
+        }
+        key={idx}
+        status="warning"
+        title={`Insufficient buffer liquidity for your ${underlyingSymbol} ${action}`}
+      />
+    )
+  })
+}
+
+function useBufferBalances(wrappedTokens: ApiToken[]) {
+  const { data, isLoading } = useReadContracts({
+    contracts: wrappedTokens.map(token => ({
+      chainId: token.chainId,
+      abi: vaultAdminAbi_V3,
+      address: AddressProvider.Vault(token.chainId),
+      functionName: 'getBufferBalance',
+      args: [token.address],
+    })),
+    query: { enabled: wrappedTokens.length > 0 },
+  })
+
+  const bufferBalances = data
+    ?.map((item, index) => {
+      const result = item.result as readonly [bigint, bigint] | undefined
+      const wrappedToken = wrappedTokens[index]
+
+      const underlyingBalanceRaw = result?.[0]
+      const wrappedBalanceRaw = result?.[1]
+      const underlyingDecimals = wrappedToken.underlyingToken?.decimals
+      const wrappedDecimals = wrappedToken?.decimals
+
+      if (
+        !underlyingBalanceRaw ||
+        !wrappedBalanceRaw ||
+        !underlyingDecimals ||
+        !wrappedDecimals ||
+        !wrappedToken?.priceRate
+      ) {
+        return null
+      }
+
+      const bufferBalanceOfUnderlying = bn(formatUnits(underlyingBalanceRaw, underlyingDecimals))
+      const bufferBalanceOfWrapped = bn(formatUnits(wrappedBalanceRaw, wrappedDecimals))
+
+      const bufferTotalLiquidityAsUnderlying = bufferBalanceOfUnderlying.plus(
+        bufferBalanceOfWrapped.times(wrappedToken.priceRate)
+      )
+      const halfOfBufferTotalLiquidityAsUnderlying = bufferTotalLiquidityAsUnderlying.div(2)
+      const halfOfBufferTotalLiquidityAsWrapped = halfOfBufferTotalLiquidityAsUnderlying.div(
+        wrappedToken.priceRate
+      )
+
+      const underlyingTokenAddress = wrappedTokens[index].underlyingToken?.address
+      const wrappedTokenAddress = wrappedTokens[index].address
+
+      return {
+        underlyingTokenAddress,
+        wrappedTokenAddress,
+        bufferBalanceOfUnderlying,
+        bufferBalanceOfWrapped,
+        halfOfBufferTotalLiquidityAsUnderlying,
+        halfOfBufferTotalLiquidityAsWrapped,
+      }
+    })
+    .filter(bufferBalance => bufferBalance !== null)
+
+  return { bufferBalances, isLoadingBufferBalances: isLoading }
+}

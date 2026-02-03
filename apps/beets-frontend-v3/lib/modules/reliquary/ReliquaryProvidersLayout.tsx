@@ -11,7 +11,7 @@ import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSigna
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 
 export default function ReliquaryProvidersLayout({ children }: PropsWithChildren) {
-  const { tokens } = useTokens()
+  const { tokens, isLoadingTokens } = useTokens()
 
   const poolTokens = tokens.filter(
     t =>
@@ -19,7 +19,7 @@ export default function ReliquaryProvidersLayout({ children }: PropsWithChildren
       t.address === sonicNetworkConfig.tokens.stakedAsset?.address
   )
 
-  if (poolTokens.length === 0) throw new Error('Reliquary tokens not found')
+  if (!isLoadingTokens && poolTokens.length === 0) throw new Error('Reliquary tokens not found')
 
   return (
     <TransactionStateProvider>

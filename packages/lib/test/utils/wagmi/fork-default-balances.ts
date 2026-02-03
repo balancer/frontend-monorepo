@@ -15,6 +15,10 @@ import { TokenBalance } from './fork-options'
 
 export const mainnetTokenBalances: TokenBalance[] = [
   {
+    tokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d', // BAL
+    value: '10000',
+  },
+  {
     tokenAddress: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56', // B-80BAL-20WETH
     value: '6000',
   },
@@ -24,6 +28,10 @@ export const mainnetTokenBalances: TokenBalance[] = [
   },
   {
     tokenAddress: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0', // wstETH
+    value: '6000',
+  },
+  {
+    tokenAddress: '0x2411802d8bea09be0af8fd8d08314a63e706b29c', // fwstETH
     value: '6000',
   },
   {
@@ -47,13 +55,22 @@ export const mainnetTokenBalances: TokenBalance[] = [
     value: '6000',
   },
   {
+    tokenAddress: '0xe07f9d810a48ab5c3c914ba3ca53af14e4491e8a', // GYD
+    value: '10000',
+  },
+  {
     tokenAddress: '0xc3d21f79c3120a4ffda7a535f8005a7c297799bf', // TERM
     value: '10000',
     slot: BigInt('0x52c63247e1f47db19d5ce0460030c497f067ca4cebf71ba98eeadabe20bace00'),
   },
   {
     tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
-    value: '2000',
+    value: '100000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7', // USDT
+    value: '10000',
     decimals: 6,
   },
   {
@@ -118,7 +135,12 @@ export const sonicTokenBalances: TokenBalance[] = [
   },
   {
     tokenAddress: '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC.e
-    value: '50',
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae', // scUSD
+    value: '1000',
     decimals: 6,
   },
 ]
@@ -181,5 +203,44 @@ export const hyperEVMTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0x5555555555555555555555555555555555555555', // WHYPE
     value: '100',
+  },
+]
+
+export const plasmaTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x9895D81bB462A195b4922ED7De0e3ACD007c32CB', // WETH
+    value: '10000',
+  },
+  {
+    tokenAddress: '0x6eaf19b2fc24552925db245f9ff613157a7dbb4c', // xUSD
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xa9c251f8304b1b3fc2b9e8fcae78d94eff82ac66', // tcUSDT0
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb', // USDT0
+    value: '1000',
+    decimals: 6,
+  },
+]
+
+export const monadTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x3bd359c1119da7da1d913d1c4d2b7c461115433a', // WMON
+    value: '10000',
+  },
+  {
+    tokenAddress: '0x754704bc059f8c67012fed69bc8a327a5aafb603', // USDC
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0x0555e30da8f98308edb960aa94c0db47230d2b9c', // WBTC
+    value: '10',
+    decimals: 8,
   },
 ]

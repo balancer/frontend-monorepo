@@ -8,17 +8,20 @@ import { FocussedActionLayout } from '@repo/lib/shared/components/layout/Focusse
 
 type Props = PropsWithChildren & {
   closeButton?: boolean
+  redirectPath?: string
 }
 
-export function PoolActionsLayout({ closeButton, children }: Props) {
+export function PoolActionsLayout({ closeButton, redirectPath, children }: Props) {
   const { pool } = usePool()
+
+  const finalRedirectPath = redirectPath ?? getPoolPath(pool)
 
   return (
     <FocussedActionLayout
       chain={pool.chain}
       closeButton={closeButton}
       leftSlot={<PoolName color="font.light" pool={pool} />}
-      redirectPath={getPoolPath(pool)}
+      redirectPath={finalRedirectPath}
     >
       {children}
     </FocussedActionLayout>

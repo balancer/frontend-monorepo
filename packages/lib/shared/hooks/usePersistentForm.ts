@@ -7,7 +7,7 @@ import {
   DefaultValues,
   useWatch,
 } from 'react-hook-form'
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 
 /**
  * Combines react-hook-form with useLocalStorage to persist form data.
@@ -16,13 +16,14 @@ import { useEffect, useCallback } from 'react'
  * @param initialDefaultValues The initial default values for the form. If no data is found
  * in local storage, these values will be used and also written to local storage.
  * @param formOptions Optional configuration options for react-hook-form (excluding defaultValues).
- * @returns The form methods returned by useForm.
+ * @returns The form methods returned by useForm, plus isHydrated state.
  */
 export function usePersistentForm<TFieldValues extends FieldValues = FieldValues>(
   storageKey: string,
   initialDefaultValues: DefaultValues<TFieldValues>,
   formOptions?: Omit<UseFormProps<TFieldValues>, 'defaultValues'>
-): UseFormReturn<TFieldValues> & { resetToInitial: () => void } {
+): UseFormReturn<TFieldValues> & { resetToInitial: () => void; isHydrated: boolean } {
+  const [isHydrated, setIsHydrated] = useState(false)
   const [persistedValues, setPersistedValues] = useLocalStorage<DefaultValues<TFieldValues>>(
     storageKey,
     initialDefaultValues
@@ -35,10 +36,14 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
 
   // Set persisted values after form initialization
   useEffect(() => {
-    if (persistedValues !== initialDefaultValues) {
-      form.reset(persistedValues, { keepDefaultValues: true })
-      form.trigger()
+    async function initForm() {
+      if (persistedValues !== initialDefaultValues) {
+        form.reset(persistedValues, { keepDefaultValues: true })
+      }
+      await form.trigger()
+      setIsHydrated(true)
     }
+    initForm()
   }, [])
 
   const { control } = form
@@ -53,5 +58,5 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
     form.reset(initialDefaultValues)
   }, [form, initialDefaultValues, setPersistedValues])
 
-  return { ...form, resetToInitial }
+  return { ...form, resetToInitial, isHydrated }
 }

@@ -56,7 +56,6 @@ export const v3SepoliaNestedBoostedMock = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'HAS_SOME_PHANTOM_BPT',
   poolTokens: [
     {
       id: '0x693cc6a39bbf35464f53d6a5dbf7d6c2fa93741c-0x59fa488dda749cdd41772bb068bb23ee955a6d7a',

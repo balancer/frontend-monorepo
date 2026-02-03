@@ -9,13 +9,13 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LbpBenefitsChartIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsChartIcon'
 import { LbpBenefitsLightningIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsLightningIcon'
 import { LbpBenefitsHookIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsHookIcon'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
+import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { motion, LayoutGroup } from 'framer-motion'
 
 const MotionHeading = motion(Heading)
 
 export function HeaderBanner() {
-  const { isFirstStep } = usePoolCreationFormSteps()
+  const { isFirstStep } = usePoolCreationForm()
 
   const capitalEfficiencyDescription = `
   Maximize capital efficiency with boosted pools that route idle liquidity to yield markets, allowing LPs to earn both swap fees and lending interest simultaneously.

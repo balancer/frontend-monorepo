@@ -1,6 +1,4 @@
 import {
-  balAddress,
-  usdcDaiUsdtBptAddress,
   poolId,
   wETHAddress,
   wjAuraAddress,
@@ -15,7 +13,6 @@ import {
 import {
   GqlChain,
   GqlPoolElement,
-  GqlPoolNestingType,
   GqlPoolTokenDetail,
   GqlPoolType,
   GqlPoolWeighted,
@@ -76,10 +73,9 @@ export function aWeightedV2PoolMock(...options: Partial<GqlPoolElement>[]): GqlP
 }
 
 export function toGqlWeighedPoolMock(poolElement: GqlPoolElement): GqlPoolWeighted {
-  const pool: GqlPoolWeighted = {
+  const pool: any = {
     ...poolElement,
     __typename: 'GqlPoolWeighted',
-    nestingType: GqlPoolNestingType.NoNesting,
   }
   return pool
 }
@@ -95,14 +91,6 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
     chain: GqlChain.Mainnet,
     createTime: 1620153071,
     decimals: 18,
-    displayTokens: [
-      {
-        address: balAddress,
-      },
-      {
-        address: wETHAddress,
-      },
-    ],
     dynamicData: {
       totalLiquidity: '176725796.079429',
       totalShares: '13131700.67391808961378162',
@@ -113,11 +101,6 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
       holdersCount: '1917',
       swapFee: '0.01',
       swapsCount: '58991',
-      apr: {
-        apr: {
-          total: '0.05',
-        },
-      },
     },
     factory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
     id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014',
@@ -128,24 +111,6 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
     type: GqlPoolType.Weighted,
   }
   return Object.assign({}, defaultPool, defaultPool1, ...options)
-}
-
-export function aNested50Weth503Pool(...options: Partial<GqlPoolElement>[]): GqlPoolElement {
-  const tokens = [
-    aTokenExpandedMock({
-      address: usdcDaiUsdtBptAddress, // 3POOL-BPT
-    }),
-    aTokenExpandedMock({ symbol: 'WETH', isMainToken: true }),
-  ]
-
-  const defaultOptions: Partial<GqlPoolElement> = {
-    id: '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' as Address,
-    address: '0x08775ccb6674d6bdceb0797c364c2653ed84f384',
-    type: GqlPoolType.Weighted,
-    poolTokens: tokens as unknown as GqlPoolTokenDetail[],
-  }
-
-  return Object.assign({}, aGqlPoolElementMock(defaultOptions), options)
 }
 
 export function aPhantomStablePoolMock(): GqlPoolElement {

@@ -76,6 +76,16 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         version
         workingSupply
       }
+      reliquary {
+        levels {
+          level
+          balance
+          apr
+          allocationPoints
+        }
+        beetsPerSecond
+        totalBalance
+      }
       id
       type
     }
@@ -99,7 +109,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     ... on GqlPoolComposableStable {
       amp
       bptPriceRate
-      nestingType
     }
     ... on GqlPoolElement {
       baseToken
@@ -144,7 +153,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       c
       dSq
       lambda
-      nestingType
       root3Alpha
       s
       sqrtAlpha
@@ -158,9 +166,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       v
       w
       z
-    }
-    ... on GqlPoolLiquidityBootstrapping {
-      nestingType
     }
     ... on GqlPoolMetaStable {
       amp
@@ -190,9 +195,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     ... on GqlPoolStable {
       amp
     }
-    ... on GqlPoolWeighted {
-      nestingType
-    }
   }
 }
 
@@ -208,17 +210,16 @@ query GetPoolSnapshots($poolId: String!, $range: GqlPoolSnapshotDataRange!, $cha
   }
 }
 
-query GetPoolTokensDynamicData($addresses: [String!]!) {
-  staticData: tokenGetTokensData(addresses: $addresses) {
-    id
-    tokenAddress
+query GetPoolTokensDynamicData($addresses: [String!]!, $chain: GqlChain!) {
+  staticData: tokenGetTokens(chains: [$chain], where: { tokensIn: $addresses }) {
+    address
     description
     discordUrl
     telegramUrl
     twitterUsername
     websiteUrl
   }
-  dynamicData: tokenGetTokensDynamicData(addresses: $addresses) {
+  dynamicData: tokenGetTokensDynamicData(addresses: $addresses, chain: $chain) {
     ...GqlTokenDynamicData
   }
 }
@@ -234,12 +235,7 @@ query GetPoolEvents(
   poolEvents(
     first: $first
     skip: $skip
-    where: {
-      poolId: $poolId
-      chainIn: $chainIn
-      type: $type
-      userAddress: $userAddress
-    }
+    where: { poolId: $poolId, chainIn: $chainIn, type: $type, userAddress: $userAddress }
   ) {
     id
     poolId

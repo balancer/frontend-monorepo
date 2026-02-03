@@ -20,9 +20,8 @@ import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/g
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { Address } from 'viem'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-
+import { useRouter } from 'next/navigation'
 interface RestartPoolCreationModalProps {
   modalTitle?: string
   triggerTitle?: string
@@ -55,9 +54,9 @@ export function RestartPoolCreationModal({
     onClose()
   }
 
-  const handleCloseModal = () => {
+  const handleContinueSetup = () => {
+    if (showCowAmmWarning) router.replace('/create')
     onClose()
-    router.replace('/create')
   }
 
   useEffect(() => {
@@ -123,7 +122,7 @@ export function RestartPoolCreationModal({
                   flex="1"
                   gap="1"
                   minWidth="184px"
-                  onClick={handleCloseModal}
+                  onClick={handleContinueSetup}
                   size="lg"
                   variant="tertiary"
                 >

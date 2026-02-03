@@ -13,6 +13,7 @@ export async function impersonate(page: Page, impersonationAddress: string) {
   await page.getByLabel('Mock address').fill(impersonationAddress)
   await clickButton(page, 'Impersonate button')
   await forceClickButton(page, 'Dev tools close button')
+  await page.getByTestId('dev-tools-drawer').waitFor({ state: 'hidden' })
 }
 
 /*

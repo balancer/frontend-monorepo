@@ -10,6 +10,8 @@ import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import { selectRemoveLiquidityHandler } from './handlers/selectRemoveLiquidityHandler'
+import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
+import { Pool } from '../../pool.types'
 import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidityPriceImpactQuery'
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, formatUnits, Hash } from 'viem'
@@ -18,7 +20,7 @@ import { isCowAmmPool } from '../../pool.helpers'
 import { getActionableTokenAddresses, getPoolActionableTokens } from '../../pool-tokens.utils'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
-import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
+import { useRemoveLiquiditySteps as useRemoveLiquidityStepsBase } from './useRemoveLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
@@ -26,10 +28,19 @@ import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useWrapUnderlying } from '../useWrapUnderlying'
 
+type UseRemoveLiquidityStepsHook = typeof useRemoveLiquidityStepsBase
+
 export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
 
-export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
+export function useRemoveLiquidityLogic(
+  urlTxHash?: Hash,
+  mute?: boolean,
+  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
+  maxHumanBptIn?: HumanAmount,
+  useRemoveLiquiditySteps: UseRemoveLiquidityStepsHook = useRemoveLiquidityStepsBase,
+  enablePoolRedirect = true
+) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
   const [wethIsEth, setWethIsEth] = useState(false)
@@ -38,13 +49,12 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
     RemoveLiquidityType.Proportional
   )
 
-  const { pool, chainId, bptPrice, isLoading } = usePool()
+  const { pool, chainId, bptPrice } = usePool()
   const { getNativeAssetToken, getWrappedNativeAssetToken, usdValueForTokenAddress } = useTokens()
   const { isConnected } = useUserAccount()
   const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
-  const maxHumanBptIn: HumanAmount = getUserWalletBalance(pool)
-  const humanBptIn: HumanAmount = bn(maxHumanBptIn)
+  const humanBptIn: HumanAmount = bn(maxHumanBptIn ?? getUserWalletBalance(pool))
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
@@ -57,10 +67,10 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
     isWrappedNativeAsset(token.address as Address, chain)
   )
 
-  const handler = useMemo(
-    () => selectRemoveLiquidityHandler(pool, removalType),
-    [pool, removalType, isLoading]
-  )
+  const handler = useMemo(() => {
+    const selector = handlerSelector ?? selectRemoveLiquidityHandler
+    return selector(pool, removalType)
+  }, [pool, removalType, handlerSelector])
 
   const totalUsdFromBprPrice = bn(humanBptIn).times(bptPrice).toFixed()
 
@@ -239,7 +249,11 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
     [priceImpactQuery.isError, 'Error fetching price impact']
   )
 
-  const previewModalDisclosure = useModalWithPoolRedirect(pool, removeLiquidityTxHash)
+  const previewModalDisclosure = useModalWithPoolRedirect(
+    pool,
+    removeLiquidityTxHash,
+    enablePoolRedirect
+  )
 
   return {
     transactionSteps,
@@ -281,10 +295,32 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash, mute?: boolean) {
   }
 }
 
-type Props = PropsWithChildren<{ urlTxHash?: Hash; mute?: boolean }>
+type Props = PropsWithChildren<{
+  urlTxHash?: Hash
+  mute?: boolean
+  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+  maxHumanBptIn?: HumanAmount
+  useRemoveLiquiditySteps?: UseRemoveLiquidityStepsHook
+  enablePoolRedirect?: boolean
+}>
 
-export function RemoveLiquidityProvider({ urlTxHash, mute, children }: Props) {
-  const hook = useRemoveLiquidityLogic(urlTxHash, mute)
+export function RemoveLiquidityProvider({
+  urlTxHash,
+  mute,
+  handlerSelector,
+  maxHumanBptIn,
+  useRemoveLiquiditySteps,
+  enablePoolRedirect,
+  children,
+}: Props) {
+  const hook = useRemoveLiquidityLogic(
+    urlTxHash,
+    mute,
+    handlerSelector,
+    maxHumanBptIn,
+    useRemoveLiquiditySteps,
+    enablePoolRedirect
+  )
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 

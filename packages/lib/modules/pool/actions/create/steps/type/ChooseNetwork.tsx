@@ -19,7 +19,6 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
   const { poolCreationForm } = usePoolCreationForm()
 
   const [protocol, poolType] = useWatch({ control, name: ['protocol', 'poolType'] })
-
   const { supportedNetworks, cowSupportedNetworks } = PROJECT_CONFIG
 
   const protocolNetworks = isCowProtocol(protocol) ? cowSupportedNetworks : supportedNetworks

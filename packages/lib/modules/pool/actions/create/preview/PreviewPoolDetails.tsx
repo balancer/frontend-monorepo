@@ -5,8 +5,7 @@ import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink
 import { usePoolHooksWhitelist } from '../steps/details/usePoolHooksWhitelist'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
-import { isStablePool, isCowPool } from '../helpers'
+import { isStablePool, isCowPool, isPoolCreatorEnabled } from '../helpers'
 import { useWatch } from 'react-hook-form'
 
 export function PreviewPoolDetails() {
@@ -25,7 +24,7 @@ export function PreviewPoolDetails() {
 }
 
 export function PoolDetailsContent() {
-  const { poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm, isBeforeStep } = usePoolCreationForm()
   const [
     network,
     name,
@@ -38,6 +37,7 @@ export function PoolDetailsContent() {
     disableUnbalancedLiquidity,
     enableDonation,
     poolType,
+    poolCreator,
   ] = useWatch({
     control: poolCreationForm.control,
     name: [
@@ -52,6 +52,7 @@ export function PoolDetailsContent() {
       'disableUnbalancedLiquidity',
       'enableDonation',
       'poolType',
+      'poolCreator',
     ],
   })
 
@@ -83,6 +84,7 @@ export function PoolDetailsContent() {
     'Pool name': name,
     'Pool symbol': symbol,
     ...(showPoolSettings && {
+      ...(isPoolCreatorEnabled(poolType) && { 'Pool creator': formatPoolManager(poolCreator) }),
       'Swap fee manager': formatPoolManager(swapFeeManager),
       'Pool pause manager': formatPoolManager(pauseManager),
       'Swap fee percentage': `${swapFeePercentage}%`,

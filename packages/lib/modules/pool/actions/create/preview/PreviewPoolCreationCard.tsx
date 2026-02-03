@@ -1,5 +1,4 @@
 import { Card } from '@chakra-ui/react'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useWatch } from 'react-hook-form'
@@ -18,8 +17,10 @@ export function PreviewPoolCreationCard({
   hasWarning = false,
   isConnected = true,
 }: Props) {
-  const { isBeforeStep, isStep } = usePoolCreationFormSteps()
-  const { poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
+  
+export function PreviewPoolCreationCard({ children, stepTitle }: Props) {
+  const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'network'],

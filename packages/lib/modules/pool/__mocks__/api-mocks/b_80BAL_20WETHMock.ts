@@ -103,7 +103,6 @@ export const b_80BAL_20WETHMock = {
     walletBalanceUsd: 0,
     stakedBalances: [],
   },
-  nestingType: 'NO_NESTING',
   poolTokens: [
     {
       id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014-0xba100000625a3754423978a60c9317c58a424e3d',

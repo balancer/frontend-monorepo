@@ -16,6 +16,7 @@ import {
   sepolia,
   sonic,
   plasma,
+  monad,
 } from 'wagmi/chains'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { keyBy } from 'lodash'
@@ -45,6 +46,7 @@ export const rpcFallbacks: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Sonic]: 'https://rpc.soniclabs.com',
   [GqlChain.Hyperevm]: 'https://rpc.hyperliquid.xyz/evm',
   [GqlChain.Plasma]: 'https://rpc.plasma.to',
+  [GqlChain.Monad]: 'https://rpc.monad.xyz',
 }
 
 const baseUrl = getBaseUrl()
@@ -70,6 +72,7 @@ export const rpcOverrides: Partial<Record<GqlChainValues, string | undefined>> =
   [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic),
   [GqlChain.Hyperevm]: getPrivateRpcUrl(GqlChain.Hyperevm),
   [GqlChain.Plasma]: getPrivateRpcUrl(GqlChain.Plasma),
+  [GqlChain.Monad]: getPrivateRpcUrl(GqlChain.Monad),
 }
 
 const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
@@ -88,6 +91,7 @@ const gqlChainToWagmiChainMap: Partial<Record<GqlChainValues, Chain>> = {
   [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
   [GqlChain.Hyperevm]: { iconUrl: '/images/chains/HYPEREVM.svg', ...hyperEVM },
   [GqlChain.Plasma]: { iconUrl: '/images/chains/PLASMA.svg', ...plasma },
+  [GqlChain.Monad]: { iconUrl: '/images/chains/MONAD.svg', ...monad },
 } as const
 
 export const supportedNetworks = PROJECT_CONFIG.supportedNetworks

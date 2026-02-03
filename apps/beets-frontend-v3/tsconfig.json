@@ -10,7 +10,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@repo/*": ["../../packages/*"]
+      "@repo/*": ["../../packages/*"],
+      "~/*": ["./lib/*"]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "jsx": "preserve"
@@ -20,7 +21,8 @@
     "**/*.tsx",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "../../packages/lib/global.d.ts"
+    "../../packages/lib/global.d.ts",
+    "types.d.ts"
   ],
   "exclude": ["node_modules", ".next", "**/generated/**"]
 }

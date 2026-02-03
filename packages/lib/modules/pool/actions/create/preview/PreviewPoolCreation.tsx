@@ -5,7 +5,6 @@ import { PreviewPoolTokens } from './PreviewPoolTokens'
 import { PreviewPoolTokensInWallet } from './PreviewPoolTokensInWallet'
 import { PreviewPoolDetails } from './PreviewPoolDetails'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { usePoolCreationFormSteps } from '../usePoolCreationFormSteps'
 import { RestartPoolCreationModal } from '../modal/RestartPoolCreationModal'
 import { getGqlPoolType } from '../helpers'
 import { LearnMoreModal } from '@repo/lib/shared/components/modals/LearnMoreModal'
@@ -87,9 +86,8 @@ function PreviewPoolHeader() {
 }
 
 function PreviewPoolChart() {
-  const { poolCreationForm } = usePoolCreationForm()
+  const { poolCreationForm, isBeforeStep } = usePoolCreationForm()
   const [poolType] = useWatch({ control: poolCreationForm.control, name: ['poolType'] })
-  const { isBeforeStep } = usePoolCreationFormSteps()
 
   const eclpLiquidityProfile = usePreviewEclpLiquidityProfile()
 

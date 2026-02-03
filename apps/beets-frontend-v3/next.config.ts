@@ -44,14 +44,6 @@ const config: NextConfig = {
       },
     ]
 
-    if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
-      redirects.push({
-        source: '/mabeets',
-        destination: 'https://ma.beets.fi/',
-        permanent: false,
-      })
-    }
-
     // TODO: remove when loops goes live
     if (process.env.NEXT_PUBLIC_APP_ENV === 'prod') {
       redirects.push({

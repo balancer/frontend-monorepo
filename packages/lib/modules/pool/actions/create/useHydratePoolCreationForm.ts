@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
-import { usePoolCreationFormSteps } from './usePoolCreationFormSteps'
+
 import { useUninitializedPool } from './useUninitializedPool'
 
 export function useHydratePoolCreationForm() {
@@ -14,9 +14,8 @@ export function useHydratePoolCreationForm() {
     poolAddressParam,
   } = useUninitializedPool()
 
-  const { poolCreationForm, setPoolAddress, reClammConfigForm, eclpConfigForm } =
+  const { poolCreationForm, setPoolAddress, reClammConfigForm, eclpConfigForm, goToLastStep } =
     usePoolCreationForm()
-  const { lastStep } = usePoolCreationFormSteps()
 
   // allows user to switch between uninitialzed pools
   useEffect(() => {
@@ -30,7 +29,7 @@ export function useHydratePoolCreationForm() {
       if (eclpFormData) eclpConfigForm.reset(eclpFormData)
 
       setPoolAddress(poolAddressParam)
-      lastStep()
+      goToLastStep()
     }
   }, [isLoadingPool, shouldHydratePoolCreationForm])
 

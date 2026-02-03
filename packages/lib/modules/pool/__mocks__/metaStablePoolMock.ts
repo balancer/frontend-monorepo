@@ -53,46 +53,7 @@ export const metaStablePoolMock: GqlPoolElement = {
     fees24hAtlTimestamp: 1628812800,
     yieldCapture24h: '207.08',
     yieldCapture48h: '425.27',
-    apr: {
-      hasRewardApr: false,
-      thirdPartyApr: { total: '0' },
-      nativeRewardApr: { total: '0' },
-      swapApr: '0.0005418645008309938',
-      apr: { total: '0.009229765323129689' },
-      items: [
-        {
-          id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080-wstETH-yield-apr',
-          title: 'wstETH APR',
-          apr: { total: '0.008687900822298695' },
-          subItems: [],
-        },
-        {
-          id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080-swap-apr',
-          title: 'Swap fees APR',
-          apr: { total: '0.0005418645008309938' },
-          subItems: [],
-        },
-      ],
-    },
   },
-  displayTokens: [
-    {
-      id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      address: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      name: 'Wrapped liquid staked Ether 2.0',
-      weight: null,
-      symbol: 'wstETH',
-      nestedTokens: null,
-    },
-    {
-      id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      name: 'Wrapped Ether',
-      weight: null,
-      symbol: 'WETH',
-      nestedTokens: null,
-    },
-  ],
   staking: {
     id: '0xcd4722b7c24c29e0413bdcd9e51404b4539d14ae',
     type: 'GAUGE',

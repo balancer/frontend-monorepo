@@ -117,3 +117,8 @@ export function isCowProtocol(protocol: string): boolean {
 export function isBalancerProtocol(protocol: string): boolean {
   return protocol.toLowerCase() === BALANCER_PROTOCOL_ID.toLowerCase()
 }
+
+export function isPoolCreatorEnabled(poolType: PoolType): boolean {
+  // reclamm and eclp factories still require zero address
+  return poolType === PoolType.Stable || poolType === PoolType.Weighted
+}

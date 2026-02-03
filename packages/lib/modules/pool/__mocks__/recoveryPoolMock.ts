@@ -51,84 +51,7 @@ export const recoveryPoolMock: GqlPoolElement = {
     fees24hAtlTimestamp: 1675900800,
     yieldCapture24h: '0.04',
     yieldCapture48h: '0.08',
-    apr: {
-      hasRewardApr: false,
-      thirdPartyApr: { total: '0' },
-      nativeRewardApr: { total: '0' },
-      swapApr: '0',
-      apr: { total: '0.513654555109003' },
-      items: [
-        {
-          id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-wstETH-yield-apr',
-          title: 'wstETH APR',
-          apr: { total: '0.008572737434281911' },
-          subItems: [],
-        },
-        {
-          id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-EULER',
-          title: 'Euler boosted APR',
-          apr: { total: '0.5050818176747212' },
-          subItems: [
-            {
-              id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f62712400000000000000000000046f-0xd4e7c1f3da1144c9e2cfd1b015eda7652b4a4399-2',
-              title: 'eUSDC APR',
-              apr: { total: '0.2609486185344997' },
-            },
-            {
-              id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f62712400000000000000000000046f-0x3c640f0d3036ad85afa2d5a9e32be651657b874f-0',
-              title: 'eUSDT APR',
-              apr: { total: '0.007931613037193017' },
-            },
-            {
-              id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f62712400000000000000000000046f-0xeb486af868aeb3b6e53066abc9623b1041b42bc0-3',
-              title: 'eDAI APR',
-              apr: { total: '0.2362015861030285' },
-            },
-          ],
-        },
-      ],
-    },
   },
-  displayTokens: [
-    {
-      id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f627124',
-      address: '0x50cf90b954958480b8df7958a9e965752f627124',
-      name: 'bb-euler-USD',
-      weight: '0.5',
-      symbol: 'bb-euler-USD-BPT',
-      nestedTokens: [
-        {
-          id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f627124-0x6b175474e89094c44da98b954eedeac495271d0f',
-          address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-          name: 'Dai Stablecoin',
-          weight: null,
-          symbol: 'DAI',
-        },
-        {
-          id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f627124-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-          address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-          name: 'USD Coin',
-          weight: null,
-          symbol: 'USDC',
-        },
-        {
-          id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f627124-0xdac17f958d2ee523a2206206994597c13d831ec7',
-          address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-          name: 'Tether USD',
-          weight: null,
-          symbol: 'USDT',
-        },
-      ],
-    },
-    {
-      id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      address: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      name: 'Wrapped liquid staked Ether 2.0',
-      weight: '0.5',
-      symbol: 'wstETH',
-      nestedTokens: null,
-    },
-  ],
   staking: {
     id: '0x623f3dbc761b46f64ae7951700dd7724cb7d6075',
     type: 'GAUGE',
@@ -158,7 +81,6 @@ export const recoveryPoolMock: GqlPoolElement = {
     stakedBalances: [],
     __typename: 'GqlPoolUserBalance',
   },
-  nestingType: 'HAS_SOME_PHANTOM_BPT',
   tokens: [
     {
       id: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473-0x50cf90b954958480b8df7958a9e965752f627124',
@@ -183,7 +105,6 @@ export const recoveryPoolMock: GqlPoolElement = {
         createTime: 1675954271,
         totalShares: '895400.147223784762125555',
         totalLiquidity: '880756.3555825928',
-        nestingType: 'HAS_ONLY_PHANTOM_BPT',
         swapFee: '0.1',
         amp: '2000',
         bptPriceRate: '1.000238166815367525',

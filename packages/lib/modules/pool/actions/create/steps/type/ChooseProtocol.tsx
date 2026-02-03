@@ -19,7 +19,7 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
 
   const handleChooseProtocol = (protocol: PoolCreationForm['protocol']) => {
     const poolType = isCowProtocol(protocol) ? PoolType.CowAmm : PoolType.Stable
-    router.replace(`/create`) // clean up search params in case user enters page via "create cow amm" then changes to balancer v3
+    router.replace(`/create/step-1-type`) // clean up search params in case user enters page via "create cow amm" then changes to balancer v3
     poolCreationForm.reset({ ...INITIAL_POOL_CREATION_FORM, protocol, poolType })
   }
 

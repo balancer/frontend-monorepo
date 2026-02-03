@@ -1,0 +1,135 @@
+import {
+  Button,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+  VStack,
+  useBreakpointValue,
+} from '@chakra-ui/react'
+import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { useReliquary } from '../../ReliquaryProvider'
+import RelicStat, { StatLabel, StatValueText } from './RelicStat'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { useReliquaryGlobalStats } from '../../hooks/useReliquaryGlobalStats'
+import { useState } from 'react'
+import { ReliquaryClaimAllRewardsModal } from '../ReliquaryClaimAllRewardsModal'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+
+export function YourMaBeetsStats() {
+  const [isClaimAllModalOpen, setIsClaimAllModalOpen] = useState(false)
+  const isMobile = useBreakpointValue({ base: true, md: false }) ?? false
+  const { bptPrice } = usePool()
+  const { latest: globalStats, loading: isLoadingGlobalStats } = useReliquaryGlobalStats()
+  const { toCurrency } = useCurrency()
+
+  const {
+    relicPositions,
+    totalMaBeetsVP,
+    totalPendingRewardsUSD,
+    isLoading: isLoadingReliquary,
+  } = useReliquary()
+
+  const isLoading = isLoadingReliquary || isLoadingGlobalStats
+
+  // Calculate total user fBEETS balance - used by multiple stats below
+  const userTotalBalance = relicPositions.reduce(
+    (sum, relic) => bn(sum).plus(relic.amount).toNumber(),
+    0
+  )
+
+  // Calculate Total Liquidity
+  const totalLiquidity = bn(userTotalBalance).times(bptPrice).toNumber()
+
+  // Calculate Average Maturity Level (weighted by balance)
+  const avgMaturityLevel =
+    relicPositions.length > 0 && userTotalBalance > 0
+      ? relicPositions.reduce((sum, relic) => {
+          const weight = bn(relic.amount).div(userTotalBalance).toNumber()
+          return sum + (relic.level + 1) * weight // +1 because levels are 0-indexed
+        }, 0)
+      : 0
+
+  // Calculate Total Relic Share as percentage
+  const globalTotalBalance = bn(globalStats?.totalBalance || '1').toNumber() // Avoid division by zero
+  const relicShareDecimal =
+    globalTotalBalance > 0 ? bn(userTotalBalance).div(globalTotalBalance).toNumber() : 0
+
+  const isDisabledButton = totalPendingRewardsUSD < 0.01
+
+  return (
+    <VStack align="flex-start" flex="1" spacing="4" width="full">
+      <Text
+        background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
+        backgroundClip="text"
+        fontSize="xl"
+        fontWeight="bold"
+      >
+        Your maBEETS Summary
+      </Text>
+      <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
+        <RelicStat>
+          <StatLabel label="Your Relics" />
+          <Skeleton isLoaded={!isLoading}>
+            <StatValueText>{relicPositions.length}</StatValueText>
+          </Skeleton>
+        </RelicStat>
+        <RelicStat>
+          <StatLabel label="Total Liquidity" />
+          <Skeleton isLoaded={!isLoading}>
+            <StatValueText>{toCurrency(totalLiquidity)}</StatValueText>
+          </Skeleton>
+        </RelicStat>
+        <RelicStat>
+          <StatLabel label="Avg Maturity Level" />
+          <Skeleton isLoaded={!isLoading}>
+            <StatValueText>{fNumCustom(avgMaturityLevel, '0.00')}</StatValueText>
+          </Skeleton>
+        </RelicStat>
+        <RelicStat>
+          <Stack alignItems="center" direction={{ base: 'column', md: 'row' }} h="full" w="full">
+            <VStack alignItems="flex-start" h="full" spacing="0" w="full">
+              <StatLabel label="Total Pending Rewards" />
+              <Skeleton isLoaded={!isLoading}>
+                <StatValueText>{toCurrency(totalPendingRewardsUSD)}</StatValueText>
+              </Skeleton>
+            </VStack>
+            <TooltipWithTouch
+              fullWidth={isMobile}
+              isDisabled={!isDisabledButton}
+              label={`The minimum amount to claim is ${toCurrency(0.01)}`}
+            >
+              <Button
+                isDisabled={isDisabledButton}
+                onClick={() => setIsClaimAllModalOpen(true)}
+                size="sm"
+                variant="primary"
+                w="full"
+              >
+                Claim all rewards
+              </Button>
+            </TooltipWithTouch>
+          </Stack>
+        </RelicStat>
+        <RelicStat>
+          <StatLabel label="Total Relic Share" />
+          <Skeleton isLoaded={!isLoading}>
+            <StatValueText>{fNum('sharePercent', relicShareDecimal)}</StatValueText>
+          </Skeleton>
+        </RelicStat>
+        <RelicStat>
+          <StatLabel label="Total Voting Power" />
+          <Skeleton isLoaded={!isLoading}>
+            <StatValueText>{fNumCustom(totalMaBeetsVP, '0.000a')} maBEETS</StatValueText>
+          </Skeleton>
+        </RelicStat>
+      </SimpleGrid>
+      <ReliquaryClaimAllRewardsModal
+        isOpen={isClaimAllModalOpen}
+        onClose={() => setIsClaimAllModalOpen(false)}
+        onOpen={() => setIsClaimAllModalOpen(true)}
+      />
+    </VStack>
+  )
+}

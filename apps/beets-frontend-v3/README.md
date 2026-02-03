@@ -30,6 +30,12 @@ cd ../..
 pnpm install
 ```
 
+Generate GraphQL types
+
+```bash
+pnpm run graphql:gen
+```
+
 Then, run the development server:
 
 ```bash

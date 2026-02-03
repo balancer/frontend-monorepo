@@ -378,7 +378,7 @@ function BaseAprTooltip({
                 fontWeight={500}
                 pl={6}
                 pt={3}
-                title="Extra BEETS (max maturity boost)"
+                title="Extra BEETS (maturity boost)"
                 tooltipText={maBeetsRewardTooltipText}
               />
             )}

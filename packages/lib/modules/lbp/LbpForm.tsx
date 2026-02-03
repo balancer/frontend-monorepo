@@ -14,24 +14,21 @@ import {
   Divider,
 } from '@chakra-ui/react'
 import { useLbpForm } from './LbpFormProvider'
-import { SaleStructureStep } from './steps/SaleStructureStep'
-import { ProjectInfoStep } from './steps/ProjectInfoStep'
-import { ReviewStep } from './steps/review/ReviewStep'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useEffect } from 'react'
 
 export function LbpForm() {
-  const { steps, activeStepIndex, activeStep } = useLbpForm()
+  const { steps, currentStepIndex, currentStep, canRenderStep } = useLbpForm()
   const { isMobile } = useBreakpoints()
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [activeStepIndex])
+  }, [currentStepIndex])
 
   return (
     <VStack align="start" spacing="lg" w="full">
       <Divider />
-      <Stepper index={activeStepIndex} orientation={isMobile ? 'vertical' : 'horizontal'} w="full">
+      <Stepper index={currentStepIndex} orientation={isMobile ? 'vertical' : 'horizontal'} w="full">
         {steps.map(step => (
           <Step key={step.id}>
             <StepIndicator>
@@ -54,9 +51,7 @@ export function LbpForm() {
       <Divider />
 
       <VStack spacing="lg" w="full">
-        {activeStep.id === 'step1' && <SaleStructureStep />}
-        {activeStep.id === 'step2' && <ProjectInfoStep />}
-        {activeStep.id === 'step3' && <ReviewStep />}
+        {canRenderStep && <currentStep.Component />}
       </VStack>
     </VStack>
   )
