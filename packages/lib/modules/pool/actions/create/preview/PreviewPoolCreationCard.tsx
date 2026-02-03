@@ -18,9 +18,6 @@ export function PreviewPoolCreationCard({
   isConnected = true,
 }: Props) {
   const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
-  
-export function PreviewPoolCreationCard({ children, stepTitle }: Props) {
-  const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
     name: ['poolTokens', 'network'],

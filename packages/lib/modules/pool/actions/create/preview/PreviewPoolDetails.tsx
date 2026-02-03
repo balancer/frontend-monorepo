@@ -24,7 +24,7 @@ export function PreviewPoolDetails() {
 }
 
 export function PoolDetailsContent() {
-  const { poolCreationForm, isBeforeStep } = usePoolCreationForm()
+  const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
   const [
     network,
     name,
@@ -95,7 +95,6 @@ export function PoolDetailsContent() {
     }),
   }
 
-  const { isBeforeStep, isStep } = usePoolCreationFormSteps()
   const isDetailsActive = isStep('Details')
 
   return Object.entries(poolDetailsMap).map(([label, value]) => (
