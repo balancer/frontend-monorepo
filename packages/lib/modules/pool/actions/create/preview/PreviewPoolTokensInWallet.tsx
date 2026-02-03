@@ -84,7 +84,7 @@ function PoolTokensInWalletContent({
     <>
       {hasMultipleTokensSelected && isConnected && hasAtLeastOneZeroBalanceToken && (
         <BalAlert
-          content="You can continue to configure settings, and even create the pool but unseeded pools will not appear on the Balancer UI. So you'll need to get each token to seed the pool with the best ratio to set the initial price. "
+          content="You can continue to configure settings, and even create the pool but unseeded pools will not appear on the Balancer UI. So you'll need to get each token in this wallet, in order to seed the pool with the correct ratio (since this ratio will be used to set the initial price)."
           status="warning"
           title={
             hasNoTokensWithBalance
