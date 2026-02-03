@@ -72,16 +72,24 @@ export class CreatePoolPage {
     private config: PoolCreationConfig = POOL_CREATION_CONFIGS[0],
   ) {}
 
-  get isReClamm() {
-    return this.config.type === PoolType.ReClamm
+  get isStable() {
+    return this.config.type === PoolType.Stable
+  }
+
+  get isStableSurge() {
+    return this.config.type === PoolType.StableSurge
+  }
+
+  get isWeighted() {
+    return this.config.type === PoolType.Weighted
   }
 
   get isGyroEclp() {
     return this.config.type === PoolType.GyroE
   }
 
-  get isWeighted() {
-    return this.config.type === PoolType.Weighted
+  get isReClamm() {
+    return this.config.type === PoolType.ReClamm
   }
 
   get isCowAmm() {
