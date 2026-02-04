@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Box, SkeletonText } from '@chakra-ui/react'
+import { Alert, AlertIcon, Box, SkeletonText, Text, VStack } from '@chakra-ui/react'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AddLiquiditySimulationQueryResult } from '@repo/lib/modules/pool/actions/add-liquidity/queries/useAddLiquiditySimulationQuery'
@@ -54,27 +54,25 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
   }
 
   return (
-    <Box mt="4" w="full">
-      <Alert status="warning">
-        <AlertIcon alignSelf="center" />
-        {!isLoading ? (
-          <>
+    <Alert status="warning" w="full">
+      <AlertIcon alignSelf="center" />
+      {!isLoading ? (
+        <VStack align="start" spacing="0">
+          <Text color="black" fontSize="sm">
             Adding {fNum('token', totalInvestValue)} fBEETS to this Relic will affect its maturity.
             It will take an additional {maturityDuration} to reach maximum maturity.
-            {addLiquidityMaturityImpact.oldLevel !== addLiquidityMaturityImpact.newLevel && (
-              <>
-                {' '}
-                Your Relic will change from level {addLiquidityMaturityImpact.oldLevel + 1} to level{' '}
-                {addLiquidityMaturityImpact.newLevel + 1}.
-              </>
-            )}
-          </>
-        ) : (
-          <Box w="full">
-            <SkeletonText noOfLines={2} skeletonHeight="2" spacing="2" />
-          </Box>
-        )}
-      </Alert>
-    </Box>
+          </Text>
+          {addLiquidityMaturityImpact.oldLevel !== addLiquidityMaturityImpact.newLevel && (
+            <Text color="black" fontSize="sm">
+              {`Your Relic will change from level ${addLiquidityMaturityImpact.oldLevel + 1} to level               ${addLiquidityMaturityImpact.newLevel + 1}.`}
+            </Text>
+          )}
+        </VStack>
+      ) : (
+        <Box w="full">
+          <SkeletonText noOfLines={2} skeletonHeight="2" spacing="2" />
+        </Box>
+      )}
+    </Alert>
   )
 }

@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text, Alert, AlertIcon } from '@chakra-ui/react'
+import { Card, VStack, Text } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
@@ -23,11 +23,8 @@ import {
   SlippageSelector,
 } from '@repo/lib/modules/pool/actions/SlippageSelector'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useReliquaryAddLiquidityMaturityImpact } from '../hooks/useReliquaryAddLiquidityMaturityImpact'
-import { intervalToDuration, formatDuration } from 'date-fns'
 import { formatUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type Props = AddLiquidityReceiptResult & {
   createNew: boolean
@@ -57,17 +54,6 @@ export function ReliquaryAddLiquiditySummary({
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
-  const { toCurrency } = useCurrency()
-
-  // Calculate add liquidity impact based on simulated BPT amount
-  const bptAmount = simulationQuery.data?.bptOut
-    ? bn(formatUnits(simulationQuery.data.bptOut.amount, BPT_DECIMALS)).toNumber()
-    : 0
-
-  const addLiquidityMaturityImpactQuery = useReliquaryAddLiquidityMaturityImpact(
-    bptAmount,
-    createNew ? undefined : relicId
-  )
 
   // Order amountsIn like the form inputs which uses the tokens array
   const [selectedSlippage, setSelectedSlippage] = useState(0)
@@ -88,19 +74,6 @@ export function ReliquaryAddLiquiditySummary({
     if (hasQuoteContext) return shouldShowReceipt && isLoadingReceipt
     return isLoadingReceipt
   }, [hasQuoteContext, isLoadingReceipt, shouldShowReceipt])
-
-  const addLiquidityMaturityImpact = addLiquidityMaturityImpactQuery.data
-  const showAddLiquidityMaturityImpactWarning =
-    !createNew && relicId && addLiquidityMaturityImpact && !addLiquidityMaturityImpact.staysMax
-
-  const maturityDuration = useMemo(() => {
-    if (!addLiquidityMaturityImpact) return null
-    const duration = intervalToDuration({
-      start: 0,
-      end: addLiquidityMaturityImpact.addLiquidityMaturityImpactTimeInMilliseconds,
-    })
-    return formatDuration(duration, { delimiter: ', ' })
-  }, [addLiquidityMaturityImpact])
 
   if (!isUserAddressLoading && !userAddress) {
     return <BalAlert content="User is not connected" status="warning" />
@@ -130,15 +103,6 @@ export function ReliquaryAddLiquiditySummary({
     <AnimateHeightChange spacing="ms">
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
-      )}
-      {showAddLiquidityMaturityImpactWarning && !shouldShowReceipt && (
-        <Alert mb="sm" status="warning">
-          <AlertIcon />
-          <Text color="black" fontSize="sm">
-            Adding {toCurrency(totalUSDValue)} to this Relic will affect its maturity. It will take
-            an additional {maturityDuration} to reach maximum maturity.
-          </Text>
-        </Alert>
       )}
       <Card p="ms" variant="modalSubSection">
         <TokenRowGroup
