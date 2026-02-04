@@ -36,6 +36,8 @@ import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWith
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { sumRecoveredFundsTotal, useRecoveredFunds } from '../recovered-funds/useRecoveredFunds'
 import { ClaimRecoveredFundsModal } from '../recovered-funds/ClaimRecoveredFundsModal'
+import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
+import { RecoveredFundsLearnMoreModal } from '../recovered-funds/RecoveredFundsLearnMoreModal'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -86,6 +88,11 @@ export function ClaimNetworkPools() {
     onOpen: openClaimRecoveredFundModal,
     onClose: onClaimRecoveredFundModalClose,
   } = useDisclosure()
+  const {
+    isOpen: isRecoveredFundsLearnMoreModalOpen,
+    onOpen: openRecoveredFundsLearnMoreModal,
+    onClose: onRecoveredFundsLearnMoreModalClose,
+  } = useDisclosure()
   const { isConnected } = useUserAccount()
   const router = useRouter()
 
@@ -131,7 +138,13 @@ export function ClaimNetworkPools() {
 
         {isBalancer && hasRecoveredFunds && (
           <BalAlert
-            content="Claim your share of recovered funds from the November 2025 security incident affecting some v2 Composable Stable pools."
+            content={
+              <Text color="font.dark" fontWeight="medium">
+                Claim your share of recovered funds from the November 2025 security incident
+                affecting some v2 Composable Stable pools.{' '}
+                <BalAlertLink onClick={openRecoveredFundsLearnMoreModal}>Learn more</BalAlertLink>
+              </Text>
+            }
             status="warning"
           />
         )}
@@ -362,6 +375,10 @@ export function ClaimNetworkPools() {
             <ClaimRecoveredFundsModal
               isOpen={isClaimRecoveredFundModalOpen}
               onClose={onClaimRecoveredFundModalClose}
+            />
+            <RecoveredFundsLearnMoreModal
+              isOpen={isRecoveredFundsLearnMoreModalOpen}
+              onClose={onRecoveredFundsLearnMoreModalClose}
             />
           </>
         )}
