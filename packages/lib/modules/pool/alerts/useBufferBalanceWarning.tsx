@@ -7,7 +7,7 @@ import { Text } from '@chakra-ui/react'
 import { BalAlert } from '../../../shared/components/alerts/BalAlert'
 import { useReadContracts } from 'wagmi'
 import { vaultAdminAbi_V3, AddressProvider } from '@balancer/sdk'
-import { formatUnits } from 'viem'
+import { formatUnits, erc4626Abi, Address } from 'viem'
 
 type Props = {
   validTokens: ApiToken[]
@@ -58,12 +58,13 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
         if (!bufferBalance || !wrappedToken || !wrappedToken.priceRate) return null
 
-        const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped } = bufferBalance
+        const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped, maxDeposit } =
+          bufferBalance
 
         const wrappedAmountRequired = bn(humanAmount).div(wrappedToken.priceRate)
         const exceedsBufferBalance = wrappedAmountRequired.gt(bufferBalanceOfWrapped)
 
-        const maxDeposit = bn(wrappedToken?.maxDeposit ?? 0)
+        // is erc4626 maxDeposit insufficient to perform balancer vault buffer rebalance operation?
         const exceedsVaultCapacity = maxDeposit.lt(
           halfOfBufferTotalLiquidityAsWrapped.plus(
             wrappedAmountRequired.minus(bufferBalanceOfWrapped)
@@ -84,12 +85,13 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 
         if (!bufferBalance || !underlyingSymbol) return null
 
-        const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying } = bufferBalance
+        const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying, maxWithdraw } =
+          bufferBalance
 
         const underlyingAmountRequired = bn(humanAmount)
         const exceedsBufferBalance = underlyingAmountRequired.gt(bufferBalanceOfUnderlying)
 
-        const maxWithdraw = bn(underlyingToken?.maxWithdraw ?? 0)
+        // is erc4626 maxWithdraw insufficient to perform the required balancer vault buffer rebalance operation?
         const exceedsVaultCapacity = maxWithdraw.lt(
           halfOfBufferTotalLiquidityAsUnderlying.plus(
             underlyingAmountRequired.minus(bufferBalanceOfUnderlying)
@@ -141,60 +143,105 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
 }
 
 function useBufferBalances(wrappedTokens: ApiToken[]) {
-  const { data, isLoading } = useReadContracts({
+  const { data: bufferBalanceData, isLoading } = useReadContracts({
     contracts: wrappedTokens.map(token => ({
       chainId: token.chainId,
       abi: vaultAdminAbi_V3,
       address: AddressProvider.Vault(token.chainId),
-      functionName: 'getBufferBalance',
+      functionName: 'getBufferBalance' as const,
       args: [token.address],
     })),
     query: { enabled: wrappedTokens.length > 0 },
   })
 
+  const { data: maxDepositData } = useReadContracts({
+    contracts: wrappedTokens.map(token => ({
+      chainId: token.chainId,
+      abi: erc4626Abi,
+      address: token.address as Address,
+      functionName: 'maxDeposit',
+      args: [AddressProvider.Vault(token.chainId)],
+    })),
+  })
+
+  const { data: maxWithdrawData } = useReadContracts({
+    contracts: wrappedTokens.map(token => ({
+      chainId: token.chainId,
+      abi: erc4626Abi,
+      address: token.address as Address,
+      functionName: 'maxWithdraw',
+      args: [AddressProvider.Vault(token.chainId)],
+    })),
+  })
+
+  const data = wrappedTokens.map((token, index) => {
+    const bufferUnderlyingBalanceRaw = bufferBalanceData?.[index]?.result?.[0] ?? 0n
+    const bufferWrappedBalanceRaw = bufferBalanceData?.[index]?.result?.[1] ?? 0n
+    const maxDeposit = bn(maxDepositData?.[index]?.result ?? 0n)
+    const maxWithdraw = bn(maxWithdrawData?.[index]?.result ?? 0n)
+
+    return {
+      underlyingTokenAddress: token.underlyingToken?.address,
+      wrappedTokenAddress: token.address,
+      underlyingTokenDecimals: token.underlyingToken?.decimals,
+      wrappedTokenDecimals: token.decimals,
+      wrappedTokenPriceRate: token.priceRate,
+      bufferUnderlyingBalanceRaw,
+      bufferWrappedBalanceRaw,
+      maxDeposit,
+      maxWithdraw,
+    }
+  })
+
   const bufferBalances = data
-    ?.map((item, index) => {
-      const result = item.result as readonly [bigint, bigint] | undefined
-      const wrappedToken = wrappedTokens[index]
-
-      const underlyingBalanceRaw = result?.[0]
-      const wrappedBalanceRaw = result?.[1]
-      const underlyingDecimals = wrappedToken.underlyingToken?.decimals
-      const wrappedDecimals = wrappedToken?.decimals
-
-      if (
-        !underlyingBalanceRaw ||
-        !wrappedBalanceRaw ||
-        !underlyingDecimals ||
-        !wrappedDecimals ||
-        !wrappedToken?.priceRate
-      ) {
-        return null
-      }
-
-      const bufferBalanceOfUnderlying = bn(formatUnits(underlyingBalanceRaw, underlyingDecimals))
-      const bufferBalanceOfWrapped = bn(formatUnits(wrappedBalanceRaw, wrappedDecimals))
-
-      const bufferTotalLiquidityAsUnderlying = bufferBalanceOfUnderlying.plus(
-        bufferBalanceOfWrapped.times(wrappedToken.priceRate)
-      )
-      const halfOfBufferTotalLiquidityAsUnderlying = bufferTotalLiquidityAsUnderlying.div(2)
-      const halfOfBufferTotalLiquidityAsWrapped = halfOfBufferTotalLiquidityAsUnderlying.div(
-        wrappedToken.priceRate
-      )
-
-      const underlyingTokenAddress = wrappedTokens[index].underlyingToken?.address
-      const wrappedTokenAddress = wrappedTokens[index].address
-
-      return {
+    .map(
+      ({
+        bufferUnderlyingBalanceRaw,
+        bufferWrappedBalanceRaw,
+        maxDeposit,
+        maxWithdraw,
+        underlyingTokenDecimals,
+        wrappedTokenDecimals,
+        wrappedTokenPriceRate,
         underlyingTokenAddress,
         wrappedTokenAddress,
-        bufferBalanceOfUnderlying,
-        bufferBalanceOfWrapped,
-        halfOfBufferTotalLiquidityAsUnderlying,
-        halfOfBufferTotalLiquidityAsWrapped,
+      }) => {
+        if (
+          !bufferUnderlyingBalanceRaw ||
+          !bufferWrappedBalanceRaw ||
+          !underlyingTokenDecimals ||
+          !wrappedTokenDecimals ||
+          !wrappedTokenPriceRate
+        ) {
+          return null
+        }
+
+        const bufferBalanceOfUnderlying = bn(
+          formatUnits(bufferUnderlyingBalanceRaw, underlyingTokenDecimals)
+        )
+        const bufferBalanceOfWrapped = bn(
+          formatUnits(bufferWrappedBalanceRaw, wrappedTokenDecimals)
+        )
+
+        const bufferTotalLiquidityAsUnderlying = bufferBalanceOfUnderlying.plus(
+          bufferBalanceOfWrapped.times(wrappedTokenPriceRate)
+        )
+        const halfOfBufferTotalLiquidityAsUnderlying = bufferTotalLiquidityAsUnderlying.div(2)
+        const halfOfBufferTotalLiquidityAsWrapped =
+          halfOfBufferTotalLiquidityAsUnderlying.div(wrappedTokenPriceRate)
+
+        return {
+          underlyingTokenAddress,
+          wrappedTokenAddress,
+          bufferBalanceOfUnderlying,
+          bufferBalanceOfWrapped,
+          halfOfBufferTotalLiquidityAsUnderlying,
+          halfOfBufferTotalLiquidityAsWrapped,
+          maxDeposit,
+          maxWithdraw,
+        }
       }
-    })
+    )
     .filter(bufferBalance => bufferBalance !== null)
 
   return { bufferBalances, isLoadingBufferBalances: isLoading }
