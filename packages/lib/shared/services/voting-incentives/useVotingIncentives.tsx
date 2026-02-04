@@ -37,7 +37,7 @@ async function getStakeDaoIncentives(priceFor: PriceForFn): Promise<PoolVotingIn
   const stakeDaoVoteMarket = await fetchStakeDaoVoteMarket()
 
   const voteOpenCampaigns = stakeDaoVoteMarket.campaigns.filter(
-    campaign => campaign.status.voteOpen
+    campaign => campaign.status.voteOpen && !campaign.isBlacklist && campaign.addresses.length === 0
   )
 
   // Group campaigns by gauge address and sum values
@@ -79,7 +79,6 @@ async function getStakeDaoIncentives(priceFor: PriceForFn): Promise<PoolVotingIn
           incentives: [incentive],
         }
       } else {
-        // Merge with existing gauge entry
         acc[gaugeAddress].totalValue += fiatValue
         acc[gaugeAddress].valuePerVote += valuePerVote
         acc[gaugeAddress].incentives.push(incentive)
