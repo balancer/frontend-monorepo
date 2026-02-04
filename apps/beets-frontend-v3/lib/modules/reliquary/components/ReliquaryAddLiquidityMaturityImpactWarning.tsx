@@ -64,7 +64,7 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
           </Text>
           {addLiquidityMaturityImpact.oldLevel !== addLiquidityMaturityImpact.newLevel && (
             <Text color="black" fontSize="sm">
-              {`Your Relic will change from level ${addLiquidityMaturityImpact.oldLevel + 1} to level               ${addLiquidityMaturityImpact.newLevel + 1}.`}
+              {`Your Relic will change from level ${addLiquidityMaturityImpact.oldLevel + 1} to level ${addLiquidityMaturityImpact.newLevel + 1}.`}
             </Text>
           )}
         </VStack>
