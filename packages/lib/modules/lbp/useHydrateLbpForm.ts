@@ -4,12 +4,12 @@ import { getLbpPathParams } from './getLbpPathParams'
 import { useLbpForm } from './LbpFormProvider'
 import { useReadContract, useReadContracts } from 'wagmi'
 import { Address, formatUnits } from 'viem'
-import { liquidityBootstrappingPoolAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { useEffect, useRef } from 'react'
 import { SaleStructureForm, UserActions, WeightAdjustmentType, SaleType } from './lbp.types'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
 import { FixedPriceLBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/FixedPriceLBPoolAbi'
+import { LBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/LBPoolAbi'
 
 type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
 
@@ -79,7 +79,7 @@ export function useHydrateLbpForm() {
 
   const { data: poolVersionData, isLoading: isVersionLoading } = useReadContract({
     address: params.poolAddress,
-    abi: liquidityBootstrappingPoolAbi,
+    abi: LBPoolAbi, // version signature is the same for both LBPool and FixedPriceLBPool
     chainId,
     functionName: 'version',
     query: { enabled: shouldHydrateLbpForm },
@@ -97,17 +97,13 @@ export function useHydrateLbpForm() {
     'getReserveToken',
     'getStaticSwapFeePercentage',
     'isProjectTokenSwapInBlocked',
-    ...(poolType === 'LBPool'
-      ? ['getLBPoolImmutableData']
-      : poolType === 'FixedPriceLBPool'
-        ? ['getFixedPriceLBPoolImmutableData']
-        : []),
+    ...(poolType === 'LBPool' ? ['getLBPoolImmutableData'] : ['getFixedPriceLBPoolImmutableData']),
   ]
 
   const lbpContractReads = poolType
     ? lbpFunctionNames.map(functionName => ({
         address: params.poolAddress,
-        abi: poolType === 'LBPool' ? liquidityBootstrappingPoolAbi : FixedPriceLBPoolAbi,
+        abi: poolType === 'LBPool' ? LBPoolAbi : FixedPriceLBPoolAbi,
         chainId,
         functionName,
       }))
