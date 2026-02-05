@@ -6,31 +6,75 @@ import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/per
 import { LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
 import { LbpForm } from '@repo/lib/modules/lbp/LbpForm'
 import { LbpPreview } from '@repo/lib/modules/lbp/LbpPreview'
-import { VStack, Stack, Skeleton } from '@chakra-ui/react'
+import {
+  VStack,
+  Stack,
+  Skeleton,
+  Stepper,
+  Step,
+  StepIndicator,
+  StepStatus,
+  StepNumber,
+  StepIcon,
+  StepTitle,
+  StepSeparator,
+  Box,
+  Divider,
+} from '@chakra-ui/react'
 import { HeaderBanner } from '@repo/lib/modules/lbp/header/HeaderBanner'
 import { useHydrateLbpForm } from '@repo/lib/modules/lbp/useHydrateLbpForm'
+import { useLbpForm } from '@repo/lib/modules/lbp/LbpFormProvider'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 function LbpCreationPageContent() {
   const { isLbpLoading } = useHydrateLbpForm()
+  const { steps, currentStepIndex } = useLbpForm()
+  const { isMobile } = useBreakpoints()
 
   return (
-    <VStack spacing="lg">
+    <VStack align="start" spacing="lg">
       <HeaderBanner />
-      <Stack
-        direction={{ base: 'column', xl: 'row' }}
-        justifyContent="stretch"
-        spacing="xl"
-        w="full"
-      >
-        {isLbpLoading ? (
-          <LbpPageSkeleton />
-        ) : (
-          <>
+      {isLbpLoading ? (
+        <LbpPageSkeleton />
+      ) : (
+        <>
+          <Stepper
+            index={currentStepIndex}
+            orientation={isMobile ? 'vertical' : 'horizontal'}
+            w="50%"
+          >
+            {steps.map(step => (
+              <Step key={step.id}>
+                <StepIndicator>
+                  <StepStatus
+                    active={<StepNumber />}
+                    complete={<StepIcon />}
+                    incomplete={<StepNumber />}
+                  />
+                </StepIndicator>
+
+                <Box flexShrink="0">
+                  <StepTitle>{step.title}</StepTitle>
+                </Box>
+
+                <StepSeparator />
+              </Step>
+            ))}
+          </Stepper>
+
+          <Divider />
+
+          <Stack
+            direction={{ base: 'column', xl: 'row' }}
+            justifyContent="stretch"
+            spacing="xl"
+            w="full"
+          >
             <LbpForm />
             <LbpPreview />
-          </>
-        )}
-      </Stack>
+          </Stack>
+        </>
+      )}
     </VStack>
   )
 }
