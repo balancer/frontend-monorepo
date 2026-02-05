@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
 import { useReliquary } from '../ReliquaryProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
 import { useGetLevelInfo } from './useGetLevelInfo'
 import { useGetLevelOnUpdate } from './useGetLevelOnUpdate'
 import { useGetPositionForId } from './useGetPositionForId'
 
 const MAX_MATURITY = 6048000 // 10 weeks in seconds
 
-export function useReliquaryAddLiquidityMaturityImpact(amount: number, relicId?: string) {
+export function useReliquaryAddLiquidityMaturityImpact(amount: Numberish, relicId?: string) {
   const { chain } = useReliquary()
   const { position, isLoading: isLoadingPosition } = useGetPositionForId(relicId || '', chain)
 
@@ -23,7 +23,7 @@ export function useReliquaryAddLiquidityMaturityImpact(amount: number, relicId?:
   )
 
   const isReady =
-    !Number.isNaN(amount) &&
+    bn(amount).gt(0) &&
     !!relicId &&
     !!position &&
     maturityThresholds.length > 0 &&
