@@ -73,10 +73,6 @@ export const mainnetTokenBalances: TokenBalance[] = [
     value: '10000',
     decimals: 6,
   },
-  {
-    tokenAddress: '0x1D13531bf6344c102280CE4c458781FBF14Dad14',
-    value: '1',
-  },
 ]
 
 export const baseTokenBalances: TokenBalance[] = [
@@ -242,5 +238,19 @@ export const monadTokenBalances: TokenBalance[] = [
     tokenAddress: '0x0555e30da8f98308edb960aa94c0db47230d2b9c', // WBTC
     value: '10',
     decimals: 8,
+  },
+]
+
+export const xlayerTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x4ae46a509f6b1d9056937ba4500cb143933d2dc8', // USDG
+    value: '50000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0x779ded0c9e1022225f8e0630b35a9b54be713736', // USDT0
+    value: '50000',
+    decimals: 6,
+    slot: 51n,
   },
 ]

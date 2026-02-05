@@ -33,3 +33,7 @@ fork-sonic:
 
 fork-monad:
 	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${MONAD_RPC_URL}" --port 8545
+
+fork-xlayer:
+	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${XLAYER_RPC_URL}" --port 8545
+
