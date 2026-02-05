@@ -10,6 +10,7 @@ import {
   Flex,
   HStack,
   Button,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
@@ -24,7 +25,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
-import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -33,6 +34,10 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { isAfter } from 'date-fns'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { sumRecoveredFundsTotal, useRecoveredFunds } from '../recovered-funds/useRecoveredFunds'
+import { ClaimRecoveredFundsModal } from '../recovered-funds/ClaimRecoveredFundsModal'
+import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
+import { RecoveredFundsLearnMoreModal } from '../recovered-funds/RecoveredFundsLearnMoreModal'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -74,8 +79,20 @@ export function ClaimNetworkPools() {
     hiddenHandRewardsData,
   } = usePortfolio()
 
+  const { hasRecoveredFunds, claims: recoveredFundsClaims } = useRecoveredFunds()
+
   const [isOpenedProtocolRevenueModal, setIsOpenedProtocolRevenueModal] = useState(false)
   const [isOpenedHiddenHandRewardsModal, setIsOpenedHiddenHandRewardsModal] = useState(false)
+  const {
+    isOpen: isClaimRecoveredFundModalOpen,
+    onOpen: openClaimRecoveredFundModal,
+    onClose: onClaimRecoveredFundModalClose,
+  } = useDisclosure()
+  const {
+    isOpen: isRecoveredFundsLearnMoreModalOpen,
+    onOpen: openRecoveredFundsLearnMoreModal,
+    onClose: onRecoveredFundsLearnMoreModalClose,
+  } = useDisclosure()
   const { isConnected } = useUserAccount()
   const router = useRouter()
 
@@ -108,15 +125,30 @@ export function ClaimNetworkPools() {
   return (
     <FadeInOnView>
       <Stack gap={5}>
+        <Heading size="h4" variant="special">
+          Claimable incentives
+        </Heading>
+
         {hasHiddenHandRewards && !isPastJulyFirst && (
           <BalAlert
             content="Your Hidden Hand rewards are expiring soon. Hidden Hand has been shutdown. Claim your incentives before they permanently expire after June 30, 2026 (23:59 UTC)."
             status="warning"
           />
         )}
-        <Heading size="h4" variant="special">
-          Claimable incentives
-        </Heading>
+
+        {isBalancer && hasRecoveredFunds && (
+          <BalAlert
+            content={
+              <Text color="font.dark" fontWeight="medium">
+                Claim your share of recovered funds from the November 2025 security incident
+                affecting some v2 Composable Stable pools.{' '}
+                <BalAlertLink onClick={openRecoveredFundsLearnMoreModal}>Learn more</BalAlertLink>
+              </Text>
+            }
+            status="warning"
+          />
+        )}
+
         {isLoadingRewards || isLoadingPortfolio ? (
           <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: isBeets ? 2 : 3 }} spacing="md">
             <Skeleton height="85px" w="full" />
@@ -217,13 +249,12 @@ export function ClaimNetworkPools() {
                 // Collect all claimable items
                 const claimableItems = []
 
-                poolsWithChain.forEach(([, pools], index) => {
+                poolsWithChain.forEach(([, pools]) => {
                   if (pools[0] && totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() > 0) {
                     claimableItems.push({
                       type: 'chain',
                       chain: pools[0].chain,
                       amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
-                      index,
                     })
                   }
                 })
@@ -233,7 +264,6 @@ export function ClaimNetworkPools() {
                     type: 'protocol',
                     chain: GqlChain.Mainnet,
                     amount: protocolRewardsBalance.toNumber(),
-                    index: poolsWithChain.length,
                   })
                 }
 
@@ -242,7 +272,15 @@ export function ClaimNetworkPools() {
                     type: 'hidden-hand',
                     chain: PROJECT_CONFIG.defaultNetwork,
                     amount: hiddenHandRewardsData.totalValueUsd,
-                    index: poolsWithChain.length + 1,
+                  })
+                }
+
+                if (isBalancer && hasRecoveredFunds) {
+                  claimableItems.push({
+                    type: 'recovered-funds',
+                    chain: PROJECT_CONFIG.defaultNetwork,
+                    amount: sumRecoveredFundsTotal(recoveredFundsClaims),
+                    icon: '/images/icons/heart.svg',
                   })
                 }
 
@@ -267,33 +305,11 @@ export function ClaimNetworkPools() {
                       case 'hidden-hand':
                         setIsOpenedHiddenHandRewardsModal(true)
                         break
+                      case 'recovered-funds':
+                        openClaimRecoveredFundModal()
+                        break
                       default:
                         router.push(`/portfolio/${chainToSlugMap[item.chain]}`)
-                    }
-                  }
-
-                  const getTitle = () => {
-                    switch (item.type) {
-                      case 'protocol':
-                        return 'Balancer protocol revenue'
-                      case 'hidden-hand':
-                        return (
-                          <LabelWithTooltip
-                            bgClip="text"
-                            bgColor="rgb(229, 211, 190)"
-                            color="transparent"
-                            fontSize="16px"
-                            fontWeight="700"
-                            label="Hidden Hand rewards"
-                            mb={0}
-                            mt={0}
-                            placement="top"
-                            textTransform="capitalize"
-                            tooltip="Available until June 30, 2026"
-                          />
-                        )
-                      default:
-                        return undefined
                     }
                   }
 
@@ -307,9 +323,10 @@ export function ClaimNetworkPools() {
                     >
                       <ClaimNetworkBlock
                         chain={item.chain}
+                        icon={item.icon}
                         networkTotalClaimableFiatBalance={item.amount}
                         onClick={handleClick}
-                        title={getTitle()}
+                        title={getCardTitle(item.type)}
                       />
                     </motion.div>
                   )
@@ -346,6 +363,7 @@ export function ClaimNetworkPools() {
                 return items
               })()}
             </SimpleGrid>
+
             <ClaimProtocolRevenueModal
               isOpen={isOpenedProtocolRevenueModal}
               onClose={() => setIsOpenedProtocolRevenueModal(false)}
@@ -354,9 +372,44 @@ export function ClaimNetworkPools() {
               isOpen={isOpenedHiddenHandRewardsModal}
               onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
             />
+            <ClaimRecoveredFundsModal
+              isOpen={isClaimRecoveredFundModalOpen}
+              onClose={onClaimRecoveredFundModalClose}
+            />
+            <RecoveredFundsLearnMoreModal
+              isOpen={isRecoveredFundsLearnMoreModalOpen}
+              onClose={onRecoveredFundsLearnMoreModalClose}
+            />
           </>
         )}
       </Stack>
     </FadeInOnView>
   )
+}
+
+function getCardTitle(itemType: string) {
+  switch (itemType) {
+    case 'protocol':
+      return 'Balancer protocol revenue'
+    case 'hidden-hand':
+      return (
+        <LabelWithTooltip
+          bgClip="text"
+          bgColor="rgb(229, 211, 190)"
+          color="transparent"
+          fontSize="16px"
+          fontWeight="700"
+          label="Hidden Hand rewards"
+          mb={0}
+          mt={0}
+          placement="top"
+          textTransform="capitalize"
+          tooltip="Available until June 30, 2026"
+        />
+      )
+    case 'recovered-funds':
+      return 'v2 incident recovered funds'
+    default:
+      return undefined
+  }
 }
