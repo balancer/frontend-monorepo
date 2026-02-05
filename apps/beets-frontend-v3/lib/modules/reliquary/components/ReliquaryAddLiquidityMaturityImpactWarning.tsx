@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, VStack } from '@chakra-ui/react'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AddLiquiditySimulationQueryResult } from '@repo/lib/modules/pool/actions/add-liquidity/queries/useAddLiquiditySimulationQuery'
@@ -19,6 +19,14 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
   addLiquidityMaturityImpactQuery,
   simulationQuery,
 }: Props) {
+  const boxProps: BoxProps = {
+    as: 'span',
+    color: 'black',
+    fontSize: 'sm',
+    fontWeight: 'medium',
+    sx: { textWrap: 'balance' },
+  }
+
   const addLiquidityMaturityImpact = addLiquidityMaturityImpactQuery.data
 
   // Calculate duration for maturity impact (pure function, no Date.now())
@@ -55,11 +63,11 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
     <BalAlert
       content={
         <VStack align="start" spacing="0">
-          <Box>
+          <Box {...boxProps}>
             {`Adding ${fNum('token', totalInvestValue)} fBEETS to this Relic will affect its maturity. It will take an additional ${maturityDuration} to reach maximum maturity.`}
           </Box>
           {addLiquidityMaturityImpact.oldLevel !== addLiquidityMaturityImpact.newLevel && (
-            <Box>
+            <Box {...boxProps}>
               {`Your Relic will change from level ${addLiquidityMaturityImpact.oldLevel + 1} to level ${addLiquidityMaturityImpact.newLevel + 1}.`}
             </Box>
           )}
