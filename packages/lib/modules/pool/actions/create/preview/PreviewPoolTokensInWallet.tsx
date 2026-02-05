@@ -1,4 +1,5 @@
-import { CardBody, VStack, Text, Divider, HStack } from '@chakra-ui/react'
+import { CardBody, VStack, Text, Divider, HStack, Box } from '@chakra-ui/react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -65,38 +66,57 @@ function PoolTokensInWalletContent() {
 
   return (
     <>
-      {poolTokensWithUserBalances.map(token => (
+      <AnimatePresence initial={false}>
+        {poolTokensWithUserBalances.map(token => (
+          <motion.div
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, height: 0 }}
+            key={token.address}
+            style={{ width: '100%', overflow: 'hidden', zIndex: 1000 }}
+            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+          >
+            <Box pb="md">
+              <CardDataRow
+                data={[
+                  <IdentifyTokenCell
+                    address={token.address}
+                    chain={token.chain}
+                    symbol={token.symbol}
+                  />,
+                  <HStack justify="end">
+                    {token.userBalanceUsd !== '0' ? (
+                      <Text>{toCurrency(token.userBalanceUsd)}</Text>
+                    ) : (
+                      <TokenMissingPriceWarning message={tokenPriceTip} />
+                    )}
+                  </HStack>,
+                  <HStack justify="end">
+                    {token.userBalanceUsd !== '0' ? (
+                      <Text>
+                        {((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2) +
+                          '%'}
+                      </Text>
+                    ) : (
+                      <TokenMissingPriceWarning message={tokenWeightTip} />
+                    )}
+                  </HStack>,
+                ]}
+              />
+            </Box>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      <>
+        <Divider />
         <CardDataRow
           data={[
-            <IdentifyTokenCell address={token.address} chain={token.chain} symbol={token.symbol} />,
-            <HStack justify="end">
-              {token.userBalanceUsd !== '0' ? (
-                <Text>{toCurrency(token.userBalanceUsd)}</Text>
-              ) : (
-                <TokenMissingPriceWarning message={tokenPriceTip} />
-              )}
-            </HStack>,
-            <HStack justify="end">
-              {token.userBalanceUsd !== '0' ? (
-                <Text>
-                  {((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2) + '%'}
-                </Text>
-              ) : (
-                <TokenMissingPriceWarning message={tokenWeightTip} />
-              )}
-            </HStack>,
+            <Text fontWeight="semibold">Total liquidity</Text>,
+            <Text align="right">{toCurrency(totalLiquidityUsd)}</Text>,
+            <Text align="right">100%</Text>,
           ]}
-          key={token.address}
         />
-      ))}
-      <Divider />
-      <CardDataRow
-        data={[
-          <Text fontWeight="semibold">Total liquidity</Text>,
-          <Text align="right">{toCurrency(totalLiquidityUsd)}</Text>,
-          <Text align="right">100%</Text>,
-        ]}
-      />
+      </>
     </>
   )
 }
