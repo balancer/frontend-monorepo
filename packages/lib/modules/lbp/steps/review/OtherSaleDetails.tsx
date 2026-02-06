@@ -6,10 +6,12 @@ export function OtherSaleDetails({
   launchTokenSymbol,
   fee,
   userActions,
+  lbpText,
 }: {
   launchTokenSymbol: string
   fee: number
   userActions: UserActions
+  lbpText: string
 }) {
   return (
     <Card>
@@ -49,7 +51,7 @@ export function OtherSaleDetails({
             variant="secondary"
             w="full"
           >
-            <ListItem>{`Ability to ${userActions.replaceAll('_', ' ')} ${launchTokenSymbol} during the LBP`}</ListItem>
+            <ListItem>{`Ability to ${userActions.replaceAll('_', ' ')} ${launchTokenSymbol} during the ${lbpText} LBP`}</ListItem>
             <ListItem>{`Immediate access to ${launchTokenSymbol} on swap (no claiming delay or vesting)`}</ListItem>
           </List>
         </VStack>

@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
-import { SaleStructureForm, UserActions } from '../lbp.types'
+import { SaleStructureForm, UserActions, WeightAdjustmentType } from '../lbp.types'
 import {
   Control,
   Controller,
@@ -45,11 +45,13 @@ import {
 } from 'date-fns'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { LbpFormAction } from '../LbpFormAction'
-import { LbpTokenAmountInputs } from './sale-structure/LbpTokenAmountInputs'
+import { DynamicLbpTokenAmountInputs } from './sale-structure/DynamicLbpTokenAmountInputs'
+import { FixedLbpTokenAmountInputs } from './sale-structure/FixedLbpTokenAmountInputs'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
 import { useWatch, useFormState } from 'react-hook-form'
+import { SaleTypeInput } from './sale-structure/SaleTypeInput'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -59,6 +61,8 @@ export function SaleStructureStep() {
     goToNextStep,
     resetLbpCreation,
     poolAddress,
+    isDynamicSale,
+    isFixedSale,
   } = useLbpForm()
 
   const [
@@ -113,6 +117,7 @@ export function SaleStructureStep() {
             </Heading>
 
             <VStack align="start" spacing="lg" w="full">
+              <SaleTypeInput control={control} />
               <NetworkSelectInput chains={supportedChains} control={control} />
               <LaunchTokenAddressInput
                 chainId={selectedChain}
@@ -158,16 +163,18 @@ export function SaleStructureStep() {
                   LBP mechanism
                 </Heading>
                 <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
-                <WeightAdjustmentTypeInput
-                  collateralTokenSymbol={collateralToken?.symbol || ''}
-                  control={control}
-                  customEndWeight={customEndWeight}
-                  customStartWeight={customStartWeight}
-                  launchTokenSymbol={launchTokenMetadata.symbol || ''}
-                  setValue={setValue}
-                  weightAdjustmentType={weightAdjustmentType}
-                />
-                <UserActionsInput control={control} />
+                {isDynamicSale && (
+                  <WeightAdjustmentTypeInput
+                    collateralTokenSymbol={collateralToken?.symbol || ''}
+                    control={control}
+                    customEndWeight={customEndWeight ?? 10}
+                    customStartWeight={customStartWeight ?? 90}
+                    launchTokenSymbol={launchTokenMetadata.symbol || ''}
+                    setValue={setValue}
+                    weightAdjustmentType={weightAdjustmentType ?? WeightAdjustmentType.LINEAR_90_10}
+                  />
+                )}
+                <UserActionsInput control={control} isFixedSale={isFixedSale} setValue={setValue} />
                 <FeeSelection
                   control={control}
                   errors={errors}
@@ -179,7 +186,8 @@ export function SaleStructureStep() {
             )}
           </>
         )}
-        <LbpTokenAmountInputs />
+        {isDynamicSale && <DynamicLbpTokenAmountInputs />}
+        {isFixedSale && <FixedLbpTokenAmountInputs />}
         <Divider />
         <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
       </VStack>
@@ -357,7 +365,7 @@ function SaleEndInput({
   value: string
   saleStart: string
 }) {
-  const validateSaleEnd = (value: string | number) => {
+  const validateSaleEnd = (value: string | number | undefined) => {
     if (typeof value !== 'string') return 'End time must be type string'
     if (!isAfter(parseISO(value), addDays(parseISO(saleStart), 1))) {
       return 'End time must be at least 24 hours after start time'
@@ -403,7 +411,7 @@ function DateTimeInput({
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   min?: string
-  validate: (value: string | number) => string | true
+  validate: (value: string | number | undefined) => string | true
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
 
@@ -465,7 +473,22 @@ function CollateralTokenAddressInput({
   )
 }
 
-function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) {
+function UserActionsInput({
+  control,
+  isFixedSale,
+  setValue,
+}: {
+  control: Control<SaleStructureForm>
+  isFixedSale?: boolean
+  setValue?: UseFormSetValue<SaleStructureForm>
+}) {
+  // For fixed sale types, force "Buy only" and disable the other option
+  useEffect(() => {
+    if (isFixedSale && setValue) {
+      setValue('userActions', UserActions.BUY_ONLY)
+    }
+  }, [isFixedSale, setValue])
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Available user actions</Text>
@@ -475,7 +498,9 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack direction="row" gap="md">
-              <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
+              <Radio isDisabled={isFixedSale} value={UserActions.BUY_AND_SELL}>
+                Buy & sell
+              </Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
             </Stack>
           </RadioGroup>
