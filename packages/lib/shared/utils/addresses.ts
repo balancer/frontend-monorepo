@@ -3,7 +3,7 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { Address, checksumAddress, isAddress } from 'viem'
 import { GqlChain } from '../services/api/generated/graphql'
 
-export function isSameAddress(address1: string, address2: string): boolean {
+export function isSameAddress(address1: string | undefined, address2: string | undefined): boolean {
   if (!address1 || !address2) return false
   return address1.toLowerCase() === address2.toLowerCase()
 }
