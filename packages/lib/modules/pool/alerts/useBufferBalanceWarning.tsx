@@ -1,84 +1,72 @@
 import { HumanTokenAmountWithSymbol, ApiToken } from '@repo/lib/modules/tokens/token.types'
+import BigNumber from 'bignumber.js'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { Text } from '@chakra-ui/react'
 import { BalAlert } from '../../../shared/components/alerts/BalAlert'
 import { useReadContracts } from 'wagmi'
 import { vaultAdminAbi_V3, AddressProvider } from '@balancer/sdk'
 import { formatUnits, erc4626Abi, Address } from 'viem'
-
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
-type Props = {
+type UseBufferBalanceWarningParams = {
   validTokens: ApiToken[]
   amounts: HumanTokenAmountWithSymbol[]
   operation: 'add' | 'remove'
 }
 
-type BufferLiquidityInfo = {
-  underlyingTokenAddress: string | undefined
-  wrappedTokenAddress: string
-  bufferBalanceOfUnderlying: ReturnType<typeof bn>
-  bufferBalanceOfWrapped: ReturnType<typeof bn>
-  halfOfBufferTotalLiquidityAsUnderlying: ReturnType<typeof bn>
-  halfOfBufferTotalLiquidityAsWrapped: ReturnType<typeof bn>
-  vaultMaxDeposit: ReturnType<typeof bn>
-  vaultMaxWithdraw: ReturnType<typeof bn>
+type LiquidityBuffer = {
+  wrappedToken: ApiToken
+  bufferUnderlyingAmount: BigNumber
+  bufferWrappedAmount: BigNumber
+  bufferTotalLiquidityAsUnderlying: BigNumber
+  maxDeposit: BigNumber
+  maxWithdraw: BigNumber
 }
 
-type Violation = { underlyingSymbol: string | undefined; wrappedSymbol: string | undefined }
+type UnderlyingTokenWithAmount = ApiToken & { amount: BigNumber }
 
 type ViolationCheckParams = {
-  tokenAddress: Address
-  humanAmount: string
-  underlyingSymbol: string | undefined
-  validTokens: ApiToken[]
-  bufferLiquidityInfo: BufferLiquidityInfo[]
+  underlyingToken: UnderlyingTokenWithAmount
+  liquidityBuffers: LiquidityBuffer[]
 }
 
-export function useBufferBalanceWarning({ amounts, validTokens, operation }: Props) {
+export function useBufferBalanceWarning(params: UseBufferBalanceWarningParams) {
+  const { amounts, validTokens, operation } = params
   const isAddLiquidity = operation === 'add'
 
-  const humanUnderlyingAmounts = amounts.filter(amount =>
-    validTokens.some(
-      token =>
-        isSameAddress(token.address, amount.tokenAddress) &&
-        token.wrappedToken &&
-        token.useUnderlyingForAddRemove
+  const underlyingTokensWithAmount = amounts.flatMap(amount => {
+    const underlyingToken = validTokens.find(
+      t =>
+        isSameAddress(t.address, amount.tokenAddress) &&
+        t.wrappedToken &&
+        t.useUnderlyingForAddRemove
     )
-  )
+    if (!underlyingToken) return []
+    return { ...underlyingToken, amount: bn(amount.humanAmount) }
+  })
 
   const wrappedTokens = isAddLiquidity
     ? validTokens.filter(token => token.underlyingToken)
     : validTokens.map(token => token.wrappedToken).filter(token => token !== undefined)
 
-  const { bufferLiquidityInfo, isLoadingBufferBalances } = useBufferBalances(wrappedTokens)
+  const { liquidityBuffers, isLoadingLiquidityBuffers } = useLiquidityBuffers(wrappedTokens)
 
-  if (isLoadingBufferBalances) return null
+  if (isLoadingLiquidityBuffers) return null
 
-  // validTokens always have symbol but amounts do not
-  const underlyingAmounts = humanUnderlyingAmounts.map(({ tokenAddress, humanAmount }) => {
-    const symbol = validTokens.find(token => isSameAddress(token.address, tokenAddress))?.symbol
-    return { tokenAddress, humanAmount, symbol }
-  })
-
-  const bufferLimitViolations = underlyingAmounts
-    .map(({ tokenAddress, humanAmount, symbol: underlyingSymbol }) => {
-      const params = {
-        tokenAddress,
-        humanAmount,
-        underlyingSymbol,
-        validTokens,
-        bufferLiquidityInfo,
-      }
-      return isAddLiquidity ? checkAddViolation(params) : checkRemoveViolation(params)
+  const bufferLimitViolations = underlyingTokensWithAmount
+    .map(underlyingToken => {
+      return isAddLiquidity
+        ? checkAddViolation({ underlyingToken, liquidityBuffers })
+        : checkRemoveViolation({ underlyingToken, liquidityBuffers })
     })
     .filter(violation => violation !== null)
 
   if (bufferLimitViolations.length === 0) return null
 
-  return bufferLimitViolations.map(({ underlyingSymbol, wrappedSymbol }, idx) => {
+  return bufferLimitViolations.map((underlyingToken, idx) => {
     const action = isAddLiquidity ? 'deposit' : 'withdrawal'
-    const selectedTokenSymbol = isAddLiquidity ? wrappedSymbol : underlyingSymbol
+    const wrappedSymbol = underlyingToken.wrappedToken?.symbol
+    const selectedTokenSymbol = isAddLiquidity ? wrappedSymbol : underlyingToken.symbol
 
     return (
       <BalAlert
@@ -98,77 +86,67 @@ export function useBufferBalanceWarning({ amounts, validTokens, operation }: Pro
         }
         key={idx}
         status="warning"
-        title={`Insufficient buffer liquidity for your ${underlyingSymbol} ${action}`}
+        title={`Insufficient buffer liquidity for your ${underlyingToken.symbol} ${action}`}
       />
     )
   })
 }
 
-function checkAddViolation(params: ViolationCheckParams): Violation | null {
-  // User is offering underlying tokens which requires sufficient buffer balance of wrapped tokens
-  const { tokenAddress, humanAmount, underlyingSymbol, validTokens, bufferLiquidityInfo } = params
+function checkAddViolation(params: ViolationCheckParams): UnderlyingTokenWithAmount | null {
+  const { underlyingToken, liquidityBuffers } = params
+  const wrappedToken = underlyingToken.wrappedToken
 
-  const wrappedToken = validTokens.find(validToken =>
-    isSameAddress(tokenAddress, validToken.underlyingToken?.address)
-  )
-  const bufferLiquidity = bufferLiquidityInfo.find(b =>
-    isSameAddress(b.wrappedTokenAddress, wrappedToken?.address)
+  const liquidityBuffer = liquidityBuffers.find(b =>
+    isSameAddress(b.wrappedToken.address, wrappedToken?.address)
   )
 
-  if (!bufferLiquidity || !wrappedToken || !wrappedToken.priceRate) return null
+  if (!liquidityBuffer || !wrappedToken || !wrappedToken.priceRate) return null
 
-  const { bufferBalanceOfWrapped, halfOfBufferTotalLiquidityAsWrapped, vaultMaxDeposit } =
-    bufferLiquidity
+  // User is offering underlying tokens which requires sufficient buffer balance of wrapped tokens or erc4626 max deposit to be sufficient to rebalance the buffer
+  const { bufferWrappedAmount, bufferTotalLiquidityAsUnderlying, maxDeposit } = liquidityBuffer
 
-  const wrappedAmountRequired = bn(humanAmount).div(wrappedToken.priceRate)
-  const exceedsBufferBalance = wrappedAmountRequired.gt(bufferBalanceOfWrapped)
-
-  const exceedsVaultCapacity = vaultMaxDeposit.lt(
-    halfOfBufferTotalLiquidityAsWrapped.plus(wrappedAmountRequired.minus(bufferBalanceOfWrapped))
+  const wrappedAmountRequired = underlyingToken.amount.div(wrappedToken.priceRate)
+  const halfTotalLiquidityAsWrapped = bufferTotalLiquidityAsUnderlying.div(wrappedToken.priceRate)
+  const depositAmountToRebalance = halfTotalLiquidityAsWrapped.plus(
+    wrappedAmountRequired.minus(bufferWrappedAmount)
   )
 
-  if (exceedsBufferBalance && exceedsVaultCapacity) {
-    return { underlyingSymbol, wrappedSymbol: wrappedToken.symbol }
-  }
+  const exceedsBufferBalance = wrappedAmountRequired.gt(bufferWrappedAmount)
+  const exceedsVaultCapacity = maxDeposit.lt(depositAmountToRebalance)
+
+  if (exceedsBufferBalance && exceedsVaultCapacity) return underlyingToken
 
   return null
 }
 
-function checkRemoveViolation(params: ViolationCheckParams): Violation | null {
-  const { tokenAddress, humanAmount, underlyingSymbol, validTokens, bufferLiquidityInfo } = params
+function checkRemoveViolation(params: ViolationCheckParams): UnderlyingTokenWithAmount | null {
+  const { underlyingToken, liquidityBuffers } = params
 
-  // User is requesting underlying tokens which requires sufficient buffer balance of underlying
-  const underlyingToken = validTokens.find(validToken =>
-    isSameAddress(tokenAddress, validToken.address)
-  )
-  const bufferLiquidity = bufferLiquidityInfo.find(b =>
-    isSameAddress(b.underlyingTokenAddress, underlyingToken?.address)
+  const liquidityBuffer = liquidityBuffers.find(b =>
+    isSameAddress(b.wrappedToken.underlyingToken?.address, underlyingToken.address)
   )
 
-  if (!bufferLiquidity || !underlyingSymbol) return null
+  if (!liquidityBuffer) return null
 
-  const { halfOfBufferTotalLiquidityAsUnderlying, bufferBalanceOfUnderlying, vaultMaxWithdraw } =
-    bufferLiquidity
+  // User is requesting underlying tokens which requires sufficient buffer balance of underlying or erc4626 max withdraw to be sufficient to rebalance the buffer
+  const { bufferTotalLiquidityAsUnderlying, bufferUnderlyingAmount, maxWithdraw } = liquidityBuffer
 
-  const underlyingAmountRequired = bn(humanAmount)
-  const exceedsBufferBalance = underlyingAmountRequired.gt(bufferBalanceOfUnderlying)
-
-  const exceedsVaultCapacity = vaultMaxWithdraw.lt(
-    halfOfBufferTotalLiquidityAsUnderlying.plus(
-      underlyingAmountRequired.minus(bufferBalanceOfUnderlying)
-    )
+  const underlyingAmountRequired = underlyingToken.amount
+  const halfTotalLiquidityAsUnderlying = bufferTotalLiquidityAsUnderlying.div(2)
+  const withdrawAmountToRebalance = halfTotalLiquidityAsUnderlying.plus(
+    underlyingAmountRequired.minus(bufferUnderlyingAmount)
   )
 
-  if (exceedsBufferBalance && exceedsVaultCapacity) {
-    const wrappedSymbol = underlyingToken?.wrappedToken?.symbol
-    return { underlyingSymbol, wrappedSymbol }
-  }
+  const exceedsBufferBalance = underlyingAmountRequired.gt(bufferUnderlyingAmount)
+  const exceedsVaultCapacity = maxWithdraw.lt(withdrawAmountToRebalance)
+
+  if (exceedsBufferBalance && exceedsVaultCapacity) return underlyingToken
 
   return null
 }
 
-function useBufferBalances(wrappedTokens: ApiToken[]) {
-  const { data: bufferBalanceData, isLoading: isLoadingBufferBalances } = useReadContracts({
+function useLiquidityBuffers(wrappedTokens: ApiToken[]) {
+  const { data: bufferBalances, isLoading: isLoadingBufferBalances } = useReadContracts({
     contracts: wrappedTokens.map(token => ({
       chainId: token.chainId,
       abi: vaultAdminAbi_V3,
@@ -184,7 +162,7 @@ function useBufferBalances(wrappedTokens: ApiToken[]) {
       chainId: token.chainId,
       abi: erc4626Abi,
       address: token.address as Address,
-      functionName: 'maxDeposit',
+      functionName: 'maxDeposit' as const,
       args: [AddressProvider.Vault(token.chainId)],
     })),
   })
@@ -194,43 +172,41 @@ function useBufferBalances(wrappedTokens: ApiToken[]) {
       chainId: token.chainId,
       abi: erc4626Abi,
       address: token.address as Address,
-      functionName: 'maxWithdraw',
+      functionName: 'maxWithdraw' as const,
       args: [AddressProvider.Vault(token.chainId)],
     })),
   })
 
-  const isLoading = isLoadingBufferBalances || isLoadingMaxDeposit || isLoadingMaxWithdraw
+  const isLoadingLiquidityBuffers =
+    isLoadingBufferBalances || isLoadingMaxDeposit || isLoadingMaxWithdraw
 
-  const bufferLiquidityInfo = wrappedTokens
-    .map((token, index) => {
-      const underlyingDecimals = token.underlyingToken?.decimals
-      const priceRate = token.priceRate
-      if (!underlyingDecimals || !priceRate) return null
+  const liquidityBuffers = wrappedTokens
+    .map((wrappedToken, index) => {
+      const underlyingDecimals = wrappedToken.underlyingToken?.decimals
 
-      const underlyingRaw = bufferBalanceData?.[index]?.result?.[0] ?? 0n
-      const wrappedRaw = bufferBalanceData?.[index]?.result?.[1] ?? 0n
+      if (!underlyingDecimals || !wrappedToken.priceRate) return null
 
-      const bufferBalanceOfUnderlying = bn(formatUnits(underlyingRaw, underlyingDecimals))
-      const bufferBalanceOfWrapped = bn(formatUnits(wrappedRaw, token.decimals))
+      const underlyingAmountRaw = bufferBalances?.[index]?.result?.[0] ?? 0n
+      const wrappedAmountRaw = bufferBalances?.[index]?.result?.[1] ?? 0n
 
-      const totalAsUnderlying = bufferBalanceOfUnderlying.plus(
-        bufferBalanceOfWrapped.times(priceRate)
+      const bufferUnderlyingAmount = bn(formatUnits(underlyingAmountRaw, underlyingDecimals))
+      const bufferWrappedAmount = bn(formatUnits(wrappedAmountRaw, wrappedToken.decimals))
+
+      const bufferWrappedAmountAsUnderlying = bufferWrappedAmount.times(wrappedToken.priceRate)
+      const bufferTotalLiquidityAsUnderlying = bufferUnderlyingAmount.plus(
+        bufferWrappedAmountAsUnderlying
       )
-      const halfTotalAsUnderlying = totalAsUnderlying.div(2)
-      const halfTotalAsWrapped = halfTotalAsUnderlying.div(priceRate)
 
       return {
-        underlyingTokenAddress: token.underlyingToken?.address,
-        wrappedTokenAddress: token.address,
-        bufferBalanceOfUnderlying,
-        bufferBalanceOfWrapped,
-        halfOfBufferTotalLiquidityAsUnderlying: halfTotalAsUnderlying,
-        halfOfBufferTotalLiquidityAsWrapped: halfTotalAsWrapped,
-        vaultMaxDeposit: bn(maxDepositData?.[index]?.result ?? 0n),
-        vaultMaxWithdraw: bn(maxWithdrawData?.[index]?.result ?? 0n),
+        wrappedToken,
+        bufferUnderlyingAmount,
+        bufferWrappedAmount,
+        bufferTotalLiquidityAsUnderlying,
+        maxDeposit: bn(formatUnits(maxDepositData?.[index]?.result ?? 0n, underlyingDecimals)),
+        maxWithdraw: bn(formatUnits(maxWithdrawData?.[index]?.result ?? 0n, underlyingDecimals)),
       }
     })
     .filter(b => b !== null)
 
-  return { bufferLiquidityInfo, isLoadingBufferBalances: isLoading }
+  return { liquidityBuffers, isLoadingLiquidityBuffers }
 }
