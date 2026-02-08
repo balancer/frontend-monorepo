@@ -18,7 +18,6 @@ type LiquidityBuffer = {
   wrappedToken: ApiToken
   underlyingBalance: BigNumber
   wrappedBalance: BigNumber
-  halfTotalLiquidityAsWrapped: BigNumber
   halfTotalLiquidityAsUnderlying: BigNumber
   maxDeposit: BigNumber
   maxWithdraw: BigNumber
@@ -42,7 +41,7 @@ export function useBufferBalanceWarning(params: UseBufferBalanceWarningParams) {
         t.wrappedToken &&
         t.useUnderlyingForAddRemove
     )
-    if (!underlyingToken) return []
+    if (!underlyingToken || !amount.humanAmount) return []
     return { ...underlyingToken, amount: bn(amount.humanAmount) }
   })
 
@@ -103,18 +102,21 @@ function checkAddViolation(params: ViolationCheckParams): UnderlyingTokenWithAmo
 
   if (!liquidityBuffer || !wrappedToken?.priceRate) return null
 
-  // User is offering underlying tokens which requires sufficient buffer balance of wrapped tokens or erc4626 max deposit to be sufficient to rebalance the buffer
-  const { wrappedBalance, halfTotalLiquidityAsWrapped, maxDeposit } = liquidityBuffer
+  // for add liquidity, user is adding underlying tokens to the buffer, which pulls from the wrapped balance
+  const { halfTotalLiquidityAsUnderlying, wrappedBalance, maxDeposit } = liquidityBuffer
 
-  const wrappedAmountRequired = underlyingToken.amount.div(bn(wrappedToken.priceRate))
-  const depositAmountToRebalance = halfTotalLiquidityAsWrapped.plus(
-    wrappedAmountRequired.minus(wrappedBalance)
+  // check if buffer has enough wrapped balance to cover the underlying amount user wants to add
+  const underlyingAmountAsWrapped = underlyingToken.amount.div(bn(wrappedToken.priceRate))
+  const exceedsWrappedBalance = underlyingAmountAsWrapped.gt(wrappedBalance)
+
+  // if buffer does not have enough wrapped balance, it will hit 100% underlying and need erc4626 max deposit to be sufficient to rebalance to 50% underlying / 50% wrapped
+  const wrappedBalanceAsUnderlying = wrappedBalance.times(bn(wrappedToken.priceRate))
+  const depositAmountToRebalance = halfTotalLiquidityAsUnderlying.plus(
+    underlyingToken.amount.minus(wrappedBalanceAsUnderlying)
   )
-
-  const exceedsBufferBalance = wrappedAmountRequired.gt(wrappedBalance)
   const exceedsMaxDeposit = depositAmountToRebalance.gt(maxDeposit)
 
-  if (exceedsBufferBalance && exceedsMaxDeposit) return underlyingToken
+  if (exceedsWrappedBalance && exceedsMaxDeposit) return underlyingToken
 
   return null
 }
@@ -128,15 +130,16 @@ function checkRemoveViolation(params: ViolationCheckParams): UnderlyingTokenWith
 
   if (!liquidityBuffer) return null
 
-  // User is requesting underlying tokens which requires sufficient buffer balance of underlying or erc4626 max withdraw to be sufficient to rebalance the buffer
+  // for remove liquidity, user is adding wrapped tokens to the buffer, which pulls from the underlying balance
   const { halfTotalLiquidityAsUnderlying, underlyingBalance, maxWithdraw } = liquidityBuffer
 
-  const underlyingAmountRequired = underlyingToken.amount
-  const withdrawAmountToRebalance = halfTotalLiquidityAsUnderlying.plus(
-    underlyingAmountRequired.minus(underlyingBalance)
-  )
+  // check if buffer has enough underlying balance to cover the underlying amount user wants to remove
+  const exceedsBufferBalance = underlyingToken.amount.gt(underlyingBalance)
 
-  const exceedsBufferBalance = underlyingAmountRequired.gt(underlyingBalance)
+  // if buffer does not have enough underlying balance, it will hit 100% wrapped and need erc4626 max withdraw to be sufficient to rebalance buffer to 50% underlying / 50% wrapped
+  const withdrawAmountToRebalance = halfTotalLiquidityAsUnderlying.plus(
+    underlyingToken.amount.minus(underlyingBalance)
+  )
   const exceedsMaxWithdraw = withdrawAmountToRebalance.gt(maxWithdraw)
 
   if (exceedsBufferBalance && exceedsMaxWithdraw) return underlyingToken
@@ -190,15 +193,10 @@ function useLiquidityBuffers(wrappedTokens: ApiToken[]) {
 
       const underlyingBalance = bn(formatUnits(underlyingBalanceRaw, underlyingDecimals))
       const wrappedBalance = bn(formatUnits(wrappedBalanceRaw, wrappedToken.decimals))
+      const wrappedBalanceAsUnderlying = wrappedBalance.times(wrappedToken.priceRate)
 
-      const bufferWrappedAmountAsUnderlying = wrappedBalance.times(wrappedToken.priceRate)
-      const bufferTotalLiquidityAsUnderlying = underlyingBalance.plus(
-        bufferWrappedAmountAsUnderlying
-      )
-      const halfTotalLiquidityAsUnderlying = bufferTotalLiquidityAsUnderlying.div(2)
-      const halfTotalLiquidityAsWrapped = halfTotalLiquidityAsUnderlying.div(
-        bn(wrappedToken.priceRate)
-      )
+      const totalLiquidityAsUnderlying = underlyingBalance.plus(wrappedBalanceAsUnderlying)
+      const halfTotalLiquidityAsUnderlying = totalLiquidityAsUnderlying.div(2)
 
       const maxDepositRaw = maxDepositData?.[index]?.result ?? 0n
       const maxWithdrawRaw = maxWithdrawData?.[index]?.result ?? 0n
@@ -210,7 +208,6 @@ function useLiquidityBuffers(wrappedTokens: ApiToken[]) {
         underlyingBalance,
         wrappedBalance,
         halfTotalLiquidityAsUnderlying,
-        halfTotalLiquidityAsWrapped,
         maxDeposit,
         maxWithdraw,
       }
