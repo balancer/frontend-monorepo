@@ -11,6 +11,7 @@ import {
   Divider,
   Box,
   Button,
+  HStack,
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
@@ -52,6 +53,7 @@ import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
 import { useWatch, useFormState } from 'react-hook-form'
 import { SaleTypeInput } from './sale-structure/SaleTypeInput'
+import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -491,7 +493,12 @@ function UserActionsInput({
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Available user actions</Text>
+      <HStack>
+        <Text color="font.primary">Available user actions</Text>
+        {isFixedSale && (
+          <InfoIconPopover message="A fixed price LBP does not allow users to sell the project tokens back into the pool." />
+        )}
+      </HStack>
       <Controller
         control={control}
         name="userActions"
