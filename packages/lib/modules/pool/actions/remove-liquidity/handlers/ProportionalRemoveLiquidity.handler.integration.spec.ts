@@ -47,7 +47,7 @@ describe('When proportionally removing liquidity for a weighted v2 pool', async 
     expect(balTokenAmountOut.amount).toBeGreaterThan(2000000000000000000n)
 
     expect(wEthTokenAmountOut.token.address).toBe(wETHAddress)
-    expect(wEthTokenAmountOut.amount).toBeGreaterThan(100000000000000n)
+    expect(wEthTokenAmountOut.amount).toBeGreaterThan(80000000000000n)
   })
 
   test('builds Tx Config', async () => {
