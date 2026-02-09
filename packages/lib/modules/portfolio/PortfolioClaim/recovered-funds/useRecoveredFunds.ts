@@ -6,13 +6,12 @@ import { Address } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { useState } from 'react'
-import { WRAPPER_TOKENS } from './wrapper-tokens'
+import { NORMALIZED_WRAPPER_TOKENS } from './wrapper-tokens'
 
 const MERKL_API_URL = 'https://api.merkl.xyz/v4'
 export const CHAINS = [
   1 /* Mainnet*/, 42161 /* Arbitrum */, 8453 /* Base */, 137 /* Polygon */, 10 /* Optimism */,
 ]
-const wrapperTokens = WRAPPER_TOKENS.map(address => address.toLowerCase())
 
 export type RecoveredTokenClaim = {
   amount: HumanTokenAmountWithSymbol
@@ -52,7 +51,11 @@ export function useRecoveredFunds() {
       ? result.data
           .flatMap(chain => chain.rewards)
           .map(toRecoveredTokenClaim)
-          .filter(claim => wrapperTokens.includes(claim.amount.tokenAddress.toLowerCase()))
+          .filter(claim =>
+            NORMALIZED_WRAPPER_TOKENS[claim.chainId].includes(
+              claim.amount.tokenAddress.toLowerCase()
+            )
+          )
       : []
 
   const hasBeenClaimed = claims.every(claim => claim.rawAmount === claim.claimedAmount)
