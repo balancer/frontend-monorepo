@@ -30,7 +30,7 @@ export function LbpPreview() {
     fdvMarketCap,
     launchTokenPriceUsd,
     launchTokenPriceUsdRaw,
-    totalValue,
+    totalValueUsd,
     isDynamicSale,
     isFixedSale,
   } = useLbpForm()
@@ -105,7 +105,7 @@ export function LbpPreview() {
                     title={`${launchTokenMetadata.symbol} sale price`}
                   />
                   <SimpleInfoCard info={fNum('token', saleTokenAmount)} title="Tokens for sale" />
-                  <SimpleInfoCard info={totalValue} title="Max sale total" />
+                  <SimpleInfoCard info={totalValueUsd} title="Max sale total" />
                 </HStack>
                 <FixedProjectedPrice
                   endDateTime={endDateTime}

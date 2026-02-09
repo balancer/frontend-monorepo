@@ -3,7 +3,7 @@ import { InputGroup, Input, InputRightElement, Button, Box } from '@chakra-ui/re
 import { TokenBalancesProvider } from '../../../tokens/TokenBalancesProvider'
 import { useLbpForm } from '../../LbpFormProvider'
 import { useTokens } from '../../../tokens/TokensProvider'
-import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
+import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
 import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { VStack, Text, Heading } from '@chakra-ui/react'
@@ -15,7 +15,8 @@ export function FixedLbpTokenAmountInputs() {
   const {
     launchToken,
     launchTokenPriceUsd,
-    totalValue,
+    totalValueUsd,
+    totalValueRaw,
     saleStructureForm: { control },
   } = useLbpForm()
 
@@ -62,8 +63,11 @@ export function FixedLbpTokenAmountInputs() {
               <Text color="font.secondary" fontSize="sm">
                 Transfer all of the tokens to be sold in the token sale right now.
               </Text>
-              <Text color="font.secondary" fontSize="sm">
-                At current prices, if all tokens are sold, you will raise: ~{totalValue}
+              <Text
+                color={bn(totalValueRaw).gt(0) ? 'font.secondary' : 'font.secondaryAlpha50'}
+                fontSize="sm"
+              >
+                At current prices, if all tokens are sold, you will raise: ~{totalValueUsd}
               </Text>
             </VStack>
           </VStack>
