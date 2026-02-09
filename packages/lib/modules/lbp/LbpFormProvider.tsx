@@ -155,6 +155,7 @@ export function useLbpFormLogic() {
     poolAddress,
     setPoolAddress,
     launchTokenPriceUsd: toCurrency(launchTokenPriceUsd),
+    launchTokenPriceUsdRaw: launchTokenPriceUsd,
     totalValue: toCurrency(totalValue),
     isDynamicSale,
     isFixedSale,

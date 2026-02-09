@@ -7,6 +7,7 @@ import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
 import { PoolWeights } from './steps/preview/PoolWeights'
 import { ProjectedPrice } from './steps/preview/ProjectedPrice'
+import { FixedProjectedPrice } from './steps/preview/FixedProjectedPrice'
 import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
@@ -28,6 +29,7 @@ export function LbpPreview() {
     saleMarketCap,
     fdvMarketCap,
     launchTokenPriceUsd,
+    launchTokenPriceUsdRaw,
     totalValue,
     isDynamicSale,
     isFixedSale,
@@ -96,14 +98,23 @@ export function LbpPreview() {
         {tokenLoaded && (
           <>
             {isFixedSale && (
-              <HStack alignItems="stretch" gap="ms" w="full">
-                <SimpleInfoCard
-                  info={launchTokenPriceUsd}
-                  title={`${launchTokenMetadata.symbol} sale price`}
+              <>
+                <HStack alignItems="stretch" gap="ms" w="full">
+                  <SimpleInfoCard
+                    info={launchTokenPriceUsd}
+                    title={`${launchTokenMetadata.symbol} sale price`}
+                  />
+                  <SimpleInfoCard info={fNum('token', saleTokenAmount)} title="Tokens for sale" />
+                  <SimpleInfoCard info={totalValue} title="Max sale total" />
+                </HStack>
+                <FixedProjectedPrice
+                  endDateTime={endDateTime}
+                  launchTokenPriceUsdRaw={launchTokenPriceUsdRaw}
+                  launchTokenSymbol={launchTokenMetadata?.symbol || ''}
+                  onPriceChange={updatePriceStats}
+                  startDateTime={startDateTime}
                 />
-                <SimpleInfoCard info={fNum('token', saleTokenAmount)} title="Tokens for sale" />
-                <SimpleInfoCard info={totalValue} title="Max sale total" />
-              </HStack>
+              </>
             )}
             {isDynamicSale && (
               <>
