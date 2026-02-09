@@ -113,7 +113,7 @@
     "cross-fetch": "4.1.0",
     "eslint": "9.27.0",
     "lokijs": "^1.5.12",
-    "msw": "2.11.6",
+    "msw": "2.12.9",
     "sentry-testkit": "6.2.2"
   }
 }
