@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text, Alert, AlertIcon } from '@chakra-ui/react'
+import { Card, VStack, Text } from '@chakra-ui/react'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -53,12 +53,11 @@ export function ReliquaryClaimSummary({
     <AnimateHeightChange spacing="ms">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
       {!shouldShowReceipt && pendingRewardsUsdValue.eq(0) && (
-        <Alert mb="sm" status="warning">
-          <AlertIcon />
-          <Text color="black" fontSize="sm">
-            No rewards available to claim from Relic #{relicId}
-          </Text>
-        </Alert>
+        <BalAlert
+          content={`No rewards available to claim from Relic #${relicId}`}
+          mb="sm"
+          status="warning"
+        />
       )}
       <Card p="ms" variant="modalSubSection">
         <TokenRowGroup
