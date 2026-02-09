@@ -43,7 +43,7 @@ test('enriches V2 pool with on-chain data', async () => {
 })
 
 test('enriches V1 Cow AMM pool with on-chain data', async () => {
-  const cowPoolId = '0xf706c50513446d709f08d3e5126cd74fb6bfda19'
+  const cowPoolId = '0xf08d4dea369c456d26a3168ff0024b904f2d8b91'
 
   const pool = await fetchPoolMock({ poolId: cowPoolId, chain: GqlChain.Mainnet })
 
