@@ -14,6 +14,7 @@ export function FixedLbpTokenAmountInputs() {
 
   const {
     launchToken,
+    launchTokenPriceRaw,
     launchTokenPriceUsd,
     totalValueUsd,
     totalValueRaw,
@@ -48,6 +49,7 @@ export function FixedLbpTokenAmountInputs() {
               collateralTokenSymbol={collateralTokenSymbol}
               control={control}
               errors={errors}
+              launchTokenPriceRaw={launchTokenPriceRaw}
               launchTokenPriceUsd={launchTokenPriceUsd}
               launchTokenSymbol={launchTokenSymbol}
             />
@@ -83,12 +85,14 @@ function LaunchTokenRateInput({
   collateralTokenSymbol,
   launchTokenSymbol,
   launchTokenPriceUsd,
+  launchTokenPriceRaw,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   collateralTokenSymbol: string
   launchTokenSymbol: string
   launchTokenPriceUsd: string
+  launchTokenPriceRaw: string
 }) {
   return (
     <VStack align="start" w="full">
@@ -169,7 +173,7 @@ function LaunchTokenRateInput({
         </Text>
       )}
       <Text color="font.secondary" fontSize="sm">
-        At current prices, 1 {launchTokenSymbol} will be sold for {launchTokenPriceUsd}
+        {`At current prices, 1 ${launchTokenSymbol} will be sold for${bn(launchTokenPriceRaw).gt(0) ? ` ${launchTokenPriceUsd}` : '...'}`}
       </Text>
     </VStack>
   )
