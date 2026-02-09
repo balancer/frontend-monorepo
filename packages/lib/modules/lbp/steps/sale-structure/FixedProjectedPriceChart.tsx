@@ -32,6 +32,8 @@ export function FixedProjectedPriceChart({
   const priceValue = prices[0]?.projectTokenPrice ?? 0
   const yAxisMin = priceValue ? priceValue * 0.9 : 0
   const yAxisMax = priceValue ? priceValue * 1.1 : 1
+  const yAxisInterval = (yAxisMax - yAxisMin) / 4
+  const yAxisMid = yAxisMin + yAxisInterval * 2
 
   const toolTipTheme = {
     container: `background: ${theme.colors.gray[800]};`,
@@ -112,11 +114,22 @@ export function FixedProjectedPriceChart({
       type: 'value',
       min: yAxisMin,
       max: yAxisMax,
+      interval: yAxisInterval,
+      splitNumber: 4,
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
       axisLabel: {
         formatter: (value: number) => {
+          const epsilon = yAxisInterval * 0.001
+          const isMin = Math.abs(value - yAxisMin) < epsilon
+          const isMax = Math.abs(value - yAxisMax) < epsilon
+          const isMid = Math.abs(value - yAxisMid) < epsilon
+          const isDash = !isMin && !isMax && !isMid
+
+          if (isDash) return '—'
+          if (isMid) return toCurrency(priceValue)
+
           return toCurrency(value)
         },
         color: theme.semanticTokens.colors.font.primary[colorMode],
