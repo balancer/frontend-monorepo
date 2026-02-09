@@ -29,7 +29,7 @@ export function LbpPreview() {
     saleMarketCap,
     fdvMarketCap,
     launchTokenPriceUsd,
-    launchTokenPriceUsdRaw,
+    launchTokenPriceRaw,
     totalValueUsd,
     isDynamicSale,
     isFixedSale,
@@ -109,7 +109,7 @@ export function LbpPreview() {
                 </HStack>
                 <FixedProjectedPrice
                   endDateTime={endDateTime}
-                  launchTokenPriceUsdRaw={launchTokenPriceUsdRaw}
+                  launchTokenPriceRaw={launchTokenPriceRaw}
                   launchTokenSymbol={launchTokenMetadata?.symbol || ''}
                   onPriceChange={updatePriceStats}
                   startDateTime={startDateTime}

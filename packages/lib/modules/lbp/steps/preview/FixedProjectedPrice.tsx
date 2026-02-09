@@ -25,14 +25,14 @@ type Props = {
   startDateTime: string
   endDateTime: string
   launchTokenSymbol: string
-  launchTokenPriceUsdRaw: string
+  launchTokenPriceRaw: string
   onPriceChange: (prices: LbpPrice[]) => void
 }
 
 export function FixedProjectedPrice({
   startDateTime,
   endDateTime,
-  launchTokenPriceUsdRaw,
+  launchTokenPriceRaw,
   onPriceChange,
 }: Props) {
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
@@ -44,7 +44,7 @@ export function FixedProjectedPrice({
       : ''
 
   const prices = useMemo<LbpPrice[]>(() => {
-    if (!startDateTime || !endDateTime || !launchTokenPriceUsdRaw) return []
+    if (!startDateTime || !endDateTime || !launchTokenPriceRaw) return []
 
     const start = parseISO(startDateTime)
     const end = parseISO(endDateTime)
@@ -53,16 +53,16 @@ export function FixedProjectedPrice({
     let current = start
 
     while (isBefore(current, end)) {
-      data.push({ timestamp: current, projectTokenPrice: Number(launchTokenPriceUsdRaw) })
+      data.push({ timestamp: current, projectTokenPrice: Number(launchTokenPriceRaw) })
       current = addHours(current, 24)
     }
 
     if (data.length === 0 || !isEqual(data[data.length - 1].timestamp, end)) {
-      data.push({ timestamp: end, projectTokenPrice: Number(launchTokenPriceUsdRaw) })
+      data.push({ timestamp: end, projectTokenPrice: Number(launchTokenPriceRaw) })
     }
 
     return data
-  }, [endDateTime, launchTokenPriceUsdRaw, startDateTime])
+  }, [endDateTime, launchTokenPriceRaw, startDateTime])
 
   useEffect(() => {
     if (prices.length > 0) onPriceChange(prices)
