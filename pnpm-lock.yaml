@@ -72,7 +72,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 4.0.11
-        version: 4.0.11(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
+        version: 4.0.11(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer/sdk':
         specifier: 5.1.2
         version: 5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
@@ -148,7 +148,7 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(react@19.2.4)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+        version: 2.5.8(react@19.2.4)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.2.4)
@@ -205,7 +205,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 4.0.11
-        version: 4.0.11(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
+        version: 4.0.11(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer/sdk':
         specifier: 5.1.2
         version: 5.1.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)
@@ -238,7 +238,7 @@ importers:
         version: link:../../packages/test
       '@sentry/nextjs':
         specifier: 10.33.0
-        version: 10.33.0(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(next@16.1.5(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(webpack@5.94.0(esbuild@0.25.12))
+        version: 10.33.0(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(next@16.1.5(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(webpack@5.94.0)
       '@tanstack/react-query':
         specifier: 5.90.5
         version: 5.90.5(react@19.2.4)
@@ -308,7 +308,7 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(react@19.2.4)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+        version: 2.5.8(react@19.2.4)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.2.4)
@@ -479,10 +479,10 @@ importers:
         version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.4))(react@19.2.4)
       '@dicebear/collection':
         specifier: 9.2.2
-        version: 9.2.2(@dicebear/core@9.3.0)
+        version: 9.2.2(@dicebear/core@9.3.1)
       '@dicebear/core':
-        specifier: 9.3.0
-        version: 9.3.0
+        specifier: 9.3.1
+        version: 9.3.1
       '@emotion/react':
         specifier: 11.14.0
         version: 11.14.0(@types/react@19.2.10)(react@19.2.4)
@@ -1326,8 +1326,8 @@ packages:
     peerDependencies:
       '@dicebear/core': ^9.0.0
 
-  '@dicebear/core@9.3.0':
-    resolution: {integrity: sha512-ZzIKk9Xaiee5rYAEDvSfD5qyCQddiHeg/u0dwehXgxAL+FpZgr2qlEq2Ea4hkJHv0lCulZzKTL5hkLexaUHU1w==}
+  '@dicebear/core@9.3.1':
+    resolution: {integrity: sha512-N6Gl9z3SxYp1OVtOzQegtURFqr0D62l3QcXgvshDAVXDNjkziZ5gWj//JxYJRWldNZfVp9/pm97V3ExKI5AXPg==}
     engines: {node: '>=18.0.0'}
 
   '@dicebear/croodles-neutral@9.2.2':
@@ -4335,6 +4335,7 @@ packages:
 
   '@walletconnect/ethereum-provider@2.21.1':
     resolution: {integrity: sha512-SSlIG6QEVxClgl1s0LMk4xr2wg4eT3Zn/Hb81IocyqNSGfXpjtawWxKxiC5/9Z95f1INyBD6MctJbL/R1oBwIw==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/events@1.0.1':
     resolution: {integrity: sha512-NPTqaoi0oPBVNuLv7qPaJazmGHs5JGyO8eEAk5VGKmJzDR7AHzD4k6ilox5kxk1iwiOnFopBOOMLs86Oa76HpQ==}
@@ -4762,8 +4763,8 @@ packages:
     resolution: {integrity: sha512-7rAxByjUMqQ3/bHJy7D6OGXvx/MMc4IqBn/X0fcM1QUcAItpZrBEYhWGem+tzXH90c+G01ypMcYJBO9Y30203g==}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
 
-  bowser@2.13.1:
-    resolution: {integrity: sha512-OHawaAbjwx6rqICCKgSG0SAnT05bzd7ppyKLVUITZpANBaaMFBAsaNkto3LoQ31tyFP5kNujE8Cdx85G9VzOkw==}
+  bowser@2.14.1:
+    resolution: {integrity: sha512-tzPjzCxygAKWFOJP011oxFHs57HzIhOEracIgAePE4pqB3LikALKnSzUyU4MGs9/iCEUuHlAJTjTc5M+u7YEGg==}
 
   boxen@7.1.1:
     resolution: {integrity: sha512-2hCgjEmP8YLWQ130n2FerGv7rYpfBmnmp9Uy2Le1vge6X3gZIfSmEzP5QTDElFxcvVcXlEn8Aq6MU/PZygIOog==}
@@ -6166,8 +6167,8 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
-  hono@4.11.7:
-    resolution: {integrity: sha512-l7qMiNee7t82bH3SeyUCt9UF15EVmaBvsppY2zQtrbIhl/yzBTny+YUxsVjSjQ6gaqaeVtZmGocom8TzBlA4Yw==}
+  hono@4.11.9:
+    resolution: {integrity: sha512-Eaw2YTGM6WOxA6CXbckaEvslr2Ne4NFsKrvc0v97JD5awbmeBLO5w9Ho9L9kmKonrwF9RJlW6BxT1PVv/agBHQ==}
     engines: {node: '>=16.9.0'}
 
   hookified@1.7.0:
@@ -7962,6 +7963,11 @@ packages:
 
   semver@7.7.3:
     resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.7.4:
+    resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -9998,163 +10004,163 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.0.0
 
-  '@dicebear/adventurer-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/adventurer-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/adventurer@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/adventurer@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/avataaars-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/avataaars-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/avataaars@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/avataaars@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/big-ears-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/big-ears-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/big-ears@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/big-ears@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/big-smile@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/big-smile@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/bottts-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/bottts-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/bottts@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/bottts@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/collection@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/collection@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/adventurer': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/adventurer-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/avataaars': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/avataaars-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/big-ears': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/big-ears-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/big-smile': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/bottts': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/bottts-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/core': 9.3.0
-      '@dicebear/croodles': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/croodles-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/dylan': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/fun-emoji': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/glass': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/icons': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/identicon': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/initials': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/lorelei': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/lorelei-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/micah': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/miniavs': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/notionists': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/notionists-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/open-peeps': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/personas': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/pixel-art': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/pixel-art-neutral': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/rings': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/shapes': 9.2.2(@dicebear/core@9.3.0)
-      '@dicebear/thumbs': 9.2.2(@dicebear/core@9.3.0)
+      '@dicebear/adventurer': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/adventurer-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/avataaars': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/avataaars-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/big-ears': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/big-ears-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/big-smile': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/bottts': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/bottts-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/core': 9.3.1
+      '@dicebear/croodles': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/croodles-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/dylan': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/fun-emoji': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/glass': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/icons': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/identicon': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/initials': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/lorelei': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/lorelei-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/micah': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/miniavs': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/notionists': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/notionists-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/open-peeps': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/personas': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/pixel-art': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/pixel-art-neutral': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/rings': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/shapes': 9.2.2(@dicebear/core@9.3.1)
+      '@dicebear/thumbs': 9.2.2(@dicebear/core@9.3.1)
 
-  '@dicebear/core@9.3.0':
+  '@dicebear/core@9.3.1':
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@dicebear/croodles-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/croodles-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/croodles@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/croodles@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/dylan@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/dylan@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/fun-emoji@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/fun-emoji@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/glass@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/glass@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/icons@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/icons@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/identicon@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/identicon@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/initials@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/initials@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/lorelei-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/lorelei-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/lorelei@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/lorelei@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/micah@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/micah@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/miniavs@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/miniavs@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/notionists-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/notionists-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/notionists@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/notionists@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/open-peeps@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/open-peeps@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/personas@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/personas@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/pixel-art-neutral@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/pixel-art-neutral@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/pixel-art@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/pixel-art@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/rings@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/rings@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/shapes@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/shapes@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
-  '@dicebear/thumbs@9.2.2(@dicebear/core@9.3.0)':
+  '@dicebear/thumbs@9.2.2(@dicebear/core@9.3.1)':
     dependencies:
-      '@dicebear/core': 9.3.0
+      '@dicebear/core': 9.3.1
 
   '@dual-bundle/import-meta-resolve@4.1.0': {}
 
@@ -11589,7 +11595,7 @@ snapshots:
 
   '@metamask/onboarding@1.0.1':
     dependencies:
-      bowser: 2.13.1
+      bowser: 2.14.1
     optional: true
 
   '@metamask/providers@16.1.0':
@@ -11665,7 +11671,7 @@ snapshots:
       '@metamask/sdk-communication-layer': 0.33.1(cross-fetch@4.1.0)(eciesjs@0.4.17)(eventemitter2@6.4.9)(readable-stream@3.6.2)(socket.io-client@4.8.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@metamask/sdk-install-modal-web': 0.32.1
       '@paulmillr/qr': 0.2.1
-      bowser: 2.13.1
+      bowser: 2.14.1
       cross-fetch: 4.1.0
       debug: 4.3.4
       eciesjs: 0.4.17
@@ -11699,7 +11705,7 @@ snapshots:
       debug: 4.4.3
       lodash: 4.17.23
       pony-cause: 2.1.11
-      semver: 7.7.3
+      semver: 7.7.4
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
@@ -11712,9 +11718,9 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.4.3
+      debug: 4.3.4
       pony-cause: 2.1.11
-      semver: 7.7.3
+      semver: 7.7.4
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
@@ -11727,9 +11733,9 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.4.3
+      debug: 4.3.4
       pony-cause: 2.1.11
-      semver: 7.7.3
+      semver: 7.7.4
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
@@ -12803,7 +12809,7 @@ snapshots:
       - supports-color
       - webpack
 
-  '@sentry/nextjs@10.33.0(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(next@16.1.5(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(webpack@5.94.0(esbuild@0.25.12))':
+  '@sentry/nextjs@10.33.0(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(next@16.1.5(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(webpack@5.94.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.38.0
@@ -12815,7 +12821,7 @@ snapshots:
       '@sentry/opentelemetry': 10.33.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.3.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.38.0)
       '@sentry/react': 10.33.0(react@19.2.4)
       '@sentry/vercel-edge': 10.33.0
-      '@sentry/webpack-plugin': 4.6.1(webpack@5.94.0(esbuild@0.25.12))
+      '@sentry/webpack-plugin': 4.6.1(webpack@5.94.0)
       next: 16.1.5(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.53.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       rollup: 4.55.1
       stacktrace-parser: 0.1.11
@@ -12908,16 +12914,6 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/resources': 2.3.0(@opentelemetry/api@1.9.0)
       '@sentry/core': 10.33.0
-
-  '@sentry/webpack-plugin@4.6.1(webpack@5.94.0(esbuild@0.25.12))':
-    dependencies:
-      '@sentry/bundler-plugin-core': 4.6.1
-      unplugin: 1.0.1
-      uuid: 9.0.1
-      webpack: 5.94.0(esbuild@0.25.12)
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
 
   '@sentry/webpack-plugin@4.6.1(webpack@5.94.0)':
     dependencies:
@@ -14498,7 +14494,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bowser@2.13.1:
+  bowser@2.14.1:
     optional: true
 
   boxen@7.1.1:
@@ -16221,7 +16217,7 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  hono@4.11.7:
+  hono@4.11.9:
     optional: true
 
   hookified@1.7.0: {}
@@ -17410,11 +17406,11 @@ snapshots:
   ox@0.6.7(typescript@5.9.2)(zod@4.3.5):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
-      '@noble/curves': 1.9.7
-      '@noble/hashes': 1.8.0
-      '@scure/bip32': 1.7.0
-      '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.9.2)(zod@4.3.5)
+      '@noble/curves': 1.8.1
+      '@noble/hashes': 1.7.1
+      '@scure/bip32': 1.6.2
+      '@scure/bip39': 1.5.4
+      abitype: 1.0.8(typescript@5.9.2)(zod@4.3.5)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.2
@@ -17623,7 +17619,7 @@ snapshots:
   porto@0.2.35(@tanstack/react-query@5.90.5(react@19.2.4))(@types/react@19.2.10)(@wagmi/core@3.1.0(@tanstack/query-core@5.90.5)(@types/react@19.2.10)(ox@0.11.3(typescript@5.9.2)(zod@4.3.5))(react@19.2.4)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5)))(react@19.2.4)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5))(wagmi@3.2.0):
     dependencies:
       '@wagmi/core': 3.1.0(@tanstack/query-core@5.90.5)(@types/react@19.2.10)(ox@0.11.3(typescript@5.9.2)(zod@4.3.5))(react@19.2.4)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.45.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.5))
-      hono: 4.11.7
+      hono: 4.11.9
       idb-keyval: 6.2.2
       mipd: 0.0.7(typescript@5.9.2)
       ox: 0.9.17(typescript@5.9.2)(zod@4.3.5)
@@ -18199,6 +18195,9 @@ snapshots:
 
   semver@7.7.3: {}
 
+  semver@7.7.4:
+    optional: true
+
   send@0.19.0:
     dependencies:
       debug: 2.6.9
@@ -18759,17 +18758,6 @@ snapshots:
       strip-ansi: 7.1.0
 
   tapable@2.3.0: {}
-
-  terser-webpack-plugin@5.3.16(esbuild@0.25.12)(webpack@5.94.0(esbuild@0.25.12)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.31
-      jest-worker: 27.5.1
-      schema-utils: 4.3.3
-      serialize-javascript: 6.0.2
-      terser: 5.46.0
-      webpack: 5.94.0(esbuild@0.25.12)
-    optionalDependencies:
-      esbuild: 0.25.12
 
   terser-webpack-plugin@5.3.16(webpack@5.94.0):
     dependencies:
@@ -19419,36 +19407,6 @@ snapshots:
       schema-utils: 3.3.0
       tapable: 2.3.0
       terser-webpack-plugin: 5.3.16(webpack@5.94.0)
-      watchpack: 2.5.1
-      webpack-sources: 3.3.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-
-  webpack@5.94.0(esbuild@0.25.12):
-    dependencies:
-      '@types/estree': 1.0.8
-      '@webassemblyjs/ast': 1.14.1
-      '@webassemblyjs/wasm-edit': 1.14.1
-      '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.15.0
-      acorn-import-attributes: 1.9.5(acorn@8.15.0)
-      browserslist: 4.28.1
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.19.0
-      es-module-lexer: 1.7.0
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.1
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.3.0
-      terser-webpack-plugin: 5.3.16(esbuild@0.25.12)(webpack@5.94.0(esbuild@0.25.12))
       watchpack: 2.5.1
       webpack-sources: 3.3.3
     transitivePeerDependencies:
