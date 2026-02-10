@@ -30,6 +30,7 @@ function Content({ stepType }: ContentProps) {
         description={description}
         forceColumnMode
         title="Token approval bundling in Safe App"
+        wrapText
       />
     </HStack>
   )
