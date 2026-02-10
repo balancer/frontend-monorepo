@@ -538,7 +538,7 @@ function FeeSelection({
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
+      <Text color="font.primary">{`LBP swap fees (50% share with ${PROJECT_CONFIG.projectName} DAO)`}</Text>
       <RadioGroup
         onChange={(value: string) => {
           setValue(value)
