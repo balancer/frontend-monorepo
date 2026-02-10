@@ -81,6 +81,7 @@ Sentry.init({
       'unstake',
       'migrate-stake',
       'swap',
+      'create',
     ]
     const criticalFlowPath = criticalFlowPaths.find(path => event.request?.url?.includes(path))
     if (!criticalFlowPath || isNonFatalError(event)) {
