@@ -15,12 +15,17 @@ import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
 
 const removeLiquidityStepId = 'remove-liquidity'
 
-export type RemoveLiquidityStepParams = RemoveLiquidityBuildQueryParams
+export type RemoveLiquidityStepParams<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+> = RemoveLiquidityBuildQueryParams<THandler>
 
-export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): TransactionStep {
+export function useRemoveLiquidityStep<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+>(params: RemoveLiquidityStepParams<THandler>): TransactionStep {
   const [isStepActivated, setIsStepActivated] = useState(false)
   const { pool, refetch: refetchPoolUserBalances, chainId } = usePool()
   const { buildTenderlyUrl } = useTenderly({ chainId })
