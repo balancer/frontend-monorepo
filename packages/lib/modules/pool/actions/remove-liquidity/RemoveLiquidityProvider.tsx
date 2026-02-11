@@ -27,18 +27,29 @@ import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useWrapUnderlying } from '../useWrapUnderlying'
+import { RemoveLiquidityStepParams } from './useRemoveLiquidityStep'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
-type UseRemoveLiquidityStepsHook = typeof useRemoveLiquidityStepsBase
+type RemoveLiquidityHandlerSelector<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+> = (pool: Pool, removalType: RemoveLiquidityType) => THandler
+
+type RemoveLiquidityStepsHook<THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler> = (
+  params: RemoveLiquidityStepParams<THandler>
+) => TransactionStep[]
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
 
-export function useRemoveLiquidityLogic(
+export function useRemoveLiquidityLogic<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+>(
   urlTxHash?: Hash,
   mute?: boolean,
-  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
+  handlerSelector?: RemoveLiquidityHandlerSelector<THandler>,
   maxHumanBptIn?: HumanAmount,
-  useRemoveLiquiditySteps: UseRemoveLiquidityStepsHook = useRemoveLiquidityStepsBase,
+  // eslint-disable-next-line max-len
+  useRemoveLiquiditySteps: RemoveLiquidityStepsHook<THandler> = useRemoveLiquidityStepsBase as RemoveLiquidityStepsHook<THandler>,
   enablePoolRedirect = true
 ) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
@@ -68,7 +79,8 @@ export function useRemoveLiquidityLogic(
   )
 
   const handler = useMemo(() => {
-    const selector = handlerSelector ?? selectRemoveLiquidityHandler
+    const selector =
+      handlerSelector ?? (selectRemoveLiquidityHandler as RemoveLiquidityHandlerSelector<THandler>)
     return selector(pool, removalType)
   }, [pool, removalType, handlerSelector])
 
@@ -295,16 +307,18 @@ export function useRemoveLiquidityLogic(
   }
 }
 
-type Props = PropsWithChildren<{
+type Props<THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler> = PropsWithChildren<{
   urlTxHash?: Hash
   mute?: boolean
-  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+  handlerSelector?: RemoveLiquidityHandlerSelector<THandler>
   maxHumanBptIn?: HumanAmount
-  useRemoveLiquiditySteps?: UseRemoveLiquidityStepsHook
+  useRemoveLiquiditySteps?: RemoveLiquidityStepsHook<THandler>
   enablePoolRedirect?: boolean
 }>
 
-export function RemoveLiquidityProvider({
+export function RemoveLiquidityProvider<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+>({
   urlTxHash,
   mute,
   handlerSelector,
@@ -312,8 +326,8 @@ export function RemoveLiquidityProvider({
   useRemoveLiquiditySteps,
   enablePoolRedirect,
   children,
-}: Props) {
-  const hook = useRemoveLiquidityLogic(
+}: Props<THandler>) {
+  const hook = useRemoveLiquidityLogic<THandler>(
     urlTxHash,
     mute,
     handlerSelector,

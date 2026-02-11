@@ -14,8 +14,11 @@ import { shouldUseRecoveryRemoveLiquidity } from '../LiquidityActionHelpers'
 import { SdkQueryRemoveLiquidityOutput } from './remove-liquidity.types'
 import { RemoveLiquidityStepParams, useRemoveLiquidityStep } from './useRemoveLiquidityStep'
 import { useBptTokenApprovals } from './useBptTokenApprovals'
+import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
 
-export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): TransactionStep[] {
+export function useRemoveLiquiditySteps<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+>(params: RemoveLiquidityStepParams<THandler>): TransactionStep[] {
   const { chainId, pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { slippage } = useUserSettings()

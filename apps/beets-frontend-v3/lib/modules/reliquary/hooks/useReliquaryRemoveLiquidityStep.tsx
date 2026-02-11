@@ -16,14 +16,17 @@ import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transa
 import { ensureLastQueryResponse } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { ReliquaryProportionalRemoveLiquidityHandler } from '../handlers/ReliquaryProportionalRemoveLiquidity.handler'
 import { ReliquarySingleTokenRemoveLiquidityHandler } from '../handlers/ReliquarySingleTokenRemoveLiquidity.handler'
-import { RemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-liquidity/handlers/RemoveLiquidity.handler'
 import { useReliquary } from '../ReliquaryProvider'
 import { Address, zeroAddress } from 'viem'
 
 const reliquaryMulticallStepId = 'reliquary-multicall-remove-liquidity'
 
+export type ReliquaryRemoveLiquidityHandler =
+  | ReliquaryProportionalRemoveLiquidityHandler
+  | ReliquarySingleTokenRemoveLiquidityHandler
+
 export type ReliquaryRemoveLiquidityStepParams = {
-  handler: RemoveLiquidityHandler // Accept base type but check for reliquary handlers in runtime
+  handler: ReliquaryRemoveLiquidityHandler
   simulationQuery: any
   slippage: string
   relicId: number
@@ -42,7 +45,7 @@ function useReliquaryBuildCallDataQuery({
   enabled,
   singleTokenOutAddress,
 }: {
-  handler: RemoveLiquidityHandler
+  handler: ReliquaryRemoveLiquidityHandler
   simulationQuery: any
   slippage: string
   enabled: boolean

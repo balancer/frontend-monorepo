@@ -20,23 +20,27 @@ export type RemoveLiquidityBuildQueryResponse = ReturnType<
   typeof useRemoveLiquidityBuildCallDataQuery
 >
 
-export type RemoveLiquidityBuildQueryParams = {
+export type RemoveLiquidityBuildQueryParams<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+> = {
   humanBptIn: HumanAmount
-  handler: RemoveLiquidityHandler
+  handler: THandler
   simulationQuery: RemoveLiquiditySimulationQueryResult
   singleTokenOutAddress: Address
   wethIsEth: boolean
 }
 
 // Queries the SDK to create a transaction config to be used by wagmi's useManagedSendTransaction
-export function useRemoveLiquidityBuildCallDataQuery({
+export function useRemoveLiquidityBuildCallDataQuery<
+  THandler extends RemoveLiquidityHandler = RemoveLiquidityHandler,
+>({
   humanBptIn,
   handler,
   simulationQuery,
   singleTokenOutAddress,
   wethIsEth,
   enabled,
-}: RemoveLiquidityBuildQueryParams & {
+}: RemoveLiquidityBuildQueryParams<THandler> & {
   enabled: boolean
 }) {
   const { userAddress, isConnected } = useUserAccount()
