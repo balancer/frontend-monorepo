@@ -84,7 +84,13 @@ export function RecoveredFundsLearnMoreModal({
         </ModalBody>
 
         <ModalFooter gap={3}>
-          <Button flex="1" hidden onClick={onClose} variant="secondary">
+          <Button
+            as={Link}
+            flex="1"
+            href="https://x.com/Balancer/status/2021554863314977087"
+            isExternal
+            variant="secondary"
+          >
             Read post
           </Button>
           <Button flex="1" onClick={onClose} variant="tertiary">
