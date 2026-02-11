@@ -16,18 +16,20 @@ import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/tr
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
 
-export type AddLiquidityStepsParams = AddLiquidityStepParams & {
-  helpers: LiquidityActionHelpers
-}
+export type AddLiquidityStepsParams<THandler extends AddLiquidityHandler = AddLiquidityHandler> =
+  AddLiquidityStepParams<THandler> & {
+    helpers: LiquidityActionHelpers
+  }
 
-export function useAddLiquiditySteps({
+export function useAddLiquiditySteps<THandler extends AddLiquidityHandler = AddLiquidityHandler>({
   helpers,
   handler,
   humanAmountsIn,
   simulationQuery,
   slippage,
-}: AddLiquidityStepsParams) {
+}: AddLiquidityStepsParams<THandler>) {
   const { pool, chainId, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const relayerMode = useRelayerMode(pool)

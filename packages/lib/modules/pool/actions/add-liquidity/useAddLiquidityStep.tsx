@@ -10,6 +10,7 @@ import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
+import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
 import {
   AddLiquidityBuildQueryParams,
   useAddLiquidityBuildCallDataQuery,
@@ -18,9 +19,14 @@ import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transa
 
 const addLiquidityStepId = 'add-liquidity'
 
-export type AddLiquidityStepParams = AddLiquidityBuildQueryParams
+export type AddLiquidityStepParams<THandler extends AddLiquidityHandler = AddLiquidityHandler> =
+  Omit<AddLiquidityBuildQueryParams, 'handler'> & {
+    handler: THandler
+  }
 
-export function useAddLiquidityStep(params: AddLiquidityStepParams): TransactionStep {
+export function useAddLiquidityStep<THandler extends AddLiquidityHandler = AddLiquidityHandler>(
+  params: AddLiquidityStepParams<THandler>
+): TransactionStep {
   const { pool, refetch: refetchPoolBalances, chainId } = usePool()
   const [isStepActivated, setIsStepActivated] = useState(false)
   const { buildTenderlyUrl } = useTenderly({ chainId })
