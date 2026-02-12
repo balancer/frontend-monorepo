@@ -65,17 +65,13 @@ export const mainnetTokenBalances: TokenBalance[] = [
   },
   {
     tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
-    value: '2000',
+    value: '100000',
     decimals: 6,
   },
   {
     tokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7', // USDT
     value: '10000',
     decimals: 6,
-  },
-  {
-    tokenAddress: '0x1D13531bf6344c102280CE4c458781FBF14Dad14',
-    value: '1',
   },
 ]
 
@@ -225,5 +221,36 @@ export const plasmaTokenBalances: TokenBalance[] = [
     tokenAddress: '0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb', // USDT0
     value: '1000',
     decimals: 6,
+  },
+]
+
+export const monadTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x3bd359c1119da7da1d913d1c4d2b7c461115433a', // WMON
+    value: '10000',
+  },
+  {
+    tokenAddress: '0x754704bc059f8c67012fed69bc8a327a5aafb603', // USDC
+    value: '1000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0x0555e30da8f98308edb960aa94c0db47230d2b9c', // WBTC
+    value: '10',
+    decimals: 8,
+  },
+]
+
+export const xlayerTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x4ae46a509f6b1d9056937ba4500cb143933d2dc8', // USDG
+    value: '50000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0x779ded0c9e1022225f8e0630b35a9b54be713736', // USDT0
+    value: '50000',
+    decimals: 6,
+    slot: 51n,
   },
 ]

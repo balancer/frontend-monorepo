@@ -1,5 +1,5 @@
 import { Address, isSameAddress } from '@balancer/sdk'
-import { Alert, AlertIcon, Card, Text, VStack } from '@chakra-ui/react'
+import { Card, Text, VStack } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
@@ -124,12 +124,11 @@ export function ReliquaryRemoveLiquiditySummary({
         <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />
       )}
       {!shouldShowReceipt && relicId && (
-        <Alert mb="sm" status="info">
-          <AlertIcon />
-          <Text color="black" fontSize="sm">
-            Remove liquidity from Relic #{relicId} and claim rewards
-          </Text>
-        </Alert>
+        <BalAlert
+          content={`Remove liquidity from Relic #{relicId} and claim rewards`}
+          mb="sm"
+          status="info"
+        />
       )}
       <Card variant="modalSubSection">
         <BptRow

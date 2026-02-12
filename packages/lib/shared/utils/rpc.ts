@@ -17,6 +17,8 @@ const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Sonic]: 'sonic',
   [GqlChain.Hyperevm]: 'hyperliquid',
   [GqlChain.Plasma]: 'plasma',
+  [GqlChain.Monad]: 'monad',
+  [GqlChain.Xlayer]: 'xlayer',
 }
 
 const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
@@ -35,6 +37,8 @@ const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [ChainId.SONIC]: 'sonic',
   [ChainId.HYPEREVM]: 'hyperliquid',
   [ChainId.PLASMA]: 'plasma',
+  [ChainId.MONAD]: 'monad',
+  [ChainId.X_LAYER]: 'xlayer',
 }
 
 export function drpcUrl(chain: GqlChain, privateKey: string) {

@@ -26,7 +26,14 @@ fork-hype:
 	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${HYPE_RPC_URL}" --port 8545
 
 fork-optimism:
-	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${OPTIMISM_RPC_URL}" --port 8545
+	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${OPTIMISM_RPC_URL}" --fork-block-number 147306200 --port 8545
 
 fork-sonic:
 	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${SONIC_RPC_URL}" --port 8545
+
+fork-monad:
+	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${MONAD_RPC_URL}" --port 8545
+
+fork-xlayer:
+	anvil --mnemonic ${TEST_ACCOUNT_MNEMONIC} --fork-url "${XLAYER_RPC_URL}" --port 8545
+

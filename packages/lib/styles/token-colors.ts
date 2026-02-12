@@ -140,6 +140,19 @@ const tokenColors: Partial<Record<GqlChain, Record<Address, TokenColorDef>>> = {
     '0x6100e367285b01f48d07953803a2d8dca5d19873': { from: '#163029', to: '#367766' }, // 'WXPL'
     '0x6eaf19b2fc24552925db245f9ff613157a7dbb4c': { from: '#00AEEC', to: '#61D5FF' }, // 'xUSD'
   },
+  [GqlChain.Monad]: {
+    '0x3bd359c1119da7da1d913d1c4d2b7c461115433a': { from: '#6E54FF', to: '#DDD7FE' }, // 'WMON'
+    '0x754704bc059f8c67012fed69bc8a327a5aafb603': { from: '#1075E2', to: '#62A8F4' }, // 'USDC'
+    '0xe7cd86e13ac4309349f30b3435a9d337750fc82d': { from: '#27A17C', to: '#42EBB8' }, // 'USDT0'
+    '0x10aeaf63194db8d453d4d85a06e5efe1dd0b5417': { from: '#00A3FF', to: '#99DAFF' }, // 'wstETH'
+    '0x0555e30da8f98308edb960aa94c0db47230d2b9c': { from: '#F09242', to: '#F09242' }, // 'WBTC'
+  },
+  [GqlChain.Xlayer]: {
+    '0x1e4a5963abfd975d8c9021ce480b42188849d41d': { from: '#27A17C', to: '#42EBB8' }, // 'USDT',
+    '0x779ded0c9e1022225f8e0630b35a9b54be713736': { from: '#27A17C', to: '#42EBB8' }, // 'USDT0',
+    '0x74b7f16337b8972027f6196a17a631ac6de26d22': { from: '#1075E2', to: '#62A8F4' }, // 'USDC',
+    '0x5a77f1443d16ee5761d310e38b62f77f726bc71c': { from: '#F2F3F7', to: '#CECDFE' }, // 'WETH',
+  },
 }
 
 const DEFAULT_TOKEN_COLORS: TokenColorDef[] = [

@@ -94,7 +94,5 @@ export function useSafeAppLink() {
     return `https://safe.onchainden.com/share/safe-app?appUrl=https%3A%2F%2F${PROJECT_CONFIG.projectId}.fi%2Fpools&chain=hyperevm`
   }
 
-  // TODO: check for plasma
-
   return `https://app.safe.global/share/safe-app?appUrl=https://${PROJECT_CONFIG.projectId}.fi/pools`
 }
