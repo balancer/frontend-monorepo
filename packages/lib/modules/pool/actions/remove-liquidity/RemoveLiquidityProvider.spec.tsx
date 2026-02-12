@@ -10,6 +10,8 @@ import { act } from 'react'
 import { mock } from 'vitest-mock-extended'
 import { aTokenAmountMock } from '../__mocks__/liquidity.builders'
 import { RemoveLiquiditySimulationQueryResult } from './queries/useRemoveLiquiditySimulationQuery'
+import { RemoveLiquidityHandler } from './handlers/RemoveLiquidity.handler'
+import { RemoveLiquidityType } from './remove-liquidity.types'
 import { useRemoveLiquidityLogic } from './RemoveLiquidityProvider'
 import { aSuccessfulQueryResultMock } from '@repo/lib/test/utils/react-query'
 
@@ -99,4 +101,36 @@ describe('When the user choses single token remove liquidity', () => {
 
     expect(result.current.singleTokenOutAddress).toEqual(wETHAddress)
   })
+})
+
+test('uses custom remove liquidity handler selector and forwards handler to custom steps hook', async () => {
+  const customHandler: RemoveLiquidityHandler = {
+    simulate: vi.fn(),
+    getPriceImpact: vi.fn(),
+    buildCallData: vi.fn(),
+  }
+  const handlerSelector = vi.fn(() => customHandler)
+  const useRemoveLiquiditySteps = vi.fn(() => [])
+
+  const { result } = testHook(
+    () =>
+      useRemoveLiquidityLogic(
+        undefined,
+        false,
+        handlerSelector,
+        undefined,
+        useRemoveLiquiditySteps
+      ),
+    {
+      wrapper: buildDefaultPoolTestProvider(poolMock),
+    }
+  )
+
+  expect(result.current.handler).toBe(customHandler)
+  expect(handlerSelector).toHaveBeenCalledWith(poolMock, RemoveLiquidityType.Proportional)
+  expect(useRemoveLiquiditySteps).toHaveBeenCalledWith(
+    expect.objectContaining({
+      handler: customHandler,
+    })
+  )
 })
