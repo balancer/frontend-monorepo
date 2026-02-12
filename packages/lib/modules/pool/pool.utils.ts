@@ -194,7 +194,7 @@ export function getTotalAprRaw(aprItems: GqlPoolAprItem[], vebalBoost?: string):
 }
 
 // Maps GraphQL pool type enum to human readable label for UI.
-const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
+const poolTypeLabelMap: Partial<Record<GqlPoolType, string>> = {
   [GqlPoolType.Weighted]: 'Weighted',
   [GqlPoolType.Element]: 'Element',
   [GqlPoolType.Gyro]: '2-CLP',
