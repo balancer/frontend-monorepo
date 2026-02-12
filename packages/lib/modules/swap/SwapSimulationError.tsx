@@ -15,13 +15,15 @@ export function SwapSimulationError({ errorMessage }: Props) {
   const { tokenIn, tokenOut, selectedChain } = useSwap()
 
   const showCowSwapLink = PROJECT_CONFIG.cowSupportedNetworks.includes(selectedChain)
+  const projectName = PROJECT_CONFIG.projectName
 
   if (errorMessage?.includes('Must contain at least 1 path')) {
     return (
       <ErrorAlert title={`Not enough liquidity on ${PROJECT_CONFIG.projectName}`}>
         <Text color="#000" fontSize="sm">
           Your swap amount is too high to find a route through the available liquidity on{' '}
-          {PROJECT_CONFIG.projectName}. Reduce your swap size
+          {projectName}. If there is some liquidity available on {projectName}, you can reduce yobur
+          swap size
           {showCowSwapLink && (
             <>
               {' '}
