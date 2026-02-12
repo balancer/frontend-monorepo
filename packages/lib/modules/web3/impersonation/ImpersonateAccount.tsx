@@ -10,7 +10,7 @@ export function ImpersonateAccount() {
   const [impersonatedAddress, setImpersonatedAddress] = useState<string>(defaultAnvilAccount)
   const { impersonateAccount } = useImpersonateAccount()
   const { userAddress, isConnected } = useUserAccount()
-  const { disconnect } = useDisconnect()
+  const disconnect = useDisconnect()
 
   const impersonated = isConnected && impersonatedAddress === userAddress
   const impersonate = () =>
@@ -29,7 +29,7 @@ export function ImpersonateAccount() {
         <Button
           aria-label="Impersonate button"
           disabled={!isAddress(impersonatedAddress)}
-          onClick={!impersonated ? impersonate : () => disconnect()}
+          onClick={!impersonated ? impersonate : () => disconnect.mutate()}
         >
           {!impersonated ? 'Connect' : 'Disconnect'}
         </Button>

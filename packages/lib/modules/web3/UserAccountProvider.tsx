@@ -1,7 +1,6 @@
 'use client'
 
-// eslint-disable-next-line no-restricted-imports
-import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
+import { useConnection, useConnectionEffect, useDisconnect } from 'wagmi'
 import { emptyAddress } from './contracts/wagmi-helpers'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -32,8 +31,8 @@ export const UserAccountContext = createContext<UseUserAccountResponse | null>(n
 
 export function useUserAccountLogic() {
   const isMounted = useIsMounted()
-  const query = useAccount()
-  const { disconnect } = useDisconnect()
+  const query = useConnection()
+  const disconnect = useDisconnect()
   const [checkingAuth, setCheckingAuth] = useState(true)
   const [isBlocked, setIsBlocked] = useState(false)
 
@@ -70,7 +69,7 @@ export function useUserAccountLogic() {
       let isAuthorized = true
       if (isAddress(address)) {
         isAuthorized = await isAuthorizedAddress(address)
-        if (!isAuthorized) disconnect()
+        if (!isAuthorized) disconnect.mutate()
       }
 
       setIsBlocked(!isAuthorized)
@@ -107,7 +106,7 @@ export function useUserAccountLogic() {
     }
   }, [result.userAddress])
 
-  useAccountEffect({
+  useConnectionEffect({
     onDisconnect: () => {
       if (shouldUseAnvilFork) {
         clearImpersonatedAddressLS()
