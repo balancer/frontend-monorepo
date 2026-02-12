@@ -8,7 +8,6 @@ import { LbpSummary } from './LbpSummary'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
@@ -26,6 +25,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCreateLbpInput } from '../useCreateLbpInput'
 import { useInitializeLbpInput } from '../useInitializeLbpInput'
 import { usePoolCreationTransactions } from '@repo/lib/modules/pool/actions/create/modal/usePoolCreationTransactions'
+import { SaleTypeOptionValue } from '../lbp.types'
 
 type Props = {
   isOpen: boolean
@@ -46,12 +46,12 @@ export function LbpCreationModal({
   )
 
   const initialFocusRef = useRef(null)
+  const hasAttemptedSaveMetadata = useRef(false)
   const { isDesktop } = useBreakpoints()
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
-  const { selectedChain } = saleStructureForm.getValues()
-
   const createPoolInput = useCreateLbpInput()
   const initPoolInput = useInitializeLbpInput()
+
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
     poolAddress,
     setPoolAddress,
@@ -67,7 +67,8 @@ export function LbpCreationModal({
     reset: resetSaveMetadata,
   } = useLbpMetadata()
 
-  const hasAttemptedSaveMetadata = useRef(false)
+  const { selectedChain, saleType } = saleStructureForm.getValues()
+  const poolType = saleType as SaleTypeOptionValue // saleType will be set at this point in the flow
   const chainId = getChainId(selectedChain)
   const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress })
 
@@ -81,7 +82,7 @@ export function LbpCreationModal({
   const path = getPoolPath({
     id: poolAddress as Address,
     chain: selectedChain,
-    type: GqlPoolType.LiquidityBootstrapping,
+    type: poolType,
     protocolVersion: 3 as const,
   })
 
