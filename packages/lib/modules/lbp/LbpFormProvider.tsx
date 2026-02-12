@@ -20,7 +20,7 @@ import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
 import { useTokens } from '../tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { SaleType } from './lbp.types'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -136,8 +136,8 @@ export function useLbpFormLogic() {
     decimals: launchTokenMetadata.decimals || 0,
   }
 
-  const isDynamicSale = saleType !== '' && saleType === SaleType.DYNAMIC_PRICE_LBP
-  const isFixedSale = saleType !== '' && saleType === SaleType.FIXED_PRICE_LBP
+  const isDynamicSale = saleType !== '' && saleType === GqlPoolType.LiquidityBootstrapping
+  const isFixedSale = saleType !== '' && saleType === GqlPoolType.FixedLbp
 
   return {
     ...formSteps,

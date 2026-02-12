@@ -5,11 +5,12 @@ import { useLbpForm } from './LbpFormProvider'
 import { useReadContract, useReadContracts } from 'wagmi'
 import { Address, formatUnits } from 'viem'
 import { useEffect, useRef } from 'react'
-import { SaleStructureForm, UserActions, WeightAdjustmentType, SaleType } from './lbp.types'
+import { SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
 import { FixedPriceLBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/FixedPriceLBPoolAbi'
 import { LBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/LBPoolAbi'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
 
@@ -173,7 +174,7 @@ export function useHydrateLbpForm() {
     const saleStructureFormValues: SaleStructureForm = {
       selectedChain: params.chain,
       launchTokenAddress: projectToken.result,
-      saleType: SaleType.DYNAMIC_PRICE_LBP,
+      saleType: GqlPoolType.LiquidityBootstrapping,
       collateralTokenAddress: reserveToken.result,
       saleTokenAmount: '',
       collateralTokenAmount: '',
@@ -226,7 +227,7 @@ export function useHydrateLbpForm() {
     const saleStructureFormValues: SaleStructureForm = {
       selectedChain: params.chain,
       launchTokenAddress: projectToken.result,
-      saleType: SaleType.FIXED_PRICE_LBP,
+      saleType: GqlPoolType.FixedLbp,
       collateralTokenAddress: reserveToken.result,
       saleTokenAmount: '',
       collateralTokenAmount: '',

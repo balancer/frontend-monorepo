@@ -1,13 +1,14 @@
 import { Badge, Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { RadioCardGroup, RadioCardOption } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 import { Control, Controller } from 'react-hook-form'
-import { SaleStructureForm, SaleType } from '../../lbp.types'
+import { SaleStructureForm, SaleTypeOptionValue } from '../../lbp.types'
 import { Minus, TrendingUp } from 'react-feather'
 import { ReactNode } from 'react'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
-const saleTypeOptions: RadioCardOption<SaleType>[] = [
+const saleTypeOptions: RadioCardOption<SaleTypeOptionValue>[] = [
   {
-    value: SaleType.DYNAMIC_PRICE_LBP,
+    value: GqlPoolType.LiquidityBootstrapping,
     label: (
       <HStack align="start" spacing="md" w="full">
         <IconBadge icon={<TrendingUp size={20} />} />
@@ -22,7 +23,7 @@ const saleTypeOptions: RadioCardOption<SaleType>[] = [
     ),
   },
   {
-    value: SaleType.FIXED_PRICE_LBP,
+    value: GqlPoolType.FixedLbp,
     label: (
       <HStack align="start" spacing="md" w="full">
         <IconBadge icon={<Minus size={20} />} />
