@@ -15,18 +15,13 @@ import { useQuery } from '@tanstack/react-query'
 import { ensureLastQueryResponse } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
+import { AddLiquidityHandler } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/AddLiquidity.handler'
 import { useReliquary } from '../ReliquaryProvider'
-import { ReliquaryProportionalAddLiquidityHandler } from '../handlers/ReliquaryProportionalAddLiquidity.handler'
-import { ReliquaryUnbalancedAddLiquidityHandler } from '../handlers/ReliquaryUnbalancedAddLiquidity.handler'
 
 const reliquaryMulticallStepId = 'reliquary-multicall-add-liquidity'
 
-export type ReliquaryAddLiquidityHandler =
-  | ReliquaryProportionalAddLiquidityHandler
-  | ReliquaryUnbalancedAddLiquidityHandler
-
 export type ReliquaryAddLiquidityStepParams = {
-  handler: ReliquaryAddLiquidityHandler
+  handler: AddLiquidityHandler
   humanAmountsIn: HumanTokenAmountWithSymbol[]
   simulationQuery: any
   slippage: string
@@ -46,7 +41,7 @@ function useReliquaryBuildCallDataQuery({
   slippage,
   enabled,
 }: {
-  handler: ReliquaryAddLiquidityHandler
+  handler: AddLiquidityHandler
   humanAmountsIn: HumanTokenAmountWithSymbol[]
   simulationQuery: any
   slippage: string

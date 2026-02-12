@@ -11,7 +11,6 @@ import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useReliquaryAddLiquiditySteps } from './hooks/useReliquaryAddLiquiditySteps'
 import { AddLiquidityStepsParams } from '@repo/lib/modules/pool/actions/add-liquidity/useAddLiquiditySteps'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { ReliquaryAddLiquidityHandler } from './hooks/useReliquaryAddLiquidityStep'
 
 export function RelicAddLiquidityProvider({
   children,
@@ -45,7 +44,7 @@ export function RelicAddLiquidityProvider({
     [relicIdNumber]
   )
 
-  function useReliquarySteps(params: AddLiquidityStepsParams<ReliquaryAddLiquidityHandler>) {
+  function useReliquarySteps(params: AddLiquidityStepsParams) {
     return useReliquaryAddLiquiditySteps({
       ...params,
       createNew,

@@ -41,13 +41,10 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
 
-type AddLiquidityHandlerSelector<THandler extends AddLiquidityHandler = AddLiquidityHandler> = (
-  pool: Pool,
-  wantsProportional: boolean
-) => THandler
+type AddLiquidityHandlerSelector = (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
 
-type AddLiquidityStepsHook<THandler extends AddLiquidityHandler = AddLiquidityHandler> = (
-  params: AddLiquidityStepsParams<THandler>
+type AddLiquidityStepsHook = (
+  params: AddLiquidityStepsParams
 ) => ReturnType<typeof useAddLiquidityStepsBase>
 
 function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithSymbol[] {
@@ -63,11 +60,10 @@ function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithS
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
-export function useAddLiquidityLogic<THandler extends AddLiquidityHandler = AddLiquidityHandler>(
+export function useAddLiquidityLogic(
   urlTxHash?: Hash,
-  // eslint-disable-next-line max-len
-  addLiquidityHandlerSelector: AddLiquidityHandlerSelector<THandler> = selectAddLiquidityHandler as AddLiquidityHandlerSelector<THandler>,
-  useAddLiquiditySteps: AddLiquidityStepsHook<THandler> = useAddLiquidityStepsBase as AddLiquidityStepsHook<THandler>,
+  addLiquidityHandlerSelector: AddLiquidityHandlerSelector = selectAddLiquidityHandler,
+  useAddLiquiditySteps: AddLiquidityStepsHook = useAddLiquidityStepsBase,
   enablePoolRedirect = true
 ) {
   const { pool, refetch: refetchPool } = usePool()
@@ -280,21 +276,21 @@ export function useAddLiquidityLogic<THandler extends AddLiquidityHandler = AddL
   }
 }
 
-type Props<THandler extends AddLiquidityHandler = AddLiquidityHandler> = PropsWithChildren<{
+type Props = PropsWithChildren<{
   urlTxHash?: Hash
-  addLiquidityHandlerSelector?: AddLiquidityHandlerSelector<THandler>
-  useAddLiquiditySteps?: AddLiquidityStepsHook<THandler>
+  addLiquidityHandlerSelector?: AddLiquidityHandlerSelector
+  useAddLiquiditySteps?: AddLiquidityStepsHook
   enablePoolRedirect?: boolean
 }>
 
-export function AddLiquidityProvider<THandler extends AddLiquidityHandler = AddLiquidityHandler>({
+export function AddLiquidityProvider({
   urlTxHash,
   addLiquidityHandlerSelector,
   useAddLiquiditySteps,
   enablePoolRedirect,
   children,
-}: Props<THandler>) {
-  const hook = useAddLiquidityLogic<THandler>(
+}: Props) {
+  const hook = useAddLiquidityLogic(
     urlTxHash,
     addLiquidityHandlerSelector,
     useAddLiquiditySteps,
