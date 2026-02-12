@@ -9,6 +9,17 @@ export const balWeth8020: PoolExample = {
   poolChain: GqlChain.Mainnet,
   version: 2,
 }
+
+export const aaveWstETH8020: PoolExample = {
+  name: '20wstETH-80AAVE',
+  description: 'Flagship weighted pool',
+  poolId: '0x3de27efa2f1aa663ae5d458857e731c129069f29000200000000000000000588',
+  poolAddress: '0x3de27efa2f1aa663ae5d458857e731c129069f29',
+  poolChain: GqlChain.Mainnet,
+  version: 2,
+  mockName: 'aaveWstETH8020Mock',
+}
+
 export const osETHPhantom: PoolExample = {
   name: 'osETH/wETH-BPT',
   description:
@@ -61,6 +72,7 @@ export const gyroV3: PoolExample = {
 
 export const flatPoolExamples = [
   balWeth8020,
+  aaveWstETH8020,
   osETHPhantom,
   sDAIWeighted,
   v2SepoliaStableWithERC4626,

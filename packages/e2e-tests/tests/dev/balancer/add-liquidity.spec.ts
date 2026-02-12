@@ -1,7 +1,7 @@
 import { impersonate, setForkBalances } from '@/helpers/e2e.helpers'
-import { button, clickButton, isButtonVisible } from '@/helpers/user.helpers'
+import { button, clickButton } from '@/helpers/user.helpers'
 import { test, expect } from '@playwright/test'
-import { balWeth8020 } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
+import { aaveWstETH8020 } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
 import { defaultAnvilAccount, resetFork } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 test.afterAll(async () => {
@@ -21,60 +21,107 @@ test('Adds liquidity in balWeth8020', async ({ page }) => {
   await clickButton(page, 'Add liquidity')
   await expect(button(page, 'Next')).toBeVisible()
 
-  await page.getByPlaceholder('0.00').nth(1).fill('0.01')
-  await page.getByText('I accept the risks of').click()
-  await clickButton(page, 'Next')
+    await page.getByPlaceholder('0.00').nth(1).fill('1')
+    await page.getByText('I accept the risks of').click()
+    await clickButton(page, 'Next')
 
-  if (await isButtonVisible(page, 'Approve WETH to add')) {
-    await clickButton(page, 'Approve WETH to add')
-  }
+    await clickButton(page, 'Approve AAVE to add')
 
-  await clickButton(page, 'Add liquidity')
-  await expect(page.getByText('Transaction confirmed')).toBeVisible()
-})
-
-/*
-  Skip until permit2 signatures can be tested again.
-  The blocker is that all foundry default anvil accounts now have 7702 lists so, instead of using ECDSA.recover,
-  the permit2 SignatureChecker lib will use 1271 signature verification first, breaking signature flow.
-
-  The foundry team confirmed that they will implement a feature to reset the default anvil when forking, so they do not have
-  7702 authorization lists by default. We have to skip this test until that feature is implemented.
-*/
-test.skip('Adds liquidity in tri-boosted aave pool (Aave GHO/USDT/USDC)', async ({ page }) => {
-  // Must go before loading the page
-  await setForkBalances(page, {
-    chainId: 1,
-    forkBalances: {
-      1: [
-        {
-          tokenAddress: '0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f', // GHO
-          value: '5000',
-        },
-      ],
-    },
+    await clickButton(page, 'Add liquidity')
+    await expect(page.getByText('Transaction confirmed')).toBeVisible()
   })
 
-  await page.goto(
-    `http://localhost:3000/pools/ethereum/v3/0x85b2b559bc2d21104c4defdd6efca8a20343361d`,
-  )
+  test('proportional', async ({ page }) => {
+    await clickButton(page, 'Add liquidity')
+    await expect(button(page, 'Next')).toBeVisible()
 
-  await impersonate(page, defaultAnvilAccount)
+    await page.locator('#button-group-1').click()
 
-  // Fill form
-  await page.getByRole('button', { name: 'Add liquidity' }).click()
-  // Fill 100 GHO
-  await page.getByPlaceholder('0.00').nth(1).fill('100')
-  await page.getByText('I accept the risks of').click({ timeout: 20000 })
-  await page.getByRole('button', { name: 'Next', exact: true }).click()
+    await page.getByPlaceholder('0.00').nth(1).fill('1')
+    await page.getByText('I accept the risks of').click()
+    await clickButton(page, 'Next')
 
-  await page.getByRole('button', { name: 'GHO: Approve Permit' }).click()
-  await page.getByRole('button', { name: 'Sign permit: GHO' }).click()
+    await clickButton(page, 'Approve AAVE to add')
+    await clickButton(page, 'Approve wstETH to add')
 
-  // Run transaction and wait for confirmation
-  await page.getByRole('button', { name: 'Add liquidity' }).click()
-  await expect(page.getByText('Transaction confirmed')).toBeVisible()
+    await clickButton(page, 'Add liquidity')
+    await expect(page.getByText('Transaction confirmed')).toBeVisible()
+  })
+})
 
-  await page.getByRole('button', { name: 'Return to pool' }).click()
-  await page.getByRole('button', { name: 'Remove' }).click()
+test.describe('Boosted stable pool v3', () => {
+  test.beforeEach(async ({ page }) => {
+    await resetFork()
+    // Must go before loading the page
+    await setForkBalances(page, {
+      chainId: 1,
+      forkBalances: {
+        1: [
+          {
+            tokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7', // USDT
+            value: '5000',
+          },
+          {
+            tokenAddress: '0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f', // GHO
+            value: '5000',
+          },
+          {
+            tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+            value: '5000',
+            decimals: 6,
+          },
+        ],
+      },
+    })
+
+    await page.goto(
+      `http://localhost:3000/pools/ethereum/v3/0x85b2b559bc2d21104c4defdd6efca8a20343361d`,
+    )
+    await impersonate(page, defaultAnvilAccount)
+    await expect(button(page, 'Connect')).not.toBeVisible()
+  })
+
+  test('flexible', async ({ page }) => {
+    await clickButton(page, 'Add liquidity')
+    await page.getByPlaceholder('0.00').nth(1).fill('100')
+
+    await page.getByText('I accept the risks of').click({ timeout: 20000 })
+    await page.getByText('I accept that by adding tokens').click({ timeout: 20000 })
+
+    await clickButton(page, 'Next')
+
+    await clickButton(page, 'GHO: Approve Permit')
+    await clickButton(page, 'Sign permit: GHO')
+
+    await clickButton(page, 'Add liquidity')
+    await expect(page.getByText('Transaction confirmed')).toBeVisible()
+
+    await page.getByRole('button', { name: 'Return to pool' }).click()
+    await page.getByRole('button', { name: 'Remove' }).click()
+  })
+
+  test('proportional', async ({ page }) => {
+    await page.getByRole('button', { name: 'Add liquidity' }).click()
+
+    await page.locator('#button-group-1').click()
+
+    await page.getByPlaceholder('0.00').nth(1).fill('100')
+
+    await page.getByText('I accept the risks of').click({ timeout: 20000 })
+    await page.getByText('I accept that by adding tokens').click({ timeout: 20000 })
+
+    await clickButton(page, 'Next')
+
+    await clickButton(page, 'GHO: Approve Permit')
+    await clickButton(page, 'USDT: Approve Permit')
+    await clickButton(page, 'USDC: Approve Permit')
+
+    await clickButton(page, 'Sign approvals: USDC, GHO, USDC')
+
+    await clickButton(page, 'Add liquidity')
+    await expect(page.getByText('Transaction confirmed')).toBeVisible()
+
+    await page.getByRole('button', { name: 'Return to pool' }).click()
+    await page.getByRole('button', { name: 'Remove' }).click()
+  })
 })
