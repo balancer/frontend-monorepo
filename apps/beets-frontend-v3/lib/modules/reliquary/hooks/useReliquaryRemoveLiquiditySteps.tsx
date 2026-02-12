@@ -3,14 +3,12 @@ import { TransactionStep } from '@repo/lib/modules/transactions/transaction-step
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useApproveRelayerRelicsStep } from './useApproveRelayerRelicsStep'
-import {
-  ReliquaryRemoveLiquidityHandler,
-  useReliquaryRemoveLiquidityStep,
-} from './useReliquaryRemoveLiquidityStep'
+import { useReliquaryRemoveLiquidityStep } from './useReliquaryRemoveLiquidityStep'
+import { RemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-liquidity/handlers/RemoveLiquidity.handler'
 import { Address } from 'viem'
 
 type UseReliquaryRemoveLiquidityStepsParams = {
-  handler: ReliquaryRemoveLiquidityHandler
+  handler: RemoveLiquidityHandler
   simulationQuery: any
   relicId: number
   singleTokenOutAddress?: Address

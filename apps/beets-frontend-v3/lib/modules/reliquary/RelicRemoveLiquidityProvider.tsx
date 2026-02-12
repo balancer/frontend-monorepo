@@ -18,7 +18,6 @@ import { useReliquaryRemoveLiquiditySteps } from './hooks/useReliquaryRemoveLiqu
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { RemoveLiquidityStepParams } from '@repo/lib/modules/pool/actions/remove-liquidity/useRemoveLiquidityStep'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { ReliquaryRemoveLiquidityHandler } from './hooks/useReliquaryRemoveLiquidityStep'
 
 export function RelicRemoveLiquidityProvider({
   children,
@@ -54,9 +53,7 @@ export function RelicRemoveLiquidityProvider({
     [relicIdNumber]
   )
 
-  function useReliquarySteps(
-    params: RemoveLiquidityStepParams<ReliquaryRemoveLiquidityHandler>
-  ): TransactionStep[] {
+  function useReliquarySteps(params: RemoveLiquidityStepParams): TransactionStep[] {
     return useReliquaryRemoveLiquiditySteps({
       handler: params.handler,
       simulationQuery: params.simulationQuery,
@@ -66,7 +63,7 @@ export function RelicRemoveLiquidityProvider({
   }
 
   return (
-    <RemoveLiquidityProvider<ReliquaryRemoveLiquidityHandler>
+    <RemoveLiquidityProvider
       enablePoolRedirect={false}
       handlerSelector={reliquaryHandlerSelector}
       maxHumanBptIn={relic?.amount as HumanAmount | undefined}
