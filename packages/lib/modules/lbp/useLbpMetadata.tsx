@@ -18,11 +18,13 @@ export function useLbpMetadata() {
   )
 
   const { saleStructureForm, projectInfoForm } = useLbpForm()
-  const { selectedChain } = saleStructureForm.getValues()
+  const { selectedChain, saleType } = saleStructureForm.getValues()
   const { name, description, websiteUrl, tokenIconUrl, telegramHandle, xHandle, discordUrl } =
     projectInfoForm.getValues()
 
   const saveMetadata = async () => {
+    const poolType = saleType === '' ? undefined : saleType
+
     const { data } = await createLbp({
       variables: {
         input: {
@@ -40,8 +42,10 @@ export function useLbpMetadata() {
             x: xHandle ? normalizeHandle(xHandle) : undefined,
           },
         },
+        type: poolType,
       },
     })
+
     if (data?.createLBP) setIsMetadataSaved(true)
   }
 

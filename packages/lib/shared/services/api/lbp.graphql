@@ -1,5 +1,5 @@
-mutation CreateLBP($input: CreateLBPInput!) {
-  createLBP(input: $input)
+mutation CreateLBP($input: CreateLBPInput!, $type: GqlPoolType) {
+  createLBP(input: $input, type: $type)
 }
 
 fragment LBPPriceChartData on LBPPriceChartData {
