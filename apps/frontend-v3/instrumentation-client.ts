@@ -10,6 +10,7 @@ import {
   getErrorTextFromTop3Frames,
   shouldIgnoreException,
 } from '@repo/lib/shared/utils/sentry.helpers'
+import { isSwapWithNoPathsError } from '@repo/lib/shared/utils/error-filters'
 
 Sentry.init({
   // Change this value only if you need to debug in development (we have a custom developmentSentryDSN for that)
@@ -93,6 +94,7 @@ export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
 
 function handleNonFatalError(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null {
   if (shouldIgnoreException(event)) return null
+
   event.level = 'error'
 
   return customizeEvent(event)
@@ -131,7 +133,7 @@ function uppercaseSegment(path: string): string {
 // Detect errors that are not considered fatal even if they happen in a critical path
 function isNonFatalError(event: Sentry.ErrorEvent) {
   const errorText = getErrorTextFromTop3Frames(event)
-  if (errorText.includes('Must contain at least 1 path.')) return true
+  if (isSwapWithNoPathsError(errorText)) return true
 
   return false
 }
