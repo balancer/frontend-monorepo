@@ -87,7 +87,12 @@ function isDoubleApprovalRequired(
   tokenAddress: Address,
   allowanceFor: (tokenAddress: Address) => bigint
 ): boolean {
-  return !!(requiresDoubleApproval(chainId, tokenAddress) && allowanceFor(tokenAddress) > 0n)
+  const previousAllowanceApproved = allowanceFor(tokenAddress)
+  return !!(
+    requiresDoubleApproval(chainId, tokenAddress) &&
+    previousAllowanceApproved > 0n &&
+    previousAllowanceApproved < MAX_BIGINT
+  )
 }
 
 export function areEmptyRawAmounts(amountsIn: RawAmount[]) {
