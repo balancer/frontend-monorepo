@@ -23,9 +23,13 @@ export enum AnalyticsEvent {
   ClickNavVeBal = 'click: veBAL primary nav',
   ClickPoolListCreatePool = 'click: Pool list create pool',
   ClickPoolListFilter = 'click: Pool list filter',
+  // Transaction events
   TransactionConfirmed = 'transaction: Confirmed',
   TransactionReverted = 'transaction: Reverted',
   TransactionSubmitted = 'transaction: Submitted',
+  // Wallet events
+  WalletWith7702 = 'wallet: with EIP-7702',
+  WalletWithout7702 = 'wallet: no EIP-7702',
 }
 
 /**
