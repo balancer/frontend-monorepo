@@ -23,7 +23,10 @@ import { LABELS } from '@repo/lib/shared/labels'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
 import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
-import { useAddLiquiditySteps as useAddLiquidityStepsBase } from './useAddLiquiditySteps'
+import {
+  AddLiquidityStepsParams,
+  useAddLiquiditySteps as useAddLiquidityStepsBase,
+} from './useAddLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
@@ -37,6 +40,12 @@ import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filter
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
+
+type AddLiquidityHandlerSelector = (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
+
+type AddLiquidityStepsHook = (
+  params: AddLiquidityStepsParams
+) => ReturnType<typeof useAddLiquidityStepsBase>
 
 function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithSymbol[] {
   return tokens.map(
@@ -53,11 +62,8 @@ export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>
 
 export function useAddLiquidityLogic(
   urlTxHash?: Hash,
-  addLiquidityHandlerSelector: (
-    pool: Pool,
-    wantsProportional: boolean
-  ) => AddLiquidityHandler = selectAddLiquidityHandler,
-  useAddLiquiditySteps: typeof useAddLiquidityStepsBase = useAddLiquidityStepsBase,
+  addLiquidityHandlerSelector: AddLiquidityHandlerSelector = selectAddLiquidityHandler,
+  useAddLiquiditySteps: AddLiquidityStepsHook = useAddLiquidityStepsBase,
   enablePoolRedirect = true
 ) {
   const { pool, refetch: refetchPool } = usePool()
@@ -272,8 +278,8 @@ export function useAddLiquidityLogic(
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
-  addLiquidityHandlerSelector?: (pool: Pool, wantsProportional: boolean) => AddLiquidityHandler
-  useAddLiquiditySteps?: typeof useAddLiquidityStepsBase
+  addLiquidityHandlerSelector?: AddLiquidityHandlerSelector
+  useAddLiquiditySteps?: AddLiquidityStepsHook
   enablePoolRedirect?: boolean
 }>
 
