@@ -90,7 +90,7 @@ export function LbpCreationModal({
 
   useEffect(() => {
     const handleSaveMetadata = async () => {
-      if (isPoolInitialized && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
+      if (poolAddress && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
         hasAttemptedSaveMetadata.current = true
         try {
           await saveMetadata()
@@ -100,7 +100,7 @@ export function LbpCreationModal({
       }
     }
     handleSaveMetadata()
-  }, [isPoolInitialized, isMetadataSaved, saveMetadata])
+  }, [poolAddress, isMetadataSaved, saveMetadata])
 
   if (saveMetadataError && !transactionSteps.steps.some(step => step.id === 'save-metadata')) {
     transactionSteps.steps.push({
