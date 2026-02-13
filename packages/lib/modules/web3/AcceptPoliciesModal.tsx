@@ -28,7 +28,7 @@ export function AcceptPoliciesModal() {
   const { acceptedPolicies, setAcceptedPolicies } = useUserSettings()
   const { isBlocked, isLoading, isConnected, userAddress } = useUserAccount()
   const [isChecked, setIsChecked] = useState(false)
-  const { disconnect } = useDisconnect()
+  const disconnect = useDisconnect()
 
   const { projectName } = PROJECT_CONFIG
 
@@ -47,7 +47,7 @@ export function AcceptPoliciesModal() {
     const shouldDisconnect = !isChecked || !acceptedPolicies.includes(userAddress.toLowerCase())
     //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
     if (!isProceeding && shouldDisconnect) {
-      if (isConnected) disconnect()
+      if (isConnected) disconnect.mutate()
     }
     setIsChecked(false)
     onClose()
