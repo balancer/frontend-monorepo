@@ -49,3 +49,19 @@ export async function selectPopularToken(page: Page, tokenSymbol: string) {
     .first()
     .click()
 }
+
+export async function doLiquidityTxSteps(page: Page, operation: 'Add' | 'Remove') {
+  const actionBtn = button(page, `${operation} liquidity`)
+  const approveButton = page.getByRole('button', { name: /(Approve|Sign)/i })
+
+  while (!(await actionBtn.isVisible())) {
+    await actionBtn.or(approveButton).waitFor()
+    try {
+      if (await approveButton.isVisible()) await approveButton.click({ timeout: 5000 })
+    } catch {
+      // Button was detached between visibility check and click
+    }
+  }
+
+  await actionBtn.click()
+}
