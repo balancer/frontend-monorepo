@@ -2,15 +2,20 @@ import { useParams } from 'next/navigation'
 import { getChainId } from '@repo/lib/config/app.config'
 import { getLbpPathParams } from './getLbpPathParams'
 import { useLbpForm } from './LbpFormProvider'
+import { useQuery } from '@apollo/client/react'
 import { useReadContract, useReadContracts } from 'wagmi'
 import { Address, formatUnits } from 'viem'
 import { useEffect, useRef } from 'react'
-import { SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
+import { ProjectInfoForm, SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
 import { FixedPriceLBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/FixedPriceLBPoolAbi'
 import { LBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/LBPoolAbi'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetPoolDocument,
+  GetPoolQuery,
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
 
@@ -71,12 +76,24 @@ function formatLbpTimestamp(timestamp: bigint): string {
 export function useHydrateLbpForm() {
   const { slug } = useParams()
   const hasHydratedRef = useRef(false)
-  const { poolAddress, setPoolAddress, saleStructureForm } = useLbpForm()
+  const hasHydratedProjectInfoRef = useRef(false)
+  const { poolAddress, setPoolAddress, saleStructureForm, projectInfoForm } = useLbpForm()
 
   const params = getLbpPathParams(slug as string[] | undefined)
   const chainId = params.chain ? getChainId(params.chain) : undefined
   const areAllParamsDefined = !!params.chain && !!params.poolAddress
   const shouldHydrateLbpForm = !poolAddress && areAllParamsDefined
+  const shouldFetchPoolData = areAllParamsDefined
+
+  const { data: poolData, loading: isPoolLoading } = useQuery(GetPoolDocument, {
+    variables: {
+      id: params.poolAddress?.toLowerCase() || '',
+      chain: params.chain!,
+    },
+    skip: !shouldFetchPoolData,
+  })
+
+  console.log({ poolData, shouldFetchPoolData })
 
   const { data: poolVersionData, isLoading: isVersionLoading } = useReadContract({
     address: params.poolAddress,
@@ -118,6 +135,44 @@ export function useHydrateLbpForm() {
       enabled,
     },
   }) as { data: ContractDataResponse; isLoading: boolean }
+
+  function getProjectInfoFormValues(
+    pool: NonNullable<GetPoolQuery['pool']> | undefined
+  ): ProjectInfoForm | null {
+    if (!pool) return null
+
+    const projectTokenAddress =
+      'projectToken' in pool && typeof pool.projectToken === 'string'
+        ? pool.projectToken.toLowerCase()
+        : undefined
+
+    const tokenIconUrl =
+      pool.poolTokens.find(token => token.address.toLowerCase() === projectTokenAddress)?.logoURI ||
+      pool.poolTokens.find(token => !!token.logoURI)?.logoURI ||
+      ''
+
+    const lbpName = 'lbpName' in pool && typeof pool.lbpName === 'string' ? pool.lbpName : ''
+    const lbpOwner = 'lbpOwner' in pool && typeof pool.lbpOwner === 'string' ? pool.lbpOwner : ''
+    const description =
+      'description' in pool && typeof pool.description === 'string' ? pool.description : ''
+    const website = 'website' in pool && typeof pool.website === 'string' ? pool.website : ''
+    const x = 'x' in pool && typeof pool.x === 'string' ? pool.x : ''
+    const telegram = 'telegram' in pool && typeof pool.telegram === 'string' ? pool.telegram : ''
+    const discord = 'discord' in pool && typeof pool.discord === 'string' ? pool.discord : ''
+
+    return {
+      name: lbpName || pool.name || '',
+      description,
+      tokenIconUrl,
+      websiteUrl: website,
+      xHandle: x,
+      telegramHandle: telegram,
+      discordUrl: discord,
+      owner: lbpOwner || pool.owner || '',
+      poolCreator: pool.poolCreator || '',
+      disclaimerAccepted: false,
+    }
+  }
 
   function handleLBPoolData(lbpData: LbpDataResponse) {
     const [
@@ -264,6 +319,16 @@ export function useHydrateLbpForm() {
   ])
 
   useEffect(() => {
+    if (!areAllParamsDefined || hasHydratedProjectInfoRef.current) return
+
+    const projectInfoFormValues = getProjectInfoFormValues(poolData?.pool)
+    if (!projectInfoFormValues) return
+
+    projectInfoForm.reset(projectInfoFormValues)
+    hasHydratedProjectInfoRef.current = true
+  }, [areAllParamsDefined, poolData, projectInfoForm])
+
+  useEffect(() => {
     // clean up LS and ref in case user wants to load another pool
     if (!areAllParamsDefined || !poolAddress) {
       return
@@ -272,8 +337,9 @@ export function useHydrateLbpForm() {
     if (params.poolAddress && poolAddress !== params.poolAddress) {
       setPoolAddress(undefined)
       hasHydratedRef.current = false
+      hasHydratedProjectInfoRef.current = false
     }
   }, [areAllParamsDefined, params.poolAddress, poolAddress, setPoolAddress])
 
-  return { isLbpLoading: isVersionLoading || isContractLoading }
+  return { isLbpLoading: isVersionLoading || isContractLoading || isPoolLoading }
 }

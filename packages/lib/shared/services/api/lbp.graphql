@@ -2,21 +2,65 @@ mutation CreateLBP($input: CreateLBPInput!, $type: GqlPoolType) {
   createLBP(input: $input, type: $type)
 }
 
+fragment LbpV3CommonMetadataFields on GqlPoolLiquidityBootstrappingV3 {
+  description
+  discord
+  endTime
+  isProjectTokenSwapInBlocked
+  lbpName
+  lbpOwner
+  projectToken
+  projectTokenEndWeight
+  projectTokenIndex
+  projectTokenStartWeight
+  reserveToken
+  reserveTokenIndex
+  startTime
+  telegram
+  topTrades {
+    address
+    value
+  }
+  website
+  x
+}
+
+fragment FixedPriceLbpCommonMetadataFields on GqlPoolFixedPriceLBP {
+  description
+  discord
+  endTime
+  farcaster
+  lbpName
+  lbpOwner
+  projectToken
+  projectTokenIndex
+  reserveToken
+  reserveTokenIndex
+  startTime
+  telegram
+  topTrades {
+    address
+    value
+  }
+  website
+  x
+}
+
 fragment LBPPriceChartData on LBPPriceChartData {
   buyVolume
+  cumulativeFees
+  cumulativeVolume
   fees
   intervalTimestamp # deprecated
+  projectTokenBalance
   projectTokenPrice # in reserve token
+  reserveTokenBalance
   reservePrice # in USD
   sellVolume
   swapCount
   timestamp
   tvl
   volume
-  cumulativeVolume
-  cumulativeFees
-  projectTokenBalance
-  reserveTokenBalance
 }
 
 query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
