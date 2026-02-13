@@ -31,7 +31,7 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
     }
 
     if (!tokenOut) {
-      throw new Error('tokenOut is required for single token remove liquidity')
+      throw new Error('tokenOut is required for single token reliquary remove liquidity')
     }
 
     const removeLiquidity = new RemoveLiquidity()
