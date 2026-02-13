@@ -26,7 +26,7 @@ export function PreviewPoolTokens() {
 
   return (
     <PreviewPoolCreationCard stepTitle="Tokens">
-      <CardHeaderRow columnNames={['Tokens', 'Price', 'Market Cap']} />
+      <CardHeaderRow columnNames={['Tokens', 'Price', 'Market cap']} />
       <CardBody>
         <VStack spacing="0">
           <AnimatePresence initial={false}>
