@@ -50,12 +50,12 @@ export async function selectPopularToken(page: Page, tokenSymbol: string) {
     .click()
 }
 
-export async function doLiquidityTxSteps(page: Page, operation: 'Add' | 'Remove') {
-  const actionBtn = button(page, `${operation} liquidity`)
+export async function doAddLiquidityTxSteps(page: Page) {
+  const addLiquidityButton = button(page, 'Add liquidity')
   const approveButton = page.getByRole('button', { name: /(Approve|Sign)/i })
 
-  while (!(await actionBtn.isVisible())) {
-    await actionBtn.or(approveButton).waitFor()
+  while (!(await addLiquidityButton.isVisible())) {
+    await addLiquidityButton.or(approveButton).waitFor()
     try {
       if (await approveButton.isVisible()) await approveButton.click({ timeout: 5000 })
     } catch {
@@ -63,5 +63,5 @@ export async function doLiquidityTxSteps(page: Page, operation: 'Add' | 'Remove'
     }
   }
 
-  await actionBtn.click()
+  await addLiquidityButton.click()
 }
