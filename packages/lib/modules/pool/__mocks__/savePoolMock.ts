@@ -2,6 +2,7 @@ import { Address } from 'viem'
 import { fetchPoolMock } from './fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
+import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { lowerFirst } from 'lodash'
@@ -32,10 +33,8 @@ export async function savePoolMock({
 
   if (!isFrozen) {
     fs.writeFileSync(filePath, createPoolMockFromTemplate(poolVarName, poolJson), 'utf-8')
+    formatFile(filePath)
   }
-
-  // Uncomment to debug
-  // console.log(`${poolVarName} pool mock saved to ${filePath}`)
 
   return poolVarName
 }
@@ -49,6 +48,10 @@ function createPoolMockFromTemplate(poolVarName: string, poolJson: string) {
   export const ${poolVarName} =
 ${poolJson} as unknown as Pool
 `
+}
+
+function formatFile(filePath: string) {
+  execSync(`npx prettier --write "${filePath}"`, { stdio: 'ignore' })
 }
 
 export function createPoolVarName(poolName: string) {
@@ -69,6 +72,7 @@ export async function saveAllPoolApiMocksFile(mockFileNames: string[]) {
   const filePath = path.join(apiMocksDir, `allApiMocks.ts`)
 
   fs.writeFileSync(filePath, allMocksFileContent, 'utf-8')
+  formatFile(filePath)
 }
 
 function createExportListFromTemplate(mockFileNames: string[]) {

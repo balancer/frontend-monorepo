@@ -33,6 +33,30 @@ export async function clickRadio(page: Page, groupLabel: string, radioLabel: str
   return page.getByRole('radiogroup', { name: groupLabel }).getByText(regex).click()
 }
 
+export async function setSliderPercent(page: Page, percent: number) {
+  const slider = page.locator('.chakra-slider')
+  const box = await slider.boundingBox()
+  await slider.click({
+    position: { x: (box.width * percent) / 100, y: box.height / 2 },
+  })
+}
+
 export async function checkbox(page: Page, text: string) {
   return page.locator('label', { hasText: text }).locator('.chakra-checkbox__control')
+}
+
+export async function doAddLiquidityTxSteps(page: Page) {
+  const addLiquidityButton = button(page, 'Add liquidity')
+  const approveButton = page.getByRole('button', { name: /(Approve|Sign)/i })
+
+  while (!(await addLiquidityButton.isVisible())) {
+    await addLiquidityButton.or(approveButton).waitFor()
+    try {
+      if (await approveButton.isVisible()) await approveButton.click({ timeout: 5000 })
+    } catch {
+      // Button was detached between visibility check and click
+    }
+  }
+
+  await addLiquidityButton.click()
 }
