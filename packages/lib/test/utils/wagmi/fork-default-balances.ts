@@ -57,6 +57,7 @@ export const mainnetTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0xe07f9d810a48ab5c3c914ba3ca53af14e4491e8a', // GYD
     value: '10000',
+    slot: BigInt('0x34'),
   },
   {
     tokenAddress: '0xc3d21f79c3120a4ffda7a535f8005a7c297799bf', // TERM
