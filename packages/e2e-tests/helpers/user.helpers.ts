@@ -33,6 +33,14 @@ export async function clickRadio(page: Page, groupLabel: string, radioLabel: str
   return page.getByRole('radiogroup', { name: groupLabel }).getByText(regex).click()
 }
 
+export async function setSliderPercent(page: Page, percent: number) {
+  const slider = page.locator('.chakra-slider')
+  const box = await slider.boundingBox()
+  await slider.click({
+    position: { x: (box.width * percent) / 100, y: box.height / 2 },
+  })
+}
+
 export async function checkbox(page: Page, text: string) {
   return page.locator('label', { hasText: text }).locator('.chakra-checkbox__control')
 }

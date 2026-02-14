@@ -1,5 +1,10 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { doAddLiquidityTxSteps, button, clickButton } from '@/helpers/user.helpers'
+import {
+  doAddLiquidityTxSteps,
+  button,
+  clickButton,
+  setSliderPercent,
+} from '@/helpers/user.helpers'
 import { test, expect, Page } from '@playwright/test'
 import { aaveWstETH8020Mock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aaveWstETH8020Mock'
 import { aave_USDC_USDTMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aave_USDC_USDTMock'
@@ -43,13 +48,7 @@ test.describe('Weighted pool v2', () => {
   test.describe('Remove Liquidity', () => {
     test('proportional', async ({ page }) => {
       await clickButton(page, 'Remove')
-      const slider = page.locator('.chakra-slider')
-      const box = await slider.boundingBox()
-      if (box) {
-        await slider.click({
-          position: { x: box.width / 2, y: box.height / 2 },
-        })
-      }
+      await setSliderPercent(page, 50)
       await clickButton(page, 'Next')
 
       await clickButton(page, 'Remove liquidity')
