@@ -96,6 +96,9 @@ export function usePermit2ApprovalSteps({
     rawAmounts: filteredApprovalAmounts,
     allowanceFor,
     skipAllowanceCheck: isUnwrappingNative,
+  }).filter(amount => {
+    // For permit2 approvals we should never need to reset the amounts before approval
+    return amount.requestedRawAmount > 0
   })
 
   const steps: TransactionStep[] = tokenAmountsToApprove.map(tokenAmountToApprove => {

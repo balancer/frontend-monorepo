@@ -140,3 +140,7 @@ export function isLedgerUnknownError(error?: ErrorWithOptionalShortMessage | nul
 
   return hasErrorInMessage || hasErrorInShortMessage
 }
+
+export function isSwapWithNoPathsError(errorMessage: string) {
+  return errorMessage.includes('Must contain at least 1 path.')
+}

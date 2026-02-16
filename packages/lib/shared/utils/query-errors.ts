@@ -17,6 +17,8 @@ import {
   stringifyHumanAmountsIn,
 } from '@repo/lib/modules/pool/actions/add-liquidity/queries/add-liquidity-keys'
 import { RemoveLiquidityParams } from '@repo/lib/modules/pool/actions/remove-liquidity/queries/remove-liquidity-keys'
+import { CreatePoolInput } from '@repo/lib/modules/pool/actions/create/types'
+import { InitPoolInputV3 } from '@balancer/sdk'
 import { SimulateSwapParams } from '@repo/lib/modules/swap/queries/useSimulateSwapQuery'
 import { SwapState } from '@repo/lib/modules/swap/swap.types'
 import { SwapHandler } from '@repo/lib/modules/swap/handlers/Swap.handler'
@@ -69,6 +71,23 @@ export type SwapMetaParams = (SimulateSwapParams | SwapBuildCallExtras) & {
   chainId: number
   blockNumber?: bigint
 }
+export type CreatePoolMetaParams = CreatePoolInput & {
+  blockNumber?: bigint
+}
+export function sentryMetaForCreatePoolHandler(errorMessage: string, params: CreatePoolMetaParams) {
+  return createCreatePoolMetadata('HandlerQueryError', errorMessage, params)
+}
+
+export type InitPoolMetaParams = InitPoolInputV3 & {
+  blockNumber?: bigint
+}
+export function sentryMetaForInitializePoolHandler(
+  errorMessage: string,
+  params: InitPoolMetaParams
+) {
+  return createCreatePoolMetadata('HandlerQueryError', errorMessage, params)
+}
+
 export function sentryMetaForSwapHandler(errorMessage: string, params: SwapMetaParams) {
   return createSwapHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
@@ -176,6 +195,20 @@ function createSwapHandlerMetadata(
   const extra: Extras = {
     handler: handler.constructor.name,
     params: rest,
+  }
+  return createFatalMetadata(errorName, errorMessage, extra)
+}
+
+/**
+ * Creates sentry metadata for errors in create/initialize pool handlers
+ */
+function createCreatePoolMetadata(
+  errorName: string,
+  errorMessage: string,
+  params: CreatePoolMetaParams | InitPoolMetaParams
+) {
+  const extra: Extras = {
+    params,
   }
   return createFatalMetadata(errorName, errorMessage, extra)
 }
