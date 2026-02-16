@@ -93,8 +93,6 @@ export function useHydrateLbpForm() {
     skip: !shouldFetchPoolData,
   })
 
-  console.log({ poolData, shouldFetchPoolData })
-
   const { data: poolVersionData, isLoading: isVersionLoading } = useReadContract({
     address: params.poolAddress,
     abi: LBPoolAbi, // version signature is the same for both LBPool and FixedPriceLBPool
