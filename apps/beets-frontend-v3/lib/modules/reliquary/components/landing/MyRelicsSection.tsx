@@ -143,7 +143,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
             fontSize="xl"
             fontWeight="bold"
           >
-            Your Relics
+            Your maBEETS positions
           </Text>
           {isConnected && (
             <Button
@@ -151,7 +151,7 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
               size="md"
               variant="primary"
             >
-              Create New Relic
+              Create New maBEETS Position
             </Button>
           )}
         </Flex>

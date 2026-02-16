@@ -120,12 +120,12 @@ export function useReliquaryRemoveLiquidityStep(
 
   // Labels for the multicall transaction (removeLiquidityFromReliquary + exitPool)
   const removeLiquidityLabels: TransactionLabels = {
-    init: 'Remove liquidity from Relic',
-    title: `Remove liquidity from Relic #${relicId}`,
-    description: `Remove liquidity from ${pool.name || 'pool'} and Relic #${relicId}.`,
-    confirming: 'Removing liquidity from Relic...',
-    confirmed: 'Liquidity removed from Relic!',
-    tooltip: `Remove liquidity from ${pool.name || 'pool'} and Relic #${relicId}`,
+    init: 'Remove liquidity from maBEETS position',
+    title: `Remove liquidity from maBEETS position #${relicId}`,
+    description: `Remove liquidity from ${pool.name || 'pool'} and maBEETS position #${relicId}.`,
+    confirming: 'Removing liquidity from maBEETS position...',
+    confirmed: 'Liquidity removed from maBEETS position!',
+    tooltip: `Remove liquidity from ${pool.name || 'pool'} and maBEETS position #${relicId}`,
     poolId: pool.id,
   }
 

@@ -133,12 +133,20 @@ export function ReliquaryAddLiquiditySummary({
                 : receivedBptUnits
             }
             isLoading={isLoadingReceipt}
-            label={createNew ? 'Created Relic with' : `Added liquidity to Relic #${relicId}`}
+            label={
+              createNew
+                ? 'Created maBEETS position with'
+                : `Added liquidity to maBEETS position #${relicId}`
+            }
           />
         ) : (
           <QuoteBptOut
             isLoading={isLoadingTokens}
-            label={createNew ? 'Creating Relic with' : `Adding liquidity to Relic #${relicId}`}
+            label={
+              createNew
+                ? 'Creating maBEETS position with'
+                : `Adding liquidity to maBEETS position #${relicId}`
+            }
           />
         )}
       </Card>
@@ -150,12 +158,12 @@ export function ReliquaryAddLiquiditySummary({
               <VStack align="start" spacing="md" w="full">
                 <Text color="font.highlight">
                   {createNew
-                    ? "You've successfully created a new Relic and added liquidity to it!"
-                    : `You've successfully added liquidity to Relic #${relicId}!`}
+                    ? "You've successfully created a new maBEETS position and added liquidity to it!"
+                    : `You've successfully added liquidity to maBEETS position #${relicId}!`}
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
-                  Your maBEETS are now earning rewards. Return to the maBEETS page to manage your
-                  Relic.
+                  Your maBEETS position is now earning rewards. Return to the maBEETS page to manage
+                  your position(s).
                 </Text>
               </VStack>
             </Card>

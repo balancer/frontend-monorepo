@@ -54,7 +54,7 @@ export function ReliquaryClaimSummary({
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
       {!shouldShowReceipt && pendingRewardsUsdValue.eq(0) && (
         <BalAlert
-          content={`No rewards available to claim from Relic #${relicId}`}
+          content={`No rewards available to claim from maBEETS position #${relicId}`}
           mb="sm"
           status="warning"
         />
@@ -76,7 +76,7 @@ export function ReliquaryClaimSummary({
             <Card variant="modalSubSection">
               <VStack align="start" spacing="md" w="full">
                 <Text color="font.highlight">
-                  You've successfully claimed rewards from Relic #{relicId}!
+                  You've successfully claimed rewards from maBEETS position#{relicId}!
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your BEETS rewards have been transferred to your wallet. Return to the maBEETS
