@@ -103,7 +103,7 @@
     "@types/node": "24.0.3",
     "@types/numeral": "^2.0.2",
     "@types/pluralize": "^0.0.33",
-    "@types/react": "19.2.10",
+    "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "^1.4.6",
     "@viem/anvil": "^0.0.10",
