@@ -105,9 +105,9 @@ test.describe('Boosted stable pool v3', () => {
   })
 
   test.describe('Remove Liquidity', () => {
-    // TODO: figure out why remove fails for v3 pools. maybe has to do with permit signature creation on fork?
-    test.skip('proportional', async ({ page }) => {
+    test('proportional', async ({ page }) => {
       await clickButton(page, 'Remove')
+      await setSliderPercent(page, 50)
       await clickButton(page, 'Next')
 
       await clickButton(page, `Sign approval: ${aave_USDC_USDTMock.symbol}`)
