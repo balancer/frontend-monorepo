@@ -1,0 +1,90 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+
+  "schedule": ["before 6am on Monday"],
+  "timezone": "UTC",
+  "labels": ["dependencies"],
+  "minimumReleaseAge": "3 days",
+
+  "ignoreDeps": [
+    "strip-ansi",
+    "color-convert",
+    "color-name",
+    "is-core-module",
+    "error-ex",
+    "has-ansi"
+  ],
+
+  "packageRules": [
+    {
+      "description": "Hard peer dep coupling — must move together.",
+      "groupName": "wagmi / viem ecosystem",
+      "matchPackageNames": [
+        "viem",
+        "wagmi",
+        "@wagmi/cli",
+        "@viem/anvil",
+        "@rainbow-me/rainbowkit"
+      ]
+    },
+    {
+      "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
+      "groupName": "Chakra UI",
+      "matchPackageNames": ["@emotion/react", "@emotion/styled"],
+      "matchPackagePrefixes": ["@chakra-ui/"]
+    },
+    {
+      "description": "@next/eslint-plugin-next should match the installed Next.js major.",
+      "groupName": "Next.js",
+      "matchPackageNames": ["next", "@next/eslint-plugin-next"]
+    },
+    {
+      "description": "Shared schema/AST layer — a version gap can break generated types or query execution.",
+      "groupName": "GraphQL / Apollo",
+      "matchPackageNames": [
+        "graphql",
+        "graphql-request",
+        "graphql-tag",
+        "@apollo/client",
+        "@apollo/client-integration-nextjs",
+        "@graphql-typed-document-node/core"
+      ],
+      "matchPackagePrefixes": ["@graphql-codegen/"]
+    },
+    {
+      "description": "vitest, happy-dom (DOM environment), and @testing-library must be compatible.",
+      "groupName": "Testing tools",
+      "matchPackageNames": ["vitest", "vitest-mock-extended", "happy-dom"],
+      "matchPackagePrefixes": ["@vitest/", "@testing-library/"]
+    },
+    {
+      "description": "Plugins must be compatible with the installed ESLint core — a mismatch breaks lint entirely.",
+      "groupName": "ESLint ecosystem",
+      "matchPackageNames": [
+        "eslint",
+        "eslint-config-prettier",
+        "eslint-plugin-only-warn",
+        "eslint-plugin-react",
+        "eslint-plugin-react-hooks",
+        "eslint-plugin-turbo"
+      ],
+      "matchPackagePrefixes": ["@eslint/", "eslint-plugin-"]
+    },
+    {
+      "description": "Low-risk, high-frequency — consolidate to reduce noise.",
+      "groupName": "@types packages",
+      "matchPackagePrefixes": ["@types/"]
+    },
+    {
+      "description": "Consolidate workflow action bumps",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "Flag major bumps for manual review.",
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major-update"]
+    }
+  ]
+}
