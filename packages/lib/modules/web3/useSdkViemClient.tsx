@@ -1,4 +1,4 @@
-import { Client, publicActions, SignableMessage } from 'viem'
+import { publicActions, SignableMessage, TypedDataDomain } from 'viem'
 import { useWalletClient } from 'wagmi'
 import { PublicWalletClient } from '@balancer/sdk'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
@@ -13,8 +13,31 @@ export function useSdkWalletClient() {
 
   if (sdkClient && shouldUseAnvilFork) {
     sdkClient = sdkClient.extend(client => ({
-      async signTypedData(args: { account: `0x${string}`; [key: string]: any }) {
-        return mockSignature(client, args.account)
+      async signTypedData(args: {
+        account: `0x${string}`
+        domain: TypedDataDomain
+        types: any
+        primaryType: string
+        message: Record<string, unknown>
+      }) {
+        console.log(`
+        Mocking ${args.account} signature for testing. For errors related
+        to how the signature is made this may not be the best option.`)
+
+        const signature = await client.signTypedData({
+          account: privateKeyToAccount(TEST_PRIVATE_KEY),
+          domain: args.domain,
+          types: args.types,
+          primaryType: args.primaryType,
+          message: args.message,
+        })
+
+        await client.request({
+          method: 'anvil_impersonateSignature' as any, // Method not available in viem
+          params: [[signature, args.account]] as any,
+        })
+
+        return signature
       },
       async signMessage(args: { account: `0x${string}`; message: SignableMessage }) {
         const signature = await client.signMessage({
@@ -36,19 +59,4 @@ export function useSdkWalletClient() {
     sdkClient: sdkClient ? (sdkClient.extend(publicActions) as PublicWalletClient) : undefined,
     isLoading,
   }
-}
-
-async function mockSignature(client: Client, account: `0x${string}`) {
-  console.log(`
-        Mocking ${account} signature for testing. For errors related
-        to how the signature is made this may not be the best option.`)
-
-  const signature = '0x' + 'b'.repeat(130) // 65-byte dummy
-
-  await client.request({
-    method: 'anvil_impersonateSignature' as any, // Method not available in viem
-    params: [[signature, account]] as any,
-  })
-
-  return signature
 }
