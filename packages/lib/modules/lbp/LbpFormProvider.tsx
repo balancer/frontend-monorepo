@@ -1,13 +1,12 @@
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { PropsWithChildren, createContext } from 'react'
+import { PropsWithChildren, createContext, useState } from 'react'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLocalStorage } from 'usehooks-ts'
-import { useState } from 'react'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
@@ -44,6 +43,7 @@ export function useLbpFormLogic() {
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
+  const isProjectInfoLocked = !!poolAddress
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const [startDateTime, endDateTime] = useWatch({
@@ -154,6 +154,7 @@ export function useLbpFormLogic() {
     isCollateralNativeAsset,
     poolAddress,
     setPoolAddress,
+    isProjectInfoLocked,
     launchTokenPriceUsd: toCurrency(launchTokenPriceUsd),
     launchTokenPriceRaw: launchTokenPriceUsd,
     totalValueUsd: toCurrency(totalValue),
