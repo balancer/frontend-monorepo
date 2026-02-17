@@ -3,8 +3,6 @@ import { useWalletClient } from 'wagmi'
 import { PublicWalletClient } from '@balancer/sdk'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { privateKeyToAccount } from 'viem/accounts'
-import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 const TEST_PRIVATE_KEY = '0xd30650ad825c0bde8ac3895b2294e151af2c2722bf0af3d94c011df930d8f483'
 
@@ -12,10 +10,8 @@ export function useSdkWalletClient() {
   const { data, isLoading } = useWalletClient()
 
   let sdkClient = data
-  const connectedAccount = data?.account.address
-  const shouldImpersonateSignatures = !isSameAddress(connectedAccount, defaultAnvilAccount)
 
-  if (sdkClient && shouldUseAnvilFork && shouldImpersonateSignatures) {
+  if (sdkClient && shouldUseAnvilFork) {
     sdkClient = sdkClient.extend(client => ({
       async signTypedData(args: {
         account: `0x${string}`

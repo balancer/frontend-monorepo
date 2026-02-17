@@ -35,24 +35,9 @@ export const mainnetTokenBalances: TokenBalance[] = [
     slot: BigInt('0x0'),
   },
   {
-    tokenAddress: '0x2411802d8bea09be0af8fd8d08314a63e706b29c', // fwstETH
-    value: '6000',
-    slot: BigInt('0x0'),
-  },
-  {
     tokenAddress: '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9', // AAVE
     value: '7000',
     slot: BigInt('0x0'),
-  },
-  {
-    tokenAddress: '0x91c65c2a9a3adfe2424ecc4a4890b8334c3a8212', // ONE
-    value: '8000',
-    slot: BigInt('0x0'),
-  },
-  {
-    tokenAddress: '0x98fae31948b16b90a2c72cccc10cb61654850b28', // NIN
-    value: '9000',
-    slot: BigInt('0x3'),
   },
   {
     tokenAddress: '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38', // osETH
