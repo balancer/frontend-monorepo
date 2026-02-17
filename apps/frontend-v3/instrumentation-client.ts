@@ -108,17 +108,17 @@ function handleFatalError(
   event.level = 'fatal'
 
   if (event?.exception?.values?.length) {
-    const lastIndex = event.exception.values.length - 1
-    const topValue = event.exception.values[lastIndex]
-
     if (shouldIgnoreException(event)) return null
 
-    const flowType = uppercaseSegment(criticalFlowPath)
-    topValue.value = `Unexpected error in ${flowType} flow.
-    Cause: ${topValue.type}: ${topValue.value}`
+    const lastIndex = event.exception.values.length - 1
+    const topValue = event.exception.values[lastIndex]
+    if (topValue) {
+      const flowType = uppercaseSegment(criticalFlowPath)
+      topValue.value = `Unexpected error in ${flowType} flow. Cause: ${topValue.type}: ${topValue.value}`
 
-    topValue.type = flowType + 'Error'
-    event.exception.values[lastIndex] = topValue
+      topValue.type = flowType + 'Error'
+      event.exception.values[lastIndex] = topValue
+    }
   }
 
   return customizeEvent(event)

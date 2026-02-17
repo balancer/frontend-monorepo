@@ -37,8 +37,7 @@ export function useBlacklistedVotes(votingPools: VoteListItem[]) {
     })
     .reduce(
       (acc, current) => {
-        if (!acc[current.gaugeAddress]) acc[current.gaugeAddress] = bn(0)
-        acc[current.gaugeAddress] = acc[current.gaugeAddress].plus(current.votes)
+        acc[current.gaugeAddress] = (acc[current.gaugeAddress] || bn(0)).plus(current.votes)
         return acc
       },
       {} as Record<string, BigNumber>
@@ -77,8 +76,8 @@ function useVotes(votingPools: VoteListItem[]) {
   const blacklistedVotesResult = data || []
 
   const blacklistedVotes = blacklistedVotesResult.map((vote, i) => {
-    const accountAddress = calls[i].args[0]
-    const gaugeAddress = calls[i].args[1] as Address
+    const accountAddress = calls[i]!.args[0]
+    const gaugeAddress = calls[i]!.args[1] as Address
 
     return { ...vote, accountAddress, gaugeAddress }
   })

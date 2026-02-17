@@ -91,7 +91,7 @@ export const useCrossChainSyncLogic = () => {
 
   const [mainnetCrossChainNetwork] = useCrossChainNetworks([GqlChain.Mainnet], omniEscrowLocksMap)
 
-  const { votingEscrowLocks: mainnetEscrowLock } = mainnetCrossChainNetwork
+  const mainnetEscrowLock = mainnetCrossChainNetwork?.votingEscrowLocks
 
   const crossChainNetworksResponses = useCrossChainNetworks(
     veBalSyncSupportedNetworks,
@@ -99,7 +99,7 @@ export const useCrossChainSyncLogic = () => {
   )
   const crossChainNetworks = keyBy(crossChainNetworksResponses, 'chainId')
 
-  const isLoading = isLoadingOmniEscrow || mainnetCrossChainNetwork.isLoading
+  const isLoading = isLoadingOmniEscrow || mainnetCrossChainNetwork?.isLoading
 
   const networksSyncState = useMemo(() => {
     return veBalSyncSupportedNetworks.reduce<Partial<Record<GqlChain, NetworkSyncState>>>(
@@ -136,12 +136,12 @@ export const useCrossChainSyncLogic = () => {
 
   const hasError =
     isOmniEscrowError ||
-    veBalSyncSupportedNetworks.some(network => crossChainNetworks[network].isError)
+    veBalSyncSupportedNetworks.some(network => crossChainNetworks[network]?.isError)
 
   const l2VeBalBalances = useMemo(() => {
     return veBalSyncSupportedNetworks.reduce<Partial<Record<GqlChain, string>>>((acc, network) => {
       const crossChainNetwork = crossChainNetworks[network]
-      const votingEscrowLocks = crossChainNetwork.votingEscrowLocks
+      const votingEscrowLocks = crossChainNetwork?.votingEscrowLocks
 
       if (!votingEscrowLocks) {
         return acc
@@ -178,12 +178,13 @@ export const useCrossChainSyncLogic = () => {
   }, [warningMessage, networksBySyncState])
 
   const refetch = useCallback(async () => {
+    if (!mainnetCrossChainNetwork) return
     await Promise.all([refetchOmniEscrow(), mainnetCrossChainNetwork.refetch()])
 
     if (omniEscrowLocksMap) {
-      const promises = networksBySyncState.syncing.map(networkId =>
-        crossChainNetworks[networkId].refetch()
-      )
+      const promises = networksBySyncState.syncing.map(networkId => {
+        if (crossChainNetworks[networkId]) crossChainNetworks[networkId].refetch()
+      })
       await Promise.all(promises)
     }
   }, [
@@ -218,7 +219,7 @@ export const useCrossChainSyncLogic = () => {
     if (!tempSyncingNetworks[userAddress]) return
 
     setTempSyncingNetworks(prev => {
-      const updatedNetworks = prev[userAddress].networks.filter(
+      const updatedNetworks = prev[userAddress]?.networks.filter(
         network => !networksBySyncState.synced.includes(network)
       )
       return { ...prev, [userAddress]: { ...prev[userAddress], networks: updatedNetworks } }

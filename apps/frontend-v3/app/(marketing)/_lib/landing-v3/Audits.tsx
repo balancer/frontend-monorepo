@@ -148,13 +148,13 @@ const AuditCard = memo(function AuditCard({
           />
           {/* Gradient overlay with blend mode shown on hover */}
           <Box
-            background={gradientOverlay.background}
+            background={gradientOverlay?.background}
             h="full"
             left="0"
             opacity={isHovered ? 1 : 0}
             position="absolute"
             sx={{
-              mixBlendMode: gradientOverlay.blendMode,
+              mixBlendMode: gradientOverlay?.blendMode,
             }}
             top="0"
             transition="opacity 0.5s var(--ease-out-cubic) 0.05s"

@@ -162,9 +162,9 @@ function parseRawCallArgumentsError(error: Error, chainId: number): TransactionC
   const toMatch = error.message.match(/to:\s*([^\n]+)/)
   const dataMatch = error.message.match(/data:\s*([^\n]+)/)
 
-  const from = fromMatch?.[1].trim() ?? ''
-  const to = toMatch?.[1].trim() ?? ''
-  const data = dataMatch?.[1].trim() ?? ''
+  const from = fromMatch?.[1]?.trim() ?? ''
+  const to = toMatch?.[1]?.trim() ?? ''
+  const data = dataMatch?.[1]?.trim() ?? ''
 
   return {
     data: data as Hex,
