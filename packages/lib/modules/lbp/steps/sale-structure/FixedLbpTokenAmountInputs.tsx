@@ -18,6 +18,7 @@ export function FixedLbpTokenAmountInputs() {
     launchTokenPriceUsd,
     totalValueUsd,
     totalValueRaw,
+    poolAddress,
     saleStructureForm: { control },
   } = useLbpForm()
 
@@ -49,6 +50,7 @@ export function FixedLbpTokenAmountInputs() {
               collateralTokenSymbol={collateralTokenSymbol}
               control={control}
               errors={errors}
+              isDisabled={!!poolAddress}
               launchTokenPriceRaw={launchTokenPriceRaw}
               launchTokenPriceUsd={launchTokenPriceUsd}
               launchTokenSymbol={launchTokenSymbol}
@@ -82,6 +84,7 @@ export function FixedLbpTokenAmountInputs() {
 function LaunchTokenRateInput({
   control,
   errors,
+  isDisabled,
   collateralTokenSymbol,
   launchTokenSymbol,
   launchTokenPriceUsd,
@@ -89,6 +92,7 @@ function LaunchTokenRateInput({
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
+  isDisabled: boolean
   collateralTokenSymbol: string
   launchTokenSymbol: string
   launchTokenPriceUsd: string
@@ -134,6 +138,7 @@ function LaunchTokenRateInput({
                 fontSize="3xl"
                 fontWeight="medium"
                 id="launch-token-price"
+                isDisabled={isDisabled}
                 min={0}
                 onChange={field.onChange}
                 onWheel={e => {
