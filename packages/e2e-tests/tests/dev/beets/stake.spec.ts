@@ -7,7 +7,7 @@ test.describe('Stake $S page at /stake', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3001/pools')
     await clickLink(page, 'Stake \\$S')
-    await page.waitForURL('**/stake', { waitUntil: 'commit' })
+    await page.waitForURL('http://localhost:3001/stake', { waitUntil: 'commit' })
     await impersonate(page, defaultAnvilAccount)
   })
 

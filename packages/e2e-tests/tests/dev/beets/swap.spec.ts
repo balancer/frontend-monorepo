@@ -4,7 +4,9 @@ import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 test('Wrap 1 S to wS', async ({ page }) => {
-  await page.goto('http://localhost:3001/swap')
+  await page.goto('http://localhost:3001/pools')
+  await clickLink(page, 'Swap')
+  await page.waitForURL('http://localhost:3001/swap', { waitUntil: 'commit' })
   await impersonate(page, defaultAnvilAccount)
 
   await clickButton(page, 'Select token')
