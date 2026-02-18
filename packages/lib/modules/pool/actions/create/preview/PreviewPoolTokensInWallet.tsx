@@ -1,73 +1,101 @@
-import { CardBody, VStack, Text, Divider, HStack, Box } from '@chakra-ui/react'
+import { CardBody, VStack, Text, Divider, HStack, Box, Icon } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
-import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { formatUnits } from 'viem'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'
 import { TokenMissingPriceWarning } from '@repo/lib/modules/tokens/TokenMissingPriceWarning'
 import { usePoolTokenPriceWarnings } from '@repo/lib/modules/pool/usePoolTokenPriceWarnings'
-import { useWatch } from 'react-hook-form'
+import { AlertTriangle } from 'react-feather'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
+import { usePoolTokensInWallet, SelectedPoolToken } from './usePoolTokensInWallet'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 export function PreviewPoolTokensInWallet() {
+  const { selectedPoolTokens, hasNoTokensWithBalance } = usePoolTokensInWallet()
+  const { isConnected } = useUserAccount()
+
+  const hasAtLeastOneZeroBalanceToken = selectedPoolTokens.some(token => token.hasZeroBalance)
+  const hasMultipleTokensSelected = selectedPoolTokens.length >= 2
+  const shouldShowError = hasMultipleTokensSelected && isConnected && hasAtLeastOneZeroBalanceToken
+
   return (
-    <PreviewPoolCreationCard stepTitle="Tokens">
-      <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token Value', '%']} />
+    <PreviewPoolCreationCard
+      hasWarning={shouldShowError}
+      isConnected={isConnected}
+      stepTitle="Tokens"
+    >
+      <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token value', '%']} />
       <CardBody>
         <VStack spacing="md">
-          <PoolTokensInWalletContent />
+          <PoolTokensInWalletContent
+            hasNoTokensWithBalance={hasNoTokensWithBalance}
+            selectedPoolTokens={selectedPoolTokens}
+          />
         </VStack>
       </CardBody>
     </PreviewPoolCreationCard>
   )
 }
 
-function PoolTokensInWalletContent() {
-  const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
+function ZeroBalanceWarning({ isConnected }: { isConnected: boolean }) {
+  if (!isConnected) {
+    return (
+      <HStack color="font.disabled" justify="end" spacing="xs">
+        <Text color="font.disabled">–</Text>
+      </HStack>
+    )
+  }
+
+  return (
+    <TooltipWithTouch label="Your wallet has none of this token." placement="top">
+      <HStack color="font.warning" justify="end" spacing="xs">
+        <Text color="font.warning">$0.00</Text>
+        <Box>
+          <Icon as={AlertTriangle} boxSize="16px" />
+        </Box>
+      </HStack>
+    </TooltipWithTouch>
+  )
+}
+
+function PoolTokensInWalletContent({
+  hasNoTokensWithBalance,
+  selectedPoolTokens,
+}: {
+  hasNoTokensWithBalance: boolean
+  selectedPoolTokens: SelectedPoolToken[]
+}) {
   const { toCurrency } = useCurrency()
-  const { usdValueForTokenAddress } = useTokens()
-  const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { tokenPriceTip, tokenWeightTip } = usePoolTokenPriceWarnings()
+  const { isConnected } = useUserAccount()
 
-  if (isBalancesLoading) return <DefaultCardContent />
+  const hasSelectedTokens = selectedPoolTokens.length > 0
+  if (!hasSelectedTokens) return <DefaultCardContent />
 
-  const poolTokensWithUserBalances = poolTokens
-    .map(token => {
-      const { data, address } = token
-      if (!data || !address) return null
-
-      const userBalanceRaw = balanceFor(address)
-      if (userBalanceRaw === undefined) return null
-
-      const { decimals, chain, symbol } = data
-      const userBalanceHuman = formatUnits(userBalanceRaw.amount, decimals)
-      const userBalanceUsd = usdValueForTokenAddress(
-        address,
-        chain,
-        userBalanceHuman,
-        token.usdPrice
-      )
-      return { address, symbol, chain, userBalanceUsd, userBalanceHuman }
-    })
-    .filter(token => token !== null)
-    .filter(token => {
-      return token && (token.userBalanceUsd !== '0' || token.userBalanceHuman !== '0')
-    })
-
-  const userHasPoolTokens = poolTokensWithUserBalances.length > 0
-  if (!userHasPoolTokens) return <DefaultCardContent />
-
-  const totalLiquidityUsd = poolTokensWithUserBalances.reduce((acc, token) => {
+  const tokensWithBalance = selectedPoolTokens.filter(token => !token.hasZeroBalance)
+  const totalLiquidityUsd = tokensWithBalance.reduce((acc, token) => {
     return acc + Number(token.userBalanceUsd || 0)
   }, 0)
 
+  const hasMultipleTokensSelected = selectedPoolTokens.length >= 2
+  const hasAtLeastOneZeroBalanceToken = selectedPoolTokens.some(token => token.hasZeroBalance)
+
   return (
     <>
+      {hasMultipleTokensSelected && isConnected && hasAtLeastOneZeroBalanceToken && (
+        <BalAlert
+          content="You can continue to configure settings, and even create the pool but unseeded pools will not appear on the Balancer UI. So you'll need to get each token in this wallet, in order to seed the pool with the correct ratio (since this ratio will be used to set the initial price)."
+          status="warning"
+          title={
+            hasNoTokensWithBalance
+              ? "You don't have any of these tokens in your wallet."
+              : "You don't have all of the pool tokens in your wallet"
+          }
+        />
+      )}
       <AnimatePresence initial={false}>
-        {poolTokensWithUserBalances.map(token => (
+        {selectedPoolTokens.map(token => (
           <motion.div
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -84,39 +112,51 @@ function PoolTokensInWalletContent() {
                     chain={token.chain}
                     symbol={token.symbol}
                   />,
-                  <HStack justify="end">
-                    {token.userBalanceUsd !== '0' ? (
-                      <Text>{toCurrency(token.userBalanceUsd)}</Text>
-                    ) : (
-                      <TokenMissingPriceWarning message={tokenPriceTip} />
-                    )}
-                  </HStack>,
-                  <HStack justify="end">
-                    {token.userBalanceUsd !== '0' ? (
-                      <Text>
-                        {((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2) +
-                          '%'}
-                      </Text>
-                    ) : (
-                      <TokenMissingPriceWarning message={tokenWeightTip} />
-                    )}
-                  </HStack>,
+                  token.hasZeroBalance ? (
+                    <ZeroBalanceWarning isConnected={isConnected} />
+                  ) : (
+                    <HStack justify="end">
+                      {token.userBalanceUsd !== '0' ? (
+                        <Text>{toCurrency(token.userBalanceUsd)}</Text>
+                      ) : (
+                        <TokenMissingPriceWarning message={tokenPriceTip} />
+                      )}
+                    </HStack>
+                  ),
+                  token.hasZeroBalance ? (
+                    <Text align="right" color={isConnected ? 'font.warning' : 'font.disabled'}>
+                      {isConnected ? '0.00%' : '–'}
+                    </Text>
+                  ) : (
+                    <HStack justify="end">
+                      {token.userBalanceUsd !== '0' && totalLiquidityUsd > 0 ? (
+                        <Text>
+                          {((Number(token.userBalanceUsd) / totalLiquidityUsd) * 100).toFixed(2) +
+                            '%'}
+                        </Text>
+                      ) : (
+                        <TokenMissingPriceWarning message={tokenWeightTip} />
+                      )}
+                    </HStack>
+                  ),
                 ]}
               />
             </Box>
           </motion.div>
         ))}
       </AnimatePresence>
-      <>
-        <Divider />
-        <CardDataRow
-          data={[
-            <Text fontWeight="semibold">Total liquidity</Text>,
-            <Text align="right">{toCurrency(totalLiquidityUsd)}</Text>,
-            <Text align="right">100%</Text>,
-          ]}
-        />
-      </>
+      {tokensWithBalance.length > 0 && (
+        <>
+          <Divider />
+          <CardDataRow
+            data={[
+              <Text fontWeight="semibold">Total potential seed liquidity</Text>,
+              <Text align="right">{toCurrency(totalLiquidityUsd)}</Text>,
+              <Text align="right">100%</Text>,
+            ]}
+          />
+        </>
+      )}
     </>
   )
 }
