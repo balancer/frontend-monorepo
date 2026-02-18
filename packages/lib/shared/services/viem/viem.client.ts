@@ -14,6 +14,8 @@ function getViemChain(chainId: number): Chain {
 export function getViemClient(chain: GqlChain) {
   const { chainId } = getNetworkConfig(chain)
 
+  if (!chainsByKey[chainId]) throw new Error(`Bad configuration for chain: ${chainId}`)
+
   return createPublicClient({
     chain: getViemChain(chainId),
     transport: getTransports(chainsByKey[chainId]),

@@ -76,7 +76,7 @@ export async function getSdkTestUtils({
       address: token,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [VAULT_V2[client?.chain?.id || mainnet.id], amount],
+      args: [VAULT_V2[client?.chain?.id || mainnet.id] || ZERO_ADDRESS, amount],
     })
 
     const txReceipt = await client.waitForTransactionReceipt({
@@ -147,7 +147,7 @@ export async function getSdkTestUtils({
         // ignore ETH delta from gas cost
         _balanceAfter = balanceAfter + gasPrice
       }
-      const delta = _balanceAfter - balanceBefore[i]
+      const delta = _balanceAfter - (balanceBefore[i] || 0n)
       return delta >= 0n ? delta : -delta
     })
 
@@ -284,7 +284,12 @@ export async function getSdkTestUtils({
     }
 
     for (let i = 0; i < tokens.length; i++) {
-      await setupToken(humanBalances[i], tokens[i], isVyperMapping[i], _slots[i])
+      await setupToken(
+        humanBalances[i] || '0',
+        tokens[i] || ZERO_ADDRESS,
+        isVyperMapping[i],
+        _slots[i]
+      )
     }
   }
 

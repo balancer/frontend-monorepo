@@ -64,12 +64,12 @@ export async function setTokenBalances({
   }
 
   if (chainId) {
-    return setChainBalances(tokenBalances[chainId], chainId)
+    return setChainBalances(tokenBalances[chainId] || [], chainId)
   }
 
   // Iterate over all chains
   for (const chainId in tokenBalances) {
-    await setChainBalances(tokenBalances[chainId], Number(chainId))
+    await setChainBalances(tokenBalances[chainId] || [], Number(chainId))
   }
 }
 
