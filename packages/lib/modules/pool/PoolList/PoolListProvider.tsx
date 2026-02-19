@@ -185,6 +185,13 @@ export function usePoolListLogic({
     (nativeBalanceQueries.some(query => query.isLoading || query.isFetching) ||
       tokenBalanceQueries.some(query => query.isLoading || query.isFetching))
 
+  function hasWalletTokenBalance(chain: GqlChain, tokenAddress: string) {
+    if (!tokenAddress) return false
+
+    const tokenAddresses = walletTokenAddressesByChain.get(chain) || []
+    return includesAddress(tokenAddresses, tokenAddress)
+  }
+
   const filteredPools = isJoinableBalanceLoading ? poolsData : joinablePoolsData
 
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
@@ -205,6 +212,7 @@ export function usePoolListLogic({
     error,
     networkStatus,
     isFixedPoolType,
+    hasWalletTokenBalance,
     refetch,
     poolDisplayType,
     setPoolDisplayType,
