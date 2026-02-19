@@ -178,16 +178,15 @@ export const ProjectConfigBalancer: ProjectConfig = {
   promoItems: [
     {
       id: 0,
-      icon: 'plasma',
-      label: 'Plasma Chain',
-      title: 'Balancer is live on Plasma Chain',
+      icon: 'xlayer',
+      label: 'X Layer',
+      title: 'X Layer: The New Money Chain is live on Balancer',
       description:
-        'Global Reach. Real Impact. Balancer brings stable-optimized pools to the stablecoins-focused blockchain.',
+        'X Layer is an EVM layer 2 that empowers builders for a global, versatile onchain economy.',
       buttonText: 'View pools',
-      buttonLink: '/pools?networks=PLASMA',
+      buttonLink: '/pools?networks=XLAYER',
       linkText: 'Learn more',
-      linkURL:
-        'https://vote.balancer.fi/#/proposal/0x382b5f20c7e03f643df9fbf7c5981f1f9aa80ae12ba60fb1b3bf87affe42cf7c',
+      linkURL: 'https://forum.balancer.fi/t/bip-879-deploy-balancer-v3-on-x-layer-okx-chain/6843',
       linkExternal: true,
       bgImageActive: {
         directory: '/images/promos/promo-banner/',
@@ -274,6 +273,28 @@ export const ProjectConfigBalancer: ProjectConfig = {
     //   buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
     //   linkText: 'Learn more',
     //   linkURL: 'https://www.gyro.finance/',
+    //   linkExternal: true,
+    //   bgImageActive: {
+    //     directory: '/images/promos/promo-banner/',
+    //     imgName: 'bg-active2',
+    //   },
+    //   bgImageInactive: {
+    //     directory: '/images/promos/promo-banner/',
+    //     imgName: 'bg-inactive2',
+    //   },
+    // },
+    // {
+    //   id: 0,
+    //   icon: 'plasma',
+    //   label: 'Plasma Chain',
+    //   title: 'Balancer is live on Plasma Chain',
+    //   description:
+    //     'Global Reach. Real Impact. Balancer brings stable-optimized pools to the stablecoins-focused blockchain.',
+    //   buttonText: 'View pools',
+    //   buttonLink: '/pools?networks=PLASMA',
+    //   linkText: 'Learn more',
+    //   linkURL:
+    //     'https://vote.balancer.fi/#/proposal/0x382b5f20c7e03f643df9fbf7c5981f1f9aa80ae12ba60fb1b3bf87affe42cf7c',
     //   linkExternal: true,
     //   bgImageActive: {
     //     directory: '/images/promos/promo-banner/',
