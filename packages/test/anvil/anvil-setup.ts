@@ -75,7 +75,7 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     chainId: sepolia.id,
     fallBackRpc: 'https://gateway.tenderly.co/public/sepolia',
     port: ANVIL_PORTS[sepolia.id],
-    forkBlockNumber: 10280000n,
+    forkBlockNumber: 10295680n,
   },
   [base.id]: {
     chainId: base.id,
