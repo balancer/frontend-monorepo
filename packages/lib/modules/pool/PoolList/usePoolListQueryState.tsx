@@ -125,7 +125,6 @@ export function usePoolListQueryState() {
   function toggleUserAddress(checked: boolean, address: string) {
     if (checked) {
       setUserAddress(address)
-      setJoinablePoolsInt(null)
     } else {
       setUserAddress('')
     }
@@ -135,7 +134,6 @@ export function usePoolListQueryState() {
   function toggleJoinablePools(checked: boolean) {
     if (checked) {
       setJoinablePoolsInt(1)
-      setUserAddress(null)
       setFirst(JOINABLE_POOLS_FIRST)
       setSkip(null)
     } else {
