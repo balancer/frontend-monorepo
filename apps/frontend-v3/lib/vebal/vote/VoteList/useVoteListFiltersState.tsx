@@ -37,7 +37,9 @@ export function useVoteListFiltersState() {
   const [poolTypes, setPoolTypes] = useState<PoolFilterType[] | null>(null)
   const [includeExpiredPools, setIncludeExpiredPools] = useState(false)
 
-  const [activeProtocolVersionTab, setActiveProtocolVersionTab] = useState(PROTOCOL_VERSION_TABS[0])
+  const [activeProtocolVersionTab, setActiveProtocolVersionTab] = useState(
+    PROTOCOL_VERSION_TABS[0]!
+  )
   const [protocolVersion, setProtocolVersion] = useState<number | null>(null)
 
   const [textSearch, setTextSearch] = useState('')

@@ -412,7 +412,7 @@ export function NetworkPreviewSVG({
       ? (() => {
           const symbol = tokenSymbols?.[hoveredIndex] || ''
           const header = symbol || normalizedAddresses[hoveredIndex] || ''
-          const pct = isWeighted ? `${(fractions[hoveredIndex] * 100).toFixed(2)}%` : ''
+          const pct = isWeighted ? `${((fractions[hoveredIndex] || 0) * 100).toFixed(2)}%` : ''
           const showPct = isWeighted && pct.length > 0
 
           const padding = 12

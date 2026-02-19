@@ -47,15 +47,12 @@ test('returns amountsIn with empty input amount by default', async () => {
   ])
 })
 
-// Only works when using .only
-// there's a global state collision otherwise (investigation pending)
-test.skip('returns valid tokens for a nested pool', async () => {
+test('returns valid tokens for a nested pool', async () => {
   const result = await testUseAddLiquidity(nestedPoolMock as GqlPoolElement)
 
-  expect(result.current.validTokens.map(t => t.address)).toEqual([
-    wETHAddress,
-    daiAddress,
-    usdtAddress,
-    usdcAddress,
-  ])
+  const validAddresses = result.current.validTokens.map(t => t.address)
+  expect(validAddresses).toEqual(
+    expect.arrayContaining([wETHAddress, daiAddress, usdtAddress, usdcAddress])
+  )
+  expect(validAddresses).toHaveLength(4)
 })
