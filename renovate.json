@@ -6,6 +6,7 @@
   "timezone": "UTC",
   "labels": ["dependencies"],
   "minimumReleaseAge": "3 days",
+  "prConcurrentLimit": 5,
 
   "ignoreDeps": [
     "strip-ansi",
@@ -18,29 +19,17 @@
 
   "packageRules": [
     {
-      "description": "Hard peer dep coupling — must move together.",
-      "groupName": "wagmi / viem ecosystem",
-      "matchPackageNames": [
-        "viem",
-        "wagmi",
-        "@wagmi/cli",
-        "@viem/anvil",
-        "@rainbow-me/rainbowkit"
-      ]
+      "description": "To avoid problems we want to keep viem version matched with balancer sdk",
+      "groupName": "balancer sdk / viem",
+      "matchPackageNames": ["viem", "@balancer-labs/sdk"]
     },
     {
       "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
       "groupName": "Chakra UI",
-      "matchPackageNames": ["@emotion/react", "@emotion/styled"],
-      "matchPackagePrefixes": ["@chakra-ui/"]
+      "matchPackageNames": ["@emotion/react", "@emotion/styled", "@chakra-ui/**"]
     },
     {
-      "description": "@next/eslint-plugin-next should match the installed Next.js major.",
-      "groupName": "Next.js",
-      "matchPackageNames": ["next", "@next/eslint-plugin-next"]
-    },
-    {
-      "description": "Shared schema/AST layer — a version gap can break generated types or query execution.",
+      "description": "Group ESLint core with plugins/configs — major ESLint bumps can break incompatible plugins.",
       "groupName": "GraphQL / Apollo",
       "matchPackageNames": [
         "graphql",
@@ -48,33 +37,24 @@
         "graphql-tag",
         "@apollo/client",
         "@apollo/client-integration-nextjs",
-        "@graphql-typed-document-node/core"
-      ],
-      "matchPackagePrefixes": ["@graphql-codegen/"]
-    },
-    {
-      "description": "vitest, happy-dom (DOM environment), and @testing-library must be compatible.",
-      "groupName": "Testing tools",
-      "matchPackageNames": ["vitest", "vitest-mock-extended", "happy-dom"],
-      "matchPackagePrefixes": ["@vitest/", "@testing-library/"]
+        "@graphql-typed-document-node/core",
+        "@graphql-codegen/**"
+      ]
     },
     {
       "description": "Plugins must be compatible with the installed ESLint core — a mismatch breaks lint entirely.",
       "groupName": "ESLint ecosystem",
       "matchPackageNames": [
         "eslint",
-        "eslint-config-prettier",
-        "eslint-plugin-only-warn",
-        "eslint-plugin-react",
-        "eslint-plugin-react-hooks",
-        "eslint-plugin-turbo"
-      ],
-      "matchPackagePrefixes": ["@eslint/", "eslint-plugin-"]
+        "eslint-config-**",
+        "eslint-plugin-**",
+        "@eslint/**"
+      ]
     },
     {
       "description": "Low-risk, high-frequency — consolidate to reduce noise.",
       "groupName": "@types packages",
-      "matchPackagePrefixes": ["@types/"]
+      "matchPackageNames": ["@types/**"]
     },
     {
       "description": "Consolidate workflow action bumps",
