@@ -36,3 +36,16 @@ export async function clickRadio(page: Page, groupLabel: string, radioLabel: str
 export async function checkbox(page: Page, text: string) {
   return page.locator('label', { hasText: text }).locator('.chakra-checkbox__control')
 }
+
+// reliable method for selecting pill buttons at top of token select modal
+export async function selectPopularToken(page: Page, tokenSymbol: string) {
+  await button(page, 'Select token').first().click()
+  const modalHeader = page.getByText('Select a token')
+  await modalHeader.waitFor({ state: 'visible' })
+  const modal = page.getByRole('dialog').filter({ has: modalHeader })
+  await modal
+    .getByRole('group')
+    .filter({ has: page.getByText(tokenSymbol, { exact: true }) })
+    .first()
+    .click()
+}

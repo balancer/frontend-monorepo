@@ -1,5 +1,5 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { clickButton, clickLink } from '@/helpers/user.helpers'
+import { clickButton, clickLink, selectPopularToken } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
@@ -9,8 +9,7 @@ test('Wrap 1 S to wS', async ({ page }) => {
   await page.waitForURL('http://localhost:3001/swap', { waitUntil: 'commit' })
   await impersonate(page, defaultAnvilAccount)
 
-  await clickButton(page, 'Select token')
-  await page.getByText('Wrapped Sonic', { exact: true }).click()
+  await selectPopularToken(page, 'wS')
   await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('1')
 
   await clickButton(page, 'Next')
