@@ -19,17 +19,21 @@
 
   "packageRules": [
     {
-      "description": "To avoid problems we want to keep viem version matched with balancer sdk",
+      "description": "To avoid problems keep viem version matched with balancer sdk",
       "groupName": "balancer sdk / viem",
       "matchPackageNames": ["viem", "@balancer-labs/sdk"]
     },
     {
       "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
       "groupName": "Chakra UI",
-      "matchPackageNames": ["@emotion/react", "@emotion/styled", "@chakra-ui/**"]
+      "matchPackageNames": [
+        "@emotion/react",
+        "@emotion/styled",
+        "@chakra-ui/**"
+      ]
     },
     {
-      "description": "Group ESLint core with plugins/configs — major ESLint bumps can break incompatible plugins.",
+      "description": "Keep graphql core in sync with clients and codegen tools.",
       "groupName": "GraphQL / Apollo",
       "matchPackageNames": [
         "graphql",
@@ -42,7 +46,7 @@
       ]
     },
     {
-      "description": "Plugins must be compatible with the installed ESLint core — a mismatch breaks lint entirely.",
+      "description": "Keep ESLint plugins compatible with core.",
       "groupName": "ESLint ecosystem",
       "matchPackageNames": [
         "eslint",
