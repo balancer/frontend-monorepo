@@ -1,31 +1,85 @@
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
+import { act } from '@testing-library/react'
+import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { usePoolListQueryState } from './usePoolListQueryState'
 
-function updateUrlQueryString(queryString: `?${string}`) {
-  window.location.href = 'http://app.balancer.fi/' + queryString
+const testAddress = '0x000000000000000000000000000000000000dEaD'
+
+function TestWrapper({ children }: { children: React.ReactNode }) {
+  return <NuqsTestingAdapter>{children}</NuqsTestingAdapter>
 }
 
-// TODO: For some reason the test no longer respects the update of the window.location.href
-// This is why we have .skip. It happend in the transition to monorepo.
-describe.skip('Pool list state query', () => {
-  // Setting window.location.href no longer works in unit tests. Looks like the
-  // nuqs package is being actively worked on for the nextjs app router. So may
-  // be possible again in the future. https://nuqs.47ng.com/docs/testing
-  it.skip('calculates pagination based on first and ', () => {
-    updateUrlQueryString('?first=50&skip=150')
-    const { result } = testHook(() => usePoolListQueryState())
+describe('Pool list state query', () => {
+  it('toggles joinablePools and updates total filter count', () => {
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: TestWrapper,
+    })
 
-    expect(result.current.pagination).toMatchInlineSnapshot(`
-      {
-        "pageIndex": 3,
-        "pageSize": 50,
-      }
-    `)
+    expect(result.current.joinablePools).toBe(false)
+    expect(result.current.totalFilterCount).toBe(0)
+    expect(result.current.pagination.pageSize).toBe(20)
+    expect(result.current.pagination.pageIndex).toBe(0)
+
+    act(() => {
+      result.current.toggleJoinablePools(true)
+    })
+
+    expect(result.current.joinablePools).toBe(true)
+    expect(result.current.totalFilterCount).toBe(1)
+    expect(result.current.pagination.pageSize).toBe(100)
+    expect(result.current.pagination.pageIndex).toBe(0)
+
+    act(() => {
+      result.current.toggleJoinablePools(false)
+    })
+
+    expect(result.current.joinablePools).toBe(false)
+    expect(result.current.pagination.pageSize).toBe(20)
+    expect(result.current.pagination.pageIndex).toBe(0)
   })
 
-  it('calculates pagination based on first and ', () => {
-    const { result } = testHook(() => usePoolListQueryState())
+  it('keeps My positions and Joinable pools mutually exclusive', () => {
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: TestWrapper,
+    })
 
-    expect(result.current.totalFilterCount).toBe(0)
+    act(() => {
+      result.current.toggleUserAddress(true, testAddress)
+    })
+
+    expect(result.current.userAddress).toBe(testAddress)
+    expect(result.current.joinablePools).toBe(false)
+
+    act(() => {
+      result.current.toggleJoinablePools(true)
+    })
+
+    expect(result.current.joinablePools).toBe(true)
+    expect(result.current.userAddress).toBeNull()
+
+    act(() => {
+      result.current.toggleUserAddress(true, testAddress)
+    })
+
+    expect(result.current.userAddress).toBe(testAddress)
+    expect(result.current.joinablePools).toBe(false)
+  })
+
+  it('resetFilters clears joinablePools', () => {
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: TestWrapper,
+    })
+
+    act(() => {
+      result.current.toggleJoinablePools(true)
+    })
+
+    expect(result.current.joinablePools).toBe(true)
+
+    act(() => {
+      result.current.resetFilters()
+    })
+
+    expect(result.current.joinablePools).toBe(false)
   })
 })
