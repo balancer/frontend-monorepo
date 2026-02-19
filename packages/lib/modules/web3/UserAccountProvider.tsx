@@ -1,7 +1,6 @@
 'use client'
 
-// eslint-disable-next-line no-restricted-imports
-import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
+import { useConnection, useConnectionEffect, useDisconnect, useWalletClient } from 'wagmi'
 import { emptyAddress } from './contracts/wagmi-helpers'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -13,6 +12,9 @@ import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useSafeAppConnectionGuard } from './useSafeAppConnectionGuard'
 import { useWCConnectionLocalStorage } from './wallet-connect/useWCConnectionLocalStorage'
 import { clearImpersonatedAddressLS } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { has7702Support } from './wallets/eip-7702'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
+import { useAsyncEffect } from '@repo/lib/shared/hooks/custom-effect-hooks'
 
 async function isAuthorizedAddress(address: Address): Promise<boolean> {
   try {
@@ -32,8 +34,9 @@ export const UserAccountContext = createContext<UseUserAccountResponse | null>(n
 
 export function useUserAccountLogic() {
   const isMounted = useIsMounted()
-  const query = useAccount()
-  const { disconnect } = useDisconnect()
+  const query = useConnection()
+  const disconnect = useDisconnect()
+  const { data: walletClient } = useWalletClient()
   const [checkingAuth, setCheckingAuth] = useState(true)
   const [isBlocked, setIsBlocked] = useState(false)
 
@@ -70,7 +73,7 @@ export function useUserAccountLogic() {
       let isAuthorized = true
       if (isAddress(address)) {
         isAuthorized = await isAuthorizedAddress(address)
-        if (!isAuthorized) disconnect()
+        if (!isAuthorized) disconnect.mutate()
       }
 
       setIsBlocked(!isAuthorized)
@@ -107,7 +110,18 @@ export function useUserAccountLogic() {
     }
   }, [result.userAddress])
 
-  useAccountEffect({
+  useAsyncEffect(async () => {
+    if (!result.isConnected || !walletClient) return
+    // We avoid checking safe wallets that batch tx's using other method
+    if ('safe' === result.connector?.id) return
+
+    const hasSupport = await has7702Support(walletClient)
+
+    if (hasSupport) trackEvent(AnalyticsEvent.WalletWith7702)
+    else trackEvent(AnalyticsEvent.WalletWithout7702)
+  }, [result.isConnected, walletClient])
+
+  useConnectionEffect({
     onDisconnect: () => {
       if (shouldUseAnvilFork) {
         clearImpersonatedAddressLS()

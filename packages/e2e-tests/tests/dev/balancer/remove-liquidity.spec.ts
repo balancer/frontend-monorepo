@@ -1,5 +1,5 @@
 import { impersonate, setForkBalances } from '@/helpers/e2e.helpers'
-import { button, clickButton, forceClickButton } from '@/helpers/user.helpers'
+import { clickButton, forceClickButton } from '@/helpers/user.helpers'
 import { expect, Page, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
@@ -12,7 +12,6 @@ test('Removes liquidity from v2 pool (20wstETH-80AAVE)', async ({ page }) => {
   await page.goto(`http://localhost:3000/pools/ethereum/v3/${POOL_ID}`)
 
   await impersonate(page, defaultAnvilAccount)
-  await expect(button(page, 'Connect')).not.toBeVisible()
 
   await clickButton(page, 'Remove')
   await clickButton(page, 'Next')

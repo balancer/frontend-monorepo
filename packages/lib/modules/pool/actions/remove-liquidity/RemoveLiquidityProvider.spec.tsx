@@ -77,8 +77,7 @@ describe('When the user choses proportional remove liquidity', () => {
     expect(result.current.amountOutForToken(wETHAddress)).toBe(wEthTokenOutUnits)
   })
 
-  // TODO: avoid flaky test until improve mock
-  test.skip('calculates token usd out ', async () => {
+  test('calculates token usd out ', async () => {
     const result = await testUseRemoveLiquidity()
 
     await waitFor(() => expect(result.current.usdOutForToken(balAddress) !== '0.00').toBeTruthy())

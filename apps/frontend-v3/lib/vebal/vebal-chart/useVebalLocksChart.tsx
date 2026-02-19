@@ -75,9 +75,7 @@ function processLockSnapshots(lockSnapshots: LockSnapshot[], currentTimestampMs:
     const point1Balance = bn(snapshot.bias).toNumber()
     const point1Date = formatDate(snapshot.timestamp)
 
-    const point2Timestamp = lockSnapshots[i + 1]
-      ? bn(lockSnapshots[i + 1].timestamp)
-      : bn(currentDateSeconds)
+    const point2Timestamp = bn(lockSnapshots[i + 1]?.timestamp || currentDateSeconds)
     const point2Balance = forecastBalance(snapshot, point2Timestamp)
     const point2Date = formatDate(point2Timestamp.toNumber())
 
@@ -158,7 +156,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
 
   const futureLockChartData = useMemo(() => {
     if (hasExistingLock && !isExpired && userHistoricalLocks.length > 0) {
-      const lastSnapshot = userHistoricalLocks[userHistoricalLocks.length - 1]
+      const lastSnapshot = userHistoricalLocks[userHistoricalLocks.length - 1]!
       const firstDay = currentTimestampMs
       const lastDay = mainnetLockedInfo.lockedEndDate
       const interpolatedPoints = createInterpolatedPoints(firstDay, lastDay, lastSnapshot)
@@ -261,7 +259,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           const firstPoint = Array.isArray(params) ? params[0] : params
           const secondPoint = Array.isArray(params) ? params[1] : null
 
-          const firstPointValue = firstPoint.value as number[]
+          const firstPointValue = firstPoint!.value as number[]
           const secondPointValue = secondPoint ? (secondPoint.value as number[]) : null
 
           return `
@@ -272,7 +270,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
                 color: ${toolTipTheme.text};">
               veBAL
               <span style="font-size: 14px; font-weight: 400; color: ${toolTipTheme.secondaryText};">
-               &nbsp;&nbsp;&nbsp;${format(new Date(firstPointValue[0]), 'dd/MM/yyyy')}
+               &nbsp;&nbsp;&nbsp;${format(new Date(firstPointValue[0]!), 'dd/MM/yyyy')}
               </span>
             </div>
             <hr />
@@ -283,15 +281,15 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
                   ? `
                   <span style="display: flex; flex-direction: row; justify-content: space-between">
                     <span style="color: ${toolTipTheme.secondaryText}; font-weight: 400;">Added:</span>
-                    <span>${fNum('token', secondPointValue[1] - firstPointValue[1])}</span>
+                    <span>${fNum('token', secondPointValue[1]! - firstPointValue[1]!)}</span>
                   </span>
                   <span style="display: flex; flex-direction: row; justify-content: space-between">
                     <span style="color: ${toolTipTheme.secondaryText}; font-weight: 400;">Final:</span>
-                    <span>${fNum('token', secondPointValue[1])}</span>
+                    <span>${fNum('token', secondPointValue[1]!)}</span>
                   </span>`
                   : `
                   <span>
-                    <span>${fNum('token', firstPointValue[1])}</span>
+                    <span>${fNum('token', firstPointValue[1]!)}</span>
                     ${firstPointValue[1] === 0 ? `<span style="${badgeStyle}">Expired</span>` : ''}
                   </span>`
               }

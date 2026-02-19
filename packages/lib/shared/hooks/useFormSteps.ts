@@ -71,7 +71,7 @@ export function useFormSteps(config: UseFormStepsConfig) {
   useEffect(() => {
     if (!isFormHydrated) return
     // if render attempt would crash page, redirect to first step
-    if (!canRenderStep) router.replace(`${basePath}/${steps[0].id}`)
+    if (!canRenderStep) router.replace(`${basePath}/${steps[0]?.id || ''}`)
     const shouldSyncLocalStorage = stepIndexFromUrl !== null && stepIndexFromUrl !== savedStepIndex
     if (shouldSyncLocalStorage) setSavedStepIndex(stepIndexFromUrl)
   }, [stepIndexFromUrl, savedStepIndex, setSavedStepIndex, isFormHydrated, canRenderStep])
@@ -108,7 +108,7 @@ export function useFormSteps(config: UseFormStepsConfig) {
 
   const resetSteps = () => {
     setSavedStepIndex(0)
-    router.replace(`${basePath}/${steps[0].id}`)
+    router.replace(`${basePath}/${steps[0]?.id || ''}`)
   }
 
   const isBeforeStep = (stepTitle: string) => {
@@ -117,7 +117,7 @@ export function useFormSteps(config: UseFormStepsConfig) {
   }
 
   const isStep = (stepTitle: string) => {
-    return currentStep.title === stepTitle
+    return currentStep?.title === stepTitle
   }
 
   return {

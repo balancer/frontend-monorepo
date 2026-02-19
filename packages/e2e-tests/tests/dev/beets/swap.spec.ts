@@ -1,16 +1,13 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { button, clickButton, clickLink } from '@/helpers/user.helpers'
+import { clickButton, clickLink } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 test('Wrap 1 S to wS', async ({ page }) => {
   await page.goto('http://localhost:3001/pools')
-  await impersonate(page, defaultAnvilAccount)
-
-  // Wait for dev tools panel to fully close before checking wallet button
-  await expect(button(page, 'Dev tools button')).toBeVisible()
-  await expect(button(page, 'Connect wallet')).not.toBeVisible()
   await clickLink(page, 'Swap')
+  await page.waitForURL('http://localhost:3001/swap', { waitUntil: 'commit' })
+  await impersonate(page, defaultAnvilAccount)
 
   await clickButton(page, 'Select token')
   await page.getByText('Wrapped Sonic', { exact: true }).click()

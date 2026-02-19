@@ -6,11 +6,6 @@ import { partialBoosted } from '../../../__mocks__/pool-examples/boosted'
 import { Pool } from '../../../pool.types'
 import { usePoolStateWithBalancesQuery } from './usePoolStateWithBalancesQuery'
 
-/*
-TODO:
-Review issue cause by the use of getRpcUrl(chainId) returning http://127.0.0.1:8645/1 (mocked in setup-integration.ts)
-inside the SDK implementation
-*/
 async function testQuery(pool: Pool) {
   const { result } = testHook(() => usePoolStateWithBalancesQuery(pool), {
     wrapper: buildDefaultPoolTestProvider(pool as GqlPoolElement),
@@ -18,7 +13,7 @@ async function testQuery(pool: Pool) {
   return result
 }
 
-describe.skip('usePoolStateWithBalances', () => {
+describe('usePoolStateWithBalances', () => {
   it('for a partial boosted pool', async () => {
     const pool = getApiPoolMock(partialBoosted)
 

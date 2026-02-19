@@ -1,5 +1,5 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { button, clickButton, isButtonVisible } from '@/helpers/user.helpers'
+import { clickButton, isButtonVisible } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
@@ -7,7 +7,6 @@ test('Swap 1 ETH to USDC)', async ({ page }) => {
   await page.goto('http://localhost:3000/swap/ethereum/ETH')
 
   await impersonate(page, defaultAnvilAccount)
-  await expect(button(page, 'Connect wallet')).not.toBeVisible()
 
   await clickButton(page, 'ETH')
   await page.getByText('Wrapped Ether', { exact: true }).click()

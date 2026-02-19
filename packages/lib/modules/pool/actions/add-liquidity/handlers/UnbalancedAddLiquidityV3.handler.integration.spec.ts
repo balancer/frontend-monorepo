@@ -2,27 +2,24 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
-import { Pool } from '../../../pool.types'
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
+import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
 
-// TODO: unskip this test when sepolia V3 pools are available in production api
-describe.skip('When adding unbalanced liquidity for a V3 pool', async () => {
-  // Sepolia
-  const balAddress = '0xb19382073c7a0addbb56ac6af1808fa49e377b75'
-  // const poolId = '0xec1b5ca86c83c7a85392063399e7d2170d502e00' // Sepolia B-50BAL-50WETH
-  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
-  const v3Pool = {} as unknown as Pool
+describe('When adding unbalanced liquidity for a V3 pool', async () => {
+  const wethAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+  const poolId = '0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3' // rETH-waEthWETH
+  const v3Pool = await fetchPoolMock({ poolId, chain: GqlChain.Mainnet })
 
   const handler = selectAddLiquidityHandler(v3Pool) as UnbalancedAddLiquidityV3Handler
 
   const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
-    { humanAmount: '0.1', tokenAddress: balAddress, symbol: 'BAL' },
+    { humanAmount: '0.1', tokenAddress: wethAddress, symbol: 'WETH' },
   ]
 
   it('calculates price impact', async () => {
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
-    expect(priceImpact).toBeGreaterThan(0.002)
+    expect(priceImpact).toBeGreaterThan(0.00002)
   })
 
   it('queries bptOut', async () => {
@@ -42,9 +39,10 @@ describe.skip('When adding unbalanced liquidity for a V3 pool', async () => {
       queryOutput,
     })
 
-    const sepoliaRouter = getNetworkConfig(GqlChain.Sepolia).contracts.balancer.router
+    const mainnetRouter = getNetworkConfig(GqlChain.Mainnet).contracts.balancer
+      .compositeLiquidityRouterBoosted
 
-    expect(result.to).toBe(sepoliaRouter)
+    expect(result.to).toBe(mainnetRouter)
     expect(result.data).toBeDefined()
   })
 })
