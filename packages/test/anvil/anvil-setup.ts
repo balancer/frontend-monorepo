@@ -1,4 +1,4 @@
-import { fantom, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
+import { base, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
@@ -8,7 +8,7 @@ type NetworksWithFork = readonly [
   typeof polygon,
   typeof sepolia,
   typeof gnosis,
-  typeof fantom,
+  typeof base,
   typeof sonic,
 ]
 export type ChainIdWithFork = NetworksWithFork[number]['id']
@@ -48,7 +48,7 @@ const ANVIL_PORTS: Record<ChainIdWithFork, number> = {
   [mainnet.id]: 8645,
   [polygon.id]: 8745,
   [sepolia.id]: 8845,
-  [fantom.id]: 8945,
+  [base.id]: 8945,
   [gnosis.id]: 9045,
   [sonic.id]: 9145,
 }
@@ -77,11 +77,11 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     port: ANVIL_PORTS[sepolia.id],
     forkBlockNumber: 10280000n,
   },
-  [fantom.id]: {
-    chainId: fantom.id,
-    fallBackRpc: 'https://gateway.tenderly.co/public/fantom',
-    port: ANVIL_PORTS[fantom.id],
-    forkBlockNumber: 99471829n,
+  [base.id]: {
+    chainId: base.id,
+    fallBackRpc: 'https://gateway.tenderly.co/public/base',
+    port: ANVIL_PORTS[base.id],
+    forkBlockNumber: 42375000n,
   },
   [sonic.id]: {
     chainId: sonic.id,

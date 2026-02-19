@@ -1,9 +1,9 @@
 import { ChainIdWithFork } from '@repo/test/anvil/anvil-setup'
 import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
 import { publicActions, testActions, walletActions } from 'viem'
-import { fantom, gnosis, mainnet, polygon, sepolia } from 'viem/chains'
+import { base, gnosis, mainnet, polygon, sepolia } from 'viem/chains'
 
-export function createTestHttpClient(chainId: 1 | 137 | 11155111 | 100 | 250) {
+export function createTestHttpClient(chainId: 1 | 137 | 11155111 | 100 | 8453) {
   return testWagmiConfig
     .getClient({ chainId })
     .extend(testActions({ mode: 'anvil' }))
@@ -14,7 +14,7 @@ export function createTestHttpClient(chainId: 1 | 137 | 11155111 | 100 | 250) {
 export const mainnetTestPublicClient = createTestHttpClient(mainnet.id)
 export const polygonTestPublicClient = createTestHttpClient(polygon.id)
 export const sepoliaTestPublicClient = createTestHttpClient(sepolia.id)
-export const fantomTestPublicClient = createTestHttpClient(fantom.id)
+export const baseTestPublicClient = createTestHttpClient(base.id)
 export const gnosisTestPublicClient = createTestHttpClient(gnosis.id)
 
 export function getTestClient(chainId: ChainIdWithFork) {
@@ -25,8 +25,8 @@ export function getTestClient(chainId: ChainIdWithFork) {
       return polygonTestPublicClient
     case sepolia.id:
       return sepoliaTestPublicClient
-    case fantom.id:
-      return fantomTestPublicClient
+    case base.id:
+      return baseTestPublicClient
     case gnosis.id:
       return gnosisTestPublicClient
     default:
