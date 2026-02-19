@@ -67,7 +67,7 @@ const poolListQueryStateParsers = {
   protocolVersion: parseAsInteger,
   textSearch: parseAsString,
   userAddress: parseAsString,
-  joinablePools: parseAsInteger.withDefault(0),
+  joinablePools: parseAsString,
   minTvl: parseAsFloat.withDefault(0),
   poolTags: parseAsArrayOf(
     parseAsStringEnum<PoolTagType>(poolTagFilters as unknown as PoolTagType[])
@@ -110,11 +110,14 @@ export function usePoolListQueryState() {
     'userAddress',
     poolListQueryStateParsers.userAddress
   )
-  const [joinablePoolsInt, setJoinablePoolsInt] = useQueryState(
+  const [joinablePoolsValue, setJoinablePoolsValue] = useQueryState(
     'joinablePools',
     poolListQueryStateParsers.joinablePools
   )
-  const joinablePools = joinablePoolsInt === 1
+  const normalizedJoinablePoolsValue = joinablePoolsValue?.toLowerCase()
+  const joinablePools =
+    normalizedJoinablePoolsValue !== undefined &&
+    ['true', '1', ''].includes(normalizedJoinablePoolsValue)
 
   // on toggle always start at the beginning of the list
   useEffect(() => {
@@ -133,11 +136,11 @@ export function usePoolListQueryState() {
   // Set internal checked state
   function toggleJoinablePools(checked: boolean) {
     if (checked) {
-      setJoinablePoolsInt(1)
+      setJoinablePoolsValue('true')
       setFirst(JOINABLE_POOLS_FIRST)
       setSkip(null)
     } else {
-      setJoinablePoolsInt(null)
+      setJoinablePoolsValue(null)
       setFirst(null)
       setSkip(null)
     }
@@ -252,7 +255,7 @@ export function usePoolListQueryState() {
     setOrderDirection(null)
     setProtocolVersion(null)
     setPoolHookTags(null)
-    setJoinablePoolsInt(null)
+    setJoinablePoolsValue(null)
   }
 
   const totalFilterCount =
