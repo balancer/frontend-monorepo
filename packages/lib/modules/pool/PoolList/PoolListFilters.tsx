@@ -34,7 +34,7 @@ import {
 } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
-import { Filter, Plus } from 'react-feather'
+import { Filter, Info, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -54,6 +54,7 @@ import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import NextLink from 'next/link'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function useFilterTagsVisible() {
   const {
@@ -87,10 +88,9 @@ function UserLiquidityFilters() {
   const isMyPositionsChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
 
   return (
-    <VStack align="start" spacing="xxs">
+    <VStack align="start" spacing="xs">
       <Checkbox
         isChecked={isMyPositionsChecked}
-        isDisabled={joinablePools}
         mb="xxs"
         onChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
       >
@@ -99,11 +99,26 @@ function UserLiquidityFilters() {
 
       <Checkbox
         isChecked={joinablePools}
-        isDisabled={isMyPositionsChecked}
         mb="xxs"
         onChange={e => toggleJoinablePools(e.target.checked)}
       >
-        <Text fontSize="sm">Joinable pools</Text>
+        <HStack gap="xs">
+          <Text fontSize="sm">Joinable pools</Text>
+          <TooltipWithTouch
+            label="This shows pools where you have at least one token in your wallet. For performance reasons, this will only filter from the top 100 pools for your current search criteria."
+            placement="top"
+          >
+            <Icon
+              _hover={{ opacity: 1 }}
+              as={Info}
+              boxSize={3}
+              color="font.secondary"
+              opacity={0.6}
+              position="relative"
+              top="1px"
+            />
+          </TooltipWithTouch>
+        </HStack>
       </Checkbox>
     </VStack>
   )
@@ -586,7 +601,7 @@ export function PoolListFilters() {
                       {isConnected ? (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
                           <Heading as="h3" my="sm" size="sm">
-                            My liquidity
+                            Based on my wallet
                           </Heading>
                           <UserLiquidityFilters />
                         </Box>
