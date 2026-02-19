@@ -1,4 +1,5 @@
-import { VStack, HStack, Text, CardBody, Divider, Icon } from '@chakra-ui/react'
+import { VStack, HStack, Text, CardBody, Divider, Icon, Box } from '@chakra-ui/react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -25,37 +26,70 @@ export function PreviewPoolTokens() {
 
   return (
     <PreviewPoolCreationCard stepTitle="Tokens">
-      <CardHeaderRow columnNames={['Tokens', 'Price', 'Market Cap']} />
+      <CardHeaderRow columnNames={['Tokens', 'Price', 'Market cap']} />
       <CardBody>
-        <VStack spacing="md">
-          {poolTokens.map((token, idx) => {
-            if (!token.address || !token.data) return <DefaultDataRow key={idx} />
-            const { address, chain, symbol, name } = token.data
+        <VStack spacing="0">
+          <AnimatePresence initial={false}>
+            {poolTokens.map((token, idx) => {
+              if (!token.address || !token.data) {
+                return (
+                  <motion.div
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    initial={{ opacity: 0, height: 0 }}
+                    key={idx}
+                    style={{ width: '100%', overflow: 'hidden', zIndex: 1000 }}
+                    transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                  >
+                    <Box pb="md">
+                      <DefaultDataRow />
+                    </Box>
+                  </motion.div>
+                )
+              }
 
-            const tokenUsdValue = token.usdPrice || priceFor(address, chain)
-            const tokenPriceDisplay = toCurrency(tokenUsdValue, { abbreviated: false })
+              const { address, chain, symbol, name } = token.data
 
-            return (
-              <CardDataRow
-                data={[
-                  <IdentifyTokenCell address={address} chain={chain} name={name} symbol={symbol} />,
-                  <HStack justify="end">
-                    {tokenUsdValue ? (
-                      <Text>{tokenPriceDisplay}</Text>
-                    ) : (
-                      <TokenMissingPriceWarning message={tokenPriceTip} />
-                    )}
-                  </HStack>,
-                  <MarketCapValue
-                    address={address as Address}
-                    chain={chain}
-                    tokenUsdValue={Number(tokenUsdValue)}
-                  />,
-                ]}
-                key={address}
-              />
-            )
-          })}
+              const tokenUsdValue = token.usdPrice || priceFor(address, chain)
+              const tokenPriceDisplay = toCurrency(tokenUsdValue, { abbreviated: false })
+
+              return (
+                <motion.div
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0, height: 0 }}
+                  key={address}
+                  style={{ width: '100%', overflow: 'hidden', zIndex: 1000 }}
+                  transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                >
+                  <Box pb="md">
+                    <CardDataRow
+                      data={[
+                        <IdentifyTokenCell
+                          address={address}
+                          chain={chain}
+                          name={name}
+                          symbol={symbol}
+                        />,
+                        <HStack justify="end">
+                          {tokenUsdValue ? (
+                            <Text>{tokenPriceDisplay}</Text>
+                          ) : (
+                            <TokenMissingPriceWarning message={tokenPriceTip} />
+                          )}
+                        </HStack>,
+                        <MarketCapValue
+                          address={address as Address}
+                          chain={chain}
+                          tokenUsdValue={Number(tokenUsdValue)}
+                        />,
+                      ]}
+                    />
+                  </Box>
+                </motion.div>
+              )
+            })}
+          </AnimatePresence>
           {hasRateProviders && <RateProviderRows poolTokens={poolTokens} />}
         </VStack>
       </CardBody>
@@ -90,6 +124,7 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
   return (
     <>
       <Divider />
+      <Box pt="md" />
       <CardDataRow
         data={['Rate providers', 'Reviewed', 'Address'].map((name, idx) => (
           <Text
@@ -97,6 +132,7 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
             color="font.secondary"
             fontSize="sm"
             key={name}
+            pb="sm"
           >
             {name}
           </Text>

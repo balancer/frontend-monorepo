@@ -48,7 +48,7 @@ export function SmartCircularImage({
           // Check corners for transparency
           const checkCorner = (x: number, y: number) => {
             const index = (y * canvas.width + x) * 4
-            return data[index + 3] < 128 // Alpha channel < 50%
+            return (data[index + 3] || Number.MAX_VALUE) < 128 // Alpha channel < 50%
           }
 
           const cornerSize = Math.min(canvas.width, canvas.height) * 0.1 // Check 10% of corner
@@ -66,8 +66,11 @@ export function SmartCircularImage({
             let transparentPixels = 0
             let totalPixels = 0
 
-            for (let x = startX; x < startX + cornerSize && x < canvas.width; x++) {
-              for (let y = startY; y < startY + cornerSize && y < canvas.height; y++) {
+            const originX = startX || 0
+            const originY = startY || 0
+
+            for (let x = originX; x < originX + cornerSize && x < canvas.width; x++) {
+              for (let y = originY; y < originY + cornerSize && y < canvas.height; y++) {
                 if (checkCorner(x, y)) {
                   transparentPixels++
                 }

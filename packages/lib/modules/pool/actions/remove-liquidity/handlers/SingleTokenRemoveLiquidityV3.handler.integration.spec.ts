@@ -4,8 +4,8 @@ import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { SingleTokenRemoveLiquidityV3Handler } from './SingleTokenRemoveLiquidityV3.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
-// import { getPoolMock } from '../../../__mocks__/getPoolMock'
-// import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV3Handler {
   return selectRemoveLiquidityHandler(
@@ -16,14 +16,11 @@ function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV3Handl
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }
 
-// TODO: unskip this test when sepolia V3 pools are available in production api
-describe.skip('When removing unbalanced liquidity for a weighted V3 pool', async () => {
-  // Sepolia
+describe('When removing unbalanced liquidity for a weighted V3 pool', async () => {
   const balAddress = '0xb19382073c7a0addbb56ac6af1808fa49e377b75'
   const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9'
-  // const poolId = '0xec1b5ca86c83c7a85392063399e7d2170d502e00' // Sepolia B-50BAL-50WETH
-  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
-  const v3Pool = {} as unknown as Pool
+  const poolId = '0xb790fa0ba5d563b814b0ca1716c414f6b99937b2' // Sepolia B-50BAL-50WETH
+  const v3Pool = await fetchPoolMock({ poolId, chain: GqlChain.Sepolia })
 
   const defaultQueryInput: QueryRemoveLiquidityInput = {
     humanBptIn: '0.001',

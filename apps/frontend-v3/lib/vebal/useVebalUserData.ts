@@ -30,7 +30,7 @@ export function useVebalUserData() {
   const snapshots = apiResponse.data?.veBalGetUser.lockSnapshots
   const lastLockTimestamp =
     snapshots && snapshots.length > 0
-      ? secondsToMilliseconds(calculateLastLock(snapshots).timestamp)
+      ? secondsToMilliseconds(calculateLastLock(snapshots)?.timestamp || 0)
       : undefined
 
   return {

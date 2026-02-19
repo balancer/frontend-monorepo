@@ -1,4 +1,4 @@
-import { ErrorEvent } from '@sentry/core'
+import { ErrorEvent } from '@sentry/nextjs'
 import { shouldIgnoreException } from './sentry.helpers'
 
 describe('shouldIgnoreError', () => {

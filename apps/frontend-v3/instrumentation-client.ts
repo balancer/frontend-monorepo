@@ -10,6 +10,7 @@ import {
   getErrorTextFromTop3Frames,
   shouldIgnoreException,
 } from '@repo/lib/shared/utils/sentry.helpers'
+import { isSwapWithNoPathsError } from '@repo/lib/shared/utils/error-filters'
 
 Sentry.init({
   // Change this value only if you need to debug in development (we have a custom developmentSentryDSN for that)
@@ -80,6 +81,7 @@ Sentry.init({
       'unstake',
       'migrate-stake',
       'swap',
+      'create',
     ]
     const criticalFlowPath = criticalFlowPaths.find(path => event.request?.url?.includes(path))
     if (!criticalFlowPath || isNonFatalError(event)) {
@@ -93,6 +95,7 @@ export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
 
 function handleNonFatalError(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null {
   if (shouldIgnoreException(event)) return null
+
   event.level = 'error'
 
   return customizeEvent(event)
@@ -105,17 +108,17 @@ function handleFatalError(
   event.level = 'fatal'
 
   if (event?.exception?.values?.length) {
-    const lastIndex = event.exception.values.length - 1
-    const topValue = event.exception.values[lastIndex]
-
     if (shouldIgnoreException(event)) return null
 
-    const flowType = uppercaseSegment(criticalFlowPath)
-    topValue.value = `Unexpected error in ${flowType} flow.
-    Cause: ${topValue.type}: ${topValue.value}`
+    const lastIndex = event.exception.values.length - 1
+    const topValue = event.exception.values[lastIndex]
+    if (topValue) {
+      const flowType = uppercaseSegment(criticalFlowPath)
+      topValue.value = `Unexpected error in ${flowType} flow. Cause: ${topValue.type}: ${topValue.value}`
 
-    topValue.type = flowType + 'Error'
-    event.exception.values[lastIndex] = topValue
+      topValue.type = flowType + 'Error'
+      event.exception.values[lastIndex] = topValue
+    }
   }
 
   return customizeEvent(event)
@@ -131,7 +134,7 @@ function uppercaseSegment(path: string): string {
 // Detect errors that are not considered fatal even if they happen in a critical path
 function isNonFatalError(event: Sentry.ErrorEvent) {
   const errorText = getErrorTextFromTop3Frames(event)
-  if (errorText.includes('Must contain at least 1 path.')) return true
+  if (isSwapWithNoPathsError(errorText)) return true
 
   return false
 }

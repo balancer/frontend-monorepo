@@ -26,7 +26,8 @@
     "VERCEL_BRANCH_URL",
     "TZ",
     "NEXT_PRIVATE_MAGPIE_API_KEY",
-    "TEST_ACCOUNT_MNEMONIC"
+    "TEST_ACCOUNT_MNEMONIC",
+    "SLACK_BOT_TOKEN"
   ],
   "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {

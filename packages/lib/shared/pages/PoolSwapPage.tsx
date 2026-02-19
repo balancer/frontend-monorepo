@@ -40,8 +40,8 @@ export function PoolSwapPage({ txHash }: Props) {
 
   const pathParams: PathParams = {
     chain: chainToSlugMap[pool.chain],
-    tokenIn: poolActionableTokens[0].address,
-    tokenOut: poolActionableTokens[1].address,
+    tokenIn: poolActionableTokens[0]?.address,
+    tokenOut: poolActionableTokens[1]?.address,
     urlTxHash: maybeTxHash,
   }
   const props: SwapProviderProps = {

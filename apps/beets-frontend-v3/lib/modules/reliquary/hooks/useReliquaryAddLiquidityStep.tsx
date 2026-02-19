@@ -4,6 +4,7 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
@@ -172,11 +173,30 @@ export function useReliquaryAddLiquidityStep(
           />
         )
       },
+      renderBatchAction: (currentStep: TransactionStep) => {
+        return (
+          <TransactionBatchButton
+            chainId={chainId}
+            currentStep={currentStep}
+            labels={addLiquidityLabels}
+            onTransactionChange={setTransaction}
+          />
+        )
+      },
+      isBatchEnd: true,
+      batchableTxCall: buildCallDataQuery.data
+        ? {
+            data: buildCallDataQuery.data.data,
+            to: buildCallDataQuery.data.to,
+            value: buildCallDataQuery.data.value,
+          }
+        : undefined,
     }),
     [
       transaction,
       simulationQuery.data,
       buildCallDataQuery.data,
+      chainId,
       gasEstimationMeta,
       addLiquidityLabels,
       isComplete,

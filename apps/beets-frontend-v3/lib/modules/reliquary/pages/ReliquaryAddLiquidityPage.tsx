@@ -42,6 +42,8 @@ import { useReliquaryAddLiquidityMaturityImpact } from '../hooks/useReliquaryAdd
 import { ReliquaryAddLiquidityModal } from '../components/ReliquaryAddLiquidityModal'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { TOSCheckbox } from '@/lib/modules/reliquary/components/TOSCheckbox'
+import { formatUnits } from 'viem'
+import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 
 export function ReliquaryAddLiquidityPage({ relicId }: { relicId?: string }) {
   const { validTokens } = useAddLiquidity()
@@ -81,9 +83,9 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
   const createNew = !relicId
 
   // Calculate add liquidity impact based on simulated BPT amount
-  const bptAmount = simulationQuery.data?.bptOut
-    ? Number(simulationQuery.data.bptOut) / 1e18 // Convert from wei to human amount
-    : 0
+  const bptAmount = simulationQuery.data?.bptOut.amount
+    ? formatUnits(simulationQuery.data.bptOut.amount, BPT_DECIMALS)
+    : '0'
 
   const addLiquidityMaturityImpactQuery = useReliquaryAddLiquidityMaturityImpact(
     bptAmount,

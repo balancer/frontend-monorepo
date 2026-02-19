@@ -1,5 +1,5 @@
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { Button, Card, Flex, HStack, Heading, IconButton, Stack } from '@chakra-ui/react'
+import { Button, Card, Flex, HStack, Heading, IconButton, Image, Stack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -11,6 +11,7 @@ type Props = {
   chain: GqlChain
   networkTotalClaimableFiatBalance: number
   title?: ReactNode
+  icon?: string
   onClick(): void
 }
 
@@ -18,6 +19,7 @@ export function ClaimNetworkBlock({
   chain,
   title,
   networkTotalClaimableFiatBalance,
+  icon,
   onClick,
 }: Props) {
   const { toCurrency } = useCurrency()
@@ -35,7 +37,11 @@ export function ClaimNetworkBlock({
     >
       <Flex alignItems="center" justifyContent="space-between">
         <HStack gap="ms">
-          <NetworkIcon chain={chain} shadow="md" size={iconSize} />
+          {icon ? (
+            <Image alt="Claim icon" h="48px" src={icon} w="48px" />
+          ) : (
+            <NetworkIcon chain={chain} shadow="md" size={iconSize} />
+          )}
 
           <Stack gap={1}>
             <Heading size="sm" textTransform="capitalize">

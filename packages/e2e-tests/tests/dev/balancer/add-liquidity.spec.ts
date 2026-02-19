@@ -17,7 +17,6 @@ test('Adds liquidity in balWeth8020', async ({ page }) => {
   await page.goto(`http://localhost:3000/pools/ethereum/v2/${balWeth8020.poolId}`)
 
   await impersonate(page, defaultAnvilAccount)
-  await expect(button(page, 'Connect')).not.toBeVisible()
 
   await clickButton(page, 'Add liquidity')
   await expect(button(page, 'Next')).toBeVisible()

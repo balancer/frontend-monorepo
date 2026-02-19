@@ -55,6 +55,10 @@ const networkConfig: NetworkConfig = {
     },
     veDelegationProxy: '0xD87F44Df0159DC78029AB9CA7D7e57E7249F5ACD',
     permit2: PERMIT2[base.id],
+    merkl: {
+      claims: '0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae',
+    },
+    signatureRegistry: '0x45fB5aF0a1aD80Ea16C803146eb81844D9972373',
   },
   pools: convertHexToLowerCase({ issues: {} }),
   layerZeroChainId: 184,

@@ -12,6 +12,7 @@ env:
   TEST_ACCOUNT_MNEMONIC: ${{ secrets.TEST_ACCOUNT_MNEMONIC }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
 
 jobs:
   # Skip this job as it is already part of the E2E-Smoke-Test job
