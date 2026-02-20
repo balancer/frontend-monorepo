@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 
 export async function clickButton(page: Page, text: string) {
   const regex = new RegExp('^' + text + '$', 'i')
@@ -31,6 +31,15 @@ export async function clickRadio(page: Page, groupLabel: string, radioLabel: str
   const pattern = exact ? `^${radioLabel}$` : `^${radioLabel}`
   const regex = new RegExp(pattern, 'i')
   return page.getByRole('radiogroup', { name: groupLabel }).getByText(regex).click()
+}
+
+export async function setSliderPercent(page: Page, percent: number, scope?: Locator) {
+  const root = scope ?? page
+  const slider = root.locator('.chakra-slider')
+  const box = await slider.boundingBox()
+  await slider.click({
+    position: { x: (box.width * percent) / 100, y: box.height / 2 },
+  })
 }
 
 export async function checkbox(page: Page, text: string) {
