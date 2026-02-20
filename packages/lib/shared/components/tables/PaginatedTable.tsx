@@ -23,6 +23,7 @@ interface Props<T> extends BoxProps {
   getRowId: (item: T, index: number) => React.Key
   loadingLength?: number
   paginationStyles?: StyleProps
+  loadingSpinnerPosition?: 'center' | 'top'
 }
 
 export function PaginatedTable<T>({
@@ -36,6 +37,7 @@ export function PaginatedTable<T>({
   getRowId,
   loadingLength = 20,
   paginationStyles,
+  loadingSpinnerPosition = 'center',
 }: Props<T>) {
   const previousPageCountRef = useRef(0)
 
@@ -84,7 +86,7 @@ export function PaginatedTable<T>({
                 style={{
                   position: 'absolute',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: loadingSpinnerPosition === 'top' ? 'flex-start' : 'center',
                   justifyContent: 'center',
                   width: '100%',
                   height: '100%',
@@ -93,6 +95,7 @@ export function PaginatedTable<T>({
                   borderRadius: 10,
                   zIndex: 10,
                   backdropFilter: 'blur(3px)',
+                  paddingTop: loadingSpinnerPosition === 'top' ? '96px' : 0,
                 }}
               >
                 <Center py="4xl">
