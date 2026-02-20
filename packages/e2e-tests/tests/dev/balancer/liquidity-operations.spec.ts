@@ -1,15 +1,9 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import {
-  doAddLiquidityTxSteps,
-  button,
-  clickButton,
-  setSliderPercent,
-} from '@/helpers/user.helpers'
+import { button, clickButton, setSliderPercent, forceClickButton } from '@/helpers/user.helpers'
 import { test, expect, Page } from '@playwright/test'
 import { aaveWstETH8020Mock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aaveWstETH8020Mock'
 import { aave_USDC_USDTMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aave_USDC_USDTMock'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { forceClickButton } from '@/helpers/user.helpers'
 
 test.describe('Weighted pool v2', () => {
   test.beforeEach(async ({ page }) => {
@@ -129,4 +123,21 @@ test.describe('Boosted stable pool v3', () => {
 async function agreeToBoostedPoolRisks(page: Page) {
   await page.getByText('I accept the risks of').click()
   await page.getByText('I accept that by adding tokens').click()
+}
+
+async function doAddLiquidityTxSteps(page: Page) {
+  const addButton = button(page, 'Add liquidity')
+  const approveOrSignButton = page.getByRole('button', { name: /(Approve|Sign)/i })
+
+  while (true) {
+    await addButton.or(approveOrSignButton).waitFor()
+    if (await addButton.isVisible()) break
+    try {
+      await approveOrSignButton.click({ timeout: 3000 })
+    } catch {
+      // Button was detached between visibility check and click
+    }
+  }
+
+  await addButton.click()
 }

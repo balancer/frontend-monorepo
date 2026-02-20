@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 
 export async function clickButton(page: Page, text: string) {
   const regex = new RegExp('^' + text + '$', 'i')
@@ -33,8 +33,9 @@ export async function clickRadio(page: Page, groupLabel: string, radioLabel: str
   return page.getByRole('radiogroup', { name: groupLabel }).getByText(regex).click()
 }
 
-export async function setSliderPercent(page: Page, percent: number) {
-  const slider = page.locator('.chakra-slider')
+export async function setSliderPercent(page: Page, percent: number, scope?: Locator) {
+  const root = scope ?? page
+  const slider = root.locator('.chakra-slider')
   const box = await slider.boundingBox()
   await slider.click({
     position: { x: (box.width * percent) / 100, y: box.height / 2 },
@@ -56,20 +57,4 @@ export async function selectPopularToken(page: Page, tokenSymbol: string) {
     .filter({ has: page.getByText(tokenSymbol, { exact: true }) })
     .first()
     .click()
-}
-
-export async function doAddLiquidityTxSteps(page: Page) {
-  const addLiquidityButton = button(page, 'Add liquidity')
-  const approveButton = page.getByRole('button', { name: /(Approve|Sign)/i })
-
-  while (!(await addLiquidityButton.isVisible())) {
-    await addLiquidityButton.or(approveButton).waitFor()
-    try {
-      if (await approveButton.isVisible()) await approveButton.click({ timeout: 5000 })
-    } catch {
-      // Button was detached between visibility check and click
-    }
-  }
-
-  await addLiquidityButton.click()
 }
