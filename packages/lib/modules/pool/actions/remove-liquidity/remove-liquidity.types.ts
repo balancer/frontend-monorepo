@@ -37,6 +37,7 @@ export type BuildRemoveLiquidityInput = {
   relayerApprovalSignature?: Address //only used by Nested Remove Liquidity in signRelayer mode
   wethIsEth?: boolean // only used by single token removal type
   permit?: Permit //only used by v3 remove liquidity
+  tokenOut?: Address // only used by single token removal type
 }
 
 /*

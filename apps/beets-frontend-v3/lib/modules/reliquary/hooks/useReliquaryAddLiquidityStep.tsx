@@ -14,16 +14,14 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useQuery } from '@tanstack/react-query'
 import { ensureLastQueryResponse } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
-import { AddLiquidityHandler } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/AddLiquidity.handler'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
+import { AddLiquidityHandler } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/AddLiquidity.handler'
 import { useReliquary } from '../ReliquaryProvider'
-import { ReliquaryProportionalAddLiquidityHandler } from '../handlers/ReliquaryProportionalAddLiquidity.handler'
-import { ReliquaryUnbalancedAddLiquidityHandler } from '../handlers/ReliquaryUnbalancedAddLiquidity.handler'
 
 const reliquaryMulticallStepId = 'reliquary-multicall-add-liquidity'
 
 export type ReliquaryAddLiquidityStepParams = {
-  handler: AddLiquidityHandler // Accept base type but check for reliquary handlers in runtime
+  handler: AddLiquidityHandler
   humanAmountsIn: HumanTokenAmountWithSymbol[]
   simulationQuery: any
   slippage: string
@@ -52,28 +50,18 @@ function useReliquaryBuildCallDataQuery({
   const { userAddress, isConnected } = useUserAccount()
 
   const queryFn = async () => {
-    // Check if handler is a reliquary handler
-    if (
-      handler instanceof ReliquaryProportionalAddLiquidityHandler ||
-      handler instanceof ReliquaryUnbalancedAddLiquidityHandler
-    ) {
-      const queryOutput = ensureLastQueryResponse(
-        'Reliquary add liquidity query',
-        simulationQuery.data
-      )
-      const response = await handler.buildCallData({
-        account: userAddress,
-        humanAmountsIn,
-        slippagePercent: slippage,
-        queryOutput,
-      })
-      console.log('Reliquary call data built:', response)
-      return response
-    } else {
-      throw new Error(
-        'Handler must be a ReliquaryProportionalAddLiquidityHandler or ReliquaryUnbalancedAddLiquidityHandler'
-      )
-    }
+    const queryOutput = ensureLastQueryResponse(
+      'Reliquary add liquidity query',
+      simulationQuery.data
+    )
+    const response = await handler.buildCallData({
+      account: userAddress,
+      humanAmountsIn,
+      slippagePercent: slippage,
+      queryOutput,
+    })
+    console.log('Reliquary call data built:', response)
+    return response
   }
 
   return useQuery({

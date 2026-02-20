@@ -27,8 +27,15 @@ import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useWrapUnderlying } from '../useWrapUnderlying'
+import { RemoveLiquidityStepParams } from './useRemoveLiquidityStep'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
-type UseRemoveLiquidityStepsHook = typeof useRemoveLiquidityStepsBase
+type RemoveLiquidityHandlerSelector = (
+  pool: Pool,
+  removalType: RemoveLiquidityType
+) => RemoveLiquidityHandler
+
+type RemoveLiquidityStepsHook = (params: RemoveLiquidityStepParams) => TransactionStep[]
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -36,9 +43,9 @@ export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse |
 export function useRemoveLiquidityLogic(
   urlTxHash?: Hash,
   mute?: boolean,
-  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler,
+  handlerSelector?: RemoveLiquidityHandlerSelector,
   maxHumanBptIn?: HumanAmount,
-  useRemoveLiquiditySteps: UseRemoveLiquidityStepsHook = useRemoveLiquidityStepsBase,
+  useRemoveLiquiditySteps: RemoveLiquidityStepsHook = useRemoveLiquidityStepsBase,
   enablePoolRedirect = true
 ) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
@@ -298,9 +305,9 @@ export function useRemoveLiquidityLogic(
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
   mute?: boolean
-  handlerSelector?: (pool: Pool, removalType: RemoveLiquidityType) => RemoveLiquidityHandler
+  handlerSelector?: RemoveLiquidityHandlerSelector
   maxHumanBptIn?: HumanAmount
-  useRemoveLiquiditySteps?: UseRemoveLiquidityStepsHook
+  useRemoveLiquiditySteps?: RemoveLiquidityStepsHook
   enablePoolRedirect?: boolean
 }>
 
