@@ -45,8 +45,6 @@ test('fetches token balance', async () => {
   `)
 })
 
-// TODO: this test behaves differently when running with ".only"
-// FIX: reset useQuery wagmi client once we migrate to wagmi v2
 test('refetches balances', async () => {
   const balBasicToken = fakeTokenBySymbol('BAL')
 
@@ -98,8 +96,9 @@ test('Should not return balances when user is not connected (account is empty) '
   })
 })
 
-test.skip('Debug: should return balances of 50 tokens', async () => {
-  const numberOfTokens = 50
+test('should return balances of 20 tokens', async () => {
+  const numberOfTokens = 20
+
   const { result } = testHook(() =>
     useTokenBalancesLogic(allFakeGqlTokens.slice(0, numberOfTokens))
   )
