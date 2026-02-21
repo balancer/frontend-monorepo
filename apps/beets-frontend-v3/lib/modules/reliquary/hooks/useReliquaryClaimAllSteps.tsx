@@ -39,10 +39,10 @@ export function useReliquaryClaimAllSteps() {
   const labels: TransactionLabels = {
     init: 'Claim all rewards',
     title: 'Claim all BEETS rewards',
-    description: 'Claim pending BEETS rewards from all your Relics.',
+    description: 'Claim pending BEETS rewards from all your maBEETS positions.',
     confirming: 'Claiming all rewards...',
     confirmed: 'All rewards claimed!',
-    tooltip: 'Claim pending BEETS rewards from all your Relics',
+    tooltip: 'Claim pending BEETS rewards from all your maBEETS positions',
     poolId: pool.id,
   }
 

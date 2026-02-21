@@ -59,7 +59,7 @@ export function ReliquaryClaimModal({
         {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
         <TransactionModalHeader
           chain={pool.chain}
-          label={`Claim rewards from Relic #${relicId}`}
+          label={`Claim rewards from maBEETS position #${relicId}`}
           txHash={claimTxHash}
         />
         <ModalCloseButton />

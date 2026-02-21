@@ -61,7 +61,7 @@ export function BurnModal({
         {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={burnTransactionSteps} />}
         <TransactionModalHeader
           chain={chain}
-          label={`Burn Relic #${relicId}`}
+          label={`Burn maBEETS position #${relicId}`}
           txHash={burnTxHash}
         />
         <ModalCloseButton />

@@ -35,7 +35,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
     return () => window.removeEventListener('resize', checkOverflow)
   }, [relicPositions])
 
-  // Auto-scroll to focused Relic when specified
+  // Auto-scroll to focused maBEETS position when specified
 
   const scrollToCard = (index: number) => {
     if (scrollContainerRef.current) {
@@ -118,7 +118,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
     return (
       <Box py="16" textAlign="center">
         <Text color="gray.400" fontSize="lg">
-          No maBEETS positions yet — your first Relic will appear here.
+          No maBEETS positions yet — your first maBEETS positionwill appear here.
         </Text>
       </Box>
     )
