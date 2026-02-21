@@ -8,7 +8,6 @@ import { formatUnits } from 'viem'
 import { getRpcUrl } from '../../web3/transports'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { ProtocolVersion } from '../../pool/pool.types'
-import { SdkSimulationResponseWithRouter } from '../queries/useSimulateSwapQuery'
 
 /**
  * Base abstract class that shares common logic shared by Default standard swaps and single pool swaps.
@@ -64,7 +63,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
     swapInputs: SimulateSwapInputs
     paths: Path[]
     hopCount: number
-  }): Promise<SdkSimulationResponseWithRouter> {
+  }): Promise<SdkSimulateSwapResponse> {
     const { chain, swapType, swapAmount } = swapInputs
 
     // Get accurate return amount with onchain call
@@ -88,6 +87,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
     const returnAmount = formatUnits(onchainReturnAmount.amount, onchainReturnAmount.token.decimals)
 
     if (!queryOutput.to) throw new Error('No router found in swap query output')
+
     return {
       protocolVersion,
       hopCount,
@@ -98,6 +98,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
       effectivePrice: bn(swapAmount).div(returnAmount).toString(),
       effectivePriceReversed: bn(returnAmount).div(swapAmount).toString(),
       router: queryOutput.to,
+      paths,
     }
   }
 
