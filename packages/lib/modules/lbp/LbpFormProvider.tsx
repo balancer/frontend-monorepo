@@ -1,15 +1,14 @@
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { PropsWithChildren, createContext } from 'react'
+import { PropsWithChildren, createContext, useState } from 'react'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLocalStorage } from 'usehooks-ts'
-import { useState } from 'react'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
 import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
@@ -18,11 +17,16 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { useWatch } from 'react-hook-form'
 import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
+import { useTokens } from '../tokens/TokensProvider'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
 
 export function useLbpFormLogic() {
+  const { toCurrency } = useCurrency()
+
   const saleStructureForm = usePersistentForm<SaleStructureForm>(
     LS_KEYS.LbpConfig.SaleStructure,
     INITIAL_SALE_STRUCTURE,
@@ -39,6 +43,7 @@ export function useLbpFormLogic() {
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
+  const isProjectInfoLocked = !!poolAddress
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const [startDateTime, endDateTime] = useWatch({
@@ -71,9 +76,18 @@ export function useLbpFormLogic() {
     setIsMetadataSaved(false)
   }
 
-  const { saleTokenAmount, launchTokenAddress, selectedChain, collateralTokenAddress } = useWatch({
+  const {
+    saleTokenAmount,
+    launchTokenAddress,
+    selectedChain,
+    collateralTokenAddress,
+    launchTokenRate,
+    saleType,
+  } = useWatch({
     control: saleStructureForm.control,
   })
+
+  const { priceFor } = useTokens()
 
   const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
   const { tokens } = getNetworkConfig(selectedChain)
@@ -87,6 +101,17 @@ export function useLbpFormLogic() {
   const [maxPrice, setMaxPrice] = useState(0)
   const [saleMarketCap, setSaleMarketCap] = useState('')
   const [fdvMarketCap, setFdvMarketCap] = useState('')
+
+  const collateralTokenPrice = collateralTokenAddress ? priceFor(collateralTokenAddress, chain) : 0
+
+  const launchTokenPriceUsd =
+    collateralTokenPrice && launchTokenRate
+      ? bn(launchTokenRate).times(collateralTokenPrice).toString()
+      : '0'
+
+  const totalValue = saleTokenAmount
+    ? bn(saleTokenAmount).times(launchTokenPriceUsd).toString()
+    : '0'
 
   const updatePriceStats = (prices: LbpPrice[]) => {
     const minPrice = min(prices)
@@ -111,11 +136,14 @@ export function useLbpFormLogic() {
     decimals: launchTokenMetadata.decimals || 0,
   }
 
+  const isDynamicSale = saleType !== '' && saleType === GqlPoolType.LiquidityBootstrapping
+  const isFixedSale = saleType !== '' && saleType === GqlPoolType.FixedLbp
+
   return {
     ...formSteps,
     saleStructureForm,
     projectInfoForm,
-    maxPrice,
+    maxPrice: toCurrency(maxPrice),
     saleMarketCap,
     fdvMarketCap,
     updatePriceStats,
@@ -126,6 +154,13 @@ export function useLbpFormLogic() {
     isCollateralNativeAsset,
     poolAddress,
     setPoolAddress,
+    isProjectInfoLocked,
+    launchTokenPriceUsd: toCurrency(launchTokenPriceUsd),
+    launchTokenPriceRaw: launchTokenPriceUsd,
+    totalValueUsd: toCurrency(totalValue),
+    totalValueRaw: totalValue,
+    isDynamicSale,
+    isFixedSale,
   }
 }
 

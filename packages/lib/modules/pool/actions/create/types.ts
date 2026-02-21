@@ -8,6 +8,7 @@ import {
   CreatePoolReClammInput,
   CreatePoolGyroECLPInput,
   CreatePoolLiquidityBootstrappingInput,
+  CreatePoolLiquidityBootstrappingFixedPriceInput,
 } from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
@@ -101,3 +102,4 @@ export type CreatePoolInput =
   | CreatePoolGyroECLPInput
   | CreateCowAmmInput
   | CreatePoolLiquidityBootstrappingInput
+  | CreatePoolLiquidityBootstrappingFixedPriceInput

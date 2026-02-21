@@ -32,7 +32,7 @@ export function formatDateAxisLabel(value: number, startDate: Date, endDate: Dat
   }
 }
 
-export function isSaleStartValid(value: string | number) {
+export function isSaleStartValid(value: string | number | undefined) {
   if (typeof value !== 'string') return 'Start time must be type string'
 
   if (isBefore(parseISO(value), now())) {

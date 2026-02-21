@@ -7,6 +7,7 @@ import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
 import { PoolWeights } from './steps/preview/PoolWeights'
 import { ProjectedPrice } from './steps/preview/ProjectedPrice'
+import { FixedProjectedPrice } from './steps/preview/FixedProjectedPrice'
 import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useLbpWeights } from './useLbpWeights'
@@ -18,7 +19,22 @@ import { useWatch } from 'react-hook-form'
 export function LbpPreview() {
   const { getToken, priceFor } = useTokens()
 
-  const { saleStructureForm, resetLbpCreation } = useLbpForm()
+  const {
+    saleStructureForm,
+    resetLbpCreation,
+    isLastStep,
+    projectInfoForm,
+    updatePriceStats,
+    maxPrice,
+    saleMarketCap,
+    fdvMarketCap,
+    launchTokenPriceUsd,
+    launchTokenPriceRaw,
+    totalValueUsd,
+    isDynamicSale,
+    isFixedSale,
+  } = useLbpForm()
+
   const [
     selectedChain,
     launchTokenAddress,
@@ -40,82 +56,100 @@ export function LbpPreview() {
     ],
   })
 
-  const { isLastStep, projectInfoForm, updatePriceStats, maxPrice, saleMarketCap, fdvMarketCap } =
-    useLbpForm()
-
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
   const { projectTokenStartWeight: startWeight, projectTokenEndWeight: endWeight } = useLbpWeights()
 
   const tokenLoaded = !launchTokenMetadata.isLoading && !!launchTokenMetadata.symbol
 
+  const collateralTokenPrice = priceFor(collateralTokenAddress, selectedChain)
+
   return (
-    <>
-      <NoisyCard
-        cardProps={{
-          w: 'full',
-          overflow: 'hidden',
-          rounded: 'xl',
-        }}
-      >
-        <VStack align="start" px="lg" py="md" spacing="md" w="full">
-          <Flex alignItems="center" pt="xs" w="full">
-            <Heading color="font.maxContrast" size="md">
-              LBP preview
-            </Heading>
-            <Spacer />
-            <RestartPoolCreationModal
-              handleRestart={resetLbpCreation}
-              network={selectedChain}
-              poolType={GqlPoolType.LiquidityBootstrapping}
-            />
-            <LbpLearnMoreModal buttonLabel="Get help" />
-          </Flex>
-          {!isLastStep && (
-            <>
-              <TokenSummary
-                chain={selectedChain}
-                launchTokenAddress={launchTokenAddress as Address}
-                launchTokenMetadata={launchTokenMetadata}
-                projectInfoForm={projectInfoForm}
-              />
-            </>
-          )}
-
-          {tokenLoaded && (
-            <>
-              <HStack alignItems="stretch" gap="ms" w="full">
-                <SimpleInfoCard
-                  info={`$${fNum('fiat', maxPrice)}`}
-                  title={`${launchTokenMetadata.symbol} start price`}
+    <NoisyCard
+      cardProps={{
+        w: 'full',
+        overflow: 'hidden',
+        rounded: 'xl',
+        h: 'fit-content',
+        position: 'sticky',
+        top: 'lg',
+      }}
+    >
+      <VStack align="start" px="lg" py="md" spacing="md" w="full">
+        <Flex alignItems="center" pt="xs" w="full">
+          <Heading color="font.maxContrast" size="md">
+            Preview {isDynamicSale ? 'Dynamic Price LBP' : isFixedSale ? 'Fixed Price LBP' : ''}
+          </Heading>
+          <Spacer />
+          <RestartPoolCreationModal
+            handleRestart={resetLbpCreation}
+            network={selectedChain}
+            poolType={GqlPoolType.LiquidityBootstrapping}
+          />
+          <LbpLearnMoreModal buttonLabel="Get help" />
+        </Flex>
+        {!isLastStep && (
+          <TokenSummary
+            chain={selectedChain}
+            launchTokenAddress={launchTokenAddress as Address}
+            launchTokenMetadata={launchTokenMetadata}
+            projectInfoForm={projectInfoForm}
+          />
+        )}
+        {tokenLoaded && (
+          <>
+            {isFixedSale && (
+              <>
+                <HStack alignItems="stretch" gap="ms" w="full">
+                  <SimpleInfoCard
+                    info={launchTokenPriceUsd}
+                    title={`${launchTokenMetadata.symbol} sale price`}
+                  />
+                  <SimpleInfoCard info={fNum('token', saleTokenAmount)} title="Tokens for sale" />
+                  <SimpleInfoCard info={totalValueUsd} title="Max sale total" />
+                </HStack>
+                <FixedProjectedPrice
+                  endDateTime={endDateTime}
+                  launchTokenPriceRaw={launchTokenPriceRaw}
+                  launchTokenSymbol={launchTokenMetadata?.symbol || ''}
+                  onPriceChange={updatePriceStats}
+                  startDateTime={startDateTime}
                 />
-                <SimpleInfoCard info={saleMarketCap} title="Sale market cap" />
-                <SimpleInfoCard info={fdvMarketCap} title="FDV market cap" />
-              </HStack>
-
-              <PoolWeights
-                collateralToken={getToken(collateralTokenAddress, selectedChain)}
-                endDateTime={endDateTime}
-                endWeight={endWeight}
-                launchTokenMetadata={launchTokenMetadata}
-                startDateTime={startDateTime}
-                startWeight={startWeight}
-              />
-
-              <ProjectedPrice
-                collateralTokenPrice={priceFor(collateralTokenAddress, selectedChain)}
-                collateralTokenSeed={Number(collateralTokenAmount)}
-                endDateTime={endDateTime}
-                endWeight={endWeight}
-                launchTokenSeed={Number(saleTokenAmount)}
-                launchTokenSymbol={launchTokenMetadata?.symbol || ''}
-                onPriceChange={updatePriceStats}
-                startDateTime={startDateTime}
-                startWeight={startWeight}
-              />
-            </>
-          )}
-        </VStack>
-      </NoisyCard>
-    </>
+              </>
+            )}
+            {isDynamicSale && (
+              <>
+                <HStack alignItems="stretch" gap="ms" w="full">
+                  <SimpleInfoCard
+                    info={maxPrice}
+                    title={`${launchTokenMetadata.symbol} start price`}
+                  />
+                  <SimpleInfoCard info={saleMarketCap} title="Sale market cap" />
+                  <SimpleInfoCard info={fdvMarketCap} title="FDV market cap" />
+                </HStack>
+                <PoolWeights
+                  collateralToken={getToken(collateralTokenAddress, selectedChain)}
+                  endDateTime={endDateTime}
+                  endWeight={endWeight}
+                  launchTokenMetadata={launchTokenMetadata}
+                  startDateTime={startDateTime}
+                  startWeight={startWeight}
+                />
+                <ProjectedPrice
+                  collateralTokenPrice={collateralTokenPrice}
+                  collateralTokenSeed={Number(collateralTokenAmount)}
+                  endDateTime={endDateTime}
+                  endWeight={endWeight}
+                  launchTokenSeed={Number(saleTokenAmount)}
+                  launchTokenSymbol={launchTokenMetadata?.symbol || ''}
+                  onPriceChange={updatePriceStats}
+                  startDateTime={startDateTime}
+                  startWeight={startWeight}
+                />
+              </>
+            )}
+          </>
+        )}
+      </VStack>
+    </NoisyCard>
   )
 }
