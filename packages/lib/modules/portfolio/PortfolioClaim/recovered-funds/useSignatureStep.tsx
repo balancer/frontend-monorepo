@@ -13,7 +13,7 @@ import { useReadContract } from 'wagmi'
 import { signatureRegistryAbi } from './signatureRegistryAbi'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import terms from './terms'
-import { Address, BaseError, ContractFunctionRevertedError, zeroAddress } from 'viem'
+import { Address, BaseError, ContractFunctionRevertedError } from 'viem'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { getGqlChain } from '@repo/lib/config/app.config'
 
@@ -31,7 +31,7 @@ export function useSignatureStep(signatureChain: number) {
   const { isConnected, userAddress } = useUserAccount()
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(signatureChain)
   const signatureContract =
-    getNetworkConfig(getGqlChain(signatureChain)).contracts.signatureRegistry || zeroAddress
+    getNetworkConfig(getGqlChain(signatureChain)).contracts.signatureRegistry as Address
 
   const [hasAcceptedDisclaimer, setHasAcceptedDisclaimer] = useState(false)
   const {
