@@ -54,9 +54,8 @@ const ANVIL_PORTS: Record<ChainIdWithFork, number> = {
 }
 
 /*
- * Set forkBlockNumber to be >= the highest block number used in any test for that chain.
+ * Set forkBlockNumber to be after the highest block number used in any test for a chain.
  * Alternatively, omitting forkBlockNumber forks from latest, but can cause flaky tests
- * (e.g. hopCount in swap tests varies with changing state of pool liquidity)
  */
 export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
   [mainnet.id]: {
