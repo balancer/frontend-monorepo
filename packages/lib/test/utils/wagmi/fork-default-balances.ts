@@ -116,13 +116,13 @@ export const gnosisTokenBalances: TokenBalance[] = [
 
 export const sonicTokenBalances: TokenBalance[] = [
   {
-    tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWING
+    tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWIG
     value: '100000',
   },
-  {
-    tokenAddress: '0x3bce5cb273f0f148010bbea2470e7b5df84c7812', // scETH
-    value: '0.01',
-  },
+  // {
+  //   tokenAddress: '0x3bce5cb273f0f148010bbea2470e7b5df84c7812', // scETH
+  //   value: '0.01',
+  // },
   {
     tokenAddress: '0xbb30e76d9bb2cc9631f7fc5eb8e87b5aff32bfbd', // scBTC
     value: '0.01',
@@ -136,6 +136,17 @@ export const sonicTokenBalances: TokenBalance[] = [
     tokenAddress: '0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae', // scUSD
     value: '1000',
     decimals: 6,
+  },
+  {
+    tokenAddress: '0x2d0e0814e62d80056181f5cd932274405966e4f0', // BEETS
+    value: '1000000',
+    decimals: 18,
+  },
+  {
+    tokenAddress: '0xe5da20f15420ad15de0fa650600afc998bbe3955', // stS
+    value: '1000',
+    decimals: 18,
+    slot: BigInt('0x52c63247e1f47db19d5ce0460030c497f067ca4cebf71ba98eeadabe20bace00'),
   },
 ]
 
