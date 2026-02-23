@@ -8,7 +8,7 @@ import {
   setTokenBalances,
 } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { useEffect, useRef } from 'react'
-import { Address } from 'viem'
+import { Address, parseEther } from 'viem'
 import { useConnect } from 'wagmi'
 import { impersonateWagmiConfig, WagmiConfig } from '../WagmiConfig'
 import { useWagmiConfig } from '../WagmiConfigProvider'
@@ -22,6 +22,7 @@ export function useImpersonateAccount() {
   // Tracks current impersonated address stored in local storage (used to auto-reconnect)
   const storedImpersonatedAddress = useRef<Address | undefined>(undefined)
   const isReconnected = useRef(false)
+  const DEFAULT_FORK_NATIVE_BALANCE = parseEther('1000')
 
   useEffect(() => {
     const impersonatedAddress = getSavedImpersonatedAddressLS()
@@ -112,6 +113,12 @@ export function useImpersonateAccount() {
     isReconnecting?: boolean
   }) {
     const { forkBalances, chainId } = await getOptions()
+
+    await forkClient.setBalance({
+      address: impersonatedAddress,
+      value: DEFAULT_FORK_NATIVE_BALANCE,
+    })
+
     if (forkBalances[chainId] && !isReconnecting) {
       await setTokenBalances({
         impersonatedAddress,
