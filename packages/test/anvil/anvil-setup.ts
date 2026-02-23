@@ -53,22 +53,22 @@ const ANVIL_PORTS: Record<ChainIdWithFork, number> = {
   [sonic.id]: 9145,
 }
 
+/*
+ * Set forkBlockNumber to be >= the highest block number used in any test for that chain.
+ * Alternatively, omitting forkBlockNumber forks from latest, but can cause flaky tests
+ * (e.g. hopCount in swap tests varies with changing state of pool liquidity)
+ */
 export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
   [mainnet.id]: {
     chainId: mainnet.id,
     fallBackRpc: 'https://cloudflare-eth.com',
     port: ANVIL_PORTS[mainnet.id],
-    /* From time to time this block gets outdated having this kind of error in integration tests:
-     ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-     forkBlockNumber: 22426500n, // block number from 6 May 2025 (1 day before pectra launch)
-    */
+    forkBlockNumber: 24521900n,
   },
   [polygon.id]: {
     chainId: polygon.id,
     fallBackRpc: 'https://polygon-rpc.com',
     port: ANVIL_PORTS[polygon.id],
-    // Note - this has to be >= highest blockNo used in tests
-    // forkBlockNumber: 64747630n,
     forkBlockNumber: 67867894n,
   },
   [sepolia.id]: {
