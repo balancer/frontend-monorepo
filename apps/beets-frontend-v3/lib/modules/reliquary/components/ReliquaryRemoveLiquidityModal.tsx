@@ -96,7 +96,7 @@ export function ReliquaryRemoveLiquidityModal({
     baseOnClose()
   }
 
-  const modalLabel = `Remove liquidity from maBEETS position #${relicId}`
+  const modalLabel = `Remove liquidity from maBEETS #${relicId}`
 
   return (
     <Modal

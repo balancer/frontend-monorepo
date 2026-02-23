@@ -30,11 +30,11 @@ export function useReliquaryClaimSteps(relicId: string) {
 
   const labels: TransactionLabels = {
     init: 'Claim rewards',
-    title: `Claim rewards from maBEETS position #${relicId}`,
-    description: `Claim pending BEETS rewards from maBEETS position #${relicId}.`,
+    title: `Claim rewards from maBEETS #${relicId}`,
+    description: `Claim pending BEETS rewards from maBEETS #${relicId}.`,
     confirming: 'Claiming rewards...',
     confirmed: 'Rewards claimed!',
-    tooltip: `Claim pending BEETS rewards from maBEETS position #${relicId}`,
+    tooltip: `Claim pending BEETS rewards from maBEETS #${relicId}`,
     poolId: pool.id,
   }
 

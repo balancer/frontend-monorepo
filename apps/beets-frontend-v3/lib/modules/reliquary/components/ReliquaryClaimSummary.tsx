@@ -54,7 +54,7 @@ export function ReliquaryClaimSummary({
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
       {!shouldShowReceipt && pendingRewardsUsdValue.eq(0) && (
         <BalAlert
-          content={`No rewards available to claim from maBEETS position #${relicId}`}
+          content={`No rewards available to claim from maBEETS #${relicId}`}
           mb="sm"
           status="warning"
         />

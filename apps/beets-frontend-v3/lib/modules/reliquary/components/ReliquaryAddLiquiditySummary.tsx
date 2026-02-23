@@ -134,9 +134,7 @@ export function ReliquaryAddLiquiditySummary({
             }
             isLoading={isLoadingReceipt}
             label={
-              createNew
-                ? 'Created maBEETS position with'
-                : `Added liquidity to maBEETS position #${relicId}`
+              createNew ? 'Created maBEETS position with' : `Added liquidity to maBEETS #${relicId}`
             }
           />
         ) : (
@@ -145,7 +143,7 @@ export function ReliquaryAddLiquiditySummary({
             label={
               createNew
                 ? 'Creating maBEETS position with'
-                : `Adding liquidity to maBEETS position #${relicId}`
+                : `Adding liquidity to maBEETS #${relicId}`
             }
           />
         )}
@@ -159,7 +157,7 @@ export function ReliquaryAddLiquiditySummary({
                 <Text color="font.highlight">
                   {createNew
                     ? "You've successfully created a new maBEETS position and added liquidity to it!"
-                    : `You've successfully added liquidity to maBEETS position #${relicId}!`}
+                    : `You've successfully added liquidity to maBEETS #${relicId}!`}
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your maBEETS position is now earning rewards. Return to the maBEETS page to manage

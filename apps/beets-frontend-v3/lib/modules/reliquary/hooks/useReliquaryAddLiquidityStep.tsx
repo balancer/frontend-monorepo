@@ -115,12 +115,12 @@ export function useReliquaryAddLiquidityStep(
         poolId: pool.id,
       }
     : {
-        init: 'Add liquidity to maBEETS position',
-        title: `Add liquidity to maBEETS position #${relicId}`,
-        description: `Add liquidity to ${pool.name || 'pool'} and maBEETS position #${relicId}.`,
-        confirming: 'Adding liquidity to maBEETS position...',
-        confirmed: 'Liquidity added to maBEETS position!',
-        tooltip: `Add liquidity to ${pool.name || 'pool'} and maBEETS position #${relicId}`,
+        init: 'Add liquidity to maBEETS',
+        title: `Add liquidity to maBEETS #${relicId}`,
+        description: `Add liquidity to ${pool.name || 'pool'} and maBEETS #${relicId}.`,
+        confirming: 'Adding liquidity to maBEETS...',
+        confirmed: 'Liquidity added to maBEETS!',
+        tooltip: `Add liquidity to ${pool.name || 'pool'} and maBEETS #${relicId}`,
         poolId: pool.id,
       }
 

@@ -155,7 +155,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
             />
           )}
           {relicId && (
-            <BalAlert content={`Adding liquidity to maBEETS position #${relicId}`} status="info" />
+            <BalAlert content={`Adding liquidity to maBEETS #${relicId}`} status="info" />
           )}
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}

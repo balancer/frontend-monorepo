@@ -167,7 +167,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           Level {relic.level + 1} - {levelNames[relic.level] || 'Unknown'}
         </Badge>
         <Badge colorScheme="blue" fontSize="sm" px="3" py="1">
-          maBEETS position #{relic.relicId}
+          maBEETS #{relic.relicId}
         </Badge>
       </HStack>
       <Box

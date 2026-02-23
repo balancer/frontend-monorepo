@@ -116,7 +116,7 @@ export function ReliquaryAddLiquidityModal({
 
   const modalLabel = createNew
     ? 'Create new maBEETS position & add liquidity'
-    : `Add liquidity to maBEETS position #${relicId}`
+    : `Add liquidity to maBEETS #${relicId}`
 
   return (
     <Modal
