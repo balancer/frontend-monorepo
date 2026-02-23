@@ -42,6 +42,10 @@ test.describe('Reliquary page at /mabeets', () => {
     test('Can add liquidity to created Relic', async ({ page }) => {
       await addLiquidityToExistingRelicAndReturn(page)
     })
+
+    test('Can remove liquidity from created Relic', async ({ page }) => {
+      await removeLiquidityFromExistingRelicAndReturn(page)
+    })
   })
 })
 
@@ -98,6 +102,29 @@ async function addLiquidityToExistingRelicAndReturn(page: Page) {
   const addLiquidityButton = page.getByRole('button', { name: /Add liquidity to Relic/i })
   await expect(addLiquidityButton).toBeEnabled()
   await addLiquidityButton.click()
+
+  await expect(page.getByText('Transaction confirmed')).toBeVisible()
+  const returnToMabeetsButton = page.getByRole('button', { name: /Return to maBEETS/i })
+  await expect(returnToMabeetsButton).toBeVisible()
+  await returnToMabeetsButton.click()
+  await page.waitForURL(new RegExp(`${baseUrl}/mabeets(?:\\?focusRelic=\\d+)?$`), {
+    waitUntil: 'commit',
+  })
+  await expect(page.getByText('Your maBEETS Summary')).toBeVisible()
+}
+
+async function removeLiquidityFromExistingRelicAndReturn(page: Page) {
+  await clickButton(page, 'Remove')
+  await expect(page).toHaveURL(new RegExp(`${baseUrl}/mabeets/remove-liquidity/\\d+`))
+  await expect(page.getByText('Remove liquidity from Relic')).toBeVisible()
+
+  const nextButton = page.getByRole('button', { name: 'Next', exact: true })
+  await expect(nextButton).toBeEnabled()
+  await nextButton.click()
+
+  const removeLiquidityButton = page.getByRole('button', { name: /Remove liquidity from Relic/i })
+  await expect(removeLiquidityButton).toBeEnabled()
+  await removeLiquidityButton.click()
 
   await expect(page.getByText('Transaction confirmed')).toBeVisible()
   const returnToMabeetsButton = page.getByRole('button', { name: /Return to maBEETS/i })
