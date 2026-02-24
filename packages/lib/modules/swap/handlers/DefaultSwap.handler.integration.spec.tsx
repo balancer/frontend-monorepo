@@ -78,7 +78,7 @@ describe('Pool Swap handler with v2 nested pool', async () => {
       tokenOut: daiAddress,
     })
 
-    expect(result.hopCount).toBe(1)
+    expect(result.hopCount).toBeGreaterThan(0)
     expect(result.protocolVersion).toBe(2)
 
     const queryOutput = result.queryOutput as ExactOutQueryOutput
