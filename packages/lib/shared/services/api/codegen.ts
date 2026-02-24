@@ -3,11 +3,23 @@ import { CodegenConfig } from '@graphql-codegen/cli'
 const config: CodegenConfig = {
   generates: {
     ['./shared/services/api/generated/schema.graphql']: {
-      schema: process.env.NEXT_PUBLIC_BALANCER_API_URL,
+      schema: {
+        [process.env.NEXT_PUBLIC_BALANCER_API_URL!]: {
+          headers: {
+            'Accept-Encoding': 'identity',
+          },
+        },
+      },
       plugins: ['schema-ast'],
     },
     [`./shared/services/api/generated/`]: {
-      schema: process.env.NEXT_PUBLIC_BALANCER_API_URL,
+      schema: {
+        [process.env.NEXT_PUBLIC_BALANCER_API_URL!]: {
+          headers: {
+            'Accept-Encoding': 'identity',
+          },
+        },
+      },
       documents: ['./shared/services/api/**/*.graphql'],
       preset: 'client',
       presetConfig: {
