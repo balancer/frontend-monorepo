@@ -9,8 +9,8 @@ const schemaWithHeaders = {
 }
 
 const config: CodegenConfig = {
+  schema: schemaWithHeaders,
   generates: {
-    schema: schemaWithHeaders,
     ['./shared/services/api/generated/schema.graphql']: {
       plugins: ['schema-ast'],
     },
