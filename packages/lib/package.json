@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config -c ./shared/services/api/codegen.ts",
+    "graphql:gen:retry": "bash ./scripts/graphql-gen-retry.sh",
     "lint": "eslint . --max-warnings 0 --cache",
     "lint:fix": "eslint . --fix --max-warnings 0 --cache",
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
