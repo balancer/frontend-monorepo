@@ -4,6 +4,9 @@ import { expect, test, type Page } from '@playwright/test'
 import { defaultAnvilAccount, forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 const baseUrl = 'http://localhost:3001'
+const mabeetsUrlPattern = new RegExp(`${baseUrl}/mabeets(?:\\?focusRelic=\\d+)?$`)
+const nextButtonName = 'Next'
+const returnToMabeetsButtonName = /Return to maBEETS/i
 
 test.describe('Reliquary page at /mabeets', () => {
   test('Shows reliquary landing sections', async ({ page }) => {
@@ -60,7 +63,7 @@ async function createRelicAndReturnToMabeets(page: Page) {
   await page.waitForURL(`${baseUrl}/mabeets/add-liquidity/new`, { waitUntil: 'commit' })
   await expect(page.getByText('Add liquidity to Relic')).toBeVisible()
   await expect(page.getByText('A new Relic will be created with this add liquidity')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: nextButtonName, exact: true })).toBeVisible()
 
   await page.locator('#button-group-1').click() // proportional tab
   await page.getByRole('button', { name: 'stS', exact: true }).waitFor({ state: 'visible' })
@@ -68,9 +71,7 @@ async function createRelicAndReturnToMabeets(page: Page) {
   await page.getByText('I agree to the terms of service as stated here').click()
   await page.getByText('I accept the risks of interacting with this pool').click()
 
-  const nextButton = page.getByRole('button', { name: 'Next', exact: true })
-  await expect(nextButton).toBeEnabled()
-  await nextButton.click()
+  await clickEnabledNextButton(page)
 
   await doCreateRelicTxSteps(page)
   await expect(page.getByText('Transaction confirmed')).toBeVisible()
@@ -78,11 +79,7 @@ async function createRelicAndReturnToMabeets(page: Page) {
     page.getByText("You've successfully created a new Relic and added liquidity to it!"),
   ).toBeVisible()
 
-  await page.getByRole('button', { name: /Return to maBEETS/i }).click()
-  await page.waitForURL(new RegExp(`${baseUrl}/mabeets(?:\\?focusRelic=\\d+)?$`), {
-    waitUntil: 'commit',
-  })
-  await expect(page.getByText('Your maBEETS Summary')).toBeVisible()
+  await returnToMabeets(page)
 }
 
 async function addLiquidityToExistingRelicAndReturn(page: Page) {
@@ -95,22 +92,13 @@ async function addLiquidityToExistingRelicAndReturn(page: Page) {
   await page.getByPlaceholder('0.00').first().fill('1000')
   await page.getByText('I accept the risks of interacting with this pool').click()
 
-  const nextButton = page.getByRole('button', { name: 'Next', exact: true })
-  await expect(nextButton).toBeEnabled()
-  await nextButton.click()
+  await clickEnabledNextButton(page)
 
   const addLiquidityButton = page.getByRole('button', { name: /Add liquidity to Relic/i })
   await expect(addLiquidityButton).toBeEnabled()
   await addLiquidityButton.click()
 
-  await expect(page.getByText('Transaction confirmed')).toBeVisible()
-  const returnToMabeetsButton = page.getByRole('button', { name: /Return to maBEETS/i })
-  await expect(returnToMabeetsButton).toBeVisible()
-  await returnToMabeetsButton.click()
-  await page.waitForURL(new RegExp(`${baseUrl}/mabeets(?:\\?focusRelic=\\d+)?$`), {
-    waitUntil: 'commit',
-  })
-  await expect(page.getByText('Your maBEETS Summary')).toBeVisible()
+  await confirmTxAndReturnToMabeets(page)
 }
 
 async function removeLiquidityFromExistingRelicAndReturn(page: Page) {
@@ -118,22 +106,13 @@ async function removeLiquidityFromExistingRelicAndReturn(page: Page) {
   await expect(page).toHaveURL(new RegExp(`${baseUrl}/mabeets/remove-liquidity/\\d+`))
   await expect(page.getByText('Remove liquidity from Relic')).toBeVisible()
 
-  const nextButton = page.getByRole('button', { name: 'Next', exact: true })
-  await expect(nextButton).toBeEnabled()
-  await nextButton.click()
+  await clickEnabledNextButton(page)
 
   const removeLiquidityButton = page.getByRole('button', { name: /Remove liquidity from Relic/i })
   await expect(removeLiquidityButton).toBeEnabled()
   await removeLiquidityButton.click()
 
-  await expect(page.getByText('Transaction confirmed')).toBeVisible()
-  const returnToMabeetsButton = page.getByRole('button', { name: /Return to maBEETS/i })
-  await expect(returnToMabeetsButton).toBeVisible()
-  await returnToMabeetsButton.click()
-  await page.waitForURL(new RegExp(`${baseUrl}/mabeets(?:\\?focusRelic=\\d+)?$`), {
-    waitUntil: 'commit',
-  })
-  await expect(page.getByText('Your maBEETS Summary')).toBeVisible()
+  await confirmTxAndReturnToMabeets(page)
 }
 
 async function doCreateRelicTxSteps(page: Page) {
@@ -163,4 +142,23 @@ async function doCreateRelicTxSteps(page: Page) {
 
   await expect(createRelicButton).toBeEnabled()
   await createRelicButton.click()
+}
+
+async function clickEnabledNextButton(page: Page) {
+  const nextButton = page.getByRole('button', { name: nextButtonName, exact: true })
+  await expect(nextButton).toBeEnabled()
+  await nextButton.click()
+}
+
+async function confirmTxAndReturnToMabeets(page: Page) {
+  await expect(page.getByText('Transaction confirmed')).toBeVisible()
+  await returnToMabeets(page)
+}
+
+async function returnToMabeets(page: Page) {
+  const returnToMabeetsButton = page.getByRole('button', { name: returnToMabeetsButtonName })
+  await expect(returnToMabeetsButton).toBeVisible()
+  await returnToMabeetsButton.click()
+  await page.waitForURL(mabeetsUrlPattern, { waitUntil: 'commit' })
+  await expect(page.getByText('Your maBEETS Summary')).toBeVisible()
 }
