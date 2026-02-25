@@ -343,14 +343,18 @@ export function SwapForm({
                     setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                   />
 
-                  <RoutesCard
-                    chain={selectedChain}
-                    paths={
-                      simulationQuery.data && 'paths' in simulationQuery.data
-                        ? (simulationQuery.data['paths'] as Path[])
-                        : []
-                    }
-                  />
+                  {!isPoolSwap && (
+                    <RoutesCard
+                      chain={selectedChain}
+                      paths={
+                        simulationQuery.data && 'paths' in simulationQuery.data
+                          ? (simulationQuery.data['paths'] as Path[])
+                          : []
+                      }
+                      totalInputAmount={Number(tokenIn.amount)}
+                      totalOutputAmount={Number(tokenOut.amount)}
+                    />
+                  )}
                 </>
               )}
               {simulationQuery.isError ? (
