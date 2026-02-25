@@ -60,6 +60,7 @@ const TOTAL_BASE_APR_TYPES = [
   GqlPoolAprItemType.VebalEmissions,
   GqlPoolAprItemType.MabeetsEmissions,
   GqlPoolAprItemType.QuantAmmUplift,
+  GqlPoolAprItemType.Fuul,
 ]
 
 // Types that must be added to the total APR
