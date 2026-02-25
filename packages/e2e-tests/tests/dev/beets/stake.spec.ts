@@ -5,9 +5,7 @@ import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 test.describe('Stake $S page at /stake', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001/pools')
-    await clickLink(page, 'Stake \\$S')
-    await page.waitForURL('http://localhost:3001/stake', { waitUntil: 'commit' })
+    await page.goto('http://localhost:3001/stake')
     await impersonate(page, defaultAnvilAccount)
   })
 
