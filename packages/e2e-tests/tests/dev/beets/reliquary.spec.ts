@@ -24,21 +24,23 @@ test.describe('Reliquary page at /mabeets', () => {
     let existingRelicSnapshotId: `0x${string}`
 
     test.beforeAll(async ({ browser }) => {
-      await forkClient.reset()
+      await withRpcRetry('reset fork', () => forkClient.reset())
 
       const context = await browser.newContext()
       const page = await context.newPage()
 
       await gotoMabeetsAndImpersonate(page)
       await createRelicAndReturnToMabeets(page)
-      existingRelicSnapshotId = await forkClient.snapshot()
+      existingRelicSnapshotId = await withRpcRetry('create snapshot', () => forkClient.snapshot())
 
       await context.close()
     })
 
     test.beforeEach(async ({ page }) => {
-      await forkClient.revert({ id: existingRelicSnapshotId })
-      existingRelicSnapshotId = await forkClient.snapshot()
+      await withRpcRetry('revert snapshot', () =>
+        forkClient.revert({ id: existingRelicSnapshotId }),
+      )
+      existingRelicSnapshotId = await withRpcRetry('refresh snapshot', () => forkClient.snapshot())
       await gotoMabeetsAndImpersonate(page)
     })
 
@@ -51,6 +53,30 @@ test.describe('Reliquary page at /mabeets', () => {
     })
   })
 })
+
+async function withRpcRetry<T>(label: string, fn: () => Promise<T>, attempts = 3): Promise<T> {
+  let lastError: unknown
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await fn()
+    } catch (error) {
+      lastError = error
+      if (attempt < attempts) {
+        console.warn(
+          `[e2e][reliquary] ${label} failed on attempt ${attempt}/${attempts}. Retrying...`,
+        )
+        await sleep(attempt * 1_000)
+      }
+    }
+  }
+
+  throw lastError
+}
+
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 async function gotoMabeetsAndImpersonate(page: Page) {
   await page.goto(`${baseUrl}/mabeets`)
