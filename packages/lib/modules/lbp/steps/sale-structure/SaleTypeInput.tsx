@@ -68,11 +68,14 @@ export function SaleTypeInput({ control }: { control: Control<SaleStructureForm>
                 py: 4,
                 _checked: {
                   bg: '#63F2BE0D',
-                  borderColor: 'green.400 !important',
+                  borderColor: 'transparent',
                   boxShadow: 'none',
+                  _hover: {
+                    borderColor: 'green.400 !important',
+                  },
                 },
                 _hover: {
-                  boxShadow: 'lg',
+                  borderColor: 'green.400',
                 },
               },
               wrapperProps: {
