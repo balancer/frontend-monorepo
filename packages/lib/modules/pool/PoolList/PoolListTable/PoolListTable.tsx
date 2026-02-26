@@ -172,16 +172,18 @@ export function PoolListTable({ pools, count, loading }: Props) {
         ref={cardRef}
         w={{ base: '100vw', lg: 'full' }}
       >
-        <PaginatedTable
-          getRowId={item => item.id}
-          items={pools}
-          loading={loading}
-          noItemsFoundLabel="No pools found"
-          paginationProps={paginationProps}
-          renderTableHeader={renderTableHeader}
-          renderTableRow={renderTableRow}
-          showPagination={showPagination}
-        />
+        <Box minW="max-content" w="full">
+          <PaginatedTable
+            getRowId={item => item.id}
+            items={pools}
+            loading={loading}
+            noItemsFoundLabel="No pools found"
+            paginationProps={paginationProps}
+            renderTableHeader={renderTableHeader}
+            renderTableRow={renderTableRow}
+            showPagination={showPagination}
+          />
+        </Box>
       </Card>
     </>
   )

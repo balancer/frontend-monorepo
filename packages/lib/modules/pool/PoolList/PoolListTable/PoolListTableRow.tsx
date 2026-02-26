@@ -61,7 +61,6 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
         }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
-        rounded="md"
         transition="all 0.2s ease-in-out"
         w="full"
       >
