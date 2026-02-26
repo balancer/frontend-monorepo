@@ -142,6 +142,8 @@ function BaseAprTooltip({
     maBeetsRewardTooltipText,
     dynamicSwapFeesDisplayed,
     dynamicSwapFeesTooltipText,
+    fuulIncentivesDisplayed,
+    fuulTooltipText,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
@@ -262,6 +264,15 @@ function BaseAprTooltip({
             ))}
         </TooltipAprItem>
       ) : null}
+      {!fuulIncentivesDisplayed.isZero() && (
+        <TooltipAprItem
+          {...basePopoverAprItemProps}
+          apr={fuulIncentivesDisplayed}
+          displayValueFormatter={usedDisplayValueFormatter}
+          title="Fuul APR"
+          tooltipText={fuulTooltipText}
+        />
+      )}
       {isCowAmmPool(poolType) && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
