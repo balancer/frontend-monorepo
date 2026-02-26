@@ -303,6 +303,7 @@ export function NavBar({
       as={motion.div}
       borderColor="border.base"
       boxShadow={showShadow ? 'lg' : 'none'}
+      data-main-navbar="true"
       onScroll={e => console.log('Navbar scroll:', e)}
       pos="fixed"
       style={{
