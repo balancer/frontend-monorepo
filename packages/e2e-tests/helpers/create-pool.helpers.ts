@@ -47,13 +47,14 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
       { symbol: 'GHO', amount: undefined },
     ],
   },
-  {
-    type: PoolType.ReClamm,
-    tokens: [
-      { symbol: 'WETH', amount: '1' },
-      { symbol: 'USDC', amount: undefined },
-    ],
-  },
+  // reclamm pool creation has been temporarily disabled for audit investigations
+  // {
+  //   type: PoolType.ReClamm,
+  //   tokens: [
+  //     { symbol: 'WETH', amount: '1' },
+  //     { symbol: 'USDC', amount: undefined },
+  //   ],
+  // },
   {
     type: PoolType.CowAmm,
     tokens: [
