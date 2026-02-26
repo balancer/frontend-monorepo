@@ -247,6 +247,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     <VStack spacing="md" w="full">
       {(isConnected || isUserAccountLoading) && (
         <Card
+          borderColor="base"
           p={['sm', 'ms']}
           position="relative"
           variant="subSection"
