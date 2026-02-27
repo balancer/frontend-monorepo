@@ -52,8 +52,6 @@ export function useLbpFormLogic() {
   })
 
   const isSaleFormValid = !!(startDateTime && endDateTime)
-  // isSaleFormValid breaks reset on review step for some unknown reason because it stays true after from data reset
-  // const { isValid: isSaleFormValid } = useFormState({ control: saleStructureForm.control })
 
   const formSteps = useFormSteps({
     steps: LBP_FORM_STEPS,
@@ -62,7 +60,6 @@ export function useLbpFormLogic() {
     isFormHydrated: saleStructureForm.isHydrated && projectInfoForm.isHydrated,
     shouldSkipRedirectToSavedStep: false,
     canRenderStepFn: (stepIndex: number) => {
-      console.log({ stepIndex, isSaleFormValid })
       if (stepIndex > 0) return isSaleFormValid
       return true
     },
