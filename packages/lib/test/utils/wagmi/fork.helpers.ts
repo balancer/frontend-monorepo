@@ -15,6 +15,12 @@ import { isBeets } from '@repo/lib/config/getProjectConfig'
 
 export const defaultAnvilAccount = '0x3B7D260597A3e3f90274563a9e481618C6B951Eb'
 export const defaultAnvilForkRpcUrl = 'http://127.0.0.1:8545'
+const anvilTransportConfig = {
+  // CI can temporarily stall under load while handling fork control methods.
+  timeout: 60_000,
+  retryCount: 5,
+  retryDelay: 200,
+}
 
 const chain = {
   ...(isBeets ? sonic : mainnet),
@@ -28,12 +34,12 @@ const chain = {
 export const forkClient = createTestClient({
   chain,
   mode: 'anvil',
-  transport: http(defaultAnvilForkRpcUrl),
+  transport: http(defaultAnvilForkRpcUrl, anvilTransportConfig),
 })
 
 // Only used to get the running fork chainId
 export const publicForkClient = createPublicClient({
-  transport: http(defaultAnvilForkRpcUrl),
+  transport: http(defaultAnvilForkRpcUrl, anvilTransportConfig),
 })
 
 type WagmiConfig = ReturnType<typeof createConfig>
