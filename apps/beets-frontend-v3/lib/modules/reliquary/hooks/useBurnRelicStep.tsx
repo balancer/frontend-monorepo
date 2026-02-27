@@ -18,11 +18,11 @@ export function useBurnRelicStep(relicId: string | undefined, chain: GqlChain) {
   const chainId = getChainId(chain)
 
   const labels: TransactionLabels = {
-    init: 'Burn Relic',
-    title: 'Burn Relic',
+    init: 'Burn maBEETS position',
+    title: 'Burn maBEETS position',
     confirming: 'Confirming burn...',
-    confirmed: 'Relic burned!',
-    tooltip: 'Burn this Relic to remove all liquidity',
+    confirmed: 'maBEETS position burned!',
+    tooltip: 'Burn this maBEETS position to remove all liquidity',
   }
 
   const props: ManagedTransactionInput = {

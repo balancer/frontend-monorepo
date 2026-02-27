@@ -51,7 +51,7 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
       fromInternalBalance: true,
     })
 
-    // Get Relic add liquidity data
+    // Get maBEETS position add liquidity data
     const relicAddLiquidityData = this.getRelicAddLiquidityOrCreateAndAddLiquidity({
       userAddress: account,
       relicId,

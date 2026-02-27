@@ -143,15 +143,20 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <Box as="span">Add liquidity to Relic</Box>
+            <Box as="span">Add liquidity to maBEETS position</Box>
             <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
           {!relicId && (
-            <BalAlert content="A new Relic will be created with this add liquidity" status="info" />
+            <BalAlert
+              content="A new maBEETS position will be created with this add liquidity"
+              status="info"
+            />
           )}
-          {relicId && <BalAlert content={`Adding liquidity to Relic #${relicId}`} status="info" />}
+          {relicId && (
+            <BalAlert content={`Adding liquidity to maBEETS #${relicId}`} status="info" />
+          )}
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             setFlexibleTab={setFlexibleTab}

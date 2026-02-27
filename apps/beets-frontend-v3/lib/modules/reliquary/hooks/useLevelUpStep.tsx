@@ -24,7 +24,7 @@ export function useLevelUpStep(relicId: string | undefined) {
     title: 'Level up',
     confirming: 'Confirming level up...',
     confirmed: 'Level up!',
-    tooltip: 'Upgrade your Relic to the next maturity level',
+    tooltip: 'Upgrade your maBEETS position to the next maturity level',
   }
 
   const props: ManagedTransactionInput = {

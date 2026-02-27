@@ -39,7 +39,7 @@ export class ReliquaryProportionalRemoveLiquidityHandler extends BaseProportiona
       recipient: account,
     })
 
-    // Get remove liquidity from Relic call data
+    // Get remove liquidity from maBEETS position call data
     const removeLiquidityCallData = this.getRelicRemoveLiquidityAndClaimCallData({
       account,
       relicId,

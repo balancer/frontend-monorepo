@@ -87,7 +87,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const pendingRewardsAmount = pendingRewardsByRelicId[relic.relicId] ?? '0'
   const pendingRewardsUsdValue = bn(pendingRewardsAmount).times(beetsPrice)
 
-  // Get Relic level data for this specific Relic
+  // Get maBEETS position level data for this specific Relic
   const relicLevel = reliquaryLevels.find(level => level.level === relic.level)
   const relicApr = relicLevel?.apr || '0'
   const allocationPoints = relicLevel?.allocationPoints || 1
@@ -110,7 +110,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   const { progressToNextLevel, levelUpDate, isMaxMaturity, canUpgrade, canUpgradeTo } =
     relicGetMaturityProgress(relic, maturityThresholds)
 
-  // Check if Relic has balance
+  // Check if maBEETS position has balance
   const hasBalance = bn(relic.amount).gt(0)
 
   // Calculate APR with boost
@@ -167,7 +167,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           Level {relic.level + 1} - {levelNames[relic.level] || 'Unknown'}
         </Badge>
         <Badge colorScheme="blue" fontSize="sm" px="3" py="1">
-          Relic #{relic.relicId}
+          maBEETS #{relic.relicId}
         </Badge>
       </HStack>
       <Box

@@ -125,7 +125,7 @@ export function ReliquaryRemoveLiquiditySummary({
       )}
       {!shouldShowReceipt && relicId && (
         <BalAlert
-          content={`Remove liquidity from Relic #{relicId} and claim rewards`}
+          content={`Remove liquidity from maBEETS #${relicId} and claim rewards`}
           mb="sm"
           status="info"
         />
@@ -136,8 +136,8 @@ export function ReliquaryRemoveLiquiditySummary({
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={
             shouldShowReceipt
-              ? `Removed liquidity from Relic #${relicId || ''}`
-              : `Removing liquidity from Relic #${relicId || ''}`
+              ? `Removed liquidity from maBEETS #${relicId || ''}`
+              : `Removing liquidity from maBEETS #${relicId || ''}`
           }
           pool={pool}
         />
@@ -180,11 +180,12 @@ export function ReliquaryRemoveLiquiditySummary({
             <Card variant="modalSubSection">
               <VStack align="start" spacing="md" w="full">
                 <Text color="font.highlight">
-                  Successfully removed liquidity from Relic #{relicId}! Rewards have been harvested.
+                  Successfully removed liquidity from maBEETS #{relicId}! Rewards have been
+                  harvested.
                 </Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your tokens are now in your wallet. Return to the maBEETS page to view your
-                  remaining Relics.
+                  remaining maBEETS positions.
                 </Text>
               </VStack>
             </Card>

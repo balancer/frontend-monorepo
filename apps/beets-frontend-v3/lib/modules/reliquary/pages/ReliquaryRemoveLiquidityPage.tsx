@@ -125,13 +125,13 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <Box as="span">Remove liquidity from Relic</Box>
+            <Box as="span">Remove liquidity from maBEETS position</Box>
             <TransactionSettings size="xs" />
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
           {relicId && (
-            <BalAlert content={`Removing liquidity from Relic #${relicId}`} status="info" />
+            <BalAlert content={`Removing liquidity from maBEETS #${relicId}`} status="info" />
           )}
           <HStack w="full">
             <ButtonGroup

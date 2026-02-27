@@ -54,7 +54,7 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
     return null
   }
 
-  // Don't show warning if Relic stays at max level
+  // Don't show warning if maBEETS position stays at max level
   if (addLiquidityMaturityImpact.staysMax) {
     return null
   }
@@ -64,11 +64,11 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
       content={
         <VStack align="start" spacing="0">
           <Box {...boxProps}>
-            {`Adding ${fNum('token', totalInvestValue)} fBEETS to this Relic will affect its maturity. It will take an additional ${maturityDuration} to reach maximum maturity.`}
+            {`Adding ${fNum('token', totalInvestValue)} fBEETS to this maBEETS position will affect its maturity. It will take an additional ${maturityDuration} to reach maximum maturity.`}
           </Box>
           {addLiquidityMaturityImpact.oldLevel !== addLiquidityMaturityImpact.newLevel && (
             <Box {...boxProps}>
-              {`Your Relic will change from level ${addLiquidityMaturityImpact.oldLevel + 1} to level ${addLiquidityMaturityImpact.newLevel + 1}.`}
+              {`Your maBEETS position will change from level ${addLiquidityMaturityImpact.oldLevel + 1} to level ${addLiquidityMaturityImpact.newLevel + 1}.`}
             </Box>
           )}
         </VStack>

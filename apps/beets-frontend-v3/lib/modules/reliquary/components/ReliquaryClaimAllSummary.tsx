@@ -64,7 +64,7 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
                 <Text color="font.highlight">You've successfully claimed all rewards!</Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your BEETS rewards have been transferred to your wallet. Return to the maBEETS
-                  page to manage your Relics.
+                  page to manage your maBEETS positions.
                 </Text>
               </VStack>
             </Card>

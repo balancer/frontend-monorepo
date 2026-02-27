@@ -108,7 +108,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
           </Skeleton>
         </RelicStat>
         <RelicStat>
-          <StatLabel label="Total Relics" />
+          <StatLabel label="Total maBEETS positions" />
           <Skeleton isLoaded={!loading}>
             <StatValueText>{fNumCustom(globalStats?.relicCount || 0, '0,0')}</StatValueText>
           </Skeleton>
