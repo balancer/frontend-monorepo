@@ -1,0 +1,74 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["before 6am on Monday"],
+  "timezone": "UTC",
+  "labels": ["dependencies"],
+  "minimumReleaseAge": "3 days",
+  "prConcurrentLimit": 5,
+  "automerge": false,
+
+  "ignoreDeps": [
+    "strip-ansi",
+    "color-convert",
+    "color-name",
+    "is-core-module",
+    "error-ex",
+    "has-ansi"
+  ],
+
+  "packageRules": [
+    {
+      "description": "To avoid problems keep viem version matched with balancer sdk",
+      "groupName": "balancer sdk / viem",
+      "matchPackageNames": ["viem", "@balancer-labs/sdk"]
+    },
+    {
+      "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
+      "groupName": "Chakra UI",
+      "matchPackageNames": [
+        "@emotion/react",
+        "@emotion/styled",
+        "@chakra-ui/**"
+      ]
+    },
+    {
+      "description": "Keep graphql core in sync with clients and codegen tools.",
+      "groupName": "GraphQL / Apollo",
+      "matchPackageNames": [
+        "graphql",
+        "graphql-request",
+        "graphql-tag",
+        "@apollo/client",
+        "@apollo/client-integration-nextjs",
+        "@graphql-typed-document-node/core",
+        "@graphql-codegen/**"
+      ]
+    },
+    {
+      "description": "Keep ESLint plugins compatible with core.",
+      "groupName": "ESLint ecosystem",
+      "matchPackageNames": [
+        "eslint",
+        "eslint-config-**",
+        "eslint-plugin-**",
+        "@eslint/**"
+      ]
+    },
+    {
+      "description": "Low-risk, high-frequency — consolidate to reduce noise.",
+      "groupName": "@types packages",
+      "matchPackageNames": ["@types/**"]
+    },
+    {
+      "description": "Consolidate workflow action bumps",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "Flag major bumps for manual review.",
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major-update"]
+    }
+  ]
+}
