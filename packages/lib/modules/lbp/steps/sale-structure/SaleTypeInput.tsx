@@ -59,24 +59,25 @@ export function SaleTypeInput({ control }: { control: Control<SaleStructureForm>
             options={saleTypeOptions}
             radioCardProps={{
               containerProps: {
-                bg: 'background.level2',
-                borderColor: 'transparent',
-                borderRadius: 'lg',
-                borderWidth: '1px',
-                boxShadow: 'md',
-                px: 4,
-                py: 4,
                 _checked: {
+                  borderColor: 'green.400 !important',
                   bg: '#63F2BE0D',
-                  borderColor: 'transparent',
-                  boxShadow: 'none',
-                  _hover: {
-                    borderColor: 'green.400 !important',
-                  },
+                  color: 'font.opposite',
+                },
+                _focus: {
+                  boxShadow: 'outline',
                 },
                 _hover: {
                   borderColor: 'green.400',
                 },
+                borderColor: 'transparent',
+                borderRadius: 'lg',
+                borderWidth: '1px',
+                boxShadow: 'md',
+                bg: 'background.level2',
+                cursor: 'pointer',
+                px: 4,
+                py: 4,
               },
               wrapperProps: {
                 w: 'full',
