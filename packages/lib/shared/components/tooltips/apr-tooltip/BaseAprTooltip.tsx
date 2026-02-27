@@ -269,7 +269,7 @@ function BaseAprTooltip({
           {...basePopoverAprItemProps}
           apr={fuulIncentivesDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
-          title="Fuul APR"
+          title="Hypurr Fuul APR"
           tooltipText={fuulTooltipText}
         />
       )}
