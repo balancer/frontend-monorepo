@@ -14,6 +14,7 @@ import { ApiToken, HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/t
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { isBoosted } from '../../../pool.helpers'
 import { usePool } from '../../../PoolProvider'
@@ -25,6 +26,7 @@ export function useProportionalInputs() {
   const { isConnected } = useUserAccount()
   const {
     helpers,
+    tokens,
     setHumanAmountsIn,
     clearAmountsIn,
     wethIsEth,
@@ -32,7 +34,7 @@ export function useProportionalInputs() {
     setReferenceAmountAddress,
   } = useAddLiquidity()
 
-  const { balances, isBalancesLoading } = useTokenBalances()
+  const { balances, balanceFor, isBalancesLoading } = useTokenBalances()
   const { isLoading: isPoolLoading, pool } = usePool()
 
   const { data: poolStateWithBalances, isLoading: isPoolStateWithBalancesLoading } =
@@ -78,11 +80,62 @@ export function useProportionalInputs() {
     !isBalancesLoading &&
     !isPoolLoading &&
     !isPoolStateWithBalancesLoading &&
-    balances.length > 0
+    balances.length > 0 &&
+    tokens.length > 0 &&
+    tokens.every(token => {
+      return bn(humanBalanceFor(token.address as Address)).gt(0)
+    })
+
+  const maxProportionalHumanAmountsIn = (() => {
+    if (!hasBalanceForAllTokens || !poolStateWithBalances) return
+
+    const optimalToken = tokens.find(token => {
+      const userBalance = humanBalanceFor(token.address as Address)
+
+      const proportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
+        token,
+        humanAmount: userBalance,
+        helpers,
+        wethIsEth,
+        wrapUnderlying,
+        poolStateWithBalances,
+      })
+
+      return proportionalHumanAmountsIn.every(({ tokenAddress, humanAmount }) => {
+        if (humanAmount === '') return true
+
+        return bn(humanBalanceFor(tokenAddress)).gte(humanAmount)
+      })
+    })
+
+    if (!optimalToken) return
+
+    return _calculateProportionalHumanAmountsIn({
+      token: optimalToken,
+      humanAmount: humanBalanceFor(optimalToken.address as Address),
+      helpers,
+      wethIsEth,
+      wrapUnderlying,
+      poolStateWithBalances,
+    })
+  })()
+
+  function handleMaximizeProportionalAmounts() {
+    if (!maxProportionalHumanAmountsIn?.length) return
+
+    setReferenceAmountAddress(maxProportionalHumanAmountsIn[0].tokenAddress)
+    setHumanAmountsIn(maxProportionalHumanAmountsIn)
+  }
+
+  function humanBalanceFor(tokenAddress: Address): HumanAmount {
+    return (balanceFor(tokenAddress)?.formatted || '0') as HumanAmount
+  }
 
   return {
     hasBalanceForAllTokens,
+    maxProportionalHumanAmountsIn,
     handleProportionalHumanInputChange,
+    handleMaximizeProportionalAmounts,
   }
 }
 
