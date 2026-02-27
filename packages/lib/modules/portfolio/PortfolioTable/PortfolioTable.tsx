@@ -149,35 +149,35 @@ export function PortfolioTable() {
             pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
             w={{ base: '100vw', lg: 'full' }}
           >
-            <PaginatedTable
-              alignItems="flex-start"
-              getRowId={row => row.uniqueKey}
-              items={sortedPools}
-              left={{ base: '-4px', sm: '0' }}
-              loading={isLoadingPortfolio}
-              noItemsFoundLabel="You have no current positions"
-              paginationProps={undefined}
-              position="relative"
-              renderTableHeader={() => (
-                <PortfolioTableHeader
-                  currentSortingObj={currentSortingObj}
-                  setCurrentSortingObj={setSorting}
-                  {...rowProps(options.showVeBal, hasStakingBoost)}
-                />
-              )}
-              renderTableRow={({ item }) => {
-                return (
-                  <PortfolioTableRow
-                    keyValue={item.id}
-                    pool={item}
-                    veBalBoostMap={veBalBoostMap}
+            <Box minW="max-content" w="full">
+              <PaginatedTable
+                getRowId={row => row.uniqueKey}
+                items={sortedPools}
+                left={{ base: '-4px', sm: '0' }}
+                loading={isLoadingPortfolio}
+                noItemsFoundLabel="You have no current positions"
+                paginationProps={undefined}
+                position="relative"
+                renderTableHeader={() => (
+                  <PortfolioTableHeader
+                    currentSortingObj={currentSortingObj}
+                    setCurrentSortingObj={setSorting}
                     {...rowProps(options.showVeBal, hasStakingBoost)}
                   />
-                )
-              }}
-              showPagination={false}
-              w={{ base: '100vw', lg: 'full' }}
-            />
+                )}
+                renderTableRow={({ item }) => {
+                  return (
+                    <PortfolioTableRow
+                      keyValue={item.id}
+                      pool={item}
+                      veBalBoostMap={veBalBoostMap}
+                      {...rowProps(options.showVeBal, hasStakingBoost)}
+                    />
+                  )
+                }}
+                showPagination={false}
+              />
+            </Box>
           </Card>
         ) : (
           <Card

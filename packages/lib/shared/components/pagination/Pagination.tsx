@@ -33,8 +33,9 @@ export function Pagination({
 }: PaginationProps & StyleProps) {
   return (
     <Stack
-      direction={{ base: 'column', lg: 'row' }}
-      justify={hideDropdown ? 'center' : 'space-between'}
+      alignItems="center"
+      direction="row"
+      justify={{ base: 'flex-start', lg: hideDropdown ? 'center' : 'space-between' }}
       w="full"
       {...rest}
     >
@@ -86,6 +87,9 @@ export function Pagination({
       {!hideDropdown && (
         <Select
           disabled={!changeSize}
+          flexShrink="0"
+          minW="32"
+          ml={{ base: '4', xl: '0' }}
           onChange={e => {
             setPageSize(Number(e.target.value))
           }}
