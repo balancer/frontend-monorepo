@@ -21,6 +21,8 @@ import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
 import tinycolor from 'tinycolor2'
 import { useVeBALTotal } from './useVeBALTotal'
 import { oneWeekInMs } from '@repo/lib/shared/utils/time'
+import { useTotalVotes } from './useTotalVotes'
+import { formatUnits } from 'viem'
 
 interface TooltipItemProps extends StackProps {
   label: ReactNode
@@ -100,8 +102,10 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
   const trendIcon = !voteDiff ? undefined : voteDiff > 0 ? <TrendUpIcon /> : <TrendDownIcon />
 
   const [thisWeek] = useState(() => Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs)
-  const { totalAmount: totalVeBAL } = useVeBALTotal(thisWeek)
-  const votesThisWeek = totalVeBAL && votesShare ? (votesShare * totalVeBAL).toFixed(2) : undefined
+
+  const { totalVotes: totalVotesRaw } = useTotalVotes()
+  const totalVotes = Number(formatUnits(totalVotesRaw, 18))
+  const votesThisWeek = totalVotes && votesShare ? (votesShare * totalVotes).toFixed(2) : undefined
 
   const nextWeek = thisWeek + oneWeekInMs
   const { totalAmount: totalVeBALNextWeek } = useVeBALTotal(nextWeek)
