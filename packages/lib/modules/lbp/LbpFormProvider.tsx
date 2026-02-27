@@ -136,8 +136,8 @@ export function useLbpFormLogic() {
     decimals: launchTokenMetadata.decimals || 0,
   }
 
-  const isDynamicSale = saleType !== '' && saleType === GqlPoolType.LiquidityBootstrapping
-  const isFixedSale = saleType !== '' && saleType === GqlPoolType.FixedLbp
+  const isDynamicSale = saleType === GqlPoolType.LiquidityBootstrapping
+  const isFixedSale = saleType === GqlPoolType.FixedLbp
 
   return {
     ...formSteps,

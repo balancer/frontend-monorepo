@@ -23,8 +23,6 @@ export function useLbpMetadata() {
     projectInfoForm.getValues()
 
   const saveMetadata = async () => {
-    const poolType = saleType === '' ? undefined : saleType
-
     const { data } = await createLbp({
       variables: {
         input: {
@@ -42,7 +40,7 @@ export function useLbpMetadata() {
             x: xHandle ? normalizeHandle(xHandle) : undefined,
           },
         },
-        type: poolType,
+        type: saleType,
       },
     })
 

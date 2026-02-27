@@ -5,6 +5,7 @@ import { FormStep } from '@repo/lib/shared/hooks/useFormSteps'
 import { UserActions, WeightAdjustmentType } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const LBP_FORM_STEPS: FormStep[] = [
   { id: 'step-1-sale-structure', title: 'Sale structure', Component: SaleStructureStep },
@@ -15,7 +16,7 @@ export const LBP_FORM_STEPS: FormStep[] = [
 export const INITIAL_SALE_STRUCTURE: SaleStructureForm = {
   selectedChain: PROJECT_CONFIG.defaultNetwork,
   launchTokenAddress: '',
-  saleType: '',
+  saleType: GqlPoolType.LiquidityBootstrapping,
   userActions: UserActions.BUY_AND_SELL,
   fee: 1.0,
   startDateTime: '',

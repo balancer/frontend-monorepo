@@ -12,12 +12,12 @@ export enum WeightAdjustmentType {
   CUSTOM = 'custom',
 }
 
-export type SaleTypeOptionValue = Exclude<SaleStructureForm['saleType'], ''>
+export type SaleTypeOptionValue = GqlPoolType.LiquidityBootstrapping | GqlPoolType.FixedLbp
 
 export type SaleStructureForm = {
   selectedChain: GqlChain
   launchTokenAddress: string
-  saleType: GqlPoolType.LiquidityBootstrapping | GqlPoolType.FixedLbp | '' // dynamic | fixed | empty
+  saleType: SaleTypeOptionValue
   startDateTime: string
   endDateTime: string
   collateralTokenAddress: string

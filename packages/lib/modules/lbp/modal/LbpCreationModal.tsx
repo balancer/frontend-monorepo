@@ -25,7 +25,6 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCreateLbpInput } from '../useCreateLbpInput'
 import { useInitializeLbpInput } from '../useInitializeLbpInput'
 import { usePoolCreationTransactions } from '@repo/lib/modules/pool/actions/create/modal/usePoolCreationTransactions'
-import { SaleTypeOptionValue } from '../lbp.types'
 
 type Props = {
   isOpen: boolean
@@ -67,8 +66,7 @@ export function LbpCreationModal({
     reset: resetSaveMetadata,
   } = useLbpMetadata()
 
-  const { selectedChain, saleType } = saleStructureForm.getValues()
-  const poolType = saleType as SaleTypeOptionValue // saleType will be set at this point in the flow
+  const [selectedChain, saleType] = saleStructureForm.getValues(['selectedChain', 'saleType'])
   const chainId = getChainId(selectedChain)
   const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress })
 
@@ -82,7 +80,7 @@ export function LbpCreationModal({
   const path = getPoolPath({
     id: poolAddress as Address,
     chain: selectedChain,
-    type: poolType,
+    type: saleType,
     protocolVersion: 3 as const,
   })
 

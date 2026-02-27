@@ -77,7 +77,6 @@ export function SaleStructureStep() {
     customStartWeight,
     weightAdjustmentType,
     fee,
-    saleType,
   ] = useWatch({
     control,
     name: [
@@ -90,7 +89,6 @@ export function SaleStructureStep() {
       'customStartWeight',
       'weightAdjustmentType',
       'fee',
-      'saleType',
     ],
   })
   const { isValid, errors } = useFormState({ control })
@@ -135,7 +133,7 @@ export function SaleStructureStep() {
               />
             </VStack>
 
-            {saleType && launchTokenIsValid && (
+            {launchTokenIsValid && (
               <>
                 <Divider />
 
@@ -193,7 +191,7 @@ export function SaleStructureStep() {
         {isDynamicSale && <DynamicLbpTokenAmountInputs />}
         {isFixedSale && <FixedLbpTokenAmountInputs />}
         <Divider />
-        <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading || !saleType} />
+        <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
       </VStack>
     </form>
   )
