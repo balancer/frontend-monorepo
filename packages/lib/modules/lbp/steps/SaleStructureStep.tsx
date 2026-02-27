@@ -51,7 +51,7 @@ import { FixedLbpTokenAmountInputs } from './sale-structure/FixedLbpTokenAmountI
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
-import { useWatch, useFormState } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 import { SaleTypeInput } from './sale-structure/SaleTypeInput'
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
 
@@ -59,13 +59,21 @@ export function SaleStructureStep() {
   const { getToken } = useTokens()
 
   const {
-    saleStructureForm: { handleSubmit, control, setValue, trigger },
+    saleStructureForm,
     goToNextStep,
     resetLbpCreation,
     poolAddress,
     isDynamicSale,
     isFixedSale,
   } = useLbpForm()
+
+  const {
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    control,
+    trigger,
+  } = saleStructureForm
 
   const [
     selectedChain,
@@ -91,8 +99,6 @@ export function SaleStructureStep() {
       'fee',
     ],
   })
-  const { isValid, errors } = useFormState({ control })
-
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {
     const chainConfig = getNetworkConfig(chain)
     return typeof chainConfig?.lbps !== 'undefined'
@@ -191,7 +197,7 @@ export function SaleStructureStep() {
         {isDynamicSale && <DynamicLbpTokenAmountInputs />}
         {isFixedSale && <FixedLbpTokenAmountInputs />}
         <Divider />
-        <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
+        <LbpFormAction />
       </VStack>
     </form>
   )

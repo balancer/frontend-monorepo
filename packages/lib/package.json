@@ -77,7 +77,8 @@
     "use-sound": "^4.0.1",
     "usehooks-ts": "3.1.1",
     "viem": "2.45.0",
-    "wagmi": "3.2.0"
+    "wagmi": "3.2.0",
+    "zod": "3.24.4"
   },
   "devDependencies": {
     "@apollo/client-integration-nextjs": "0.14.3",

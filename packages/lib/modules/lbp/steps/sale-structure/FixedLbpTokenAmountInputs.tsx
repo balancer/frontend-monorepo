@@ -98,6 +98,9 @@ function LaunchTokenRateInput({
   launchTokenPriceUsd: string
   launchTokenPriceRaw: string
 }) {
+  const { errors: formErrors } = useFormState({ control, name: ['launchTokenRate'] })
+  const launchTokenRateError = errors.launchTokenRate || formErrors.launchTokenRate
+
   return (
     <VStack align="start" w="full">
       <Text as="label" color="font.primary" htmlFor="launch-token-price">
@@ -172,9 +175,9 @@ function LaunchTokenRateInput({
           validate: { isGreaterThanZeroValidation },
         }}
       />
-      {errors.launchTokenRate && (
+      {launchTokenRateError && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full" whiteSpace="pre-wrap">
-          {errors.launchTokenRate.message}
+          {launchTokenRateError.message}
         </Text>
       )}
       <Text color="font.secondary" fontSize="sm">

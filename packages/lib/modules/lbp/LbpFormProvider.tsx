@@ -3,7 +3,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
+import { ProjectInfoForm, SaleStructureForm, WeightAdjustmentType } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLocalStorage } from 'usehooks-ts'
@@ -14,9 +14,10 @@ import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
-import { useWatch } from 'react-hook-form'
+import { useFormState, useWatch } from 'react-hook-form'
 import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
+import { validateProjectInfoStep, validateSaleStructureStep } from './lbp.validation'
 import { useTokens } from '../tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -46,12 +47,29 @@ export function useLbpFormLogic() {
   const isProjectInfoLocked = !!poolAddress
   const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
-  const [startDateTime, endDateTime] = useWatch({
-    control: saleStructureForm.control,
-    name: ['startDateTime', 'endDateTime'],
-  })
+  const [startDateTime, endDateTime, weightAdjustmentType, customStartWeight, customEndWeight] =
+    useWatch({
+      control: saleStructureForm.control,
+      name: [
+        'startDateTime',
+        'endDateTime',
+        'weightAdjustmentType',
+        'customStartWeight',
+        'customEndWeight',
+      ],
+    })
 
-  const isSaleFormValid = !!(startDateTime && endDateTime)
+  const saleStructureFormState = useFormState({ control: saleStructureForm.control })
+  const hasValidCustomWeights =
+    weightAdjustmentType !== WeightAdjustmentType.CUSTOM ||
+    (customStartWeight !== undefined &&
+      customEndWeight !== undefined &&
+      customStartWeight >= 1 &&
+      customStartWeight <= 99 &&
+      customEndWeight >= 1 &&
+      customEndWeight <= 99)
+  const isSaleFormValid = !!(startDateTime && endDateTime && saleStructureFormState.isValid)
+  const canRenderSaleStep = isSaleFormValid && hasValidCustomWeights
 
   const formSteps = useFormSteps({
     steps: LBP_FORM_STEPS,
@@ -60,10 +78,22 @@ export function useLbpFormLogic() {
     isFormHydrated: saleStructureForm.isHydrated && projectInfoForm.isHydrated,
     shouldSkipRedirectToSavedStep: false,
     canRenderStepFn: (stepIndex: number) => {
-      if (stepIndex > 0) return isSaleFormValid
+      if (stepIndex > 0) return canRenderSaleStep
       return true
     },
   })
+
+  const validateCurrentStep = async () => {
+    if (formSteps.currentStepIndex === 0) {
+      return validateSaleStructureStep(saleStructureForm)
+    }
+    if (formSteps.currentStepIndex === 1) {
+      return validateProjectInfoStep(projectInfoForm)
+    }
+    const saleValid = await validateSaleStructureStep(saleStructureForm)
+    const projectValid = await validateProjectInfoStep(projectInfoForm)
+    return saleValid && projectValid
+  }
 
   const resetLbpCreation = () => {
     formSteps.resetSteps()
@@ -140,6 +170,7 @@ export function useLbpFormLogic() {
     ...formSteps,
     saleStructureForm,
     projectInfoForm,
+    validateCurrentStep,
     maxPrice: toCurrency(maxPrice),
     saleMarketCap,
     fdvMarketCap,

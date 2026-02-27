@@ -6,7 +6,7 @@ import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
-import { Control, FieldErrors, Controller } from 'react-hook-form'
+import { Control, FieldErrors, Controller, useFormState } from 'react-hook-form'
 import { formatUnits } from 'viem'
 
 export function SaleTokenAmountInput({
@@ -28,6 +28,8 @@ export function SaleTokenAmountInput({
     chainId: getChainId(selectedChain),
     token: launchToken.address,
   })
+  const { errors: formErrors } = useFormState({ control, name: ['saleTokenAmount'] })
+  const saleTokenError = errors.saleTokenAmount || formErrors.saleTokenAmount
 
   const haveEnoughAmount = (value: string) => {
     if (isLoading) return true
@@ -71,9 +73,9 @@ export function SaleTokenAmountInput({
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
-      {errors.saleTokenAmount && (
+      {saleTokenError && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full">
-          {errors.saleTokenAmount.message}
+          {saleTokenError.message}
         </Text>
       )}
     </VStack>

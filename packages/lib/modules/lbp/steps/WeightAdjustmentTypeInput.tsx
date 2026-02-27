@@ -1,4 +1,4 @@
-import { Control, Controller, UseFormSetValue } from 'react-hook-form'
+import { Control, Controller, UseFormSetValue, useFormState } from 'react-hook-form'
 import { SaleStructureForm, WeightAdjustmentType } from '../lbp.types'
 import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { ArrowRight } from 'react-feather'
@@ -23,6 +23,7 @@ export function WeightAdjustmentTypeInput({
   customEndWeight: number
   setValue: UseFormSetValue<SaleStructureForm>
 }) {
+  const { errors } = useFormState({ control })
   const options = [
     {
       label: (
@@ -92,6 +93,7 @@ export function WeightAdjustmentTypeInput({
           <WeightSlider
             collateralTokenSymbol={collateralTokenSymbol}
             customWeight={customStartWeight}
+            errorMessage={errors.customStartWeight?.message}
             launchTokenSymbol={launchTokenSymbol}
             name="customStartWeight"
             setValue={setValue}
@@ -100,6 +102,7 @@ export function WeightAdjustmentTypeInput({
           <WeightSlider
             collateralTokenSymbol={collateralTokenSymbol}
             customWeight={customEndWeight}
+            errorMessage={errors.customEndWeight?.message}
             launchTokenSymbol={launchTokenSymbol}
             name="customEndWeight"
             setValue={setValue}
@@ -119,6 +122,7 @@ function WeightSlider({
   customWeight,
   setValue,
   isDisabled,
+  errorMessage,
 }: {
   name: keyof SaleStructureForm
   title: string
@@ -127,6 +131,7 @@ function WeightSlider({
   customWeight: number
   setValue: UseFormSetValue<SaleStructureForm>
   isDisabled?: boolean
+  errorMessage?: string
 }) {
   return (
     <VStack align="start" w="full">
@@ -165,6 +170,11 @@ function WeightSlider({
           variant="lock"
         />
       </Box>
+      {errorMessage && (
+        <Text color="font.error" fontSize="sm" textAlign="start" w="full">
+          {errorMessage}
+        </Text>
+      )}
     </VStack>
   )
 }

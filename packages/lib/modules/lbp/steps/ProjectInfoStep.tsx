@@ -1,4 +1,15 @@
-import { Heading, VStack, Text, HStack, Spacer, Divider, Checkbox, Button } from '@chakra-ui/react'
+import {
+  Heading,
+  VStack,
+  Text,
+  HStack,
+  Spacer,
+  Divider,
+  Checkbox,
+  Button,
+  FormControl,
+  FormErrorMessage,
+} from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
@@ -15,7 +26,7 @@ import { useWatch, useFormState } from 'react-hook-form'
 
 export function ProjectInfoStep() {
   const {
-    projectInfoForm: { control, handleSubmit },
+    projectInfoForm: { handleSubmit },
     goToNextStep,
     isProjectInfoLocked,
   } = useLbpForm()
@@ -23,8 +34,6 @@ export function ProjectInfoStep() {
   const onSubmit: SubmitHandler<ProjectInfoForm> = () => {
     goToNextStep()
   }
-
-  const { isValid } = useFormState({ control })
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
@@ -49,7 +58,7 @@ export function ProjectInfoStep() {
 
         <Divider />
         <Disclaimer />
-        <LbpFormAction disabled={!isValid} />
+        <LbpFormAction />
       </VStack>
     </form>
   )
@@ -408,49 +417,53 @@ function Disclaimer() {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   return (
-    <Controller
-      control={control}
-      name="disclaimerAccepted"
-      render={({ field }) => (
-        <Checkbox
-          color="font.primary"
-          fontWeight="medium"
-          isChecked={field.value}
-          onChange={field.onChange}
-          size="lg"
-        >
-          {'I accept the'}
-          <Button
-            as={NextLink}
-            fontSize="lg"
+    <FormControl isInvalid={!!errors.disclaimerAccepted}>
+      <Controller
+        control={control}
+        name="disclaimerAccepted"
+        render={({ field }) => (
+          <Checkbox
+            color="font.primary"
             fontWeight="medium"
-            href={'/risks'}
-            px="0.3em"
-            target="_blank"
-            textColor="font.link"
-            variant="link"
+            isChecked={field.value}
+            onChange={field.onChange}
+            size="lg"
           >
-            Risks
-          </Button>
-          {'and'}
-          <Button
-            as={NextLink}
-            fontSize="lg"
-            fontWeight="medium"
-            href={'/terms-of-use'}
-            px="0.3em"
-            target="_blank"
-            textColor="font.link"
-            variant="link"
-          >
-            Terms of Use
-          </Button>
-          {'for creating and LBP'}
-        </Checkbox>
-      )}
-      rules={{ required: 'Conditions must be accepted' }}
-    />
+            {'I accept the'}
+            <Button
+              as={NextLink}
+              fontSize="lg"
+              fontWeight="medium"
+              href={'/risks'}
+              px="0.3em"
+              target="_blank"
+              textColor="font.link"
+              variant="link"
+            >
+              Risks
+            </Button>
+            {'and'}
+            <Button
+              as={NextLink}
+              fontSize="lg"
+              fontWeight="medium"
+              href={'/terms-of-use'}
+              px="0.3em"
+              target="_blank"
+              textColor="font.link"
+              variant="link"
+            >
+              Terms of Use
+            </Button>
+            {'for creating and LBP'}
+          </Checkbox>
+        )}
+        rules={{ required: 'Conditions must be accepted' }}
+      />
+      <FormErrorMessage>{errors.disclaimerAccepted?.message}</FormErrorMessage>
+    </FormControl>
   )
 }
