@@ -5,7 +5,7 @@ import { useTokens } from '../../../tokens/TokensProvider'
 import { TokenInput } from '../../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
-import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
+import { Control, Controller, useFormState, useWatch } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { VStack, Text, Heading, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
@@ -21,7 +21,7 @@ export function DynamicLbpTokenAmountInputs() {
     launchToken,
     saleStructureForm: { control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
+  useFormState({ control })
   const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
     control,
     name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'],
@@ -58,7 +58,6 @@ export function DynamicLbpTokenAmountInputs() {
           <VStack align="start" w="full">
             <SaleTokenAmountInput
               control={control}
-              errors={errors}
               launchToken={launchToken}
               selectedChain={selectedChain}
               title="Sale token"
@@ -71,7 +70,6 @@ export function DynamicLbpTokenAmountInputs() {
             collateralTokenAddress={collateralTokenAddress}
             collateralTokenSymbol={collateralToken?.symbol || ''}
             control={control}
-            errors={errors}
             selectedChain={selectedChain}
           />
         </TokenBalancesProvider>
@@ -82,13 +80,11 @@ export function DynamicLbpTokenAmountInputs() {
 
 function CollateralTokenAmountInput({
   control,
-  errors,
   selectedChain,
   collateralTokenAddress,
   collateralTokenSymbol,
 }: {
   control: Control<SaleStructureForm>
-  errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
   collateralTokenAddress: string
   collateralTokenSymbol: string
@@ -119,14 +115,27 @@ function CollateralTokenAmountInput({
       <Controller
         control={control}
         name="collateralTokenAmount"
-        render={({ field }) => (
-          <TokenInput
-            address={collateralTokenAddress}
-            chain={selectedChain}
-            id="collateral-token-amount"
-            onChange={e => field.onChange(e.currentTarget.value)}
-            value={field.value}
-          />
+        render={({ field, fieldState }) => (
+          <>
+            <TokenInput
+              address={collateralTokenAddress}
+              chain={selectedChain}
+              id="collateral-token-amount"
+              onChange={e => field.onChange(e.currentTarget.value)}
+              value={field.value}
+            />
+            {fieldState.error && (
+              <Text
+                color="font.error"
+                fontSize="sm"
+                textAlign="start"
+                w="full"
+                whiteSpace="pre-wrap"
+              >
+                {fieldState.error.message}
+              </Text>
+            )}
+          </>
         )}
         rules={{
           required: 'Collateral token amount is required',
@@ -136,11 +145,6 @@ function CollateralTokenAmountInput({
       <Text color="font.secondary" fontSize="sm">
         Add $5k+ of the collateral token to ensure a smooth start.
       </Text>
-      {errors.collateralTokenAmount && (
-        <Text color="font.error" fontSize="sm" textAlign="start" w="full" whiteSpace="pre-wrap">
-          {errors.collateralTokenAmount.message}
-        </Text>
-      )}
     </VStack>
   )
 }

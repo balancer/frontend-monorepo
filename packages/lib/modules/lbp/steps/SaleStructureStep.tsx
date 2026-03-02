@@ -12,6 +12,8 @@ import {
   Box,
   Button,
   HStack,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
@@ -72,6 +74,7 @@ export function SaleStructureStep() {
     formState: { errors },
     setValue,
     control,
+    clearErrors,
     trigger,
   } = saleStructureForm
 
@@ -79,6 +82,7 @@ export function SaleStructureStep() {
     selectedChain,
     launchTokenAddress,
     collateralTokenAddress,
+    saleType,
     startDateTime,
     endDateTime,
     customEndWeight,
@@ -91,6 +95,7 @@ export function SaleStructureStep() {
       'selectedChain',
       'launchTokenAddress',
       'collateralTokenAddress',
+      'saleType',
       'startDateTime',
       'endDateTime',
       'customEndWeight',
@@ -99,6 +104,10 @@ export function SaleStructureStep() {
       'fee',
     ],
   })
+
+  useEffect(() => {
+    clearErrors()
+  }, [saleType, clearErrors])
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {
     const chainConfig = getNetworkConfig(chain)
     return typeof chainConfig?.lbps !== 'undefined'
@@ -150,18 +159,12 @@ export function SaleStructureStep() {
                   <VStack align="start" gap="sm" w="full">
                     <SaleStartInput
                       control={control}
-                      errors={errors}
                       triggerValidation={trigger}
                       value={startDateTime}
                     />
                   </VStack>
                   <VStack align="start" gap="sm" w="full">
-                    <SaleEndInput
-                      control={control}
-                      errors={errors}
-                      saleStart={startDateTime}
-                      value={endDateTime}
-                    />
+                    <SaleEndInput control={control} saleStart={startDateTime} value={endDateTime} />
                   </VStack>
                 </VStack>
 
@@ -251,7 +254,7 @@ function LaunchTokenAddressInput({
 }) {
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
-    setFormValue('launchTokenAddress', clipboardText)
+    setFormValue('launchTokenAddress', clipboardText, { shouldDirty: true, shouldValidate: true })
   }
 
   const locked = !!value && !errors.launchTokenAddress
@@ -273,7 +276,10 @@ function LaunchTokenAddressInput({
               info="First create the token on the chosen network, if you haven't already."
               isDisabled={locked}
               isInvalid={!!errors.launchTokenAddress}
-              onChange={e => field.onChange(e.target.value)}
+              onChange={e => {
+                field.onChange(e.target.value)
+                triggerValidation('launchTokenAddress')
+              }}
               placeholder="Enter token address"
               value={field.value}
             />
@@ -325,12 +331,10 @@ function LaunchTokenAddressInput({
 
 function SaleStartInput({
   control,
-  errors,
   value,
   triggerValidation,
 }: {
   control: Control<SaleStructureForm>
-  errors: FieldErrors<SaleStructureForm>
   value: string
   triggerValidation: UseFormTrigger<SaleStructureForm>
 }) {
@@ -346,13 +350,12 @@ function SaleStartInput({
     <>
       <DateTimeInput
         control={control}
-        errors={errors}
         label="Start date and time"
         min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
         name="startDateTime"
         validate={isSaleStartValid}
       />
-      {saleStartsSoon(value) && !errors['startDateTime'] && (
+      {saleStartsSoon(value) && (
         <Text color="font.warning" fontSize="sm">
           This sale starts soon. Make sure to seed liquidity before this time or the LBP will fail
           to launch.
@@ -364,12 +367,10 @@ function SaleStartInput({
 
 function SaleEndInput({
   control,
-  errors,
   value,
   saleStart,
 }: {
   control: Control<SaleStructureForm>
-  errors: FieldErrors<SaleStructureForm>
   value: string
   saleStart: string
 }) {
@@ -391,7 +392,6 @@ function SaleEndInput({
     <>
       <DateTimeInput
         control={control}
-        errors={errors}
         label="End date and time"
         min={saleStart}
         name="endDateTime"
@@ -410,14 +410,12 @@ function DateTimeInput({
   name,
   label,
   control,
-  errors,
   min,
   validate,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
-  errors: FieldErrors<SaleStructureForm>
   min?: string
   validate: (value: string | number | undefined) => string | true
 }) {
@@ -429,10 +427,10 @@ function DateTimeInput({
       <Controller
         control={control}
         name={name}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors[field.name]?.message}
-            isInvalid={!!errors[field.name]}
+            error={fieldState.error?.message}
+            isInvalid={!!fieldState.error}
             min={min || today}
             onChange={e => field.onChange(e.target.value)}
             type="datetime-local"
@@ -440,7 +438,7 @@ function DateTimeInput({
           />
         )}
         rules={{
-          required: 'Start date and time is required',
+          required: `${label} is required`,
           validate,
         }}
       />
@@ -465,17 +463,21 @@ function CollateralTokenAddressInput({
       <Controller
         control={control}
         name="collateralTokenAddress"
-        render={({ field }) => (
-          <TokenSelectInput
-            chain={selectedChain}
-            defaultTokenAddress={field.value || collateralTokens?.[0]}
-            onChange={newValue => {
-              field.onChange(newValue as GqlChain)
-            }}
-            tokenAddresses={collateralTokens ?? []}
-            value={field.value}
-          />
+        render={({ field, fieldState }) => (
+          <FormControl isInvalid={!!fieldState.error}>
+            <TokenSelectInput
+              chain={selectedChain}
+              defaultTokenAddress={field.value || collateralTokens?.[0]}
+              onChange={newValue => {
+                field.onChange(newValue as GqlChain)
+              }}
+              tokenAddresses={collateralTokens ?? []}
+              value={field.value}
+            />
+            <FormErrorMessage>{fieldState.error?.message}</FormErrorMessage>
+          </FormControl>
         )}
+        rules={{ required: 'Collateral token is required' }}
       />
     </VStack>
   )

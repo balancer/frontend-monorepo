@@ -6,19 +6,17 @@ import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
-import { Control, FieldErrors, Controller, useFormState } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import { formatUnits } from 'viem'
 
 export function SaleTokenAmountInput({
   control,
-  errors,
   selectedChain,
   launchToken,
   launchTokenPriceUsd,
   title,
 }: {
   control: Control<SaleStructureForm>
-  errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
   launchToken: CustomToken
   launchTokenPriceUsd?: string
@@ -28,9 +26,6 @@ export function SaleTokenAmountInput({
     chainId: getChainId(selectedChain),
     token: launchToken.address,
   })
-  const { errors: formErrors } = useFormState({ control, name: ['saleTokenAmount'] })
-  const saleTokenError = errors.saleTokenAmount || formErrors.saleTokenAmount
-
   const haveEnoughAmount = (value: string) => {
     if (isLoading) return true
 
@@ -54,30 +49,32 @@ export function SaleTokenAmountInput({
       <Controller
         control={control}
         name="saleTokenAmount"
-        render={({ field }) => (
-          <TokenInput
-            address={launchToken.address}
-            apiToken={launchToken}
-            chain={selectedChain}
-            customUserBalance={
-              balanceData ? formatUnits(balanceData.value, balanceData.decimals) : undefined
-            }
-            id="sale-token-amount"
-            onChange={e => field.onChange(e.currentTarget.value)}
-            priceMessage={`Price: ${launchTokenPriceUsd || 'N/A'}`}
-            value={field.value}
-          />
+        render={({ field, fieldState }) => (
+          <>
+            <TokenInput
+              address={launchToken.address}
+              apiToken={launchToken}
+              chain={selectedChain}
+              customUserBalance={
+                balanceData ? formatUnits(balanceData.value, balanceData.decimals) : undefined
+              }
+              id="sale-token-amount"
+              onChange={e => field.onChange(e.currentTarget.value)}
+              priceMessage={`Price: ${launchTokenPriceUsd || 'N/A'}`}
+              value={field.value}
+            />
+            {fieldState.error && (
+              <Text color="font.error" fontSize="sm" textAlign="start" w="full">
+                {fieldState.error.message}
+              </Text>
+            )}
+          </>
         )}
         rules={{
           required: 'Sale token amount is required',
           validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
-      {saleTokenError && (
-        <Text color="font.error" fontSize="sm" textAlign="start" w="full">
-          {saleTokenError.message}
-        </Text>
-      )}
     </VStack>
   )
 }

@@ -58,7 +58,6 @@ export function FixedLbpTokenAmountInputs() {
             <VStack align="start" w="full">
               <SaleTokenAmountInput
                 control={control}
-                errors={errors}
                 launchToken={launchToken}
                 launchTokenPriceUsd={launchTokenPriceUsd}
                 selectedChain={selectedChain}
