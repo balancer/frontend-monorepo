@@ -5,7 +5,6 @@ import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
 import { Control, Controller } from 'react-hook-form'
 import { formatUnits } from 'viem'
 import { useLbpForm } from '../../LbpFormProvider'
@@ -30,20 +29,10 @@ export function SaleTokenAmountInput({
     chainId: getChainId(selectedChain),
     token: launchToken.address,
   })
-  const haveEnoughAmount = (value: string) => {
-    if (isLoading) return true
-
-    if (!balanceData || balanceData.value === 0n) {
-      return `Your wallet has no ${launchToken.symbol}. You will need some to seed this pool and sell it during the LBP`
-    }
-
-    // TODO: do we need this? TokenInput alread has 'Exceeds balance'
-    if (bn(formatUnits(balanceData.value, balanceData.decimals)).lt(value)) {
-      return `Your wallet does not have enough ${launchToken.symbol}`
-    }
-
-    return true
-  }
+  const hasNoBalance = isLoading ? false : !balanceData || balanceData.value === 0n
+  const priceMessage = hasNoBalance
+    ? `Your wallet has no ${launchToken.symbol}`
+    : `Price: ${launchTokenPriceUsd || 'N/A'}`
 
   return (
     <VStack align="start" w="full">
@@ -67,7 +56,7 @@ export function SaleTokenAmountInput({
                 field.onChange(e.currentTarget.value)
                 clearErrors('saleTokenAmount')
               }}
-              priceMessage={`Price: ${launchTokenPriceUsd || 'N/A'}`}
+              priceMessage={priceMessage}
               value={field.value}
             />
             {fieldState.error && (
@@ -77,10 +66,6 @@ export function SaleTokenAmountInput({
             )}
           </>
         )}
-        rules={{
-          required: 'Sale token amount is required',
-          validate: { isGreaterThanZeroValidation, haveEnoughAmount },
-        }}
       />
     </VStack>
   )

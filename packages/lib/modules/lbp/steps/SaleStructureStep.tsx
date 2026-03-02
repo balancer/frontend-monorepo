@@ -17,36 +17,23 @@ import {
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { SaleStructureForm, UserActions, WeightAdjustmentType } from '../lbp.types'
-import { Control, Controller, FieldErrors, SubmitHandler, UseFormSetValue } from 'react-hook-form'
+import { Control, Controller, SubmitHandler, UseFormSetValue } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
-import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { Percent } from 'react-feather'
-import {
-  TokenMetadata,
-  useTokenMetadata,
-  useTokenMetadataAcrossChains,
-} from '../../tokens/useTokenMetadata'
+import { useTokenMetadata, useTokenMetadataAcrossChains } from '../../tokens/useTokenMetadata'
 import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import {
-  addDays,
-  addHours,
-  differenceInDays,
-  differenceInHours,
-  format,
-  parseISO,
-  isAfter,
-} from 'date-fns'
+import { addHours, differenceInDays, differenceInHours, format, parseISO } from 'date-fns'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { LbpFormAction } from '../LbpFormAction'
 import { DynamicLbpTokenAmountInputs } from './sale-structure/DynamicLbpTokenAmountInputs'
 import { FixedLbpTokenAmountInputs } from './sale-structure/FixedLbpTokenAmountInputs'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
+import { saleStartsSoon } from './sale-structure/helpers'
 import { useWatch } from 'react-hook-form'
 import { SaleTypeInput } from './sale-structure/SaleTypeInput'
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
@@ -56,13 +43,7 @@ export function SaleStructureStep() {
 
   const { saleStructureForm, goToNextStep, poolAddress, isDynamicSale, isFixedSale } = useLbpForm()
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    control,
-    clearErrors,
-  } = saleStructureForm
+  const { handleSubmit, setValue, control, clearErrors } = saleStructureForm
 
   const [
     selectedChain,
@@ -107,7 +88,6 @@ export function SaleStructureStep() {
     supportedChains
   )
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
-  const resolvedLaunchTokenMetadata = launchTokenMatch?.metadata || launchTokenMetadata
 
   useEffect(() => {
     if (launchTokenMatch?.chain && launchTokenMatch.chain !== selectedChain) {
@@ -146,10 +126,8 @@ export function SaleStructureStep() {
             <VStack align="start" spacing="lg" w="full">
               <SaleTypeInput control={control} />
               <LaunchTokenAddressInput
-                chainId={selectedChain}
                 clearErrors={clearErrors}
                 control={control}
-                metadata={resolvedLaunchTokenMetadata}
                 setFormValue={setValue}
               />
               <NetworkSelectInput chains={supportedChains} control={control} />
@@ -191,12 +169,7 @@ export function SaleStructureStep() {
               />
             )}
             <UserActionsInput control={control} isFixedSale={isFixedSale} />
-            <FeeSelection
-              control={control}
-              errors={errors}
-              feeValue={fee}
-              setFormValue={setValue}
-            />
+            <FeeSelection control={control} feeValue={fee} setFormValue={setValue} />
             <Divider />
           </>
         )}
@@ -240,14 +213,10 @@ function LaunchTokenAddressInput({
   clearErrors,
   control,
   setFormValue,
-  metadata,
-  chainId,
 }: {
   clearErrors: (name?: keyof SaleStructureForm) => void
   control: Control<SaleStructureForm>
   setFormValue: UseFormSetValue<SaleStructureForm>
-  metadata: TokenMetadata
-  chainId: GqlChain
 }) {
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
@@ -275,17 +244,6 @@ function LaunchTokenAddressInput({
               value={field.value}
             />
           )}
-          rules={{
-            required: 'Token address is required',
-            validate: (value: string) => {
-              if (!isAddress(value)) return 'This is an invalid token address format'
-              if (!metadata.isLoading && !metadata.symbol) {
-                return `This is not a valid token address on ${getChainName(chainId)}`
-              }
-
-              return true
-            },
-          }}
         />
 
         <InputRightElement w="max-content">
@@ -328,7 +286,6 @@ function SaleStartInput({
         label="Start date and time"
         min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
         name="startDateTime"
-        validate={isSaleStartValid}
       />
       {saleStartsSoon(value) && (
         <Text color="font.warning" fontSize="sm">
@@ -351,14 +308,6 @@ function SaleEndInput({
   value: string
   saleStart: string
 }) {
-  const validateSaleEnd = (value: string | number | undefined) => {
-    if (typeof value !== 'string') return 'End time must be type string'
-    if (!isAfter(parseISO(value), addDays(parseISO(saleStart), 1))) {
-      return 'End time must be at least 24 hours after start time'
-    }
-    return true
-  }
-
   const areSaleTimesValid = !!saleStart && !!value
   const daysDiff = areSaleTimesValid ? differenceInDays(parseISO(value), parseISO(saleStart)) : 0
   const hoursDiff = areSaleTimesValid
@@ -373,7 +322,6 @@ function SaleEndInput({
         label="End date and time"
         min={saleStart}
         name="endDateTime"
-        validate={validateSaleEnd}
       />
       <Text color="font.secondary" fontSize="sm">
         {saleStart && value
@@ -390,14 +338,12 @@ function DateTimeInput({
   control,
   clearErrors,
   min,
-  validate,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
   clearErrors: (name?: keyof SaleStructureForm) => void
   min?: string
-  validate: (value: string | number | undefined) => string | true
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
 
@@ -420,10 +366,6 @@ function DateTimeInput({
             value={field.value}
           />
         )}
-        rules={{
-          required: `${label} is required`,
-          validate,
-        }}
       />
     </VStack>
   )
@@ -460,7 +402,6 @@ function CollateralTokenAddressInput({
             <FormErrorMessage>{fieldState.error?.message}</FormErrorMessage>
           </FormControl>
         )}
-        rules={{ required: 'Collateral token is required' }}
       />
     </VStack>
   )
@@ -499,22 +440,14 @@ function UserActionsInput({
 
 function FeeSelection({
   control,
-  errors,
   feeValue,
   setFormValue,
 }: {
   control: Control<SaleStructureForm>
-  errors: FieldErrors<SaleStructureForm>
   feeValue: number
   setFormValue: UseFormSetValue<SaleStructureForm>
 }) {
   const [value, setValue] = useState(() => (feeValue === 1.0 ? 'minimum' : 'custom'))
-
-  const isInRange = (fee: number) => {
-    if (fee < 1) return 'LBP swap fees must be set at or above 1.00%'
-    if (fee > 10) return 'LBP swap fees must be set at or below 10.00%'
-    return true
-  }
 
   return (
     <VStack align="start" w="full">
@@ -539,21 +472,17 @@ function FeeSelection({
               <Controller
                 control={control}
                 name="fee"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <InputWithError
-                    error={errors[field.name]?.message}
+                    error={fieldState.error?.message}
                     info="Minimum fee: 1.00% - Maximum fee: 10.00%"
-                    isInvalid={!!errors[field.name]}
+                    isInvalid={fieldState.invalid}
                     onChange={e => field.onChange(e.target.value)}
                     step=".01"
                     type="number"
                     value={field.value}
                   />
                 )}
-                rules={{
-                  required: 'Swap fee is required',
-                  validate: isInRange,
-                }}
               />
               <InputRightElement>
                 <Percent size="20" />
