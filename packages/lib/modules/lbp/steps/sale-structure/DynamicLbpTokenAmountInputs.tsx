@@ -89,6 +89,9 @@ function CollateralTokenAmountInput({
   collateralTokenAddress: string
   collateralTokenSymbol: string
 }) {
+  const {
+    saleStructureForm: { clearErrors },
+  } = useLbpForm()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const balance = balanceFor(collateralTokenAddress)
 
@@ -121,7 +124,10 @@ function CollateralTokenAmountInput({
               address={collateralTokenAddress}
               chain={selectedChain}
               id="collateral-token-amount"
-              onChange={e => field.onChange(e.currentTarget.value)}
+              onChange={e => {
+                field.onChange(e.currentTarget.value)
+                clearErrors('collateralTokenAmount')
+              }}
               value={field.value}
             />
             {fieldState.error && (

@@ -1,13 +1,13 @@
 import { TokenInputsValidationProvider } from '../../../tokens/TokenInputsValidationProvider'
 import { InputGroup, Input, InputRightElement, Button, Box } from '@chakra-ui/react'
 import { TokenBalancesProvider } from '../../../tokens/TokenBalancesProvider'
-import { useLbpForm } from '../../LbpFormProvider'
 import { useTokens } from '../../../tokens/TokensProvider'
 import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
 import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { VStack, Text, Heading } from '@chakra-ui/react'
 import { SaleTokenAmountInput } from './SaleTokenAmountInput'
+import { useLbpForm } from '../../LbpFormProvider'
 
 export function FixedLbpTokenAmountInputs() {
   const { getToken } = useTokens()
@@ -97,6 +97,9 @@ function LaunchTokenRateInput({
   launchTokenPriceUsd: string
   launchTokenPriceRaw: string
 }) {
+  const {
+    saleStructureForm: { clearErrors },
+  } = useLbpForm()
   const { errors: formErrors } = useFormState({ control, name: ['launchTokenRate'] })
   const launchTokenRateError = errors.launchTokenRate || formErrors.launchTokenRate
 
@@ -142,7 +145,10 @@ function LaunchTokenRateInput({
                 id="launch-token-price"
                 isDisabled={isDisabled}
                 min={0}
-                onChange={field.onChange}
+                onChange={event => {
+                  field.onChange(event)
+                  clearErrors('launchTokenRate')
+                }}
                 onWheel={e => {
                   // Avoid changing the input value when scrolling
                   return e.currentTarget.blur()

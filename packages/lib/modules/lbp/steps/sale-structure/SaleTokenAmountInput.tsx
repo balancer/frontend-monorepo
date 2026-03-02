@@ -8,6 +8,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn, isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
 import { Control, Controller } from 'react-hook-form'
 import { formatUnits } from 'viem'
+import { useLbpForm } from '../../LbpFormProvider'
 
 export function SaleTokenAmountInput({
   control,
@@ -22,6 +23,9 @@ export function SaleTokenAmountInput({
   launchTokenPriceUsd?: string
   title: string
 }) {
+  const {
+    saleStructureForm: { clearErrors },
+  } = useLbpForm()
   const { balanceData, isLoading } = useUserBalance({
     chainId: getChainId(selectedChain),
     token: launchToken.address,
@@ -59,7 +63,10 @@ export function SaleTokenAmountInput({
                 balanceData ? formatUnits(balanceData.value, balanceData.decimals) : undefined
               }
               id="sale-token-amount"
-              onChange={e => field.onChange(e.currentTarget.value)}
+              onChange={e => {
+                field.onChange(e.currentTarget.value)
+                clearErrors('saleTokenAmount')
+              }}
               priceMessage={`Price: ${launchTokenPriceUsd || 'N/A'}`}
               value={field.value}
             />

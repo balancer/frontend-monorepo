@@ -94,6 +94,7 @@ export function SaleStructureStep() {
   useEffect(() => {
     clearErrors()
   }, [saleType, clearErrors])
+
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {
     const chainConfig = getNetworkConfig(chain)
     return typeof chainConfig?.lbps !== 'undefined'
@@ -160,10 +161,15 @@ export function SaleStructureStep() {
             </Heading>
             <VStack align="start" gap="lg" w="full">
               <VStack align="start" gap="sm" w="full">
-                <SaleStartInput control={control} value={startDateTime} />
+                <SaleStartInput clearErrors={clearErrors} control={control} value={startDateTime} />
               </VStack>
               <VStack align="start" gap="sm" w="full">
-                <SaleEndInput control={control} saleStart={startDateTime} value={endDateTime} />
+                <SaleEndInput
+                  clearErrors={clearErrors}
+                  control={control}
+                  saleStart={startDateTime}
+                  value={endDateTime}
+                />
               </VStack>
             </VStack>
 
@@ -303,14 +309,17 @@ function LaunchTokenAddressInput({
 
 function SaleStartInput({
   control,
+  clearErrors,
   value,
 }: {
   control: Control<SaleStructureForm>
+  clearErrors: (name?: keyof SaleStructureForm) => void
   value: string
 }) {
   return (
     <>
       <DateTimeInput
+        clearErrors={clearErrors}
         control={control}
         label="Start date and time"
         min={format(addHours(new Date(), 1), "yyyy-MM-dd'T'HH:mm:00")}
@@ -329,10 +338,12 @@ function SaleStartInput({
 
 function SaleEndInput({
   control,
+  clearErrors,
   value,
   saleStart,
 }: {
   control: Control<SaleStructureForm>
+  clearErrors: (name?: keyof SaleStructureForm) => void
   value: string
   saleStart: string
 }) {
@@ -353,6 +364,7 @@ function SaleEndInput({
   return (
     <>
       <DateTimeInput
+        clearErrors={clearErrors}
         control={control}
         label="End date and time"
         min={saleStart}
@@ -372,12 +384,14 @@ function DateTimeInput({
   name,
   label,
   control,
+  clearErrors,
   min,
   validate,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
+  clearErrors: (name?: keyof SaleStructureForm) => void
   min?: string
   validate: (value: string | number | undefined) => string | true
 }) {
@@ -394,7 +408,10 @@ function DateTimeInput({
             error={fieldState.error?.message}
             isInvalid={!!fieldState.error}
             min={min || today}
-            onChange={e => field.onChange(e.target.value)}
+            onChange={e => {
+              field.onChange(e.target.value)
+              clearErrors(name)
+            }}
             type="datetime-local"
             value={field.value}
           />
