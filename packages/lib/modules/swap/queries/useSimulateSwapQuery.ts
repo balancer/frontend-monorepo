@@ -5,18 +5,14 @@ import { useDebounce } from 'use-debounce'
 import { useQuery } from '@tanstack/react-query'
 import { SwapHandler } from '../handlers/Swap.handler'
 import { swapQueryKeys } from './swapQueryKeys'
-import { SdkSimulateSwapResponse, SimulateSwapInputs, SimulateSwapResponse } from '../swap.types'
+import { SimulateSwapInputs, SimulateSwapResponse } from '../swap.types'
 import { sentryMetaForSwapHandler } from '@repo/lib/shared/utils/query-errors'
 import { isZero } from '@repo/lib/shared/utils/numbers'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useBlockNumber } from 'wagmi'
-import { Address } from 'viem'
 import { isWrapWithTooSmallAmount } from '@repo/lib/shared/utils/error-filters'
 
 export type SwapSimulationQueryResult = ReturnType<typeof useSimulateSwapQuery>
-export type SdkSimulationResponseWithRouter = SdkSimulateSwapResponse & {
-  router: Address
-}
 
 export type SimulateSwapParams = {
   handler: SwapHandler

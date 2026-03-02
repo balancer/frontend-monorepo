@@ -7,6 +7,7 @@ import {
   AuraBalSwapQueryOutput,
   ExactInQueryOutput,
   ExactOutQueryOutput,
+  Path,
   Permit2,
   Swap,
 } from '@balancer/sdk'
@@ -48,6 +49,7 @@ export interface SdkSimulateSwapResponse extends SimulateSwapResponse {
   protocolVersion: number
   hopCount: number
   router: Address
+  paths?: Path[]
 }
 
 export interface SimulateSinglePoolSwapResponse extends SimulateSwapResponse {
