@@ -169,7 +169,12 @@ export function SaleStructureStep() {
               />
             )}
             <UserActionsInput control={control} isFixedSale={isFixedSale} />
-            <FeeSelection control={control} feeValue={fee} setFormValue={setValue} />
+            <FeeSelection
+              clearErrors={clearErrors}
+              control={control}
+              feeValue={fee}
+              setFormValue={setValue}
+            />
             <Divider />
           </>
         )}
@@ -439,10 +444,12 @@ function UserActionsInput({
 }
 
 function FeeSelection({
+  clearErrors,
   control,
   feeValue,
   setFormValue,
 }: {
+  clearErrors: (name?: keyof SaleStructureForm) => void
   control: Control<SaleStructureForm>
   feeValue: number
   setFormValue: UseFormSetValue<SaleStructureForm>
@@ -477,7 +484,10 @@ function FeeSelection({
                     error={fieldState.error?.message}
                     info="Minimum fee: 1.00% - Maximum fee: 10.00%"
                     isInvalid={fieldState.invalid}
-                    onChange={e => field.onChange(e.target.value)}
+                    onChange={e => {
+                      field.onChange(e.target.value)
+                      clearErrors('fee')
+                    }}
                     step=".01"
                     type="number"
                     value={field.value}
