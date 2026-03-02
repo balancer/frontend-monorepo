@@ -14,10 +14,16 @@ import { LbpPrice, max, min } from './pool/usePriceInfo'
 import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getChainId } from '@repo/lib/config/app.config'
-import { useWatch } from 'react-hook-form'
+import { Resolver, useWatch } from 'react-hook-form'
 import { useFormSteps } from '@repo/lib/shared/hooks/useFormSteps'
 import { LBP_FORM_STEPS, INITIAL_SALE_STRUCTURE, INITIAL_PROJECT_INFO } from './constants.lbp'
-import { validateProjectInfoStep, validateSaleStructureStep } from './lbp.validation'
+import {
+  projectInfoStepSchema,
+  saleStructureStepSchema,
+  validateProjectInfoStep,
+  validateSaleStructureStep,
+} from './lbp.validation'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useTokens } from '../tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -31,13 +37,27 @@ export function useLbpFormLogic() {
   const saleStructureForm = usePersistentForm<SaleStructureForm>(
     LS_KEYS.LbpConfig.SaleStructure,
     INITIAL_SALE_STRUCTURE,
-    { mode: 'onSubmit' }
+    {
+      mode: 'onSubmit',
+      resolver: zodResolver(saleStructureStepSchema) as unknown as Resolver<
+        SaleStructureForm,
+        any,
+        SaleStructureForm
+      >,
+    }
   )
 
   const projectInfoForm = usePersistentForm<ProjectInfoForm>(
     LS_KEYS.LbpConfig.ProjectInfo,
     INITIAL_PROJECT_INFO,
-    { mode: 'onSubmit' }
+    {
+      mode: 'onSubmit',
+      resolver: zodResolver(projectInfoStepSchema) as unknown as Resolver<
+        ProjectInfoForm,
+        any,
+        ProjectInfoForm
+      >,
+    }
   )
 
   const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(

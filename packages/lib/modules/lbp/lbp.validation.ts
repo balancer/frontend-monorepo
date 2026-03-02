@@ -1,11 +1,12 @@
-import { z, ZodError } from 'zod'
-import { FieldValues, Path, UseFormReturn } from 'react-hook-form'
+import { z } from 'zod'
+import { UseFormReturn } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { addDays, isAfter, parseISO } from 'date-fns'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProjectInfoForm, SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
 import { isSaleStartValid } from './steps/sale-structure/helpers'
 import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
+import { HumanAmount } from '@balancer/sdk'
 import { validateImageUrl, validateUrlFormat } from '@repo/lib/shared/utils/urls'
 import { isValidTelegramHandle, isValidTwitterHandle } from '@repo/lib/shared/utils/strings'
 import { normalizeHandle } from '@repo/lib/shared/utils/links'
@@ -26,6 +27,13 @@ const numberStringSchema = (requiredMessage: string) =>
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: result })
       }
     })
+
+const numericStringSchema = z.preprocess((value: unknown) => {
+  if (value === undefined || value === null) return ''
+  return String(value)
+}, z.string())
+
+const humanAmountSchema = numericStringSchema as z.ZodType<HumanAmount | ''>
 
 const feeSchema = z
   .preprocess(
@@ -87,15 +95,13 @@ const saleStructureStepBaseSchema = z.object({
   customEndWeight: z.number().optional(),
   userActions: z.nativeEnum(UserActions),
   fee: feeSchema,
-  launchTokenRate: z.union([z.string(), z.number()]).optional(),
-  saleTokenAmount: z.union([z.string(), z.number()]),
-  collateralTokenAmount: z.union([z.string(), z.number()]).optional(),
+  launchTokenRate: humanAmountSchema.optional(),
+  saleTokenAmount: humanAmountSchema,
+  collateralTokenAmount: humanAmountSchema.optional(),
 })
 
-type SaleStructureStepValues = z.infer<typeof saleStructureStepBaseSchema>
-
 export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
-  (values: SaleStructureStepValues, ctx: z.RefinementCtx) => {
+  (values, ctx: z.RefinementCtx) => {
     if (values.startDateTime && values.endDateTime) {
       const isEndAfterStart = isAfter(
         parseISO(values.endDateTime),
@@ -169,7 +175,7 @@ export const saleStructureStepSchema = saleStructureStepBaseSchema.superRefine(
   }
 )
 
-export const projectInfoStepSchema: z.ZodType<ProjectInfoForm> = z.object({
+export const projectInfoStepSchema = z.object({
   name: z.string().min(1, 'Project name is required').max(24, 'Project name is too long'),
   description: z
     .string()
@@ -221,56 +227,14 @@ export const projectInfoStepSchema: z.ZodType<ProjectInfoForm> = z.object({
 
 export const lbpFormSchema = z.intersection(saleStructureStepSchema, projectInfoStepSchema)
 
-function applyZodErrors<T extends FieldValues>(form: UseFormReturn<T>, error: ZodError) {
-  error.issues.forEach((issue: z.ZodIssue) => {
-    if (!issue.path.length) return
-    const path = issue.path.map(String).join('.') as Path<T>
-    form.setError(path, { type: 'manual', message: issue.message })
-  })
-}
-
 export async function validateSaleStructureStep(
   form: UseFormReturn<SaleStructureForm>
 ): Promise<boolean> {
-  const formValid = await form.trigger(undefined, { shouldFocus: true })
-  const values = form.getValues()
-  const saleTokenAmountValidation = isGreaterThanZeroValidation(
-    values.saleTokenAmount ? String(values.saleTokenAmount) : undefined
-  )
-  if (saleTokenAmountValidation !== true && !form.getFieldState('saleTokenAmount').error) {
-    form.setError(
-      'saleTokenAmount',
-      { type: 'manual', message: saleTokenAmountValidation },
-      { shouldFocus: true }
-    )
-  }
-  if (values.saleType === GqlPoolType.FixedLbp) {
-    const launchTokenRateValidation = isGreaterThanZeroValidation(
-      values.launchTokenRate ? String(values.launchTokenRate) : undefined
-    )
-    if (launchTokenRateValidation !== true && !form.getFieldState('launchTokenRate').error) {
-      form.setError(
-        'launchTokenRate',
-        { type: 'manual', message: launchTokenRateValidation },
-        { shouldFocus: true }
-      )
-    }
-  }
-  const result = await saleStructureStepSchema.safeParseAsync(values)
-  if (!result.success) {
-    applyZodErrors(form, result.error)
-  }
-  return formValid && result.success
+  return form.trigger(undefined, { shouldFocus: true })
 }
 
 export async function validateProjectInfoStep(
   form: UseFormReturn<ProjectInfoForm>
 ): Promise<boolean> {
-  const formValid = await form.trigger(undefined, { shouldFocus: true })
-  const values = form.getValues()
-  const result = await projectInfoStepSchema.safeParseAsync(values)
-  if (!result.success) {
-    applyZodErrors(form, result.error)
-  }
-  return formValid && result.success
+  return form.trigger(undefined, { shouldFocus: true })
 }
