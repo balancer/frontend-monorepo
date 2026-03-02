@@ -1,5 +1,5 @@
 import { HumanAmount } from '@balancer/sdk'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export enum UserActions {
   BUY_AND_SELL = 'buy_and_sell',
@@ -12,17 +12,21 @@ export enum WeightAdjustmentType {
   CUSTOM = 'custom',
 }
 
+export type SaleTypeOptionValue = GqlPoolType.LiquidityBootstrapping | GqlPoolType.FixedLbp
+
 export type SaleStructureForm = {
   selectedChain: GqlChain
   launchTokenAddress: string
+  saleType: SaleTypeOptionValue
   startDateTime: string
   endDateTime: string
   collateralTokenAddress: string
-  weightAdjustmentType: WeightAdjustmentType
-  customStartWeight: number
-  customEndWeight: number
+  weightAdjustmentType?: WeightAdjustmentType
+  customStartWeight?: number
+  customEndWeight?: number
   userActions: UserActions
   fee: number
+  launchTokenRate?: HumanAmount | ''
   saleTokenAmount: HumanAmount | ''
   collateralTokenAmount: HumanAmount | ''
 }

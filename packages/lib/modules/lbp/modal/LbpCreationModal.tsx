@@ -8,7 +8,6 @@ import { LbpSummary } from './LbpSummary'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
@@ -46,12 +45,12 @@ export function LbpCreationModal({
   )
 
   const initialFocusRef = useRef(null)
+  const hasAttemptedSaveMetadata = useRef(false)
   const { isDesktop } = useBreakpoints()
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
-  const { selectedChain } = saleStructureForm.getValues()
-
   const createPoolInput = useCreateLbpInput()
   const initPoolInput = useInitializeLbpInput()
+
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
     poolAddress,
     setPoolAddress,
@@ -67,7 +66,7 @@ export function LbpCreationModal({
     reset: resetSaveMetadata,
   } = useLbpMetadata()
 
-  const hasAttemptedSaveMetadata = useRef(false)
+  const [selectedChain, saleType] = saleStructureForm.getValues(['selectedChain', 'saleType'])
   const chainId = getChainId(selectedChain)
   const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress })
 
@@ -81,7 +80,7 @@ export function LbpCreationModal({
   const path = getPoolPath({
     id: poolAddress as Address,
     chain: selectedChain,
-    type: GqlPoolType.LiquidityBootstrapping,
+    type: saleType,
     protocolVersion: 3 as const,
   })
 
@@ -89,7 +88,7 @@ export function LbpCreationModal({
 
   useEffect(() => {
     const handleSaveMetadata = async () => {
-      if (isPoolInitialized && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
+      if (poolAddress && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
         hasAttemptedSaveMetadata.current = true
         try {
           await saveMetadata()
@@ -99,7 +98,7 @@ export function LbpCreationModal({
       }
     }
     handleSaveMetadata()
-  }, [isPoolInitialized, isMetadataSaved, saveMetadata])
+  }, [poolAddress, isMetadataSaved, saveMetadata])
 
   if (saveMetadataError && !transactionSteps.steps.some(step => step.id === 'save-metadata')) {
     transactionSteps.steps.push({

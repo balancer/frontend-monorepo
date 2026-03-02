@@ -1,4 +1,15 @@
-import { Heading, VStack, Text, HStack, Spacer, Divider, Checkbox, Button } from '@chakra-ui/react'
+import {
+  Heading,
+  VStack,
+  Text,
+  HStack,
+  Spacer,
+  Divider,
+  Checkbox,
+  Button,
+  FormControl,
+  FormErrorMessage,
+} from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
@@ -15,15 +26,14 @@ import { useWatch, useFormState } from 'react-hook-form'
 
 export function ProjectInfoStep() {
   const {
-    projectInfoForm: { control, handleSubmit },
+    projectInfoForm: { handleSubmit },
     goToNextStep,
+    isProjectInfoLocked,
   } = useLbpForm()
 
   const onSubmit: SubmitHandler<ProjectInfoForm> = () => {
     goToNextStep()
   }
-
-  const { isValid } = useFormState({ control })
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
@@ -32,29 +42,29 @@ export function ProjectInfoStep() {
           Project info
         </Heading>
 
-        <NameInput />
-        <DescriptionInput />
-        <ProjectWebsiteUrlInput />
-        <TokenIconInput />
-        <ProjectOwnerInput />
-        <PoolCreatorInput />
+        <NameInput isDisabled={isProjectInfoLocked} />
+        <DescriptionInput isDisabled={isProjectInfoLocked} />
+        <ProjectWebsiteUrlInput isDisabled={isProjectInfoLocked} />
+        <TokenIconInput isDisabled={isProjectInfoLocked} />
+        <ProjectOwnerInput isDisabled={isProjectInfoLocked} />
+        <PoolCreatorInput isDisabled={isProjectInfoLocked} />
         <Divider />
         <Heading color="font.maxContrast" size="md">
           Social accounts
         </Heading>
-        <ProjectXHandle />
-        <ProjectTelegramHandle />
-        <ProjectDiscordUrlInput />
+        <ProjectXHandle isDisabled={isProjectInfoLocked} />
+        <ProjectTelegramHandle isDisabled={isProjectInfoLocked} />
+        <ProjectDiscordUrlInput isDisabled={isProjectInfoLocked} />
 
         <Divider />
         <Disclaimer />
-        <LbpFormAction disabled={!isValid} />
+        <LbpFormAction />
       </VStack>
     </form>
   )
 }
 
-function NameInput() {
+function NameInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
@@ -82,6 +92,7 @@ function NameInput() {
           <InputWithError
             error={errors.name?.message}
             id="project-name"
+            isDisabled={isDisabled}
             isInvalid={!!errors.name}
             maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
@@ -96,7 +107,7 @@ function NameInput() {
   )
 }
 
-function DescriptionInput() {
+function DescriptionInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
@@ -125,6 +136,7 @@ function DescriptionInput() {
           <TextareaWithError
             error={errors.description?.message}
             id="project-description"
+            isDisabled={isDisabled}
             isInvalid={!!errors.description}
             maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
@@ -141,7 +153,7 @@ function DescriptionInput() {
   )
 }
 
-function TokenIconInput() {
+function TokenIconInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control, setValue },
   } = useLbpForm()
@@ -165,9 +177,10 @@ function TokenIconInput() {
           <InputWithError
             error={errors.tokenIconUrl?.message}
             id="token-icon-url"
+            isDisabled={isDisabled}
             isInvalid={!!errors.tokenIconUrl}
             onChange={e => field.onChange(e.target.value)}
-            pasteFn={paste}
+            pasteFn={isDisabled ? undefined : paste}
             placeholder="https://project-name.com/token.svg"
             value={field.value}
           />
@@ -181,7 +194,7 @@ function TokenIconInput() {
   )
 }
 
-function ProjectWebsiteUrlInput() {
+function ProjectWebsiteUrlInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
@@ -199,6 +212,7 @@ function ProjectWebsiteUrlInput() {
           <InputWithError
             error={errors.websiteUrl?.message}
             id="project-website-url"
+            isDisabled={isDisabled}
             isInvalid={!!errors.websiteUrl}
             onChange={e => field.onChange(e.target.value)}
             placeholder="https://project-name.com"
@@ -214,7 +228,7 @@ function ProjectWebsiteUrlInput() {
   )
 }
 
-function ProjectXHandle() {
+function ProjectXHandle({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
@@ -232,6 +246,7 @@ function ProjectXHandle() {
           <InputWithError
             error={errors.xHandle?.message}
             id="x-handle"
+            isDisabled={isDisabled}
             isInvalid={!!errors.xHandle}
             onChange={e => field.onChange(e.target.value)}
             placeholder="@project-handle"
@@ -247,7 +262,7 @@ function ProjectXHandle() {
   )
 }
 
-function ProjectTelegramHandle() {
+function ProjectTelegramHandle({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
@@ -265,6 +280,7 @@ function ProjectTelegramHandle() {
           <InputWithError
             error={errors.telegramHandle?.message}
             id="telegram-handle"
+            isDisabled={isDisabled}
             isInvalid={!!errors.telegramHandle}
             onChange={e => field.onChange(e.target.value)}
             placeholder="@project-handle"
@@ -280,7 +296,7 @@ function ProjectTelegramHandle() {
   )
 }
 
-function ProjectDiscordUrlInput() {
+function ProjectDiscordUrlInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
@@ -298,6 +314,7 @@ function ProjectDiscordUrlInput() {
           <InputWithError
             error={errors.discordUrl?.message}
             id="discord-url"
+            isDisabled={isDisabled}
             isInvalid={!!errors.discordUrl}
             onChange={e => field.onChange(e.target.value)}
             placeholder="https://yourdomain.com"
@@ -312,7 +329,7 @@ function ProjectDiscordUrlInput() {
   )
 }
 
-function ProjectOwnerInput() {
+function ProjectOwnerInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control, setValue, trigger },
   } = useLbpForm()
@@ -338,9 +355,10 @@ function ProjectOwnerInput() {
           <InputWithError
             error={errors.owner?.message}
             id="project-owner"
+            isDisabled={isDisabled}
             isInvalid={!!errors.owner}
             onChange={e => field.onChange(e.target.value)}
-            pasteFn={paste}
+            pasteFn={isDisabled ? undefined : paste}
             placeholder={userAddress}
             value={field.value}
           />
@@ -353,7 +371,7 @@ function ProjectOwnerInput() {
   )
 }
 
-function PoolCreatorInput() {
+function PoolCreatorInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control, setValue, trigger },
   } = useLbpForm()
@@ -379,9 +397,10 @@ function PoolCreatorInput() {
           <InputWithError
             error={errors.poolCreator?.message}
             id="pool-creator"
+            isDisabled={isDisabled}
             isInvalid={!!errors.poolCreator}
             onChange={e => field.onChange(e.target.value)}
-            pasteFn={paste}
+            pasteFn={isDisabled ? undefined : paste}
             placeholder={userAddress}
             value={field.value}
           />
@@ -398,49 +417,53 @@ function Disclaimer() {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
+  const { errors } = useFormState({ control })
 
   return (
-    <Controller
-      control={control}
-      name="disclaimerAccepted"
-      render={({ field }) => (
-        <Checkbox
-          color="font.primary"
-          fontWeight="medium"
-          isChecked={field.value}
-          onChange={field.onChange}
-          size="lg"
-        >
-          {'I accept the'}
-          <Button
-            as={NextLink}
-            fontSize="lg"
+    <FormControl isInvalid={!!errors.disclaimerAccepted}>
+      <Controller
+        control={control}
+        name="disclaimerAccepted"
+        render={({ field }) => (
+          <Checkbox
+            color="font.primary"
             fontWeight="medium"
-            href={'/risks'}
-            px="0.3em"
-            target="_blank"
-            textColor="font.link"
-            variant="link"
+            isChecked={field.value}
+            onChange={field.onChange}
+            size="lg"
           >
-            Risks
-          </Button>
-          {'and'}
-          <Button
-            as={NextLink}
-            fontSize="lg"
-            fontWeight="medium"
-            href={'/terms-of-use'}
-            px="0.3em"
-            target="_blank"
-            textColor="font.link"
-            variant="link"
-          >
-            Terms of Use
-          </Button>
-          {'for creating and LBP'}
-        </Checkbox>
-      )}
-      rules={{ required: 'Conditions must be accepted' }}
-    />
+            {'I accept the'}
+            <Button
+              as={NextLink}
+              fontSize="lg"
+              fontWeight="medium"
+              href={'/risks'}
+              px="0.3em"
+              target="_blank"
+              textColor="font.link"
+              variant="link"
+            >
+              Risks
+            </Button>
+            {'and'}
+            <Button
+              as={NextLink}
+              fontSize="lg"
+              fontWeight="medium"
+              href={'/terms-of-use'}
+              px="0.3em"
+              target="_blank"
+              textColor="font.link"
+              variant="link"
+            >
+              Terms of Use
+            </Button>
+            {'for creating and LBP'}
+          </Checkbox>
+        )}
+        rules={{ required: 'Conditions must be accepted' }}
+      />
+      <FormErrorMessage>{errors.disclaimerAccepted?.message}</FormErrorMessage>
+    </FormControl>
   )
 }

@@ -1,4 +1,5 @@
-import { Circle, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react'
+import { Circle, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function TokenInfo({
@@ -6,14 +7,20 @@ export function TokenInfo({
   symbol,
   name,
   amount,
-  value,
+  value, // already formatted for Fixed Price
+  showValue = true,
+  isFixedSale,
 }: {
   iconURL: string
   symbol: string
   name: string
-  amount: number
-  value?: number
+  amount: string
+  value?: string
+  showValue?: boolean
+  isFixedSale?: boolean
 }) {
+  const { toCurrency } = useCurrency()
+
   return (
     <HStack spacing="md" w="full">
       <Circle bg="background.level4" color="font.secondary" shadow="lg" size={12}>
@@ -24,14 +31,19 @@ export function TokenInfo({
       <VStack gap="xxs" w="full">
         <HStack alignItems="start" w="full">
           <Text fontWeight="bold">{symbol}</Text>
-          <Spacer />
-          <Text fontWeight="bold">{amount}</Text>
+          {showValue && (
+            <Text fontWeight="bold" ml="auto">
+              {fNum('token', amount, { abbreviated: false })}
+            </Text>
+          )}
         </HStack>
-
         <HStack alignItems="start" w="full">
           <Text variant="secondary">{name}</Text>
-          <Spacer />
-          <Text variant="secondary">{value ? `$${fNum('fiat', value)}` : 'Value TBD'}</Text>
+          {showValue && (
+            <Text ml="auto" variant="secondary">
+              {value ? (isFixedSale ? `at ~${value} each` : toCurrency(value)) : 'Value TBD'}
+            </Text>
+          )}
         </HStack>
       </VStack>
     </HStack>

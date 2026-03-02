@@ -40,7 +40,9 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
       if (persistedValues !== initialDefaultValues) {
         form.reset(persistedValues, { keepDefaultValues: true })
       }
-      await form.trigger()
+      if (formOptions?.mode !== 'onSubmit') {
+        await form.trigger()
+      }
       setIsHydrated(true)
     }
     initForm()
