@@ -147,8 +147,8 @@ export function SaleStructureStep() {
               <SaleTypeInput control={control} />
               <LaunchTokenAddressInput
                 chainId={selectedChain}
+                clearErrors={clearErrors}
                 control={control}
-                errors={errors}
                 metadata={resolvedLaunchTokenMetadata}
                 setFormValue={setValue}
               />
@@ -237,14 +237,14 @@ function NetworkSelectInput({
 }
 
 function LaunchTokenAddressInput({
+  clearErrors,
   control,
-  errors,
   setFormValue,
   metadata,
   chainId,
 }: {
+  clearErrors: (name?: keyof SaleStructureForm) => void
   control: Control<SaleStructureForm>
-  errors: FieldErrors<SaleStructureForm>
   setFormValue: UseFormSetValue<SaleStructureForm>
   metadata: TokenMetadata
   chainId: GqlChain
@@ -252,6 +252,7 @@ function LaunchTokenAddressInput({
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
     setFormValue('launchTokenAddress', clipboardText, { shouldDirty: true })
+    clearErrors('launchTokenAddress')
   }
 
   return (
@@ -261,12 +262,15 @@ function LaunchTokenAddressInput({
         <Controller
           control={control}
           name="launchTokenAddress"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <InputWithError
-              error={errors.launchTokenAddress?.message}
+              error={fieldState.error?.message}
               info="First create the token on the chosen network, if you haven't already."
-              isInvalid={!!errors.launchTokenAddress}
-              onChange={e => field.onChange(e.target.value)}
+              isInvalid={fieldState.invalid}
+              onChange={e => {
+                field.onChange(e.target.value)
+                clearErrors('launchTokenAddress')
+              }}
               placeholder="Enter token address"
               value={field.value}
             />
