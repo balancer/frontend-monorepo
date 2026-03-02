@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 
 export async function clickButton(page: Page, text: string) {
   const regex = new RegExp('^' + text + '$', 'i')
@@ -33,6 +33,28 @@ export async function clickRadio(page: Page, groupLabel: string, radioLabel: str
   return page.getByRole('radiogroup', { name: groupLabel }).getByText(regex).click()
 }
 
+export async function setSliderPercent(page: Page, percent: number, scope?: Locator) {
+  const root = scope ?? page
+  const slider = root.locator('.chakra-slider')
+  const box = await slider.boundingBox()
+  await slider.click({
+    position: { x: (box.width * percent) / 100, y: box.height / 2 },
+  })
+}
+
 export async function checkbox(page: Page, text: string) {
   return page.locator('label', { hasText: text }).locator('.chakra-checkbox__control')
+}
+
+// reliable method for selecting pill buttons at top of token select modal
+export async function selectPopularToken(page: Page, tokenSymbol: string) {
+  await button(page, 'Select token').first().click()
+  const modalHeader = page.getByText('Select a token')
+  await modalHeader.waitFor({ state: 'visible' })
+  const modal = page.getByRole('dialog').filter({ has: modalHeader })
+  await modal
+    .getByRole('group')
+    .filter({ has: page.getByText(tokenSymbol, { exact: true }) })
+    .first()
+    .click()
 }

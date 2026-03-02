@@ -22,7 +22,7 @@ export function SwapSimulationError({ errorMessage }: Props) {
       <ErrorAlert title={`Not enough liquidity on ${PROJECT_CONFIG.projectName}`}>
         <Text color="#000" fontSize="sm">
           Your swap amount is too high to find a route through the available liquidity on{' '}
-          {projectName}. If there is some liquidity available on {projectName}, you can reduce yobur
+          {projectName}. If there is some liquidity available on {projectName}, you can reduce your
           swap size
           {showCowSwapLink && (
             <>

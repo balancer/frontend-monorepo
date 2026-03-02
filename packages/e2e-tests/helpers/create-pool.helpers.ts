@@ -1,4 +1,10 @@
-import { clickButton, clickRadio, button, checkbox } from '@/helpers/user.helpers'
+import {
+  clickButton,
+  clickRadio,
+  button,
+  checkbox,
+  selectPopularToken,
+} from '@/helpers/user.helpers'
 import { expect, Page } from '@playwright/test'
 import { POOL_CREATION_FORM_STEPS } from '@repo/lib/modules/pool/actions/create/constants'
 import { POOL_TYPES } from '@repo/lib/modules/pool/actions/create/constants'
@@ -41,13 +47,14 @@ export const POOL_CREATION_CONFIGS: PoolCreationConfig[] = [
       { symbol: 'GHO', amount: undefined },
     ],
   },
-  {
-    type: PoolType.ReClamm,
-    tokens: [
-      { symbol: 'WETH', amount: '1' },
-      { symbol: 'USDC', amount: undefined },
-    ],
-  },
+  // reclamm pool creation has been temporarily disabled for audit investigations
+  // {
+  //   type: PoolType.ReClamm,
+  //   tokens: [
+  //     { symbol: 'WETH', amount: '1' },
+  //     { symbol: 'USDC', amount: undefined },
+  //   ],
+  // },
   {
     type: PoolType.CowAmm,
     tokens: [
@@ -118,18 +125,6 @@ export class CreatePoolPage {
     await clickRadio(this.page, 'Choose a pool type', POOL_TYPES[poolType].label)
   }
 
-  async selectToken(tokenName: string) {
-    await button(this.page, 'Select token').first().click()
-    const modalHeader = this.page.getByText('Select a token: Ethereum', { exact: true })
-    await modalHeader.waitFor({ state: 'visible' })
-    const modal = this.page.getByRole('dialog').filter({ has: modalHeader })
-    await modal
-      .getByRole('group')
-      .filter({ has: this.page.getByText(tokenName, { exact: true }) })
-      .first()
-      .click()
-  }
-
   async fillTokenAmounts() {
     const shouldOnlyFillOneAmount = this.isReClamm || this.isGyroEclp
 
@@ -166,7 +161,7 @@ export class CreatePoolPage {
     await expect(this.page).toHaveURL(this.urls.tokens)
     await expect(this.page.getByText('Choose pool tokens')).toBeVisible()
     await expect(button(this.page, 'Next')).toBeDisabled()
-    for (const token of this.config.tokens) await this.selectToken(token.symbol)
+    for (const token of this.config.tokens) await selectPopularToken(this.page, token.symbol)
     await expect(button(this.page, 'Next')).toBeEnabled()
     if (goToNextStep) await clickButton(this.page, 'Next')
   }

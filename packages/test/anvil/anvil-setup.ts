@@ -1,4 +1,4 @@
-import { fantom, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
+import { base, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
@@ -8,7 +8,7 @@ type NetworksWithFork = readonly [
   typeof polygon,
   typeof sepolia,
   typeof gnosis,
-  typeof fantom,
+  typeof base,
   typeof sonic,
 ]
 export type ChainIdWithFork = NetworksWithFork[number]['id']
@@ -48,41 +48,39 @@ const ANVIL_PORTS: Record<ChainIdWithFork, number> = {
   [mainnet.id]: 8645,
   [polygon.id]: 8745,
   [sepolia.id]: 8845,
-  [fantom.id]: 8945,
+  [base.id]: 8945,
   [gnosis.id]: 9045,
   [sonic.id]: 9145,
 }
 
+/*
+ * Set forkBlockNumber to be after the highest block number used in any test for a chain.
+ * Alternatively, omitting forkBlockNumber forks from latest, but can cause flaky tests
+ */
 export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
   [mainnet.id]: {
     chainId: mainnet.id,
     fallBackRpc: 'https://cloudflare-eth.com',
     port: ANVIL_PORTS[mainnet.id],
-    /* From time to time this block gets outdated having this kind of error in integration tests:
-     ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-     forkBlockNumber: 22426500n, // block number from 6 May 2025 (1 day before pectra launch)
-    */
+    forkBlockNumber: 24521900n,
   },
   [polygon.id]: {
     chainId: polygon.id,
     fallBackRpc: 'https://polygon-rpc.com',
     port: ANVIL_PORTS[polygon.id],
-    // Note - this has to be >= highest blockNo used in tests
-    // forkBlockNumber: 64747630n,
     forkBlockNumber: 67867894n,
   },
   [sepolia.id]: {
     chainId: sepolia.id,
     fallBackRpc: 'https://gateway.tenderly.co/public/sepolia',
     port: ANVIL_PORTS[sepolia.id],
-    // For now we will use the last block until v3 deployments are final
-    // forkBlockNumber: 6679621n,
+    forkBlockNumber: 10295680n,
   },
-  [fantom.id]: {
-    chainId: fantom.id,
-    fallBackRpc: 'https://gateway.tenderly.co/public/fantom',
-    port: ANVIL_PORTS[fantom.id],
-    forkBlockNumber: 99471829n,
+  [base.id]: {
+    chainId: base.id,
+    fallBackRpc: 'https://gateway.tenderly.co/public/base',
+    port: ANVIL_PORTS[base.id],
+    forkBlockNumber: 42375000n,
   },
   [sonic.id]: {
     chainId: sonic.id,

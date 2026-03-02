@@ -62,6 +62,10 @@ const networkConfig: NetworkConfig = {
     },
     veDelegationProxy: '0x9dA18982a33FD0c7051B19F0d7C76F2d5E7e017c',
     permit2: PERMIT2[optimism.id],
+    merkl: {
+      claims: '0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae',
+    },
+    signatureRegistry: '0xc86eF81E57492BE65BFCa9b0Ed53dCBAfDBe6100',
   },
   pools: convertHexToLowerCase({
     issues: {
