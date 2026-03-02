@@ -6,7 +6,6 @@ import {
   RadioGroup,
   InputGroup,
   InputRightElement,
-  IconButton,
   Heading,
   Divider,
   Box,
@@ -18,21 +17,17 @@ import {
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { SaleStructureForm, UserActions, WeightAdjustmentType } from '../lbp.types'
-import {
-  Control,
-  Controller,
-  FieldErrors,
-  SubmitHandler,
-  UseFormReset,
-  UseFormSetValue,
-  UseFormTrigger,
-} from 'react-hook-form'
+import { Control, Controller, FieldErrors, SubmitHandler, UseFormSetValue } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import { Edit, Percent } from 'react-feather'
-import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
+import { Percent } from 'react-feather'
+import {
+  TokenMetadata,
+  useTokenMetadata,
+  useTokenMetadataAcrossChains,
+} from '../../tokens/useTokenMetadata'
 import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
@@ -51,7 +46,6 @@ import { LbpFormAction } from '../LbpFormAction'
 import { DynamicLbpTokenAmountInputs } from './sale-structure/DynamicLbpTokenAmountInputs'
 import { FixedLbpTokenAmountInputs } from './sale-structure/FixedLbpTokenAmountInputs'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { useInterval } from 'usehooks-ts'
 import { isSaleStartValid, saleStartsSoon } from './sale-structure/helpers'
 import { useWatch } from 'react-hook-form'
 import { SaleTypeInput } from './sale-structure/SaleTypeInput'
@@ -60,14 +54,7 @@ import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconP
 export function SaleStructureStep() {
   const { getToken } = useTokens()
 
-  const {
-    saleStructureForm,
-    goToNextStep,
-    resetLbpCreation,
-    poolAddress,
-    isDynamicSale,
-    isFixedSale,
-  } = useLbpForm()
+  const { saleStructureForm, goToNextStep, poolAddress, isDynamicSale, isFixedSale } = useLbpForm()
 
   const {
     handleSubmit,
@@ -75,7 +62,6 @@ export function SaleStructureStep() {
     setValue,
     control,
     clearErrors,
-    trigger,
   } = saleStructureForm
 
   const [
@@ -115,9 +101,18 @@ export function SaleStructureStep() {
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
 
+  const { match: launchTokenMatch } = useTokenMetadataAcrossChains(
+    launchTokenAddress,
+    supportedChains
+  )
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
-  const launchTokenIsValid = isAddress(launchTokenAddress) && !!launchTokenMetadata.symbol
+  const resolvedLaunchTokenMetadata = launchTokenMatch?.metadata || launchTokenMetadata
 
+  useEffect(() => {
+    if (launchTokenMatch?.chain && launchTokenMatch.chain !== selectedChain) {
+      setValue('selectedChain', launchTokenMatch.chain, { shouldDirty: true })
+    }
+  }, [launchTokenMatch?.chain, selectedChain, setValue])
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
     goToNextStep()
   }
@@ -135,66 +130,54 @@ export function SaleStructureStep() {
 
             <VStack align="start" spacing="lg" w="full">
               <SaleTypeInput control={control} />
-              <NetworkSelectInput chains={supportedChains} control={control} />
               <LaunchTokenAddressInput
                 chainId={selectedChain}
                 control={control}
                 errors={errors}
-                metadata={launchTokenMetadata}
-                resetForm={resetLbpCreation}
+                metadata={resolvedLaunchTokenMetadata}
                 setFormValue={setValue}
-                triggerValidation={trigger}
-                value={launchTokenAddress}
               />
+              <NetworkSelectInput chains={supportedChains} control={control} />
+            </VStack>
+            <Divider />
+
+            <Heading color="font.maxContrast" size="md">
+              Sale period
+            </Heading>
+            <VStack align="start" gap="lg" w="full">
+              <VStack align="start" gap="sm" w="full">
+                <SaleStartInput control={control} value={startDateTime} />
+              </VStack>
+              <VStack align="start" gap="sm" w="full">
+                <SaleEndInput control={control} saleStart={startDateTime} value={endDateTime} />
+              </VStack>
             </VStack>
 
-            {launchTokenIsValid && (
-              <>
-                <Divider />
+            <Divider />
 
-                <Heading color="font.maxContrast" size="md">
-                  Sale period
-                </Heading>
-                <VStack align="start" gap="lg" w="full">
-                  <VStack align="start" gap="sm" w="full">
-                    <SaleStartInput
-                      control={control}
-                      triggerValidation={trigger}
-                      value={startDateTime}
-                    />
-                  </VStack>
-                  <VStack align="start" gap="sm" w="full">
-                    <SaleEndInput control={control} saleStart={startDateTime} value={endDateTime} />
-                  </VStack>
-                </VStack>
-
-                <Divider />
-
-                <Heading color="font.maxContrast" size="md">
-                  LBP mechanism
-                </Heading>
-                <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
-                {isDynamicSale && (
-                  <WeightAdjustmentTypeInput
-                    collateralTokenSymbol={collateralToken?.symbol || ''}
-                    control={control}
-                    customEndWeight={customEndWeight ?? 10}
-                    customStartWeight={customStartWeight ?? 90}
-                    launchTokenSymbol={launchTokenMetadata.symbol || ''}
-                    setValue={setValue}
-                    weightAdjustmentType={weightAdjustmentType ?? WeightAdjustmentType.LINEAR_90_10}
-                  />
-                )}
-                <UserActionsInput control={control} isFixedSale={isFixedSale} setValue={setValue} />
-                <FeeSelection
-                  control={control}
-                  errors={errors}
-                  feeValue={fee}
-                  setFormValue={setValue}
-                />
-                <Divider />
-              </>
+            <Heading color="font.maxContrast" size="md">
+              LBP mechanism
+            </Heading>
+            <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+            {isDynamicSale && (
+              <WeightAdjustmentTypeInput
+                collateralTokenSymbol={collateralToken?.symbol || ''}
+                control={control}
+                customEndWeight={customEndWeight ?? 10}
+                customStartWeight={customStartWeight ?? 90}
+                launchTokenSymbol={launchTokenMetadata.symbol || ''}
+                setValue={setValue}
+                weightAdjustmentType={weightAdjustmentType ?? WeightAdjustmentType.LINEAR_90_10}
+              />
             )}
+            <UserActionsInput control={control} isFixedSale={isFixedSale} />
+            <FeeSelection
+              control={control}
+              errors={errors}
+              feeValue={fee}
+              setFormValue={setValue}
+            />
+            <Divider />
           </>
         )}
         {isDynamicSale && <DynamicLbpTokenAmountInputs />}
@@ -237,31 +220,19 @@ function LaunchTokenAddressInput({
   control,
   errors,
   setFormValue,
-  value,
   metadata,
   chainId,
-  triggerValidation,
-  resetForm,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   setFormValue: UseFormSetValue<SaleStructureForm>
-  value: string
   metadata: TokenMetadata
   chainId: GqlChain
-  triggerValidation: UseFormTrigger<SaleStructureForm>
-  resetForm: UseFormReset<SaleStructureForm>
 }) {
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
-    setFormValue('launchTokenAddress', clipboardText, { shouldDirty: true, shouldValidate: true })
+    setFormValue('launchTokenAddress', clipboardText, { shouldDirty: true })
   }
-
-  const locked = !!value && !errors.launchTokenAddress
-
-  useEffect(() => {
-    if (value) triggerValidation('launchTokenAddress')
-  }, [metadata.isLoading, value, triggerValidation])
 
   return (
     <VStack align="start" w="full">
@@ -274,12 +245,8 @@ function LaunchTokenAddressInput({
             <InputWithError
               error={errors.launchTokenAddress?.message}
               info="First create the token on the chosen network, if you haven't already."
-              isDisabled={locked}
               isInvalid={!!errors.launchTokenAddress}
-              onChange={e => {
-                field.onChange(e.target.value)
-                triggerValidation('launchTokenAddress')
-              }}
+              onChange={e => field.onChange(e.target.value)}
               placeholder="Enter token address"
               value={field.value}
             />
@@ -298,31 +265,22 @@ function LaunchTokenAddressInput({
         />
 
         <InputRightElement w="max-content">
-          {!locked ? (
-            <Button
-              aria-label="paste"
-              h="28px"
-              letterSpacing="0.25px"
-              lineHeight="1"
-              mr="0.5"
-              onClick={paste}
-              position="relative"
-              px="2"
-              right="3px"
-              rounded="sm"
-              size="sm"
-              variant="tertiary"
-            >
-              Paste
-            </Button>
-          ) : (
-            <IconButton
-              aria-label="edit"
-              icon={<Edit size="16px" />}
-              onClick={() => resetForm()}
-              variant="link"
-            />
-          )}
+          <Button
+            aria-label="paste"
+            h="28px"
+            letterSpacing="0.25px"
+            lineHeight="1"
+            mr="0.5"
+            onClick={paste}
+            position="relative"
+            px="2"
+            right="3px"
+            rounded="sm"
+            size="sm"
+            variant="tertiary"
+          >
+            Paste
+          </Button>
         </InputRightElement>
       </InputGroup>
     </VStack>
@@ -332,20 +290,10 @@ function LaunchTokenAddressInput({
 function SaleStartInput({
   control,
   value,
-  triggerValidation,
 }: {
   control: Control<SaleStructureForm>
   value: string
-  triggerValidation: UseFormTrigger<SaleStructureForm>
 }) {
-  useEffect(() => {
-    if (value) triggerValidation('startDateTime')
-  }, [value, triggerValidation])
-
-  useInterval(() => {
-    if (value) triggerValidation('startDateTime')
-  }, 5000)
-
   return (
     <>
       <DateTimeInput
@@ -486,19 +434,10 @@ function CollateralTokenAddressInput({
 function UserActionsInput({
   control,
   isFixedSale,
-  setValue,
 }: {
   control: Control<SaleStructureForm>
   isFixedSale?: boolean
-  setValue?: UseFormSetValue<SaleStructureForm>
 }) {
-  // For fixed sale types, force "Buy only" and disable the other option
-  useEffect(() => {
-    if (isFixedSale && setValue) {
-      setValue('userActions', UserActions.BUY_ONLY)
-    }
-  }, [isFixedSale, setValue])
-
   return (
     <VStack align="start" w="full">
       <HStack>
@@ -513,9 +452,7 @@ function UserActionsInput({
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack direction="row" gap="md">
-              <Radio isDisabled={isFixedSale} value={UserActions.BUY_AND_SELL}>
-                Buy & sell
-              </Radio>
+              <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
             </Stack>
           </RadioGroup>
