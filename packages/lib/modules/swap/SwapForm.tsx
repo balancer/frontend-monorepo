@@ -2,7 +2,7 @@
 
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { HumanAmount } from '@balancer/sdk'
+import { HumanAmount, Path } from '@balancer/sdk'
 import {
   Card,
   Center,
@@ -50,6 +50,7 @@ import { useIsSafeAccount } from '../web3/safe.hooks'
 import { buildCowSwapUrl } from '../cow/cow.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { RoutesCard } from './RoutesCard'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -330,14 +331,31 @@ export function SwapForm({
                 />
               </VStack>
               {!simulationQuery.isError && (
-                <PriceImpactAccordion
-                  accordionButtonComponent={<SwapRate customTokenUsdPrice={customTokenUsdPrice} />}
-                  accordionPanelComponent={<SwapDetails />}
-                  action="swap"
-                  cowLink={cowLink}
-                  isDisabled={!simulationQuery.data}
-                  setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
-                />
+                <>
+                  <PriceImpactAccordion
+                    accordionButtonComponent={
+                      <SwapRate customTokenUsdPrice={customTokenUsdPrice} />
+                    }
+                    accordionPanelComponent={<SwapDetails />}
+                    action="swap"
+                    cowLink={cowLink}
+                    isDisabled={!simulationQuery.data}
+                    setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
+                  />
+
+                  {!isPoolSwap && (
+                    <RoutesCard
+                      chain={selectedChain}
+                      paths={
+                        simulationQuery.data && 'paths' in simulationQuery.data
+                          ? (simulationQuery.data['paths'] as Path[])
+                          : []
+                      }
+                      totalInputAmount={Number(tokenIn.amount)}
+                      totalOutputAmount={Number(tokenOut.amount)}
+                    />
+                  )}
+                </>
               )}
               {simulationQuery.isError ? (
                 <SwapSimulationError errorMessage={simulationQuery.error?.message} />

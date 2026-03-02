@@ -6,11 +6,9 @@ import { signPermit2Swap } from '../tokens/approvals/permit2/signPermit2Swap'
 import { NoncesByTokenAddress } from '../tokens/approvals/permit2/usePermit2Allowance'
 import { SignPermit2Fn, TokenAmountIn } from '../tokens/approvals/permit2/useSignPermit2'
 import { useSignPermit2Step } from '../transactions/transaction-steps/useSignPermit2Step'
-import {
-  SdkSimulationResponseWithRouter,
-  SwapSimulationQueryResult,
-} from './queries/useSimulateSwapQuery'
+import { SwapSimulationQueryResult } from './queries/useSimulateSwapQuery'
 import { ApiToken } from '../tokens/token.types'
+import { SdkSimulateSwapResponse } from './swap.types'
 
 type Props = {
   wethIsEth: boolean
@@ -32,7 +30,7 @@ export function useSignPermit2SwapStep({
 
   const tokenInAddress = (tokenInInfo?.address ?? '') as Address
 
-  const queryData = simulationQuery.data as SdkSimulationResponseWithRouter
+  const queryData = simulationQuery.data as SdkSimulateSwapResponse
 
   function getTokenInAmount(): bigint {
     if (!queryData?.queryOutput) return 0n
