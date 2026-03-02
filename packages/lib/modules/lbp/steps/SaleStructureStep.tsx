@@ -113,6 +113,20 @@ export function SaleStructureStep() {
       setValue('selectedChain', launchTokenMatch.chain, { shouldDirty: true })
     }
   }, [launchTokenMatch?.chain, selectedChain, setValue])
+
+  useEffect(() => {
+    const chainConfig = getNetworkConfig(selectedChain)
+    const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
+    const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || []), nativeAsset]
+    const normalizedTokens = collateralTokens.filter(Boolean).map(token => token?.toLowerCase())
+    const hasValidCollateral = normalizedTokens.includes(
+      (collateralTokenAddress || '').toLowerCase()
+    )
+
+    if (!hasValidCollateral) {
+      setValue('collateralTokenAddress', collateralTokens?.[0] || '', { shouldDirty: true })
+    }
+  }, [collateralTokenAddress, selectedChain, setValue])
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
     goToNextStep()
   }
