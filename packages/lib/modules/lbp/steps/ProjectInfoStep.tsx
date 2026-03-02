@@ -14,15 +14,11 @@ import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
 import { LbpFormAction } from '../LbpFormAction'
-import { validateUrlFormat, validateImageUrl } from '@repo/lib/shared/utils/urls'
-import { isValidTelegramHandle, isValidTwitterHandle } from '@repo/lib/shared/utils/strings'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWithError'
 import NextLink from 'next/link'
-import { isAddress } from 'viem'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { normalizeHandle } from '@repo/lib/shared/utils/links'
-import { useWatch, useFormState } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 export function ProjectInfoStep() {
   const {
@@ -66,9 +62,8 @@ export function ProjectInfoStep() {
 
 function NameInput({ isDisabled }: { isDisabled: boolean }) {
   const {
-    projectInfoForm: { control },
+    projectInfoForm: { clearErrors, control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
   const length = useWatch({ control, name: 'name' }).length
   const maxLength = 24
 
@@ -88,20 +83,20 @@ function NameInput({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="name"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.name?.message}
+            error={fieldState.error?.message}
             id="project-name"
             isDisabled={isDisabled}
-            isInvalid={!!errors.name}
+            isInvalid={fieldState.invalid}
             maxLength={maxLength}
-            onChange={e => field.onChange(e.target.value)}
+            onChange={e => {
+              field.onChange(e.target.value)
+              clearErrors('name')
+            }}
             value={field.value}
           />
         )}
-        rules={{
-          required: 'Project name is required',
-        }}
       />
     </VStack>
   )
@@ -109,9 +104,8 @@ function NameInput({ isDisabled }: { isDisabled: boolean }) {
 
 function DescriptionInput({ isDisabled }: { isDisabled: boolean }) {
   const {
-    projectInfoForm: { control },
+    projectInfoForm: { clearErrors, control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   const length = useWatch({ control, name: 'description' }).length
   const maxLength = 240
@@ -132,22 +126,22 @@ function DescriptionInput({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="description"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <TextareaWithError
-            error={errors.description?.message}
+            error={fieldState.error?.message}
             id="project-description"
             isDisabled={isDisabled}
-            isInvalid={!!errors.description}
+            isInvalid={fieldState.invalid}
             maxLength={maxLength}
-            onChange={e => field.onChange(e.target.value)}
+            onChange={e => {
+              field.onChange(e.target.value)
+              clearErrors('description')
+            }}
             placeholder="A brief description of your project and what the token will be used for."
             rows={4}
             value={field.value}
           />
         )}
-        rules={{
-          required: 'Project description is required',
-        }}
       />
     </VStack>
   )
@@ -155,14 +149,13 @@ function DescriptionInput({ isDisabled }: { isDisabled: boolean }) {
 
 function TokenIconInput({ isDisabled }: { isDisabled: boolean }) {
   const {
-    projectInfoForm: { control, setValue },
+    projectInfoForm: { clearErrors, control, setValue },
   } = useLbpForm()
-
-  const { errors } = useFormState({ control })
 
   const paste = async () => {
     const clipboardText = await navigator.clipboard.readText()
     setValue('tokenIconUrl', clipboardText, { shouldDirty: true })
+    clearErrors('tokenIconUrl')
   }
 
   return (
@@ -173,22 +166,21 @@ function TokenIconInput({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="tokenIconUrl"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.tokenIconUrl?.message}
+            error={fieldState.error?.message}
             id="token-icon-url"
             isDisabled={isDisabled}
-            isInvalid={!!errors.tokenIconUrl}
-            onChange={e => field.onChange(e.target.value)}
+            isInvalid={fieldState.invalid}
+            onChange={e => {
+              field.onChange(e.target.value)
+              clearErrors('tokenIconUrl')
+            }}
             pasteFn={isDisabled ? undefined : paste}
             placeholder="https://project-name.com/token.svg"
             value={field.value}
           />
         )}
-        rules={{
-          required: 'Token icon URL is required',
-          validate: validateImageUrl,
-        }}
       />
     </VStack>
   )
@@ -196,9 +188,8 @@ function TokenIconInput({ isDisabled }: { isDisabled: boolean }) {
 
 function ProjectWebsiteUrlInput({ isDisabled }: { isDisabled: boolean }) {
   const {
-    projectInfoForm: { control },
+    projectInfoForm: { clearErrors, control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -208,21 +199,20 @@ function ProjectWebsiteUrlInput({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="websiteUrl"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.websiteUrl?.message}
+            error={fieldState.error?.message}
             id="project-website-url"
             isDisabled={isDisabled}
-            isInvalid={!!errors.websiteUrl}
-            onChange={e => field.onChange(e.target.value)}
+            isInvalid={fieldState.invalid}
+            onChange={e => {
+              field.onChange(e.target.value)
+              clearErrors('websiteUrl')
+            }}
             placeholder="https://project-name.com"
             value={field.value}
           />
         )}
-        rules={{
-          required: 'Website URL is required',
-          validate: validateUrlFormat,
-        }}
       />
     </VStack>
   )
@@ -232,7 +222,6 @@ function ProjectXHandle({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -242,21 +231,17 @@ function ProjectXHandle({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="xHandle"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.xHandle?.message}
+            error={fieldState.error?.message}
             id="x-handle"
             isDisabled={isDisabled}
-            isInvalid={!!errors.xHandle}
+            isInvalid={fieldState.invalid}
             onChange={e => field.onChange(e.target.value)}
             placeholder="@project-handle"
             value={field.value}
           />
         )}
-        rules={{
-          validate: (value: string | undefined) =>
-            isValidTwitterHandle(normalizeHandle(value || '')),
-        }}
       />
     </VStack>
   )
@@ -266,7 +251,6 @@ function ProjectTelegramHandle({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -276,21 +260,17 @@ function ProjectTelegramHandle({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="telegramHandle"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.telegramHandle?.message}
+            error={fieldState.error?.message}
             id="telegram-handle"
             isDisabled={isDisabled}
-            isInvalid={!!errors.telegramHandle}
+            isInvalid={fieldState.invalid}
             onChange={e => field.onChange(e.target.value)}
             placeholder="@project-handle"
             value={field.value}
           />
         )}
-        rules={{
-          validate: (value: string | undefined) =>
-            isValidTelegramHandle(normalizeHandle(value || '')),
-        }}
       />
     </VStack>
   )
@@ -300,7 +280,6 @@ function ProjectDiscordUrlInput({ isDisabled }: { isDisabled: boolean }) {
   const {
     projectInfoForm: { control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
@@ -310,20 +289,17 @@ function ProjectDiscordUrlInput({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="discordUrl"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.discordUrl?.message}
+            error={fieldState.error?.message}
             id="discord-url"
             isDisabled={isDisabled}
-            isInvalid={!!errors.discordUrl}
+            isInvalid={fieldState.invalid}
             onChange={e => field.onChange(e.target.value)}
             placeholder="https://yourdomain.com"
             value={field.value}
           />
         )}
-        rules={{
-          validate: validateUrlFormat,
-        }}
       />
     </VStack>
   )
@@ -331,16 +307,14 @@ function ProjectDiscordUrlInput({ isDisabled }: { isDisabled: boolean }) {
 
 function ProjectOwnerInput({ isDisabled }: { isDisabled: boolean }) {
   const {
-    projectInfoForm: { control, setValue, trigger },
+    projectInfoForm: { control, setValue },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   const { userAddress } = useUserAccount()
 
   const paste = async () => {
     const clipboardText = await navigator.clipboard.readText()
     setValue('owner', clipboardText)
-    trigger('owner')
   }
 
   return (
@@ -351,21 +325,18 @@ function ProjectOwnerInput({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="owner"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.owner?.message}
+            error={fieldState.error?.message}
             id="project-owner"
             isDisabled={isDisabled}
-            isInvalid={!!errors.owner}
+            isInvalid={fieldState.invalid}
             onChange={e => field.onChange(e.target.value)}
             pasteFn={isDisabled ? undefined : paste}
             placeholder={userAddress}
             value={field.value}
           />
         )}
-        rules={{
-          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
-        }}
       />
     </VStack>
   )
@@ -373,16 +344,14 @@ function ProjectOwnerInput({ isDisabled }: { isDisabled: boolean }) {
 
 function PoolCreatorInput({ isDisabled }: { isDisabled: boolean }) {
   const {
-    projectInfoForm: { control, setValue, trigger },
+    projectInfoForm: { control, setValue },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   const { userAddress } = useUserAccount()
 
   const paste = async () => {
     const clipboardText = await navigator.clipboard.readText()
     setValue('poolCreator', clipboardText)
-    trigger('poolCreator')
   }
 
   return (
@@ -393,21 +362,18 @@ function PoolCreatorInput({ isDisabled }: { isDisabled: boolean }) {
       <Controller
         control={control}
         name="poolCreator"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <InputWithError
-            error={errors.poolCreator?.message}
+            error={fieldState.error?.message}
             id="pool-creator"
             isDisabled={isDisabled}
-            isInvalid={!!errors.poolCreator}
+            isInvalid={fieldState.invalid}
             onChange={e => field.onChange(e.target.value)}
             pasteFn={isDisabled ? undefined : paste}
             placeholder={userAddress}
             value={field.value}
           />
         )}
-        rules={{
-          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
-        }}
       />
     </VStack>
   )
@@ -415,55 +381,58 @@ function PoolCreatorInput({ isDisabled }: { isDisabled: boolean }) {
 
 function Disclaimer() {
   const {
-    projectInfoForm: { control },
+    projectInfoForm: { clearErrors, control },
   } = useLbpForm()
-  const { errors } = useFormState({ control })
 
   return (
-    <FormControl isInvalid={!!errors.disclaimerAccepted}>
+    <FormControl>
       <Controller
         control={control}
         name="disclaimerAccepted"
-        render={({ field }) => (
-          <Checkbox
-            color="font.primary"
-            fontWeight="medium"
-            isChecked={field.value}
-            onChange={field.onChange}
-            size="lg"
-          >
-            {'I accept the'}
-            <Button
-              as={NextLink}
-              fontSize="lg"
+        render={({ field, fieldState }) => (
+          <FormControl isInvalid={fieldState.invalid}>
+            <Checkbox
+              color="font.primary"
               fontWeight="medium"
-              href={'/risks'}
-              px="0.3em"
-              target="_blank"
-              textColor="font.link"
-              variant="link"
+              isChecked={field.value}
+              onChange={event => {
+                field.onChange(event)
+                clearErrors('disclaimerAccepted')
+              }}
+              size="lg"
             >
-              Risks
-            </Button>
-            {'and'}
-            <Button
-              as={NextLink}
-              fontSize="lg"
-              fontWeight="medium"
-              href={'/terms-of-use'}
-              px="0.3em"
-              target="_blank"
-              textColor="font.link"
-              variant="link"
-            >
-              Terms of Use
-            </Button>
-            {'for creating and LBP'}
-          </Checkbox>
+              {'I accept the'}
+              <Button
+                as={NextLink}
+                fontSize="lg"
+                fontWeight="medium"
+                href={'/risks'}
+                px="0.3em"
+                target="_blank"
+                textColor="font.link"
+                variant="link"
+              >
+                Risks
+              </Button>
+              {'and'}
+              <Button
+                as={NextLink}
+                fontSize="lg"
+                fontWeight="medium"
+                href={'/terms-of-use'}
+                px="0.3em"
+                target="_blank"
+                textColor="font.link"
+                variant="link"
+              >
+                Terms of Use
+              </Button>
+              {'for creating and LBP'}
+            </Checkbox>
+            <FormErrorMessage>{fieldState.error?.message}</FormErrorMessage>
+          </FormControl>
         )}
-        rules={{ required: 'Conditions must be accepted' }}
       />
-      <FormErrorMessage>{errors.disclaimerAccepted?.message}</FormErrorMessage>
     </FormControl>
   )
 }
