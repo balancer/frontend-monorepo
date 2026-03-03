@@ -25,7 +25,6 @@ async function doSaleStructureStep(page: Page, { continue: shouldContinue = fals
 
   const nextButton = button(page, 'Next')
 
-  await expect(nextButton).toBeDisabled()
   await page.getByLabel('Sale token').fill('100')
   await page.getByLabel('Collateral token').fill('1')
   await expect(nextButton).toBeEnabled()
@@ -47,9 +46,7 @@ async function doProjectInfoStep(page: Page, { continue: shouldContinue = false 
     .getByLabel('Token icon URL')
     .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
 
-  await expect(nextButton).toBeDisabled()
   await page.getByRole('checkbox').check({ force: true })
-  await expect(nextButton).toBeEnabled()
 
   if (shouldContinue) await nextButton.click()
 }
@@ -87,6 +84,34 @@ test.describe('Create LBP page', () => {
     await doSaleStructureStep(page, { continue: true })
     await doProjectInfoStep(page, { continue: true })
     await doReviewStep(page)
+  })
+
+  test('shows validation errors when required fields are missing', async ({ page }) => {
+    await expect(page).toHaveURL(stepUrl(0))
+
+    await clickButton(page, 'Next')
+
+    await expect(page.getByText('Token address is required')).toBeVisible()
+    await expect(page.getByText('Start date and time is required')).toBeVisible()
+    await expect(page.getByText('End date and time is required')).toBeVisible()
+    await expect(page.getByText('Sale token amount is required')).toBeVisible()
+    await expect(page.getByText('Collateral token amount is required')).toBeVisible()
+    await expect(page).toHaveURL(stepUrl(0))
+  })
+
+  test('blocks sale period shorter than 24 hours', async ({ page }) => {
+    await doSaleStructureStep(page)
+
+    const dateInputs = page.locator('input[type="datetime-local"]')
+    const invalidEndTime = toISOString(Date.now() + oneDayInMs + 60 * 60 * 1000).slice(0, 16)
+    await dateInputs.last().fill(invalidEndTime)
+
+    await clickButton(page, 'Next')
+
+    await expect(
+      page.getByText('End time must be at least 24 hours after start time'),
+    ).toBeVisible()
+    await expect(page).toHaveURL(stepUrl(0))
   })
 
   test.describe('Form reset', () => {
