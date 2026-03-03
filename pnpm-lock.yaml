@@ -583,8 +583,8 @@ importers:
         specifier: ^2.0.10
         version: 2.0.10(react@19.2.4)
       react-hook-form:
-        specifier: 7.65.0
-        version: 7.65.0(react@19.2.4)
+        specifier: 7.71.2
+        version: 7.71.2(react@19.2.4)
       react-hotkeys-hook:
         specifier: 5.2.4
         version: 5.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -7661,8 +7661,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-hook-form@7.65.0:
-    resolution: {integrity: sha512-xtOzDz063WcXvGWaHgLNrNzlsdFgtUWcb32E6WFaGTd7kPZG3EeDusjdZfUsPwKCKVXy1ZlntifaHZ4l8pAsmw==}
+  react-hook-form@7.71.2:
+    resolution: {integrity: sha512-1CHvcDYzuRUNOflt4MOq3ZM46AronNJtQ1S7tnX6YN4y72qhgiUItpacZUAQ0TyWYci3yz1X+rXaSxiuEm86PA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -17797,7 +17797,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.10
 
-  react-hook-form@7.65.0(react@19.2.4):
+  react-hook-form@7.71.2(react@19.2.4):
     dependencies:
       react: 19.2.4
 
