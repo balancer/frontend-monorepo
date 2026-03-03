@@ -1,5 +1,5 @@
 import { useRef, type JSX } from 'react'
-import { Box, useToken } from '@chakra-ui/react'
+import { Box, useToken } from '@chakra-ui/react';
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
 
 export function AnimatedSVG(): JSX.Element {
@@ -7,8 +7,7 @@ export function AnimatedSVG(): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start end', 'end start'],
-  })
+    offset: ['start end', 'end start'] })
 
   const pathLength: MotionValue<number> = useTransform(scrollYProgress, [0, 1], [0, 1])
   const pathD: MotionValue<string> = useTransform(

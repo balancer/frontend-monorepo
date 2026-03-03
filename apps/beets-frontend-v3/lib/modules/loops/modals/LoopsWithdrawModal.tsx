@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -36,8 +36,7 @@ export function LoopsWithdrawModal({
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
-    txReceipt: lastTransaction?.result,
-  })
+    txReceipt: lastTransaction?.result })
 
   useEffect(() => {
     if (isOpen) {
@@ -51,38 +50,46 @@ export function LoopsWithdrawModal({
   const isSuccess = !!loopsWithdrawTxHash && loopsWithdrawReceipt.hasReceipt
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!loopsWithdrawTxHash} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && (
-          <DesktopStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />
-        )}
-        <TransactionModalHeader
-          chain={chain}
-          isReceiptLoading
-          label="Review withdrawal"
-          txHash={loopsWithdrawTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <LoopsWithdrawSummary {...loopsWithdrawReceipt} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={withdrawTransactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onClose}
-          returnLabel="Withdraw again"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!loopsWithdrawTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && (
+              <DesktopStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />
+            )}
+            <TransactionModalHeader
+              chain={chain}
+              isReceiptLoading
+              label="Review withdrawal"
+              txHash={loopsWithdrawTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <LoopsWithdrawSummary {...loopsWithdrawReceipt} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={withdrawTransactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onClose}
+              returnLabel="Withdraw again"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

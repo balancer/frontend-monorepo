@@ -1,5 +1,5 @@
 import { SVGProps, forwardRef } from 'react'
-import { useColorMode } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 
 interface LbpBenefitsChartIconProps extends SVGProps<SVGSVGElement> {
   size?: number
@@ -7,7 +7,7 @@ interface LbpBenefitsChartIconProps extends SVGProps<SVGSVGElement> {
 
 export const LbpBenefitsChartIcon = forwardRef<SVGSVGElement, LbpBenefitsChartIconProps>(
   ({ size = 42, ...props }, ref) => {
-    const { colorMode } = useColorMode()
+    const colorMode = useThemeColorMode()
 
     return (
       <svg

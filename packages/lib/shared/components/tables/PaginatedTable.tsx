@@ -3,13 +3,12 @@ import {
   Box,
   BoxProps,
   Center,
-  Divider,
   Text,
   Spinner,
   VStack,
   Skeleton,
   StyleProps,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { Pagination, PaginationProps } from '@repo/lib/shared/components/pagination/Pagination'
 
 interface Props<T> extends BoxProps {
@@ -35,8 +34,7 @@ export function PaginatedTable<T>({
   noItemsFoundLabel,
   getRowId,
   loadingLength = 20,
-  paginationStyles,
-}: Props<T>) {
+  paginationStyles }: Props<T>) {
   const previousPageCountRef = useRef(0)
 
   useEffect(() => {
@@ -53,7 +51,7 @@ export function PaginatedTable<T>({
     <>
       <VStack gap="0" w="full">
         <TableHeader />
-        <Divider />
+        <Separator />
         <Box position="relative" w="full">
           {items.length > 0 && (
             <VStack gap="0">
@@ -92,8 +90,7 @@ export function PaginatedTable<T>({
                   left: 0,
                   borderRadius: 10,
                   zIndex: 10,
-                  backdropFilter: 'blur(3px)',
-                }}
+                  backdropFilter: 'blur(3px)' }}
               >
                 <Center py="4xl">
                   <Spinner size="xl" />
@@ -105,10 +102,10 @@ export function PaginatedTable<T>({
       </VStack>
       {showPagination && paginationProps && (
         <>
-          <Divider />
+          <Separator />
           <Pagination p="md" {...paginationProps} {...paginationStyles} />
         </>
       )}
     </>
-  )
+  );
 }

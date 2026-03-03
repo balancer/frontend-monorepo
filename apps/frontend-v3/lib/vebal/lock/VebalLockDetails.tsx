@@ -1,5 +1,5 @@
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
-import { HStack, VStack, Text, Skeleton } from '@chakra-ui/react'
+import { HStack, VStack, Text, Skeleton } from '@chakra-ui/react';
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useVebalLock } from './VebalLockProvider'
 
@@ -21,7 +21,7 @@ export function VebalLockDetails({ variant, isLoading }: VebalLockDetailsProps) 
       : undefined
 
   return (
-    <VStack align="start" fontSize="sm" spacing="sm" w="full">
+    <VStack align="start" fontSize="sm" gap="sm" w="full">
       <HStack justify="space-between" w="full">
         <Text color="grayText">Total share of veBAL</Text>
         <HStack>
@@ -71,5 +71,5 @@ export function VebalLockDetails({ variant, isLoading }: VebalLockDetailsProps) 
         </HStack>
       </HStack>
     </VStack>
-  )
+  );
 }

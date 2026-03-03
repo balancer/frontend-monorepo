@@ -3,7 +3,7 @@
 import { useApolloClient, useReactiveVar } from '@apollo/client/react'
 import { ApolloClient } from '@apollo/client'
 import { HumanAmount } from '@balancer/sdk'
-import { useDisclosure } from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react';
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
@@ -12,8 +12,7 @@ import { LABELS } from '@repo/lib/shared/labels'
 import {
   GqlChain,
   GqlPoolLiquidityBootstrappingV3,
-  GqlSorSwapType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
@@ -41,8 +40,7 @@ import {
   SdkSimulateSwapResponse,
   SimulateSwapResponse,
   SwapAction,
-  SwapState,
-} from './swap.types'
+  SwapState } from './swap.types'
 import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 import { useSwapSteps } from './useSwapSteps'
 import {
@@ -51,8 +49,7 @@ import {
   getWrapperForBaseToken,
   isNativeWrap,
   isSupportedWrap,
-  isWrapOrUnwrap,
-} from './wrap.helpers'
+  isWrapOrUnwrap } from './wrap.helpers'
 import { Pool } from '../pool/pool.types'
 import { getStandardRootTokens, isStandardOrUnderlyingRootToken } from '../pool/pool-tokens.utils'
 import { getChildTokens } from '../pool/pool-tokens.utils'
@@ -114,16 +111,13 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       tokenIn: {
         address: emptyAddress,
         amount: '',
-        scaledAmount: BigInt(0),
-      },
+        scaledAmount: BigInt(0) },
       tokenOut: {
         address: emptyAddress,
         amount: '',
-        scaledAmount: BigInt(0),
-      },
+        scaledAmount: BigInt(0) },
       swapType: GqlSorSwapType.ExactIn,
-      selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork,
-    },
+      selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork },
     isLbpSwap ? 'lbpSwapState' : 'swapState',
     shouldDiscardOldPersistedValue
   )
@@ -218,17 +212,14 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       swapType: swapState.swapType,
       swapAmount: getSwapAmount(),
       // We only use this field to filter by the specific pool swap path in pool swap flow
-      poolIds: getPoolSwapPoolsIds(),
-    },
-    enabled: shouldFetchSwap(swapState, urlTxHash),
-  })
+      poolIds: getPoolSwapPoolsIds() },
+    enabled: shouldFetchSwap(swapState, urlTxHash) })
 
   function handleSimulationResponse({ returnAmount, swapType }: SimulateSwapResponse) {
     const swapState = swapStateVar()
     swapStateVar({
       ...swapState,
-      swapType,
-    })
+      swapType })
 
     if (swapType === GqlSorSwapType.ExactIn) {
       setTokenOutAmount(returnAmount, { userTriggered: false })
@@ -251,12 +242,10 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       ...swapState,
       tokenIn: {
         ...swapState.tokenIn,
-        address: tokenAddress,
-      },
+        address: tokenAddress },
       tokenOut: isSameAsTokenOut
         ? { ...swapState.tokenOut, address: emptyAddress }
-        : swapState.tokenOut,
-    })
+        : swapState.tokenOut })
 
     resetPriceImpact()
     resetValidationErrors()
@@ -270,12 +259,10 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       ...swapState,
       tokenOut: {
         ...swapState.tokenOut,
-        address: tokenAddress,
-      },
+        address: tokenAddress },
       tokenIn: isSameAsTokenIn
         ? { ...swapState.tokenIn, address: emptyAddress }
-        : swapState.tokenIn,
-    })
+        : swapState.tokenIn })
 
     resetPriceImpact()
     resetValidationErrors()
@@ -287,8 +274,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       ...swapState,
       tokenIn: swapState.tokenOut,
       tokenOut: swapState.tokenIn,
-      swapType: GqlSorSwapType.ExactIn,
-    })
+      swapType: GqlSorSwapType.ExactIn })
     setTokenInAmount('', { userTriggered: false })
     setTokenOutAmount('', { userTriggered: false })
 
@@ -307,8 +293,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
           scaledAmount: scaleTokenAmount(
             amount,
             lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
-          ),
-        }
+          ) }
       : /*
           When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
           so we set amount as zero instead of crashing the app
@@ -316,26 +301,21 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         tokenInInfo
         ? {
             amount: amount,
-            scaledAmount: scaleTokenAmount(amount, tokenInInfo),
-          }
+            scaledAmount: scaleTokenAmount(amount, tokenInInfo) }
         : {
             amount: '0',
-            scaledAmount: 0n,
-          }
+            scaledAmount: 0n }
 
     const newState = {
       ...state,
       tokenIn: {
         ...state.tokenIn,
-        ...amountObj,
-      },
-    }
+        ...amountObj } }
 
     if (userTriggered) {
       swapStateVar({
         ...newState,
-        swapType: GqlSorSwapType.ExactIn,
-      })
+        swapType: GqlSorSwapType.ExactIn })
       setTokenOutAmount('', { userTriggered: false })
     } else {
       // Sometimes we want to set the amount without triggering a fetch or
@@ -356,8 +336,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
           scaledAmount: scaleTokenAmount(
             amount,
             lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
-          ),
-        }
+          ) }
       : /*
           When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
           so we set amount as zero instead of crashing the app
@@ -365,27 +344,22 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         tokenOutInfo
         ? {
             amount: amount,
-            scaledAmount: scaleTokenAmount(amount, tokenOutInfo),
-          }
+            scaledAmount: scaleTokenAmount(amount, tokenOutInfo) }
         : {
             amount: '0',
-            scaledAmount: 0n,
-          }
+            scaledAmount: 0n }
 
     const newState = {
       ...state,
       tokenOut: {
         ...state.tokenOut,
 
-        ...amountObj,
-      },
-    }
+        ...amountObj } }
 
     if (userTriggered) {
       swapStateVar({
         ...newState,
-        swapType: GqlSorSwapType.ExactOut,
-      })
+        swapType: GqlSorSwapType.ExactOut })
       setTokenInAmount('', { userTriggered: false })
     } else {
       // Sometimes we want to set the amount without triggering a fetch or
@@ -399,8 +373,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     const swapState = swapStateVar()
 
     const {
-      tokens: { defaultSwapTokens },
-    } = getNetworkConfig(chain)
+      tokens: { defaultSwapTokens } } = getNetworkConfig(chain)
 
     const { tokenIn, tokenOut } = defaultSwapTokens || {}
 
@@ -409,13 +382,10 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       selectedChain: chain,
       tokenIn: {
         ...swapState.tokenIn,
-        address: tokenIn ? tokenIn : emptyAddress,
-      },
+        address: tokenIn ? tokenIn : emptyAddress },
       tokenOut: {
         ...swapState.tokenOut,
-        address: tokenOut ? tokenOut : emptyAddress,
-      },
-    }
+        address: tokenOut ? tokenOut : emptyAddress } }
   }
 
   function resetSwapAmounts() {
@@ -426,14 +396,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       tokenIn: {
         ...state.tokenIn,
         amount: '',
-        scaledAmount: BigInt(0),
-      },
+        scaledAmount: BigInt(0) },
       tokenOut: {
         ...state.tokenOut,
         amount: '',
-        scaledAmount: BigInt(0),
-      },
-    })
+        scaledAmount: BigInt(0) } })
   }
 
   function setDefaultTokens() {
@@ -514,8 +481,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       isLbpSwap && !isLbpProjectTokenBuy && lbpToken ? (lbpToken as ApiToken) : tokenInInfo,
     tokenOutInfo,
     isLbpSwap: !!isLbpSwap,
-    isLbpProjectTokenBuy: !!isLbpProjectTokenBuy,
-  })
+    isLbpProjectTokenBuy: !!isLbpProjectTokenBuy })
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
@@ -720,8 +686,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     setTokenIn,
     setTokenOut,
     switchTokens,
-    setNeedsToAcceptHighPI,
-  }
+    setNeedsToAcceptHighPI }
 }
 
 type Props = PropsWithChildren<{

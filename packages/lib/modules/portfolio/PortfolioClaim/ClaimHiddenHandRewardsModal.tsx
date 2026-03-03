@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
+import { Card, Dialog, Portal } from '@chakra-ui/react';
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { Address } from 'viem'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -34,40 +34,53 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
   const rewards: HumanTokenAmount[] =
     hiddenHandRewardsData?.aggregatedRewards.map(reward => ({
       tokenAddress: reward.tokenAddress as Address,
-      humanAmount: reward.claimable as HumanAmount,
-    })) || []
+      humanAmount: reward.claimable as HumanAmount })) || []
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap trapFocus={!isSuccess}>
-      <SuccessOverlay startAnimation={isSuccess} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
-        <TransactionModalHeader
-          chain={chain}
-          label="Claim Hidden Hand rewards"
-          txHash={claimTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <AnimateHeightChange spacing="sm" w="full">
-            {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
-            <Card variant="modalSubSection">
-              <TokenRowGroup
-                amounts={rewards}
-                chain={chain}
-                label="You'll get"
-                totalUSDValue={hiddenHandRewardsData?.totalValueUsd?.toString() || '0'}
-              />
-            </Card>
-          </AnimateHeightChange>
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onClose}
-          returnLabel="Return to portfolio"
-        />
-      </ModalContent>
-    </Modal>
-  )
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
+      trapFocus={!isSuccess}
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={isSuccess} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
+            <TransactionModalHeader
+              chain={chain}
+              label="Claim Hidden Hand rewards"
+              txHash={claimTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <AnimateHeightChange spacing="sm" w="full">
+                {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
+                <Card.Root variant="modalSubSection">
+                  <TokenRowGroup
+                    amounts={rewards}
+                    chain={chain}
+                    label="You'll get"
+                    totalUSDValue={hiddenHandRewardsData?.totalValueUsd?.toString() || '0'}
+                  />
+                </Card.Root>
+              </AnimateHeightChange>
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onClose}
+              returnLabel="Return to portfolio"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

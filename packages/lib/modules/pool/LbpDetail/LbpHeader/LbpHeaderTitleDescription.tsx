@@ -1,4 +1,4 @@
-import { HStack, VStack, Heading, Text, Button, IconButton, Link, Stack } from '@chakra-ui/react'
+import { HStack, VStack, Heading, Text, Button, IconButton, Link, Stack } from '@chakra-ui/react';
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { IconType, SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
@@ -15,21 +15,18 @@ export function LbpHeaderTitleDescription() {
   const socialLinks = [
     {
       iconType: 'x',
-      href: lbpPool.x ? `https://twitter.com/${lbpPool.x}` : undefined,
-    },
+      href: lbpPool.x ? `https://twitter.com/${lbpPool.x}` : undefined },
     {
       iconType: 'discord',
-      href: lbpPool.discord || undefined,
-    },
+      href: lbpPool.discord || undefined },
     {
       iconType: 'tg',
-      href: lbpPool.telegram ? `https://t.me/${lbpPool.telegram}` : undefined,
-    },
+      href: lbpPool.telegram ? `https://t.me/${lbpPool.telegram}` : undefined },
   ] as { iconType: IconType; href: string | undefined }[]
 
   return (
-    <VStack align="start" spacing="xl">
-      <HStack spacing="sm">
+    <VStack align="start" gap="xl">
+      <HStack gap="sm">
         <TokenIcon
           address={pool.address}
           alt={projectToken.symbol || pool.address}
@@ -39,8 +36,8 @@ export function LbpHeaderTitleDescription() {
           overflow="visible"
           size={64}
         />
-        <VStack align="start" spacing="sm">
-          <HStack spacing="md">
+        <VStack align="start" gap="sm">
+          <HStack gap="md">
             <Heading
               fontSize="4xl"
               lineHeight="36px"
@@ -57,38 +54,36 @@ export function LbpHeaderTitleDescription() {
         {lbpPool.description}
       </Text>
       <HStack mt="auto">
-        <Button as={Link} href={lbpPool.website || ''} isExternal variant="tertiary">
-          <HStack gap="xxs">
-            <Text>View project</Text>
-            <ArrowUpRight size={12} />
-          </HStack>
-        </Button>
+        <Button isExternal variant="tertiary" asChild><Link href={lbpPool.website || ''}>
+            <HStack gap="xxs">
+              <Text>View project</Text>
+              <ArrowUpRight size={12} />
+            </HStack>
+          </Link></Button>
         <Text opacity="0.25" px={{ base: '0', sm: 'ms' }} variant="secondary">
           |
         </Text>
-        <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
+        <HStack gap="ms" w={{ base: 'full', lg: 'auto' }}>
           {socialLinks.map(({ href, iconType }) => (
             <Stack key={href + '-' + iconType}>
               {href && (
                 <IconButton
                   aria-label={`Visit us on ${iconType}`}
-                  as={Link}
                   bg="background.level2"
                   h="32px"
-                  href={href}
                   isExternal
                   isRound
                   rounded="full"
                   size="sm"
                   variant="tertiary"
-                >
-                  <SocialIcon iconType={iconType} size={16} />
-                </IconButton>
+                  asChild><Link href={href}>
+                    <SocialIcon iconType={iconType} size={16} />
+                  </Link></IconButton>
               )}
             </Stack>
           ))}
         </HStack>
       </HStack>
     </VStack>
-  )
+  );
 }

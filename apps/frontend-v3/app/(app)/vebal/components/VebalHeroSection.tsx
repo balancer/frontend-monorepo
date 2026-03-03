@@ -10,8 +10,7 @@ import {
   Heading,
   Stack,
   Text,
-  useBreakpointValue,
-} from '@chakra-ui/react'
+  useBreakpointValue } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -22,8 +21,7 @@ export function VebalHeroSection() {
   const radialPatternProps = useBreakpointValue({
     base: { circleCount: 10, height: 1000, width: 1000 },
     md: { circleCount: 15, height: 1500, width: 1500 },
-    xl: { circleCount: 20, height: 2000, width: 2000 },
-  })
+    xl: { circleCount: 20, height: 2000, width: 2000 } })
 
   return (
     <Box
@@ -76,7 +74,9 @@ export function VebalHeroSection() {
                       bg="background.gold"
                       pb="sm"
                       size="xl"
-                      sx={{ textWrap: 'pretty' }}
+                      css={{
+                        textWrap: 'pretty'
+                      }}
                       textAlign={{ base: 'center', md: 'start' }}
                     >
                       Lock-in for veBAL boosts
@@ -86,7 +86,9 @@ export function VebalHeroSection() {
                       lineHeight="1.4"
                       maxW="36ch"
                       mb="sm"
-                      sx={{ textWrap: 'pretty' }}
+                      css={{
+                        textWrap: 'pretty'
+                      }}
                       textAlign={{ base: 'center', md: 'start' }}
                     >
                       veBAL is the Balancer protocol governance system that rewards long-term
@@ -95,22 +97,18 @@ export function VebalHeroSection() {
                   </Stack>
 
                   <Flex gap="ms" maxWidth={320} mb="ms">
-                    <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
-                      Manage veBAL
-                    </Button>
+                    <Button flex={1} size="lg" variant="gold" asChild><NextLink href="/vebal/manage">Manage veBAL
+                                          </NextLink></Button>
 
                     <Box bg="background.level1">
                       <Button
-                        as={NextLink}
                         bg="background.gold"
                         bgClip="text"
                         flex={1}
-                        href="/vebal/vote"
                         size="lg"
                         variant="tertiary"
-                      >
-                        Vote on gauges
-                      </Button>
+                        asChild><NextLink href="/vebal/vote">Vote on gauges
+                                              </NextLink></Button>
                     </Box>
                   </Flex>
                   <Link color="font.secondary" fontSize="sm" href="/portfolio">
@@ -129,12 +127,12 @@ export function VebalHeroSection() {
                 <Box
                   margin={{ base: '32px auto', md: '0' }}
                   position="relative"
-                  sx={{
-                    '@keyframes scaleUpFadeIn': {
+                  css={{
+                    '& @keyframes scaleUpFadeIn': {
                       from: { opacity: 0, transform: 'scale(0.8)' },
-                      to: { opacity: 1, transform: 'scale(1)' },
-                    },
-                    animation: `scaleUpFadeIn 1s ease-out forwards`,
+                      to: { opacity: 1, transform: 'scale(1)' } },
+
+                    animation: `scaleUpFadeIn 1s ease-out forwards`
                   }}
                   width={{ base: '98%', md: 'clamp(800px, 85vw, 1200px)' }}
                 >
@@ -163,5 +161,5 @@ export function VebalHeroSection() {
         </DefaultPageContainer>
       </Noise>
     </Box>
-  )
+  );
 }

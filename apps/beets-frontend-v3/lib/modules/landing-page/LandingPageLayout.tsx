@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 import { BeetsLandingHeroImg } from './components/BeetsLandingHeroImg'
 import { LandingBalancerV3Section } from './sections/LandingBalancerV3Section'
 import { LandingBeetsData } from './sections/LandingBeetsData'
@@ -12,14 +12,12 @@ import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
 import {
   GetProtocolStatsPerChainQuery,
   GetProtocolStatsQuery,
-  GetStakedSonicDataQuery,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function LandingPageLayout({
   protocolData,
   protocolDataPerChain,
-  stakedSonicData,
-}: {
+  stakedSonicData }: {
   protocolData: GetProtocolStatsQuery
   protocolDataPerChain: GetProtocolStatsPerChainQuery[]
   stakedSonicData: GetStakedSonicDataQuery

@@ -1,4 +1,4 @@
-import { Badge, Card, Center, Heading, HStack, Stack, Text } from '@chakra-ui/react'
+import { Badge, Card, Center, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 import { useHook } from '../../../hooks/useHook'
 import { usePool } from '../../PoolProvider'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
@@ -20,7 +20,7 @@ export function PoolHookBanner() {
       return <MevCapturePoolDetailBanner key={hook.id} />
     } else {
       return (
-        <Card key={hook.id}>
+        <Card.Root key={hook.id}>
           <HStack alignItems="center" direction="row" gap="4" px={4} py={4}>
             <Badge
               alignItems="center"
@@ -49,8 +49,8 @@ export function PoolHookBanner() {
               </Text>
             </Stack>
           </HStack>
-        </Card>
-      )
+        </Card.Root>
+      );
     }
-  })
+  });
 }

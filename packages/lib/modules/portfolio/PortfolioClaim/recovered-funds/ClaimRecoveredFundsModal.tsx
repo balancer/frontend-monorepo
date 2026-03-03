@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalOverlay,
-} from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Dialog, Portal } from '@chakra-ui/react';
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
@@ -66,56 +56,61 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
   }, [])
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={closeModal}>
-      <ModalOverlay />
+    <Dialog.Root placement='center' open={isOpen} onOpenChange={e => {
+      if (!e.open) {
+        closeModal();
+      }
+    }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && (
-          <DesktopStepTracker chain={GqlChain.Mainnet} isTxBatch={false} transactionSteps={steps} />
-        )}
-
-        <TransactionModalHeader
-          chain={GqlChain.Mainnet}
-          isReceiptLoading={false}
-          label="Claim recovered funds from v2 incident"
-          txHash={txHash}
-        />
-
-        <ModalCloseButton />
-
-        <ModalBody p={0}>
-          <Box overflow="hidden">
-            <MotionFlex
-              animate={{ x: showSettlementTerms ? '-50%' : '0%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              width="200%"
-            >
-              <Box p={6} ref={summaryRef} width="50%">
-                <ClaimsSummary setShowSettlementTerms={setShowSettlementTerms} />
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && (
+              <DesktopStepTracker chain={GqlChain.Mainnet} isTxBatch={false} transactionSteps={steps} />
+            )}
+            <TransactionModalHeader
+              chain={GqlChain.Mainnet}
+              isReceiptLoading={false}
+              label="Claim recovered funds from v2 incident"
+              txHash={txHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body p={0}>
+              <Box overflow="hidden">
+                <MotionFlex
+                  animate={{ x: showSettlementTerms ? '-50%' : '0%' }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  width="200%"
+                >
+                  <Box p={6} ref={summaryRef} width="50%">
+                    <ClaimsSummary setShowSettlementTerms={setShowSettlementTerms} />
+                  </Box>
+                  <Box maxH={`${maxHeight}px`} overflowY="scroll" p={6} width="50%">
+                    <SettlementTerms />
+                  </Box>
+                </MotionFlex>
               </Box>
-              <Box maxH={`${maxHeight}px`} overflowY="scroll" p={6} width="50%">
-                <SettlementTerms />
-              </Box>
-            </MotionFlex>
-          </Box>
-        </ModalBody>
+            </Dialog.Body>
+            {showSettlementTerms ? (
+              <HStack justifyContent="right" p={6} width="100%">
+                <Button onClick={() => setShowSettlementTerms(false)} variant="primary">
+                  ← Back
+                </Button>
+              </HStack>
+            ) : (
+              <ActionModalFooter
+                currentStep={steps.currentStep}
+                isSuccess={isSuccess}
+                returnAction={closeModal}
+                returnLabel="Go to portfolio page"
+                urlTxHash={txHash}
+              />
+            )}
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-        {showSettlementTerms ? (
-          <HStack justifyContent="right" p={6} width="100%">
-            <Button onClick={() => setShowSettlementTerms(false)} variant="primary">
-              ← Back
-            </Button>
-          </HStack>
-        ) : (
-          <ActionModalFooter
-            currentStep={steps.currentStep}
-            isSuccess={isSuccess}
-            returnAction={closeModal}
-            returnLabel="Go to portfolio page"
-            urlTxHash={txHash}
-          />
-        )}
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }

@@ -1,5 +1,5 @@
 import { SVGProps, forwardRef } from 'react'
-import { useColorMode } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 
 export interface VebalBenefitsVoteIconProps extends SVGProps<SVGSVGElement> {
   size?: number
@@ -7,7 +7,7 @@ export interface VebalBenefitsVoteIconProps extends SVGProps<SVGSVGElement> {
 
 export const VebalBenefitsVoteIcon = forwardRef<SVGSVGElement, VebalBenefitsVoteIconProps>(
   ({ size = 24, ...props }, ref) => {
-    const { colorMode } = useColorMode()
+    const colorMode = useThemeColorMode()
 
     return (
       <svg

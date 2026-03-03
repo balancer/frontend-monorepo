@@ -1,4 +1,4 @@
-import { Box, BoxProps, Card, Flex, Grid, GridItem, Skeleton, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Card, Flex, Grid, GridItem, Skeleton, Text } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
@@ -15,21 +15,17 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     borderTopLeftRadius: 'none',
     borderBottomRightRadius: 'none',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   cardProps: {
     position: 'relative',
     height: 'full',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
-}
+    overflow: 'hidden' } }
 
 function GlobalStatsCard({
   label,
   value,
-  isLoading,
-}: {
+  isLoading }: {
   label: string
   value: string
   isLoading: boolean
@@ -59,7 +55,7 @@ export function LoopsStats() {
   const loopsNav = loopsData?.loopsGetData.nav || '0'
 
   return (
-    <Card rounded="xl" w="full">
+    <Card.Root rounded="xl" w="full">
       <NoisyCard
         cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
@@ -75,8 +71,7 @@ export function LoopsStats() {
             templateColumns={{
               base: '1fr',
               lg: '1fr',
-              xl: '1.25fr 1fr 1fr 1fr',
-            }}
+              xl: '1.25fr 1fr 1fr 1fr' }}
             w="full"
           >
             <GridItem alignItems="center" display="flex">
@@ -84,28 +79,28 @@ export function LoopsStats() {
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                isLoading={isLoopsDataLoading}
+                loading={isLoopsDataLoading}
                 label="APR"
-                value={fNum('apr', loopsApr)}
+                value={String(fNum('apr', loopsApr))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                isLoading={isLoopsDataLoading}
+                loading={isLoopsDataLoading}
                 label="TVL"
-                value={toCurrency(loopsTVL)}
+                value={String(toCurrency(loopsTVL))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                isLoading={isLoopsDataLoading}
+                loading={isLoopsDataLoading}
                 label="NAV ($S)"
-                value={fNum('token', loopsNav)}
+                value={String(fNum('token', loopsNav))}
               />
             </GridItem>
           </Grid>
         </Box>
       </NoisyCard>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

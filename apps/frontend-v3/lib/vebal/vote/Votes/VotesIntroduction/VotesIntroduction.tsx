@@ -7,11 +7,8 @@ import {
   Text,
   Breadcrumb,
   Box,
-  BreadcrumbItem,
-  BreadcrumbLink,
   useBreakpointValue,
-  Button,
-} from '@chakra-ui/react'
+  Button } from '@chakra-ui/react';
 import { VotingDeadline } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadline'
 import { ChevronRight } from 'react-feather'
 import { Home } from 'react-feather'
@@ -23,15 +20,13 @@ const linkStyles = {
   color: 'font.secondary',
   fontSize: '14px',
   lineHeight: '16px',
-  fontWeight: 500,
-}
+  fontWeight: 500 }
 
 export function VotesIntroduction() {
   const radialPatternProps = useBreakpointValue({
     base: { circleCount: 10, height: 1000, width: 1000 },
     md: { circleCount: 15, height: 1500, width: 1500 },
-    xl: { circleCount: 12, height: 900, width: 900 },
-  })
+    xl: { circleCount: 12, height: 900, width: 900 } })
 
   return (
     <Box
@@ -78,53 +73,60 @@ export function VotesIntroduction() {
             width={3000}
             zIndex={0}
           />
-          <Breadcrumb
+          <Breadcrumb.Root
             left="-4px"
             pb={{ base: 'lg', md: '0' }}
             position="relative"
-            separator={
-              <Box color="font.secondary" opacity="0.5">
-                <ChevronRight size={16} />
-              </Box>
-            }
-            spacing="xs"
             w="full"
-            zIndex="1"
-          >
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">
-                <Button color="grayText" size="xs" variant="link">
-                  <Home size={16} />
-                </Button>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/vebal" {...linkStyles} fontWeight="bold">
-                veBAL
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="/vebal/vote" {...linkStyles}>
-                Vote
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+            zIndex="1">
+            <Breadcrumb.List gap="xs">
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">
+                  <Button color="grayText" size="xs" variant='plain'>
+                    <Home size={16} />
+                  </Button>
+                </Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Separator>{
+                  <Box color="font.secondary" opacity="0.5">
+                    <ChevronRight size={16} />
+                  </Box>
+                }</Breadcrumb.Separator><Breadcrumb.Item>
+                <Breadcrumb.Link href="/vebal" {...linkStyles} fontWeight="bold">
+                  veBAL
+                </Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Separator>{
+                  <Box color="font.secondary" opacity="0.5">
+                    <ChevronRight size={16} />
+                  </Box>
+                }</Breadcrumb.Separator><Breadcrumb.Item>
+                <Breadcrumb.Link href="/vebal/vote" {...linkStyles}>
+                  Vote
+                </Breadcrumb.Link>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb.Root>
 
           <HStack
             alignItems={{ base: 'start', md: 'center' }}
             flexDirection={{ base: 'column', md: 'row' }}
             justifyContent={{ base: 'start', lg: 'space-between' }}
-            spacing={{ base: '40px', lg: undefined }}
+            gap={{ base: '40px', lg: undefined }}
             w="full"
           >
-            <VStack pt="sm" spacing="30px" w={{ base: 'full', lg: undefined }}>
-              <VStack alignItems="start" spacing="ms">
+            <VStack pt="sm" gap="30px" w={{ base: 'full', lg: undefined }}>
+              <VStack alignItems="start" gap="ms">
                 <Box maxW="290px">
-                  <Heading as="h2" size="lg" sx={{ textWrap: 'pretty' }} variant="special">
+                  <Heading as="h2" size="lg" css={{
+                    textWrap: 'pretty'
+                  }} variant="special">
                     Vote on pool gauges, earn extra incentives.
                   </Heading>
                 </Box>
-                <Text color="font.secondary" sx={{ textWrap: 'balance' }}>
+                <Text color="font.secondary" css={{
+                  textWrap: 'balance'
+                }}>
                   Voting on pool gauges helps to direct weekly BAL emissions and earns you
                   additional voting incentives from third-party platforms like Votemarket.
                 </Text>
@@ -136,5 +138,5 @@ export function VotesIntroduction() {
         </DefaultPageContainer>
       </Noise>
     </Box>
-  )
+  );
 }

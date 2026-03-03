@@ -29,8 +29,7 @@ export function hasValidPermit2(
      const amountIn = tokenAmountsIn[0]
      console.log({tokenAddress,
        approvalExpired: approvalExpired(tokenAddress),
-       alreadyAllowed: alreadyAllowed(amountIn),
-     })
+       alreadyAllowed: alreadyAllowed(amountIn) })
    }
   */
   return isValid
@@ -47,16 +46,14 @@ export function getTokenSymbolsForPermit2({
   getToken,
   tokenAmountsIn,
   wethIsEth,
-  chainId,
-}: BasePermit2Params & { getToken: GetTokenFn }): string[] {
+  chainId }: BasePermit2Params & { getToken: GetTokenFn }): string[] {
   if (!tokenAmountsIn) return []
 
   const chain = getGqlChain(chainId)
   const tokenSymbols = filterTokensForPermit2({
     wethIsEth,
     tokenAmountsIn,
-    chain,
-  })
+    chain })
     .filter(t => t.amount > 0n)
     .map(t => {
       if (t.symbol) return t.symbol
@@ -84,8 +81,7 @@ export function permit2Address(chain: GqlChain): Address {
 export function filterTokensForPermit2({
   tokenAmountsIn,
   wethIsEth,
-  chain,
-}: {
+  chain }: {
   tokenAmountsIn?: TokenAmountIn[]
   wethIsEth: boolean
   chain: GqlChain
@@ -117,9 +113,8 @@ export function getMaxAmountForPermit2(amount: bigint): bigint {
 export function maximizeAmountsInForPermit2(amountsIn: TokenAmount[]): TokenAmount[] {
   return amountsIn.map(
     amountIn =>
-      ({
+      (({
         ...amountIn,
-        amount: getMaxAmountForPermit2(amountIn.amount),
-      }) as TokenAmount
-  )
+        amount: getMaxAmountForPermit2(amountIn.amount) }) as TokenAmount)
+  );
 }

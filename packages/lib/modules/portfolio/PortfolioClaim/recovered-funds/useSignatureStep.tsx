@@ -1,8 +1,7 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react';
 import {
   TransactionLabels,
-  TransactionStep,
-} from '@repo/lib/modules/transactions/transaction-steps/lib'
+  TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -24,8 +23,7 @@ const labels: TransactionLabels = {
   title: 'Sign indemnity release',
   confirming: 'Signing...',
   confirmed: 'Signed!',
-  tooltip: 'Sign indemnity release',
-}
+  tooltip: 'Sign indemnity release' }
 
 export function useSignatureStep(signatureChain: number) {
   const { isConnected, userAddress } = useUserAccount()
@@ -38,8 +36,7 @@ export function useSignatureStep(signatureChain: number) {
     hasAlreadySigned,
     isLoading: isSignatureLoading,
     error: fetchSignatureError,
-    refetchSignature,
-  } = useFetchSignature(signatureChain, signatureContract)
+    refetchSignature } = useFetchSignature(signatureChain, signatureContract)
 
   const { sdkClient, isLoading: isWalletClientLoading } = useSdkWalletClient()
   const [isSigning, setIsSigning] = useState<boolean>(false)
@@ -54,16 +51,14 @@ export function useSignatureStep(signatureChain: number) {
     try {
       const signature = await sdkClient.signMessage({
         account: userAddress,
-        message: terms,
-      })
+        message: terms })
 
       const { request } = await sdkClient.simulateContract({
         account: userAddress,
         address: signatureContract,
         abi: signatureRegistryAbi,
         functionName: 'recordSignatureFor',
-        args: [signature, userAddress],
-      })
+        args: [signature, userAddress] })
 
       await sdkClient.writeContract(request)
 
@@ -101,7 +96,7 @@ export function useSignatureStep(signatureChain: number) {
 
         {!shouldChangeNetwork && isConnected ? (
           <Button
-            isDisabled={!isConnected || !hasAcceptedDisclaimer || (isSigning && !hasAlreadySigned)}
+            disabled={!isConnected || !hasAcceptedDisclaimer || (isSigning && !hasAlreadySigned)}
             onClick={() => {
               setIsSigning(true)
               storeSignature()
@@ -116,14 +111,12 @@ export function useSignatureStep(signatureChain: number) {
           </Button>
         ) : null}
       </VStack>
-    ),
-  }
+    ) }
 
   return {
     signatureStep: step,
     hasAcceptedDisclaimer,
-    setHasAcceptedDisclaimer,
-  }
+    setHasAcceptedDisclaimer }
 }
 
 function useFetchSignature(signatureChain: number, signatureContract: Address | undefined) {
@@ -136,13 +129,11 @@ function useFetchSignature(signatureChain: number, signatureContract: Address | 
     address: signatureContract,
     functionName: 'signatures',
     args: [userAddress],
-    query: { enabled: userAddress && !shouldChangeNetwork && !!signatureContract },
-  })
+    query: { enabled: userAddress && !shouldChangeNetwork && !!signatureContract } })
 
   return {
     hasAlreadySigned: query.data !== '0x',
     isLoading: query.isLoading,
     error: query.error?.message,
-    refetchSignature: query.refetch,
-  }
+    refetchSignature: query.refetch }
 }

@@ -1,5 +1,5 @@
 'use client'
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 import ReactECharts from 'echarts-for-react'
 import { useEclpChart } from '../hooks/EclpChartProvider'
 

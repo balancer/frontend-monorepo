@@ -6,8 +6,7 @@ import {
   Slider,
   SliderTrack,
   SliderFilledTrack,
-  SliderThumb,
-} from '@chakra-ui/react'
+  SliderThumb } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePoolList } from './PoolListProvider'
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
@@ -91,8 +90,7 @@ function snapToStep(value: number): number {
 export function PoolMinTvlFilter() {
   const { toCurrency } = useCurrency()
   const {
-    queryState: { minTvl, setMinTvl },
-  } = usePoolList()
+    queryState: { minTvl, setMinTvl } } = usePoolList()
   const [sliderValue, setSliderValue] = useState(() => tvlToSliderValue(minTvl))
 
   const tvlValue = sliderValueToTvl(sliderValue)
@@ -123,21 +121,21 @@ export function PoolMinTvlFilter() {
           {toCurrency(tvlValue)}
         </NumberText>
       </HStack>
-      <Slider
+      <Slider.Root
         aria-label="slider-min-tvl"
         max={SLIDER_MAX_SLIDER_VALUE}
         min={0}
         ml="sm"
-        onChange={handleSliderChange}
-        onChangeEnd={handleSliderChangeEnd}
+        onValueChange={handleSliderChange}
+        onValueChangeEnd={handleSliderChangeEnd}
         step={1}
-        value={sliderValue}
+        value={String(sliderValue)}
       >
         <SliderTrack>
           <SliderFilledTrack />
         </SliderTrack>
         <SliderThumb />
-      </Slider>
+      </Slider.Root>
     </VStack>
-  )
+  );
 }

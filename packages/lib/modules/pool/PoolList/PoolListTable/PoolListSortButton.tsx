@@ -1,4 +1,4 @@
-import { ButtonProps, Text, VStack, HStack, Button, Icon } from '@chakra-ui/react'
+import { ButtonProps, Text, VStack, HStack, Button, Icon } from '@chakra-ui/react';
 import { ChevronDown, ChevronUp } from 'react-feather'
 
 interface Props extends ButtonProps {
@@ -24,15 +24,15 @@ export default function PoolListSortButton({ title, isDesc, isCurrentSort, ...re
         <Text color={isCurrentSort ? 'font.highlight' : 'font.primary'} fontWeight="bold">
           {title}
         </Text>
-        <VStack alignContent="center" gap="0" spacing="0">
+        <VStack alignContent="center" gap="0" gap="0">
           {(!isCurrentSort || !isDesc) && (
-            <Icon as={ChevronUp} color={getColor(isCurrentSort)} size="10" />
+            <Icon color={getColor(isCurrentSort)} size="10" asChild><ChevronUp /></Icon>
           )}
           {(!isCurrentSort || isDesc) && (
-            <Icon as={ChevronDown} color={getColor(isCurrentSort)} size="10" />
+            <Icon color={getColor(isCurrentSort)} size="10" asChild><ChevronDown /></Icon>
           )}
         </VStack>
       </HStack>
     </Button>
-  )
+  );
 }

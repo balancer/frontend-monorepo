@@ -1,4 +1,4 @@
-import { VStack, Card, HStack, Text } from '@chakra-ui/react'
+import { VStack, Card, HStack, Text } from '@chakra-ui/react';
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -19,12 +19,12 @@ export function PoolSwapCard() {
         }
         status="warning"
       />
-      <Card h="full">
+      <Card.Root h="full">
         <HStack>
           <NetworkIcon chain={pool.chain} size={6} />
           <Text>{pool.name} (swap route)</Text>
         </HStack>
-      </Card>
+      </Card.Root>
     </VStack>
-  )
+  );
 }

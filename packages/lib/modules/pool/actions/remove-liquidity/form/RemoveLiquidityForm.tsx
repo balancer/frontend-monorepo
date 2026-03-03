@@ -2,25 +2,21 @@
 
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import {
   Box,
   Button,
   Card,
-  CardHeader,
-  Divider,
   HStack,
   Skeleton,
   Text,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
+  HoverCard,
   VStack,
   Stack,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react'
 import { RemoveLiquidityModal } from '../modal/RemoveLiquidityModal'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
@@ -62,14 +58,12 @@ export function RemoveLiquidityForm() {
   const TABS: ButtonGroupOption[] = [
     {
       value: 'proportional',
-      label: 'Proportional',
-    },
+      label: 'Proportional' },
     {
       value: 'single',
       label: 'Single token',
       tabTooltipLabel,
-      disabled: isDisabledSingleTokenTab,
-    },
+      disabled: isDisabledSingleTokenTab },
   ] as const
 
   const [activeTab, setActiveTab] = useState(TABS[0])
@@ -95,8 +89,7 @@ export function RemoveLiquidityForm() {
     setSingleTokenType,
     setHumanBptInPercent,
     setNeedsToAcceptHighPI,
-    amountsOut,
-  } = useRemoveLiquidity()
+    amountsOut } = useRemoveLiquidity()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
@@ -156,23 +149,22 @@ export function RemoveLiquidityForm() {
   const bufferBalanceWarning = useBufferBalanceWarning({
     amounts: amountsOut,
     operation: 'remove',
-    validTokens,
-  })
+    validTokens })
 
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
-        <Card>
-          <CardHeader>
+        <Card.Root>
+          <Card.Header>
             <HStack justify="space-between" w="full">
               <span>{title}</span>
               <TransactionSettings size="sm" />
             </HStack>
-          </CardHeader>
+          </Card.Header>
           {isAnyTokenWithoutPrice && (
             <BalAlert content={removeLiquidityWarning} mb="sm" status="warning" />
           )}
-          <VStack align="start" spacing="md">
+          <VStack align="start" gap="md">
             <SafeAppAlert />
             {!isLoadingContractWallet && isContractWallet && !isSafeAccount && (
               <ContractWalletAlert />
@@ -189,8 +181,8 @@ export function RemoveLiquidityForm() {
                   options={TABS}
                   size="sm"
                 />
-                <Popover trigger="hover">
-                  <PopoverTrigger>
+                <HoverCard.Root>
+                  <HoverCard.Trigger asChild>
                     <Box
                       _hover={{ opacity: 1 }}
                       opacity="0.6"
@@ -198,34 +190,36 @@ export function RemoveLiquidityForm() {
                     >
                       <InfoIcon />
                     </Box>
-                  </PopoverTrigger>
-                  <PopoverContent maxW="300px" p="sm" w="auto">
-                    <VStack align="start" spacing="sm">
-                      <Box>
-                        <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                          Proportional Removal
-                        </Text>
-                        <Text fontSize="sm" variant="secondary">
-                          Proportional liquidity removal keeps token prices unchanged, ensuring zero
-                          price impact to maximize your returns.
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                          Single token Removal
-                        </Text>
-                        <Text fontSize="sm" variant="secondary">
-                          Single-token removal can be convenient but may lower your returns due to
-                          price impact.
-                        </Text>
-                      </Box>
-                    </VStack>
-                  </PopoverContent>
-                </Popover>
-                <Divider w="full" />
+                  </HoverCard.Trigger>
+                  <HoverCard.Positioner>
+                    <HoverCard.Content maxW="300px" p="sm" w="auto">
+                      <VStack align="start" gap="sm">
+                        <Box>
+                          <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                            Proportional Removal
+                          </Text>
+                          <Text fontSize="sm" variant="secondary">
+                            Proportional liquidity removal keeps token prices unchanged, ensuring zero
+                            price impact to maximize your returns.
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                            Single token Removal
+                          </Text>
+                          <Text fontSize="sm" variant="secondary">
+                            Single-token removal can be convenient but may lower your returns due to
+                            price impact.
+                          </Text>
+                        </Box>
+                      </VStack>
+                    </HoverCard.Content>
+                  </HoverCard.Positioner>
+                </HoverCard.Root>
+                <Separator w="full" />
               </HStack>
             )}
-            <VStack align="start" spacing="md" w="full">
+            <VStack align="start" gap="md" w="full">
               {!isV3LBP(pool) && (
                 <InputWithSlider
                   isNumberInputDisabled
@@ -253,7 +247,7 @@ export function RemoveLiquidityForm() {
                 <RemoveLiquiditySingleToken chain={pool.chain} tokens={tokens} />
               )}
             </VStack>
-            <VStack align="start" spacing="sm" w="full">
+            <VStack align="start" gap="sm" w="full">
               {!simulationQuery.isError && !isV3LBP(pool) && (
                 <PriceImpactAccordion
                   accordionButtonComponent={
@@ -284,13 +278,13 @@ export function RemoveLiquidityForm() {
                 />
               )}
               {isV3LBP(pool) && (
-                <Card variant="modalSubSection">
+                <Card.Root variant="modalSubSection">
                   <Stack w="full">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
                       Potential losses: 0.00%
                     </Text>
                   </Stack>
-                </Card>
+                </Card.Root>
               )}
             </VStack>
             <RemoveSimulationError
@@ -301,8 +295,8 @@ export function RemoveLiquidityForm() {
             {bufferBalanceWarning}
             <TooltipWithTouch fullWidth label={isDisabled ? disabledReason : ''}>
               <Button
-                isDisabled={isDisabled || isWarning}
-                isLoading={simulationQuery.isLoading || priceImpactQuery.isLoading}
+                disabled={isDisabled || isWarning}
+                loading={simulationQuery.isLoading || priceImpactQuery.isLoading}
                 onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
                 ref={nextBtn}
                 size="lg"
@@ -313,7 +307,7 @@ export function RemoveLiquidityForm() {
               </Button>
             </TooltipWithTouch>
           </VStack>
-        </Card>
+        </Card.Root>
 
         <RemoveLiquidityModal
           finalFocusRef={nextBtn}
@@ -323,5 +317,5 @@ export function RemoveLiquidityForm() {
         />
       </Box>
     </TokenBalancesProvider>
-  )
+  );
 }

@@ -45,22 +45,20 @@ export function useBlacklistedVotes(votingPools: VoteListItem[]) {
 
   return {
     isLoading: votesAreLoading,
-    blacklistedVotes: blacklistedVotesGroupedByGauge as Record<Address, BigNumber | undefined>,
-  }
+    blacklistedVotes: blacklistedVotesGroupedByGauge as Record<Address, BigNumber | undefined> }
 }
 
 function useVotes(votingPools: VoteListItem[]) {
   const calls = BLACKLISTED_ADDRESSES.flatMap(blacklistedAddress => {
     return votingPools.map(
       votingPool =>
-        ({
+        (({
           chainId: mainnet.id,
           abi: AbiMap['balancer.gaugeControllerAbi'],
           address: mainnetNetworkConfig.contracts.gaugeController as Hex,
           functionName: 'vote_user_slopes',
-          args: [blacklistedAddress, votingPool.gauge.address],
-        }) as const
-    )
+          args: [blacklistedAddress, votingPool.gauge.address] }) as const)
+    );
   })
 
   const { data, isLoading } = useReadContracts({
@@ -68,10 +66,8 @@ function useVotes(votingPools: VoteListItem[]) {
     allowFailure: false,
     query: {
       ...onlyExplicitRefetch,
-      enabled: true,
-    },
-    contracts: calls,
-  })
+      enabled: true },
+    contracts: calls })
 
   const blacklistedVotesResult = data || []
 

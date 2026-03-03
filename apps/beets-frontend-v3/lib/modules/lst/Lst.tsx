@@ -1,26 +1,13 @@
-'use client'
-
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Tooltip,
-  useDisclosure,
-  VStack,
-  BoxProps,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react'
+'use client';
+import { Box, Button, Card, useDisclosure, VStack, BoxProps, Grid, GridItem } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useRef, useState } from 'react'
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useLst } from './LstProvider'
 import { LstStakeModal } from './modals/LstStakeModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -55,15 +42,12 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     borderTopLeftRadius: 'none',
     borderBottomRightRadius: 'none',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   cardProps: {
     position: 'relative',
     height: 'full',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
-}
+    overflow: 'hidden' } }
 
 function LstForm() {
   const nextBtn = useRef(null)
@@ -95,8 +79,7 @@ function LstForm() {
     getAmountAssets,
     isRateLoading,
     chain,
-    tabs,
-  } = useLst()
+    tabs } = useLst()
 
   const isLoading = !isMounted || isBalancesLoading
 
@@ -135,59 +118,59 @@ function LstForm() {
 
   return (
     <VStack h="full" w="full">
-      <CardBody align="start" as={VStack} h="full" w="full">
-        <Box h="full" w="full">
-          <VStack spacing="md" w="full">
-            <ButtonGroup
-              currentOption={activeTab}
-              fontSize="lg"
-              groupId="add-liquidity"
-              isFullWidth
-              onChange={handleTabChange}
-              options={tabs}
-              size="md"
+      <Card.Body align="start" h="full" w="full" asChild><VStack>
+          <Box h="full" w="full">
+            <VStack gap="md" w="full">
+              <ButtonGroup
+                currentOption={activeTab}
+                fontSize="lg"
+                groupId="add-liquidity"
+                isFullWidth
+                onChange={handleTabChange}
+                options={tabs}
+                size="md"
+              />
+            </VStack>
+            {isStakeTab && <LstStake />}
+            {isUnstakeTab && <LstUnstake />}
+            {isWithdrawTab && <LstWithdraw />}
+          </Box>
+          {/* <HStack>
+            {isStakedSonicDataLoading ? (
+              <Skeleton h="full" w="12" />
+            ) : (
+              <>
+                <Text>{`1 ${tokenIn}`}</Text>
+                <Icon as={ArrowRight} />
+                <Text>{`${fNum('token', rate)} ${tokenOut}`}</Text>
+              </>
+            )}
+          </HStack> */}
+          {isStakeTab && !isRateLoading && amountAssets !== '' && (
+            <YouWillReceive
+              address={stakedAsset?.address || ''}
+              amount={getAmountShares(amountAssets)}
+              chain={chain}
+              label="You will receive"
+              symbol={stakedAsset?.symbol || ''}
             />
-          </VStack>
-          {isStakeTab && <LstStake />}
-          {isUnstakeTab && <LstUnstake />}
-          {isWithdrawTab && <LstWithdraw />}
-        </Box>
-        {/* <HStack>
-          {isStakedSonicDataLoading ? (
-            <Skeleton h="full" w="12" />
-          ) : (
-            <>
-              <Text>{`1 ${tokenIn}`}</Text>
-              <Icon as={ArrowRight} />
-              <Text>{`${fNum('token', rate)} ${tokenOut}`}</Text>
-            </>
           )}
-        </HStack> */}
-        {isStakeTab && !isRateLoading && amountAssets !== '' && (
-          <YouWillReceive
-            address={stakedAsset?.address || ''}
-            amount={getAmountShares(amountAssets)}
-            chain={chain}
-            label="You will receive"
-            symbol={stakedAsset?.symbol || ''}
-          />
-        )}
-        {isUnstakeTab && !isRateLoading && amountShares !== '' && (
-          <YouWillReceive
-            address={nativeAsset?.address || ''}
-            amount={getAmountAssets(amountShares)}
-            chain={chain}
-            label="You can withdraw (after 14 days)"
-            symbol={nativeAsset?.symbol || ''}
-          />
-        )}
-      </CardBody>
-      <CardFooter w="full">
+          {isUnstakeTab && !isRateLoading && amountShares !== '' && (
+            <YouWillReceive
+              address={nativeAsset?.address || ''}
+              amount={getAmountAssets(amountShares)}
+              chain={chain}
+              label="You can withdraw (after 14 days)"
+              symbol={nativeAsset?.symbol || ''}
+            />
+          )}
+        </VStack></Card.Body>
+      <Card.Footer w="full">
         {isConnected && !isWithdrawTab && (
-          <Tooltip label={isDisabled ? disabledReason : ''}>
+          <Tooltip content={isDisabled ? disabledReason : ''}>
             <Button
-              isDisabled={isDisabled}
-              isLoading={isLoading}
+              disabled={isDisabled}
+              loading={isLoading}
               loadingText={loadingText}
               onClick={() => disclosure.onOpen()}
               ref={nextBtn}
@@ -208,27 +191,26 @@ function LstForm() {
             w="full"
           />
         )}
-      </CardFooter>
+      </Card.Footer>
       <LstStakeModal
         finalFocusRef={nextBtn}
-        isOpen={stakeModalDisclosure.isOpen}
+        isOpen={stakeModalDisclosure.open}
         onClose={onModalClose}
         onOpen={stakeModalDisclosure.onOpen}
       />
       <LstUnstakeModal
         finalFocusRef={nextBtn}
-        isOpen={unstakeModalDisclosure.isOpen}
+        isOpen={unstakeModalDisclosure.open}
         onClose={onModalClose}
         onOpen={unstakeModalDisclosure.onOpen}
       />
     </VStack>
-  )
+  );
 }
 
 function LstInfo({
   stakedSonicData,
-  isStakedSonicDataLoading,
-}: {
+  isStakedSonicDataLoading }: {
   stakedSonicData?: GetStakedSonicDataQuery
   isStakedSonicDataLoading: boolean
 }) {
@@ -254,7 +236,7 @@ function LstInfo({
         m="auto"
         p={{ base: 'md', md: 'lg' }}
         role="group"
-        spacing="sm"
+        gap="sm"
         w="full"
         zIndex={1}
       >
@@ -303,7 +285,7 @@ function LstInfo({
         </Box> */}
       </VStack>
     </NoisyCard>
-  )
+  );
 }
 
 export function Lst() {
@@ -314,7 +296,7 @@ export function Lst() {
       <DefaultPageContainer noVerticalPadding>
         <VStack gap="xl" w="full">
           <LstStats />
-          <Card rounded="xl" w="full">
+          <Card.Root rounded="xl" w="full">
             <Grid gap="lg" templateColumns={{ base: '1fr', lg: '5fr 4fr' }}>
               <GridItem>
                 <LstForm />
@@ -326,10 +308,10 @@ export function Lst() {
                 />
               </GridItem>
             </Grid>
-          </Card>
+          </Card.Root>
           <LstFaq />
         </VStack>
       </DefaultPageContainer>
     </FadeInOnView>
-  )
+  );
 }

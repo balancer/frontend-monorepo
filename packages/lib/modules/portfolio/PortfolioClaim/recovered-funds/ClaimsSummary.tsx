@@ -3,13 +3,12 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRecoveredFundsClaims } from './RecoveredFundsClaimsProvider'
-import { Badge, Card, Checkbox, Divider, HStack, Link, Text, VStack } from '@chakra-ui/react'
+import { Badge, Card, Checkbox, HStack, Link, Text, VStack, Separator } from '@chakra-ui/react';
 import {
   RecoveredTokenClaim,
   useRecoveredFunds,
   CHAINS,
-  sumRecoveredFundsTotal,
-} from './useRecoveredFunds'
+  sumRecoveredFundsTotal } from './useRecoveredFunds'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import Image from 'next/image'
 import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
@@ -18,8 +17,7 @@ import { useUnderlyingToken } from './useUnderlyingToken'
 import { Dispatch, SetStateAction } from 'react'
 
 export function ClaimsSummary({
-  setShowSettlementTerms,
-}: {
+  setShowSettlementTerms }: {
   setShowSettlementTerms: Dispatch<SetStateAction<boolean>>
 }) {
   const { isMobile } = useBreakpoints()
@@ -31,46 +29,41 @@ export function ClaimsSummary({
   return (
     <AnimateHeightChange spacing="md">
       {isMobile && <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={steps} />}
-
       <Text fontSize="sm" variant="secondary">
         Some of your funds from affected v2 Composable Stable liquidity pools have been recovered.
         You can claim your share now below.
       </Text>
-
       <HStack>
         <Image alt="Merkl logo" height={20} src="/images/protocols/merkl.png" width={20}></Image>
         <Text fontSize="sm" variant="secondary">
           Claim powered by Merkl
         </Text>
       </HStack>
-
       {CHAINS.map(chainId => (
         <ChainClaimCard chainId={chainId} claims={claims} key={chainId} />
       ))}
-
       <ClaimsTotalCard claims={claims} />
-
-      <Checkbox
+      <Checkbox.Root
         alignItems="flex-start"
-        isChecked={hasAcceptedDisclaimer || signatureStep?.isComplete()}
-        isDisabled={signatureStep?.isComplete()}
-        onChange={e => setHasAcceptedDisclaimer(e.target.checked)}
+        disabled={signatureStep?.isComplete()}
+        onCheckedChange={e => setHasAcceptedDisclaimer(e.target.checked)}
         size="lg"
-      >
-        <Text fontSize="sm">
-          I have read and agree to the terms and confirm my acceptance of the {''}
-          <Link
-            alignItems="center"
-            display="inline-flex"
-            onClick={() => setShowSettlementTerms(true)}
-            textDecoration="underline"
-          >
-            Claim Settlement Terms
-          </Link>
-        </Text>
-      </Checkbox>
+        checked={hasAcceptedDisclaimer || signatureStep?.isComplete()}
+      ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+          <Text fontSize="sm">
+            I have read and agree to the terms and confirm my acceptance of the {''}
+            <Link
+              alignItems="center"
+              display="inline-flex"
+              onClick={() => setShowSettlementTerms(true)}
+              textDecoration="underline"
+            >
+              Claim Settlement Terms
+            </Link>
+          </Text>
+        </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
     </AnimateHeightChange>
-  )
+  );
 }
 
 type ChainClaimCardProps = {
@@ -89,8 +82,8 @@ function ChainClaimCard({ claims, chainId }: ChainClaimCardProps) {
   const hasBeenClaimed = chainClaims.every(claim => claim.rawAmount === claim.claimedAmount)
 
   return (
-    <Card paddingX={0} variant="modalSubSection">
-      <VStack align="start" spacing="sm">
+    <Card.Root paddingX={0} variant="modalSubSection">
+      <VStack align="start" gap="sm">
         <HStack justify="space-between" px="3" w="full">
           <HStack>
             <Image
@@ -119,7 +112,7 @@ function ChainClaimCard({ claims, chainId }: ChainClaimCardProps) {
           )}
         </HStack>
 
-        <Divider p="0" />
+        <Separator p="0" />
 
         <VStack px="3" w="full">
           {chainClaims.map(claim => (
@@ -127,8 +120,8 @@ function ChainClaimCard({ claims, chainId }: ChainClaimCardProps) {
           ))}
         </VStack>
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 type TokenClaimProps = {
@@ -158,7 +151,7 @@ function ClaimsTotalCard({ claims }: ClaimsTotalCardProps) {
   const { toCurrency } = useCurrency()
 
   return (
-    <Card variant="modalSubSection">
+    <Card.Root variant="modalSubSection">
       <HStack justify="space-between" w="full">
         <Text fontSize="sm" variant="secondary">
           Total
@@ -167,6 +160,6 @@ function ClaimsTotalCard({ claims }: ClaimsTotalCardProps) {
           {toCurrency(sumRecoveredFundsTotal(claims))}
         </Text>
       </HStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

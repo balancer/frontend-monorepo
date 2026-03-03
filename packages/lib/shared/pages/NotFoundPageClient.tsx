@@ -1,7 +1,7 @@
 'use client'
 
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { Button, Heading, VStack, Text } from '@chakra-ui/react'
+import { Button, Heading, VStack, Text } from '@chakra-ui/react';
 import NextLink from 'next/link'
 
 interface NotFoundPageClientProps {
@@ -15,19 +15,18 @@ export function NotFoundPageClient({
   title,
   description,
   redirectUrl,
-  redirectText,
-}: NotFoundPageClientProps) {
+  redirectText }: NotFoundPageClientProps) {
   return (
     <DefaultPageContainer minH="80vh">
-      <VStack align="start" spacing="md">
+      <VStack align="start" gap="md">
         <Heading size="md">{title}</Heading>
-        <VStack align="start" spacing="xs">
+        <VStack align="start" gap="xs">
           <Text>{description}</Text>
         </VStack>
-        <Button as={NextLink} href={redirectUrl} size="sm">
-          {redirectText}
-        </Button>
+        <Button size="sm" asChild><NextLink href={redirectUrl}>
+            {redirectText}
+          </NextLink></Button>
       </VStack>
     </DefaultPageContainer>
-  )
+  );
 }

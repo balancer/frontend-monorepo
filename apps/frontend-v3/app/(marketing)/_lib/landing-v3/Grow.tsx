@@ -1,15 +1,6 @@
 'use client'
 
-import {
-  VStack,
-  Text,
-  Grid,
-  GridItem,
-  Center,
-  Box,
-  useDisclosure,
-  BoxProps,
-} from '@chakra-ui/react'
+import { VStack, Text, Grid, GridItem, Center, Box, useDisclosure, BoxProps } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { BeetsIcon } from '@repo/lib/shared/components/icons/logos/BeetsIcon'
@@ -21,8 +12,7 @@ import { QuantAmmIcon } from '@repo/lib/shared/components/icons/logos/QuantAmmIc
 import { ReactNode, useRef, useState } from 'react'
 import {
   PartnerRedirectModal,
-  RedirectPartner,
-} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+  RedirectPartner } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { FeatureCard } from './shared/FeatureCard'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
@@ -38,8 +28,7 @@ function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   return (
     <Box
       _hover={{
-        bg: 'background.level3',
-      }}
+        bg: 'background.level3' }}
       bg="background.level2"
       color="font.primary"
       cursor="pointer"
@@ -83,10 +72,7 @@ export function Grow() {
     show: {
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  }
+        delayChildren: 0.3 } } }
 
   const gridItemVariants = {
     show: {
@@ -97,16 +83,13 @@ export function Grow() {
       transition: {
         type: 'spring' as AnimationGeneratorType,
         stiffness: 100,
-        damping: 10,
-      },
-    },
-    hidden: { opacity: 0, filter: 'blur(3px)', scale: 0.95, y: 15 },
-  }
+        damping: 10 } },
+    hidden: { opacity: 0, filter: 'blur(3px)', scale: 0.95, y: 15 } }
 
   return (
     <Noise backgroundColor="background.level0WithOpacity">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
-        <VStack alignItems="center" spacing="md" textAlign="center">
+        <VStack alignItems="center" gap="md" textAlign="center">
           <WordsPullUp
             as="h2"
             color="font.primary"
@@ -141,8 +124,7 @@ export function Grow() {
                 innerWidth: 100,
                 height: 200,
                 width: 200,
-                circleCount: 6,
-              }}
+                circleCount: 6 }}
               stat={fNumCustom(
                 protocolData?.protocolMetricsAggregated.totalLiquidity ?? 0,
                 '$0,0.0a'
@@ -159,8 +141,7 @@ export function Grow() {
                 innerWidth: 100,
                 height: 200,
                 width: 200,
-                circleCount: 6,
-              }}
+                circleCount: 6 }}
               stat={fNumCustom(protocolData?.protocolMetricsAggregated.poolCount ?? 0, '0,0.0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="Pools"
@@ -174,8 +155,7 @@ export function Grow() {
                 innerWidth: 100,
                 height: 200,
                 width: 200,
-                circleCount: 6,
-              }}
+                circleCount: 6 }}
               stat={fNumCustom(protocolData?.protocolMetricsAggregated.swapVolume24h ?? 0, '$0,0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="24hr volume"
@@ -213,8 +193,7 @@ export function Grow() {
                 innerWidth: 100,
                 height: isMobile ? 200 : 250,
                 width: isMobile ? 200 : 250,
-                circleCount: isMobile ? 6 : 8,
-              }}
+                circleCount: isMobile ? 6 : 8 }}
               stat="10+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               subTitle="Instant volume for your liquidity"
@@ -258,10 +237,10 @@ export function Grow() {
         </Text>
       </DefaultPageContainer>
       <PartnerRedirectModal
-        isOpen={partnerRedirectDisclosure.isOpen}
+        isOpen={partnerRedirectDisclosure.open}
         onClose={partnerRedirectDisclosure.onClose}
         partner={redirectPartner}
       />
     </Noise>
-  )
+  );
 }

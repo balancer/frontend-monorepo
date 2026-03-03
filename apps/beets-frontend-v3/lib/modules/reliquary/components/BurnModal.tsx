@@ -1,11 +1,4 @@
-import {
-  Card,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalProps,
-} from '@chakra-ui/react'
+import { Card, ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -48,40 +41,48 @@ export function BurnModal({
   const isSuccess = !!burnTxHash
 
   return (
-    <Modal
-      isCentered
-      isOpen={isOpen}
-      onClose={handleOnClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!burnTxHash} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={burnTransactionSteps} />}
-        <TransactionModalHeader
-          chain={chain}
-          label={`Burn Relic #${relicId}`}
-          txHash={burnTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <AnimateHeightChange spacing="sm">
-            {isMobile && (
-              <MobileStepTracker chain={chain} transactionSteps={burnTransactionSteps} />
-            )}
-            <Card variant="modalSubSection">
-              {isSuccess ? 'Relic burned!' : 'Burn this Relic!'}
-            </Card>
-          </AnimateHeightChange>
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={burnTransactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={handleOnClose}
-          returnLabel="Return to maBEETS"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          handleOnClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!burnTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={burnTransactionSteps} />}
+            <TransactionModalHeader
+              chain={chain}
+              label={`Burn Relic #${relicId}`}
+              txHash={burnTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <AnimateHeightChange spacing="sm">
+                {isMobile && (
+                  <MobileStepTracker chain={chain} transactionSteps={burnTransactionSteps} />
+                )}
+                <Card.Root variant="modalSubSection">
+                  {isSuccess ? 'Relic burned!' : 'Burn this Relic!'}
+                </Card.Root>
+              </AnimateHeightChange>
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={burnTransactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={handleOnClose}
+              returnLabel="Return to maBEETS"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

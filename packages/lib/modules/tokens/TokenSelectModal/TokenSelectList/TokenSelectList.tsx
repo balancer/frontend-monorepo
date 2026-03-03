@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, Button, HStack, Text, Divider } from '@chakra-ui/react'
+import { Box, BoxProps, Button, HStack, Text, Separator } from '@chakra-ui/react';
 import { TokenSelectListRow } from './TokenSelectListRow'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '../../TokenBalancesProvider'
@@ -33,7 +33,7 @@ type Props = {
 function OtherTokens() {
   return (
     <Box bg="background.level1">
-      <Divider />
+      <Separator />
       <HStack pt="sm" px="md">
         <Box color="font.secondary">
           <CoinsIcon size={20} />
@@ -42,9 +42,9 @@ function OtherTokens() {
           Other tokens
         </Text>
       </HStack>
-      <Divider pt="2" />
+      <Separator pt="2" />
     </Box>
-  )
+  );
 }
 
 interface InYourWalletProps {
@@ -56,7 +56,7 @@ interface InYourWalletProps {
 function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: InYourWalletProps) {
   return (
     <Box mr="0" pb="0">
-      <Divider />
+      <Separator />
       <Box bg="background.level1" px="md" py="sm">
         <HStack zIndex="1">
           <Box color="font.secondary">
@@ -74,7 +74,7 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
               onClick={openConnectModal}
               padding="0"
               size="sm"
-              variant="link"
+              variant='plain'
             >
               Connect wallet
             </Button>
@@ -88,9 +88,9 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
           )}
         </HStack>
       </Box>
-      {isConnected && !hasNoTokensInWallet && <Divider />}
+      {isConnected && !hasNoTokensInWallet && <Separator />}
     </Box>
-  )
+  );
 }
 
 interface TokenRowProps {
@@ -114,8 +114,7 @@ function TokenRow({
   isLoadingTokenPrices,
   activeIndex,
   isCurrentToken,
-  onTokenSelect,
-}: TokenRowProps) {
+  onTokenSelect }: TokenRowProps) {
   const userBalance = isConnected ? balanceFor(token.address) : undefined
 
   return (
@@ -192,8 +191,7 @@ export function TokenSelectList({
           decimals,
           chain,
           chainId: getChainId(chain),
-          address: searchTerm as `0x${string}`,
-        }
+          address: searchTerm as `0x${string}` }
       : undefined
 
   const tokensWithBalance = isConnected

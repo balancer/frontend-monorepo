@@ -4,17 +4,15 @@ import {
   HStack,
   Text,
   Popover,
-  PopoverTrigger,
+  HoverCard,
   Portal,
-  PopoverContent,
   VStack,
   StackProps,
   Badge,
   Box,
   useToken,
   Center,
-  Divider,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -111,17 +109,16 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
       : undefined
 
   const popoverContent = (
-    <PopoverContent bg="background.base" minWidth={['100px', '300px']} p="ms" shadow="3xl">
-      <VStack alignItems="stretch" spacing="xs" width="full">
-        <TooltipItem
-          label={
-            <Text as="b" fontWeight="bold">
-              veBAL votes
-            </Text>
-          }
-          mb="xs"
-          value={
-            <Badge {...badgeColorScheme} rounded="full">
+    <HoverCard.Positioner>
+      <HoverCard.Content bg="background.base" minWidth={['100px', '300px']} p="ms" shadow="3xl">
+        <VStack alignItems="stretch" gap="xs" width="full">
+          <TooltipItem
+            label={
+              <Text fontWeight="bold" asChild><b>veBAL votes
+                              </b></Text>
+            }
+            mb="xs"
+            value={String(<Badge {...badgeColorScheme} rounded="full">
               <HStack gap="xxs" p="xxs" pl="0">
                 <Box color="font.dark" fontSize="xs">
                   {diffIcon}
@@ -130,37 +127,37 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
                   {voteDiffText}
                 </Text>
               </HStack>
-            </Badge>
-          }
-        />
+            </Badge>)}
+          />
 
-        <Divider />
+          <Separator />
 
-        <TooltipItem label="Current period" mt="sm" value={votesShareText ?? <>&mdash;</>} />
-        <TooltipItem
-          color="font.secondary"
-          label="veBAL votes"
-          value={votesThisWeek ?? <>&mdash;</>}
-        />
+          <TooltipItem label="Current period" mt="sm" value={String(votesShareText ?? <>&mdash;</>)} />
+          <TooltipItem
+            color="font.secondary"
+            label="veBAL votes"
+            value={String(votesThisWeek ?? <>&mdash;</>)}
+          />
 
-        <TooltipItem
-          label="For next period"
-          mt="sm"
-          value={votesShareNextWeekText ?? <>&mdash;</>}
-        />
-        <TooltipItem
-          color="font.secondary"
-          label="veBAL votes"
-          value={votesNextWeek ?? <>&mdash;</>}
-        />
-      </VStack>
-    </PopoverContent>
+          <TooltipItem
+            label="For next period"
+            mt="sm"
+            value={String(votesShareNextWeekText ?? <>&mdash;</>)}
+          />
+          <TooltipItem
+            color="font.secondary"
+            label="veBAL votes"
+            value={String(votesNextWeek ?? <>&mdash;</>)}
+          />
+        </VStack>
+      </HoverCard.Content>
+    </HoverCard.Positioner>
   )
 
   return (
-    <Popover trigger="hover">
+    <HoverCard.Root>
       <>
-        <PopoverTrigger>
+        <HoverCard.Trigger asChild>
           <HStack>
             <Text
               color={votesColor}
@@ -175,10 +172,10 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
             </Text>
             {trendIcon}
           </HStack>
-        </PopoverTrigger>
+        </HoverCard.Trigger>
 
         <Portal>{popoverContent}</Portal>
       </>
-    </Popover>
-  )
+    </HoverCard.Root>
+  );
 }

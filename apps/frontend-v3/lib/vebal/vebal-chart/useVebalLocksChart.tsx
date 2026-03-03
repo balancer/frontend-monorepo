@@ -1,7 +1,13 @@
-'use client'
+'use client';
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTheme as useChakraTheme } from '@chakra-ui/react'
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
 import {
@@ -10,8 +16,7 @@ import {
   addDays,
   isBefore,
   secondsToMilliseconds,
-  millisecondsToSeconds,
-} from 'date-fns'
+  millisecondsToSeconds } from 'date-fns'
 import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -116,7 +121,7 @@ export interface UseVebalLocksChartParams {
 
 export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVebalLocksChartParams) {
   const theme = useChakraTheme()
-  const { theme: nextTheme } = useNextTheme()
+  const { system: nextTheme } = useNextTheme()
 
   const instanceRef = useRef<ECharts | undefined>(undefined)
   const [currentTimestampMs, setCurrentTimestampMs] = useState(() => Date.now())
@@ -145,8 +150,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
     const processedValues = processLockSnapshots(
       userHistoricalLocks.map(userHistoricalLock => ({
         ...userHistoricalLock,
-        slope: userHistoricalLock.slope,
-      })),
+        slope: userHistoricalLock.slope })),
       currentTimestampMs
     )
     const valuesByDates = groupValuesByDates(processedValues)
@@ -174,17 +178,14 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           type: [3, 15],
           color: '#EAA879',
           width: 3,
-          cap: 'round' as const,
-        },
-        showSymbol: false,
-      }
+          cap: 'round' as const },
+        showSymbol: false }
     }
 
     return {
       name: '',
       type: 'line' as const,
-      data: [],
-    }
+      data: [] }
   }, [
     chartValues,
     currentTimestampMs,
@@ -203,18 +204,17 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
       heading: 'font-weight: bold; color: #E5D3BE',
       container: `background: ${
         nextTheme === 'dark'
-          ? theme.semanticTokens.colors.background.level3._dark
-          : theme.semanticTokens.colors.background.default
+          ? theme.token('semanticTokens.colors.background.level3._dark')
+          : theme.token('semanticTokens.colors.background.default')
       };`,
       text:
         nextTheme === 'dark'
-          ? theme.semanticTokens.colors.font.primary._dark
-          : theme.semanticTokens.colors.font.primary.default,
+          ? theme.token('semanticTokens.colors.font.primary._dark')
+          : theme.token('semanticTokens.colors.font.primary.default'),
       secondaryText:
         nextTheme === 'dark'
-          ? theme.semanticTokens.colors.font.secondary._dark
-          : theme.semanticTokens.colors.font.secondary.default,
-    }
+          ? theme.token('semanticTokens.colors.font.secondary._dark')
+          : theme.token('semanticTokens.colors.font.secondary.default') }
 
     const badgeStyle =
       'background: #f48975; color: #2D3748; font-weight: bold; letter-spacing: -0.5px; border-radius: 0.25rem; padding-inline-start: 0.25rem; padding-inline-end: 0.25rem; margin-left: 60px;'
@@ -226,19 +226,16 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         textStyle: {
           color:
             nextTheme === 'dark'
-              ? theme.semanticTokens.colors.font.primary._dark
-              : theme.semanticTokens.colors.font.primary.default,
+              ? theme.token('semanticTokens.colors.font.primary._dark')
+              : theme.token('semanticTokens.colors.font.primary.default'),
           fontWeight: 'bold',
-          fontSize: 13,
-        },
-      },
+          fontSize: 13 } },
       grid: {
         left: '1.5%',
         right: '3%',
         top: '12%',
         bottom: '4%',
-        containLabel: true,
-      },
+        containLabel: true },
       tooltip: {
         show: true,
         showContent: true,
@@ -248,9 +245,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           animation: false,
           type: 'shadow',
           label: {
-            show: false,
-          },
-        },
+            show: false } },
         extraCssText: `border: none;${toolTipTheme.container};max-width: 215px; z-index: 5`,
         position: point => {
           return [point[0] + 15, point[1] + 15]
@@ -296,8 +291,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
             </div>
           </div>
         `
-        },
-      },
+        } },
       xAxis: {
         show: true,
         type: 'time',
@@ -309,26 +303,20 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           },
           color:
             nextTheme === 'dark'
-              ? theme.semanticTokens.colors.font.secondary._dark
-              : theme.semanticTokens.colors.font.secondary.default,
-          opacity: 1,
-        },
+              ? theme.token('semanticTokens.colors.font.secondary._dark')
+              : theme.token('semanticTokens.colors.font.secondary.default'),
+          opacity: 1 },
         axisPointer: {
           type: 'line',
           label: {
             formatter: (params: any) => {
               return format(new Date(secondsToMilliseconds(params.value)), 'MMM d')
-            },
-          },
-        },
+            } } },
         axisLine: { show: false },
         splitArea: {
           show: false,
           areaStyle: {
-            color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'],
-          },
-        },
-      },
+            color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'] } } },
       yAxis: {
         show: true,
         type: 'value',
@@ -338,11 +326,9 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         axisLabel: {
           color:
             nextTheme === 'dark'
-              ? theme.semanticTokens.colors.font.secondary._dark
-              : theme.semanticTokens.colors.font.secondary.default,
-          opacity: 1,
-        },
-      },
+              ? theme.token('semanticTokens.colors.font.secondary._dark')
+              : theme.token('semanticTokens.colors.font.secondary.default'),
+          opacity: 1 } },
       series: [
         {
           id: MAIN_SERIES_ID,
@@ -353,8 +339,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: 'rgba(14, 165, 233, 0.08)' },
               { offset: 1, color: 'rgba(68, 9, 236, 0)' },
-            ]),
-          },
+            ]) },
           lineStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
               { offset: 0, color: '#B3AEF5' },
@@ -364,20 +349,16 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
             ]),
             width: 3,
             join: 'round' as const,
-            cap: 'round' as const,
-          },
-          showSymbol: false,
-        },
+            cap: 'round' as const },
+          showSymbol: false },
         futureLockChartData,
-      ],
-    }
-  }, [chartValues, futureLockChartData, theme, nextTheme])
+      ] };
+  }, [chartValues, futureLockChartData, system, nextTheme])
 
   return {
     lockedUntil,
     chartData: options,
     options,
     onChartReady,
-    insufficientData: chartValues.length < MIN_CHART_VALUES,
-  }
+    insufficientData: chartValues.length < MIN_CHART_VALUES }
 }

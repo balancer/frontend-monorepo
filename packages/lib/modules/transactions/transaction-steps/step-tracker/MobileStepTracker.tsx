@@ -1,14 +1,6 @@
 'use client'
 
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  HStack,
-  Text,
-} from '@chakra-ui/react'
+import { Accordion, HStack, Text } from '@chakra-ui/react';
 
 import { StepIndicator } from './Step'
 import { Steps } from './Steps'
@@ -33,11 +25,11 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
   const stepLabel = `Step ${currentStepNumber}/${totalSteps}`
 
   return (
-    <Accordion allowToggle textAlign="left" variant="button" width="full">
-      <AccordionItem>
+    <Accordion.Root collapsible textAlign="left" variant="button" width="full">
+      <Accordion.Root value='item-0'>
         {({ isExpanded }) => (
           <>
-            <AccordionButton>
+            <Accordion.Root>
               <HStack fontSize="md" justify="flex-start" width="full">
                 {currentStep && (
                   <StepIndicator
@@ -56,15 +48,15 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
                 <Text color={isExpanded ? 'font.link' : 'font.highlight'} whiteSpace="nowrap">
                   {stepLabel}
                 </Text>
-                <AccordionIcon textColor={isExpanded ? 'font.link' : 'font.highlight'} />
+                <Accordion.Root textColor={isExpanded ? 'font.link' : 'font.highlight'} />
               </HStack>
-            </AccordionButton>
-            <AccordionPanel pt="md">
-              <Steps transactionSteps={transactionSteps} />
-            </AccordionPanel>
+            </Accordion.ItemTrigger>
+            <Accordion.Root pt="md"><Accordion.Root>
+                <Steps transactionSteps={transactionSteps} />
+              </Accordion.ItemBody></Accordion.ItemContent>
           </>
         )}
-      </AccordionItem>
-    </Accordion>
-  )
+      </Accordion.Item>
+    </Accordion.Root>
+  );
 }

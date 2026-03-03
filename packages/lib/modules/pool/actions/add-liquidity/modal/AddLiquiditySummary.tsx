@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Box, Divider, Card, VStack, Button, Text } from '@chakra-ui/react'
+import { Box, Card, VStack, Button, Text, Separator } from '@chakra-ui/react';
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -21,16 +21,14 @@ import { useRouter } from 'next/navigation'
 import {
   PROPORTIONAL_ADD_DESCRIPTION,
   SlippageOptions,
-  SlippageSelector,
-} from '../../SlippageSelector'
+  SlippageSelector } from '../../SlippageSelector'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
   error,
   sentTokens,
-  receivedBptUnits,
-}: AddLiquidityReceiptResult) {
+  receivedBptUnits }: AddLiquidityReceiptResult) {
   const {
     totalUSDValue,
     simulationQuery,
@@ -41,8 +39,7 @@ export function AddLiquiditySummary({
     addLiquidityTxHash,
     addLiquidityTxSuccess,
     slippage,
-    wantsProportional,
-  } = useAddLiquidity()
+    wantsProportional } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -57,8 +54,7 @@ export function AddLiquiditySummary({
       ...amount,
       humanAmount: bn(amount?.humanAmount || 0)
         .times(1 - selectedSlippage)
-        .toString(),
-    })) as HumanTokenAmountWithSymbol[]
+        .toString() })) as HumanTokenAmountWithSymbol[]
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -97,8 +93,7 @@ export function AddLiquiditySummary({
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
-
-      <Card p="ms" variant="modalSubSection">
+      <Card.Root p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
@@ -117,23 +112,21 @@ export function AddLiquiditySummary({
           tokens={tokens}
           totalUSDValue={hasQuoteContext ? totalUSDValue : undefined}
         />
-      </Card>
-
-      <Card p="ms" variant="modalSubSection">
+      </Card.Root>
+      <Card.Root p="ms" variant="modalSubSection">
         {shouldShowReceipt ? (
           <ReceiptBptOut actualBptOut={receivedBptUnits} isLoading={isLoadingReceipt} />
         ) : (
           <QuoteBptOut isLoading={isLoadingTokens} />
         )}
-      </Card>
-
+      </Card.Root>
       {shouldShowReceipt ? (
         <>
           <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="staking-options">
             {isVebalPool(pool.id) ? (
-              <Card variant="modalSubSection">
-                <VStack align="start" spacing="md" w="full">
+              <Card.Root variant="modalSubSection">
+                <VStack align="start" gap="md" w="full">
                   <Text>Get extra incentives with veBAL</Text>
                   <Button
                     onClick={() => router.push('/vebal/manage')}
@@ -144,11 +137,11 @@ export function AddLiquiditySummary({
                     Lock to get veBAL
                   </Button>
                 </VStack>
-              </Card>
+              </Card.Root>
             ) : (
               pool.staking && (
                 <Box pt="sm">
-                  <Divider mb="md" />
+                  <Separator mb="md" />
                   <StakingOptions />
                 </Box>
               )
@@ -157,8 +150,8 @@ export function AddLiquiditySummary({
         </>
       ) : hasQuoteContext ? (
         <CardPopAnim key="price-impact-details">
-          <Card p="ms" variant="modalSubSection">
-            <VStack align="start" spacing="sm">
+          <Card.Root p="ms" variant="modalSubSection">
+            <VStack align="start" gap="sm">
               <PoolActionsPriceImpactDetails
                 bptAmount={simulationQuery.data?.bptOut.amount}
                 isAddLiquidity
@@ -167,9 +160,9 @@ export function AddLiquiditySummary({
                 totalUSDValue={totalUSDValue}
               />
             </VStack>
-          </Card>
+          </Card.Root>
         </CardPopAnim>
       ) : null}
     </AnimateHeightChange>
-  )
+  );
 }

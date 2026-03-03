@@ -1,6 +1,6 @@
 'use client'
 
-import { VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react';
 import { useLbpForm } from './LbpFormProvider'
 import { useEffect } from 'react'
 
@@ -12,10 +12,10 @@ export function LbpForm() {
   }, [currentStepIndex])
 
   return (
-    <VStack align="start" spacing="lg" w="full">
-      <VStack spacing="lg" w="full">
+    <VStack align="start" gap="lg" w="full">
+      <VStack gap="lg" w="full">
         {canRenderStep && <currentStep.Component />}
       </VStack>
     </VStack>
-  )
+  );
 }

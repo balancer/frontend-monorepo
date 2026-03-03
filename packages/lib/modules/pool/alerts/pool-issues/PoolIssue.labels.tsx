@@ -1,4 +1,4 @@
-import { Link } from '@chakra-ui/react'
+import { Link } from '@chakra-ui/react';
 import { PoolIssue } from './PoolIssue.type'
 import { ReactNode } from 'react'
 
@@ -20,12 +20,10 @@ type VunerabilityData = {
 export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
   [PoolIssue.PoolProtocolFeeVulnWarning]: {
     jsxTitle: <>{vulnerabilityTitle}</>,
-    learnMoreLink: 'https://x.com/Balancer/status/1611363559685898247',
-  },
+    learnMoreLink: 'https://x.com/Balancer/status/1611363559685898247' },
   [PoolIssue.PoolOwnerVulnWarningGovernanceMigrate]: {
     jsxTitle: <>{vulnerabilityDisclosure}. You're advised to migrate your liquidity.</>,
-    learnMoreLink: vulnerabilityDisclosureLink,
-  },
+    learnMoreLink: vulnerabilityDisclosureLink },
   [PoolIssue.PoolOwnerVulnWarningGovernanceWithdraw]: {
     jsxTitle: (
       <>
@@ -34,8 +32,8 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://forum.balancer.fi/t/vulnerability-disclosure/3179"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           vulnerability
         </Link>
         . You're advised to withdraw your liquidity asap. Add it to the{' '}
@@ -43,14 +41,13 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://app.balancer.fi/#/ethereum/pool/0xa13a9247ea42d743238089903570127dda72fe4400000000000000000000035d"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           upgraded pool{' '}
         </Link>
         to participate in liquidity incentives.
       </>
-    ),
-  },
+    ) },
   [PoolIssue.PoolOwnerVulnWarningGovernance]: {
     jsxTitle: (
       <>
@@ -58,8 +55,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         same composition.
       </>
     ),
-    learnMoreLink: vulnerabilityDisclosureLink,
-  },
+    learnMoreLink: vulnerabilityDisclosureLink },
   [PoolIssue.PoolOwnerVulnWarningEcosystem]: {
     jsxTitle: (
       <>
@@ -67,12 +63,10 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         the same composition.
       </>
     ),
-    learnMoreLink: vulnerabilityDisclosureLink,
-  },
+    learnMoreLink: vulnerabilityDisclosureLink },
   [PoolIssue.PoolOwnerVulnWarningEcosystemMigrate]: {
     jsxTitle: <>{vulnerabilityDisclosure}. You're advised to migrate your liquidity.</>,
-    learnMoreLink: vulnerabilityDisclosureLink,
-  },
+    learnMoreLink: vulnerabilityDisclosureLink },
   [PoolIssue.RenBTCWarning]: {
     jsxTitle: (
       <>
@@ -83,8 +77,8 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://medium.com/renproject/moving-on-from-alameda-da62a823ce93"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           sunset
         </Link>{' '}
         in December 2022. This will render this version of the renBTC token as valueless, which will
@@ -93,19 +87,17 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
           href="https://x.com/renprotocol/status/1595807696296751104"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           bridge all ren assets
         </Link>{' '}
         back to their native chain ASAP to avoid being left holding a valueless token which can no
         longer be redeemed for the native asset.
       </>
-    ),
-  },
+    ) },
   [PoolIssue.CspPoolVulnWarning]: {
     jsxTitle: <>{vulnerabilityTitle}</>,
-    learnMoreLink: 'https://forum.balancer.fi/t/vulnerability-found-in-some-pools/5102/1',
-  },
+    learnMoreLink: 'https://forum.balancer.fi/t/vulnerability-found-in-some-pools/5102/1' },
   [PoolIssue.EulerBoostedWarning]: {
     jsxTitle: (
       <>
@@ -113,8 +105,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         pool are not possible until that functionality is restored.
       </>
     ),
-    learnMoreLink: emergencyMultisigLink,
-  },
+    learnMoreLink: emergencyMultisigLink },
   [PoolIssue.EulerRecoveryModeWarning]: {
     jsxTitle: (
       <>
@@ -122,8 +113,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         withdraw as soon as possible.
       </>
     ),
-    learnMoreLink: emergencyMultisigLink,
-  },
+    learnMoreLink: emergencyMultisigLink },
   [PoolIssue.FxPoolVulnWarning]: {
     jsxTitle: (
       <>
@@ -131,6 +121,4 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         remove remove liquidity from this pool.
       </>
     ),
-    learnMoreLink: 'https://x.com/XaveFinance/status/1725089131330756628',
-  },
-}
+    learnMoreLink: 'https://x.com/XaveFinance/status/1725089131330756628' } }

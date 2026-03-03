@@ -1,20 +1,6 @@
 'use client'
 
-import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-  Checkbox,
-  Button,
-  VStack,
-  ModalFooter,
-  Box,
-  Link,
-} from '@chakra-ui/react'
+import { useDisclosure, Checkbox, Button, VStack, Box, Link, Dialog, Portal } from '@chakra-ui/react';
 import { useEffect, useState } from 'react'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
@@ -24,7 +10,7 @@ import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export function AcceptPoliciesModal() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const { acceptedPolicies, setAcceptedPolicies } = useUserSettings()
   const { isBlocked, isLoading, isConnected, userAddress } = useUserAccount()
   const [isChecked, setIsChecked] = useState(false)
@@ -62,67 +48,74 @@ export function AcceptPoliciesModal() {
   }
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={handleOnClose} preserveScrollBarGap>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{`Accept ${projectName} policies`}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <VStack align="flex-start" gap="md">
-            <Checkbox
-              alignItems="start"
-              isChecked={isChecked}
-              onChange={e => setIsChecked(e.target.checked)}
-              size="lg"
-            >
-              {isBalancer ? (
-                <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
-                  By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
-                  <Link as={NextLink} href="/terms-of-use">
-                    Terms of Use
-                  </Link>
-                  ,{' '}
-                  <Link as={NextLink} href="/risks">
-                    Risks
-                  </Link>
-                  ,{' '}
-                  <Link as={NextLink} href="/cookies-policy">
-                    Cookies Policy
-                  </Link>
-                  , use of{' '}
-                  <Link as={NextLink} href="/3rd-party-services">
-                    Third-party services
-                  </Link>{' '}
-                  and{' '}
-                  <Link as={NextLink} href="/privacy-policy">
-                    Privacy Policy
-                  </Link>
-                  .
-                </Box>
-              ) : (
-                <Box color="font.primary" fontSize="md" mt="-3px">
-                  By connecting my wallet, I agree to Beets&apos;{' '}
-                  <Link as={NextLink} href="/terms-of-service">
-                    Terms of Service
-                  </Link>
-                  .
-                </Box>
-              )}
-            </Checkbox>
-          </VStack>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            isDisabled={!isChecked}
-            onClick={handleClick}
-            size="lg"
-            variant="secondary"
-            w="full"
-          >
-            Proceed
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  )
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
+      onOpenChange={e => {
+        if (!e.open) {
+          handleOnClose();
+        }
+      }}>
+      <Portal>
+
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>{`Accept ${projectName} policies`}</Dialog.Header>
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <VStack align="flex-start" gap="md">
+                <Checkbox.Root
+                  alignItems="start"
+                  onCheckedChange={e => setIsChecked(e.target.checked)}
+                  size="lg"
+                  checked={isChecked}
+                ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                    {isBalancer ? (
+                      <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
+                        By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
+                        <Link asChild><NextLink href="/terms-of-use">Terms of Use
+                                                  </NextLink></Link>
+                        ,{' '}
+                        <Link asChild><NextLink href="/risks">Risks
+                                                  </NextLink></Link>
+                        ,{' '}
+                        <Link asChild><NextLink href="/cookies-policy">Cookies Policy
+                                                  </NextLink></Link>
+                        , use of{' '}
+                        <Link asChild><NextLink href="/3rd-party-services">Third-party services
+                                                  </NextLink></Link>{' '}
+                        and{' '}
+                        <Link asChild><NextLink href="/privacy-policy">Privacy Policy
+                                                  </NextLink></Link>
+                        .
+                      </Box>
+                    ) : (
+                      <Box color="font.primary" fontSize="md" mt="-3px">
+                        By connecting my wallet, I agree to Beets&apos;{' '}
+                        <Link asChild><NextLink href="/terms-of-service">Terms of Service
+                                                  </NextLink></Link>
+                        .
+                      </Box>
+                    )}
+                  </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+              </VStack>
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Button
+                disabled={!isChecked}
+                onClick={handleClick}
+                size="lg"
+                variant="secondary"
+                w="full"
+              >
+                Proceed
+              </Button>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

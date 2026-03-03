@@ -1,18 +1,6 @@
-import {
-  Box,
-  Divider,
-  ListItem,
-  UnorderedList,
-  VStack,
-  HStack,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Text,
-} from '@chakra-ui/react'
+import { Box, VStack, HStack, Popover, HoverCard, Text, Separator, List } from '@chakra-ui/react';
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect } from 'react'
 import { usePool } from '../../../PoolProvider'
@@ -20,8 +8,7 @@ import {
   requiresProportionalInput,
   requiresProportionalInputReason,
   supportsProportionalAddLiquidityKind,
-  supportsProportionalAddLiquidityReasons,
-} from '../../LiquidityActionHelpers'
+  supportsProportionalAddLiquidityReasons } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -54,7 +41,9 @@ function PoolWeightsInfo() {
                 color="black"
                 fontSize="sm"
                 fontWeight="medium"
-                sx={{ textWrap: 'balance' }}
+                css={{
+                  textWrap: 'balance'
+                }}
               >
                 Proportional adds avoid price impact by matching the current ratio of each token's
                 USD value within the pool:
@@ -63,8 +52,8 @@ function PoolWeightsInfo() {
             forceColumnMode
             wrapText
           >
-            <UnorderedList>
-              <ListItem
+            <List.Root as='ul'>
+              <List.Item
                 color="font.black"
                 fontSize="sm"
                 fontWeight="medium"
@@ -78,13 +67,12 @@ function PoolWeightsInfo() {
                         'weight',
                         poolTokensWithActualWeights[token.address],
                         {
-                          abbreviated: false,
-                        }
+                          abbreviated: false }
                       )}`
                   )
                   .join(', ')}
-              </ListItem>
-            </UnorderedList>
+              </List.Item>
+            </List.Root>
           </BalAlertContent>
         }
         mb="sm"
@@ -92,7 +80,7 @@ function PoolWeightsInfo() {
         pb="xxs !important"
         status="info"
       />
-    )
+    );
   }
 }
 
@@ -116,8 +104,7 @@ export function AddLiquidityFormTabs({
   nestedAddLiquidityEnabled,
   tabIndex,
   setFlexibleTab,
-  setProportionalTab,
-}: {
+  setProportionalTab }: {
   totalUSDValue: string
   nestedAddLiquidityEnabled: boolean
   tabIndex: number
@@ -166,8 +153,7 @@ export function AddLiquidityFormTabs({
       value: '0',
       label: 'Flexible',
       disabled: isDisabledFlexibleTab,
-      tabTooltipLabel: getFlexibleTabTooltipLabel(),
-    },
+      tabTooltipLabel: getFlexibleTabTooltipLabel() },
     {
       value: '1',
       label: 'Proportional',
@@ -175,8 +161,7 @@ export function AddLiquidityFormTabs({
       tabTooltipLabel: isDisabledProportionalTab
         ? supportsProportionalAddLiquidityReasons(pool) ||
           'This pool does not support liquidity to be added proportionally'
-        : undefined,
-    },
+        : undefined },
   ]
 
   useEffect(() => {
@@ -200,8 +185,11 @@ export function AddLiquidityFormTabs({
           options={options}
           size="sm"
         />
-        <Popover placement="top" trigger="hover">
-          <PopoverTrigger>
+        <HoverCard.Root
+          positioning={{
+            placement: 'top'
+          }}>
+          <HoverCard.Trigger asChild>
             <Box
               _hover={{ opacity: 1 }}
               opacity="0.6"
@@ -209,35 +197,37 @@ export function AddLiquidityFormTabs({
             >
               <InfoIcon />
             </Box>
-          </PopoverTrigger>
-          <PopoverContent maxW="300px" p="sm" w="auto">
-            <VStack align="start" spacing="sm">
-              <Box>
-                <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                  Flexible Adds
-                </Text>
-                <Text fontSize="sm" variant="secondary">
-                  Enter any amount for each token manually. Balances are independent, and no
-                  automatic adjustments will be made.
-                </Text>
-              </Box>
-              <Box>
-                <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                  Proportional Adds (No price impact)
-                </Text>
-                <Text fontSize="sm" variant="secondary">
-                  When you enter an amount for one token, the others are automatically adjusted to
-                  maintain the pool's proportional balance.
-                </Text>
-              </Box>
-            </VStack>
-          </PopoverContent>
-        </Popover>
-        <Divider w="full" />
+          </HoverCard.Trigger>
+          <HoverCard.Positioner>
+            <HoverCard.Content maxW="300px" p="sm" w="auto">
+              <VStack align="start" gap="sm">
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                    Flexible Adds
+                  </Text>
+                  <Text fontSize="sm" variant="secondary">
+                    Enter any amount for each token manually. Balances are independent, and no
+                    automatic adjustments will be made.
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                    Proportional Adds (No price impact)
+                  </Text>
+                  <Text fontSize="sm" variant="secondary">
+                    When you enter an amount for one token, the others are automatically adjusted to
+                    maintain the pool's proportional balance.
+                  </Text>
+                </Box>
+              </VStack>
+            </HoverCard.Content>
+          </HoverCard.Positioner>
+        </HoverCard.Root>
+        <Separator w="full" />
       </HStack>
       {!isMinimumDepositMet && <MinimumDepositErrorsAlert errors={minimumDepositErrors} />}
       {isOutOfRange && <OutOfRangeWarning />}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
-  )
+  );
 }

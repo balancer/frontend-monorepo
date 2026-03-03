@@ -1,4 +1,4 @@
-import { VStack, Heading, Text, HStack, Link } from '@chakra-ui/react'
+import { VStack, Heading, Text, HStack, Link } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useSuggestedGyroEclpConfig } from './useSuggestedGyroEclpConfig'
@@ -14,19 +14,19 @@ export function GyroEclpConfiguration() {
   const { errorMessage } = useValidateEclpParams()
 
   return (
-    <VStack align="start" spacing="xl" w="full">
+    <VStack align="start" gap="xl" w="full">
       <EclpParamHeader />
       <EclpParamInputs />
       {errorMessage && (
         <BalAlert content={errorMessage} status="error" title="Invalid E-CLP parameters" />
       )}
     </VStack>
-  )
+  );
 }
 
 function EclpParamHeader() {
   return (
-    <VStack align="start" spacing="sm" w="full">
+    <VStack align="start" gap="sm" w="full">
       <Heading color="font.maxContrast" pb="1" size="md">
         Gyro E-CLP configuration
       </Heading>
@@ -37,14 +37,14 @@ function EclpParamHeader() {
           display="inline-flex"
           gap="xs"
           href="https://docs.gyro.finance/pools/e-clps.html#reading-e-clp-parameters"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           Read the Gyroscope docs
           <ArrowUpRight size={14} />
         </Link>
       </HStack>
     </VStack>
-  )
+  );
 }
 
 function EclpParamInputs() {
@@ -53,8 +53,7 @@ function EclpParamInputs() {
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
   const [alpha, beta, peakPrice, lambda, c, s] = useWatch({
     control: eclpConfigForm.control,
-    name: ['alpha', 'beta', 'peakPrice', 'lambda', 'c', 's'],
-  })
+    name: ['alpha', 'beta', 'peakPrice', 'lambda', 'c', 's'] })
 
   const tokenPricePair = poolTokens
     .map(token => token.data?.symbol)
@@ -95,8 +94,7 @@ function EclpParamInputs() {
         return 'Lower bound price must be less than upper bound price'
       }
       return true
-    },
-  }
+    } }
 
   const peakPriceInput = {
     label: `Peak price: ${tokenPricePair}`,
@@ -113,8 +111,7 @@ function EclpParamInputs() {
       if (value <= Number(alpha)) return 'Peak price must be greater than lower bound price'
       if (value >= Number(beta)) return 'Peak price must be less than upper bound price'
       return true
-    },
-  }
+    } }
 
   const upperBoundPriceInput = {
     label: `Upper bound price: ${tokenPricePair}`,
@@ -135,8 +132,7 @@ function EclpParamInputs() {
         return 'Upper bound price must be greater than peak price'
       }
       return true
-    },
-  }
+    } }
 
   const stretchingFactorInput = {
     label: `Stretching factor`,
@@ -148,8 +144,7 @@ function EclpParamInputs() {
       if (value <= 0) return 'Stretching factor must be greater than 0'
       if (value > MAX_LAMBDA) return `Maximum value for stretching factor is ${MAX_LAMBDA}`
       return true
-    },
-  }
+    } }
 
   const eclpConfigInputs = [
     lowerBoundPriceInput,

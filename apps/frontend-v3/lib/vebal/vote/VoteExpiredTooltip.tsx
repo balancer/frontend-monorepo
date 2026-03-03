@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Portal,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Badge, Popover, HoverCard, Portal, Text, VStack } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react'
 
 interface Props {
@@ -15,24 +7,26 @@ interface Props {
 
 export function VoteExpiredTooltip({ usePortal, children }: PropsWithChildren<Props>) {
   const popoverContent = (
-    <PopoverContent bg="background.level3" minWidth={['100px', '170px']} p="sm" shadow="3xl">
-      <VStack alignItems="start" spacing="sm" width="full">
-        <Text color="font.secondary" fontSize="md" fontWeight={700}>
-          Expired pool gauge
-        </Text>
-        <Text color="font.secondary" fontSize="sm">
-          This pool gauge that collects votes from veBAL holders to distribute BAL liquidity
-          incentives is no longer active. If you have active votes to this pool, reallocate them to
-          active pool gauges to avoid wasting your vote.
-        </Text>
-      </VStack>
-    </PopoverContent>
+    <HoverCard.Positioner>
+      <HoverCard.Content bg="background.level3" minWidth={['100px', '170px']} p="sm" shadow="3xl">
+        <VStack alignItems="start" gap="sm" width="full">
+          <Text color="font.secondary" fontSize="md" fontWeight={700}>
+            Expired pool gauge
+          </Text>
+          <Text color="font.secondary" fontSize="sm">
+            This pool gauge that collects votes from veBAL holders to distribute BAL liquidity
+            incentives is no longer active. If you have active votes to this pool, reallocate them to
+            active pool gauges to avoid wasting your vote.
+          </Text>
+        </VStack>
+      </HoverCard.Content>
+    </HoverCard.Positioner>
   )
 
   return (
-    <Popover trigger="hover">
+    <HoverCard.Root>
       <>
-        <PopoverTrigger>
+        <HoverCard.Trigger asChild>
           {children ?? (
             <Badge
               background="red.400"
@@ -44,10 +38,10 @@ export function VoteExpiredTooltip({ usePortal, children }: PropsWithChildren<Pr
               Expired
             </Badge>
           )}
-        </PopoverTrigger>
+        </HoverCard.Trigger>
 
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
       </>
-    </Popover>
-  )
+    </HoverCard.Root>
+  );
 }

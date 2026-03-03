@@ -1,36 +1,52 @@
-import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
-import { Icon, Stack, useTheme } from '@chakra-ui/react'
-import { Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon';
+import { Icon, Stack, Popover, HoverCard } from '@chakra-ui/react';
+import { Popover, HoverCard, Text } from '@chakra-ui/react';
 
 export function MyIncentivesTooltip() {
   const theme = useTheme()
 
   const popoverContent = (
-    <PopoverContent bg="background.base" gap="md" minWidth={['100px']} px="0" py="ms" shadow="3xl">
-      <Stack px="sm" spacing="sm" w="full">
-        <Text color="font.secondary" fontSize="sm">
-          {`Weekly bribes are provided by unaffiliated 3rd parties through the Votemarket platform
-          to incentivize liquidity to certain pools. This does not include additional yield that veBAL
-          holders also can earn (e.g. protocol revenue, extra boosts on liquidity mining incentives,
-          and swap fees).`}
-        </Text>
-      </Stack>
-    </PopoverContent>
+    <HoverCard.Positioner>
+      <HoverCard.Content
+        bg="background.base"
+        gap="md"
+        minWidth={['100px']}
+        px="0"
+        py="ms"
+        shadow="3xl">
+        <Stack px="sm" gap="sm" w="full">
+          <Text color="font.secondary" fontSize="sm">
+            {`Weekly bribes are provided by unaffiliated 3rd parties through the Votemarket platform
+            to incentivize liquidity to certain pools. This does not include additional yield that veBAL
+            holders also can earn (e.g. protocol revenue, extra boosts on liquidity mining incentives,
+            and swap fees).`}
+          </Text>
+        </Stack>
+      </HoverCard.Content>
+    </HoverCard.Positioner>
   )
 
   return (
-    <Popover trigger="hover">
+    <HoverCard.Root>
       <>
-        <PopoverTrigger>
+        <HoverCard.Trigger asChild>
           <Icon
             as={StarsIcon}
             gradFrom={theme.colors['red.400']}
             gradTo={theme.colors['red.400']}
           />
-        </PopoverTrigger>
+        </HoverCard.Trigger>
 
         {popoverContent}
       </>
-    </Popover>
-  )
+    </HoverCard.Root>
+  );
 }

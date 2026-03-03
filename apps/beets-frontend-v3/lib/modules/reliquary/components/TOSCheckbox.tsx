@@ -1,34 +1,35 @@
-import { VStack, HStack, Checkbox, Text, Link } from '@chakra-ui/react'
+import { VStack, HStack, Checkbox, Text, Link } from '@chakra-ui/react';
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { TextShine } from '@repo/lib/shared/components/TextShine/TextShine'
 
 export function TOSCheckbox({
   checked,
-  onChange,
-}: {
+  onChange }: {
   checked: boolean
   onChange: (checked: boolean) => void
 }) {
   return (
     <FadeInOnView scaleUp={false}>
-      <VStack align="start" spacing="sm">
-        <HStack spacing="xs">
-          <Checkbox isChecked={checked} onChange={e => onChange(e.target.checked)} size="lg">
-            <Text as="div" fontSize="md" lineHeight="1" sx={{ textWrap: 'pretty' }}>
-              <TextShine animationDuration="1.5s">
-                I agree to the terms of service as stated&nbsp;
-                <Link
-                  href="https://beets.fi/terms-of-service"
-                  isExternal
-                  onClick={e => e.stopPropagation()}
-                >
-                  here
-                </Link>
-              </TextShine>
-            </Text>
-          </Checkbox>
+      <VStack align="start" gap="sm">
+        <HStack gap="xs">
+          <Checkbox.Root onCheckedChange={e => onChange(e.target.checked)} size="lg" checked={checked}><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+              <Text as="div" fontSize="md" lineHeight="1" css={{
+                textWrap: 'pretty'
+              }}>
+                <TextShine animationDuration="1.5s">
+                  I agree to the terms of service as stated&nbsp;
+                  <Link
+                    href="https://beets.fi/terms-of-service"
+                    onClick={e => e.stopPropagation()}
+                    target='_blank'
+                    rel='noopener noreferrer'>
+                    here
+                  </Link>
+                </TextShine>
+              </Text>
+            </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
         </HStack>
       </VStack>
     </FadeInOnView>
-  )
+  );
 }

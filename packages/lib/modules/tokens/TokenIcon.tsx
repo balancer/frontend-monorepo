@@ -4,7 +4,7 @@ import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
-import { Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
+import { Text, Popover, HoverCard } from '@chakra-ui/react';
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { SmartCircularImage } from '@repo/lib/shared/components/image/SmartCircularImage'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
@@ -50,8 +50,7 @@ export function TokenIcon({
     radius: 50,
     backgroundType: ['solid'],
     scale: 80,
-    ...tokenColor,
-  })
+    ...tokenColor })
 
   const iconSrc = (() => {
     const src = logoURI ?? token?.logoURI
@@ -83,13 +82,15 @@ export function TokenIcon({
   }
 
   return (
-    <Popover trigger="hover">
-      <PopoverTrigger>{tokenImage}</PopoverTrigger>
-      <PopoverContent maxW="300px" p="sm" w="auto">
-        <Text fontSize="sm" variant="secondary">
-          {weight ? `${fNum('weight', weight)} ${alt}` : alt}
-        </Text>
-      </PopoverContent>
-    </Popover>
-  )
+    <HoverCard.Root>
+      <HoverCard.Trigger asChild>{tokenImage}</HoverCard.Trigger>
+      <HoverCard.Positioner>
+        <HoverCard.Content maxW="300px" p="sm" w="auto">
+          <Text fontSize="sm" variant="secondary">
+            {weight ? `${fNum('weight', weight)} ${alt}` : alt}
+          </Text>
+        </HoverCard.Content>
+      </HoverCard.Positioner>
+    </HoverCard.Root>
+  );
 }

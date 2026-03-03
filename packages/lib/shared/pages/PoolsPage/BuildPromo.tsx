@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Center, Flex, Heading, Link, Text, HStack, Stack } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Heading, Link, Text, HStack, Stack } from '@chakra-ui/react';
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
@@ -43,7 +43,9 @@ export function BuildPromo() {
                 justifyContent="center"
                 lineHeight="1.4"
                 maxWidth="38ch"
-                sx={{ textWrap: 'pretty' }}
+                css={{
+                  textWrap: 'pretty'
+                }}
                 textAlign="center"
                 width="full"
               >
@@ -59,29 +61,20 @@ export function BuildPromo() {
               maxWidth={356}
               width="full"
             >
-              <Button as={NextLink} flex={1} href="/create" size="lg" variant="primary">
-                Create a pool
-              </Button>
-              <Button
-                as={NextLink}
-                flex={1}
-                href="https://github.com/balancer/scaffold-balancer-v3"
-                rightIcon={<ArrowUpRight size="14px" />}
-                size="lg"
-                variant="tertiary"
-              >
-                Prototype on v3
-              </Button>
+              <Button flex={1} size="lg" variant="primary" asChild><NextLink href="/create">Create a pool
+                              </NextLink></Button>
+              <Button flex={1} size="lg" variant="tertiary" asChild><NextLink href="https://github.com/balancer/scaffold-balancer-v3">Prototype on v3
+                                                <ArrowUpRight size="14px" /></NextLink></Button>
             </Flex>
             <Link
               alignItems="center"
               color="font.secondary"
               display="inline-flex"
               href="https://docs.balancer.fi/"
-              isExternal
               justifyContent="center"
               mt="sm"
-            >
+              target='_blank'
+              rel='noopener noreferrer'>
               <HStack gap="xxs">
                 <Text color="font.secondary" fontSize={{ base: 'sm', md: 'md' }}>
                   View the docs
@@ -96,5 +89,5 @@ export function BuildPromo() {
         </FadeInOnView>
       </Center>
     </Box>
-  )
+  );
 }

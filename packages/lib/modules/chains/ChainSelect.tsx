@@ -1,14 +1,13 @@
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Box, HStack, Text, Center, VStack, Divider } from '@chakra-ui/react'
+import { Box, HStack, Text, Center, VStack, Separator } from '@chakra-ui/react';
 import {
   GroupBase,
   chakraComponents,
   DropdownIndicatorProps,
   SingleValueProps,
-  OptionProps,
-} from 'chakra-react-select'
+  OptionProps } from 'chakra-react-select'
 import { ChevronDown } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
@@ -69,10 +68,10 @@ function Option({ children, ...props }: OptionProps<ChainOption, false, GroupBas
 
   return (
     <Box w="full">
-      {showDivider && <Divider borderColor="background.level4" my="2" />}
+      {showDivider && <Separator borderColor="background.level4" my="2" />}
       <chakraComponents.Option {...props}>{children}</chakraComponents.Option>
     </Box>
-  )
+  );
 }
 
 export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supportedNetworks }: Props) {
@@ -105,21 +104,20 @@ export function ChainSelect({ value, onChange, chains = PROJECT_CONFIG.supported
       </VStack>
     ),
     value: chain,
-    showDivider: chain === firstChainWithoutBalance && hasChainsWithBalance,
-  }))
+    showDivider: chain === firstChainWithoutBalance && hasChainsWithBalance }))
 
   return (
-    <Box animate={pulseOnceWithDelay} as={motion.div} w="full" zIndex="10">
-      <SelectInput
-        DropdownIndicator={DropdownIndicator}
-        id="chain-select"
-        isSearchable={false}
-        onChange={onChange}
-        Option={Option}
-        options={networkOptions}
-        SingleValue={SingleValue}
-        value={value}
-      />
-    </Box>
-  )
+    <Box animate={pulseOnceWithDelay} w="full" zIndex="10" asChild><motion.div>
+        <SelectInput
+          DropdownIndicator={DropdownIndicator}
+          id="chain-select"
+          isSearchable={false}
+          onChange={onChange}
+          Option={Option}
+          options={networkOptions}
+          SingleValue={SingleValue}
+          value={value}
+        />
+      </motion.div></Box>
+  );
 }

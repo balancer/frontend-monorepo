@@ -1,16 +1,4 @@
-import {
-  Button,
-  HStack,
-  Link,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Text,
-  UseDisclosureProps,
-} from '@chakra-ui/react'
+import { Button, HStack, Link, Text, UseDisclosureProps, Dialog, Portal } from '@chakra-ui/react';
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { usePathname, useRouter } from 'next/navigation'
 import { Pool } from '../pool.types'
@@ -22,8 +10,7 @@ import { ArrowUpRight } from 'react-feather'
 export function UnstakeWarningModal({
   isOpen = false,
   onClose = () => {},
-  pool,
-}: UseDisclosureProps & { pool: Pool }) {
+  pool }: UseDisclosureProps & { pool: Pool }) {
   const router = useRouter()
   const pathname = usePathname()
 
@@ -48,32 +35,39 @@ export function UnstakeWarningModal({
   }
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
-      <SuccessOverlay />
+    <Dialog.Root placement='center' open={isOpen} onOpenChange={e => {
+      if (!e.open) {
+        onClose();
+      }
+    }}>
+      <Portal>
 
-      <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
-        <ModalCloseButton />
+        <SuccessOverlay />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>{title}</Dialog.Header>
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <Text color="font.secondary">{content}</Text>
+            </Dialog.Body>
+            <Dialog.Footer>
+              {hasBalancerStakedBalance(pool) ? (
+                <Button onClick={unstake} variant="secondary" w="full">
+                  Unstake
+                </Button>
+              ) : (
+                <Button isExternal variant="secondary" w="full" asChild><Link href={auraRedirectLink}>
+                    <HStack>
+                      <span>Go to Aura to Unstake</span>
+                      <ArrowUpRight size={16} />
+                    </HStack>
+                  </Link></Button>
+              )}
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-        <ModalBody>
-          <Text color="font.secondary">{content}</Text>
-        </ModalBody>
-
-        <ModalFooter>
-          {hasBalancerStakedBalance(pool) ? (
-            <Button onClick={unstake} variant="secondary" w="full">
-              Unstake
-            </Button>
-          ) : (
-            <Button as={Link} href={auraRedirectLink} isExternal variant="secondary" w="full">
-              <HStack>
-                <span>Go to Aura to Unstake</span>
-                <ArrowUpRight size={16} />
-              </HStack>
-            </Button>
-          )}
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }

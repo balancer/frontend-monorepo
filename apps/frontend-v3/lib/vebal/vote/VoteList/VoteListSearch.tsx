@@ -1,17 +1,16 @@
-import { FormControl, Box } from '@chakra-ui/react'
+import { Box, Field } from '@chakra-ui/react';
 import { SearchInput } from '@repo/lib/shared/components/inputs/SearchInput'
 import { useVoteList } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
 
 export function VoteListSearch() {
   const {
     loading,
-    filtersState: { searchText, setSearch },
-  } = useVoteList()
+    filtersState: { searchText, setSearch } } = useVoteList()
 
   return (
     <Box w={{ base: 'full', lg: 'sm' }}>
       <form>
-        <FormControl w="full">
+        <Field.Root w="full">
           <SearchInput
             ariaLabel="search for a voting pool"
             autoFocus={false}
@@ -20,8 +19,8 @@ export function VoteListSearch() {
             search={searchText}
             setSearch={setSearch}
           />
-        </FormControl>
+        </Field.Root>
       </form>
     </Box>
-  )
+  );
 }

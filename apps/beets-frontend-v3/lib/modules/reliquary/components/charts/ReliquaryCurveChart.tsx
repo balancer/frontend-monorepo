@@ -1,4 +1,12 @@
-import { Box, HStack, Link, useTheme, VStack } from '@chakra-ui/react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { Box, HStack, Link, VStack } from '@chakra-ui/react';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { EChartsOption, graphic } from 'echarts'
@@ -13,8 +21,7 @@ export function ReliquaryCurveChart() {
   const data = pool.staking?.reliquary?.levels
     ?.map(level => ({
       level: level.level + 1,
-      allocationPoints: level.allocationPoints,
-    }))
+      allocationPoints: level.allocationPoints }))
     // sometimes the levels from the pool data loop around which gives a weird chart, so just always slice out the correct data
     .slice(0, 11)
 
@@ -25,17 +32,13 @@ export function ReliquaryCurveChart() {
       axisPointer: {
         type: 'cross',
         crossStyle: {
-          color: '#999',
-        },
-      },
+          color: '#999' } },
       // any -> https://github.com/apache/echarts/issues/14277
       formatter: (params: any) =>
         `Level ${params[0].data[0]}: ${fNumCustom(params[0].data[1], '0a')}x maturity boost`,
-      confine: true,
-    },
+      confine: true },
     textStyle: {
-      color: '#D3D3D3',
-    },
+      color: '#D3D3D3' },
     xAxis: {
       name: 'Level',
       nameLocation: 'middle',
@@ -44,10 +47,8 @@ export function ReliquaryCurveChart() {
       splitLine: { show: false },
       axisTick: { show: false, alignWithLabel: true },
       axisLabel: {
-        margin: 16,
-      },
-      axisLine: { show: false },
-    },
+        margin: 16 },
+      axisLine: { show: false } },
     yAxis: {
       name: 'Maturity boost',
       nameLocation: 'middle',
@@ -56,17 +57,14 @@ export function ReliquaryCurveChart() {
       axisLine: { show: false },
       splitLine: { show: false },
       axisLabel: {
-        show: false,
-      },
-      axisTick: { show: false },
-    },
+        show: false },
+      axisTick: { show: false } },
     grid: {
       bottom: '6.5%',
       right: '1.5%',
       left: '6.5%',
       top: '10%',
-      containLabel: true,
-    },
+      containLabel: true },
     series: [
       {
         type: 'line',
@@ -75,17 +73,13 @@ export function ReliquaryCurveChart() {
         areaStyle: {
           opacity: 0.2,
           color: new graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
-            { offset: 0.5, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
-            { offset: 1, color: theme.semanticTokens.colors.chart.pool.bar.volume.to },
-          ]),
-        },
+            { offset: 0, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+            { offset: 0.5, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+            { offset: 1, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
+          ]) },
         lineStyle: {
-          color: theme.semanticTokens.colors.chart.pool.bar.volume.from,
-        },
-      },
-    ],
-  }
+          color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') } },
+    ] }
 
   return (
     <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
@@ -97,10 +91,12 @@ export function ReliquaryCurveChart() {
             lineHeight: '1rem',
             fontWeight: 'semibold',
             fontSize: 'sm',
-            color: 'beets.base.50',
-          }}
+            color: 'beets.base.50' }}
         />
-        <Link href="https://docs.beets.fi/tokenomics/mabeets" isExternal>
+        <Link
+          href="https://docs.beets.fi/tokenomics/mabeets"
+          target='_blank'
+          rel='noopener noreferrer'>
           <ExternalLink size="16" />
         </Link>
       </HStack>
@@ -108,5 +104,5 @@ export function ReliquaryCurveChart() {
         <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
       </Box>
     </VStack>
-  )
+  );
 }

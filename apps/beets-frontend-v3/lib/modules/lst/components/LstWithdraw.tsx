@@ -6,13 +6,13 @@ import { orderBy } from 'lodash'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { useMemo } from 'react'
 import { LstWithdrawModal } from '../modals/LstWithdrawModal'
-import { useDisclosure } from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react';
 import { useGetUserWithdraws, UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from '../hooks/useGetUserNumWithdraws'
 
 export function LstWithdraw() {
   const { nativeAsset, pagination, setPagination, first, skip, chain, isWithdrawTab } = useLst()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
 
   const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(
     chain,
@@ -42,8 +42,7 @@ export function LstWithdraw() {
     px: { base: 'sm', sm: '0' },
     gridTemplateColumns: '100px 1fr 100px',
     alignItems: 'center',
-    gap: { base: 'xxs', xl: 'lg' },
-  }
+    gap: { base: 'xxs', xl: 'lg' } }
 
   return (
     <>

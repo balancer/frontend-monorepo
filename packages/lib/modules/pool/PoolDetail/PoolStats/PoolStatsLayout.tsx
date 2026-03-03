@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack } from '@chakra-ui/react'
+import { Stack } from '@chakra-ui/react';
 import { PoolSnapshot } from './PoolSnapshot/PoolSnapshot'
 import { PoolChartsContainer } from './PoolCharts/PoolChartsContainer'
 
@@ -10,11 +10,11 @@ export function PoolStatsLayout() {
       direction={{ base: 'column', md: 'row' }}
       h={{ md: '484px' }}
       justifyContent="stretch"
-      spacing="md"
+      gap="md"
       w="full"
     >
       <PoolSnapshot w={{ base: 'full', md: 'md' }} />
       <PoolChartsContainer />
     </Stack>
-  )
+  );
 }

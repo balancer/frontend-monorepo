@@ -1,15 +1,4 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  CardProps,
-  Flex,
-  HStack,
-  Icon,
-  Text,
-} from '@chakra-ui/react'
+import { Accordion, CardProps, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import StarsIcon from '../icons/StarsIcon'
 
 type Props = {
@@ -20,11 +9,11 @@ type Props = {
 
 export function IncentiveBadge({ special = false, label, value, children }: Props) {
   return (
-    <Accordion allowToggle variant="incentives">
-      <AccordionItem border="none">
-        <AccordionButton>
+    <Accordion.Root collapsible variant="incentives">
+      <Accordion.Root border="none" value='item-0'>
+        <Accordion.Root>
           <HStack justifyContent="space-between" width="full" zIndex="2">
-            <HStack spacing="4" width="full">
+            <HStack gap="4" width="full">
               <Flex
                 alignItems="center"
                 background="background.level3"
@@ -45,7 +34,7 @@ export function IncentiveBadge({ special = false, label, value, children }: Prop
                 alignItems="flex-start"
                 fontWeight="medium"
                 justifyContent="space-between"
-                spacing="2"
+                gap="2"
                 width="full"
               >
                 <Text fontSize="1.15rem" fontWeight="semibold" variant="primary">
@@ -59,14 +48,14 @@ export function IncentiveBadge({ special = false, label, value, children }: Prop
                   >
                     {value}
                   </Text>
-                  <AccordionIcon />
+                  <Accordion.Root />
                 </HStack>
               </HStack>
             </HStack>
           </HStack>
-        </AccordionButton>
-        <AccordionPanel>{children}</AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  )
+        </Accordion.ItemTrigger>
+        <Accordion.Root><Accordion.Root>{children}</Accordion.ItemBody></Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
 }

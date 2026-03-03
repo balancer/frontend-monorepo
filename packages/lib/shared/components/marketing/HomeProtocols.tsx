@@ -1,5 +1,5 @@
 'use client'
-import { Heading, Text, Box, SimpleGrid } from '@chakra-ui/react'
+import { Heading, Text, Box, SimpleGrid } from '@chakra-ui/react';
 import Section from '@repo/lib/shared/components/layout/Section'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -26,16 +26,16 @@ export function HomeProtocols() {
               as="h2"
               pb="md"
               size="2xl"
-              sx={{
-                textWrap: 'balance',
+              css={{
+                textWrap: 'balance'
               }}
               w="full"
             >
               Plug in to DeFi&rsquo;s liquidity hub
             </Heading>
             <Text
-              sx={{
-                textWrap: 'balance',
+              css={{
+                textWrap: 'balance'
               }}
             >
               Launch your token with confidence by plugging into the Balancer vault and ecosystem.
@@ -45,7 +45,6 @@ export function HomeProtocols() {
           </FadeInOnView>
         </Box>
       </Box>
-
       <Box m="0 auto" maxW="maxContent">
         <FadeInOnView>
           <ParallaxImage>
@@ -62,10 +61,9 @@ export function HomeProtocols() {
           </ParallaxImage>
         </FadeInOnView>
       </Box>
-
       <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <FadeInOnView>
-          <SimpleGrid columns={{ base: 2, md: 4 }} py="xl" spacing={{ base: 8, md: 8, xl: '12' }}>
+          <SimpleGrid columns={{ base: 2, md: 4 }} py="xl" gap={{ base: 8, md: 8, xl: '12' }}>
             <Box>
               <Heading as="h5" pb="sm" size="h5" variant="h5">
                 Get swaps on day 1
@@ -106,5 +104,5 @@ export function HomeProtocols() {
         </FadeInOnView>
       </Box>
     </Section>
-  )
+  );
 }

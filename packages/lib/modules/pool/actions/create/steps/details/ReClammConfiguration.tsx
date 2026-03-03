@@ -1,9 +1,8 @@
-import { Heading, VStack, Text, HStack, Radio, SimpleGrid, useRadioGroup } from '@chakra-ui/react'
+import { Heading, VStack, Text, HStack, Radio, SimpleGrid, useRadioGroup } from '@chakra-ui/react';
 import { InfoIconPopover } from '../../InfoIconPopover'
 import {
   useReClammConfigurationOptions,
-  ReClammConfigOptionsGroup,
-} from './useReClammConfigurationOptions'
+  ReClammConfigOptionsGroup } from './useReClammConfigurationOptions'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -16,7 +15,7 @@ export function ReClammConfiguration() {
   const reClammConfigurationOptions = useReClammConfigurationOptions()
 
   return (
-    <VStack align="start" spacing="xl" w="full">
+    <VStack align="start" gap="xl" w="full">
       <Heading color="font.maxContrast" size="md">
         reCLAMM configuration
       </Heading>
@@ -33,7 +32,7 @@ export function ReClammConfiguration() {
         />
       ))}
     </VStack>
-  )
+  );
 }
 
 function ConfigOptionsGroup({
@@ -43,13 +42,11 @@ function ConfigOptionsGroup({
   validateFn,
   name,
   customInputLabel,
-  tooltip,
-}: ReClammConfigOptionsGroup) {
+  tooltip }: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
   const [initialMinPrice, initialTargetPrice, initialMaxPrice] = useWatch({
     control: reClammConfigForm.control,
-    name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
-  })
+    name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'] })
   const formValue = useWatch({ control: reClammConfigForm.control, name })
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
@@ -75,8 +72,7 @@ function ConfigOptionsGroup({
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     value: selectedValue,
-    onChange: (value: string) => updateFn(value),
-  })
+    onChange: (value: string) => updateFn(value) })
   const radioGroupProps = getRootProps()
   const cardContainerProps = {
     alignItems: 'center',
@@ -99,31 +95,28 @@ function ConfigOptionsGroup({
       bg: '#63F2BE0D',
       borderColor: 'green.400 !important',
       boxShadow: 'none',
-      color: 'font.maxContrast',
-    },
+      color: 'font.maxContrast' },
     _hover: {
-      boxShadow: 'md',
-    },
-  } as const
+      boxShadow: 'md' } } as const
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <HStack>
         <Text textAlign="start" w="full">
           {label}
         </Text>
         <InfoIconPopover message={tooltip} />
       </HStack>
-      <SimpleGrid columns={3} spacing={{ base: 'sm', md: 'md' }} w="full" {...radioGroupProps}>
+      <SimpleGrid columns={3} gap={{ base: 'sm', md: 'md' }} w="full" {...radioGroupProps}>
         {cardOptions.map((option, idx) => {
           const radio = getRadioProps({ value: option.rawValue })
           const key = `${label.replace(/\s+/g, '-')}-${idx}`
 
           return (
             <RadioCard key={key} {...radio} containerProps={cardContainerProps}>
-              <VStack align="center" h="full" justify="center" spacing="3" textAlign="center">
+              <VStack align="center" h="full" justify="center" gap="3" textAlign="center">
                 {option.svg && <option.svg height="100%" width="100%" />}
-                <VStack spacing="1">
+                <VStack gap="1">
                   <Text color="inherit" fontSize={{ base: 'xs', sm: 'sm' }}>
                     {option.label}
                   </Text>
@@ -133,16 +126,16 @@ function ConfigOptionsGroup({
                 </VStack>
               </VStack>
             </RadioCard>
-          )
+          );
         })}
       </SimpleGrid>
       {customOption ? (
         <Radio
-          isChecked={selectedValue === customOption.rawValue}
+          checked={selectedValue === customOption.rawValue}
           mt="2"
           name={name}
-          onChange={() => updateFn(customOption.rawValue)}
-          value={customOption.rawValue}
+          onValueChange={() => updateFn(customOption.rawValue)}
+          value={String(customOption.rawValue)}
         >
           <Text color="font.secondary" fontSize="sm">
             {customOption.label}
@@ -150,7 +143,7 @@ function ConfigOptionsGroup({
         </Radio>
       ) : null}
       {isCustomPriceRange ? (
-        <VStack align="start" spacing="md" w="full">
+        <VStack align="start" gap="md" w="full">
           <NumberInput
             control={reClammConfigForm.control}
             label={'Range low price'}
@@ -209,5 +202,5 @@ function ConfigOptionsGroup({
         />
       ) : null}
     </VStack>
-  )
+  );
 }

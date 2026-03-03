@@ -1,4 +1,4 @@
-import { Card, HStack, Text, Box, VStack } from '@chakra-ui/react'
+import { Card, HStack, Text, Box, VStack } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 
 interface HeaderCardProps {
@@ -22,25 +22,20 @@ const cardSpecialStyles = {
     WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
     WebkitMaskComposite: 'xor',
     maskComposite: 'exclude',
-    pointerEvents: 'none',
-  },
-}
+    pointerEvents: 'none' } }
 
 const cardExpiredStyles = {
   background:
-    'radial-gradient(123.13% 233.05% at 50% 50%, rgba(244, 137, 117, 0) 0%, rgba(244, 137, 117, 0.15) 100%)',
-}
+    'radial-gradient(123.13% 233.05% at 50% 50%, rgba(244, 137, 117, 0) 0%, rgba(244, 137, 117, 0.15) 100%)' }
 
 function getCardProps(variant: HeaderCardProps['variant']) {
   switch (variant) {
     case 'special':
       return {
-        sx: cardSpecialStyles,
-      }
+        sx: cardSpecialStyles }
     case 'expired':
       return {
-        sx: cardExpiredStyles,
-      }
+        sx: cardExpiredStyles }
     default:
       return {}
   }
@@ -50,12 +45,11 @@ export function MyVotesStatsCard({
   headerText,
   variant = 'default',
   leftContent,
-  rightContent,
-}: HeaderCardProps) {
+  rightContent }: HeaderCardProps) {
   const cardProps = getCardProps(variant)
   return (
-    <Card h="full" w="full" {...cardProps}>
-      <VStack align="start" h="full" justifyContent="space-between" spacing="ms" w="full">
+    <Card.Root h="full" w="full" {...cardProps}>
+      <VStack align="start" h="full" justifyContent="space-between" gap="ms" w="full">
         <Box as="span" color="font.secondary" fontSize="sm" fontWeight="medium">
           {headerText}
         </Box>
@@ -63,13 +57,13 @@ export function MyVotesStatsCard({
           alignItems="center"
           justifyContent="space-between"
           minHeight="36px"
-          spacing="sm"
+          gap="sm"
           w="full"
         >
           {leftContent || <Text color="font.maxContrast">&mdash;</Text>}
           {rightContent}
         </HStack>
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

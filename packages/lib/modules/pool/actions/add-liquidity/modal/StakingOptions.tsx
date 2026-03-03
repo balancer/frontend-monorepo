@@ -1,18 +1,7 @@
-'use client'
-
+'use client';
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
-import {
-  Button,
-  Card,
-  Flex,
-  Box,
-  HStack,
-  Icon,
-  Text,
-  Tooltip,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, Card, Flex, Box, HStack, Icon, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import Image from 'next/image'
 import Link from 'next/link'
 import { getAuraPoolLink, getPoolActionPath, getTotalAprLabel } from '../../../pool.utils'
@@ -21,8 +10,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { getChainId } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
-  RedirectPartner,
-} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+  RedirectPartner } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isQuantAmmPool } from '../../../pool.helpers'
@@ -38,8 +26,7 @@ export function StakingOptions() {
   const stakePath = getPoolActionPath({
     id: pool.id,
     chain: pool.chain,
-    action: 'stake',
-  })
+    action: 'stake' })
 
   const auraDisclosure = useDisclosure()
 
@@ -57,16 +44,15 @@ export function StakingOptions() {
         >
           <Tooltip
             display="inline-block"
-            label="You’ve just added liquidity and received LP tokens for a pool eligible for liquidity mining incentives. To earn your share, stake your LP tokens. There’s no lock-up period—you can stake or unstake anytime."
+            content="You’ve just added liquidity and received LP tokens for a pool eligible for liquidity mining incentives. To earn your share, stake your LP tokens. There’s no lock-up period—you can stake or unstake anytime."
           >
             <InfoIcon display="inline-block" />
           </Tooltip>
         </Box>
       </Text>
-
       <HStack alignItems="stretch" gap="ms" justify="space-between" w="full">
-        <Card p="ms" position="relative" variant="modalSubSection">
-          <VStack align="left" spacing="md">
+        <Card.Root p="ms" position="relative" variant="modalSubSection">
+          <VStack align="left" gap="md">
             <Text color="font.maxContrast" fontWeight="bold">
               {projectName}
             </Text>
@@ -77,7 +63,7 @@ export function StakingOptions() {
                 {/* skip vebal boost here */}
                 {getTotalAprLabel(pool.dynamicData.aprItems, undefined, canBeNegative)}
               </Text>
-              <Icon as={StarsIcon} height="16px" width="16px" />
+              <Icon height="16px" width="16px" asChild><StarsIcon /></Icon>
             </HStack>
             <Flex position="absolute" right={1.5} top={1.5}>
               <Image
@@ -88,21 +74,17 @@ export function StakingOptions() {
               />
             </Flex>
             <Button
-              as={Link}
-              href={stakePath}
-              isDisabled={!canStake}
-              prefetch
+              disabled={!canStake}
               variant={canStake ? 'primary' : 'disabled'}
               w="full"
-            >
-              Stake
-            </Button>
+              asChild><Link href={stakePath} prefetch>Stake
+                          </Link></Button>
           </VStack>
-        </Card>
+        </Card.Root>
         {(PROJECT_CONFIG.options.showVeBal || pool.chain === GqlChain.Optimism) &&
           pool.staking?.aura && (
-            <Card p="ms" position="relative" variant="modalSubSection">
-              <VStack align="left" spacing="md">
+            <Card.Root p="ms" position="relative" variant="modalSubSection">
+              <VStack align="left" gap="md">
                 <Text color="font.maxContrast" fontWeight="bold">
                   Aura
                 </Text>
@@ -120,7 +102,7 @@ export function StakingOptions() {
                       Learn more
                     </Button>
                     <PartnerRedirectModal
-                      isOpen={auraDisclosure.isOpen}
+                      isOpen={auraDisclosure.open}
                       onClose={auraDisclosure.onClose}
                       partner={RedirectPartner.Aura}
                       redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
@@ -128,9 +110,9 @@ export function StakingOptions() {
                   </>
                 )}
               </VStack>
-            </Card>
+            </Card.Root>
           )}
       </HStack>
     </>
-  )
+  );
 }

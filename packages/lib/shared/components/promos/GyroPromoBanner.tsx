@@ -1,12 +1,12 @@
-'use client'
-
-import { Button, Heading, Flex, Box, Center, Text, Stack, useColorMode } from '@chakra-ui/react'
+'use client';
+import { Button, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import NextLink from 'next/link'
 import { GyroIcon } from '@repo/lib/shared/components/icons/GyroIcon'
 import { Picture } from '../other/Picture'
 
 export function GyroPromoBanner() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
@@ -16,9 +16,9 @@ export function GyroPromoBanner() {
         position="relative"
         rounded="lg"
         shadow="innerRockShadow"
-        sx={{
+        css={{
           width: '100% !important',
-          maxWidth: '100% !important',
+          maxWidth: '100% !important'
         }}
         width="full"
       >
@@ -119,8 +119,8 @@ export function GyroPromoBanner() {
                       lineHeight="1.25"
                       maxW="600px"
                       opacity={colorMode === 'dark' ? '0.9' : '1'}
-                      sx={{
-                        textWrap: 'balance',
+                      css={{
+                        textWrap: 'balance'
                       }}
                     >
                       Next-gen Gyroscope pools are now live on Balancer v3
@@ -133,8 +133,7 @@ export function GyroPromoBanner() {
               {/* <Button
                 _hover={{
                   bg: colorMode === 'dark' ? '#000' : '#fff',
-                  color: colorMode === 'dark' ? '#fff' : '#000',
-                }}
+                  color: colorMode === 'dark' ? '#fff' : '#000' }}
                 as={Link}
                 borderColor="font.maxContrast"
                 color="font.maxContrast"
@@ -155,8 +154,7 @@ export function GyroPromoBanner() {
                 Learn more
                 <Box
                   _groupHover={{
-                    transform: 'translateX(2px)',
-                  }}
+                    transform: 'translateX(2px)' }}
                   as="span"
                   transition="all 0.3s var(--ease-out-cubic)"
                 >
@@ -166,9 +164,7 @@ export function GyroPromoBanner() {
               <Button
                 _hover={{
                   bg: 'linear-gradient(to right, rgb(240, 255, 155), rgb(255, 180, 255), rgb(145, 245, 245))',
-                  color: colorMode === 'dark' ? '#000' : '#000',
-                }}
-                as={NextLink}
+                  color: colorMode === 'dark' ? '#000' : '#000' }}
                 bg="font.maxContrast"
                 border="1px solid"
                 borderColor="font.dark"
@@ -176,19 +172,17 @@ export function GyroPromoBanner() {
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}
-                href="/pools?protocolVersion=3&poolTypes=GYRO"
                 py="sm"
                 rounded="full"
                 size="md"
                 transition="all 0.3s var(--cubic)"
                 w="128px"
-              >
-                View pools
-              </Button>
+                asChild><NextLink href="/pools?protocolVersion=3&poolTypes=GYRO">View pools
+                              </NextLink></Button>
             </Flex>
           </Flex>
         </Center>
       </Box>
     </Box>
-  )
+  );
 }

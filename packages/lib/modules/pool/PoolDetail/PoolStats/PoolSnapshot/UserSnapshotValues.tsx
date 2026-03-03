@@ -1,7 +1,7 @@
-'use client'
-
+'use client';
 import { memo, useMemo } from 'react'
-import { Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Button, HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -42,14 +42,12 @@ export function UserSnapshotValues() {
     previewModalDisclosure,
     isLoading: isLoadingClaiming,
     balRewards,
-    nonBalRewards,
-  } = useClaim()
+    nonBalRewards } = useClaim()
 
   const { myClaimableRewards, tokens, rewardsByToken } = useGetUserPoolRewards({
     pool,
     balRewards,
-    nonBalRewards,
-  })
+    nonBalRewards })
 
   const boost = useMemo(() => {
     if (isEmpty(veBalBoostMap)) return
@@ -73,8 +71,7 @@ export function UserSnapshotValues() {
         myPotentialWeeklyYield: bn(totalBalanceUsd || POSSIBLE_STAKED_BALANCE_USD)
           .times(bn(myAprRaw).div(52))
           .toFixed(2),
-        myClaimableRewards: myClaimableRewards,
-      }
+        myClaimableRewards: myClaimableRewards }
     }
   }, [pool, myAprRaw, myClaimableRewards, isLoadingPool, isLoadingClaiming])
 
@@ -89,7 +86,7 @@ export function UserSnapshotValues() {
   return (
     <>
       <FadeInOnView scaleUp={false}>
-        <VStack align="flex-start" spacing="xxs" w="full">
+        <VStack align="flex-start" gap="xxs" w="full">
           <LabelWithTooltip
             label="My liquidity"
             tooltip="The value of all your tokens in this pool."
@@ -120,7 +117,7 @@ export function UserSnapshotValues() {
         </VStack>
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
-        <VStack align="flex-start" spacing="xxs" w="full">
+        <VStack align="flex-start" gap="xxs" w="full">
           {hasAuraStakedBalanceValue && auraApr ? (
             <LabelWithTooltip
               label="My Aura APR"
@@ -152,7 +149,7 @@ export function UserSnapshotValues() {
         </VStack>
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
-        <VStack align="flex-start" spacing="xxs" w="full">
+        <VStack align="flex-start" gap="xxs" w="full">
           {poolMyStatsValues && !poolMyStatsValues.myLiquidity ? (
             <LabelWithTooltip
               label="My potential weekly yield on $10k"
@@ -173,7 +170,7 @@ export function UserSnapshotValues() {
         </VStack>
       </FadeInOnView>
       <FadeInOnView scaleUp={false}>
-        <VStack align="flex-start" spacing="xxs" w="full">
+        <VStack align="flex-start" gap="xxs" w="full">
           <LabelWithTooltip
             label="My claimable incentives"
             tooltip="The amount of liquidity incentives you can claim from staking in this pool."
@@ -192,10 +189,10 @@ export function UserSnapshotValues() {
                 >
                   <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
                 </TokenStackPopover>
-                <Tooltip label={isDisabled ? disabledReason : ''}>
+                <Tooltip content={isDisabled ? disabledReason : ''}>
                   <Button
                     fontSize="sm"
-                    isDisabled={isDisabled}
+                    disabled={isDisabled}
                     onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
                     rounded="sm"
                     size="xxs"
@@ -218,5 +215,5 @@ export function UserSnapshotValues() {
         onClose={onModalClose}
       />
     </>
-  )
+  );
 }

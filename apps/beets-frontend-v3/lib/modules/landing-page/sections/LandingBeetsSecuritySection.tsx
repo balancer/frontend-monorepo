@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Heading, Text, Card } from '@chakra-ui/react';
 import React from 'react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { SecurityAuditsSvg } from '../components/SecurityAuditsSvg'
@@ -10,8 +10,7 @@ import { SecurityOpenSourceSvg } from '../components/SecurityOpenSourceSvg'
 function Card({
   title,
   description,
-  image,
-}: {
+  image }: {
   title: React.ReactNode
   description: string
   image: React.ReactNode
@@ -37,8 +36,7 @@ export function LandingBeetsSecuritySection() {
       button={{
         text: 'View audits',
         href: 'https://docs.beets.fi/beets-dex/security#audits',
-        isExternal: true,
-      }}
+        isExternal: true }}
       subtitle="Built with security at its core, beets prioritizes trust at every level. From rigorous audits to open-source transparency and continuous monitoring, our ecosystem ensures your assets remain safe, reliable, and accessible."
       title="Code you can trust"
     >
@@ -49,10 +47,9 @@ export function LandingBeetsSecuritySection() {
           p="lg"
           templateColumns={{
             base: '1fr',
-            lg: '1fr 1fr 1fr',
-          }}
+            lg: '1fr 1fr 1fr' }}
         >
-          <Card
+          <Card.Root
             description="Our code is thoroughly audited by leading security firms."
             image={<SecurityAuditsSvg />}
             title={
@@ -63,7 +60,7 @@ export function LandingBeetsSecuritySection() {
               </>
             }
           />
-          <Card
+          <Card.Root
             description="All code is publicly available for community scrutiny and trust."
             image={<SecurityOpenSourceSvg />}
             title={
@@ -74,7 +71,7 @@ export function LandingBeetsSecuritySection() {
               </>
             }
           />
-          <Card
+          <Card.Root
             description="Ongoing security assessments ensure the integrity of the beets ecosystem."
             image={<SecurityMonitoringSvg />}
             title={
@@ -88,5 +85,5 @@ export function LandingBeetsSecuritySection() {
         </Grid>
       </Box>
     </LandingSectionContainer>
-  )
+  );
 }

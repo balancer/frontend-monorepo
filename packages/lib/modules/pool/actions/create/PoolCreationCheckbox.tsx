@@ -1,4 +1,4 @@
-import { HStack, Text, Checkbox } from '@chakra-ui/react'
+import { HStack, Text, Checkbox } from '@chakra-ui/react';
 import { InfoIconPopover } from './InfoIconPopover'
 
 interface PoolCreationCheckboxProps {
@@ -18,19 +18,18 @@ export function PoolCreationCheckbox({
   tooltip,
   isChecked,
   isDisabled,
-  onChange,
-}: PoolCreationCheckboxProps) {
+  onChange }: PoolCreationCheckboxProps) {
   return (
     <>
       {title && (
-        <HStack spacing="xs">
+        <HStack gap="xs">
           <Text>{title}</Text>
           {tooltip && <InfoIconPopover message={tooltip} placement="right-start" />}
         </HStack>
       )}
-      <Checkbox disabled={isDisabled} isChecked={isChecked} onChange={onChange} size="lg">
-        <Text color={labelColor}>{label}</Text>
-      </Checkbox>
+      <Checkbox.Root disabled={isDisabled} onCheckedChange={onChange} size="lg" checked={isChecked}><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+          <Text color={labelColor}>{label}</Text>
+        </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
     </>
-  )
+  );
 }

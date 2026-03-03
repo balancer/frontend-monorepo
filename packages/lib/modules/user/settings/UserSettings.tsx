@@ -9,15 +9,9 @@ import {
   InputGroup,
   InputRightElement,
   Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverTrigger,
   VStack,
   Text,
-  Switch,
-} from '@chakra-ui/react'
+  Switch } from '@chakra-ui/react';
 import { useUserSettings } from './UserSettingsProvider'
 import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 import { Percent, Settings } from 'react-feather'
@@ -46,17 +40,16 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
         <Input
           _hover={{
             bg: 'input.bgHover',
-            borderColor: 'input.borderHover',
-          }}
+            borderColor: 'input.borderHover' }}
           autoComplete="off"
           autoCorrect="off"
           bg="background.level1"
           // max={50}
           min={0}
-          onChange={handleChange}
+          onValueChange={handleChange}
           onKeyDown={blockInvalidNumberInput}
           type="number"
-          value={slippage}
+          value={String(slippage)}
         />
         <InputRightElement pointerEvents="none">
           <Percent color="grayText" size="20px" />
@@ -75,7 +68,7 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
         ))}
       </HStack>
     </VStack>
-  )
+  );
 }
 
 export function EnableSignaturesSelect() {
@@ -85,7 +78,7 @@ export function EnableSignaturesSelect() {
     setEnableSignatures(enableSignatures === 'yes' ? 'no' : 'yes')
   }
 
-  return <Switch isChecked={enableSignatures === 'yes'} onChange={handleChange} />
+  return <Switch checked={enableSignatures === 'yes'} onValueChange={handleChange} />;
 }
 
 function ToggleAllowSounds() {
@@ -95,7 +88,7 @@ function ToggleAllowSounds() {
     setAllowSounds(allowSounds === 'yes' ? 'no' : 'yes')
   }
 
-  return <Switch isChecked={allowSounds === 'yes'} onChange={handleChange} />
+  return <Switch checked={allowSounds === 'yes'} onValueChange={handleChange} />;
 }
 
 export function UserSettings() {
@@ -106,59 +99,61 @@ export function UserSettings() {
   }
 
   return (
-    <Popover isLazy>
-      <PopoverTrigger>
+    <Popover.Root lazyMount>
+      <Popover.Trigger asChild>
         <Button onClick={handleSettingsClick} p="0" variant="tertiary">
           <Settings size={18} />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverArrow bg="background.level3" />
-        <PopoverCloseButton />
-        <PopoverBody p="0">
-          <HStack color="font.primary" p="md" pb="0">
-            <Settings size={20} />
-            <Heading size="md" variant="special">
-              Settings
-            </Heading>
-          </HStack>
-          <VStack align="start" p="md" spacing="lg">
-            <Box w="full">
-              <Heading pb="2" size="sm">
-                Currency
+      </Popover.Trigger>
+      <Popover.Positioner>
+        <Popover.Content>
+          <Popover.Arrow bg="background.level3" />
+          <Popover.CloseTrigger />
+          <Popover.Body p="0">
+            <HStack color="font.primary" p="md" pb="0">
+              <Settings size={20} />
+              <Heading size="md" variant="special">
+                Settings
               </Heading>
-              <CurrencySelect id="user-settings-currency-select" />
-            </Box>
-            <Box w="full">
-              <Heading pb="2" size="sm">
-                Slippage
-              </Heading>
-              <SlippageInput setSlippage={setSlippage} slippage={slippage} />
-            </Box>
-            <Box w="full">
-              <Heading pb="xs" size="sm">
-                Use Signatures
-              </Heading>
-              <Text color="font.secondary" fontSize="sm" pb="sm">
-                Signatures allow for gas-free transactions, where possible. If your wallet
-                doesn&apos;t support signatures, you can turn it off.
-              </Text>
-              <EnableSignaturesSelect />
-            </Box>
-            <Box w="full">
-              <Heading pb="xs" size="sm">
-                Sound effects
-              </Heading>
-              <Text color="font.secondary" fontSize="sm" pb="sm">
-                Allow sound effects for successful transactions. Disable if you prefer a silent
-                experience.
-              </Text>
-              <ToggleAllowSounds />
-            </Box>
-            <EnableTxBundleSetting />
-          </VStack>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
+            </HStack>
+            <VStack align="start" p="md" gap="lg">
+              <Box w="full">
+                <Heading pb="2" size="sm">
+                  Currency
+                </Heading>
+                <CurrencySelect id="user-settings-currency-select" />
+              </Box>
+              <Box w="full">
+                <Heading pb="2" size="sm">
+                  Slippage
+                </Heading>
+                <SlippageInput setSlippage={setSlippage} slippage={slippage} />
+              </Box>
+              <Box w="full">
+                <Heading pb="xs" size="sm">
+                  Use Signatures
+                </Heading>
+                <Text color="font.secondary" fontSize="sm" pb="sm">
+                  Signatures allow for gas-free transactions, where possible. If your wallet
+                  doesn&apos;t support signatures, you can turn it off.
+                </Text>
+                <EnableSignaturesSelect />
+              </Box>
+              <Box w="full">
+                <Heading pb="xs" size="sm">
+                  Sound effects
+                </Heading>
+                <Text color="font.secondary" fontSize="sm" pb="sm">
+                  Allow sound effects for successful transactions. Disable if you prefer a silent
+                  experience.
+                </Text>
+                <ToggleAllowSounds />
+              </Box>
+              <EnableTxBundleSetting />
+            </VStack>
+          </Popover.Body>
+        </Popover.Content>
+      </Popover.Positioner>
+    </Popover.Root>
+  );
 }

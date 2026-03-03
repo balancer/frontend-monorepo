@@ -1,19 +1,18 @@
-import { Card, Heading, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import { Card, Heading, List, Text, VStack } from '@chakra-ui/react';
 import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function OtherSaleDetails({
   launchTokenSymbol,
   fee,
-  userActions,
-}: {
+  userActions }: {
   launchTokenSymbol: string
   fee: number
   userActions: UserActions
 }) {
   return (
-    <Card>
-      <VStack spacing="4">
+    <Card.Root>
+      <VStack gap="4">
         <Heading size="md" textAlign="left" w="full">
           Other sale details
         </Heading>
@@ -22,53 +21,53 @@ export function OtherSaleDetails({
           <Text align="left" fontWeight="bold" w="full">
             Token creator rights
           </Text>
-          <List
+          <List.Root
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
             variant="secondary"
             w="full"
           >
-            <ListItem>Cancel sale (before start)</ListItem>
-            <ListItem>Pause sale (during LBP)</ListItem>
-            <ListItem>Unpause sale (during LBP)</ListItem>
-            <ListItem>
+            <List.Item>Cancel sale (before start)</List.Item>
+            <List.Item>Pause sale (during LBP)</List.Item>
+            <List.Item>Unpause sale (during LBP)</List.Item>
+            <List.Item>
               Non-editable metadata (before and during sale): Token address, sale liquidity
-            </ListItem>
-          </List>
+            </List.Item>
+          </List.Root>
         </VStack>
 
         <VStack gap="0" w="full">
           <Text align="left" fontWeight="bold" w="full">
             User rights
           </Text>
-          <List
+          <List.Root
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
             variant="secondary"
             w="full"
           >
-            <ListItem>{`Ability to ${userActions.replaceAll('_', ' ')} ${launchTokenSymbol} during the LBP`}</ListItem>
-            <ListItem>{`Immediate access to ${launchTokenSymbol} on swap (no claiming delay or vesting)`}</ListItem>
-          </List>
+            <List.Item>{`Ability to ${userActions.replaceAll('_', ' ')} ${launchTokenSymbol} during the LBP`}</List.Item>
+            <List.Item>{`Immediate access to ${launchTokenSymbol} on swap (no claiming delay or vesting)`}</List.Item>
+          </List.Root>
         </VStack>
 
         <VStack gap="0" w="full">
           <Text align="left" fontWeight="bold" w="full">
             Fees
           </Text>
-          <List
+          <List.Root
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
             variant="secondary"
             w="full"
           >
-            <ListItem>Swap fees: {fNum('feePercent', fee / 100)}</ListItem>
-          </List>
+            <List.Item>Swap fees: {fNum('feePercent', fee / 100)}</List.Item>
+          </List.Root>
         </VStack>
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

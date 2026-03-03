@@ -1,6 +1,14 @@
 'use client'
 
-import { Box, HStack, Text, VStack, useTheme } from '@chakra-ui/react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import { useMemo, useRef } from 'react'
 import ReactECharts from 'echarts-for-react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
@@ -18,8 +26,7 @@ const smallSize: ChartSizeValues = {
   haloTop: '40%',
   haloLeft: '55px',
   haloWidth: '40px',
-  haloHeight: '40px',
-}
+  haloHeight: '40px' }
 
 const normalSize: ChartSizeValues = {
   chartHeight: '225px',
@@ -28,13 +35,11 @@ const normalSize: ChartSizeValues = {
   haloTop: '49%',
   haloLeft: '95px',
   haloWidth: '60px',
-  haloHeight: '60px',
-}
+  haloHeight: '60px' }
 
 export default function StakedBalanceDistributionChart({
   pool,
-  isSmall = true,
-}: {
+  isSmall = true }: {
   pool: Pool
   isSmall?: boolean
 }) {
@@ -49,31 +54,25 @@ export default function StakedBalanceDistributionChart({
         value: getUserWalletBalanceUsd(pool),
         name: 'Unstaked balance',
         itemStyle: {
-          color: theme.semanticTokens.colors.font.light,
-        },
-      },
+          color: theme.token('semanticTokens.colors.font.light') } },
       {
         value: calcTotalStakedBalanceUsd(pool),
         name: 'Staked balance',
-        itemStyle: { color: theme.semanticTokens.colors.chart.stakedBalance },
-      },
+        itemStyle: { color: theme.token('semanticTokens.colors.chart.stakedBalance') } },
     ]
 
     return {
       ...(chartSizeValues.chartHeight && { height: chartSizeValues.chartHeight }),
       tooltip: {
         trigger: 'item',
-        show: false,
-      },
+        show: false },
       legend: {
-        show: false,
-      },
+        show: false },
       grid: {
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-      },
+        bottom: 0 },
       series: [
         {
           name: 'Access From',
@@ -81,26 +80,20 @@ export default function StakedBalanceDistributionChart({
           radius: ['49%', '80%'],
           itemStyle: {
             borderColor: theme.colors['chartBorder'][colorMode],
-            borderWidth: 0,
-          },
+            borderWidth: 0 },
           label: {
             show: false,
-            position: 'center',
-          },
+            position: 'center' },
           labelLine: {
-            show: false,
-          },
+            show: false },
           emphasis: {
-            scale: false,
-          },
-          data: chartData,
-        },
-      ],
-    }
-  }, [pool, colorMode, chartSizeValues, theme])
+            scale: false },
+          data: chartData },
+      ] }
+  }, [pool, colorMode, chartSizeValues, system])
 
   return (
-    <HStack p={{ base: 'sm', md: '0' }} spacing={{ base: 'lg', md: '2xl' }}>
+    <HStack p={{ base: 'sm', md: '0' }} gap={{ base: 'lg', md: '2xl' }}>
       <Box
         height={`${chartSizeValues.boxHeight}px`}
         position="relative"
@@ -108,7 +101,6 @@ export default function StakedBalanceDistributionChart({
       >
         <Box
           alignItems="center"
-          as={motion.div}
           bottom="0"
           display="flex"
           height={`${chartSizeValues.boxHeight * 0.5}px`}
@@ -123,22 +115,21 @@ export default function StakedBalanceDistributionChart({
           transform="translateY(-50%)"
           width={`${chartSizeValues.boxWidth * 0.5}px`}
           zIndex={4}
-        >
-          <NoisyCard
-            cardProps={{
-              rounded: 'full',
-            }}
-            contentProps={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'relative',
-              rounded: 'full',
-              bg: 'background.level3',
-            }}
-            shadowContainerProps={{ shadow: 'none' }}
-          />
-        </Box>
+          asChild
+        ><motion.div>
+            <NoisyCard
+              cardProps={{
+                rounded: 'full' }}
+              contentProps={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'relative',
+                rounded: 'full',
+                bg: 'background.level3' }}
+              shadowContainerProps={{ shadow: 'none' }}
+            />
+          </motion.div></Box>
         <Box
           background="background.level3"
           height={`${chartSizeValues.boxHeight}px`}
@@ -167,8 +158,7 @@ export default function StakedBalanceDistributionChart({
             ref={eChartsRef}
             style={{
               width: `${chartSizeValues.boxWidth}px`,
-              height: `${chartSizeValues.boxHeight}px`,
-            }}
+              height: `${chartSizeValues.boxHeight}px` }}
           />
         </Box>
       </Box>
@@ -187,5 +177,5 @@ export default function StakedBalanceDistributionChart({
         </HStack>
       </VStack>
     </HStack>
-  )
+  );
 }

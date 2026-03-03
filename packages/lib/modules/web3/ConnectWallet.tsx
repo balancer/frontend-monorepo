@@ -1,5 +1,5 @@
 import { ConnectButton, WalletButton } from '@rainbow-me/rainbowkit'
-import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
+import { Box, Button, ButtonProps, HStack, Image, Show } from '@chakra-ui/react';
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
 import { useIsSafeApp } from './safe.hooks'
@@ -22,8 +22,7 @@ export function ConnectWallet({
         account,
         chain,
         openChainModal,
-        openAccountModal,
-      }) => {
+        openAccountModal }) => {
         const isReady = mounted && authenticationStatus !== 'loading'
         const isLoading = authenticationStatus === 'loading' || isLoadingAccount
         const isConnected =
@@ -58,7 +57,7 @@ export function ConnectWallet({
                 </WalletButton.Custom>
               )}
               <Button
-                isDisabled={isLoading || !mounted}
+                disabled={isLoading || !mounted}
                 loadingText={connectLabel}
                 onClick={handleConnectClick}
                 type="button"
@@ -68,7 +67,7 @@ export function ConnectWallet({
                 {connectLabel}
               </Button>
             </HStack>
-          )
+          );
         }
 
         if (chain.unsupported) {
@@ -78,11 +77,10 @@ export function ConnectWallet({
               type="button"
               variant="tertiary"
               {...rest}
-              isDisabled={isSafeApp}
-            >
-              Unsupported network
-            </Button>
-          )
+              disabled={isSafeApp}
+            >Unsupported network
+                          </Button>
+          );
         }
 
         const handleNetworkClick = () => {
@@ -96,11 +94,11 @@ export function ConnectWallet({
         }
 
         return (
-          <HStack spacing="sm">
+          <HStack gap="sm">
             <Button
               alignItems="center"
               display="flex"
-              isDisabled={isSafeApp}
+              disabled={isSafeApp}
               onClick={handleNetworkClick}
               type="button"
               variant="tertiary"
@@ -115,7 +113,7 @@ export function ConnectWallet({
                   width={6}
                 >
                   {chain.iconUrl && (
-                    <Img
+                    <Image
                       alt={chain.name ?? 'Chain icon'}
                       height={6}
                       src={chain.iconUrl}
@@ -124,9 +122,9 @@ export function ConnectWallet({
                   )}
                 </Box>
               )}
-              <Show above="sm">{chain.name}</Show>
+              <Box above="sm" hideFrom>{chain.name}</Box>
             </Button>
-            <Button onClick={handleWalletClick} variant="tertiary" {...rest} isDisabled={isSafeApp}>
+            <Button onClick={handleWalletClick} variant="tertiary" {...rest} disabled={isSafeApp}>
               <CustomAvatar
                 address={account.address}
                 alt="Avatar"
@@ -135,11 +133,11 @@ export function ConnectWallet({
                 rounded="full"
                 size={6}
               />
-              <Show above="sm">{account.displayName}</Show>
+              <Box above="sm" hideFrom>{account.displayName}</Box>
             </Button>
           </HStack>
-        )
+        );
       }}
     </ConnectButton.Custom>
-  )
+  );
 }

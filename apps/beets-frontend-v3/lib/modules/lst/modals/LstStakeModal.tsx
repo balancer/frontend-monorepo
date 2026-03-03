@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -39,8 +39,7 @@ export function LstStakeModal({
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
-    txReceipt: lastTransaction?.result,
-  })
+    txReceipt: lastTransaction?.result })
 
   useEffect(() => {
     if (isOpen) {
@@ -54,31 +53,39 @@ export function LstStakeModal({
   const isSuccess = !!lstStakeTxHash && lstStakeReceipt.hasReceipt
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!lstStakeTxHash} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
-        <TransactionModalHeader chain={chain} isReceiptLoading label="Review stake" txHash="0x" />
-        <ModalCloseButton />
-        <ModalBody>
-          <LstStakeSummary {...lstStakeReceipt} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={stakeTransactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onClose}
-          returnLabel="Stake again"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!lstStakeTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
+            <TransactionModalHeader chain={chain} isReceiptLoading label="Review stake" txHash="0x" />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <LstStakeSummary {...lstStakeReceipt} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={stakeTransactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onClose}
+              returnLabel="Stake again"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

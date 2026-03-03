@@ -1,5 +1,5 @@
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useToast } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react'
 import { signRelayerApproval } from './signRelayerApproval'
 import { useHasApprovedRelayer } from './useHasApprovedRelayer'
@@ -11,8 +11,7 @@ import { useSdkWalletClient } from '../web3/useSdkViemClient'
 import {
   SignatureState,
   isSignatureDisabled,
-  isSignatureLoading,
-} from '../web3/signatures/signature.helpers'
+  isSignatureLoading } from '../web3/signatures/signature.helpers'
 
 export function useShouldSignRelayerApproval(chainId: SupportedChainId, relayerMode: RelayerMode) {
   const { hasApprovedRelayer } = useHasApprovedRelayer(chainId, { relayerMode })
@@ -53,8 +52,7 @@ export function useSignRelayerApproval(chainId: SupportedChainId) {
           status: 'success',
           duration: 5000,
           isClosable: true,
-          render: ({ ...rest }) => <Toast {...rest} />,
-        })
+          render: ({ ...rest }) => <Toast {...rest} /> })
       } else {
         setSignRelayerState(SignatureState.Ready)
       }
@@ -73,8 +71,7 @@ export function useSignRelayerApproval(chainId: SupportedChainId) {
     buttonLabel: getButtonLabel(signRelayerState),
     isLoading: isSignatureLoading(signRelayerState),
     isDisabled: isSignatureDisabled(signRelayerState),
-    error,
-  }
+    error }
 }
 
 function getButtonLabel(signRelayerState: SignatureState) {

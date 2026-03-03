@@ -1,6 +1,6 @@
 import { type Control, Controller } from 'react-hook-form'
 import { PoolCreationForm, SupportedPoolTypes } from '../../types'
-import { VStack, Text, RadioGroup, Stack, Radio, HStack } from '@chakra-ui/react'
+import { VStack, Text, RadioGroup, Stack, Radio, HStack } from '@chakra-ui/react';
 import { POOL_TYPES, INITIAL_POOL_CREATION_FORM } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
 import { InfoIconPopover } from '../../InfoIconPopover'
@@ -26,11 +26,10 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
 
   const [network] = useWatch({
     control,
-    name: ['network'],
-  })
+    name: ['network'] })
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <Text color="font.primary" fontWeight="bold">
         Choose a pool type
       </Text>
@@ -38,34 +37,31 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
         control={control}
         name="poolType"
         render={({ field }) => (
-          <RadioGroup
+          <RadioGroup.Root
             aria-label="Choose a pool type"
-            onChange={(value: SupportedPoolTypes) => {
+            onValueChange={(value: SupportedPoolTypes) => {
               poolCreationForm.reset({
                 ...INITIAL_POOL_CREATION_FORM,
                 network,
                 swapFeePercentage: getSwapFeePercentageOptions(value)[0].value,
-                poolType: value,
-              })
+                poolType: value })
             }}
-            value={field.value}
-          >
-            <Stack spacing={3}>
+            value={String(field.value)}>
+            <Stack gap={3}>
               {poolTypesKeys.map(poolTypeKey => (
                 <HStack key={poolTypeKey}>
-                  <Radio size="lg" value={poolTypeKey}>
+                  <Radio size="lg" value={String(poolTypeKey)}>
                     <Text color="font.primary">{POOL_TYPES[poolTypeKey].label}</Text>
                   </Radio>
                   <InfoIconPopover message={POOL_TYPES[poolTypeKey].description} />
                 </HStack>
               ))}
             </Stack>
-          </RadioGroup>
+          </RadioGroup.Root>
         )}
         rules={{
-          required: 'Please select a pool type',
-        }}
+          required: 'Please select a pool type' }}
       />
     </VStack>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { HStack, Text, Icon, Box } from '@chakra-ui/react'
+import { HStack, Text, Icon, Box } from '@chakra-ui/react';
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 import { ElementType } from 'react'
 import { Info } from 'react-feather'
@@ -32,9 +32,9 @@ export function ClpBadge({ icon, bodyText, headerText, bgColor }: ClpBadgeProps)
           <Text color="black" fontSize="sm" fontWeight="bold">
             {headerText}
           </Text>
-          <Icon as={Info} />
+          <Icon asChild><Info /></Icon>
         </HStack>
       </Box>
     </CustomPopover>
-  )
+  );
 }

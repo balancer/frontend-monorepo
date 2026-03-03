@@ -2,20 +2,9 @@
 
 import React from 'react'
 import {
-  Box,
-  //BoxProps,
-  Button,
-  Center,
-  Flex,
-  Grid,
-  GridItem,
-  HStack,
-  Heading,
-  Progress,
-  Text,
-  VStack,
-  chakra,
-} from '@chakra-ui/react'
+Box, //BoxProps,
+Button, Center, Flex, Grid, GridItem, HStack, Heading, Progress, Text, VStack, chakra
+} from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BeetsByTheNumbers } from '../components/BeetsByTheNumbers'
@@ -23,8 +12,7 @@ import {
   GetProtocolStatsPerChainQuery,
   GetProtocolStatsQuery,
   GetStakedSonicDataQuery,
-  GqlChain,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainId } from '@repo/lib/config/app.config'
 //import { fNum } from '@repo/lib/shared/utils/numbers'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -59,8 +47,7 @@ function ChainStats({
   isSonic,
   protocolData,
   stakedSonicData,
-  totalTvl,
-}: {
+  totalTvl }: {
   isSonic?: boolean
   protocolData: GetProtocolStatsPerChainQuery
   stakedSonicData: GetStakedSonicDataQuery
@@ -84,15 +71,18 @@ function ChainStats({
         <Text fontSize="2xl">TVL</Text>
         <Text fontSize="2xl">{toCurrency(protocolData.protocolMetricsChain.totalLiquidity)}</Text>
       </HStack>
-      <Progress
-        colorScheme="cyan"
+      <Progress.Root
+        colorPalette="cyan"
         rounded="lg"
-        value={bn(protocolData.protocolMetricsChain.totalLiquidity)
+        value={String(bn(protocolData.protocolMetricsChain.totalLiquidity)
           .div(totalTvl)
           .times(100)
-          .toNumber()}
-        w="full"
-      />
+          .toNumber())}
+        w="full">
+        <Progress.Track>
+          <Progress.Range />
+        </Progress.Track>
+      </Progress.Root>
       <Box flex="1">
         {/*sSonicBeetsTvl && <SubStatBar color="red" label="sSONICBeets" stat={sSonicBeetsTvl} />}
         {maBeetsTvl && <SubStatBar color="green" label="maBEETS" stat={maBeetsTvl} />}
@@ -104,10 +94,9 @@ function ChainStats({
           <SubStatBar color="purple" label="maBEETS (legacy)" stat={maBeetsLegacyTvl} />
         )*/}
       </Box>
-
       <Grid gap="sm" templateColumns="repeat(2, 1fr)">
         <GridItem bg="rgba(255, 255, 255, 0.05)" p="lg" w="full">
-          <VStack align="flex-start" spacing="sm">
+          <VStack align="flex-start" gap="sm">
             <Text fontSize="lg">24h Volume</Text>
             <Text fontSize="2xl">
               {toCurrency(protocolData.protocolMetricsChain.swapVolume24h)}
@@ -115,14 +104,14 @@ function ChainStats({
           </VStack>
         </GridItem>
         <GridItem bg="rgba(255, 255, 255, 0.05)" p="lg" w="full">
-          <VStack align="flex-start" spacing="sm">
+          <VStack align="flex-start" gap="sm">
             <Text fontSize="lg">24h Fees</Text>
             <Text fontSize="2xl">{toCurrency(totalFees)}</Text>
           </VStack>
         </GridItem>
       </Grid>
     </Box>
-  )
+  );
 }
 
 function ChainDataCard({
@@ -132,8 +121,7 @@ function ChainDataCard({
   totalTvl,
   button,
   isSonic,
-  stakedSonicData,
-}: {
+  stakedSonicData }: {
   chain: GqlChain
   networkColor: string
   protocolData: GetProtocolStatsPerChainQuery
@@ -179,8 +167,7 @@ function GlobalStatsCard({ label, value }: { label: string; value: string }) {
 export function LandingBeetsData({
   protocolData,
   protocolDataPerChain,
-  stakedSonicData,
-}: {
+  stakedSonicData }: {
   protocolData: GetProtocolStatsQuery
   protocolDataPerChain: GetProtocolStatsPerChainQuery[]
   stakedSonicData: GetStakedSonicDataQuery
@@ -205,7 +192,7 @@ export function LandingBeetsData({
 
   return (
     <DefaultPageContainer noVerticalPadding position="relative" py="3xl">
-      <VStack spacing="lg">
+      <VStack gap="lg">
         <Box bg="rgba(0, 0, 0, 0.1)" display="flex" w="full">
           <Grid
             gap="sm"
@@ -214,8 +201,7 @@ export function LandingBeetsData({
             templateColumns={{
               base: '1fr',
               lg: '1fr',
-              xl: '1.25fr 1fr 1fr 1fr',
-            }}
+              xl: '1.25fr 1fr 1fr 1fr' }}
             w="full"
           >
             <GridItem alignItems="center" display="flex">
@@ -224,17 +210,17 @@ export function LandingBeetsData({
             <GridItem bg="rgba(0, 0, 0, 0.2)">
               <GlobalStatsCard
                 label="TVL"
-                value={toCurrency(protocolMetricsAggregated.totalLiquidity)}
+                value={String(toCurrency(protocolMetricsAggregated.totalLiquidity))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
               <GlobalStatsCard
                 label="24h Volume"
-                value={toCurrency(protocolMetricsAggregated.swapVolume24h)}
+                value={String(toCurrency(protocolMetricsAggregated.swapVolume24h))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
-              <GlobalStatsCard label="24h Fees" value={toCurrency(totalFees)} />
+              <GlobalStatsCard label="24h Fees" value={String(toCurrency(totalFees))} />
             </GridItem>
           </Grid>
         </Box>
@@ -242,9 +228,8 @@ export function LandingBeetsData({
           <GridItem bg="rgba(255, 255, 255, 0.05)">
             <ChainDataCard
               button={
-                <Button as={NextLink} href="/pools?networks=SONIC" variant="primary">
-                  Sonic Pools
-                </Button>
+                <Button variant="primary" asChild><NextLink href="/pools?networks=SONIC">Sonic Pools
+                                  </NextLink></Button>
               }
               chain={GqlChain.Sonic}
               isSonic
@@ -257,9 +242,8 @@ export function LandingBeetsData({
           <GridItem bg="rgba(0, 0, 0, 0.2)">
             <ChainDataCard
               button={
-                <Button as={NextLink} href="/pools?networks=OPTIMISM" variant="primary">
-                  Optimism Pools
-                </Button>
+                <Button variant="primary" asChild><NextLink href="/pools?networks=OPTIMISM">Optimism Pools
+                                  </NextLink></Button>
               }
               chain={GqlChain.Optimism}
               networkColor="red"
@@ -271,5 +255,5 @@ export function LandingBeetsData({
         </Grid>
       </VStack>
     </DefaultPageContainer>
-  )
+  );
 }

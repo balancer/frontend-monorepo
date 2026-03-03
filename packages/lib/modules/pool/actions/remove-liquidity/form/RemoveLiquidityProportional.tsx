@@ -1,7 +1,7 @@
 'use client'
 
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
-import { Card, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { Card, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens/token.helpers'
@@ -24,8 +24,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
     setWethIsEth,
     simulationQuery,
     priceImpactQuery,
-    setWrapUnderlyingByIndex,
-  } = useRemoveLiquidity()
+    setWrapUnderlyingByIndex } = useRemoveLiquidity()
   // Array with the underlying and wrapped tokens to be selected in WrappedOrUnderlyingSelectModal
   const [wrappedAndUnderlying, setWrappedAndUnderlying] = useState<ApiToken[] | undefined>()
   const nativeTokenSelectDisclosure = useDisclosure()
@@ -81,8 +80,8 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
 
   return (
     <>
-      <Card variant="subSection">
-        <VStack align="start" spacing="md">
+      <Card.Root variant="subSection">
+        <VStack align="start" gap="md">
           <Text fontSize="sm" fontWeight="bold">
             You&apos;re expected to get (if no slippage)
           </Text>
@@ -91,8 +90,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
               ? {
                   pool,
                   logoURI: token.logoURI || '',
-                  customUsdPrice: priceFor(token.address as Address, pool.chain),
-                }
+                  customUsdPrice: priceFor(token.address as Address, pool.chain) }
               : {}
 
             return (
@@ -108,22 +106,21 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
             )
           })}
         </VStack>
-      </Card>
+      </Card.Root>
       {!!validTokens.length && (
         <NativeAssetSelectModal
           chain={validTokens[0].chain}
-          isOpen={nativeTokenSelectDisclosure.isOpen}
+          isOpen={nativeTokenSelectDisclosure.open}
           nativeAssets={nativeAssets}
           onClose={nativeTokenSelectDisclosure.onClose}
           onOpen={nativeTokenSelectDisclosure.onOpen}
           onTokenSelect={handleTokenSelect}
         />
       )}
-
       {!!validTokens.length && (
         <WrappedOrUnderlyingSelectModal
           chain={validTokens[0].chain}
-          isOpen={boostedTokenSelectDisclosure.isOpen && !!wrappedAndUnderlying}
+          isOpen={boostedTokenSelectDisclosure.open && !!wrappedAndUnderlying}
           onClose={boostedTokenSelectDisclosure.onClose}
           onOpen={boostedTokenSelectDisclosure.onOpen}
           onTokenSelect={onBoostedTokenSelect}
@@ -131,5 +128,5 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
         />
       )}
     </>
-  )
+  );
 }

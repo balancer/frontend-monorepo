@@ -1,22 +1,9 @@
-'use client'
-
+'use client';
 import {
   TokenBalancesProvider,
-  useTokenBalances,
-} from '@repo/lib/modules/tokens/TokenBalancesProvider'
-import {
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  Grid,
-  GridItem,
-  HStack,
-  Skeleton,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+  useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -26,8 +13,7 @@ import { usePool } from '../../../PoolProvider'
 import {
   hasNoLiquidity,
   requiresProportionalInput,
-  supportsNestedActions,
-} from '../../LiquidityActionHelpers'
+  supportsNestedActions } from '../../LiquidityActionHelpers'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
@@ -88,8 +74,7 @@ function AddLiquidityMainForm() {
     setWantsProportional,
     wantsProportional,
     humanAmountsIn,
-    validTokens,
-  } = useAddLiquidity()
+    validTokens } = useAddLiquidity()
 
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -169,20 +154,19 @@ function AddLiquidityMainForm() {
   const bufferBalanceWarning = useBufferBalanceWarning({
     amounts: humanAmountsIn,
     operation: 'add',
-    validTokens,
-  })
+    validTokens })
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
-      <Card>
-        <CardHeader>
+      <Card.Root>
+        <Card.Header>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
 
             <TransactionSettings size="xs" />
           </HStack>
-        </CardHeader>
-        <VStack align="start" spacing="md" w="full">
+        </Card.Header>
+        <VStack align="start" gap="md" w="full">
           {poolMetadata?.addLiquidityWarning && (
             <BalAlert
               content={poolMetadata.addLiquidityWarning.text}
@@ -220,7 +204,7 @@ function AddLiquidityMainForm() {
             />
           )}
           {bufferBalanceWarning}
-          <VStack align="start" spacing="sm" w="full">
+          <VStack align="start" gap="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
                 accordionButtonComponent={
@@ -256,18 +240,17 @@ function AddLiquidityMainForm() {
           </VStack>
           <Grid gap="sm" templateColumns="1fr 1fr" w="full">
             <GridItem>
-              <Card minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
+              <Card.Root minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
                 <VStack align="start" gap="sm">
                   <Text fontSize="sm" fontWeight="500" lineHeight="16px">
                     Total
                   </Text>
                   <Text fontSize="md" fontWeight="700" lineHeight="16px">
                     {formatFalsyValueAsDash(totalUSDValue, toCurrency, {
-                      showZeroAmountAsDash: true,
-                    })}
+                      showZeroAmountAsDash: true })}
                   </Text>
                 </VStack>
-              </Card>
+              </Card.Root>
             </GridItem>
             <GridItem>
               <AddLiquidityPotentialWeeklyYield
@@ -292,10 +275,10 @@ function AddLiquidityMainForm() {
           )}
 
           {isConnected ? (
-            <Tooltip label={isDisabled ? disabledReason : ''}>
+            <Tooltip content={isDisabled ? disabledReason : ''}>
               <Button
-                isDisabled={isDisabled}
-                isLoading={isLoading}
+                disabled={isDisabled}
+                loading={isLoading}
                 onClick={() => !isDisabled && onModalOpen()}
                 ref={nextBtn}
                 size="lg"
@@ -309,7 +292,7 @@ function AddLiquidityMainForm() {
             <ConnectWallet size="lg" variant="primary" w="full" />
           )}
         </VStack>
-      </Card>
+      </Card.Root>
       <AddLiquidityModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}
@@ -317,5 +300,5 @@ function AddLiquidityMainForm() {
         onOpen={previewModalDisclosure.onOpen}
       />
     </Box>
-  )
+  );
 }

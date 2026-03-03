@@ -1,14 +1,13 @@
 'use client'
 
-import { AlertProps, Text } from '@chakra-ui/react'
+import { AlertProps, Text } from '@chakra-ui/react';
 import {
   isInvariantRatioAboveMaxSimulationErrorMessage,
   isInvariantRatioAboveMinSimulationErrorMessage,
   isInvariantRatioPIErrorMessage,
   isUnbalancedAddError,
   isUnbalancedAddErrorMessage,
-  isPoolSurgingError,
-} from '../../utils/error-filters'
+  isPoolSurgingError } from '../../utils/error-filters'
 import { BalAlertLink } from '../alerts/BalAlertLink'
 import { ErrorAlert } from './ErrorAlert'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
@@ -26,8 +25,7 @@ export function UnbalancedAddError({
   error,
   goToProportionalAdds,
   isProportionalSupported = true,
-  pool,
-}: Props) {
+  pool }: Props) {
   const { clearAmountsIn } = useAddLiquidity()
   const goToProportionalMode = () => {
     clearAmountsIn()
@@ -97,6 +95,5 @@ export function getErrorLabels(
   return {
     errorTitle,
     errorMessage,
-    proportionalLabel,
-  }
+    proportionalLabel }
 }

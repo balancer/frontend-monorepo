@@ -1,4 +1,4 @@
-import { Button, Card, HStack, Text, VStack, Link } from '@chakra-ui/react'
+import { Button, Card, HStack, Text, VStack, Link } from '@chakra-ui/react';
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { GatewayTransactionDetails, TransactionStatus } from '@safe-global/safe-apps-sdk'
 import { ArrowUpRight } from 'react-feather'
@@ -6,8 +6,7 @@ import {
   getRemainingSignaturesLabel,
   getSafeWebUrl,
   getSignConfirmationsLabel,
-  hasSomePendingNestedTxInBatch,
-} from './safe.helpers'
+  hasSomePendingNestedTxInBatch } from './safe.helpers'
 import { TransactionStep } from '../lib'
 import { Address } from 'viem'
 
@@ -28,8 +27,8 @@ export function MultisigStatus({ chainId, details, currentStep }: MultisigProps)
   const isTxBatch = currentStep ? hasSomePendingNestedTxInBatch(currentStep) : false
 
   return (
-    <Card backgroundColor="font.special" variant="modalSubSection">
-      <VStack align="start" fontSize="sm" mb="sm" spacing="sm" w="full">
+    <Card.Root backgroundColor="font.special" variant="modalSubSection">
+      <VStack align="start" fontSize="sm" mb="sm" gap="sm" w="full">
         <Text color="font.primaryGradient" fontSize="md">
           {isTxBatch ? 'Transaction bundle status' : 'Multisig status'}
         </Text>
@@ -49,15 +48,8 @@ export function MultisigStatus({ chainId, details, currentStep }: MultisigProps)
         {isFailed && <Text color="grayText">Transaction failed</Text>}
         {isCancelled && <Text color="grayText">The transaction was cancelled</Text>}
       </VStack>
-      <Button
-        as={Link}
-        href={getSafeWebUrl(chainId, details.safeAddress as Address, details.txId)}
-        isExternal
-        rightIcon={<ArrowUpRight size="14" />}
-        variant="secondary"
-      >
-        {isTxBatch ? 'View transaction bundle in Safe App' : 'View transaction in Safe App'}
-      </Button>
-    </Card>
-  )
+      <Button isExternal variant="secondary" asChild><Link
+          href={getSafeWebUrl(chainId, details.safeAddress as Address, details.txId)}>{isTxBatch ? 'View transaction bundle in Safe App' : 'View transaction in Safe App'}<ArrowUpRight size="14" /></Link></Button>
+    </Card.Root>
+  );
 }

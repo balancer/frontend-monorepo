@@ -1,13 +1,4 @@
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  Box,
-  HStack,
-  Text,
-  AccordionIcon,
-} from '@chakra-ui/react'
+import { Accordion, Box, HStack, Text } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 
 interface VebalLockDetailsAccordionProps {
@@ -16,19 +7,18 @@ interface VebalLockDetailsAccordionProps {
 }
 export function VebalLockDetailsAccordion({
   accordionPanelComponent,
-  isDisabled,
-}: VebalLockDetailsAccordionProps) {
+  isDisabled }: VebalLockDetailsAccordionProps) {
   return (
     <Box w="full">
-      <Accordion allowToggle variant="button" w="full">
-        <AccordionItem
+      <Accordion.Root collapsible variant="button" w="full">
+        <Accordion.Root
           bg="background.level3"
-          isDisabled={isDisabled}
+          disabled={isDisabled}
           shadow={isDisabled ? 'none' : undefined}
           w="full"
-        >
+          value='item-0'>
           <h2>
-            <AccordionButton>
+            <Accordion.Root>
               <Box as="span" flex="1" textAlign="left">
                 <HStack>
                   <Text color="font.maxContrast" fontSize="sm">
@@ -36,12 +26,12 @@ export function VebalLockDetailsAccordion({
                   </Text>
                 </HStack>
               </Box>
-              <AccordionIcon textColor="font.secondary" />
-            </AccordionButton>
+              <Accordion.Root textColor="font.secondary" />
+            </Accordion.ItemTrigger>
           </h2>
-          <AccordionPanel py="md">{accordionPanelComponent}</AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+          <Accordion.Root py="md"><Accordion.Root>{accordionPanelComponent}</Accordion.ItemBody></Accordion.ItemContent>
+        </Accordion.Item>
+      </Accordion.Root>
     </Box>
-  )
+  );
 }

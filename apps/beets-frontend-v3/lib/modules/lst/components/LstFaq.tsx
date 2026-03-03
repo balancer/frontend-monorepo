@@ -1,19 +1,4 @@
-import {
-  Box,
-  Card,
-  CardHeader,
-  HStack,
-  Heading,
-  CardBody,
-  VStack,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  Text,
-  Link,
-} from '@chakra-ui/react'
+import { Box, Card, HStack, Heading, VStack, Accordion, Text, Link } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 
 const FAQ_ITEMS = [
@@ -25,8 +10,7 @@ const FAQ_ITEMS = [
         The value of stS naturally appreciates in relation to $S thanks to native network staking
         rewards from validator delegation being automatically compounded within the token.
       </Text>
-    ),
-  },
+    ) },
   {
     question: 'What are the stS fees?',
     answer: (
@@ -36,8 +20,7 @@ const FAQ_ITEMS = [
         APY displayed on the UI is the APY the user receives (all fees have been subtracted
         automatically).
       </Text>
-    ),
-  },
+    ) },
   {
     question: 'How do I get stS tokens?',
     answer: (
@@ -46,8 +29,7 @@ const FAQ_ITEMS = [
         deposit. As an alternative to staking, users can swap into stS on DEXs by swapping their $S
         for stS on the Swap Page.
       </Text>
-    ),
-  },
+    ) },
   {
     question: 'How do I unstake stS for $S?',
     answer: (
@@ -58,8 +40,7 @@ const FAQ_ITEMS = [
         note that swapping may offer a less favorable exchange rate than unstaking, depending on the
         pool’s liquidity.
       </Text>
-    ),
-  },
+    ) },
   {
     question: 'Where can I use stS tokens?',
     answer: (
@@ -67,8 +48,7 @@ const FAQ_ITEMS = [
         stS is fully liquid, meaning you can use stS seamlessly across DeFi and access lending
         markets, liquidity pools, and more without pausing your rewards.
       </Text>
-    ),
-  },
+    ) },
   {
     question: 'What is the stS exchange rate and how does it change?',
     answer: (
@@ -77,8 +57,7 @@ const FAQ_ITEMS = [
         validators on the network. Every time staking rewards are added to the pool, the stS
         exchange rate to $S increases.
       </Text>
-    ),
-  },
+    ) },
   {
     question:
       'What steps have been taken to ensure the security and reliability of the stS smart contract code?',
@@ -90,8 +69,8 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           <Box as="span" fontSize="lg" fontWeight="thin">
             Spearbit
           </Box>
@@ -104,8 +83,8 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           <Box as="span" fontSize="lg" fontWeight="thin">
             Trail of Bits
           </Box>
@@ -114,8 +93,7 @@ const FAQ_ITEMS = [
           </Box>
         </Link>
       </Text>
-    ),
-  },
+    ) },
   {
     question: 'What is the contract address for stS?',
     answer: (
@@ -125,8 +103,8 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://sonicscan.org/token/0xe5da20f15420ad15de0fa650600afc998bbe3955"
-          isExternal
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           <Box as="span" fontSize="lg" fontWeight="thin">
             0xE5DA20F15420aD15DE0fa650600aFc998bbE3955
           </Box>
@@ -135,35 +113,34 @@ const FAQ_ITEMS = [
           </Box>
         </Link>
       </Text>
-    ),
-  },
+    ) },
 ]
 
 export function LstFaq() {
   return (
-    <Card rounded="xl" w="full">
-      <CardHeader as={HStack} justify="space-between" w="full">
+    <Card.Root rounded="xl" w="full">
+      <Card.Header as={HStack} justify="space-between" w="full">
         <Heading as="h2" size="lg">
           FAQ
         </Heading>
-      </CardHeader>
-      <CardBody align="start" as={VStack}>
-        <Accordion allowToggle bg="transparent" variant="button" w="full">
+      </Card.Header>
+      <Card.Body align="start" as={VStack}>
+        <Accordion.Root collapsible bg="transparent" variant="button" w="full">
           {FAQ_ITEMS.map(item => (
-            <AccordionItem key={item.question} mb="sm">
+            <Accordion.Root key={item.question} mb="sm" value='item-0'>
               <h2>
-                <AccordionButton>
+                <Accordion.Root>
                   <Box as="span" flex="1" textAlign="left">
                     {item.question}
                   </Box>
-                  <AccordionIcon />
-                </AccordionButton>
+                  <Accordion.Root />
+                </Accordion.ItemTrigger>
               </h2>
-              <AccordionPanel pb="md">{item.answer}</AccordionPanel>
-            </AccordionItem>
+              <Accordion.Root pb="md"><Accordion.Root>{item.answer}</Accordion.ItemBody></Accordion.ItemContent>
+            </Accordion.Item>
           ))}
-        </Accordion>
-      </CardBody>
-    </Card>
-  )
+        </Accordion.Root>
+      </Card.Body>
+    </Card.Root>
+  );
 }

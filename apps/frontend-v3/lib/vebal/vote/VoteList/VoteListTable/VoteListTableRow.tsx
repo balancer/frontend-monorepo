@@ -6,13 +6,11 @@ import {
   GridProps,
   HStack,
   Popover,
-  PopoverContent,
-  PopoverTrigger,
+  HoverCard,
   Portal,
   Skeleton,
-  Text,
-  Tooltip,
-} from '@chakra-ui/react'
+  Text } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import Link from 'next/link'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -57,8 +55,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.level0',
-        }}
+          bg: 'background.level0' }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         rounded="md"
@@ -100,20 +97,22 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             ) : vote.votingIncentive ? (
               <Text>{toCurrency(vote.votingIncentive.totalValue, { abbreviated: false })}</Text>
             ) : (
-              <Popover trigger="hover">
-                <PopoverTrigger>
+              <HoverCard.Root>
+                <HoverCard.Trigger asChild>
                   <Text color="font.warning" zIndex={1}>
                     &mdash;
                   </Text>
-                </PopoverTrigger>
+                </HoverCard.Trigger>
                 <Portal>
-                  <PopoverContent maxW="300px" p="sm" w="auto">
-                    <Text fontSize="sm" textAlign="left" variant="secondary">
-                      {missingDataReason}
-                    </Text>
-                  </PopoverContent>
+                  <HoverCard.Positioner>
+                    <HoverCard.Content maxW="300px" p="sm" w="auto">
+                      <Text fontSize="sm" textAlign="left" variant="secondary">
+                        {missingDataReason}
+                      </Text>
+                    </HoverCard.Content>
+                  </HoverCard.Positioner>
                 </Portal>
-              </Popover>
+              </HoverCard.Root>
             )}
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
@@ -123,22 +122,23 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               <Text>
                 {toCurrency(vote.votingIncentive.valuePerVote, {
                   abbreviated: false,
-                  forceThreeDecimals: true,
-                })}
+                  forceThreeDecimals: true })}
               </Text>
             ) : (
-              <Popover trigger="hover">
-                <PopoverTrigger>
+              <HoverCard.Root>
+                <HoverCard.Trigger asChild>
                   <Text color="font.warning">&mdash;</Text>
-                </PopoverTrigger>
+                </HoverCard.Trigger>
                 <Portal>
-                  <PopoverContent maxW="300px" p="sm" w="auto">
-                    <Text fontSize="sm" textAlign="left" variant="secondary">
-                      {missingDataReason}
-                    </Text>
-                  </PopoverContent>
+                  <HoverCard.Positioner>
+                    <HoverCard.Content maxW="300px" p="sm" w="auto">
+                      <Text fontSize="sm" textAlign="left" variant="secondary">
+                        {missingDataReason}
+                      </Text>
+                    </HoverCard.Content>
+                  </HoverCard.Positioner>
                 </Portal>
-              </Popover>
+              </HoverCard.Root>
             )}
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
@@ -154,19 +154,19 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                 color="font.secondary"
                 fontSize="sm"
                 fontWeight="700"
-                isDisabled
+                disabled
                 variant="outline"
                 w="80px"
               >
                 {vote.gauge.isKilled ? 'Expired' : 'Voted'}
               </Button>
             ) : (
-              <Tooltip isDisabled={!isDisabled} label={disabledReason}>
+              <Tooltip disabled={!isDisabled} content={disabledReason}>
                 <Button
                   color={selected ? 'font.secondary' : undefined}
                   fontSize="sm"
                   fontWeight="700"
-                  isDisabled={isDisabled}
+                  disabled={isDisabled}
                   onClick={() => toggleVotingPool(vote)}
                   rounded="md"
                   size="xs"
@@ -181,5 +181,5 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
         </Grid>
       </Box>
     </FadeInOnView>
-  )
+  );
 }

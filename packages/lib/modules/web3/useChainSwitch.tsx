@@ -1,7 +1,7 @@
 'use client'
 
 import { useSwitchChain } from 'wagmi'
-import { Button } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react';
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { useUserAccount } from './UserAccountProvider'
@@ -18,13 +18,11 @@ export function useChainSwitch(chainId: SupportedChainId) {
     name: getChainShortName(chainId),
     switchChain,
     chainId,
-    isPending,
-  }
+    isPending }
 
   return {
     shouldChangeNetwork,
-    networkSwitchButtonProps,
-  }
+    networkSwitchButtonProps }
 }
 
 export interface NetworkSwitchButtonProps {
@@ -45,17 +43,16 @@ export function NetworkSwitchButton({ chainId }: Props) {
 
   return (
     <Button
-      isLoading={networkSwitchButtonProps.isPending}
+      loading={networkSwitchButtonProps.isPending}
       onClick={() =>
         networkSwitchButtonProps.switchChain?.({ chainId: networkSwitchButtonProps.chainId })
       }
       size="lg"
       variant="secondary"
       w="full"
-    >
-      Switch network to {networkSwitchButtonProps.name}
+    >Switch network to {networkSwitchButtonProps.name}
     </Button>
-  )
+  );
 }
 
 // Show an alert to switch network as Safe App does not support programmatic network switch

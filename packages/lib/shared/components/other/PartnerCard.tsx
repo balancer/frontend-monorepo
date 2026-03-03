@@ -1,15 +1,6 @@
-'use client'
-
-import {
-  Box,
-  Heading,
-  Text,
-  Link,
-  Stack,
-  VStack,
-  Image as ChakraImage,
-  useColorMode,
-} from '@chakra-ui/react'
+'use client';
+import { Box, Heading, Text, Link, Stack, VStack, Image as ChakraImage } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from './Picture'
 // import { ArrowRightIcon } from '@chakra-ui/icons'
@@ -34,10 +25,9 @@ export function PartnerCard({
   ctaText,
   ctaUrl,
   bgColor = 'gray.900',
-  externalLink = false,
-}: PartnerCardProps) {
+  externalLink = false }: PartnerCardProps) {
   const iconSrc = iconName ? `/images/logos/circular-bg/${iconName}.svg` : icon
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   return (
     <Box height="100%">
@@ -58,8 +48,7 @@ export function PartnerCard({
               shadow:
                 colorMode === 'dark'
                   ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.25) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.25) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.04) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.1) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.04) inset'
-                  : '-2px -2px 4px 0px rgba(0, 0, 0, 0.1) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.1) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.15) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.15) inset',
-            }}
+                  : '-2px -2px 4px 0px rgba(0, 0, 0, 0.1) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.1) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.15) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.15) inset' }}
             backgroundPosition="center"
             backgroundSize="cover"
             borderRadius="xl"
@@ -77,8 +66,7 @@ export function PartnerCard({
             <Box height="100%" position="absolute" width="100%">
               <Box
                 _groupHover={{
-                  transform: 'scale(1.01)',
-                }}
+                  transform: 'scale(1.01)' }}
                 bgColor={bgColor}
                 height="100%"
                 position="absolute"
@@ -104,10 +92,10 @@ export function PartnerCard({
               height="full"
               p={{ base: 'lg', sm: 'md', md: 'lg' }}
               position="relative"
-              spacing={4}
+              gap={4}
               zIndex={1}
             >
-              <VStack align="flex-start" spacing={2}>
+              <VStack align="flex-start" gap={2}>
                 <Stack
                   align="start"
                   alignItems={{ base: 'center', sm: 'start' }}
@@ -137,7 +125,9 @@ export function PartnerCard({
                   fontWeight="bold"
                   lineHeight="relaxed"
                   opacity="0.75"
-                  sx={{ textWrap: 'balance' }}
+                  css={{
+                    textWrap: 'balance'
+                  }}
                   transition="transform 0.3s var(--ease-out-cubic)"
                 >
                   {description}
@@ -173,5 +163,5 @@ export function PartnerCard({
         </Box>
       </Link>
     </Box>
-  )
+  );
 }

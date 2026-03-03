@@ -1,18 +1,4 @@
-import {
-  AlertDescription,
-  AlertIcon,
-  Alert,
-  Card,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalProps,
-  Stack,
-  Text,
-  AlertTitle,
-  VStack,
-} from '@chakra-ui/react'
+import { Alert, Card, ModalProps, Stack, Text, VStack, Dialog, Portal } from '@chakra-ui/react';
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -28,8 +14,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useRouter } from 'next/navigation'
 import {
   useBuildLockSteps,
-  UseBuildLockStepsArgs,
-} from '@bal/lib/vebal/lock/steps/useBuildLockSteps'
+  UseBuildLockStepsArgs } from '@bal/lib/vebal/lock/steps/useBuildLockSteps'
 import { getPreviewLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'
 import { useMemo } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -68,8 +53,7 @@ export function VebalLockModal({
     lockDuration,
     lockMode,
     isIncreasedLockAmount,
-    isLoading: vebalLockIsLoading,
-  } = useVebalLock()
+    isLoading: vebalLockIsLoading } = useVebalLock()
   const { mainnetLockedInfo, isLoading: vebalLockDataIsLoading } = useVebalLockData()
 
   /*
@@ -84,8 +68,7 @@ export function VebalLockModal({
       totalAmount: addedAmount,
       lockDuration,
       isIncreasedLockAmount,
-      mainnetLockedInfo,
-    }),
+      mainnetLockedInfo }),
     [addedAmount, extendExpired, isIncreasedLockAmount, lockDuration, mainnetLockedInfo]
   )
 
@@ -104,107 +87,111 @@ export function VebalLockModal({
   const weeklyYield = !poolIsLoading ? calculatePotentialYield(totalUsdValue) : '0'
 
   return (
-    <Modal
-      isCentered
-      isOpen={isOpen}
-      onClose={() => {
-        onClose(!!lockTxHash, redirectPath)
-      }}
-      preserveScrollBarGap
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!lockTxHash} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose(!!lockTxHash, redirectPath)
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop ? (
-          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-        ) : null}
-        <TransactionModalHeader
-          chain={GqlChain.Mainnet}
-          label={`${getPreviewLabel(lockMode, extendExpired)} preview`}
-          txHash={lockTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <AnimateHeightChange spacing="md">
-            {isMobile ? (
-              <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+        <SuccessOverlay startAnimation={!!lockTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop ? (
+              <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
             ) : null}
-            {isLoading ? (
-              <Text>Loading data...</Text>
-            ) : (
-              <>
-                {lockMode === LockMode.Unlock && extendExpired && (
-                  <Alert status="info">
-                    <AlertIcon />
-                    <AlertDescription>
-                      To extend an expired lock, unlock the old one first, then confirm the new
-                      lock-up period.
-                    </AlertDescription>
-                  </Alert>
+            <TransactionModalHeader
+              chain={GqlChain.Mainnet}
+              label={`${getPreviewLabel(lockMode, extendExpired)} preview`}
+              txHash={lockTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <AnimateHeightChange spacing="md">
+                {isMobile ? (
+                  <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+                ) : null}
+                {isLoading ? (
+                  <Text>Loading data...</Text>
+                ) : (
+                  <>
+                    {lockMode === LockMode.Unlock && extendExpired && (
+                      <Alert.Root status="info">
+                        <Alert.Indicator />
+                        <Alert.Description>
+                          To extend an expired lock, unlock the old one first, then confirm the new
+                          lock-up period.
+                        </Alert.Description>
+                      </Alert.Root>
+                    )}
+                    {isUnlocking && (
+                      <Alert.Root status="info">
+                        <Alert.Indicator />
+                        <VStack alignItems="start" gap="none">
+                          <Alert.Title>Reconsider unlocking?</Alert.Title>
+                          <Alert.Description>
+                            {`Extending your lock to 1 year could generate ${toCurrency(weeklyYield, { abbreviated: false })}
+                            in yield next week from voting incentives, protocol revenue and swap fees.`}
+                          </Alert.Description>
+                        </VStack>
+                      </Alert.Root>
+                    )}
+                    <Stack direction="column" gap="sm" w="full">
+                      <Text>{isUnlocking ? 'Locked amount' : 'Lock amount'}</Text>
+                      <Card.Root variant="modalSubSection">
+                        <TokenRowWithDetails
+                          address={vebalBptToken.address as Address}
+                          chain={GqlChain.Mainnet}
+                          details={
+                            isUnlocking && lockDuration.lockedUntilDateFormatted
+                              ? [
+                                  [
+                                    <Text fontSize="sm" key={1} variant="secondary">
+                                      Lock-up period ended
+                                    </Text>,
+                                    <Text fontSize="sm" key={2} variant="secondary">
+                                      {lockDuration.lockedUntilDateFormatted}
+                                    </Text>,
+                                  ],
+                                ]
+                              : undefined
+                          }
+                          value={totalAmount}
+                        />
+                      </Card.Root>
+                    </Stack>
+                    {!isUnlocking && (
+                      <Stack direction="column" gap="sm" w="full">
+                        <Text>Summary</Text>
+                        <Card.Root variant="modalSubSection">
+                          <VebalLockDetails variant="summary" />
+                        </Card.Root>
+                      </Stack>
+                    )}
+                  </>
                 )}
-                {isUnlocking && (
-                  <Alert status="info">
-                    <AlertIcon />
-                    <VStack alignItems="start" spacing="none">
-                      <AlertTitle>Reconsider unlocking?</AlertTitle>
-                      <AlertDescription>
-                        {`Extending your lock to 1 year could generate ${toCurrency(weeklyYield, { abbreviated: false })}
-                        in yield next week from voting incentives, protocol revenue and swap fees.`}
-                      </AlertDescription>
-                    </VStack>
-                  </Alert>
-                )}
-                <Stack direction="column" spacing="sm" w="full">
-                  <Text>{isUnlocking ? 'Locked amount' : 'Lock amount'}</Text>
-                  <Card variant="modalSubSection">
-                    <TokenRowWithDetails
-                      address={vebalBptToken.address as Address}
-                      chain={GqlChain.Mainnet}
-                      details={
-                        isUnlocking && lockDuration.lockedUntilDateFormatted
-                          ? [
-                              [
-                                <Text fontSize="sm" key={1} variant="secondary">
-                                  Lock-up period ended
-                                </Text>,
-                                <Text fontSize="sm" key={2} variant="secondary">
-                                  {lockDuration.lockedUntilDateFormatted}
-                                </Text>,
-                              ],
-                            ]
-                          : undefined
-                      }
-                      value={totalAmount}
-                    />
-                  </Card>
-                </Stack>
-                {!isUnlocking && (
-                  <Stack direction="column" spacing="sm" w="full">
-                    <Text>Summary</Text>
-                    <Card variant="modalSubSection">
-                      <VebalLockDetails variant="summary" />
-                    </Card>
-                  </Stack>
-                )}
-              </>
+              </AnimateHeightChange>
+            </Dialog.Body>
+            {transactionSteps.currentStep && (
+              <ActionModalFooter
+                currentStep={transactionSteps.currentStep}
+                isSuccess={isSuccess}
+                returnAction={() => {
+                  onClose(isSuccess, redirectPath)
+                  router.push(redirectPath)
+                }}
+                returnLabel={returnLabel}
+              />
             )}
-          </AnimateHeightChange>
-        </ModalBody>
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-        {transactionSteps.currentStep && (
-          <ActionModalFooter
-            currentStep={transactionSteps.currentStep}
-            isSuccess={isSuccess}
-            returnAction={() => {
-              onClose(isSuccess, redirectPath)
-              router.push(redirectPath)
-            }}
-            returnLabel={returnLabel}
-          />
-        )}
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps } from '@chakra-ui/react'
+import { Box, BoxProps } from '@chakra-ui/react';
 import { motion, useInView, HTMLMotionProps, Easing } from 'framer-motion'
 import { Children, isValidElement, ReactNode, useRef } from 'react'
 
@@ -28,10 +28,8 @@ export function FadeIn({
       opacity: 1,
       filter: 'blur(0px)',
       y: 0,
-      transition: { duration, delay, ease: 'easeInOut' as Easing },
-    },
-    hidden: { opacity: 0, filter: 'blur(3px)', y: direction === 'down' ? -15 : 15 },
-  }
+      transition: { duration, delay, ease: 'easeInOut' as Easing } },
+    hidden: { opacity: 0, filter: 'blur(3px)', y: direction === 'down' ? -15 : 15 } }
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
 
@@ -44,11 +42,7 @@ export function FadeIn({
         transition: {
           staggerChildren,
           delayChildren,
-          delay,
-        },
-      },
-    },
-  }
+          delay } } } }
 
   return (
     <MotionBox ref={ref} {...motionProps} {...(rest as any)}>

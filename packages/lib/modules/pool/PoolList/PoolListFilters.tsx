@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import {
   Badge,
   Box,
@@ -8,20 +7,13 @@ import {
   Center,
   Checkbox,
   Flex,
-  forwardRef,
   Heading,
   HStack,
   Icon,
   Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverTrigger,
   Text,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+  VStack } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { PoolListSearch } from './PoolListSearch'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import {
@@ -30,10 +22,9 @@ import {
   PoolHookTagType,
   poolTagFilters,
   PoolTagType,
-  poolTypeFilters,
-} from '../pool.types'
+  poolTypeFilters } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef } from 'react';
 import { Filter, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -45,8 +36,7 @@ import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import Image from 'next/image'
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
@@ -57,8 +47,7 @@ import NextLink from 'next/link'
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion },
-  } = usePoolList()
+    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion } } = usePoolList()
 
   return (
     networks.length > 0 ||
@@ -72,26 +61,24 @@ export function useFilterTagsVisible() {
 
 function UserPoolFilter() {
   const {
-    queryState: { userAddress, toggleUserAddress },
-  } = usePoolList()
+    queryState: { userAddress, toggleUserAddress } } = usePoolList()
   const { userAddress: connectedUserAddress } = useUserAccount()
   const isChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
 
   return (
-    <Checkbox
-      isChecked={isChecked}
+    <Checkbox.Root
       mb="xxs"
-      onChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
-    >
-      <Text fontSize="sm">My positions</Text>
-    </Checkbox>
-  )
+      onCheckedChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
+      checked={isChecked}
+    ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+          <Text fontSize="sm">My positions</Text>
+        </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+  );
 }
 
 function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   const {
-    queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
-  } = usePoolList()
+    queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel } } = usePoolList()
 
   // remove query param when empty
   useEffect(() => {
@@ -101,27 +88,26 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   }, [poolTags])
 
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {poolTagFilters
-        .filter(tag => !hidePoolTags?.includes(tag))
-        .map(tag => (
-          <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
-            <Checkbox
-              isChecked={!!poolTags.find(selected => selected === tag)}
-              onChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
-            >
-              <Text fontSize="sm">{poolTagLabel(tag)}</Text>
-            </Checkbox>
-          </Box>
-        ))}
-    </Box>
-  )
+    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+        {poolTagFilters
+          .filter(tag => !hidePoolTags?.includes(tag))
+          .map(tag => (
+            <Box variants={staggeredFadeInUp} asChild><motion.div key={tag}>
+                <Checkbox.Root
+                  onCheckedChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
+                  checked={!!poolTags.find(selected => selected === tag)}
+                ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                    <Text fontSize="sm">{poolTagLabel(tag)}</Text>
+                  </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+              </motion.div></Box>
+          ))}
+      </motion.div></Box>
+  );
 }
 
 function PoolHookFilters() {
   const {
-    queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel },
-  } = usePoolList()
+    queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel } } = usePoolList()
 
   // Exclude hooks that are not live
   const livePoolHookTagFilters = poolHookTagFilters.filter(
@@ -136,19 +122,19 @@ function PoolHookFilters() {
   }, [poolHookTags])
 
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {livePoolHookTagFilters.map(tag => (
-        <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
-          <Checkbox
-            isChecked={!!poolHookTags.find(selected => selected === tag)}
-            onChange={e => togglePoolHookTag(e.target.checked, tag as PoolHookTagType)}
-          >
-            <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
-          </Checkbox>
-        </Box>
-      ))}
-    </Box>
-  )
+    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+        {livePoolHookTagFilters.map(tag => (
+          <Box variants={staggeredFadeInUp} asChild><motion.div key={tag}>
+              <Checkbox.Root
+                onCheckedChange={e => togglePoolHookTag(e.target.checked, tag as PoolHookTagType)}
+                checked={!!poolHookTags.find(selected => selected === tag)}
+              ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                  <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
+                </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+            </motion.div></Box>
+        ))}
+      </motion.div></Box>
+  );
 }
 
 export interface PoolTypeFiltersArgs {
@@ -164,8 +150,7 @@ export function PoolTypeFilters({
   poolTypes,
   poolTypeLabel,
   setPoolTypes,
-  hidePoolTypes,
-}: PoolTypeFiltersArgs) {
+  hidePoolTypes }: PoolTypeFiltersArgs) {
   // remove query param when empty
   useEffect(() => {
     if (!poolTypes.length) {
@@ -178,19 +163,19 @@ export function PoolTypeFilters({
   )
 
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {_poolTypeFilters.map(poolType => (
-        <Box as={motion.div} key={poolType} variants={staggeredFadeInUp}>
-          <Checkbox
-            isChecked={!!poolTypes.find(selected => selected === poolType)}
-            onChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
-          >
-            <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
-          </Checkbox>
-        </Box>
-      ))}
-    </Box>
-  )
+    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+        {_poolTypeFilters.map(poolType => (
+          <Box variants={staggeredFadeInUp} asChild><motion.div key={poolType}>
+              <Checkbox.Root
+                onCheckedChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
+                checked={!!poolTypes.find(selected => selected === poolType)}
+              ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                  <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
+                </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+            </motion.div></Box>
+        ))}
+      </motion.div></Box>
+  );
 }
 
 export interface PoolNetworkFiltersArgs {
@@ -202,8 +187,7 @@ export interface PoolNetworkFiltersArgs {
 export function PoolNetworkFilters({
   toggledNetworks,
   toggleNetwork,
-  setNetworks,
-}: PoolNetworkFiltersArgs) {
+  setNetworks }: PoolNetworkFiltersArgs) {
   const { supportedNetworks } = PROJECT_CONFIG
 
   // const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()] // Alphabetical order after Mainnet
@@ -218,13 +202,12 @@ export function PoolNetworkFilters({
       </Box>
     ),
     selectedLabel: (
-      <HStack spacing="6px">
+      <HStack gap="6px">
         <Box h="20px" rounded="full" shadow="md" w="20px">
           <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
         </Box>
       </HStack>
-    ),
-  }))
+    ) }))
 
   function isCheckedNetwork(network: GqlChain): boolean {
     return !!toggledNetworks.includes(network)
@@ -281,8 +264,7 @@ export function FilterTags({
   togglePoolHookTag,
   poolHookTagLabel,
   protocolVersion,
-  setProtocolVersion,
-}: FilterTagsPops) {
+  setProtocolVersion }: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
   // prevents layout shift in mobile view
@@ -299,7 +281,7 @@ export function FilterTags({
   }
 
   return (
-    <HStack spacing="sm" wrap="wrap">
+    <HStack gap="sm" wrap="wrap">
       <AnimatePresence>
         {protocolVersion && setProtocolVersion && (
           <AnimatedTag
@@ -362,13 +344,14 @@ export function FilterTags({
           ))}
       </AnimatePresence>
     </HStack>
-  )
+  );
 }
 
-export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number }, 'button'>(
+export const FilterButton = forwardRef<HTMLButtonElement, ButtonProps & { totalFilterCount: number }>(
   ({ totalFilterCount, onClick, ...props }, ref) => {
     const { isMobile } = useBreakpoints()
-    const textColor = useColorModeValue('#fff', 'font.dark')
+    const colorMode = useThemeColorMode()
+    const textColor = colorMode === 'dark' ? 'font.dark' : '#fff'
 
     const handleFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       trackEvent(AnalyticsEvent.ClickPoolListFilter)
@@ -384,7 +367,7 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
         onClick={handleFilterClick}
         variant="tertiary"
       >
-        <Icon as={Filter} boxSize={4} />
+        <Icon boxSize={4} asChild><Filter /></Icon>
         {!isMobile && 'Filters'}
         {totalFilterCount > 0 && (
           <Badge
@@ -403,7 +386,7 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
           </Badge>
         )}
       </Button>
-    )
+    );
   }
 )
 
@@ -422,8 +405,7 @@ export function ProtocolVersionFilter({
   poolTypes,
   activeProtocolVersionTab,
   setActiveProtocolVersionTab,
-  hideProtocolVersion,
-}: ProtocolVersionFilterProps) {
+  hideProtocolVersion }: ProtocolVersionFilterProps) {
   const tabs = PROTOCOL_VERSION_TABS
 
   function toggleTab(option: ButtonGroupOption) {
@@ -482,9 +464,7 @@ export function PoolListFilters() {
       setPoolTypes,
       setProtocolVersion,
       protocolVersion,
-      activeProtocolVersionTab,
-    },
-  } = usePoolList()
+      activeProtocolVersionTab } } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
 
@@ -497,140 +477,147 @@ export function PoolListFilters() {
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" pr={{ base: 'md', xl: '0' }} spacing="none" w="full">
+      <HStack gap="0" justify="end" pr={{ base: 'md', xl: '0' }} gap="none" w="full">
         <PoolListSearch />
-        <Popover
-          isLazy
-          isOpen={isPopoverOpen}
-          onClose={() => setIsPopoverOpen(false)}
-          onOpen={() => setIsPopoverOpen(true)}
-          placement="bottom-end"
-        >
-          <PopoverTrigger>
+        <Popover.Root
+          lazyMount
+          open={isPopoverOpen}
+          onOpenChange={e => {
+            if (e.open) {
+              setIsPopoverOpen(true);
+            } else {
+              setIsPopoverOpen(false);
+            }
+          }}
+          positioning={{
+            placement: 'bottom-end'
+          }}>
+          <Popover.Trigger asChild>
             <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
-          </PopoverTrigger>
+          </Popover.Trigger>
           <Box shadow="2xl" zIndex="popover">
-            <PopoverContent motionProps={{ animate: { scale: 1, opacity: 1 } }}>
-              <PopoverArrow bg="background.level3" />
-              <PopoverCloseButton top="sm" />
-              <PopoverBody p="md">
-                <AnimatePresence>
-                  {isPopoverOpen ? (
-                    <VStack
-                      align="start"
-                      animate="show"
-                      as={motion.div}
-                      exit="exit"
-                      initial="hidden"
-                      spacing="md"
-                      variants={staggeredFadeInUp}
-                    >
-                      <Box as={motion.div} lineHeight="0" p="0" variants={staggeredFadeInUp}>
-                        <Flex alignItems="center" gap="ms" justifyContent="space-between" w="full">
-                          <Text
-                            background="font.special"
-                            backgroundClip="text"
-                            display="inline"
-                            fontSize="xs"
-                            variant="eyebrow"
-                          >
-                            Filters
-                          </Text>
-                          {totalFilterCount > 0 && (
-                            <Button
-                              h="fit-content"
-                              onClick={_resetFilters}
-                              size="xs"
-                              variant="link"
-                            >
-                              Reset all
-                            </Button>
+            <Popover.Positioner>
+              <Popover.Content motionProps={{ animate: { scale: 1, opacity: 1 } }}>
+                <Popover.Arrow bg="background.level3" />
+                <Popover.CloseTrigger top="sm" />
+                <Popover.Body p="md">
+                  <AnimatePresence>
+                    {isPopoverOpen ? (
+                      <VStack
+                        align="start"
+                        animate="show"
+                        exit="exit"
+                        initial="hidden"
+                        gap="md"
+                        variants={staggeredFadeInUp}
+                        asChild
+                      ><motion.div>
+                          <Box lineHeight="0" p="0" variants={staggeredFadeInUp} asChild><motion.div>
+                              <Flex alignItems="center" gap="ms" justifyContent="space-between" w="full">
+                                <Text
+                                  background="font.special"
+                                  backgroundClip="text"
+                                  display="inline"
+                                  fontSize="xs"
+                                  variant="eyebrow"
+                                >
+                                  Filters
+                                </Text>
+                                {totalFilterCount > 0 && (
+                                  <Button
+                                    h="fit-content"
+                                    onClick={_resetFilters}
+                                    size="xs"
+                                    variant='plain'
+                                  >
+                                    Reset all
+                                  </Button>
+                                )}
+                              </Flex>
+                            </motion.div></Box>
+                          {isConnected ? (
+                            <Box variants={staggeredFadeInUp} asChild><motion.div>
+                                <Heading as="h3" my="sm" size="sm">
+                                  My liquidity
+                                </Heading>
+                                <UserPoolFilter />
+                              </motion.div></Box>
+                          ) : null}
+                          {/* TODO: filter for cow networks when 'isCowPath' is true */}
+                          <Box variants={staggeredFadeInUp} w="full" asChild><motion.div>
+                              <Heading as="h3" mb="sm" size="sm">
+                                Networks
+                              </Heading>
+                              <PoolNetworkFilters
+                                setNetworks={setNetworks}
+                                toggledNetworks={toggledNetworks}
+                                toggleNetwork={toggleNetwork}
+                              />
+                            </motion.div></Box>
+                          {!isCowPath && (
+                            <Box variants={staggeredFadeInUp} asChild><motion.div>
+                                <Heading as="h3" mb="sm" size="sm">
+                                  Protocol version
+                                </Heading>
+                                <ProtocolVersionFilter
+                                  activeProtocolVersionTab={activeProtocolVersionTab}
+                                  hideProtocolVersion={PROJECT_CONFIG.options.hideProtocolVersion}
+                                  poolTypes={poolTypes}
+                                  protocolVersion={protocolVersion}
+                                  setActiveProtocolVersionTab={setActiveProtocolVersionTab}
+                                  setProtocolVersion={setProtocolVersion}
+                                />
+                              </motion.div></Box>
                           )}
-                        </Flex>
-                      </Box>
+                          {!isFixedPoolType && (
+                            <Box variants={staggeredFadeInUp} asChild><motion.div>
+                                <Heading as="h3" mb="sm" size="sm">
+                                  Pool types
+                                </Heading>
+                                <PoolTypeFilters
+                                  hidePoolTypes={PROJECT_CONFIG.options.hidePoolTypes}
+                                  poolTypeLabel={poolTypeLabel}
+                                  poolTypes={poolTypes}
+                                  setPoolTypes={setPoolTypes}
+                                  togglePoolType={togglePoolType}
+                                />
+                              </motion.div></Box>
+                          )}
+                          {!isCowPath && (
+                            <>
+                              <Box variants={staggeredFadeInUp} asChild><motion.div>
+                                  <Heading as="h3" mb="sm" size="sm">
+                                    Pool categories
+                                  </Heading>
+                                  <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
+                                </motion.div></Box>
 
-                      {isConnected ? (
-                        <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" my="sm" size="sm">
-                            My liquidity
-                          </Heading>
-                          <UserPoolFilter />
-                        </Box>
-                      ) : null}
-                      {/* TODO: filter for cow networks when 'isCowPath' is true */}
-                      <Box as={motion.div} variants={staggeredFadeInUp} w="full">
-                        <Heading as="h3" mb="sm" size="sm">
-                          Networks
-                        </Heading>
-                        <PoolNetworkFilters
-                          setNetworks={setNetworks}
-                          toggledNetworks={toggledNetworks}
-                          toggleNetwork={toggleNetwork}
-                        />
-                      </Box>
-                      {!isCowPath && (
-                        <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" mb="sm" size="sm">
-                            Protocol version
-                          </Heading>
-                          <ProtocolVersionFilter
-                            activeProtocolVersionTab={activeProtocolVersionTab}
-                            hideProtocolVersion={PROJECT_CONFIG.options.hideProtocolVersion}
-                            poolTypes={poolTypes}
-                            protocolVersion={protocolVersion}
-                            setActiveProtocolVersionTab={setActiveProtocolVersionTab}
-                            setProtocolVersion={setProtocolVersion}
-                          />
-                        </Box>
-                      )}
-                      {!isFixedPoolType && (
-                        <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" mb="sm" size="sm">
-                            Pool types
-                          </Heading>
-                          <PoolTypeFilters
-                            hidePoolTypes={PROJECT_CONFIG.options.hidePoolTypes}
-                            poolTypeLabel={poolTypeLabel}
-                            poolTypes={poolTypes}
-                            setPoolTypes={setPoolTypes}
-                            togglePoolType={togglePoolType}
-                          />
-                        </Box>
-                      )}
-                      {!isCowPath && (
-                        <>
-                          <Box as={motion.div} variants={staggeredFadeInUp}>
-                            <Heading as="h3" mb="sm" size="sm">
-                              Pool categories
-                            </Heading>
-                            <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
-                          </Box>
-
-                          <Box as={motion.div} variants={staggeredFadeInUp}>
-                            <Heading as="h3" mb="sm" size="sm">
-                              Hooks
-                            </Heading>
-                            <PoolHookFilters />
-                          </Box>
-                        </>
-                      )}
-                      <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
-                        <PoolMinTvlFilter />
-                      </Box>
-                    </VStack>
-                  ) : null}
-                </AnimatePresence>
-              </PopoverBody>
-            </PopoverContent>
+                              <Box variants={staggeredFadeInUp} asChild><motion.div>
+                                  <Heading as="h3" mb="sm" size="sm">
+                                    Hooks
+                                  </Heading>
+                                  <PoolHookFilters />
+                                </motion.div></Box>
+                            </>
+                          )}
+                          <Box mb="xs" variants={staggeredFadeInUp} w="full" asChild><motion.div>
+                              <PoolMinTvlFilter />
+                            </motion.div></Box>
+                        </motion.div></VStack>
+                    ) : null}
+                  </AnimatePresence>
+                </Popover.Body>
+              </Popover.Content>
+            </Popover.Positioner>
           </Box>
-        </Popover>
+        </Popover.Root>
         {isBeets && (
-          <Button as={NextLink} display="flex" gap="2" href="/create" ml="ms" variant="tertiary">
-            <Icon as={Plus} boxSize={4} />
-            {!isMobile && 'Create a pool'}
-          </Button>
+          <Button display="flex" gap="2" ml="ms" variant="tertiary" asChild><NextLink href="/create">
+              <Icon boxSize={4} asChild><Plus /></Icon>
+              {!isMobile && 'Create a pool'}
+            </NextLink></Button>
         )}
       </HStack>
     </VStack>
-  )
+  );
 }

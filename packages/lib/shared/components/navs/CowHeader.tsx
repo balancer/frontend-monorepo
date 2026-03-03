@@ -1,17 +1,16 @@
 'use client'
 
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { Box, Card, Center, Heading, Link, VStack, Image } from '@chakra-ui/react'
+import { Box, Card, Center, Heading, Link, VStack, Image } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 
 export function CowHeader() {
   return (
     <FadeInOnView animateOnce={false}>
-      <Card
+      <Card.Root
         backgroundImage={{
           base: '/images/partners/cow/banner-mobile.svg',
-          md: '/images/partners/cow/banner-desktop.svg',
-        }}
+          md: '/images/partners/cow/banner-desktop.svg' }}
         backgroundPosition={{ base: 'bottom', md: 'bottom' }}
         backgroundRepeat="no-repeat"
         backgroundSize="cover"
@@ -19,11 +18,11 @@ export function CowHeader() {
         rounded="xl"
       >
         <Center>
-          <VStack maxW="xl" p="xl" spacing="lg" textAlign="center">
+          <VStack maxW="xl" p="xl" gap="lg" textAlign="center">
             <Heading
               color="#BCEC79"
-              sx={{
-                textWrap: 'balance',
+              css={{
+                textWrap: 'balance'
               }}
             >
               The first MEV-capturing AMM
@@ -35,11 +34,11 @@ export function CowHeader() {
                 _hover={{ color: '#fff' }}
                 color="#BCEC79"
                 href="https://cow.fi/cow-amm"
-                isExternal
                 position="relative"
                 role="group"
                 textDecoration="underline"
-              >
+                target='_blank'
+                rel='noopener noreferrer'>
                 Learn more
                 <Box
                   _groupHover={{ transform: 'translateX(1.5px)' }}
@@ -54,7 +53,7 @@ export function CowHeader() {
             <Image alt="cow-logo" h="30px" src="/images/partners/cow/cow-amm-logo.svg" />
           </VStack>
         </Center>
-      </Card>
+      </Card.Root>
     </FadeInOnView>
-  )
+  );
 }

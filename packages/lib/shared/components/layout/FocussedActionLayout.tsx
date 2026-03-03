@@ -1,6 +1,6 @@
-'use client'
-
-import { Box, VStack, Card, useColorModeValue } from '@chakra-ui/react'
+'use client';
+import { Box, VStack, Card } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { PropsWithChildren, ReactNode } from 'react'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { FocussedActionNav } from '@repo/lib/shared/components/layout/FocussedActionNav'
@@ -20,10 +20,10 @@ export function FocussedActionLayout({
   redirectPath,
   leftSlot,
   chain,
-  closeButton,
-}: ModalLayoutProps) {
-  const bg = useColorModeValue('blackAlpha.800', 'blackAlpha.700')
-  const blur = useColorModeValue('blur(8px)', 'blur(5px)')
+  closeButton }: ModalLayoutProps) {
+  const colorMode = useThemeColorMode()
+  const bg = colorMode === 'dark' ? 'blackAlpha.700' : 'blackAlpha.800'
+  const blur = colorMode === 'dark' ? 'blur(5px)' : 'blur(8px)'
 
   const router = useRouter()
   const { redirectToPage } = useRedirect(redirectPath)
@@ -37,7 +37,7 @@ export function FocussedActionLayout({
       <VStack backdropFilter={blur} bg={bg} onClick={redirectToPage} w="full" zIndex={51}>
         <NavBar disableBlur leftSlot={leftSlot} />
         <Box pt="72px" px={['0', 'md']} w="full">
-          <Card
+          <Card.Root
             borderBottomRadius={0}
             borderTopRadius="2xl"
             minH="calc(100vh - 80px)"
@@ -52,9 +52,9 @@ export function FocussedActionLayout({
               redirectPath={redirectPath}
             />
             {children}
-          </Card>
+          </Card.Root>
         </Box>
       </VStack>
     </Box>
-  )
+  );
 }

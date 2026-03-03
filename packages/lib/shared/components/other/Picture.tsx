@@ -1,4 +1,4 @@
-import { useColorMode } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 
 interface PictureProps {
   imgName: string
@@ -45,11 +45,10 @@ export function Picture({
   imgAvifLarge = false,
   directory = '/images/homepage/',
   width,
-  height,
-}: PictureProps) {
+  height }: PictureProps) {
   const imagePath = `${directory}${imgName}`
 
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   return (
     <picture className="picture">

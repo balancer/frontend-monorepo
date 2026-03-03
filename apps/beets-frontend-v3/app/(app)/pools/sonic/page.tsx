@@ -1,5 +1,5 @@
 import { BeetsPromoBanner } from '@/lib/components/promos/BeetsPromoBanner'
-import { Box, Skeleton } from '@chakra-ui/react'
+import { Box, Skeleton } from '@chakra-ui/react';
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'

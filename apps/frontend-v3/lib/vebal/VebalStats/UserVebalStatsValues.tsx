@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { differenceInDays, format } from 'date-fns'
@@ -15,7 +15,7 @@ export function UserVebalStatsValues() {
 
   return (
     <>
-      <VStack align="flex-start" spacing="0" w="full">
+      <VStack align="flex-start" gap="0" w="full">
         <Text fontSize="sm" fontWeight="semibold" mb="xs" mt="xxs" variant="secondary">
           My veBAL
         </Text>
@@ -25,7 +25,7 @@ export function UserVebalStatsValues() {
           <Heading size="h4">{userVebal}</Heading>
         )}
       </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
+      <VStack align="flex-start" gap="0" w="full">
         <TooltipWithTouch label="Your rank does not include all other veBAL holders using 3rd party platforms like Aura and StakeDAO.">
           <Text
             fontSize="sm"
@@ -48,7 +48,7 @@ export function UserVebalStatsValues() {
           </Heading>
         )}
       </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
+      <VStack align="flex-start" gap="0" w="full">
         <Text fontSize="sm" fontWeight="semibold" mb="xs" mt="xxs" variant="secondary">
           My share of veBAL
         </Text>
@@ -62,7 +62,7 @@ export function UserVebalStatsValues() {
           </Heading>
         )}
       </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
+      <VStack align="flex-start" gap="0" w="full">
         <Text fontSize="sm" fontWeight="bold" mb="xs" mt="xxs" variant="secondary">
           {lockedInfoIsLoading || (userStats && !userStats.lockExpired) ? (
             'Lock expiry date'
@@ -100,5 +100,5 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
     </>
-  )
+  );
 }

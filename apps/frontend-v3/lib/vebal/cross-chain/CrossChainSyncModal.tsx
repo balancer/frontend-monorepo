@@ -1,18 +1,13 @@
 import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
   Card,
   Text,
-  ModalFooter,
   Button,
   VStack,
   Checkbox,
-  ModalHeader,
   HStack,
   Heading,
-} from '@chakra-ui/react'
+  Dialog,
+  Portal } from '@chakra-ui/react';
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
@@ -47,7 +42,7 @@ function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: Ne
         network costs additional gas to sync, so it’s best to only sync networks where you plan to
         stake
       </Text>
-      <Card gap="4">
+      <Card.Root gap="4">
         <Heading>
           <HStack justifyContent="space-between" w="full">
             <Text>Ethereum</Text>
@@ -59,9 +54,9 @@ function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: Ne
           selectedNetworks={selectedNetworks}
           toggleNetwork={toggleNetwork}
         />
-      </Card>
+      </Card.Root>
     </VStack>
-  )
+  );
 }
 
 interface NetworkOptionsProps {
@@ -73,21 +68,21 @@ interface NetworkOptionsProps {
 function NetworkOptions({ networks, selectedNetworks, toggleNetwork }: NetworkOptionsProps) {
   const { l2VeBalBalances } = useCrossChainSync()
   return (
-    <VStack align="start" spacing="xs" w="full">
+    <VStack align="start" gap="xs" w="full">
       {networks.map(network => (
-        <Checkbox
-          isChecked={selectedNetworks.includes(network)}
+        <Checkbox.Root
           key={`checkbox-${String(network)}`}
-          onChange={e => toggleNetwork(e.target.checked, network)}
-        >
-          <HStack w="full">
-            <Text>{getChainShortName(network)}</Text>
-            <Text>{l2VeBalBalances[network]} veBAL</Text>
-          </HStack>
-        </Checkbox>
+          onCheckedChange={e => toggleNetwork(e.target.checked, network)}
+          checked={selectedNetworks.includes(network)}
+        ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+            <HStack w="full">
+              <Text>{getChainShortName(network)}</Text>
+              <Text>{l2VeBalBalances[network]} veBAL</Text>
+            </HStack>
+          </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
       ))}
     </VStack>
-  )
+  );
 }
 
 export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
@@ -97,8 +92,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
   const { isDesktop, isMobile } = useBreakpoints()
 
   const steps = useCrossChainSyncSteps({
-    networks: selectedNetworks,
-  })
+    networks: selectedNetworks })
   const transactionSteps = useTransactionSteps(steps)
 
   const transactionHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
@@ -122,67 +116,73 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
   const isSuccess = !!transactionHash
 
   return (
-    <Modal
-      isCentered
-      isOpen={isOpen}
-      onClose={onModalClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
-    >
-      <SuccessOverlay startAnimation={!!transactionHash} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onModalClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {showTransactionSteps && isDesktop && (
-          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-        )}
-        {showTransactionSteps ? (
-          <TransactionModalHeader
-            chain={GqlChain.Mainnet}
-            label="Sync veBAL"
-            txHash={transactionHash}
-          />
-        ) : (
-          <ModalHeader>Sync veBAL: Select networks</ModalHeader>
-        )}
-        <ModalCloseButton />
-        <ModalBody>
-          <AnimateHeightChange spacing="sm" w="full">
-            {showTransactionSteps ? (
-              <>
-                {isMobile && (
-                  <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-                )}
-              </>
-            ) : (
-              <NetworksSelectionStep
-                networks={networks}
-                selectedNetworks={selectedNetworks}
-                toggleNetwork={toggleNetwork}
-              />
+        <SuccessOverlay startAnimation={!!transactionHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {showTransactionSteps && isDesktop && (
+              <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
             )}
-          </AnimateHeightChange>
-        </ModalBody>
+            {showTransactionSteps ? (
+              <TransactionModalHeader
+                chain={GqlChain.Mainnet}
+                label="Sync veBAL"
+                txHash={transactionHash}
+              />
+            ) : (
+              <Dialog.Header>Sync veBAL: Select networks</Dialog.Header>
+            )}
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <AnimateHeightChange spacing="sm" w="full">
+                {showTransactionSteps ? (
+                  <>
+                    {isMobile && (
+                      <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+                    )}
+                  </>
+                ) : (
+                  <NetworksSelectionStep
+                    networks={networks}
+                    selectedNetworks={selectedNetworks}
+                    toggleNetwork={toggleNetwork}
+                  />
+                )}
+              </AnimateHeightChange>
+            </Dialog.Body>
+            {transactionSteps.currentStep && showTransactionSteps ? (
+              <ActionModalFooter
+                currentStep={transactionSteps.currentStep}
+                isSuccess={isSuccess}
+                returnAction={onClose}
+                returnLabel="Return to vebal"
+              />
+            ) : (
+              <Dialog.Footer>
+                <Button
+                  disabled={selectedNetworks.length === 0}
+                  onClick={() => setShowTransactionSteps(true)}
+                  size="lg"
+                  w="full"
+                >
+                  Next
+                </Button>
+              </Dialog.Footer>
+            )}
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-        {transactionSteps.currentStep && showTransactionSteps ? (
-          <ActionModalFooter
-            currentStep={transactionSteps.currentStep}
-            isSuccess={isSuccess}
-            returnAction={onClose}
-            returnLabel="Return to vebal"
-          />
-        ) : (
-          <ModalFooter>
-            <Button
-              isDisabled={selectedNetworks.length === 0}
-              onClick={() => setShowTransactionSteps(true)}
-              size="lg"
-              w="full"
-            >
-              Next
-            </Button>
-          </ModalFooter>
-        )}
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }

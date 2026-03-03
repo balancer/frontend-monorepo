@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack } from '@chakra-ui/react'
+import { Card, HStack, Text, VStack } from '@chakra-ui/react';
 import BaseAprTooltip from './BaseAprTooltip'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useCallback } from 'react'
@@ -49,8 +49,8 @@ function StakeAprTooltip({ pool, totalUsdValue, weeklyRewards }: Props) {
       usePortal={false}
       vebalBoost="1"
     >
-      <Card cursor="pointer" variant="subSection" w="full">
-        <VStack align="start" spacing="sm" w="full">
+      <Card.Root cursor="pointer" variant="subSection" w="full">
+        <VStack align="start" gap="sm" w="full">
           <Text>Potential yield (1w)</Text>
           <HStack>
             <Text fontSize="lg" fontWeight="bold" variant="special">
@@ -59,9 +59,9 @@ function StakeAprTooltip({ pool, totalUsdValue, weeklyRewards }: Props) {
             <SparklesIcon isOpen={false} pool={pool} />
           </HStack>
         </VStack>
-      </Card>
+      </Card.Root>
     </BaseAprTooltip>
-  )
+  );
 }
 
 export default StakeAprTooltip

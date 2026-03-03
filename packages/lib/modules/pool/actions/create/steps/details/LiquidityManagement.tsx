@@ -1,4 +1,4 @@
-import { VStack, HStack, Text } from '@chakra-ui/react'
+import { VStack, HStack, Text } from '@chakra-ui/react';
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -19,8 +19,7 @@ export function LiquidityManagement() {
         'disableUnbalancedLiquidity',
         'poolHooksContract',
         'network',
-      ],
-    })
+      ] })
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
 
@@ -40,7 +39,7 @@ export function LiquidityManagement() {
   const isDonationToggleDisabled = isReClammPool(poolType)
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <HStack>
         <Text fontWeight="bold" textAlign="start" w="full">
           Liquidity management
@@ -72,5 +71,5 @@ export function LiquidityManagement() {
         />
       </TooltipWithTouch>
     </VStack>
-  )
+  );
 }

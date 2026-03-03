@@ -1,5 +1,6 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Center, HStack, ModalHeader, VStack, Text, Link, useColorMode } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Center, HStack, VStack, Text, Link, Dialog } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode } from 'react'
 import { ArrowUpRight, Check } from 'react-feather'
@@ -16,10 +17,10 @@ type Props = {
 
 export function TransactionModalHeader(props: Props) {
   return (
-    <ModalHeader>
+    <Dialog.Header>
       <TransactionHeader {...props} />
-    </ModalHeader>
-  )
+    </Dialog.Header>
+  );
 }
 
 export function TransactionHeader({
@@ -28,9 +29,8 @@ export function TransactionHeader({
   txHash,
   chain,
   // true by default for flows that do not have a receipt
-  isReceiptLoading = true,
-}: Props) {
-  const { colorMode } = useColorMode()
+  isReceiptLoading = true }: Props) {
+  const colorMode = useThemeColorMode()
 
   return (
     <HStack justify="space-between" pr="lg" w="full">
@@ -41,7 +41,7 @@ export function TransactionHeader({
             {timeout || null}
           </>
         ) : (
-          <HStack spacing="md">
+          <HStack gap="md">
             <motion.div
               animate={{ opacity: [0, 0.7, 1], scale: [0, 1.2, 1] }}
               initial={{ opacity: 0, scale: 0 }}
@@ -60,22 +60,22 @@ export function TransactionHeader({
             </motion.div>
 
             <motion.div animate={{ x: [-20, 0] }} transition={{ duration: 0.8, ease: 'easeInOut' }}>
-              <VStack align="start" spacing="none">
+              <VStack align="start" gap="none">
                 <Text fontSize="xl" fontWeight="bold">
                   Transaction confirmed
                 </Text>
-                <HStack spacing="xxs">
+                <HStack gap="xxs">
                   <Text color="grayText" fontSize="sm">
                     View details on explorer
                   </Text>
                   <Link
                     color="grayText"
                     href={getBlockExplorerTxUrl(txHash, chain)}
-                    isExternal
                     left="-1px"
                     position="relative"
                     top="1px"
-                  >
+                    target='_blank'
+                    rel='noopener noreferrer'>
                     <ArrowUpRight size={14} />
                   </Link>
                 </HStack>
@@ -85,5 +85,5 @@ export function TransactionHeader({
         )}
       </AnimatePresence>
     </HStack>
-  )
+  );
 }

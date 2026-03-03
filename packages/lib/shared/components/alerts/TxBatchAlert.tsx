@@ -1,4 +1,4 @@
-import { AlertProps, HStack } from '@chakra-ui/react'
+import { AlertProps, HStack } from '@chakra-ui/react';
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'

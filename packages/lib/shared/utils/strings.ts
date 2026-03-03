@@ -35,5 +35,5 @@ export function isValidTelegramHandle(handle: string): string | true {
 }
 
 export function hasWhitespace(s: string) {
-  return /\s/g.test(s)
+  return /\s/g.test(s);
 }

@@ -2,7 +2,7 @@
 
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { Center, HStack, Input, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react'
+import { Center, HStack, Input, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react'
 import { Address, formatUnits } from 'viem'
 import { sepolia } from 'viem/chains'
@@ -29,26 +29,25 @@ export default function Page() {
     chainId,
     tokenAddress,
     owner: userAddress,
-    spender: router,
-  })
+    spender: router })
 
   return (
     <Center>
       <VStack w="50%">
-        <RadioGroup onChange={onRouterChange} value={undefined}>
+        <RadioGroup.Root onValueChange={onRouterChange} value={String(undefined)}>
           <VStack w="full">
             <HStack w="full">
-              <Radio value="BALANCER_ROUTER" /> <Text> BALANCER ROUTER </Text>
-              <Radio value="BALANCER_BATCH_ROUTER" /> <Text> BALANCER BATCH ROUTER </Text>
+              <RadioGroup.Item value="BALANCER_ROUTER"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText></RadioGroup.ItemText></RadioGroup.Item> <Text> BALANCER ROUTER </Text>
+              <RadioGroup.Item value="BALANCER_BATCH_ROUTER"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText></RadioGroup.ItemText></RadioGroup.Item> <Text> BALANCER BATCH ROUTER </Text>
             </HStack>
             )
           </VStack>
-        </RadioGroup>
+        </RadioGroup.Root>
         <Text>
           Enter address of token to check permit2 allowance in the current chain:{' '}
           {chain ? chain.name : 'None'}
         </Text>
-        <Input onChange={e => setTokenAddress(e.target.value as Address)} type="text" />
+        <Input onValueChange={e => setTokenAddress(e.target.value as Address)} type="text" />
 
         {data ? (
           <div>
@@ -59,5 +58,5 @@ export default function Page() {
         ) : null}
       </VStack>
     </Center>
-  )
+  );
 }

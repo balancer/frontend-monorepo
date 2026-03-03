@@ -1,4 +1,4 @@
-import { Stack, VStack, Grid, GridItem } from '@chakra-ui/react'
+import { Stack, VStack, Grid, GridItem } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { PoolActivity } from '../PoolDetail/PoolActivity/PoolActivity'
 import { PoolComposition } from '../PoolDetail/PoolComposition'
@@ -28,7 +28,7 @@ export function LbpDetail() {
     <>
       <LbpHeader />
       <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '40px']}>
-        <VStack spacing="2xl" w="full">
+        <VStack gap="2xl" w="full">
           {isSaleFinished && fundsAvailable && <GetFundsWarning />}
 
           <Grid gap="4" templateColumns={{ base: '1fr', md: '2fr 1fr' }} w="full">
@@ -44,7 +44,7 @@ export function LbpDetail() {
             <Stack
               direction={{ base: 'column', xl: 'row' }}
               justifyContent="stretch"
-              spacing="md"
+              gap="md"
               w="full"
             >
               <MyPurchases isLoading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
@@ -59,5 +59,5 @@ export function LbpDetail() {
         </VStack>
       </DefaultPageContainer>
     </>
-  )
+  );
 }

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Box, Center, ModalOverlay } from '@chakra-ui/react'
+import { Box, Center, Dialog } from '@chakra-ui/react';
 
 export function SuccessOverlay({ startAnimation }: { startAnimation?: boolean }) {
   return (
-    <ModalOverlay>
+    <Dialog.Backdrop>
       {startAnimation && (
         <Center h="full" position="absolute" w="full">
           <Box className="ripple ripple-1" />
@@ -11,6 +11,6 @@ export function SuccessOverlay({ startAnimation }: { startAnimation?: boolean })
           <Box className="ripple ripple-3" />
         </Center>
       )}
-    </ModalOverlay>
-  )
+    </Dialog.Backdrop>
+  );
 }

@@ -1,11 +1,12 @@
-'use client'
-
+'use client';
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { Button, Heading, Flex, Box, Center, useColorModeValue } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react';
 import NextLink from 'next/link'
 
 export function CowPromoBanner() {
-  const bgColor = useColorModeValue('#194D05', '#194D05')
+  const colorMode = useThemeColorMode()
+  const bgColor = colorMode === 'dark' ? '#194D05' : '#194D05'
 
   return (
     <Box
@@ -16,9 +17,9 @@ export function CowPromoBanner() {
       overflow="hidden"
       position="relative"
       rounded="lg"
-      sx={{
+      css={{
         width: '100% !important',
-        maxWidth: '100% !important',
+        maxWidth: '100% !important'
       }}
       width="full"
     >
@@ -34,7 +35,6 @@ export function CowPromoBanner() {
           />
         </Box>
       </Box>
-
       <Box zIndex="0">
         <Box bottom="0" position="absolute" right="0" zIndex="0">
           <Picture
@@ -47,7 +47,6 @@ export function CowPromoBanner() {
           />
         </Box>
       </Box>
-
       <Center className="copy" h="100%" zIndex="1">
         <Flex
           alignItems="center"
@@ -80,22 +79,18 @@ export function CowPromoBanner() {
           </Flex>
           <Button
             _hover={{ bg: '#E2F8BF' }}
-            as={NextLink}
             bg="#BCEC79"
             color="#194D05"
             flex="1"
             h={{ base: '32px', sm: '40px', md: '48px' }}
-            href="/pools/cow"
-            prefetch
             py="sm"
             rounded="full"
             size="lg"
             w="max-content"
-          >
-            View pools
-          </Button>
+            asChild><NextLink href="/pools/cow" prefetch>View pools
+                      </NextLink></Button>
         </Flex>
       </Center>
     </Box>
-  )
+  );
 }

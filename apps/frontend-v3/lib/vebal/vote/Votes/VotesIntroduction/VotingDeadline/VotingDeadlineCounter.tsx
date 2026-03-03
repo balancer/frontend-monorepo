@@ -1,4 +1,4 @@
-import { HStack, VStack, Text, Box } from '@chakra-ui/react'
+import { HStack, VStack, Text, Box } from '@chakra-ui/react';
 import { useCurrentDate, useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
 import { differenceInMinutes, format } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
@@ -28,7 +28,7 @@ export function VotingDeadlineCounter() {
 
   return (
     <VotingDeadlineContainer>
-      <VStack spacing="md">
+      <VStack gap="md">
         <HStack justify="space-between" w="full">
           <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
             {format(deadline, 'EEEE, haaa zzzz')}
@@ -42,10 +42,10 @@ export function VotingDeadlineCounter() {
             onClose={() => setIsCalendarReminderOpen(false)}
           />
         </HStack>
-        <HStack spacing="sm" w="full">
+        <HStack gap="sm" w="full">
           {counters.map(counter => (
             <Box flex="1" key={counter.title}>
-              <VStack position="relative" px="ms" py="13px" rounded="lg" shadow="2xl" spacing="sm">
+              <VStack position="relative" px="ms" py="13px" rounded="lg" shadow="2xl" gap="sm">
                 <Box
                   h="full"
                   inset={0}
@@ -97,5 +97,5 @@ export function VotingDeadlineCounter() {
         </HStack>
       </VStack>
     </VotingDeadlineContainer>
-  )
+  );
 }

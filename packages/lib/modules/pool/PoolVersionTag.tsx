@@ -3,7 +3,7 @@
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 import { isCowAmmPool } from './pool.helpers'
 import { PoolListItem } from './pool.types'
-import { Center } from '@chakra-ui/react'
+import { Center } from '@chakra-ui/react';
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { Pool } from './pool.types'
 

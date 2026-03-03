@@ -1,4 +1,4 @@
-import { VStack, HStack, Text } from '@chakra-ui/react'
+import { VStack, HStack, Text } from '@chakra-ui/react';
 import { Address } from 'viem'
 import TokenRow from './TokenRow'
 import { Pool } from '../../pool/pool.types'
@@ -9,8 +9,7 @@ export function BptRow({
   rightElement,
   bptAmount,
   pool,
-  isLoading,
-}: {
+  isLoading }: {
   label: string
   bptAmount: string
   pool: Pool
@@ -18,7 +17,7 @@ export function BptRow({
   isLoading?: boolean
 }) {
   return (
-    <VStack align="start" spacing="md">
+    <VStack align="start" gap="md">
       <HStack justify="space-between" w="full">
         {!isLoading && (
           <Text fontSize="sm" fontWeight="bold">
@@ -37,5 +36,5 @@ export function BptRow({
         value={bptAmount}
       />
     </VStack>
-  )
+  );
 }

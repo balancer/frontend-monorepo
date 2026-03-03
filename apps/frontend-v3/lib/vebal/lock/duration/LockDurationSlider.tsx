@@ -1,8 +1,7 @@
-import { Box, BoxProps, Button, HStack } from '@chakra-ui/react'
+import { Box, BoxProps, Button, HStack } from '@chakra-ui/react';
 import {
   SliderWithSteps,
-  SliderWithStepsProps,
-} from '@repo/lib/shared/components/inputs/SliderWithSteps'
+  SliderWithStepsProps } from '@repo/lib/shared/components/inputs/SliderWithSteps'
 
 export interface LockDurationSliderProps {
   value: number
@@ -25,8 +24,7 @@ export function LockDurationSlider({
   boxProps,
   steps,
   minValue,
-  onSliderChange,
-}: LockDurationSliderProps) {
+  onSliderChange }: LockDurationSliderProps) {
   const sliderMaxed = value === max
 
   return (
@@ -35,7 +33,10 @@ export function LockDurationSlider({
       border="white"
       borderRadius="md"
       shadow="innerBase"
-      sx={{ paddingX: 'md', paddingY: 'lg' }}
+      css={{
+        paddingX: 'md',
+        paddingY: 'lg'
+      }}
       w="full"
       {...boxProps}
     >
@@ -56,5 +57,5 @@ export function LockDurationSlider({
         </Button>
       </HStack>
     </Box>
-  )
+  );
 }

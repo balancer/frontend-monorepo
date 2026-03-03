@@ -1,21 +1,21 @@
 'use client'
 
 import React from 'react'
-import { Box, Center, Grid, GridItem, Heading, HStack, Link, Text, VStack } from '@chakra-ui/react'
+import { Box, Center, Grid, GridItem, Heading, HStack, Link, Text, VStack } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { CoingeckoIcon } from '@repo/lib/shared/components/icons/CoingeckoIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 export function FeatureCard({ title, description }: { title: string; description: string }) {
   return (
-    <HStack align="start" h="full" spacing="none" w="full">
+    <HStack align="start" h="full" gap="none" w="full">
       <Box bg="rgba(0, 0, 0, 0.1)" borderBottom="30px solid rgba(0, 0, 0, 0.4)" h="full" w="40%" />
       <VStack align="start" borderBottom="30px solid rgba(0, 0, 0, 0.3)" h="full" p="lg" w="60%">
         <Heading fontSize="2xl">{title}</Heading>
         <Text fontSize="lg">{description}</Text>
       </VStack>
     </HStack>
-  )
+  );
 }
 
 export function Token() {
@@ -63,7 +63,10 @@ export function Token() {
                   <Heading size="lg">$BEETS Price</Heading>
                   <Text fontSize="3xl">{toCurrency(0.0303)}</Text>
                   <HStack>
-                    <Link href="https://www.coingecko.com/en/coins/beethoven-x" isExternal>
+                    <Link
+                      href="https://www.coingecko.com/en/coins/beethoven-x"
+                      target='_blank'
+                      rel='noopener noreferrer'>
                       View price history
                     </Link>
                     <CoingeckoIcon height={16} width={16} />
@@ -75,5 +78,5 @@ export function Token() {
         </Box>
       </DefaultPageContainer>
     </>
-  )
+  );
 }

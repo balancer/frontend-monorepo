@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useSwap } from '../SwapProvider'
@@ -49,16 +49,14 @@ export function SwapPreviewModal({
     hasQuoteContext,
     protocolVersion,
     isLbpSwap,
-    isLbpProjectTokenBuy,
-  } = useSwap()
+    isLbpProjectTokenBuy } = useSwap()
 
   const swapReceipt = useSwapReceipt({
     txHash: swapTxHash,
     userAddress,
     chain: selectedChain,
     protocolVersion,
-    txReceipt: lastTransaction?.result,
-  })
+    txReceipt: lastTransaction?.result })
 
   useEffect(() => {
     if (!isWrap && swapTxHash && !window.location.pathname.includes(swapTxHash) && !isLbpSwap) {
@@ -81,43 +79,51 @@ export function SwapPreviewModal({
   const isSuccess = !!swapTxHash && swapReceipt.hasReceipt
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} />
-        )}
-        <TransactionModalHeader
-          chain={selectedChain}
-          isReceiptLoading={swapReceipt.isLoading}
-          label={`Review ${isLbpSwap ? (isLbpProjectTokenBuy ? 'Buy' : 'Sell') : capitalize(swapAction)}`}
-          timeout={<SwapTimeout />}
-          txHash={swapTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <SwapSummary {...swapReceipt} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onClose}
-          returnLabel={
-            isLbpSwap ? 'Return to lbp' : isPoolSwapUrl ? 'Return to pool' : 'Swap again'
-          }
-          urlTxHash={urlTxHash}
-        />
-      </ModalContent>
-    </Modal>
-  )
+        <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} />
+        <Dialog.Positioner>
+          <Dialog.Content
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {isDesktop && hasQuoteContext && (
+              <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} />
+            )}
+            <TransactionModalHeader
+              chain={selectedChain}
+              isReceiptLoading={swapReceipt.isLoading}
+              label={`Review ${isLbpSwap ? (isLbpProjectTokenBuy ? 'Buy' : 'Sell') : capitalize(swapAction)}`}
+              timeout={<SwapTimeout />}
+              txHash={swapTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <SwapSummary {...swapReceipt} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onClose}
+              returnLabel={
+                isLbpSwap ? 'Return to lbp' : isPoolSwapUrl ? 'Return to pool' : 'Swap again'
+              }
+              urlTxHash={urlTxHash}
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

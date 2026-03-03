@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react';
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import React, { ReactNode } from 'react'
 
@@ -22,8 +22,7 @@ function Stat({ children }: StatProps) {
       <Box h="full" pointerEvents="none" position="absolute" w="full">
         <Box
           _groupHover={{
-            transform: 'scale(1.01)',
-          }}
+            transform: 'scale(1.01)' }}
           backgroundPosition="left"
           backgroundSize="cover"
           h="full"

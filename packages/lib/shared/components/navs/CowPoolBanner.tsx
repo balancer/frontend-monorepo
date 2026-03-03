@@ -1,11 +1,12 @@
-'use client'
-
+'use client';
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { Button, Flex, Box, Center, useColorModeValue, Link } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Button, Flex, Box, Center, Link } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 
 export function CowPoolBanner() {
-  const bgColor = useColorModeValue('#194D05', '#194D05')
+  const colorMode = useThemeColorMode()
+  const bgColor = colorMode === 'dark' ? '#194D05' : '#194D05'
 
   return (
     <Box
@@ -15,9 +16,9 @@ export function CowPoolBanner() {
       overflow="hidden"
       position="relative"
       rounded="lg"
-      sx={{
+      css={{
         width: '100% !important',
-        maxWidth: '100% !important',
+        maxWidth: '100% !important'
       }}
       width="full"
     >
@@ -33,7 +34,6 @@ export function CowPoolBanner() {
           />
         </Box>
       </Box>
-
       <Box zIndex="0">
         <Box bottom="0" position="absolute" right="0" zIndex="0">
           <Picture
@@ -46,7 +46,6 @@ export function CowPoolBanner() {
           />
         </Box>
       </Box>
-
       <Center className="copy" h="100%" zIndex="1">
         <Flex alignItems="center" gap={{ base: 'ms', md: 'xl' }} justifyContent="center" zIndex="1">
           <Box h="auto" w="clamp(160px, 40vw, 300px)">
@@ -60,29 +59,26 @@ export function CowPoolBanner() {
           </Box>
           <Button
             _hover={{ bg: '#E2F8BF' }}
-            as={Link}
             bg="#BCEC79"
             color="#194D05"
             flex="1"
             h={{ base: '32px', sm: '40px', md: '48px' }}
-            href="https://cow.fi/cow-amm"
             isExternal
             role="group"
             rounded="full"
             size="lg"
             w="max-content"
-          >
-            How it works
-            <Box
-              _groupHover={{ transform: ' translateX(1.5px)' }}
-              pl="xs"
-              transition="all 0.2s var(--ease-out-cubic)"
-            >
-              <ArrowUpRight size={14} style={{ display: 'inline' }} />
-            </Box>
-          </Button>
+            asChild><Link href="https://cow.fi/cow-amm">How it works
+                          <Box
+                _groupHover={{ transform: ' translateX(1.5px)' }}
+                pl="xs"
+                transition="all 0.2s var(--ease-out-cubic)"
+              >
+                <ArrowUpRight size={14} style={{ display: 'inline' }} />
+              </Box>
+            </Link></Button>
         </Flex>
       </Center>
     </Box>
-  )
+  );
 }

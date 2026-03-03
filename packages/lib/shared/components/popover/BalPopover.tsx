@@ -1,10 +1,4 @@
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Text,
-  PlacementWithLogical,
-} from '@chakra-ui/react'
+import { Popover, HoverCard, Text, PlacementWithLogical } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react'
 
 type BalPopoverProps = {
@@ -15,17 +9,20 @@ type BalPopoverProps = {
 export function BalPopover({
   children,
   text,
-  placement = 'right',
-}: PropsWithChildren<BalPopoverProps>) {
+  placement = 'right' }: PropsWithChildren<BalPopoverProps>) {
   return (
-    <Popover placement={placement} trigger="hover">
-      <PopoverTrigger>{children}</PopoverTrigger>
-
-      <PopoverContent maxW="300px" p="sm" w="auto">
-        <Text fontSize="sm" variant="secondary">
-          {text}
-        </Text>
-      </PopoverContent>
-    </Popover>
-  )
+    <HoverCard.Root
+      positioning={{
+        placement: placement
+      }}>
+      <HoverCard.Trigger asChild>{children}</HoverCard.Trigger>
+      <HoverCard.Positioner>
+        <HoverCard.Content maxW="300px" p="sm" w="auto">
+          <Text fontSize="sm" variant="secondary">
+            {text}
+          </Text>
+        </HoverCard.Content>
+      </HoverCard.Positioner>
+    </HoverCard.Root>
+  );
 }

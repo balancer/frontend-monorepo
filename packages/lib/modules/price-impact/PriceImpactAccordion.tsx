@@ -1,8 +1,5 @@
 import {
   Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
   Box,
   HStack,
   Text,
@@ -10,21 +7,16 @@ import {
   Button,
   Card,
   useDisclosure,
-  AccordionIcon,
   Alert,
-  AlertTitle,
-  AlertDescription,
-  CardFooter,
-  CardBody,
-  useColorModeValue,
   Link,
-} from '@chakra-ui/react'
+  Icon } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
 import { getPriceImpactLevel } from './price-impact.utils'
-import { CheckIcon } from '@chakra-ui/icons'
+import { LuCheck } from 'react-icons/lu';
 
 interface PriceImpactAccordionProps {
   setNeedsToAcceptPIRisk: (value: boolean) => void
@@ -46,8 +38,7 @@ export function PriceImpactAccordion({
   cannotCalculatePriceImpact = false,
   avoidPriceImpactAlert = false,
   action,
-  cowLink,
-}: PriceImpactAccordionProps) {
+  cowLink }: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
   const {
     priceImpactLevel,
@@ -56,8 +47,7 @@ export function PriceImpactAccordion({
     hasToAcceptHighPriceImpact,
     setAcceptPriceImpactRisk,
     PriceImpactIcon,
-    priceImpact,
-  } = usePriceImpact()
+    priceImpact } = usePriceImpact()
 
   const isUnknownPriceImpact = cannotCalculatePriceImpact || priceImpactLevel === 'unknown'
 
@@ -84,22 +74,23 @@ export function PriceImpactAccordion({
     }
   }
 
-  const borderColor = useColorModeValue('red.300', 'red.400')
+  const colorMode = useThemeColorMode()
+  const borderColor = colorMode === 'dark' ? 'red.400' : 'red.300'
 
   return (
     <Box w="full">
-      <Accordion allowToggle variant="button" w="full">
-        <AccordionItem
+      <Accordion.Root collapsible variant="button" w="full">
+        <Accordion.Root
           bg={isDisabled ? 'background.level2' : 'background.level3'}
           border="1px solid"
           borderColor={isDisabled ? 'border.base' : 'transparent'}
           borderRadius="md"
-          isDisabled={isDisabled}
+          disabled={isDisabled}
           shadow={isDisabled ? 'none' : 'md'}
           w="full"
-        >
+          value='item-0'>
           <h2>
-            <AccordionButton pl="ms" pr="sm">
+            <Accordion.Root pl="ms" pr="sm">
               <Box as="span" flex="1" textAlign="left">
                 {accordionButtonComponent}
               </Box>
@@ -108,18 +99,18 @@ export function PriceImpactAccordion({
                 <Text color={priceImpactColor} fontSize="sm">
                   Details
                 </Text>
-                <AccordionIcon textColor={priceImpactColor} />
+                <Accordion.Root textColor={priceImpactColor} />
               </HStack>
-            </AccordionButton>
+            </Accordion.ItemTrigger>
           </h2>
-          <AccordionPanel p="ms">{accordionPanelComponent}</AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+          <Accordion.Root p="ms"><Accordion.Root>{accordionPanelComponent}</Accordion.ItemBody></Accordion.ItemContent>
+        </Accordion.Item>
+      </Accordion.Root>
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
-          <VStack align="start" gap="0" mt="md" spacing="0" w="full">
+          <VStack align="start" gap="0" mt="md" gap="0" w="full">
             {!avoidPriceImpactAlert && (
-              <Alert roundedBottom="0" roundedTop="lg" status="error">
+              <Alert.Root roundedBottom="0" roundedTop="lg" status="error">
                 <PriceImpactIcon
                   alignSelf="start"
                   color="font.dark"
@@ -128,12 +119,12 @@ export function PriceImpactAccordion({
                   size={24}
                 />
                 <Box ml="md">
-                  <AlertTitle>
+                  <Alert.Title>
                     {isUnknownPriceImpact
                       ? 'Unknown potential losses'
                       : `${getPriceImpactTitle(action)}`}
-                  </AlertTitle>
-                  <AlertDescription>
+                  </Alert.Title>
+                  <Alert.Description>
                     {isUnknownPriceImpact ? (
                       <Text as="div" color="#000" fontSize="sm" whiteSpace="pre-line">
                         'The potential losses from this transaction cannot be calculated at this
@@ -143,11 +134,11 @@ export function PriceImpactAccordion({
                     ) : (
                       <PriceImpactMessage action={action} cowLink={cowLink} />
                     )}
-                  </AlertDescription>
+                  </Alert.Description>
                 </Box>
-              </Alert>
+              </Alert.Root>
             )}
-            <Card
+            <Card.Root
               bg="rgba(255,0,0,0.04)"
               border="1px solid"
               borderColor={borderColor}
@@ -156,7 +147,7 @@ export function PriceImpactAccordion({
               roundedTop="0"
               variant="subSection"
             >
-              <CardBody>
+              <Card.Body>
                 <Text color="font.maxContrast" fontWeight="bold" mb="xs">
                   Acknowledge potential loss to continue
                 </Text>
@@ -173,8 +164,8 @@ export function PriceImpactAccordion({
                     like high price impact and/or high swap fees.
                   </Text>
                 )}
-              </CardBody>
-              <CardFooter pt="md">
+              </Card.Body>
+              <Card.Footer pt="md">
                 {!acceptPriceImpactRisk ? (
                   <Button onClick={handleClick} variant="maxContrast" w="full">
                     I accept {isUnknownPriceImpact ? 'unknown' : 'high'} potential losses
@@ -190,14 +181,14 @@ export function PriceImpactAccordion({
                     rounded="lg"
                     w="full"
                   >
-                    <CheckIcon color="font.maxContrast" />
+                    <Icon as={LuCheck} color="font.maxContrast" />
                     <Text color="font.maxContrast" fontSize="sm" fontWeight="bold">
                       {isUnknownPriceImpact ? 'Unknown' : 'High'} potential losses accepted
                     </Text>
                   </HStack>
                 )}
-              </CardFooter>
-            </Card>
+              </Card.Footer>
+            </Card.Root>
           </VStack>
           <PriceImpactAcceptModal
             isOpen={acceptHighImpactDisclosure.isOpen}
@@ -208,13 +199,12 @@ export function PriceImpactAccordion({
         </>
       )}
     </Box>
-  )
+  );
 }
 
 function PriceImpactMessage({
   action,
-  cowLink,
-}: {
+  cowLink }: {
   action: 'swap' | 'add' | 'remove'
   cowLink: string | undefined
 }) {
@@ -236,14 +226,13 @@ function PriceImpactMessage({
                 or try{' '}
                 <Link
                   _hover={{
-                    color: '#fff',
-                  }}
+                    color: '#fff' }}
                   color="#000"
                   fontSize="sm"
                   href={cowLink}
-                  isExternal
                   textDecor="underline"
-                >
+                  target='_blank'
+                  rel='noopener noreferrer'>
                   CoW Swap
                 </Link>
                 .
@@ -253,7 +242,7 @@ function PriceImpactMessage({
             )}
           </Text>
         </>
-      )
+      );
     case 'add':
       return (
         <>

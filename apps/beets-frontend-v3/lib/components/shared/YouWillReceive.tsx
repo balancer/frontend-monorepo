@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Popover, PopoverContent, PopoverTrigger, HStack } from '@chakra-ui/react'
+import { Box, Flex, Text, Popover, HoverCard, HStack } from '@chakra-ui/react';
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -27,8 +27,11 @@ export function YouWillReceive({ label, amount, address, symbol, chain, infoText
                 <Text color="grayText" mb="0">
                   {label}
                 </Text>
-                <Popover placement="right" trigger="hover">
-                  <PopoverTrigger>
+                <HoverCard.Root
+                  positioning={{
+                    placement: 'right'
+                  }}>
+                  <HoverCard.Trigger asChild>
                     <Box
                       _hover={{ opacity: 1 }}
                       opacity="0.5"
@@ -36,13 +39,15 @@ export function YouWillReceive({ label, amount, address, symbol, chain, infoText
                     >
                       <InfoIcon />
                     </Box>
-                  </PopoverTrigger>
-                  <PopoverContent p="sm">
-                    <Text fontSize="sm" variant="secondary">
-                      {infoText}
-                    </Text>
-                  </PopoverContent>
-                </Popover>
+                  </HoverCard.Trigger>
+                  <HoverCard.Positioner>
+                    <HoverCard.Content p="sm">
+                      <Text fontSize="sm" variant="secondary">
+                        {infoText}
+                      </Text>
+                    </HoverCard.Content>
+                  </HoverCard.Positioner>
+                </HoverCard.Root>
               </HStack>
             ) : (
               <Text color="grayText" mb="sm">
@@ -59,5 +64,5 @@ export function YouWillReceive({ label, amount, address, symbol, chain, infoText
         </Flex>
       </FadeInOnView>
     </Box>
-  )
+  );
 }

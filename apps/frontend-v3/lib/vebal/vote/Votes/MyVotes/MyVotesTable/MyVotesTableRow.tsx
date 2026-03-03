@@ -7,10 +7,9 @@ import {
   HStack,
   IconButton,
   Text,
-  Tooltip,
   useToken,
-  VStack,
-} from '@chakra-ui/react'
+  VStack } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import Link from 'next/link'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -28,8 +27,7 @@ import {
   calculateMyValuePerVote,
   calculateMyVoteRewardsValue,
   inputPercentageWeightToBps,
-  votingTimeLockedEndDate,
-} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+  votingTimeLockedEndDate } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 import { VoteWeight } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteWeight'
@@ -60,8 +58,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
     allowChangeVotes,
     vebalLockTooShort,
     isPoolGaugeExpired,
-    vebalIsExpired,
-  } = useVotes()
+    vebalIsExpired } = useVotes()
   const { toCurrency } = useCurrency()
 
   const isGaugeExpired = isPoolGaugeExpired(vote)
@@ -110,8 +107,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.level0',
-        }}
+          bg: 'background.level0' }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         rounded="md"
@@ -156,8 +152,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
               <Text>
                 {toCurrency(averageRewards, {
                   abbreviated: false,
-                  forceThreeDecimals: true,
-                })}
+                  forceThreeDecimals: true })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
@@ -197,26 +192,23 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
           <GridItem {...cellProps}>
             <VStack align="center" w="full">
               <Tooltip
-                isDisabled={removable}
-                label="You have an existing vote, so this row cannot be removed from the table. Set it to 0% to reallocate your vote."
+                disabled={removable}
+                content="You have an existing vote, so this row cannot be removed from the table. Set it to 0% to reallocate your vote."
               >
                 <IconButton
                   _hover={{
                     bg: 'red.500',
-                    color: 'white',
-                  }}
+                    color: 'white' }}
                   aria-label="Remove"
                   color={fontSecondary}
-                  icon={<Trash2 height="20px" />}
-                  isDisabled={!removable}
+                  disabled={!removable}
                   onClick={onRemove}
-                  variant="ghost"
-                />
+                  variant="ghost"><Trash2 height="20px" /></IconButton>
               </Tooltip>
             </VStack>
           </GridItem>
         </Grid>
       </Box>
     </FadeInOnView>
-  )
+  );
 }

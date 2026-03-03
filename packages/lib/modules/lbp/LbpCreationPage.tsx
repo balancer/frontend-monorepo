@@ -1,26 +1,12 @@
-'use client'
-
+'use client';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { LuCheck } from 'react-icons/lu';
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
 import { LbpForm } from '@repo/lib/modules/lbp/LbpForm'
 import { LbpPreview } from '@repo/lib/modules/lbp/LbpPreview'
-import {
-  VStack,
-  Stack,
-  Skeleton,
-  Stepper,
-  Step,
-  StepIndicator,
-  StepStatus,
-  StepNumber,
-  StepIcon,
-  StepTitle,
-  StepSeparator,
-  Box,
-  Divider,
-} from '@chakra-ui/react'
+import { Steps, VStack, Stack, Skeleton, Box, Separator } from '@chakra-ui/react';
 import { HeaderBanner } from '@repo/lib/modules/lbp/header/HeaderBanner'
 import { useHydrateLbpForm } from '@repo/lib/modules/lbp/useHydrateLbpForm'
 import { useLbpForm } from '@repo/lib/modules/lbp/LbpFormProvider'
@@ -32,42 +18,44 @@ function LbpCreationPageContent() {
   const { isMobile } = useBreakpoints()
 
   return (
-    <VStack align="start" spacing="lg">
+    <VStack align="start" gap="lg">
       <HeaderBanner />
       {isLbpLoading ? (
         <LbpPageSkeleton />
       ) : (
         <>
-          <Stepper
-            index={currentStepIndex}
+          <Steps.Root
+            step={currentStepIndex}
             orientation={isMobile ? 'vertical' : 'horizontal'}
             w="50%"
           >
-            {steps.map(step => (
-              <Step key={step.id}>
-                <StepIndicator>
-                  <StepStatus
-                    active={<StepNumber />}
-                    complete={<StepIcon />}
-                    incomplete={<StepNumber />}
-                  />
-                </StepIndicator>
+                <Steps.List>
+              {steps.map(step => (
+                <Steps.Item key={step.id}>
+                  <Steps.Indicator>
+                    <Steps.Status
+                      current={<Steps.Number />}
+                      complete={<LuCheck />}
+                      incomplete={<Steps.Number />}
+                    />
+                  </Steps.Indicator>
 
-                <Box flexShrink="0">
-                  <StepTitle>{step.title}</StepTitle>
-                </Box>
+                  <Box flexShrink="0">
+                    <Steps.Title>{step.title}</Steps.Title>
+                  </Box>
 
-                <StepSeparator />
-              </Step>
-            ))}
-          </Stepper>
+                  <Steps.Separator />
+                </Steps.Item>
+              ))}
+            </Steps.List>
+              </Steps.Root>
 
-          <Divider />
+          <Separator />
 
           <Stack
             direction={{ base: 'column', xl: 'row' }}
             justifyContent="stretch"
-            spacing="xl"
+            gap="xl"
             w="full"
           >
             <LbpForm />
@@ -76,13 +64,13 @@ function LbpCreationPageContent() {
         </>
       )}
     </VStack>
-  )
+  );
 }
 
 function LbpPageSkeleton() {
   return (
     <>
-      <VStack align="start" spacing="lg" w="full">
+      <VStack align="start" gap="lg" w="full">
         <Skeleton h="2px" w="full" />
         <Skeleton h="80px" w="full" />
         <Skeleton h="2px" w="full" />
@@ -90,11 +78,11 @@ function LbpPageSkeleton() {
         <Skeleton h="200px" w="full" />
         <Skeleton h="60px" w="full" />
       </VStack>
-      <VStack align="start" spacing="md" w="full">
+      <VStack align="start" gap="md" w="full">
         <Skeleton h="1300px" w="full" />
       </VStack>
     </>
-  )
+  );
 }
 
 export default function LbpCreationPage() {

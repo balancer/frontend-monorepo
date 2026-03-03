@@ -1,4 +1,6 @@
-import { Box, Center, HStack, Text, useColorModeValue } from '@chakra-ui/react'
+import { Box, Center, HStack, Text } from '@chakra-ui/react';
+
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 
 import { useHook } from '../../hooks/useHook'
 import { PoolCore } from '../pool.types'
@@ -18,8 +20,9 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
   // TODO: add nested hook support when needed
   const hook = hooks[0]
 
-  const stopColor1 = useColorModeValue('#FFFFFF', '#FCFCFD')
-  const stopColor2 = useColorModeValue('#DFCCB9', '#A0AEC0')
+  const colorMode = useThemeColorMode()
+  const stopColor1 = colorMode === 'dark' ? '#FCFCFD' : '#FFFFFF'
+  const stopColor2 = colorMode === 'dark' ? '#A0AEC0' : '#DFCCB9'
 
   if (!hook) return null
 

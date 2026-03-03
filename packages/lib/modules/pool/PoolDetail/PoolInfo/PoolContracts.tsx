@@ -11,13 +11,11 @@ import {
   Heading,
   Icon,
   Link,
-  Divider,
   Text,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
+  HoverCard,
   VStack,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
@@ -26,8 +24,7 @@ import {
   GqlHookReviewData,
   Erc4626ReviewData,
   HookFragment,
-  GqlPoolLiquidityBootstrappingV3,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
@@ -56,12 +53,12 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
   let level
 
   if (!hasData) {
-    icon = <Icon as={AlertTriangle} color="font.warning" cursor="pointer" size={16} />
+    icon = <Icon color="font.warning" cursor="pointer" size={16} asChild><AlertTriangle /></Icon>
     level = 1
   } else {
     if (isSafe) {
       if (hasWarnings) {
-        icon = <Icon as={AlertTriangle} color="font.warning" cursor="pointer" size={16} />
+        icon = <Icon color="font.warning" cursor="pointer" size={16} asChild><AlertTriangle /></Icon>
         level = 1
       } else {
         icon = (
@@ -72,7 +69,7 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
         level = 2
       }
     } else {
-      icon = <Icon as={XCircle} color="red.500" cursor="pointer" size={16} />
+      icon = <Icon color="red.500" cursor="pointer" size={16} asChild><XCircle /></Icon>
       level = 0
     }
   }
@@ -143,16 +140,14 @@ export function PoolContracts({ ...props }: CardProps) {
       {
         label: 'Pool address',
         address: pool.address,
-        explorerLink: poolExplorerLink,
-      },
+        explorerLink: poolExplorerLink },
     ]
 
     if (hasGaugeAddress) {
       contracts.push({
         label: 'Incentives gauge',
         address: gaugeAddress,
-        explorerLink: gaugeExplorerLink,
-      })
+        explorerLink: gaugeExplorerLink })
     }
 
     if (isV3LBP(pool)) {
@@ -160,8 +155,7 @@ export function PoolContracts({ ...props }: CardProps) {
       contracts.push({
         label: 'Sale token contract',
         address: abbreviateAddress(lbpPool.projectToken as Address),
-        explorerLink: getBlockExplorerAddressUrl(lbpPool.projectToken as Address, pool.chain),
-      })
+        explorerLink: getBlockExplorerAddressUrl(lbpPool.projectToken as Address, pool.chain) })
     }
 
     return contracts
@@ -173,8 +167,7 @@ export function PoolContracts({ ...props }: CardProps) {
         tokenAddress: token.address,
         tokenSymbol: token.symbol,
         rateProviderAddress: token.priceRateProvider,
-        priceRateProviderData: token.priceRateProviderData,
-      }))
+        priceRateProviderData: token.priceRateProviderData }))
       .filter(
         item => item.rateProviderAddress && item.rateProviderAddress !== zeroAddress
       ) as RateProvider[]
@@ -206,12 +199,12 @@ export function PoolContracts({ ...props }: CardProps) {
   }, [pool])
 
   return (
-    <Card {...props}>
-      <VStack alignItems="flex-start" spacing="md" width="full">
+    <Card.Root {...props}>
+      <VStack alignItems="flex-start" gap="md" width="full">
         <Heading fontSize="xl" variant="h4">
           Pool contracts
         </Heading>
-        <Divider />
+        <Separator />
         {contracts.map(contract => (
           <Grid
             gap="sm"
@@ -226,7 +219,11 @@ export function PoolContracts({ ...props }: CardProps) {
             </GridItem>
             <GridItem>
               <HStack gap="xxs">
-                <Link href={contract.explorerLink} isExternal variant="link">
+                <Link
+                  href={contract.explorerLink}
+                  variant="link"
+                  target='_blank'
+                  rel='noopener noreferrer'>
                   <HStack gap="xxs">
                     <Text color="link">{abbreviateAddress(contract.address)}</Text>
                     <ArrowUpRight size={12} />
@@ -242,44 +239,42 @@ export function PoolContracts({ ...props }: CardProps) {
         {hooks.length > 0 && (
           <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
             <GridItem>
-              <Popover trigger="hover">
-                <PopoverTrigger>
+              <HoverCard.Root>
+                <HoverCard.Trigger asChild>
                   <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
                     {hooks.length === 1 ? 'Hook:' : 'Hooks:'}
                   </Text>
-                </PopoverTrigger>
-                <PopoverContent maxW="300px" p="sm" w="auto">
-                  <Text fontSize="sm" variant="secondary">
-                    Hooks are contracts that can be used to modify the behavior of the pool.
-                  </Text>
-                </PopoverContent>
-              </Popover>
+                </HoverCard.Trigger>
+                <HoverCard.Positioner>
+                  <HoverCard.Content maxW="300px" p="sm" w="auto">
+                    <Text fontSize="sm" variant="secondary">
+                      Hooks are contracts that can be used to modify the behavior of the pool.
+                    </Text>
+                  </HoverCard.Content>
+                </HoverCard.Positioner>
+              </HoverCard.Root>
             </GridItem>
             <GridItem>
               <VStack alignItems="flex-start">
                 {hooks.map((hook, index) => {
-                  return (
-                    hook && (
-                      <HStack key={hook.address}>
-                        <Link
-                          href={getBlockExplorerAddressUrl(hook.address, chain)}
-                          isExternal
-                          key={hook.address}
-                          variant="link"
-                        >
-                          <HStack gap="xxs">
-                            <Text color="link">
-                              {abbreviateAddress(hook.address)} (
-                              {getHookName(hook, pool, hooksMetadata)})
-                            </Text>
-                            <ArrowUpRight size={12} />
-                          </HStack>
-                        </Link>
-                        {(index > 0 || !pool.hook) && <Text variant="secondary">(nested)</Text>}
-                        {getHookIcon(hook.reviewData)}
+                  return (hook && (<HStack key={hook.address}>
+                    <Link
+                      href={getBlockExplorerAddressUrl(hook.address, chain)}
+                      key={hook.address}
+                      variant="link"
+                      target='_blank'
+                      rel='noopener noreferrer'>
+                      <HStack gap="xxs">
+                        <Text color="link">
+                          {abbreviateAddress(hook.address)} (
+                          {getHookName(hook, pool, hooksMetadata)})
+                        </Text>
+                        <ArrowUpRight size={12} />
                       </HStack>
-                    )
-                  )
+                    </Link>
+                    {(index > 0 || !pool.hook) && <Text variant="secondary">(nested)</Text>}
+                    {getHookIcon(hook.reviewData)}
+                  </HStack>));
                 })}
               </VStack>
             </GridItem>
@@ -288,21 +283,23 @@ export function PoolContracts({ ...props }: CardProps) {
         {rateProviders.length > 0 && (
           <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
             <GridItem>
-              <Popover trigger="hover">
-                <PopoverTrigger>
+              <HoverCard.Root>
+                <HoverCard.Trigger asChild>
                   <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
                     {rateProviders.length === 1 ? 'Rate provider:' : 'Rate providers:'}
                   </Text>
-                </PopoverTrigger>
-                <PopoverContent maxW="300px" p="sm" w="auto">
-                  <Text fontSize="sm" variant="secondary">
-                    Rate Providers are contracts that provide an exchange rate between two assets.
-                    This can come from any on-chain source, including oracles or from other
-                    calculations. This introduces risks around the rate provider being able to
-                    supply accurate and timely exchange rates.
-                  </Text>
-                </PopoverContent>
-              </Popover>
+                </HoverCard.Trigger>
+                <HoverCard.Positioner>
+                  <HoverCard.Content maxW="300px" p="sm" w="auto">
+                    <Text fontSize="sm" variant="secondary">
+                      Rate Providers are contracts that provide an exchange rate between two assets.
+                      This can come from any on-chain source, including oracles or from other
+                      calculations. This introduces risks around the rate provider being able to
+                      supply accurate and timely exchange rates.
+                    </Text>
+                  </HoverCard.Content>
+                </HoverCard.Positioner>
+              </HoverCard.Root>
             </GridItem>
             <GridItem>
               <VStack alignItems="flex-start">
@@ -310,8 +307,7 @@ export function PoolContracts({ ...props }: CardProps) {
                   const token = {
                     address: provider.tokenAddress,
                     symbol: provider.tokenSymbol,
-                    chain,
-                  }
+                    chain }
 
                   return (
                     <HStack key={provider.tokenAddress}>
@@ -323,10 +319,10 @@ export function PoolContracts({ ...props }: CardProps) {
                       />
                       <Link
                         href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
-                        isExternal
                         key={provider.rateProviderAddress}
                         variant="link"
-                      >
+                        target='_blank'
+                        rel='noopener noreferrer'>
                         <HStack gap="xxs">
                           <Text color="link">
                             {abbreviateAddress(provider.rateProviderAddress)}
@@ -336,7 +332,7 @@ export function PoolContracts({ ...props }: CardProps) {
                       </Link>
                       {getRateProviderIcon(provider.priceRateProviderData, token)}
                     </HStack>
-                  )
+                  );
                 })}
               </VStack>
             </GridItem>
@@ -345,20 +341,22 @@ export function PoolContracts({ ...props }: CardProps) {
         {erc4626Tokens.length > 0 && (
           <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
             <GridItem>
-              <Popover trigger="hover">
-                <PopoverTrigger>
+              <HoverCard.Root>
+                <HoverCard.Trigger asChild>
                   <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
                     {erc4626Tokens.length === 1 ? 'Tokenized vault:' : 'Tokenized vaults:'}
                   </Text>
-                </PopoverTrigger>
-                <PopoverContent maxW="300px" p="sm" w="auto">
-                  <Text fontSize="sm" variant="secondary">
-                    ERC-4626 (tokenized vault) is a standard to optimize and unify the technical
-                    parameters of yield-bearing vaults. It provides a standard API for tokenized
-                    yield-bearing vaults that represent shares of a single underlying ERC-20 token.
-                  </Text>
-                </PopoverContent>
-              </Popover>
+                </HoverCard.Trigger>
+                <HoverCard.Positioner>
+                  <HoverCard.Content maxW="300px" p="sm" w="auto">
+                    <Text fontSize="sm" variant="secondary">
+                      ERC-4626 (tokenized vault) is a standard to optimize and unify the technical
+                      parameters of yield-bearing vaults. It provides a standard API for tokenized
+                      yield-bearing vaults that represent shares of a single underlying ERC-20 token.
+                    </Text>
+                  </HoverCard.Content>
+                </HoverCard.Positioner>
+              </HoverCard.Root>
             </GridItem>
             <GridItem>
               <VStack alignItems="flex-start">
@@ -366,8 +364,7 @@ export function PoolContracts({ ...props }: CardProps) {
                   const token = {
                     address: erc4626Token.address as Address,
                     symbol: erc4626Token.symbol,
-                    chain,
-                  }
+                    chain }
 
                   return (
                     <HStack key={erc4626Token.address}>
@@ -379,10 +376,10 @@ export function PoolContracts({ ...props }: CardProps) {
                       />
                       <Link
                         href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
-                        isExternal
                         key={erc4626Token.address}
                         variant="link"
-                      >
+                        target='_blank'
+                        rel='noopener noreferrer'>
                         <HStack gap="xxs">
                           <Text color="link">{abbreviateAddress(erc4626Token.address)}</Text>
                           <ArrowUpRight size={12} />
@@ -390,13 +387,13 @@ export function PoolContracts({ ...props }: CardProps) {
                       </Link>
                       {getErc4626Icon(erc4626Token.erc4626ReviewData, token)}
                     </HStack>
-                  )
+                  );
                 })}
               </VStack>
             </GridItem>
           </Grid>
         )}
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

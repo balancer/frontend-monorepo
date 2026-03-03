@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react';
 import { ThumbsUp } from 'react-feather'
 import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'

@@ -1,12 +1,4 @@
-import {
-  Card,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalProps,
-  Text,
-} from '@chakra-ui/react'
+import { Card, ModalProps, Text, Dialog, Portal } from '@chakra-ui/react';
 import { useClaim } from './ClaimProvider'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
@@ -48,8 +40,7 @@ export function ClaimModal({
       allClaimableRewards
         .map(reward => ({
           humanAmount: (reward?.humanBalance || '0') as HumanAmount,
-          tokenAddress: (reward?.tokenAddress || '') as Address,
-        }))
+          tokenAddress: (reward?.tokenAddress || '') as Address }))
         .filter(Boolean) as HumanTokenAmountWithSymbol[],
     [allClaimableRewards]
   )
@@ -57,55 +48,59 @@ export function ClaimModal({
   const isSuccess = !!claimTxHash
 
   return (
-    <Modal
-      isCentered
-      isOpen={isOpen}
-      onClose={() => {
-        onClose(!!claimTxHash)
-      }}
-      preserveScrollBarGap
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!claimTxHash} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose(!!claimTxHash)
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
-        <TransactionModalHeader chain={chain} label="Claim incentives" txHash={claimTxHash} />
-        <ModalCloseButton />
-        <ModalBody>
-          <AnimateHeightChange spacing="sm">
-            {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
-            {isLoading ? (
-              <Text>Loading data...</Text>
-            ) : rewards.length === 0 ? (
-              <Text>Nothing to claim</Text>
-            ) : (
-              <Card variant="modalSubSection">
-                <TokenRowGroup
-                  amounts={rewards}
-                  chain={chain}
-                  label={claimTxHash ? 'You got' : "You'll get"}
-                  totalUSDValue={totalClaimableUsd}
-                />
-              </Card>
-            )}
-            {claimTxHash && (
-              <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
-            )}
-          </AnimateHeightChange>
-        </ModalBody>
+        <SuccessOverlay startAnimation={!!claimTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
+            <TransactionModalHeader chain={chain} label="Claim incentives" txHash={claimTxHash} />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <AnimateHeightChange spacing="sm">
+                {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
+                {isLoading ? (
+                  <Text>Loading data...</Text>
+                ) : rewards.length === 0 ? (
+                  <Text>Nothing to claim</Text>
+                ) : (
+                  <Card.Root variant="modalSubSection">
+                    <TokenRowGroup
+                      amounts={rewards}
+                      chain={chain}
+                      label={claimTxHash ? 'You got' : "You'll get"}
+                      totalUSDValue={totalClaimableUsd}
+                    />
+                  </Card.Root>
+                )}
+                {claimTxHash && (
+                  <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
+                )}
+              </AnimateHeightChange>
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={() => {
+                onClose(isSuccess)
+                router.push('/portfolio')
+              }}
+              returnLabel="Return to portfolio"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={() => {
-            onClose(isSuccess)
-            router.push('/portfolio')
-          }}
-          returnLabel="Return to portfolio"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }

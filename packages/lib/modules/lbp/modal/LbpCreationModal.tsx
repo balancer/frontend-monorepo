@@ -1,12 +1,12 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useRef, useEffect } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useLbpForm } from '../LbpFormProvider'
 import { LbpSummary } from './LbpSummary'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { VStack, Button, HStack, Text } from '@chakra-ui/react'
+import { VStack, Button, HStack, Text, Dialog, Portal } from '@chakra-ui/react';
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
@@ -56,16 +56,14 @@ export function LbpCreationModal({
     poolAddress,
     setPoolAddress,
     createPoolInput,
-    initPoolInput,
-  })
+    initPoolInput })
 
   const shouldBatchTransactions = useShouldBatchTransactions()
   const {
     saveMetadata,
     error: saveMetadataError,
     isMetadataSaved,
-    reset: resetSaveMetadata,
-  } = useLbpMetadata()
+    reset: resetSaveMetadata } = useLbpMetadata()
 
   const hasAttemptedSaveMetadata = useRef(false)
   const chainId = getChainId(selectedChain)
@@ -82,8 +80,7 @@ export function LbpCreationModal({
     id: poolAddress as Address,
     chain: selectedChain,
     type: GqlPoolType.LiquidityBootstrapping,
-    protocolVersion: 3 as const,
-  })
+    protocolVersion: 3 as const })
 
   const { redirectToPage: redirectToPoolPage } = useRedirect(path)
 
@@ -107,12 +104,10 @@ export function LbpCreationModal({
       stepType: 'sendLbpMetadata' as const,
       details: {
         gasless: true,
-        type: 'Offchain action',
-      },
+        type: 'Offchain action' },
       labels: { init: 'Save metadata', title: 'Save metadata', tooltip: 'Save metadata' },
       isComplete: () => isMetadataSaved,
-      renderAction: () => undefined,
-    })
+      renderAction: () => undefined })
   }
 
   const isSuccess = !!isPoolInitialized && isMetadataSaved
@@ -122,123 +117,126 @@ export function LbpCreationModal({
     shouldToggleBlockSize,
     setUsingBigBlocks,
     isSetUsingBigBlocksPending,
-    setUsingBigBlocksError,
-  } = useHyperEvm({
+    setUsingBigBlocksError } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvmTx: selectedChain === GqlChain.Hyperevm,
-  })
+    isHyperEvmTx: selectedChain === GqlChain.Hyperevm })
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!initPoolTxHash} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent>
-        {isDesktop && (
-          <DesktopStepTracker
-            chain={selectedChain}
-            isTxBatch={shouldBatchTransactions}
-            transactionSteps={transactionSteps}
-          />
-        )}
-        <TransactionModalHeader
-          chain={selectedChain}
-          label={'Preview: Create an LBP'}
-          txHash={initPoolTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <LbpSummary transactionSteps={transactionSteps} />
-
-          {isSuccess && (
-            <VStack width="full">
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                marginTop="4"
-                onClick={() => window.open(path, '_blank')}
-                size="lg"
-                variant="secondary"
-                w="full"
-                width="full"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    View LBP page
-                  </Text>
-                </HStack>
-              </Button>
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                marginTop="2"
-                onClick={handleReset}
-                size="lg"
-                variant="primary"
-                w="full"
-                width="full"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    Create another LBP
-                  </Text>
-                </HStack>
-              </Button>
-            </VStack>
-          )}
-
-          {!!saveMetadataError && (
-            <VStack marginTop="4" spacing="3" width="full">
-              <BalAlert
-                content="The pool has been created and seeded onchain. However, there was an error syncing the metadata to the Balancer API. Your pool will not display on the Balancer UI until the sync is completed."
-                status="error"
-                title="Error syncing metadata"
+        <SuccessOverlay startAnimation={!!initPoolTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            {isDesktop && (
+              <DesktopStepTracker
+                chain={selectedChain}
+                isTxBatch={shouldBatchTransactions}
+                transactionSteps={transactionSteps}
               />
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                onClick={saveMetadata}
-                size="lg"
-                variant="secondary"
-                w="full"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    Retry sync metadata
-                  </Text>
-                </HStack>
-              </Button>
-            </VStack>
-          )}
-        </ModalBody>
+            )}
+            <TransactionModalHeader
+              chain={selectedChain}
+              label={'Preview: Create an LBP'}
+              txHash={initPoolTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <LbpSummary transactionSteps={transactionSteps} />
 
-        {shouldToggleBlockSize ? (
-          <ToggleHyperBlockSize
-            isSetUsingBigBlocksPending={isSetUsingBigBlocksPending}
-            setUsingBigBlocks={setUsingBigBlocks}
-            setUsingBigBlocksError={setUsingBigBlocksError}
-            shouldUseBigBlocks={shouldUseBigBlocks}
-          />
-        ) : !saveMetadataError ? (
-          <ActionModalFooter
-            currentStep={transactionSteps.currentStep}
-            isSuccess={isSuccess}
-            returnAction={redirectToPoolPage}
-            returnLabel="View pool page"
-            urlTxHash={urlTxHash}
-          />
-        ) : null}
+              {isSuccess && (
+                <VStack width="full">
+                  <Button
+                    disabled={false}
+                    loading={false}
+                    marginTop="4"
+                    onClick={() => window.open(path, '_blank')}
+                    size="lg"
+                    variant="secondary"
+                    w="full"
+                    width="full"
+                  >
+                    <HStack justifyContent="center" gap="sm" width="100%">
+                      <Text color="font.primaryGradient" fontWeight="bold">
+                        View LBP page
+                      </Text>
+                    </HStack>
+                  </Button>
+                  <Button
+                    disabled={false}
+                    loading={false}
+                    marginTop="2"
+                    onClick={handleReset}
+                    size="lg"
+                    variant="primary"
+                    w="full"
+                    width="full"
+                  >
+                    <HStack justifyContent="center" gap="sm" width="100%">
+                      <Text color="font.primaryGradient" fontWeight="bold">
+                        Create another LBP
+                      </Text>
+                    </HStack>
+                  </Button>
+                </VStack>
+              )}
 
-        {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
-      </ModalContent>
-    </Modal>
-  )
+              {!!saveMetadataError && (
+                <VStack marginTop="4" gap="3" width="full">
+                  <BalAlert
+                    content="The pool has been created and seeded onchain. However, there was an error syncing the metadata to the Balancer API. Your pool will not display on the Balancer UI until the sync is completed."
+                    status="error"
+                    title="Error syncing metadata"
+                  />
+                  <Button
+                    disabled={false}
+                    loading={false}
+                    onClick={saveMetadata}
+                    size="lg"
+                    variant="secondary"
+                    w="full"
+                  >
+                    <HStack justifyContent="center" gap="sm" width="100%">
+                      <Text color="font.primaryGradient" fontWeight="bold">
+                        Retry sync metadata
+                      </Text>
+                    </HStack>
+                  </Button>
+                </VStack>
+              )}
+            </Dialog.Body>
+            {shouldToggleBlockSize ? (
+              <ToggleHyperBlockSize
+                isSetUsingBigBlocksPending={isSetUsingBigBlocksPending}
+                setUsingBigBlocks={setUsingBigBlocks}
+                setUsingBigBlocksError={setUsingBigBlocksError}
+                shouldUseBigBlocks={shouldUseBigBlocks}
+              />
+            ) : !saveMetadataError ? (
+              <ActionModalFooter
+                currentStep={transactionSteps.currentStep}
+                isSuccess={isSuccess}
+                returnAction={redirectToPoolPage}
+                returnLabel="View pool page"
+                urlTxHash={urlTxHash}
+              />
+            ) : null}
+            {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

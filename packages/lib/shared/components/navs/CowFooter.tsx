@@ -3,7 +3,7 @@
 import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { Box, Button, Center, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Text, VStack } from '@chakra-ui/react';
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import NextLink from 'next/link'
 
@@ -15,9 +15,8 @@ export function CowFooter() {
       <Center>
         <VStack>
           <Text color="grayText">{`Can't find the pool you're looking for?`}</Text>
-          <Button as={NextLink} href="/create">
-            Create a pool
-          </Button>
+          <Button asChild><NextLink href="/create">Create a pool
+                      </NextLink></Button>
         </VStack>
       </Center>
       <Box position="relative" zIndex="-1">
@@ -39,5 +38,5 @@ export function CowFooter() {
         </FadeInOnView>
       </Box>
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { Badge, HStack } from '@chakra-ui/react'
+import { Badge, HStack } from '@chakra-ui/react';
 import { ArrowDownIcon } from '@repo/lib/shared/components/icons/ArrowDownIcon'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -20,7 +20,7 @@ export function GainBadge({ gain }: Props) {
       pr="sm"
       userSelect="none"
     >
-      <HStack spacing="0">
+      <HStack gap="0">
         {gain.lt(0) ? (
           <ArrowDownIcon height="12" width="12" />
         ) : gain.gt(0) ? (
@@ -31,5 +31,5 @@ export function GainBadge({ gain }: Props) {
         <>{toCurrency(gain.abs(), { abbreviated: false })}</>
       </HStack>
     </Badge>
-  )
+  );
 }

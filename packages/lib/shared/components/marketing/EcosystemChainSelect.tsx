@@ -2,7 +2,7 @@
 
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
-import { Box, HStack, Text } from '@chakra-ui/react'
+import { Box, HStack, Text } from '@chakra-ui/react';
 import { Select, OptionBase, GroupBase, SingleValue, chakraComponents } from 'chakra-react-select'
 import { ReactNode } from 'react'
 import { ChevronDown } from 'react-feather'
@@ -29,8 +29,7 @@ const networkOptions: ChainOption[] = [
         <Text>All networks</Text>
       </HStack>
     ),
-    value: 'all',
-  },
+    value: 'all' },
   ...PROJECT_CONFIG.supportedNetworks.map(network => ({
     label: (
       <HStack>
@@ -44,8 +43,7 @@ const networkOptions: ChainOption[] = [
         <Text>{getChainShortName(network)}</Text>
       </HStack>
     ),
-    value: network,
-  })),
+    value: network })),
 ]
 
 function CustomDropdownIndicator(props: any) {
@@ -67,19 +65,18 @@ export function EcosystemChainSelect({ value, onChange }: Props) {
   }
 
   return (
-    <Box animate={pulseOnceWithDelay} as={motion.div} data-lenis-prevent w="200px" zIndex="10">
-      <Select<ChainOption, false, GroupBase<ChainOption>>
-        // width="300px"
-        chakraStyles={chakraStyles}
-        components={{
-          DropdownIndicator: CustomDropdownIndicator,
-        }}
-        instanceId="chain-select"
-        name="Chain"
-        onChange={handleChange}
-        options={networkOptions}
-        value={chainValue}
-      />
-    </Box>
-  )
+    <Box animate={pulseOnceWithDelay} data-lenis-prevent w="200px" zIndex="10" asChild><motion.div>
+        <Select<ChainOption, false, GroupBase<ChainOption>>
+          // width="300px"
+          chakraStyles={chakraStyles}
+          components={{
+            DropdownIndicator: CustomDropdownIndicator }}
+          instanceId="chain-select"
+          name="Chain"
+          onChange={handleChange}
+          options={networkOptions}
+          value={chainValue}
+        />
+      </motion.div></Box>
+  );
 }

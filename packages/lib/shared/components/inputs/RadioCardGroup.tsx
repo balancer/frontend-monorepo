@@ -6,8 +6,7 @@ import {
   type UseRadioGroupProps,
   type UseRadioProps,
   useRadio,
-  useRadioGroup,
-} from '@chakra-ui/react'
+  useRadioGroup } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 
 export type RadioCardStyleProps = {
@@ -21,8 +20,7 @@ export type RadioCardProps = UseRadioProps &
   }
 
 const defaultWrapperProps: BoxProps = {
-  w: 'full',
-}
+  w: 'full' }
 
 const defaultContainerProps: BoxProps = {
   borderRadius: 'lg',
@@ -32,8 +30,7 @@ const defaultContainerProps: BoxProps = {
   px: 5,
   py: 3,
   transition: 'all 0.2s ease',
-  w: 'full',
-}
+  w: 'full' }
 
 export function RadioCard({ children, containerProps, wrapperProps, ...props }: RadioCardProps) {
   const { getInputProps, getRadioProps } = useRadio(props)
@@ -42,13 +39,13 @@ export function RadioCard({ children, containerProps, wrapperProps, ...props }: 
   const radioProps = getRadioProps()
 
   return (
-    <Box as="label" {...defaultWrapperProps} {...wrapperProps}>
-      <input {...inputProps} />
-      <Box {...radioProps} {...defaultContainerProps} {...containerProps}>
-        {children}
-      </Box>
-    </Box>
-  )
+    <Box {...defaultWrapperProps} {...wrapperProps} asChild><label>
+        <input {...inputProps} />
+        <Box {...radioProps} {...defaultContainerProps} {...containerProps}>
+          {children}
+        </Box>
+      </label></Box>
+  );
 }
 
 export type RadioCardOption<T extends string> = {
@@ -74,8 +71,7 @@ export type RadioCardGroupProps<T extends string> = Omit<
 const defaultLayoutProps: SimpleGridProps = {
   columns: { base: 1, sm: 2 },
   spacing: 'md',
-  w: 'full',
-}
+  w: 'full' }
 
 export function RadioCardGroup<T extends string>({
   name,
@@ -93,8 +89,7 @@ export function RadioCardGroup<T extends string>({
     value,
     defaultValue,
     onChange: selected => onChange?.(selected as T),
-    ...groupProps,
-  })
+    ...groupProps })
 
   const rootProps = getRootProps()
   const mergedLayoutProps = { ...defaultLayoutProps, ...layoutProps }
@@ -105,8 +100,7 @@ export function RadioCardGroup<T extends string>({
         const radio = getRadioProps({ value: option.value })
         const mergedCardProps: RadioCardStyleProps = {
           ...radioCardProps,
-          ...option.cardProps,
-        }
+          ...option.cardProps }
 
         return (
           <RadioCard key={option.value} {...radio} {...mergedCardProps}>

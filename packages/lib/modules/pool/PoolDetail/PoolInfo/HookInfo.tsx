@@ -1,17 +1,5 @@
 import { GqlHookReviewData } from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverBody,
-  VStack,
-  HStack,
-  Text,
-  Heading,
-  Box,
-  Icon,
-} from '@chakra-ui/react'
+import { Popover, HoverCard, VStack, HStack, Text, Heading, Box, Icon } from '@chakra-ui/react';
 import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
@@ -82,14 +70,14 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
                 <Text color="font.link" fontSize="sm">
                   View review details
                 </Text>
-                <Icon as={ArrowUpRight} color="font.link" size={12} />
+                <Icon color="font.link" size={12} asChild><ArrowUpRight /></Icon>
               </HStack>
             </Link>
           )}
         </>
       )}
     </>
-  )
+  );
 }
 
 export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps) {
@@ -104,21 +92,23 @@ export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps)
   )
 
   return (
-    <Popover trigger="hover">
-      <PopoverTrigger>{children}</PopoverTrigger>
-      <PopoverContent w="auto">
-        <PopoverArrow bg="background.level3" />
-        <PopoverBody>
-          <VStack alignItems="flex-start" spacing="ms" w="full">
-            <HStack w="full">
-              <Heading fontSize="1.125rem" variant="h4">
-                Hook
-              </Heading>
-            </HStack>
-            {body}
-          </VStack>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
+    <HoverCard.Root>
+      <HoverCard.Trigger asChild>{children}</HoverCard.Trigger>
+      <HoverCard.Positioner>
+        <HoverCard.Content w="auto">
+          <HoverCard.Arrow bg="background.level3" />
+          <HoverCard.Body>
+            <VStack alignItems="flex-start" gap="ms" w="full">
+              <HStack w="full">
+                <Heading fontSize="1.125rem" variant="h4">
+                  Hook
+                </Heading>
+              </HStack>
+              {body}
+            </VStack>
+          </HoverCard.Body>
+        </HoverCard.Content>
+      </HoverCard.Positioner>
+    </HoverCard.Root>
+  );
 }

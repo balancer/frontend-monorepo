@@ -1,6 +1,6 @@
-'use client'
-
-import { Box, Flex, Card, Center, Text, useColorMode } from '@chakra-ui/react'
+'use client';
+import { Box, Flex, Card, Center, Text } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PartnerCard } from '@repo/lib/shared/components/other/PartnerCard'
@@ -9,10 +9,10 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export function FeaturedPartners() {
   const partnerCards = PROJECT_CONFIG.partnerCards
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   return partnerCards?.length ? (
-    <Card mb="md">
+    <Card.Root mb="md">
       <Center>
         <Text
           color="font.secondary"
@@ -57,8 +57,7 @@ export function FeaturedPartners() {
                     flex={{
                       base: '1 1 100%',
                       sm: index === 0 ? '1 1 100%' : '1 1 calc(50% - 10px)',
-                      md: '1 1 30%',
-                    }}
+                      md: '1 1 30%' }}
                     key={partnerCard.title}
                   >
                     <FadeInOnView animateOnce={false}>
@@ -71,6 +70,6 @@ export function FeaturedPartners() {
           </Box>
         </FadeInOnView>
       </Noise>
-    </Card>
-  ) : null
+    </Card.Root>
+  ) : null;
 }

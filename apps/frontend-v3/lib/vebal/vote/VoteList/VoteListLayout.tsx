@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, Stack, HStack, VStack, useBreakpointValue } from '@chakra-ui/react'
+import { Box, Heading, Stack, HStack, VStack, useBreakpointValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -28,21 +28,16 @@ export function VoteListLayout() {
       includeExpiredPools,
       protocolVersion,
       toggleIncludeExpiredPools,
-      setProtocolVersion,
-    },
-  } = useVoteList()
+      setProtocolVersion } } = useVoteList()
   const { selectedVotingPools, scrollToMyVotes } = useVotes()
   const isFilterVisible = useFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 
   const variants = {
     visible: {
-      transform: isMd ? 'translateY(-40px)' : 'translateY(0)',
-    },
+      transform: isMd ? 'translateY(-40px)' : 'translateY(0)' },
     hidden: {
-      transform: 'translateY(0)',
-    },
-  }
+      transform: 'translateY(0)' } }
 
   const SelectedPoolsMenuRender = useMemo(() => {
     return function SelectedPoolsRender() {
@@ -55,15 +50,14 @@ export function VoteListLayout() {
                 token => `${token.symbol} ${token.weight ? `${bn(token.weight).times(100)}%` : ''}`
               )
               .join(' / '),
-            description: selectedVotingPool.symbol,
-          }))}
+            description: selectedVotingPool.symbol }))}
         />
       )
     }
   }, [scrollToMyVotes, selectedVotingPools])
 
   return (
-    <VStack align="start" minHeight="1000px" spacing="md" w="full">
+    <VStack align="start" minHeight="1000px" gap="md" w="full">
       <Stack
         alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
         direction={{ base: 'column', md: 'row' }}
@@ -75,7 +69,6 @@ export function VoteListLayout() {
             <Box position="relative" top="0">
               <Box
                 animate={isFilterVisible ? 'visible' : 'hidden'}
-                as={motion.div}
                 left="0"
                 minW={{ base: 'auto', md: '370px' }}
                 position={{ base: 'relative', md: 'absolute' }}
@@ -83,16 +76,17 @@ export function VoteListLayout() {
                 transition="all 0.15s var(--ease-out-cubic)"
                 variants={variants}
                 willChange="transform"
-              >
-                <HStack w="full">
-                  <Heading as="h2" pb="0.5" size="h4" variant="special">
-                    Pool gauge vote list
-                  </Heading>
-                  <Heading mt="0" size="md" variant="secondary">
-                    ({fNum('integer', count || 0)})
-                  </Heading>
-                </HStack>
-              </Box>
+                asChild
+              ><motion.div>
+                  <HStack w="full">
+                    <Heading as="h2" pb="0.5" size="h4" variant="special">
+                      Pool gauge vote list
+                    </Heading>
+                    <Heading mt="0" size="md" variant="secondary">
+                      ({fNum('integer', count || 0)})
+                    </Heading>
+                  </HStack>
+                </motion.div></Box>
             </Box>
           </HStack>
           <FilterTags
@@ -121,5 +115,5 @@ export function VoteListLayout() {
       </ErrorBoundary>
       <StaticToast isOpen={selectedVotingPools.length > 0}>{SelectedPoolsMenuRender}</StaticToast>
     </VStack>
-  )
+  );
 }

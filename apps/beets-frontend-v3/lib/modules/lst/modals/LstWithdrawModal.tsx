@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
@@ -45,31 +45,39 @@ export function LstWithdrawModal({
   const isSuccess = !!lstWithdrawTxHash
 
   return (
-    <Modal
-      isCentered
-      isOpen={isOpen}
-      onClose={handleOnClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!lstWithdrawTxHash} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && (
-          <DesktopStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />
-        )}
-        <TransactionModalHeader chain={chain} label="Withdraw" txHash={lstWithdrawTxHash} />
-        <ModalCloseButton />
-        <ModalBody>
-          <LstWithdrawSummary {...lstWithdrawReceipt} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={withdrawTransactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={handleOnClose}
-          returnLabel="Return to withdraw"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          handleOnClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!lstWithdrawTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && (
+              <DesktopStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />
+            )}
+            <TransactionModalHeader chain={chain} label="Withdraw" txHash={lstWithdrawTxHash} />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <LstWithdrawSummary {...lstWithdrawReceipt} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={withdrawTransactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={handleOnClose}
+              returnLabel="Return to withdraw"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

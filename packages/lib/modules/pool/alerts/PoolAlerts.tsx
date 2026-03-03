@@ -1,6 +1,6 @@
 'use client'
 
-import { Text, VStack, Link, HStack } from '@chakra-ui/react'
+import { Text, VStack, Link, HStack } from '@chakra-ui/react';
 import { usePool } from '../PoolProvider'
 import { usePoolAlerts } from './usePoolAlerts'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
@@ -23,14 +23,13 @@ export function PoolAlerts() {
       </Text>
       <Link
         _hover={{
-          color: '#555',
-        }}
+          color: '#555' }}
         color="#000"
         fontWeight="bold"
         href="https://x.com/Balancer/status/1990856260988670132"
-        isExternal
         textDecoration="underline"
-      >
+        target='_blank'
+        rel='noopener noreferrer'>
         Read the Post-Mortem
       </Link>
     </HStack>

@@ -1,5 +1,5 @@
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { Button, Card, Flex, HStack, Heading, IconButton, Image, Stack } from '@chakra-ui/react'
+import { Button, Card, Flex, HStack, Heading, IconButton, Image, Stack } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -20,14 +20,13 @@ export function ClaimNetworkBlock({
   title,
   networkTotalClaimableFiatBalance,
   icon,
-  onClick,
-}: Props) {
+  onClick }: Props) {
   const { toCurrency } = useCurrency()
   const { isDesktop, isMobile } = useBreakpoints()
 
   const iconSize = isDesktop ? 12 : 8
   return (
-    <Card
+    <Card.Root
       flex="1"
       onClick={isMobile ? onClick : undefined}
       p={['sm', 'md']}
@@ -60,12 +59,7 @@ export function ClaimNetworkBlock({
             <Heading size="sm" variant="sand">
               {toCurrency(networkTotalClaimableFiatBalance)}
             </Heading>
-            <IconButton
-              aria-label=""
-              color="font.highlight"
-              icon={<ChevronRight />}
-              variant="ghost"
-            />
+            <IconButton aria-label="" color="font.highlight" variant="ghost"><ChevronRight /></IconButton>
           </HStack>
         )}
         {isDesktop && (
@@ -74,6 +68,6 @@ export function ClaimNetworkBlock({
           </Button>
         )}
       </Flex>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

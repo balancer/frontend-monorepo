@@ -1,10 +1,18 @@
-import { addHours, differenceInDays, format, isAfter, isBefore, isValid } from 'date-fns'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { addHours, differenceInDays, format, isAfter, isBefore, isValid } from 'date-fns';
 import { formatDateAxisLabel } from './helpers'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
-import { Stack, Text, useTheme } from '@chakra-ui/react'
+import { Stack, Text } from '@chakra-ui/react';
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 export function WeightsChart({
@@ -14,8 +22,7 @@ export function WeightsChart({
   endDateTime,
   cutTime,
   launchTokenSymbol,
-  collateralTokenSymbol,
-}: {
+  collateralTokenSymbol }: {
   startWeight: number
   endWeight: number
   startDateTime: Date
@@ -39,16 +46,14 @@ export function WeightsChart({
 
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.colors.gray[800]};`,
-    text: theme.colors.gray[400],
-  }
+    container: `background: ${theme.token('colors.gray')};`,
+    text: theme.token('colors.gray') }
 
   const chartInfo: EChartsOption = {
     grid: {
       top: '5%',
       bottom: '10%',
-      containLabel: isMobile ? true : false,
-    },
+      containLabel: isMobile ? true : false },
     tooltip: {
       show: true,
       showContent: true,
@@ -58,9 +63,7 @@ export function WeightsChart({
         animation: false,
         type: 'shadow',
         label: {
-          show: false,
-        },
-      },
+          show: false } },
       extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
       formatter: (params: any) => {
         if (!params || params.length === 0) return ''
@@ -96,8 +99,7 @@ export function WeightsChart({
         }
 
         return ''
-      },
-    },
+      } },
 
     xAxis: {
       show: true,
@@ -112,8 +114,7 @@ export function WeightsChart({
         interval: 'auto', // ECharts automatically prevents overlap
         rotate: isMobile ? 45 : 0, // Rotate labels on mobile
         fontSize: isMobile ? 10 : 12,
-        margin: 8,
-      },
+        margin: 8 },
       splitNumber: (() => {
         const totalDays = differenceInDays(endDateTime, startDateTime)
         if (totalDays <= 7) return Math.min(totalDays, 7)
@@ -121,8 +122,7 @@ export function WeightsChart({
         if (totalDays <= 90) return 6
         if (totalDays <= 365) return 8
         return 10
-      })(),
-    },
+      })() },
     yAxis: {
       show: true,
       type: 'value',
@@ -149,17 +149,12 @@ export function WeightsChart({
             ]),
             color: 'black',
             padding: 2,
-            borderRadius: 2,
-          },
+            borderRadius: 2 },
           collateral: {
             backgroundColor: '#93C6FF',
             color: 'black',
             padding: 2,
-            borderRadius: 2,
-          },
-        },
-      },
-    },
+            borderRadius: 2 } } } },
     series: [
       {
         id: 'collateral-token-weight',
@@ -170,8 +165,7 @@ export function WeightsChart({
           color: '#93C6FF',
           width: 3,
           join: 'round',
-          cap: 'round',
-        },
+          cap: 'round' },
         showSymbol: false,
         markLine: {
           silent: true,
@@ -180,13 +174,9 @@ export function WeightsChart({
           lineStyle: {
             type: 'dashed',
             color: 'grey',
-            width: 1,
-          },
+            width: 1 },
           label: {
-            show: false,
-          },
-        },
-      },
+            show: false } } },
       {
         id: 'collateral-token-weight-after-cut-time',
         name: '',
@@ -197,10 +187,8 @@ export function WeightsChart({
           color: '#93C6FF',
           width: 2,
           join: 'round',
-          cap: 'round',
-        },
-        showSymbol: false,
-      },
+          cap: 'round' },
+        showSymbol: false },
       {
         id: 'launch-token-weight',
         name: '',
@@ -215,10 +203,8 @@ export function WeightsChart({
           ]),
           width: 3,
           join: 'round',
-          cap: 'round',
-        },
-        showSymbol: false,
-      },
+          cap: 'round' },
+        showSymbol: false },
       {
         id: 'launch-token-weight-after-cut-time',
         name: '',
@@ -234,12 +220,9 @@ export function WeightsChart({
           ]),
           width: 2,
           join: 'round',
-          cap: 'round',
-        },
-        showSymbol: false,
-      },
-    ],
-  }
+          cap: 'round' },
+        showSymbol: false },
+    ] }
 
   if (cutTime && isAfter(cutTime, startDateTime) && isBefore(cutTime, endDateTime)) {
     const percentage =
@@ -258,8 +241,7 @@ export function WeightsChart({
         type: 'dashed',
         width: 1,
         cap: 'round',
-        join: 'round',
-      },
+        join: 'round' },
       label: {
         show: true,
         position: percentage < 0.8 ? 'right' : 'left',
@@ -273,12 +255,8 @@ export function WeightsChart({
             backgroundColor: '#3F4650',
             color: '#A0AEC0',
             padding: 4,
-            borderRadius: 2,
-          },
-        },
-      },
-      showSymbol: true,
-    })
+            borderRadius: 2 } } },
+      showSymbol: true })
   }
 
   const enoughData = startWeight && endWeight && isValid(startDateTime) && isValid(endDateTime)

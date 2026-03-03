@@ -1,19 +1,10 @@
 import { useEffect, useRef } from 'react'
-import {
-  Popover,
-  PopoverArrow,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  Link,
-  Portal,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Popover, Link, Portal, useDisclosure } from '@chakra-ui/react';
 import { BuildPopover } from './BuildPopover'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 export function BuildNavLink() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const triggerRef = useRef<HTMLAnchorElement>(null)
   const popoverRef = useRef<HTMLDivElement>(null)
 
@@ -53,8 +44,10 @@ export function BuildNavLink() {
   }
 
   return (
-    <Popover closeOnBlur={false} isOpen={isOpen} placement="bottom">
-      <PopoverTrigger>
+    <Popover.Root closeOnInteractOutside={false} open={isOpen} positioning={{
+      placement: 'bottom'
+    }}>
+      <Popover.Trigger asChild>
         <Link
           bg="transparent"
           cursor="pointer"
@@ -65,20 +58,21 @@ export function BuildNavLink() {
         >
           Build
         </Link>
-      </PopoverTrigger>
+      </Popover.Trigger>
       <Portal>
-        <PopoverContent
-          _focus={{ borderColor: 'transparent !important' }}
-          ref={popoverRef}
-          rounded="lg"
-          w="fit-content"
-        >
-          <PopoverArrow bg="background.level3" />
-          <PopoverBody p={{ base: 'ms', md: 'md' }}>
-            <BuildPopover closePopover={onClose} />
-          </PopoverBody>
-        </PopoverContent>
+        <Popover.Positioner>
+          <Popover.Content
+            _focus={{ borderColor: 'transparent !important' }}
+            ref={popoverRef}
+            rounded="lg"
+            w="fit-content">
+            <Popover.Arrow bg="background.level3" />
+            <Popover.Body p={{ base: 'ms', md: 'md' }}>
+              <BuildPopover closePopover={onClose} />
+            </Popover.Body>
+          </Popover.Content>
+        </Popover.Positioner>
       </Portal>
-    </Popover>
-  )
+    </Popover.Root>
+  );
 }

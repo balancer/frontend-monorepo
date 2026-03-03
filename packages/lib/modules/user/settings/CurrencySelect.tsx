@@ -1,7 +1,7 @@
 'use client'
 
 import { SupportedCurrency } from '@repo/lib/shared/utils/currencies'
-import { Circle, HStack, Text } from '@chakra-ui/react'
+import { Circle, HStack, Text } from '@chakra-ui/react';
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { ReactNode } from 'react'
 import Image from 'next/image'
@@ -20,8 +20,7 @@ const currencyIconMap: Record<SupportedCurrency, string> = {
   [SupportedCurrency.JPY]: '/images/currencies/JPY.svg',
   [SupportedCurrency.CNY]: '/images/currencies/CNY.svg',
   [SupportedCurrency.BTC]: '/images/currencies/BTC.svg',
-  [SupportedCurrency.ETH]: '/images/currencies/ETH.svg',
-}
+  [SupportedCurrency.ETH]: '/images/currencies/ETH.svg' }
 
 const options: CurrencyOption[] = Object.values(SupportedCurrency).map(currency => ({
   label: (
@@ -32,8 +31,7 @@ const options: CurrencyOption[] = Object.values(SupportedCurrency).map(currency 
       <Text>{currency}</Text>
     </HStack>
   ),
-  value: currency,
-}))
+  value: currency }))
 
 export function CurrencySelect({ id }: { id: string }) {
   const { currency, setCurrency } = useUserSettings()

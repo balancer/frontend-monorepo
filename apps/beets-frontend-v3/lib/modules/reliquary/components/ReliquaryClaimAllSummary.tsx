@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text } from '@chakra-ui/react'
+import { Card, VStack, Text } from '@chakra-ui/react';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
@@ -33,8 +33,7 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
       {
         tokenAddress: beetsAddress,
         humanAmount: pendingRewardsData.rewards[0].amount as `${number}` | '',
-        symbol: 'BEETS',
-      },
+        symbol: 'BEETS' },
     ]
   }, [pendingRewardsData, totalPendingRewardsUSD, pool, beetsAddress])
 
@@ -45,7 +44,7 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
   return (
     <AnimateHeightChange spacing="ms">
       {isMobile && <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
-      <Card p="ms" variant="modalSubSection">
+      <Card.Root p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={claimTokens}
           chain={pool.chain}
@@ -54,23 +53,23 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
           tokens={[]}
           totalUSDValue={totalPendingRewardsUSD.toString()}
         />
-      </Card>
+      </Card.Root>
       {shouldShowReceipt ? (
         <>
           <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="success-message">
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="md" w="full">
+            <Card.Root variant="modalSubSection">
+              <VStack align="start" gap="md" w="full">
                 <Text color="font.highlight">You've successfully claimed all rewards!</Text>
                 <Text color="font.secondary" fontSize="sm">
                   Your BEETS rewards have been transferred to your wallet. Return to the maBEETS
                   page to manage your Relics.
                 </Text>
               </VStack>
-            </Card>
+            </Card.Root>
           </CardPopAnim>
         </>
       ) : null}
     </AnimateHeightChange>
-  )
+  );
 }

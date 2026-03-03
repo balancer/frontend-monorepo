@@ -1,6 +1,6 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'
+import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import { useTokens } from '../TokensProvider'
 import { useMemo } from 'react'
 import { TokenIcon } from '../TokenIcon'
@@ -21,11 +21,9 @@ export function TokenSelectPopular({
   currentToken,
   excludeNativeAsset,
   onTokenSelect,
-  excludedTokens = [],
-}: Props) {
+  excludedTokens = [] }: Props) {
   const {
-    tokens: { popularTokens },
-  } = getNetworkConfig(chain)
+    tokens: { popularTokens } } = getNetworkConfig(chain)
   const { getToken } = useTokens()
 
   const tokens = useMemo(() => {
@@ -45,7 +43,7 @@ export function TokenSelectPopular({
     <Wrap>
       {tokens?.map(token => (
         <WrapItem key={token.address}>
-          <Tag
+          <Tag.Root
             _hover={isExcludedToken(token) ? {} : { bg: 'background.level4', shadow: 'none' }}
             cursor={isExcludedToken(token) ? 'not-allowed' : 'pointer'}
             key={token.address}
@@ -61,9 +59,9 @@ export function TokenSelectPopular({
               <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={20} />
               <Text fontSize="sm">{token.symbol}</Text>
             </HStack>
-          </Tag>
+          </Tag.Root>
         </WrapItem>
       ))}
     </Wrap>
-  )
+  );
 }

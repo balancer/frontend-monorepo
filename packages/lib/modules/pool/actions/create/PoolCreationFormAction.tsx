@@ -1,5 +1,4 @@
-import { Button, HStack, IconButton, useDisclosure, Divider, VStack } from '@chakra-ui/react'
-import { ChevronLeftIcon } from '@chakra-ui/icons'
+import { Button, HStack, IconButton, useDisclosure, VStack, Separator, Icon } from '@chakra-ui/react';
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { usePoolCreationForm } from './PoolCreationFormProvider'
@@ -9,14 +8,14 @@ import { InvalidTotalWeightAlert } from './InvalidTotalWeightAlert'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 import { isReClammPool, isCowPool } from './helpers'
 import { useFormState, useWatch } from 'react-hook-form'
+import { LuChevronLeft } from 'react-icons/lu';
 
 export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
   const { poolAddress, poolCreationForm, goToNextStep, goToPreviousStep, isLastStep, isFirstStep } =
     usePoolCreationForm()
   const [poolTokens, poolType, network] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'poolType', 'network'],
-  })
+    name: ['poolTokens', 'poolType', 'network'] })
   const formState = useFormState({ control: poolCreationForm.control })
   const previewModalDisclosure = useDisclosure()
   const { isConnected } = useUserAccount()
@@ -38,19 +37,14 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
 
   return (
     <>
-      <VStack spacing="lg" w="full">
-        <Divider />
+      <VStack gap="lg" w="full">
+        <Separator />
 
         <InvalidTotalWeightAlert />
 
-        <HStack spacing="md" w="full">
+        <HStack gap="md" w="full">
           {showBackButton && (
-            <IconButton
-              aria-label="Back"
-              icon={<ChevronLeftIcon h="8" w="8" />}
-              onClick={goToPreviousStep}
-              size="lg"
-            />
+            <IconButton aria-label="Back" onClick={goToPreviousStep} size="lg"><Icon h="8" w="8" asChild><LuChevronLeft /></Icon></IconButton>
           )}
 
           {poolAddress && !isCowPool(poolType) && (
@@ -81,15 +75,14 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
           )}
         </HStack>
       </VStack>
-
       {formState.isValid && isLastStep && (
         <PoolCreationModal
           finalFocusRef={nextBtn}
-          isOpen={previewModalDisclosure.isOpen}
+          isOpen={previewModalDisclosure.open}
           onClose={previewModalDisclosure.onClose}
           onOpen={previewModalDisclosure.onOpen}
         />
       )}
     </>
-  )
+  );
 }

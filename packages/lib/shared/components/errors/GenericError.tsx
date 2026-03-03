@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertProps, Text } from '@chakra-ui/react'
+import { AlertProps, Text } from '@chakra-ui/react';
 import { ErrorAlert } from './ErrorAlert'
 import {
   isLedgerUnknownError,
@@ -8,8 +8,7 @@ import {
   isPausedError,
   isTooManyRequestsError,
   isUserRejectedError,
-  isViemHttpFetchError,
-} from '../../utils/error-filters'
+  isViemHttpFetchError } from '../../utils/error-filters'
 import { ensureError } from '../../utils/errors'
 import { DiscordLink } from '@repo/lib/shared/components/links/DiscordLink'
 

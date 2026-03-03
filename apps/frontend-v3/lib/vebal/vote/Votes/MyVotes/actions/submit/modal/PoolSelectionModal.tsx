@@ -3,16 +3,10 @@ import {
   Checkbox,
   CheckboxGroup,
   HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Text,
   VStack,
-} from '@chakra-ui/react'
+  Dialog,
+  Portal } from '@chakra-ui/react';
 import { SubmittingVote, useMyVotes } from '../../../MyVotesProvider'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -35,51 +29,59 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Confirm vote resubmission</ModalHeader>
-        <ModalCloseButton />
+    <Dialog.Root open={isOpen} onOpenChange={e => {
+      if (!e.open) {
+        onClose();
+      }
+    }}>
+      <Portal>
 
-        <ModalBody>
-          <VStack>
-            <Text color="font.secondary">
-              Since you are not utilizing your full voting power on the pools listed below, it is
-              assumed you will want to re-submit your vote now. However, there are some cases where
-              you may not want to re-submit (e.g. to avoid the 10-day time lock), so please confirm.
-            </Text>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>Confirm vote resubmission</Dialog.Header>
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <VStack>
+                <Text color="font.secondary">
+                  Since you are not utilizing your full voting power on the pools listed below, it is
+                  assumed you will want to re-submit your vote now. However, there are some cases where
+                  you may not want to re-submit (e.g. to avoid the 10-day time lock), so please confirm.
+                </Text>
 
-            <Text fontWeight="bold" mt="4" w="full">
-              Select pools to resubmit:
-            </Text>
+                <Text fontWeight="bold" mt="4" w="full">
+                  Select pools to resubmit:
+                </Text>
 
-            <CheckboxGroup
-              defaultValue={selectableVotes.map(vote => vote.vote.id)}
-              onChange={(votes: string[]) => setSelectedVotes(votes as Address[])}
-            >
-              {selectableVotes.map(vote => (
-                <Checkbox key={vote.vote.id} value={vote.vote.id} w="full">
-                  <VoteDescription vote={vote} />
-                </Checkbox>
-              ))}
-            </CheckboxGroup>
+                <CheckboxGroup
+                  defaultValue={String(selectableVotes.map(vote => vote.vote.id))}
+                  onValueChange={(votes: string[]) => setSelectedVotes(votes as Address[])}
+                >
+                  {selectableVotes.map(vote => (
+                    <Checkbox.Root key={vote.vote.id} value={String(vote.vote.id)} w="full"><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                        <VoteDescription vote={vote} />
+                      </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+                  ))}
+                </CheckboxGroup>
 
-            {updatedWeightVotes.map(vote => (
-              <Checkbox defaultChecked isDisabled key={vote.vote.id} value={vote.vote.id} w="full">
-                <VoteDescription vote={vote} />
-              </Checkbox>
-            ))}
-          </VStack>
-        </ModalBody>
+                {updatedWeightVotes.map(vote => (
+                  <Checkbox.Root defaultChecked disabled key={vote.vote.id} value={String(vote.vote.id)} w="full"><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                      <VoteDescription vote={vote} />
+                    </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+                ))}
+              </VStack>
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Button onClick={continueOrClose} variant="primary" w="full">
+                {submittableVotes.length > 0 ? 'Continue' : 'Return to vote page'}
+              </Button>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-        <ModalFooter>
-          <Button onClick={continueOrClose} variant="primary" w="full">
-            {submittableVotes.length > 0 ? 'Continue' : 'Return to vote page'}
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }
 
 function poolName(vote: VotingPoolWithData) {

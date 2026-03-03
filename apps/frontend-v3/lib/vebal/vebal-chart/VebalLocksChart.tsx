@@ -1,4 +1,4 @@
-import { Card, CardProps, Text, VStack } from '@chakra-ui/react'
+import { Card, CardProps, Text, VStack } from '@chakra-ui/react';
 
 import ReactECharts from 'echarts-for-react'
 import { useVebalLocksChart, UseVebalLocksChartParams } from './useVebalLocksChart'
@@ -12,7 +12,7 @@ export function VebalLocksChart({
   const chartInfo = useVebalLocksChart({ mainnetLockedInfo, lockSnapshots })
 
   return (
-    <Card position="relative" {...props}>
+    <Card.Root position="relative" {...props}>
       {chartInfo.insufficientData ? (
         <VStack h="full" justifyContent="center">
           <Text variant="secondary">
@@ -29,6 +29,6 @@ export function VebalLocksChart({
           style={{ height: '100%', width: '100%' }}
         />
       )}
-    </Card>
-  )
+    </Card.Root>
+  );
 }

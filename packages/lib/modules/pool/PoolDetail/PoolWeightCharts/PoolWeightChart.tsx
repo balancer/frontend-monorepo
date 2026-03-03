@@ -1,7 +1,15 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql';
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
-import { Box, VStack, useTheme } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react';
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'framer-motion'
 import { useRef, useMemo } from 'react'
@@ -40,8 +48,7 @@ const smallSize: ChartSizeValues = {
   haloTop: '40%',
   haloLeft: '55px',
   haloWidth: '40px',
-  haloHeight: '40px',
-}
+  haloHeight: '40px' }
 
 const normalSize: ChartSizeValues = {
   chartHeight: '250px',
@@ -50,14 +57,13 @@ const normalSize: ChartSizeValues = {
   haloTop: '49%',
   haloLeft: '95px',
   haloWidth: '60px',
-  haloHeight: '60px',
-}
+  haloHeight: '60px' }
 
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
   const colorMode = useThemeColorMode()
   const theme = useTheme()
   const colorModeKey = colorMode === 'light' ? 'default' : '_dark'
-  const chartOuter = isSmall ? '' : theme.semanticTokens.shadows.chartIconOuter[colorModeKey]
+  const chartOuter = isSmall ? '' : theme.token('semanticTokens.shadows.chartIconOuter')[colorModeKey]
   return (
     <Box
       alignItems="center"
@@ -108,8 +114,7 @@ export function PoolWeightChart({
   chain,
   hasLegend,
   isSmall,
-  totalLiquidity,
-}: PoolWeightChartProps) {
+  totalLiquidity }: PoolWeightChartProps) {
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const theme = useTheme()
@@ -121,18 +126,15 @@ export function PoolWeightChart({
       ...(chartSizeValues.chartHeight && { height: chartSizeValues.chartHeight }),
       tooltip: {
         trigger: 'item',
-        valueFormatter: (value: string) => fNum('weight', value, { abbreviated: false }),
-      },
+        valueFormatter: (value: string) => fNum('weight', value, { abbreviated: false }) },
       animation: false,
       legend: {
-        show: false,
-      },
+        show: false },
       grid: {
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-      },
+        bottom: 0 },
       series: [
         {
           name: 'Pool composition',
@@ -140,18 +142,14 @@ export function PoolWeightChart({
           radius: ['70%', '99%'],
           itemStyle: {
             borderColor: theme.colors['chartBorder'][colorMode],
-            borderWidth: 1.5,
-          },
+            borderWidth: 1.5 },
           label: {
             show: false,
-            position: 'center',
-          },
+            position: 'center' },
           labelLine: {
-            show: false,
-          },
+            show: false },
           emphasis: {
-            scale: false,
-          },
+            scale: false },
           data: displayTokens.map((token, i) => ({
             value: calcWeightForBalance(token.address, token.balance, totalLiquidity, chain),
             name: token.symbol,
@@ -159,18 +157,12 @@ export function PoolWeightChart({
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 1,
-                  color: getTokenColor(chain, token.address as Address, i).from,
-                },
+                  color: getTokenColor(chain, token.address as Address, i).from },
                 {
                   offset: 0,
-                  color: getTokenColor(chain, token.address as Address, i).to,
-                },
-              ]),
-            },
-          })),
-        },
-      ],
-    }
+                  color: getTokenColor(chain, token.address as Address, i).to },
+              ]) } })) },
+      ] }
   }, [chartSizeValues, displayTokens, totalLiquidity, chain, colorMode, calcWeightForBalance])
 
   return (
@@ -185,7 +177,6 @@ export function PoolWeightChart({
         <Box height="full" position="absolute" rounded="full" shadow="md" top="0" width="full" />
         <Box
           alignItems="center"
-          as={motion.div}
           bottom="0"
           display="flex"
           height={`${chartSizeValues.boxHeight * 0.7}px`}
@@ -199,49 +190,48 @@ export function PoolWeightChart({
           transform="translateY(-50%)"
           width={`${chartSizeValues.boxWidth * 0.7}px`}
           zIndex={4}
-        >
-          <NoisyCard
-            cardProps={{
-              rounded: 'full',
-            }}
-            contentProps={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'relative',
-              shadow: 'innerXl',
-              rounded: 'full',
-            }}
-            shadowContainerProps={{ shadow: 'none' }}
-          >
-            <Box
-              _groupHover={{ transform: 'scale(1.15) translateY(-50%)' }}
-              position="absolute"
-              top="50%"
-              transform="translateY(-50%)"
-              transformOrigin="center"
-              transition="all 0.2s ease-out"
-              zIndex={5}
+          asChild
+        ><motion.div>
+            <NoisyCard
+              cardProps={{
+                rounded: 'full' }}
+              contentProps={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'relative',
+                shadow: 'innerXl',
+                rounded: 'full' }}
+              shadowContainerProps={{ shadow: 'none' }}
             >
-              <Image
-                alt={`Chain icon for ${chain.toLowerCase()}`}
-                height={isSmall ? 28 : 36}
-                src={`/images/chains/${chain}.svg`}
-                width={isSmall ? 28 : 36}
-              />
-            </Box>
+              <Box
+                _groupHover={{ transform: 'scale(1.15) translateY(-50%)' }}
+                position="absolute"
+                top="50%"
+                transform="translateY(-50%)"
+                transformOrigin="center"
+                transition="all 0.2s ease-out"
+                zIndex={5}
+              >
+                <Image
+                  alt={`Chain icon for ${chain.toLowerCase()}`}
+                  height={isSmall ? 28 : 36}
+                  src={`/images/chains/${chain}.svg`}
+                  width={isSmall ? 28 : 36}
+                />
+              </Box>
 
-            {/* Since these triangles utilise clip-path, we cannot use box-shadow, we need to utilise css filters */}
-            {/* Simply applying an opacity to the background color will achieve weird effects, so to match the designs */}
-            {/* We utilise layers of the same component! */}
-            <OuterSymbolCircle isSmall={isSmall || false} opacity="10%" />
-            <OuterSymbolCircle isSmall={isSmall || false} opacity="20%" />
-            <OuterSymbolCircle isSmall={isSmall || false} opacity="20%" />
-            <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
-            <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
-            <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
-          </NoisyCard>
-        </Box>
+              {/* Since these triangles utilise clip-path, we cannot use box-shadow, we need to utilise css filters */}
+              {/* Simply applying an opacity to the background color will achieve weird effects, so to match the designs */}
+              {/* We utilise layers of the same component! */}
+              <OuterSymbolCircle isSmall={isSmall || false} opacity="10%" />
+              <OuterSymbolCircle isSmall={isSmall || false} opacity="20%" />
+              <OuterSymbolCircle isSmall={isSmall || false} opacity="20%" />
+              <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
+              <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
+              <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
+            </NoisyCard>
+          </motion.div></Box>
         <Box
           height={`${chartSizeValues.boxHeight}`}
           position="relative"
@@ -253,12 +243,11 @@ export function PoolWeightChart({
             ref={eChartsRef}
             style={{
               width: `${chartSizeValues.boxWidth}px`,
-              height: `${chartSizeValues.boxHeight}px`,
-            }}
+              height: `${chartSizeValues.boxHeight}px` }}
           />
         </Box>
       </Box>
       {hasLegend && <PoolWeightChartLegend displayTokens={displayTokens} />}
     </VStack>
-  )
+  );
 }

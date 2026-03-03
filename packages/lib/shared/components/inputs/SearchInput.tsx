@@ -1,4 +1,4 @@
-import { InputGroup, Input, InputRightElement, IconButton, InputProps } from '@chakra-ui/react'
+import { InputGroup, Input, InputRightElement, IconButton, InputProps } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form'
 import { useDebounce } from '@repo/lib/shared/hooks/useDebounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
@@ -45,22 +45,20 @@ export function SearchInput({
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
           boxShadow: 'var(--chakra-shadows-input-innerFocus) !important',
-          color: 'input.fontFocus',
-        }}
+          color: 'input.fontFocus' }}
         _focusVisible={{
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
           boxShadow: 'var(--chakra-shadows-input-innerFocus) !important',
-          color: 'input.fontFocus',
-        }}
+          color: 'input.fontFocus' }}
         _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
         autoComplete="off"
         bg="input.bgDefault"
         border="1px solid"
         borderColor="input.borderDefault"
-        defaultValue={search ?? ''}
+        defaultValue={String(search ?? '')}
         id={SEARCH}
-        onChange={debouncedChangeHandler}
+        onValueChange={debouncedChangeHandler}
         onKeyDown={event => {
           if (event.key === 'Enter') {
             event.preventDefault()
@@ -74,21 +72,18 @@ export function SearchInput({
           _hover={{
             opacity: '1',
             background: 'background.level1',
-            color: 'font.maxContrast',
-          }}
+            color: 'font.maxContrast' }}
           aria-label={ariaLabel}
           color="font.secondary"
-          icon={search ? <X size="20" /> : <Search size="20" />}
-          isLoading={isLoading && getFieldState(SEARCH).isTouched}
+          loading={isLoading && getFieldState(SEARCH).isTouched}
           onClick={() => {
             setSearch('')
             setValue(SEARCH, '')
           }}
           opacity="0.5"
           size="sm"
-          variant="ghost"
-        />
+          variant="ghost">{search ? <X size="20" /> : <Search size="20" />}</IconButton>
       </InputRightElement>
     </InputGroup>
-  )
+  );
 }

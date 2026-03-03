@@ -1,4 +1,4 @@
-import { Card } from '@chakra-ui/react'
+import { Card } from '@chakra-ui/react';
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -9,8 +9,7 @@ import { formatUnits } from 'viem'
 
 export function LstWithdrawSummary({
   isLoading: isLoadingReceipt,
-  receivedToken,
-}: LstWithdrawReceiptResult) {
+  receivedToken }: LstWithdrawReceiptResult) {
   const { isMobile } = useBreakpoints()
   const { chain, withdrawTransactionSteps, lstWithdrawTxHash, nativeAsset, amountWithdraw } =
     useLst()
@@ -21,7 +20,7 @@ export function LstWithdrawSummary({
   return (
     <AnimateHeightChange spacing="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />}
-      <Card variant="modalSubSection">
+      <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
           isLoading={isLoading}
@@ -33,7 +32,7 @@ export function LstWithdrawSummary({
               : formatUnits(amountWithdraw, nativeAsset?.decimals || 18).toString()
           }
         />
-      </Card>
+      </Card.Root>
     </AnimateHeightChange>
-  )
+  );
 }

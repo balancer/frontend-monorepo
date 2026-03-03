@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { Box, BoxProps, Center, Text, TextProps } from '@chakra-ui/react'
+import { Box, BoxProps, Center, Text, TextProps } from '@chakra-ui/react';
 import { RadialPattern, RadialPatternProps } from './RadialPattern'
 import { GraniteBg } from './GraniteBg'
 

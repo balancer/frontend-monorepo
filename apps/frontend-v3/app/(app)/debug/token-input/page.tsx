@@ -2,7 +2,7 @@
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
-import { Button, Card, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { Button, Card, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState } from 'react'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
@@ -31,8 +31,8 @@ export default function TokenInputPage() {
           <Heading>Token Input</Heading>
           <Text>Current value: {currentValue}</Text>
           <ConnectWallet />
-          <Card p="md" shadow="2xl" variant="level3">
-            <VStack spacing="md" w="full">
+          <Card.Root p="md" shadow="2xl" variant="level3">
+            <VStack gap="md" w="full">
               <TokenInput
                 address={token?.address}
                 chain={token?.chain}
@@ -46,11 +46,11 @@ export default function TokenInputPage() {
                 Submit
               </Button>
             </VStack>
-          </Card>
+          </Card.Root>
 
           <TokenSelectModal
             chain={GqlChain.Mainnet}
-            isOpen={tokenSelectDisclosure.isOpen}
+            isOpen={tokenSelectDisclosure.open}
             onClose={tokenSelectDisclosure.onClose}
             onOpen={tokenSelectDisclosure.onOpen}
             onTokenSelect={handleTokenSelect}
@@ -59,5 +59,5 @@ export default function TokenInputPage() {
         </VStack>
       </TokenBalancesProvider>
     </TokenInputsValidationProvider>
-  )
+  );
 }

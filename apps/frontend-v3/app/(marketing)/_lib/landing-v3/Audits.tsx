@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import {
   VStack,
   Button,
@@ -11,9 +10,8 @@ import {
   Link,
   Stack,
   IconButton,
-  Heading,
-  useColorMode,
-} from '@chakra-ui/react'
+  Heading } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ArrowUpRight } from 'react-feather'
@@ -30,8 +28,7 @@ const MotionBox = motion(Box)
 
 const HOVER_ANIMATION = {
   scale: 1.0,
-  transition: { duration: 0.3 },
-}
+  transition: { duration: 0.3 } }
 
 const ARROW_ICON = <ArrowUpRight size="14px" />
 
@@ -42,41 +39,33 @@ const GRADIENT_OVERLAYS = {
   light: [
     {
       background: 'linear-gradient(90deg, #eee 0%, #999 100%)',
-      blendMode: 'soft-light',
-    },
+      blendMode: 'soft-light' },
     {
       background: 'linear-gradient(90deg, #666 0%, #eee 100%)',
-      blendMode: 'soft-light',
-    },
+      blendMode: 'soft-light' },
     {
       background: 'linear-gradient(90deg, #eee 0%, #bbb 100%)',
-      blendMode: 'soft-light',
-    },
+      blendMode: 'soft-light' },
   ],
   dark: [
     {
       background:
         'linear-gradient(90deg, #B3AEF5 54.87%, #D7CBE7 70.41%, #E5C8C8 82.72%, #EAA879 96.28%)',
-      blendMode: 'overlay',
-    },
+      blendMode: 'overlay' },
     {
       background: 'linear-gradient(90deg, rgba(237, 187, 250, 0.00) 0.08%, #F48975 90%)',
-      blendMode: 'soft-light',
-    },
+      blendMode: 'soft-light' },
     {
       background: 'linear-gradient(90deg, #62E9CA 0%, #42DCFD 98.03%)',
-      blendMode: 'soft-light',
-    },
-  ],
-} as const
+      blendMode: 'soft-light' },
+  ] } as const
 
 const AuditCard = memo(function AuditCard({
   href,
   logo,
   bgImageName,
   colorMode,
-  gradientIndex,
-}: {
+  gradientIndex }: {
   href: string
   logo: ReactNode
   bgImageName: string
@@ -91,7 +80,7 @@ const AuditCard = memo(function AuditCard({
   )
 
   return (
-    <Link cursor="pointer" href={href} isExternal>
+    <Link cursor="pointer" href={href} target='_blank' rel='noopener noreferrer'>
       <MotionBox
         _hover={{ shadow: 'sm' }}
         data-group
@@ -135,12 +124,12 @@ const AuditCard = memo(function AuditCard({
             left="0"
             opacity={0}
             position="absolute"
-            sx={{
+            css={{
               animation: isHovered ? 'flash 0.3s ease-out' : 'none',
-              '@keyframes flash': {
+
+              '& @keyframes flash': {
                 '0%': { opacity: 0.15 },
-                '100%': { opacity: 0 },
-              },
+                '100%': { opacity: 0 } }
             }}
             top="0"
             w="full"
@@ -153,8 +142,8 @@ const AuditCard = memo(function AuditCard({
             left="0"
             opacity={isHovered ? 1 : 0}
             position="absolute"
-            sx={{
-              mixBlendMode: gradientOverlay?.blendMode,
+            css={{
+              mixBlendMode: gradientOverlay?.blendMode
             }}
             top="0"
             transition="opacity 0.5s var(--ease-out-cubic) 0.05s"
@@ -181,7 +170,6 @@ const AuditCard = memo(function AuditCard({
           _groupHover={ICON_BUTTON_HOVER_STYLES}
           aria-label="View report"
           h="40px"
-          icon={ARROW_ICON}
           isRound
           opacity={0}
           position="absolute"
@@ -190,15 +178,14 @@ const AuditCard = memo(function AuditCard({
           top="md"
           transition="opacity 0.3s ease"
           w="40px"
-          zIndex="2"
-        />
+          zIndex="2">{ARROW_ICON}</IconButton>
       </MotionBox>
     </Link>
-  )
+  );
 })
 
 export function Audits() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   const spearbitLogo = useMemo(() => <SpearbitLogo />, [])
   const trailOfBitsLogo = useMemo(() => <TrailOfBitsLogo />, [])
@@ -207,16 +194,16 @@ export function Audits() {
   return (
     <Noise backgroundColor="background.level0WithOpacity ">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
-        <VStack align="start" spacing="lg" w="full">
+        <VStack align="start" gap="lg" w="full">
           <Stack
             align="end"
             alignItems={{ base: 'start', lg: 'end' }}
             direction={{ base: 'column', lg: 'row' }}
             justify="space-between"
-            spacing="lg"
+            gap="lg"
             w="full"
           >
-            <VStack align="start" spacing="lg">
+            <VStack align="start" gap="lg">
               <BlurIn delay={0.4}>
                 <Text
                   background="font.special"
@@ -237,15 +224,8 @@ export function Audits() {
                 text="Audited by the best"
               />
             </VStack>
-            <Button
-              as={Link}
-              href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits"
-              isExternal
-              rightIcon={ARROW_ICON}
-              variant="secondary"
-            >
-              View reports
-            </Button>
+            <Button isExternal variant="secondary" asChild><Link href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits">View reports
+                                          {ARROW_ICON}</Link></Button>
           </Stack>
           <Grid
             gap="md"
@@ -280,7 +260,7 @@ export function Audits() {
               />
             </GridItem>
           </Grid>
-          <VStack align="start" mt="xs" spacing="xs">
+          <VStack align="start" mt="xs" gap="xs">
             <Heading fontSize="lg" pb="xs" variant="h6">
               Review the code and report vulnerabilities
             </Heading>
@@ -291,8 +271,8 @@ export function Audits() {
                 display="inline-flex"
                 gap="2px"
                 href="https://immunefi.com/bug-bounty/balancer/information/"
-                isExternal
-              >
+                target='_blank'
+                rel='noopener noreferrer'>
                 Immunefi
                 {ARROW_ICON}
               </Link>
@@ -301,5 +281,5 @@ export function Audits() {
         </VStack>
       </DefaultPageContainer>
     </Noise>
-  )
+  );
 }

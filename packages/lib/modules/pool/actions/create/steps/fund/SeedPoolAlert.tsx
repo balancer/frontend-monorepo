@@ -3,7 +3,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolType } from '@balancer/sdk'
 import { isGyroEllipticPool, isReClammPool } from '@repo/lib/modules/pool/actions/create/helpers'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { VStack, UnorderedList, ListItem } from '@chakra-ui/react'
+import { VStack, List } from '@chakra-ui/react';
 
 export function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
   const { poolAddress } = usePoolCreationForm()
@@ -39,21 +39,21 @@ export function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
   return (
     <BalAlert
       content={
-        <UnorderedList>
-          <ListItem color="black">
+        <List.Root as='ul'>
+          <List.Item color="black">
             The pool will only be listed on the {projectName} UI once it is seeded.
-          </ListItem>
-          <ListItem color="black">
+          </List.Item>
+          <List.Item color="black">
             Be very careful that the USD values you add are proportional to the target token
             weights, or you’ll likely get rekt.{' '}
-          </ListItem>
-          <ListItem color="black">
+          </List.Item>
+          <List.Item color="black">
             Note: LPs are required to make proportional adds when the liquidity of the pool is less
             than $50k.
-          </ListItem>
-        </UnorderedList>
+          </List.Item>
+        </List.Root>
       }
       status="info"
     />
-  )
+  );
 }

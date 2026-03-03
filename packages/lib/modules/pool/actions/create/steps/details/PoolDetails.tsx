@@ -1,4 +1,4 @@
-import { VStack, Heading } from '@chakra-ui/react'
+import { VStack, Heading } from '@chakra-ui/react';
 import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolDetails } from '../../validatePoolCreationForm'
@@ -41,11 +41,10 @@ export function PoolDetails() {
   }, [suggestedPoolName, suggestedPoolSymbol, poolCreationForm])
 
   return (
-    <VStack align="start" spacing="xl" w="full">
+    <VStack align="start" gap="xl" w="full">
       <Heading color="font.maxContrast" size="md">
         Pool details
       </Heading>
-
       <InputWithSuggestion
         control={poolCreationForm.control}
         label="Pool name"
@@ -59,7 +58,6 @@ export function PoolDetails() {
         tooltip="The name for the pool token"
         validate={validatePoolDetails.name}
       />
-
       <InputWithSuggestion
         control={poolCreationForm.control}
         label="Pool symbol"
@@ -74,5 +72,5 @@ export function PoolDetails() {
         validate={validatePoolDetails.symbol}
       />
     </VStack>
-  )
+  );
 }

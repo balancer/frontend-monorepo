@@ -1,4 +1,4 @@
-import { Icon, IconProps } from '@chakra-ui/react'
+import { Icon, IconProps } from '@chakra-ui/react';
 
 export function BeetsTokenSonic(props: IconProps) {
   return (

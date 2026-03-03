@@ -1,9 +1,10 @@
-import { useColorModeValue } from '@chakra-ui/react'
 import { SVGProps } from 'react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 
 export function BoostedIcon({ size = 24, ...props }: { size?: number } & SVGProps<SVGSVGElement>) {
-  const stopColor1 = useColorModeValue('#FFFFFF', '#FCFCFD')
-  const stopColor2 = useColorModeValue('#DFCCB9', '#A0AEC0')
+  const colorMode = useThemeColorMode()
+  const stopColor1 = colorMode === 'dark' ? '#FCFCFD' : '#FFFFFF'
+  const stopColor2 = colorMode === 'dark' ? '#A0AEC0' : '#DFCCB9'
   return (
     <svg
       {...props}

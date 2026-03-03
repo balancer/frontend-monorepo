@@ -1,5 +1,5 @@
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { Text } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react';
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { buildCowSwapUrl } from '../cow/cow.utils'
@@ -34,8 +34,7 @@ export function SwapSimulationError({ errorMessage }: Props) {
                 href={buildCowSwapUrl({
                   chain: selectedChain,
                   tokenInAddress: tokenIn.address,
-                  tokenOutAddress: tokenOut.address,
-                })}
+                  tokenOutAddress: tokenOut.address })}
                 isExternal
               >
                 CoW Swap

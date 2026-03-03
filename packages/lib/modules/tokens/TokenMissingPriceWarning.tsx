@@ -1,15 +1,18 @@
-import { Box, HStack, Text, Tooltip } from '@chakra-ui/react'
+import { Box, HStack, Text } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { AlertTriangle } from 'react-feather'
 
 export function TokenMissingPriceWarning({ message }: { message: string }) {
   return (
-    <HStack color="font.warning" spacing="xs">
+    <HStack color="font.warning" gap="xs">
       <Text color="font.warning">—</Text>
-      <Tooltip label={message} placement="top">
+      <Tooltip content={message} positioning={{
+        placement: "top"
+      }}>
         <Box zIndex="0">
           <AlertTriangle size={16} />
         </Box>
       </Tooltip>
     </HStack>
-  )
+  );
 }

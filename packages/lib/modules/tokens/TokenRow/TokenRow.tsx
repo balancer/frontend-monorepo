@@ -7,12 +7,10 @@ import {
   Skeleton,
   Text,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
+  HoverCard,
   VStack,
   Flex,
-  Link,
-} from '@chakra-ui/react'
+  Link } from '@chakra-ui/react';
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -62,8 +60,7 @@ function TokenInfo({
   isBpt = false,
   isNestedPoolToken = false,
   iconSize = 40,
-  logoURI,
-}: TokenInfoProps) {
+  logoURI }: TokenInfoProps) {
   const tokenSymbol = isBpt ? '‘LP’ pool token' : poolToken?.symbol || token?.symbol || symbol
   const tokenName = isBpt ? pool?.symbol : poolToken?.name || token?.name
 
@@ -72,18 +69,16 @@ function TokenInfo({
     fontSize: isNestedPoolToken ? 'sm' : 'md',
     fontWeight: 'bold',
     lineHeight: isNestedPoolToken ? '18px' : '24px',
-    variant: disabled ? 'secondary' : 'primary',
-  }
+    variant: disabled ? 'secondary' : 'primary' }
 
   const tokenNameProps = {
     fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
     lineHeight: isNestedPoolToken ? '12px' : '18px',
-    variant: 'secondary',
-  }
+    variant: 'secondary' }
 
   return (
-    <HStack spacing={{ base: 'sm', md: 'ms' }}>
+    <HStack gap={{ base: 'sm', md: 'ms' }}>
       {!isBpt && (
         <TokenIcon
           address={address}
@@ -94,12 +89,12 @@ function TokenInfo({
           size={iconSize}
         />
       )}
-      <VStack alignItems="flex-start" spacing="none">
-        <HStack spacing="none">
+      <VStack alignItems="flex-start" gap="none">
+        <HStack gap="none">
           {isBpt && pool ? (
-            <Link as={NextLink} href={getNestedPoolPath({ pool, nestedPoolAddress: address })}>
-              <Heading {...headingProps}>{tokenSymbol}</Heading>
-            </Link>
+            <Link asChild><NextLink href={getNestedPoolPath({ pool, nestedPoolAddress: address })}>
+                <Heading {...headingProps}>{tokenSymbol}</Heading>
+              </NextLink></Link>
           ) : (
             <Heading {...headingProps}>{tokenSymbol}</Heading>
           )}
@@ -115,7 +110,7 @@ function TokenInfo({
         </Box>
       )}
     </HStack>
-  )
+  );
 }
 
 export type TokenRowProps = {
@@ -162,8 +157,7 @@ export default function TokenRow({
   iconSize,
   logoURI,
   customToken,
-  customUsdPrice,
-}: TokenRowProps) {
+  customUsdPrice }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
@@ -189,8 +183,7 @@ export default function TokenRow({
     iconSize,
     isNestedPoolToken,
     symbol,
-    logoURI,
-  }
+    logoURI }
 
   let usdValue: string | undefined
 
@@ -212,18 +205,16 @@ export default function TokenRow({
     as: 'h6' as const,
     fontSize: isNestedPoolToken ? 'sm' : 'md',
     fontWeight: isNestedPoolToken ? 'medium' : 'bold',
-    lineHeight: isNestedPoolToken ? '18px' : '24px',
-  }
+    lineHeight: isNestedPoolToken ? '18px' : '24px' }
 
   const subTextProps = {
     fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
     lineHeight: isNestedPoolToken ? '12px' : '18px',
-    variant: 'secondary',
-  }
+    variant: 'secondary' }
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       {label && typeof label === 'string' ? <Text color="grayText">{label}</Text> : label}
       <HStack justifyContent="space-between" width="full">
         {toggleTokenSelect ? (
@@ -233,8 +224,8 @@ export default function TokenRow({
         ) : (
           <TokenInfo {...props} isBpt={isBpt || isNestedBpt} />
         )}
-        <HStack align="start" spacing="none">
-          <VStack alignItems="flex-end" spacing="none" textAlign="right">
+        <HStack align="start" gap="none">
+          <VStack alignItems="flex-end" gap="none" textAlign="right">
             {isLoading ? (
               <>
                 <Skeleton h="4" w="10" />
@@ -244,8 +235,7 @@ export default function TokenRow({
               <>
                 <Heading {...headingProps} title={value.toString()}>
                   {formatFalsyValueAsDash(value, val => fNum('token', val), {
-                    showZeroAmountAsDash,
-                  })}
+                    showZeroAmountAsDash })}
                 </Heading>
                 {isTokenPriceMissing ? (
                   <TokenMissingPriceWarning message={tokenPriceTip} />
@@ -253,15 +243,14 @@ export default function TokenRow({
                   <Text {...subTextProps}>
                     {formatFalsyValueAsDash(usdValue, toCurrency, {
                       abbreviated,
-                      showZeroAmountAsDash,
-                    })}
+                      showZeroAmountAsDash })}
                   </Text>
                 )}
               </>
             )}
           </VStack>
           {actualWeight && (
-            <VStack alignItems="flex-end" spacing="none" w="24">
+            <VStack alignItems="flex-end" gap="none" w="24">
               {isLoading ? (
                 <>
                   <Skeleton h="4" w="10" />
@@ -276,12 +265,12 @@ export default function TokenRow({
                       fNum('weight', actualWeight, { abbreviated: false })
                     )}
                   </Heading>
-                  <HStack align="center" spacing="xs">
+                  <HStack align="center" gap="xs">
                     {targetWeight ? (
                       <>
                         <Text {...subTextProps}>{fNum('weight', targetWeight)}</Text>
-                        <Popover trigger="hover">
-                          <PopoverTrigger>
+                        <HoverCard.Root>
+                          <HoverCard.Trigger asChild>
                             <Box
                               _hover={{ opacity: 1 }}
                               opacity="0.5"
@@ -291,19 +280,21 @@ export default function TokenRow({
                             >
                               <BullseyeIcon />
                             </Box>
-                          </PopoverTrigger>
-                          <PopoverContent maxW="300px" p="sm" w="auto">
-                            <Text fontSize="sm" variant="secondary">
-                              The target weight percentage set for this token in the context of a{' '}
-                              {pool ? getPoolTypeLabel(pool.type) : 'this'} pool.
-                            </Text>
-                          </PopoverContent>
-                        </Popover>
+                          </HoverCard.Trigger>
+                          <HoverCard.Positioner>
+                            <HoverCard.Content maxW="300px" p="sm" w="auto">
+                              <Text fontSize="sm" variant="secondary">
+                                The target weight percentage set for this token in the context of a{' '}
+                                {pool ? getPoolTypeLabel(pool.type) : 'this'} pool.
+                              </Text>
+                            </HoverCard.Content>
+                          </HoverCard.Positioner>
+                        </HoverCard.Root>
                       </>
                     ) : (
                       <>
-                        <Popover trigger="hover">
-                          <PopoverTrigger>
+                        <HoverCard.Root>
+                          <HoverCard.Trigger asChild>
                             <HStack cursor="default" data-group>
                               <Flex alignItems="center" height="24px">
                                 <Text
@@ -330,15 +321,17 @@ export default function TokenRow({
                                 <BullseyeIcon />
                               </Box>
                             </HStack>
-                          </PopoverTrigger>
-                          <PopoverContent p="sm">
-                            <Text fontSize="sm" variant="secondary">
-                              There is no concept of a target weight for tokens within{' '}
-                              {pool ? getPoolTypeLabel(pool.type) : 'this'} pools. Target weights
-                              only apply to tokens within Weighted pools.
-                            </Text>
-                          </PopoverContent>
-                        </Popover>
+                          </HoverCard.Trigger>
+                          <HoverCard.Positioner>
+                            <HoverCard.Content p="sm">
+                              <Text fontSize="sm" variant="secondary">
+                                There is no concept of a target weight for tokens within{' '}
+                                {pool ? getPoolTypeLabel(pool.type) : 'this'} pools. Target weights
+                                only apply to tokens within Weighted pools.
+                              </Text>
+                            </HoverCard.Content>
+                          </HoverCard.Positioner>
+                        </HoverCard.Root>
                       </>
                     )}
                   </HStack>
@@ -349,5 +342,5 @@ export default function TokenRow({
         </HStack>
       </HStack>
     </VStack>
-  )
+  );
 }

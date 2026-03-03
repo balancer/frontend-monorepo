@@ -1,11 +1,11 @@
-'use client'
-
+'use client';
 import React from 'react'
-import { Button, Heading, Flex, Box, Center, useColorMode } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react';
 import NextLink from 'next/link'
 
 export function BoostedPoolsPromoBanner() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   return (
     <Box
@@ -22,9 +22,9 @@ export function BoostedPoolsPromoBanner() {
       position="relative"
       rounded="lg"
       shadow="2xl"
-      sx={{
+      css={{
         width: '100% !important',
-        maxWidth: '100% !important',
+        maxWidth: '100% !important'
       }}
       width="full"
     >
@@ -65,23 +65,20 @@ export function BoostedPoolsPromoBanner() {
           </Flex>
           <Button
             _hover={{ bg: '#fff', color: '#000' }}
-            as={NextLink}
             bg="font.light"
             color="font.dark"
             cursor="hand"
             flex="1"
             h={{ base: '32px', sm: '40px', lg: '48px' }}
-            href="/pools?poolTags=BOOSTED"
             py="sm"
             rounded="full"
             shadow="2xl"
             size="md"
             w="max-content"
-          >
-            View pools
-          </Button>
+            asChild><NextLink href="/pools?poolTags=BOOSTED">View pools
+                      </NextLink></Button>
         </Flex>
       </Center>
     </Box>
-  )
+  );
 }

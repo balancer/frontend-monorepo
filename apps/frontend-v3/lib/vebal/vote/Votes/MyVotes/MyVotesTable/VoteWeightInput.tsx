@@ -1,13 +1,13 @@
-import {
-  Input,
-  InputGroup,
-  InputProps,
-  Box,
-  InputRightElement,
-  Tooltip,
-  useBoolean,
-  VStack,
-} from '@chakra-ui/react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useBoolean: Use react-use: useToggle or useState
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { Input, InputGroup, InputProps, Box, InputRightElement, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { blockInvalidNumberInput, bn } from '@repo/lib/shared/utils/numbers'
 import { Percent } from 'react-feather'
 import { useState } from 'react'
@@ -86,7 +86,7 @@ export function VoteWeightInput({
 
   return (
     <VStack align="start" w="full">
-      <Tooltip isDisabled={!inputProps.isDisabled} label={tooltipLabel}>
+      <Tooltip disabled={!inputProps.isDisabled} content={tooltipLabel}>
         <InputGroup>
           <Input
             autoComplete="off"
@@ -98,14 +98,14 @@ export function VoteWeightInput({
               setEditingValue(parseFloat(percentage).toFixed(2))
               toggle()
             }}
-            onChange={handleChange}
+            onValueChange={handleChange}
             onFocus={() => {
               setEditingValue(parseFloat(percentage).toFixed(2))
               toggle()
             }}
             onKeyDown={blockInvalidNumberInput}
             type="number"
-            value={getInputValue()}
+            value={String(getInputValue())}
             {...inputProps}
           />
           <InputRightElement color="font.primary" pointerEvents="none">
@@ -116,5 +116,5 @@ export function VoteWeightInput({
         </InputGroup>
       </Tooltip>
     </VStack>
-  )
+  );
 }

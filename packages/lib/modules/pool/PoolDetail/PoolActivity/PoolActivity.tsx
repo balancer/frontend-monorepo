@@ -7,8 +7,7 @@ import {
   HStack,
   Skeleton,
   Box,
-  IconButton,
-} from '@chakra-ui/react'
+  IconButton } from '@chakra-ui/react';
 import { Maximize2, Minimize2 } from 'react-feather'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PoolActivityProvider, usePoolActivity } from './usePoolActivity'
@@ -17,14 +16,12 @@ import { PoolActivityTable } from '../PoolActivityTable/PoolActivityTable'
 import { PoolActivityViewType } from '../PoolActivityViewType/PoolActivityViewType'
 import {
   PoolActivityViewTypeProvider,
-  usePoolActivityViewType,
-} from '../PoolActivityViewType/usePoolActivityViewType'
+  usePoolActivityViewType } from '../PoolActivityViewType/usePoolActivityViewType'
 import {
   differenceInDays,
   differenceInHours,
   isWithinInterval,
-  secondsToMilliseconds,
-} from 'date-fns'
+  secondsToMilliseconds } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
 import { usePool } from '../../PoolProvider'
 import { isV3LBP } from '../../pool.helpers'
@@ -50,8 +47,7 @@ function Content() {
     setActiveTab,
     isLoading,
     isExpanded,
-    setIsExpanded,
-  } = usePoolActivity()
+    setIsExpanded } = usePoolActivity()
 
   const { isChartView, isListView } = usePoolActivityViewType()
 
@@ -71,10 +67,7 @@ function Content() {
         backgroundColor: 'font.highlight',
         zIndex: -1,
         borderRadius: 'inherit',
-        opacity: 0.1,
-      },
-    },
-  }
+        opacity: 0.1 } } }
 
   const { dataSize } = usePoolActivity()
   const title = isV3LBP(pool)
@@ -88,8 +81,7 @@ function Content() {
     if (
       isWithinInterval(currentTime, {
         start: secondsToMilliseconds(lbpPool.startTime),
-        end: secondsToMilliseconds(lbpPool.endTime),
-      })
+        end: secondsToMilliseconds(lbpPool.endTime) })
     ) {
       const daysDiff = differenceInDays(currentTime, secondsToMilliseconds(lbpPool.startTime))
       subtitle = `In last ${daysDiff} days`
@@ -109,7 +101,7 @@ function Content() {
   }
 
   return (
-    <Card role="group">
+    <Card.Root role="group">
       <Stack
         alignItems="start"
         direction={{ base: 'column', md: 'row' }}
@@ -154,15 +146,13 @@ function Content() {
               aria-label={isExpanded ? 'Minimize chart' : 'Expand chart'}
               borderRadius="full"
               h="34px"
-              icon={isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
               onClick={() => setIsExpanded(!isExpanded)}
               size="sm"
               transition="transform 0.2s var(--ease-out-cubic)"
               variant="outline"
               w="34px"
               {...(isChartView && !isExpanded && groupHoverProps)}
-              isDisabled={!isChartView}
-            />
+              disabled={!isChartView}>{isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}</IconButton>
           </Box>
         </HStack>
       </Stack>
@@ -170,6 +160,6 @@ function Content() {
         {isChartView && <PoolActivityChart />}
         {isListView && <PoolActivityTable />}
       </Box>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

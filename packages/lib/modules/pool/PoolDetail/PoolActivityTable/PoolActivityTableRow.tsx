@@ -1,3 +1,11 @@
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
 import {
   Box,
   Grid,
@@ -6,10 +14,8 @@ import {
   HStack,
   Text,
   Link,
-  useTheme,
   Badge,
-  BadgeProps,
-} from '@chakra-ui/react'
+  BadgeProps } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
@@ -82,8 +88,7 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.level0',
-        }}
+          bg: 'background.level0' }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         rounded="md"
@@ -98,14 +103,14 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
             <HStack>
               <Box
                 backgroundImage={
-                  theme.semanticTokens.colors.chart.pool.scatter[poolEvent.action].label
+                  theme.token('semanticTokens.colors.chart.pool.scatter.label')
                 }
                 borderRadius="50%"
                 display="inline-block"
                 height="2"
                 width="2"
               />
-              <Text casing="capitalize">{poolEvent.action}</Text>
+              <Text textTransform="capitalize">{poolEvent.action}</Text>
             </HStack>
           </GridItem>
           <GridItem>
@@ -120,12 +125,14 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
             <Text>{toCurrency(poolEvent.usdValue)}</Text>
           </GridItem>
           <GridItem>
-            <Link href={getBlockExplorerTxUrl(poolEvent.tx, chain)} isExternal>
+            <Link
+              href={getBlockExplorerTxUrl(poolEvent.tx, chain)}
+              target='_blank'
+              rel='noopener noreferrer'>
               <HStack gap="0.5" justifyContent="flex-end">
                 <Text>
                   {formatDistanceToNow(new Date(secondsToMilliseconds(event[0])), {
-                    addSuffix: true,
-                  })}
+                    addSuffix: true })}
                 </Text>
                 <Text variant="secondary">
                   <ArrowUpRight size={12} />
@@ -136,5 +143,5 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
         </Grid>
       </Box>
     </FadeInOnView>
-  )
+  );
 }

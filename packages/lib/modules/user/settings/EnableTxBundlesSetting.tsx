@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, Switch, Text } from '@chakra-ui/react'
+import { Box, Heading, Switch, Text } from '@chakra-ui/react';
 import { useUserSettings } from './UserSettingsProvider'
 import { useIsSafeApp } from '../../web3/safe.hooks'
 
@@ -11,7 +11,7 @@ function EnableTxBundleSelect() {
     setEnableTxBundling(enableTxBundling === 'yes' ? 'no' : 'yes')
   }
 
-  return <Switch isChecked={enableTxBundling === 'yes'} onChange={handleChange} />
+  return <Switch checked={enableTxBundling === 'yes'} onValueChange={handleChange} />;
 }
 
 export function EnableTxBundleSetting() {

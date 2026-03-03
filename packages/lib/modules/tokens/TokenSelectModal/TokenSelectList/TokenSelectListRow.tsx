@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, HStack, VStack, Text } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, VStack, Text } from '@chakra-ui/react';
 import { TokenIcon } from '../../TokenIcon'
 import { TokenAmount } from '../../token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -49,23 +49,21 @@ export function TokenSelectListRow({
     _hover: isCurrentToken
       ? {}
       : {
-          bg: active ? 'background.level3' : 'background.level2',
-        },
-    transition: 'all 0.2s var(--ease-out-cubic)',
-  }
+          bg: active ? 'background.level3' : 'background.level2' },
+    transition: 'all 0.2s var(--ease-out-cubic)' }
 
   return (
     <Box {...boxStyles} {...rest} role="group">
-      <HStack height="full" justify="space-between" maxW="full" spacing="md">
-        <HStack height="full" maxW="full" spacing="ms">
+      <HStack height="full" justify="space-between" maxW="full" gap="md">
+        <HStack height="full" maxW="full" gap="ms">
           <Box
             _groupHover={isCurrentToken ? {} : { transform: 'scale(1.075)' }}
             transition="all 0.2s var(--ease-out-cubic)"
           >
             <TokenIcon address={token.address} alt={token.symbol} chain={token.chain} />
           </Box>
-          <VStack align="start" height="full" justify="center" maxW="full" spacing="none">
-            <HStack spacing="xxs">
+          <VStack align="start" height="full" justify="center" maxW="full" gap="none">
+            <HStack gap="xxs">
               <Text color={active ? 'font.link' : 'font.primary'} fontWeight="bold">
                 {token.symbol}
               </Text>
@@ -88,7 +86,7 @@ export function TokenSelectListRow({
           </VStack>
         </HStack>
         {isConnected && tokenBalance !== '0' && (
-          <VStack align="end" justify="center" spacing="none">
+          <VStack align="end" justify="center" gap="none">
             <Text
               color={active ? 'font.link' : 'font.primary'}
               fontWeight="bold"
@@ -103,5 +101,5 @@ export function TokenSelectListRow({
         )}
       </HStack>
     </Box>
-  )
+  );
 }

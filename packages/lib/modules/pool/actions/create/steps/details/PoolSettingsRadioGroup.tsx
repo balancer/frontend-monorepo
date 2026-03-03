@@ -1,4 +1,4 @@
-import { VStack, HStack, Text, RadioGroup, Radio, Stack } from '@chakra-ui/react'
+import { VStack, HStack, Text, RadioGroup, Radio, Stack } from '@chakra-ui/react';
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -37,11 +37,9 @@ export function PoolSettingsRadioGroup({
   validate,
   validateAsync,
   isPercentage,
-  isDisabled,
-}: PoolSettingsRadioGroupProps) {
+  isDisabled }: PoolSettingsRadioGroupProps) {
   const {
-    poolCreationForm: { control, setValue, trigger, resetField, formState },
-  } = usePoolCreationForm()
+    poolCreationForm: { control, setValue, trigger, resetField, formState } } = usePoolCreationForm()
 
   const handlePaste = async () => {
     const clipboardText = await navigator.clipboard.readText()
@@ -53,7 +51,7 @@ export function PoolSettingsRadioGroup({
   const errors = formState.errors[name]
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <HStack>
         <Text fontWeight="bold" textAlign="start" w="full">
           {title}
@@ -61,7 +59,6 @@ export function PoolSettingsRadioGroup({
 
         <InfoIconPopover message={tooltip} />
       </HStack>
-
       <Controller
         control={control}
         name={name}
@@ -71,25 +68,24 @@ export function PoolSettingsRadioGroup({
           const selectedRadioGroupValue = isCustomOptionSelected ? '' : field.value
 
           return (
-            <RadioGroup
+            <RadioGroup.Root
               aria-label={title}
-              onChange={value => {
+              onValueChange={value => {
                 if (value === '') {
                   resetField(name, { defaultValue: '' })
                 } else {
                   field.onChange(value)
                 }
               }}
-              value={selectedRadioGroupValue}
-              w="full"
-            >
-              <Stack spacing={4}>
+              value={String(selectedRadioGroupValue)}
+              w="full">
+              <Stack gap={4}>
                 {optionsPlusCustom.map((option, idx) => {
                   const isCustomOption = option.value === ''
 
                   return (
                     <VStack align="start" key={idx} w="full">
-                      <Radio isDisabled={isDisabled} size="lg" value={option.value}>
+                      <Radio disabled={isDisabled} size="lg" value={String(option.value)}>
                         <HStack>
                           <Text color="font.primary">{option.label}</Text>
                           {option.detail && option.detail}
@@ -140,13 +136,13 @@ export function PoolSettingsRadioGroup({
                           </FormSubsection>
                         ))}
                     </VStack>
-                  )
+                  );
                 })}
               </Stack>
-            </RadioGroup>
-          )
+            </RadioGroup.Root>
+          );
         }}
       />
     </VStack>
-  )
+  );
 }

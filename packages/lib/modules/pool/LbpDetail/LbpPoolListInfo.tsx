@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack, Text } from '@chakra-ui/react';
 import { PoolListItem } from '../pool.types'
 import { differenceInDays, differenceInHours, isAfter, secondsToMilliseconds } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'

@@ -1,4 +1,4 @@
-import { Card } from '@chakra-ui/react'
+import { Card } from '@chakra-ui/react';
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -10,8 +10,7 @@ import { formatUnits, parseUnits } from 'viem'
 
 export function LoopsDepositSummary({
   isLoading: isLoadingReceipt,
-  receivedToken,
-}: LoopsDepositReceiptResult) {
+  receivedToken }: LoopsDepositReceiptResult) {
   const { isMobile } = useBreakpoints()
 
   const {
@@ -20,8 +19,7 @@ export function LoopsDepositSummary({
     loopsDepositTxHash,
     nativeAsset,
     loopedAsset,
-    amountAssets,
-  } = useLoops()
+    amountAssets } = useLoops()
 
   const { sharesAmount, isLoading: isLoadingSharesAmount } = useLoopsGetConvertToShares(
     amountAssets && nativeAsset?.decimals ? parseUnits(amountAssets, nativeAsset.decimals) : 0n,
@@ -33,7 +31,7 @@ export function LoopsDepositSummary({
   return (
     <AnimateHeightChange spacing="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={depositTransactionSteps} />}
-      <Card variant="modalSubSection">
+      <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
           isLoading={false}
@@ -41,8 +39,8 @@ export function LoopsDepositSummary({
           tokenAddress={nativeAsset?.address || ''}
           tokenAmount={amountAssets}
         />
-      </Card>
-      <Card variant="modalSubSection">
+      </Card.Root>
+      <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
           isLoading={isLoadingSharesAmount || isLoadingReceipt}
@@ -54,7 +52,7 @@ export function LoopsDepositSummary({
               : formatUnits(sharesAmount, loopedAsset?.decimals ?? 18)
           }
         />
-      </Card>
+      </Card.Root>
     </AnimateHeightChange>
-  )
+  );
 }

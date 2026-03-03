@@ -1,22 +1,12 @@
-'use client'
-
-import {
-  Button,
-  Heading,
-  Flex,
-  Box,
-  Center,
-  Text,
-  Stack,
-  useColorMode,
-  Link,
-} from '@chakra-ui/react'
+'use client';
+import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 import { usePool } from '../../../modules/pool/PoolProvider'
 
 export function QuantAMMPromoBanner() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
   const { pool, chain } = usePool()
 
   const isDarkMode = colorMode === 'dark'
@@ -28,8 +18,7 @@ export function QuantAMMPromoBanner() {
     _hover: {
       bg: isDarkMode ? 'background.special' : '#fff',
       color: isDarkMode ? '#000' : '#000',
-      borderColor: isDarkMode ? 'transparent' : '#000',
-    },
+      borderColor: isDarkMode ? 'transparent' : '#000' },
     as: Link,
     border: '1px solid',
     borderColor: isDarkMode ? '#fff' : '#000',
@@ -41,8 +30,7 @@ export function QuantAMMPromoBanner() {
     rounded: 'full',
     size: 'md',
     transition: 'all 0.3s var(--cubic)',
-    w: '145px',
-  }
+    w: '145px' }
 
   return (
     <Box rounded="lg" shadow="2xl" w="full">
@@ -53,9 +41,9 @@ export function QuantAMMPromoBanner() {
         position="relative"
         rounded="lg"
         shadow="innerRockShadowSm"
-        sx={{
+        css={{
           width: '100% !important',
-          maxWidth: '100% !important',
+          maxWidth: '100% !important'
         }}
         width="full"
       >
@@ -121,8 +109,8 @@ export function QuantAMMPromoBanner() {
                       lineHeight="1.25"
                       maxW="600px"
                       opacity={isDarkMode ? '0.9' : '1'}
-                      sx={{
-                        textWrap: 'balance',
+                      css={{
+                        textWrap: 'balance'
                       }}
                     >
                       Blockchain Traded Funds are smart pools that capture profit for LPs by
@@ -161,5 +149,5 @@ export function QuantAMMPromoBanner() {
         </Center>
       </Box>
     </Box>
-  )
+  );
 }

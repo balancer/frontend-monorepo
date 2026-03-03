@@ -1,7 +1,6 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useState } from 'react'
 
@@ -78,8 +77,8 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
           cursor="default"
           display="inline-block"
           position="relative"
-          sx={{
-            '&::after': {
+          css={{
+            '& &::after': {
               content: '""',
               position: 'absolute',
               bottom: 0,
@@ -88,8 +87,7 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
               height: '0px',
               borderBottom: '1px dotted',
               borderColor: 'font.secondary',
-              opacity: 0.5,
-            },
+              opacity: 0.5 }
           }}
           top="-3px"
         >
@@ -98,7 +96,6 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
           </Text>
         </Box>
       </TooltipWithTouch>
-
       <ButtonGroup
         currentOption={selected}
         fontSize="11px"
@@ -109,5 +106,5 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
         size="xxxs"
       />
     </HStack>
-  )
+  );
 }

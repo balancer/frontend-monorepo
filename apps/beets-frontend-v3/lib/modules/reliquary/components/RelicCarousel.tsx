@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react';
 import { useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { useReliquary } from '../ReliquaryProvider'
 import { RelicCard } from './RelicCard'
@@ -55,8 +55,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
         // Scroll horizontally only (no vertical scrolling)
         container.scrollTo({
           left: container.scrollLeft + scrollOffset,
-          behavior: 'smooth',
-        })
+          behavior: 'smooth' })
       }
     }
   }
@@ -77,8 +76,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
         const scrollOffset = cardCenter - containerCenter
 
         container.scrollTo({
-          left: container.scrollLeft + scrollOffset,
-        })
+          left: container.scrollLeft + scrollOffset })
 
         // 2. Vertical scroll to center carousel in viewport
         // Get the carousel container's position relative to viewport
@@ -90,8 +88,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
         const targetScrollY = containerTop - viewportHeight / 2 + containerHeight / 2
 
         window.scrollTo({
-          top: targetScrollY,
-        })
+          top: targetScrollY })
       }
     }
   }
@@ -134,14 +131,14 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
         overflowX={allRelicsVisible ? 'hidden' : 'auto'}
         p="6"
         ref={scrollContainerRef}
-        sx={{
+        css={{
           pointerEvents: 'none',
-          '::-webkit-scrollbar': {
-            display: 'none',
-          },
-          '> *': {
-            pointerEvents: 'auto',
-          },
+
+          '& ::-webkit-scrollbar': {
+            display: 'none' },
+
+          '& > *': {
+            pointerEvents: 'auto' }
         }}
         w="full"
       >
@@ -162,33 +159,27 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
           </Flex>
         ))}
       </Box>
-      <HStack justify="center" spacing="4">
+      <HStack justify="center" gap="4">
         {!allRelicsVisible && (
           <Button
             _disabled={{
               opacity: 0.3,
-              cursor: 'not-allowed',
-            }}
+              cursor: 'not-allowed' }}
             _hover={{
-              opacity: selectedIndex === 0 ? 0.3 : 0.8,
-            }}
+              opacity: selectedIndex === 0 ? 0.3 : 0.8 }}
             bg="transparent"
             color="white"
-            isDisabled={selectedIndex === 0}
-            leftIcon={<ChevronLeft size={20} />}
+            disabled={selectedIndex === 0}
             onClick={scrollToPrev}
-            size="sm"
-          >
-            Previous
-          </Button>
+            size="sm"><ChevronLeft size={20} />Previous
+                      </Button>
         )}
         {!allRelicsVisible && (
-          <HStack spacing="2">
+          <HStack gap="2">
             {relicPositions.map((relic, index) => (
               <Box
                 _hover={{
-                  transform: 'scale(1.2)',
-                }}
+                  transform: 'scale(1.2)' }}
                 bg={index === selectedIndex ? 'whiteAlpha.800' : 'whiteAlpha.400'}
                 borderRadius="full"
                 cursor="pointer"
@@ -208,22 +199,17 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
           <Button
             _disabled={{
               opacity: 0.3,
-              cursor: 'not-allowed',
-            }}
+              cursor: 'not-allowed' }}
             _hover={{
-              opacity: selectedIndex === relicPositions.length - 1 ? 0.3 : 0.8,
-            }}
+              opacity: selectedIndex === relicPositions.length - 1 ? 0.3 : 0.8 }}
             bg="transparent"
             color="white"
             disabled={selectedIndex === relicPositions.length - 1}
             onClick={scrollToNext}
-            rightIcon={<ChevronRight size={20} />}
-            size="sm"
-          >
-            Next
-          </Button>
+            size="sm">Next
+                      <ChevronRight size={20} /></Button>
         )}
       </HStack>
     </Box>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useRemoveLiquidity } from '@repo/lib/modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
@@ -52,8 +52,7 @@ export function ReliquaryRemoveLiquidityModal({
     txHash: removeLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt,
-  })
+    txReceipt })
 
   useEffect(() => {
     if (isOpen) {
@@ -99,44 +98,53 @@ export function ReliquaryRemoveLiquidityModal({
   const modalLabel = `Remove liquidity from Relic #${relicId}`
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={handleOnClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker
-            chain={pool.chain}
-            isTxBatch={shouldBatchTransactions}
-            transactionSteps={transactionSteps}
-          />
-        )}
-        <TransactionModalHeader
-          chain={pool.chain}
-          isReceiptLoading={receiptProps.isLoading}
-          label={modalLabel}
-          txHash={removeLiquidityTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
-          <ReliquaryRemoveLiquiditySummary {...receiptProps} relicId={relicId} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={handleReturnAction}
-          returnLabel="Return to maBEETS"
-          urlTxHash={urlTxHash}
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          handleOnClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
+        <Dialog.Positioner>
+          <Dialog.Content
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {isDesktop && hasQuoteContext && (
+              <DesktopStepTracker
+                chain={pool.chain}
+                isTxBatch={shouldBatchTransactions}
+                transactionSteps={transactionSteps}
+              />
+            )}
+            <TransactionModalHeader
+              chain={pool.chain}
+              isReceiptLoading={receiptProps.isLoading}
+              label={modalLabel}
+              txHash={removeLiquidityTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
+              <ReliquaryRemoveLiquiditySummary {...receiptProps} relicId={relicId} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={handleReturnAction}
+              returnLabel="Return to maBEETS"
+              urlTxHash={urlTxHash}
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

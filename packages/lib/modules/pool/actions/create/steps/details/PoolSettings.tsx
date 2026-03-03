@@ -1,4 +1,4 @@
-import { VStack, Heading, Text } from '@chakra-ui/react'
+import { VStack, Heading, Text } from '@chakra-ui/react';
 import { zeroAddress, Address, isAddress } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
@@ -28,8 +28,7 @@ export function PoolSettings() {
   const { poolCreationForm } = usePoolCreationForm()
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolType'],
-  })
+    name: ['network', 'poolType'] })
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
@@ -48,16 +47,14 @@ export function PoolSettings() {
     {
       label: 'My connected wallet:',
       value: userAddress,
-      detail: <BlockExplorerLink address={userAddress} chain={network} />,
-    },
+      detail: <BlockExplorerLink address={userAddress} chain={network} /> },
   ]
 
   const swapFeePercentageOptions: PoolSettingsOption[] = [
     ...getSwapFeePercentageOptions(poolType).map(option => ({
       label: `${option.value}%`,
       value: option.value,
-      detail: <Text color="font.secondary">{option.tip}</Text>,
-    })),
+      detail: <Text color="font.secondary">{option.tip}</Text> })),
   ]
 
   const poolHooksOptions: PoolSettingsOption[] = [
@@ -91,8 +88,7 @@ export function PoolSettings() {
         address: address as Address,
         abi: reClammPoolAbi,
         functionName: 'getHookFlags',
-        args: [],
-      })
+        args: [] })
       if (!hookFlags) return 'Invalid hooks contract address'
       return true
     } catch (error) {
@@ -108,11 +104,10 @@ export function PoolSettings() {
   const showPoolHooks = !isStableSurgePool(poolType)
 
   return (
-    <VStack align="start" spacing="lg" w="full">
+    <VStack align="start" gap="lg" w="full">
       <Heading color="font.maxContrast" size="md">
         Pool settings
       </Heading>
-
       {isPoolCreatorEnabled(poolType) && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom pool creator address"
@@ -124,7 +119,6 @@ export function PoolSettings() {
           validate={validatePoolSettings.poolRoleAccount}
         />
       )}
-
       <PoolSettingsRadioGroup
         customInputLabel="Custom swap fee manager address"
         customInputType="address"
@@ -134,7 +128,6 @@ export function PoolSettings() {
         tooltip="Account empowered to set static swap fees for a pool"
         validate={validatePoolSettings.poolRoleAccount}
       />
-
       <PoolSettingsRadioGroup
         customInputLabel="Custom pause manager address"
         customInputType="address"
@@ -144,7 +137,6 @@ export function PoolSettings() {
         tooltip="Account empowered to pause/unpause the pool (note that governance can always pause a pool)"
         validate={validatePoolSettings.poolRoleAccount}
       />
-
       <PoolSettingsRadioGroup
         customInputLabel="Custom swap fee"
         customInputType="number"
@@ -155,7 +147,6 @@ export function PoolSettings() {
         tooltip="The initial static swap fee percentage of the pool"
         validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
-
       {showAmplificationParameter && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom amplification parameter"
@@ -167,7 +158,6 @@ export function PoolSettings() {
           validate={validatePoolSettings.amplificationParameter}
         />
       )}
-
       {showPoolHooks && (
         <PoolSettingsRadioGroup
           customInputLabel="Custom pool hooks address"
@@ -182,5 +172,5 @@ export function PoolSettings() {
       )}
       <LiquidityManagement />
     </VStack>
-  )
+  );
 }

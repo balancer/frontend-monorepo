@@ -1,17 +1,7 @@
-'use client'
-
+'use client';
 import { useState, useRef } from 'react'
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Link,
-  Text,
-  useColorMode,
-  useBreakpointValue,
-} from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Box, Button, Center, Flex, Heading, Link, Text, useBreakpointValue } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
@@ -44,11 +34,10 @@ function getIconElement(icon: string) {
 const promoData: (PromoItem & { iconElement: React.ReactNode })[] =
   PROJECT_CONFIG.promoItems?.map(item => ({
     ...item,
-    iconElement: getIconElement(item.icon),
-  })) ?? []
+    iconElement: getIconElement(item.icon) })) ?? []
 
 export function PromoBanners() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
   const [activeIndex, setActiveIndex] = useState(getRandomInt(0, promoData.length - 1))
   const isSmallScreen = useBreakpointValue({ base: true, md: false }, { fallback: 'md' }) ?? false
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -61,8 +50,7 @@ export function PromoBanners() {
 
       scrollContainerRef.current.scrollTo({
         left: scrollPosition,
-        behavior: 'smooth',
-      })
+        behavior: 'smooth' })
     }
   }
 
@@ -75,11 +63,9 @@ export function PromoBanners() {
     <Box
       css={{
         '&::-webkit-scrollbar': {
-          display: 'none',
-        },
+          display: 'none' },
         scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-      }}
+        msOverflowStyle: 'none' }}
       mx={{ base: '-md', md: 0 }}
       overflowX={{ base: 'scroll', md: 'visible' }}
       pb={{ base: 'xl', md: 0 }}
@@ -107,8 +93,7 @@ export function PromoBanners() {
               display="block"
               flexBasis={{
                 base: '80vw',
-                md: isActive ? 'auto' : 'clamp(60px, calc(14.0625vw - 48px), 132px)',
-              }}
+                md: isActive ? 'auto' : 'clamp(60px, calc(14.0625vw - 48px), 132px)' }}
               flexGrow={{ base: 0, md: isActive ? 1 : 0 }}
               flexShrink={{ base: 0, md: isActive ? 1 : 0 }}
               height="auto"
@@ -137,8 +122,7 @@ export function PromoBanners() {
                     right: 0,
                     top: 0,
                     transition: 'opacity 0.2s var(--ease-out-cubic)',
-                    zIndex: 1,
-                  }}
+                    zIndex: 1 }}
                   height="100%"
                   opacity={shouldShowAsActive ? 1 : 0}
                   position="absolute"
@@ -223,8 +207,8 @@ export function PromoBanners() {
                             letterSpacing="-0.5px"
                             lineHeight="1.1"
                             pb="sm"
-                            sx={{
-                              textWrap: 'balance',
+                            css={{
+                              textWrap: 'balance'
                             }}
                           >
                             {item.title}
@@ -236,8 +220,8 @@ export function PromoBanners() {
                             lineHeight="1.25"
                             maxW="48ch"
                             opacity={colorMode === 'dark' ? '0.75' : '1'}
-                            sx={{
-                              textWrap: 'balance',
+                            css={{
+                              textWrap: 'balance'
                             }}
                           >
                             {item.description}{' '}
@@ -266,12 +250,10 @@ export function PromoBanners() {
                               index === 2
                                 ? {
                                     bg: 'linear-gradient(to right, rgb(240, 255, 155), rgb(255, 180, 255), rgb(145, 245, 245))',
-                                    color: colorMode === 'dark' ? '#000' : '#000',
-                                  }
+                                    color: colorMode === 'dark' ? '#000' : '#000' }
                                 : { bg: 'white', color: 'font.dark', opacity: 0.9 }
                             }
                             animation="fade-in 0.3s var(--ease-out-cubic) 0.3s both"
-                            as={NextLink}
                             bg="transparent"
                             border="1px solid"
                             borderColor="font.maxContrast"
@@ -279,16 +261,14 @@ export function PromoBanners() {
                             cursor="pointer"
                             fontSize={{ base: 'xs', sm: 'sm' }}
                             h={{ base: '32px', sm: '36px' }}
-                            href={item.buttonLink}
                             mb="sm"
-                            onClick={e => e.stopPropagation()}
                             px="ms"
                             rounded="full"
                             size="md"
                             whiteSpace="nowrap"
-                          >
-                            {item.buttonText}
-                          </Button>
+                            asChild><NextLink href={item.buttonLink} onClick={e => e.stopPropagation()}>
+                              {item.buttonText}
+                            </NextLink></Button>
                         </Flex>
                       )}
                     </Flex>
@@ -357,8 +337,7 @@ export function PromoBanners() {
                         _groupHover={{
                           color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500',
                           opacity: 1,
-                          transform: 'translateY(-6px)',
-                        }}
+                          transform: 'translateY(-6px)' }}
                         color={colorMode === 'dark' ? 'font.secondary' : 'brown.400'}
                         opacity="0.8"
                         transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic), box-shadow 0.15s var(--ease-out-cubic)"
@@ -368,8 +347,7 @@ export function PromoBanners() {
                       <Text
                         _groupHover={{
                           color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500',
-                          opacity: 1,
-                        }}
+                          opacity: 1 }}
                         bottom="24px"
                         display={{ base: 'none', lg: 'block' }}
                         fontSize={{ base: '11px', xl: 'xs' }}
@@ -385,9 +363,9 @@ export function PromoBanners() {
                 </Box>
               )}
             </Box>
-          )
+          );
         })}
       </Flex>
     </Box>
-  )
+  );
 }

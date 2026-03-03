@@ -5,8 +5,7 @@ import {
   Stack,
   Text,
   VStack,
-  useBreakpointValue,
-} from '@chakra-ui/react'
+  useBreakpointValue } from '@chakra-ui/react';
 import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
@@ -28,8 +27,7 @@ export function YourMaBeetsStats() {
     relicPositions,
     totalMaBeetsVP,
     totalPendingRewardsUSD,
-    isLoading: isLoadingReliquary,
-  } = useReliquary()
+    isLoading: isLoadingReliquary } = useReliquary()
 
   const isLoading = isLoadingReliquary || isLoadingGlobalStats
 
@@ -59,7 +57,7 @@ export function YourMaBeetsStats() {
   const isDisabledButton = totalPendingRewardsUSD < 0.01
 
   return (
-    <VStack align="flex-start" flex="1" spacing="4" width="full">
+    <VStack align="flex-start" flex="1" gap="4" width="full">
       <Text
         background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
         backgroundClip="text"
@@ -68,30 +66,30 @@ export function YourMaBeetsStats() {
       >
         Your maBEETS Summary
       </Text>
-      <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
+      <SimpleGrid columns={2} gap={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>
           <StatLabel label="Your Relics" />
-          <Skeleton isLoaded={!isLoading}>
+          <Skeleton loading={!!isLoading}>
             <StatValueText>{relicPositions.length}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Liquidity" />
-          <Skeleton isLoaded={!isLoading}>
+          <Skeleton loading={!!isLoading}>
             <StatValueText>{toCurrency(totalLiquidity)}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Maturity Level" />
-          <Skeleton isLoaded={!isLoading}>
+          <Skeleton loading={!!isLoading}>
             <StatValueText>{fNumCustom(avgMaturityLevel, '0.00')}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <Stack alignItems="center" direction={{ base: 'column', md: 'row' }} h="full" w="full">
-            <VStack alignItems="flex-start" h="full" spacing="0" w="full">
+            <VStack alignItems="flex-start" h="full" gap="0" w="full">
               <StatLabel label="Total Pending Rewards" />
-              <Skeleton isLoaded={!isLoading}>
+              <Skeleton loading={!!isLoading}>
                 <StatValueText>{toCurrency(totalPendingRewardsUSD)}</StatValueText>
               </Skeleton>
             </VStack>
@@ -101,7 +99,7 @@ export function YourMaBeetsStats() {
               label={`The minimum amount to claim is ${toCurrency(0.01)}`}
             >
               <Button
-                isDisabled={isDisabledButton}
+                disabled={isDisabledButton}
                 onClick={() => setIsClaimAllModalOpen(true)}
                 size="sm"
                 variant="primary"
@@ -114,13 +112,13 @@ export function YourMaBeetsStats() {
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Relic Share" />
-          <Skeleton isLoaded={!isLoading}>
+          <Skeleton loading={!!isLoading}>
             <StatValueText>{fNum('sharePercent', relicShareDecimal)}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Voting Power" />
-          <Skeleton isLoaded={!isLoading}>
+          <Skeleton loading={!!isLoading}>
             <StatValueText>{fNumCustom(totalMaBeetsVP, '0.000a')} maBEETS</StatValueText>
           </Skeleton>
         </RelicStat>
@@ -131,5 +129,5 @@ export function YourMaBeetsStats() {
         onOpen={() => setIsClaimAllModalOpen(true)}
       />
     </VStack>
-  )
+  );
 }

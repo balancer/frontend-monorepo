@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Text, VStack } from '@chakra-ui/react';
 import { Title } from '../components/Title'
 import NextLink from 'next/link'
 
@@ -20,15 +20,13 @@ export function LandingBeetsHero() {
             tokens.
           </Text>
           <Flex gap="lg" mt="lg">
-            <Button as={NextLink} href="/stake" size="lg" variant="primary">
-              Stake $S
-            </Button>
-            <Button as={NextLink} href="/pools" size="lg" variant="secondary">
-              Explore Pools
-            </Button>
+            <Button size="lg" variant="primary" asChild><NextLink href="/stake">Stake $S
+                          </NextLink></Button>
+            <Button size="lg" variant="secondary" asChild><NextLink href="/pools">Explore Pools
+                          </NextLink></Button>
           </Flex>
         </VStack>
       </Center>
     </Box>
-  )
+  );
 }

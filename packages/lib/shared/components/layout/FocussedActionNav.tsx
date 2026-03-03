@@ -1,11 +1,11 @@
 'use client'
 
-import { Card, HStack, IconButton } from '@chakra-ui/react'
+import { Card, HStack, IconButton } from '@chakra-ui/react';
 import Image from 'next/image'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { CloseIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { LuX } from 'react-icons/lu';
 
 export interface ModalActionsNavProps {
   chain: GqlChain
@@ -16,13 +16,12 @@ export interface ModalActionsNavProps {
 export function FocussedActionNav({
   chain,
   redirectPath,
-  closeButton = true,
-}: ModalActionsNavProps) {
+  closeButton = true }: ModalActionsNavProps) {
   const networkConfig = getNetworkConfig(chain)
 
   return (
     <HStack justify="space-between" mb="4">
-      <Card
+      <Card.Root
         h={{ base: '32px', md: '40px' }}
         p={{ base: 'xs', sm: 'xs', md: 'sm' }}
         shadow="sm"
@@ -30,19 +29,10 @@ export function FocussedActionNav({
         width={{ base: '32px', md: '40px' }}
       >
         <Image alt={networkConfig.shortName} height="24" src={networkConfig.iconPath} width="24" />
-      </Card>
-
+      </Card.Root>
       {closeButton && (
-        <IconButton
-          aria-label="Close"
-          as={Link}
-          href={redirectPath}
-          icon={<CloseIcon />}
-          isRound
-          prefetch
-          variant="outline"
-        />
+        <IconButton aria-label="Close" isRound variant="outline" asChild><Link href={redirectPath} prefetch><LuX /></Link></IconButton>
       )}
     </HStack>
-  )
+  );
 }

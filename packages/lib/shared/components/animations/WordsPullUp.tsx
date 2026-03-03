@@ -1,6 +1,6 @@
 'use client'
 
-import { HStack, Box, BoxProps } from '@chakra-ui/react'
+import { HStack, Box, BoxProps } from '@chakra-ui/react';
 import { motion, useInView } from 'framer-motion'
 import * as React from 'react'
 
@@ -26,17 +26,13 @@ export function WordsPullUp({
       filter: 'blur(0px)',
       transition: {
         delay: delay + i * 0.1,
-        duration: 1,
-      },
-    }),
-  }
+        duration: 1 } }) }
 
   const ref = React.useRef(null)
 
   const isInView = useInView(ref, {
     once: true,
-    amount: 0.3,
-  })
+    amount: 0.3 })
 
   return (
     <HStack justify="center" {...rest}>
@@ -46,8 +42,7 @@ export function WordsPullUp({
           custom: i,
           initial: 'initial',
           variants: pullupVariant,
-          pr,
-        } as any
+          pr } as any
 
         return (
           <MotionBox key={i} ref={i === 0 ? ref : undefined} {...motionProps}>

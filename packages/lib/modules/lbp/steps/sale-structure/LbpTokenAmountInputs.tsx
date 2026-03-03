@@ -11,7 +11,7 @@ import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
 import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { VStack, Text, Heading, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react'
+import { VStack, Text, Heading, Alert } from '@chakra-ui/react';
 import { AlertTriangle } from 'react-feather'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { format, parseISO } from 'date-fns'
@@ -21,13 +21,11 @@ export function LbpTokenAmountInputs() {
   const { getToken } = useTokens()
   const {
     launchToken,
-    saleStructureForm: { control },
-  } = useLbpForm()
+    saleStructureForm: { control } } = useLbpForm()
   const { errors } = useFormState({ control })
   const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
     control,
-    name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'],
-  })
+    name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'] })
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
   const saleStart = startDateTime
 
@@ -35,7 +33,7 @@ export function LbpTokenAmountInputs() {
     <TokenInputsValidationProvider>
       {collateralToken && (
         <TokenBalancesProvider extTokens={[collateralToken]}>
-          <VStack align="start" spacing="md" w="full">
+          <VStack align="start" gap="md" w="full">
             <Heading color="font.maxContrast" size="md">
               Seed initial pool liquidity
             </Heading>
@@ -44,17 +42,17 @@ export function LbpTokenAmountInputs() {
               and price curve. The stats and charts in the preview show the impact of your choices.
             </Text>
             {saleStart && isSaleStartValid(saleStart) && (
-              <Alert
+              <Alert.Root
                 status={saleStartsSoon(saleStart) ? 'warning' : 'info'}
                 variant="WideOnDesktop"
               >
-                <AlertIcon as={saleStartsSoon(saleStart) ? AlertTriangle : LightbulbIcon} />
-                <AlertDescription color="#000" fontSize="sm">
+                <Alert.Indicator as={saleStartsSoon(saleStart) ? AlertTriangle : LightbulbIcon} />
+                <Alert.Description color="#000" fontSize="sm">
                   {saleStartsSoon(saleStart) && 'This sale is scheduled to start soon. '}
                   The LBP will fail to launch unless you seed the initial liquidity before the
                   scheduled start time at {format(parseISO(saleStart), 'h:mmaaa, d MMMM yyyy')}.
-                </AlertDescription>
-              </Alert>
+                </Alert.Description>
+              </Alert.Root>
             )}
           </VStack>
           <SaleTokenAmountInput
@@ -73,15 +71,14 @@ export function LbpTokenAmountInputs() {
         </TokenBalancesProvider>
       )}
     </TokenInputsValidationProvider>
-  )
+  );
 }
 
 function SaleTokenAmountInput({
   control,
   errors,
   selectedChain,
-  launchToken,
-}: {
+  launchToken }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
@@ -89,8 +86,7 @@ function SaleTokenAmountInput({
 }) {
   const { balanceData, isLoading } = useUserBalance({
     chainId: getChainId(selectedChain),
-    token: launchToken.address,
-  })
+    token: launchToken.address })
 
   const haveEnoughAmount = (value: string) => {
     if (isLoading) return true
@@ -128,8 +124,7 @@ function SaleTokenAmountInput({
         )}
         rules={{
           required: 'Sale token amount is required',
-          validate: { isGreaterThanZeroValidation, haveEnoughAmount },
-        }}
+          validate: { isGreaterThanZeroValidation, haveEnoughAmount } }}
       />
       <Text
         _groupFocusWithin={{ opacity: '1' }}
@@ -156,8 +151,7 @@ function CollateralTokenAmountInput({
   errors,
   selectedChain,
   collateralTokenAddress,
-  collateralTokenSymbol,
-}: {
+  collateralTokenSymbol }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
@@ -200,8 +194,7 @@ function CollateralTokenAmountInput({
         )}
         rules={{
           required: 'Collateral token amount is required',
-          validate: { isGreaterThanZeroValidation, haveEnoughAmount },
-        }}
+          validate: { isGreaterThanZeroValidation, haveEnoughAmount } }}
       />
       <Text
         _groupFocusWithin={{ opacity: '1' }}

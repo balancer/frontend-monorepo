@@ -1,5 +1,12 @@
-import { forwardRef, useTheme } from '@chakra-ui/react'
-import { Ref, SVGProps } from 'react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { Ref, SVGProps, forwardRef } from 'react';
 
 interface Props extends SVGProps<SVGSVGElement> {
   gradFrom?: string

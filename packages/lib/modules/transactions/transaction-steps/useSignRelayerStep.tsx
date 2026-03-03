@@ -3,7 +3,7 @@
 import { useSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { Alert, Button, VStack } from '@chakra-ui/react'
+import { Alert, Button, VStack } from '@chakra-ui/react';
 import { TransactionStep } from './lib'
 import { useMemo } from 'react'
 import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
@@ -33,21 +33,20 @@ function SignRelayerButton({
   networkSwitchButtonProps,
   isDisabled,
   buttonLabel,
-  signRelayer,
-}: SignRelayerButtonProps) {
+  signRelayer }: SignRelayerButtonProps) {
   return (
     <VStack width="full">
       {error && (
-        <Alert rounded="md" status="error">
+        <Alert.Root rounded="md" status="error">
           {error}
-        </Alert>
+        </Alert.Root>
       )}
       {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
       {shouldChangeNetwork && isConnected && <NetworkSwitchButton {...networkSwitchButtonProps} />}
       {!shouldChangeNetwork && isConnected && (
         <Button
-          isDisabled={isDisabled}
-          isLoading={isLoading}
+          disabled={isDisabled}
+          loading={isLoading}
           loadingText={buttonLabel}
           onClick={signRelayer}
           size="lg"
@@ -59,7 +58,7 @@ function SignRelayerButton({
         </Button>
       )}
     </VStack>
-  )
+  );
 }
 
 export function useSignRelayerStep(chain: GqlChain): TransactionStep {
@@ -79,22 +78,20 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
       labels: {
         title: 'Sign relayer',
         init: 'Sign relayer',
-        tooltip: 'Sign relayer',
-      },
+        tooltip: 'Sign relayer' },
       isComplete: () => isComplete,
       renderAction: () => (
         <SignRelayerButton
           buttonLabel={buttonLabel}
           error={error}
           isConnected={isConnected}
-          isDisabled={isDisabled}
-          isLoading={isLoading}
+          disabled={isDisabled}
+          loading={isLoading}
           networkSwitchButtonProps={networkSwitchButtonProps}
           shouldChangeNetwork={shouldChangeNetwork}
           signRelayer={signRelayer}
         />
-      ),
-    }),
+      ) }),
 
     [
       isComplete,
@@ -107,5 +104,5 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
       buttonLabel,
       signRelayer,
     ]
-  )
+  );
 }

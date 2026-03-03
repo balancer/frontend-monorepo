@@ -1,10 +1,17 @@
-import { ColorMode, theme as defaultTheme, useTheme as useChakraTheme } from '@chakra-ui/react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { ColorMode, system as defaultTheme } from '@chakra-ui/react';
 import { addHours, differenceInDays, format } from 'date-fns'
 import {
   GetPoolSnapshotsDocument,
   GqlPoolSnapshotDataRange,
-  GqlChain,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/client/react'
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
@@ -27,20 +34,16 @@ export type PoolChartPeriod = {
 export const poolChartPeriods: PoolChartPeriod[] = [
   {
     value: GqlPoolSnapshotDataRange.ThirtyDays,
-    label: '30d',
-  },
+    label: '30d' },
   {
     value: GqlPoolSnapshotDataRange.NinetyDays,
-    label: '90d',
-  },
+    label: '90d' },
   {
     value: GqlPoolSnapshotDataRange.OneHundredEightyDays,
-    label: '180d',
-  },
+    label: '180d' },
   {
     value: GqlPoolSnapshotDataRange.AllTime,
-    label: 'All time',
-  },
+    label: 'All time' },
 ]
 
 // Define a simpler type for gradients
@@ -72,20 +75,18 @@ export interface PoolChartTypeOptions {
 const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
   [GqlPoolSnapshotDataRange.ThirtyDays]: 30,
   [GqlPoolSnapshotDataRange.NinetyDays]: 90,
-  [GqlPoolSnapshotDataRange.OneHundredEightyDays]: 180,
-}
+  [GqlPoolSnapshotDataRange.OneHundredEightyDays]: 180 }
 
 export const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
   nextTheme: ColorMode = 'dark',
-  theme: any, // TODO: type this
+  system: any, // TODO: type this
   options: { useTimeRange: boolean } = { useTimeRange: false }
 ) => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.colors.gray[800]};`,
-    text: theme.colors.gray[400],
-  }
+    container: `background: ${theme.token('colors.gray')};`,
+    text: theme.token('colors.gray') }
 
   const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
   return {
@@ -94,8 +95,7 @@ export const getDefaultPoolChartOptions = (
       right: '2.5%',
       top: '7.5%',
       bottom: '0',
-      containLabel: true,
-    },
+      containLabel: true },
     xAxis: {
       show: true,
       type: 'time',
@@ -106,28 +106,22 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return format(new Date(value * 1000), 'MMM d')
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
         opacity: 0.5,
         interval: 0,
         showMaxLabel: false,
-        showMinLabel: false,
-      },
+        showMinLabel: false },
       axisPointer: {
         type: 'line',
         label: {
           formatter: (params: any) => {
             return format(new Date(params.value * 1000), 'MMM d')
-          },
-        },
-      },
+          } } },
       axisLine: { show: false },
       splitArea: {
         show: false,
         areaStyle: {
-          color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'],
-        },
-      },
-    },
+          color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'] } } },
     yAxis: {
       show: true,
       type: 'value',
@@ -139,13 +133,11 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return currencyFormatter(value)
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,
-        showMinLabel: false,
-      },
-    },
+        showMinLabel: false } },
 
     tooltip: {
       show: true,
@@ -156,9 +148,7 @@ export const getDefaultPoolChartOptions = (
         animation: false,
         type: 'shadow',
         label: {
-          show: false,
-        },
-      },
+          show: false } },
       extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
       formatter: (params: any) => {
         const data = Array.isArray(params) ? params[0] : params
@@ -179,9 +169,7 @@ export const getDefaultPoolChartOptions = (
             </div>
           </div>
         `
-      },
-    },
-  }
+      } } };
 }
 
 export function usePoolSnapshots(
@@ -193,9 +181,7 @@ export function usePoolSnapshots(
     variables: {
       poolId: poolId.toLowerCase(),
       range,
-      chainId,
-    },
-  })
+      chainId } })
 }
 
 type PoolChartsContextType = ReturnType<typeof usePoolChartsLogic>
@@ -206,7 +192,7 @@ export function usePoolChartsLogic() {
   const { pool, tvl } = usePool()
   const { id: poolId } = useParams()
   const { toCurrency } = useCurrency()
-  const { theme: nextTheme } = useNextTheme()
+  const { system: nextTheme } = useNextTheme()
   const theme = useChakraTheme()
   const [chartValue, setChartValue] = useState(0)
   const [chartDate, setChartDate] = useState('')
@@ -377,7 +363,7 @@ export function usePoolChartsLogic() {
     pool.dynamicData.totalLiquidity,
   ])
 
-  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
+  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, system)
 
   type SupportedPoolChartTab =
     | PoolChartTab.VOLUME
@@ -398,21 +384,17 @@ export function usePoolChartsLogic() {
           {
             offset: 0,
             color: isCowPool
-              ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.from
-              : theme.semanticTokens.colors.chart.pool.bar.volume.from,
-          },
+              ? theme.token('semanticTokens.colors.chart.pool.bar.volume.cow.from')
+              : theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
           {
             offset: 1,
             color: isCowPool
-              ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.to
-              : theme.semanticTokens.colors.chart.pool.bar.volume.to,
-          },
-        ],
-      },
+              ? theme.token('semanticTokens.colors.chart.pool.bar.volume.cow.to')
+              : theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
+        ] },
       hoverColor: isCowPool
-        ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.hover
-        : defaultTheme.colors.pink[500],
-    },
+        ? theme.token('semanticTokens.colors.chart.pool.bar.volume.cow.hover')
+        : defaultTheme.colors.pink[500] },
     [PoolChartTab.TVL]: {
       type: 'line',
       color: defaultTheme.colors.blue[600],
@@ -428,34 +410,25 @@ export function usePoolChartsLogic() {
           colorStops: [
             {
               offset: 0,
-              color: 'rgba(14, 165, 233, 0.08)',
-            },
+              color: 'rgba(14, 165, 233, 0.08)' },
             {
               offset: 1,
-              color: 'rgba(68, 9, 236, 0)',
-            },
-          ],
-        },
-      },
-    },
+              color: 'rgba(68, 9, 236, 0)' },
+          ] } } },
     [PoolChartTab.FEES]: {
       type: 'bar',
       color: defaultTheme.colors.yellow[400],
-      hoverColor: defaultTheme.colors.pink[500],
-    },
+      hoverColor: defaultTheme.colors.pink[500] },
     [PoolChartTab.SURPLUS]: {
       type: 'bar',
       color: defaultTheme.colors.yellow[400],
-      hoverColor: defaultTheme.colors.pink[500],
-    },
-  }
+      hoverColor: defaultTheme.colors.pink[500] } }
 
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value as SupportedPoolChartTab] || {
       type: 'line',
       color: defaultTheme.colors.blue[500],
-      hoverColor: defaultTheme.colors.pink[500],
-    }
+      hoverColor: defaultTheme.colors.pink[500] }
 
     return {
       ...defaultChartOptions,
@@ -466,25 +439,19 @@ export function usePoolChartsLogic() {
           smooth: true,
           symbol: 'none',
           lineStyle: {
-            width: 2,
-          },
+            width: 2 },
           itemStyle: {
             color: activeTabOptions.color,
-            borderRadius: 100,
-          },
+            borderRadius: 100 },
           emphasis: {
             itemStyle: {
               color: activeTabOptions.hoverColor,
-              borderColor: activeTabOptions.hoverBorderColor,
-            },
-          },
+              borderColor: activeTabOptions.hoverBorderColor } },
           areaStyle: activeTabOptions.areaStyle,
           animationEasing: function (k: number) {
             return k === 1 ? 1 : 1 - Math.pow(2, -10 * k)
-          },
-        },
-      ],
-    }
+          } },
+      ] }
   }, [activeTab.value, defaultChartOptions, poolChartTypeOptions, processedChartData])
 
   const handleAxisMoved = useCallback(
@@ -509,8 +476,7 @@ export function usePoolChartsLogic() {
     handleAxisMoved,
     chartData,
     chartValueSum,
-    hasChartData: !!chartData.length,
-  }
+    hasChartData: !!chartData.length }
 }
 
 export function PoolChartsProvider({ children }: PropsWithChildren) {

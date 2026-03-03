@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react';
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolDetails } from './PoolDetails'
@@ -30,16 +30,16 @@ export function PoolDetailsStep() {
 
   return (
     <>
-      <Box as="form" style={{ width: '100%' }}>
-        <VStack align="start" spacing="xl" w="full">
-          {isReClammPool(poolType) && <ReClammConfiguration />}
-          {isGyroEllipticPool(poolType) && <GyroEclpConfiguration />}
-          <PoolDetails />
-          {showPoolSettings && <PoolSettings />}
-          <PoolCreationFormAction disabled={isDisabled} />
-        </VStack>
-      </Box>
+      <Box style={{ width: '100%' }} asChild><form>
+          <VStack align="start" gap="xl" w="full">
+            {isReClammPool(poolType) && <ReClammConfiguration />}
+            {isGyroEllipticPool(poolType) && <GyroEclpConfiguration />}
+            <PoolDetails />
+            {showPoolSettings && <PoolSettings />}
+            <PoolCreationFormAction disabled={isDisabled} />
+          </VStack>
+        </form></Box>
       <SimilarPoolsModal />
     </>
-  )
+  );
 }

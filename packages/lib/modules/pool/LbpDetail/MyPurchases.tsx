@@ -1,5 +1,5 @@
 import TokenRow from '../../tokens/TokenRow/TokenRow'
-import { Divider, Card, HStack, Heading, Text, VStack, Spacer, Skeleton } from '@chakra-ui/react'
+import { Card, HStack, Heading, Text, VStack, Spacer, Skeleton, Separator } from '@chakra-ui/react';
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -7,15 +7,13 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import {
   GetPoolEventsQuery,
   GqlPoolLiquidityBootstrappingV3,
-  GqlPoolSwapEventV3,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolSwapEventV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useState, useEffect } from 'react'
 
 export function MyPurchases({
   userPoolEvents,
-  isLoading,
-}: {
+  isLoading }: {
   userPoolEvents: GetPoolEventsQuery['poolEvents'] | undefined
   isLoading: boolean
 }) {
@@ -39,14 +37,14 @@ export function MyPurchases({
   }, [])
 
   return (
-    <Card h={['fit-content', height]}>
+    <Card.Root h={['fit-content', height]}>
       {isLoading && <Skeleton h="full" w="full" />}
       {!isLoading && (
-        <VStack align="start" h="full" spacing="md" width="full">
+        <VStack align="start" h="full" gap="md" width="full">
           <Heading backgroundClip="text" bg="font.special" fontWeight="bold" size="h5">
             My purchases
           </Heading>
-          <Divider />
+          <Separator />
           <TokenRow
             abbreviated={false}
             address={projectToken.address as Address}
@@ -57,7 +55,7 @@ export function MyPurchases({
             value={userProjectTokenBalance}
           />
           <Spacer />
-          <Divider />
+          <Separator />
           <HStack w="full">
             <Text fontSize="0.85rem" variant="secondary">
               My share of tokens sold
@@ -69,8 +67,8 @@ export function MyPurchases({
           </HStack>
         </VStack>
       )}
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 function calculateBalance(

@@ -1,4 +1,4 @@
-import { Card, HStack, Text } from '@chakra-ui/react'
+import { Card, HStack, Text } from '@chakra-ui/react';
 import { TransactionStep } from './lib'
 import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
@@ -50,7 +50,7 @@ export function GasCostSummaryCard({ chain, transactionSteps }: GasCostSummaryCa
   }, [transactionSteps, usdValueForTokenAddress, networkConfig])
 
   return hasMoreThanOneTransaction ? (
-    <Card px="md" variant="modalSubSection">
+    <Card.Root px="md" variant="modalSubSection">
       <HStack color="font.secondary" w="full">
         <GasIcon size={18} />
         <Text color="font.secondary" fontSize="sm">
@@ -60,6 +60,6 @@ export function GasCostSummaryCard({ chain, transactionSteps }: GasCostSummaryCa
           {toCurrency(totalGasCost)}
         </Text>
       </HStack>
-    </Card>
-  ) : null
+    </Card.Root>
+  ) : null;
 }

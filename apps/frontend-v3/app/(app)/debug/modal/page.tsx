@@ -3,22 +3,14 @@
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useDisclosure } from '@chakra-ui/hooks'
-import {
-  Button,
-  Modal,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Box,
-} from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
+import { Button, Box, Dialog, Portal } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { Hex } from 'viem'
 
 export default function ModalPage() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const [txHash, setTxHash] = useState<Hex | undefined>(undefined)
 
   function toggleSuccess() {
@@ -28,75 +20,83 @@ export default function ModalPage() {
   return (
     <>
       <Button onClick={onOpen}>Open Modal</Button>
+      <Dialog.Root placement='center' open={isOpen} onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+        <Portal>
 
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        <SuccessOverlay startAnimation={!!txHash} />
-        <ModalContent>
-          <TransactionModalHeader chain={GqlChain.Mainnet} label="Add liquidity" txHash={txHash} />
-          <ModalCloseButton />
-          <motion.div animate={{ height: 'auto' }}>
-            <AnimatePresence initial={false}>
-              <ModalBody>
+          <SuccessOverlay startAnimation={!!txHash} />
+          <Dialog.Positioner>
+            <Dialog.Content>
+              <TransactionModalHeader chain={GqlChain.Mainnet} label="Add liquidity" txHash={txHash} />
+              <Dialog.CloseTrigger />
+              <motion.div animate={{ height: 'auto' }}>
+                <AnimatePresence initial={false}>
+                  <Dialog.Body>
+                    <AnimatePresence initial={false} mode="wait">
+                      {txHash ? (
+                        <motion.div
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          key="receipt"
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Box bg="red" h="100px" w="full" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          key="preview"
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Box bg="blue" h="200px" w="full" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </Dialog.Body>
+                </AnimatePresence>
+              </motion.div>
+              <Dialog.Footer>
                 <AnimatePresence initial={false} mode="wait">
                   {txHash ? (
                     <motion.div
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       initial={{ opacity: 0, scale: 0.95 }}
-                      key="receipt"
+                      key="footer"
+                      style={{ width: '100%' }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Box bg="red" h="100px" w="full" />
+                      <Button onClick={toggleSuccess} size="lg" w="full">
+                        Toggle
+                      </Button>
                     </motion.div>
                   ) : (
                     <motion.div
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       initial={{ opacity: 0, scale: 0.95 }}
-                      key="preview"
+                      key="action"
+                      style={{ width: '100%' }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Box bg="blue" h="200px" w="full" />
+                      <Button onClick={toggleSuccess} size="lg" w="full">
+                        Toggle
+                      </Button>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </ModalBody>
-            </AnimatePresence>
-          </motion.div>
+              </Dialog.Footer>
+            </Dialog.Content>
+          </Dialog.Positioner>
 
-          <ModalFooter>
-            <AnimatePresence initial={false} mode="wait">
-              {txHash ? (
-                <motion.div
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  key="footer"
-                  style={{ width: '100%' }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Button onClick={toggleSuccess} size="lg" w="full">
-                    Toggle
-                  </Button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  key="action"
-                  style={{ width: '100%' }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Button onClick={toggleSuccess} size="lg" w="full">
-                    Toggle
-                  </Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        </Portal>
+      </Dialog.Root>
     </>
-  )
+  );
 }

@@ -3,17 +3,15 @@
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react';
 import { useMemo } from 'react'
 import {
   RemoveLiquidityPermitParams,
-  useSignPermit as useSignPermit,
-} from '../../tokens/approvals/permit/useSignPermit'
+  useSignPermit as useSignPermit } from '../../tokens/approvals/permit/useSignPermit'
 import {
   NetworkSwitchButton,
   NetworkSwitchButtonProps,
-  useChainSwitch,
-} from '../../web3/useChainSwitch'
+  useChainSwitch } from '../../web3/useChainSwitch'
 import { TransactionStep } from './lib'
 import { getChainId } from '@repo/lib/config/app.config'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
@@ -39,8 +37,7 @@ function SignPermitButton({
   networkSwitchButtonProps,
   isDisabled,
   buttonLabel,
-  signPermit,
-}: SignPermitButtonProps) {
+  signPermit }: SignPermitButtonProps) {
   return (
     <VStack width="full">
       {error && <BalAlert content={error} status="error" />}
@@ -48,8 +45,8 @@ function SignPermitButton({
       {shouldChangeNetwork && isConnected && <NetworkSwitchButton {...networkSwitchButtonProps} />}
       {!shouldChangeNetwork && isConnected && (
         <Button
-          isDisabled={isDisabled}
-          isLoading={isLoading}
+          disabled={isDisabled}
+          loading={isLoading}
           loadingText={buttonLabel}
           onClick={signPermit}
           size="lg"
@@ -61,15 +58,14 @@ function SignPermitButton({
         </Button>
       )}
     </VStack>
-  )
+  );
 }
 
 export function useSignPermitStep(params: RemoveLiquidityPermitParams): TransactionStep {
   const { isConnected } = useUserAccount()
 
   const { signPermit, signPermitState, isLoading, isDisabled, buttonLabel, error } = useSignPermit({
-    ...params,
-  })
+    ...params })
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(
     getChainId(params.pool.chain)
   )
@@ -84,22 +80,20 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
       labels: {
         title: `Permit pool token on ${PROJECT_CONFIG.projectName}`,
         init: `Sign permit`,
-        tooltip: 'Sign permit',
-      },
+        tooltip: 'Sign permit' },
       isComplete: () => isComplete,
       renderAction: () => (
         <SignPermitButton
           buttonLabel={buttonLabel}
           error={error}
           isConnected={isConnected}
-          isDisabled={isDisabled}
-          isLoading={isLoading}
+          disabled={isDisabled}
+          loading={isLoading}
           networkSwitchButtonProps={networkSwitchButtonProps}
           shouldChangeNetwork={shouldChangeNetwork}
           signPermit={signPermit}
         />
-      ),
-    }),
+      ) }),
     [
       signPermitState,
       isLoading,
@@ -112,5 +106,5 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
       signPermit,
       isComplete,
     ]
-  )
+  );
 }

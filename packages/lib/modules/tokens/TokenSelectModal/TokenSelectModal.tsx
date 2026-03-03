@@ -1,16 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  ModalProps,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, ModalProps, VStack, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useState } from 'react'
 import { TokenSelectList } from './TokenSelectList/TokenSelectList'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -62,56 +52,64 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   }
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={closeModal}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      placement='center'
+      open={isOpen}
       {...rest}
-    >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader color="font.primary">Select a token: {getChainShortName(chain)}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody p={0}>
-          <VStack align="start" spacing="md" w="full">
-            <Box px="md" w="full">
-              <SearchInput
-                ariaLabel="search for a token"
-                placeholder="Search by name, symbol or address"
-                search={searchTerm}
-                setSearch={setSearchTerm}
-                tabIndex={0}
-              />
-            </Box>
-            {!searchTerm && (
-              <Box px="md" w="full">
-                <TokenSelectPopular
-                  chain={chain}
-                  currentToken={currentToken}
-                  excludedTokens={excludedTokens}
-                  excludeNativeAsset={excludeNativeAsset}
-                  onTokenSelect={closeOnSelect}
-                />
-              </Box>
-            )}
-            <Box pr="0" w="full">
-              <TokenSelectList
-                chain={chain}
-                currentToken={currentToken}
-                enableUnlistedToken={enableUnlistedToken}
-                excludeNativeAsset={excludeNativeAsset}
-                listHeight={500}
-                onTokenSelect={closeOnSelect}
-                pinNativeAsset={pinNativeAsset}
-                searchTerm={searchTerm}
-                tokens={tokens}
-              />
-            </Box>
-          </VStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          closeModal();
+        }
+      }}>
+      <Portal>
+
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header color="font.primary">Select a token: {getChainShortName(chain)}</Dialog.Header>
+            <Dialog.CloseTrigger />
+            <Dialog.Body p={0}>
+              <VStack align="start" gap="md" w="full">
+                <Box px="md" w="full">
+                  <SearchInput
+                    ariaLabel="search for a token"
+                    placeholder="Search by name, symbol or address"
+                    search={searchTerm}
+                    setSearch={setSearchTerm}
+                    tabIndex={0}
+                  />
+                </Box>
+                {!searchTerm && (
+                  <Box px="md" w="full">
+                    <TokenSelectPopular
+                      chain={chain}
+                      currentToken={currentToken}
+                      excludedTokens={excludedTokens}
+                      excludeNativeAsset={excludeNativeAsset}
+                      onTokenSelect={closeOnSelect}
+                    />
+                  </Box>
+                )}
+                <Box pr="0" w="full">
+                  <TokenSelectList
+                    chain={chain}
+                    currentToken={currentToken}
+                    enableUnlistedToken={enableUnlistedToken}
+                    excludeNativeAsset={excludeNativeAsset}
+                    listHeight={500}
+                    onTokenSelect={closeOnSelect}
+                    pinNativeAsset={pinNativeAsset}
+                    searchTerm={searchTerm}
+                    tokens={tokens}
+                  />
+                </Box>
+              </VStack>
+            </Dialog.Body>
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

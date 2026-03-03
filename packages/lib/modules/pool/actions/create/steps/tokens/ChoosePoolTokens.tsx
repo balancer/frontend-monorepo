@@ -1,6 +1,5 @@
 import {
   VStack,
-  Divider,
   Heading,
   Text,
   useDisclosure,
@@ -9,7 +8,7 @@ import {
   Icon,
   Box,
   Link,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
@@ -27,8 +26,7 @@ import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
 import {
   isConstantRateProvider,
-  isDynamicRateProvider,
-} from '@repo/lib/modules/tokens/token.helpers'
+  isDynamicRateProvider } from '@repo/lib/modules/tokens/token.helpers'
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
@@ -39,8 +37,7 @@ import {
   isCustomWeightedPool,
   isReClammPool,
   isGyroEllipticPool,
-  isCowPool,
-} from '../../helpers'
+  isCowPool } from '../../helpers'
 import { PoolType } from '@balancer/sdk'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
@@ -53,8 +50,7 @@ export function ChoosePoolTokens() {
     usePoolCreationForm()
   const [network, poolTokens, weightedPoolStructure, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'],
-  })
+    name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'] })
 
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
@@ -104,8 +100,7 @@ export function ChoosePoolTokens() {
       rateProvider,
       data: tokenMetadata,
       paysYieldFees: rateProvider !== zeroAddress,
-      usdPrice: '',
-    })
+      usdPrice: '' })
 
     setSelectedTokenIndex(null)
     poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
@@ -121,14 +116,14 @@ export function ChoosePoolTokens() {
 
   return (
     <>
-      <VStack align="start" spacing="md" w="full">
+      <VStack align="start" gap="md" w="full">
         <ChoosePoolTokensAlert poolType={poolType} weightedPoolStructure={weightedPoolStructure} />
 
         <Heading color="font.maxContrast" size="md">
           Choose pool tokens
         </Heading>
 
-        <VStack align="start" spacing="0" w="full">
+        <VStack align="start" gap="0" w="full">
           <AnimatePresence initial={false}>
             {poolTokens.map((token, index) => {
               const tokenData = listedTokens.find(
@@ -169,7 +164,7 @@ export function ChoosePoolTokens() {
           </AnimatePresence>
           {(!isWeightedPool(poolType) || isCustomWeightedPool(poolType, weightedPoolStructure)) && (
             <VStack align="start" gap="lg" w="full">
-              <Divider />
+              <Separator />
               <AddTokenButton
                 isDisabled={isPoolAtMaxTokens}
                 onClick={() => addPoolToken()}
@@ -180,27 +175,26 @@ export function ChoosePoolTokens() {
 
           {isWeightedPool(poolType) && isCustomWeightedPool(poolType, weightedPoolStructure) && (
             <VStack align="start" gap="lg" w="full">
-              <Divider />
+              <Separator />
               <TotalWeightDisplay />
             </VStack>
           )}
         </VStack>
       </VStack>
-
       <TokenSelectModal
         chain={network}
         currentToken={selectedTokenAddress}
         enableUnlistedToken
         excludedTokens={excludedTokens}
         excludeNativeAsset={true}
-        isOpen={tokenSelectDisclosure.isOpen}
+        isOpen={tokenSelectDisclosure.open}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
         onTokenSelect={handleTokenSelect}
         tokens={availableTokens}
       />
     </>
-  )
+  );
 }
 
 interface ConfigureTokenProps {
@@ -222,8 +216,7 @@ function ConfigureToken({
   weightedPoolStructure,
   poolTokens,
   network,
-  poolType,
-}: ConfigureTokenProps) {
+  poolType }: ConfigureTokenProps) {
   const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
   const formState = useFormState({ control: poolCreationForm.control })
 
@@ -236,8 +229,7 @@ function ConfigureToken({
     // automatically hydrate form with coingecko price for unlisted tokens
     if (!apiPriceForToken && cgPriceForToken && token?.usdPrice) {
       updatePoolToken(index, {
-        usdPrice: cgPriceForToken.toString(),
-      })
+        usdPrice: cgPriceForToken.toString() })
     }
   }, [cgPriceForToken, apiPriceForToken, token?.usdPrice])
 
@@ -251,9 +243,9 @@ function ConfigureToken({
   const showRateProvider = !isCowPool(poolType)
 
   return (
-    <VStack align="start" key={index} spacing="sm" w="full">
+    <VStack align="start" key={index} gap="sm" w="full">
       <HStack align="end" w="full">
-        <VStack align="start" spacing="sm" w="full">
+        <VStack align="start" gap="sm" w="full">
           <Text fontWeight="bold">Token {index + 1}</Text>
 
           <TokenInputSelector onToggleTokenClicked={onToggleTokenClicked} token={token?.data} />
@@ -286,16 +278,14 @@ function ConfigureToken({
 
         {poolTokens.length > 2 && (
           <RemoveTokenButton
-            isDisabled={poolTokens.length <= 2}
+            disabled={poolTokens.length <= 2}
             onClick={() => removePoolToken(index)}
           />
         )}
       </HStack>
-
       {isWeightedPool(poolType) && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
-
       {token.address && !apiPriceForToken && (
-        <VStack align="start" spacing="sm" w="full">
+        <VStack align="start" gap="sm" w="full">
           <NumberInput
             attribution={cgPriceForToken && <CoingeckoAttribution />}
             control={poolCreationForm.control}
@@ -317,7 +307,6 @@ function ConfigureToken({
           />
         </VStack>
       )}
-
       {showRateProvider && token.address && (
         <ConfigureTokenRateProvider
           tokenIndex={index}
@@ -325,14 +314,13 @@ function ConfigureToken({
         />
       )}
     </VStack>
-  )
+  );
 }
 
 function AddTokenButton({
   isDisabled,
   onClick,
-  poolType,
-}: {
+  poolType }: {
   isDisabled: boolean
   onClick: () => void
   poolType: SupportedPoolTypes
@@ -361,11 +349,11 @@ function AddTokenButton({
     <motion.div transition={{ duration: 0.2 }} whileTap={{ scale: isDisabled ? 1 : 0.98 }}>
       <Button
         cursor={isDisabled ? 'not-allowed' : 'pointer'}
-        isDisabled={isDisabled}
+        disabled={isDisabled}
         onClick={onClick}
         variant="secondary"
       >
-        <HStack spacing="sm">
+        <HStack gap="sm">
           <PlusCircle size={20} />
           <Text color="font.dark" fontWeight="bold">
             Add token
@@ -392,40 +380,43 @@ function RemoveTokenButton({ onClick, isDisabled }: { onClick: () => void; isDis
       _focus={{ color: 'font.error' }}
       _hover={{ color: 'font.error' }}
       color="font.secondary"
-      isDisabled={isDisabled}
+      disabled={isDisabled}
       onClick={onClick}
-      variant="unstyled"
+      unstyled
     >
       <Trash2 size={16} />
     </Button>
-  )
+  );
 }
 
 function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
   if (!message) return null
 
   return (
-    <HStack spacing="sm" w="full">
-      <Icon as={AlertTriangle} boxSize="18px" color="red.500" />
-
+    <HStack gap="sm" w="full">
+      <Icon boxSize="18px" color="red.500" asChild><AlertTriangle /></Icon>
       <Text color="font.error" fontSize="sm" fontWeight="semibold" textAlign="start" w="full">
         {message}
       </Text>
     </HStack>
-  )
+  );
 }
 
 function CoingeckoAttribution() {
   return (
-    <HStack spacing="xs">
+    <HStack gap="xs">
       <Text color="font.secondary" fontSize="sm">
         Price data by
       </Text>
-
-      <Link color="font.link" fontSize="sm" href="https://www.coingecko.com" isExternal>
+      <Link
+        color="font.link"
+        fontSize="sm"
+        href="https://www.coingecko.com"
+        target='_blank'
+        rel='noopener noreferrer'>
         CoinGecko
-        <Icon as={ArrowUpRight} />
+        <Icon asChild><ArrowUpRight /></Icon>
       </Link>
     </HStack>
-  )
+  );
 }

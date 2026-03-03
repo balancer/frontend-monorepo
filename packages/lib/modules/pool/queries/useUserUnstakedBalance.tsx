@@ -25,23 +25,19 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
     isLoading,
     isFetching,
     refetch,
-    error,
-  } = useReadContracts({
+    error } = useReadContracts({
     allowFailure: false,
     query: {
-      enabled: isConnected,
-    },
+      enabled: isConnected },
     contracts: pools.map(
       pool =>
-        ({
+        (({
           abi: balanceOfAbi,
           address: pool.address as Address,
           functionName: 'balanceOf',
           args: [userAddress as Address],
-          chainId: getChainId(pool.chain),
-        }) as const
-    ),
-  })
+          chainId: getChainId(pool.chain) }) as const)
+    ) })
 
   // for each pool get the unstaked balance
   const balances = useMemo(() => {
@@ -59,8 +55,7 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
           poolId: pool.id,
           rawUnstakedBalance: rawBalance,
           unstakedBalance: humanUnstakedBalance,
-          unstakedBalanceUsd: bn(humanUnstakedBalance).times(bptPrice),
-        }
+          unstakedBalanceUsd: bn(humanUnstakedBalance).times(bptPrice) }
       })
     )
   }, [isLoading, unstakedPoolBalances, pools, userAddress, isFetching])
@@ -72,6 +67,5 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
     isLoading,
     isFetching,
     refetch,
-    error,
-  }
+    error }
 }

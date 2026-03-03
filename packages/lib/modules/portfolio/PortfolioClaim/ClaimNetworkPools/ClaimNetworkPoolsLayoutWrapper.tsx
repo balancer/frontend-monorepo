@@ -4,7 +4,7 @@ import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ClaimModal } from '@repo/lib/modules/pool/actions/claim/ClaimModal'
 import { ClaimProvider } from '@repo/lib/modules/pool/actions/claim/ClaimProvider'
 import { ChainSlug, getChainSlug } from '@repo/lib/modules/pool/pool.utils'
-import { Button, Card, HStack, Heading, Skeleton, Stack, Text, VStack } from '@chakra-ui/react'
+import { Button, Card, HStack, Heading, Skeleton, Stack, Text, VStack } from '@chakra-ui/react';
 import { ClaimNetworkPoolsLayout } from '@repo/lib/modules/portfolio/PortfolioClaim/ClaimNetworkPools/ClaimNetworkPoolsLayout'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { TokenIconStack } from '@repo/lib/modules/tokens/TokenIconStack'
@@ -25,8 +25,7 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
     poolRewardsMap,
     totalFiatClaimableBalanceByChain,
     isLoadingRewards,
-    refetchClaimPoolData,
-  } = usePortfolio()
+    refetchClaimPoolData } = usePortfolio()
 
   const gqlChain = getChainSlug(chain as ChainSlug)
 
@@ -64,9 +63,9 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
     <RelayerSignatureProvider>
       <ClaimNetworkPoolsLayout backLink="/portfolio" title="Portfolio">
         <HStack justifyContent="space-between" pb="1">
-          <HStack spacing="xs">
+          <HStack gap="xs">
             <NetworkIcon chain={gqlChain} size={12} />
-            <Stack spacing="none">
+            <Stack gap="none">
               <Heading size="md">{chainName} incentives</Heading>
             </Stack>
           </HStack>
@@ -79,7 +78,7 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
             <Skeleton height="126px" />
           ) : poolsWithClaims.length > 0 ? (
             poolsWithClaims.map(pool => (
-              <Card key={pool.id} variant="subSection">
+              <Card.Root key={pool.id} variant="subSection">
                 <VStack align="start">
                   <HStack w="full">
                     <PoolName fontSize="lg" fontWeight="bold" pool={pool} />
@@ -108,7 +107,7 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
                     )}
                   </HStack>
                 </VStack>
-              </Card>
+              </Card.Root>
             ))
           ) : (
             <Text p="10" textAlign="center" variant="secondary">
@@ -118,7 +117,7 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
         </Stack>
         {poolsWithClaims.length > 0 && (
           <Button
-            isDisabled={isClaimAllDisabled}
+            disabled={isClaimAllDisabled}
             onClick={() => {
               setModalPools(poolsWithClaims)
             }}
@@ -146,5 +145,5 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
         )}
       </ClaimNetworkPoolsLayout>
     </RelayerSignatureProvider>
-  )
+  );
 }

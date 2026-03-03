@@ -1,13 +1,4 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Heading,
-  HStack,
-  Spacer,
-  Text,
-} from '@chakra-ui/react'
+import { Card, Heading, HStack, Spacer, Text, Separator } from '@chakra-ui/react';
 import { ProjectedPriceChart } from '../sale-structure/ProjectedPriceChart'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useState } from 'react'
@@ -36,8 +27,7 @@ export function ProjectedPrice({
   launchTokenSeed,
   collateralTokenSeed,
   collateralTokenPrice,
-  onPriceChange,
-}: Props) {
+  onPriceChange }: Props) {
   const [maxPrice, setMaxPrice] = useState('')
   const updateMaxPrice = (prices: LbpPrice[]) => {
     setMaxPrice(fNum('fiat', max(prices)))
@@ -62,8 +52,8 @@ export function ProjectedPrice({
   )
 
   return (
-    <Card h="450px">
-      <CardHeader>
+    <Card.Root h="450px">
+      <Card.Header>
         <HStack>
           <Heading size="sm">Projected price</Heading>
           <Spacer />
@@ -71,8 +61,8 @@ export function ProjectedPrice({
             {`Starting price: $${maxPrice}`}
           </Text>
         </HStack>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Body>
         <ProjectedPriceChart
           endDateTime={parseISO(endDateTime)}
           gridLeft="11%"
@@ -84,15 +74,14 @@ export function ProjectedPrice({
           startDateTime={parseISO(startDateTime)}
         />
 
-        <Divider />
+        <Separator />
 
         <HStack mt="2">
           <hr
             style={{
               width: '15px',
               border: '1px dashed',
-              borderColor: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)',
-            }}
+              borderColor: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)' }}
           />
           <Text>{`${launchTokenSymbol} projected price (if no demand)`}</Text>
           <Spacer />
@@ -100,7 +89,7 @@ export function ProjectedPrice({
             {salePeriodText}
           </Text>
         </HStack>
-      </CardBody>
-    </Card>
-  )
+      </Card.Body>
+    </Card.Root>
+  );
 }

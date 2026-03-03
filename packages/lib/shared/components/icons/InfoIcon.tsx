@@ -1,7 +1,8 @@
-import { Box, BoxProps, forwardRef } from '@chakra-ui/react'
+import { forwardRef } from "react";
+import { Box, BoxProps } from '@chakra-ui/react';
 import { Info } from 'react-feather'
 
-export const InfoIcon = forwardRef<BoxProps, 'div'>((props, ref) => {
+export const InfoIcon = forwardRef<HTMLDivElement, BoxProps>((props, ref) => {
   return (
     <Box color="grayText" ref={ref} {...props}>
       <Info size={16} />

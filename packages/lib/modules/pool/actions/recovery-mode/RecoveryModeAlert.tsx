@@ -1,6 +1,6 @@
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { Pool } from '../../pool.types'
-import { AlertStatus } from '@chakra-ui/react'
+import { AlertStatus } from '@chakra-ui/react';
 import { usePathname, useRouter } from 'next/navigation'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isGyro } from '../../pool.helpers'
@@ -20,8 +20,7 @@ export function recoveryModeAlert(pool: Pool) {
     content,
     status: 'warning' as AlertStatus,
     isSoftWarning: false,
-    action: isV3 ? <RecoveryAction /> : undefined,
-  }
+    action: isV3 ? <RecoveryAction /> : undefined }
 }
 
 function RecoveryAction() {

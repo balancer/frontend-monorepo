@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -42,35 +42,43 @@ export function ReliquaryClaimAllRewardsModal({
   }
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onCloseModal}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!claimTxHash} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
-        <TransactionModalHeader chain={pool.chain} label="Claim all rewards" txHash={claimTxHash} />
-        <ModalCloseButton />
-        <ModalBody>
-          <ReliquaryClaimAllSummary
-            claimTxHash={claimTxHash}
-            isLoadingSteps={isLoadingSteps}
-            transactionSteps={transactionSteps}
-          />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onCloseModal}
-          returnLabel="Return to maBEETS"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          onCloseModal();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!claimTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+            <TransactionModalHeader chain={pool.chain} label="Claim all rewards" txHash={claimTxHash} />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <ReliquaryClaimAllSummary
+                claimTxHash={claimTxHash}
+                isLoadingSteps={isLoadingSteps}
+                transactionSteps={transactionSteps}
+              />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onCloseModal}
+              returnLabel="Return to maBEETS"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

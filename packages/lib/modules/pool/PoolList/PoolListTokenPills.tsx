@@ -1,9 +1,8 @@
-import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react'
+import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react';
 import {
   GqlChain,
   GqlPoolTokenDetail,
-  GqlPoolType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
@@ -18,8 +17,7 @@ import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
 function NestedTokenPill({
   nestedTokens,
   chain,
-  iconSize = 24,
-}: {
+  iconSize = 24 }: {
   nestedTokens: GqlPoolTokenDetail[]
   chain: GqlChain
   iconSize?: number
@@ -65,7 +63,7 @@ function WeightedTokenPills({
   preciseWeight?: boolean
 } & BadgeProps) {
   return (
-    <Wrap spacing="xs">
+    <Wrap gap="xs">
       {tokens.map((token, index) => {
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
 
@@ -97,7 +95,7 @@ function WeightedTokenPills({
                       <Text
                         _groupHover={{ color: 'font.maxContrast' }}
                         fontWeight="bold"
-                        noOfLines={1}
+                        lineClamp={1}
                         size={nameSize}
                         transition="color 0.2s var(--ease-out-cubic)"
                       >
@@ -127,7 +125,7 @@ function WeightedTokenPills({
                     <Text
                       _groupHover={{ color: 'font.maxContrast' }}
                       fontWeight="bold"
-                      noOfLines={1}
+                      lineClamp={1}
                       size={nameSize}
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
@@ -147,10 +145,10 @@ function WeightedTokenPills({
               )}
             </HStack>
           </Badge>
-        )
+        );
       })}
     </Wrap>
-  )
+  );
 }
 
 function StableTokenPills({
@@ -169,7 +167,7 @@ function StableTokenPills({
   const zIndices = Array.from({ length: tokens.length }, (_, index) => index + 1).reverse()
 
   return (
-    <HStack spacing={0}>
+    <HStack gap={0}>
       {tokens.map((token, i) => {
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
         return (
@@ -202,7 +200,7 @@ function StableTokenPills({
                     <Text
                       _groupHover={{ color: 'font.maxContrast' }}
                       fontWeight="bold"
-                      noOfLines={1}
+                      lineClamp={1}
                       size={nameSize}
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
@@ -221,7 +219,7 @@ function StableTokenPills({
                   <Text
                     _groupHover={{ color: 'font.maxContrast' }}
                     fontWeight="bold"
-                    noOfLines={1}
+                    lineClamp={1}
                     size={nameSize}
                     transition="color 0.2s var(--ease-out-cubic)"
                   >
@@ -231,10 +229,10 @@ function StableTokenPills({
               )}
             </HStack>
           </Badge>
-        )
+        );
       })}
     </HStack>
-  )
+  );
 }
 
 type VotingListTokenPillsProps = {

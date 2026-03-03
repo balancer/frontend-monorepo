@@ -1,4 +1,4 @@
-import { Card, Flex, Heading, HStack, Progress, Stack, Text, VStack } from '@chakra-ui/react'
+import { Card, Flex, Heading, HStack, Progress, Stack, Text, VStack } from '@chakra-ui/react';
 import { fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { formatUserVebal, useVebalUserStats } from './VebalStats/useVeBalUserStats'
 import { useMaxAmountOfVeBAL } from './useMaxAmountOfVeBal'
@@ -28,7 +28,7 @@ export function VeBalPotentialBar() {
   }
 
   return (
-    <VStack spacing="xs" w="full">
+    <VStack gap="xs" w="full">
       <Flex justifyContent="space-between" w="full">
         <Heading as="h3" pb="0.5" size="h4" variant="special">
           Max lock percentage
@@ -37,7 +37,7 @@ export function VeBalPotentialBar() {
           {formatPercentage(progressPercentage)}%
         </Heading>
       </Flex>
-      <Card m="ms" p={{ base: 'ms', sm: 'md', md: 'lg' }} position="relative" w="full">
+      <Card.Root m="ms" p={{ base: 'ms', sm: 'md', md: 'lg' }} position="relative" w="full">
         <Stack direction="row" justifyContent="space-between" mb={5} w="full">
           <Text fontSize={{ base: 'xs', md: 'sm' }}>
             Current veBAL: {formatUserVebal(userStats)}
@@ -47,17 +47,20 @@ export function VeBalPotentialBar() {
           </Text>
         </Stack>
         <HStack gap={{ base: 'md', md: 'lg' }}>
-          <Progress
-            colorScheme="green"
+          <Progress.Root
+            colorPalette="green"
             rounded="lg"
             size="sm"
-            value={progressPercentage}
-            w="full"
-          />
+            value={String(progressPercentage)}
+            w="full">
+            <Progress.Track>
+              <Progress.Range />
+            </Progress.Track>
+          </Progress.Root>
 
           <VeBalExtendLockButton action="lock" size="md" sourcePage="manage" variant="primary" />
         </HStack>
-      </Card>
+      </Card.Root>
     </VStack>
-  )
+  );
 }

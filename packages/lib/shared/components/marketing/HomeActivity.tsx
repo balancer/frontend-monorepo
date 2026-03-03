@@ -1,4 +1,4 @@
-import { Button, Center, Heading, Text, Flex, Box } from '@chakra-ui/react'
+import { Button, Center, Heading, Text, Flex, Box } from '@chakra-ui/react';
 import Section from '@repo/lib/shared/components/layout/Section'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { EcosystemActivityChart } from '@repo/lib/shared/components/marketing/EcosystemActivityChart'
@@ -16,8 +16,8 @@ export function HomeActivity() {
             </Heading>
             <Text
               pb="xl"
-              sx={{
-                textWrap: 'balance',
+              css={{
+                textWrap: 'balance'
               }}
             >
               Balancer is a vibrant ecosystem. Explore the latest activity across all Balancer
@@ -46,16 +46,14 @@ export function HomeActivity() {
             px={{ base: 'md', lg: '0' }}
             width="max-content"
           >
-            <Button as={NextLink} flex="1" href="/pools" prefetch size="lg" variant="primary">
-              Explore pools
-            </Button>
+            <Button flex="1" size="lg" variant="primary" asChild><NextLink href="/pools" prefetch>Explore pools
+                          </NextLink></Button>
 
-            <Button as={NextLink} flex="1" href="/build/v3" prefetch size="lg" variant="secondary">
-              Build on v3
-            </Button>
+            <Button flex="1" size="lg" variant="secondary" asChild><NextLink href="/build/v3" prefetch>Build on v3
+                          </NextLink></Button>
           </Flex>
         </FadeInOnView>
       </Box>
     </Section>
-  )
+  );
 }

@@ -2,13 +2,12 @@ import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BaseVariant, Pool } from '../pool.types'
-import { HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
+import { HStack, Link, Text, useDisclosure } from '@chakra-ui/react';
 import { UnstakeWarningModal } from './UnstakeWarningModal'
 import {
   hasAuraStakedBalance,
   hasBalancerStakedBalance,
-  hasTotalBalance,
-} from '../user-balance.helpers'
+  hasTotalBalance } from '../user-balance.helpers'
 import { useRouter } from 'next/navigation'
 import { chainToSlugMap, getPoolPath } from '../pool.utils'
 import { usePoolMigrations } from './PoolMigrationsProvider'
@@ -30,7 +29,7 @@ export function MigrationAlert({ pool }: Props) {
 
 function AlertWithBalance({ pool }: Props) {
   const router = useRouter()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
 
   const { getMigration } = usePoolMigrations()
   const migration = getMigration(pool.protocolVersion, getChainId(pool.chain), pool.id)

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps } from '@chakra-ui/react'
+import { Box, BoxProps } from '@chakra-ui/react';
 import { motion, useInView, HTMLMotionProps } from 'framer-motion'
 import { ReactNode, useRef } from 'react'
 
@@ -22,8 +22,7 @@ export function BlurIn({
   const motionProps: HTMLMotionProps<'div'> = {
     animate: isInView ? { filter: 'blur(0px)', opacity: 1 } : {},
     initial: { filter: 'blur(20px)', opacity: 0 },
-    transition: { duration, delay },
-  }
+    transition: { duration, delay } }
 
   return (
     <MotionBox ref={ref} {...motionProps} {...(rest as any)}>

@@ -1,4 +1,4 @@
-import { CreateToastFnReturn } from '@chakra-ui/react'
+import { CreateToastFnReturn } from '@chakra-ui/react';
 import { ErrorCause } from '../../utils/errors'
 
 export function showErrorAsToast(toast: CreateToastFnReturn, cause: ErrorCause) {
@@ -9,7 +9,6 @@ export function showErrorAsToast(toast: CreateToastFnReturn, cause: ErrorCause) 
       description: cause.description,
       status: 'error',
       duration: 300000,
-      isClosable: true,
-    })
+      isClosable: true })
   }
 }

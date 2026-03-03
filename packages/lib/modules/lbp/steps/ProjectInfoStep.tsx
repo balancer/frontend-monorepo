@@ -1,4 +1,4 @@
-import { Heading, VStack, Text, HStack, Spacer, Divider, Checkbox, Button } from '@chakra-ui/react'
+import { Heading, VStack, Text, HStack, Spacer, Checkbox, Button, Separator } from '@chakra-ui/react';
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
@@ -16,8 +16,7 @@ import { useWatch, useFormState } from 'react-hook-form'
 export function ProjectInfoStep() {
   const {
     projectInfoForm: { control, handleSubmit },
-    goToNextStep,
-  } = useLbpForm()
+    goToNextStep } = useLbpForm()
 
   const onSubmit: SubmitHandler<ProjectInfoForm> = () => {
     goToNextStep()
@@ -27,7 +26,7 @@ export function ProjectInfoStep() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-      <VStack align="start" spacing="lg" w="full">
+      <VStack align="start" gap="lg" w="full">
         <Heading color="font.maxContrast" size="md">
           Project info
         </Heading>
@@ -38,7 +37,7 @@ export function ProjectInfoStep() {
         <TokenIconInput />
         <ProjectOwnerInput />
         <PoolCreatorInput />
-        <Divider />
+        <Separator />
         <Heading color="font.maxContrast" size="md">
           Social accounts
         </Heading>
@@ -46,18 +45,17 @@ export function ProjectInfoStep() {
         <ProjectTelegramHandle />
         <ProjectDiscordUrlInput />
 
-        <Divider />
+        <Separator />
         <Disclaimer />
         <LbpFormAction disabled={!isValid} />
       </VStack>
     </form>
-  )
+  );
 }
 
 function NameInput() {
   const {
-    projectInfoForm: { control },
-  } = useLbpForm()
+    projectInfoForm: { control } } = useLbpForm()
   const { errors } = useFormState({ control })
   const length = useWatch({ control, name: 'name' }).length
   const maxLength = 24
@@ -65,9 +63,8 @@ function NameInput() {
   return (
     <VStack align="start" w="full">
       <HStack w="full">
-        <Text as="label" color="font.primary" htmlFor="project-name">
-          Project name
-        </Text>
+        <Text color="font.primary" asChild><label htmlFor="project-name">Project name
+                  </label></Text>
         <Spacer />
         <Text
           className="tabular-number"
@@ -89,17 +86,15 @@ function NameInput() {
           />
         )}
         rules={{
-          required: 'Project name is required',
-        }}
+          required: 'Project name is required' }}
       />
     </VStack>
-  )
+  );
 }
 
 function DescriptionInput() {
   const {
-    projectInfoForm: { control },
-  } = useLbpForm()
+    projectInfoForm: { control } } = useLbpForm()
   const { errors } = useFormState({ control })
 
   const length = useWatch({ control, name: 'description' }).length
@@ -108,9 +103,8 @@ function DescriptionInput() {
   return (
     <VStack align="start" w="full">
       <HStack w="full">
-        <Text as="label" color="font.primary" htmlFor="project-description">
-          Project description
-        </Text>
+        <Text color="font.primary" asChild><label htmlFor="project-description">Project description
+                  </label></Text>
         <Spacer />
         <Text
           className="tabular-number"
@@ -134,17 +128,15 @@ function DescriptionInput() {
           />
         )}
         rules={{
-          required: 'Project description is required',
-        }}
+          required: 'Project description is required' }}
       />
     </VStack>
-  )
+  );
 }
 
 function TokenIconInput() {
   const {
-    projectInfoForm: { control, setValue },
-  } = useLbpForm()
+    projectInfoForm: { control, setValue } } = useLbpForm()
 
   const { errors } = useFormState({ control })
 
@@ -155,9 +147,8 @@ function TokenIconInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text as="label" color="font.primary" htmlFor="token-icon-url">
-        Token icon URL
-      </Text>
+      <Text color="font.primary" asChild><label htmlFor="token-icon-url">Token icon URL
+              </label></Text>
       <Controller
         control={control}
         name="tokenIconUrl"
@@ -174,24 +165,21 @@ function TokenIconInput() {
         )}
         rules={{
           required: 'Token icon URL is required',
-          validate: validateImageUrl,
-        }}
+          validate: validateImageUrl }}
       />
     </VStack>
-  )
+  );
 }
 
 function ProjectWebsiteUrlInput() {
   const {
-    projectInfoForm: { control },
-  } = useLbpForm()
+    projectInfoForm: { control } } = useLbpForm()
   const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
-      <Text as="label" color="font.primary" htmlFor="project-website-url">
-        Project website URL
-      </Text>
+      <Text color="font.primary" asChild><label htmlFor="project-website-url">Project website URL
+              </label></Text>
       <Controller
         control={control}
         name="websiteUrl"
@@ -207,24 +195,21 @@ function ProjectWebsiteUrlInput() {
         )}
         rules={{
           required: 'Website URL is required',
-          validate: validateUrlFormat,
-        }}
+          validate: validateUrlFormat }}
       />
     </VStack>
-  )
+  );
 }
 
 function ProjectXHandle() {
   const {
-    projectInfoForm: { control },
-  } = useLbpForm()
+    projectInfoForm: { control } } = useLbpForm()
   const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
-      <Text as="label" color="font.primary" htmlFor="x-handle">
-        X / Twitter username (optional)
-      </Text>
+      <Text color="font.primary" asChild><label htmlFor="x-handle">X / Twitter username (optional)
+              </label></Text>
       <Controller
         control={control}
         name="xHandle"
@@ -240,24 +225,21 @@ function ProjectXHandle() {
         )}
         rules={{
           validate: (value: string | undefined) =>
-            isValidTwitterHandle(normalizeHandle(value || '')),
-        }}
+            isValidTwitterHandle(normalizeHandle(value || '')) }}
       />
     </VStack>
-  )
+  );
 }
 
 function ProjectTelegramHandle() {
   const {
-    projectInfoForm: { control },
-  } = useLbpForm()
+    projectInfoForm: { control } } = useLbpForm()
   const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
-      <Text as="label" color="font.primary" htmlFor="telegram-handle">
-        Telegram username (optional)
-      </Text>
+      <Text color="font.primary" asChild><label htmlFor="telegram-handle">Telegram username (optional)
+              </label></Text>
       <Controller
         control={control}
         name="telegramHandle"
@@ -273,24 +255,21 @@ function ProjectTelegramHandle() {
         )}
         rules={{
           validate: (value: string | undefined) =>
-            isValidTelegramHandle(normalizeHandle(value || '')),
-        }}
+            isValidTelegramHandle(normalizeHandle(value || '')) }}
       />
     </VStack>
-  )
+  );
 }
 
 function ProjectDiscordUrlInput() {
   const {
-    projectInfoForm: { control },
-  } = useLbpForm()
+    projectInfoForm: { control } } = useLbpForm()
   const { errors } = useFormState({ control })
 
   return (
     <VStack align="start" w="full">
-      <Text as="label" color="font.primary" htmlFor="discord-url">
-        Discord community URL (optional)
-      </Text>
+      <Text color="font.primary" asChild><label htmlFor="discord-url">Discord community URL (optional)
+              </label></Text>
       <Controller
         control={control}
         name="discordUrl"
@@ -305,17 +284,15 @@ function ProjectDiscordUrlInput() {
           />
         )}
         rules={{
-          validate: validateUrlFormat,
-        }}
+          validate: validateUrlFormat }}
       />
     </VStack>
-  )
+  );
 }
 
 function ProjectOwnerInput() {
   const {
-    projectInfoForm: { control, setValue, trigger },
-  } = useLbpForm()
+    projectInfoForm: { control, setValue, trigger } } = useLbpForm()
   const { errors } = useFormState({ control })
 
   const { userAddress } = useUserAccount()
@@ -328,9 +305,8 @@ function ProjectOwnerInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text as="label" color="font.primary" htmlFor="project-owner">
-        Project owner wallet address (optional)
-      </Text>
+      <Text color="font.primary" asChild><label htmlFor="project-owner">Project owner wallet address (optional)
+              </label></Text>
       <Controller
         control={control}
         name="owner"
@@ -346,17 +322,15 @@ function ProjectOwnerInput() {
           />
         )}
         rules={{
-          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
-        }}
+          validate: (value: string) => !value || isAddress(value) || 'Invalid address' }}
       />
     </VStack>
-  )
+  );
 }
 
 function PoolCreatorInput() {
   const {
-    projectInfoForm: { control, setValue, trigger },
-  } = useLbpForm()
+    projectInfoForm: { control, setValue, trigger } } = useLbpForm()
   const { errors } = useFormState({ control })
 
   const { userAddress } = useUserAccount()
@@ -369,9 +343,8 @@ function PoolCreatorInput() {
 
   return (
     <VStack align="start" w="full">
-      <Text as="label" color="font.primary" htmlFor="pool-creator">
-        Pool creator wallet address (optional)
-      </Text>
+      <Text color="font.primary" asChild><label htmlFor="pool-creator">Pool creator wallet address (optional)
+              </label></Text>
       <Controller
         control={control}
         name="poolCreator"
@@ -387,60 +360,50 @@ function PoolCreatorInput() {
           />
         )}
         rules={{
-          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
-        }}
+          validate: (value: string) => !value || isAddress(value) || 'Invalid address' }}
       />
     </VStack>
-  )
+  );
 }
 
 function Disclaimer() {
   const {
-    projectInfoForm: { control },
-  } = useLbpForm()
+    projectInfoForm: { control } } = useLbpForm()
 
   return (
     <Controller
       control={control}
       name="disclaimerAccepted"
       render={({ field }) => (
-        <Checkbox
+        <Checkbox.Root
           color="font.primary"
           fontWeight="medium"
-          isChecked={field.value}
-          onChange={field.onChange}
+          onCheckedChange={field.onChange}
           size="lg"
-        >
-          {'I accept the'}
-          <Button
-            as={NextLink}
-            fontSize="lg"
-            fontWeight="medium"
-            href={'/risks'}
-            px="0.3em"
-            target="_blank"
-            textColor="font.link"
-            variant="link"
-          >
-            Risks
-          </Button>
-          {'and'}
-          <Button
-            as={NextLink}
-            fontSize="lg"
-            fontWeight="medium"
-            href={'/terms-of-use'}
-            px="0.3em"
-            target="_blank"
-            textColor="font.link"
-            variant="link"
-          >
-            Terms of Use
-          </Button>
-          {'for creating and LBP'}
-        </Checkbox>
+          checked={field.value}
+        ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+              {'I accept the'}
+              <Button
+                fontSize="lg"
+                fontWeight="medium"
+                px="0.3em"
+                textColor="font.link"
+                variant='plain'
+                asChild><NextLink href={'/risks'} target="_blank">Risks
+                              </NextLink></Button>
+              {'and'}
+              <Button
+                fontSize="lg"
+                fontWeight="medium"
+                px="0.3em"
+                textColor="font.link"
+                variant='plain'
+                asChild><NextLink href={'/terms-of-use'} target="_blank">Terms of Use
+                              </NextLink></Button>
+              {'for creating and LBP'}
+            </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
       )}
       rules={{ required: 'Conditions must be accepted' }}
     />
-  )
+  );
 }

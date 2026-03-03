@@ -1,4 +1,4 @@
-import { Badge, Box, Button, HStack, Progress, SimpleGrid, Text, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Progress, SimpleGrid, Text, VStack } from '@chakra-ui/react';
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { getTotalApr } from '@repo/lib/modules/pool/pool.utils'
@@ -81,8 +81,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
     chain,
     weightedTotalBalance,
     pendingRewardsByRelicId,
-    beetsPrice,
-  } = useReliquary()
+    beetsPrice } = useReliquary()
 
   const pendingRewardsAmount = pendingRewardsByRelicId[relic.relicId] ?? '0'
   const pendingRewardsUsdValue = bn(pendingRewardsAmount).times(beetsPrice)
@@ -124,13 +123,11 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         title: 'BEETS reward APR',
         apr: bn(relicApr)
           .minus(baseApr?.apr || 0)
-          .toNumber(),
-      }
+          .toNumber() }
     } else if (item.title === 'Voting APR Boost' && item.type === 'STAKING_BOOST') {
       return {
         ...item,
-        apr: bn(item.apr).times(allocationPoints).div(100).toNumber(),
-      }
+        apr: bn(item.apr).times(allocationPoints).div(100).toNumber() }
     } else {
       return item
     }
@@ -154,19 +151,18 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
   return (
     <VStack
       _hover={{
-        opacity: 1,
-      }}
+        opacity: 1 }}
       opacity={isSelected ? 1 : 0.5}
-      spacing="4"
+      gap="4"
       transform={isSelected ? 'scale(1)' : 'scale(0.85)'}
       transition="all 300ms ease"
       width="full"
     >
       <HStack justify="space-between" width="full">
-        <Badge colorScheme="green" fontSize="sm" px="3" py="1">
+        <Badge colorPalette="green" fontSize="sm" px="3" py="1">
           Level {relic.level + 1} - {levelNames[relic.level] || 'Unknown'}
         </Badge>
-        <Badge colorScheme="blue" fontSize="sm" px="3" py="1">
+        <Badge colorPalette="blue" fontSize="sm" px="3" py="1">
           Relic #{relic.relicId}
         </Badge>
       </HStack>
@@ -209,9 +205,9 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           p="3"
           position="absolute"
           right="0"
-          spacing="2"
-          sx={{
-            background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)',
+          gap="2"
+          css={{
+            background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)'
           }}
         >
           <Button
@@ -242,7 +238,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
               label={`The minimum amount to claim is ${toCurrency(0.01)}`}
             >
               <Button
-                isDisabled={isDisabledButton}
+                disabled={isDisabledButton}
                 onClick={() => setIsClaimModalOpen(true)}
                 size="sm"
                 variant="secondary"
@@ -254,20 +250,23 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           </Box>
         </HStack>
       </Box>
-      <HStack spacing="2" width="full">
+      <HStack gap="2" width="full">
         {!isMaxMaturity && (
           <Text color="white" fontSize="sm" fontWeight="bold">
             {relic.level + 1}
           </Text>
         )}
         <Box flex="1" position="relative">
-          <Progress
-            colorScheme="blue"
+          <Progress.Root
+            colorPalette="blue"
             height="24px"
             rounded="md"
-            value={isMaxMaturity ? 100 : progressToNextLevel}
-            width="full"
-          />
+            value={String(isMaxMaturity ? 100 : progressToNextLevel)}
+            width="full">
+            <Progress.Track>
+              <Progress.Range />
+            </Progress.Track>
+          </Progress.Root>
           <Box
             color="black"
             fontSize="xs"
@@ -293,14 +292,14 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
           </Text>
         )}
       </HStack>
-      <SimpleGrid columns={{ base: 2, sm: 2 }} spacing={{ base: 'sm', lg: 'ms' }} width="full">
+      <SimpleGrid columns={{ base: 2, sm: 2 }} gap={{ base: 'sm', lg: 'ms' }} width="full">
         <RelicStat>
           <StatLabel label="Liquidity" />
           <StatValueText>{toCurrency(relicBalanceUSD)}</StatValueText>
         </RelicStat>
         <RelicStat>
           <StatLabel label="APR" />
-          <HStack spacing="3">
+          <HStack gap="3">
             <StatValueText>{formattedApr}</StatValueText>
             <MainAprTooltip
               aprItems={dynamicDataAprItems}
@@ -318,7 +317,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         <RelicStat>
           <StatLabel label="Pending rewards" />
           {pendingRewardsUsdValue.gt(0.01) ? (
-            <HStack spacing="1">
+            <HStack gap="1">
               <BeetsTokenSonic height="16px" width="16px" />
               <StatValueText>
                 {fNum('token', pendingRewardsAmount)} ({toCurrency(pendingRewardsUsdValue)})
@@ -365,5 +364,5 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
         relicId={relic.relicId}
       />
     </VStack>
-  )
+  );
 }

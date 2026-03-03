@@ -1,6 +1,6 @@
 import ReactECharts from 'echarts-for-react'
 import { usePoolWeightShiftsChart } from './usePoolWeightShiftsChart'
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react';
 import { isEmpty } from 'lodash'
 
 export function PoolWeightShiftsChart() {

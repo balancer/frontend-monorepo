@@ -17,11 +17,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   if (!isMounted) return null
 
   return (
-    <ChakraProvider
-      cssVarsRoot="body"
-      theme={theme}
-      toastOptions={{ defaultOptions: { position: 'bottom-left' } }}
-    >
+    <ChakraProvider value={theme} cssVarsRoot="body">
       {children}
     </ChakraProvider>
   )

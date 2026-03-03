@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 import { orderByHash, SortingState } from '../pool.types'
 import { usePoolOrderByState } from './usePoolOrderByState'
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
@@ -17,8 +17,7 @@ interface SortOption extends OptionBase {
 export function PoolListSortType() {
   const isMounted = useIsMounted()
   const {
-    queryState: { sorting, setSorting },
-  } = usePoolList()
+    queryState: { sorting, setSorting } } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const chakraStyles = getSelectStyles<SortOption>()
 
@@ -28,12 +27,10 @@ export function PoolListSortType() {
         .map(sortType => [
           {
             label: `${orderByHash[sortType]} (high to low)`,
-            value: [{ id: sortType, desc: true }],
-          },
+            value: [{ id: sortType, desc: true }] },
           {
             label: `${orderByHash[sortType]} (low to high)`,
-            value: [{ id: sortType, desc: false }],
-          },
+            value: [{ id: sortType, desc: false }] },
         ])
         .flat(),
     [orderBy]

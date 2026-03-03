@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react'
+import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react';
 import { isDev, isStaging, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
@@ -69,83 +69,57 @@ function NavLinks({
   }
 
   return (
-    <HStack fontWeight="medium" spacing="lg" {...props}>
+    <HStack fontWeight="medium" gap="lg" {...props}>
       {appLinks.map(link => {
         if (!link.href) return null
         return (
-          <Box as={motion.div} key={link.href} variants={fadeIn}>
-            <Link
-              as={NextLink}
-              color={linkColorFor(link.href || '')}
-              href={link.href}
-              isExternal={link.isExternal}
-              onClick={() => handleLinkClick(link.analyticsEvent)}
-              prefetch
-              variant="nav"
-            >
-              <HStack gap="xxs">
-                <Box as="span">{link.label}</Box>
-                {link.isExternal && (
-                  <Box as="span" color="grayText" position="relative" top="-4px">
-                    <ArrowUpRight size={12} />
-                  </Box>
-                )}
-              </HStack>
-            </Link>
-          </Box>
-        )
+          <Box variants={fadeIn} asChild><motion.div key={link.href}>
+              <Link color={linkColorFor(link.href || '')} variant="nav" asChild><NextLink
+                  href={link.href}
+                  onClick={() => handleLinkClick(link.analyticsEvent)}
+                  prefetch
+                  target='_blank'
+                  rel='noopener noreferrer'>
+                  <HStack gap="xxs">
+                    <Box as="span">{link.label}</Box>
+                    {link.isExternal && (
+                      <Box as="span" color="grayText" position="relative" top="-4px">
+                        <ArrowUpRight size={12} />
+                      </Box>
+                    )}
+                  </HStack>
+                </NextLink></Link>
+            </motion.div></Box>
+        );
       })}
       {customLinks}
       {(isDev || isStaging) && (
         <>
-          <Box as={motion.div} variants={fadeIn}>
-            <Link
-              as={NextLink}
-              color={linkColorFor('/lbp/create')}
-              href="/lbp/create"
-              prefetch
-              variant="nav"
-            >
-              LBP
-            </Link>
-          </Box>
-          <Box as={motion.div} variants={fadeIn}>
-            <Link
-              as={NextLink}
-              color={linkColorFor('/create')}
-              href="/create"
-              prefetch
-              variant="nav"
-            >
-              Create
-            </Link>
-          </Box>
-          <Box as={motion.div} variants={fadeIn}>
-            <Link
-              as={NextLink}
-              color={linkColorFor('/debug/pools')}
-              href="/debug/pools"
-              prefetch
-              variant="nav"
-            >
-              Test-Pools
-            </Link>
-          </Box>
-          <Box as={motion.div} variants={fadeIn}>
-            <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
-              Debug
-            </Link>
-          </Box>
+          <Box variants={fadeIn} asChild><motion.div>
+              <Link color={linkColorFor('/lbp/create')} variant="nav" asChild><NextLink href="/lbp/create" prefetch>LBP
+                            </NextLink></Link>
+            </motion.div></Box>
+          <Box variants={fadeIn} asChild><motion.div>
+              <Link color={linkColorFor('/create')} variant="nav" asChild><NextLink href="/create" prefetch>Create
+                            </NextLink></Link>
+            </motion.div></Box>
+          <Box variants={fadeIn} asChild><motion.div>
+              <Link color={linkColorFor('/debug/pools')} variant="nav" asChild><NextLink href="/debug/pools" prefetch>Test-Pools
+                            </NextLink></Link>
+            </motion.div></Box>
+          <Box variants={fadeIn} asChild><motion.div>
+              <Link color={linkColorFor('/debug')} variant="nav" asChild><NextLink href="/debug" prefetch>Debug
+                            </NextLink></Link>
+            </motion.div></Box>
         </>
       )}
     </HStack>
-  )
+  );
 }
 
 export function NavActions({
   mobileNav,
-  allowCreateWallet,
-}: {
+  allowCreateWallet }: {
   mobileNav: ReactNode
   allowCreateWallet?: boolean
 }) {
@@ -158,21 +132,17 @@ export function NavActions({
       return [
         {
           el: hideDarkModeToggle ? null : <DarkModeToggle />,
-          display: { base: 'none', lg: 'block' },
-        },
+          display: { base: 'none', lg: 'block' } },
         {
           el: (
-            <Button as={NextLink} href="/pools" prefetch px={7} size="md" variant="primary">
-              Launch app
-            </Button>
+            <Button px={7} size="md" variant="primary" asChild><NextLink href="/pools" prefetch>Launch app
+                          </NextLink></Button>
           ),
-          display: { base: 'block', lg: 'block' },
-        },
+          display: { base: 'block', lg: 'block' } },
         {
           el: mobileNav,
-          display: { base: 'block', lg: 'none' },
-        },
-      ]
+          display: { base: 'block', lg: 'none' } },
+      ];
     }
 
     const defaultActions = [
@@ -180,26 +150,22 @@ export function NavActions({
         ? [
             {
               el: <DevToolsDrawerButton />,
-              display: { base: 'block', lg: 'block' },
-            },
+              display: { base: 'block', lg: 'block' } },
           ]
         : []),
       {
         el: <UserSettings />,
-        display: { base: 'none', lg: 'block' },
-      },
+        display: { base: 'none', lg: 'block' } },
       ...(isBalancer
         ? [
             {
               el: <UserFeedback />,
-              display: { base: 'none', lg: 'block' },
-            },
+              display: { base: 'none', lg: 'block' } },
           ]
         : []),
       {
         el: hideDarkModeToggle ? null : <DarkModeToggle />,
-        display: { base: 'none', lg: 'block' },
-      },
+        display: { base: 'none', lg: 'block' } },
       {
         el: (
           <ConnectWallet
@@ -207,20 +173,17 @@ export function NavActions({
             showCreateWalletButton={allowCreateWallet}
           />
         ),
-        display: { base: 'block', lg: 'block' },
-      },
+        display: { base: 'block', lg: 'block' } },
       {
         el: mobileNav,
-        display: { base: 'block', lg: 'none' },
-      },
+        display: { base: 'block', lg: 'none' } },
     ]
 
     if (isConnected) {
       return [
         {
           el: <RecentTransactions />,
-          display: { base: 'none', lg: 'block' },
-        },
+          display: { base: 'none', lg: 'block' } },
         ...defaultActions,
       ]
     }
@@ -233,13 +196,13 @@ export function NavActions({
       {actions.map(
         ({ el, display }, i) =>
           el && (
-            <Box as={motion.div} display={display} key={i} variants={fadeIn}>
-              {el}
-            </Box>
+            <Box display={display} variants={fadeIn} asChild><motion.div key={i}>
+                {el}
+              </motion.div></Box>
           )
       )}
     </>
-  )
+  );
 }
 
 export function NavBar({
@@ -298,59 +261,50 @@ export function NavBar({
         bottom: 0,
         bg: showShadow ? 'background.level1' : 'none',
         opacity: 0.5,
-        zIndex: -1,
-      }}
-      as={motion.div}
+        zIndex: -1 }}
       borderColor="border.base"
       boxShadow={showShadow ? 'lg' : 'none'}
-      onScroll={e => console.log('Navbar scroll:', e)}
       pos="fixed"
       style={{
         backdropFilter: disableBlur ? 'none' : backdropFilter,
         top: disableBlur ? 0 : top,
-        opacity: disableBlur ? 1 : opacity,
-      }}
+        opacity: disableBlur ? 1 : opacity }}
       top="0"
       transition="all 0.3s ease-in-out"
       w="full"
       zIndex={100}
       {...rest}
-    >
-      {!apiOK && <ApiOutageAlert />}
-
-      <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
-        <HStack
-          animate="show"
-          as={motion.div}
-          initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
-          onClick={e => e.stopPropagation()}
-          spacing="xl"
-          variants={staggeredFadeIn}
-        >
-          {leftSlot || (
-            <>
-              {navLogo}
-              {appLinks && (
-                <NavLinks
-                  appLinks={appLinks}
-                  customLinks={customLinks}
-                  display={{ base: 'none', lg: 'flex' }}
-                />
+      asChild><motion.div onScroll={e => console.log('Navbar scroll:', e)}>
+        {!apiOK && <ApiOutageAlert />}
+        <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
+          <HStack
+            animate="show"
+            initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
+            gap="xl"
+            variants={staggeredFadeIn}
+            asChild><motion.div onClick={e => e.stopPropagation()}>
+              {leftSlot || (
+                <>
+                  {navLogo}
+                  {appLinks && (
+                    <NavLinks
+                      appLinks={appLinks}
+                      customLinks={customLinks}
+                      display={{ base: 'none', lg: 'flex' }}
+                    />
+                  )}
+                </>
               )}
-            </>
-          )}
+            </motion.div></HStack>
+          <HStack
+            animate="show"
+            initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
+            order={{ md: '2' }}
+            variants={staggeredFadeIn}
+            asChild><motion.div onClick={e => e.stopPropagation()}>
+              {rightSlot || <NavActions allowCreateWallet={allowCreateWallet} mobileNav={mobileNav} />}
+            </motion.div></HStack>
         </HStack>
-        <HStack
-          animate="show"
-          as={motion.div}
-          initial={process.env.NODE_ENV === 'development' ? false : 'hidden'}
-          onClick={e => e.stopPropagation()}
-          order={{ md: '2' }}
-          variants={staggeredFadeIn}
-        >
-          {rightSlot || <NavActions allowCreateWallet={allowCreateWallet} mobileNav={mobileNav} />}
-        </HStack>
-      </HStack>
-    </Box>
-  )
+      </motion.div></Box>
+  );
 }

@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, VStack } from '@chakra-ui/react'
+import { Box, Grid, GridItem, VStack } from '@chakra-ui/react';
 import { PoolBreadcrumbs } from '../../PoolDetail/PoolHeader/PoolBreadcrumbs'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'

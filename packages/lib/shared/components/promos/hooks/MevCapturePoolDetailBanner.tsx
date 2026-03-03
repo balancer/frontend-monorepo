@@ -1,23 +1,13 @@
-'use client'
-
-import {
-  Stack,
-  Heading,
-  Button,
-  Flex,
-  Box,
-  Center,
-  Text,
-  useColorMode,
-  Link,
-} from '@chakra-ui/react'
+'use client';
+import { Stack, Heading, Button, Flex, Box, Center, Text, Link } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../../other/Picture'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 // import Stat from '../../other/Stat'
 
 export function MevCapturePoolDetailBanner() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   return (
     <Box rounded="lg" shadow="2xl" w="full">
@@ -32,9 +22,9 @@ export function MevCapturePoolDetailBanner() {
             ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
             : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
         }
-        sx={{
+        css={{
           width: '100% !important',
-          maxWidth: '100% !important',
+          maxWidth: '100% !important'
         }}
         width="full"
       >
@@ -150,16 +140,13 @@ export function MevCapturePoolDetailBanner() {
             <Button
               _hover={{
                 bg: colorMode === 'dark' ? '#000' : '#fff',
-                color: colorMode === 'dark' ? '#fff' : '#000',
-              }}
-              as={Link}
+                color: colorMode === 'dark' ? '#fff' : '#000' }}
               borderColor="font.maxContrast"
               color="font.maxContrast"
               cursor="pointer"
               flex="1"
               gap="xs"
               h={{ base: '32px', sm: '40px', lg: '48px' }}
-              href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
               isExternal
               maxW="132px"
               py="sm"
@@ -168,21 +155,20 @@ export function MevCapturePoolDetailBanner() {
               size="md"
               variant="outline"
               w="132px"
-            >
-              Learn more
-              <Box
-                _groupHover={{
-                  transform: 'translateX(2px)',
-                }}
-                as="span"
-                transition="all 0.3s var(--ease-out-cubic)"
-              >
-                <ArrowUpRight size="14px" />
-              </Box>
-            </Button>
+              asChild><Link
+                href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295">Learn more
+                              <Box
+                  _groupHover={{
+                    transform: 'translateX(2px)' }}
+                  as="span"
+                  transition="all 0.3s var(--ease-out-cubic)"
+                >
+                  <ArrowUpRight size="14px" />
+                </Box>
+              </Link></Button>
           </Flex>
         </Center>
       </Box>
     </Box>
-  )
+  );
 }

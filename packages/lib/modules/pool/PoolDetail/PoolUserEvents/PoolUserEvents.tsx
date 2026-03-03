@@ -1,4 +1,4 @@
-import { Grid, GridItem, Text, Box, HStack, Link, Divider } from '@chakra-ui/react'
+import { Grid, GridItem, Text, Box, HStack, Link, Separator } from '@chakra-ui/react';
 import { usePool } from '../../PoolProvider'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -7,8 +7,7 @@ import {
   GqlChain,
   GqlPoolStakingType,
   GqlPoolAddRemoveEventV3,
-  GqlPoolSwapEventV3,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolSwapEventV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { secondsToMilliseconds } from 'date-fns'
 import { ArrowUpRight } from 'react-feather'
@@ -64,8 +63,7 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
       templateAreas={{
         base: `"action value time"
                "tokens tokens tokens"`,
-        md: `"action tokens value time"`,
-      }}
+        md: `"action tokens value time"` }}
       templateColumns={{ base: 'fit-content(150px) 50px 1fr', md: GRID_COLUMNS }}
       w="full"
     >
@@ -83,13 +81,13 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
           <Text color="grayText">
             {formatDistanceToNowAbbr(new Date(secondsToMilliseconds(poolEvent.timestamp)))}
           </Text>
-          <Link color="grayText" href={txUrl} isExternal>
+          <Link color="grayText" href={txUrl} target='_blank' rel='noopener noreferrer'>
             <ArrowUpRight size={16} />
           </Link>
         </HStack>
       </GridItem>
     </Grid>
-  )
+  );
 }
 
 function getEventType(item: PoolEventItem) {
@@ -117,8 +115,7 @@ function Tokens({ poolEvent, chain }: { poolEvent: PoolEventItem; chain: GqlChai
 
 function AddRemoveTokens({
   addRemoveEvent,
-  chain,
-}: {
+  chain }: {
   addRemoveEvent: GqlPoolAddRemoveEventV3
   chain: GqlChain
 }) {
@@ -162,8 +159,7 @@ function SwapTokens({ swapEvent, chain }: { swapEvent: GqlPoolSwapEventV3; chain
 }
 
 export default function PoolUserEvents({
-  userPoolEvents,
-}: {
+  userPoolEvents }: {
   userPoolEvents: GetPoolEventsQuery['poolEvents']
 }) {
   const { myLiquiditySectionRef, chain, pool } = usePool()
@@ -171,8 +167,7 @@ export default function PoolUserEvents({
   const { toCurrency } = useCurrency()
 
   const {
-    options: { showVeBal },
-  } = PROJECT_CONFIG
+    options: { showVeBal } } = PROJECT_CONFIG
 
   const isVeBalPoolStaking = pool.staking?.type === GqlPoolStakingType.Vebal
   const showBoostValue =
@@ -213,8 +208,8 @@ export default function PoolUserEvents({
       cardProps={{ h: height }}
       footer={
         <>
-          <Divider />
-          <HStack mt="auto" spacing="4">
+          <Separator />
+          <HStack mt="auto" gap="4">
             <Text fontSize="0.85rem" variant="secondary">
               {`${stakedPercentage} ${getShareTitle()}`}
             </Text>
@@ -237,5 +232,5 @@ export default function PoolUserEvents({
         />
       ))}
     </PoolTransactionsCard>
-  )
+  );
 }

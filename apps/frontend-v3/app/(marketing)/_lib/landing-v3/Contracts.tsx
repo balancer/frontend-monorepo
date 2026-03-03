@@ -1,12 +1,11 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Box, Card, Grid, GridItem, HStack, IconButton, Text, VStack, Link } from '@chakra-ui/react'
+import { Box, Card, Grid, GridItem, HStack, IconButton, Text, VStack, Link } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 // @ts-ignore
 import { ArrowUpRight, Code } from 'react-feather'
-import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -14,6 +13,7 @@ import { RadialPattern } from './shared/RadialPattern'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
+import { LuMinus, LuPlus } from 'react-icons/lu';
 
 const contracts = [
   {
@@ -30,9 +30,7 @@ const contracts = [
         'Vault integration',
         'Custom logic',
         'Dynamic updating',
-      ],
-    },
-  },
+      ] } },
   {
     title: 'Pool',
     url: 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/',
@@ -46,9 +44,7 @@ const contracts = [
         '80/20 pool',
         'Boosted pool',
         'Liquidity Boostrapping Pools (LBP)',
-      ],
-    },
-  },
+      ] } },
   {
     title: 'Vault',
     url: 'https://docs.balancer.fi/concepts/vault/',
@@ -67,9 +63,7 @@ const contracts = [
         'Swap fee',
         'Live balances',
         'Liquidity invariant approximation',
-      ],
-    },
-  },
+      ] } },
   {
     title: 'Hook',
     url: 'https://docs.balancer.fi/concepts/core-concepts/hooks.html',
@@ -84,23 +78,20 @@ const contracts = [
         'Removes (before/after)',
         'Swaps (before/after)',
         'Dynamic swap fee computation',
-      ],
-    },
-  },
+      ] } },
 ]
 
 function ContractCard({
   contract,
   isExpanded,
-  onToggle,
-}: {
+  onToggle }: {
   contract: (typeof contracts)[number]
   isExpanded: boolean
   onToggle: () => void
 }) {
   return (
-    <Card h="full" w="full">
-      <VStack alignItems="start" spacing="lg" w="full">
+    <Card.Root h="full" w="full">
+      <VStack alignItems="start" gap="lg" w="full">
         <HStack alignItems="center" justifyContent="space-between" w="full">
           <HStack>
             <Box color="font.secondary">
@@ -112,13 +103,11 @@ function ContractCard({
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             fontSize="12px"
             h="30px"
-            icon={isExpanded ? <MinusIcon /> : <AddIcon />}
             isRound
             onClick={onToggle}
             size="xs"
             variant="primary"
-            w="30px"
-          />
+            w="30px">{isExpanded ? <LuMinus /> : <LuPlus />}</IconButton>
         </HStack>
         <VStack alignItems="start" mb="lg">
           <HStack justifyContent="space-between" w="full">
@@ -126,8 +115,8 @@ function ContractCard({
               {contract.title}
             </Text>
             {isExpanded && (
-              <Link href={contract.url} isExternal>
-                <HStack spacing={0}>
+              <Link href={contract.url} target='_blank' rel='noopener noreferrer'>
+                <HStack gap={0}>
                   <span>View docs</span>
                   <ArrowUpRight size={16} />
                 </HStack>
@@ -135,7 +124,9 @@ function ContractCard({
             )}
           </HStack>
 
-          <Text color="font.secondary" sx={{ textWrap: 'balance' }} w="80%">
+          <Text color="font.secondary" css={{
+            textWrap: 'balance'
+          }} w="80%">
             {contract.shortDescription}
           </Text>
           {isExpanded && (
@@ -145,8 +136,8 @@ function ContractCard({
           )}
         </VStack>
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 const MotionGridItem = motion(GridItem)
@@ -188,7 +179,7 @@ export function Contracts() {
           <Grid gap="xl" templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}>
             {!isMobile && <GridItem />}
             <GridItem borderRadius="lg">
-              <VStack alignItems="start" spacing="md">
+              <VStack alignItems="start" gap="md">
                 <WordsPullUp
                   as="h3"
                   color="font.primary"
@@ -218,18 +209,15 @@ export function Contracts() {
                     <MotionGridItem
                       animate={{
                         opacity: expandedCard && expandedCard !== contract.title ? 0 : 1,
-                        scale: 1,
-                      }}
+                        scale: 1 }}
                       exit={{
                         opacity: 0,
-                        scale: 0,
-                      }}
+                        scale: 0 }}
                       gridColumn={expandedCard === contract.title ? 'span 2' : 'auto'}
                       gridRow={expandedCard === contract.title ? 'span 2' : 'auto'}
                       initial={{
                         opacity: 1,
-                        scale: 1,
-                      }}
+                        scale: 1 }}
                       key={contract.title}
                       layout
                       order={expandedCard && expandedCard == contract.title ? 0 : index + 1}
@@ -237,16 +225,13 @@ export function Contracts() {
                         display:
                           expandedCard && expandedCard !== contract.title ? 'hidden' : 'block',
                         position:
-                          expandedCard && expandedCard !== contract.title ? 'absolute' : 'relative',
-                      }}
+                          expandedCard && expandedCard !== contract.title ? 'absolute' : 'relative' }}
                       transition={{
                         layout: {
                           type: 'spring',
                           bounce: 0.2,
-                          duration: 0.4,
-                        },
-                        opacity: { duration: 0.2 },
-                      }}
+                          duration: 0.4 },
+                        opacity: { duration: 0.2 } }}
                     >
                       <ContractCard
                         contract={contract}
@@ -264,5 +249,5 @@ export function Contracts() {
         </DefaultPageContainer>
       </Box>
     </Noise>
-  )
+  );
 }

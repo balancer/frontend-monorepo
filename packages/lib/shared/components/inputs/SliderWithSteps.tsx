@@ -5,9 +5,8 @@ import {
   SliderThumb,
   SliderTrack,
   SliderProps,
-  Tooltip,
-  useToken,
-} from '@chakra-ui/react'
+  useToken } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export interface SliderWithStepsProps extends SliderProps {
@@ -81,7 +80,7 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
   }, [minValue, props.max, props.min])
 
   return (
-    <Slider {...props} onChange={onChange} value={value}>
+    <Slider.Root {...props} onValueChange={onChange} value={String(value)}>
       {steps &&
         steps.map(step => (
           <SliderMark
@@ -92,17 +91,19 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
             height="8px"
             key={step}
             top="3px"
-            value={step}
+            value={String(step)}
             width="8px"
             zIndex="1"
           />
         ))}
       <SliderTrack ref={slider}>
         <Tooltip
-          hasArrow
+          showArrow
           isOpen={filledTrackFocused && !disabledTooltip}
-          label="You have an existing lock and can't reduce the lock period. You can only slide right to extend the lock period"
-          placement="top-start"
+          content="You have an existing lock and can't reduce the lock period. You can only slide right to extend the lock period"
+          positioning={{
+            placement: "top-start"
+          }}
         >
           <SliderFilledTrack
             background={filledTrackBackground}
@@ -114,6 +115,6 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
         </Tooltip>
       </SliderTrack>
       <SliderThumb />
-    </Slider>
-  )
+    </Slider.Root>
+  );
 }

@@ -1,5 +1,5 @@
 import { Address, isSameAddress } from '@balancer/sdk'
-import { Card, Text, VStack } from '@chakra-ui/react'
+import { Card, Text, VStack } from '@chakra-ui/react';
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
@@ -11,8 +11,7 @@ import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import {
   ApiToken,
   HumanTokenAmount,
-  HumanTokenAmountWithSymbol,
-} from '@repo/lib/modules/tokens/token.types'
+  HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 import { RemoveLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
@@ -35,8 +34,7 @@ export function ReliquaryRemoveLiquiditySummary({
   receivedTokens,
   sentBptUnits,
   error,
-  relicId,
-}: Props) {
+  relicId }: Props) {
   const {
     transactionSteps,
     humanBptIn,
@@ -44,8 +42,7 @@ export function ReliquaryRemoveLiquiditySummary({
     amountsOut,
     hasQuoteContext,
     removeLiquidityTxHash,
-    removeLiquidityTxSuccess,
-  } = useRemoveLiquidity()
+    removeLiquidityTxSuccess } = useRemoveLiquidity()
   const { isMobile } = useBreakpoints()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -65,8 +62,7 @@ export function ReliquaryRemoveLiquiditySummary({
       ? {
           tokenAddress: networkConfig.tokens.addresses.beets as `0x${string}`,
           humanAmount: pendingRewardsAmount as `${number}` | '',
-          symbol: 'BEETS',
-        }
+          symbol: 'BEETS' }
       : null
 
   const tokens = allPoolTokens(pool).flatMap(token => {
@@ -97,8 +93,7 @@ export function ReliquaryRemoveLiquiditySummary({
     if (isSameAddress(token.tokenAddress, networkConfig.tokens.addresses.beets as Address)) {
       return {
         ...token,
-        humanAmount: `${Number(token.humanAmount) + Number(rewardsAmount?.humanAmount)}`,
-      }
+        humanAmount: `${Number(token.humanAmount) + Number(rewardsAmount?.humanAmount)}` }
     }
     return token
   })
@@ -130,7 +125,7 @@ export function ReliquaryRemoveLiquiditySummary({
           status="info"
         />
       )}
-      <Card variant="modalSubSection">
+      <Card.Root variant="modalSubSection">
         <BptRow
           bptAmount={shouldShowReceipt ? sentBptUnits : humanBptIn}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
@@ -141,9 +136,9 @@ export function ReliquaryRemoveLiquiditySummary({
           }
           pool={pool}
         />
-      </Card>
+      </Card.Root>
       {rewardsAmount && (
-        <Card variant="modalSubSection">
+        <Card.Root variant="modalSubSection">
           <TokenRowGroup
             amounts={[rewardsAmount]}
             chain={chain}
@@ -152,9 +147,9 @@ export function ReliquaryRemoveLiquiditySummary({
             tokens={tokens}
             totalUSDValue={rewardsUSDValue}
           />
-        </Card>
+        </Card.Root>
       )}
-      <Card variant="modalSubSection">
+      <Card.Root variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? receivedTokensWithoutBpt : _amountsOutWithRewards}
           chain={chain}
@@ -172,13 +167,13 @@ export function ReliquaryRemoveLiquiditySummary({
             hasQuoteContext ? bn(totalUSDValue).plus(rewardsUSDValue).toString() : undefined
           }
         />
-      </Card>
+      </Card.Root>
       {shouldShowReceipt ? (
         <>
           <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="success-message">
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="md" w="full">
+            <Card.Root variant="modalSubSection">
+              <VStack align="start" gap="md" w="full">
                 <Text color="font.highlight">
                   Successfully removed liquidity from Relic #{relicId}! Rewards have been harvested.
                 </Text>
@@ -187,14 +182,14 @@ export function ReliquaryRemoveLiquiditySummary({
                   remaining Relics.
                 </Text>
               </VStack>
-            </Card>
+            </Card.Root>
           </CardPopAnim>
         </>
       ) : (
         hasQuoteContext && (
           <CardPopAnim key="price-impact-details">
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="sm">
+            <Card.Root variant="modalSubSection">
+              <VStack align="start" gap="sm">
                 <PoolActionsPriceImpactDetails
                   bptAmount={undefined}
                   isSummary
@@ -202,10 +197,10 @@ export function ReliquaryRemoveLiquiditySummary({
                   totalUSDValue={totalUSDValue}
                 />
               </VStack>
-            </Card>
+            </Card.Root>
           </CardPopAnim>
         )
       )}
     </AnimateHeightChange>
-  )
+  );
 }

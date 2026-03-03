@@ -1,7 +1,7 @@
 'use client'
 
-import { Button, useToast, VStack } from '@chakra-ui/react'
-import { useDisclosure } from '@chakra-ui/hooks'
+import { Button, useToast, VStack } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react'
 import { StaticToast, StaticToastRenderProps } from '@repo/lib/shared/components/toasts/StaticToast'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
@@ -13,7 +13,7 @@ function ToastRender({ id, title, isClosable, onClose }: StaticToastRenderProps)
 const start = Date.now()
 
 export default function Page() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const now = Number(useCurrentDate(100))
 
   const showToast = useToast()

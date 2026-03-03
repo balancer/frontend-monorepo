@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react'
+import { Box, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react';
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { FeatureLink } from './FeatureLink'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
@@ -38,8 +38,7 @@ export function HeaderBanner() {
               w: 'full',
               overflow: 'hidden',
               rounded: 'xl',
-              h: { base: 'auto', lg: '210px' },
-            }}
+              h: { base: 'auto', lg: '210px' } }}
           >
             <HStack
               alignItems={{ base: 'start', md: 'center' }}
@@ -47,24 +46,26 @@ export function HeaderBanner() {
               h="full"
               justifyContent={{ base: 'start', lg: 'space-between' }}
               p={{ base: 'lg', lg: 'xl' }}
-              spacing={{ base: 'md', lg: undefined }}
+              gap={{ base: 'md', lg: undefined }}
               w="full"
             >
               <VStack
                 alignItems="start"
                 pt="sm"
-                spacing="30px"
+                gap="30px"
                 w={{ base: 'full', lg: undefined }}
                 zIndex={1}
               >
-                <VStack alignItems="start" spacing="ms">
+                <VStack alignItems="start" gap="ms">
                   <Box maxW="290px">
                     <MotionHeading
                       as="h1"
                       layout
                       layoutId="create-pool-heading"
                       size="lg"
-                      sx={{ textWrap: 'nowrap' }}
+                      css={{
+                        textWrap: 'nowrap'
+                      }}
                       transition={{ duration: 0.2, ease: 'easeOut' }}
                       variant="special"
                     >
@@ -72,14 +73,16 @@ export function HeaderBanner() {
                     </MotionHeading>
                   </Box>
 
-                  <Text color="font.secondary" maxW="48ch" sx={{ textWrap: 'balance' }}>
+                  <Text color="font.secondary" maxW="48ch" css={{
+                    textWrap: 'balance'
+                  }}>
                     {PROJECT_CONFIG.projectName} v3 handles the low level tasks, like token
                     accounting and security, allowing you to focus on innovating with custom logic.
                   </Text>
                   <Link
                     href="https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html"
-                    isExternal
-                  >
+                    target='_blank'
+                    rel='noopener noreferrer'>
                     <HStack
                       _hover={{ cursor: 'pointer', color: 'font.linkHover' }}
                       color="font.link"
@@ -97,7 +100,7 @@ export function HeaderBanner() {
               <Stack
                 direction={{ base: 'column', md: 'row' }}
                 justifyContent="stretch"
-                spacing={{ base: 4, md: 2, lg: 4, xl: 8 }}
+                gap={{ base: 4, md: 2, lg: 4, xl: 8 }}
                 w="full"
               >
                 <RadialPattern
@@ -154,7 +157,9 @@ export function HeaderBanner() {
             layout
             layoutId="create-pool-heading"
             size="lg"
-            sx={{ textWrap: 'nowrap' }}
+            css={{
+              textWrap: 'nowrap'
+            }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             variant="special"
           >
@@ -163,5 +168,5 @@ export function HeaderBanner() {
         )}
       </Box>
     </LayoutGroup>
-  )
+  );
 }

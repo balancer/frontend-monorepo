@@ -1,7 +1,7 @@
 'use client'
 
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -42,8 +42,7 @@ export function AddLiquidityModal({
     addLiquidityTxHash,
     hasQuoteContext,
     urlTxHash,
-    setInitialHumanAmountsIn,
-  } = useAddLiquidity()
+    setInitialHumanAmountsIn } = useAddLiquidity()
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { redirectToPoolPage } = usePoolRedirect(pool)
@@ -57,8 +56,7 @@ export function AddLiquidityModal({
     txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt,
-  })
+    txReceipt })
 
   useEffect(() => {
     if (isOpen) {
@@ -81,46 +79,54 @@ export function AddLiquidityModal({
   const isSuccess = !!addLiquidityTxHash && receiptProps.hasReceipt
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!addLiquidityTxHash && hasQuoteContext} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker
-            chain={pool.chain}
-            isTxBatch={shouldBatchTransactions}
-            transactionSteps={transactionSteps}
-          />
-        )}
-        <TransactionModalHeader
-          chain={pool.chain}
-          isReceiptLoading={receiptProps.isLoading}
-          label="Add liquidity"
-          timeout={<AddLiquidityTimeout />}
-          txHash={addLiquidityTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
-          <AddLiquiditySummary {...receiptProps} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={redirectToPoolPage}
-          returnLabel="Return to pool"
-          urlTxHash={urlTxHash}
-        />
-      </ModalContent>
-    </Modal>
-  )
+        <SuccessOverlay startAnimation={!!addLiquidityTxHash && hasQuoteContext} />
+        <Dialog.Positioner>
+          <Dialog.Content
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {isDesktop && hasQuoteContext && (
+              <DesktopStepTracker
+                chain={pool.chain}
+                isTxBatch={shouldBatchTransactions}
+                transactionSteps={transactionSteps}
+              />
+            )}
+            <TransactionModalHeader
+              chain={pool.chain}
+              isReceiptLoading={receiptProps.isLoading}
+              label="Add liquidity"
+              timeout={<AddLiquidityTimeout />}
+              txHash={addLiquidityTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
+              <AddLiquiditySummary {...receiptProps} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={redirectToPoolPage}
+              returnLabel="Return to pool"
+              urlTxHash={urlTxHash}
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

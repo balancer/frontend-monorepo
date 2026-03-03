@@ -4,12 +4,10 @@ import {
   Button,
   HStack,
   Popover,
-  PopoverContent,
-  PopoverTrigger,
+  HoverCard,
   Portal,
   Text,
-  VStack,
-} from '@chakra-ui/react'
+  VStack } from '@chakra-ui/react';
 import { differenceInSeconds, format } from 'date-fns'
 import { oneYearInSecs } from '@repo/lib/shared/utils/time'
 import { BatteryChargeIcon } from '@repo/lib/shared/components/icons/BatteryChargeIcon'
@@ -35,65 +33,54 @@ export function MyVebalChargeTooltip({
   lockedEndDate,
   isLockExpired,
   expectedVeBalAmount,
-  usePortal,
-}: Props) {
+  usePortal }: Props) {
   const lockedEndDatePercentage = getLockedEndDatePercentage(lockedEndDate)
 
   const popoverContent = (
-    <PopoverContent bg="background.base" minWidth={['100px']} px="sm" py="ms" shadow="3xl">
-      <VStack alignItems="start" spacing="sm" width="full">
-        <HStack justifyContent="space-between" w="full">
-          <Text fontSize="sm" fontWeight={700}>
-            veBAL charge
-          </Text>
-          <Text fontSize="sm" fontWeight={700}>
-            {fNum('apr', lockedEndDatePercentage / 100)}
-          </Text>
-        </HStack>
-        <HStack justifyContent="space-between" w="full">
-          <Text fontSize="sm" fontWeight={700}>
-            Expiry date
-          </Text>
-          <Text fontSize="sm" fontWeight={700}>
-            {format(lockedEndDate, PRETTY_DATE_FORMAT)}
-          </Text>
-        </HStack>
-        <HStack justifyContent="space-between" w="full">
-          <Text fontSize="sm" fontWeight={700}>
-            veBAL if locked for 1 year
-          </Text>
-          <Text fontSize="sm" fontWeight={700}>
-            {fNum('token', expectedVeBalAmount)}
-          </Text>
-        </HStack>
-        <HStack mt="sm" spacing="sm">
-          <Button
-            as={NextLink}
-            href={getVeBalManagePath('extend', 'vote')}
-            size="sm"
-            variant="secondary"
-          >
-            Extend lock
-          </Button>
-          {isLockExpired && (
-            <Button
-              as={NextLink}
-              href={getVeBalManagePath('unlock', 'vote')}
-              size="sm"
-              variant="tertiary"
-            >
-              Unlock
-            </Button>
-          )}
-        </HStack>
-      </VStack>
-    </PopoverContent>
+    <HoverCard.Positioner>
+      <HoverCard.Content bg="background.base" minWidth={['100px']} px="sm" py="ms" shadow="3xl">
+        <VStack alignItems="start" gap="sm" width="full">
+          <HStack justifyContent="space-between" w="full">
+            <Text fontSize="sm" fontWeight={700}>
+              veBAL charge
+            </Text>
+            <Text fontSize="sm" fontWeight={700}>
+              {fNum('apr', lockedEndDatePercentage / 100)}
+            </Text>
+          </HStack>
+          <HStack justifyContent="space-between" w="full">
+            <Text fontSize="sm" fontWeight={700}>
+              Expiry date
+            </Text>
+            <Text fontSize="sm" fontWeight={700}>
+              {format(lockedEndDate, PRETTY_DATE_FORMAT)}
+            </Text>
+          </HStack>
+          <HStack justifyContent="space-between" w="full">
+            <Text fontSize="sm" fontWeight={700}>
+              veBAL if locked for 1 year
+            </Text>
+            <Text fontSize="sm" fontWeight={700}>
+              {fNum('token', expectedVeBalAmount)}
+            </Text>
+          </HStack>
+          <HStack mt="sm" gap="sm">
+            <Button size="sm" variant="secondary" asChild><NextLink href={getVeBalManagePath('extend', 'vote')}>Extend lock
+                          </NextLink></Button>
+            {isLockExpired && (
+              <Button size="sm" variant="tertiary" asChild><NextLink href={getVeBalManagePath('unlock', 'vote')}>Unlock
+                              </NextLink></Button>
+            )}
+          </HStack>
+        </VStack>
+      </HoverCard.Content>
+    </HoverCard.Positioner>
   )
 
   return (
-    <Popover trigger="hover">
+    <HoverCard.Root>
       <>
-        <PopoverTrigger>
+        <HoverCard.Trigger asChild>
           <Box>
             {isLockExpired ? (
               <Badge
@@ -109,10 +96,10 @@ export function MyVebalChargeTooltip({
               <BatteryChargeIcon percentage={lockedEndDatePercentage} />
             )}
           </Box>
-        </PopoverTrigger>
+        </HoverCard.Trigger>
 
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
       </>
-    </Popover>
-  )
+    </HoverCard.Root>
+  );
 }

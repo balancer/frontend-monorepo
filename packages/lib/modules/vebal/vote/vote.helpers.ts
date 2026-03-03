@@ -1,8 +1,7 @@
 import {
   VotingPoolWithData,
   VotesState,
-  SortVotesBy,
-} from '@repo/lib/modules/vebal/vote/vote.types'
+  SortVotesBy } from '@repo/lib/modules/vebal/vote/vote.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { VotingPool } from '@repo/lib/modules/pool/pool.types'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
@@ -27,11 +26,10 @@ export function voteToPool(vote: VotingPoolWithData): VotingPool {
     chain: vote.chain,
     poolTokens: vote.poolTokens.map(
       token =>
-        ({
+        (({
           ...token,
           chain: token.chain,
-          chainId: token.chainId || getChainId(vote.chain),
-        }) as ApiToken
+          chainId: token.chainId || getChainId(vote.chain) }) as ApiToken)
     ),
     address: vote.address,
     protocolVersion: vote.protocolVersion,
@@ -39,8 +37,7 @@ export function voteToPool(vote: VotingPoolWithData): VotingPool {
     tags: vote.tags,
     // TODO: API is not returning the following fields in GqlVotingPool yet
     hook: undefined,
-    hasErc4626: false,
-  }
+    hasErc4626: false };
 }
 
 export function isGaugeExpired(expiredGauges: string[] | undefined, gaugeAddress: string): boolean {
@@ -65,16 +62,12 @@ export const orderByHash: Record<SortVotesBy, { label: string; title?: string }>
   bribes: {
     label: 'Bribes',
     title:
-      'Voting incentives (referred to as ‘Bribes’ in DeFi) are provided by unaffiliated 3rd parties through the Votemarket platform to incentivize liquidity to certain pools.',
-  },
+      'Voting incentives (referred to as ‘Bribes’ in DeFi) are provided by unaffiliated 3rd parties through the Votemarket platform to incentivize liquidity to certain pools.' },
   bribesPerVebal: {
     label: 'Bribes/veBAL',
     title:
-      'This shows the ratio of 3rd party voting incentives (known as Bribes) to veBAL. The higher this ratio, the more profitable it is to currently vote on this pool. Note this ratio could change up till the voting deadline.',
-  },
+      'This shows the ratio of 3rd party voting incentives (known as Bribes) to veBAL. The higher this ratio, the more profitable it is to currently vote on this pool. Note this ratio could change up till the voting deadline.' },
   votes: {
     label: 'veBAL votes',
     title:
-      'The percentage of votes for each pool for the next period. This is based on voting by veBAL holders based on their collective voting power.',
-  },
-}
+      'The percentage of votes for each pool for the next period. This is based on voting by veBAL holders based on their collective voting power.' } }

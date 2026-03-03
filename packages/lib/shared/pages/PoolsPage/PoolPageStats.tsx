@@ -1,14 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Flex,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Flex, Popover, HoverCard, Text } from '@chakra-ui/react';
 import Stat from '../../components/other/Stat'
 import { bn, safeToNumber } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
@@ -34,26 +26,22 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
   const fees: Fee[] = [
     {
       label: 'Swap fees',
-      value: protocolData?.protocolMetricsAggregated.swapFee24h,
-    },
+      value: protocolData?.protocolMetricsAggregated.swapFee24h },
     {
       label: 'Yield-bearing tokens',
-      value: protocolData?.protocolMetricsAggregated.yieldCapture24h,
-    },
+      value: protocolData?.protocolMetricsAggregated.yieldCapture24h },
   ]
 
   if (rewardsClaimed24h && rewardsClaimed24h !== '0') {
     fees.push({
       label: 'stS rewards',
-      value: rewardsClaimed24h,
-    })
+      value: rewardsClaimed24h })
   }
 
   if (surplus24h && surplus24h !== '0') {
     fees.push({
       label: 'CoW AMM LVR surplus',
-      value: surplus24h,
-    })
+      value: surplus24h })
   }
 
   const totalFees = fees
@@ -109,12 +97,11 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
         </TooltipWithTouch>
       </Box>
       <Box flex={{ base: '1', sm: '1' }}>
-        <Popover
-          modifiers={[{ name: 'offset', options: { offset: [0, -24] } }]}
-          placement="top"
-          trigger="hover"
-        >
-          <PopoverTrigger>
+        <HoverCard.Root
+          positioning={{
+            placement: 'top'
+          }}>
+          <HoverCard.Trigger asChild>
             <Box>
               <Stat
                 imageBackgroundSize="400%"
@@ -124,34 +111,35 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
                 value={<AnimatedNumber value={safeToNumber(totalFees)} />}
               />
             </Box>
-          </PopoverTrigger>
-          <PopoverContent
-            bg="background.level0"
-            border="none"
-            borderRadius="md"
-            minW="200px"
-            p={2}
-            shadow="2xl"
-            w="auto"
-            zIndex={9999}
-          >
-            <PopoverBody p="0">
-              <Flex direction="column" gap={1}>
-                {fees.map(fee => (
-                  <Flex align="center" justify="space-between" key={fee.label}>
-                    <Text color="font.secondary" fontSize="xs">
-                      {fee.label}
-                    </Text>
-                    <Text className="home-stats" color="font.secondary" fontSize="xs">
-                      <AnimatedNumber value={safeToNumber(fee.value)} />
-                    </Text>
-                  </Flex>
-                ))}
-              </Flex>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
+          </HoverCard.Trigger>
+          <HoverCard.Positioner>
+            <HoverCard.Content
+              bg="background.level0"
+              border="none"
+              borderRadius="md"
+              minW="200px"
+              p={2}
+              shadow="2xl"
+              w="auto"
+              zIndex={9999}>
+              <HoverCard.Body p="0">
+                <Flex direction="column" gap={1}>
+                  {fees.map(fee => (
+                    <Flex align="center" justify="space-between" key={fee.label}>
+                      <Text color="font.secondary" fontSize="xs">
+                        {fee.label}
+                      </Text>
+                      <Text className="home-stats" color="font.secondary" fontSize="xs">
+                        <AnimatedNumber value={safeToNumber(fee.value)} />
+                      </Text>
+                    </Flex>
+                  ))}
+                </Flex>
+              </HoverCard.Body>
+            </HoverCard.Content>
+          </HoverCard.Positioner>
+        </HoverCard.Root>
       </Box>
     </Flex>
-  )
+  );
 }

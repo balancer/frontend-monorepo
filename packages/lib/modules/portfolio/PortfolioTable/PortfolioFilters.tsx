@@ -2,7 +2,6 @@ import {
   Box,
   Text,
   ButtonProps,
-  useColorModeValue,
   Button,
   Icon,
   Badge,
@@ -11,15 +10,9 @@ import {
   Heading,
   HStack,
   Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverTrigger,
   VStack,
-  forwardRef,
-  Checkbox,
-} from '@chakra-ui/react'
+  Checkbox } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -27,7 +20,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, forwardRef } from 'react';
 import { Filter } from 'react-feather'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { PoolFilterType } from '../../pool/pool.types'
@@ -46,15 +39,13 @@ export function PortfolioNetworkFilters({
   toggledNetworks,
   toggleNetwork,
   setNetworks,
-  networks,
-}: PortfolioNetworkFiltersArgs) {
+  networks }: PortfolioNetworkFiltersArgs) {
   const networkOptions = networks.map(network => ({
     label: getChainShortName(network),
     value: network,
     selectedLabel: (
       <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
-    ),
-  }))
+    ) }))
 
   function isCheckedNetwork(network: GqlChain): boolean {
     return !!toggledNetworks.includes(network)
@@ -82,24 +73,23 @@ function CheckboxFilterList<T>({
   availableItems,
   selectedItems,
   toggleItem,
-  getItemLabel,
-}: CheckboxFilterListProps<T>) {
+  getItemLabel }: CheckboxFilterListProps<T>) {
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {availableItems.map(item => (
-        <Box as={motion.div} key={String(item)} variants={staggeredFadeInUp}>
-          <Checkbox
-            isChecked={!!selectedItems.find(selected => selected === item)}
-            onChange={e => toggleItem(e.target.checked, item)}
-          >
-            <Text fontSize="sm" textTransform="capitalize">
-              {getItemLabel(item)}
-            </Text>
-          </Checkbox>
-        </Box>
-      ))}
-    </Box>
-  )
+    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+        {availableItems.map(item => (
+          <Box variants={staggeredFadeInUp} asChild><motion.div key={String(item)}>
+              <Checkbox.Root
+                onCheckedChange={e => toggleItem(e.target.checked, item)}
+                checked={!!selectedItems.find(selected => selected === item)}
+              ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                  <Text fontSize="sm" textTransform="capitalize">
+                    {getItemLabel(item)}
+                  </Text>
+                </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+            </motion.div></Box>
+        ))}
+      </motion.div></Box>
+  );
 }
 
 export interface PortfolioPoolTypeFiltersArgs {
@@ -112,8 +102,7 @@ export interface PortfolioPoolTypeFiltersArgs {
 export function PoolTypeFilters({
   togglePoolType,
   poolTypes,
-  availablePoolTypes,
-}: PortfolioPoolTypeFiltersArgs) {
+  availablePoolTypes }: PortfolioPoolTypeFiltersArgs) {
   return (
     <CheckboxFilterList
       availableItems={availablePoolTypes}
@@ -133,8 +122,7 @@ export interface PortfolioStakingTypeFiltersArgs {
 export function StakingTypeFilters({
   availableStakingTypes,
   stakingTypes,
-  toggleStakingType,
-}: PortfolioStakingTypeFiltersArgs) {
+  toggleStakingType }: PortfolioStakingTypeFiltersArgs) {
   return (
     <CheckboxFilterList
       availableItems={availableStakingTypes}
@@ -168,15 +156,14 @@ export function PortfolioFilterTags({
   poolTypes,
   togglePoolType,
   stakingTypes,
-  toggleStakingType,
-}: PortfolioFilterTagsPops) {
+  toggleStakingType }: PortfolioFilterTagsPops) {
   // prevents layout shift in mobile view
   if (networks.length === 0 && poolTypes.length === 0 && stakingTypes.length === 0) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
 
   return (
-    <HStack spacing="sm" wrap="wrap">
+    <HStack gap="sm" wrap="wrap">
       <AnimatePresence>
         {poolTypes.map(poolType => (
           <AnimatedTag
@@ -201,17 +188,18 @@ export function PortfolioFilterTags({
         ))}
       </AnimatePresence>
     </HStack>
-  )
+  );
 }
 
-export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number }, 'button'>(
+export const FilterButton = forwardRef<HTMLButtonElement, ButtonProps & { totalFilterCount: number }>(
   ({ totalFilterCount, ...props }, ref) => {
     const { isMobile } = useBreakpoints()
-    const textColor = useColorModeValue('#fff', 'font.dark')
+    const colorMode = useThemeColorMode()
+    const textColor = colorMode === 'dark' ? 'font.dark' : '#fff'
 
     return (
       <Button ref={ref} {...props} display="flex" gap="2" variant="tertiary">
-        <Icon as={Filter} boxSize={4} />
+        <Icon boxSize={4} asChild><Filter /></Icon>
         {!isMobile && 'Filters'}
         {totalFilterCount > 0 && (
           <Badge
@@ -230,14 +218,13 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
           </Badge>
         )}
       </Button>
-    )
+    );
   }
 )
 
 export function PortfolioFilters({
   selectedNetworks,
-  selectedPoolTypes,
-}: {
+  selectedPoolTypes }: {
   selectedNetworks?: GqlChain[]
   selectedPoolTypes?: PoolFilterType[]
 }) {
@@ -255,8 +242,7 @@ export function PortfolioFilters({
     availablePoolTypes,
     selectedStakingTypes,
     toggleStakingType,
-    availableStakingTypes,
-  } = usePortfolioFilters()
+    availableStakingTypes } = usePortfolioFilters()
 
   const effectiveSelectedNetworks = selectedNetworks || hookSelectedNetworks
   const effectiveSelectedPoolTypes = selectedPoolTypes || hookSelectedPoolTypes
@@ -268,93 +254,101 @@ export function PortfolioFilters({
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" spacing="none" w="full">
+      <HStack gap="0" justify="end" gap="none" w="full">
         {/* <PoolListSearch /> */}
-        <Popover
-          isOpen={isPopoverOpen}
-          onClose={() => setIsPopoverOpen(false)}
-          onOpen={() => setIsPopoverOpen(true)}
-          placement="bottom-end"
-        >
-          <PopoverTrigger>
+        <Popover.Root
+          open={isPopoverOpen}
+          onOpenChange={e => {
+            if (e.open) {
+              setIsPopoverOpen(true);
+            } else {
+              setIsPopoverOpen(false);
+            }
+          }}
+          positioning={{
+            placement: 'bottom-end'
+          }}>
+          <Popover.Trigger asChild>
             <FilterButton isDisabled={isDisabled} ml="ms" totalFilterCount={totalFilterCount} />
-          </PopoverTrigger>
+          </Popover.Trigger>
           <Box shadow="2xl" zIndex="popover">
-            <PopoverContent>
-              <PopoverArrow bg="background.level3" />
-              <PopoverCloseButton top="sm" />
-              <PopoverBody p="md">
-                <AnimatePresence>
-                  {isPopoverOpen ? (
-                    <VStack
-                      align="start"
-                      animate="show"
-                      as={motion.div}
-                      exit="exit"
-                      initial="hidden"
-                      spacing="md"
-                      variants={staggeredFadeInUp}
-                    >
-                      <Box as={motion.div} lineHeight="0" p="0" variants={staggeredFadeInUp}>
-                        <Flex alignItems="center" gap="ms" justifyContent="space-between" w="full">
-                          <Text
-                            background="font.special"
-                            backgroundClip="text"
-                            display="inline"
-                            fontSize="xs"
-                            variant="eyebrow"
-                          >
-                            Filters
-                          </Text>
-                          {totalFilterCount > 0 && (
-                            <Button h="fit-content" onClick={resetFilters} size="xs" variant="link">
-                              Reset all
-                            </Button>
+            <Popover.Positioner>
+              <Popover.Content>
+                <Popover.Arrow bg="background.level3" />
+                <Popover.CloseTrigger top="sm" />
+                <Popover.Body p="md">
+                  <AnimatePresence>
+                    {isPopoverOpen ? (
+                      <VStack
+                        align="start"
+                        animate="show"
+                        exit="exit"
+                        initial="hidden"
+                        gap="md"
+                        variants={staggeredFadeInUp}
+                        asChild
+                      ><motion.div>
+                          <Box lineHeight="0" p="0" variants={staggeredFadeInUp} asChild><motion.div>
+                              <Flex alignItems="center" gap="ms" justifyContent="space-between" w="full">
+                                <Text
+                                  background="font.special"
+                                  backgroundClip="text"
+                                  display="inline"
+                                  fontSize="xs"
+                                  variant="eyebrow"
+                                >
+                                  Filters
+                                </Text>
+                                {totalFilterCount > 0 && (
+                                  <Button h="fit-content" onClick={resetFilters} size="xs" variant='plain'>
+                                    Reset all
+                                  </Button>
+                                )}
+                              </Flex>
+                            </motion.div></Box>
+                          {availableNetworks.length > 1 && (
+                            <Box variants={staggeredFadeInUp} w="full" asChild><motion.div>
+                                <Heading as="h3" mb="sm" size="sm">
+                                  Networks
+                                </Heading>
+                                <PortfolioNetworkFilters
+                                  networks={availableNetworks}
+                                  setNetworks={setSelectedNetworks}
+                                  toggledNetworks={effectiveSelectedNetworks}
+                                  toggleNetwork={toggleNetwork}
+                                />
+                              </motion.div></Box>
                           )}
-                        </Flex>
-                      </Box>
-                      {availableNetworks.length > 1 && (
-                        <Box as={motion.div} variants={staggeredFadeInUp} w="full">
-                          <Heading as="h3" mb="sm" size="sm">
-                            Networks
-                          </Heading>
-                          <PortfolioNetworkFilters
-                            networks={availableNetworks}
-                            setNetworks={setSelectedNetworks}
-                            toggledNetworks={effectiveSelectedNetworks}
-                            toggleNetwork={toggleNetwork}
-                          />
-                        </Box>
-                      )}
-                      <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" mb="sm" size="sm">
-                          Pool types
-                        </Heading>
-                        <PoolTypeFilters
-                          availablePoolTypes={availablePoolTypes}
-                          poolTypes={effectiveSelectedPoolTypes}
-                          setPoolTypes={setSelectedPoolTypes}
-                          togglePoolType={togglePoolType}
-                        />
-                      </Box>
-                      <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" mb="sm" size="sm">
-                          Staking types
-                        </Heading>
-                        <StakingTypeFilters
-                          availableStakingTypes={availableStakingTypes}
-                          stakingTypes={selectedStakingTypes}
-                          toggleStakingType={toggleStakingType}
-                        />
-                      </Box>
-                    </VStack>
-                  ) : null}
-                </AnimatePresence>
-              </PopoverBody>
-            </PopoverContent>
+                          <Box variants={staggeredFadeInUp} asChild><motion.div>
+                              <Heading as="h3" mb="sm" size="sm">
+                                Pool types
+                              </Heading>
+                              <PoolTypeFilters
+                                availablePoolTypes={availablePoolTypes}
+                                poolTypes={effectiveSelectedPoolTypes}
+                                setPoolTypes={setSelectedPoolTypes}
+                                togglePoolType={togglePoolType}
+                              />
+                            </motion.div></Box>
+                          <Box variants={staggeredFadeInUp} asChild><motion.div>
+                              <Heading as="h3" mb="sm" size="sm">
+                                Staking types
+                              </Heading>
+                              <StakingTypeFilters
+                                availableStakingTypes={availableStakingTypes}
+                                stakingTypes={selectedStakingTypes}
+                                toggleStakingType={toggleStakingType}
+                              />
+                            </motion.div></Box>
+                        </motion.div></VStack>
+                    ) : null}
+                  </AnimatePresence>
+                </Popover.Body>
+              </Popover.Content>
+            </Popover.Positioner>
           </Box>
-        </Popover>
+        </Popover.Root>
       </HStack>
     </VStack>
-  )
+  );
 }

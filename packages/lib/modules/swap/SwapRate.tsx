@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react';
 import { useState } from 'react'
 import { useSwap } from './SwapProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -13,8 +13,7 @@ export function SwapRate({ customTokenUsdPrice }: { customTokenUsdPrice?: number
   const { usdValueForToken } = useTokens()
 
   const effectivePriceValue = fNum('token', simulationQuery.data?.effectivePrice || '0', {
-    abbreviated: false,
-  })
+    abbreviated: false })
 
   const effectivePriceReversedValue = fNum(
     'token',
@@ -67,8 +66,7 @@ export function SwapRate({ customTokenUsdPrice }: { customTokenUsdPrice?: number
         left: 0,
         opacity: 0.5,
         position: 'absolute',
-        width: '100%',
-      }}
+        width: '100%' }}
       _hover={{ color: 'font.link' }}
       cursor="pointer"
       fontSize="sm"

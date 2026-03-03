@@ -4,25 +4,18 @@ import {
   Heading,
   Link,
   Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverTrigger,
   Text,
-  Tooltip,
   VStack,
   Center,
-  CircularProgress,
+  ProgressCircle,
   CircularProgressLabel,
   Box,
-  useDisclosure,
-} from '@chakra-ui/react'
+  useDisclosure } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import {
   TrackedTransaction,
   TransactionStatus,
-  useRecentTransactions,
-} from '@repo/lib/modules/transactions/RecentTransactionsProvider'
+  useRecentTransactions } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { isEmpty, orderBy } from 'lodash'
 import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'react-feather'
 import { getChainId, getChainShortName } from '@repo/lib/config/app.config'
@@ -35,14 +28,13 @@ function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
     case 'confirming':
       return (
-        <CircularProgress
-          color="orange.300"
-          isIndeterminate
-          size="5"
-          trackColor="border.base"
-          value={100}
-        />
-      )
+        <ProgressCircle.Root value={String(null)} size="5" trackColor="border.base">
+          <ProgressCircle.Circle>
+            <ProgressCircle.Track />
+            <ProgressCircle.Range stroke="orange.300" />
+          </ProgressCircle.Circle>
+        </ProgressCircle.Root>
+      );
     case 'confirmed':
       return (
         <Box color="font.highlight">
@@ -93,40 +85,40 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
   return (
     <HStack align="start" key={transaction.hash} py="sm" w="95%">
       <TransactionIcon status={transaction.status} />
-      <VStack align="start" spacing="none" w="full">
-        <Tooltip fontSize="sm" label={label}>
+      <VStack align="start" gap="none" w="full">
+        <Tooltip fontSize="sm" content={label}>
           <Text isTruncated maxW="85%">
             {transaction.init}
           </Text>
         </Tooltip>
-        <HStack fontSize="xs" spacing="xs">
+        <HStack fontSize="xs" gap="xs">
           <Text color="grayText">
             {transaction.chain ? getChainShortName(transaction.chain) : 'Unknown'},&nbsp;
             {formatDistanceToNowAbbr(new Date(transaction.timestamp))}
           </Text>
-          <Link color="grayText" href={txLink} isExternal>
+          <Link color="grayText" href={txLink} target='_blank' rel='noopener noreferrer'>
             <ArrowUpRight size={16} />
           </Link>
         </HStack>
       </VStack>
     </HStack>
-  )
+  );
 }
 
 function Transactions({ transactions }: { transactions: Record<string, TrackedTransaction> }) {
   const orderedRecentTransactions = orderBy(Object.values(transactions), 'timestamp', 'desc')
 
   return (
-    <VStack align="start" maxH="250px" overflowY="auto" p="md" spacing="none">
+    <VStack align="start" maxH="250px" overflowY="auto" p="md" gap="none">
       {orderedRecentTransactions.map(transaction => (
         <TransactionRow key={transaction.hash} transaction={transaction} />
       ))}
     </VStack>
-  )
+  );
 }
 
 export default function RecentTransactions() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const { transactions } = useRecentTransactions()
   const hasTransactions = !isEmpty(transactions)
 
@@ -139,47 +131,54 @@ export default function RecentTransactions() {
   }
 
   return (
-    <Popover isOpen={isOpen} onClose={onClose} onOpen={onOpen}>
-      <PopoverTrigger>
+    <Popover.Root
+      open={isOpen}
+      onOpenChange={e => {
+        if (e.open) {
+          onOpen();
+        } else {
+          onClose();
+        }
+      }}>
+      <Popover.Trigger asChild>
         <Button onClick={handleActivityClick} p="0" variant="tertiary">
           {confirmingTxCount > 0 ? (
-            <CircularProgress
-              color="font.warning"
-              isIndeterminate
-              size="7"
-              thickness="8"
-              trackColor="border.base"
-              value={100}
-            >
-              <CircularProgressLabel color="font.warning" fontSize="sm" fontWeight="bold">
-                {confirmingTxCount}
-              </CircularProgressLabel>
-            </CircularProgress>
+            <ProgressCircle.Root value={String(null)} size="7" trackColor="border.base">
+              <ProgressCircle.Circle
+                css={{
+                  "--thickness": "8"
+                }}>
+                <ProgressCircle.Track />
+                <ProgressCircle.Range stroke="font.warning" />
+              </ProgressCircle.Circle>
+            </ProgressCircle.Root>
           ) : (
             <Activity size={20} />
           )}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent w="330px">
-        <PopoverArrow bg="background.level3" />
-        <PopoverCloseButton />
-        <PopoverBody p="0">
-          <HStack color="font.primary" p="md" pb="0">
-            <Activity size={18} />
-            <Heading size="md" variant="special">
-              Recent activity
-            </Heading>
-          </HStack>
+      </Popover.Trigger>
+      <Popover.Positioner>
+        <Popover.Content w="330px">
+          <Popover.Arrow bg="background.level3" />
+          <Popover.CloseTrigger />
+          <Popover.Body p="0">
+            <HStack color="font.primary" p="md" pb="0">
+              <Activity size={18} />
+              <Heading size="md" variant="special">
+                Recent activity
+              </Heading>
+            </HStack>
 
-          {hasTransactions ? (
-            <Transactions transactions={transactions} />
-          ) : (
-            <Center p="md">
-              <Text color="font.secondary">No transactions...</Text>
-            </Center>
-          )}
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
+            {hasTransactions ? (
+              <Transactions transactions={transactions} />
+            ) : (
+              <Center p="md">
+                <Text color="font.secondary">No transactions...</Text>
+              </Center>
+            )}
+          </Popover.Body>
+        </Popover.Content>
+      </Popover.Positioner>
+    </Popover.Root>
+  );
 }

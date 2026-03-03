@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, Card, Flex, Grid, GridItem, Skeleton, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Card, Flex, Grid, GridItem, Skeleton, Text } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { StsByTheNumbersSvg } from './StsByTheNumbersSvg'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
@@ -23,21 +23,17 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     borderTopLeftRadius: 'none',
     borderBottomRightRadius: 'none',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   cardProps: {
     position: 'relative',
     height: 'full',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
-}
+    overflow: 'hidden' } }
 
 function GlobalStatsCard({
   label,
   value,
-  isLoading,
-}: {
+  isLoading }: {
   label: string
   value: string
   isLoading: boolean
@@ -68,7 +64,7 @@ export function LstStats() {
   const stakedSonic = stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0'
 
   return (
-    <Card rounded="xl" w="full">
+    <Card.Root rounded="xl" w="full">
       <NoisyCard
         cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
@@ -84,8 +80,7 @@ export function LstStats() {
             templateColumns={{
               base: '1fr',
               lg: '1fr',
-              xl: '1.25fr 1fr 1fr 1fr',
-            }}
+              xl: '1.25fr 1fr 1fr 1fr' }}
             w="full"
           >
             <GridItem alignItems="center" display="flex">
@@ -93,28 +88,28 @@ export function LstStats() {
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                isLoading={isStakedSonicDataLoading}
+                loading={isStakedSonicDataLoading}
                 label="APR"
-                value={fNum('apr', stakingApr)}
+                value={String(fNum('apr', stakingApr))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                isLoading={isStakedSonicDataLoading}
+                loading={isStakedSonicDataLoading}
                 label="TVL"
-                value={toCurrency(usdValueForToken(lstToken, stakedSonic))}
+                value={String(toCurrency(usdValueForToken(lstToken, stakedSonic)))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                isLoading={isStakedSonicDataLoading}
+                loading={isStakedSonicDataLoading}
                 label="Total $S"
-                value={fNum('token', stakedSonic)}
+                value={String(fNum('token', stakedSonic))}
               />
             </GridItem>
           </Grid>
         </Box>
       </NoisyCard>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

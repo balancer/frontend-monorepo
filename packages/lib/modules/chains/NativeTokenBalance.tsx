@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react';
 import React from 'react'
 import { getNativeAsset } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -25,9 +25,7 @@ export function NativeTokenBalance({ chain, applyOpacity, ...props }: NativeToke
     address: userAddress,
     query: {
       enabled: isConnected,
-      staleTime: 30_000,
-    },
-  })
+      staleTime: 30_000 } })
 
   if (!isConnected) {
     return null

@@ -1,4 +1,4 @@
-import { Card, Text, VStack } from '@chakra-ui/react'
+import { Card, Text, VStack } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 
@@ -21,13 +21,13 @@ export function AddLiquidityPotentialWeeklyYield({ weeklyYield, totalUsdValue }:
       }
       trigger={popoverEnabled ? 'hover' : undefined}
     >
-      <Card
+      <Card.Root
         cursor={popoverEnabled ? 'pointer' : undefined}
         p={['sm', 'ms']}
         variant="subSection"
         w="full"
       >
-        <VStack align="start" spacing="sm">
+        <VStack align="start" gap="sm">
           <Text fontSize="sm" fontWeight="500" lineHeight="16px" variant="special">
             Potential weekly yield
           </Text>
@@ -35,7 +35,7 @@ export function AddLiquidityPotentialWeeklyYield({ weeklyYield, totalUsdValue }:
             {weeklyYield ? toCurrency(weeklyYield, { abbreviated: false }) : '-'}
           </Text>
         </VStack>
-      </Card>
+      </Card.Root>
     </CustomPopover>
-  )
+  );
 }

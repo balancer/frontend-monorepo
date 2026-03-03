@@ -17,22 +17,19 @@ export function useGetRelicPositionsOfOwner(chain: GqlChain) {
     address: config.contracts.beets?.reliquary,
     functionName: 'relicPositionsOfOwner',
     args: [userAddress],
-    query: { enabled: isConnected && !!userAddress },
-  })
+    query: { enabled: isConnected && !!userAddress } })
 
   return {
     ...query,
     relics: query.data
       ? query.data[0].map(
           (relicId, index) =>
-            ({
+            (({
               relicId: relicId.toString(),
               amount: formatUnits(query.data[1][index].amount, 18),
               entry: Number(query.data[1][index].entry.toString()),
               poolId: query.data[1][index].poolId.toString(),
-              level: Number(query.data[1][index].level.toString()),
-            }) as ReliquaryPosition
+              level: Number(query.data[1][index].level.toString()) }) as ReliquaryPosition)
         )
-      : [],
-  }
+      : [] };
 }

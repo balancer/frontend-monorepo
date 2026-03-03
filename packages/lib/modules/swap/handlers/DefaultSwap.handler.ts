@@ -7,8 +7,7 @@ import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
 import {
   ensureError,
   isFailedToFetchApolloError,
-  swapApolloNetworkErrorMessage,
-} from '@repo/lib/shared/utils/errors'
+  swapApolloNetworkErrorMessage } from '@repo/lib/shared/utils/errors'
 
 export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   name = 'DefaultSwapHandler'
@@ -22,8 +21,7 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
       .query({
         query: SorGetSwapPathsDocument,
         variables: { ...variables },
-        fetchPolicy: 'no-cache',
-      })
+        fetchPolicy: 'no-cache' })
       .catch(e => {
         const error = ensureError(e)
         if (isFailedToFetchApolloError(error)) {
@@ -35,18 +33,16 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
     const hopCount: number = data?.swaps.routes[0]?.hops?.length || 0
     const paths = data?.swaps.paths.map(
       path =>
-        ({
+        (({
           ...path,
           inputAmountRaw: BigInt(path.inputAmountRaw),
-          outputAmountRaw: BigInt(path.outputAmountRaw),
-        }) as Path
+          outputAmountRaw: BigInt(path.outputAmountRaw) }) as Path)
     )
 
     return this.runSimulation({
       protocolVersion: data?.swaps.protocolVersion as ProtocolVersion,
       paths: paths || [],
       hopCount,
-      swapInputs: variables,
-    })
+      swapInputs: variables })
   }
 }

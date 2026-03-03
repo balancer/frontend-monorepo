@@ -1,6 +1,6 @@
 'use client'
 
-import { VStack, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
+import { VStack, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { GraniteBg } from './shared/GraniteBg'
@@ -12,26 +12,23 @@ const grantIdeas = [
   {
     title: 'Pool hook',
     description:
-      'Hooks enable limitless pool customization possibilities in v3. We actively fund innovative products that solve real problems or create new value. Pool creators can earn additional revenue through customizable fees.',
-  },
+      'Hooks enable limitless pool customization possibilities in v3. We actively fund innovative products that solve real problems or create new value. Pool creators can earn additional revenue through customizable fees.' },
   {
     title: 'Custom AMM',
     description:
-      'Balancer is the home for AMM innovation and development is now easier than ever on v3. We are looking to fund innovative ideas to solve LVR, recapture MEV and other ways to bring more value to LPs.',
-  },
+      'Balancer is the home for AMM innovation and development is now easier than ever on v3. We are looking to fund innovative ideas to solve LVR, recapture MEV and other ways to bring more value to LPs.' },
   {
     title: 'Custom pool',
     description:
-      'Build your custom pool easily on Balancer v3 and follow in the footsteps of Gyroscope and Xave Finance. Get a grant to kickstart your project using custom invariants to create the next innovation in DeFi.',
-  },
+      'Build your custom pool easily on Balancer v3 and follow in the footsteps of Gyroscope and Xave Finance. Get a grant to kickstart your project using custom invariants to create the next innovation in DeFi.' },
 ]
 
 export function Grants() {
   return (
     <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
-        <VStack align="start" spacing="lg" w="full">
-          <VStack align="start" spacing="lg" w="full">
+        <VStack align="start" gap="lg" w="full">
+          <VStack align="start" gap="lg" w="full">
             <BlurIn delay={0.4}>
               <Text background="font.special" backgroundClip="text" fontSize="sm" variant="eyebrow">
                 BALANCER GRANTS
@@ -89,7 +86,6 @@ export function Grants() {
           </Grid>
         </VStack>
       </DefaultPageContainer>
-
       <Box
         bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
         bottom="0"
@@ -100,5 +96,5 @@ export function Grants() {
         w="full"
       />
     </Noise>
-  )
+  );
 }

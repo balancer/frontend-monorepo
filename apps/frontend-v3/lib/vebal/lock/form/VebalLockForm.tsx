@@ -1,18 +1,7 @@
-'use client'
+'use client';
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
-import {
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  Grid,
-  GridItem,
-  HStack,
-  Skeleton,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { HumanAmount } from '@balancer/sdk'
 import { LockDurationSlider } from '@bal/lib/vebal/lock/duration/LockDurationSlider'
@@ -61,8 +50,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
     lockDuration,
     isLoading,
     lockMode,
-    expectedVeBalAmount,
-  } = useVebalLock()
+    expectedVeBalAmount } = useVebalLock()
 
   const router = useRouter()
 
@@ -106,15 +94,15 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
-      <Card>
-        <CardHeader>
+      <Card.Root>
+        <Card.Header>
           <HStack justify="space-between" w="full">
             <Text as="span" fontSize="2xl" fontWeight="700" letterSpacing="-0.35px">
               {getModalLabel(lockMode, editAlwaysOn, true)}
             </Text>
           </HStack>
-        </CardHeader>
-        <VStack align="start" spacing="lg" w="full">
+        </Card.Header>
+        <VStack align="start" gap="lg" w="full">
           {bptBalance !== undefined && isZero(bptBalance.amount) && isZero(totalAmount) && (
             <BalAlert
               content={
@@ -140,7 +128,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
             />
           )}
 
-          <VStack align="start" spacing="sm" w="full">
+          <VStack align="start" gap="sm" w="full">
             <HStack justifyContent="space-between" w="full">
               {isLoading ? (
                 <Skeleton h="18px" w="100px" />
@@ -176,7 +164,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
             )}
 
             {amountMode === 'show' && (
-              <Card variant="level2">
+              <Card.Root variant="level2">
                 <TokenRowWithDetails
                   address={vebalBptToken.address as Address}
                   chain={vebalBptToken.chain}
@@ -196,12 +184,12 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                   }
                   value={lockedAmount ?? ''}
                 />
-              </Card>
+              </Card.Root>
             )}
           </VStack>
 
-          <VStack align="start" spacing="sm" w="full">
-            <HStack justifyContent="space-between" spacing="md" w="full">
+          <VStack align="start" gap="sm" w="full">
+            <HStack justifyContent="space-between" gap="md" w="full">
               <TooltipWithTouch label="The minimum lock period is to the Thursday of the following week. The maximum lock period is to the closest Thursday to the end of a 1 year period. Once locked, you cannot redeem your LP tokens until lock expiry. You can extend your lock period later at any time.">
                 <Text
                   _after={{
@@ -212,8 +200,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                     width: 'full',
                     borderBottom: '1px dotted',
                     opacity: 0.8,
-                    pointerEvents: 'none',
-                  }}
+                    pointerEvents: 'none' }}
                   cursor="pointer"
                   display="inline-block"
                   fontSize="sm"
@@ -226,7 +213,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                 </Text>
               </TooltipWithTouch>
               <Box textAlign="right" w="100px">
-                <Tooltip label={lockDuration.lockUntilDateFormatted}>
+                <Tooltip content={lockDuration.lockUntilDateFormatted}>
                   <Text fontSize="sm" fontWeight="700" lineHeight="18px">
                     {lockDuration.lockUntilDateDuration}
                   </Text>
@@ -251,7 +238,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
 
           <Grid gap="sm" templateColumns="1fr 1fr" w="full">
             <GridItem>
-              <Card minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
+              <Card.Root minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
                 <VStack align="start" gap="sm">
                   <Text fontSize="sm" fontWeight="500" lineHeight="16px">
                     Total veBAL
@@ -268,7 +255,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                     </Text>
                   </HStack>
                 </VStack>
-              </Card>
+              </Card.Root>
             </GridItem>
             <GridItem>
               {poolIsLoading ? (
@@ -284,10 +271,10 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
               )}
             </GridItem>
           </Grid>
-          <Tooltip label={isDisabled ? disabledReason : undefined}>
+          <Tooltip content={isDisabled ? disabledReason : undefined}>
             <Button
-              isDisabled={isDisabled}
-              isLoading={isLoading}
+              disabled={isDisabled}
+              loading={isLoading}
               onClick={previewModalDisclosure.onOpen}
               variant="primary"
               w="full"
@@ -296,8 +283,8 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
             </Button>
           </Tooltip>
         </VStack>
-      </Card>
+      </Card.Root>
       <VebalLockModal extendExpired isOpen={previewModalDisclosure.isOpen} onClose={onModalClose} />
     </Box>
-  )
+  );
 }

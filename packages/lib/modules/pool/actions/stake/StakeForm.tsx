@@ -1,6 +1,6 @@
-'use client'
-
-import { Card, CardBody, CardFooter, CardHeader, Button, Tooltip, Box } from '@chakra-ui/react'
+'use client';
+import { Card, Button, Box } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { useStake } from './StakeProvider'
 import { useRef } from 'react'
 import { StakeModal } from './StakeModal'
@@ -15,17 +15,17 @@ export function StakeForm() {
 
   return (
     <Box h="full" maxW="lg" mx="auto" w="full">
-      <Card>
-        <CardHeader>Stake for rewards</CardHeader>
-        <CardBody>
+      <Card.Root>
+        <Card.Header>Stake for rewards</Card.Header>
+        <Card.Body>
           <SafeAppAlert />
           <StakePreview />
-        </CardBody>
-        <CardFooter>
-          <Tooltip label={isDisabled ? disabledReason : ''}>
+        </Card.Body>
+        <Card.Footer>
+          <Tooltip content={isDisabled ? disabledReason : ''}>
             <Button
-              isDisabled={isDisabled}
-              isLoading={isLoading}
+              disabled={isDisabled}
+              loading={isLoading}
               onClick={() => !isDisabled && onOpen()}
               ref={nextBtn}
               size="lg"
@@ -35,9 +35,9 @@ export function StakeForm() {
               Next
             </Button>
           </Tooltip>
-        </CardFooter>
-      </Card>
+        </Card.Footer>
+      </Card.Root>
       <StakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
     </Box>
-  )
+  );
 }

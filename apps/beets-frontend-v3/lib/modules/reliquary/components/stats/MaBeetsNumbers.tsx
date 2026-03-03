@@ -1,4 +1,4 @@
-import { HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react';
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -33,8 +33,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
 
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
     level: bn(balance.level).plus(1),
-    percentageOfTotal: bn(balance.balance).div(globalStats.totalBalance),
-  }))
+    percentageOfTotal: bn(balance.balance).div(globalStats.totalBalance) }))
 
   const avgRelicMaturity = fNumCustom(
     relicMaturityLevels?.reduce(
@@ -56,15 +55,14 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
     if (item.title === 'BEETS reward APR' && item.type === 'STAKING_BOOST') {
       return {
         ...item,
-        apr: item.apr - (baseApr?.apr || 0),
-      }
+        apr: item.apr - (baseApr?.apr || 0) }
     } else {
       return item
     }
   })
 
   return (
-    <VStack align="flex-start" flex="1" spacing="4" width="full">
+    <VStack align="flex-start" flex="1" gap="4" width="full">
       <Text
         background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
         backgroundClip="text"
@@ -73,10 +71,10 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
       >
         maBeets Numbers
       </Text>
-      <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
+      <SimpleGrid columns={2} gap={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>
           <StatLabel label="APR" />
-          <Skeleton isLoaded={!loading}>
+          <Skeleton loading={!!loading}>
             <MainAprTooltip
               aprItems={dynamicDataAprItems}
               chain={networkConfig.chain}
@@ -88,7 +86,7 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
         </RelicStat>
         <RelicStat>
           <StatLabel label="TVL" />
-          <Skeleton isLoaded={!loading}>
+          <Skeleton loading={!!loading}>
             <StatValueText>{toCurrency(tvl)}</StatValueText>
           </Skeleton>
         </RelicStat>
@@ -97,25 +95,25 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
             <StatLabel label="Incentives" />
             <InfoIconPopover message="Liquidity incentives are additional incentives which are available for maBEETS holders. The daily value is an approximation based on current token prices and emissions." />
           </HStack>
-          <Skeleton isLoaded={!loading}>
+          <Skeleton loading={!!loading}>
             <StatValueText>~{toCurrency(incentivesDailyValue)} per day</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Maturity Level" />
-          <Skeleton isLoaded={!loading}>
+          <Skeleton loading={!!loading}>
             <StatValueText>{avgRelicMaturity}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Total Relics" />
-          <Skeleton isLoaded={!loading}>
+          <Skeleton loading={!!loading}>
             <StatValueText>{fNumCustom(globalStats?.relicCount || 0, '0,0')}</StatValueText>
           </Skeleton>
         </RelicStat>
         <RelicStat>
           <StatLabel label="Avg Value Per Relic" />
-          <Skeleton isLoaded={!loading}>
+          <Skeleton loading={!!loading}>
             <StatValueText>{toCurrency(avgValuePerRelic)}</StatValueText>
           </Skeleton>
         </RelicStat>
@@ -130,5 +128,5 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
         {chartsVisible ? 'Show less' : 'Show more'}
       </Link>
     </VStack>
-  )
+  );
 }

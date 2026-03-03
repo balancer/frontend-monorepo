@@ -1,4 +1,4 @@
-import { TextProps, Text } from '@chakra-ui/react'
+import { TextProps, Text } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react'
 
 export function NumberText({ children, ...rest }: PropsWithChildren & TextProps) {

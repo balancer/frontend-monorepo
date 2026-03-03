@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -36,8 +36,7 @@ export function LoopsDepositModal({
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
-    txReceipt: lastTransaction?.result,
-  })
+    txReceipt: lastTransaction?.result })
 
   useEffect(() => {
     if (isOpen) {
@@ -51,38 +50,46 @@ export function LoopsDepositModal({
   const isSuccess = !!loopsDepositTxHash && loopsDepositReceipt.hasReceipt
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!loopsDepositTxHash} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && (
-          <DesktopStepTracker chain={chain} transactionSteps={depositTransactionSteps} />
-        )}
-        <TransactionModalHeader
-          chain={chain}
-          isReceiptLoading
-          label="Review deposit"
-          txHash={loopsDepositTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <LoopsDepositSummary {...loopsDepositReceipt} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={depositTransactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onClose}
-          returnLabel="Deposit again"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!loopsDepositTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && (
+              <DesktopStepTracker chain={chain} transactionSteps={depositTransactionSteps} />
+            )}
+            <TransactionModalHeader
+              chain={chain}
+              isReceiptLoading
+              label="Review deposit"
+              txHash={loopsDepositTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <LoopsDepositSummary {...loopsDepositReceipt} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={depositTransactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onClose}
+              returnLabel="Deposit again"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

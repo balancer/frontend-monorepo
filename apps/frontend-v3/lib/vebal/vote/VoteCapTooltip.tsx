@@ -1,12 +1,4 @@
-import {
-  HStack,
-  Text,
-  Popover,
-  PopoverTrigger,
-  Portal,
-  PopoverContent,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, Text, Popover, HoverCard, Portal, VStack } from '@chakra-ui/react';
 import { VoteCapIcon } from '@repo/lib/shared/components/icons/VoteCapIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -29,29 +21,31 @@ export function VoteCapTooltip({ relativeWeightCap, votesState, usePortal = true
         : 'vote cap exceeded'
 
   const popoverContent = (
-    <PopoverContent bg="background.level3" minWidth={['100px', '170px']} p="sm" shadow="3xl">
-      <VStack alignItems="start" spacing="sm" width="full">
-        <Text color={votesColor ?? 'font.secondary'} fontSize="sm" fontWeight={700}>
-          {fNum('apr', relativeWeightCap)} {voteCapText}
-        </Text>
-        <Text color="font.secondary" fontSize="sm">
-          Governance by veBAL holders have set a cap on this gauge. Any votes that push the vote
-          above this cap will be disregarded.
-        </Text>
-      </VStack>
-    </PopoverContent>
+    <HoverCard.Positioner>
+      <HoverCard.Content bg="background.level3" minWidth={['100px', '170px']} p="sm" shadow="3xl">
+        <VStack alignItems="start" gap="sm" width="full">
+          <Text color={votesColor ?? 'font.secondary'} fontSize="sm" fontWeight={700}>
+            {fNum('apr', relativeWeightCap)} {voteCapText}
+          </Text>
+          <Text color="font.secondary" fontSize="sm">
+            Governance by veBAL holders have set a cap on this gauge. Any votes that push the vote
+            above this cap will be disregarded.
+          </Text>
+        </VStack>
+      </HoverCard.Content>
+    </HoverCard.Positioner>
   )
   return (
-    <Popover trigger="hover">
+    <HoverCard.Root>
       <>
-        <PopoverTrigger>
+        <HoverCard.Trigger asChild>
           <HStack color={votesColor ?? 'font.secondary'}>
             <VoteCapIcon height="16px" width="16px" />
           </HStack>
-        </PopoverTrigger>
+        </HoverCard.Trigger>
 
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
       </>
-    </Popover>
-  )
+    </HoverCard.Root>
+  );
 }

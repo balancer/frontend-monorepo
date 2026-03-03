@@ -1,4 +1,4 @@
-import { Card, Grid, Heading, Text, Flex, Box } from '@chakra-ui/react'
+import { Card, Grid, Heading, Text, Flex, Box } from '@chakra-ui/react';
 import Section from '@repo/lib/shared/components/layout/Section'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -25,16 +25,16 @@ export function HomeBuilders() {
               as="h2"
               pb="md"
               size="2xl"
-              sx={{
-                textWrap: 'balance',
+              css={{
+                textWrap: 'balance'
               }}
               w="full"
             >
               DeFi&rsquo;s most extensive AMM product suite
             </Heading>
             <Text
-              sx={{
-                textWrap: 'balance',
+              css={{
+                textWrap: 'balance'
               }}
               w="full"
             >
@@ -52,11 +52,10 @@ export function HomeBuilders() {
               templateColumns={{
                 base: 'repeat(1, 1fr',
                 md: 'repeat(2, 1fr',
-                lg: 'repeat(4, 1fr',
-              }}
+                lg: 'repeat(4, 1fr' }}
               templateRows={{ base: 'repeat(4, 1fr', md: 'repeat(3, 1fr', lg: 'repeat(2, 1fr' }}
             >
-              <Card
+              <Card.Root
                 gridArea={{ base: 'auto', md: '1 / 1 / 2 / 3', lg: '1 / 1 / 3 / 3' }}
                 variant="level2"
               >
@@ -83,15 +82,15 @@ export function HomeBuilders() {
                     as="h5"
                     pb="sm"
                     size="h5"
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Code less. Build more.
                   </Heading>
                   <Text
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Focus on innovation rather than low level tasks like accounting and security.
@@ -99,9 +98,9 @@ export function HomeBuilders() {
                     battle-tested tech stack.
                   </Text>
                 </Flex>
-              </Card>
+              </Card.Root>
 
-              <Card>
+              <Card.Root>
                 <Flex direction="column" h="100%" justify="flex-end">
                   <Box h="100%" overflow="hidden" pb="md" rounded="lg">
                     <ParallaxImage
@@ -124,24 +123,24 @@ export function HomeBuilders() {
                     as="h5"
                     pb="sm"
                     size="h5"
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Booststrap liquidity
                   </Heading>
                   <Text
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Plug into Balancer&lsquo;s veBAL incentive mechanism and grants framework to
                     bootstrap AMM liquidity.
                   </Text>
                 </Flex>
-              </Card>
+              </Card.Root>
 
-              <Card>
+              <Card.Root>
                 <Flex direction="column" h="100%" justify="flex-end">
                   <Box h="100%" overflow="hidden" pb="md" rounded="lg">
                     <ParallaxImage
@@ -164,24 +163,24 @@ export function HomeBuilders() {
                     as="h5"
                     pb="sm"
                     size="h5"
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Launch your product faster
                   </Heading>
                   <Text
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Eliminate the cold start AMM problem with streamlined aggregator integrations
                     and a prebuilt UI.
                   </Text>
                 </Flex>
-              </Card>
+              </Card.Root>
 
-              <Card gridArea={{ base: 'auto', md: '3 / 1 / 4 / 3', lg: '1 / 4 / 3 / 5' }}>
+              <Card.Root gridArea={{ base: 'auto', md: '3 / 1 / 4 / 3', lg: '1 / 4 / 3 / 5' }}>
                 <Flex direction="column" h="100%" justify="flex-end">
                   <Box h="100%" overflow="hidden" pb="md" rounded="lg">
                     <ParallaxImage
@@ -208,26 +207,26 @@ export function HomeBuilders() {
                     as="h5"
                     pb="sm"
                     size="h5"
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Join the largest AMM network
                   </Heading>
                   <Text
-                    sx={{
-                      textWrap: 'balance',
+                    css={{
+                      textWrap: 'balance'
                     }}
                   >
                     Unlock an extensive network of AMM expertise, audit pipelines, and partnership
                     connections.
                   </Text>
                 </Flex>
-              </Card>
+              </Card.Root>
             </Grid>
           </Box>
         </FadeInOnView>
       </Box>
     </Section>
-  )
+  );
 }

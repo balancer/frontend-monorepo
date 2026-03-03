@@ -1,13 +1,4 @@
-import {
-  Button,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  VStack,
-  Text,
-  SystemStyleObject,
-} from '@chakra-ui/react'
+import { Button, Popover, VStack, Text, SystemStyleObject } from '@chakra-ui/react';
 import { ReminderButton } from './ReminderButton'
 import { format } from 'date-fns'
 import { ReactNode, useState } from 'react'
@@ -40,15 +31,17 @@ export function DeadlineDayTooltip({
   day,
   deadline,
   sharedStyles,
-  getDayStyles,
-}: Props) {
+  getDayStyles }: Props) {
   const { isMobile } = useBreakpoints()
 
   const [isCalendarReminderOpen, setIsCalendarReminderOpen] = useState(false)
 
   return (
-    <Popover placement="top" trigger={isMobile ? 'click' : 'hover'}>
-      <PopoverTrigger>
+    <Popover.Root
+      positioning={{
+        placement: 'top'
+      }}>
+      <Popover.Trigger asChild>
         <Button
           {...sharedStyles}
           _hover={{}}
@@ -57,35 +50,37 @@ export function DeadlineDayTooltip({
         >
           {children}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent maxW="258px">
-        <PopoverBody p="0">
-          <VStack
-            bg="background.level3"
-            boxShadow={popoverBoxShadow}
-            p="ms"
-            rounded="lg"
-            spacing="sm"
-          >
-            <Text alignSelf="start" fontSize="16px" fontWeight={700} lineHeight="20px">
-              {title}
-            </Text>
-            <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
-              {format(day.setHours(deadline.getHours()), 'haaa zzzz, d LLLL yyyy')}
-            </Text>
+      </Popover.Trigger>
+      <Popover.Positioner>
+        <Popover.Content maxW="258px">
+          <Popover.Body p="0">
+            <VStack
+              bg="background.level3"
+              boxShadow={popoverBoxShadow}
+              p="ms"
+              rounded="lg"
+              gap="sm"
+            >
+              <Text alignSelf="start" fontSize="16px" fontWeight={700} lineHeight="20px">
+                {title}
+              </Text>
+              <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
+                {format(day.setHours(deadline.getHours()), 'haaa zzzz, d LLLL yyyy')}
+              </Text>
 
-            <ReminderButton alignSelf="start" onClick={() => setIsCalendarReminderOpen(true)}>
-              Set weekly reminder
-            </ReminderButton>
+              <ReminderButton alignSelf="start" onClick={() => setIsCalendarReminderOpen(true)}>
+                Set weekly reminder
+              </ReminderButton>
 
-            <CalendarReminderModal
-              deadline={day}
-              isOpen={isCalendarReminderOpen}
-              onClose={() => setIsCalendarReminderOpen(false)}
-            />
-          </VStack>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
+              <CalendarReminderModal
+                deadline={day}
+                isOpen={isCalendarReminderOpen}
+                onClose={() => setIsCalendarReminderOpen(false)}
+              />
+            </VStack>
+          </Popover.Body>
+        </Popover.Content>
+      </Popover.Positioner>
+    </Popover.Root>
+  );
 }

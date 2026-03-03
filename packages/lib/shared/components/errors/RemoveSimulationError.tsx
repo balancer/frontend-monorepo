@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react';
 import { hasSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { isPoolSurgingError } from '../../utils/error-filters'
@@ -21,8 +21,7 @@ type Props = {
 export function RemoveSimulationError({
   priceImpactQuery,
   simulationQuery,
-  goToProportionalRemoves,
-}: Props) {
+  goToProportionalRemoves }: Props) {
   const { pool } = usePool()
   if (!simulationQuery.isError && !priceImpactQuery.error) return
 

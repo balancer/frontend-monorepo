@@ -1,16 +1,14 @@
 import {
   Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Divider,
+  HoverCard,
   HStack,
   Button,
   Heading,
   Text,
   Icon,
   Portal,
-  useColorModeValue,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -26,84 +24,81 @@ const basePopoverAprItemProps = {
   pr: 2,
   pb: 3,
   backgroundColor: 'background.level1',
-  fontWeight: 700,
-}
+  fontWeight: 700 }
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 
 function AuraAprTooltip({ auraApr, textProps }: Props) {
   const usedDisplayValueFormatter = defaultDisplayValueFormatter
 
-  const auraGradFrom = useColorModeValue(
-    '#9357FF', // light from
-    '#9357FF' // dark from
-  )
-  const auraGradTo = useColorModeValue(
-    '#D399FF', // light to
-    '#E9CCFF' // dark to
-  )
+  const colorMode = useThemeColorMode()
+  const auraGradFrom = colorMode === 'dark' ? '#9357FF' : '#9357FF'
+  const auraGradTo = colorMode === 'dark' ? '#E9CCFF' : '#D399FF'
 
   const popoverContent = (
-    <PopoverContent minWidth={['100px', '300px']} p="0" shadow="3xl" w="fit-content">
-      <TooltipAprItem
-        {...basePopoverAprItemProps}
-        apr={bn(auraApr)}
-        aprOpacity={auraApr ? 1 : 0.5}
-        bg="background.level3"
-        displayValueFormatter={usedDisplayValueFormatter}
-        pt={3}
-        title="Aura APR"
-        tooltipText="Visit Aura to get a full breakdown of this current APR and the projected APR for next week."
-      />
-      <Divider />
-      <TooltipAprItem
-        {...basePopoverAprItemProps}
-        apr={bn(auraApr)}
-        backgroundColor="background.level4"
-        displayValueFormatter={usedDisplayValueFormatter}
-        fontColor="font.maxContrast"
-        pt={3}
-        title="Total APR"
-      />
-    </PopoverContent>
+    <HoverCard.Positioner>
+      <HoverCard.Content minWidth={['100px', '300px']} p="0" shadow="3xl" w="fit-content">
+        <TooltipAprItem
+          {...basePopoverAprItemProps}
+          apr={bn(auraApr)}
+          aprOpacity={auraApr ? 1 : 0.5}
+          bg="background.level3"
+          displayValueFormatter={usedDisplayValueFormatter}
+          pt={3}
+          title="Aura APR"
+          tooltipText="Visit Aura to get a full breakdown of this current APR and the projected APR for next week."
+        />
+        <Separator />
+        <TooltipAprItem
+          {...basePopoverAprItemProps}
+          apr={bn(auraApr)}
+          backgroundColor="background.level4"
+          displayValueFormatter={usedDisplayValueFormatter}
+          fontColor="font.maxContrast"
+          pt={3}
+          title="Total APR"
+        />
+      </HoverCard.Content>
+    </HoverCard.Positioner>
   )
 
   return (
-    <Popover trigger="hover">
-      {({ isOpen }) => (
-        <>
-          <PopoverTrigger>
-            <HStack align="center" alignItems="center">
-              <Button _focus={{ outline: 'none' }} h="30px" px="0" variant="unstyled">
-                <HStack
-                  // _hover={{ color: hoverColor }}
-                  color="font.primary"
-                  gap="xs"
-                  opacity={1}
-                >
-                  {textProps ? (
-                    <Text {...textProps}>{usedDisplayValueFormatter(bn(auraApr))}</Text>
-                  ) : (
-                    <Heading cursor="pointer" size="h4">
-                      {usedDisplayValueFormatter(bn(auraApr))}
-                    </Heading>
-                  )}
-                  <Icon
-                    as={StarsIcon}
-                    gradFrom={isOpen ? 'green' : auraGradFrom}
-                    gradTo={isOpen ? 'green' : auraGradTo}
-                    variant="gradient"
-                  />
-                </HStack>
-              </Button>
-            </HStack>
-          </PopoverTrigger>
+    <HoverCard.Root>
+      <HoverCard.Context>{({
+          open: isOpen
+        }) => (
+          <>
+            <HoverCard.Trigger asChild>
+              <HStack align="center" alignItems="center">
+                <Button _focus={{ outline: 'none' }} h="30px" px="0" unstyled>
+                  <HStack
+                    // _hover={{ color: hoverColor }}
+                    color="font.primary"
+                    gap="xs"
+                    opacity={1}
+                  >
+                    {textProps ? (
+                      <Text {...textProps}>{usedDisplayValueFormatter(bn(auraApr))}</Text>
+                    ) : (
+                      <Heading cursor="pointer" size="h4">
+                        {usedDisplayValueFormatter(bn(auraApr))}
+                      </Heading>
+                    )}
+                    <Icon
+                      gradFrom={isOpen ? 'green' : auraGradFrom}
+                      gradTo={isOpen ? 'green' : auraGradTo}
+                      variant="gradient"
+                      asChild><StarsIcon /></Icon>
+                  </HStack>
+                </Button>
+              </HStack>
+            </HoverCard.Trigger>
 
-          <Portal>{popoverContent}</Portal>
-        </>
-      )}
-    </Popover>
-  )
+            <Portal>{popoverContent}</Portal>
+          </>
+        )}</HoverCard.Context>
+    </HoverCard.Root>
+  );
 }
 
 export type { Props as BaseAprTooltipProps }

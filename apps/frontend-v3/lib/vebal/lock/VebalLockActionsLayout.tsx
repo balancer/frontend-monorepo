@@ -1,6 +1,6 @@
 'use client'
 
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack, Text } from '@chakra-ui/react';
 import { FocussedActionLayout } from '@repo/lib/shared/components/layout/FocussedActionLayout'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PropsWithChildren } from 'react'

@@ -1,4 +1,4 @@
-import { Box, BoxProps, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, VStack } from '@chakra-ui/react';
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AddLiquiditySimulationQueryResult } from '@repo/lib/modules/pool/actions/add-liquidity/queries/useAddLiquiditySimulationQuery'
@@ -17,15 +17,13 @@ type Props = {
 export function ReliquaryAddLiquidityMaturityImpactWarning({
   createNew,
   addLiquidityMaturityImpactQuery,
-  simulationQuery,
-}: Props) {
+  simulationQuery }: Props) {
   const boxProps: BoxProps = {
     as: 'span',
     color: 'black',
     fontSize: 'sm',
     fontWeight: 'medium',
-    sx: { textWrap: 'balance' },
-  }
+    sx: { textWrap: 'balance' } }
 
   const addLiquidityMaturityImpact = addLiquidityMaturityImpactQuery.data
 
@@ -35,8 +33,7 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
     if (!addLiquidityMaturityImpact) return null
     const duration = intervalToDuration({
       start: 0,
-      end: addLiquidityMaturityImpact.addLiquidityMaturityImpactTimeInMilliseconds,
-    })
+      end: addLiquidityMaturityImpact.addLiquidityMaturityImpactTimeInMilliseconds })
     return formatDuration(duration, { delimiter: ', ' })
   }, [addLiquidityMaturityImpact])
 
@@ -62,7 +59,7 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
   return (
     <BalAlert
       content={
-        <VStack align="start" spacing="0">
+        <VStack align="start" gap="0">
           <Box {...boxProps}>
             {`Adding ${fNum('token', totalInvestValue)} fBEETS to this Relic will affect its maturity. It will take an additional ${maturityDuration} to reach maximum maturity.`}
           </Box>
@@ -76,5 +73,5 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
       status="warning"
       w="full"
     />
-  )
+  );
 }

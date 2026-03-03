@@ -1,10 +1,18 @@
 'use client'
-import * as echarts from 'echarts/core'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import * as echarts from 'echarts/core';
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format, millisecondsToSeconds, secondsToMinutes } from 'date-fns'
 import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
-import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
+import { ColorMode } from '@chakra-ui/react';
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -16,8 +24,7 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { ApiToken } from '../tokens/token.types'
 import {
   getBlockExplorerAddressUrl,
-  getBlockExplorerTxUrl,
-} from '@repo/lib/shared/utils/blockExplorer'
+  getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 
@@ -42,61 +49,46 @@ export type ChartInfo = Partial<Record<GqlChain, ChartEl[]>>
 export const gradientMap: Partial<Record<GqlChain, { from: string; to: string }>> = {
   [GqlChain.Arbitrum]: {
     from: '#6C80A7',
-    to: '#2D374B',
-  },
+    to: '#2D374B' },
   [GqlChain.Mainnet]: {
     from: '#F7F7F7',
-    to: '#A4C6EE',
-  },
+    to: '#A4C6EE' },
   [GqlChain.Base]: {
     from: '#99B9FF',
-    to: '#0252FF',
-  },
+    to: '#0252FF' },
   [GqlChain.Optimism]: {
     from: '#FF9EA9',
-    to: '#FF0420',
-  },
+    to: '#FF0420' },
   [GqlChain.Polygon]: {
     from: '#DECEF8',
-    to: '#8247E5',
-  },
+    to: '#8247E5' },
   [GqlChain.Zkevm]: {
     from: '#CD6BE1',
-    to: '#7C40E4',
-  },
+    to: '#7C40E4' },
   [GqlChain.Gnosis]: {
     from: '#07DEA7',
-    to: '#04795B',
-  },
+    to: '#04795B' },
   [GqlChain.Avalanche]: {
     from: '#F39B9B',
-    to: '#DA1A1C',
-  },
+    to: '#DA1A1C' },
   [GqlChain.Fantom]: {
     from: '#7D84FF',
-    to: '#5468FF',
-  },
+    to: '#5468FF' },
   [GqlChain.Fraxtal]: {
     from: '#E0E7FF',
-    to: '#8C9EFF',
-  },
+    to: '#8C9EFF' },
   [GqlChain.Mode]: {
     from: '#FFD77D',
-    to: '#FFB74D',
-  },
+    to: '#FFB74D' },
   [GqlChain.Sepolia]: {
     from: '#D1B3FF',
-    to: '#A384FF',
-  },
+    to: '#A384FF' },
   [GqlChain.Sonic]: {
     from: '#D1B3FF',
-    to: '#A384FF',
-  },
+    to: '#A384FF' },
   [GqlChain.Hyperevm]: {
     from: '#50D2C1',
-    to: '#072723',
-  },
-}
+    to: '#072723' } }
 
 function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
   return {
@@ -113,13 +105,12 @@ function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
     [GqlChain.Mode]: [],
     [GqlChain.Sepolia]: [],
     [GqlChain.Sonic]: [],
-    [GqlChain.Hyperevm]: [],
-  }
+    [GqlChain.Hyperevm]: [] }
 }
 
 const getDefaultPoolActivityChartOptions = (
   nextTheme: ColorMode = 'dark',
-  theme: any, // TODO: type this
+  system: any, // TODO: type this
   currencyFormatter: NumberFormatter,
   isMobile = false,
   is2xl = false
@@ -129,14 +120,13 @@ const getDefaultPoolActivityChartOptions = (
     heading: 'font-weight: bold; color: #E5D3BE',
     container: `background: ${
       nextTheme === 'dark'
-        ? theme.semanticTokens.colors.background.level3._dark
-        : theme.semanticTokens.colors.background.default
+        ? theme.token('semanticTokens.colors.background.level3._dark')
+        : theme.token('semanticTokens.colors.background.default')
     };`,
     text:
       nextTheme === 'dark'
-        ? theme.semanticTokens.colors.font.primary._dark
-        : theme.semanticTokens.colors.font.primary.default,
-  }
+        ? theme.token('semanticTokens.colors.font.primary._dark')
+        : theme.token('semanticTokens.colors.font.primary.default') }
 
   return {
     grid: {
@@ -144,8 +134,7 @@ const getDefaultPoolActivityChartOptions = (
       right: '2.5%',
       top: '7.5%',
       bottom: '10.5%',
-      containLabel: false,
-    },
+      containLabel: false },
     xAxis: {
       show: false,
       offset: 10,
@@ -158,17 +147,12 @@ const getDefaultPoolActivityChartOptions = (
         label: {
           formatter: (params: any) => {
             return format(new Date(params.value * 1000), 'MMM d')
-          },
-        },
-      },
+          } } },
       axisLine: { show: false },
       splitArea: {
         show: false,
         areaStyle: {
-          color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'],
-        },
-      },
-    },
+          color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'] } } },
     yAxis: {
       show: true,
       offset: 10,
@@ -176,13 +160,11 @@ const getDefaultPoolActivityChartOptions = (
       axisLabel: {
         formatter: (value: number) => {
           return currencyFormatter(value ** 2)
-        },
-      },
+        } },
       axisLine: { show: false },
       minorSplitLine: { show: false },
       splitLine: { show: false },
-      splitNumber: 3,
-    },
+      splitNumber: 3 },
     tooltip: {
       triggerOn: 'mousemove|click',
       confine: is2xl ? false : true,
@@ -269,9 +251,7 @@ const getDefaultPoolActivityChartOptions = (
             </div>
           </div>
       `
-      },
-    },
-  }
+      } } }
 }
 
 function getSymbolSize(dataItem?: ChartEl) {
@@ -299,26 +279,22 @@ export interface PoolActivityChartTypeTab {
 const tabsList: PoolActivityChartTypeTab[] = [
   {
     label: 'All',
-    value: 'all',
-  },
+    value: 'all' },
   {
     label: 'Adds',
-    value: GqlPoolEventType.Add,
-  },
+    value: GqlPoolEventType.Add },
   {
     label: 'Removes',
-    value: GqlPoolEventType.Remove,
-  },
+    value: GqlPoolEventType.Remove },
   {
     label: 'Swaps',
-    value: GqlPoolEventType.Swap,
-  },
+    value: GqlPoolEventType.Swap },
 ]
 
 export function useEcosystemPoolActivityChart() {
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const { isMobile, is2xl } = useBreakpoints()
-  const { theme: nextTheme } = useNextTheme()
+  const { system: nextTheme } = useNextTheme()
   const { getToken } = useTokens()
   const { toCurrency } = useCurrency()
   const [activeTab, setActiveTab] = useState<PoolActivityChartTypeTab>(tabsList[0])
@@ -330,8 +306,7 @@ export function useEcosystemPoolActivityChart() {
 
   const { loading, data: response } = usePoolEvents({
     first: 500,
-    chainIn: supportedNetworks,
-  })
+    chainIn: supportedNetworks })
 
   const chartData = useMemo(() => {
     if (!response) return getDefaultChainMeta()
@@ -355,8 +330,7 @@ export function useEcosystemPoolActivityChart() {
         item.tokens.forEach(token => {
           tokens.push({
             token: getToken(token.address, chain),
-            amount: token.amount,
-          })
+            amount: token.amount })
         })
       }
 
@@ -366,12 +340,10 @@ export function useEcosystemPoolActivityChart() {
       ) {
         tokens.push({
           token: getToken(item.tokenIn.address, chain),
-          amount: item.tokenIn.amount,
-        })
+          amount: item.tokenIn.amount })
         tokens.push({
           token: getToken(item.tokenOut.address, chain),
-          amount: item.tokenOut.amount,
-        })
+          amount: item.tokenOut.amount })
       }
 
       const chartYAxisValue = Math.sqrt(Number(usdValue))
@@ -415,22 +387,17 @@ export function useEcosystemPoolActivityChart() {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: gradientMap[chain]?.from || '#F7F7F7',
-            },
+              color: gradientMap[chain]?.from || '#F7F7F7' },
             {
               offset: 1,
-              color: gradientMap[chain]?.to || '#A4C6EE',
-            },
-          ]),
-        },
+              color: gradientMap[chain]?.to || '#A4C6EE' },
+          ]) },
         emphasis: {
           focus: 'self',
-          scale: 1.5,
-        },
+          scale: 1.5 },
         symbolSize: getSymbolSize,
         data: chartData[chain],
-        type: 'scatter',
-      }
+        type: 'scatter' }
     })
   }, [chartData])
 
@@ -439,15 +406,14 @@ export function useEcosystemPoolActivityChart() {
     if (!instance) return
 
     return instance.setOption({
-      series: options,
-    })
+      series: options })
   }, [chartData, options])
 
   return {
     isLoading: loading,
     chartOption: getDefaultPoolActivityChartOptions(
       nextTheme as ColorMode,
-      theme,
+      system,
       toCurrency,
       isMobile,
       is2xl
@@ -459,6 +425,5 @@ export function useEcosystemPoolActivityChart() {
     setActiveTab,
     activeNetwork,
     setActiveNetwork,
-    headerInfo,
-  }
+    headerInfo };
 }

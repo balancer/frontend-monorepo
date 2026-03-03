@@ -1,14 +1,4 @@
-import {
-  Box,
-  Card,
-  HStack,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  VStack,
-  Text,
-  Skeleton,
-} from '@chakra-ui/react'
+import { Box, Card, HStack, Popover, HoverCard, VStack, Text, Skeleton } from '@chakra-ui/react';
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -25,8 +15,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 export function LoopsWithdrawSummary({
   isLoading: isLoadingReceipt,
-  receivedToken,
-}: LoopsWithdrawReceiptResult) {
+  receivedToken }: LoopsWithdrawReceiptResult) {
   const { isMobile } = useBreakpoints()
   const { usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
@@ -37,14 +26,12 @@ export function LoopsWithdrawSummary({
     loopsWithdrawTxHash,
     wNativeAsset,
     loopedAsset,
-    amountShares,
-  } = useLoops()
+    amountShares } = useLoops()
 
   const {
     wethAmountOut,
     isLoading: isLoadingFlyQuote,
-    minWethAmountOut,
-  } = useLoopsGetFlyQuote(amountShares, chain)
+    minWethAmountOut } = useLoopsGetFlyQuote(amountShares, chain)
 
   const slippage = bn(wethAmountOut).isZero()
     ? bn(0)
@@ -59,7 +46,7 @@ export function LoopsWithdrawSummary({
   return (
     <AnimateHeightChange spacing="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />}
-      <Card variant="modalSubSection">
+      <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
           isLoading={false}
@@ -67,8 +54,8 @@ export function LoopsWithdrawSummary({
           tokenAddress={loopedAsset?.address || ''}
           tokenAmount={amountShares}
         />
-      </Card>
-      <Card variant="modalSubSection">
+      </Card.Root>
+      <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
           isLoading={isLoadingFlyQuote || isLoadingReceipt}
@@ -80,8 +67,8 @@ export function LoopsWithdrawSummary({
               : formatUnits(wethAmountOut, wNativeAsset?.decimals ?? 18)
           }
         />
-      </Card>
-      <VStack align="start" fontSize="sm" mt="sm" spacing="sm" w="full">
+      </Card.Root>
+      <VStack align="start" fontSize="sm" mt="sm" gap="sm" w="full">
         <HStack justify="space-between" w="full">
           <Text color="grayText" fontSize="sm">
             Max slippage
@@ -94,8 +81,8 @@ export function LoopsWithdrawSummary({
                 {`-${toCurrency(slippageUsdValue, { abbreviated: false })} (-${fNum('slippage', slippage)})`}
               </NumberText>
             )}
-            <Popover trigger="hover">
-              <PopoverTrigger>
+            <HoverCard.Root>
+              <HoverCard.Trigger asChild>
                 <Box
                   _hover={{ opacity: 1 }}
                   opacity="0.5"
@@ -103,14 +90,16 @@ export function LoopsWithdrawSummary({
                 >
                   <InfoIcon />
                 </Box>
-              </PopoverTrigger>
-              <PopoverContent p="sm">
-                <Text fontSize="sm" variant="secondary">
-                  Withdrawals may return slightly less than the displayed rate due to stS → $S
-                  market swaps and normal slippage.
-                </Text>
-              </PopoverContent>
-            </Popover>
+              </HoverCard.Trigger>
+              <HoverCard.Positioner>
+                <HoverCard.Content p="sm">
+                  <Text fontSize="sm" variant="secondary">
+                    Withdrawals may return slightly less than the displayed rate due to stS → $S
+                    market swaps and normal slippage.
+                  </Text>
+                </HoverCard.Content>
+              </HoverCard.Positioner>
+            </HoverCard.Root>
           </HStack>
         </HStack>
         <HStack justify="space-between" w="full">
@@ -123,13 +112,12 @@ export function LoopsWithdrawSummary({
             ) : (
               <NumberText color="grayText" fontSize="sm">
                 {fNum('token', formatUnits(minWethAmountOut, wNativeAsset?.decimals ?? 18), {
-                  abbreviated: false,
-                })}{' '}
+                  abbreviated: false })}{' '}
                 {wNativeAsset?.symbol}
               </NumberText>
             )}
-            <Popover trigger="hover">
-              <PopoverTrigger>
+            <HoverCard.Root>
+              <HoverCard.Trigger asChild>
                 <Box
                   _hover={{ opacity: 1 }}
                   opacity="0.5"
@@ -137,16 +125,18 @@ export function LoopsWithdrawSummary({
                 >
                   <InfoIcon />
                 </Box>
-              </PopoverTrigger>
-              <PopoverContent p="sm">
-                <Text fontSize="sm" variant="secondary">
-                  TBD
-                </Text>
-              </PopoverContent>
-            </Popover>
+              </HoverCard.Trigger>
+              <HoverCard.Positioner>
+                <HoverCard.Content p="sm">
+                  <Text fontSize="sm" variant="secondary">
+                    TBD
+                  </Text>
+                </HoverCard.Content>
+              </HoverCard.Positioner>
+            </HoverCard.Root>
           </HStack>
         </HStack>
       </VStack>
     </AnimateHeightChange>
-  )
+  );
 }

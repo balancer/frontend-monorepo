@@ -1,5 +1,13 @@
-import ReactECharts from 'echarts-for-react'
-import { Box, Divider, HStack, Skeleton, Text, useTheme } from '@chakra-ui/react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import ReactECharts from 'echarts-for-react';
+import { Box, HStack, Skeleton, Text, Separator } from '@chakra-ui/react';
 import { usePoolActivityChart } from './usePoolActivityChart'
 import { PropsWithChildren } from 'react'
 import { motion, easeOut } from 'framer-motion'
@@ -25,16 +33,13 @@ export function PoolActivityChart() {
   const legendTabs = [
     {
       label: 'Adds',
-      color: theme.semanticTokens.colors.chart.pool.scatter.add.label,
-    },
+      color: theme.token('semanticTokens.colors.chart.pool.scatter.add.label') },
     {
       label: 'Removes',
-      color: theme.semanticTokens.colors.chart.pool.scatter.remove.label,
-    },
+      color: theme.token('semanticTokens.colors.chart.pool.scatter.remove.label') },
     {
       label: 'Swaps',
-      color: theme.semanticTokens.colors.chart.pool.scatter.swap.label,
-    },
+      color: theme.token('semanticTokens.colors.chart.pool.scatter.swap.label') },
   ]
 
   return (
@@ -56,11 +61,10 @@ export function PoolActivityChart() {
           </motion.div>
         </Box>
       )}
-
       {!isLoading && isExpanded && (
         <AnimateOpacity>
-          <Divider mb="4" pt="2" />
-          <HStack px={['1', '2']} spacing="4">
+          <Separator mb="4" pt="2" />
+          <HStack px={['1', '2']} gap="4">
             {legendTabs.map((tab, index) => (
               <HStack alignItems="center" gap="2" key={index}>
                 <Box
@@ -79,5 +83,5 @@ export function PoolActivityChart() {
         </AnimateOpacity>
       )}
     </Box>
-  )
+  );
 }

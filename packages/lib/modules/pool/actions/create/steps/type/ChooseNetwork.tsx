@@ -1,6 +1,6 @@
 import { Control } from 'react-hook-form'
 import { PoolCreationForm } from '../../types'
-import { VStack, Text, HStack } from '@chakra-ui/react'
+import { VStack, Text, HStack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -9,8 +9,7 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import {
   RadioCardGroup,
-  type RadioCardOption,
-} from '@repo/lib/shared/components/inputs/RadioCardGroup'
+  type RadioCardOption } from '@repo/lib/shared/components/inputs/RadioCardGroup'
 import { INITIAL_POOL_CREATION_FORM } from '../../constants'
 import { isCowProtocol } from '../../helpers'
 import { useWatch } from 'react-hook-form'
@@ -34,11 +33,10 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
     )
     .map(network => ({
       value: network,
-      label: getChainShortName(network),
-    }))
+      label: getChainShortName(network) }))
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <Text color="font.primary" fontWeight="bold">
         Choose network
       </Text>
@@ -54,8 +52,7 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
                 ...INITIAL_POOL_CREATION_FORM,
                 network: value,
                 protocol,
-                poolType,
-              })
+                poolType })
             }}
             options={networkOptions}
             radioCardProps={{
@@ -63,11 +60,9 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
                 _checked: {
                   borderColor: 'green.400 !important',
                   bg: '#63F2BE0D',
-                  color: 'font.opposite',
-                },
+                  color: 'font.opposite' },
                 _focus: {
-                  boxShadow: 'outline',
-                },
+                  boxShadow: 'outline' },
                 borderColor: 'transparent',
                 borderRadius: 'lg',
                 borderWidth: '1px',
@@ -75,11 +70,9 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
                 bg: 'background.level2',
                 cursor: 'pointer',
                 px: 5,
-                py: 3,
-              },
-            }}
+                py: 3 } }}
             renderOption={({ value, label }) => (
-              <HStack spacing="sm">
+              <HStack gap="sm">
                 <NetworkIcon chain={value} size={8} />
                 <Text fontWeight="bold">{label}</Text>
               </HStack>
@@ -88,9 +81,8 @@ export function ChooseNetwork({ control }: { control: Control<PoolCreationForm> 
           />
         )}
         rules={{
-          required: 'Please select a network',
-        }}
+          required: 'Please select a network' }}
       />
     </VStack>
-  )
+  );
 }

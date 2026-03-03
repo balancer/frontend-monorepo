@@ -1,14 +1,5 @@
-import {
-  Box,
-  Button,
-  Center,
-  HStack,
-  Icon,
-  PopoverContent,
-  Text,
-  TextProps,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { Box, Button, Center, HStack, Icon, Text, TextProps, Popover } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import BaseAprTooltip, { BaseAprTooltipProps } from './BaseAprTooltip'
 import { Info } from 'react-feather'
 import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
@@ -40,8 +31,7 @@ export function SparklesIcon({
   isOpen,
   pool,
   id,
-  hoverColor,
-}: {
+  hoverColor }: {
   isOpen: boolean
   pool: Pool | PoolListItem | FeaturedPool
   id?: string
@@ -60,32 +50,15 @@ export function SparklesIcon({
     pool.dynamicData.aprItems.filter(item => item.type === GqlPoolAprItemType.SwapFee_24H)
       .length === pool.dynamicData.aprItems.length
 
-  const defaultGradFrom = useColorModeValue(
-    '#91A1B6', // light from
-    '#A0AEC0' // dark from
-  )
-  const defaultGradTo = useColorModeValue(
-    '#BCCCE1', // light to
-    '#E9EEF5' // dark to
-  )
+  const colorMode = useThemeColorMode()
+  const defaultGradFrom = colorMode === 'dark' ? '#A0AEC0' : '#91A1B6'
+  const defaultGradTo = colorMode === 'dark' ? '#E9EEF5' : '#BCCCE1'
 
-  const corePoolGradFrom = useColorModeValue(
-    '#BFA672', // light from
-    '#AE8C56' // dark from
-  )
-  const corePoolGradTo = useColorModeValue(
-    '#D9C47F', // light to
-    '#F4EAD2' // dark to
-  )
+  const corePoolGradFrom = colorMode === 'dark' ? '#AE8C56' : '#BFA672'
+  const corePoolGradTo = colorMode === 'dark' ? '#F4EAD2' : '#D9C47F'
 
-  const rewardsGradFrom = useColorModeValue(
-    '#F49A55', // light from
-    '#F49175' // dark from
-  )
-  const rewardsGradTo = useColorModeValue(
-    '#FCD45B', // light to
-    '#FFCC33' // dark to
-  )
+  const rewardsGradFrom = colorMode === 'dark' ? '#F49175' : '#F49A55'
+  const rewardsGradTo = colorMode === 'dark' ? '#FFCC33' : '#FCD45B'
 
   let gradFromColor = defaultGradFrom
   let gradToColor = defaultGradTo
@@ -104,26 +77,24 @@ export function SparklesIcon({
     <Box h="auto" minW="16px" w="16px">
       <Center w="16px">
         {isLBP(pool.type) ? (
-          <Icon as={Info} boxSize={4} color={isOpen ? 'inherit' : 'gray.400'} />
+          <Icon boxSize={4} color={isOpen ? 'inherit' : 'gray.400'} asChild><Info /></Icon>
         ) : hasOnlySwapApr ? (
           <Icon
-            as={StarIcon}
             boxSize={4}
             gradFrom={isOpen ? hoverColor : defaultGradFrom}
             gradTo={isOpen ? hoverColor : defaultGradTo}
             id={id || ''}
-          />
+            asChild><StarIcon /></Icon>
         ) : (
           <Icon
-            as={StarsIcon}
             gradFrom={isOpen ? hoverColor : gradFromColor}
             gradTo={isOpen ? hoverColor : gradToColor}
             id={id || ''}
-          />
+            asChild><StarsIcon /></Icon>
         )}
       </Center>
     </Box>
-  )
+  );
 }
 
 function MainAprTooltip({
@@ -148,11 +119,13 @@ function MainAprTooltip({
       : 'font.highlight'
 
   const customPopoverContent = isLBP(pool.type) ? (
-    <PopoverContent p="md">
-      <Text color="font.secondary" fontSize="sm">
-        LBP APRs cannot be realized by LPs.
-      </Text>
-    </PopoverContent>
+    <Popover.Positioner>
+      <Popover.Content p="md">
+        <Text color="font.secondary" fontSize="sm">
+          LBP APRs cannot be realized by LPs.
+        </Text>
+      </Popover.Content>
+    </Popover.Positioner>
   ) : undefined
 
   return (
@@ -169,7 +142,7 @@ function MainAprTooltip({
     >
       {({ isOpen }) => (
         <HStack align="center" alignItems="center">
-          <Button _focus={{ outline: 'none' }} h={height} px="0" variant="unstyled">
+          <Button _focus={{ outline: 'none' }} h={height} px="0" unstyled>
             <HStack
               _hover={{ color: hoverColor }}
               color={isOpen ? hoverColor : 'font.primary'}
@@ -179,7 +152,7 @@ function MainAprTooltip({
               {!onlySparkles && (
                 <Text
                   color={isOpen || isAprNegative ? hoverColor : 'font.primary'}
-                  noOfLines={2}
+                  lineClamp={2}
                   textAlign="left"
                   textDecoration={isLBP(pool.type) ? 'line-through' : 'none'}
                   whiteSpace="pre-wrap"
@@ -192,7 +165,7 @@ function MainAprTooltip({
               <SparklesIcon
                 hoverColor={isAprNegative ? '#f97316' : 'green'} // hoverColor here is used for the icon and therefore needs to be a color
                 id={id}
-                isOpen={isOpen}
+                open={isOpen}
                 pool={pool}
               />
             </HStack>
@@ -200,7 +173,7 @@ function MainAprTooltip({
         </HStack>
       )}
     </BaseAprTooltip>
-  )
+  );
 }
 
 export default MainAprTooltip

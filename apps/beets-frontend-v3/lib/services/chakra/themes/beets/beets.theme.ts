@@ -1,11 +1,10 @@
-import { ThemeTypings, extendTheme } from '@chakra-ui/react'
+import { ThemeTypings, createSystem, defaultConfig } from '@chakra-ui/react';
 import { colors, primaryTextColor } from './colors'
 import { getComponents } from '@repo/lib/shared/services/chakra/themes/base/components'
 import {
   fonts,
   styles,
-  themeConfig,
-} from '@repo/lib/shared/services/chakra/themes/base/foundations'
+  themeConfig } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { getSemanticTokens } from '@repo/lib/shared/services/chakra/themes/base/semantic-tokens'
 import { proseTheme } from '@repo/lib/shared/services/chakra/themes/base/prose'
 import { getBeetsTokens } from './tokens'
@@ -20,23 +19,19 @@ semanticTokens.colors.grayText._dark = '#BBBBBB'
 
 components.Button.variants.buttonGroupActive._dark.color = '#363636'
 
-export const beetsTheme = {
-  config: {
-    ...themeConfig,
-    initialColorMode: 'dark',
-  },
-  fonts,
-  styles: {
-    global: {
-      ...styles.global,
-      body: {
-        background: 'linear-gradient(90deg, #111111 0%, #333333 100%)',
-      },
-    },
-  },
-  colors,
-  semanticTokens,
-  components,
-}
+export {};
 
-export const theme = extendTheme(beetsTheme, proseTheme) as ThemeTypings
+export const theme = createSystem(defaultConfig, {
+  globalCss: {
+    ...styles.global,
+    body: {
+      background: 'linear-gradient(90deg, #111111 0%, #333333 100%)' } },
+
+  system: {
+    tokens: {
+      fonts,
+      colors },
+
+    semanticTokens: semanticTokens },
+
+  components }) as ThemeTypings

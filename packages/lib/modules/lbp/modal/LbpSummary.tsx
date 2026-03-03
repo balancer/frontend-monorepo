@@ -1,5 +1,5 @@
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { Card, VStack, Text, Divider, HStack } from '@chakra-ui/react'
+import { Card, VStack, Text, HStack, Separator } from '@chakra-ui/react';
 import { useLbpForm } from '../LbpFormProvider'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { Address } from 'viem'
@@ -24,14 +24,12 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     startDateTime,
     endDateTime,
     weightAdjustmentType,
-    userActions,
-  } = saleStructureForm.getValues()
+    userActions } = saleStructureForm.getValues()
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
       {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />}
-
-      <Card variant="modalSubSection">
+      <Card.Root variant="modalSubSection">
         <VStack align="start" gap="ms">
           <Text fontWeight="bold">Sale token</Text>
           <TokenRow
@@ -40,7 +38,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
             customToken={launchToken}
             value={saleTokenAmount}
           />
-          <Divider p="0" />
+          <Separator p="0" />
           <Text fontWeight="bold">Collateral token</Text>
           <TokenRow
             address={collateralTokenAddress as Address}
@@ -48,8 +46,8 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
             value={collateralTokenAmount}
           />
         </VStack>
-      </Card>
-      <Card variant="modalSubSection">
+      </Card.Root>
+      <Card.Root variant="modalSubSection">
         <VStack align="start">
           <Text fontWeight="bold">Sale details</Text>
           <HStack justify="space-between" w="full">
@@ -73,31 +71,29 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
             <Text color="grayText">{saleMarketCap}</Text>
           </HStack>
         </VStack>
-      </Card>
+      </Card.Root>
       <GasCostSummaryCard chain={selectedChain} transactionSteps={transactionSteps.steps} />
     </AnimateHeightChange>
-  )
+  );
 }
 
 const humanWeightShifts: Record<WeightAdjustmentType, ReactNode> = {
   [WeightAdjustmentType.LINEAR_90_10]: (
-    <HStack spacing={1}>
+    <HStack gap={1}>
       <Text color="grayText">Standard linear: 90</Text>
       <ArrowRight color="grayText" size={16} />
       <Text color="grayText">10</Text>
     </HStack>
   ),
   [WeightAdjustmentType.LINEAR_90_50]: (
-    <HStack spacing={1}>
+    <HStack gap={1}>
       <Text color="grayText">Standard linear: 90</Text>
       <ArrowRight color="grayText" size={16} />
       <Text color="grayText">50</Text>
     </HStack>
   ),
-  [WeightAdjustmentType.CUSTOM]: 'Custom',
-}
+  [WeightAdjustmentType.CUSTOM]: 'Custom' }
 
 const humanUserActions: Record<UserActions, ReactNode> = {
   [UserActions.BUY_ONLY]: 'Users can ‘Buy’ only',
-  [UserActions.BUY_AND_SELL]: 'Users can ‘Buy & Sell’',
-}
+  [UserActions.BUY_AND_SELL]: 'Users can ‘Buy & Sell’' }

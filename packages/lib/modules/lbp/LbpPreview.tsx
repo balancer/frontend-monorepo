@@ -1,4 +1,4 @@
-import { VStack, Heading, Flex, Spacer, HStack } from '@chakra-ui/react'
+import { VStack, Heading, Flex, Spacer, HStack } from '@chakra-ui/react';
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
@@ -37,8 +37,7 @@ export function LbpPreview() {
       'startDateTime',
       'collateralTokenAmount',
       'saleTokenAmount',
-    ],
-  })
+    ] })
 
   const { isLastStep, projectInfoForm, updatePriceStats, maxPrice, saleMarketCap, fdvMarketCap } =
     useLbpForm()
@@ -54,10 +53,9 @@ export function LbpPreview() {
         cardProps={{
           w: 'full',
           overflow: 'hidden',
-          rounded: 'xl',
-        }}
+          rounded: 'xl' }}
       >
-        <VStack align="start" px="lg" py="md" spacing="md" w="full">
+        <VStack align="start" px="lg" py="md" gap="md" w="full">
           <Flex alignItems="center" pt="xs" w="full">
             <Heading color="font.maxContrast" size="md">
               LBP preview
@@ -117,5 +115,5 @@ export function LbpPreview() {
         </VStack>
       </NoisyCard>
     </>
-  )
+  );
 }

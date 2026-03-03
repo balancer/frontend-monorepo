@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, Text, Stack } from '@chakra-ui/react'
+import { Button, HStack, Skeleton, Text, Stack } from '@chakra-ui/react';
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon'
@@ -22,8 +22,7 @@ import { useVeBALPool } from '../useVeBALPool'
 import {
   GqlPoolAprItem,
   GqlPoolAprItemType,
-  GqlPoolStakingType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { getStakedBalance } from '@repo/lib/modules/pool/user-balance.helpers'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
@@ -59,8 +58,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const {
     isLoading: optimizationLoading,
     totalIncentives: optimizedRewardValue,
-    votes: optimizedVotes,
-  } = useIncentivesOptimized(
+    votes: optimizedVotes } = useIncentivesOptimized(
     votingPools,
     myVotes,
     calculateVotingPower(slope, lockEnd).shiftedBy(18),
@@ -84,8 +82,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
             left: 0,
             opacity: 0.5,
             position: 'absolute',
-            width: '100%',
-          }}
+            width: '100%' }}
           fontSize="sm"
           position="relative"
           variant="secondary"
@@ -107,8 +104,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
             left: 0,
             opacity: 0.5,
             position: 'absolute',
-            width: '100%',
-          }}
+            width: '100%' }}
           fontSize="sm"
           position="relative"
           variant="secondary"
@@ -157,7 +153,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
             {incentives.voting ? fNumCustom(incentives.voting, '0.00%') : '—'}
           </Text>
         ) : (
-          <HStack spacing="xs">
+          <HStack gap="xs">
             <Text fontSize="lg" fontWeight={700} variant="special">
               {optimizedRewardValue ? (
                 toCurrency(optimizedRewardValue, { abbreviated: false })
@@ -176,14 +172,8 @@ export function MyVotesStatsMyIncentivesOptimized() {
         isLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : isConnected && noVeBALBalance ? (
-          <Button
-            as={NextLink}
-            href={getVeBalManagePath('lock', 'vote')}
-            size="sm"
-            variant="primary"
-          >
-            Get veBAL
-          </Button>
+          <Button size="sm" variant="primary" asChild><NextLink href={getVeBalManagePath('lock', 'vote')}>Get veBAL
+                      </NextLink></Button>
         ) : isConnected ? (
           <TooltipWithTouch
             bg="background.base"
@@ -198,7 +188,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
                 size="sm"
                 variant={disabledButton ? 'outline' : 'primary'}
               >
-                <HStack spacing="xs">
+                <HStack gap="xs">
                   <MagicStickIcon />
                   <Text color="font.dark" fontSize="sm" fontWeight="700">
                     {votesAlreadyOptimized && !allVotesTimelocked ? 'Applied' : 'Apply'}
@@ -215,5 +205,5 @@ export function MyVotesStatsMyIncentivesOptimized() {
       }
       variant="special"
     />
-  )
+  );
 }

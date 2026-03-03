@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid, GridItem, Icon, PopoverContent, Text, VStack } from '@chakra-ui/react'
+import { Grid, GridItem, Icon, Text, VStack, Popover } from '@chakra-ui/react';
 import { Globe } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { useVoteList } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
@@ -11,8 +11,7 @@ const orderBy = Object.values(SortVotesBy)
 
 export function VoteListTableHeader({ ...rest }) {
   const {
-    filtersState: { sorting, setSorting, sortVotesBy, setSortVotesBy, toggleSorting },
-  } = useVoteList()
+    filtersState: { sorting, setSorting, sortVotesBy, setSortVotesBy, toggleSorting } } = useVoteList()
 
   const handleSort = (newSortVotesBy: SortVotesBy) => {
     if (sortVotesBy === newSortVotesBy) {
@@ -27,7 +26,7 @@ export function VoteListTableHeader({ ...rest }) {
     <Grid {...rest} p={['sm', 'md']} w="full">
       <GridItem>
         <VStack align="start" w="full">
-          <Icon as={Globe} boxSize="5" color="font.primary" />
+          <Icon boxSize="5" color="font.primary" asChild><Globe /></Icon>
         </VStack>
       </GridItem>
       <GridItem>
@@ -46,24 +45,25 @@ export function VoteListTableHeader({ ...rest }) {
           <SortableHeader
             containerProps={{
               position: 'relative',
-              right: '-10px',
-            }}
+              right: '-10px' }}
             isSorted={sortVotesBy === orderByItem}
             label={orderByHash[orderByItem].label}
             onSort={() => handleSort(orderByItem)}
             popoverContent={
               orderByHash[orderByItem].title ? (
-                <PopoverContent maxW="300px" p="sm" w="auto">
-                  <Text
-                    fontSize="sm"
-                    textAlign={
-                      ['bribes', 'bribesPerVebal'].includes(orderByItem) ? 'left' : undefined
-                    }
-                    variant="secondary"
-                  >
-                    {orderByHash[orderByItem].title}
-                  </Text>
-                </PopoverContent>
+                <Popover.Positioner>
+                  <Popover.Content maxW="300px" p="sm" w="auto">
+                    <Text
+                      fontSize="sm"
+                      textAlign={
+                        ['bribes', 'bribesPerVebal'].includes(orderByItem) ? 'left' : undefined
+                      }
+                      variant="secondary"
+                    >
+                      {orderByHash[orderByItem].title}
+                    </Text>
+                  </Popover.Content>
+                </Popover.Positioner>
               ) : undefined
             }
             sorting={sorting}
@@ -77,5 +77,5 @@ export function VoteListTableHeader({ ...rest }) {
         </Text>
       </GridItem>
     </Grid>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import NextLink from 'next/link'
-import { Stack, Divider, Text, Box, VStack, HStack, Link, IconButton } from '@chakra-ui/react'
+import { Stack, Text, Box, VStack, HStack, Link, IconButton, Separator } from '@chakra-ui/react';
 import { staggeredFadeIn } from '@repo/lib/shared/utils/animations'
 import { motion } from 'framer-motion'
 import { DefaultPageContainer } from '../containers/DefaultPageContainer'
@@ -26,16 +26,18 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
       direction={{ base: 'column', lg: 'row' }}
       justify="space-between"
       py={{ base: 'sm', lg: 'md' }}
-      spacing={{ base: 'xl', lg: 'md' }}
+      gap={{ base: 'xl', lg: 'md' }}
       w="full"
     >
-      <VStack align="start" color="font.primary" spacing="lg" width={{ base: 'auto', md: '70%' }}>
+      <VStack align="start" color="font.primary" gap="lg" width={{ base: 'auto', md: '70%' }}>
         <Box w="120px">{logoType}</Box>
-        <VStack align="start" spacing="sm">
+        <VStack align="start" gap="sm">
           <Text fontSize="4xl" fontWeight="500" letterSpacing="-0.4px" variant="secondary">
             {title}
           </Text>
-          <Text sx={{ textWrap: 'balance' }} variant="secondary">
+          <Text css={{
+            textWrap: 'balance'
+          }} variant="secondary">
             {subTitle}
           </Text>
         </VStack>
@@ -44,15 +46,15 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
         align="start"
         direction={{ base: 'column', lg: 'row' }}
         justify="space-between"
-        spacing={{ base: 'lg', lg: 'md' }}
+        gap={{ base: 'lg', lg: 'md' }}
         w="full"
       >
         {linkSections.map(section => (
-          <VStack align="start" key={section.title} spacing={{ base: 'sm', lg: 'ms' }}>
+          <VStack align="start" key={section.title} gap={{ base: 'sm', lg: 'ms' }}>
             <Text color="font.secondary" fontSize={{ base: 'xs', md: 'xs' }} variant="eyebrow">
               {section.title}
             </Text>
-            <VStack align="start" spacing={{ base: 'xs', lg: 'sm' }}>
+            <VStack align="start" gap={{ base: 'xs', lg: 'sm' }}>
               {section.links.map(link => (
                 <Link
                   as={link.isExternal ? Link : NextLink}
@@ -84,12 +86,12 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
         ))}
       </Stack>
     </Stack>
-  )
+  );
 }
 
 function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
   return (
-    <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
+    <HStack gap="ms" w={{ base: 'full', lg: 'auto' }}>
       {socialLinks.map(({ href, iconType }) => (
         <IconButton
           aria-label="Social icon"
@@ -108,7 +110,7 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
         </IconButton>
       ))}
     </HStack>
-  )
+  );
 }
 
 function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
@@ -118,7 +120,7 @@ function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
     <HStack
       justify={{ base: 'start', lg: 'end' }}
       p={{ base: 'sm', lg: '0' }}
-      spacing={{ base: 'sm', lg: 'md' }}
+      gap={{ base: 'sm', lg: 'md' }}
       w="full"
       wrap="wrap"
     >
@@ -153,7 +155,7 @@ function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
         )
       })}
     </HStack>
-  )
+  );
 }
 
 type FooterProps = {
@@ -165,20 +167,19 @@ type FooterProps = {
 export function Footer({ logoType, title, subTitle }: FooterProps) {
   const {
     footer: { linkSections },
-    links: { socialLinks, legalLinks },
-  } = PROJECT_CONFIG
+    links: { socialLinks, legalLinks } } = PROJECT_CONFIG
 
   return (
     <Box as="footer" background="background.level0" shadow="innerLg">
       <DefaultPageContainer py="xl">
-        <VStack align="start" pt="md" spacing="lg">
+        <VStack align="start" pt="md" gap="lg">
           <CardContent
             linkSections={linkSections}
             logoType={logoType}
             subTitle={subTitle}
             title={title}
           />
-          <Divider />
+          <Separator />
           <Stack
             align="start"
             alignItems={{ base: 'none', lg: 'center' }}
@@ -197,5 +198,5 @@ export function Footer({ logoType, title, subTitle }: FooterProps) {
         </VStack>
       </DefaultPageContainer>
     </Box>
-  )
+  );
 }

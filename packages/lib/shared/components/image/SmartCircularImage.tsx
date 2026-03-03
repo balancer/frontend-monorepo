@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 import NextImage, { ImageProps } from 'next/image'
 import { useState, useEffect } from 'react'
 
@@ -117,8 +117,7 @@ export function SmartCircularImage({
     borderRadius: 'full',
     boxSize: `${size}px`,
     position: 'relative' as const,
-    border,
-  }
+    border }
 
   if (isCircular) {
     // For circular images: preserve full image
@@ -130,8 +129,7 @@ export function SmartCircularImage({
           sizes={`${size}px`}
           src={src}
           style={{
-            objectFit: 'cover',
-          }}
+            objectFit: 'cover' }}
           {...imageProps}
         />
       </Box>
@@ -147,8 +145,7 @@ export function SmartCircularImage({
           src={src}
           style={{
             objectFit: 'contain',
-            borderRadius: '50%',
-          }}
+            borderRadius: '50%' }}
           {...imageProps}
         />
       </Box>

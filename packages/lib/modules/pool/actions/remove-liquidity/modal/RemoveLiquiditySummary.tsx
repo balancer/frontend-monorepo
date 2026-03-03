@@ -1,6 +1,6 @@
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack } from '@chakra-ui/react'
+import { Card, VStack } from '@chakra-ui/react';
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
@@ -24,8 +24,7 @@ export function RemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
   receivedTokens,
   sentBptUnits,
-  error,
-}: RemoveLiquidityReceiptResult) {
+  error }: RemoveLiquidityReceiptResult) {
   const {
     transactionSteps,
     humanBptIn,
@@ -33,8 +32,7 @@ export function RemoveLiquiditySummary({
     amountsOut,
     hasQuoteContext,
     removeLiquidityTxHash,
-    removeLiquidityTxSuccess,
-  } = useRemoveLiquidity()
+    removeLiquidityTxSuccess } = useRemoveLiquidity()
   const { isMobile } = useBreakpoints()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -80,17 +78,15 @@ export function RemoveLiquiditySummary({
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
-
-      <Card variant="modalSubSection">
+      <Card.Root variant="modalSubSection">
         <BptRow
           bptAmount={shouldShowReceipt ? sentBptUnits : humanBptIn}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You removed' : "You're removing"}
           pool={pool}
         />
-      </Card>
-
-      <Card variant="modalSubSection">
+      </Card.Root>
+      <Card.Root variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? receivedTokens : _amountsOut}
           chain={pool.chain}
@@ -100,24 +96,23 @@ export function RemoveLiquiditySummary({
           tokens={shouldShowReceipt ? tokens : undefined}
           totalUSDValue={shouldShowReceipt ? undefined : totalUSDValue}
         />
-      </Card>
-
+      </Card.Root>
       {shouldShowReceipt && (
         <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
       )}
       {!shouldShowReceipt && hasQuoteContext && (
         <CardPopAnim key="price-impact-details">
-          <Card variant="modalSubSection">
-            <VStack align="start" spacing="sm">
+          <Card.Root variant="modalSubSection">
+            <VStack align="start" gap="sm">
               <PoolActionsPriceImpactDetails
                 bptAmount={BigInt(parseUnits(humanBptIn, 18))}
                 slippage={slippage}
                 totalUSDValue={totalUSDValue}
               />
             </VStack>
-          </Card>
+          </Card.Root>
         </CardPopAnim>
       )}
     </AnimateHeightChange>
-  )
+  );
 }

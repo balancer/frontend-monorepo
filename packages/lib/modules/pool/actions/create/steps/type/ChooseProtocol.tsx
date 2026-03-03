@@ -1,8 +1,7 @@
-import { VStack, Text, SimpleGrid, Card } from '@chakra-ui/react'
+import { VStack, Text, SimpleGrid, Card } from '@chakra-ui/react';
 import {
   BALANCER_PROTOCOL_OPTIONS,
-  INITIAL_POOL_CREATION_FORM,
-} from '@repo/lib/modules/pool/actions/create/constants'
+  INITIAL_POOL_CREATION_FORM } from '@repo/lib/modules/pool/actions/create/constants'
 import Image from 'next/image'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { type PoolCreationForm } from '../../types'
@@ -24,11 +23,11 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
   }
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <Text color="font.primary" fontWeight="bold">
         Choose protocol
       </Text>
-      <SimpleGrid columns={2} spacing="md" w="full">
+      <SimpleGrid columns={2} gap="md" w="full">
         {BALANCER_PROTOCOL_OPTIONS.map(({ name, imageSrc }) => {
           const cardProps = {
             cursor: 'pointer',
@@ -39,25 +38,22 @@ export function ChooseProtocol({ control }: { control: Control<PoolCreationForm>
               ? {
                   backgroundColor: 'rgba(0, 211, 149, 0.05)',
                   border: '1px solid',
-                  borderColor: 'green.500',
-                }
+                  borderColor: 'green.500' }
               : {
                   backgroundColor: 'background.level2',
                   border: '1px solid',
-                  borderColor: 'transparent',
-                }),
-          }
+                  borderColor: 'transparent' }) }
 
           return (
-            <Card key={name} {...cardProps}>
-              <VStack spacing="sm">
+            <Card.Root key={name} {...cardProps}>
+              <VStack gap="sm">
                 <Image alt={`${name} logo`} height={80} src={imageSrc} width={80} />
                 <Text>{name}</Text>
               </VStack>
-            </Card>
-          )
+            </Card.Root>
+          );
         })}
       </SimpleGrid>
     </VStack>
-  )
+  );
 }

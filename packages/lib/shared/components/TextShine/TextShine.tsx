@@ -1,4 +1,4 @@
-import { Box, SystemStyleObject } from '@chakra-ui/react'
+import { Box, SystemStyleObject } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react'
 import React from 'react'
 
@@ -33,15 +33,14 @@ export const TextShine: React.FC<TextShineProps> = ({
   color = 'font.primary',
   fontSize = 'md',
   animationIterationCount = '1',
-  gradient = 'linear-gradient(110deg, font.primary 45%, font.opposite 55%, font.primary 65%)',
-}) => {
+  gradient = 'linear-gradient(110deg, font.primary 45%, font.opposite 55%, font.primary 65%)' }) => {
   return (
     <Box
       as="span"
       className={className}
       color={color}
       fontSize={fontSize}
-      sx={{
+      css={{
         display: 'inline-flex',
         animation: `${shineAnimation} ${animationDuration} ${animationDelay} ${animationTimingFunction} ${animationIterationCount} ${animationFillMode}`,
         backgroundImage: gradient,
@@ -51,10 +50,10 @@ export const TextShine: React.FC<TextShineProps> = ({
         color: 'transparent',
         WebkitTextFillColor: 'transparent',
         lineHeight: 'shorter',
-        ...sx,
+        ...sx
       }}
     >
       {children}
     </Box>
-  )
+  );
 }

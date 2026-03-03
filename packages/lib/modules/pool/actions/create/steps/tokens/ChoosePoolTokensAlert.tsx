@@ -3,7 +3,7 @@ import { WeightedPoolStructure } from '../../constants'
 import { isGyroEllipticPool, isStablePool, isCustomWeightedPool } from '../../helpers'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 
 type ChoosePoolTokensAlertProps = {
   poolType: SupportedPoolTypes
@@ -12,8 +12,7 @@ type ChoosePoolTokensAlertProps = {
 
 export function ChoosePoolTokensAlert({
   poolType,
-  weightedPoolStructure,
-}: ChoosePoolTokensAlertProps) {
+  weightedPoolStructure }: ChoosePoolTokensAlertProps) {
   const message = getPoolMessage({ poolType, weightedPoolStructure })
   if (!message) return null
 

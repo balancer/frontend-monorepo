@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
@@ -49,8 +49,7 @@ export function RemoveLiquidityModal({
     txHash: removeLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt: lastTransaction?.result,
-  })
+    txReceipt: lastTransaction?.result })
 
   useEffect(() => {
     if (isOpen) {
@@ -70,48 +69,54 @@ export function RemoveLiquidityModal({
   const isSuccess = !!removeLiquidityTxHash && receiptProps.hasReceipt
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker
-            chain={pool.chain}
-            isTxBatch={shouldBatchTransactions}
-            transactionSteps={transactionSteps}
-          />
-        )}
+        <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
+        <Dialog.Positioner>
+          <Dialog.Content
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {isDesktop && hasQuoteContext && (
+              <DesktopStepTracker
+                chain={pool.chain}
+                isTxBatch={shouldBatchTransactions}
+                transactionSteps={transactionSteps}
+              />
+            )}
+            <TransactionModalHeader
+              chain={pool.chain}
+              isReceiptLoading={receiptProps.isLoading}
+              label="Remove liquidity"
+              timeout={<RemoveLiquidityTimeout />}
+              txHash={removeLiquidityTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
+              <RemoveLiquiditySummary {...receiptProps} />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={redirectToPoolPage}
+              returnLabel="Return to pool"
+              urlTxHash={urlTxHash}
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-        <TransactionModalHeader
-          chain={pool.chain}
-          isReceiptLoading={receiptProps.isLoading}
-          label="Remove liquidity"
-          timeout={<RemoveLiquidityTimeout />}
-          txHash={removeLiquidityTxHash}
-        />
-
-        <ModalCloseButton />
-        <ModalBody>
-          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
-          <RemoveLiquiditySummary {...receiptProps} />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={redirectToPoolPage}
-          returnLabel="Return to pool"
-          urlTxHash={urlTxHash}
-        />
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }

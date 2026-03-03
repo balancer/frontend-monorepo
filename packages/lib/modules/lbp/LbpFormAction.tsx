@@ -1,7 +1,6 @@
 'use client'
 
-import { Button, HStack, IconButton, useDisclosure } from '@chakra-ui/react'
-import { ChevronLeftIcon } from '@chakra-ui/icons'
+import { Button, HStack, IconButton, useDisclosure, Icon } from '@chakra-ui/react';
 import { useLbpForm } from './LbpFormProvider'
 import { LbpCreationModal } from './modal/LbpCreationModal'
 import { useRef } from 'react'
@@ -9,6 +8,7 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 import { useFormState, useWatch } from 'react-hook-form'
+import { LuChevronLeft } from 'react-icons/lu';
 
 export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
@@ -18,8 +18,7 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     goToNextStep,
     goToPreviousStep,
     saleStructureForm,
-    poolAddress,
-  } = useLbpForm()
+    poolAddress } = useLbpForm()
   const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
@@ -33,16 +32,10 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const initializeUrl = `${window.location.origin}/lbp/create/${selectedChain}/${poolAddress}`
 
   return (
-    <HStack spacing="md" w="full">
+    <HStack gap="md" w="full">
       {!isFirstStep && (
-        <IconButton
-          aria-label="Back"
-          icon={<ChevronLeftIcon h="8" w="8" />}
-          onClick={goToPreviousStep}
-          size="lg"
-        />
+        <IconButton aria-label="Back" onClick={goToPreviousStep} size="lg"><Icon h="8" w="8" asChild><LuChevronLeft /></Icon></IconButton>
       )}
-
       {poolAddress && (
         <Button
           onClick={() => copyToClipboard(initializeUrl)}
@@ -53,7 +46,6 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
           {isCopied ? 'Copied ✓' : 'Copy Link'}
         </Button>
       )}
-
       <Button
         disabled={disabled}
         onClick={() => {
@@ -69,15 +61,14 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
       >
         {formButtonText}
       </Button>
-
       {isFormStateValid && isLastStep && (
         <LbpCreationModal
           finalFocusRef={nextBtn}
-          isOpen={previewModalDisclosure.isOpen}
+          isOpen={previewModalDisclosure.open}
           onClose={previewModalDisclosure.onClose}
           onOpen={previewModalDisclosure.onOpen}
         />
       )}
     </HStack>
-  )
+  );
 }

@@ -4,16 +4,13 @@ import {
   Box,
   Button,
   Card,
-  CardHeader,
-  Divider,
   HStack,
   Popover,
-  PopoverContent,
-  PopoverTrigger,
+  HoverCard,
   Skeleton,
   Text,
   VStack,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
@@ -28,8 +25,7 @@ import { TransactionSettings } from '@repo/lib/modules/user/settings/Transaction
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
@@ -55,12 +51,10 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
   const TABS: ButtonGroupOption[] = [
     {
       value: 'proportional',
-      label: 'Proportional',
-    },
+      label: 'Proportional' },
     {
       value: 'single',
-      label: 'Single token',
-    },
+      label: 'Single token' },
   ] as const
 
   const [activeTab, setActiveTab] = useState(TABS[0])
@@ -81,8 +75,7 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
     tokens,
     humanBptInPercent,
     setHumanBptInPercent,
-    isSingleTokenBalanceMoreThat25Percent,
-  } = useRemoveLiquidity()
+    isSingleTokenBalanceMoreThat25Percent } = useRemoveLiquidity()
 
   const { pool, chain } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -122,14 +115,14 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
-      <Card>
-        <CardHeader>
+      <Card.Root>
+        <Card.Header>
           <HStack justify="space-between" w="full">
             <Box as="span">Remove liquidity from Relic</Box>
             <TransactionSettings size="xs" />
           </HStack>
-        </CardHeader>
-        <VStack align="start" spacing="md" w="full">
+        </Card.Header>
+        <VStack align="start" gap="md" w="full">
           {relicId && (
             <BalAlert content={`Removing liquidity from Relic #${relicId}`} status="info" />
           )}
@@ -143,8 +136,8 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
               options={TABS}
               size="sm"
             />
-            <Popover trigger="hover">
-              <PopoverTrigger>
+            <HoverCard.Root>
+              <HoverCard.Trigger asChild>
                 <Box
                   _hover={{ opacity: 1 }}
                   opacity="0.6"
@@ -152,31 +145,33 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
                 >
                   <InfoIcon />
                 </Box>
-              </PopoverTrigger>
-              <PopoverContent maxW="300px" p="sm" w="auto">
-                <VStack align="start" spacing="sm">
-                  <Box>
-                    <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                      Proportional Removal
-                    </Text>
-                    <Text fontSize="sm" variant="secondary">
-                      Proportional liquidity removal keeps token prices unchanged, ensuring zero
-                      price impact to maximize your returns.
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Text fontSize="sm" fontWeight="bold" mb="xxs">
-                      Single token Removal
-                    </Text>
-                    <Text fontSize="sm" variant="secondary">
-                      Single-token removal can be convenient but may lower your returns due to price
-                      impact.
-                    </Text>
-                  </Box>
-                </VStack>
-              </PopoverContent>
-            </Popover>
-            <Divider w="full" />
+              </HoverCard.Trigger>
+              <HoverCard.Positioner>
+                <HoverCard.Content maxW="300px" p="sm" w="auto">
+                  <VStack align="start" gap="sm">
+                    <Box>
+                      <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                        Proportional Removal
+                      </Text>
+                      <Text fontSize="sm" variant="secondary">
+                        Proportional liquidity removal keeps token prices unchanged, ensuring zero
+                        price impact to maximize your returns.
+                      </Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" fontWeight="bold" mb="xxs">
+                        Single token Removal
+                      </Text>
+                      <Text fontSize="sm" variant="secondary">
+                        Single-token removal can be convenient but may lower your returns due to price
+                        impact.
+                      </Text>
+                    </Box>
+                  </VStack>
+                </HoverCard.Content>
+              </HoverCard.Positioner>
+            </HoverCard.Root>
+            <Separator w="full" />
           </HStack>
           <InputWithSlider
             isNumberInputDisabled
@@ -196,7 +191,7 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
           ) : (
             <RemoveLiquiditySingleToken chain={chain} tokens={tokens} />
           )}
-          <VStack align="start" spacing="sm" w="full">
+          <VStack align="start" gap="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
                 accordionButtonComponent={
@@ -228,8 +223,8 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
             )}
           </VStack>
           <Button
-            isDisabled={isDisabled}
-            isLoading={isLoading}
+            disabled={isDisabled}
+            loading={isLoading}
             onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
             ref={nextBtn}
             size="lg"
@@ -239,7 +234,7 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
             {disabledReason || 'Next'}
           </Button>
         </VStack>
-      </Card>
+      </Card.Root>
       <ReliquaryRemoveLiquidityModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}
@@ -248,5 +243,5 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
         relicId={relicId}
       />
     </Box>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
+import { Card, Dialog, Portal } from '@chakra-ui/react';
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
@@ -37,48 +37,60 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
     .sort((a, b) => b.fiatBalance.minus(a.fiatBalance).toNumber())
     .map(reward => ({
       tokenAddress: reward.tokenAddress as Address,
-      humanAmount: reward.humanBalance,
-    }))
+      humanAmount: reward.humanBalance }))
 
   const isSuccess = !!claimTxHash
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap trapFocus={!isSuccess}>
-      <SuccessOverlay startAnimation={!!claimTxHash} />
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
+      trapFocus={!isSuccess}
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && (
-          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-        )}
-        <TransactionModalHeader
-          chain={GqlChain.Mainnet}
-          label="Claim protocol revenue share"
-          txHash={claimTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <AnimateHeightChange spacing="sm" w="full">
-            {isMobile && (
-              <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+        <SuccessOverlay startAnimation={!!claimTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && (
+              <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
             )}
+            <TransactionModalHeader
+              chain={GqlChain.Mainnet}
+              label="Claim protocol revenue share"
+              txHash={claimTxHash}
+            />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <AnimateHeightChange spacing="sm" w="full">
+                {isMobile && (
+                  <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+                )}
 
-            <Card variant="modalSubSection">
-              <TokenRowGroup
-                amounts={rewards}
-                chain={GqlChain.Mainnet}
-                label={claimTxHash ? 'You got' : "You'll get"}
-                totalUSDValue={protocolRewardsBalance.toString()}
-              />
-            </Card>
-          </AnimateHeightChange>
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onClose}
-          returnLabel="Return to portfolio"
-        />
-      </ModalContent>
-    </Modal>
-  )
+                <Card.Root variant="modalSubSection">
+                  <TokenRowGroup
+                    amounts={rewards}
+                    chain={GqlChain.Mainnet}
+                    label={claimTxHash ? 'You got' : "You'll get"}
+                    totalUSDValue={protocolRewardsBalance.toString()}
+                  />
+                </Card.Root>
+              </AnimateHeightChange>
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={transactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onClose}
+              returnLabel="Return to portfolio"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

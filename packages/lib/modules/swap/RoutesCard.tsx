@@ -1,18 +1,13 @@
 import { Path, TokenApi } from '@balancer/sdk'
 import {
   Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   HStack,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Text,
-  VStack,
-} from '@chakra-ui/react'
+  VStack } from '@chakra-ui/react';
 import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../tokens/TokensProvider'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
@@ -57,89 +52,89 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
 
   return (
     <Box w="full">
-      <Accordion allowToggle variant="button" w="full">
-        <AccordionItem
+      <Accordion.Root collapsible variant="button" w="full">
+        <Accordion.Root
           bg="background.level3"
           border="1px solid"
           borderColor="transparent"
           borderRadius="md"
           shadow="md"
           w="full"
-        >
-          <AccordionButton pl="ms" pr="sm">
+          value='item-0'>
+          <Accordion.Root pl="ms" pr="sm">
             <Box as="span" flex="1" textAlign="left">
               {`Proposed route: ${paths?.length > 1 ? 'Split route, ' : ''} ${maxHops} hops`}
             </Box>
-            <AccordionIcon />
-          </AccordionButton>
+            <Accordion.Root />
+          </Accordion.ItemTrigger>
 
-          <AccordionPanel w="full">
-            <VStack>
-              <HStack justify="space-between" w="full">
-                <HStack>
+          <Accordion.Root w="full"><Accordion.Root>
+              <VStack>
+                <HStack justify="space-between" w="full">
+                  <HStack>
+                    <Text fontSize="sm" fontWeight="bold">
+                      {`${fNum('token', totalInputAmount)} ${inputToken.symbol}`}
+                    </Text>
+                    <Text>
+                      <ArrowRight size="16" />
+                    </Text>
+                  </HStack>
                   <Text fontSize="sm" fontWeight="bold">
-                    {`${fNum('token', totalInputAmount)} ${inputToken.symbol}`}
-                  </Text>
-                  <Text>
-                    <ArrowRight size="16" />
+                    {`${fNum('token', totalOutputAmount)} ${outputToken.symbol}`}
                   </Text>
                 </HStack>
-                <Text fontSize="sm" fontWeight="bold">
-                  {`${fNum('token', totalOutputAmount)} ${outputToken.symbol}`}
-                </Text>
-              </HStack>
 
-              <HStack h="200" overflowX="auto" pb="2" w="full">
-                <TokenItem
-                  amountShare={1}
-                  chain={chain}
-                  colors={colors}
-                  position="start"
-                  token={inputToken}
-                  tokenAmount={totalInputAmount}
-                />
+                <HStack h="200" overflowX="auto" pb="2" w="full">
+                  <TokenItem
+                    amountShare={1}
+                    chain={chain}
+                    colors={colors}
+                    position="start"
+                    token={inputToken}
+                    tokenAmount={totalInputAmount}
+                  />
 
-                <VStack flex="1" h="full">
-                  {paths.map((path, i) => (
-                    <PathRoute
-                      chain={chain}
-                      colors={colors}
-                      key={`path-${i}`}
-                      path={path}
-                      totalAmount={totalInputAmount}
-                    />
-                  ))}
-                </VStack>
+                  <VStack flex="1" h="full">
+                    {paths.map((path, i) => (
+                      <PathRoute
+                        chain={chain}
+                        colors={colors}
+                        key={`path-${i}`}
+                        path={path}
+                        totalAmount={totalInputAmount}
+                      />
+                    ))}
+                  </VStack>
 
-                <TokenItem
-                  amountShare={outputPercentage}
-                  chain={chain}
-                  colors={colors}
-                  position="end"
-                  token={outputToken}
-                  tokenAmount={totalOutputAmount}
-                />
-              </HStack>
+                  <TokenItem
+                    amountShare={outputPercentage}
+                    chain={chain}
+                    colors={colors}
+                    position="end"
+                    token={outputToken}
+                    tokenAmount={totalOutputAmount}
+                  />
+                </HStack>
 
-              <HStack justify="space-between" w="full">
-                <HStack>
+                <HStack justify="space-between" w="full">
+                  <HStack>
+                    <Text color="font.secondary" fontSize="sm">
+                      {toCurrency(inputValue)}
+                    </Text>
+                    <Text color="font.secondary">
+                      <ArrowRight size="16" />
+                    </Text>
+                  </HStack>
                   <Text color="font.secondary" fontSize="sm">
-                    {toCurrency(inputValue)}
-                  </Text>
-                  <Text color="font.secondary">
-                    <ArrowRight size="16" />
+                    {`${toCurrency(outputValue)} (${fNum('sharePercent', -(1 - outputPercentage), { hideSmallPercentage: false })})`}
                   </Text>
                 </HStack>
-                <Text color="font.secondary" fontSize="sm">
-                  {`${toCurrency(outputValue)} (${fNum('sharePercent', -(1 - outputPercentage), { hideSmallPercentage: false })})`}
-                </Text>
-              </HStack>
-            </VStack>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+              </VStack>
+            </Accordion.ItemBody></Accordion.ItemContent>
+        </Accordion.Item>
+      </Accordion.Root>
     </Box>
-  )
+  );
 }
 
 type PathRouteProps = {
@@ -212,8 +207,7 @@ function TokenItem({ chain, token, position, amountShare, colors, tokenAmount }:
 
   const borderProps = {
     borderLeftRadius: position === 'start' ? '10px' : undefined,
-    borderRightRadius: position === 'end' ? '10px' : undefined,
-  }
+    borderRightRadius: position === 'end' ? '10px' : undefined }
 
   const item = (
     <Box
@@ -273,11 +267,9 @@ function PoolItem({
   outputToken,
   amountShare,
   hops,
-  colors,
-}: PoolItemProps) {
+  colors }: PoolItemProps) {
   const { data } = useQuery(GetPoolDocument, {
-    variables: { id: poolId, chain },
-  })
+    variables: { id: poolId, chain } })
 
   if (!data) return null
 

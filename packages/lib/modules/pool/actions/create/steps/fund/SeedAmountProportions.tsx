@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, HStack, Text, VStack } from '@chakra-ui/react';
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -25,8 +25,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'poolType'],
-  })
+    name: ['poolTokens', 'poolType'] })
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {
@@ -41,8 +40,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
 
   const tokenAmountToUsdWithWeights = tokenAmountToUsd.map(token => ({
     ...token,
-    usdWeight: totalSeedUsdValue ? (token.usdValue * 100) / totalSeedUsdValue : 0,
-  }))
+    usdWeight: totalSeedUsdValue ? (token.usdValue * 100) / totalSeedUsdValue : 0 }))
 
   const targetWeights = poolTokens.map(t => Number(t.weight))
   const usdWeights = tokenAmountToUsdWithWeights.map(t => t.usdWeight)
@@ -58,7 +56,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
     showTargetWeights && !isAllWeightsCloseToTarget && poolTokens.every(t => t.amount)
 
   return (
-    <VStack spacing="md" w="full">
+    <VStack gap="md" w="full">
       {displayAlert && isGoingToGetRekt && (
         <BalAlert
           content="If your deposit amounts don’t match the target pool weights, you risk losing funds to arbitrageurs. To avoid this, seed the pool with amounts in proportion to the target weights."
@@ -66,21 +64,19 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
           title="You are likely to get rekt"
         />
       )}
-
-      <Card
+      <Card.Root
         bg={isGoingToGetRekt ? '#EB3C3C0D' : 'background.level2'}
         border="1px solid"
         borderColor={isGoingToGetRekt ? 'red.400' : 'transparent'}
         shadow="sm"
         variant={variant}
       >
-        <CardBody>
-          <VStack spacing="md">
+        <Card.Body>
+          <VStack gap="md">
             <WeightsPercentageLabels
               tokens={tokenAmountToUsdWithWeights.map(t => ({
                 symbol: t.symbol,
-                weight: t.usdWeight,
-              }))}
+                weight: t.usdWeight }))}
             />
 
             <WeightsBarChart
@@ -104,10 +100,10 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
               </>
             )}
           </VStack>
-        </CardBody>
-      </Card>
+        </Card.Body>
+      </Card.Root>
     </VStack>
-  )
+  );
 }
 
 interface WeightsBarChartProps {
@@ -120,7 +116,7 @@ function WeightsBarChart({ weights, height, opacity }: WeightsBarChartProps) {
   const allZeroWeights = weights.every(weight => weight === 0)
 
   return (
-    <HStack opacity={opacity} spacing={allZeroWeights ? 0 : 0.5} w="full">
+    <HStack opacity={opacity} gap={allZeroWeights ? 0 : 0.5} w="full">
       {weights.map((weight, idx) => {
         const isFirst = idx === 0
         const isLast = idx === weights.length - 1
@@ -140,7 +136,7 @@ function WeightsBarChart({ weights, height, opacity }: WeightsBarChartProps) {
         )
       })}
     </HStack>
-  )
+  );
 }
 
 interface WeightsPercentageLabelsProps {
@@ -153,7 +149,7 @@ function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercent
   const isMoreThanTwoTokens = tokens.length > 2
 
   return (
-    <HStack justify="space-between" spacing={0.5} w="full">
+    <HStack justify="space-between" gap={0.5} w="full">
       {tokens.map((token, idx) => {
         const isFirst = idx === 0
         const isLast = idx === tokens.length - 1
@@ -164,7 +160,7 @@ function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercent
             align="center"
             justify={isFirst ? 'flex-start' : isLast ? 'flex-end' : 'center'}
             key={idx}
-            spacing="xs"
+            gap="xs"
           >
             {(!isLast || isMoreThanTwoTokens) && (
               <Box bg={color} borderRadius="full" h="8px" w="8px" />
@@ -178,8 +174,8 @@ function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercent
               <Box bg={color} borderRadius="full" h="8px" w="8px" />
             )}
           </HStack>
-        )
+        );
       })}
     </HStack>
-  )
+  );
 }

@@ -12,8 +12,7 @@ import {
   Text,
   Center,
   Stack,
-  Link,
-} from '@chakra-ui/react'
+  Link } from '@chakra-ui/react';
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -37,24 +36,19 @@ const videos = {
   createCustomAMMs: {
     title: '',
     url: 'https://youtu.be/oJAXQCMVdfA?si=Vnusjr2rzGVLI4Lm',
-    src: createCustomAMMsSrc,
-  },
+    src: createCustomAMMsSrc },
   scaffoldBalancer: {
     title: 'Prototype v3 on Scaffold Balancer',
     url: 'https://youtu.be/m6q5M34ZdXw?si=FfZhc6fQRHht3JME',
-    src: scaffoldBalancerSrc,
-  },
+    src: scaffoldBalancerSrc },
   createHook: {
     title: 'Create a Hook on Balancer v3',
     url: 'https://youtu.be/kaz6duliRPA?si=CMTRINvkDwrR-7s-',
-    src: createHookSrc,
-  },
+    src: createHookSrc },
   createRouter: {
     title: 'Create a Router on Balancer v3',
     url: 'https://youtu.be/pO1ChmSFTaY?si=6wRUk2Ff5yJyGrIn',
-    src: createRouterSrc,
-  },
-}
+    src: createRouterSrc } }
 
 export function VideoBox({
   label,
@@ -73,7 +67,7 @@ export function VideoBox({
   const video = videos[id]
 
   return (
-    <Link href={video.url} isExternal role="group">
+    <Link href={video.url} role="group" target='_blank' rel='noopener noreferrer'>
       <Box
         background="background.level0"
         overflow="hidden"
@@ -90,8 +84,7 @@ export function VideoBox({
               sizes="100vw"
               src={video.src}
               style={{
-                objectFit: 'cover',
-              }}
+                objectFit: 'cover' }}
             />
             <Box
               _groupHover={{ opacity: 0.5 }}
@@ -126,7 +119,7 @@ export function VideoBox({
         </Box>
       </Box>
     </Link>
-  )
+  );
 }
 
 export function Videos() {
@@ -148,12 +141,12 @@ export function Videos() {
         </Box>
       </Box>
       <DefaultPageContainer noVerticalPadding position="relative" py={['3xl', '10rem']} zIndex={2}>
-        <VStack align="start" spacing="lg" w="full">
+        <VStack align="start" gap="lg" w="full">
           <Stack
             align={{ base: 'start', lg: 'end' }}
             direction={{ base: 'column', lg: 'row' }}
             justify="space-between"
-            spacing="lg"
+            gap="lg"
             w="full"
           >
             <WordsPullUp
@@ -165,17 +158,10 @@ export function Videos() {
               lineHeight={1}
               text="Balancer v3 video tutorials"
             />
-            <Button
-              as={Link}
-              href="https://github.com/balancer/scaffold-balancer-v3"
-              isExternal
-              rightIcon={<ArrowUpRight size="14px" />}
-              variant="secondary"
-            >
-              Prototype on v3
-            </Button>
+            <Button isExternal variant="secondary" asChild><Link href="https://github.com/balancer/scaffold-balancer-v3">Prototype on v3
+                                          <ArrowUpRight size="14px" /></Link></Button>
           </Stack>
-          <Card>
+          <Card.Root>
             <VideoBox
               feature
               id="createCustomAMMs"
@@ -225,7 +211,7 @@ export function Videos() {
                 />
               </GridItem>
             </Grid>
-          </Card>
+          </Card.Root>
         </VStack>
       </DefaultPageContainer>
       <Box minH="500px" position="absolute" w="full" zIndex={-1}>
@@ -244,5 +230,5 @@ export function Videos() {
         </Box>
       </Box>
     </Noise>
-  )
+  );
 }

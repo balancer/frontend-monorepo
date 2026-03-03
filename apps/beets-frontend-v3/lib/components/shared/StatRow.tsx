@@ -1,12 +1,11 @@
-import { Box, Text, HStack, Skeleton } from '@chakra-ui/react'
+import { Box, Text, HStack, Skeleton } from '@chakra-ui/react';
 
 export function StatRow({
   label,
   value,
   secondaryValue,
   tertiaryValue,
-  isLoading,
-}: {
+  isLoading }: {
   label: string
   value: string
   secondaryValue?: string

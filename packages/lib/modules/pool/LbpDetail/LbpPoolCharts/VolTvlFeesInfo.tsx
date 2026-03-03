@@ -1,6 +1,6 @@
 import { useLbpPoolCharts } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/LbpPoolChartsProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { VStack, Text, Heading } from '@chakra-ui/react'
+import { VStack, Text, Heading } from '@chakra-ui/react';
 import { useMemo } from 'react'
 import { PoolChartTab } from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import { getNowTimestampInSecs } from '@repo/lib/shared/utils/time'
@@ -48,15 +48,14 @@ export function VolTvlFeesInfo({ chartType }: { chartType: PoolChartTab }) {
       totalFees: fees,
       latestTVL,
       latestTVLTimestamp,
-      daysFromStart,
-    }
+      daysFromStart }
   }, [hourlyData])
 
   return (
     <VStack
       alignItems={{ base: undefined, md: 'flex-end' }}
       ml={{ base: undefined, md: 'auto' }}
-      spacing="0"
+      gap="0"
     >
       {chartType === PoolChartTab.VOLUME && (
         <>
@@ -89,5 +88,5 @@ export function VolTvlFeesInfo({ chartType }: { chartType: PoolChartTab }) {
         </>
       )}
     </VStack>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-'use client'
-
+'use client';
 import { GetFeaturedPoolsQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { useState, type JSX } from 'react'
-import { Box, BoxProps, Card, Center, Text, useColorMode } from '@chakra-ui/react'
+import { Box, BoxProps, Card, Center, Text } from '@chakra-ui/react';
 import { FeaturePoolCard } from './FeaturePoolCard'
 import { Pool } from '../pool/pool.types'
 import { useSwipeable } from 'react-swipeable'
@@ -15,11 +15,10 @@ type Props = {
 export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & BoxProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState<'left' | 'right'>('left')
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => next(),
-    onSwipedRight: () => prev(),
-  })
+    onSwipedRight: () => prev() })
 
   function next() {
     setDirection('right')
@@ -40,7 +39,7 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
 
   return (
     <Box {...swipeHandlers} {...rest} zIndex={9999}>
-      <Card
+      <Card.Root
         alignItems="center"
         display="flex"
         justifyContent="center"
@@ -81,7 +80,7 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
           key={`pool-carousel-card-${currentIndex}`}
           pool={currentPool}
         />
-      </Card>
+      </Card.Root>
       <Center mt="md" w="full">
         {featuredPools.map((featured, index) => (
           <Box
@@ -98,5 +97,5 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
         ))}
       </Center>
     </Box>
-  )
+  );
 }

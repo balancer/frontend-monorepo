@@ -1,4 +1,4 @@
-import { Box, Card, Stack, Heading, Text, VStack, Divider, HStack, Link } from '@chakra-ui/react'
+import { Box, Card, Stack, Heading, Text, VStack, HStack, Link, Separator } from '@chakra-ui/react';
 import { useFormattedPoolAttributes } from './useFormattedPoolAttributes'
 import { ArrowUpRight } from 'react-feather'
 import { isGyroEPool, isV3LBP } from '../../../pool.helpers'
@@ -12,26 +12,30 @@ export function PoolAttributes() {
   const formattedAttributes = useFormattedPoolAttributes()
 
   return (
-    <Card>
-      <VStack alignItems="flex-start" spacing={{ base: 'sm', md: 'md' }} width="full">
+    <Card.Root>
+      <VStack alignItems="flex-start" gap={{ base: 'sm', md: 'md' }} width="full">
         <Heading fontSize="1.25rem" variant="h4">
           Pool attributes
         </Heading>
-        <Divider />
+        <Separator />
         <VStack width="full">
           {formattedAttributes.map(attribute => {
             return (
               <Stack
                 direction={{ base: 'column', md: 'row' }}
                 key={`pool-attribute-${attribute.title}`}
-                spacing={{ base: 'xxs', md: 'xl' }}
+                gap={{ base: 'xxs', md: 'xl' }}
                 width="full"
               >
                 <Box minWidth="160px">
                   <Text variant={{ base: 'primary', md: 'secondary' }}>{attribute.title}:</Text>
                 </Box>
                 {attribute.link ? (
-                  <Link href={attribute.link} isExternal variant="link">
+                  <Link
+                    href={attribute.link}
+                    variant="link"
+                    target='_blank'
+                    rel='noopener noreferrer'>
                     <HStack gap="xxs">
                       <Text color="link">{attribute.value}</Text>
                       <ArrowUpRight size={12} />
@@ -46,7 +50,7 @@ export function PoolAttributes() {
                   </Text>
                 )}
               </Stack>
-            )
+            );
           })}
         </VStack>
 
@@ -58,6 +62,6 @@ export function PoolAttributes() {
 
         {isGyroEPool(pool) && <ClpPoolAttributes pool={pool} />}
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

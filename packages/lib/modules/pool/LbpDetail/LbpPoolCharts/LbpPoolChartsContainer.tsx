@@ -1,10 +1,9 @@
-import { Card, HStack, Box } from '@chakra-ui/react'
+import { Card, HStack, Box } from '@chakra-ui/react';
 import {
   PoolChartTab,
   PoolChartTabsProvider,
   PoolChartTypeTab,
-  usePoolChartTabs,
-} from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
+  usePoolChartTabs } from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { LbpPriceChart, PriceInfo } from './LbpPriceChart'
 import { LbpPoolChartsProvider, useLbpPoolCharts } from './LbpPoolChartsProvider'
@@ -27,7 +26,7 @@ function PoolChartsContent() {
   const { hourlyData, hasHourlyData, isLoading } = useLbpPoolCharts()
 
   return (
-    <Card h="full">
+    <Card.Root h="full">
       <HStack align="start" justifyContent="space-between" w="full">
         <ButtonGroup
           currentOption={activeTab}
@@ -50,8 +49,7 @@ function PoolChartsContent() {
               style={{
                 position: 'absolute',
                 width: '100%',
-                height: '100%',
-              }}
+                height: '100%' }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
               <LbpPriceChart />
@@ -66,6 +64,6 @@ function PoolChartsContent() {
           )}
         </AnimatePresence>
       </Box>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

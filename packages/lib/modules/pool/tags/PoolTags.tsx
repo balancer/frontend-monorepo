@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, Image } from '@chakra-ui/react'
+import { Badge, HStack, Text, Image } from '@chakra-ui/react';
 import { PoolTag } from './getPoolTags'
 import { usePool } from '../PoolProvider'
 import { isValidNumber } from '@repo/lib/shared/utils/numbers'

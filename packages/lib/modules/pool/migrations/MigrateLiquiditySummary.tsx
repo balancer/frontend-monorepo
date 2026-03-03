@@ -1,7 +1,7 @@
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
-import { Card, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Card, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
 import { Pool } from '../pool.types'
 import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'
 import { useMigrateLiquidity } from './MigrateLiquidityProvider'
@@ -55,7 +55,7 @@ function AmountInfo({ title, pool, amounts, totalAmount }: AmountInfoProps) {
   const totalAmountFormatted = toCurrency(totalAmount)
 
   return (
-    <Card variant="modalSubSection">
+    <Card.Root variant="modalSubSection">
       {pool ? (
         <TokenRowGroup
           amounts={amounts}
@@ -67,8 +67,8 @@ function AmountInfo({ title, pool, amounts, totalAmount }: AmountInfoProps) {
       ) : (
         <Skeleton h="40px" w="full" />
       )}
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 type PoolCardProps = {
@@ -78,8 +78,8 @@ type PoolCardProps = {
 
 function PoolCard({ title, pool }: PoolCardProps) {
   return (
-    <Card variant="modalSubSection">
-      <VStack align="start" spacing="sm">
+    <Card.Root variant="modalSubSection">
+      <VStack align="start" gap="sm">
         <HStack height="28px" justify="space-between" w="full">
           <Text fontSize="sm" fontWeight="bold">
             {title}
@@ -107,14 +107,13 @@ function PoolCard({ title, pool }: PoolCardProps) {
               poolId={pool.id}
               textProps={{
                 fontSize: ['md', 'md', 'lg'],
-                lineHeight: '28px',
-              }}
+                lineHeight: '28px' }}
             />
           )}
         </HStack>
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 function PriceImpactCard() {
@@ -127,8 +126,8 @@ function PriceImpactCard() {
   if (!isComplete) return null
 
   return (
-    <Card variant="modalSubSection">
-      <VStack align="start" spacing="sm">
+    <Card.Root variant="modalSubSection">
+      <VStack align="start" gap="sm">
         <Text fontSize="sm" fontWeight="bold">
           Add liquidity
         </Text>
@@ -138,6 +137,6 @@ function PriceImpactCard() {
           totalUSDValue={totalUSDValue}
         />
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

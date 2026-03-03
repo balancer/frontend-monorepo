@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react'
-import { Card, CardProps, Box } from '@chakra-ui/react'
+import { Card, CardProps, Box } from '@chakra-ui/react';
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function VotingDeadlineContainer({
@@ -7,7 +7,7 @@ export function VotingDeadlineContainer({
   ...stackProps
 }: PropsWithChildren & CardProps) {
   return (
-    <Card
+    <Card.Root
       bg="transparent"
       p={{ base: 'ms', xl: '20px' }}
       position="relative"
@@ -40,6 +40,6 @@ export function VotingDeadlineContainer({
       <Box position="relative" zIndex={2}>
         {children}
       </Box>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

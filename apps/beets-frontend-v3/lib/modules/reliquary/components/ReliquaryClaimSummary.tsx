@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text } from '@chakra-ui/react'
+import { Card, VStack, Text } from '@chakra-ui/react';
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -23,8 +23,7 @@ export function ReliquaryClaimSummary({
   relicId,
   claimTxHash,
   transactionSteps,
-  isLoadingSteps,
-}: Props) {
+  isLoadingSteps }: Props) {
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const { chain, pendingRewardsByRelicId, beetsPrice, beetsAddress } = useReliquary()
@@ -40,8 +39,7 @@ export function ReliquaryClaimSummary({
       {
         tokenAddress: beetsAddress,
         humanAmount: pendingRewardsAmount as `${number}` | '',
-        symbol: 'BEETS',
-      },
+        symbol: 'BEETS' },
     ]
   }, [pendingRewardsAmount, pendingRewardsUsdValue, chain, beetsAddress])
 
@@ -59,7 +57,7 @@ export function ReliquaryClaimSummary({
           status="warning"
         />
       )}
-      <Card p="ms" variant="modalSubSection">
+      <Card.Root p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={claimTokens}
           chain={chain}
@@ -68,13 +66,13 @@ export function ReliquaryClaimSummary({
           tokens={[]}
           totalUSDValue={pendingRewardsUsdValue.toString()}
         />
-      </Card>
+      </Card.Root>
       {shouldShowReceipt ? (
         <>
           <GasCostSummaryCard chain={chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="success-message">
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="md" w="full">
+            <Card.Root variant="modalSubSection">
+              <VStack align="start" gap="md" w="full">
                 <Text color="font.highlight">
                   You've successfully claimed rewards from Relic #{relicId}!
                 </Text>
@@ -83,10 +81,10 @@ export function ReliquaryClaimSummary({
                   page to manage your Relic.
                 </Text>
               </VStack>
-            </Card>
+            </Card.Root>
           </CardPopAnim>
         </>
       ) : null}
     </AnimateHeightChange>
-  )
+  );
 }

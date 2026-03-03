@@ -2,10 +2,9 @@ import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/tra
 import {
   ManagedResult,
   TransactionLabels,
-  TransactionStep,
-} from '@repo/lib/modules/transactions/transaction-steps/lib'
+  TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react';
 import { capitalize } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
 import { BuildSwapQueryParams, useBuildSwapQuery } from './queries/useBuildSwapQuery'
@@ -38,14 +37,12 @@ export function useSwapStep({
   tokenInInfo,
   tokenOutInfo,
   isLbpSwap,
-  isLbpProjectTokenBuy,
-}: SwapStepParams): TransactionStep {
+  isLbpProjectTokenBuy }: SwapStepParams): TransactionStep {
   const { isConnected } = useUserAccount()
   const [isBuildQueryEnabled, setIsBuildQueryEnabled] = useState(false)
   const { refetchBalances } = useTokenBalances()
   const { buildTenderlyUrl } = useTenderly({
-    chainId: getChainId(swapState.selectedChain),
-  })
+    chainId: getChainId(swapState.selectedChain) })
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const buildSwapQuery = useBuildSwapQuery({
@@ -53,8 +50,7 @@ export function useSwapStep({
     simulationQuery,
     wethIsEth,
     swapState,
-    enabled: isBuildQueryEnabled && !!simulationQuery.data,
-  })
+    enabled: isBuildQueryEnabled && !!simulationQuery.data })
 
   const tokenInSymbol = tokenInInfo?.symbol || 'Unknown'
   const tokenOutSymbol = tokenOutInfo?.symbol || 'Unknown'
@@ -66,23 +62,20 @@ export function useSwapStep({
           title: 'Buy',
           confirming: 'Confirming buy...',
           confirmed: 'Buy confirmed!',
-          tooltip: `Buy ${tokenOutSymbol}`,
-        }
+          tooltip: `Buy ${tokenOutSymbol}` }
       : {
           init: 'Sell',
           title: 'Sell',
           confirming: 'Confirming sell...',
           confirmed: 'Sell confirmed!',
-          tooltip: `Sell ${tokenInSymbol}`,
-        }
+          tooltip: `Sell ${tokenInSymbol}` }
     : {
         init: capitalize(swapAction),
         title: capitalize(swapAction),
         confirming: 'Confirming swap...',
         confirmed: `${swapActionPastTense(swapAction)}!`,
         tooltip: `${capitalize(swapAction)} ${tokenInSymbol} for ${tokenOutSymbol}`,
-        description: `${capitalize(swapAction)} ${tokenInSymbol} for ${tokenOutSymbol}`,
-      }
+        description: `${capitalize(swapAction)} ${tokenInSymbol} for ${tokenOutSymbol}` }
 
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds by SwapTimeout
@@ -93,8 +86,7 @@ export function useSwapStep({
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in swap gas estimation', {
     buildCallQueryData: buildSwapQuery.data,
-    tenderlyUrl: buildTenderlyUrl(buildSwapQuery.data),
-  })
+    tenderlyUrl: buildTenderlyUrl(buildSwapQuery.data) })
 
   const isComplete = () => isTransactionSuccess(transaction)
 
@@ -105,8 +97,7 @@ export function useSwapStep({
       labels,
       details: {
         gasless: false,
-        type: 'Gas transaction',
-      },
+        type: 'Gas transaction' },
       transaction,
       isComplete,
       onActivated: () => setIsBuildQueryEnabled(true),
@@ -125,8 +116,7 @@ export function useSwapStep({
             />
           </VStack>
         )
-      },
-    }),
+      } }),
     [
       transaction,
       simulationQuery.data,

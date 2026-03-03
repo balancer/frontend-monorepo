@@ -1,4 +1,5 @@
-import { Box, BoxProps, CardProps, chakra, useColorModeValue } from '@chakra-ui/react'
+import { Box, BoxProps, CardProps, chakra } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { ReactNode, MouseEvent } from 'react'
 import { motion, useMotionTemplate, useMotionValue, isValidMotionProp } from 'framer-motion'
 
@@ -10,15 +11,13 @@ type NoisyCardProps = {
 }
 
 const MotionBox = chakra(motion.div, {
-  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
-})
+  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children' })
 
 export function NoisyCard({
   children,
   cardProps = {},
   contentProps = {},
-  shadowContainerProps = {},
-}: NoisyCardProps) {
+  shadowContainerProps = {} }: NoisyCardProps) {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
@@ -28,10 +27,8 @@ export function NoisyCard({
     mouseY.set(clientY - top)
   }
 
-  const gradientColor = useColorModeValue(
-    'rgba(255, 255, 255, 0.4)', // Light mode color
-    'rgba(255, 255, 255, 0.03)' // Dark mode color
-  )
+  const colorMode = useThemeColorMode()
+  const gradientColor = colorMode === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.4)'
 
   const gradient = useMotionTemplate`
     radial-gradient(
@@ -43,48 +40,45 @@ export function NoisyCard({
 
   return (
     <Box
-      as={motion.div}
       backgroundImage={`url('/images/background-noise.png')`}
       borderWidth={0}
-      onMouseMove={handleMouseMove}
       position="relative"
       rounded="sm"
       width="full"
       {...cardProps}
       role="group"
-    >
-      <MotionBox
-        _groupHover={{ opacity: 1 }}
-        borderRadius="xl"
-        h="full"
-        inset="-1px"
-        opacity="0"
-        pointerEvents="none"
-        position="absolute"
-        style={{
-          background: gradient,
-        }}
-        transition="opacity 300ms"
-        w="full"
-        zIndex="0"
-      />
-      <Box
-        content=""
-        height="full"
-        pointerEvents="none"
-        position="absolute"
-        shadow="innerXl"
-        width="full"
-        {...shadowContainerProps}
-      />
-      <Box
-        backgroundColor="background.level0WithOpacity"
-        height="full"
-        width="full"
-        {...contentProps}
-      >
-        {children}
-      </Box>
-    </Box>
-  )
+      asChild><motion.div onMouseMove={handleMouseMove}>
+        <MotionBox
+          _groupHover={{ opacity: 1 }}
+          borderRadius="xl"
+          h="full"
+          inset="-1px"
+          opacity="0"
+          pointerEvents="none"
+          position="absolute"
+          style={{
+            background: gradient }}
+          transition="opacity 300ms"
+          w="full"
+          zIndex="0"
+        />
+        <Box
+          content=""
+          height="full"
+          pointerEvents="none"
+          position="absolute"
+          shadow="innerXl"
+          width="full"
+          {...shadowContainerProps}
+        />
+        <Box
+          backgroundColor="background.level0WithOpacity"
+          height="full"
+          width="full"
+          {...contentProps}
+        >
+          {children}
+        </Box>
+      </motion.div></Box>
+  );
 }

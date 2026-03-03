@@ -1,13 +1,12 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text } from '@chakra-ui/react'
+import { Card, VStack, Text } from '@chakra-ui/react';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import {
   QuoteBptOut,
-  ReceiptBptOut,
-} from '@repo/lib/modules/pool/actions/add-liquidity/modal/BptOut'
+  ReceiptBptOut } from '@repo/lib/modules/pool/actions/add-liquidity/modal/BptOut'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -20,8 +19,7 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import {
   PROPORTIONAL_ADD_DESCRIPTION,
   SlippageOptions,
-  SlippageSelector,
-} from '@repo/lib/modules/pool/actions/SlippageSelector'
+  SlippageSelector } from '@repo/lib/modules/pool/actions/SlippageSelector'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
@@ -37,8 +35,7 @@ export function ReliquaryAddLiquiditySummary({
   sentTokens,
   receivedBptUnits,
   createNew,
-  relicId,
-}: Props) {
+  relicId }: Props) {
   const {
     totalUSDValue,
     simulationQuery,
@@ -49,8 +46,7 @@ export function ReliquaryAddLiquiditySummary({
     addLiquidityTxHash,
     addLiquidityTxSuccess,
     slippage,
-    wantsProportional,
-  } = useAddLiquidity()
+    wantsProportional } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -64,8 +60,7 @@ export function ReliquaryAddLiquiditySummary({
       ...amount,
       humanAmount: bn(amount?.humanAmount || 0)
         .times(1 - selectedSlippage)
-        .toString(),
-    })) as HumanTokenAmountWithSymbol[]
+        .toString() })) as HumanTokenAmountWithSymbol[]
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -104,7 +99,7 @@ export function ReliquaryAddLiquiditySummary({
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
-      <Card p="ms" variant="modalSubSection">
+      <Card.Root p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
@@ -123,8 +118,8 @@ export function ReliquaryAddLiquiditySummary({
           tokens={tokens}
           totalUSDValue={hasQuoteContext ? totalUSDValue : undefined}
         />
-      </Card>
-      <Card p="ms" variant="modalSubSection">
+      </Card.Root>
+      <Card.Root p="ms" variant="modalSubSection">
         {shouldShowReceipt ? (
           <ReceiptBptOut
             actualBptOut={
@@ -141,13 +136,13 @@ export function ReliquaryAddLiquiditySummary({
             label={createNew ? 'Creating Relic with' : `Adding liquidity to Relic #${relicId}`}
           />
         )}
-      </Card>
+      </Card.Root>
       {shouldShowReceipt ? (
         <>
           <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="success-message">
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="md" w="full">
+            <Card.Root variant="modalSubSection">
+              <VStack align="start" gap="md" w="full">
                 <Text color="font.highlight">
                   {createNew
                     ? "You've successfully created a new Relic and added liquidity to it!"
@@ -158,13 +153,13 @@ export function ReliquaryAddLiquiditySummary({
                   Relic.
                 </Text>
               </VStack>
-            </Card>
+            </Card.Root>
           </CardPopAnim>
         </>
       ) : hasQuoteContext ? (
         <CardPopAnim key="price-impact-details">
-          <Card p="ms" variant="modalSubSection">
-            <VStack align="start" spacing="sm">
+          <Card.Root p="ms" variant="modalSubSection">
+            <VStack align="start" gap="sm">
               <PoolActionsPriceImpactDetails
                 bptAmount={simulationQuery.data?.bptOut.amount}
                 isAddLiquidity
@@ -173,9 +168,9 @@ export function ReliquaryAddLiquiditySummary({
                 totalUSDValue={totalUSDValue}
               />
             </VStack>
-          </Card>
+          </Card.Root>
         </CardPopAnim>
       ) : null}
     </AnimateHeightChange>
-  )
+  );
 }

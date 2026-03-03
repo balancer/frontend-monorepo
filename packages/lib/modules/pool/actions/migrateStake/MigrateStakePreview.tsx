@@ -1,5 +1,5 @@
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
-import { Card, VStack } from '@chakra-ui/react'
+import { Card, VStack } from '@chakra-ui/react';
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useMigrateStake as useMigrateStake } from './MigrateStakeProvider'
@@ -13,8 +13,8 @@ export function MigrateStakePreview() {
   const { rewardAmounts, totalClaimableUsd } = useUnstake()
 
   return (
-    <VStack spacing="sm" w="full">
-      <Card variant="subSection">
+    <VStack gap="sm" w="full">
+      <Card.Root variant="subSection">
         <TokenRow
           address={pool.address as Address}
           chain={pool.chain}
@@ -23,20 +23,18 @@ export function MigrateStakePreview() {
           pool={pool}
           value={migratedAmount}
         />
-      </Card>
-
+      </Card.Root>
       {isClaimable && (
-        <Card variant="subSection">
+        <Card.Root variant="subSection">
           <TokenRowGroup
             amounts={rewardAmounts}
             chain={pool.chain}
             label={restakeTxHash ? 'Claimed rewards' : 'Claimable rewards'}
             totalUSDValue={totalClaimableUsd}
           />
-        </Card>
+        </Card.Root>
       )}
-
       <StakeAprTooltip pool={pool} totalUsdValue={migratedAmount} />
     </VStack>
-  )
+  );
 }

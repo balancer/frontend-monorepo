@@ -22,8 +22,7 @@ export async function savePoolMock({
   chain,
   apiUrl,
   fileName,
-  isFrozen = false,
-}: Params): Promise<string> {
+  isFrozen = false }: Params): Promise<string> {
   const pool = (await fetchPoolMock({ poolId, chain, apiUrl })) as Pool
   const poolJson = JSON.stringify(pool, null, 2)
 
@@ -55,7 +54,7 @@ function formatFile(filePath: string) {
 }
 
 export function createPoolVarName(poolName: string) {
-  return lowerFirst(poolName.replace(/[^a-zA-Z0-9]/g, '_'))
+  return lowerFirst(poolName.replace(/[^a-zA-Z0-9]/g, '_'));
 }
 
 /**

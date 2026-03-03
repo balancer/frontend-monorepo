@@ -1,13 +1,4 @@
-import {
-  BoxProps,
-  Box,
-  HStack,
-  Text,
-  Portal,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from '@chakra-ui/react'
+import { BoxProps, Box, HStack, Text, Portal, Popover, HoverCard } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 
 interface Props extends BoxProps {
@@ -57,8 +48,8 @@ export function TooltipItem({
           {title}
         </Text>
         {tooltipText ? (
-          <Popover trigger="hover">
-            <PopoverTrigger>
+          <HoverCard.Root>
+            <HoverCard.Trigger asChild>
               <Text
                 _after={{
                   borderBottom: '1px dotted',
@@ -68,8 +59,7 @@ export function TooltipItem({
                   left: 0,
                   opacity: 0.5,
                   position: 'absolute',
-                  width: '100%',
-                }}
+                  width: '100%' }}
                 color={valueFontColor ?? fontColor}
                 fontSize="sm"
                 fontWeight={fontWeight}
@@ -78,15 +68,17 @@ export function TooltipItem({
               >
                 {displayValueFormatter(value)}
               </Text>
-            </PopoverTrigger>
+            </HoverCard.Trigger>
             <Portal>
-              <PopoverContent maxW="300px" p="sm" w="auto">
-                <Text fontSize="sm" variant="secondary">
-                  {tooltipText}
-                </Text>
-              </PopoverContent>
+              <HoverCard.Positioner>
+                <HoverCard.Content maxW="300px" p="sm" w="auto">
+                  <Text fontSize="sm" variant="secondary">
+                    {tooltipText}
+                  </Text>
+                </HoverCard.Content>
+              </HoverCard.Positioner>
             </Portal>
-          </Popover>
+          </HoverCard.Root>
         ) : (
           <Text
             color={valueFontColor ?? fontColor}
@@ -100,5 +92,5 @@ export function TooltipItem({
       </HStack>
       {children}
     </Box>
-  )
+  );
 }

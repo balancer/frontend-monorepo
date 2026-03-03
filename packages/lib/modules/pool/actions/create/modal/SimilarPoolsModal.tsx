@@ -13,14 +13,13 @@ import {
   useDisclosure,
   Card,
   Text,
-  Box,
-} from '@chakra-ui/react'
+  Box } from '@chakra-ui/react'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useEffect } from 'react'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { Link } from '@chakra-ui/react'
+import { Link, Card } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import NextLink from 'next/link'
@@ -32,8 +31,7 @@ export function SimilarPoolsModal() {
   const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
   const [network, hasAcceptedSimilarPoolsWarning] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'hasAcceptedSimilarPoolsWarning'],
-  })
+    name: ['network', 'hasAcceptedSimilarPoolsWarning'] })
   const { similarPools } = useCheckForSimilarPools()
 
   useEffect(() => {
@@ -47,7 +45,7 @@ export function SimilarPoolsModal() {
       <SuccessOverlay />
       <ModalContent bg="background.level1">
         <ModalBody padding="lg">
-          <VStack spacing="md">
+          <VStack gap="md">
             <BalAlert
               content="You can still create this pool, but you'll fragment liquidity making your pool less profitable (on top of additional set up gas fees)."
               status="warning"
@@ -55,16 +53,15 @@ export function SimilarPoolsModal() {
             />
 
             {similarPools?.slice(0, 3).map(pool => (
-              <Card key={pool.address} position="relative" variant="modalSubSection">
-                <VStack spacing="md">
+              <Card.Root key={pool.address} position="relative" variant="modalSubSection">
+                <VStack gap="md">
                   <Link
                     as={NextLink}
                     href={getPoolPath({
                       chain: pool.chain,
                       id: pool.address,
                       type: pool.type,
-                      protocolVersion: pool.protocolVersion,
-                    })}
+                      protocolVersion: pool.protocolVersion })}
                     position="absolute"
                     rel="noopener noreferrer"
                     right="sm"
@@ -84,7 +81,7 @@ export function SimilarPoolsModal() {
 
                     {pool.poolTokens.map(token => (
                       <Box flexShrink={0} key={token.address}>
-                        <Card p="sm" rounded="full" variant="subSection" width="fit-content">
+                        <Card.Root p="sm" rounded="full" variant="subSection" width="fit-content">
                           <HStack>
                             <TokenIcon
                               address={token.address}
@@ -99,11 +96,11 @@ export function SimilarPoolsModal() {
                               <Text fontSize="sm">{fNum('weight', token.weight)}</Text>
                             )}
                           </HStack>
-                        </Card>
+                        </Card.Root>
                       </Box>
                     ))}
                   </HStack>
-                  <HStack spacing="sm" w="full">
+                  <HStack gap="sm" w="full">
                     <Text color="font.secondary" fontSize="sm">
                       Type: {pool.type.toLowerCase()}
                     </Text>
@@ -121,7 +118,7 @@ export function SimilarPoolsModal() {
                     </Text>
                   </HStack>
                 </VStack>
-              </Card>
+              </Card.Root>
             ))}
 
             <HStack display="grid" gap="md" gridTemplateColumns="1fr 1fr" mt="sm" w="full">
@@ -151,5 +148,5 @@ export function SimilarPoolsModal() {
         </ModalBody>
       </ModalContent>
     </Modal>
-  )
+  );
 }

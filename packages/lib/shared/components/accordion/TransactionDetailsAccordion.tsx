@@ -1,14 +1,5 @@
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  HStack,
-  VStack,
-} from '@chakra-ui/react'
+import { Accordion, Box, HStack, VStack } from '@chakra-ui/react';
 import { useCurrency } from '../../hooks/useCurrency'
 import { bn, fNum } from '../../utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
@@ -24,39 +15,39 @@ export function TransactionDetailsAccordion() {
     : '-'
 
   return (
-    <Accordion allowToggle variant="button" w="full">
-      <AccordionItem>
-        <AccordionButton>
+    <Accordion.Root collapsible variant="button" w="full">
+      <Accordion.Root value='item-0'>
+        <Accordion.Root>
           <Box as="span" color="font.primary" flex="1" textAlign="left">
             Transaction Details
           </Box>
-          <AccordionIcon textColor="font.highlight" />
-        </AccordionButton>
-        <AccordionPanel pb="md">
-          <VStack textColor="grayText" w="full">
-            <HStack justifyContent="space-between" w="full">
-              <div>Total added</div>
-              <div> {toCurrency(totalUSDValue, { abbreviated: false })}</div>
-            </HStack>
-            {priceImpact && (
+          <Accordion.Root textColor="font.highlight" />
+        </Accordion.ItemTrigger>
+        <Accordion.Root pb="md"><Accordion.Root>
+            <VStack textColor="grayText" w="full">
               <HStack justifyContent="space-between" w="full">
-                <div>Price impact</div>
-                <div>{toCurrency(priceImpactUsdValue)}</div>
+                <div>Total added</div>
+                <div> {toCurrency(totalUSDValue, { abbreviated: false })}</div>
               </HStack>
-            )}
-            {/* <HStack w="full" justifyContent="space-between">
-              <div>Final slippage</div>
-              <div>TODO</div>
-            </HStack> */}
-            {!isCowAmmPool(pool.type) && (
-              <HStack justifyContent="space-between" w="full">
-                <div>Share of pool</div>
-                <div>{fNum('sharePercent', calcUserShareOfPool(pool))}</div>
-              </HStack>
-            )}
-          </VStack>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  )
+              {priceImpact && (
+                <HStack justifyContent="space-between" w="full">
+                  <div>Price impact</div>
+                  <div>{toCurrency(priceImpactUsdValue)}</div>
+                </HStack>
+              )}
+              {/* <HStack w="full" justifyContent="space-between">
+                <div>Final slippage</div>
+                <div>TODO</div>
+              </HStack> */}
+              {!isCowAmmPool(pool.type) && (
+                <HStack justifyContent="space-between" w="full">
+                  <div>Share of pool</div>
+                  <div>{fNum('sharePercent', calcUserShareOfPool(pool))}</div>
+                </HStack>
+              )}
+            </VStack>
+          </Accordion.ItemBody></Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
 }

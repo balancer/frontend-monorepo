@@ -1,10 +1,10 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useRef } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { VStack, Button, HStack, Text } from '@chakra-ui/react'
+import { VStack, Button, HStack, Text, Dialog, Portal } from '@chakra-ui/react';
 import { Address } from 'viem'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
@@ -42,8 +42,7 @@ export function PoolCreationModal({
     usePoolCreationForm()
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolType'],
-  })
+    name: ['network', 'poolType'] })
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
@@ -54,8 +53,7 @@ export function PoolCreationModal({
     poolAddress,
     setPoolAddress,
     createPoolInput,
-    initPoolInput,
-  })
+    initPoolInput })
 
   const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress, poolType })
 
@@ -69,8 +67,7 @@ export function PoolCreationModal({
     id: poolAddress as Address,
     chain: network,
     type: getGqlPoolType(poolType),
-    protocolVersion,
-  })
+    protocolVersion })
 
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
@@ -83,110 +80,114 @@ export function PoolCreationModal({
     shouldToggleBlockSize,
     setUsingBigBlocks,
     isSetUsingBigBlocksPending,
-    setUsingBigBlocksError,
-  } = useHyperEvm({
+    setUsingBigBlocksError } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvmTx: network === GqlChain.Hyperevm,
-  })
+    isHyperEvmTx: network === GqlChain.Hyperevm })
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isPoolInitialized}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!initPoolTxHash} />
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent>
-        {isDesktop && (
-          <VStack>
-            <DesktopStepTracker
+        <SuccessOverlay startAnimation={!!initPoolTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            {isDesktop && (
+              <VStack>
+                <DesktopStepTracker
+                  chain={network}
+                  isTxBatch={shouldBatchTransactions}
+                  transactionSteps={transactionSteps}
+                />
+                {!isPoolInitialized && (
+                  <RestartPoolCreationModal
+                    handleRestart={handleReset}
+                    isAbsolutePosition
+                    modalTitle="Abandon pool set up"
+                    network={network}
+                    poolAddress={poolAddress}
+                    poolType={getGqlPoolType(poolType)}
+                    triggerTitle="Abandon pool set up"
+                  />
+                )}
+              </VStack>
+            )}
+            <TransactionModalHeader
               chain={network}
-              isTxBatch={shouldBatchTransactions}
-              transactionSteps={transactionSteps}
+              label={`Create pool on ${getChainName(network)}`}
+              txHash={initPoolTxHash}
             />
-            {!isPoolInitialized && (
-              <RestartPoolCreationModal
-                handleRestart={handleReset}
-                isAbsolutePosition
-                modalTitle="Abandon pool set up"
-                network={network}
-                poolAddress={poolAddress}
-                poolType={getGqlPoolType(poolType)}
-                triggerTitle="Abandon pool set up"
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <PoolSummary transactionSteps={transactionSteps} />
+
+              {isPoolInitialized && (
+                <VStack width="full">
+                  <Button
+                    disabled={false}
+                    loading={false}
+                    marginTop="4"
+                    onClick={() => window.open(poolPath, '_blank')}
+                    size="lg"
+                    variant="primary"
+                    w="full"
+                    width="full"
+                  >
+                    <HStack justifyContent="center" gap="sm" width="100%">
+                      <Text color="font.primaryGradient" fontWeight="bold">
+                        View pool page
+                      </Text>
+                    </HStack>
+                  </Button>
+                  <Button
+                    disabled={false}
+                    loading={false}
+                    marginTop="2"
+                    onClick={handleReset}
+                    size="lg"
+                    variant="secondary"
+                    w="full"
+                    width="full"
+                  >
+                    <HStack justifyContent="center" gap="sm" width="100%">
+                      <Text color="font.primaryGradient" fontWeight="bold">
+                        Create another pool
+                      </Text>
+                    </HStack>
+                  </Button>
+                </VStack>
+              )}
+            </Dialog.Body>
+            {shouldToggleBlockSize ? (
+              <ToggleHyperBlockSize
+                isSetUsingBigBlocksPending={isSetUsingBigBlocksPending}
+                setUsingBigBlocks={setUsingBigBlocks}
+                setUsingBigBlocksError={setUsingBigBlocksError}
+                shouldUseBigBlocks={shouldUseBigBlocks}
+              />
+            ) : (
+              <ActionModalFooter
+                currentStep={transactionSteps.currentStep}
+                isSuccess={isPoolInitialized}
+                returnAction={redirectToPoolPage}
+                returnLabel="View pool page"
+                urlTxHash={urlTxHash}
               />
             )}
-          </VStack>
-        )}
-        <TransactionModalHeader
-          chain={network}
-          label={`Create pool on ${getChainName(network)}`}
-          txHash={initPoolTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <PoolSummary transactionSteps={transactionSteps} />
+          </Dialog.Content>
+        </Dialog.Positioner>
 
-          {isPoolInitialized && (
-            <VStack width="full">
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                marginTop="4"
-                onClick={() => window.open(poolPath, '_blank')}
-                size="lg"
-                variant="primary"
-                w="full"
-                width="full"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    View pool page
-                  </Text>
-                </HStack>
-              </Button>
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                marginTop="2"
-                onClick={handleReset}
-                size="lg"
-                variant="secondary"
-                w="full"
-                width="full"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    Create another pool
-                  </Text>
-                </HStack>
-              </Button>
-            </VStack>
-          )}
-        </ModalBody>
-
-        {shouldToggleBlockSize ? (
-          <ToggleHyperBlockSize
-            isSetUsingBigBlocksPending={isSetUsingBigBlocksPending}
-            setUsingBigBlocks={setUsingBigBlocks}
-            setUsingBigBlocksError={setUsingBigBlocksError}
-            shouldUseBigBlocks={shouldUseBigBlocks}
-          />
-        ) : (
-          <ActionModalFooter
-            currentStep={transactionSteps.currentStep}
-            isSuccess={isPoolInitialized}
-            returnAction={redirectToPoolPage}
-            returnLabel="View pool page"
-            urlTxHash={urlTxHash}
-          />
-        )}
-      </ModalContent>
-    </Modal>
-  )
+      </Portal>
+    </Dialog.Root>
+  );
 }

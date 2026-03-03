@@ -1,4 +1,4 @@
-import { BoxProps, ButtonProps } from '@chakra-ui/react'
+import { BoxProps, ButtonProps } from '@chakra-ui/react';
 import { HTMLMotionProps } from 'framer-motion'
 
 /**
@@ -6,7 +6,7 @@ import { HTMLMotionProps } from 'framer-motion'
  */
 export interface NextLinkProps {
   href?: string
-  as?: React.ElementType
+  asChild?: boolean
   target?: string
   rel?: string
 }

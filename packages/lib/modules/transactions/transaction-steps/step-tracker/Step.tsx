@@ -1,12 +1,11 @@
 import {
   Box,
-  CircularProgress,
+  ProgressCircle,
   CircularProgressLabel,
   HStack,
   Text,
   VStack,
-  Link,
-} from '@chakra-ui/react'
+  Link } from '@chakra-ui/react';
 import { StepProps, getStepSettings } from './getStepSettings'
 import { ArrowUpRight, Check } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
@@ -31,7 +30,7 @@ export function Step(props: StepProps) {
       <Box mt="4px">
         <StepIndicator transaction={transaction} {...props} />
       </Box>
-      <VStack alignItems="start" spacing="0">
+      <VStack alignItems="start" gap="0">
         <Text fontWeight="bold" lineHeight="1.05" variant={variant}>
           {shouldDisplayAsTxBatch ? 'Safe transaction bundle' : title}
         </Text>
@@ -53,7 +52,7 @@ export function Step(props: StepProps) {
         )}
       </VStack>
     </HStack>
-  )
+  );
 }
 
 export function StepIndicator({
@@ -67,43 +66,34 @@ export function StepIndicator({
 
   if (status === 'complete') {
     return (
-      <CircularProgress
-        color="font.highlight"
-        size="7"
-        thickness="5"
-        trackColor="border.base"
-        value={100}
-      >
-        <CircularProgressLabel color="font.highlight" fontSize="md" pl={1.5}>
-          <Check size={15} strokeWidth={3.5} />
-        </CircularProgressLabel>
-      </CircularProgress>
-    )
+      <ProgressCircle.Root value='100' size="7" trackColor="border.base">
+        <ProgressCircle.Circle
+          css={{
+            "--thickness": "5"
+          }}>
+          <ProgressCircle.Track />
+          <ProgressCircle.Range stroke="font.highlight" />
+        </ProgressCircle.Circle>
+      </ProgressCircle.Root>
+    );
   }
 
   return (
-    <CircularProgress
+    <ProgressCircle.Root
+      value={String(null)}
       bg={isActive ? 'background.special' : 'transparent'}
-      color={color}
-      isIndeterminate={isActiveLoading}
       rounded="full"
       size="7"
-      thickness={isActive ? 0 : 5}
-      trackColor="border.base"
-      value={100}
-    >
-      <CircularProgressLabel color={color}>
-        <Text
-          color={isActive ? 'background.level1' : 'font.secondary'}
-          fontSize="sm"
-          fontWeight="bold"
-          variant="special"
-        >
-          {stepNumber}
-        </Text>
-      </CircularProgressLabel>
-    </CircularProgress>
-  )
+      trackColor="border.base">
+      <ProgressCircle.Circle
+        css={{
+          "--thickness": isActive ? 0 : 5
+        }}>
+        <ProgressCircle.Track />
+        <ProgressCircle.Range stroke={color} />
+      </ProgressCircle.Circle>
+    </ProgressCircle.Root>
+  );
 }
 
 function NestedInfo({
@@ -111,8 +101,7 @@ function NestedInfo({
   details,
   transaction,
   variant,
-  step,
-}: {
+  step }: {
   color: string
   details?: StepDetails
   transaction?: ManagedResult
@@ -126,8 +115,7 @@ function NestedInfo({
   const textProps = {
     fontSize: 'sm',
     lineHeight: '1.2',
-    variant,
-  }
+    variant }
 
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
@@ -154,13 +142,12 @@ function NestedInfo({
               transaction?.result?.data?.transactionHash,
               getGqlChain(transaction?.result?.data?.chainId)
             )}
-            isExternal
-          >
+            target='_blank'
+            rel='noopener noreferrer'>
             <ArrowUpRight size={14} />
           </Link>
         )}
       </HStack>
-
       {details?.batchApprovalTokens &&
         details.batchApprovalTokens.length > 1 &&
         details.batchApprovalTokens.map((token, index) => (
@@ -172,7 +159,7 @@ function NestedInfo({
           </HStack>
         ))}
     </Box>
-  )
+  );
 }
 
 /*
@@ -185,8 +172,7 @@ function NestedInfo({
 function TransactionBatchSteps({
   color,
   mainStepTitle,
-  nestedSteps,
-}: {
+  nestedSteps }: {
   mainStepTitle?: string
   color: string
   nestedSteps?: TransactionStep[]
@@ -221,10 +207,14 @@ function TransactionBatchSteps({
 
 function SubStepIndicator({ color, label }: { color: string; label: string }) {
   return (
-    <CircularProgress color={color} size="6" thickness="2" trackColor="border.base" value={100}>
-      <CircularProgressLabel color={color} fontSize="xs" fontWeight="bold">
-        {label}
-      </CircularProgressLabel>
-    </CircularProgress>
-  )
+    <ProgressCircle.Root value='100' size="6" trackColor="border.base">
+      <ProgressCircle.Circle
+        css={{
+          "--thickness": "2"
+        }}>
+        <ProgressCircle.Track />
+        <ProgressCircle.Range stroke={color} />
+      </ProgressCircle.Circle>
+    </ProgressCircle.Root>
+  );
 }

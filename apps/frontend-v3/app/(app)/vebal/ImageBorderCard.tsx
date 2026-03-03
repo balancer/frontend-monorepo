@@ -1,9 +1,10 @@
-import { Box, BoxProps, useColorMode } from '@chakra-ui/react'
+import { Box, BoxProps } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 
 export function ImageBorderCard({ children, ...props }: BoxProps) {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
   // Use image-set for AVIF (preferred) and JPEG fallback
   const borderImage =
     colorMode === 'dark'
@@ -17,8 +18,8 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
       p={4}
       position="relative"
       shadow="2xl"
-      sx={{
-        '::before': {
+      css={{
+        '& ::before': {
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           background: borderImage,
@@ -27,8 +28,7 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
           inset: 0,
           pointerEvents: 'none',
           position: 'absolute',
-          zIndex: 0,
-        },
+          zIndex: 0 }
       }}
       {...props}
     >
@@ -69,5 +69,5 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
         </Noise>
       </Box>
     </Box>
-  )
+  );
 }

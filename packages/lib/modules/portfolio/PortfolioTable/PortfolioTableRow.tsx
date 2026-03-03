@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
+import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react';
 import Link from 'next/link'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo } from 'react'
@@ -13,8 +13,7 @@ import {
   ExpandedPoolType,
   StakingFilterKey,
   StakingFilterKeyType,
-  STAKING_LABEL_MAP,
-} from './useExpandedPools'
+  STAKING_LABEL_MAP } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -66,8 +65,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.base',
-        }}
+          bg: 'background.base' }}
         key={keyValue}
         px={{ base: 'ms', sm: '0' }}
         rounded="md"

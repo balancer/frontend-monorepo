@@ -1,4 +1,4 @@
-import { VStack, HStack, Text, CardBody, Divider, Icon, Box } from '@chakra-ui/react'
+import { VStack, HStack, Text, Icon, Box, Card, Separator } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -27,8 +27,8 @@ export function PreviewPoolTokens() {
   return (
     <PreviewPoolCreationCard stepTitle="Tokens">
       <CardHeaderRow columnNames={['Tokens', 'Price', 'Market cap']} />
-      <CardBody>
-        <VStack spacing="0">
+      <Card.Body>
+        <VStack gap="0">
           <AnimatePresence initial={false}>
             {poolTokens.map((token, idx) => {
               if (!token.address || !token.data) {
@@ -92,9 +92,9 @@ export function PreviewPoolTokens() {
           </AnimatePresence>
           {hasRateProviders && <RateProviderRows poolTokens={poolTokens} />}
         </VStack>
-      </CardBody>
+      </Card.Body>
     </PreviewPoolCreationCard>
-  )
+  );
 }
 
 interface MarketCapValueProps {
@@ -123,7 +123,7 @@ function MarketCapValue({ address, chain, tokenUsdValue }: MarketCapValueProps) 
 function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTokens'] }) {
   return (
     <>
-      <Divider />
+      <Separator />
       <Box pt="md" />
       <CardDataRow
         data={['Rate providers', 'Reviewed', 'Address'].map((name, idx) => (
@@ -138,7 +138,6 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
           </Text>
         ))}
       />
-
       {poolTokens
         .filter(token => token.rateProvider !== zeroAddress)
         .map(token => {
@@ -174,7 +173,7 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
           )
         })}
     </>
-  )
+  );
 }
 
 function RateProviderReviewedCell({ hasBeenReviewed }: { hasBeenReviewed: boolean | undefined }) {
@@ -183,14 +182,14 @@ function RateProviderReviewedCell({ hasBeenReviewed }: { hasBeenReviewed: boolea
       {hasBeenReviewed ? (
         <>
           <Text>Yes</Text>
-          <Icon as={CheckCircle} color="green.500" size={12} />
+          <Icon color="green.500" size={12} asChild><CheckCircle /></Icon>
         </>
       ) : (
         <>
           <Text>No</Text>
-          <Icon as={XCircle} color="red.500" size={12} />
+          <Icon color="red.500" size={12} asChild><XCircle /></Icon>
         </>
       )}
     </HStack>
-  )
+  );
 }

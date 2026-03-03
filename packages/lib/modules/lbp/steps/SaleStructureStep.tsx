@@ -8,10 +8,9 @@ import {
   InputRightElement,
   IconButton,
   Heading,
-  Divider,
   Box,
   Button,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { SaleStructureForm, UserActions } from '../lbp.types'
@@ -22,8 +21,7 @@ import {
   SubmitHandler,
   UseFormReset,
   UseFormSetValue,
-  UseFormTrigger,
-} from 'react-hook-form'
+  UseFormTrigger } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
@@ -41,8 +39,7 @@ import {
   differenceInHours,
   format,
   parseISO,
-  isAfter,
-} from 'date-fns'
+  isAfter } from 'date-fns'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { LbpFormAction } from '../LbpFormAction'
 import { LbpTokenAmountInputs } from './sale-structure/LbpTokenAmountInputs'
@@ -58,8 +55,7 @@ export function SaleStructureStep() {
     saleStructureForm: { handleSubmit, control, setValue, trigger },
     goToNextStep,
     resetLbpCreation,
-    poolAddress,
-  } = useLbpForm()
+    poolAddress } = useLbpForm()
 
   const [
     selectedChain,
@@ -83,8 +79,7 @@ export function SaleStructureStep() {
       'customStartWeight',
       'weightAdjustmentType',
       'fee',
-    ],
-  })
+    ] })
   const { isValid, errors } = useFormState({ control })
 
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {
@@ -105,14 +100,14 @@ export function SaleStructureStep() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-      <VStack align="start" spacing="lg" w="full">
+      <VStack align="start" gap="lg" w="full">
         {!isPoolCreated && (
           <>
             <Heading color="font.maxContrast" size="md">
               Launch token details
             </Heading>
 
-            <VStack align="start" spacing="lg" w="full">
+            <VStack align="start" gap="lg" w="full">
               <NetworkSelectInput chains={supportedChains} control={control} />
               <LaunchTokenAddressInput
                 chainId={selectedChain}
@@ -122,13 +117,13 @@ export function SaleStructureStep() {
                 resetForm={resetLbpCreation}
                 setFormValue={setValue}
                 triggerValidation={trigger}
-                value={launchTokenAddress}
+                value={String(launchTokenAddress)}
               />
             </VStack>
 
             {launchTokenIsValid && (
               <>
-                <Divider />
+                <Separator />
 
                 <Heading color="font.maxContrast" size="md">
                   Sale period
@@ -152,7 +147,7 @@ export function SaleStructureStep() {
                   </VStack>
                 </VStack>
 
-                <Divider />
+                <Separator />
 
                 <Heading color="font.maxContrast" size="md">
                   LBP mechanism
@@ -174,23 +169,22 @@ export function SaleStructureStep() {
                   feeValue={fee}
                   setFormValue={setValue}
                 />
-                <Divider />
+                <Separator />
               </>
             )}
           </>
         )}
         <LbpTokenAmountInputs />
-        <Divider />
+        <Separator />
         <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
       </VStack>
     </form>
-  )
+  );
 }
 
 function NetworkSelectInput({
   control,
-  chains,
-}: {
+  chains }: {
   control: Control<SaleStructureForm>
   chains: GqlChain[]
 }) {
@@ -222,8 +216,7 @@ function LaunchTokenAddressInput({
   metadata,
   chainId,
   triggerValidation,
-  resetForm,
-}: {
+  resetForm }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   setFormValue: UseFormSetValue<SaleStructureForm>
@@ -271,8 +264,7 @@ function LaunchTokenAddressInput({
               }
 
               return true
-            },
-          }}
+            } }}
         />
 
         <InputRightElement w="max-content">
@@ -294,25 +286,19 @@ function LaunchTokenAddressInput({
               Paste
             </Button>
           ) : (
-            <IconButton
-              aria-label="edit"
-              icon={<Edit size="16px" />}
-              onClick={() => resetForm()}
-              variant="link"
-            />
+            <IconButton aria-label="edit" onClick={() => resetForm()} variant="link"><Edit size="16px" /></IconButton>
           )}
         </InputRightElement>
       </InputGroup>
     </VStack>
-  )
+  );
 }
 
 function SaleStartInput({
   control,
   errors,
   value,
-  triggerValidation,
-}: {
+  triggerValidation }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   value: string
@@ -350,8 +336,7 @@ function SaleEndInput({
   control,
   errors,
   value,
-  saleStart,
-}: {
+  saleStart }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   value: string
@@ -396,8 +381,7 @@ function DateTimeInput({
   control,
   errors,
   min,
-  validate,
-}: {
+  validate }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
@@ -425,8 +409,7 @@ function DateTimeInput({
         )}
         rules={{
           required: 'Start date and time is required',
-          validate,
-        }}
+          validate }}
       />
     </VStack>
   )
@@ -434,8 +417,7 @@ function DateTimeInput({
 
 function CollateralTokenAddressInput({
   selectedChain,
-  control,
-}: {
+  control }: {
   selectedChain: GqlChain
   control: Control<SaleStructureForm>
 }) {
@@ -473,24 +455,23 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
         control={control}
         name="userActions"
         render={({ field }) => (
-          <RadioGroup onChange={field.onChange} value={field.value}>
+          <RadioGroup.Root onValueChange={field.onChange} value={String(field.value)}>
             <Stack direction="row" gap="md">
-              <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
-              <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
+              <RadioGroup.Item value={String(UserActions.BUY_AND_SELL)}><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Buy & sell</RadioGroup.ItemText></RadioGroup.Item>
+              <RadioGroup.Item value={String(UserActions.BUY_ONLY)}><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Buy only</RadioGroup.ItemText></RadioGroup.Item>
             </Stack>
-          </RadioGroup>
+          </RadioGroup.Root>
         )}
       />
     </VStack>
-  )
+  );
 }
 
 function FeeSelection({
   control,
   errors,
   feeValue,
-  setFormValue,
-}: {
+  setFormValue }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   feeValue: number
@@ -507,19 +488,17 @@ function FeeSelection({
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
-      <RadioGroup
-        onChange={(value: string) => {
+      <RadioGroup.Root
+        onValueChange={(value: string) => {
           setValue(value)
           if (value === 'minimum') setFormValue('fee', 1.0)
         }}
-        value={value}
-      >
+        value={String(value)}>
         <Stack direction="row" gap="md">
-          <Radio value="minimum">1.00%</Radio>
-          <Radio value="custom">Custom</Radio>
+          <RadioGroup.Item value="minimum"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>1.00%</RadioGroup.ItemText></RadioGroup.Item>
+          <RadioGroup.Item value="custom"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Custom</RadioGroup.ItemText></RadioGroup.Item>
         </Stack>
-      </RadioGroup>
-
+      </RadioGroup.Root>
       {value === 'custom' && (
         <Box w="full">
           <FadeInOnView scaleUp={false}>
@@ -540,8 +519,7 @@ function FeeSelection({
                 )}
                 rules={{
                   required: 'Swap fee is required',
-                  validate: isInRange,
-                }}
+                  validate: isInRange }}
               />
               <InputRightElement>
                 <Percent size="20" />
@@ -551,5 +529,5 @@ function FeeSelection({
         </Box>
       )}
     </VStack>
-  )
+  );
 }

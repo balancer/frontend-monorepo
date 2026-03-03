@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react'
+import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react';
 
 export function TextareaWithError({ error, ...props }: { error?: string } & TextareaProps) {
   return (

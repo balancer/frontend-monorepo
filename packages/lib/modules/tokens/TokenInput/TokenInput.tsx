@@ -1,5 +1,13 @@
 'use client'
 
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
 import {
   Box,
   BoxProps,
@@ -11,10 +19,7 @@ import {
   InputRightAddon,
   Skeleton,
   Text,
-  VStack,
-  forwardRef,
-  useTheme,
-} from '@chakra-ui/react'
+  VStack } from '@chakra-ui/react';
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
@@ -26,7 +31,7 @@ import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { ChevronDown } from 'react-feather'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { PriceImpactLevel } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { useEffect } from 'react'
+import { useEffect, forwardRef } from 'react';
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
@@ -50,8 +55,7 @@ export function TokenInputSelector({
   token,
   weight,
   onToggleTokenClicked,
-  showWeight = true,
-}: TokenInputSelectorProps) {
+  showWeight = true }: TokenInputSelectorProps) {
   const DEFAULT_TOKEN_LABEL = 'Select token'
 
   const tokenConfig: TokenSelectorConfigProps | undefined = token
@@ -72,7 +76,7 @@ export function TokenInputSelector({
       width="full"
     >
       {tokenConfig && (
-        <HStack spacing="sm">
+        <HStack gap="sm">
           {tokenConfig.showIcon && (
             <Box>
               <TokenIcon alt={tokenConfig.label} logoURI={token?.logoURI} size={22} />
@@ -98,7 +102,7 @@ export function TokenInputSelector({
     </Button>
   ) : (
     <Skeleton height="40px" width="110px" />
-  )
+  );
 }
 
 type PriceImpactProps = {
@@ -130,8 +134,7 @@ function TokenInputFooter({
   customUserBalance,
   isDisabled,
   customUsdPrice,
-  priceImpactProps,
-}: TokenInputFooterProps) {
+  priceImpactProps }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
@@ -274,8 +277,7 @@ export const TokenInput = forwardRef(
     const { handleOnChange, updateValue, validateInput } = useTokenInput({
       token,
       onChange,
-      disableBalanceValidation,
-    })
+      disableBalanceValidation })
 
     const hasError = hasValidationError(token)
 
@@ -300,13 +302,11 @@ export const TokenInput = forwardRef(
                 opacity: 0.05,
                 borderRadius: 'md',
                 pointerEvents: 'none',
-                zIndex: 0,
-              }
+                zIndex: 0 }
             : undefined
         }
         _focusWithin={{
-          boxShadow: hasError ? 'input.innerError' : 'input.innerFocus',
-        }}
+          boxShadow: hasError ? 'input.innerError' : 'input.innerFocus' }}
         bg="background.level0"
         border="white"
         borderRadius="md"
@@ -317,19 +317,17 @@ export const TokenInput = forwardRef(
         w="full"
         {...boxProps}
       >
-        <VStack align="start" spacing="md">
+        <VStack align="start" gap="md">
           <InputGroup background="transparent" border="transparent">
             <Box position="relative" w="full">
               <Input
                 _focus={{
                   outline: 'none',
                   border: '0px solid transparent',
-                  boxShadow: 'none',
-                }}
+                  boxShadow: 'none' }}
                 _hover={{
                   border: '0px solid transparent',
-                  boxShadow: 'none',
-                }}
+                  boxShadow: 'none' }}
                 autoComplete="off"
                 autoCorrect="off"
                 bg="transparent"
@@ -337,9 +335,9 @@ export const TokenInput = forwardRef(
                 boxShadow="none"
                 fontSize="3xl"
                 fontWeight="medium"
-                isDisabled={!token}
+                disabled={!token}
                 min={0}
-                onChange={handleOnChange}
+                onValueChange={handleOnChange}
                 onKeyDown={blockInvalidNumberInput}
                 onWheel={e => {
                   // Avoid changing the input value when scrolling
@@ -353,7 +351,7 @@ export const TokenInput = forwardRef(
                 step="any"
                 title={value || ''}
                 type="number"
-                value={value}
+                value={String(value)}
                 {...inputProps}
               />
               {token && (
@@ -382,16 +380,16 @@ export const TokenInput = forwardRef(
             customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
             hasPriceImpact={hasPriceImpact}
-            isDisabled={inputProps.isDisabled}
+            disabled={inputProps.isDisabled}
             isLoadingPriceImpact={isLoadingPriceImpact}
             priceImpactProps={priceImpactProps}
             priceMessage={priceMessage}
             token={token}
             updateValue={updateValue}
-            value={value}
+            value={String(value)}
           />
         </VStack>
       </Box>
-    )
+    );
   }
 )

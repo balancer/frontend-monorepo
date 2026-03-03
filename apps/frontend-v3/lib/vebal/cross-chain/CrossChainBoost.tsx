@@ -1,11 +1,7 @@
-'use client'
-
+'use client';
 import {
   Button,
   Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
   Flex,
   GridItem,
   HStack,
@@ -13,8 +9,9 @@ import {
   Skeleton,
   Stack,
   Text,
-  Tooltip,
-} from '@chakra-ui/react'
+  Icon } from '@chakra-ui/react';
+
+import { Tooltip } from '@/components/ui/tooltip';
 
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import Image from 'next/image'
@@ -23,9 +20,9 @@ import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { CrossChainSyncModal } from '@bal/lib/vebal/cross-chain/CrossChainSyncModal'
 import { useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { formatUnits } from 'viem'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
+import { LuInfo } from 'react-icons/lu';
 
 const tooltipLabel = `Sidechains & Layer 2 networks like Polygon and Arbitrum don't know 
                     your veBAL balance on Ethereum Mainnet, 
@@ -52,8 +49,8 @@ export function CrossChainBoost() {
           Cross chain veBAL boosts
         </Text>
 
-        <Tooltip label={tooltipLabel}>
-          <InfoOutlineIcon color="font.light" fontSize="sm" />
+        <Tooltip content={tooltipLabel}>
+          <Icon color="font.light" fontSize="sm" asChild><LuInfo /></Icon>
         </Tooltip>
       </HStack>
       {isConnected ? (
@@ -61,7 +58,7 @@ export function CrossChainBoost() {
           {!hasExistingLock || (hasExistingLock && isExpired) ? (
             <Text>Once you have some veBAL, sync your balance here to other networks.</Text>
           ) : (
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing="md">
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap="md">
               {showingUnsyncedNetworks.length > 0 && (
                 <CrossChainSyncModal
                   isOpen={syncIsOpen}
@@ -73,9 +70,9 @@ export function CrossChainBoost() {
                 {isLoading ? (
                   <Skeleton height="126px" />
                 ) : (
-                  <Card h="100%">
-                    <CardHeader>Unsynced networks</CardHeader>
-                    <CardBody>
+                  <Card.Root h="100%">
+                    <Card.Header>Unsynced networks</Card.Header>
+                    <Card.Body>
                       {showingUnsyncedNetworks.length ? (
                         <Flex>
                           {showingUnsyncedNetworks.map(chain => (
@@ -94,22 +91,22 @@ export function CrossChainBoost() {
                       ) : (
                         <Text>All networks are synced</Text>
                       )}
-                    </CardBody>
-                    <CardFooter>
+                    </Card.Body>
+                    <Card.Footer>
                       <Button onClick={() => setSyncIsOpen(true)} size="lg" variant="primary">
                         Sync
                       </Button>
-                    </CardFooter>
-                  </Card>
+                    </Card.Footer>
+                  </Card.Root>
                 )}
               </GridItem>
               <GridItem>
                 {isLoading ? (
                   <Skeleton height="126px" />
                 ) : (
-                  <Card h="100%">
-                    <CardHeader>Synced networks</CardHeader>
-                    <CardBody>
+                  <Card.Root h="100%">
+                    <Card.Header>Synced networks</Card.Header>
+                    <Card.Body>
                       {networksBySyncState.synced.length ? (
                         <Flex>
                           {networksBySyncState.synced.map(chain => (
@@ -128,8 +125,8 @@ export function CrossChainBoost() {
                           Sync veBAL across networks for a boosted APR on your staked positions.
                         </Text>
                       )}
-                    </CardBody>
-                  </Card>
+                    </Card.Body>
+                  </Card.Root>
                 )}
               </GridItem>
             </SimpleGrid>
@@ -139,5 +136,5 @@ export function CrossChainBoost() {
         <Text>Once you have some veBAL, sync your balance here to other networks.</Text>
       )}
     </Stack>
-  )
+  );
 }

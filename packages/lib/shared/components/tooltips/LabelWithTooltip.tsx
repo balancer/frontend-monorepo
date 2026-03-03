@@ -1,6 +1,6 @@
 'use client'
 
-import { PlacementWithLogical, Text, TextProps } from '@chakra-ui/react'
+import { PlacementWithLogical, Text, TextProps } from '@chakra-ui/react';
 import { TooltipWithTouch } from './TooltipWithTouch'
 
 interface LabelWithTooltipProps extends TextProps {
@@ -20,8 +20,7 @@ export function LabelWithTooltip({ label, tooltip, placement, ...rest }: LabelWi
           bottom: '-1px',
           width: '100%',
           borderBottom: '1.5px dotted',
-          borderColor: 'border.base',
-        }}
+          borderColor: 'border.base' }}
         cursor="default"
         fontSize="sm"
         fontWeight="semibold"

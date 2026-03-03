@@ -1,4 +1,4 @@
-import { Card, VStack, Text, SimpleGrid, Box, HStack, Divider, Button } from '@chakra-ui/react'
+import { Card, VStack, Text, SimpleGrid, Box, HStack, Button, Separator } from '@chakra-ui/react';
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
@@ -12,8 +12,7 @@ export function PreviewGyroEclpConfig() {
     usePoolCreationForm()
   const [alpha, beta, peakPrice] = useWatch({
     control: eclpConfigForm.control,
-    name: ['alpha', 'beta', 'peakPrice'],
-  })
+    name: ['alpha', 'beta', 'peakPrice'] })
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const { options } = useEclpChart()
@@ -22,18 +21,15 @@ export function PreviewGyroEclpConfig() {
     {
       color: 'purple.400',
       label: 'Lower bound',
-      value: alpha ? fNumCustom(alpha, NUM_FORMAT) : '-',
-    },
+      value: alpha ? fNumCustom(alpha, NUM_FORMAT) : '-' },
     {
       color: 'green.400',
       label: 'Peak price',
-      value: peakPrice ? fNumCustom(peakPrice, NUM_FORMAT) : '-',
-    },
+      value: peakPrice ? fNumCustom(peakPrice, NUM_FORMAT) : '-' },
     {
       color: 'orange.400',
       label: 'Upper bound',
-      value: beta ? fNumCustom(beta, NUM_FORMAT) : '-',
-    },
+      value: beta ? fNumCustom(beta, NUM_FORMAT) : '-' },
   ]
   const tokenSymbols = poolTokens.map(token => token.data?.symbol).filter(Boolean)
   const tokenSymbolsString = tokenSymbols.join(' / ')
@@ -41,13 +37,13 @@ export function PreviewGyroEclpConfig() {
   if (isBeforeStep('Details')) return null
 
   return (
-    <Card>
-      <VStack spacing="md" w="full">
-        <SimpleGrid columns={3} spacing={3} w="full">
+    <Card.Root>
+      <VStack gap="md" w="full">
+        <SimpleGrid columns={3} gap={3} w="full">
           {priceDisplayCards.map(({ color, label, value }) => (
-            <Card key={label} variant="subSection">
-              <VStack align="start" spacing="sm">
-                <HStack spacing="sm">
+            <Card.Root key={label} variant="subSection">
+              <VStack align="start" gap="sm">
+                <HStack gap="sm">
                   <Box bg={color} borderRadius="full" h="8px" w="8px" />
 
                   <Text color="font.secondary" fontSize="sm">
@@ -57,17 +53,17 @@ export function PreviewGyroEclpConfig() {
 
                 <Text fontWeight="bold">{value}</Text>
               </VStack>
-            </Card>
+            </Card.Root>
           ))}
         </SimpleGrid>
 
-        <Divider />
+        <Separator />
 
         <Box h={333} w="full">
           <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
         </Box>
 
-        <Divider />
+        <Separator />
 
         <HStack justify="space-between" w="full">
           <Button
@@ -87,6 +83,6 @@ export function PreviewGyroEclpConfig() {
           </Button>
         </HStack>
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

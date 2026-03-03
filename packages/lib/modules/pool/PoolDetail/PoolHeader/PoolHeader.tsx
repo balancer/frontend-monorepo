@@ -1,4 +1,5 @@
-import { Stack, Button, VStack, useDisclosure, HStack, Tooltip, Text } from '@chakra-ui/react'
+import { Stack, Button, VStack, useDisclosure, HStack, Text } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 import { usePool } from '../../PoolProvider'
@@ -8,8 +9,7 @@ import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
 import {
   PartnerRedirectModal,
-  RedirectPartner,
-} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+  RedirectPartner } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
 import { PoolAdvancedOptions } from './PoolAdvancedOptions'
@@ -48,37 +48,39 @@ export function PoolHeader() {
   }
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <PoolBreadcrumbs />
       <Stack
         align={{ base: 'start', lg: 'end' }}
         direction={{ base: 'column', lg: 'row' }}
         justify="space-between"
         mt="xs"
-        spacing="md"
+        gap="md"
         w="full"
       >
-        <VStack align="start" spacing="md">
+        <VStack align="start" gap="md">
           <PoolMetaBadges />
           {poolMetadata?.description && (
-            <Text fontSize="sm" maxW="xl" mb="xxs" sx={{ textWrap: 'pretty' }} variant="secondary">
+            <Text fontSize="sm" maxW="xl" mb="xxs" css={{
+              textWrap: 'pretty'
+            }} variant="secondary">
               {poolMetadata.description}
             </Text>
           )}
         </VStack>
-        <Stack direction={{ base: 'column', md: 'row' }} spacing="ms">
+        <Stack direction={{ base: 'column', md: 'row' }} gap="ms">
           <PoolTags />
           <HStack alignItems="end" gap="sm">
             <Tooltip
-              isDisabled={!blockingReasons}
-              label={
+              disabled={!blockingReasons}
+              content={
                 <Text color="primaryTextColor" whiteSpace="pre-line">
                   {blockingReasons}
                 </Text>
               }
             >
               <Button
-                isDisabled={isAddLiquidityBlocked}
+                disabled={isAddLiquidityBlocked}
                 onClick={handleClick}
                 size="md"
                 variant="primary"
@@ -90,7 +92,7 @@ export function PoolHeader() {
             <PoolAdvancedOptions />
           </HStack>
           <PartnerRedirectModal
-            isOpen={partnerRedirectDisclosure.isOpen}
+            isOpen={partnerRedirectDisclosure.open}
             onClose={partnerRedirectDisclosure.onClose}
             partner={redirectPartner}
             redirectUrl={redirectPartnerUrl}
@@ -98,5 +100,5 @@ export function PoolHeader() {
         </Stack>
       </Stack>
     </VStack>
-  )
+  );
 }

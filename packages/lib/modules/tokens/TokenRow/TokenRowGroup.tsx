@@ -1,4 +1,4 @@
-import { HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '../token.types'
@@ -20,8 +20,7 @@ export function TokenRowGroup({
   tokens = [],
   totalUSDValue,
   isLoading = false,
-  pool,
-}: {
+  pool }: {
   label: string
   rightElement?: ReactNode
   amounts: HumanTokenAmountWithSymbol[]
@@ -54,8 +53,7 @@ export function TokenRowGroup({
           humanAmount: bn(amountMap[key].humanAmount)
             .plus(bn(amount.humanAmount))
             .toString() as HumanAmount,
-          symbol: symbol || amount.symbol,
-        }
+          symbol: symbol || amount.symbol }
       } else {
         amountMap[key] = { ...amount }
       }
@@ -67,7 +65,7 @@ export function TokenRowGroup({
   const hasMultipleAmounts = aggregatedAmounts.length > 1
 
   return (
-    <VStack align="start" spacing="sm">
+    <VStack align="start" gap="sm">
       <HStack height="28px" justify="space-between" w="full">
         <Text fontSize="sm" fontWeight="bold">
           {label}
@@ -102,5 +100,5 @@ export function TokenRowGroup({
         )
       })}
     </VStack>
-  )
+  );
 }

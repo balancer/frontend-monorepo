@@ -4,7 +4,6 @@ import {
   BoxProps,
   Card,
   CardProps,
-  Divider,
   Grid,
   GridItem,
   GridItemProps,
@@ -13,7 +12,7 @@ import {
   Skeleton,
   Text,
   VStack,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 
 export type PoolTransactionsCardHeaderCell = {
   label: string
@@ -45,7 +44,7 @@ const DEFAULT_HEADER_CELLS: PoolTransactionsCardHeaderCell[] = [
 ]
 
 const DEFAULT_NO_TRANSACTIONS_STATE = (
-  <VStack alignItems="flex-start" spacing="1">
+  <VStack alignItems="flex-start" gap="1">
     <Text variant="secondary">No recent transactions</Text>
     <Text variant="secondary">
       Note: Recent transactions may take a few minutes to display here.
@@ -66,13 +65,12 @@ export function PoolTransactionsCard({
   cardRef,
   listContainerProps,
   headerGridProps,
-  contentAlignItems = 'flex-start',
-}: PoolTransactionsCardProps) {
+  contentAlignItems = 'flex-start' }: PoolTransactionsCardProps) {
   const cells = headerCells ?? DEFAULT_HEADER_CELLS
   const noTransactionsState = renderNoTransactions ?? DEFAULT_NO_TRANSACTIONS_STATE
 
   return (
-    <Card ref={cardRef} {...cardProps}>
+    <Card.Root ref={cardRef} {...cardProps}>
       {isLoading ? (
         <Skeleton h="full" w="full" />
       ) : (
@@ -93,7 +91,7 @@ export function PoolTransactionsCard({
           >
             {title}
           </Heading>
-          <Divider />
+          <Separator />
           <Box display={{ base: 'none', md: 'block' }} w="full">
             <Grid
               gap="4"
@@ -109,7 +107,7 @@ export function PoolTransactionsCard({
                 </GridItem>
               ))}
             </Grid>
-            <Divider mt="md" />
+            <Separator mt="md" />
           </Box>
           <Box overflowY="auto" w="full" {...listContainerProps}>
             {hasNoTransactions ? noTransactionsState : children}
@@ -117,6 +115,6 @@ export function PoolTransactionsCard({
           {footer}
         </Box>
       )}
-    </Card>
-  )
+    </Card.Root>
+  );
 }

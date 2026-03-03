@@ -1,10 +1,10 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react';
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { ExternalLink } from 'react-feather'
-import { Text } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react';
 
 interface ToggleHyperBlockSizeProps {
   isSetUsingBigBlocksPending: boolean
@@ -17,15 +17,14 @@ export function ToggleHyperBlockSize({
   isSetUsingBigBlocksPending,
   setUsingBigBlocks,
   setUsingBigBlocksError,
-  shouldUseBigBlocks,
-}: ToggleHyperBlockSizeProps) {
+  shouldUseBigBlocks }: ToggleHyperBlockSizeProps) {
   return (
     <VStack
       marginTop="2"
       paddingBottom="6"
       paddingLeft="6"
       paddingRight="6"
-      spacing="3"
+      gap="3"
       width="full"
     >
       {setUsingBigBlocksError ? (
@@ -51,10 +50,9 @@ export function ToggleHyperBlockSize({
           status="info"
         />
       )}
-
       <Button
-        isDisabled={isSetUsingBigBlocksPending}
-        isLoading={isSetUsingBigBlocksPending}
+        disabled={isSetUsingBigBlocksPending}
+        loading={isSetUsingBigBlocksPending}
         onClick={() => setUsingBigBlocks(shouldUseBigBlocks)}
         size="lg"
         variant="primary"
@@ -65,5 +63,5 @@ export function ToggleHyperBlockSize({
         </LabelWithIcon>
       </Button>
     </VStack>
-  )
+  );
 }

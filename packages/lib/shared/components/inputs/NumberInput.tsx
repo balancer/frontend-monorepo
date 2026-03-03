@@ -6,8 +6,7 @@ import {
   NumberInputField,
   HStack,
   InputGroup,
-  InputLeftElement,
-} from '@chakra-ui/react'
+  InputLeftElement } from '@chakra-ui/react';
 import { Controller, Control } from 'react-hook-form'
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
@@ -45,12 +44,11 @@ export function NumberInput({
   suggestedValue,
   onClickSuggestion,
   tooltip,
-  isFiatPrice,
-}: NumberInputProps) {
+  isFiatPrice }: NumberInputProps) {
   return (
-    <VStack align="start" spacing="sm" w="full">
+    <VStack align="start" gap="sm" w="full">
       <HStack justify="space-between" w="full">
-        <HStack spacing="xs">
+        <HStack gap="xs">
           <Text fontWeight="bold">{label}</Text>
           {tooltip && (
             <BalPopover text={tooltip}>
@@ -80,7 +78,6 @@ export function NumberInput({
           </Text>
         )}
       </HStack>
-
       <Box position="relative" w={width}>
         <Controller
           control={control}
@@ -98,14 +95,14 @@ export function NumberInput({
                   )}
                   <ChakraNumberInput
                     {...field}
-                    isDisabled={isDisabled}
-                    isInvalid={isInvalid || !!fieldState.error}
-                    keepWithinRange={true}
-                    onChange={field.onChange}
-                    value={field.value}
+                    disabled={isDisabled}
+                    invalid={isInvalid || !!fieldState.error}
+                    allowOverflow={false}
+                    onValueChange={field.onChange}
+                    value={String(field.value)}
                     w="full"
                   >
-                    <NumberInputField
+                    <NumberInput.Input
                       pl={isFiatPrice ? '8' : undefined}
                       placeholder={placeholder}
                     />
@@ -123,16 +120,14 @@ export function NumberInput({
                     </Text>
                   )}
                 </InputGroup>
-
                 {errorMessage && (
                   <Text color="font.error" fontSize="sm" textAlign="start" w="full">
                     {errorMessage}
                   </Text>
                 )}
-
                 {suggestedValue && (
                   <HStack justify="space-between" mt="xs" w="full">
-                    <HStack spacing="xs">
+                    <HStack gap="xs">
                       <Text color="font.secondary" fontSize="sm">
                         Suggested:
                       </Text>
@@ -152,11 +147,11 @@ export function NumberInput({
                   </HStack>
                 )}
               </>
-            )
+            );
           }}
           rules={{ validate }}
         />
       </Box>
     </VStack>
-  )
+  );
 }

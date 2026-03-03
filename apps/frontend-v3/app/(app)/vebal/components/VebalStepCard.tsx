@@ -1,4 +1,4 @@
-import { Box, Heading, Stack, Text } from '@chakra-ui/react'
+import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { ParallaxImage } from '@repo/lib/shared/components/marketing/ParallaxImage'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
@@ -18,8 +18,7 @@ export function VebalStepCard({
   altText,
   heading,
   step,
-  description,
-}: VebalStepCardProps) {
+  description }: VebalStepCardProps) {
   return (
     <ImageBorderCard display="flex" flexDirection="column" height="100%">
       <Stack alignItems="center" flex="1" gap="sm" textAlign="center">
@@ -54,10 +53,12 @@ export function VebalStepCard({
         >
           {step} {heading}
         </Heading>
-        <Text color="font.secondary" lineHeight="1.4" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>
+        <Text color="font.secondary" lineHeight="1.4" pb="ms" px="md" css={{
+          textWrap: 'pretty'
+        }}>
           {description}
         </Text>
       </Stack>
     </ImageBorderCard>
-  )
+  );
 }

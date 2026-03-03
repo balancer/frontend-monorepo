@@ -1,4 +1,4 @@
-import { Box, BoxProps, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Text } from '@chakra-ui/react';
 import { Picture } from './Picture'
 import { ReactNode } from 'react'
 
@@ -19,8 +19,7 @@ function Stat({
   imageBackgroundSize = 'cover',
   imageBackgroundPosition = 'left',
   imageTransform = 'scale(1)',
-  popover = false,
-}: StatProps) {
+  popover = false }: StatProps) {
   return (
     <Box
       flex="1"
@@ -34,8 +33,7 @@ function Stat({
       <Box height="100%" position="absolute" width="100%">
         <Box
           _groupHover={{
-            transform: 'scale(1.01)',
-          }}
+            transform: 'scale(1.01)' }}
           backgroundPosition={imageBackgroundPosition}
           backgroundSize={imageBackgroundSize}
           height="100%"
@@ -79,9 +77,7 @@ function Stat({
                   borderBottom: '1px dotted',
                   opacity: 0.5,
                   width: '100%',
-                  pointerEvents: 'none',
-                },
-              }
+                  pointerEvents: 'none' } }
             : {})}
         >
           {label}

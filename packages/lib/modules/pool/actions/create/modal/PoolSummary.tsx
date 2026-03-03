@@ -1,16 +1,4 @@
-import {
-  Card,
-  Text,
-  HStack,
-  VStack,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Box,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Card, Text, HStack, VStack, Accordion, Box, useDisclosure } from '@chakra-ui/react';
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -31,8 +19,7 @@ export function PoolSummary({ transactionSteps }: { transactionSteps: Transactio
   const { poolCreationForm, poolAddress } = usePoolCreationForm()
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolType'],
-  })
+    name: ['network', 'poolType'] })
 
   const showTokenAmountSummary = !isReClammPool(poolType) || poolAddress
 
@@ -51,19 +38,18 @@ function PoolTitleCard() {
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, symbol, network] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'symbol', 'network'],
-  })
+    name: ['poolTokens', 'symbol', 'network'] })
 
   return (
-    <Card variant="modalSubSection">
-      <VStack align="start" spacing="md">
+    <Card.Root variant="modalSubSection">
+      <VStack align="start" gap="md">
         <Text color="font.secondary">{symbol}</Text>
         <HStack flexWrap="wrap" gap="sm">
           <NetworkIcon bg="background.level4" chain={network} shadow="lg" size={8} />
 
           {poolTokens.map((token, idx) => (
             <Box flexShrink={0} key={idx}>
-              <Card
+              <Card.Root
                 bg="background.level4"
                 key={idx}
                 paddingY="sm"
@@ -79,21 +65,20 @@ function PoolTitleCard() {
                   />
                   <Text>{token.data?.symbol}</Text>
                 </HStack>
-              </Card>
+              </Card.Root>
             </Box>
           ))}
         </HStack>
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 function PoolTokenAmountsCard() {
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'network'],
-  })
+    name: ['poolTokens', 'network'] })
   const { usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -108,14 +93,14 @@ function PoolTokenAmountsCard() {
     .filter(token => token !== null)
 
   return (
-    <Card variant="modalSubSection">
-      <VStack align="start" spacing="md">
+    <Card.Root variant="modalSubSection">
+      <VStack align="start" gap="md">
         <Text>You’re seeding the pool with</Text>
         {poolTokenAmounts.map(({ address, symbol, amount, usdValue, name }) => (
           <HStack justify="space-between" key={address} w="full">
-            <HStack align="center" spacing="sm">
+            <HStack align="center" gap="sm">
               <TokenIcon address={address} alt={address || ''} chain={network} size={40} />
-              <VStack align="start" spacing="xxs">
+              <VStack align="start" gap="xxs">
                 <Text fontWeight="bold">{symbol}</Text>
                 <Text color="font.secondary" fontSize="sm">
                   {name}
@@ -131,8 +116,8 @@ function PoolTokenAmountsCard() {
           </HStack>
         ))}
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 function PoolDetailsCard() {
@@ -146,16 +131,16 @@ function PoolDetailsCard() {
   const showSwapFee = !isCowPool(poolType) && !isOpen
 
   return (
-    <Accordion allowToggle variant="button" w="full">
-      <AccordionItem
+    <Accordion.Root collapsible variant="button" w="full">
+      <Accordion.Root
         bg="background.level3"
         border="1px solid"
         borderColor="transparent"
         borderRadius="md"
         shadow="md"
         w="full"
-      >
-        <AccordionButton onClick={onToggle} pl="sm" pr="sm" py={3}>
+        value='item-0'>
+        <Accordion.Root onClick={onToggle} pl="sm" pr="sm" py={3}>
           <Box as="span" flex="1" textAlign="left">
             <HStack justify="space-between" w="full">
               {showSwapFee && (
@@ -164,15 +149,15 @@ function PoolDetailsCard() {
               <Text color="font.secondary">Details</Text>
             </HStack>
           </Box>
-          <AccordionIcon />
-        </AccordionButton>
+          <Accordion.Root />
+        </Accordion.ItemTrigger>
 
-        <AccordionPanel p="ms">
-          <VStack align="start" spacing="sm" w="full">
-            <PoolDetailsContent />
-          </VStack>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  )
+        <Accordion.Root p="ms"><Accordion.Root>
+            <VStack align="start" gap="sm" w="full">
+              <PoolDetailsContent />
+            </VStack>
+          </Accordion.ItemBody></Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
 }

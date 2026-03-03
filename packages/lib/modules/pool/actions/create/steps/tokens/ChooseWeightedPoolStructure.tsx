@@ -1,6 +1,6 @@
 import { type Control, Controller, useWatch } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
-import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react'
+import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react';
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationForm } from '../../types'
 import { isCowPool } from '../../helpers'
@@ -9,8 +9,7 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'poolType'],
-  })
+    name: ['poolTokens', 'poolType'] })
 
   const weightedPoolStructures = WEIGHTED_POOL_STRUCTURES.filter(structure => {
     return isCowPool(poolType) ? structure !== WeightedPoolStructure.Custom : true
@@ -37,7 +36,7 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
   }
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" gap="md" w="full">
       <Heading color="font.maxContrast" size="md">
         Weighted pool structure
       </Heading>
@@ -45,16 +44,15 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
         control={control}
         name="weightedPoolStructure"
         render={({ field }) => (
-          <RadioGroup
-            onChange={value => {
+          <RadioGroup.Root
+            onValueChange={value => {
               updatePoolTokenWeights(value as WeightedPoolStructure)
               field.onChange(value)
             }}
-            value={field.value}
-          >
-            <Stack spacing={3}>
+            value={String(field.value)}>
+            <Stack gap={3}>
               {weightedPoolStructures.map(structure => (
-                <Radio key={structure} size="lg" value={structure}>
+                <Radio key={structure} size="lg" value={String(structure)}>
                   <Text>
                     {structure !== WeightedPoolStructure.Custom && '2-token: '}
                     {structure === WeightedPoolStructure.Custom ? 'Custom' : structure}
@@ -62,12 +60,11 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
                 </Radio>
               ))}
             </Stack>
-          </RadioGroup>
+          </RadioGroup.Root>
         )}
         rules={{
-          required: 'Please select a pool type',
-        }}
+          required: 'Please select a pool type' }}
       />
     </VStack>
-  )
+  );
 }

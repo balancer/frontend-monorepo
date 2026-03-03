@@ -1,46 +1,37 @@
-'use client'
-
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Tooltip,
-  useDisclosure,
-} from '@chakra-ui/react'
+'use client';
+import { Box, Button, Card, useDisclosure, Icon } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { useRef } from 'react'
 import { useMigrateStake } from './MigrateStakeProvider'
 import { MigrateStakePreview } from './MigrateStakePreview'
 import { MigrateStakeModal } from './MigrateStakeModal'
-import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { migrateStakeTooltipLabel } from '../stake.helpers'
+import { LuInfo } from 'react-icons/lu';
 
 export function MigrateStakeForm() {
   const nextBtn = useRef(null)
-  const { onClose, onOpen, isOpen } = useDisclosure()
+  const { onClose, onOpen, open } = useDisclosure()
 
   const { isDisabled, disabledReason, isLoading } = useMigrateStake()
 
   return (
     <Box h="full" maxW="lg" mx="auto" w="full">
-      <Card>
-        <CardHeader isTruncated>
+      <Card.Root>
+        <Card.Header isTruncated>
           Migrate to new staking gauge{' '}
-          <Tooltip label={migrateStakeTooltipLabel}>
-            <InfoOutlineIcon color="grayText" fontSize="sm" />
+          <Tooltip content={migrateStakeTooltipLabel}>
+            <Icon color="grayText" fontSize="sm" asChild><LuInfo /></Icon>
           </Tooltip>
-        </CardHeader>
+        </Card.Header>
 
-        <CardBody>
+        <Card.Body>
           <MigrateStakePreview />
-        </CardBody>
-        <CardFooter>
-          <Tooltip label={isDisabled ? disabledReason : ''}>
+        </Card.Body>
+        <Card.Footer>
+          <Tooltip content={isDisabled ? disabledReason : ''}>
             <Button
-              isDisabled={isDisabled}
-              isLoading={isLoading}
+              disabled={isDisabled}
+              loading={isLoading}
               onClick={() => !isDisabled && onOpen()}
               ref={nextBtn}
               size="lg"
@@ -50,8 +41,8 @@ export function MigrateStakeForm() {
               Next
             </Button>
           </Tooltip>
-        </CardFooter>
-      </Card>
+        </Card.Footer>
+      </Card.Root>
       <MigrateStakeModal
         finalFocusRef={nextBtn}
         isOpen={isOpen}
@@ -59,5 +50,5 @@ export function MigrateStakeForm() {
         onOpen={onOpen}
       />
     </Box>
-  )
+  );
 }

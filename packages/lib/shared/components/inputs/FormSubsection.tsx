@@ -1,4 +1,4 @@
-import { VStack, StackProps } from '@chakra-ui/react'
+import { VStack, StackProps } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 
 interface FormSubsectionProps extends StackProps {
@@ -17,9 +17,9 @@ export function FormSubsection({ children, marginLeft = '2', ...props }: FormSub
       mt="3"
       pl="5"
       position="relative"
-      spacing="md"
-      sx={{
-        '&::before': {
+      gap="md"
+      css={{
+        '& &::before': {
           content: '""',
           position: 'absolute',
           left: 0,
@@ -27,13 +27,12 @@ export function FormSubsection({ children, marginLeft = '2', ...props }: FormSub
           bottom: 0,
           width: '4px',
           backgroundColor: 'border.base',
-          opacity: 0.5,
-        },
+          opacity: 0.5 }
       }}
       w={{ base: 'calc(100% - var(--chakra-space-5))', xl: 'full' }}
       {...props}
     >
       {children}
     </VStack>
-  )
+  );
 }

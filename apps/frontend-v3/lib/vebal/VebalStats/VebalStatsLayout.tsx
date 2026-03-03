@@ -1,6 +1,6 @@
 'use client'
 
-import { Skeleton, Stack } from '@chakra-ui/react'
+import { Skeleton, Stack } from '@chakra-ui/react';
 import { VebalStats } from '@bal/lib/vebal/VebalStats/VebalStats'
 import { VebalLocksChart } from '@bal/lib/vebal/vebal-chart/VebalLocksChart'
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
@@ -14,7 +14,7 @@ export function VebalStatsLayout() {
   const lockSnapshots = useMemo(() => snapshots || [], [snapshots])
 
   return (
-    <Stack direction={{ base: 'column', md: 'row' }} justifyContent="stretch" spacing="md" w="full">
+    <Stack direction={{ base: 'column', md: 'row' }} justifyContent="stretch" gap="md" w="full">
       <VebalStats w={{ base: 'full', md: 'md' }} />
       {isLoading || lockInfo.isLoading ? (
         <Skeleton h={{ base: 'md', md: 'auto' }} w="full" />
@@ -27,5 +27,5 @@ export function VebalStatsLayout() {
         />
       )}
     </Stack>
-  )
+  );
 }

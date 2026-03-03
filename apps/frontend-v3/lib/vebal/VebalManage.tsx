@@ -1,4 +1,4 @@
-import { Flex, Box, Center, Heading, Stack } from '@chakra-ui/react'
+import { Flex, Box, Center, Heading, Stack } from '@chakra-ui/react';
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { VeBalLockButtons } from './VeBalLockButtons'
 import { VeBalPotentialBar } from './VeBalPotentialBar'
@@ -13,8 +13,8 @@ export function VebalManage() {
 
   if (!isConnected) {
     return (
-      <Stack spacing="2xl">
-        <Stack spacing="lg">
+      <Stack gap="2xl">
+        <Stack gap="lg">
           <VebalBreadcrumbs />
           <VeBalSectionHeader
             before={
@@ -31,12 +31,12 @@ export function VebalManage() {
         </Stack>
         <VeBalManagePromos />
       </Stack>
-    )
+    );
   }
 
   return (
-    <Stack spacing="2xl">
-      <Stack spacing="lg">
+    <Stack gap="2xl">
+      <Stack gap="lg">
         <VebalBreadcrumbs />
         <Flex alignItems="end" justifyContent="space-between" w="full">
           <Heading as="h2" pb="0.5" size="lg" variant="special">
@@ -49,5 +49,5 @@ export function VebalManage() {
       <VeBalPotentialBar />
       <VeBalManagePromos />
     </Stack>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 import { VebalLockForm } from '@bal/lib/vebal/lock/form/VebalLockForm'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { Box, Center } from '@chakra-ui/react'
+import { Box, Center } from '@chakra-ui/react';
 
 export function VebalExtend() {
   const { isConnected } = useUserAccount()

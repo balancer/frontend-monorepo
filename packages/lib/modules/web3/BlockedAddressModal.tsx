@@ -1,20 +1,11 @@
 'use client'
 
-import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-  Text,
-} from '@chakra-ui/react'
+import { useDisclosure, Text, Dialog, Portal } from '@chakra-ui/react';
 import { useEffect } from 'react'
 import { useUserAccount } from './UserAccountProvider'
 
 export function BlockedAddressModal() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const { isBlocked } = useUserAccount()
 
   useEffect(() => {
@@ -22,25 +13,38 @@ export function BlockedAddressModal() {
   }, [isBlocked])
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Address blocked</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Text color="grayText" mb="md">
-            Your address is blocked from transacting on this site.
-          </Text>
-          <Text color="grayText" mb="md">
-            Your wallet address cannot use this site because it has been flagged as high risk by our
-            compliance partner, Hypernative.
-          </Text>
-          <Text color="grayText" mb="md">
-            This website is open source and permissionless. Anyone can fork and run their own front
-            end.
-          </Text>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  )
+    <Dialog.Root
+      placement='center'
+      open={isOpen}
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
+
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>Address blocked</Dialog.Header>
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <Text color="grayText" mb="md">
+                Your address is blocked from transacting on this site.
+              </Text>
+              <Text color="grayText" mb="md">
+                Your wallet address cannot use this site because it has been flagged as high risk by our
+                compliance partner, Hypernative.
+              </Text>
+              <Text color="grayText" mb="md">
+                This website is open source and permissionless. Anyone can fork and run their own front
+                end.
+              </Text>
+            </Dialog.Body>
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

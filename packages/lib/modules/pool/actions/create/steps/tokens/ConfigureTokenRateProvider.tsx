@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link, Box } from '@chakra-ui/react'
+import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link, Box } from '@chakra-ui/react';
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
@@ -24,13 +24,11 @@ interface ConfigureTokenRateProviderProps {
 
 export function ConfigureTokenRateProvider({
   tokenIndex,
-  verifiedRateProviderAddress,
-}: ConfigureTokenRateProviderProps) {
+  verifiedRateProviderAddress }: ConfigureTokenRateProviderProps) {
   const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'network'],
-  })
+    name: ['poolTokens', 'network'] })
   const formState = useFormState({ control: poolCreationForm.control })
 
   // Early return if token doesn't exist or has no address
@@ -76,19 +74,21 @@ export function ConfigureTokenRateProvider({
   return (
     <FormSubsection marginLeft={{ base: 2, sm: 4, md: 5 }}>
       <VStack align="start" w="full">
-        <HStack spacing="xs">
+        <HStack gap="xs">
           <Text fontWeight="bold">Rate Provider</Text>
           <InfoIconPopover message="Tokens that accrue yield over time should use a rate provider" />
         </HStack>
-        <RadioGroup onChange={handleRateProviderOptionChange} value={rateProviderRadioValue}>
-          <Stack spacing={3}>
+        <RadioGroup.Root
+          onValueChange={handleRateProviderOptionChange}
+          value={String(rateProviderRadioValue)}>
+          <Stack gap={3}>
             {adjustedRateProviderOptions.map(({ label, value }) => (
               <Stack
                 direction={{ base: 'column', md: 'row' }}
                 key={value}
-                spacing={{ base: 1, md: 'xs' }}
+                gap={{ base: 1, md: 'xs' }}
               >
-                <Radio size="lg" value={value}>
+                <Radio size="lg" value={String(value)}>
                   <Text>{label}</Text>
                 </Radio>
                 {value === RateProviderOption.Verified && (
@@ -102,9 +102,8 @@ export function ConfigureTokenRateProvider({
               </Stack>
             ))}
           </Stack>
-        </RadioGroup>
+        </RadioGroup.Root>
       </VStack>
-
       {isCustomRateProvider && (
         <CustomRateProviderInput
           chainName={getChainName(network)}
@@ -119,7 +118,7 @@ export function ConfigureTokenRateProvider({
         <ShareYieldFeesCheckbox paysYieldFees={paysYieldFees} tokenIndex={tokenIndex} />
       )}
     </FormSubsection>
-  )
+  );
 }
 
 interface CustomRateProviderInputProps {
@@ -136,8 +135,7 @@ function CustomRateProviderInput({
   control,
   errors,
   chainName,
-  network,
-}: CustomRateProviderInputProps) {
+  network }: CustomRateProviderInputProps) {
   const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
   const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
 
@@ -158,8 +156,7 @@ function CustomRateProviderInput({
         address: address as Address,
         abi: parseAbi(['function getRate() external view returns (uint256)']),
         functionName: 'getRate',
-        args: [],
-      })
+        args: [] })
       if (!rate) return 'invalid rate provider address'
       return true
     } catch (error) {
@@ -171,8 +168,8 @@ function CustomRateProviderInput({
   }
 
   return (
-    <VStack align="start" my="4" spacing="md" w="full">
-      <VStack align="start" spacing="sm" w="full">
+    <VStack align="start" my="4" gap="md" w="full">
+      <VStack align="start" gap="sm" w="full">
         <Controller
           control={control}
           name={`poolTokens.${tokenIndex}.rateProvider`}
@@ -189,11 +186,9 @@ function CustomRateProviderInput({
             />
           )}
           rules={{
-            validate: validateRateProvider,
-          }}
+            validate: validateRateProvider }}
         />
       </VStack>
-
       <BalAlert
         content={
           <Text color="black">
@@ -206,9 +201,9 @@ function CustomRateProviderInput({
               display="inline-flex"
               gap="xs"
               href="https://docs.balancer.fi/partner-onboarding/onboarding-overview/rate-providers.html#what-are-the-requirements-for-a-rate-provider-contract"
-              isExternal
               textDecoration="underline"
-            >
+              target='_blank'
+              rel='noopener noreferrer'>
               Learn more
               <ArrowUpRight size={14} />
             </Link>
@@ -217,5 +212,5 @@ function CustomRateProviderInput({
         status="warning"
       />
     </VStack>
-  )
+  );
 }

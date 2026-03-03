@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Heading, HStack, Spacer, Text } from '@chakra-ui/react'
+import { Card, Heading, HStack, Spacer, Text } from '@chakra-ui/react';
 import { WeightsChartContainer } from '../sale-structure/WeightsChartContainer'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
@@ -19,8 +19,7 @@ export function PoolWeights({
   startWeight,
   endWeight,
   launchTokenMetadata,
-  collateralToken,
-}: Props) {
+  collateralToken }: Props) {
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
   const hoursDiff =
     differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
@@ -30,8 +29,8 @@ export function PoolWeights({
       : ''
 
   return (
-    <Card h="450px">
-      <CardHeader>
+    <Card.Root h="450px">
+      <Card.Header>
         <HStack>
           <Heading size="sm">LBP pool weight shifts</Heading>
           <Spacer />
@@ -39,8 +38,8 @@ export function PoolWeights({
             Standard linear
           </Text>
         </HStack>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Body>
         <WeightsChartContainer
           collateralTokenSymbol={collateralToken?.symbol || ''}
           endDateTime={endDateTime}
@@ -50,7 +49,7 @@ export function PoolWeights({
           startDateTime={startDateTime}
           startWeight={startWeight}
         />
-      </CardBody>
-    </Card>
-  )
+      </Card.Body>
+    </Card.Root>
+  );
 }

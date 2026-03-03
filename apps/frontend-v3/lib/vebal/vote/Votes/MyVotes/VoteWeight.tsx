@@ -1,10 +1,9 @@
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack, Text } from '@chakra-ui/react';
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { bpsToPercentage } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import {
   getExceededWeight,
-  getUnallocatedWeight,
-} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+  getUnallocatedWeight } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { VoteUnallocatedTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteUnallocatedTooltip'
 import { VoteExceededTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteExceededTooltip'
 import { VoteTimeLockedTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteTimeLockedTooltip'
@@ -35,8 +34,7 @@ export function VoteWeight({
   timeLockedEndDate,
   isGaugeExpired,
   isGaugeUnderpowered = false,
-  previousWeight,
-}: Props) {
+  previousWeight }: Props) {
   const exceededWeight = getExceededWeight(weight)
   const unallocatedWeight = getUnallocatedWeight(weight)
 

@@ -7,7 +7,7 @@ import { isReClammPool, isGyroEllipticPool } from '../../helpers'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { useWatch } from 'react-hook-form'
-import { VStack, Text } from '@chakra-ui/react'
+import { VStack, Text } from '@chakra-ui/react';
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
 
@@ -87,7 +87,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
   }, [idx, updatePoolToken, reClammInitAmounts, poolTokens])
 
   return (
-    <VStack align="start" key={idx} spacing="sm" w="full">
+    <VStack align="start" key={idx} gap="sm" w="full">
       <Text fontWeight="bold">Token {idx + 1}</Text>
       <TokenInput
         apiToken={token.data}
@@ -98,5 +98,5 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
         value={token.amount}
       />
     </VStack>
-  )
+  );
 }

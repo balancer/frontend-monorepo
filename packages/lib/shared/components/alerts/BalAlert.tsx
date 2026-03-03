@@ -1,13 +1,4 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertProps,
-  AlertStatus,
-  AlertTitle,
-  CloseButton,
-  VStack,
-} from '@chakra-ui/react'
+import { Alert, AlertProps, AlertStatus, CloseButton, VStack } from '@chakra-ui/react';
 import { MouseEventHandler, ReactNode } from 'react'
 import { AlertTriangle, Check, Loader, XOctagon } from 'react-feather'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
@@ -39,15 +30,13 @@ export function BalAlert({
 }: BalAlertProps) {
   const iconSize = {
     h: '24px',
-    w: '24px',
-  }
+    w: '24px' }
   return (
-    <Alert rounded={isNavAlert ? 'none' : 'default'} status={status} {...rest}>
-      {ssr ? <AlertIcon {...iconSize} /> : <AlertIcon as={getAlertIcon(status)} {...iconSize} />}
-
+    <Alert.Root rounded={isNavAlert ? 'none' : 'default'} status={status} {...rest}>
+      {ssr ? <Alert.Indicator {...iconSize} /> : <Alert.Indicator as={getAlertIcon(status)} {...iconSize} />}
       {title ? (
         <VStack align="start" gap="0.5" w="full">
-          <AlertTitle
+          <Alert.Title
             color="black"
             display="flex"
             flexDirection="column"
@@ -55,8 +44,8 @@ export function BalAlert({
             w="full"
           >
             {title}
-          </AlertTitle>
-          <AlertDescription
+          </Alert.Title>
+          <Alert.Description
             color="black"
             display="flex"
             flexDirection="column"
@@ -64,10 +53,10 @@ export function BalAlert({
             w="full"
           >
             {content}
-          </AlertDescription>
+          </Alert.Description>
         </VStack>
       ) : (
-        <AlertTitle
+        <Alert.Title
           color="black"
           display="flex"
           flexDirection="column"
@@ -76,16 +65,14 @@ export function BalAlert({
           wordBreak="break-word"
         >
           {content}
-        </AlertTitle>
+        </Alert.Title>
       )}
-
       {learnMoreLink && <BalAlertButtonLink href={learnMoreLink}>More</BalAlertButtonLink>}
       {action}
       {isSoftWarning && (
         <CloseButton
           _hover={{
-            transform: 'scale(1.2)',
-          }}
+            transform: 'scale(1.2)' }}
           aria-label="Close"
           color="font.dark"
           ml="auto"
@@ -94,8 +81,8 @@ export function BalAlert({
           variant="softWarning"
         />
       )}
-    </Alert>
-  )
+    </Alert.Root>
+  );
 }
 
 function getAlertIcon(status: AlertStatus) {

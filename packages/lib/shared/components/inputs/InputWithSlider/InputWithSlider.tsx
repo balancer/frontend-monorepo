@@ -1,6 +1,14 @@
 'use client'
 
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency';
 import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 import {
   Box,
@@ -13,11 +21,8 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  VStack,
-  forwardRef,
-  useTheme as useChakraTheme,
-} from '@chakra-ui/react'
-import { useState } from 'react'
+  VStack } from '@chakra-ui/react';
+import { useState, forwardRef } from 'react';
 import { useTheme as useNextTheme } from 'next-themes'
 
 type Props = {
@@ -44,7 +49,7 @@ export const InputWithSlider = forwardRef(
     const [sliderPercent, setSliderPercent] = useState<number>(100)
     const { toCurrency } = useCurrency()
     const theme = useChakraTheme()
-    const { theme: nextTheme } = useNextTheme()
+    const { system: nextTheme } = useNextTheme()
 
     function handleSliderChange(percent: number) {
       setSliderPercent(percent)
@@ -64,13 +69,13 @@ export const InputWithSlider = forwardRef(
 
     const boxShadowColor =
       nextTheme === 'dark'
-        ? theme.semanticTokens.colors.font.warning._dark
-        : theme.semanticTokens.colors.font.warning.default
+        ? theme.token('semanticTokens.colors.font.warning._dark')
+        : theme.token('semanticTokens.colors.font.warning.default')
 
     const boxShadow = isWarning ? `0 0 0 1px ${boxShadowColor}` : undefined
 
     return (
-      <VStack spacing="sm" w="full">
+      <VStack gap="sm" w="full">
         {children && (
           <HStack justifyContent="space-between" w="full">
             {children}
@@ -88,39 +93,36 @@ export const InputWithSlider = forwardRef(
           w="full"
           {...boxProps}
         >
-          <HStack align="start" spacing="md">
-            <NumberInput
+          <HStack align="start" gap="md">
+            <NumberInput.Root
               autoComplete="off"
               autoCorrect="off"
               bg="transparent"
               border="transparent"
               fontSize="xl"
               fontWeight="medium"
-              isDisabled={isNumberInputDisabled}
+              disabled={isNumberInputDisabled}
               min={0}
-              onChange={handleInputChange}
+              onValueChange={handleInputChange}
               onKeyDown={blockInvalidNumberInput}
               p="0"
               placeholder="0.00"
               shadow="none"
-              value={toCurrency(value || 0)}
+              value={String(toCurrency(value || 0))}
               w="50%"
               {...numberInputProps}
             >
-              <NumberInputField
+              <NumberInput.Input
                 _disabled={{
                   opacity: 1,
-                  textColor: 'input.fontDefault',
-                }}
+                  textColor: 'input.fontDefault' }}
                 _focusVisible={{
                   borderColor: 'transparent',
                   boxShadow: 'none',
-                  shadow: 'none',
-                }}
+                  shadow: 'none' }}
                 _hover={{
                   borderColor: 'transparent',
-                  boxShadow: 'none',
-                }}
+                  boxShadow: 'none' }}
                 aria-valuenow={sliderPercent}
                 boxShadow="none"
                 fontSize="2xl"
@@ -128,14 +130,14 @@ export const InputWithSlider = forwardRef(
                 pl="0"
                 shadow="none"
               />
-            </NumberInput>
+            </NumberInput.Root>
             <Box alignSelf="center" pr="sm" w="50%">
-              <Slider
+              <Slider.Root
                 aria-label="slider"
-                defaultValue={100}
+                defaultValue='100'
                 focusThumbOnChange={false} // this is so the NumberInput won't lose focus after input
-                onChange={handleSliderChange}
-                value={sliderPercent}
+                onValueChange={handleSliderChange}
+                value={String(sliderPercent)}
               >
                 <SliderTrack
                   bg="background.level0"
@@ -147,11 +149,11 @@ export const InputWithSlider = forwardRef(
                   <SliderFilledTrack />
                 </SliderTrack>
                 <SliderThumb />
-              </Slider>
+              </Slider.Root>
             </Box>
           </HStack>
         </Box>
       </VStack>
-    )
+    );
   }
 )

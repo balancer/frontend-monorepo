@@ -1,4 +1,4 @@
-import { CardBody, VStack, Text, Divider, HStack, Box, Icon } from '@chakra-ui/react'
+import { VStack, Text, HStack, Box, Icon, Card, Separator } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -26,43 +26,42 @@ export function PreviewPoolTokensInWallet() {
       stepTitle="Tokens"
     >
       <CardHeaderRow columnNames={['Pool tokens in my wallet', 'Token value', '%']} />
-      <CardBody>
-        <VStack spacing="md">
+      <Card.Body>
+        <VStack gap="md">
           <PoolTokensInWalletContent
             hasNoTokensWithBalance={hasNoTokensWithBalance}
             selectedPoolTokens={selectedPoolTokens}
           />
         </VStack>
-      </CardBody>
+      </Card.Body>
     </PreviewPoolCreationCard>
-  )
+  );
 }
 
 function ZeroBalanceWarning({ isConnected }: { isConnected: boolean }) {
   if (!isConnected) {
     return (
-      <HStack color="font.disabled" justify="end" spacing="xs">
+      <HStack color="font.disabled" justify="end" gap="xs">
         <Text color="font.disabled">–</Text>
       </HStack>
-    )
+    );
   }
 
   return (
     <TooltipWithTouch label="Your wallet has none of this token." placement="top">
-      <HStack color="font.warning" justify="end" spacing="xs">
+      <HStack color="font.warning" justify="end" gap="xs">
         <Text color="font.warning">$0.00</Text>
         <Box>
-          <Icon as={AlertTriangle} boxSize="16px" />
+          <Icon boxSize="16px" asChild><AlertTriangle /></Icon>
         </Box>
       </HStack>
     </TooltipWithTouch>
-  )
+  );
 }
 
 function PoolTokensInWalletContent({
   hasNoTokensWithBalance,
-  selectedPoolTokens,
-}: {
+  selectedPoolTokens }: {
   hasNoTokensWithBalance: boolean
   selectedPoolTokens: SelectedPoolToken[]
 }) {
@@ -147,7 +146,7 @@ function PoolTokensInWalletContent({
       </AnimatePresence>
       {tokensWithBalance.length > 0 && (
         <>
-          <Divider />
+          <Separator />
           <CardDataRow
             data={[
               <Text fontWeight="semibold">Total potential seed liquidity</Text>,
@@ -158,7 +157,7 @@ function PoolTokensInWalletContent({
         </>
       )}
     </>
-  )
+  );
 }
 
 function DefaultCardContent() {

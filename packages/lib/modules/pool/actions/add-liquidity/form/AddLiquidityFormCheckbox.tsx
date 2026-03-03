@@ -1,16 +1,4 @@
-import {
-  Checkbox,
-  HStack,
-  VStack,
-  Popover,
-  PopoverTrigger,
-  IconButton,
-  PopoverContent,
-  PopoverArrow,
-  PopoverBody,
-  Box,
-  Text,
-} from '@chakra-ui/react'
+import { Checkbox, HStack, VStack, Popover, HoverCard, IconButton, Box, Text } from '@chakra-ui/react';
 import { RisksList } from '../../../PoolDetail/PoolInfo/PoolRisks/PoolRisks'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -61,63 +49,70 @@ export function AddLiquidityFormCheckbox() {
 
   return (
     <FadeInOnView scaleUp={false}>
-      <VStack align="start" spacing="sm">
-        <HStack spacing="xs">
-          <Checkbox
-            isChecked={hasAcceptedPoolRisks}
-            isDisabled={isBalancesLoading || hasNoPoolTokensInWallet}
-            onChange={e => setHasAcceptedPoolRisks(e.target.checked)}
+      <VStack align="start" gap="sm">
+        <HStack gap="xs">
+          <Checkbox.Root
+            disabled={isBalancesLoading || hasNoPoolTokensInWallet}
+            onCheckedChange={e => setHasAcceptedPoolRisks(e.target.checked)}
             size="lg"
-          >
-            <Text as="div" fontSize="md" lineHeight="1" sx={{ textWrap: 'pretty' }}>
-              <TextShine animationDuration="1.5s">
-                I accept the risks of interacting with this pool
-              </TextShine>
-              <Box as="span">
-                <Popover placement="top" trigger="hover">
-                  <PopoverTrigger>
-                    <IconButton
-                      _hover={{ bg: 'background.level2', opacity: '1' }}
-                      aria-label="pool-risks-info"
-                      bg="background.level2"
-                      icon={<InfoIcon />}
-                      left="1px"
-                      opacity="0.6"
-                      position="relative"
-                      size="xs"
-                      top="-1px"
-                      transition="opacity 0.2s var(--ease-out-cubic)"
-                    />
-                  </PopoverTrigger>
-                  <Box shadow="2xl" zIndex="popover">
-                    <PopoverContent>
-                      <PopoverArrow bg="background.level3" />
-                      <PopoverBody>
-                        <RisksList textVariant="primary" />
-                      </PopoverBody>
-                    </PopoverContent>
-                  </Box>
-                </Popover>
-              </Box>
-            </Text>
-          </Checkbox>
+            checked={hasAcceptedPoolRisks}
+          ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+              <Text as="div" fontSize="md" lineHeight="1" css={{
+                textWrap: 'pretty'
+              }}>
+                <TextShine animationDuration="1.5s">
+                  I accept the risks of interacting with this pool
+                </TextShine>
+                <Box as="span">
+                  <HoverCard.Root
+                    positioning={{
+                      placement: 'top'
+                    }}>
+                    <HoverCard.Trigger asChild>
+                      <IconButton
+                        _hover={{ bg: 'background.level2', opacity: '1' }}
+                        aria-label="pool-risks-info"
+                        bg="background.level2"
+                        left="1px"
+                        opacity="0.6"
+                        position="relative"
+                        size="xs"
+                        top="-1px"
+                        transition="opacity 0.2s var(--ease-out-cubic)"><InfoIcon /></IconButton>
+                    </HoverCard.Trigger>
+                    <Box shadow="2xl" zIndex="popover">
+                      <HoverCard.Positioner>
+                        <HoverCard.Content>
+                          <HoverCard.Arrow bg="background.level3" />
+                          <HoverCard.Body>
+                            <RisksList textVariant="primary" />
+                          </HoverCard.Body>
+                        </HoverCard.Content>
+                      </HoverCard.Positioner>
+                    </Box>
+                  </HoverCard.Root>
+                </Box>
+              </Text>
+            </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
         </HStack>
         {isBoostedPool && (
-          <HStack spacing="xs">
-            <Checkbox
+          <HStack gap="xs">
+            <Checkbox.Root
               alignItems="flex-start"
-              isChecked={hasAcceptedBoostedRisks}
-              isDisabled={isBalancesLoading || hasNoPoolTokensInWallet}
-              onChange={e => setHasAcceptedBoostedRisks(e.target.checked)}
+              disabled={isBalancesLoading || hasNoPoolTokensInWallet}
+              onCheckedChange={e => setHasAcceptedBoostedRisks(e.target.checked)}
               size="lg"
-            >
-              <Text as="div" fontSize="md" lineHeight="1" sx={{ textWrap: 'pretty' }}>
-                <TextShine animationDuration="1.5s">{boostedRiskDescription}</TextShine>
-              </Text>
-            </Checkbox>
+              checked={hasAcceptedBoostedRisks}
+            ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
+                <Text as="div" fontSize="md" lineHeight="1" css={{
+                  textWrap: 'pretty'
+                }}>
+                  <TextShine animationDuration="1.5s">{boostedRiskDescription}</TextShine>
+                </Text>
+              </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
           </HStack>
         )}
       </VStack>
     </FadeInOnView>
-  )
+  );
 }

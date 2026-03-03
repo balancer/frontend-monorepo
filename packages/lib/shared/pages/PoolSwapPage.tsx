@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
 import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { usePoolRedirect } from '@repo/lib/modules/pool/pool.hooks'
@@ -42,13 +42,11 @@ export function PoolSwapPage({ txHash }: Props) {
     chain: chainToSlugMap[pool.chain],
     tokenIn: poolActionableTokens[0]?.address,
     tokenOut: poolActionableTokens[1]?.address,
-    urlTxHash: maybeTxHash,
-  }
+    urlTxHash: maybeTxHash }
   const props: SwapProviderProps = {
     pathParams,
     pool,
-    poolActionableTokens: poolActionableTokens,
-  }
+    poolActionableTokens: poolActionableTokens }
 
   const shouldRenderLayout = !!pool
 

@@ -1,17 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Card,
-  CardProps,
-  Divider,
-  Heading,
-  ListItem,
-  Text,
-  UnorderedList,
-  VStack,
-  Link,
-} from '@chakra-ui/react'
+import { Box, Card, CardProps, Heading, Text, VStack, Link, Separator, List } from '@chakra-ui/react';
 import { usePool } from '../../../PoolProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolRisks, risksTitle } from './usePoolRisks'
@@ -34,32 +23,32 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
             <Text fontWeight="bold" mt="sm">
               {group.title}
             </Text>
-            <UnorderedList ml="6" variant="link">
+            <List.Root as='ul' ml="6" variant="link">
               {group.risks.map(risk => (
-                <ListItem key={`pool-risk-${risk.path.replaceAll('//', '')}`}>
-                  <Link as={NextLink} href={risk.path}>
-                    {risk.title}
-                  </Link>
-                </ListItem>
+                <List.Item key={`pool-risk-${risk.path.replaceAll('//', '')}`}>
+                  <Link asChild><NextLink href={risk.path}>
+                      {risk.title}
+                    </NextLink></Link>
+                </List.Item>
               ))}
-            </UnorderedList>
+            </List.Root>
           </Box>
         ))}
       </Box>
     </VStack>
-  )
+  );
 }
 
 export function PoolRisks({ ...props }: CardProps) {
   return (
-    <Card {...props}>
-      <VStack alignItems="flex-start" spacing="4" width="full">
+    <Card.Root {...props}>
+      <VStack alignItems="flex-start" gap="4" width="full">
         <Heading fontSize="1.25rem" variant="h4">
           Pool risks
         </Heading>
-        <Divider />
+        <Separator />
         <RisksList />
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

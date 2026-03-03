@@ -1,19 +1,7 @@
 'use client'
 
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import {
-  Modal,
-  ModalContent,
-  ModalCloseButton,
-  ModalBody,
-  ModalHeader,
-  VStack,
-  Text,
-  HStack,
-  Button,
-  useDisclosure,
-  Icon,
-} from '@chakra-ui/react'
+import { VStack, Text, HStack, Button, useDisclosure, Icon, Dialog, Portal } from '@chakra-ui/react';
 import { Trash2 } from 'react-feather'
 import { getChainName } from '@repo/lib/config/app.config'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -44,9 +32,8 @@ export function RestartPoolCreationModal({
   poolAddress,
   isAbsolutePosition,
   showBalancerWarning,
-  showCowAmmWarning,
-}: RestartPoolCreationModalProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  showCowAmmWarning }: RestartPoolCreationModalProps) {
+  const { open, onOpen, onClose } = useDisclosure()
   const router = useRouter()
 
   const handleFormReset = () => {
@@ -74,67 +61,76 @@ export function RestartPoolCreationModal({
           position: 'absolute',
           right: '-240px',
           top: '-40px',
-          width: '250px',
-        })}
+          width: '250px' })}
       >
         <HStack>
-          <Icon as={Trash2} boxSize="16px" color="font.secondary" />
+          <Icon boxSize="16px" color="font.secondary" asChild><Trash2 /></Icon>
           <Text color="font.secondary" fontWeight="bold">
             {triggerTitle}
           </Text>
         </HStack>
       </Button>
-      <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
-        <SuccessOverlay />
-        <ModalContent bg="background.level1">
-          <ModalHeader fontSize="2xl">{modalTitle}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb="lg">
-            <VStack>
-              {!poolAddress ? (
-                <BeforePoolDeployedWarning
-                  network={network}
-                  poolType={poolType}
-                  showBalancerWarning={showBalancerWarning}
-                  showCowAmmWarning={showCowAmmWarning}
-                />
-              ) : (
-                <AfterPoolDeployedWarning
-                  network={network}
-                  poolAddress={poolAddress}
-                  poolType={poolType}
-                />
-              )}
-              <HStack gap="ms" mt="md" w="full">
-                <Button
-                  display="flex"
-                  flex="1"
-                  gap="1"
-                  minWidth="184px"
-                  onClick={handleFormReset}
-                  size="lg"
-                  variant="danger"
-                >
-                  {poolAddress ? 'Abandon set up' : 'Delete and start over'}
-                </Button>
-                <Button
-                  display="flex"
-                  flex="1"
-                  gap="1"
-                  minWidth="184px"
-                  onClick={handleContinueSetup}
-                  size="lg"
-                  variant="tertiary"
-                >
-                  Continue set up
-                </Button>
-              </HStack>
-            </VStack>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+        <Portal>
+
+          <SuccessOverlay />
+          <Dialog.Positioner>
+            <Dialog.Content bg="background.level1">
+              <Dialog.Header fontSize="2xl">{modalTitle}</Dialog.Header>
+              <Dialog.CloseTrigger />
+              <Dialog.Body pb="lg">
+                <VStack>
+                  {!poolAddress ? (
+                    <BeforePoolDeployedWarning
+                      network={network}
+                      poolType={poolType}
+                      showBalancerWarning={showBalancerWarning}
+                      showCowAmmWarning={showCowAmmWarning}
+                    />
+                  ) : (
+                    <AfterPoolDeployedWarning
+                      network={network}
+                      poolAddress={poolAddress}
+                      poolType={poolType}
+                    />
+                  )}
+                  <HStack gap="ms" mt="md" w="full">
+                    <Button
+                      display="flex"
+                      flex="1"
+                      gap="1"
+                      minWidth="184px"
+                      onClick={handleFormReset}
+                      size="lg"
+                      variant="danger"
+                    >
+                      {poolAddress ? 'Abandon set up' : 'Delete and start over'}
+                    </Button>
+                    <Button
+                      display="flex"
+                      flex="1"
+                      gap="1"
+                      minWidth="184px"
+                      onClick={handleContinueSetup}
+                      size="lg"
+                      variant="tertiary"
+                    >
+                      Continue set up
+                    </Button>
+                  </HStack>
+                </VStack>
+              </Dialog.Body>
+            </Dialog.Content>
+          </Dialog.Positioner>
+
+        </Portal>
+      </Dialog.Root>
     </>
-  )
+  );
 }
 
 interface BeforePoolDeployedWarningProps {
@@ -148,8 +144,7 @@ function BeforePoolDeployedWarning({
   network,
   poolType,
   showCowAmmWarning,
-  showBalancerWarning,
-}: BeforePoolDeployedWarningProps) {
+  showBalancerWarning }: BeforePoolDeployedWarningProps) {
   const poolTypeName = getPoolTypeLabel(poolType)
   const chainName = getChainName(network)
 
@@ -179,10 +174,9 @@ interface AfterPoolDeployedWarningProps {
 function AfterPoolDeployedWarning({
   network,
   poolType,
-  poolAddress,
-}: AfterPoolDeployedWarningProps) {
+  poolAddress }: AfterPoolDeployedWarningProps) {
   return (
-    <VStack align="start" spacing="md">
+    <VStack align="start" gap="md">
       <Text>
         You have deployed a v3 {poolType} pool but have not seeded it with liquidity. Pool address:
       </Text>
@@ -194,5 +188,5 @@ function AfterPoolDeployedWarning({
       </Text>
       <Text>Are you sure you want to abandon it and delete all associated data?</Text>
     </VStack>
-  )
+  );
 }

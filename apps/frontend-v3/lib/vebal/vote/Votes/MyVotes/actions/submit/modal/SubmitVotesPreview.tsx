@@ -1,11 +1,10 @@
-import { VStack, Card, HStack, Text, Divider, Box, Badge } from '@chakra-ui/react'
+import { VStack, Card, HStack, Text, Box, Badge, Separator } from '@chakra-ui/react';
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { SubmittingVote } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
 import {
   bpsToPercentage,
-  votingTimeLockedEndDate,
-} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+  votingTimeLockedEndDate } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { MyVotesTotalInfo } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.types'
 import { VoteWeight } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteWeight'
@@ -34,18 +33,17 @@ export function SubmitVotesPreview({
   totalInfo,
   previousChunksAllocation,
   nextChunksAllocation,
-  isPoolGaugeExpired,
-}: Props) {
+  isPoolGaugeExpired }: Props) {
   const { toCurrency } = useCurrency()
 
   const unallocatedVotes = totalInfo.unallocatedVotes || bn(0)
   const editVotes = totalInfo.editVotes || bn(0)
 
   return (
-    <VStack spacing="md" w="full">
-      <Card p="0" variant="subSection">
-        <VStack spacing="0" w="full">
-          <HStack justifyContent="space-between" p="md" spacing="sm" w="full">
+    <VStack gap="md" w="full">
+      <Card.Root p="0" variant="subSection">
+        <VStack gap="0" w="full">
+          <HStack justifyContent="space-between" p="md" gap="sm" w="full">
             <Text fontSize="sm" fontWeight={700} variant="secondary">
               Pool gauge
             </Text>
@@ -56,15 +54,15 @@ export function SubmitVotesPreview({
 
           {changedVotes.length > 0 && (
             <>
-              <Divider />
+              <Separator />
 
-              <VStack p="md" spacing="sm" w="full">
+              <VStack p="md" gap="sm" w="full">
                 {changedVotes.map(({ vote, weight }) => {
                   const isExpired = isPoolGaugeExpired?.(vote)
 
                   return (
-                    <HStack justifyContent="space-between" key={vote.id} spacing="sm" w="full">
-                      <HStack spacing="xs">
+                    <HStack justifyContent="space-between" key={vote.id} gap="sm" w="full">
+                      <HStack gap="xs">
                         <NetworkIcon chain={vote.chain} size={6} />
 
                         <VotingListTokenPills
@@ -94,7 +92,7 @@ export function SubmitVotesPreview({
                         weight={bn(weight)}
                       />
                     </HStack>
-                  )
+                  );
                 })}
               </VStack>
             </>
@@ -102,8 +100,8 @@ export function SubmitVotesPreview({
 
           {(timeLockedVotes.length > 0 || unchangedVotes.length > 0) && (
             <>
-              <Divider />
-              <VStack p="md" spacing="sm" w="full">
+              <Separator />
+              <VStack p="md" gap="sm" w="full">
                 <Text fontSize="sm" fontWeight={700} variant="secondary" w="full">
                   Unchanged votes
                 </Text>
@@ -121,9 +119,9 @@ export function SubmitVotesPreview({
 
           {totalInfo.unallocatedVotes && (
             <>
-              <Divider />
+              <Separator />
 
-              <HStack justifyContent="space-between" p="md" spacing="md" w="full">
+              <HStack justifyContent="space-between" p="md" gap="md" w="full">
                 <Text fontSize="sm" fontWeight={700} variant="secondary">
                   Unallocated votes
                 </Text>
@@ -134,10 +132,10 @@ export function SubmitVotesPreview({
 
           {previousChunksAllocation && (
             <>
-              <Divider />
+              <Separator />
 
-              <HStack justifyContent="space-between" p="md" spacing="md" w="full">
-                <HStack spacing="md">
+              <HStack justifyContent="space-between" p="md" gap="md" w="full">
+                <HStack gap="md">
                   <Box color="font.warning">
                     <AlertTriangle size={24} />
                   </Box>
@@ -154,10 +152,10 @@ export function SubmitVotesPreview({
 
           {nextChunksAllocation && (
             <>
-              <Divider />
+              <Separator />
 
-              <HStack justifyContent="space-between" p="md" spacing="md" w="full">
-                <HStack spacing="md">
+              <HStack justifyContent="space-between" p="md" gap="md" w="full">
+                <HStack gap="md">
                   <Box color="font.warning">
                     <AlertTriangle size={24} />
                   </Box>
@@ -176,19 +174,18 @@ export function SubmitVotesPreview({
             </>
           )}
 
-          <Divider />
+          <Separator />
 
-          <HStack justifyContent="space-between" p="md" spacing="sm" w="full">
+          <HStack justifyContent="space-between" p="md" gap="sm" w="full">
             <Text fontWeight={700}>Total</Text>
             <Text fontWeight={700}>{fNum('apr', bpsToPercentage(editVotes))}</Text>
           </HStack>
         </VStack>
-      </Card>
-
-      <HStack alignItems="stretch" spacing="sm" w="full">
-        <Card flex="1" variant="subSection">
+      </Card.Root>
+      <HStack alignItems="stretch" gap="sm" w="full">
+        <Card.Root flex="1" variant="subSection">
           <Text variant="special">Potential incentives (1w)</Text>
-          <HStack spacing="xs">
+          <HStack gap="xs">
             <Text fontSize="lg" fontWeight={700} variant="special">
               {totalInfo.totalRewardValue !== undefined ? (
                 toCurrency(totalInfo.totalRewardValue, { abbreviated: false })
@@ -199,19 +196,19 @@ export function SubmitVotesPreview({
             {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
             <MyIncentivesTooltip />
           </HStack>
-        </Card>
+        </Card.Root>
 
         {totalInfo.averageRewardPerVote !== undefined && (
-          <Card flex="1" variant="subSection">
+          <Card.Root flex="1" variant="subSection">
             <Text>Avg. Reward (Bribes/veBAL)</Text>
             <Text fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
             </Text>
-          </Card>
+          </Card.Root>
         )}
       </HStack>
     </VStack>
-  )
+  );
 }
 
 type UnchangedVoteProps = {
@@ -222,8 +219,8 @@ type UnchangedVoteProps = {
 
 function UnchangedVote({ vote, weight, timelocked }: UnchangedVoteProps) {
   return (
-    <HStack justifyContent="space-between" spacing="sm" w="full">
-      <HStack spacing="xs">
+    <HStack justifyContent="space-between" gap="sm" w="full">
+      <HStack gap="xs">
         <NetworkIcon chain={vote.chain} size={6} />
 
         <VotingListTokenPills
@@ -242,5 +239,5 @@ function UnchangedVote({ vote, weight, timelocked }: UnchangedVoteProps) {
         weight={bn(weight)}
       />
     </HStack>
-  )
+  );
 }

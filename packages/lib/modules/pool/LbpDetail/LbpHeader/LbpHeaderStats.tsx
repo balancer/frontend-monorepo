@@ -1,4 +1,4 @@
-import { Flex, Box } from '@chakra-ui/react'
+import { Flex, Box } from '@chakra-ui/react';
 import { usePoolStats } from '@repo/lib/modules/lbp/pool/usePoolStats'
 import { AnimatedNumber } from '@repo/lib/shared/components/other/AnimatedNumber'
 import Stat from '@repo/lib/shared/components/other/Stat'

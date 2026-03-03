@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -45,33 +45,41 @@ export function LstUnstakeModal({
   const isSuccess = !!lstUnstakeTxHash
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!lstUnstakeTxHash} />
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && (
-          <DesktopStepTracker chain={chain} transactionSteps={unstakeTransactionSteps} />
-        )}
-        <TransactionModalHeader chain={chain} isReceiptLoading label="Review unstake" txHash="0x" />
-        <ModalCloseButton />
-        <ModalBody>
-          <LstUnstakeSummary />
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={unstakeTransactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={onClose}
-          returnLabel="Unstake again"
-        />
-      </ModalContent>
-    </Modal>
-  )
+      onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+      <Portal>
+
+        <SuccessOverlay startAnimation={!!lstUnstakeTxHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && (
+              <DesktopStepTracker chain={chain} transactionSteps={unstakeTransactionSteps} />
+            )}
+            <TransactionModalHeader chain={chain} isReceiptLoading label="Review unstake" txHash="0x" />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <LstUnstakeSummary />
+            </Dialog.Body>
+            <ActionModalFooter
+              currentStep={unstakeTransactionSteps.currentStep}
+              isSuccess={isSuccess}
+              returnAction={onClose}
+              returnLabel="Unstake again"
+            />
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

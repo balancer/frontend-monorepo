@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 import ReactECharts from 'echarts-for-react'
 import { usePoolCharts } from './PoolChartsProvider'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -19,8 +19,7 @@ export function PoolCharts() {
           style={{
             position: 'absolute',
             width: '100%',
-            height: '100%',
-          }}
+            height: '100%' }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           <ReactECharts

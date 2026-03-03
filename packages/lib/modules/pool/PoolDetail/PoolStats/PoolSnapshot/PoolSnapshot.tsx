@@ -1,12 +1,11 @@
-'use client'
-
+'use client';
 import { useState } from 'react'
-import { Box, BoxProps, Card, CardProps, VStack, useColorMode } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react';
 import { usePool } from '../../../PoolProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { UserSnapshotValues } from './UserSnapshotValues'
 import { PoolSnapshotValues } from './PoolSnapshotValues'
 import { hasTotalBalance } from '../../../user-balance.helpers'
@@ -19,28 +18,23 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     justifyContent: 'center',
     borderBottomLeftRadius: 'none',
     borderTopLeftRadius: 'none',
-    borderBottomRightRadius: 'none',
-  },
+    borderBottomRightRadius: 'none' },
   cardProps: {
     position: 'relative',
-    height: 'full',
-  },
-}
+    height: 'full' } }
 
 const TABS = [
   {
     value: 'poolStats',
-    label: 'Pool stats',
-  },
+    label: 'Pool stats' },
   {
     value: 'myStats',
-    label: 'My stats',
-  },
+    label: 'My stats' },
 ] as const
 
 export function PoolSnapshot({ ...props }: CardProps) {
   const { pool } = usePool()
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
   const defaultTab = hasTotalBalance(pool) ? TABS[1] : TABS[0]
   const [userSelectedTab, setUserSelectedTab] = useState<ButtonGroupOption | null>(null)
   const activeTab = userSelectedTab ?? defaultTab
@@ -50,7 +44,7 @@ export function PoolSnapshot({ ...props }: CardProps) {
   }
 
   return (
-    <Card position="relative" {...props}>
+    <Card.Root position="relative" {...props}>
       <NoisyCard
         cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
@@ -79,7 +73,7 @@ export function PoolSnapshot({ ...props }: CardProps) {
           mb="sm"
           p="md"
           role="group"
-          spacing="xl"
+          gap="xl"
           w="full"
           zIndex={1}
         >
@@ -94,6 +88,6 @@ export function PoolSnapshot({ ...props }: CardProps) {
           {activeTab.value === 'myStats' && <UserSnapshotValues />}
         </VStack>
       </NoisyCard>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

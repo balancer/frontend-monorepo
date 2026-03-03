@@ -1,11 +1,17 @@
-'use client'
+'use client';
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
 
-import '@rainbow-me/rainbowkit/styles.css'
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, Theme, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
 import { ReactQueryClientProvider } from '@repo/lib/shared/app/react-query.provider'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
-import { useTheme } from '@chakra-ui/react'
 import { merge } from 'lodash'
 import { UserSettingsProvider } from '../user/settings/UserSettingsProvider'
 import { AcceptPoliciesModal } from './AcceptPoliciesModal'
@@ -33,23 +39,20 @@ export function Web3Provider({ children }: PropsWithChildren) {
 
   const sharedConfig = {
     fonts: {
-      body: fonts.body,
-    },
+      body: fonts.body },
     radii: {
       connectButton: radii.md,
       actionButton: radii.md,
       menuButton: radii.md,
       modal: radii.md,
-      modalMobile: radii.md,
-    },
+      modalMobile: radii.md },
     shadows: {
       connectButton: shadows.md,
       dialog: shadows.xl,
       profileDetailsAction: shadows.md,
       selectedOption: shadows.md,
       selectedWallet: shadows.md,
-      walletLogo: shadows.md,
-    },
+      walletLogo: shadows.md },
     colors: {
       accentColor: colors.purple[500],
       // accentColorForeground: '...',
@@ -80,17 +83,13 @@ export function Web3Provider({ children }: PropsWithChildren) {
       // profileActionHover: '...',
       // profileForeground: '...',
       // selectedOptionBorder: '...',
-      // standby: '...',
-    },
-  }
+      // standby: '...' } }
 
   const _lightTheme = merge(lightTheme(), {
-    ...sharedConfig,
-  } as Theme)
+    ...sharedConfig } as Theme)
 
   const _darkTheme = merge(darkTheme(), {
-    ...sharedConfig,
-  } as Theme)
+    ...sharedConfig } as Theme)
 
   const customTheme = colorMode === 'dark' ? _darkTheme : _lightTheme
 

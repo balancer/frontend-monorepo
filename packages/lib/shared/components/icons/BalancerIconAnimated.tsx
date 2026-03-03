@@ -1,26 +1,25 @@
 'use client'
 
-import { useColorModeValue } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 
 export function BalancerLogoAnimated({
   iconColor,
   noShadow,
-  size = 128,
-}: {
+  size = 128 }: {
   iconColor?: string
   noShadow?: boolean
   size?: number
 }) {
-  const _iconColor = useColorModeValue('#2D3239', '#E5D3BE')
+  const colorMode = useThemeColorMode()
+  const _iconColor = colorMode === 'dark' ? '#E5D3BE' : '#2D3239'
 
   return (
     <motion.div
       style={{
         filter: noShadow ? 'none' : 'drop-shadow(0 0 20px rgba(0, 0, 0, 0.3))',
         padding: '16px',
-        borderRadius: '50%',
-      }}
+        borderRadius: '50%' }}
     >
       <motion.svg
         fill="none"
@@ -39,8 +38,7 @@ export function BalancerLogoAnimated({
             repeat: Infinity,
             ease: 'easeInOut',
             repeatDelay: 0.2,
-            delay: 1,
-          }}
+            delay: 1 }}
         />
         {/* Middle rock */}
         <motion.path
@@ -52,8 +50,7 @@ export function BalancerLogoAnimated({
             repeat: Infinity,
             ease: 'easeInOut',
             repeatDelay: 0.2,
-            delay: 1,
-          }}
+            delay: 1 }}
         />
         {/* Top rock */}
         <motion.path
@@ -65,8 +62,7 @@ export function BalancerLogoAnimated({
             repeat: Infinity,
             ease: 'easeInOut',
             repeatDelay: 0.2,
-            delay: 1,
-          }}
+            delay: 1 }}
         />
       </motion.svg>
     </motion.div>

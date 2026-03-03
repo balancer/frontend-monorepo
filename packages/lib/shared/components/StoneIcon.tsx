@@ -1,4 +1,5 @@
-import { Box, Center, useColorMode, ResponsiveValue, BoxProps } from '@chakra-ui/react'
+import { Box, Center, ResponsiveValue, BoxProps } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { Picture } from './other/Picture'
 import { SparkleIconWrapper } from './animations/SparkleIconWrapper'
 import { ReactElement } from 'react'
@@ -17,7 +18,7 @@ export function StoneIcon({
   transformBackground,
   ...rest
 }: StoneIconProps) {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   return (
     <Box position="relative" rounded="full" shadow="2xl" zIndex={1} {...rest}>

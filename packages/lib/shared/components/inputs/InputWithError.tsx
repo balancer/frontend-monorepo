@@ -7,8 +7,7 @@ import {
   InputRightElement,
   InputLeftElement,
   Button,
-  InputGroup,
-} from '@chakra-ui/react'
+  InputGroup } from '@chakra-ui/react';
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
 

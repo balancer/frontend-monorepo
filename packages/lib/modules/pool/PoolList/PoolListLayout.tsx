@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, Stack, HStack, VStack, useBreakpointValue } from '@chakra-ui/react'
+import { Box, Heading, Stack, HStack, VStack, useBreakpointValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion'
 import { FilterTags, PoolListFilters, useFilterTagsVisible } from './PoolListFilters'
 import { PoolListTable } from './PoolListTable/PoolListTable'
@@ -29,23 +29,18 @@ export function PoolListLayout() {
       togglePoolHookTag,
       poolHookTagLabel,
       protocolVersion,
-      setProtocolVersion,
-    },
-  } = usePoolList()
+      setProtocolVersion } } = usePoolList()
   const isFilterVisible = useFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 
   const variants = {
     visible: {
-      transform: isMd ? 'translateY(-40px)' : 'translateY(0)',
-    },
+      transform: isMd ? 'translateY(-40px)' : 'translateY(0)' },
     hidden: {
-      transform: 'translateY(0)',
-    },
-  }
+      transform: 'translateY(0)' } }
 
   return (
-    <VStack align="start" minHeight="1000px" spacing="md" w="full">
+    <VStack align="start" minHeight="1000px" gap="md" w="full">
       <Stack
         alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
         direction={{ base: 'column', md: 'row' }}
@@ -57,7 +52,6 @@ export function PoolListLayout() {
             <Box position="relative" top="0">
               <Box
                 animate={isFilterVisible ? 'visible' : 'hidden'}
-                as={motion.div}
                 left="0"
                 minW={{ base: 'auto', md: '270px' }}
                 position={{ base: 'relative', md: 'absolute' }}
@@ -65,16 +59,17 @@ export function PoolListLayout() {
                 transition="all 0.15s var(--ease-out-cubic)"
                 variants={variants}
                 willChange="transform"
-              >
-                <HStack w="full">
-                  <Heading as="h2" size="lg" variant="special">
-                    Liquidity pools
-                  </Heading>
-                  <Heading mt="1" size="md" variant="secondary">
-                    ({fNum('integer', count || 0)})
-                  </Heading>
-                </HStack>
-              </Box>
+                asChild
+              ><motion.div>
+                  <HStack w="full">
+                    <Heading as="h2" size="lg" variant="special">
+                      Liquidity pools
+                    </Heading>
+                    <Heading mt="1" size="md" variant="secondary">
+                      ({fNum('integer', count || 0)})
+                    </Heading>
+                  </HStack>
+                </motion.div></Box>
             </Box>
           </HStack>
           <FilterTags
@@ -108,5 +103,5 @@ export function PoolListLayout() {
         <PoolListTable count={count || 0} loading={loading} pools={pools} />
       </ErrorBoundary>
     </VStack>
-  )
+  );
 }

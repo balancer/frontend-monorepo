@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Button, Center, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react';
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import Image from 'next/image'
@@ -43,8 +43,7 @@ export function Hero() {
               top: 0,
               left: 0,
               right: 0,
-              bottom: 0,
-            }}
+              bottom: 0 }}
             transition={{ duration: 3, ease: 'easeInOut' }}
           >
             {isDarkMode ? (
@@ -67,18 +66,16 @@ export function Hero() {
           </motion.div>
         </AnimatePresence>
       </Box>
-
       <DefaultPageContainer flex="1" h="100vh" minH="600px" noVerticalPadding position="relative">
         <Center h="full" justifyContent="start">
-          <VStack alignItems="start" spacing="xl">
+          <VStack alignItems="start" gap="xl">
             <MotionText
               animate={
                 isInView
                   ? {
                       opacity: 1,
                       filter: 'blur(0px)',
-                      willChange: 'opacity, filter',
-                    }
+                      willChange: 'opacity, filter' }
                   : {}
               }
               background="font.special"
@@ -109,8 +106,7 @@ export function Hero() {
                       opacity: 1,
                       y: 0,
                       filter: 'blur(0px)',
-                      willChange: 'transform, opacity, filter',
-                    }
+                      willChange: 'transform, opacity, filter' }
                   : {}
               }
               as="h2"
@@ -125,14 +121,13 @@ export function Hero() {
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
               simplicity and flexibility to reshape the future of AMMs.
             </MotionHeading>
-            <Stack alignItems={{ base: 'start', md: 'center' }} direction="row" mt="0" spacing="ms">
+            <Stack alignItems={{ base: 'start', md: 'center' }} direction="row" mt="0" gap="ms">
               <MotionButton
                 animate={
                   isInView
                     ? {
                         opacity: 1,
-                        willChange: 'opacity',
-                      }
+                        willChange: 'opacity' }
                     : {}
                 }
                 as={Link}
@@ -153,8 +148,7 @@ export function Hero() {
                   isInView
                     ? {
                         opacity: 1,
-                        willChange: 'opacity',
-                      }
+                        willChange: 'opacity' }
                     : {}
                 }
                 as={Link}
@@ -170,7 +164,7 @@ export function Hero() {
                 Prototype v3
               </MotionButton>
             </Stack>
-            <HStack alignItems="center" mt="xl" spacing="md">
+            <HStack alignItems="center" mt="xl" gap="md">
               <MotionBox
                 animate={isInView ? { opacity: 1 } : {}}
                 as={Link}
@@ -213,5 +207,5 @@ export function Hero() {
         w="full"
       />
     </Noise>
-  )
+  );
 }

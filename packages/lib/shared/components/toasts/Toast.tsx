@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import {
   Box,
   VStack,
@@ -7,13 +6,12 @@ import {
   ToastProps,
   IconButton,
   BoxProps,
-  CircularProgress,
+  ProgressCircle,
   HStack,
   CircularProgressLabel,
   Text,
-  Tooltip,
-  Link,
-} from '@chakra-ui/react'
+  Link } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { useRef } from 'react'
 import { ArrowUpRight, Check, X } from 'react-feather'
 
@@ -30,8 +28,7 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
     rounded: 'md',
     shadow: 'xl',
     zIndex: '1000',
-    width: 'xs',
-  }
+    width: 'xs' }
 
   const statusOverlayStyles: BoxProps = {
     position: 'absolute',
@@ -51,16 +48,14 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
             : 'transparent',
     opacity: 0.2,
     rounded: 'md',
-    zIndex: 1001,
-  }
+    zIndex: 1001 }
 
   const contentStyles: BoxProps = {
     w: 'full',
     h: 'full',
     position: 'relative',
     padding: 'md',
-    zIndex: 1002,
-  }
+    zIndex: 1002 }
 
   function closeToast() {
     if (id) {
@@ -79,20 +74,17 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
         {linkUrl && (
           <>
             <div ref={ref} />
-            <Tooltip label="View on explorer" portalProps={{ containerRef: ref }}>
+            <Tooltip content="View on explorer">
               <IconButton
                 aria-label="View on explorer"
-                as={Link}
                 h="6"
-                href={linkUrl}
-                icon={<ArrowUpRight size={12} strokeWidth={3} />}
                 isExternal
                 position="absolute"
                 right="8"
                 size="xs"
                 top="xs"
                 w="6"
-              />
+                asChild><Link href={linkUrl}><ArrowUpRight size={12} strokeWidth={3} /></Link></IconButton>
             </Tooltip>
           </>
         )}
@@ -101,48 +93,39 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
           <IconButton
             aria-label="Close toast"
             h="6"
-            icon={<X size={12} strokeWidth={3} />}
             onClick={closeToast}
             position="absolute"
             right="xs"
             size="xs"
             top="xs"
-            w="6"
-          />
+            w="6"><X size={12} strokeWidth={3} /></IconButton>
         )}
         <HStack align="start">
           {status === 'loading' && (
-            <CircularProgress
-              color="font.warning"
-              isIndeterminate
-              mt="1"
-              size={5}
-              trackColor="border.base"
-            />
+            <ProgressCircle.Root value={String(null)} mt="1" size={5} trackColor="border.base">
+              <ProgressCircle.Circle>
+                <ProgressCircle.Track />
+                <ProgressCircle.Range stroke="font.warning" />
+              </ProgressCircle.Circle>
+            </ProgressCircle.Root>
           )}
           {status === 'success' && (
-            <CircularProgress
-              color="font.highlight"
-              mt="1"
-              size={5}
-              trackColor="border.base"
-              value={100}
-            >
-              <CircularProgressLabel color="font.highlight" fontSize="md" pl={1}>
-                <Check size={12} strokeWidth={4} />
-              </CircularProgressLabel>
-            </CircularProgress>
+            <ProgressCircle.Root value='100' mt="1" size={5} trackColor="border.base">
+              <ProgressCircle.Circle>
+                <ProgressCircle.Track />
+                <ProgressCircle.Range stroke="font.highlight" />
+              </ProgressCircle.Circle>
+            </ProgressCircle.Root>
           )}
           {status === 'error' && (
-            <CircularProgress color="red.500" mt="1" size={5} trackColor="border.base" value={100}>
-              <CircularProgressLabel>
-                <Text color="red.500" fontSize="xs" fontWeight="bold">
-                  !
-                </Text>
-              </CircularProgressLabel>
-            </CircularProgress>
+            <ProgressCircle.Root value='100' mt="1" size={5} trackColor="border.base">
+              <ProgressCircle.Circle>
+                <ProgressCircle.Track />
+                <ProgressCircle.Range stroke="red.500" />
+              </ProgressCircle.Circle>
+            </ProgressCircle.Root>
           )}
-          <VStack align="start" spacing="none">
+          <VStack align="start" gap="none">
             <Box color="font.primary" fontSize="md" fontWeight="bold">
               {title}
             </Box>
@@ -151,5 +134,5 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
         </HStack>
       </Box>
     </Box>
-  )
+  );
 }

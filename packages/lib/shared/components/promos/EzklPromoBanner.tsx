@@ -1,13 +1,13 @@
-'use client'
-
-import { Button, Heading, Flex, Box, Center, Text, Stack, useColorMode } from '@chakra-ui/react'
+'use client';
+import { Button, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 import { EzklIcon } from '@repo/lib/shared/components/icons/logos/EzklIcon'
 
 export function EzklPromoBanner() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
@@ -17,9 +17,9 @@ export function EzklPromoBanner() {
         position="relative"
         rounded="lg"
         shadow="innerRockShadow"
-        sx={{
+        css={{
           width: '100% !important',
-          maxWidth: '100% !important',
+          maxWidth: '100% !important'
         }}
         width="full"
       >
@@ -81,8 +81,8 @@ export function EzklPromoBanner() {
                       lineHeight="1.25"
                       maxW="600px"
                       opacity={colorMode === 'dark' ? '0.9' : '1'}
-                      sx={{
-                        textWrap: 'balance',
+                      css={{
+                        textWrap: 'balance'
                       }}
                     >
                       Fees on this pool are controlled by a strategy that adjusts fees based on
@@ -97,9 +97,7 @@ export function EzklPromoBanner() {
               <Button
                 _hover={{
                   bg: '#f00',
-                  color: colorMode === 'dark' ? '#fff' : '#fff',
-                }}
-                as={NextLink}
+                  color: colorMode === 'dark' ? '#fff' : '#fff' }}
                 bg={colorMode === 'dark' ? '#fff' : '#fff'}
                 border="1px solid"
                 borderColor={colorMode === 'dark' ? '#fff' : 'transparent'}
@@ -107,22 +105,21 @@ export function EzklPromoBanner() {
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}
-                href="https://blog.ezkl.xyz/post/defi3dot0/#ezkl-balancer-bringing-dynamic-fees-to-defi-today"
                 py="sm"
                 rounded="full"
                 size="md"
                 transition="all 0.3s var(--cubic)"
                 w="128px"
-              >
-                Learn more{' '}
-                <Box pl="xxs">
-                  <ArrowUpRight size="14px" />
-                </Box>
-              </Button>
+                asChild><NextLink
+                  href="https://blog.ezkl.xyz/post/defi3dot0/#ezkl-balancer-bringing-dynamic-fees-to-defi-today">Learn more{' '}
+                  <Box pl="xxs">
+                    <ArrowUpRight size="14px" />
+                  </Box>
+                </NextLink></Button>
             </Flex>
           </Flex>
         </Center>
       </Box>
     </Box>
-  )
+  );
 }

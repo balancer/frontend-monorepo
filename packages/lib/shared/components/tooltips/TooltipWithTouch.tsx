@@ -1,4 +1,5 @@
-import { Tooltip, Box, TooltipProps } from '@chakra-ui/react'
+import { Box, TooltipProps } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { useRef, useState } from 'react'
 
 type TooltipWithTouchProps = TooltipProps & {
@@ -41,10 +42,8 @@ export function TooltipWithTouch({
     <Tooltip
       bg="background.level4"
       color="font.secondary"
-      isDisabled={isDisabled}
-      isOpen={isLabelOpen}
-      {...rest}
-    >
+      disabled={isDisabled}
+      isOpen={isLabelOpen}>
       <Box
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
@@ -54,5 +53,5 @@ export function TooltipWithTouch({
         {children}
       </Box>
     </Tooltip>
-  )
+  );
 }

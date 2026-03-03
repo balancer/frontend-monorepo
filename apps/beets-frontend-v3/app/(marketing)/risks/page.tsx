@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Container, Divider, Box } from '@chakra-ui/react'
+import { Container, Box, Separator } from '@chakra-ui/react';
 import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useEffect } from 'react'
@@ -837,7 +837,7 @@ export default function Privacy() {
               </p>
             </div>
             <FadeInOnView>
-              <Divider />
+              <Separator />
               <FadeInOnView>
                 <div className="subsection">
                   {' '}
@@ -1402,7 +1402,7 @@ export default function Privacy() {
               </div>
             </FadeInOnView>
 
-            <Divider />
+            <Separator />
             <FadeInOnView>
               <div className="subsection">
                 <h3 className="anchor" id="network-risks">
@@ -1468,5 +1468,5 @@ export default function Privacy() {
         </div>
       </Prose>
     </Container>
-  )
+  );
 }

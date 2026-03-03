@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, VStack, Box } from '@chakra-ui/react'
+import { HStack, Icon, Text, VStack, Box } from '@chakra-ui/react';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
@@ -46,7 +46,7 @@ function Tile({ children }: PropsWithChildren) {
       px="sm"
       rounded="lg"
       shadow="2xl"
-      spacing="none"
+      gap="none"
     >
       <Box
         h="full"
@@ -81,7 +81,7 @@ function Tile({ children }: PropsWithChildren) {
       />
       {children}
     </VStack>
-  )
+  );
 }
 
 export function LbpHeaderTimeInfo() {
@@ -96,7 +96,7 @@ export function LbpHeaderTimeInfo() {
   return (
     <>
       {isBefore(currentTime, secondsToMilliseconds(lbpPool.startTime)) ? (
-        <HStack spacing="4" w="full">
+        <HStack gap="4" w="full">
           <HStack
             alignItems="center"
             backgroundColor="special"
@@ -110,7 +110,7 @@ export function LbpHeaderTimeInfo() {
             justifyContent="start"
             px="2"
           >
-            <Icon as={Clock} fontVariant="special" />
+            <Icon fontVariant="special" asChild><Clock /></Icon>
             <Text variant="special">{`LBP starts ${startTimeFormatted}`}</Text>
           </HStack>
 
@@ -128,11 +128,11 @@ export function LbpHeaderTimeInfo() {
           px="2"
           w="full"
         >
-          <Icon as={AlertTriangle} />
+          <Icon asChild><AlertTriangle /></Icon>
           <Text color="black">{`LBP ended ${endTimeFormatted}`}</Text>
         </HStack>
       ) : (
-        <HStack spacing="4" w="full">
+        <HStack gap="4" w="full">
           <HStack
             alignItems="center"
             bg="green.400"
@@ -143,7 +143,7 @@ export function LbpHeaderTimeInfo() {
             justifyContent="start"
             px="2"
           >
-            <Icon as={Clock} />
+            <Icon asChild><Clock /></Icon>
             <Text color="black">{`LBP is live! Ends ${endTimeFormatted}`}</Text>
           </HStack>
 
@@ -151,24 +151,24 @@ export function LbpHeaderTimeInfo() {
         </HStack>
       )}
     </>
-  )
+  );
 }
 
 function Countdown({ until }: { until: Date }) {
   const info = useDateCountdown(until)
 
   return (
-    <HStack flexShrink="0" h="48px" spacing="xs">
+    <HStack flexShrink="0" h="48px" gap="xs">
       <Tile>
-        <TimeElement title="D" value={String(info.daysDiff)} />
+        <TimeElement title="D" value={String(String(info.daysDiff))} />
       </Tile>
       <Tile>
-        <HStack spacing="xs">
-          <TimeElement title="H" value={String(info.hoursDiff).padStart(2, '0')} />
-          <TimeElement title="M" value={String(info.minutesDiff).padStart(2, '0')} />
-          <TimeElement title="S" value={String(info.secondsDiff).padStart(2, '0')} />
+        <HStack gap="xs">
+          <TimeElement title="H" value={String(String(info.hoursDiff).padStart(2, '0'))} />
+          <TimeElement title="M" value={String(String(info.minutesDiff).padStart(2, '0'))} />
+          <TimeElement title="S" value={String(String(info.secondsDiff).padStart(2, '0'))} />
         </HStack>
       </Tile>
     </HStack>
-  )
+  );
 }

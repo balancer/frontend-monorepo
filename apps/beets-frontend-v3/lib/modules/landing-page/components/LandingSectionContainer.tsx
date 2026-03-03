@@ -1,4 +1,4 @@
-import { Center, Heading, VStack, Text, Button, Flex, Link, Box, HStack } from '@chakra-ui/react'
+import { Center, Heading, VStack, Text, Button, Flex, Link, Box, HStack } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import React from 'react'
 import NextLink from 'next/link'
@@ -8,8 +8,7 @@ export function LandingSectionContainer({
   children,
   title,
   subtitle,
-  button,
-}: {
+  button }: {
   children: React.ReactNode
   title: string
   subtitle: string

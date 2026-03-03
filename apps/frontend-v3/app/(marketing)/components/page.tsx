@@ -10,19 +10,14 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Select,
-  UnorderedList,
-  ListItem,
+  NativeSelect,
   Stack,
   Avatar,
   Card,
   Checkbox,
   Radio,
   RadioGroup,
-  CardHeader,
-  CardBody,
   Link,
-  CardFooter,
   Image,
   Slider,
   SliderTrack,
@@ -30,14 +25,8 @@ import {
   SliderThumb,
   Tag,
   Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-} from '@chakra-ui/react'
+  Field,
+  List } from '@chakra-ui/react';
 
 import { darken } from '@chakra-ui/theme-tools'
 import Section from '@repo/lib/shared/components/layout/Section'
@@ -52,38 +41,37 @@ export default function Components() {
         <Heading as="h2" size="h4">
           Contents
         </Heading>
-        <UnorderedList>
-          <ListItem>
+        <List.Root as='ul'>
+          <List.Item>
             <a href="#colors">Colors</a>
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             <a href="#typography">Typography</a>
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             <a href="#buttons">Buttons</a>
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             <a href="#radius">Radius</a>
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             <a href="#elevation">Elevation</a>
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             <a href="#shadows">Shadows</a>
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             <a href="#alerts">Alerts</a>
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             <a href="#cards">Cards</a>
-          </ListItem>
+          </List.Item>
 
-          <ListItem>
+          <List.Item>
             <a href="#forms">Form fields</a>
-          </ListItem>
-        </UnorderedList>
+          </List.Item>
+        </List.Root>
       </Box>
-
       <Section fontWeight="bold" id="colors">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Colors
@@ -94,8 +82,7 @@ export default function Components() {
           <Stack direction="row">
             <Center
               _hover={{
-                bg: darken('blue.50', 10),
-              }}
+                bg: darken('blue.50', 10) }}
               bg="blue.50"
               color="black"
               fontSize="xs"
@@ -107,8 +94,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.100', 10),
-              }}
+                bg: darken('blue.100', 10) }}
               bg="blue.100"
               color="font.dark"
               fontSize="xs"
@@ -120,8 +106,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.200', 10),
-              }}
+                bg: darken('blue.200', 10) }}
               bg="blue.200"
               color="font.dark"
               fontSize="xs"
@@ -133,8 +118,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.300', 10),
-              }}
+                bg: darken('blue.300', 10) }}
               bg="blue.300"
               color="font.dark"
               fontSize="xs"
@@ -146,8 +130,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.400', 10),
-              }}
+                bg: darken('blue.400', 10) }}
               bg="blue.400"
               color="font.dark"
               fontSize="xs"
@@ -159,8 +142,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.500', 10),
-              }}
+                bg: darken('blue.500', 10) }}
               bg="blue.500"
               color="font.light"
               fontSize="xs"
@@ -172,8 +154,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.600', 10),
-              }}
+                bg: darken('blue.600', 10) }}
               bg="blue.600"
               color="font.light"
               fontSize="xs"
@@ -185,8 +166,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.700', 10),
-              }}
+                bg: darken('blue.700', 10) }}
               bg="blue.700"
               color="font.light"
               fontSize="xs"
@@ -197,8 +177,7 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('blue.800', 10),
-              }}
+                bg: darken('blue.800', 10) }}
               bg="blue.800"
               color="font.light"
               fontSize="xs"
@@ -209,8 +188,7 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('blue.900', 10),
-              }}
+                bg: darken('blue.900', 10) }}
               bg="blue.900"
               color="font.light"
               fontSize="xs"
@@ -227,8 +205,7 @@ export default function Components() {
           <Stack direction="row">
             <Center
               _hover={{
-                bg: darken('gray.50', 10),
-              }}
+                bg: darken('gray.50', 10) }}
               bg="gray.50"
               color="black"
               fontSize="xs"
@@ -240,8 +217,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.100', 10),
-              }}
+                bg: darken('gray.100', 10) }}
               bg="gray.100"
               color="font.dark"
               fontSize="xs"
@@ -253,8 +229,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.200', 10),
-              }}
+                bg: darken('gray.200', 10) }}
               bg="gray.200"
               color="font.dark"
               fontSize="xs"
@@ -266,8 +241,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.300', 10),
-              }}
+                bg: darken('gray.300', 10) }}
               bg="gray.300"
               color="font.dark"
               fontSize="xs"
@@ -279,8 +253,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.400', 10),
-              }}
+                bg: darken('gray.400', 10) }}
               bg="gray.400"
               color="font.dark"
               fontSize="xs"
@@ -292,8 +265,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.500', 10),
-              }}
+                bg: darken('gray.500', 10) }}
               bg="gray.500"
               color="font.light"
               fontSize="xs"
@@ -305,8 +277,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.600', 10),
-              }}
+                bg: darken('gray.600', 10) }}
               bg="gray.600"
               color="font.light"
               fontSize="xs"
@@ -318,8 +289,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.700', 10),
-              }}
+                bg: darken('gray.700', 10) }}
               bg="gray.700"
               color="font.light"
               fontSize="xs"
@@ -330,8 +300,7 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('gray.800', 10),
-              }}
+                bg: darken('gray.800', 10) }}
               bg="gray.800"
               color="font.light"
               fontSize="xs"
@@ -342,8 +311,7 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('gray.900', 10),
-              }}
+                bg: darken('gray.900', 10) }}
               bg="gray.900"
               color="font.light"
               fontSize="xs"
@@ -396,8 +364,7 @@ export default function Components() {
           <Stack direction="row">
             <Center
               _hover={{
-                bg: darken('orange.50', 10),
-              }}
+                bg: darken('orange.50', 10) }}
               bg="orange.50"
               color="black"
               fontSize="xs"
@@ -409,8 +376,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.100', 10),
-              }}
+                bg: darken('orange.100', 10) }}
               bg="orange.100"
               color="font.dark"
               fontSize="xs"
@@ -422,8 +388,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.200', 10),
-              }}
+                bg: darken('orange.200', 10) }}
               bg="orange.200"
               color="font.dark"
               fontSize="xs"
@@ -435,8 +400,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.300', 10),
-              }}
+                bg: darken('orange.300', 10) }}
               bg="orange.300"
               color="font.dark"
               fontSize="xs"
@@ -448,8 +412,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.400', 10),
-              }}
+                bg: darken('orange.400', 10) }}
               bg="orange.400"
               color="font.dark"
               fontSize="xs"
@@ -461,8 +424,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.500', 10),
-              }}
+                bg: darken('orange.500', 10) }}
               bg="orange.500"
               color="font.light"
               fontSize="xs"
@@ -474,8 +436,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.600', 10),
-              }}
+                bg: darken('orange.600', 10) }}
               bg="orange.600"
               color="font.light"
               fontSize="xs"
@@ -487,8 +448,7 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.700', 10),
-              }}
+                bg: darken('orange.700', 10) }}
               bg="orange.700"
               color="font.light"
               fontSize="xs"
@@ -499,8 +459,7 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('orange.800', 10),
-              }}
+                bg: darken('orange.800', 10) }}
               bg="orange.800"
               color="font.light"
               fontSize="xs"
@@ -511,8 +470,7 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('orange.900', 10),
-              }}
+                bg: darken('orange.900', 10) }}
               bg="orange.900"
               color="font.light"
               fontSize="xs"
@@ -632,19 +590,18 @@ export default function Components() {
         <Section variant="subsection">
           <Heading size="h3">Gradients</Heading>
 
-          <Stack direction="column" mb="8" spacing="8">
+          <Stack direction="column" mb="8" gap="8">
             <Center bg="background.special" h="16" w="100%">
               Background special
             </Center>
           </Stack>
-          <Stack direction="column" mb="8" spacing="8">
+          <Stack direction="column" mb="8" gap="8">
             <Center bg="background.specialSecondary" h="16" w="100%">
               Background special secondary
             </Center>
           </Stack>
         </Section>
       </Section>
-
       <Section id="typography">
         <Heading as="h1" size="h1-hero" variant="special">
           Typography
@@ -739,26 +696,26 @@ export default function Components() {
         </Box>
         <Box mb="8">
           <Text variant="eyebrow">Unordered list items</Text>
-          <Tag colorScheme="red" my="2">
+          <Tag.Root colorPalette="red" my="2">
             To do
-          </Tag>
-          <UnorderedList>
-            <ListItem>
+          </Tag.Root>
+          <List.Root as='ul'>
+            <List.Item>
               <a href="#colors">Colors</a>
-            </ListItem>
-            <ListItem>
+            </List.Item>
+            <List.Item>
               <a href="#typography">Typography</a>
-            </ListItem>
-            <ListItem>
+            </List.Item>
+            <List.Item>
               <a href="#buttons">Buttons</a>
-            </ListItem>
-            <ListItem>
+            </List.Item>
+            <List.Item>
               <a href="#cards">Cards</a>
-            </ListItem>
-            <ListItem>
+            </List.Item>
+            <List.Item>
               <a href="#inputs">Inputs</a>
-            </ListItem>
-          </UnorderedList>
+            </List.Item>
+          </List.Root>
         </Box>
         <Box mb="8">
           <Text variant="eyebrow">Link</Text>
@@ -779,7 +736,6 @@ export default function Components() {
           <Text variant="eyebrow">Lorem ipsum</Text>
         </Box>
       </Section>
-
       <Section id="buttons">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Buttons
@@ -803,7 +759,7 @@ export default function Components() {
             <Button variant="solid">Solid button (default)</Button>
             <Button variant="outline">Outline button</Button>
             <Button variant="ghost">Ghost button</Button>
-            <Button variant="link">Link button</Button>
+            <Button variant='plain'>Link button</Button>
           </Flex>
         </Section>
         <Section variant="subsection">
@@ -823,7 +779,6 @@ export default function Components() {
           </Flex>
         </Section>
       </Section>
-
       <Section id="radius">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Border Radius
@@ -876,183 +831,179 @@ export default function Components() {
           </Center>
         </Stack>
       </Section>
-
       <Section id="elevation">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Elevation
         </Heading>
         <Text mb="4">8 level elevation system</Text>
-        <UnorderedList mb="4">
-          <ListItem>
+        <List.Root as='ul' mb="4">
+          <List.Item>
             Background color is determined by height.
-            <UnorderedList>
-              <ListItem>The higher it is, the lighter the color.</ListItem>
-            </UnorderedList>
-          </ListItem>
-          <ListItem>
+            <List.Root as='ul'>
+              <List.Item>The higher it is, the lighter the color.</List.Item>
+            </List.Root>
+          </List.Item>
+          <List.Item>
             Shadows are relative.
-            <UnorderedList>
-              <ListItem>
+            <List.Root as='ul'>
+              <List.Item>
                 The shadow size is dependent on the relative distance between it and the next level.
-              </ListItem>
-            </UnorderedList>
-          </ListItem>
-        </UnorderedList>
+              </List.Item>
+            </List.Root>
+          </List.Item>
+        </List.Root>
         <Heading size="h4">Card colors</Heading>
         <Section variant="subsection">
-          <Card variant="level0">
-            <CardBody>
+          <Card.Root variant="level0">
+            <Card.Body>
               <Text>Card level 0</Text>
-              <Card variant="level1">
-                <CardBody>
+              <Card.Root variant="level1">
+                <Card.Body>
                   <Text>Card level 1</Text>
-                  <Card variant="level2">
-                    <CardBody>
+                  <Card.Root variant="level2">
+                    <Card.Body>
                       <Text>Card level 2</Text>
-                      <Card variant="level3">
-                        <CardBody>
+                      <Card.Root variant="level3">
+                        <Card.Body>
                           <Text>Card level 3</Text>
-                          <Card variant="level4">
-                            <CardBody>
+                          <Card.Root variant="level4">
+                            <Card.Body>
                               <Text>Card level 4</Text>
-                            </CardBody>
-                          </Card>
-                        </CardBody>
-                      </Card>
-                    </CardBody>
-                  </Card>
-                </CardBody>
-              </Card>
-            </CardBody>
-          </Card>
+                            </Card.Body>
+                          </Card.Root>
+                        </Card.Body>
+                      </Card.Root>
+                    </Card.Body>
+                  </Card.Root>
+                </Card.Body>
+              </Card.Root>
+            </Card.Body>
+          </Card.Root>
         </Section>
       </Section>
-
       <Section id="shadows">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Shadows
         </Heading>
         <Stack direction="row" flexWrap="wrap" mb="8">
-          <Card shadow="xs" variant="level5">
-            <CardBody>
+          <Card.Root shadow="xs" variant="level5">
+            <Card.Body>
               <Text>xs</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="sm" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="sm" variant="level5">
+            <Card.Body>
               <Text>sm</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="base" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="base" variant="level5">
+            <Card.Body>
               <Text>base</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="md" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="md" variant="level5">
+            <Card.Body>
               <Text>md</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="lg" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="lg" variant="level5">
+            <Card.Body>
               <Text>lg</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="xl" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="xl" variant="level5">
+            <Card.Body>
               <Text>xl</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="2xl" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="2xl" variant="level5">
+            <Card.Body>
               <Text>2xl</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="dark-lg" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="dark-lg" variant="level5">
+            <Card.Body>
               <Text>dark-lg</Text>
-            </CardBody>
-          </Card>
+            </Card.Body>
+          </Card.Root>
         </Stack>
         <Stack direction="row" flexWrap="wrap">
-          <Card shadow="outline" variant="level5">
-            <CardBody>
+          <Card.Root shadow="outline" variant="level5">
+            <Card.Body>
               <Text>outline</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="innerBase" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="innerBase" variant="level5">
+            <Card.Body>
               <Text>inner base</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="inner" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="inner" variant="level5">
+            <Card.Body>
               <Text>inner</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="innerSm" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="innerSm" variant="level5">
+            <Card.Body>
               <Text>innerSm</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="innerMd" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="innerMd" variant="level5">
+            <Card.Body>
               <Text>innerMd</Text>
-            </CardBody>
-          </Card>
-          <Card shadow="innerLg" variant="level5">
-            <CardBody>
+            </Card.Body>
+          </Card.Root>
+          <Card.Root shadow="innerLg" variant="level5">
+            <Card.Body>
               <Text>innerLg</Text>
-            </CardBody>
-          </Card>
+            </Card.Body>
+          </Card.Root>
         </Stack>
       </Section>
-
       <Section id="alerts">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Alerts
         </Heading>
         <Section variant="subsection">
-          <Alert status="error">
-            <AlertIcon />
-            <AlertTitle>Your browser is outdated!</AlertTitle>
-            <AlertDescription>Your Chakra experience may be degraded.</AlertDescription>
-          </Alert>
+          <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>Your browser is outdated!</Alert.Title>
+            <Alert.Description>Your Chakra experience may be degraded.</Alert.Description>
+          </Alert.Root>
         </Section>
 
         <Section variant="subsection">
-          <Alert status="success">
-            <AlertIcon />
-            <AlertTitle>Your browser is outdated!</AlertTitle>
-            <AlertDescription>Your Chakra experience may be degraded.</AlertDescription>
-          </Alert>
+          <Alert.Root status="success">
+            <Alert.Indicator />
+            <Alert.Title>Your browser is outdated!</Alert.Title>
+            <Alert.Description>Your Chakra experience may be degraded.</Alert.Description>
+          </Alert.Root>
         </Section>
         <Section variant="subsection">
-          <Alert status="warning">
-            <AlertIcon />
-            <AlertTitle>Your browser is outdated!</AlertTitle>
-            <AlertDescription>Your Chakra experience may be degraded.</AlertDescription>
-          </Alert>
+          <Alert.Root status="warning">
+            <Alert.Indicator />
+            <Alert.Title>Your browser is outdated!</Alert.Title>
+            <Alert.Description>Your Chakra experience may be degraded.</Alert.Description>
+          </Alert.Root>
         </Section>
 
         <Section variant="subsection">
-          <Alert status="info">
-            <AlertIcon />
-            <AlertTitle>Your browser is outdated!</AlertTitle>
-            <AlertDescription>A tip or piece of information.</AlertDescription>
-          </Alert>
+          <Alert.Root status="info">
+            <Alert.Indicator />
+            <Alert.Title>Your browser is outdated!</Alert.Title>
+            <Alert.Description>A tip or piece of information.</Alert.Description>
+          </Alert.Root>
         </Section>
       </Section>
-
       <Section id="cards">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Cards
         </Heading>
-        <Card maxW="md">
-          <CardHeader>
+        <Card.Root maxW="md">
+          <Card.Header>
             <Flex>
               <Flex alignItems="center" flex="1" flexWrap="wrap" gap="4">
-                <Avatar name="Avatar name" src="https://placehold.co/80" />
+                <Avatar.Root><Avatar.Fallback /><Avatar.Root><Avatar.Fallback name="Avatar name" /></Avatar.Root><Avatar.Root><Avatar.Fallback /><Avatar.Image src="https://placehold.co/80" /></Avatar.Root></Avatar.Root>
 
                 <Box>
                   <Heading size="sm">Title</Heading>
@@ -1060,23 +1011,22 @@ export default function Components() {
                 </Box>
               </Flex>
             </Flex>
-          </CardHeader>
-          <CardBody>
+          </Card.Header>
+          <Card.Body>
             <Text>
               lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora quidem ipsa magnam
               dignissimos impedit odit tempore, necessitatibus provident cupiditate. Explicabo iusto
               incidunt illum molestiae, dolores quam odit cupiditate id quibusdam!
             </Text>
-          </CardBody>
+          </Card.Body>
           <Image alt="Chakra UI" objectFit="cover" src="https://placehold.co/400x200" />
 
-          <CardFooter
+          <Card.Footer
             flexWrap="wrap"
             justify="space-between"
-            sx={{
-              '& > button': {
-                minW: '136px',
-              },
+            css={{
+              '& & > button': {
+                minW: '136px' }
             }}
           >
             <Button flex="1" variant="ghost">
@@ -1088,10 +1038,9 @@ export default function Components() {
             <Button flex="1" variant="ghost">
               Share
             </Button>
-          </CardFooter>
-        </Card>
+          </Card.Footer>
+        </Card.Root>
       </Section>
-
       <Section id="forms" maxW="375px">
         <Heading as="h1" size="h1-hero" variant="gradient-dusk">
           Form fields
@@ -1110,20 +1059,18 @@ export default function Components() {
         <Section maxW="sm">
           <Section variant="subsection">
             <Box>
-              <FormControl>
-                <FormLabel>Input label</FormLabel>
+              <Field.Root>
+                <Field.Label>Input label</Field.Label>
                 <InputGroup>
                   <Input
                     _focus={{
                       bg: 'input.bgFocus',
-                      borderColor: 'input.borderFocus',
-                    }}
+                      borderColor: 'input.borderFocus' }}
                     _focusVisible={{
                       bg: 'input.bgFocus',
                       borderColor: 'input.borderFocus',
                       shadow: 'input.innerFocus',
-                      color: 'input.fontFocus',
-                    }}
+                      color: 'input.fontFocus' }}
                     _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
                     bg="input.bgDefault"
                     border="1px solid"
@@ -1136,58 +1083,55 @@ export default function Components() {
                     {/* This doesn't work, but color="yellow" does work... */}
                   </InputRightElement>
                 </InputGroup>
-                <FormHelperText color="input.fontHint" fontWeight="medium">
+                <Field.HelperText color="input.fontHint" fontWeight="medium">
                   Hint text that is displayed on focus of the input
-                </FormHelperText>
-              </FormControl>
+                </Field.HelperText>
+              </Field.Root>
             </Box>
           </Section>
           <Section variant="subsection">
-            <FormControl isInvalid>
-              <FormLabel>Input label</FormLabel>
+            <Field.Root invalid>
+              <Field.Label>Input label</Field.Label>
               <Input
                 _focusVisible={{
                   shadow: 'input.innerError', // Working
-                  bg: 'input.bgFocus',
-                }}
+                  bg: 'input.bgFocus' }}
                 _hover={{ bg: 'input.bgHover' }}
                 border="1px solid"
-                borderColor="yellow" // Not working
+                // Not working
+                borderColor="yellow"
                 defaultValue="500.00"
-                errorBorderColor="red.400" // This works but I'd like to set it to 'inner.borderError' to also get the dark mode style
                 placeholder="Placeholder"
-                shadow="input.innerError" // Not working
-                type="text"
-              />
-              <FormErrorMessage color="input.fontHintError" fontWeight="medium">
+                // Not working
+                shadow="input.innerError"
+                type="text" />
+              <Field.ErrorText color="input.fontHintError" fontWeight="medium">
                 Exceeds wallet balance
-              </FormErrorMessage>
-            </FormControl>
+              </Field.ErrorText>
+            </Field.Root>
           </Section>
           <Section variant="subsection">
             <Box>
-              <FormControl isDisabled>
-                <FormLabel>Disabled input label</FormLabel>
+              <Field.Root disabled>
+                <Field.Label>Disabled input label</Field.Label>
                 <Input
                   _focus={{
                     bg: 'input.bgFocus',
-                    borderColor: 'input.borderFocus',
-                  }}
+                    borderColor: 'input.borderFocus' }}
                   _focusVisible={{
                     bg: 'input.bgFocus',
                     borderColor: 'input.borderFocus',
-                    shadow: 'input.innerFocus',
-                  }}
+                    shadow: 'input.innerFocus' }}
                   _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
                   bg="input.bgDefault"
                   border="1px solid"
                   borderColor="input.borderDefault"
-                  isDisabled
+                  disabled
                   placeholder="Placeholder"
                   type="email"
                   // boxShadow="input.innerBase"
                 />
-              </FormControl>
+              </Field.Root>
             </Box>
           </Section>
         </Section>
@@ -1210,18 +1154,21 @@ export default function Components() {
           <Text mb="4" variant="eyebrow">
             Disabled input
           </Text>
-          <Input isDisabled placeholder="Placeholder text" />
+          <Input disabled placeholder="Placeholder text" />
         </Box>
 
         <Box mb="8">
           <Text mb="4" variant="eyebrow">
             Select
           </Text>
-          <Select placeholder="Select option">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-          </Select>
+          <NativeSelect.Root>
+            <NativeSelect.Field placeholder="Select option">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </NativeSelect.Field>
+            <NativeSelect.Indicator />
+          </NativeSelect.Root>
         </Box>
 
         <Box mb="8">
@@ -1229,8 +1176,8 @@ export default function Components() {
             Checkbox
           </Text>
           <Stack>
-            <Checkbox defaultChecked>Checkbox</Checkbox>
-            <Checkbox isDisabled>Checkbox</Checkbox>
+            <Checkbox.Root defaultChecked><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>Checkbox</Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+            <Checkbox.Root disabled><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>Checkbox</Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
           </Stack>
         </Box>
 
@@ -1238,29 +1185,28 @@ export default function Components() {
           <Text mb="4" variant="eyebrow">
             Radios
           </Text>
-          <RadioGroup defaultValue="1">
+          <RadioGroup.Root defaultValue="1">
             <Stack>
-              <Radio isDisabled value="1">
-                Checked
-              </Radio>
-              <Radio value="2">Unchecked</Radio>
-              <Radio value="3">Unchecked</Radio>
+              <RadioGroup.Item disabled value="1"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Checked
+                                </RadioGroup.ItemText></RadioGroup.Item>
+              <RadioGroup.Item value="2"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Unchecked</RadioGroup.ItemText></RadioGroup.Item>
+              <RadioGroup.Item value="3"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Unchecked</RadioGroup.ItemText></RadioGroup.Item>
             </Stack>
-          </RadioGroup>
+          </RadioGroup.Root>
         </Box>
 
         <Box mb="8">
           <Text mb="4" variant="eyebrow">
             Slider
           </Text>
-          <Slider aria-label="slider-ex-1" defaultValue={30}>
+          <Slider.Root aria-label="slider-ex-1" defaultValue='30'>
             <SliderTrack>
               <SliderFilledTrack />
             </SliderTrack>
             <SliderThumb />
-          </Slider>
+          </Slider.Root>
         </Box>
       </Section>
     </Box>
-  )
+  );
 }

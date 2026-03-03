@@ -1,4 +1,4 @@
-import { Button, HStack } from '@chakra-ui/react'
+import { Button, HStack } from '@chakra-ui/react';
 import { queryClient } from '@repo/lib/shared/app/react-query.provider'
 import { addDays } from 'date-fns'
 import MockDate from 'mockdate'

@@ -6,9 +6,8 @@ import { TransactionLabels } from '@repo/lib/modules/transactions/transaction-st
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import {
   ManagedTransactionInput,
-  useManagedTransaction,
-} from '@repo/lib/modules/web3/contracts/useManagedTransaction'
-import { Center, VStack } from '@chakra-ui/react'
+  useManagedTransaction } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
+import { Center, VStack } from '@chakra-ui/react';
 
 export default function Page() {
   const labels: TransactionLabels = {
@@ -17,8 +16,7 @@ export default function Page() {
     init: 'Revoke relayer approval',
     confirming: 'Confirming relayer approval revoke...',
     confirmed: 'Relayer revoked!',
-    tooltip: '',
-  }
+    tooltip: '' }
   const { chain, userAddress } = useUserAccount()
   const chainId = chain?.id || 1
   const config = getNetworkConfig(chainId)
@@ -35,8 +33,7 @@ export default function Page() {
     args: [userAddress, relayerAddress, false],
     enabled: !!userAddress,
     txSimulationMeta: {},
-    onTransactionChange: () => {},
-  }
+    onTransactionChange: () => {} }
 
   const transaction = useManagedTransaction(props)
 

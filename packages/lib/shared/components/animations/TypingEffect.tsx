@@ -1,6 +1,6 @@
 'use client'
 
-import { chakra, TextProps } from '@chakra-ui/react'
+import { chakra, TextProps } from '@chakra-ui/react';
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 

@@ -5,8 +5,7 @@ import {
   GridItem,
   GridItemProps,
   GridProps,
-  useDisclosure,
-} from '@chakra-ui/react'
+  useDisclosure } from '@chakra-ui/react';
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useRef } from 'react'
 import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
@@ -29,8 +28,7 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
     hasExpiredGauges,
     hasNewVotes,
     selectableVotes,
-    setSelectedVotes,
-  } = useMyVotes()
+    setSelectedVotes } = useMyVotes()
   const { allowChangeVotes } = useVotes()
   const { changedVotes } = useMyVotes()
   const numberOfSelectableVotes = changedVotes.filter(vote => {
@@ -41,16 +39,14 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
   const submitBtn = useRef(null)
 
   const {
-    isOpen: submitModalIsOpen,
+    open: submitModalIsOpen,
     onOpen: submitModalOnOpen,
-    onClose: submitModalOnClose,
-  } = useDisclosure()
+    onClose: submitModalOnClose } = useDisclosure()
 
   const {
-    isOpen: poolSelectionIsOpen,
+    open: poolSelectionIsOpen,
     onOpen: poolSelectionOnOpen,
-    onClose: poolSelectionOnClose,
-  } = useDisclosure()
+    onClose: poolSelectionOnClose } = useDisclosure()
 
   // hasExpiredGauges - allow to submit votes if there are expired pool gauges, so user could "remove" these pools
   const isDisabled =
@@ -82,8 +78,7 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
       <FadeInOnView>
         <Box
           _hover={{
-            bg: 'background.level0',
-          }}
+            bg: 'background.level0' }}
           key={keyValue}
           px={{ base: '0', sm: 'md' }}
           rounded="md"
@@ -98,7 +93,7 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
             <GridItem {...cellProps} />
             <GridItem justifySelf="end" textAlign="right" {...cellProps}>
               <Button
-                isDisabled={isDisabled}
+                disabled={isDisabled}
                 onClick={submitVotes}
                 ref={submitBtn}
                 variant="primary"
@@ -110,19 +105,17 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
           </Grid>
         </Box>
       </FadeInOnView>
-
       <SubmitVotesModal
         finalFocusRef={submitBtn}
         isOpen={submitModalIsOpen}
         onClose={handleClose}
         onOpen={submitModalOnOpen}
       />
-
       <PoolSelectionModal
         isOpen={poolSelectionIsOpen}
         onClose={poolSelectionOnClose}
         onContinue={continueAfterPoolSelection}
       />
     </>
-  )
+  );
 }

@@ -1,16 +1,6 @@
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
-import {
-  HStack,
-  VStack,
-  Text,
-  Icon,
-  Box,
-  Skeleton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from '@chakra-ui/react'
+import { HStack, VStack, Text, Icon, Box, Skeleton, Popover, HoverCard } from '@chakra-ui/react';
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePool } from '../PoolProvider'
@@ -36,8 +26,7 @@ export function PoolActionsPriceImpactDetails({
   slippage,
   isAddLiquidity = false,
   isLoading = false,
-  isSummary = false,
-}: PoolActionsPriceImpactDetailsProps) {
+  isSummary = false }: PoolActionsPriceImpactDetailsProps) {
   const { toCurrency } = useCurrency()
   const { pool } = usePool()
 
@@ -63,7 +52,7 @@ export function PoolActionsPriceImpactDetails({
         : 'Potential losses may arise from high price impact and/or high swap fees. Removing liquidity as a single token can cause high price impact, since the pool rebalances by ‘swapping’ some of non-selected tokens to replace the removed token, which unfavorably shifts the internal price. To avoid price impact, switch to ‘Proportional’ mode (if available). Or in ‘Single token’ mode, remove a smaller amount.'
 
   return (
-    <VStack align="start" fontSize="sm" spacing="sm" w="full">
+    <VStack align="start" fontSize="sm" gap="sm" w="full">
       <HStack justify="space-between" w="full">
         <Text color="grayText" fontSize="sm">
           Potential losses
@@ -78,8 +67,8 @@ export function PoolActionsPriceImpactDetails({
               {toCurrency(priceImpactUsd, { abbreviated: false })} ({priceImpactLabel})
             </NumberText>
           )}
-          <Popover trigger="hover">
-            <PopoverTrigger>
+          <HoverCard.Root>
+            <HoverCard.Trigger asChild>
               {priceImpactLevel === 'low' ? (
                 <Box
                   _hover={{ opacity: 1 }}
@@ -93,13 +82,15 @@ export function PoolActionsPriceImpactDetails({
                   <PriceImpactIcon priceImpactLevel={priceImpactLevel} />
                 </Box>
               )}
-            </PopoverTrigger>
-            <PopoverContent maxW="300px" p="sm" w="auto">
-              <Text fontSize="sm" variant="secondary">
-                {priceImpactTooltip}
-              </Text>
-            </PopoverContent>
-          </Popover>
+            </HoverCard.Trigger>
+            <HoverCard.Positioner>
+              <HoverCard.Content maxW="300px" p="sm" w="auto">
+                <Text fontSize="sm" variant="secondary">
+                  {priceImpactTooltip}
+                </Text>
+              </HoverCard.Content>
+            </HoverCard.Positioner>
+          </HoverCard.Root>
         </HStack>
       </HStack>
       <HStack justify="space-between" w="full">
@@ -114,8 +105,8 @@ export function PoolActionsPriceImpactDetails({
               {toCurrency(maxSlippageUsd, { abbreviated: false })} ({fNum('slippage', slippage)})
             </NumberText>
           )}
-          <Popover trigger="hover">
-            <PopoverTrigger>
+          <HoverCard.Root>
+            <HoverCard.Trigger asChild>
               <Box
                 _hover={{ opacity: 1 }}
                 opacity="0.5"
@@ -123,15 +114,17 @@ export function PoolActionsPriceImpactDetails({
               >
                 <InfoIcon />
               </Box>
-            </PopoverTrigger>
-            <PopoverContent maxW="300px" p="sm" w="auto">
-              <Text fontSize="sm" variant="secondary">
-                Slippage occurs when market conditions change between the time your order is
-                submitted and the time it gets executed on-chain. Slippage tolerance is the maximum
-                change in price you are willing to accept.
-              </Text>
-            </PopoverContent>
-          </Popover>
+            </HoverCard.Trigger>
+            <HoverCard.Positioner>
+              <HoverCard.Content maxW="300px" p="sm" w="auto">
+                <Text fontSize="sm" variant="secondary">
+                  Slippage occurs when market conditions change between the time your order is
+                  submitted and the time it gets executed on-chain. Slippage tolerance is the maximum
+                  change in price you are willing to accept.
+                </Text>
+              </HoverCard.Content>
+            </HoverCard.Positioner>
+          </HoverCard.Root>
         </HStack>
       </HStack>
       {isAddLiquidity && !isSummary && (
@@ -149,8 +142,8 @@ export function PoolActionsPriceImpactDetails({
                 </NumberText>
               )}
             </HStack>
-            <Popover trigger="hover">
-              <PopoverTrigger>
+            <HoverCard.Root>
+              <HoverCard.Trigger asChild>
                 <Box
                   _hover={{ opacity: 1 }}
                   opacity="0.5"
@@ -158,15 +151,17 @@ export function PoolActionsPriceImpactDetails({
                 >
                   <InfoIcon />
                 </Box>
-              </PopoverTrigger>
-              <PopoverContent maxW="300px" p="sm" w="auto">
-                <Text fontSize="sm" variant="secondary">
-                  LP tokens are digital assets which are issued to Liquidity Providers to represent
-                  their share of the pool. LP tokens can be redeemed to reclaim the original tokens
-                  plus certain types of accumulated yield (like swap fees).
-                </Text>
-              </PopoverContent>
-            </Popover>
+              </HoverCard.Trigger>
+              <HoverCard.Positioner>
+                <HoverCard.Content maxW="300px" p="sm" w="auto">
+                  <Text fontSize="sm" variant="secondary">
+                    LP tokens are digital assets which are issued to Liquidity Providers to represent
+                    their share of the pool. LP tokens can be redeemed to reclaim the original tokens
+                    plus certain types of accumulated yield (like swap fees).
+                  </Text>
+                </HoverCard.Content>
+              </HoverCard.Positioner>
+            </HoverCard.Root>
           </HStack>
         </HStack>
       )}
@@ -183,15 +178,15 @@ export function PoolActionsPriceImpactDetails({
                 <NumberText color="grayText" fontSize="sm" opacity="0.7">
                   {fNum('sharePercent', currentShareOfPool)}
                 </NumberText>
-                <Icon as={ArrowRight} color="grayText" opacity="0.7" />
+                <Icon color="grayText" opacity="0.7" asChild><ArrowRight /></Icon>
                 <NumberText color="grayText" fontSize="sm">
                   {fNum('sharePercent', futureShareOfPool)}
                 </NumberText>
               </>
             )}
           </HStack>
-          <Popover trigger="hover">
-            <PopoverTrigger>
+          <HoverCard.Root>
+            <HoverCard.Trigger asChild>
               <Box
                 _hover={{ opacity: 1 }}
                 opacity="0.5"
@@ -199,15 +194,17 @@ export function PoolActionsPriceImpactDetails({
               >
                 <InfoIcon />
               </Box>
-            </PopoverTrigger>
-            <PopoverContent maxW="300px" p="sm" w="auto">
-              <Text fontSize="sm" variant="secondary">
-                The percentage of the pool that you will own after this transaction.
-              </Text>
-            </PopoverContent>
-          </Popover>
+            </HoverCard.Trigger>
+            <HoverCard.Positioner>
+              <HoverCard.Content maxW="300px" p="sm" w="auto">
+                <Text fontSize="sm" variant="secondary">
+                  The percentage of the pool that you will own after this transaction.
+                </Text>
+              </HoverCard.Content>
+            </HoverCard.Positioner>
+          </HoverCard.Root>
         </HStack>
       </HStack>
     </VStack>
-  )
+  );
 }

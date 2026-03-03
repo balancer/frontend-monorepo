@@ -1,9 +1,9 @@
 'use client'
 
-import { Button, Heading, Text, VStack, Flex, Box, useToken } from '@chakra-ui/react'
+import { Button, Heading, Text, VStack, Flex, Box, useToken } from '@chakra-ui/react';
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
-import { Link } from '@chakra-ui/react'
+import { Link } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 import { HomeCaseStudies } from '@repo/lib/shared/components/marketing/HomeCaseStudies'
 
@@ -74,8 +74,7 @@ export function HomeHero() {
                   pb="lg"
                   position="relative"
                   sx={{
-                    fontSize: 'clamp(100px, 18vw, 200px)',
-                  }}
+                    fontSize: 'clamp(100px, 18vw, 200px)' }}
                 >
                   Earn
                 </Heading>
@@ -124,8 +123,7 @@ export function HomeHero() {
                   pb="lg"
                   position="relative"
                   sx={{
-                    fontSize: 'clamp(100px, 18vw, 200px)',
-                  }}
+                    fontSize: 'clamp(100px, 18vw, 200px)' }}
                 >
                   Build
                 </Heading>
@@ -179,16 +177,14 @@ export function HomeHero() {
                               <Box display="block" px="md" py="sm" role="group" w="full">
                                 <Link
                                   _groupHover={{
-                                    textDecoration: 'none',
-                                  }}
+                                    textDecoration: 'none' }}
                                   as={NextLink}
                                   href="/build/v3"
                                   prefetch
                                 >
                                   <Text
                                     _groupHover={{
-                                      color: 'font.maxContrast',
-                                    }}
+                                      color: 'font.maxContrast' }}
                                     fontWeight="bold"
                                     overflow="hidden"
                                     transition="all 0.2s ease-out 0.1s"
@@ -212,8 +208,7 @@ export function HomeHero() {
                               <Box display="block" px="md" py="sm" role="group" w="full">
                                 <Link
                                   _groupHover={{
-                                    textDecoration: 'none',
-                                  }}
+                                    textDecoration: 'none' }}
                                   href="https://docs.balancer.fi/"
                                 >
                                   <Flex alignItems="center" gap="xxs">
@@ -243,8 +238,7 @@ export function HomeHero() {
                               <Box display="block" px="md" py="sm" role="group" w="full">
                                 <Link
                                   _groupHover={{
-                                    textDecoration: 'none',
-                                  }}
+                                    textDecoration: 'none' }}
                                   href="https://github.com/balancer/scaffold-balancer-v3"
                                 >
                                   <Flex alignItems="center" gap="xxs">
@@ -274,8 +268,7 @@ export function HomeHero() {
                               <Box display="block" px="md" py="sm" role="group" w="full">
                                 <Link
                                   _groupHover={{
-                                    textDecoration: 'none',
-                                  }}
+                                    textDecoration: 'none' }}
                                   href="https://docs.balancer.fi/"
                                 >
                                   <Flex alignItems="center" gap="xxs">
@@ -304,8 +297,7 @@ export function HomeHero() {
                               <Box display="block" px="md" py="sm" role="group" w="full">
                                 <Link
                                   _groupHover={{
-                                    textDecoration: 'none',
-                                  }}
+                                    textDecoration: 'none' }}
                                   href="https://grants.balancer.community/"
                                 >
                                   <Flex alignItems="center" gap="xxs">

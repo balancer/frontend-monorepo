@@ -1,4 +1,4 @@
-import { Box, Container, ContainerProps } from '@chakra-ui/react'
+import { Box, Container, ContainerProps } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react'
 
 type Props = {

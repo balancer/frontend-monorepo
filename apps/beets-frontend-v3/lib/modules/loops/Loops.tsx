@@ -1,27 +1,22 @@
-'use client'
-
+'use client';
 import {
   Box,
   Button,
   Card,
-  CardBody,
-  CardFooter,
-  Tooltip,
   useDisclosure,
   VStack,
   BoxProps,
   Grid,
   GridItem,
-  Divider,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useEffect, useRef, useState } from 'react'
 import ButtonGroup, {
-  ButtonGroupOption,
-} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useLoops } from './LoopsProvider'
 import { LoopsDepositModal } from './modals/LoopsDepositModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -53,15 +48,12 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     borderTopLeftRadius: 'none',
     borderBottomRightRadius: 'none',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden' },
   cardProps: {
     position: 'relative',
     height: 'full',
     rounded: 'lg',
-    overflow: 'hidden',
-  },
-}
+    overflow: 'hidden' } }
 
 function LoopsForm() {
   const nextBtn = useRef(null)
@@ -90,8 +82,7 @@ function LoopsForm() {
     getAmountShares,
     isRateLoading,
     amountShares,
-    wNativeAsset,
-  } = useLoops()
+    wNativeAsset } = useLoops()
 
   const { wethAmountOut, isLoading: isLoadingFlyQuote } = useLoopsGetFlyQuote(amountShares, chain)
 
@@ -102,13 +93,11 @@ function LoopsForm() {
     {
       value: '0',
       label: 'Deposit',
-      disabled: false,
-    },
+      disabled: false },
     {
       value: '1',
       label: 'Withdraw',
-      disabled: false,
-    },
+      disabled: false },
   ]
 
   useEffect(() => {
@@ -143,48 +132,48 @@ function LoopsForm() {
 
   return (
     <VStack h="full" w="full">
-      <CardBody align="start" as={VStack} h="full" w="full">
-        <Box h="full" w="full">
-          <VStack spacing="md" w="full">
-            <ButtonGroup
-              currentOption={activeTab}
-              fontSize="lg"
-              groupId="add-liquidity"
-              isFullWidth
-              onChange={setActiveTab}
-              options={tabs}
-              size="md"
+      <Card.Body align="start" h="full" w="full" asChild><VStack>
+          <Box h="full" w="full">
+            <VStack gap="md" w="full">
+              <ButtonGroup
+                currentOption={activeTab}
+                fontSize="lg"
+                groupId="add-liquidity"
+                isFullWidth
+                onChange={setActiveTab}
+                options={tabs}
+                size="md"
+              />
+            </VStack>
+            {isDepositTab && <LoopsDeposit />}
+            {isWithdrawTab && <LoopsWithdraw />}
+          </Box>
+          {isDepositTab && !isRateLoading && amountAssets !== '' && (
+            <YouWillReceive
+              address={loopedAsset?.address || ''}
+              amount={getAmountShares(amountAssets)}
+              chain={chain}
+              label="You will receive"
+              symbol={loopedAsset?.symbol || ''}
             />
-          </VStack>
-          {isDepositTab && <LoopsDeposit />}
-          {isWithdrawTab && <LoopsWithdraw />}
-        </Box>
-        {isDepositTab && !isRateLoading && amountAssets !== '' && (
-          <YouWillReceive
-            address={loopedAsset?.address || ''}
-            amount={getAmountShares(amountAssets)}
-            chain={chain}
-            label="You will receive"
-            symbol={loopedAsset?.symbol || ''}
-          />
-        )}
-        {isWithdrawTab && !isLoadingFlyQuote && wethAmountOut !== 0n && (
-          <YouWillReceive
-            address={wNativeAsset?.address || ''}
-            amount={formatUnits(wethAmountOut, wNativeAsset?.decimals ?? 18)}
-            chain={chain}
-            infoText="Please check to FAQ below to learn more about why you are receiving slightly less than the displayed rate."
-            label="You will receive"
-            symbol={wNativeAsset?.symbol || ''}
-          />
-        )}
-      </CardBody>
-      <CardFooter w="full">
+          )}
+          {isWithdrawTab && !isLoadingFlyQuote && wethAmountOut !== 0n && (
+            <YouWillReceive
+              address={wNativeAsset?.address || ''}
+              amount={formatUnits(wethAmountOut, wNativeAsset?.decimals ?? 18)}
+              chain={chain}
+              infoText="Please check to FAQ below to learn more about why you are receiving slightly less than the displayed rate."
+              label="You will receive"
+              symbol={wNativeAsset?.symbol || ''}
+            />
+          )}
+        </VStack></Card.Body>
+      <Card.Footer w="full">
         {isConnected && (
-          <Tooltip label={isDisabled ? disabledReason : ''}>
+          <Tooltip content={isDisabled ? disabledReason : ''}>
             <Button
-              isDisabled={isDisabled}
-              isLoading={isLoading}
+              disabled={isDisabled}
+              loading={isLoading}
               loadingText={loadingText}
               onClick={() => disclosure.onOpen()}
               ref={nextBtn}
@@ -205,25 +194,24 @@ function LoopsForm() {
             w="full"
           />
         )}
-      </CardFooter>
+      </Card.Footer>
       <LoopsDepositModal
         finalFocusRef={nextBtn}
-        isOpen={depositModalDisclosure.isOpen}
+        isOpen={depositModalDisclosure.open}
         onClose={onModalClose}
       />
       <LoopsWithdrawModal
         finalFocusRef={nextBtn}
-        isOpen={withdrawModalDisclosure.isOpen}
+        isOpen={withdrawModalDisclosure.open}
         onClose={onModalClose}
       />
     </VStack>
-  )
+  );
 }
 
 function LoopsInfo({
   loopsData,
-  isLoopsDataLoading,
-}: {
+  isLoopsDataLoading }: {
   loopsData?: GetLoopsDataQuery
   isLoopsDataLoading: boolean
 }) {
@@ -265,7 +253,7 @@ function LoopsInfo({
         m="auto"
         p={{ base: 'md', md: 'lg' }}
         role="group"
-        spacing="sm"
+        gap="sm"
         w="full"
         zIndex={1}
       >
@@ -288,7 +276,7 @@ function LoopsInfo({
           secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} loopS`}
           value={`1 loopS = ${fNum('token', assetsToSharesRate)} S`}
         />
-        <Divider my="md" />
+        <Separator my="md" />
         <StatRow
           isLoading={isLoopsDataLoading}
           label="Health factor"
@@ -307,7 +295,7 @@ function LoopsInfo({
         <Box minH="20px" w="full" />
       </VStack>
     </NoisyCard>
-  )
+  );
 }
 
 export function Loops() {
@@ -318,7 +306,7 @@ export function Loops() {
       <DefaultPageContainer noVerticalPadding>
         <VStack gap="xl" w="full">
           <LoopsStats />
-          <Card rounded="xl" w="full">
+          <Card.Root rounded="xl" w="full">
             <Grid gap="lg" templateColumns={{ base: '1fr', lg: '5fr 4fr' }}>
               <GridItem>
                 <LoopsForm />
@@ -327,10 +315,10 @@ export function Loops() {
                 <LoopsInfo isLoopsDataLoading={isLoopsDataLoading} loopsData={loopsData} />
               </GridItem>
             </Grid>
-          </Card>
+          </Card.Root>
           <LoopsFaq />
         </VStack>
       </DefaultPageContainer>
     </FadeInOnView>
-  )
+  );
 }

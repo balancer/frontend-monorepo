@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react';
 import { Step } from './Step'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { TransactionStepsResponse } from '../useTransactionSteps'
@@ -13,7 +13,7 @@ export function Steps({ transactionSteps, isTxBatch }: Props) {
   const colorMode = useThemeColorMode()
 
   return (
-    <VStack align="start" spacing="ms">
+    <VStack align="start" gap="ms">
       {steps &&
         steps.map((step, index) => (
           <div key={step.id + index}>
@@ -29,5 +29,5 @@ export function Steps({ transactionSteps, isTxBatch }: Props) {
           </div>
         ))}
     </VStack>
-  )
+  );
 }

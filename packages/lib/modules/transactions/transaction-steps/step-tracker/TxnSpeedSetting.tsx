@@ -1,13 +1,4 @@
-import {
-  Box,
-  Popover,
-  PopoverTrigger,
-  HStack,
-  Image,
-  PopoverContent,
-  PopoverArrow,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Popover, HoverCard, HStack, Image, Text } from '@chakra-ui/react';
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { SpeedIcon } from '@repo/lib/shared/components/icons/SpeedIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
@@ -31,8 +22,11 @@ export function TxnSpeedSetting() {
   const userWalletLabel = connector?.name || 'your wallet'
 
   return (
-    <Popover placement="top" trigger="hover">
-      <PopoverTrigger>
+    <HoverCard.Root
+      positioning={{
+        placement: 'top'
+      }}>
+      <HoverCard.Trigger asChild>
         <HStack gap="xs">
           {connector && connector.icon ? (
             <Image height="14px" src={connector.icon} width="14px" />
@@ -46,13 +40,15 @@ export function TxnSpeedSetting() {
             {speedSettingLabel}
           </Text>
         </HStack>
-      </PopoverTrigger>
-      <PopoverContent p="2" shadow="2xl" width="250px" zIndex="popover">
-        <PopoverArrow bg="background.level3" />
-        <Text color="grayText" fontSize="sm">
-          {`This is a general estimate to give you a sense of the cost based on a '${speedSettingLabel}' speed transaction on your ${userWalletLabel}. This UI can’t access your wallet’s transaction speed, so the estimate may be inaccurate if your wallet is set to a higher speed.`}
-        </Text>
-      </PopoverContent>
-    </Popover>
-  )
+      </HoverCard.Trigger>
+      <HoverCard.Positioner>
+        <HoverCard.Content p="2" shadow="2xl" width="250px" zIndex="popover">
+          <HoverCard.Arrow bg="background.level3" />
+          <Text color="grayText" fontSize="sm">
+            {`This is a general estimate to give you a sense of the cost based on a '${speedSettingLabel}' speed transaction on your ${userWalletLabel}. This UI can’t access your wallet’s transaction speed, so the estimate may be inaccurate if your wallet is set to a higher speed.`}
+          </Text>
+        </HoverCard.Content>
+      </HoverCard.Positioner>
+    </HoverCard.Root>
+  );
 }

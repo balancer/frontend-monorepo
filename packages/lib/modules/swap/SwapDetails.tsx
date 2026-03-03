@@ -1,15 +1,7 @@
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import {
-  HStack,
-  VStack,
-  Text,
-  Box,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from '@chakra-ui/react'
+import { HStack, VStack, Text, Box, Popover, HoverCard } from '@chakra-ui/react';
 import { useSwap } from './SwapProvider'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
@@ -43,8 +35,8 @@ export function OrderRoute() {
         <Text color="grayText" fontSize="sm">
           {getRouteHopsLabel()}
         </Text>
-        <Popover trigger="hover">
-          <PopoverTrigger>
+        <HoverCard.Root>
+          <HoverCard.Trigger asChild>
             <Box
               _hover={{ opacity: 1 }}
               opacity="0.5"
@@ -52,16 +44,18 @@ export function OrderRoute() {
             >
               <InfoIcon />
             </Box>
-          </PopoverTrigger>
-          <PopoverContent maxW="300px" p="sm" w="auto">
-            <Text fontSize="sm" variant="secondary">
-              Balancer Vault version and number of swap hops
-            </Text>
-          </PopoverContent>
-        </Popover>
+          </HoverCard.Trigger>
+          <HoverCard.Positioner>
+            <HoverCard.Content maxW="300px" p="sm" w="auto">
+              <Text fontSize="sm" variant="secondary">
+                Balancer Vault version and number of swap hops
+              </Text>
+            </HoverCard.Content>
+          </HoverCard.Positioner>
+        </HoverCard.Root>
       </HStack>
     </HStack>
-  )
+  );
 }
 
 export function SwapDetails() {
@@ -122,7 +116,7 @@ export function SwapDetails() {
         You can change your slippage tolerance in your settings.`
 
   return (
-    <VStack align="start" fontSize="sm" spacing="sm" w="full">
+    <VStack align="start" fontSize="sm" gap="sm" w="full">
       <HStack justify="space-between" w="full">
         <Text color={priceImpactColor} fontSize="sm">
           Token in vs token out
@@ -135,8 +129,8 @@ export function SwapDetails() {
               {fullPriceImpactLabel}
             </NumberText>
           )}
-          <Popover trigger="hover">
-            <PopoverTrigger>
+          <HoverCard.Root>
+            <HoverCard.Trigger asChild>
               {priceImpactLevel === 'low' ? (
                 <Box
                   _hover={{ opacity: 1 }}
@@ -150,13 +144,15 @@ export function SwapDetails() {
                   <PriceImpactIcon priceImpactLevel={priceImpactLevel} />
                 </Box>
               )}
-            </PopoverTrigger>
-            <PopoverContent p="sm">
-              <Text fontSize="sm" variant="secondary">
-                {priceImpactTooltip}
-              </Text>
-            </PopoverContent>
-          </Popover>
+            </HoverCard.Trigger>
+            <HoverCard.Positioner>
+              <HoverCard.Content p="sm">
+                <Text fontSize="sm" variant="secondary">
+                  {priceImpactTooltip}
+                </Text>
+              </HoverCard.Content>
+            </HoverCard.Positioner>
+          </HoverCard.Root>
         </HStack>
       </HStack>
       <HStack justify="space-between" w="full">
@@ -167,8 +163,8 @@ export function SwapDetails() {
           <NumberText color="grayText" fontSize="sm">
             {fullMaxSlippageLabel}
           </NumberText>
-          <Popover trigger="hover">
-            <PopoverTrigger>
+          <HoverCard.Root>
+            <HoverCard.Trigger asChild>
               <Box
                 _hover={{ opacity: 1 }}
                 opacity="0.5"
@@ -176,13 +172,15 @@ export function SwapDetails() {
               >
                 <InfoIcon />
               </Box>
-            </PopoverTrigger>
-            <PopoverContent p="sm">
-              <Text fontSize="sm" variant="secondary">
-                {slippageLabel}
-              </Text>
-            </PopoverContent>
-          </Popover>
+            </HoverCard.Trigger>
+            <HoverCard.Positioner>
+              <HoverCard.Content p="sm">
+                <Text fontSize="sm" variant="secondary">
+                  {slippageLabel}
+                </Text>
+              </HoverCard.Content>
+            </HoverCard.Positioner>
+          </HoverCard.Root>
         </HStack>
       </HStack>
       <HStack justify="space-between" w="full">
@@ -193,8 +191,8 @@ export function SwapDetails() {
           <NumberText color="grayText" fontSize="sm">
             {fNum('token', limitValue, { abbreviated: false })} {limitToken?.symbol}
           </NumberText>
-          <Popover trigger="hover">
-            <PopoverTrigger>
+          <HoverCard.Root>
+            <HoverCard.Trigger asChild>
               <Box
                 _hover={{ opacity: 1 }}
                 opacity="0.5"
@@ -202,17 +200,18 @@ export function SwapDetails() {
               >
                 <InfoIcon />
               </Box>
-            </PopoverTrigger>
-            <PopoverContent p="sm">
-              <Text fontSize="sm" variant="secondary">
-                {limitTooltip}
-              </Text>
-            </PopoverContent>
-          </Popover>
+            </HoverCard.Trigger>
+            <HoverCard.Positioner>
+              <HoverCard.Content p="sm">
+                <Text fontSize="sm" variant="secondary">
+                  {limitTooltip}
+                </Text>
+              </HoverCard.Content>
+            </HoverCard.Positioner>
+          </HoverCard.Root>
         </HStack>
       </HStack>
-
       {isDefaultSwap ? <OrderRoute /> : null}
     </VStack>
-  )
+  );
 }

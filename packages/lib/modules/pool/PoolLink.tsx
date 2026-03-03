@@ -1,6 +1,6 @@
 'use client'
 
-import { Link, LinkProps } from '@chakra-ui/react'
+import { Link, LinkProps } from '@chakra-ui/react';
 import { PoolCore } from './pool.types'
 import { getPoolPath } from './pool.utils'
 

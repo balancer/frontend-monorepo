@@ -2,7 +2,6 @@ import {
   Badge,
   Button,
   Card,
-  Divider,
   Flex,
   HStack,
   Skeleton,
@@ -10,7 +9,7 @@ import {
   Text,
   VStack,
   useDisclosure,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { CheckCircle, XCircle } from 'react-feather'
@@ -29,7 +28,7 @@ type Props = {
 export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
   const { totalMaBeetsVP, isLoading, relicPositions } = useReliquary()
   const { isDelegatedToMDs } = useReliquaryDelegationTransaction()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const router = useRouter()
 
   const hasRelics = relicPositions.length > 0
@@ -40,12 +39,11 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
     display: 'flex',
     gap: '1',
     px: '4',
-    py: '2',
-  }
+    py: '2' }
 
   return (
-    <VStack alignItems="flex-start" spacing="20" width="full">
-      <VStack alignItems="flex-start" spacing="4" width="full">
+    <VStack alignItems="flex-start" gap="20" width="full">
+      <VStack alignItems="flex-start" gap="4" width="full">
         <Text
           background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
           backgroundClip="text"
@@ -54,17 +52,17 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
         >
           Your Beets Voting Power
         </Text>
-        <Card h="full" w="full">
+        <Card.Root h="full" w="full">
           <NoisyCard cardProps={{ h: 'full' }}>
             {hasRelics ? (
               <Stack
                 alignItems="flex-start"
                 direction={{ base: 'column', md: 'row' }}
                 p={{ base: 'sm', md: 'md' }}
-                spacing="6"
+                gap="6"
                 w="full"
               >
-                <VStack alignItems="flex-start" spacing="2" width="full">
+                <VStack alignItems="flex-start" gap="2" width="full">
                   <Text color="beets.base.50" fontSize="sm" fontWeight="semibold">
                     Total Voting Power
                   </Text>
@@ -76,19 +74,19 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                     <Skeleton height="32px" width="150px" />
                   )}
                 </VStack>
-                <Divider
+                <Separator
                   borderColor="gray.600"
                   display={{ base: 'block', md: 'none' }}
                   orientation="horizontal"
                   width="full"
                 />
-                <Divider
+                <Separator
                   borderColor="gray.600"
                   display={{ base: 'none', md: 'block' }}
                   height="60px"
                   orientation="vertical"
                 />
-                <VStack alignItems="flex-start" spacing="3" width="full">
+                <VStack alignItems="flex-start" gap="3" width="full">
                   <InfoButton
                     infoText="When active your maBEETS voting power is assigned to the Music Directors for the Beets Gauge Votes space on Snapshot. You can always override this by voting manually. An active delegation does not affect ownership, rewards, or your ability to exit."
                     label="Vote Optimizer Status"
@@ -96,17 +94,16 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                       lineHeight: '1rem',
                       fontWeight: 'semibold',
                       fontSize: 'sm',
-                      color: 'beets.base.50',
-                    }}
+                      color: 'beets.base.50' }}
                   />
                   <HStack>
                     {isDelegatedToMDs ? (
-                      <Badge {...badgeProps} colorScheme="green">
+                      <Badge {...badgeProps} colorPalette="green">
                         <CheckCircle size={12} />
                         <Text>Active</Text>
                       </Badge>
                     ) : (
-                      <Badge {...badgeProps} colorScheme="gray">
+                      <Badge {...badgeProps} colorPalette="gray">
                         <XCircle size={12} />
                         <Text>Inactive</Text>
                       </Badge>
@@ -133,9 +130,9 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
               </VStack>
             )}
           </NoisyCard>
-        </Card>
+        </Card.Root>
       </VStack>
-      <VStack alignItems="flex-start" spacing="4" width="full">
+      <VStack alignItems="flex-start" gap="4" width="full">
         <Flex alignItems="center" justifyContent="space-between" width="full">
           <Text
             background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
@@ -155,12 +152,12 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
             </Button>
           )}
         </Flex>
-        <Card h="full" w="full">
+        <Card.Root h="full" w="full">
           <NoisyCard cardProps={{ h: 'full' }}>
             <RelicCarousel focusRelicId={focusRelicId} />
           </NoisyCard>
-        </Card>
+        </Card.Root>
       </VStack>
     </VStack>
-  )
+  );
 }

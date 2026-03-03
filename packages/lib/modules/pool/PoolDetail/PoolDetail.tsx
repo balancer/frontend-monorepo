@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { VStack, Stack } from '@chakra-ui/react'
+import { VStack, Stack } from '@chakra-ui/react';
 import { PoolComposition } from './PoolComposition'
 import { PoolInfoLayout } from './PoolInfo/PoolInfoLayout'
 import { usePool } from '../PoolProvider'
@@ -49,8 +49,8 @@ export function PoolDetail() {
       <DefaultPageContainer>
         <RelayerSignatureProvider>
           <ClaimProvider pools={[pool]}>
-            <VStack spacing="2xl" w="full">
-              <VStack spacing="md" w="full">
+            <VStack gap="2xl" w="full">
+              <VStack gap="md" w="full">
                 <PoolAlerts />
                 <PoolHeader />
                 {banners?.headerSrc && <CowPoolBanner />}
@@ -61,7 +61,7 @@ export function PoolDetail() {
                 <Stack
                   direction={{ base: 'column', xl: 'row' }}
                   justifyContent="stretch"
-                  spacing="md"
+                  gap="md"
                   w="full"
                 >
                   <PoolMyLiquidity />
@@ -77,8 +77,7 @@ export function PoolDetail() {
           </ClaimProvider>
         </RelayerSignatureProvider>
       </DefaultPageContainer>
-
       {banners?.footerSrc && <CowFooter />}
     </>
-  )
+  );
 }

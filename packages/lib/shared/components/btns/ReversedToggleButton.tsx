@@ -1,5 +1,5 @@
-import { Button, Flex, Text } from '@chakra-ui/react'
-import { Icon } from '@chakra-ui/react'
+import { Button, Flex, Text } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react';
 import { Repeat } from 'react-feather'
 
 interface ReversedToggleButtonProps {

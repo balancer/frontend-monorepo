@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -42,45 +42,52 @@ export function SubmitVotesModal({
   }
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={handleClose}
-      preserveScrollBarGap
-      size="xl"
+    <Dialog.Root
+      finalFocusEl={() => finalFocusRef.current}
+      initialFocusEl={() => initialFocusRef.current}
+      placement='center'
+      open={isOpen}
+      size='xl'
       {...rest}
-    >
-      <SuccessOverlay startAnimation={!!txHash} />
+      onOpenChange={e => {
+        if (!e.open) {
+          handleClose();
+        }
+      }}>
+      <Portal>
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
-        <TransactionModalHeader chain={chain} label="Review votes" txHash={txHash} />
-        <ModalCloseButton />
-        <ModalBody>
-          <AnimateHeightChange spacing="sm">
-            {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
-            <SubmitVotesPreview
-              changedVotes={submittingVotesChunk || []}
-              isPoolGaugeExpired={isPoolGaugeExpired}
-              nextChunksAllocation={nextChunksAllocation}
-              previousChunksAllocation={previousChunksAllocation}
-              timeLockedVotes={timeLockedVotes}
-              totalInfo={totalInfo}
-              unchangedVotes={unchangedVotes}
-            />
-          </AnimateHeightChange>
-        </ModalBody>
-        {transactionSteps.currentStep && (
-          <ActionModalFooter
-            currentStep={transactionSteps.currentStep}
-            isSuccess={!!txHash}
-            returnAction={handleClose}
-            returnLabel="Return to votes"
-          />
-        )}
-      </ModalContent>
-    </Modal>
-  )
+        <SuccessOverlay startAnimation={!!txHash} />
+        <Dialog.Positioner>
+          <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
+            {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
+            <TransactionModalHeader chain={chain} label="Review votes" txHash={txHash} />
+            <Dialog.CloseTrigger />
+            <Dialog.Body>
+              <AnimateHeightChange spacing="sm">
+                {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
+                <SubmitVotesPreview
+                  changedVotes={submittingVotesChunk || []}
+                  isPoolGaugeExpired={isPoolGaugeExpired}
+                  nextChunksAllocation={nextChunksAllocation}
+                  previousChunksAllocation={previousChunksAllocation}
+                  timeLockedVotes={timeLockedVotes}
+                  totalInfo={totalInfo}
+                  unchangedVotes={unchangedVotes}
+                />
+              </AnimateHeightChange>
+            </Dialog.Body>
+            {transactionSteps.currentStep && (
+              <ActionModalFooter
+                currentStep={transactionSteps.currentStep}
+                isSuccess={!!txHash}
+                returnAction={handleClose}
+                returnLabel="Return to votes"
+              />
+            )}
+          </Dialog.Content>
+        </Dialog.Positioner>
+
+      </Portal>
+    </Dialog.Root>
+  );
 }

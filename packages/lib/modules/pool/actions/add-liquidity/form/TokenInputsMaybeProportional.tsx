@@ -1,4 +1,4 @@
-import { useDisclosure, VStack } from '@chakra-ui/react'
+import { useDisclosure, VStack } from '@chakra-ui/react';
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputs } from './TokenInputs'
 import { useProportionalInputs } from './useProportionalInputs'
@@ -27,8 +27,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     setWethIsEth,
     setWrapUnderlyingByIndex,
     wrapUnderlying,
-    clearAmountsIn,
-  } = useAddLiquidity()
+    clearAmountsIn } = useAddLiquidity()
   const { chain, pool } = usePool()
   const { balanceFor } = useTokenBalances()
 
@@ -92,31 +91,29 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
   }
 
   return (
-    <VStack spacing="md" w="full">
+    <VStack gap="md" w="full">
       <TokenInputs
         customSetAmountIn={setAmountIn}
         getToggleTokenCallback={getToggleTokenCallback}
       />
-
       {!!validTokens.length && (
         <NativeAssetSelectModal
           chain={validTokens[0].chain}
-          isOpen={nativeTokenSelectDisclosure.isOpen}
+          isOpen={nativeTokenSelectDisclosure.open}
           nativeAssets={nativeAssets}
           onClose={nativeTokenSelectDisclosure.onClose}
           onOpen={nativeTokenSelectDisclosure.onOpen}
           onTokenSelect={handleNativeTokenSelect}
         />
       )}
-
       <WrappedOrUnderlyingSelectModal
         chain={chain}
-        isOpen={boostedTokenSelectDisclosure.isOpen && !!wrappedAndUnderlying}
+        isOpen={boostedTokenSelectDisclosure.open && !!wrappedAndUnderlying}
         onClose={boostedTokenSelectDisclosure.onClose}
         onOpen={boostedTokenSelectDisclosure.onOpen}
         onTokenSelect={onBoostedTokenSelect}
         tokens={wrappedAndUnderlying as ApiToken[]}
       />
     </VStack>
-  )
+  );
 }

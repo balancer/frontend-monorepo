@@ -1,5 +1,5 @@
 import { isAfter, isBefore } from 'date-fns'
-import { Divider, HStack, Text, VStack, Box, Heading, Stack } from '@chakra-ui/react'
+import { HStack, Text, VStack, Box, Heading, Stack, Separator } from '@chakra-ui/react';
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
 import { max } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -19,12 +19,12 @@ export function LbpPriceChart() {
         prices={snapshots}
         startDateTime={startDateTime}
       />
-      <Divider />
+      <Separator />
       <Stack
         align="start"
         direction={{ base: 'column', md: 'row' }}
         mt="2"
-        spacing={{ base: 2, md: 4 }}
+        gap={{ base: 2, md: 4 }}
         w="full"
       >
         <HStack>
@@ -41,8 +41,7 @@ export function LbpPriceChart() {
                 maskImage:
                   'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
                 WebkitMaskImage:
-                  'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
-              }}
+                  'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)' }}
             />
           </Box>
           <Text fontSize="sm">Projected price with no buys</Text>
@@ -52,14 +51,14 @@ export function LbpPriceChart() {
         </Text>
       </Stack>
     </VStack>
-  )
+  );
 }
 
 export function PriceInfo() {
   const { now: currentTime, currentPrice, hasSnapshots, snapshots } = useLbpPoolCharts()
 
   return (
-    <VStack alignItems="end" spacing="0.5">
+    <VStack alignItems="end" gap="0.5">
       <Heading fontWeight="bold" size="h5">
         {`$${fNum('fiat', currentPrice, { forceThreeDecimals: true })}`}
       </Heading>
@@ -81,7 +80,7 @@ export function PriceInfo() {
         </Text>
       )}
     </VStack>
-  )
+  );
 }
 
 function percentageChange(oldValue: number, newValue: number) {

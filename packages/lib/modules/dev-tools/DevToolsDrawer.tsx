@@ -1,21 +1,15 @@
 import {
   Button,
   Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   TabList,
   TabPanels,
   Tabs,
   Tab,
   useDisclosure,
-  DrawerFooter,
   TabPanel,
-  Divider,
   VStack,
-} from '@chakra-ui/react'
+  Separator,
+  Portal } from '@chakra-ui/react';
 import { Tool } from 'react-feather'
 import { ImpersonateAccount } from '../web3/impersonation/ImpersonateAccount'
 import TimeMocker from '../web3/impersonation/TimeMocker'
@@ -24,7 +18,7 @@ import { useImpersonateAccount } from '../web3/impersonation/useImpersonateAccou
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 
 export function DevToolsDrawerButton() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
 
   return (
     <>
@@ -48,45 +42,52 @@ function DevToolsDrawer({ isOpen, onClose }: Props) {
   const { reset } = useImpersonateAccount()
 
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} placement="right" size="lg">
-      <DrawerOverlay />
+    <Drawer.Root open={isOpen} placement='end' size='lg' onOpenChange={e => {
+      if (!e.open) {
+        onClose();
+      }
+    }}>
+      <Portal>
 
-      <DrawerContent data-testid="dev-tools-drawer">
-        <DrawerCloseButton aria-label="Dev tools close button" />
-        <DrawerHeader>Dev tools</DrawerHeader>
+        <Drawer.Backdrop />
+        <Drawer.Positioner>
+          <Drawer.Content data-testid="dev-tools-drawer">
+            <Drawer.CloseTrigger aria-label="Dev tools close button" />
+            <Drawer.Header>Dev tools</Drawer.Header>
+            <Drawer.Body>
+              <Tabs.Root>
+                <Tabs.List>
+                  <Tab>Impersonation</Tab>
+                  <Tab>Time mgmt</Tab>
+                  <Tab>Pool mgmt</Tab>
+                </Tabs.List>
 
-        <DrawerBody>
-          <Tabs>
-            <TabList>
-              <Tab>Impersonation</Tab>
-              <Tab>Time mgmt</Tab>
-              <Tab>Pool mgmt</Tab>
-            </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <ImpersonateAccount />
+                  </TabPanel>
 
-            <TabPanels>
-              <TabPanel>
-                <ImpersonateAccount />
-              </TabPanel>
+                  <TabPanel>
+                    <TimeMocker setIsFakeTime={setIsFakeTime} />
+                  </TabPanel>
 
-              <TabPanel>
-                <TimeMocker setIsFakeTime={setIsFakeTime} />
-              </TabPanel>
+                  <TabPanel>Pool management content</TabPanel>
+                </TabPanels>
+              </Tabs.Root>
+            </Drawer.Body>
+            <Drawer.Footer>
+              <VStack w="full">
+                {isFakeTime && <div>Fake date: {currentDate.toLocaleDateString()}</div>}
 
-              <TabPanel>Pool management content</TabPanel>
-            </TabPanels>
-          </Tabs>
-        </DrawerBody>
+                <Separator />
 
-        <DrawerFooter>
-          <VStack w="full">
-            {isFakeTime && <div>Fake date: {currentDate.toLocaleDateString()}</div>}
+                <Button onClick={() => reset()}>Reset fork</Button>
+              </VStack>
+            </Drawer.Footer>
+          </Drawer.Content>
+        </Drawer.Positioner>
 
-            <Divider />
-
-            <Button onClick={() => reset()}>Reset fork</Button>
-          </VStack>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  )
+      </Portal>
+    </Drawer.Root>
+  );
 }

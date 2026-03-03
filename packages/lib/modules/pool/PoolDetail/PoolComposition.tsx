@@ -4,7 +4,6 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import {
   Box,
   Card,
-  Divider,
   HStack,
   Heading,
   Skeleton,
@@ -12,7 +11,7 @@ import {
   Text,
   VStack,
   Link,
-} from '@chakra-ui/react'
+  Separator } from '@chakra-ui/react';
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -46,7 +45,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
   const { poolTokensWithActualWeights } = useGetPoolTokensWithActualWeights()
 
   return (
-    <VStack spacing="md" width="full">
+    <VStack gap="md" width="full">
       <HStack justifyContent="space-between" width="full">
         <VStack alignItems="flex-start">
           <Heading fontWeight="bold" size="h5">
@@ -64,8 +63,8 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
           )}
         </VStack>
       </HStack>
-      <Divider />
-      <VStack spacing="md" width="full">
+      <Separator />
+      <VStack gap="md" width="full">
         {poolTokens.map(poolToken => {
           const actualWeight = poolTokensWithActualWeights[poolToken.address]
 
@@ -80,8 +79,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                 targetWeight={poolToken.weight || undefined}
                 value={poolToken.balance}
                 {...(poolToken.hasNestedPool && {
-                  isNestedBpt: true,
-                })}
+                  isNestedBpt: true })}
               />
               {poolToken.hasNestedPool && poolToken.nestedPool && (
                 <VStack pl="8" w="full">
@@ -113,7 +111,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
         })}
       </VStack>
     </VStack>
-  )
+  );
 }
 
 export function PoolComposition() {
@@ -156,15 +154,15 @@ export function PoolComposition() {
   }, [pool.id])
 
   return (
-    <Card ref={cardRef}>
+    <Card.Root ref={cardRef}>
       <Stack
         direction={{ base: 'column', md: 'row' }}
         justifyContent="stretch"
         maxH="1000px"
         minH="400px"
-        spacing="md"
+        gap="md"
       >
-        <VStack align="flex-start" spacing="md" w="full">
+        <VStack align="flex-start" gap="md" w="full">
           <HStack justifyContent="space-between" w="full">
             <Heading fontWeight="bold" size="h4">
               Pool composition
@@ -184,7 +182,7 @@ export function PoolComposition() {
                         {filteredErc4626Metadata.length > 0 &&
                           filteredErc4626Metadata.map((metadata, index) => (
                             <Fragment key={index}>
-                              <Link href={metadata.readMoreURL} isExternal>
+                              <Link href={metadata.readMoreURL} target='_blank' rel='noopener noreferrer'>
                                 <Box
                                   as="span"
                                   color="purple.500"
@@ -222,8 +220,8 @@ export function PoolComposition() {
                     display="inline-flex"
                     fontSize="sm"
                     href="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
-                    isExternal
-                  >
+                    target='_blank'
+                    rel='noopener noreferrer'>
                     <Box as="span">Learn more</Box>
                     <Box as="span" ml={0.5}>
                       <ArrowUpRight size={12} />
@@ -234,20 +232,20 @@ export function PoolComposition() {
               status="info"
             />
           )}
-          <Divider />
+          <Separator />
           <CardContent
             chain={chain}
             pool={pool}
             poolTokens={compositionTokens}
             totalLiquidity={totalLiquidity}
           />
-          <Divider mt="auto" />
+          <Separator mt="auto" />
           <Text color="grayText" fontSize="sm" pb="sm">
             From {fNum('integer', pool.dynamicData.holdersCount)} Liquidity Providers
           </Text>
         </VStack>
         <PoolCompositionChart height={height} isMobile={!!isMobile} />
       </Stack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

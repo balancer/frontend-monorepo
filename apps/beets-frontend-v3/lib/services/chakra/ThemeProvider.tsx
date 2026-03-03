@@ -5,7 +5,6 @@ import { ReactNode, useEffect } from 'react'
 import { theme } from './themes/beets/beets.theme'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useTheme } from 'next-themes'
-import { useColorMode } from '@chakra-ui/react'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const isMounted = useIsMounted()
@@ -13,13 +12,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // this fixes the 'light' theme which was set incorrectly but stored in localStorage awhile ago
   function SetDarkTheme() {
     const { setTheme } = useTheme()
-    const { setColorMode } = useColorMode()
 
-    const theme = 'dark'
+    const darkTheme = 'dark'
 
     useEffect(() => {
-      setTheme(theme)
-      setColorMode(theme)
+      setTheme(darkTheme)
     }, [])
 
     return null
@@ -29,11 +26,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   if (!isMounted) return null
 
   return (
-    <ChakraProvider
-      cssVarsRoot="body"
-      theme={theme}
-      toastOptions={{ defaultOptions: { position: 'bottom-left' } }}
-    >
+    <ChakraProvider value={theme} cssVarsRoot="body">
       <SetDarkTheme />
       {children}
     </ChakraProvider>

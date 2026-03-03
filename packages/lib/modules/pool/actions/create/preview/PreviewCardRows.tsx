@@ -1,13 +1,4 @@
-import {
-  VStack,
-  Text,
-  SimpleGrid,
-  Heading,
-  Divider,
-  CardHeader,
-  Box,
-  HStack,
-} from '@chakra-ui/react'
+import { VStack, Text, SimpleGrid, Heading, Box, HStack, Card, Separator } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -15,9 +6,9 @@ import { TokenInfoPopover } from '@repo/lib/modules/tokens/TokenInfoPopover'
 
 export function CardHeaderRow({ columnNames }: { columnNames: string[] }) {
   return (
-    <CardHeader>
+    <Card.Header>
       <VStack align="start" w="full">
-        <SimpleGrid alignItems="baseline" columns={4} pb="1.5" spacing={5} w="full">
+        <SimpleGrid alignItems="baseline" columns={4} pb="1.5" gap={5} w="full">
           <Heading gridColumn="span 2" size="md">
             {columnNames[0]}
           </Heading>
@@ -28,15 +19,15 @@ export function CardHeaderRow({ columnNames }: { columnNames: string[] }) {
             </Text>
           ))}
         </SimpleGrid>
-        <Divider />
+        <Separator />
       </VStack>
-    </CardHeader>
-  )
+    </Card.Header>
+  );
 }
 
 export function CardDataRow({ data }: { data: ReactNode[] }) {
   return (
-    <SimpleGrid alignItems="center" columns={4} spacing={5} w="full">
+    <SimpleGrid alignItems="center" columns={4} gap={5} w="full">
       {data.map((item, index) => (
         <Box
           gridColumn={index === 0 ? 'span 2' : ''}
@@ -47,15 +38,14 @@ export function CardDataRow({ data }: { data: ReactNode[] }) {
         </Box>
       ))}
     </SimpleGrid>
-  )
+  );
 }
 
 export function IdentifyTokenCell({
   address,
   chain,
   symbol,
-  name,
-}: {
+  name }: {
   address: string
   chain: GqlChain
   symbol: string
@@ -64,8 +54,8 @@ export function IdentifyTokenCell({
   return (
     <HStack gap="3">
       <TokenIcon address={address} alt={address || ''} chain={chain} size={36} />
-      <VStack align="start" spacing="0">
-        <HStack spacing="xs">
+      <VStack align="start" gap="0">
+        <HStack gap="xs">
           <Text fontWeight="semibold">{symbol}</Text>
           <Box onClick={e => e.stopPropagation()} zIndex={100}>
             <TokenInfoPopover chain={chain} tokenAddress={address} />
@@ -76,7 +66,7 @@ export function IdentifyTokenCell({
         </Text>
       </VStack>
     </HStack>
-  )
+  );
 }
 
 export function DefaultDataRow() {

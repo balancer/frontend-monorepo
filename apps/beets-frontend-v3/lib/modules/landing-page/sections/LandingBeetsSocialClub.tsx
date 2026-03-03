@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Center, HStack, IconButton, Link, Text } from '@chakra-ui/react'
+import { Box, Center, HStack, IconButton, Link, Text } from '@chakra-ui/react';
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
@@ -8,32 +8,28 @@ import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 
 function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
   return (
-    <HStack spacing="lg">
+    <HStack gap="lg">
       {socialLinks.map(({ href, iconType }) => (
         <IconButton
           aria-label="Social icon"
-          as={Link}
           bg="background.level2"
           h="72px"
-          href={href}
           isExternal
           isRound
-          key={href}
           rounded="full"
           variant="tertiary"
           w="72px"
-        >
-          <SocialIcon iconType={iconType} size={36} />
-        </IconButton>
+          asChild><Link href={href} key={href}>
+            <SocialIcon iconType={iconType} size={36} />
+          </Link></IconButton>
       ))}
     </HStack>
-  )
+  );
 }
 
 export function LandingBeetsSocialClub() {
   const {
-    links: { socialLinks },
-  } = PROJECT_CONFIG
+    links: { socialLinks } } = PROJECT_CONFIG
 
   return (
     <DefaultPageContainer noVerticalPadding pb="3xl">

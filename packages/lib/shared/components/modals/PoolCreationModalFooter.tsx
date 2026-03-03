@@ -1,8 +1,8 @@
-import { ModalFooter, Text, HStack } from '@chakra-ui/react'
+import { Text, HStack, Dialog } from '@chakra-ui/react';
 
 export function PoolCreationModalFooter({ onReset }: { onReset: () => void }) {
   return (
-    <ModalFooter>
+    <Dialog.Footer>
       <HStack justify="center" width="full">
         <Text
           _hover={{ textDecoration: 'underline' }}
@@ -17,6 +17,6 @@ export function PoolCreationModalFooter({ onReset }: { onReset: () => void }) {
           Abandon LBP and reset progress
         </Text>
       </HStack>
-    </ModalFooter>
-  )
+    </Dialog.Footer>
+  );
 }

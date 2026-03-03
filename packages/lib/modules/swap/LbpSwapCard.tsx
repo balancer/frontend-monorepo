@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack, Text } from '@chakra-ui/react';
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePool } from '../pool/PoolProvider'
 import { getChainName } from '@repo/lib/config/app.config'

@@ -1,4 +1,4 @@
-import { Center, CenterProps, HStack, Text } from '@chakra-ui/react'
+import { Center, CenterProps, HStack, Text } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react'
 import { SignIcon } from '../../icons/SignIcon'
 import { GasIcon } from '../../icons/GasIcon'
@@ -15,13 +15,12 @@ const iconContainerStyles: CenterProps = {
   shadow: '0',
   w: '26px',
   _groupHover: { bg: 'whiteAlpha.700' },
-  transition: 'background 0.2s var(--ease-out-cubic)',
-}
+  transition: 'background 0.2s var(--ease-out-cubic)' }
 
 export function LabelWithIcon({ children, icon }: PropsWithChildren<Props>) {
   return (
-    <HStack data-group spacing="sm" width="100%">
-      <HStack justifyContent="center" spacing="sm" width="100%">
+    <HStack data-group gap="sm" width="100%">
+      <HStack justifyContent="center" gap="sm" width="100%">
         <Text color="font.primaryGradient" fontWeight="bold">
           {children}
         </Text>
@@ -37,5 +36,5 @@ export function LabelWithIcon({ children, icon }: PropsWithChildren<Props>) {
         </Center>
       )}
     </HStack>
-  )
+  );
 }

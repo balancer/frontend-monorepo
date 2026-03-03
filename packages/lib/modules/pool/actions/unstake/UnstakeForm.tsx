@@ -1,6 +1,6 @@
-'use client'
-
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Tooltip } from '@chakra-ui/react'
+'use client';
+import { Box, Button, Card } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { useRef } from 'react'
 import { useUnstake } from './UnstakeProvider'
 import { UnstakePreview } from './UnstakePreview'
@@ -17,17 +17,17 @@ export function UnstakeForm() {
 
   return (
     <Box h="full" maxW="lg" mx="auto" w="full">
-      <Card>
-        <CardHeader>Claim & Unstake</CardHeader>
-        <CardBody>
+      <Card.Root>
+        <Card.Header>Claim & Unstake</Card.Header>
+        <Card.Body>
           <SafeAppAlert />
           <UnstakePreview />
-        </CardBody>
-        <CardFooter>
-          <Tooltip label={isDisabled ? disabledReason : ''}>
+        </Card.Body>
+        <Card.Footer>
+          <Tooltip content={isDisabled ? disabledReason : ''}>
             <Button
-              isDisabled={isDisabled}
-              isLoading={isLoading}
+              disabled={isDisabled}
+              loading={isLoading}
               onClick={() => !isDisabled && onOpen()}
               ref={nextBtn}
               size="lg"
@@ -37,9 +37,9 @@ export function UnstakeForm() {
               Next
             </Button>
           </Tooltip>
-        </CardFooter>
-      </Card>
+        </Card.Footer>
+      </Card.Root>
       <UnstakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
     </Box>
-  )
+  );
 }

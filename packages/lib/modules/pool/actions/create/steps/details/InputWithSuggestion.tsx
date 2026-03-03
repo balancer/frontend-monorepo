@@ -1,4 +1,4 @@
-import { VStack, Text, HStack } from '@chakra-ui/react'
+import { VStack, Text, HStack } from '@chakra-ui/react';
 import { Controller, Control } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 
@@ -27,10 +27,9 @@ export function InputWithSuggestion({
   onClickSuggestion,
   validate,
   attribution,
-  isFiatPrice,
-}: InputWithSuggestionProps) {
+  isFiatPrice }: InputWithSuggestionProps) {
   return (
-    <VStack align="start" spacing="sm" w="full">
+    <VStack align="start" gap="sm" w="full">
       <Controller
         control={control}
         name={name}
@@ -50,7 +49,7 @@ export function InputWithSuggestion({
               />
               {suggestedValue && (
                 <HStack justify="space-between" w="full">
-                  <HStack spacing="xs">
+                  <HStack gap="xs">
                     <Text color="font.secondary" fontSize="sm">
                       {suggestionLabel}:
                     </Text>
@@ -69,13 +68,12 @@ export function InputWithSuggestion({
                 </HStack>
               )}
             </>
-          )
+          );
         }}
         rules={{
           required: `${label} is required`,
-          validate,
-        }}
+          validate }}
       />
     </VStack>
-  )
+  );
 }

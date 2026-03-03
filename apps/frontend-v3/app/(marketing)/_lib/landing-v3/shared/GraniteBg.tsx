@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react';
 import Image from 'next/image'
 
 // @ts-ignore

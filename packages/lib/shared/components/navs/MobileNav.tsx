@@ -1,20 +1,5 @@
-import { useDisclosure } from '@chakra-ui/hooks'
-import {
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  HStack,
-  Link,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Drawer, HStack, Link, Text, VStack, Separator, Portal } from '@chakra-ui/react';
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
@@ -51,29 +36,29 @@ function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
       {appLinks.map(link => (
         <Link
           alignItems="center"
-          as={NextLink}
           color={linkColorFor(link.href || '')}
           display="flex"
           fontSize="xl"
           gap="xs"
-          href={link.href}
-          isExternal={link.isExternal}
-          key={link.href}
-          onClick={onClick}
-          prefetch
           variant="nav"
-        >
-          {link.label}
-          {link.isExternal && (
-            <Box color="grayText">
-              <ArrowUpRight size={14} />
-            </Box>
-          )}
-        </Link>
+          asChild><NextLink
+            href={link.href}
+            key={link.href}
+            onClick={onClick}
+            prefetch
+            target='_blank'
+            rel='noopener noreferrer'>
+            {link.label}
+            {link.isExternal && (
+              <Box color="grayText">
+                <ArrowUpRight size={14} />
+              </Box>
+            )}
+          </NextLink></Link>
       ))}
       {customLinks}
     </VStack>
-  )
+  );
 }
 
 function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
@@ -88,10 +73,10 @@ function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
           display="flex"
           gap="xs"
           href={link.href}
-          isExternal
           key={link.href}
           variant="nav"
-        >
+          target='_blank'
+          rel='noopener noreferrer'>
           {link.label}
           <Box color="grayText">
             <ArrowUpRight size={14} />
@@ -99,19 +84,19 @@ function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
         </Link>
       ))}
     </VStack>
-  )
+  );
 }
 
 function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
       {socialLinks.map(({ href, iconType }) => (
-        <Button as={Link} href={href} isExternal key={href} variant="tertiary">
-          <SocialIcon iconType={iconType} />
-        </Button>
+        <Button isExternal variant="tertiary" asChild><Link href={href} key={href}>
+            <SocialIcon iconType={iconType} />
+          </Link></Button>
       ))}
     </HStack>
-  )
+  );
 }
 
 export function MobileNav({
@@ -120,9 +105,8 @@ export function MobileNav({
   ecosystemLinks,
   socialLinks,
   LogoType,
-  customLinks,
-}: MobileNavProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  customLinks }: MobileNavProps) {
+  const { open, onOpen, onClose } = useDisclosure()
   const btnRef = useRef(null)
   const router = useRouter()
 
@@ -136,24 +120,34 @@ export function MobileNav({
       <Button onClick={onOpen} ref={btnRef} variant="tertiary">
         <Menu size={18} />
       </Button>
-      <Drawer finalFocusRef={btnRef} isOpen={isOpen} onClose={onClose} placement="right">
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <LogoType onClick={homeRedirect} width="106px" />
-          </DrawerHeader>
-          <DrawerBody>
-            <NavLinks appLinks={appLinks} customLinks={customLinks} onClick={onClose} />
-            {typeof buildSection === 'function' ? buildSection(onClose) : buildSection}
-            <Divider my={4} />
-            <EcosystemLinks ecosystemLinks={ecosystemLinks} />
-          </DrawerBody>
-          <DrawerFooter>
-            <SocialLinks socialLinks={socialLinks} />
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+      <Drawer.Root finalFocusEl={() => btnRef.current} open={isOpen} placement='end' onOpenChange={e => {
+        if (!e.open) {
+          onClose();
+        }
+      }}>
+        <Portal>
+
+          <Drawer.Backdrop />
+          <Drawer.Positioner>
+            <Drawer.Content>
+              <Drawer.CloseTrigger />
+              <Drawer.Header>
+                <LogoType onClick={homeRedirect} width="106px" />
+              </Drawer.Header>
+              <Drawer.Body>
+                <NavLinks appLinks={appLinks} customLinks={customLinks} onClick={onClose} />
+                {typeof buildSection === 'function' ? buildSection(onClose) : buildSection}
+                <Separator my={4} />
+                <EcosystemLinks ecosystemLinks={ecosystemLinks} />
+              </Drawer.Body>
+              <Drawer.Footer>
+                <SocialLinks socialLinks={socialLinks} />
+              </Drawer.Footer>
+            </Drawer.Content>
+          </Drawer.Positioner>
+
+        </Portal>
+      </Drawer.Root>
     </>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { Box, Icon, IconProps } from '@chakra-ui/react'
+import { Box, Icon, IconProps } from '@chakra-ui/react';
 
 type Props = {
   sizePx: string
-  as: any
+  asChild: boolean
 }
 export function ElevatedIcon({
   sizePx,

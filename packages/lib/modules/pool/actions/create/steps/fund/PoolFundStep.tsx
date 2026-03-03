@@ -1,4 +1,4 @@
-import { Box, Heading, VStack } from '@chakra-ui/react'
+import { Box, Heading, VStack } from '@chakra-ui/react';
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationRiskCheckboxes } from './PoolCreationRiskCheckboxes'
@@ -19,8 +19,7 @@ export function PoolFundStep() {
         'poolTokens',
         'hasAcceptedTokenWeightsRisk',
         'hasAcceptedPoolCreationRisk',
-      ],
-    }
+      ] }
   )
   const { hasValidationErrors } = useTokenInputsValidation()
 
@@ -37,32 +36,32 @@ export function PoolFundStep() {
   const showTokenAmountInputs = !isReClammPool(poolType) || poolAddress
 
   return (
-    <Box as="form" style={{ width: '100%' }}>
-      <VStack align="start" spacing="lg" w="full">
-        <Heading color="font.maxContrast" size="md">
-          Seed initial pool liquidity
-        </Heading>
-        <SeedPoolAlert poolType={poolType} />
-        {showTokenAmountInputs && (
-          <>
-            {poolTokens.map((token, idx) => (
-              <SeedAmountInput
-                idx={idx}
-                key={idx}
-                poolTokens={poolTokens}
-                poolType={poolType}
-                token={token}
-              />
-            ))}
+    <Box style={{ width: '100%' }} asChild><form>
+        <VStack align="start" gap="lg" w="full">
+          <Heading color="font.maxContrast" size="md">
+            Seed initial pool liquidity
+          </Heading>
+          <SeedPoolAlert poolType={poolType} />
+          {showTokenAmountInputs && (
+            <>
+              {poolTokens.map((token, idx) => (
+                <SeedAmountInput
+                  idx={idx}
+                  key={idx}
+                  poolTokens={poolTokens}
+                  poolType={poolType}
+                  token={token}
+                />
+              ))}
 
-            <SeedAmountProportions displayAlert />
-          </>
-        )}
+              <SeedAmountProportions displayAlert />
+            </>
+          )}
 
-        <PoolCreationRiskCheckboxes />
+          <PoolCreationRiskCheckboxes />
 
-        <PoolCreationFormAction disabled={isDisabled} />
-      </VStack>
-    </Box>
-  )
+          <PoolCreationFormAction disabled={isDisabled} />
+        </VStack>
+      </form></Box>
+  );
 }

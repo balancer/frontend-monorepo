@@ -1,14 +1,4 @@
-import {
-  Box,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  VStack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Popover, HoverCard, VStack, Text } from '@chakra-ui/react';
 import { ApiToken } from './token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import TokenRow from './TokenRow/TokenRow'
@@ -34,8 +24,7 @@ export function TokenStackPopover({
   children,
   rewardsByToken = {},
   tokens,
-  headerText,
-}: TokenStackPopoverProps) {
+  headerText }: TokenStackPopoverProps) {
   const { isMobile } = useBreakpoints()
 
   if (!hasDefinedValues(tokens)) {
@@ -43,49 +32,52 @@ export function TokenStackPopover({
   }
 
   return (
-    <Popover placement="top" trigger="hover">
-      <PopoverTrigger>
+    <HoverCard.Root
+      positioning={{
+        placement: 'top'
+      }}>
+      <HoverCard.Trigger asChild>
         <Box
           display="inline-block"
-          sx={{
-            '&:hover': {
+          css={{
+            '& &:hover': {
               '& > *': {
-                transform: 'scale(1.1)',
-              },
-            },
-            '& > *': {
-              transition: 'all 0.2s var(--ease-out-cubic)',
-            },
+                transform: 'scale(1.1)' } },
+
+            '& & > *': {
+              transition: 'all 0.2s var(--ease-out-cubic)' }
           }}
         >
           {children}
         </Box>
-      </PopoverTrigger>
-      <PopoverContent maxW={isMobile ? '100%' : '800px'} minW={{ base: '250px', md: '325px' }}>
-        <PopoverArrow bg="background.level3" />
-        <PopoverHeader>
-          <Text variant="special">{headerText}</Text>
-        </PopoverHeader>
-        <PopoverBody py="sm">
-          <VStack align="flex-start" spacing="xs">
-            {tokens.map((token, i) => {
-              const tokenAddress = token?.address as Address
-              const balance = rewardsByToken[tokenAddress] || '0'
+      </HoverCard.Trigger>
+      <HoverCard.Positioner>
+        <HoverCard.Content maxW={isMobile ? '100%' : '800px'} minW={{ base: '250px', md: '325px' }}>
+          <HoverCard.Arrow bg="background.level3" />
+          <HoverCard.Title>
+            <Text variant="special">{headerText}</Text>
+          </HoverCard.Title>
+          <HoverCard.Body py="sm">
+            <VStack align="flex-start" gap="xs">
+              {tokens.map((token, i) => {
+                const tokenAddress = token?.address as Address
+                const balance = rewardsByToken[tokenAddress] || '0'
 
-              return (
-                <TokenRow
-                  abbreviated
-                  address={tokenAddress}
-                  chain={chain}
-                  key={tokenAddress + i}
-                  symbol={token?.symbol}
-                  value={balance}
-                />
-              )
-            })}
-          </VStack>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
+                return (
+                  <TokenRow
+                    abbreviated
+                    address={tokenAddress}
+                    chain={chain}
+                    key={tokenAddress + i}
+                    symbol={token?.symbol}
+                    value={balance}
+                  />
+                )
+              })}
+            </VStack>
+          </HoverCard.Body>
+        </HoverCard.Content>
+      </HoverCard.Positioner>
+    </HoverCard.Root>
+  );
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react';
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
@@ -67,7 +67,7 @@ export function Code() {
   return (
     <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <DefaultPageContainer noVerticalPadding position="relative" py={['3xl', '10rem']}>
-        <VStack alignItems="center" spacing="md" textAlign="center">
+        <VStack alignItems="center" gap="md" textAlign="center">
           <WordsPullUp
             as="h2"
             color="font.primary"
@@ -85,7 +85,7 @@ export function Code() {
             </Text>
           </FadeIn>
         </VStack>
-        <Card mt="2xl">
+        <Card.Root mt="2xl">
           <Box background="background.level0" minH="500px" position="relative" shadow="innerXl">
             <Box
               bottom={0}
@@ -120,7 +120,7 @@ export function Code() {
                 w="full"
               >
                 <Box w="full">
-                  <VStack alignItems="start" px={{ base: 'md', lg: '0' }} spacing="lg">
+                  <VStack alignItems="start" px={{ base: 'md', lg: '0' }} gap="lg">
                     <BlurIn delay={0.4}>
                       <Text
                         background="font.special"
@@ -151,30 +151,28 @@ export function Code() {
                   </VStack>
                 </Box>
                 <Box w="full">
-                  <Card ref={codeBoxRef}>
+                  <Card.Root ref={codeBoxRef}>
                     <pre
                       className="language-solidity"
                       style={{
                         padding: '2rem',
                         borderRadius: '8px',
-                        minHeight: '400px',
-                      }}
+                        minHeight: '400px' }}
                     >
                       <code
                         className="language-solidity"
                         dangerouslySetInnerHTML={{ __html: displayedText }}
                         style={{
                           whiteSpace: isMobile ? 'pre-line' : 'pre',
-                          wordBreak: isMobile ? 'break-word' : 'normal',
-                        }}
+                          wordBreak: isMobile ? 'break-word' : 'normal' }}
                       />
                     </pre>
-                  </Card>
+                  </Card.Root>
                 </Box>
               </Stack>
             </Center>
           </Box>
-        </Card>
+        </Card.Root>
       </DefaultPageContainer>
       <Box
         bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
@@ -186,5 +184,5 @@ export function Code() {
         w="full"
       />
     </Noise>
-  )
+  );
 }

@@ -1,14 +1,4 @@
-import {
-  Card,
-  CardBody,
-  SimpleGrid,
-  VStack,
-  Divider,
-  Text,
-  HStack,
-  Button,
-  Box,
-} from '@chakra-ui/react'
+import { Card, SimpleGrid, VStack, Text, HStack, Button, Box, Separator } from '@chakra-ui/react';
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { formatNumber } from '../helpers'
@@ -27,61 +17,55 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
   const [initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate] = useWatch({
     control: reClammConfigForm.control,
-    name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'],
-  })
+    name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'] })
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const reClammConfigCards = [
     {
       label: 'Min Price',
-      value: initialMinPrice ? formatNumber(initialMinPrice) : '-',
-    },
+      value: initialMinPrice ? formatNumber(initialMinPrice) : '-' },
     {
       label: 'Lower Target',
-      value: upperMarginValue ? formatNumber(upperMarginValue.toString()) : '-',
-    },
+      value: upperMarginValue ? formatNumber(upperMarginValue.toString()) : '-' },
     {
       label: 'Current Price',
-      value: initialTargetPrice ? formatNumber(initialTargetPrice) : '-',
-    },
+      value: initialTargetPrice ? formatNumber(initialTargetPrice) : '-' },
     {
       label: 'Upper Target',
-      value: lowerMarginValue ? formatNumber(lowerMarginValue.toString()) : '-',
-    },
+      value: lowerMarginValue ? formatNumber(lowerMarginValue.toString()) : '-' },
     {
       label: 'Max Price',
-      value: initialMaxPrice ? formatNumber(initialMaxPrice) : '-',
-    },
+      value: initialMaxPrice ? formatNumber(initialMaxPrice) : '-' },
   ]
 
   const tokenSymbols = poolTokens.map(token => token.data?.symbol).filter(Boolean)
   const tokenSymbolsString = tokenSymbols.join(' / ')
 
   return (
-    <Card opacity={isBeforeStep ? 0.5 : 1}>
-      <CardBody>
-        <VStack spacing="lg">
-          <SimpleGrid columns={5} spacing={3} w="full">
+    <Card.Root opacity={isBeforeStep ? 0.5 : 1}>
+      <Card.Body>
+        <VStack gap="lg">
+          <SimpleGrid columns={5} gap={3} w="full">
             {reClammConfigCards.map(({ label, value }) => (
-              <Card key={label} variant="subSection">
+              <Card.Root key={label} variant="subSection">
                 <Text color="font.secondary" fontSize="sm">
                   {label}
                 </Text>
                 <Text fontSize="sm" fontWeight="bold">
                   {value}
                 </Text>
-              </Card>
+              </Card.Root>
             ))}
           </SimpleGrid>
 
           {!isBeforeStep && (
             <>
-              <Divider />
+              <Separator />
               <Box h={333} w="full">
                 <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
               </Box>
 
-              <Divider />
+              <Separator />
               <HStack justify="space-between" w="full">
                 <Button
                   flexDirection="row"
@@ -106,13 +90,14 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
                   >
                     <Text
                       fontSize="xs"
-                      sx={{
+                      css={{
                         background:
                           'linear-gradient(89.81deg, #B3AEF5 -1.06%, #D7CBE7 27.62%, #E5C8C8 49.42%, #EAA879 98.68%)',
+
                         backgroundClip: 'text',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
-                        color: 'transparent',
+                        color: 'transparent'
                       }}
                     >
                       Concentration density: {priceShiftDailyRate}%
@@ -123,7 +108,7 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
             </>
           )}
         </VStack>
-      </CardBody>
-    </Card>
-  )
+      </Card.Body>
+    </Card.Root>
+  );
 }

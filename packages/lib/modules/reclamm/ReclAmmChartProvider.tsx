@@ -1,9 +1,9 @@
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
-import { useColorMode } from '@chakra-ui/react'
 import type { ReclAmmChartData } from './useReclAmmChartData'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
@@ -17,8 +17,7 @@ function getGradientColor(colorStops: string[]) {
     y: 0,
     x2: 0,
     y2: 1,
-    colorStops: colorStops.map((color, index) => ({ offset: index, color })),
-  }
+    colorStops: colorStops.map((color, index) => ({ offset: index, color })) }
 }
 
 export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
@@ -26,7 +25,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
   const [isReversed, setIsReversed] = useState(false)
   const [chartInstance, setChartInstance] = useState<any>(null)
   const selectColor = useSelectColor()
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   const isLoading = !!chartData?.isLoading
   const isPoolWithinTargetRange = !!chartData?.isPoolWithinTargetRange
@@ -123,8 +122,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         ? ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)']
         : ['rgba(160, 174, 192, 1)', 'rgba(160, 174, 192, 0.5)'],
       borderRadius: 20,
-      segmentType: 'grey',
-    }
+      segmentType: 'grey' }
 
     const baseOrangeBarConfig = {
       count: baseOrangeBarCount,
@@ -133,8 +131,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         ? ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)']
         : ['rgba(250, 144, 71, 1)', 'rgba(250, 144, 71, 0.5)'],
       borderRadius: 20,
-      segmentType: 'orange',
-    }
+      segmentType: 'orange' }
 
     const greenBarConfig = {
       name: 'Green',
@@ -144,8 +141,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         ? ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)']
         : ['rgba(0, 184, 130, 1)', 'rgba(0, 184, 130, 0.5)'],
       borderRadius: 20,
-      segmentType: 'green',
-    }
+      segmentType: 'green' }
 
     const barSegmentsConfig = [
       { ...baseGreyBarConfig, name: 'Left Grey' },
@@ -211,8 +207,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
                 : getGradientColor(segment.gradientColors),
               borderRadius: barBorderRadius,
               borderColor,
-              borderWidth: 0.5,
-            },
+              borderWidth: 0.5 },
             // Store segment info for hover effects
             segmentType: segment.segmentType,
             segmentStartIndex,
@@ -230,10 +225,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
                   ? isPriceAdjusting
                     ? warningFontColor
                     : highlightFontColor
-                  : getGradientColor(segment.gradientColors),
-              },
-            },
-          }
+                  : getGradientColor(segment.gradientColors) } } }
         })
 
       seriesData.push(...segmentSeriesData)
@@ -243,8 +235,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
       fontSize: 12,
       lineHeight: 13,
       color: secondaryFontColor,
-      align: 'center',
-    }
+      align: 'center' }
 
     const paddingRight = isMobile ? 5 : 10
 
@@ -254,31 +245,24 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         ...baseRichProps,
         fontSize: 9,
         lineHeight: 12,
-        color: '#718096',
-      },
+        color: '#718096' },
       current: {
         ...baseRichProps,
-        color: isPriceAdjusting ? warningFontColor : highlightFontColor,
-      },
+        color: isPriceAdjusting ? warningFontColor : highlightFontColor },
       currentTriangle: {
         ...baseRichProps,
         fontSize: 8,
         lineHeight: 14,
-        color: isPriceAdjusting ? warningFontColor : highlightFontColor,
-      },
+        color: isPriceAdjusting ? warningFontColor : highlightFontColor },
       withRightPadding: {
         ...baseRichProps,
-        padding: [0, paddingRight, 0, 0],
-      },
+        padding: [0, paddingRight, 0, 0] },
       withRightBottomPadding: {
         ...baseRichProps,
-        padding: [0, paddingRight, 5, 0],
-      },
+        padding: [0, paddingRight, 5, 0] },
       withTopRightPadding: {
         ...baseRichProps,
-        padding: [showMinMaxValues && !showTargetValues ? 0 : 100, paddingRight, 0, 0],
-      },
-    }
+        padding: [showMinMaxValues && !showTargetValues ? 0 : 100, paddingRight, 0, 0] } }
 
     return {
       tooltip: {
@@ -307,15 +291,13 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         borderRadius: 4,
         padding: 6,
         extraCssText:
-          'max-width:222px; white-space:pre-line; word-break:break-word; word-wrap:break-word; line-height:1.3;',
-      },
+          'max-width:222px; white-space:pre-line; word-break:break-word; word-wrap:break-word; line-height:1.3;' },
       grid: {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
         bottom: needsMobileStyles ? gridBottomMobile : gridBottomDesktop,
-        containLabel: true,
-      },
+        containLabel: true },
       xAxis: {
         show: true,
         type: 'category',
@@ -349,35 +331,25 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
             triangle: {
               ...richStyles.triangle,
               ...richStyles.withRightBottomPadding,
-              fontSize: 9,
-            },
+              fontSize: 9 },
             labelText: {
               ...richStyles.base,
-              ...richStyles.withRightBottomPadding,
-            },
+              ...richStyles.withRightBottomPadding },
             priceValue: {
               ...richStyles.base,
-              ...richStyles.withRightPadding,
-            },
+              ...richStyles.withRightPadding },
             triangleMobile: {
               ...richStyles.triangle,
-              ...richStyles.withTopRightPadding,
-            },
+              ...richStyles.withTopRightPadding },
             labelTextMobile: {
               ...richStyles.base,
-              ...richStyles.withTopRightPadding,
-            },
+              ...richStyles.withTopRightPadding },
             priceValueMobile: {
               ...richStyles.base,
-              padding: [showMinMaxValues && !showTargetValues ? 0 : 110, 10, 0, 0],
-            },
-          },
-        },
-      },
+              padding: [showMinMaxValues && !showTargetValues ? 0 : 110, 10, 0, 0] } } } },
       yAxis: {
         show: false,
-        type: 'value',
-      },
+        type: 'value' },
       series: [
         {
           data: seriesData.map((value, index) => {
@@ -390,18 +362,12 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
                   formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? fNum('tokenRatio', currentPriceValue) : 'N/A'}}\n{triangle|▼}`,
                   rich: {
                     triangle: {
-                      ...richStyles.currentTriangle,
-                    },
+                      ...richStyles.currentTriangle },
                     labelText: {
                       ...richStyles.current,
-                      padding: [0, 0, 5, 0],
-                    },
+                      padding: [0, 0, 5, 0] },
                     priceValue: {
-                      ...richStyles.current,
-                    },
-                  },
-                },
-              }
+                      ...richStyles.current } } } }
             }
 
             return value
@@ -414,10 +380,8 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
           emphasis: {
             focus: 'series', // Focus the entire series when hovering
             scale: false, // Disable default scaling behavior
-          },
-        },
-      ],
-    }
+          } },
+      ] }
   }, [chartData, isReversed])
 
   const outOfRangeText =
@@ -469,11 +433,9 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
               itemStyle: {
                 // Don't set borderRadius here - just store it for hover state
                 hoverBorderRadius, // Store the hover border radius but don't apply it yet
-                opacity: 1,
-              },
+                opacity: 1 },
               // Increase width for better overlap between bars - prevents flickering by ensuring bars touch
-              barWidth: isMiddleBar ? '120%' : '110%',
-            }
+              barWidth: isMiddleBar ? '120%' : '110%' }
           }
           segmentStates[segmentKey] = segmentBars
         }
@@ -496,8 +458,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
       activeSegment = {
         segmentType,
         startIndex: segmentStartIndex,
-        endIndex: segmentEndIndex,
-      }
+        endIndex: segmentEndIndex }
 
       // Prepare a single update with all changes at once
       const updatedSeriesData = chartInstance
@@ -508,9 +469,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
             ...d,
             itemStyle: {
               ...d.itemStyle,
-              opacity: 0.5,
-            },
-          }
+              opacity: 0.5 } }
 
           // For bars in the hovered segment, apply the pre-computed state
           if (idx >= segmentStartIndex && idx <= segmentEndIndex) {
@@ -525,10 +484,8 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
                   ...d.itemStyle,
                   // Apply the hover border radius only during hover
                   borderRadius: segmentStyle.itemStyle.hoverBorderRadius,
-                  opacity: segmentStyle.itemStyle.opacity,
-                },
-                barWidth: segmentStyle.barWidth,
-              }
+                  opacity: segmentStyle.itemStyle.opacity },
+                barWidth: segmentStyle.barWidth }
             }
           }
 
@@ -540,10 +497,8 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         {
           series: [
             {
-              data: updatedSeriesData,
-            },
-          ],
-        },
+              data: updatedSeriesData },
+          ] },
         false
       )
 
@@ -552,8 +507,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         chartInstance.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
-          dataIndex: i,
-        })
+          dataIndex: i })
       }
     }
 
@@ -574,10 +528,8 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
           itemStyle: {
             ...d.itemStyle,
             borderRadius,
-            opacity: 1,
-          },
-          barWidth: '90%',
-        }
+            opacity: 1 },
+          barWidth: '90%' }
       })
 
       // Single setOption call to reset everything
@@ -585,18 +537,15 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
         {
           series: [
             {
-              data: resetData,
-            },
-          ],
-        },
+              data: resetData },
+          ] },
         false
       )
 
       // Single downplay action
       chartInstance.dispatchAction({
         type: 'downplay',
-        seriesIndex: 0,
-      })
+        seriesIndex: 0 })
     }
 
     // Setup event handlers for hover effects
@@ -683,14 +632,12 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
     inRangeReadjustingText,
     isPoolWithinRange: chartData?.isPoolWithinRange,
     tokens,
-    setChartInstance,
-  }
+    setChartInstance }
 }
 
 export function ReclAmmChartProvider({
   children,
-  chartData,
-}: PropsWithChildren<{
+  chartData }: PropsWithChildren<{
   chartData: ReclAmmChartData | undefined
 }>) {
   const hook = useReclAmmChartLogic(chartData)

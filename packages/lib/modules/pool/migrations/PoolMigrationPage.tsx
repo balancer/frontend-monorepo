@@ -19,7 +19,7 @@ import { AddLiquidityProvider } from '../actions/add-liquidity/AddLiquidityProvi
 import { MigrateLiquidityProvider, useFetchPool } from './MigrateLiquidityProvider'
 import { PoolMigrationModal } from './PoolMigrationModal'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { Skeleton } from '@chakra-ui/react'
+import { Skeleton } from '@chakra-ui/react';
 
 export interface PoolPathProps {
   id: string
@@ -39,8 +39,7 @@ export function PoolMigrationPage({ id, chain, variant }: PoolPathProps) {
   const {
     data: newPool,
     error,
-    loading,
-  } = useFetchPool(migration.new.chainId, migration.new.id, userAddress)
+    loading } = useFetchPool(migration.new.chainId, migration.new.id, userAddress)
 
   if (error) {
     if (error?.message === 'Pool with id does not exist') notFound()

@@ -4,8 +4,7 @@ import {
   PoolChartTabsProvider,
   PoolChartTab,
   usePoolChartTabs,
-  PoolChartTypeTab,
-} from './PoolChartTabsProvider'
+  PoolChartTypeTab } from './PoolChartTabsProvider'
 import {
   Box,
   BoxProps,
@@ -16,8 +15,7 @@ import {
   Stack,
   VStack,
   Text,
-  Heading,
-} from '@chakra-ui/react'
+  Heading } from '@chakra-ui/react';
 import { ClpBadge } from '@repo/lib/shared/components/badges/ClpBadge'
 import { EclpChartProvider, useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
@@ -29,8 +27,7 @@ import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
 import { PoolCharts } from './PoolCharts'
 import {
   ReclAmmChartProvider,
-  useReclAmmChart,
-} from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+  useReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
 import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
 import { ReversedToggleButton } from '@repo/lib/shared/components/btns/ReversedToggleButton'
 import { ThumbsDown, ThumbsUp } from 'react-feather'
@@ -45,14 +42,11 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     justifyContent: 'center',
     borderBottomLeftRadius: 'none',
     borderTopLeftRadius: 'none',
-    borderBottomRightRadius: 'none',
-  },
+    borderBottomRightRadius: 'none' },
   cardProps: {
     position: 'relative',
     overflow: 'hidden',
-    height: 'full',
-  },
-}
+    height: 'full' } }
 
 export function PoolChartsContainer() {
   const reclammChartData = useReclAmmChartData()
@@ -80,8 +74,7 @@ function PoolChartsContent({ ...props }: any) {
     outOfRangeText: eclpOutOfRangeText,
     inRangeText: eclpInRangeText,
     toggleIsReversed: toggleIsReversedEclp,
-    tokens: tokensEclp,
-  } = useEclpChart()
+    tokens: tokensEclp } = useEclpChart()
 
   const {
     hasChartData: hasReclAmmChartData,
@@ -92,15 +85,13 @@ function PoolChartsContent({ ...props }: any) {
     inRangeReadjustingText: reclammInRangeReadjustingText,
     isPoolWithinRange,
     toggleIsReversed: toggleIsReversedReclamm,
-    tokens: tokensReclamm,
-  } = useReclAmmChart()
+    tokens: tokensReclamm } = useReclAmmChart()
 
   const {
     hasChartData: hasPoolChartData,
     isLoading: isLoadingPoolChartsData,
     chartValueSum,
-    activePeriod,
-  } = usePoolCharts()
+    activePeriod } = usePoolCharts()
 
   const isLoading = isLoadingEclpChartData || isLoadingPoolChartsData || isLoadingReclAmmChartData
   const hasChartData = hasEclpChartData || hasPoolChartData || hasReclAmmChartData
@@ -116,8 +107,7 @@ function PoolChartsContent({ ...props }: any) {
       bgColor: poolIsInRange ? 'green.400' : 'orange.300',
       bodyText: poolIsInRange ? eclpInRangeText : eclpOutOfRangeText,
       headerText: `CLP ${poolIsInRange ? 'in' : 'out of'} range`,
-      icon: poolIsInRange ? ThumbsUp : ThumbsDown,
-    },
+      icon: poolIsInRange ? ThumbsUp : ThumbsDown },
     reclamm: {
       bgColor: isPoolWithinTargetRange ? 'green.400' : isPoolWithinRange ? 'orange.300' : 'red.400',
       bodyText: isPoolWithinTargetRange
@@ -126,12 +116,10 @@ function PoolChartsContent({ ...props }: any) {
           ? reclammInRangeReadjustingText
           : reclammOutOfRangeText,
       headerText: isPoolWithinTargetRange ? 'Pool in range' : 'Pool readjusting',
-      icon: isPoolWithinTargetRange ? ThumbsUp : WandIcon,
-    },
-  }
+      icon: isPoolWithinTargetRange ? ThumbsUp : WandIcon } }
 
   return (
-    <Card {...props}>
+    <Card.Root {...props}>
       <Stack h="full">
         {isLoading ? (
           <Skeleton h="full" minH="200px" w="full" />
@@ -164,7 +152,7 @@ function PoolChartsContent({ ...props }: any) {
                 <VStack
                   alignItems={{ base: undefined, md: 'flex-end' }}
                   ml={{ base: undefined, md: 'auto' }}
-                  spacing="0"
+                  gap="0"
                 >
                   {showLiquidityProfileChart && <ClpBadge {...clpBadgeConfigs.liquidityProfile} />}
                   {showReclammChart && <ClpBadge {...clpBadgeConfigs.reclamm} />}
@@ -196,8 +184,7 @@ function PoolChartsContent({ ...props }: any) {
                       style={{
                         position: 'absolute',
                         width: '100%',
-                        height: '100%',
-                      }}
+                        height: '100%' }}
                       transition={{ duration: 0.3, ease: 'easeInOut' }}
                     >
                       <EclpChart />
@@ -212,8 +199,7 @@ function PoolChartsContent({ ...props }: any) {
                       style={{
                         position: 'absolute',
                         width: '100%',
-                        height: '100%',
-                      }}
+                        height: '100%' }}
                       transition={{ duration: 0.3, ease: 'easeInOut' }}
                     >
                       <ReclAmmChart />
@@ -232,6 +218,6 @@ function PoolChartsContent({ ...props }: any) {
           </Flex>
         )}
       </Stack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }

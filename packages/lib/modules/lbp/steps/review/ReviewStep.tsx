@@ -1,14 +1,4 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Circle,
-  Heading,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Card, Circle, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import { differenceInDays, differenceInHours, format, isValid, parseISO } from 'date-fns'
 import { getChainName } from '@repo/lib/config/app.config'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -28,8 +18,7 @@ export function ReviewStep() {
   const { projectInfoForm, saleStructureForm } = useLbpForm()
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl] = useWatch({
     control: projectInfoForm.control,
-    name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'],
-  })
+    name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'] })
   const [
     selectedChain,
     launchTokenAddress,
@@ -52,8 +41,7 @@ export function ReviewStep() {
       'endDateTime',
       'fee',
       'userActions',
-    ],
-  })
+    ] })
 
   const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
 
@@ -68,9 +56,9 @@ export function ReviewStep() {
 
   return (
     <VStack align="start" gap="ms" w="full">
-      <Card>
-        <VStack alignItems="start" spacing="6">
-          <HStack spacing="5">
+      <Card.Root>
+        <VStack alignItems="start" gap="6">
+          <HStack gap="5">
             <Circle bg="background.level4" color="font.secondary" shadow="lg" size={24}>
               <VStack>
                 {tokenIconUrl && <Image borderRadius="full" src={normalizeUrl(tokenIconUrl)} />}
@@ -95,7 +83,7 @@ export function ReviewStep() {
             <Text variant="secondary">{description}</Text>
           </VStack>
 
-          <HStack spacing="4" w={{ base: 'full', lg: 'auto' }}>
+          <HStack gap="4" w={{ base: 'full', lg: 'auto' }}>
             <SocialLink href={websiteUrl} socialNetwork="website" title={websiteUrl} />
             {xHandle && (
               <SocialLink
@@ -109,8 +97,7 @@ export function ReviewStep() {
             )}
           </HStack>
         </VStack>
-      </Card>
-
+      </Card.Root>
       <HStack alignItems="stretch" gap="ms" w="full">
         {
           // FIXME: [JUANJO] use localized dates
@@ -136,12 +123,11 @@ export function ReviewStep() {
           title="Sale period"
         />
       </HStack>
-
-      <Card>
-        <CardHeader>
+      <Card.Root>
+        <Card.Header>
           <Heading size="md">Seed liquidity</Heading>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Body>
           <VStack gap="md" w="full">
             <TokenInfo
               amount={Number(launchTokenSeed)}
@@ -158,16 +144,14 @@ export function ReviewStep() {
               value={Number(collateralTokenAmount) * collateralTokenPrice}
             />
           </VStack>
-        </CardBody>
-      </Card>
-
+        </Card.Body>
+      </Card.Root>
       <OtherSaleDetails
         fee={fee}
         launchTokenSymbol={launchTokenMetadata.symbol || ''}
         userActions={userActions}
       />
-
       <LbpFormAction />
     </VStack>
-  )
+  );
 }

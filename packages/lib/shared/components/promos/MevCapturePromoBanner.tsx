@@ -1,13 +1,13 @@
-'use client'
-
+'use client';
 import React from 'react'
-import { Button, Heading, Flex, Box, Center, Text, useColorMode, Link } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Button, Heading, Flex, Box, Center, Text, Link } from '@chakra-ui/react';
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../other/Picture'
 
 export function MevCapturePromoBanner() {
-  const { colorMode } = useColorMode()
+  const colorMode = useThemeColorMode()
 
   return (
     <Box rounded="lg" shadow="2xl">
@@ -22,9 +22,9 @@ export function MevCapturePromoBanner() {
             ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
             : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
         }
-        sx={{
+        css={{
           width: '100% !important',
-          maxWidth: '100% !important',
+          maxWidth: '100% !important'
         }}
         width="full"
       >
@@ -62,8 +62,8 @@ export function MevCapturePromoBanner() {
                   letterSpacing="-0.7px"
                   lineHeight="1.2"
                   pb="ms"
-                  sx={{
-                    textWrap: 'pretty',
+                  css={{
+                    textWrap: 'pretty'
                   }}
                 >
                   New pools that capture MEV for you
@@ -77,8 +77,8 @@ export function MevCapturePromoBanner() {
                   lineHeight="1.2"
                   maxW="600px"
                   opacity="0.95"
-                  sx={{
-                    textWrap: 'balance',
+                  css={{
+                    textWrap: 'balance'
                   }}
                 >
                   Introducing the MEV Capture Hook—a new revenue stream for LPs on Base.
@@ -90,16 +90,13 @@ export function MevCapturePromoBanner() {
                 _hover={{
                   bg: 'gradient.sandDark',
                   color: '#000',
-                  borderColor: colorMode === 'dark' ? 'font.light' : 'font.light',
-                }}
-                as={Link}
+                  borderColor: colorMode === 'dark' ? 'font.light' : 'font.light' }}
                 borderColor="font.maxContrast"
                 color="font.maxContrast"
                 cursor="hand"
                 flex="1"
                 gap="xs"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}
-                href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
                 isExternal
                 py="sm"
                 role="group"
@@ -107,41 +104,36 @@ export function MevCapturePromoBanner() {
                 size="md"
                 variant="outline"
                 w="132px"
-              >
-                Learn more
-                <Box
-                  _groupHover={{
-                    transform: 'translateX(2px)',
-                  }}
-                  as="span"
-                  transition="transform 0.2s"
-                >
-                  <ArrowUpRight size="14px" />
-                </Box>
-              </Button>
+                asChild><Link
+                  href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295">Learn more
+                                  <Box
+                    _groupHover={{
+                      transform: 'translateX(2px)' }}
+                    as="span"
+                    transition="transform 0.2s"
+                  >
+                    <ArrowUpRight size="14px" />
+                  </Box>
+                </Link></Button>
               <Button
                 _hover={{
                   bg: colorMode === 'dark' ? 'gradient.dawnDark' : 'gradient.dawnDark',
-                  color: colorMode === 'dark' ? '#000' : '#000',
-                }}
-                as={NextLink}
+                  color: colorMode === 'dark' ? '#000' : '#000' }}
                 bg="font.maxContrast"
                 color={colorMode === 'dark' ? 'font.dark' : '#fff'}
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}
-                href="/pools?poolTags=MevCapture"
                 py="sm"
                 rounded="full"
                 size="md"
                 w="132px"
-              >
-                View pools
-              </Button>
+                asChild><NextLink href="/pools?poolTags=MevCapture">View pools
+                              </NextLink></Button>
             </Flex>
           </Flex>
         </Center>
       </Box>
     </Box>
-  )
+  );
 }

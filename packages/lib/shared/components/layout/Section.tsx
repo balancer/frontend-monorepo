@@ -1,4 +1,4 @@
-import { chakra, HTMLChakraProps, useStyleConfig } from '@chakra-ui/react'
+import { chakra, HTMLChakraProps, useStyleConfig } from '@chakra-ui/react';
 import * as React from 'react'
 
 type SectionProps = HTMLChakraProps<'section'> & {

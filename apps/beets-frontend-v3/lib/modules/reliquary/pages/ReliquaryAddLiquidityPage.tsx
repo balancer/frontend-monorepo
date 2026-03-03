@@ -1,23 +1,10 @@
-'use client'
-
-import {
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  Grid,
-  GridItem,
-  HStack,
-  Skeleton,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+'use client';
+import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@/components/ui/tooltip';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import {
   requiresProportionalInput,
-  supportsNestedActions,
-} from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
+  supportsNestedActions } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
@@ -77,8 +64,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
     previewModalDisclosure,
     slippage,
     setWantsProportional,
-    wantsProportional,
-  } = useAddLiquidity()
+    wantsProportional } = useAddLiquidity()
 
   const createNew = !relicId
 
@@ -140,14 +126,14 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
-      <Card>
-        <CardHeader>
+      <Card.Root>
+        <Card.Header>
           <HStack justify="space-between" w="full">
             <Box as="span">Add liquidity to Relic</Box>
             <TransactionSettings size="xs" />
           </HStack>
-        </CardHeader>
-        <VStack align="start" spacing="md" w="full">
+        </Card.Header>
+        <VStack align="start" gap="md" w="full">
           {!relicId && (
             <BalAlert content="A new Relic will be created with this add liquidity" status="info" />
           )}
@@ -164,7 +150,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
             createNew={createNew}
             simulationQuery={simulationQuery}
           />
-          <VStack align="start" spacing="sm" w="full">
+          <VStack align="start" gap="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
                 accordionButtonComponent={
@@ -199,18 +185,17 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
           </VStack>
           <Grid gap="sm" templateColumns="1fr 1fr" w="full">
             <GridItem>
-              <Card minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
+              <Card.Root minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
                 <VStack align="start" gap="sm">
                   <Text fontSize="sm" fontWeight="500" lineHeight="16px">
                     Total
                   </Text>
                   <Text fontSize="md" fontWeight="700" lineHeight="16px">
                     {formatFalsyValueAsDash(totalUSDValue, toCurrency, {
-                      showZeroAmountAsDash: true,
-                    })}
+                      showZeroAmountAsDash: true })}
                   </Text>
                 </VStack>
-              </Card>
+              </Card.Root>
             </GridItem>
             <GridItem>
               <AddLiquidityPotentialWeeklyYield
@@ -226,10 +211,10 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
             </>
           )}
           {isConnected ? (
-            <Tooltip label={isDisabled ? disabledReason : ''}>
+            <Tooltip content={isDisabled ? disabledReason : ''}>
               <Button
-                isDisabled={isDisabled || (!relicId && !tosAccepted)}
-                isLoading={isLoading}
+                disabled={isDisabled || (!relicId && !tosAccepted)}
+                loading={isLoading}
                 onClick={() => !isDisabled && onModalOpen()}
                 ref={nextBtn}
                 size="lg"
@@ -243,7 +228,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
             <ConnectWallet size="lg" variant="primary" w="full" />
           )}
         </VStack>
-      </Card>
+      </Card.Root>
       <ReliquaryAddLiquidityModal
         createNew={createNew}
         finalFocusRef={nextBtn}
@@ -253,5 +238,5 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
         relicId={relicId}
       />
     </Box>
-  )
+  );
 }

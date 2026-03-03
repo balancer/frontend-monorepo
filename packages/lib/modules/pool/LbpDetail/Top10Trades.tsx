@@ -1,25 +1,23 @@
-import { Card, Center, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
+import { Card, Center, HStack, Spacer, Text, VStack } from '@chakra-ui/react';
 import {
   GqlChain,
   GqlLbpTopTrade,
-  GqlPoolLiquidityBootstrappingV3,
-} from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { EnsOrAddress } from '../../user/EnsOrAddress'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function Top10Trades({
   chain,
-  pool,
-}: {
+  pool }: {
   chain: GqlChain
   pool: GqlPoolLiquidityBootstrappingV3
 }) {
   const trades = pool.topTrades || []
 
   return (
-    <Card h="full">
-      <VStack h="full" spacing="5" w="full">
+    <Card.Root h="full">
+      <VStack h="full" gap="5" w="full">
         <HStack w="full">
           <Text fontSize="lg" fontWeight="bold">
             Biggest transactions during the sale
@@ -38,8 +36,8 @@ export function Top10Trades({
           </Center>
         )}
       </VStack>
-    </Card>
-  )
+    </Card.Root>
+  );
 }
 
 export function Row({ trade, chain }: { trade: GqlLbpTopTrade; chain: GqlChain }) {

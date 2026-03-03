@@ -1,6 +1,6 @@
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
-import { VStack, Card, HStack, Text } from '@chakra-ui/react'
+import { VStack, Card, HStack, Text } from '@chakra-ui/react';
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useStake } from './StakeProvider'
@@ -20,8 +20,8 @@ export function StakePreview() {
     : { token: quoteAmountIn, usd: quoteAmountInUsd }
 
   return (
-    <VStack spacing="sm" w="full">
-      <Card variant="subSection">
+    <VStack gap="sm" w="full">
+      <Card.Root variant="subSection">
         <TokenRow
           address={pool.address as Address}
           chain={pool.chain}
@@ -35,12 +35,11 @@ export function StakePreview() {
           pool={pool}
           value={amount.token}
         />
-      </Card>
-
+      </Card.Root>
       <StakeAprTooltip pool={pool} totalUsdValue={amount.usd} weeklyRewards={weeklyRewards} />
       {isSuccess && (
         <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
       )}
     </VStack>
-  )
+  );
 }

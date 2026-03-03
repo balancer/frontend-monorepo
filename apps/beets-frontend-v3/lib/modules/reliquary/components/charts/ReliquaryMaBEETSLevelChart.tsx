@@ -1,5 +1,12 @@
-import { useTheme as useChakraTheme } from '@chakra-ui/react'
-import ReactECharts from 'echarts-for-react'
+/*
+ MIGRATION NOTE: The following Chakra UI hooks have been removed.
+ Please replace them with the suggested alternatives:
+
+//   - useTheme: Use Import from system or use useChakraContext
+
+ See: https://chakra-ui.com/docs/get-started/migration#hooks
+*/
+import ReactECharts from 'echarts-for-react';
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
 import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
@@ -19,16 +26,12 @@ export function ReliquaryMaBEETSLevelChart() {
         axisPointer: {
           type: 'cross',
           crossStyle: {
-            color: '#999',
-          },
-        },
+            color: '#999' } },
         // any -> https://github.com/apache/echarts/issues/14277
         formatter: (params: any) =>
-          `Level ${params[0].data[0]}: ${fNumCustom(params[0].data[1], '0a')} maBEETS`,
-      },
+          `Level ${params[0].data[0]}: ${fNumCustom(params[0].data[1], '0a')} maBEETS` },
       textStyle: {
-        color: '#D3D3D3',
-      },
+        color: '#D3D3D3' },
       xAxis: {
         name: 'Level',
         nameLocation: 'middle',
@@ -38,11 +41,9 @@ export function ReliquaryMaBEETSLevelChart() {
         axisTick: { show: false, alignWithLabel: true },
         interval: 1,
         axisLabel: {
-          color: theme.colors.gray['200'],
-          margin: 16,
-        },
-        axisLine: { show: false },
-      },
+          color: theme.token('colors.gray'),
+          margin: 16 },
+        axisLine: { show: false } },
       yAxis: {
         name: 'maBEETS',
         nameLocation: 'middle',
@@ -52,17 +53,14 @@ export function ReliquaryMaBEETSLevelChart() {
         minorSplitLine: { show: false },
         splitLine: { show: false },
         axisLabel: {
-          show: false,
-        },
-        axisTick: { show: false },
-      },
+          show: false },
+        axisTick: { show: false } },
       grid: {
         bottom: '6.5%',
         right: '1.5%',
         left: '6.5%',
         top: '10%',
-        containLabel: true,
-      },
+        containLabel: true },
       series: [
         {
           data: levels?.map(level => [
@@ -74,15 +72,12 @@ export function ReliquaryMaBEETSLevelChart() {
             opacity: 1,
             borderRadius: [5, 5, 0, 0],
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
-              { offset: 0.5, color: theme.semanticTokens.colors.chart.pool.bar.volume.from },
-              { offset: 1, color: theme.semanticTokens.colors.chart.pool.bar.volume.to },
-            ]),
-          },
-        },
-      ],
-    }),
-    [levels, theme]
+              { offset: 0, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+              { offset: 0.5, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+              { offset: 1, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
+            ]) } },
+      ] }),
+    [levels, system]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

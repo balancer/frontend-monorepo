@@ -1,17 +1,6 @@
 'use client'
 
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Box,
-  HStack,
-  Link,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Accordion, Box, HStack, Link, Text, VStack } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
@@ -19,35 +8,29 @@ import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIcon
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import {
   COW_PROTOCOL_ID,
-  BALANCER_PROTOCOL_ID,
-} from '@repo/lib/modules/pool/actions/create/constants'
+  BALANCER_PROTOCOL_ID } from '@repo/lib/modules/pool/actions/create/constants'
 
 const CREATE_POOL_LINKS = [
   {
     label: 'Balancer',
     href: `/create?protocol=${BALANCER_PROTOCOL_ID.toLowerCase()}`,
-    icon: <BalancerIconCircular size={24} />,
-  },
+    icon: <BalancerIconCircular size={24} /> },
   {
     label: 'CoW AMM',
     href: `/create?protocol=${COW_PROTOCOL_ID.toLowerCase()}`,
-    icon: <CowIconCircular size={24} />,
-  },
+    icon: <CowIconCircular size={24} /> },
 ]
 
 const RESOURCE_LINKS = [
   {
     label: 'v3 Scaffold',
-    href: 'https://github.com/balancer/scaffold-balancer-v3',
-  },
+    href: 'https://github.com/balancer/scaffold-balancer-v3' },
   {
     label: 'Code & Contracts',
-    href: 'https://github.com/balancer',
-  },
+    href: 'https://github.com/balancer' },
   {
     label: 'Documentation',
-    href: 'https://docs.balancer.fi/',
-  },
+    href: 'https://docs.balancer.fi/' },
 ]
 
 type MobileBuildAccordionProps = {
@@ -56,79 +39,79 @@ type MobileBuildAccordionProps = {
 
 export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
   return (
-    <Accordion allowToggle w="full">
-      <AccordionItem border="none">
-        <AccordionButton _hover={{ bg: 'transparent' }} pt="sm" px="0">
+    <Accordion.Root collapsible w="full">
+      <Accordion.Root border="none" value='item-0'>
+        <Accordion.Root _hover={{ bg: 'transparent' }} pt="sm" px="0">
           <Text flex="1" fontSize="xl" fontWeight="medium" textAlign="left">
             Build
           </Text>
-          <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel pb="0" pt="0" px="0">
-          <FormSubsection mx="0" py="0">
-            <VStack align="start" spacing="md">
-              {/* Create a pool section */}
-              <VStack align="start" spacing="sm" w="full">
-                <Text color="grayText" fontSize="sm" fontWeight="bold">
-                  Create a pool
-                </Text>
-                {CREATE_POOL_LINKS.map(link => (
-                  <Link
-                    _hover={{ color: 'font.highlight', textDecoration: 'none' }}
-                    as={NextLink}
-                    href={link.href}
-                    key={link.label}
-                    onClick={onClose}
-                    pb="0.5"
-                    role="group"
-                    w="full"
-                  >
-                    <HStack spacing="sm">
-                      {link.icon}
-                      <Text
-                        _groupHover={{ color: 'font.highlight' }}
-                        alignItems="center"
-                        display="flex"
-                        fontSize="md"
-                        fontWeight="bold"
-                        gap="xs"
-                      >
-                        {link.label}
-                      </Text>
-                    </HStack>
-                  </Link>
-                ))}
-              </VStack>
+          <Accordion.Root />
+        </Accordion.ItemTrigger>
+        <Accordion.Root pb="0" pt="0" px="0"><Accordion.Root>
+            <FormSubsection mx="0" py="0">
+              <VStack align="start" gap="md">
+                {/* Create a pool section */}
+                <VStack align="start" gap="sm" w="full">
+                  <Text color="grayText" fontSize="sm" fontWeight="bold">
+                    Create a pool
+                  </Text>
+                  {CREATE_POOL_LINKS.map(link => (
+                    <Link
+                      _hover={{ color: 'font.highlight', textDecoration: 'none' }}
+                      as={NextLink}
+                      href={link.href}
+                      key={link.label}
+                      onClick={onClose}
+                      pb="0.5"
+                      role="group"
+                      w="full"
+                    >
+                      <HStack gap="sm">
+                        {link.icon}
+                        <Text
+                          _groupHover={{ color: 'font.highlight' }}
+                          alignItems="center"
+                          display="flex"
+                          fontSize="md"
+                          fontWeight="bold"
+                          gap="xs"
+                        >
+                          {link.label}
+                        </Text>
+                      </HStack>
+                    </Link>
+                  ))}
+                </VStack>
 
-              {/* Builder resources section */}
-              <VStack align="start" spacing="sm" w="full">
-                <Text color="grayText" fontSize="sm" fontWeight="bold">
-                  Builder resources
-                </Text>
-                {RESOURCE_LINKS.map(link => (
-                  <Link
-                    _hover={{ color: 'font.highlight', textDecoration: 'none' }}
-                    alignItems="center"
-                    color="font.primary"
-                    display="flex"
-                    fontSize="xs"
-                    gap="xxs"
-                    href={link.href}
-                    isExternal
-                    key={link.label}
-                    onClick={onClose}
-                  >
-                    {link.label}
-                    <Box color="grayText">
-                      <ArrowUpRight size={12} />
-                    </Box>
-                  </Link>
-                ))}
+                {/* Builder resources section */}
+                <VStack align="start" gap="sm" w="full">
+                  <Text color="grayText" fontSize="sm" fontWeight="bold">
+                    Builder resources
+                  </Text>
+                  {RESOURCE_LINKS.map(link => (
+                    <Link
+                      _hover={{ color: 'font.highlight', textDecoration: 'none' }}
+                      alignItems="center"
+                      color="font.primary"
+                      display="flex"
+                      fontSize="xs"
+                      gap="xxs"
+                      href={link.href}
+                      key={link.label}
+                      onClick={onClose}
+                      target='_blank'
+                      rel='noopener noreferrer'>
+                      {link.label}
+                      <Box color="grayText">
+                        <ArrowUpRight size={12} />
+                      </Box>
+                    </Link>
+                  ))}
+                </VStack>
               </VStack>
-            </VStack>
-          </FormSubsection>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  )
+            </FormSubsection>
+          </Accordion.ItemBody></Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
 }
