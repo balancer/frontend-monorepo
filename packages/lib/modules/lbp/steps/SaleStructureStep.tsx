@@ -168,7 +168,7 @@ export function SaleStructureStep() {
                 weightAdjustmentType={weightAdjustmentType ?? WeightAdjustmentType.LINEAR_90_10}
               />
             )}
-            <UserActionsInput control={control} isFixedSale={isFixedSale} />
+            <UserActionsInput control={control} isFixedSale={isFixedSale} setFormValue={setValue} />
             <FeeSelection
               clearErrors={clearErrors}
               control={control}
@@ -415,10 +415,21 @@ function CollateralTokenAddressInput({
 function UserActionsInput({
   control,
   isFixedSale,
+  setFormValue,
 }: {
   control: Control<SaleStructureForm>
   isFixedSale?: boolean
+  setFormValue: UseFormSetValue<SaleStructureForm>
 }) {
+  useEffect(() => {
+    if (isFixedSale) {
+      setFormValue('userActions', UserActions.BUY_ONLY, {
+        shouldDirty: true,
+        shouldValidate: true,
+      })
+    }
+  }, [isFixedSale, setFormValue])
+
   return (
     <VStack align="start" w="full">
       <HStack>
@@ -433,7 +444,9 @@ function UserActionsInput({
         render={({ field }) => (
           <RadioGroup onChange={field.onChange} value={field.value}>
             <Stack direction="row" gap="md">
-              <Radio value={UserActions.BUY_AND_SELL}>Buy & sell</Radio>
+              <Radio isDisabled={isFixedSale} value={UserActions.BUY_AND_SELL}>
+                Buy & sell
+              </Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
             </Stack>
           </RadioGroup>
