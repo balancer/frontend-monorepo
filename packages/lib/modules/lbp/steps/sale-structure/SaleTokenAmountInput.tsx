@@ -8,6 +8,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Control, Controller } from 'react-hook-form'
 import { formatUnits } from 'viem'
 import { useLbpForm } from '../../LbpFormProvider'
+import { isEmpty } from 'lodash'
 
 export function SaleTokenAmountInput({
   control,
@@ -30,9 +31,12 @@ export function SaleTokenAmountInput({
     token: launchToken.address,
   })
   const hasNoBalance = isLoading ? false : !balanceData || balanceData.value === 0n
-  const priceMessage = hasNoBalance
-    ? `Your wallet has no ${launchToken.symbol}`
-    : `Price: ${launchTokenPriceUsd || 'N/A'}`
+
+  const priceMessage = isEmpty(launchToken.symbol)
+    ? 'No sale token available'
+    : hasNoBalance
+      ? `Your wallet has no ${launchToken.symbol}`
+      : `Price: ${launchTokenPriceUsd || 'N/A'}`
 
   return (
     <VStack align="start" w="full">
