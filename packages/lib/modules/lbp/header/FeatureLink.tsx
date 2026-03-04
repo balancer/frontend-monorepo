@@ -1,5 +1,5 @@
 import { HStack, Text } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { StoneIcon } from '@repo/lib/shared/components/StoneIcon'
 import { ReactElement } from 'react'
 

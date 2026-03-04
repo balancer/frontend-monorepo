@@ -1,11 +1,10 @@
 import {
   VStack,
   Text,
-  Radio,
   Stack,
   RadioGroup,
   InputGroup,
-  InputRightElement,
+  InputElement,
   IconButton,
   Heading,
   Box,
@@ -267,7 +266,7 @@ function LaunchTokenAddressInput({
             } }}
         />
 
-        <InputRightElement w="max-content">
+        <InputElement placement="right" w="max-content">
           {!locked ? (
             <Button
               aria-label="paste"
@@ -288,7 +287,7 @@ function LaunchTokenAddressInput({
           ) : (
             <IconButton aria-label="edit" onClick={() => resetForm()} variant="link"><Edit size="16px" /></IconButton>
           )}
-        </InputRightElement>
+        </InputElement>
       </InputGroup>
     </VStack>
   );
@@ -521,9 +520,9 @@ function FeeSelection({
                   required: 'Swap fee is required',
                   validate: isInRange }}
               />
-              <InputRightElement>
+              <InputElement placement="right">
                 <Percent size="20" />
-              </InputRightElement>
+              </InputElement>
             </InputGroup>
           </FadeInOnView>
         </Box>

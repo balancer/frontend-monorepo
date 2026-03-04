@@ -35,7 +35,7 @@ export function PoolMigrationModal() {
   useOnUserAccountChanged(redirectToOldPoolPage)
 
   return (
-    <Dialog.Root placement='center' open={true} onOpenChange={e => {
+    <Dialog.Root placement='center' open={true} onOpenChange={(e: { open: boolean }) => {
       if (!e.open) {
         redirectToPoolPage();
       }

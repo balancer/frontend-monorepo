@@ -1,5 +1,5 @@
 import { Permit2, PublicWalletClient } from '@balancer/sdk'
-import { useToast } from '@chakra-ui/react';
+import { useToast } from '@repo/lib/shared/hooks/useToast'
 import {
   SignatureState,
   isSignatureDisabled,

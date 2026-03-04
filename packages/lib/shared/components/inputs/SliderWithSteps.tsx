@@ -6,7 +6,7 @@ import {
   SliderTrack,
   SliderProps,
   useToken } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export interface SliderWithStepsProps extends SliderProps {

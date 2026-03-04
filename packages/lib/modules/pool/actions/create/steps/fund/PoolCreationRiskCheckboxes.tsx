@@ -29,7 +29,7 @@ export function PoolCreationRiskCheckboxes() {
       {showTokenWeightsRiskCheckbox && (
         <Checkbox.Root
           alignItems="flex-start"
-          onCheckedChange={e => poolCreationForm.setValue('hasAcceptedTokenWeightsRisk', e.target.checked)}
+          onCheckedChange={(e: { checked: boolean }) => poolCreationForm.setValue('hasAcceptedTokenWeightsRisk', e.checked)}
           checked={hasAcceptedTokenWeightsRisk}
         ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
             <Text {...textProps}>
@@ -40,7 +40,7 @@ export function PoolCreationRiskCheckboxes() {
       )}
       <Checkbox.Root
         alignItems="flex-start"
-        onCheckedChange={e => poolCreationForm.setValue('hasAcceptedPoolCreationRisk', e.target.checked)}
+        onCheckedChange={(e: { checked: boolean }) => poolCreationForm.setValue('hasAcceptedPoolCreationRisk', e.checked)}
         checked={hasAcceptedPoolCreationRisk}
       ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
           {isBalancer ? (

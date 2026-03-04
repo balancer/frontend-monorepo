@@ -1,12 +1,4 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
-import { ColorMode, system as defaultTheme } from '@chakra-ui/react';
+import { useChakraContext } from '@chakra-ui/react';
 import { addHours, differenceInDays, format } from 'date-fns'
 import {
   GetPoolSnapshotsDocument,
@@ -79,16 +71,22 @@ const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
 
 export const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
-  nextTheme: ColorMode = 'dark',
-  system: any, // TODO: type this
+  nextTheme: string = 'dark',
+  system: ReturnType<typeof useChakraContext>,
   options: { useTimeRange: boolean } = { useTimeRange: false }
 ) => {
+  function resolveToken(path: string): string {
+    const cssVar = system.token.var(`colors.${path}`)
+    if (typeof window === 'undefined') return ''
+    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+  }
+
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.token('colors.gray')};`,
-    text: theme.token('colors.gray') }
+    container: `background: ${system.token('colors.gray.700', '#374151')};`,
+    text: system.token('colors.gray.700', '#374151') }
 
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
   return {
     grid: {
       left: '1.5%',
@@ -106,7 +104,7 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return format(new Date(value * 1000), 'MMM d')
         },
-        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
+        color: resolveToken('font.primary'),
         opacity: 0.5,
         interval: 0,
         showMaxLabel: false,
@@ -133,7 +131,7 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return currencyFormatter(value)
         },
-        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
+        color: resolveToken('font.primary'),
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,
@@ -192,8 +190,8 @@ export function usePoolChartsLogic() {
   const { pool, tvl } = usePool()
   const { id: poolId } = useParams()
   const { toCurrency } = useCurrency()
-  const { system: nextTheme } = useNextTheme()
-  const theme = useChakraTheme()
+  const { resolvedTheme: nextTheme } = useNextTheme()
+  const system = useChakraContext()
   const [chartValue, setChartValue] = useState(0)
   const [chartDate, setChartDate] = useState('')
   const [activePeriod, setActivePeriod] = useState(poolChartPeriods[0])
@@ -363,7 +361,14 @@ export function usePoolChartsLogic() {
     pool.dynamicData.totalLiquidity,
   ])
 
-  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, system)
+  function resolveToken(path: string): string {
+    const cssVar = system.token.var(`colors.${path}`)
+    if (typeof window === 'undefined') return ''
+    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+  }
+
+  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme, system)
 
   type SupportedPoolChartTab =
     | PoolChartTab.VOLUME
@@ -384,22 +389,22 @@ export function usePoolChartsLogic() {
           {
             offset: 0,
             color: isCowPool
-              ? theme.token('semanticTokens.colors.chart.pool.bar.volume.cow.from')
-              : theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+              ? resolveToken('chart.pool.bar.volume.cow.from')
+              : resolveToken('chart.pool.bar.volume.from') },
           {
             offset: 1,
             color: isCowPool
-              ? theme.token('semanticTokens.colors.chart.pool.bar.volume.cow.to')
-              : theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
+              ? resolveToken('chart.pool.bar.volume.cow.to')
+              : resolveToken('chart.pool.bar.volume.to') },
         ] },
       hoverColor: isCowPool
-        ? theme.token('semanticTokens.colors.chart.pool.bar.volume.cow.hover')
-        : defaultTheme.colors.pink[500] },
+        ? resolveToken('chart.pool.bar.volume.cow.hover')
+        : '#ED64A6' },
     [PoolChartTab.TVL]: {
       type: 'line',
-      color: defaultTheme.colors.blue[600],
-      hoverBorderColor: defaultTheme.colors.pink[500],
-      hoverColor: defaultTheme.colors.gray[900],
+      color: '#3182CE',
+      hoverBorderColor: '#ED64A6',
+      hoverColor: '#171923',
       areaStyle: {
         color: {
           type: 'linear',
@@ -417,18 +422,18 @@ export function usePoolChartsLogic() {
           ] } } },
     [PoolChartTab.FEES]: {
       type: 'bar',
-      color: defaultTheme.colors.yellow[400],
-      hoverColor: defaultTheme.colors.pink[500] },
+      color: '#F6E05E',
+      hoverColor: '#ED64A6' },
     [PoolChartTab.SURPLUS]: {
       type: 'bar',
-      color: defaultTheme.colors.yellow[400],
-      hoverColor: defaultTheme.colors.pink[500] } }
+      color: '#F6E05E',
+      hoverColor: '#ED64A6' } }
 
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value as SupportedPoolChartTab] || {
       type: 'line',
-      color: defaultTheme.colors.blue[500],
-      hoverColor: defaultTheme.colors.pink[500] }
+      color: '#4299E1',
+      hoverColor: '#ED64A6' }
 
     return {
       ...defaultChartOptions,

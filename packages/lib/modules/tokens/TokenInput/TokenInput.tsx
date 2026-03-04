@@ -14,9 +14,9 @@ import {
   Button,
   HStack,
   Input,
+  InputAddon,
   InputGroup,
   InputProps,
-  InputRightAddon,
   Skeleton,
   Text,
   VStack } from '@chakra-ui/react';
@@ -266,7 +266,6 @@ export const TokenInput = forwardRef(
     const { userAddress } = useUserAccount()
     const { isBalancesLoading } = useTokenBalances()
 
-    const { colors } = useTheme()
     const { getToken } = useTokens()
     const tokenFromAddress = address && chain ? getToken(address, chain) : undefined
 
@@ -310,7 +309,7 @@ export const TokenInput = forwardRef(
         bg="background.level0"
         border="white"
         borderRadius="md"
-        boxShadow={hasError ? `0 0 0 1px ${colors.red[500]}` : undefined}
+        boxShadow={hasError ? `0 0 0 1px var(--chakra-colors-red-500)` : undefined}
         p={['ms', 'md']}
         position="relative"
         shadow={hasError ? undefined : 'innerBase'}
@@ -367,13 +366,13 @@ export const TokenInput = forwardRef(
               )}
             </Box>
 
-            <InputRightAddon bg="transparent" border="none" p="0" pl="1">
+            <InputAddon placement="right" bg="transparent" border="none" p="0" pl="1">
               <TokenInputSelector
                 onToggleTokenClicked={onToggleTokenClicked}
                 token={token}
                 weight={weight}
               />
-            </InputRightAddon>
+            </InputAddon>
           </InputGroup>
 
           <TokenInputFooter

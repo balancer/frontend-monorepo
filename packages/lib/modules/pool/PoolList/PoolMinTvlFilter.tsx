@@ -5,7 +5,6 @@ import {
   Heading,
   Slider,
   SliderTrack,
-  SliderFilledTrack,
   SliderThumb } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePoolList } from './PoolListProvider'
@@ -131,9 +130,7 @@ export function PoolMinTvlFilter() {
         step={1}
         value={String(sliderValue)}
       >
-        <SliderTrack>
-          <SliderFilledTrack />
-        </SliderTrack>
+        <SliderTrack />
         <SliderThumb />
       </Slider.Root>
     </VStack>

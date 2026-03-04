@@ -11,7 +11,7 @@ import {
   IconButton,
   Button,
   Box } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { useRef, useState } from 'react'
 import { useSwap } from './SwapProvider'
 import { TokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectModal'
@@ -399,7 +399,7 @@ export function SwapForm({
       )}
       <SwapPreviewModal
         finalFocusRef={nextBtn}
-        isOpen={previewModalDisclosure.isOpen}
+        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
       />

@@ -1,9 +1,9 @@
-import { Popover, HoverCard, Box, Text, PlacementWithLogical } from '@chakra-ui/react';
+import { Popover, HoverCard, Box, Text } from '@chakra-ui/react';
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 
 interface InfoIconPopoverProps {
   message: string
-  placement?: PlacementWithLogical
+  placement?: string
 }
 
 export function InfoIconPopover({ message, placement = 'top-start' }: InfoIconPopoverProps) {

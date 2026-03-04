@@ -1,6 +1,6 @@
-import { Alert, AlertProps, AlertStatus, CloseButton, VStack } from '@chakra-ui/react';
+import { Alert, AlertProps, AlertStatus, IconButton, VStack } from '@chakra-ui/react';
 import { MouseEventHandler, ReactNode } from 'react'
-import { AlertTriangle, Check, Loader, XOctagon } from 'react-feather'
+import { AlertTriangle, Check, Loader, X, XOctagon } from 'react-feather'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
 import { LightbulbIcon } from '../icons/LightbulbIcon'
 
@@ -70,16 +70,15 @@ export function BalAlert({
       {learnMoreLink && <BalAlertButtonLink href={learnMoreLink}>More</BalAlertButtonLink>}
       {action}
       {isSoftWarning && (
-        <CloseButton
-          _hover={{
-            transform: 'scale(1.2)' }}
+        <IconButton
+          _hover={{ transform: 'scale(1.2)' }}
           aria-label="Close"
           color="font.dark"
           ml="auto"
           onClick={onClose}
           size="sm"
-          variant="softWarning"
-        />
+          variant="ghost"
+        ><X size={16} /></IconButton>
       )}
     </Alert.Root>
   );

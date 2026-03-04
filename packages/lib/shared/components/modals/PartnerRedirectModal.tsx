@@ -112,7 +112,7 @@ export function PartnerRedirectModal({ partner, redirectUrl, isOpen, onClose }: 
     <Dialog.Root
       placement='center'
       open={isOpen}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

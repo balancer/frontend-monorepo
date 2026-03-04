@@ -1,4 +1,4 @@
-import { VStack, HStack, Text, RadioGroup, Radio, Stack } from '@chakra-ui/react';
+import { VStack, HStack, Text, RadioGroup, Stack } from '@chakra-ui/react';
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -70,11 +70,11 @@ export function PoolSettingsRadioGroup({
           return (
             <RadioGroup.Root
               aria-label={title}
-              onValueChange={value => {
-                if (value === '') {
+              onValueChange={(details: { value: string | null }) => {
+                if (details.value === '') {
                   resetField(name, { defaultValue: '' })
                 } else {
-                  field.onChange(value)
+                  field.onChange(details.value)
                 }
               }}
               value={String(selectedRadioGroupValue)}
@@ -85,12 +85,16 @@ export function PoolSettingsRadioGroup({
 
                   return (
                     <VStack align="start" key={idx} w="full">
-                      <Radio disabled={isDisabled} size="lg" value={String(option.value)}>
-                        <HStack>
-                          <Text color="font.primary">{option.label}</Text>
-                          {option.detail && option.detail}
-                        </HStack>
-                      </Radio>
+                      <RadioGroup.Item disabled={isDisabled} size="lg" value={String(option.value)}>
+                        <RadioGroup.ItemHiddenInput />
+                        <RadioGroup.ItemIndicator />
+                        <RadioGroup.ItemText>
+                          <HStack>
+                            <Text color="font.primary">{option.label}</Text>
+                            {option.detail && option.detail}
+                          </HStack>
+                        </RadioGroup.ItemText>
+                      </RadioGroup.Item>
                       {isCustomOption &&
                         isCustomOptionSelected &&
                         (customInputType === 'address' ? (

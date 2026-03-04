@@ -1,12 +1,5 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
-import { SVGProps } from 'react';
+import { useChakraContext } from '@chakra-ui/react'
+import { SVGProps } from 'react'
 
 interface Props extends SVGProps<SVGSVGElement> {
   gradFrom?: string
@@ -22,10 +15,10 @@ function StarIcon({
   id,
   ...rest
 }: Props) {
-  const theme = useTheme()
+  const system = useChakraContext()
   const gradientId = `stars-gradient-${gradFrom}-${gradTo}-${id}`
-  const startColor = theme.colors[gradTo] ? theme.colors[gradTo]['600'] : gradTo
-  const stopColor = theme.colors[gradFrom] ? theme.colors[gradFrom]['600'] : gradFrom
+  const startColor = system.token(`colors.${gradTo}.600`, gradTo)
+  const stopColor = system.token(`colors.${gradFrom}.600`, gradFrom)
 
   return (
     <svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" {...rest}>

@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { getTransactionState, Retry, TransactionState, TransactionStep } from './lib'
 import { useTxSound } from './useTxSound'
 import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
-import { useToast } from '@chakra-ui/react';
+import { useToast } from '@repo/lib/shared/hooks/useToast'
 import { resetTransaction } from './transaction.helper'
 import { showErrorAsToast } from '@repo/lib/shared/components/toasts/toast.helper'
 import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'

@@ -1,5 +1,5 @@
 import { Badge, Button, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '@chakra-ui/react';
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'

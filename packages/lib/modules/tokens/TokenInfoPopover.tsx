@@ -1,6 +1,6 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HStack, IconButton, Popover, Text, Link } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { Address } from 'viem'
 import { CopyAddressButton } from './CopyAddressButton'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'

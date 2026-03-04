@@ -11,14 +11,14 @@ export function VebalLockDetailsAccordion({
   return (
     <Box w="full">
       <Accordion.Root collapsible variant="button" w="full">
-        <Accordion.Root
+        <Accordion.Item
           bg="background.level3"
           disabled={isDisabled}
           shadow={isDisabled ? 'none' : undefined}
           w="full"
           value='item-0'>
           <h2>
-            <Accordion.Root>
+            <Accordion.ItemTrigger>
               <Box as="span" flex="1" textAlign="left">
                 <HStack>
                   <Text color="font.maxContrast" fontSize="sm">
@@ -26,10 +26,10 @@ export function VebalLockDetailsAccordion({
                   </Text>
                 </HStack>
               </Box>
-              <Accordion.Root textColor="font.secondary" />
+              <Accordion.ItemIndicator textColor="font.secondary" />
             </Accordion.ItemTrigger>
           </h2>
-          <Accordion.Root py="md"><Accordion.Root>{accordionPanelComponent}</Accordion.ItemBody></Accordion.ItemContent>
+          <Accordion.ItemContent py="md"><Accordion.ItemBody>{accordionPanelComponent}</Accordion.ItemBody></Accordion.ItemContent>
         </Accordion.Item>
       </Accordion.Root>
     </Box>

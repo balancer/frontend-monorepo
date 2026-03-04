@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Radio, Link, Box } from '@chakra-ui/react';
+import { Text, HStack, VStack, RadioGroup, Stack, Link, Box } from '@chakra-ui/react';
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
@@ -88,9 +88,13 @@ export function ConfigureTokenRateProvider({
                 key={value}
                 gap={{ base: 1, md: 'xs' }}
               >
-                <Radio size="lg" value={String(value)}>
-                  <Text>{label}</Text>
-                </Radio>
+                <RadioGroup.Item size="lg" value={String(value)}>
+                  <RadioGroup.ItemHiddenInput />
+                  <RadioGroup.ItemIndicator />
+                  <RadioGroup.ItemText>
+                    <Text>{label}</Text>
+                  </RadioGroup.ItemText>
+                </RadioGroup.Item>
                 {value === RateProviderOption.Verified && (
                   <Box pl={{ base: 7, md: 0 }}>
                     <BlockExplorerLink

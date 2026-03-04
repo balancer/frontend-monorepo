@@ -122,7 +122,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
               shadow="2xl"
               w="auto"
               zIndex={9999}>
-              <HoverCard.Body p="0">
+              <Box p="0">
                 <Flex direction="column" gap={1}>
                   {fees.map(fee => (
                     <Flex align="center" justify="space-between" key={fee.label}>
@@ -135,7 +135,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
                     </Flex>
                   ))}
                 </Flex>
-              </HoverCard.Body>
+              </Box>
             </HoverCard.Content>
           </HoverCard.Positioner>
         </HoverCard.Root>

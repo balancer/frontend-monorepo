@@ -18,5 +18,5 @@ export function useModalWithPoolRedirect(
     }
   }
 
-  return { onOpen, isOpen, onClose }
+  return { onOpen, open, onClose }
 }

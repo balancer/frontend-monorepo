@@ -1,15 +1,7 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql';
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
-import { Box, VStack } from '@chakra-ui/react';
+import { Box, VStack, useChakraContext } from '@chakra-ui/react';
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'framer-motion'
 import { useRef, useMemo } from 'react'
@@ -59,11 +51,24 @@ const normalSize: ChartSizeValues = {
   haloWidth: '60px',
   haloHeight: '60px' }
 
+function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`colors.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
+
+function resolveShadow(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`shadows.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
+
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
   const colorMode = useThemeColorMode()
-  const theme = useTheme()
-  const colorModeKey = colorMode === 'light' ? 'default' : '_dark'
-  const chartOuter = isSmall ? '' : theme.token('semanticTokens.shadows.chartIconOuter')[colorModeKey]
+  const system = useChakraContext()
+  const chartOuter = isSmall ? '' : resolveShadow(system, 'chartIconOuter')
   return (
     <Box
       alignItems="center"
@@ -117,7 +122,7 @@ export function PoolWeightChart({
   totalLiquidity }: PoolWeightChartProps) {
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
-  const theme = useTheme()
+  const system = useChakraContext()
   const colorMode = useThemeColorMode()
   const { calcWeightForBalance } = useTokens()
 
@@ -141,7 +146,7 @@ export function PoolWeightChart({
           type: 'pie',
           radius: ['70%', '99%'],
           itemStyle: {
-            borderColor: theme.colors['chartBorder'][colorMode],
+            borderColor: resolveToken(system, 'chartBorder'),
             borderWidth: 1.5 },
           label: {
             show: false,
@@ -163,7 +168,7 @@ export function PoolWeightChart({
                   color: getTokenColor(chain, token.address as Address, i).to },
               ]) } })) },
       ] }
-  }, [chartSizeValues, displayTokens, totalLiquidity, chain, colorMode, calcWeightForBalance])
+  }, [chartSizeValues, displayTokens, totalLiquidity, chain, colorMode, calcWeightForBalance, system])
 
   return (
     <VStack justifyContent="center">

@@ -1,11 +1,3 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import {
   Box,
   Grid,
@@ -15,7 +7,8 @@ import {
   Text,
   Link,
   Badge,
-  BadgeProps } from '@chakra-ui/react';
+  BadgeProps,
+  useChakraContext } from '@chakra-ui/react';
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
@@ -27,6 +20,13 @@ import React from 'react'
 import { usePool } from '../../PoolProvider'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { EnsOrAddress } from '@repo/lib/modules/user/EnsOrAddress'
+
+function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`colors.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
 
 interface Props extends GridProps {
   event: PoolActivityEl
@@ -79,7 +79,7 @@ function TransactionDetails({
 
 export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
   const { toCurrency } = useCurrency()
-  const theme = useTheme()
+  const system = useChakraContext()
   const { chain } = usePool()
 
   const poolEvent = event[2]
@@ -103,7 +103,7 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
             <HStack>
               <Box
                 backgroundImage={
-                  theme.token('semanticTokens.colors.chart.pool.scatter.label')
+                  resolveToken(system, `chart.pool.scatter.${poolEvent.action}.label`)
                 }
                 borderRadius="50%"
                 display="inline-block"

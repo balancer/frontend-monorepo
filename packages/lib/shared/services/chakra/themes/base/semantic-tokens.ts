@@ -1,5 +1,48 @@
 export type SemanticTokens = ReturnType<typeof getSemanticTokens>
 
+/**
+ * Returns true when `obj` is a Chakra v2 conditional token definition
+ * (has `default` or `_light`, and all other keys start with `_`).
+ */
+function isConditionalToken(obj: Record<string, any>): boolean {
+  if (!('default' in obj) && !('_light' in obj)) return false
+  const otherKeys = Object.keys(obj).filter(k => k !== 'default' && k !== '_light')
+  return otherKeys.every(k => k.startsWith('_'))
+}
+
+/**
+ * Transforms a v2-format semantic token tree to v3 format:
+ *   { default: 'light', _dark: 'dark' }  →  { value: { base: 'light', _dark: 'dark' } }
+ *   'stringValue'                          →  { value: 'stringValue' }
+ *   namespace objects                      →  recursed
+ */
+export function toV3SemanticTokens(raw: any): any {
+  if (raw === null || raw === undefined) return { value: '' }
+  if (typeof raw !== 'object') return { value: String(raw) }
+
+  if (isConditionalToken(raw)) {
+    const { default: defaultVal, _light, ...rest } = raw
+    const base = defaultVal !== undefined ? defaultVal : _light
+    const conditions: Record<string, string> = {}
+    if (base !== undefined) conditions.base = String(base)
+    Object.keys(rest).forEach(k => {
+      if (rest[k] !== null && rest[k] !== undefined) {
+        conditions[k] = String(rest[k])
+      }
+    })
+    return { value: conditions }
+  }
+
+  return Object.fromEntries(
+    Object.entries(raw).map(([k, v]) => {
+      if (v === null || v === undefined || typeof v !== 'object') {
+        return [k, { value: String(v ?? '') }]
+      }
+      return [k, toV3SemanticTokens(v)]
+    })
+  )
+}
+
 export function getSemanticTokens(tokens: any, colors: any) {
   return {
     colors: {

@@ -1,4 +1,4 @@
-import { CreateToastFnReturn } from '@chakra-ui/react';
+import { CreateToastFnReturn } from '../../hooks/useToast'
 import { ErrorCause } from '../../utils/errors'
 
 export function showErrorAsToast(toast: CreateToastFnReturn, cause: ErrorCause) {

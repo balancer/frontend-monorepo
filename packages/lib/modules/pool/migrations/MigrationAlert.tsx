@@ -61,7 +61,7 @@ function AlertWithBalance({ pool }: Props) {
         }
         status="info"
       />
-      <UnstakeWarningModal isOpen={isOpen} onClose={onClose} pool={pool} />
+      <UnstakeWarningModal isOpen={open} onClose={onClose} pool={pool} />
     </>
   )
 }

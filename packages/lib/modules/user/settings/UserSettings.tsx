@@ -7,7 +7,7 @@ import {
   Heading,
   Input,
   InputGroup,
-  InputRightElement,
+  InputElement,
   Popover,
   VStack,
   Text,
@@ -51,9 +51,9 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
           type="number"
           value={String(slippage)}
         />
-        <InputRightElement pointerEvents="none">
+        <InputElement placement="right" pointerEvents="none">
           <Percent color="grayText" size="20px" />
-        </InputRightElement>
+        </InputElement>
       </InputGroup>
       <HStack>
         {presetOpts.map(preset => (

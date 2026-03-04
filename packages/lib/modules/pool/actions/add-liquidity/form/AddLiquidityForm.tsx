@@ -3,7 +3,7 @@ import {
   TokenBalancesProvider,
   useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../../shared/components/tooltips/Tooltip'
 import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -295,7 +295,7 @@ function AddLiquidityMainForm() {
       </Card.Root>
       <AddLiquidityModal
         finalFocusRef={nextBtn}
-        isOpen={previewModalDisclosure.isOpen}
+        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
       />

@@ -9,7 +9,7 @@ import {
   Popover,
   Text,
   VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { fNum } from '@repo/lib/shared/utils/numbers'

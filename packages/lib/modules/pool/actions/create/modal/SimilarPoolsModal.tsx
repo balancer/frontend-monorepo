@@ -4,29 +4,28 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import {
-  Modal,
-  ModalContent,
-  ModalBody,
+  Dialog,
+  Portal,
   VStack,
   Button,
   HStack,
   useDisclosure,
   Card,
   Text,
-  Box } from '@chakra-ui/react'
+  Box,
+  Link } from '@chakra-ui/react'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useEffect } from 'react'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { Link, Card } from '@chakra-ui/react';
 import { ArrowUpRight } from 'react-feather'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import NextLink from 'next/link'
 import { useWatch } from 'react-hook-form'
 
 export function SimilarPoolsModal() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
 
   const { poolCreationForm, resetPoolCreationForm } = usePoolCreationForm()
   const [network, hasAcceptedSimilarPoolsWarning] = useWatch({
@@ -41,10 +40,16 @@ export function SimilarPoolsModal() {
   }, [hasAcceptedSimilarPoolsWarning, similarPools])
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
-      <SuccessOverlay />
-      <ModalContent bg="background.level1">
-        <ModalBody padding="lg">
+    <Dialog.Root placement='center' open={open} size='xl' onOpenChange={(e: { open: boolean }) => {
+      if (!e.open) {
+        onClose();
+      }
+    }}>
+      <Portal>
+        <SuccessOverlay />
+        <Dialog.Positioner>
+        <Dialog.Content bg="background.level1">
+          <Dialog.Body padding="lg">
           <VStack gap="md">
             <BalAlert
               content="You can still create this pool, but you'll fragment liquidity making your pool less profitable (on top of additional set up gas fees)."
@@ -145,8 +150,10 @@ export function SimilarPoolsModal() {
               </Button>
             </HStack>
           </VStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+          </Dialog.Body>
+        </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
   );
 }

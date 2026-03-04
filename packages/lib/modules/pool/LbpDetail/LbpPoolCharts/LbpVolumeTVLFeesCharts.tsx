@@ -1,11 +1,3 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import * as React from 'react';
 import ReactECharts from 'echarts-for-react'
 import { HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'
@@ -15,7 +7,7 @@ import {
 import {
   getDefaultPoolChartOptions,
   PoolChartTypeOptions } from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
-import { Box, ColorMode, Skeleton, Stack, Text, system as defaultTheme } from '@chakra-ui/react';
+import { Box, Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react';
 import { useTheme as useNextTheme } from 'next-themes'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
@@ -30,14 +22,21 @@ interface Props {
 
 type SupportedPoolChartTab = PoolChartTab.VOLUME | PoolChartTab.TVL | PoolChartTab.FEES
 
+function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`colors.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
+
 export function LbpVolumeTVLFeesCharts({
   chartType,
   hourlyData = [],
   isLoading = false,
   hasHourlyData = false }: Props) {
-  const theme = useChakraTheme()
+  const system = useChakraContext()
   const { toCurrency } = useCurrency()
-  const { system: nextTheme } = useNextTheme()
+  const { resolvedTheme: nextTheme } = useNextTheme()
   const { activeTab } = usePoolChartTabs()
 
   const poolChartTypeOptions: Record<SupportedPoolChartTab, PoolChartTypeOptions> = {
@@ -52,17 +51,17 @@ export function LbpVolumeTVLFeesCharts({
         colorStops: [
           {
             offset: 0,
-            color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+            color: resolveToken(system, 'chart.pool.bar.volume.from') },
           {
             offset: 1,
-            color: theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
+            color: resolveToken(system, 'chart.pool.bar.volume.to') },
         ] },
-      hoverColor: defaultTheme.colors.pink[500] },
+      hoverColor: '#ED64A6' },
     [PoolChartTab.TVL]: {
       type: 'line',
-      color: defaultTheme.colors.blue[600],
-      hoverBorderColor: defaultTheme.colors.pink[500],
-      hoverColor: defaultTheme.colors.gray[900],
+      color: '#3182CE',
+      hoverBorderColor: '#ED64A6',
+      hoverColor: '#171923',
       areaStyle: {
         color: {
           type: 'linear',
@@ -80,8 +79,8 @@ export function LbpVolumeTVLFeesCharts({
           ] } } },
     [PoolChartTab.FEES]: {
       type: 'bar',
-      color: defaultTheme.colors.yellow[400],
-      hoverColor: defaultTheme.colors.pink[500] } }
+      color: '#F6E05E',
+      hoverColor: '#ED64A6' } }
 
   const getChartData = (): Array<[number, number]> => {
     if ((!hourlyData || !hourlyData.length) && chartType !== PoolChartTab.PRICE) {
@@ -102,7 +101,7 @@ export function LbpVolumeTVLFeesCharts({
   const chartData = getChartData()
   const defaultChartOptions = getDefaultPoolChartOptions(
     toCurrency,
-    nextTheme as ColorMode,
+    nextTheme,
     system,
     {
       useTimeRange: true }
@@ -111,8 +110,8 @@ export function LbpVolumeTVLFeesCharts({
   const option = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[chartType as SupportedPoolChartTab] || {
       type: 'line',
-      color: defaultTheme.colors.blue[500],
-      hoverColor: defaultTheme.colors.pink[500] }
+      color: '#4299E1',
+      hoverColor: '#ED64A6' }
 
     return {
       ...defaultChartOptions,

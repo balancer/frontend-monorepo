@@ -40,14 +40,14 @@ type MobileBuildAccordionProps = {
 export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
   return (
     <Accordion.Root collapsible w="full">
-      <Accordion.Root border="none" value='item-0'>
-        <Accordion.Root _hover={{ bg: 'transparent' }} pt="sm" px="0">
+      <Accordion.Item border="none" value='item-0'>
+        <Accordion.ItemTrigger _hover={{ bg: 'transparent' }} pt="sm" px="0">
           <Text flex="1" fontSize="xl" fontWeight="medium" textAlign="left">
             Build
           </Text>
-          <Accordion.Root />
+          <Accordion.ItemIndicator />
         </Accordion.ItemTrigger>
-        <Accordion.Root pb="0" pt="0" px="0"><Accordion.Root>
+        <Accordion.ItemContent pb="0" pt="0" px="0"><Accordion.ItemBody>
             <FormSubsection mx="0" py="0">
               <VStack align="start" gap="md">
                 {/* Create a pool section */}

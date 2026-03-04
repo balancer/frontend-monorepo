@@ -2,7 +2,7 @@ import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
-import { useToast } from '@chakra-ui/react';
+import { useToast } from '@repo/lib/shared/hooks/useToast'
 import { useEffect, useState } from 'react'
 import { usePermitSignature } from '../permit2/PermitSignatureProvider'
 import { SdkQueryRemoveLiquidityOutput } from '@repo/lib/modules/pool/actions/remove-liquidity/remove-liquidity.types'

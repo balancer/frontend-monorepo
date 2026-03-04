@@ -80,7 +80,7 @@ export function PriceImpactAccordion({
   return (
     <Box w="full">
       <Accordion.Root collapsible variant="button" w="full">
-        <Accordion.Root
+        <Accordion.Item
           bg={isDisabled ? 'background.level2' : 'background.level3'}
           border="1px solid"
           borderColor={isDisabled ? 'border.base' : 'transparent'}
@@ -90,7 +90,7 @@ export function PriceImpactAccordion({
           w="full"
           value='item-0'>
           <h2>
-            <Accordion.Root pl="ms" pr="sm">
+            <Accordion.ItemTrigger pl="ms" pr="sm">
               <Box as="span" flex="1" textAlign="left">
                 {accordionButtonComponent}
               </Box>
@@ -99,11 +99,11 @@ export function PriceImpactAccordion({
                 <Text color={priceImpactColor} fontSize="sm">
                   Details
                 </Text>
-                <Accordion.Root textColor={priceImpactColor} />
+                <Accordion.ItemIndicator textColor={priceImpactColor} />
               </HStack>
             </Accordion.ItemTrigger>
           </h2>
-          <Accordion.Root p="ms"><Accordion.Root>{accordionPanelComponent}</Accordion.ItemBody></Accordion.ItemContent>
+          <Accordion.ItemContent p="ms"><Accordion.ItemBody>{accordionPanelComponent}</Accordion.ItemBody></Accordion.ItemContent>
         </Accordion.Item>
       </Accordion.Root>
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
@@ -191,7 +191,7 @@ export function PriceImpactAccordion({
             </Card.Root>
           </VStack>
           <PriceImpactAcceptModal
-            isOpen={acceptHighImpactDisclosure.isOpen}
+            isOpen={acceptHighImpactDisclosure.open}
             onClose={acceptHighImpactDisclosure.onClose}
             onOpen={acceptHighImpactDisclosure.onOpen}
             setAcceptHighPriceImpact={setAcceptPriceImpactRisk}

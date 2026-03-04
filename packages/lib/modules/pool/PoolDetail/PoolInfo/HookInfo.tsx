@@ -97,7 +97,7 @@ export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps)
       <HoverCard.Positioner>
         <HoverCard.Content w="auto">
           <HoverCard.Arrow bg="background.level3" />
-          <HoverCard.Body>
+          <Box>
             <VStack alignItems="flex-start" gap="ms" w="full">
               <HStack w="full">
                 <Heading fontSize="1.125rem" variant="h4">
@@ -106,7 +106,7 @@ export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps)
               </HStack>
               {body}
             </VStack>
-          </HoverCard.Body>
+          </Box>
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>

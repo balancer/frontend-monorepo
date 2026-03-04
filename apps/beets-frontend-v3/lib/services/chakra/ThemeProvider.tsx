@@ -5,6 +5,7 @@ import { ReactNode, useEffect } from 'react'
 import { theme } from './themes/beets/beets.theme'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useTheme } from 'next-themes'
+import { BalToaster } from '@repo/lib/shared/components/toasts/BalToaster'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const isMounted = useIsMounted()
@@ -29,6 +30,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     <ChakraProvider value={theme} cssVarsRoot="body">
       <SetDarkTheme />
       {children}
+      <BalToaster />
     </ChakraProvider>
   )
 }

@@ -1,9 +1,9 @@
-import { Popover, HoverCard, Text, PlacementWithLogical } from '@chakra-ui/react';
+import { Popover, HoverCard, Text } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react'
 
 type BalPopoverProps = {
   text: string
-  placement?: PlacementWithLogical
+  placement?: string
 }
 
 export function BalPopover({

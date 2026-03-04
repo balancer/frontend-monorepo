@@ -122,7 +122,7 @@ export function RateProviderInfoPopOver({
       <HoverCard.Positioner>
         <HoverCard.Content w="auto">
           <HoverCard.Arrow bg="background.level2" />
-          <HoverCard.Body>
+          <Box>
             <VStack alignItems="flex-start" gap="ms" w="full">
               <HStack w="full">
                 <Heading fontSize="1.125rem" variant="h4">
@@ -139,7 +139,7 @@ export function RateProviderInfoPopOver({
               </HStack>
               {body}
             </VStack>
-          </HoverCard.Body>
+          </Box>
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>

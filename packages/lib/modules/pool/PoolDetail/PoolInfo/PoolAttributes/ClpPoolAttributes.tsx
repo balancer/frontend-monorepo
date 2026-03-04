@@ -39,17 +39,17 @@ export function ClpPoolAttributes({ pool }: { pool: Pool }) {
 
   return (
     <Accordion.Root collapsible w="full">
-      <Accordion.Root border="none" value='item-0'>
+      <Accordion.Item border="none" value='item-0'>
         {({ isExpanded }) => (
           <>
-            <Accordion.Root pl={0}>
+            <Accordion.ItemTrigger pl={0}>
               <Text textColor={isExpanded ? 'green.400' : 'font.link'}>
                 Advanced E-CLP parameters
               </Text>
-              <Accordion.Root color={isExpanded ? 'green.400' : 'font.link'} />
+              <Accordion.ItemIndicator color={isExpanded ? 'green.400' : 'font.link'} />
             </Accordion.ItemTrigger>
 
-            <Accordion.Root><Accordion.Root>
+            <Accordion.ItemContent><Accordion.ItemBody>
                 {attributes.map(attr => {
                   return (
                     <Stack

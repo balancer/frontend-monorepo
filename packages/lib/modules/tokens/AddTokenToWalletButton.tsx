@@ -1,6 +1,6 @@
 'use client';
 import { IconButton, IconButtonProps } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { useWalletClient } from 'wagmi'
 import { useTokens } from './TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

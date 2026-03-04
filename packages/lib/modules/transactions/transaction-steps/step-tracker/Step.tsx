@@ -1,7 +1,6 @@
 import {
   Box,
   ProgressCircle,
-  CircularProgressLabel,
   HStack,
   Text,
   VStack,

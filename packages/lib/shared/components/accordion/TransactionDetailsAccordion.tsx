@@ -16,14 +16,14 @@ export function TransactionDetailsAccordion() {
 
   return (
     <Accordion.Root collapsible variant="button" w="full">
-      <Accordion.Root value='item-0'>
-        <Accordion.Root>
+      <Accordion.Item value='item-0'>
+        <Accordion.ItemTrigger>
           <Box as="span" color="font.primary" flex="1" textAlign="left">
             Transaction Details
           </Box>
-          <Accordion.Root textColor="font.highlight" />
+          <Accordion.ItemIndicator textColor="font.highlight" />
         </Accordion.ItemTrigger>
-        <Accordion.Root pb="md"><Accordion.Root>
+        <Accordion.ItemContent pb="md"><Accordion.ItemBody>
             <VStack textColor="grayText" w="full">
               <HStack justifyContent="space-between" w="full">
                 <div>Total added</div>

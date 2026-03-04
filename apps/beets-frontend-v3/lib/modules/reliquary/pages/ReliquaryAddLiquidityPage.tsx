@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '@chakra-ui/react';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import {
   requiresProportionalInput,

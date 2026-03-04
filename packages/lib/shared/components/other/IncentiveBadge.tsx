@@ -10,8 +10,8 @@ type Props = {
 export function IncentiveBadge({ special = false, label, value, children }: Props) {
   return (
     <Accordion.Root collapsible variant="incentives">
-      <Accordion.Root border="none" value='item-0'>
-        <Accordion.Root>
+      <Accordion.Item border="none" value='item-0'>
+        <Accordion.ItemTrigger>
           <HStack justifyContent="space-between" width="full" zIndex="2">
             <HStack gap="4" width="full">
               <Flex
@@ -48,13 +48,13 @@ export function IncentiveBadge({ special = false, label, value, children }: Prop
                   >
                     {value}
                   </Text>
-                  <Accordion.Root />
+                  <Accordion.ItemIndicator />
                 </HStack>
               </HStack>
             </HStack>
           </HStack>
         </Accordion.ItemTrigger>
-        <Accordion.Root><Accordion.Root>{children}</Accordion.ItemBody></Accordion.ItemContent>
+        <Accordion.ItemContent><Accordion.ItemBody>{children}</Accordion.ItemBody></Accordion.ItemContent>
       </Accordion.Item>
     </Accordion.Root>
   );

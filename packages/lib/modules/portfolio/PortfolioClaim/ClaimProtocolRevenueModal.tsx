@@ -46,7 +46,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
       placement='center'
       open={isOpen}
       trapFocus={!isSuccess}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

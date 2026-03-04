@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button, Card, useDisclosure, VStack, BoxProps, Grid, GridItem } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '@chakra-ui/react';
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'

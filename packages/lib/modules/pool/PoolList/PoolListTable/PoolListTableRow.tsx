@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text, Image, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'

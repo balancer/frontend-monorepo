@@ -1,19 +1,14 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
+import { useChakraContext } from '@chakra-ui/react'
 
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
-import { useTheme as useNextTheme } from 'next-themes';
+function resolveTokenVar(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`colors.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
 
 export function useSelectColor() {
-  const theme = useChakraTheme()
-  const { system: nextTheme } = useNextTheme()
+  const system = useChakraContext()
 
-  return (element: string, attr: string) =>
-    nextTheme === 'dark'
-      ? theme.token('semanticTokens.colors')[element][attr]._dark
-      : theme.token('semanticTokens.colors')[element][attr].default;
+  return (element: string, attr: string) => resolveTokenVar(system, `${element}.${attr}`)
 }

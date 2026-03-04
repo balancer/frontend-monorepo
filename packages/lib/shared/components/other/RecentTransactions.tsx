@@ -8,10 +8,9 @@ import {
   VStack,
   Center,
   ProgressCircle,
-  CircularProgressLabel,
   Box,
   useDisclosure } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import {
   TrackedTransaction,
   TransactionStatus,
@@ -28,7 +27,7 @@ function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
     case 'confirming':
       return (
-        <ProgressCircle.Root value={String(null)} size="5" trackColor="border.base">
+        <ProgressCircle.Root value={String(null)} size="sm" trackColor="border.base">
           <ProgressCircle.Circle>
             <ProgressCircle.Track />
             <ProgressCircle.Range stroke="orange.300" />
@@ -127,13 +126,13 @@ export default function RecentTransactions() {
   ).length
 
   const handleActivityClick = () => {
-    if (!isOpen) trackEvent(AnalyticsEvent.ClickNavUtilitiesActivity)
+    if (!open) trackEvent(AnalyticsEvent.ClickNavUtilitiesActivity)
   }
 
   return (
     <Popover.Root
-      open={isOpen}
-      onOpenChange={e => {
+      open={open}
+      onOpenChange={(e: { open: boolean }) => {
         if (e.open) {
           onOpen();
         } else {
@@ -143,7 +142,7 @@ export default function RecentTransactions() {
       <Popover.Trigger asChild>
         <Button onClick={handleActivityClick} p="0" variant="tertiary">
           {confirmingTxCount > 0 ? (
-            <ProgressCircle.Root value={String(null)} size="7" trackColor="border.base">
+            <ProgressCircle.Root value={String(null)} size="md" trackColor="border.base">
               <ProgressCircle.Circle
                 css={{
                   "--thickness": "8"

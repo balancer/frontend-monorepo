@@ -126,13 +126,13 @@ function PoolDetailsCard() {
     'swapFeePercentage',
     'poolType',
   ])
-  const { isOpen, onToggle } = useDisclosure()
+  const { open, onToggle } = useDisclosure()
 
-  const showSwapFee = !isCowPool(poolType) && !isOpen
+  const showSwapFee = !isCowPool(poolType) && !open
 
   return (
     <Accordion.Root collapsible variant="button" w="full">
-      <Accordion.Root
+      <Accordion.Item
         bg="background.level3"
         border="1px solid"
         borderColor="transparent"
@@ -140,7 +140,7 @@ function PoolDetailsCard() {
         shadow="md"
         w="full"
         value='item-0'>
-        <Accordion.Root onClick={onToggle} pl="sm" pr="sm" py={3}>
+        <Accordion.ItemTrigger onClick={onToggle} pl="sm" pr="sm" py={3}>
           <Box as="span" flex="1" textAlign="left">
             <HStack justify="space-between" w="full">
               {showSwapFee && (
@@ -149,10 +149,10 @@ function PoolDetailsCard() {
               <Text color="font.secondary">Details</Text>
             </HStack>
           </Box>
-          <Accordion.Root />
+          <Accordion.ItemIndicator />
         </Accordion.ItemTrigger>
 
-        <Accordion.Root p="ms"><Accordion.Root>
+        <Accordion.ItemContent p="ms"><Accordion.ItemBody>
             <VStack align="start" gap="sm" w="full">
               <PoolDetailsContent />
             </VStack>

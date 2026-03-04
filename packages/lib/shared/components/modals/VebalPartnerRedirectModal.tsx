@@ -59,7 +59,7 @@ export function VebalPartnerRedirectModal({ partner, redirectUrl, isOpen, onClos
     <Dialog.Root
       placement='center'
       open={isOpen}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

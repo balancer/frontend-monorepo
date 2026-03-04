@@ -15,8 +15,8 @@ export function BlockedAddressModal() {
   return (
     <Dialog.Root
       placement='center'
-      open={isOpen}
-      onOpenChange={e => {
+      open={open}
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

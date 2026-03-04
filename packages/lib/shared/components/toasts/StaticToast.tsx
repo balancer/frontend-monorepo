@@ -1,4 +1,4 @@
-import { ToastProps, useToast, ToastId } from '@chakra-ui/react';
+import { ToastProps, useToast, ToastId } from '../../hooks/useToast'
 import { useEffect, useRef } from 'react'
 
 export type StaticToastRenderProps = Parameters<NonNullable<ToastProps['render']>>[0]
@@ -12,7 +12,7 @@ const defaultProps = {
   duration: null }
 
 export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
-  const toast = useToast(props)
+  const toast = useToast()
 
   const toastIdRef = useRef<ToastId | undefined>(undefined)
 

@@ -1,4 +1,4 @@
-import { Box, HStack, Text, ChakraProps } from '@chakra-ui/react';
+import { Box, HStack, Text, JsxStyleProps } from '@chakra-ui/react';
 import { Pool } from '../pool.types'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
@@ -29,7 +29,7 @@ const tagWrapperProps = {
   shadow: 'sm',
   gap: 'xs' }
 
-function TagWrapper({ children, ...rest }: { children: React.ReactNode } & ChakraProps) {
+function TagWrapper({ children, ...rest }: { children: React.ReactNode } & JsxStyleProps) {
   return (
     <Box {...tagWrapperProps} {...rest} cursor="default">
       <HStack>{children}</HStack>

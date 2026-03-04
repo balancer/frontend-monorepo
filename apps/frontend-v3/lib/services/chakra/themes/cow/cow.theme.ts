@@ -1,26 +1,26 @@
-import { ThemeTypings, createSystem, defaultConfig } from '@chakra-ui/react';
+import { createSystem, defaultConfig } from '@chakra-ui/react'
 import { colors, primaryTextColor } from './colors'
-import { getComponents } from '@repo/lib/shared/services/chakra/themes/base/components'
+import { fonts, styles } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import {
-  fonts,
-  styles,
-  themeConfig } from '@repo/lib/shared/services/chakra/themes/base/foundations'
-import { proseTheme } from '@repo/lib/shared/services/chakra/themes/base/prose'
-import { getSemanticTokens } from '@repo/lib/shared/services/chakra/themes/base/semantic-tokens'
+  getSemanticTokens,
+  toV3SemanticTokens,
+} from '@repo/lib/shared/services/chakra/themes/base/semantic-tokens'
 import { getCowTokens } from './tokens'
+import { wrapTokenValues } from '@repo/lib/shared/services/chakra/theme-helpers'
 
 const tokens = getCowTokens(colors, primaryTextColor)
-const components = getComponents(tokens, primaryTextColor)
-const semanticTokens = getSemanticTokens(tokens, colors)
-
-export {};
+const semanticTokens = toV3SemanticTokens(getSemanticTokens(tokens, colors))
 
 export const theme = createSystem(defaultConfig, {
-  system: {
+  theme: {
     tokens: {
-      fonts,
-      colors },
-
-    semanticTokens: semanticTokens },
-
-  components }) as ThemeTypings
+      fonts: {
+        heading: { value: fonts.heading },
+        body: { value: fonts.body },
+      },
+      colors: wrapTokenValues(colors),
+    },
+    semanticTokens,
+  },
+  globalCss: styles.global,
+})

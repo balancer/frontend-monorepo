@@ -1,6 +1,6 @@
 'use client';
 import { Card, Button, Box } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { useStake } from './StakeProvider'
 import { useRef } from 'react'
 import { StakeModal } from './StakeModal'

@@ -13,7 +13,7 @@ import {
   useDisclosure,
   Separator,
   Icon } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { useMemo, useState, useLayoutEffect } from 'react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'

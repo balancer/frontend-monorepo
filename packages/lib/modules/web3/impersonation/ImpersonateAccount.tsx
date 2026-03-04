@@ -1,6 +1,6 @@
 import { Button, HStack, VStack, Input } from '@chakra-ui/react';
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Address, isAddress } from 'viem'
 import { useImpersonateAccount } from './useImpersonateAccount'
 import { useUserAccount } from '../UserAccountProvider'
@@ -20,7 +20,7 @@ export function ImpersonateAccount() {
     <VStack>
       <Input
         aria-label="Mock address"
-        onValueChange={e => setImpersonatedAddress(e.target.value || '')}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setImpersonatedAddress(e.target.value || '')}
         type="text"
         value={String(impersonatedAddress ?? '')}
         width="450px"

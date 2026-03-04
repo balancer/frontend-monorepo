@@ -2,7 +2,7 @@
 
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Box, HStack, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, RadioGroup, Text, VStack } from '@chakra-ui/react';
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
@@ -56,7 +56,10 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
               token =>
                 token && (
                   <HStack key={token.address} w="full">
-                    <Radio value={String(token.address)} />
+                    <RadioGroup.Item value={String(token.address)}>
+                      <RadioGroup.ItemHiddenInput />
+                      <RadioGroup.ItemIndicator />
+                    </RadioGroup.Item>
                     <TokenRow
                       address={token.address as Address}
                       chain={chain}

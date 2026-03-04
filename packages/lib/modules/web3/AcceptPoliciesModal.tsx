@@ -50,8 +50,8 @@ export function AcceptPoliciesModal() {
   return (
     <Dialog.Root
       placement='center'
-      open={isOpen}
-      onOpenChange={e => {
+      open={open}
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           handleOnClose();
         }
@@ -67,7 +67,7 @@ export function AcceptPoliciesModal() {
               <VStack align="flex-start" gap="md">
                 <Checkbox.Root
                   alignItems="start"
-                  onCheckedChange={e => setIsChecked(e.target.checked)}
+                  onCheckedChange={(e: React.ChangeEvent<HTMLInputElement>) => setIsChecked(e.target.checked)}
                   size="lg"
                   checked={isChecked}
                 ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>

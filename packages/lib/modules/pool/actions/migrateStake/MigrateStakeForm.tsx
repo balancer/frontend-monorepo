@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button, Card, useDisclosure, Icon } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { useRef } from 'react'
 import { useMigrateStake } from './MigrateStakeProvider'
 import { MigrateStakePreview } from './MigrateStakePreview'
@@ -45,7 +45,7 @@ export function MigrateStakeForm() {
       </Card.Root>
       <MigrateStakeModal
         finalFocusRef={nextBtn}
-        isOpen={isOpen}
+        isOpen={open}
         onClose={onClose}
         onOpen={onOpen}
       />

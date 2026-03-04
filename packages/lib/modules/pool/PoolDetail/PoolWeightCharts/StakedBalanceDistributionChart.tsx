@@ -1,14 +1,6 @@
 'use client'
 
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Text, VStack, useChakraContext } from '@chakra-ui/react';
 import { useMemo, useRef } from 'react'
 import ReactECharts from 'echarts-for-react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
@@ -37,6 +29,13 @@ const normalSize: ChartSizeValues = {
   haloWidth: '60px',
   haloHeight: '60px' }
 
+function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`colors.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
+
 export default function StakedBalanceDistributionChart({
   pool,
   isSmall = true }: {
@@ -45,7 +44,7 @@ export default function StakedBalanceDistributionChart({
 }) {
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
-  const theme = useTheme()
+  const system = useChakraContext()
   const colorMode = useThemeColorMode()
 
   const chartOption = useMemo(() => {
@@ -54,11 +53,11 @@ export default function StakedBalanceDistributionChart({
         value: getUserWalletBalanceUsd(pool),
         name: 'Unstaked balance',
         itemStyle: {
-          color: theme.token('semanticTokens.colors.font.light') } },
+          color: resolveToken(system, 'font.light') } },
       {
         value: calcTotalStakedBalanceUsd(pool),
         name: 'Staked balance',
-        itemStyle: { color: theme.token('semanticTokens.colors.chart.stakedBalance') } },
+        itemStyle: { color: resolveToken(system, 'chart.stakedBalance') } },
     ]
 
     return {
@@ -79,7 +78,7 @@ export default function StakedBalanceDistributionChart({
           type: 'pie',
           radius: ['49%', '80%'],
           itemStyle: {
-            borderColor: theme.colors['chartBorder'][colorMode],
+            borderColor: resolveToken(system, 'chartBorder'),
             borderWidth: 0 },
           label: {
             show: false,

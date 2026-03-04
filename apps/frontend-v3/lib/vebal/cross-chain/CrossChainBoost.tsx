@@ -11,7 +11,7 @@ import {
   Text,
   Icon } from '@chakra-ui/react';
 
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '@chakra-ui/react';
 
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import Image from 'next/image'

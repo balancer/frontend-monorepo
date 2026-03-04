@@ -1,5 +1,5 @@
 import { HStack, Heading } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { AlertTriangle } from 'react-feather'
 import { usePoolTokenPriceWarnings } from '../usePoolTokenPriceWarnings'
 

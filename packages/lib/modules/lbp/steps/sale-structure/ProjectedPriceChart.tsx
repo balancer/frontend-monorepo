@@ -1,11 +1,3 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import { differenceInDays, format, isAfter, isBefore } from 'date-fns';
 import { formatDateAxisLabel } from './helpers'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
@@ -14,8 +6,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { Skeleton, Stack, Text } from '@chakra-ui/react';
-import { useTheme as useNextTheme } from 'next-themes'
+import { Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react';
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { dividePrices, range } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
@@ -29,6 +20,13 @@ type Props = {
   gridLeft?: string
 }
 
+function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`colors.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
+
 export function ProjectedPriceChart({
   startDateTime,
   endDateTime,
@@ -38,11 +36,9 @@ export function ProjectedPriceChart({
   isLoading,
   gridLeft }: Props) {
   const { toCurrency } = useCurrency()
-  const theme = useChakraTheme()
-  const { system: nextTheme } = useNextTheme()
+  const system = useChakraContext()
   const { isMobile } = useBreakpoints()
 
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -51,10 +47,11 @@ export function ProjectedPriceChart({
 
   const priceRange = range(prices.map(item => item.projectTokenPrice))
 
+  const grayColor = system.token('colors.gray.700', '#374151')
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.token('colors.gray')};`,
-    text: theme.token('colors.gray') }
+    container: `background: ${grayColor};`,
+    text: grayColor }
 
   const chartInfo: EChartsOption = {
     grid: {
@@ -108,7 +105,7 @@ export function ProjectedPriceChart({
         rotate: isMobile ? 45 : 0, // Rotate labels on mobile
         fontSize: isMobile ? 10 : 12,
         margin: 8,
-        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
+        color: resolveToken(system, 'font.primary'),
         opacity: 0.5 },
       splitNumber: (() => {
         const totalDays = differenceInDays(endDateTime, startDateTime)
@@ -129,7 +126,7 @@ export function ProjectedPriceChart({
         formatter: (value: number) => {
           return toCurrency(value)
         },
-        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
+        color: resolveToken(system, 'font.primary'),
         opacity: 0.5 } },
     series: [
       {

@@ -1,5 +1,5 @@
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useToast } from '@chakra-ui/react';
+import { useToast } from '@repo/lib/shared/hooks/useToast'
 import { useEffect, useState } from 'react'
 import { signRelayerApproval } from './signRelayerApproval'
 import { useHasApprovedRelayer } from './useHasApprovedRelayer'

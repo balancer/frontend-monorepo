@@ -1,13 +1,5 @@
 'use client'
 
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency';
 import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 import {
@@ -21,7 +13,8 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  VStack } from '@chakra-ui/react';
+  VStack,
+  useChakraContext } from '@chakra-ui/react';
 import { useState, forwardRef } from 'react';
 import { useTheme as useNextTheme } from 'next-themes'
 
@@ -31,6 +24,13 @@ type Props = {
   onPercentChanged: (percent: number) => void
   isNumberInputDisabled?: boolean
   isWarning?: boolean
+}
+
+function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
+  const cssVar = system.token.var(`colors.${path}`)
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
 }
 
 export const InputWithSlider = forwardRef(
@@ -48,7 +48,7 @@ export const InputWithSlider = forwardRef(
   ) => {
     const [sliderPercent, setSliderPercent] = useState<number>(100)
     const { toCurrency } = useCurrency()
-    const theme = useChakraTheme()
+    const system = useChakraContext()
     const { system: nextTheme } = useNextTheme()
 
     function handleSliderChange(percent: number) {
@@ -67,10 +67,7 @@ export const InputWithSlider = forwardRef(
       // setSliderPercent(newPercent)
     }
 
-    const boxShadowColor =
-      nextTheme === 'dark'
-        ? theme.token('semanticTokens.colors.font.warning._dark')
-        : theme.token('semanticTokens.colors.font.warning.default')
+    const boxShadowColor = resolveToken(system, 'font.warning')
 
     const boxShadow = isWarning ? `0 0 0 1px ${boxShadowColor}` : undefined
 

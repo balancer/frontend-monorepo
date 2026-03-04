@@ -120,7 +120,7 @@ export function MobileNav({
       <Button onClick={onOpen} ref={btnRef} variant="tertiary">
         <Menu size={18} />
       </Button>
-      <Drawer.Root finalFocusEl={() => btnRef.current} open={isOpen} placement='end' onOpenChange={e => {
+      <Drawer.Root finalFocusEl={() => btnRef.current} open={open} placement='end' onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

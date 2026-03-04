@@ -1,12 +1,5 @@
 'use client'
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
 
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import * as echarts from 'echarts/core';
 import { useRef } from 'react'
 import { useParams } from 'next/navigation'
@@ -14,7 +7,7 @@ import { secondsToMilliseconds, differenceInDays, format } from 'date-fns'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
-import { ColorMode } from '@chakra-ui/react';
+import { useChakraContext } from '@chakra-ui/react';
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -30,8 +23,8 @@ import {
   getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 const getDefaultPoolActivityChartOptions = (
-  nextTheme: ColorMode = 'dark',
-  system: any, // TODO: type this
+  nextTheme: string = 'dark',
+  system: ReturnType<typeof useChakraContext>,
   currencyFormatter: NumberFormatter,
   isMobile = false,
   is2xl = false,
@@ -43,12 +36,17 @@ const getDefaultPoolActivityChartOptions = (
   sortedPoolEvents: PoolActivityEl[],
   isLoading: boolean
 ): echarts.EChartsCoreOption => {
+  function resolveToken(path: string): string {
+    const cssVar = system.token.var(`colors.${path}`)
+    if (typeof window === 'undefined') return ''
+    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+  }
+
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.token('semanticTokens.colors.background.level3._dark')};`,
-    text: theme.token('semanticTokens.colors.font.secondary._dark') }
-
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
+    container: `background: ${resolveToken('background.level3')};`,
+    text: resolveToken('font.secondary') }
 
   return {
     grid: {
@@ -73,7 +71,7 @@ const getDefaultPoolActivityChartOptions = (
                 : ''
             }`
           ),
-        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
+        color: resolveToken('font.primary'),
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,
@@ -98,7 +96,7 @@ const getDefaultPoolActivityChartOptions = (
         formatter: (value: number) => {
           return currencyFormatter(value)
         },
-        color: theme.token('semanticTokens.colors.font.primary')[colorMode],
+        color: resolveToken('font.primary'),
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: true,
@@ -198,10 +196,10 @@ const getDefaultPoolActivityChartOptions = (
             return new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: theme.token('semanticTokens.colors.chart.pool.scatter')[action].from },
+                color: resolveToken(`chart.pool.scatter.${action}.from`) },
               {
                 offset: 1,
-                color: theme.token('semanticTokens.colors.chart.pool.scatter')[action].to },
+                color: resolveToken(`chart.pool.scatter.${action}.to`) },
             ]);
           } },
         emphasis: {
@@ -237,10 +235,10 @@ function getSymbolSize(dataItem?: PoolActivityEl) {
 export function usePoolActivityChart() {
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const { isMobile, is2xl } = useBreakpoints()
-  const { system: nextTheme } = useNextTheme()
+  const { resolvedTheme: nextTheme } = useNextTheme()
   const { toCurrency } = useCurrency()
   const { chain } = useParams()
-  const theme = useChakraTheme()
+  const system = useChakraContext()
   const { sortedPoolEvents, minDate, maxDate, maxYAxisValue, isExpanded, isLoading } =
     usePoolActivity()
   const _chain = getChainSlug(chain as ChainSlug)
@@ -248,7 +246,7 @@ export function usePoolActivityChart() {
 
   return {
     chartOption: getDefaultPoolActivityChartOptions(
-      nextTheme as ColorMode,
+      nextTheme,
       system,
       toCurrency,
       isMobile,

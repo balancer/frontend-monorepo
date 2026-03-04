@@ -1,5 +1,5 @@
 import { Stack, Button, VStack, useDisclosure, HStack, Text } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 import { usePool } from '../../PoolProvider'

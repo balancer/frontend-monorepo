@@ -1,4 +1,4 @@
-import { Text, Tag, TagLabel, TagCloseButton } from '@chakra-ui/react';
+import { Text, Tag } from '@chakra-ui/react';
 import { motion } from 'framer-motion'
 
 export function AnimatedTag({ label, onClose }: { label: React.ReactNode; onClose: () => void }) {

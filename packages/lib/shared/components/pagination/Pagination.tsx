@@ -5,7 +5,7 @@ import {
   Text,
   Center,
   Stack,
-  StyleProps,
+  JsxStyleProps,
   Icon } from '@chakra-ui/react';
 import { LuArrowLeft, LuArrowRight, LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
@@ -38,7 +38,7 @@ export function Pagination({
   changeSize = true,
   hideDropdown = false,
   ...rest
-}: PaginationProps & StyleProps) {
+}: PaginationProps & JsxStyleProps) {
   return (
     <Stack
       direction={{ base: 'column', lg: 'row' }}
@@ -87,7 +87,7 @@ export function Pagination({
         <NativeSelect.Root>
           <NativeSelect.Field
             disabled={!changeSize}
-            onValueChange={e => {
+            onValueChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setPageSize(Number(e.target.value))
             }}
             size="sm"

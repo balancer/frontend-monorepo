@@ -7,7 +7,7 @@ import {
   Spinner,
   VStack,
   Skeleton,
-  StyleProps,
+  JsxStyleProps,
   Separator } from '@chakra-ui/react';
 import { Pagination, PaginationProps } from '@repo/lib/shared/components/pagination/Pagination'
 
@@ -21,7 +21,7 @@ interface Props<T> extends BoxProps {
   noItemsFoundLabel: string
   getRowId: (item: T, index: number) => React.Key
   loadingLength?: number
-  paginationStyles?: StyleProps
+  paginationStyles?: JsxStyleProps
 }
 
 export function PaginatedTable<T>({

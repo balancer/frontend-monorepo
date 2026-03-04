@@ -3,7 +3,7 @@ import {
   GqlHookType,
   GqlPoolAprItem,
   GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { PlacementWithLogical, Popover, HoverCard, Stack, Portal, Separator } from '@chakra-ui/react';
+import { Popover, HoverCard, Stack, Portal, Separator } from '@chakra-ui/react';
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import {
   swapFeesTooltipText,
@@ -25,7 +25,7 @@ interface Props {
   aprItems: GqlPoolAprItem[]
   numberFormatter?: (value: string) => BigNumber
   displayValueFormatter?: (value: BigNumber) => string
-  placement?: PlacementWithLogical
+  placement?: string
   poolId: string
   poolType: GqlPoolType
   vebalBoost?: string

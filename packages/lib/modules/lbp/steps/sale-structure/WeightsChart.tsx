@@ -1,18 +1,10 @@
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import { addHours, differenceInDays, format, isAfter, isBefore, isValid } from 'date-fns';
 import { formatDateAxisLabel } from './helpers'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
-import { Stack, Text } from '@chakra-ui/react';
+import { Stack, Text, useChakraContext } from '@chakra-ui/react';
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 export function WeightsChart({
@@ -32,7 +24,7 @@ export function WeightsChart({
   collateralTokenSymbol: string
 }) {
   const { isMobile } = useBreakpoints()
-  const theme = useTheme()
+  const system = useChakraContext()
 
   const { data: launchTokenData, dataAfterCutTime: launchTokenDataAfterCutTime } = interpolateData(
     startWeight,
@@ -44,10 +36,11 @@ export function WeightsChart({
   const collateralTokenData = invertData(launchTokenData)
   const collateralTokenDataAfterCutTime = invertData(launchTokenDataAfterCutTime)
 
+  const grayColor = system.token('colors.gray.700', '#374151')
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.token('colors.gray')};`,
-    text: theme.token('colors.gray') }
+    container: `background: ${grayColor};`,
+    text: grayColor }
 
   const chartInfo: EChartsOption = {
     grid: {

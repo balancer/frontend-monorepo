@@ -157,7 +157,7 @@ function WeightSlider({
           isDisabled={isDisabled}
           max={99}
           min={1}
-          onChange={value => setValue(name, value)}
+          onChange={(value: number) => setValue(name, value)}
           steps={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
           value={customWeight}
           variant="lock"

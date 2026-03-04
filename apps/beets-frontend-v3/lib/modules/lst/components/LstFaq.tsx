@@ -127,16 +127,16 @@ export function LstFaq() {
       <Card.Body align="start" as={VStack}>
         <Accordion.Root collapsible bg="transparent" variant="button" w="full">
           {FAQ_ITEMS.map(item => (
-            <Accordion.Root key={item.question} mb="sm" value='item-0'>
+            <Accordion.Item key={item.question} mb="sm" value={item.question}>
               <h2>
-                <Accordion.Root>
+                <Accordion.ItemTrigger>
                   <Box as="span" flex="1" textAlign="left">
                     {item.question}
                   </Box>
-                  <Accordion.Root />
+                  <Accordion.ItemIndicator />
                 </Accordion.ItemTrigger>
               </h2>
-              <Accordion.Root pb="md"><Accordion.Root>{item.answer}</Accordion.ItemBody></Accordion.ItemContent>
+              <Accordion.ItemContent pb="md"><Accordion.ItemBody>{item.answer}</Accordion.ItemBody></Accordion.ItemContent>
             </Accordion.Item>
           ))}
         </Accordion.Root>

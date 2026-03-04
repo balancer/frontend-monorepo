@@ -1,5 +1,5 @@
 import { Box, HStack, Text } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { AlertTriangle } from 'react-feather'
 
 export function TokenMissingPriceWarning({ message }: { message: string }) {

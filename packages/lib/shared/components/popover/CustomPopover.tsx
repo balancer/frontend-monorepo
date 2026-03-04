@@ -1,9 +1,9 @@
 // CustomPopover.tsx
-import { Popover, PopoverProps, Text, HStack, Link } from '@chakra-ui/react';
+import { Popover, PopoverRootProps, Text, HStack, Link } from '@chakra-ui/react';
 import { ReactNode, type JSX } from 'react'
 import { ArrowUpRight } from 'react-feather'
 
-interface CustomPopoverProps extends Omit<PopoverProps, 'children'> {
+interface CustomPopoverProps extends Omit<PopoverRootProps, 'children'> {
   children: ReactNode | ((props: { isOpen: boolean; content: JSX.Element }) => ReactNode)
   useIsOpen?: boolean
   headerText?: string
@@ -64,9 +64,9 @@ export function CustomPopover({
   if (useIsOpen) {
     return (
       <Popover.Root {...props}>
-        <Popover.Context>{state => (
+        <Popover.Context>{(state: { open: boolean }) => (
             <>
-              {renderTrigger(state.isOpen)}
+              {renderTrigger(state.open)}
               {popoverContent}
             </>
           )}</Popover.Context>

@@ -1,6 +1,7 @@
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { Button, useToast, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react';
+import { useToast } from '@repo/lib/shared/hooks/useToast'
 import { ManagedResult, TransactionLabels, TransactionState, getTransactionState } from './lib'
 import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'

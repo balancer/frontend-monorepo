@@ -53,7 +53,7 @@ export function AddLiquidityFormCheckbox() {
         <HStack gap="xs">
           <Checkbox.Root
             disabled={isBalancesLoading || hasNoPoolTokensInWallet}
-            onCheckedChange={e => setHasAcceptedPoolRisks(e.target.checked)}
+            onCheckedChange={(e: React.ChangeEvent<HTMLInputElement>) => setHasAcceptedPoolRisks(e.target.checked)}
             size="lg"
             checked={hasAcceptedPoolRisks}
           ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
@@ -84,9 +84,9 @@ export function AddLiquidityFormCheckbox() {
                       <HoverCard.Positioner>
                         <HoverCard.Content>
                           <HoverCard.Arrow bg="background.level3" />
-                          <HoverCard.Body>
+                          <Box>
                             <RisksList textVariant="primary" />
-                          </HoverCard.Body>
+                          </Box>
                         </HoverCard.Content>
                       </HoverCard.Positioner>
                     </Box>
@@ -100,7 +100,7 @@ export function AddLiquidityFormCheckbox() {
             <Checkbox.Root
               alignItems="flex-start"
               disabled={isBalancesLoading || hasNoPoolTokensInWallet}
-              onCheckedChange={e => setHasAcceptedBoostedRisks(e.target.checked)}
+              onCheckedChange={(e: React.ChangeEvent<HTMLInputElement>) => setHasAcceptedBoostedRisks(e.target.checked)}
               size="lg"
               checked={hasAcceptedBoostedRisks}
             ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>

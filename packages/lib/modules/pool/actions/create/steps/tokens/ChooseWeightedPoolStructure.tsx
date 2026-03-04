@@ -1,6 +1,6 @@
 import { type Control, Controller, useWatch } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
-import { VStack, Heading, RadioGroup, Stack, Radio, Text } from '@chakra-ui/react';
+import { VStack, Heading, RadioGroup, Stack, Text } from '@chakra-ui/react';
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationForm } from '../../types'
 import { isCowPool } from '../../helpers'
@@ -45,19 +45,23 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
         name="weightedPoolStructure"
         render={({ field }) => (
           <RadioGroup.Root
-            onValueChange={value => {
-              updatePoolTokenWeights(value as WeightedPoolStructure)
-              field.onChange(value)
+            onValueChange={(details: { value: string | null }) => {
+              updatePoolTokenWeights(details.value as WeightedPoolStructure)
+              field.onChange(details.value)
             }}
             value={String(field.value)}>
             <Stack gap={3}>
               {weightedPoolStructures.map(structure => (
-                <Radio key={structure} size="lg" value={String(structure)}>
-                  <Text>
-                    {structure !== WeightedPoolStructure.Custom && '2-token: '}
-                    {structure === WeightedPoolStructure.Custom ? 'Custom' : structure}
-                  </Text>
-                </Radio>
+                <RadioGroup.Item key={structure} size="lg" value={String(structure)}>
+                  <RadioGroup.ItemHiddenInput />
+                  <RadioGroup.ItemIndicator />
+                  <RadioGroup.ItemText>
+                    <Text>
+                      {structure !== WeightedPoolStructure.Custom && '2-token: '}
+                      {structure === WeightedPoolStructure.Custom ? 'Custom' : structure}
+                    </Text>
+                  </RadioGroup.ItemText>
+                </RadioGroup.Item>
               ))}
             </Stack>
           </RadioGroup.Root>

@@ -54,10 +54,8 @@ export function TokenStackPopover({
       <HoverCard.Positioner>
         <HoverCard.Content maxW={isMobile ? '100%' : '800px'} minW={{ base: '250px', md: '325px' }}>
           <HoverCard.Arrow bg="background.level3" />
-          <HoverCard.Title>
-            <Text variant="special">{headerText}</Text>
-          </HoverCard.Title>
-          <HoverCard.Body py="sm">
+          <Text variant="special">{headerText}</Text>
+          <Box py="sm">
             <VStack align="flex-start" gap="xs">
               {tokens.map((token, i) => {
                 const tokenAddress = token?.address as Address
@@ -75,7 +73,7 @@ export function TokenStackPopover({
                 )
               })}
             </VStack>
-          </HoverCard.Body>
+          </Box>
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>

@@ -1,7 +1,7 @@
 'use client';
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
 import { Button, Card, Flex, Box, HStack, Icon, Text, useDisclosure, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../../shared/components/tooltips/Tooltip'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getAuraPoolLink, getPoolActionPath, getTotalAprLabel } from '../../../pool.utils'

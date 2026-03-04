@@ -1,18 +1,11 @@
 'use client'
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
 
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import * as echarts from 'echarts/core';
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format, millisecondsToSeconds, secondsToMinutes } from 'date-fns'
 import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
-import { ColorMode } from '@chakra-ui/react';
+import { useChakraContext } from '@chakra-ui/react';
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -109,24 +102,24 @@ function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
 }
 
 const getDefaultPoolActivityChartOptions = (
-  nextTheme: ColorMode = 'dark',
-  system: any, // TODO: type this
+  nextTheme: string = 'dark',
+  system: ReturnType<typeof useChakraContext>,
   currencyFormatter: NumberFormatter,
   isMobile = false,
   is2xl = false
   // chain: GqlChain
 ): echarts.EChartsCoreOption => {
+  function resolveToken(path: string): string {
+    const cssVar = system.token.var(`colors.${path}`)
+    if (typeof window === 'undefined') return ''
+    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+  }
+
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${
-      nextTheme === 'dark'
-        ? theme.token('semanticTokens.colors.background.level3._dark')
-        : theme.token('semanticTokens.colors.background.default')
-    };`,
-    text:
-      nextTheme === 'dark'
-        ? theme.token('semanticTokens.colors.font.primary._dark')
-        : theme.token('semanticTokens.colors.font.primary.default') }
+    container: `background: ${resolveToken('background.level3')};`,
+    text: resolveToken('font.primary') }
 
   return {
     grid: {
@@ -294,12 +287,12 @@ const tabsList: PoolActivityChartTypeTab[] = [
 export function useEcosystemPoolActivityChart() {
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const { isMobile, is2xl } = useBreakpoints()
-  const { system: nextTheme } = useNextTheme()
+  const { resolvedTheme: nextTheme } = useNextTheme()
   const { getToken } = useTokens()
   const { toCurrency } = useCurrency()
   const [activeTab, setActiveTab] = useState<PoolActivityChartTypeTab>(tabsList[0])
   const [activeNetwork, setActiveNetwork] = useState<GqlChain | 'all'>('all')
-  const theme = useChakraTheme()
+  const system = useChakraContext()
   const now = useCurrentDate()
 
   const { supportedNetworks } = PROJECT_CONFIG
@@ -412,7 +405,7 @@ export function useEcosystemPoolActivityChart() {
   return {
     isLoading: loading,
     chartOption: getDefaultPoolActivityChartOptions(
-      nextTheme as ColorMode,
+      nextTheme,
       system,
       toCurrency,
       isMobile,

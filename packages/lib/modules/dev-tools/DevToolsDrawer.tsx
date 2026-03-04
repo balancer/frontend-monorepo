@@ -1,12 +1,8 @@
 import {
   Button,
   Drawer,
-  TabList,
-  TabPanels,
   Tabs,
-  Tab,
   useDisclosure,
-  TabPanel,
   VStack,
   Separator,
   Portal } from '@chakra-ui/react';
@@ -26,7 +22,7 @@ export function DevToolsDrawerButton() {
         <Tool size={18} />
       </Button>
 
-      <DevToolsDrawer isOpen={isOpen} onClose={onClose} />
+      <DevToolsDrawer isOpen={open} onClose={onClose} />
     </>
   )
 }
@@ -42,7 +38,7 @@ function DevToolsDrawer({ isOpen, onClose }: Props) {
   const { reset } = useImpersonateAccount()
 
   return (
-    <Drawer.Root open={isOpen} placement='end' size='lg' onOpenChange={e => {
+    <Drawer.Root open={isOpen} placement='end' size='lg' onOpenChange={(e: { open: boolean }) => {
       if (!e.open) {
         onClose();
       }
@@ -55,24 +51,24 @@ function DevToolsDrawer({ isOpen, onClose }: Props) {
             <Drawer.CloseTrigger aria-label="Dev tools close button" />
             <Drawer.Header>Dev tools</Drawer.Header>
             <Drawer.Body>
-              <Tabs.Root>
+              <Tabs.Root defaultValue="impersonation">
                 <Tabs.List>
-                  <Tab>Impersonation</Tab>
-                  <Tab>Time mgmt</Tab>
-                  <Tab>Pool mgmt</Tab>
+                  <Tabs.Trigger value="impersonation">Impersonation</Tabs.Trigger>
+                  <Tabs.Trigger value="time">Time mgmt</Tabs.Trigger>
+                  <Tabs.Trigger value="pool">Pool mgmt</Tabs.Trigger>
                 </Tabs.List>
 
-                <TabPanels>
-                  <TabPanel>
+                <Tabs.ContentGroup>
+                  <Tabs.Content value="impersonation">
                     <ImpersonateAccount />
-                  </TabPanel>
+                  </Tabs.Content>
 
-                  <TabPanel>
+                  <Tabs.Content value="time">
                     <TimeMocker setIsFakeTime={setIsFakeTime} />
-                  </TabPanel>
+                  </Tabs.Content>
 
-                  <TabPanel>Pool management content</TabPanel>
-                </TabPanels>
+                  <Tabs.Content value="pool">Pool management content</Tabs.Content>
+                </Tabs.ContentGroup>
               </Tabs.Root>
             </Drawer.Body>
             <Drawer.Footer>

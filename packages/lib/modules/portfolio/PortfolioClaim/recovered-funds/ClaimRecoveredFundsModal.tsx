@@ -56,7 +56,7 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
   }, [])
 
   return (
-    <Dialog.Root placement='center' open={isOpen} onOpenChange={e => {
+    <Dialog.Root placement='center' open={isOpen} onOpenChange={(e: { open: boolean }) => {
       if (!e.open) {
         closeModal();
       }

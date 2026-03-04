@@ -1,6 +1,6 @@
-import { Box, TooltipProps } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Box } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
+import { Tooltip, TooltipProps } from './Tooltip'
 
 type TooltipWithTouchProps = TooltipProps & {
   fullWidth?: boolean
@@ -10,7 +10,7 @@ type TooltipWithTouchProps = TooltipProps & {
 export function TooltipWithTouch({
   children,
   fullWidth = false,
-  isDisabled,
+  disabled,
   isHidden = false,
   ...rest
 }: TooltipWithTouchProps) {
@@ -18,7 +18,7 @@ export function TooltipWithTouch({
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleMouseEnter = () => {
-    if (isDisabled) return
+    if (disabled) return
     timeoutRef.current = setTimeout(() => {
       setIsLabelOpen(true)
     }, 100)
@@ -32,18 +32,14 @@ export function TooltipWithTouch({
   }
 
   const handleClick = () => {
-    if (isDisabled) return
+    if (disabled) return
     setIsLabelOpen(true)
   }
 
   if (isHidden) return <>{children}</>
 
   return (
-    <Tooltip
-      bg="background.level4"
-      color="font.secondary"
-      disabled={isDisabled}
-      isOpen={isLabelOpen}>
+    <Tooltip open={isLabelOpen} {...rest}>
       <Box
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
@@ -53,5 +49,5 @@ export function TooltipWithTouch({
         {children}
       </Box>
     </Tooltip>
-  );
+  )
 }

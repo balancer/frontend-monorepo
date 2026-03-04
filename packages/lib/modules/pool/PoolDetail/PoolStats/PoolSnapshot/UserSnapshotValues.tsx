@@ -1,7 +1,7 @@
 'use client';
 import { memo, useMemo } from 'react'
 import { Button, HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '../../../../../shared/components/tooltips/Tooltip'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -211,7 +211,7 @@ export function UserSnapshotValues() {
       </FadeInOnView>
       <ClaimModal
         chain={pool.chain}
-        isOpen={previewModalDisclosure.isOpen}
+        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
       />
     </>

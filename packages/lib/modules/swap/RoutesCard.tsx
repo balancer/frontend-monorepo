@@ -53,7 +53,7 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
   return (
     <Box w="full">
       <Accordion.Root collapsible variant="button" w="full">
-        <Accordion.Root
+        <Accordion.Item
           bg="background.level3"
           border="1px solid"
           borderColor="transparent"
@@ -61,14 +61,14 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
           shadow="md"
           w="full"
           value='item-0'>
-          <Accordion.Root pl="ms" pr="sm">
+          <Accordion.ItemTrigger pl="ms" pr="sm">
             <Box as="span" flex="1" textAlign="left">
               {`Proposed route: ${paths?.length > 1 ? 'Split route, ' : ''} ${maxHops} hops`}
             </Box>
-            <Accordion.Root />
+            <Accordion.ItemIndicator />
           </Accordion.ItemTrigger>
 
-          <Accordion.Root w="full"><Accordion.Root>
+          <Accordion.ItemContent w="full"><Accordion.ItemBody>
               <VStack>
                 <HStack justify="space-between" w="full">
                   <HStack>

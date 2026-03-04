@@ -5,7 +5,6 @@ import {
   VStack,
   Text,
   List,
-  UseDisclosureProps,
   Button,
   Dialog,
   Portal } from '@chakra-ui/react';
@@ -13,7 +12,7 @@ import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function RecoveredFundsLearnMoreModal({
   isOpen = false,
-  onClose = () => {} }: UseDisclosureProps) {
+  onClose = () => {} }: { isOpen?: boolean; onClose?: () => void }) {
   return (
     <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={e => {
       if (!e.open) {

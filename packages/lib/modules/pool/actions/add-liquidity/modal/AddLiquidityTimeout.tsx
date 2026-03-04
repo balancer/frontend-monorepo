@@ -44,11 +44,11 @@ function useAddLiquidityTimeout() {
 
   // When the modal is closed the timeout should be stopped and reset.
   useEffect(() => {
-    if (!previewModalDisclosure.isOpen) {
+    if (!previewModalDisclosure.open) {
       stopCountdown()
       resetCountdown()
     }
-  }, [previewModalDisclosure.isOpen])
+  }, [previewModalDisclosure.open])
 
   return { secondsToRefetch, shouldFreezeQuote }
 }

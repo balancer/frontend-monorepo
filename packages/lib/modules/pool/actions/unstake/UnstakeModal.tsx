@@ -43,13 +43,13 @@ export function UnstakeModal({
 
   return (
     <Dialog.Root
-      finalFocusEl={() => finalFocusRef.current}
+      finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
       placement='center'
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

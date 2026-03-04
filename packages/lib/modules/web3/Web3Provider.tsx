@@ -1,12 +1,4 @@
 'use client';
-/*
- MIGRATION NOTE: The following Chakra UI hooks have been removed.
- Please replace them with the suggested alternatives:
-
-//   - useTheme: Use Import from system or use useChakraContext
-
- See: https://chakra-ui.com/docs/get-started/migration#hooks
-*/
 import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, Theme, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
@@ -21,14 +13,11 @@ import { UserAccountProvider } from './UserAccountProvider'
 import { PropsWithChildren } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useWagmiConfig } from './WagmiConfigProvider'
+import { colors } from '@repo/lib/shared/services/chakra/themes/base/colors'
 
 export function Web3Provider({ children }: PropsWithChildren) {
   const isMounted = useIsMounted()
-
-  const { colors, radii, shadows, semanticTokens, fonts } = useTheme()
   const colorMode = useThemeColorMode()
-  const colorModeKey = colorMode === 'light' ? 'default' : '_dark'
-
   const { wagmiConfig } = useWagmiConfig()
 
   /*
@@ -37,61 +26,37 @@ export function Web3Provider({ children }: PropsWithChildren) {
   */
   if (!isMounted) return null
 
+  const isDark = colorMode === 'dark'
+
   const sharedConfig = {
     fonts: {
-      body: fonts.body },
+      body: 'inherit',
+    },
     radii: {
-      connectButton: radii.md,
-      actionButton: radii.md,
-      menuButton: radii.md,
-      modal: radii.md,
-      modalMobile: radii.md },
+      connectButton: '0.375rem',
+      actionButton: '0.375rem',
+      menuButton: '0.375rem',
+      modal: '0.375rem',
+      modalMobile: '0.375rem',
+    },
     shadows: {
-      connectButton: shadows.md,
-      dialog: shadows.xl,
-      profileDetailsAction: shadows.md,
-      selectedOption: shadows.md,
-      selectedWallet: shadows.md,
-      walletLogo: shadows.md },
+      connectButton: '0px 3px 6px rgba(0,0,0,0.08)',
+      dialog: '0px 8px 24px rgba(0,0,0,0.16)',
+      profileDetailsAction: '0px 3px 6px rgba(0,0,0,0.08)',
+      selectedOption: '0px 3px 6px rgba(0,0,0,0.08)',
+      selectedWallet: '0px 3px 6px rgba(0,0,0,0.08)',
+      walletLogo: '0px 3px 6px rgba(0,0,0,0.08)',
+    },
     colors: {
-      accentColor: colors.purple[500],
-      // accentColorForeground: '...',
-      // actionButtonBorder: '...',
-      // actionButtonBorderMobile: '...',
-      // actionButtonSecondaryBackground: '...',
-      // closeButton: '...',
-      // closeButtonBackground: '...',
-      // connectButtonBackground: '#000000',
-      // connectButtonBackgroundError: '...',
-      // connectButtonInnerBackground: '#000000',
-      // connectButtonText: '...',
-      // connectButtonTextError: '...',
-      // connectionIndicator: '...',
-      // downloadBottomCardBackground: '...',
-      // downloadTopCardBackground: '...',
-      // error: '...',
-      // generalBorder: '...',
-      // generalBorderDim: '...',
-      // menuItemBackground: '...',
-      // modalBackdrop: '...',
-      modalBackground: semanticTokens.colors.background.level0[colorModeKey],
-      // modalBorder: '...',
-      modalText: semanticTokens.colors.font.primary[colorModeKey],
-      // modalTextDim: '...',
-      // modalTextSecondary: '...',
-      // profileAction: '...',
-      // profileActionHover: '...',
-      // profileForeground: '...',
-      // selectedOptionBorder: '...',
-      // standby: '...' } }
+      accentColor: colors.purple['500'],
+      modalBackground: isDark ? '#31373F' : '#EBE8E0',
+      modalText: isDark ? '#E5D3BE' : '#2D3748',
+    },
+  }
 
-  const _lightTheme = merge(lightTheme(), {
-    ...sharedConfig } as Theme)
-
-  const _darkTheme = merge(darkTheme(), {
-    ...sharedConfig } as Theme)
-
-  const customTheme = colorMode === 'dark' ? _darkTheme : _lightTheme
+  const _lightTheme = merge(lightTheme(), { ...sharedConfig } as Theme)
+  const _darkTheme = merge(darkTheme(), { ...sharedConfig } as Theme)
+  const customTheme = isDark ? _darkTheme : _lightTheme
 
   return (
     <ReactQueryClientProvider>

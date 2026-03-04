@@ -1,4 +1,4 @@
-import { Button, HStack, Link, Text, UseDisclosureProps, Dialog, Portal } from '@chakra-ui/react';
+import { Button, HStack, Link, Text, Dialog, Portal } from '@chakra-ui/react';
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { usePathname, useRouter } from 'next/navigation'
 import { Pool } from '../pool.types'
@@ -10,7 +10,7 @@ import { ArrowUpRight } from 'react-feather'
 export function UnstakeWarningModal({
   isOpen = false,
   onClose = () => {},
-  pool }: UseDisclosureProps & { pool: Pool }) {
+  pool }: { isOpen?: boolean; onClose?: () => void; pool: Pool }) {
   const router = useRouter()
   const pathname = usePathname()
 
@@ -35,7 +35,7 @@ export function UnstakeWarningModal({
   }
 
   return (
-    <Dialog.Root placement='center' open={isOpen} onOpenChange={e => {
+    <Dialog.Root placement='center' open={isOpen} onOpenChange={(e: { open: boolean }) => {
       if (!e.open) {
         onClose();
       }

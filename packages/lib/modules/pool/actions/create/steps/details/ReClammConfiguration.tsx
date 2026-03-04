@@ -1,4 +1,4 @@
-import { Heading, VStack, Text, HStack, Radio, SimpleGrid, useRadioGroup } from '@chakra-ui/react';
+import { Heading, VStack, Text, HStack, RadioGroup, SimpleGrid } from '@chakra-ui/react';
 import { InfoIconPopover } from '../../InfoIconPopover'
 import {
   useReClammConfigurationOptions,
@@ -69,11 +69,6 @@ function ConfigOptionsGroup({
   const isPercentage = name === 'centerednessMargin' || name === 'priceShiftDailyRate'
   const cardOptions = options.filter(option => option.rawValue !== '')
   const customOption = options.find(option => option.rawValue === '')
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name,
-    value: selectedValue,
-    onChange: (value: string) => updateFn(value) })
-  const radioGroupProps = getRootProps()
   const cardContainerProps = {
     alignItems: 'center',
     bg: 'background.level2',
@@ -107,13 +102,12 @@ function ConfigOptionsGroup({
         </Text>
         <InfoIconPopover message={tooltip} />
       </HStack>
-      <SimpleGrid columns={3} gap={{ base: 'sm', md: 'md' }} w="full" {...radioGroupProps}>
+      <SimpleGrid columns={3} gap={{ base: 'sm', md: 'md' }} w="full">
         {cardOptions.map((option, idx) => {
-          const radio = getRadioProps({ value: option.rawValue })
           const key = `${label.replace(/\s+/g, '-')}-${idx}`
 
           return (
-            <RadioCard key={key} {...radio} containerProps={cardContainerProps}>
+            <RadioCard key={key} value={option.rawValue} containerProps={cardContainerProps}>
               <VStack align="center" h="full" justify="center" gap="3" textAlign="center">
                 {option.svg && <option.svg height="100%" width="100%" />}
                 <VStack gap="1">
@@ -130,17 +124,21 @@ function ConfigOptionsGroup({
         })}
       </SimpleGrid>
       {customOption ? (
-        <Radio
-          checked={selectedValue === customOption.rawValue}
+        <RadioGroup.Root
           mt="2"
-          name={name}
-          onValueChange={() => updateFn(customOption.rawValue)}
-          value={String(customOption.rawValue)}
+          value={selectedValue}
+          onValueChange={(value: string) => updateFn(value)}
         >
-          <Text color="font.secondary" fontSize="sm">
-            {customOption.label}
-          </Text>
-        </Radio>
+          <RadioGroup.Item value={String(customOption.rawValue)}>
+            <RadioGroup.ItemHiddenInput />
+            <RadioGroup.ItemIndicator />
+            <RadioGroup.ItemText>
+              <Text color="font.secondary" fontSize="sm">
+                {customOption.label}
+              </Text>
+            </RadioGroup.ItemText>
+          </RadioGroup.Item>
+        </RadioGroup.Root>
       ) : null}
       {isCustomPriceRange ? (
         <VStack align="start" gap="md" w="full">

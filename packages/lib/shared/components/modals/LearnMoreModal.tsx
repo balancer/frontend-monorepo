@@ -42,7 +42,7 @@ export function LearnMoreModal({
         {showHelpIcon && <HelpCircle size={16} />}
         {buttonLabel}
       </Button>
-      <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={e => {
+      <Dialog.Root placement='center' open={open} size='lg' onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

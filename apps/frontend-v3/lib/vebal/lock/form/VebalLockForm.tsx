@@ -1,7 +1,7 @@
 'use client';
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '@chakra-ui/react';
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { HumanAmount } from '@balancer/sdk'
 import { LockDurationSlider } from '@bal/lib/vebal/lock/duration/LockDurationSlider'

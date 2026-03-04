@@ -31,7 +31,7 @@ export function PoolAdvancedOptions() {
   return (
     <Popover.Root
       open={isPopoverOpen}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (e.open) {
           setIsPopoverOpen(true);
         } else {

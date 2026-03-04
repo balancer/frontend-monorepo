@@ -31,11 +31,11 @@ export function CompactTokenSelectModal({
 
   return (
     <Dialog.Root
-      finalFocusEl={() => finalFocusRef.current}
+      finalFocusEl={() => finalFocusRef?.current}
       placement='center'
       open={isOpen}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

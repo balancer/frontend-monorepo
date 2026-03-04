@@ -53,7 +53,7 @@ export function ClaimModal({
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose(!!claimTxHash)
         }

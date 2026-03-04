@@ -26,10 +26,10 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
 
   return (
     <Accordion.Root collapsible textAlign="left" variant="button" width="full">
-      <Accordion.Root value='item-0'>
+      <Accordion.Item value='item-0'>
         {({ isExpanded }) => (
           <>
-            <Accordion.Root>
+            <Accordion.ItemTrigger>
               <HStack fontSize="md" justify="flex-start" width="full">
                 {currentStep && (
                   <StepIndicator
@@ -48,10 +48,10 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
                 <Text color={isExpanded ? 'font.link' : 'font.highlight'} whiteSpace="nowrap">
                   {stepLabel}
                 </Text>
-                <Accordion.Root textColor={isExpanded ? 'font.link' : 'font.highlight'} />
+                <Accordion.ItemIndicator textColor={isExpanded ? 'font.link' : 'font.highlight'} />
               </HStack>
             </Accordion.ItemTrigger>
-            <Accordion.Root pt="md"><Accordion.Root>
+            <Accordion.ItemContent pt="md"><Accordion.ItemBody>
                 <Steps transactionSteps={transactionSteps} />
               </Accordion.ItemBody></Accordion.ItemContent>
           </>

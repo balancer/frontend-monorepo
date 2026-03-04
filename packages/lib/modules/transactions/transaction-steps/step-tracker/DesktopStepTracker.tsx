@@ -1,6 +1,6 @@
 'use client'
 
-import { Steps, Card, Box, HStack, Heading, VStack, StyleProps, Separator } from '@chakra-ui/react';
+import { Card, Box, HStack, Heading, VStack, JsxStyleProps, Separator } from '@chakra-ui/react';
 import { Steps } from './Steps'
 import { GasPriceCard } from '@repo/lib/shared/hooks/useGasPrice'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -10,7 +10,7 @@ type Props = {
   chain: GqlChain
   transactionSteps: TransactionStepsResponse
   isTxBatch?: boolean
-  extraStyles?: StyleProps
+  extraStyles?: JsxStyleProps
 }
 
 export function DesktopStepTracker({ chain, transactionSteps, isTxBatch, extraStyles }: Props) {

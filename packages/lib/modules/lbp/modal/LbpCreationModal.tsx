@@ -1,12 +1,11 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { Dialog, Portal, VStack, Button, HStack, Text } from '@chakra-ui/react';
 import { RefObject, useRef, useEffect } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useLbpForm } from '../LbpFormProvider'
 import { LbpSummary } from './LbpSummary'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { VStack, Button, HStack, Text, Dialog, Portal } from '@chakra-ui/react';
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
@@ -39,7 +38,7 @@ export function LbpCreationModal({
   onClose,
   finalFocusRef,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props) {
   const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
@@ -123,13 +122,13 @@ export function LbpCreationModal({
 
   return (
     <Dialog.Root
-      finalFocusEl={() => finalFocusRef.current}
+      finalFocusEl={() => finalFocusRef?.current || undefined}
       initialFocusEl={() => initialFocusRef.current}
       placement='center'
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

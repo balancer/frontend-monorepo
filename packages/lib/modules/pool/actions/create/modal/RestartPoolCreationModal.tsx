@@ -70,7 +70,7 @@ export function RestartPoolCreationModal({
           </Text>
         </HStack>
       </Button>
-      <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={e => {
+      <Dialog.Root placement='center' open={open} size='lg' onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

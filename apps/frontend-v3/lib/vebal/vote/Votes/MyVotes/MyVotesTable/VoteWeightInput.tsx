@@ -7,7 +7,7 @@
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
 import { Input, InputGroup, InputProps, Box, InputRightElement, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip } from '@chakra-ui/react';
 import { blockInvalidNumberInput, bn } from '@repo/lib/shared/utils/numbers'
 import { Percent } from 'react-feather'
 import { useState } from 'react'

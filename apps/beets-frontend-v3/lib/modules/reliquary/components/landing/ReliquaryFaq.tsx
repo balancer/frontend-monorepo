@@ -69,23 +69,23 @@ export function ReliquaryFaq() {
         <SimpleGrid columns={{ base: 1, lg: 2 }} gap={{ base: '0', md: '8' }} h="full" w="full">
           <Accordion.Root collapsible w="full">
             {FAQ_COLUMN_1.map(item => (
-              <Accordion.Root
+              <Accordion.Item
                 bg="transparent"
                 borderBottom="1px solid"
                 borderColor="border.base"
                 borderTop="none"
                 key={item.question}
                 py="3"
-                value='item-0'>
+                value={item.question}>
                 <h2>
-                  <Accordion.Root _hover={{ bg: 'transparent' }} px="0">
+                  <Accordion.ItemTrigger _hover={{ bg: 'transparent' }} px="0">
                     <Box as="span" flex="1" textAlign="left">
                       {item.question}
                     </Box>
-                    <Accordion.Root />
+                    <Accordion.ItemIndicator />
                   </Accordion.ItemTrigger>
                 </h2>
-                <Accordion.Root pb="md" px="0"><Accordion.Root>
+                <Accordion.ItemContent pb="md" px="0"><Accordion.ItemBody>
                     <Text color="font.primary" fontSize="lg" fontWeight="thin">
                       {item.answer}
                     </Text>
@@ -95,23 +95,23 @@ export function ReliquaryFaq() {
           </Accordion.Root>
           <Accordion.Root collapsible w="full">
             {FAQ_COLUMN_2.map(item => (
-              <Accordion.Root
+              <Accordion.Item
                 bg="transparent"
                 borderBottom="1px solid"
                 borderColor="border.base"
                 borderTop="none"
                 key={item.question}
                 py="3"
-                value='item-1'>
+                value={item.question}>
                 <h2>
-                  <Accordion.Root _hover={{ bg: 'transparent' }} px="0">
+                  <Accordion.ItemTrigger _hover={{ bg: 'transparent' }} px="0">
                     <Box as="span" flex="1" textAlign="left">
                       {item.question}
                     </Box>
-                    <Accordion.Root />
+                    <Accordion.ItemIndicator />
                   </Accordion.ItemTrigger>
                 </h2>
-                <Accordion.Root pb="md" px="0"><Accordion.Root>
+                <Accordion.ItemContent pb="md" px="0"><Accordion.ItemBody>
                     <Text color="font.primary" fontSize="lg" fontWeight="thin">
                       {item.answer}
                     </Text>
