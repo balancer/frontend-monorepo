@@ -119,10 +119,10 @@ export const sonicTokenBalances: TokenBalance[] = [
     tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWIG
     value: '100000',
   },
-  // {
-  //   tokenAddress: '0x3bce5cb273f0f148010bbea2470e7b5df84c7812', // scETH
-  //   value: '0.01',
-  // },
+  {
+    tokenAddress: '0x3bce5cb273f0f148010bbea2470e7b5df84c7812', // scETH
+    value: '0.01',
+  },
   {
     tokenAddress: '0xbb30e76d9bb2cc9631f7fc5eb8e87b5aff32bfbd', // scBTC
     value: '0.01',
