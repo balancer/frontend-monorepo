@@ -45,6 +45,10 @@ import { PoolType } from '@balancer/sdk'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
+import { useBoostWhitelist } from '../../useBoostWhitelist'
+import { getChainShortName } from '@repo/lib/config/app.config'
 
 export function ChoosePoolTokens() {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState<number | null>(null)
@@ -224,6 +228,7 @@ function ConfigureToken({
   network,
   poolType,
 }: ConfigureTokenProps) {
+  const boostTokenOptions = useBoostWhitelist(token.address)
   const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
   const formState = useFormState({ control: poolCreationForm.control })
 
@@ -249,6 +254,8 @@ function ConfigureToken({
 
   const showWeightInputs = isWeightedPool(poolType) || isCowPool(poolType)
   const showRateProvider = !isCowPool(poolType)
+
+  console.log('boostTokenOptions', boostTokenOptions)
 
   return (
     <VStack align="start" key={index} spacing="sm" w="full">
@@ -293,6 +300,21 @@ function ConfigureToken({
       </HStack>
 
       {isWeightedPool(poolType) && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
+
+      {boostTokenOptions && (
+        <BalAlert
+          content={
+            <VStack align="start" mb="sm" spacing="md">
+              <Text color="black">{`It’s recommended to use a Boosted version of ${token.data?.symbol} on the ${getChainShortName(network)} network. Balancer v3 is optimized for Boosted tokens. LPs will get additional yield, while still being able to interact with this pool using ${token.data?.symbol}.`}</Text>
+              {boostTokenOptions.map((option, index) => (
+                <BalAlertButton key={index}>Use {option.protocol} token</BalAlertButton>
+              ))}
+            </VStack>
+          }
+          status="warning"
+          title="Use a Boosted token for better LP returns"
+        />
+      )}
 
       {token.address && !apiPriceForToken && (
         <VStack align="start" spacing="sm" w="full">
