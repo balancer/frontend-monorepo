@@ -116,10 +116,6 @@ export const gnosisTokenBalances: TokenBalance[] = [
 
 export const sonicTokenBalances: TokenBalance[] = [
   {
-    tokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', // S
-    value: '1000',
-  },
-  {
     tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWIG
     value: '100000',
   },
