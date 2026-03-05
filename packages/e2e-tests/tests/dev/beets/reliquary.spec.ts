@@ -1,5 +1,5 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { clickButton } from '@/helpers/user.helpers'
+import { checkbox, clickButton } from '@/helpers/user.helpers'
 import { expect, test, type Page } from '@playwright/test'
 import { defaultAnvilAccount, forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
@@ -68,8 +68,12 @@ async function createRelicAndReturnToMabeets(page: Page) {
   await page.locator('[data-id="add-liquidity-tab-proportional"]').click()
   await page.getByRole('button', { name: 'stS', exact: true }).waitFor({ state: 'visible' })
   await page.getByPlaceholder('0.00').nth(1).fill('1')
-  await page.getByText('I agree to the terms of service as stated here').click()
-  await page.getByText('I accept the risks of interacting with this pool').click()
+
+  const termsCheckbox = await checkbox(page, 'I agree to the terms of service as stated here')
+  await termsCheckbox.click()
+
+  const risksCheckbox = await checkbox(page, 'I accept the risks of interacting with this pool')
+  await risksCheckbox.click()
 
   await clickEnabledNextButton(page)
 
@@ -90,7 +94,8 @@ async function addLiquidityToExistingRelicAndReturn(page: Page) {
 
   // Flexible tab is default; provide only BEETS amount.
   await page.getByPlaceholder('0.00').first().fill('1000')
-  await page.getByText('I accept the risks of interacting with this pool').click()
+  const risksCheckbox = await checkbox(page, 'I accept the risks of interacting with this pool')
+  await risksCheckbox.click()
 
   await clickEnabledNextButton(page)
 
