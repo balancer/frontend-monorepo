@@ -65,7 +65,7 @@ async function createRelicAndReturnToMabeets(page: Page) {
   await expect(page.getByText('A new Relic will be created with this add liquidity')).toBeVisible()
   await expect(page.getByRole('button', { name: nextButtonName, exact: true })).toBeVisible()
 
-  await page.locator('#button-group-1').click() // proportional tab
+  await page.locator('[data-id="add-liquidity-tab-proportional"]').click()
   await page.getByRole('button', { name: 'stS', exact: true }).waitFor({ state: 'visible' })
   await page.getByPlaceholder('0.00').nth(1).fill('1')
   await page.getByText('I agree to the terms of service as stated here').click()
