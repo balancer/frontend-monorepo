@@ -50,7 +50,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       >
         <Fathom />
         <NextTopLoader color="#7f6ae8" showSpinner={false} />
-        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
+        <ColorThemeProvider attribute="class" defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
             <Providers>
               <NavBarContainer />

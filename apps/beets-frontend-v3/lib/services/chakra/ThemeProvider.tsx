@@ -27,7 +27,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   if (!isMounted) return null
 
   return (
-    <ChakraProvider value={theme} cssVarsRoot="body">
+    <ChakraProvider value={theme}>
       <SetDarkTheme />
       {children}
       <BalToaster />

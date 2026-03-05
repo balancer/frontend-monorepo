@@ -23,7 +23,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
-        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
+        <ColorThemeProvider attribute="class" defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
             <ThemeSettingsProvider settings={{ hideDarkModeToggle: true }}>
               <Providers>{children}</Providers>

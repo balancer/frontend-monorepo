@@ -12,6 +12,10 @@ const tokens = getCowTokens(colors, primaryTextColor)
 const semanticTokens = toV3SemanticTokens(getSemanticTokens(tokens, colors))
 
 export const theme = createSystem(defaultConfig, {
+  conditions: {
+    _dark: '.dark &, &.dark',
+    _light: '.light &, &.light',
+  },
   theme: {
     tokens: {
       fonts: {

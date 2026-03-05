@@ -369,10 +369,6 @@ declare module '@chakra-ui/react' {
   type CardProps = CardRootProps
   type AlertProps = AlertRootProps
   type AlertStatus = 'info' | 'warning' | 'success' | 'error' | 'loading'
-  // ChakraProvider accepts cssVarsRoot in v3
-  interface ChakraProviderProps {
-    cssVarsRoot?: string
-  }
   // Progress.Track accepts children
   interface ProgressTrackProps {
     children?: React.ReactNode

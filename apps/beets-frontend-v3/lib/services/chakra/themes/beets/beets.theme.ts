@@ -19,6 +19,9 @@ rawSemanticTokens.colors.grayText._dark = '#BBBBBB'
 const semanticTokens = toV3SemanticTokens(rawSemanticTokens)
 
 export const theme = createSystem(defaultConfig, {
+  conditions: {
+    _dark: '.dark &, &.dark',
+  },
   theme: {
     tokens: {
       fonts: {
