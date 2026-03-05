@@ -73,8 +73,8 @@ function NavLinks({
       {appLinks.map(link => {
         if (!link.href) return null
         return (
-          <Box asChild variants={fadeIn}>
-            <motion.div key={link.href}>
+          <Box asChild key={link.href} variants={fadeIn}>
+            <motion.div>
               <Link asChild color={linkColorFor(link.href || '')} variant="nav">
                 <NextLink
                   href={link.href}
