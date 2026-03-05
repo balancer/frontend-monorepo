@@ -7,6 +7,15 @@ import {
 } from '@repo/lib/shared/services/chakra/themes/base/semantic-tokens'
 import { getBeetsTokens } from './tokens'
 import { wrapTokenValues } from '@repo/lib/shared/services/chakra/theme-helpers'
+import {
+  textRecipe,
+  headingRecipe,
+  buttonRecipe,
+  linkRecipe,
+  badgeRecipe,
+  inputRecipe,
+  cardSlotRecipe,
+} from '@repo/lib/shared/services/chakra/themes/base/recipes'
 
 const tokens = getBeetsTokens(colors, primaryTextColor)
 
@@ -31,6 +40,17 @@ export const theme = createSystem(defaultConfig, {
       colors: wrapTokenValues(colors),
     },
     semanticTokens,
+    recipes: {
+      text: textRecipe,
+      heading: headingRecipe,
+      button: buttonRecipe,
+      link: linkRecipe,
+      badge: badgeRecipe,
+      input: inputRecipe,
+    },
+    slotRecipes: {
+      card: cardSlotRecipe,
+    },
   },
   globalCss: {
     ...styles.global,
