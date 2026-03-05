@@ -50,7 +50,7 @@ export function LstWithdrawModal({
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           handleOnClose();
         }

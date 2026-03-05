@@ -237,7 +237,7 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
       </Card.Root>
       <ReliquaryRemoveLiquidityModal
         finalFocusRef={nextBtn}
-        isOpen={previewModalDisclosure.isOpen}
+        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
         relicId={relicId}

@@ -99,13 +99,13 @@ export function ReliquaryRemoveLiquidityModal({
 
   return (
     <Dialog.Root
-      finalFocusEl={() => finalFocusRef.current}
+      finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
       placement='center'
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           handleOnClose();
         }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, GridItem, Heading, Text, Grid, Center, Card } from '@chakra-ui/react';
+import { Box, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react';
 import React from 'react'
 import { BalancerV3BoostedPoolsSvg } from '../components/BalancerV3BoostedPoolsSvg'
 import { BalancerV3CustomPoolsSvg } from '../components/BalancerV3CustomPoolsSvg'
@@ -76,17 +76,17 @@ export function LandingBalancerV3Section() {
               base: '1fr',
               lg: '1fr 1fr 1fr' }}
           >
-            <Card.Root
+            <Card
               description="Easily build specialized liquidity pools tailored to your needs."
               image={<BalancerV3CustomPoolsSvg />}
               title="Custom Pools"
             />
-            <Card.Root
+            <Card
               description="Add custom logic to pools for enhanced control."
               image={<BalancerV3HooksSvg />}
               title="Hooks Framework"
             />
-            <Card.Root
+            <Card
               description="Maximize yields with integrated lending opportunities."
               image={<BalancerV3BoostedPoolsSvg />}
               title="100% Boosted Pools"

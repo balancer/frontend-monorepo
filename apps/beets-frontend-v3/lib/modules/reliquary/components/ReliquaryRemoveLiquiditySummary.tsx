@@ -114,7 +114,7 @@ export function ReliquaryRemoveLiquiditySummary({
   }
 
   return (
-    <AnimateHeightChange spacing="sm">
+    <AnimateHeightChange gap="sm">
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />
       )}

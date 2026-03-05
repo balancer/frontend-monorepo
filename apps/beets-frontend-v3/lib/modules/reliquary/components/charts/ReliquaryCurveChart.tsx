@@ -6,7 +6,7 @@
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
-import { Box, HStack, Link, VStack } from '@chakra-ui/react';
+import { Box, HStack, Link, VStack, useChakraContext } from '@chakra-ui/react';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { EChartsOption, graphic } from 'echarts'
@@ -16,7 +16,7 @@ import { InfoButton } from '~/components/info-button/InfoButton'
 
 export function ReliquaryCurveChart() {
   const { pool } = usePool()
-  const theme = useTheme()
+  const theme = useChakraContext()
 
   const data = pool.staking?.reliquary?.levels
     ?.map(level => ({

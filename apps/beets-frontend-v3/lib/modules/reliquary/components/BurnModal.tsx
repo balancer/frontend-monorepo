@@ -46,7 +46,7 @@ export function BurnModal({
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           handleOnClose();
         }
@@ -64,7 +64,7 @@ export function BurnModal({
             />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm">
+              <AnimateHeightChange gap="sm">
                 {isMobile && (
                   <MobileStepTracker chain={chain} transactionSteps={burnTransactionSteps} />
                 )}

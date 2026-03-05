@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Container, Box, Separator } from '@chakra-ui/react';
-import { Prose } from '@chakra-ui/react'
+import { Prose } from '@repo/lib/shared/components/prose/Prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useEffect } from 'react'
 

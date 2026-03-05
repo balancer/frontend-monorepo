@@ -48,7 +48,7 @@ export function ReliquaryClaimSummary({
   }
 
   return (
-    <AnimateHeightChange spacing="ms">
+    <AnimateHeightChange gap="ms">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
       {!shouldShowReceipt && pendingRewardsUsdValue.eq(0) && (
         <BalAlert

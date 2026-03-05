@@ -88,21 +88,21 @@ export function LstStats() {
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                loading={isStakedSonicDataLoading}
+                isLoading={isStakedSonicDataLoading}
                 label="APR"
                 value={String(fNum('apr', stakingApr))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                loading={isStakedSonicDataLoading}
+                isLoading={isStakedSonicDataLoading}
                 label="TVL"
                 value={String(toCurrency(usdValueForToken(lstToken, stakedSonic)))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                loading={isStakedSonicDataLoading}
+                isLoading={isStakedSonicDataLoading}
                 label="Total $S"
                 value={String(fNum('token', stakedSonic))}
               />

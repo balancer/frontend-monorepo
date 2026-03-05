@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Grid, GridItem, Heading, Text, Card } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import React from 'react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { SecurityAuditsSvg } from '../components/SecurityAuditsSvg'
@@ -49,7 +49,7 @@ export function LandingBeetsSecuritySection() {
             base: '1fr',
             lg: '1fr 1fr 1fr' }}
         >
-          <Card.Root
+          <Card
             description="Our code is thoroughly audited by leading security firms."
             image={<SecurityAuditsSvg />}
             title={
@@ -60,7 +60,7 @@ export function LandingBeetsSecuritySection() {
               </>
             }
           />
-          <Card.Root
+          <Card
             description="All code is publicly available for community scrutiny and trust."
             image={<SecurityOpenSourceSvg />}
             title={
@@ -71,7 +71,7 @@ export function LandingBeetsSecuritySection() {
               </>
             }
           />
-          <Card.Root
+          <Card
             description="Ongoing security assessments ensure the integrity of the beets ecosystem."
             image={<SecurityMonitoringSvg />}
             title={

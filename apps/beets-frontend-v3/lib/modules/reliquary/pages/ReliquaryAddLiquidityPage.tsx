@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@chakra-ui/react';
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import {
   requiresProportionalInput,
@@ -232,7 +232,7 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
       <ReliquaryAddLiquidityModal
         createNew={createNew}
         finalFocusRef={nextBtn}
-        isOpen={previewModalDisclosure.isOpen}
+        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
         relicId={relicId}

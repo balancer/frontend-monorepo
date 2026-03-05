@@ -42,7 +42,7 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
   }
 
   return (
-    <AnimateHeightChange spacing="ms">
+    <AnimateHeightChange gap="ms">
       {isMobile && <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
       <Card.Root p="ms" variant="modalSubSection">
         <TokenRowGroup

@@ -67,7 +67,7 @@ export function ReliquaryDelegationModal({
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           handleOnClose();
         }
@@ -83,7 +83,7 @@ export function ReliquaryDelegationModal({
             <TransactionModalHeader chain={chain} label={modalLabel} txHash={txHash} />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm">
+              <AnimateHeightChange gap="sm">
                 {isMobile && (
                   <MobileStepTracker chain={chain} transactionSteps={delegationTransactionSteps} />
                 )}

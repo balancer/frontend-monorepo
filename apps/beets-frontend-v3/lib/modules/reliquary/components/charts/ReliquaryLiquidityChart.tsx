@@ -1,8 +1,9 @@
+import { useChakraContext } from '@chakra-ui/react'
 /*
  MIGRATION NOTE: The following Chakra UI hooks have been removed.
  Please replace them with the suggested alternatives:
 
-//   - useTheme: Use Import from system or use useChakraContext
+//   - useTheme: Use Import from theme or use useChakraContext
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
@@ -17,7 +18,7 @@ interface Props {
 }
 
 export function ReliquaryLiquidityChart({ data }: Props) {
-  const theme = useChakraTheme()
+  const theme = useChakraContext()
 
   const chartData = useMemo(
     () => data.map(item => [item.timestamp * 1000, item.totalLiquidity]),
@@ -108,7 +109,7 @@ export function ReliquaryLiquidityChart({ data }: Props) {
               { offset: 1, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
             ]) } },
       ] }),
-    [chartData, system]
+    [chartData, theme]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

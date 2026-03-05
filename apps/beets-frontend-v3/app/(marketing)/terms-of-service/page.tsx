@@ -1,7 +1,7 @@
 'use client'
 
 import { Container, Link } from '@chakra-ui/react';
-import { Prose } from '@chakra-ui/react'
+import { Prose } from '@repo/lib/shared/components/prose/Prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export default function Terms() {

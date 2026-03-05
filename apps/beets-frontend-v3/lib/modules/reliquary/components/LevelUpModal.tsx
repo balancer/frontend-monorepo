@@ -45,7 +45,7 @@ export function LevelUpModal({
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           onClose();
         }
@@ -61,7 +61,7 @@ export function LevelUpModal({
             <TransactionModalHeader chain={chain} label="Level Up" txHash={levelUpTxHash} />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm">
+              <AnimateHeightChange gap="sm">
                 {isMobile && (
                   <MobileStepTracker chain={chain} transactionSteps={levelUpTransactionSteps} />
                 )}

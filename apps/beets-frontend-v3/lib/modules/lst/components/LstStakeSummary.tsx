@@ -24,7 +24,7 @@ export function LstStakeSummary({
   const shouldShowReceipt = !!lstStakeTxHash && !isLoadingReceipt && !!receivedToken
 
   return (
-    <AnimateHeightChange spacing="sm" w="full">
+    <AnimateHeightChange gap="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow

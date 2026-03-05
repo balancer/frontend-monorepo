@@ -29,7 +29,7 @@ export function LoopsDepositSummary({
   const shouldShowReceipt = !!loopsDepositTxHash && !isLoadingReceipt && !!receivedToken
 
   return (
-    <AnimateHeightChange spacing="sm" w="full">
+    <AnimateHeightChange gap="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={depositTransactionSteps} />}
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow

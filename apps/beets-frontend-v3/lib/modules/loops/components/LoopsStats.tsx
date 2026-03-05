@@ -79,21 +79,21 @@ export function LoopsStats() {
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                loading={isLoopsDataLoading}
+                isLoading={isLoopsDataLoading}
                 label="APR"
                 value={String(fNum('apr', loopsApr))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                loading={isLoopsDataLoading}
+                isLoading={isLoopsDataLoading}
                 label="TVL"
                 value={String(toCurrency(loopsTVL))}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
-                loading={isLoopsDataLoading}
+                isLoading={isLoopsDataLoading}
                 label="NAV ($S)"
                 value={String(fNum('token', loopsNav))}
               />

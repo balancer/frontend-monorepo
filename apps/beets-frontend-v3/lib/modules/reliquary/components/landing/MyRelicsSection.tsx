@@ -112,10 +112,10 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                       {isDelegatedToMDs ? 'Deactivate' : 'Activate'}
                     </Button>
                   </HStack>
-                  {isOpen && (
+                  {open && (
                     <ReliquaryDelegationModal
                       isDelegated={isDelegatedToMDs}
-                      isOpen={isOpen}
+                      isOpen={open}
                       onClose={onClose}
                       onOpen={onOpen}
                     />

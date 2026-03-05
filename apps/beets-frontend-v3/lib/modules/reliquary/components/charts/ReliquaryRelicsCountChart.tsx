@@ -1,8 +1,9 @@
+import { useChakraContext } from '@chakra-ui/react'
 /*
  MIGRATION NOTE: The following Chakra UI hooks have been removed.
  Please replace them with the suggested alternatives:
 
-//   - useTheme: Use Import from system or use useChakraContext
+//   - useTheme: Use Import from theme or use useChakraContext
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
@@ -18,7 +19,7 @@ interface Props {
 }
 
 export function ReliquaryRelicsCountChart({ data }: Props) {
-  const theme = useChakraTheme()
+  const theme = useChakraContext()
 
   const chartData = useMemo(
     () => data.map(item => [secondsToMilliseconds(item.timestamp), bn(item.relicCount).toNumber()]),
@@ -101,7 +102,7 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           tooltip: {
             valueFormatter: value => fNumCustom(value as number, '0a') } },
       ] }),
-    [chartData, system]
+    [chartData, theme]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />

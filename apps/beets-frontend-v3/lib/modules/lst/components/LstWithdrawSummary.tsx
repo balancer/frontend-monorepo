@@ -18,7 +18,7 @@ export function LstWithdrawSummary({
   const isLoading = isLoadingReceipt
 
   return (
-    <AnimateHeightChange spacing="sm" w="full">
+    <AnimateHeightChange gap="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={withdrawTransactionSteps} />}
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow

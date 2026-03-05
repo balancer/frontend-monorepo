@@ -27,7 +27,7 @@ export function LstUnstakeSummary() {
   }
 
   return (
-    <AnimateHeightChange spacing="sm" w="full">
+    <AnimateHeightChange gap="sm" w="full">
       {isMobile && <MobileStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow

@@ -1,8 +1,9 @@
+import { useChakraContext } from '@chakra-ui/react'
 /*
  MIGRATION NOTE: The following Chakra UI hooks have been removed.
  Please replace them with the suggested alternatives:
 
-//   - useTheme: Use Import from system or use useChakraContext
+//   - useTheme: Use Import from theme or use useChakraContext
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
@@ -14,7 +15,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 
 export function ReliquaryMaBEETSLevelChart() {
   const { pool } = usePool()
-  const theme = useChakraTheme()
+  const theme = useChakraContext()
 
   const levels = useMemo(() => pool.staking?.reliquary?.levels, [pool.staking?.reliquary?.levels])
 
@@ -77,7 +78,7 @@ export function ReliquaryMaBEETSLevelChart() {
               { offset: 1, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
             ]) } },
       ] }),
-    [levels, system]
+    [levels, theme]
   )
 
   return <ReactECharts option={option} style={{ height: '100%' }} />
