@@ -2,6 +2,7 @@ import { PoolType } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { ApiOrCustomToken, ApiToken } from '@repo/lib/modules/tokens/token.types'
 import {
   WeightedPoolStructure,
   COW_AMM_RAW_WEIGHT_50,
@@ -121,4 +122,8 @@ export function isBalancerProtocol(protocol: string): boolean {
 export function isPoolCreatorEnabled(poolType: PoolType): boolean {
   // reclamm and eclp factories still require zero address
   return poolType === PoolType.Stable || poolType === PoolType.Weighted
+}
+
+export function isApiToken(token: ApiOrCustomToken): token is ApiToken {
+  return 'underlyingTokenAddress' in token
 }

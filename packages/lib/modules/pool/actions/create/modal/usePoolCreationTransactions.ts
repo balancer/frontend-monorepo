@@ -16,12 +16,14 @@ import { useInitializePoolStep } from './useInitializePoolStep'
 import { CreatePoolInput } from '../types'
 import { isCowPool } from '../helpers'
 import { useCreateCowSteps } from './cow-amm-steps/useCreateCowSteps'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
 type Props = {
   createPoolInput: CreatePoolInput
   initPoolInput: ExtendedInitPoolInput
   poolAddress: Address | undefined
   setPoolAddress: (poolAddress: Address) => void
+  boostUnderlying?: { steps: TransactionStep[]; isLoading: boolean }
 }
 
 export function usePoolCreationTransactions({
@@ -29,6 +31,7 @@ export function usePoolCreationTransactions({
   initPoolInput,
   poolAddress,
   setPoolAddress,
+  boostUnderlying,
 }: Props) {
   const { poolType, protocolVersion } = createPoolInput
   const { amountsIn, wethIsEth, chainId } = initPoolInput
@@ -84,14 +87,18 @@ export function usePoolCreationTransactions({
   })
   const cowSteps = [...tokenApprovalSteps, ...finishCowSteps]
 
-  const steps = [createPoolStep, ...(isCowPool(poolType) ? cowSteps : v3Steps)]
+  const steps = [
+    createPoolStep,
+    ...(isCowPool(poolType) ? cowSteps : [...(boostUnderlying?.steps || []), ...v3Steps]),
+  ]
 
   const isLoadingSteps =
     isLoadingTokenApprovalSteps ||
     !signPermit2Step ||
     isLoadingTokenApprovalSteps ||
     isLoadingPermit2ApprovalSteps ||
-    isLoadingFinishCowSteps
+    isLoadingFinishCowSteps ||
+    boostUnderlying?.isLoading
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
   const initPoolTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash

@@ -11,7 +11,7 @@ import { Address, encodeFunctionData, erc20Abi } from 'viem'
 import { ManagedErc20TransactionButton } from '../../transactions/transaction-steps/TransactionButton'
 import { Retry, TransactionStep, TxCall } from '../../transactions/transaction-steps/lib'
 import { ManagedErc20TransactionInput } from '../../web3/contracts/useManagedErc20Transaction'
-import { useTokenAllowances } from '../../web3/useTokenAllowances'
+import { SpenderAddress, useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../TokensProvider'
 import { ApprovalAction, buildTokenApprovalLabels } from './approval-labels'
@@ -26,7 +26,7 @@ import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 
 export type Params = {
-  spenderAddress: Address
+  spenderAddress: SpenderAddress
   chain: GqlChain
   approvalAmounts: RawAmount[]
   actionType: ApprovalAction
@@ -168,14 +168,16 @@ export function useTokenApprovalSteps({
       return errors
     }
 
-    const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
+    const resolvedSpender =
+      typeof spenderAddress === 'function' ? spenderAddress(tokenAddress) : spenderAddress
+    const isTxEnabled = !!resolvedSpender && !tokenAllowances.isAllowancesLoading
     const props: ManagedErc20TransactionInput = {
       tokenAddress,
       functionName: isVeBalBtpAddress(tokenAddress) ? 'increaseApproval' : 'approve',
       labels,
       isComplete,
       chainId: getChainId(chain),
-      args: [spenderAddress, requestedRawAmount],
+      args: [resolvedSpender, requestedRawAmount],
       enabled: isTxEnabled,
       simulationMeta: sentryMetaForWagmiSimulation(
         'Error in wagmi tx simulation: Approving token',

@@ -161,6 +161,7 @@ export function usePoolFormLogic() {
     isLoadingTokenList,
     poolAddress,
     setPoolAddress,
+    isBoostingUnderlying: poolTokens.some(token => token.isBoostingUnderlying),
   }
 }
 
