@@ -100,7 +100,6 @@ async function addLiquidityToExistingRelicAndReturn(page: Page) {
   await clickEnabledNextButton(page)
 
   const addLiquidityButton = page.getByRole('button', { name: /Add liquidity to Relic/i })
-  await expect(addLiquidityButton).toBeEnabled()
   await addLiquidityButton.click()
 
   await confirmTxAndReturnToMabeets(page)
@@ -114,7 +113,6 @@ async function removeLiquidityFromExistingRelicAndReturn(page: Page) {
   await clickEnabledNextButton(page)
 
   const removeLiquidityButton = page.getByRole('button', { name: /Remove liquidity from Relic/i })
-  await expect(removeLiquidityButton).toBeEnabled()
   await removeLiquidityButton.click()
 
   await confirmTxAndReturnToMabeets(page)
@@ -145,13 +143,11 @@ async function doCreateRelicTxSteps(page: Page) {
     }
   }
 
-  await expect(createRelicButton).toBeEnabled()
   await createRelicButton.click()
 }
 
 async function clickEnabledNextButton(page: Page) {
   const nextButton = page.getByRole('button', { name: nextButtonName, exact: true })
-  await expect(nextButton).toBeEnabled()
   await nextButton.click()
 }
 
