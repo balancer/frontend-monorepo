@@ -24,6 +24,126 @@ import { ArrowRight } from 'react-feather'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getCompositionTokens } from '../pool/pool-tokens.utils'
 import { PoolToken } from '../pool/pool.types'
+import React from 'react'
+
+type RoutesPopoverProps = {
+  children: React.ReactElement
+  paths: Path[]
+  chain: GqlChain
+  totalInputAmount: number
+  totalOutputAmount: number
+  protocolVersion: number
+  maxHops: number
+}
+
+export function RoutesPopover({
+  children,
+  paths,
+  chain,
+  totalInputAmount,
+  totalOutputAmount,
+  protocolVersion,
+  maxHops,
+}: RoutesPopoverProps) {
+  const { getToken, priceFor } = useTokens()
+  const { toCurrency } = useCurrency()
+
+  const inputToken = getToken(paths[0].tokens[0].address, chain)!
+  const outputToken = getToken(paths[0].tokens[paths[0].tokens.length - 1].address, chain)!
+
+  const inputValue = bn(totalInputAmount).times(priceFor(inputToken.address, chain))
+  const outputValue = bn(totalOutputAmount).times(priceFor(outputToken.address, chain))
+
+  const outputPercentage = outputValue.div(inputValue).toNumber()
+
+  const colors = fixTokenColors(chain, paths)
+
+  return (
+    <Popover placement="top" trigger="hover">
+      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverContent
+        bg="background.level4"
+        maxW="100vw"
+        minW={{ base: '350px', md: '460px' }}
+        overflow="hidden"
+        p="0"
+        rounded="lg"
+        w={{ base: '350px', md: 'max-content' }}
+      >
+        <VStack p="4" shadow="2xl" spacing="3">
+          <VStack align="start" w="full">
+            <Text color="font.primary" fontSize="md" fontWeight="bold" pb="1">
+              Proposed: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
+              {maxHops} hops via Balancer v{protocolVersion}
+            </Text>
+          </VStack>
+
+          <Divider mb="2" mt="0" mx="-4" w="calc(100% + 2rem)" />
+
+          <HStack justify="space-between" w="full">
+            <HStack>
+              <Text fontSize="sm" fontWeight="bold" letterSpacing="normal">
+                {`${fNum('token', totalInputAmount)} ${inputToken.symbol}`}
+              </Text>
+              <Text>
+                <ArrowRight size="16" />
+              </Text>
+            </HStack>
+            <Text fontSize="sm" fontWeight="bold" letterSpacing="normal">
+              {`${fNum('token', totalOutputAmount)} ${outputToken.symbol}`}
+            </Text>
+          </HStack>
+
+          <HStack gap="1" h="200" overflowX="auto" w="full">
+            <TokenItem
+              amountShare={1}
+              chain={chain}
+              colors={colors}
+              position="start"
+              token={inputToken}
+              tokenAmount={totalInputAmount}
+            />
+
+            <VStack flex="1" gap="1" h="full">
+              {paths.map((path, i) => (
+                <PathRoute
+                  chain={chain}
+                  colors={colors}
+                  key={`path-${i}`}
+                  path={path}
+                  totalAmount={totalInputAmount}
+                />
+              ))}
+            </VStack>
+
+            <TokenItem
+              amountShare={outputPercentage}
+              chain={chain}
+              colors={colors}
+              position="end"
+              token={outputToken}
+              tokenAmount={totalOutputAmount}
+            />
+          </HStack>
+
+          <HStack justify="space-between" w="full">
+            <HStack>
+              <Text color="font.secondary" fontSize="sm">
+                {toCurrency(inputValue)}
+              </Text>
+              <Text color="font.secondary">
+                <ArrowRight size="16" />
+              </Text>
+            </HStack>
+            <Text color="font.secondary" fontSize="sm">
+              {`${toCurrency(outputValue)} (${fNum('sharePercent', -(1 - outputPercentage), { hideSmallPercentage: false })})`}
+            </Text>
+          </HStack>
+        </VStack>
+      </PopoverContent>
+    </Popover>
+  )
+}
 
 type Props = {
   paths: Path[] | undefined
@@ -40,144 +160,57 @@ export function RoutesCard({
   totalOutputAmount,
   protocolVersion,
 }: Props) {
-  const { getToken, priceFor } = useTokens()
-  const { toCurrency } = useCurrency()
-
   if (!paths || paths.length === 0) return null
 
   const maxHops = paths?.reduce((acc, path) => {
     return acc + (path.isBuffer || []).filter(buffer => buffer === false).length
   }, 0)
-  const inputToken = getToken(paths[0].tokens[0].address, chain)!
-  const outputToken = getToken(paths[0].tokens[paths[0].tokens.length - 1].address, chain)!
-
-  const inputValue = bn(totalInputAmount).times(priceFor(inputToken.address, chain))
-  const outputValue = bn(totalOutputAmount).times(priceFor(outputToken.address, chain))
-
-  const outputPercentage = outputValue.div(inputValue).toNumber()
-
-  const colors = fixTokenColors(chain, paths)
 
   return (
     <Box pt="4" w="full">
-      <Popover placement="top" trigger="hover">
-        <PopoverTrigger>
-          <HStack
-            _expanded={{ color: 'font.link', '& .arrow-icon': { transform: 'rotate(-45deg)' } }}
-            _hover={{ color: 'font.link', '& .arrow-icon': { transform: 'rotate(-45deg)' } }}
-            color="font.secondary"
-            cursor="pointer"
-            data-group
-            gap="1"
-          >
-            <Text
-              _after={{
-                borderBottom: '1px dotted',
-                borderColor: 'currentColor',
-                bottom: '-2px',
-                content: '""',
-                left: 0,
-                opacity: 0.5,
-                position: 'absolute',
-                width: '100%',
-              }}
-              _groupHover={{
-                color: 'font.link',
-              }}
-              color="font.secondary"
-              fontSize="sm"
-              position="relative"
-              transition="color 0.2s"
-            >
-              Swap route: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
-              {maxHops} hops (Bv{protocolVersion})
-            </Text>
-            <Box as="span" className="arrow-icon" display="flex" transition="transform 0.2s">
-              <ArrowRight size="12" />
-            </Box>
-          </HStack>
-        </PopoverTrigger>
-        <PopoverContent
-          bg="background.level4"
-          maxW="100vw"
-          minW={{ base: '350px', md: '460px' }}
-          overflow="hidden"
-          p="0"
-          rounded="lg"
-          w={{ base: '350px', md: 'max-content' }}
+      <RoutesPopover
+        chain={chain}
+        maxHops={maxHops}
+        paths={paths}
+        protocolVersion={protocolVersion}
+        totalInputAmount={totalInputAmount}
+        totalOutputAmount={totalOutputAmount}
+      >
+        <HStack
+          _expanded={{ color: 'font.link', '& .arrow-icon': { transform: 'rotate(-45deg)' } }}
+          _hover={{ color: 'font.link', '& .arrow-icon': { transform: 'rotate(-45deg)' } }}
+          color="font.secondary"
+          cursor="pointer"
+          data-group
+          gap="1"
         >
-          <VStack p="4" shadow="2xl" spacing="3">
-            <VStack align="start" w="full">
-              <Text color="font.primary" fontSize="md" fontWeight="bold" pb="1">
-                Proposed: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
-                {maxHops} hops via Balancer v{protocolVersion}
-              </Text>
-            </VStack>
-
-            <Divider mb="2" mt="0" mx="-4" w="calc(100% + 2rem)" />
-
-            <HStack justify="space-between" w="full">
-              <HStack>
-                <Text fontSize="sm" fontWeight="bold" letterSpacing="normal">
-                  {`${fNum('token', totalInputAmount)} ${inputToken.symbol}`}
-                </Text>
-                <Text>
-                  <ArrowRight size="16" />
-                </Text>
-              </HStack>
-              <Text fontSize="sm" fontWeight="bold" letterSpacing="normal">
-                {`${fNum('token', totalOutputAmount)} ${outputToken.symbol}`}
-              </Text>
-            </HStack>
-
-            <HStack gap="1" h="200" overflowX="auto" w="full">
-              <TokenItem
-                amountShare={1}
-                chain={chain}
-                colors={colors}
-                position="start"
-                token={inputToken}
-                tokenAmount={totalInputAmount}
-              />
-
-              <VStack flex="1" gap="1" h="full">
-                {paths.map((path, i) => (
-                  <PathRoute
-                    chain={chain}
-                    colors={colors}
-                    key={`path-${i}`}
-                    path={path}
-                    totalAmount={totalInputAmount}
-                  />
-                ))}
-              </VStack>
-
-              <TokenItem
-                amountShare={outputPercentage}
-                chain={chain}
-                colors={colors}
-                position="end"
-                token={outputToken}
-                tokenAmount={totalOutputAmount}
-              />
-            </HStack>
-
-            <HStack justify="space-between" w="full">
-              <HStack>
-                <Text color="font.secondary" fontSize="sm">
-                  {toCurrency(inputValue)}
-                </Text>
-                <Text color="font.secondary">
-                  <ArrowRight size="16" />
-                </Text>
-              </HStack>
-              <Text color="font.secondary" fontSize="sm">
-                {`${toCurrency(outputValue)} (${fNum('sharePercent', -(1 - outputPercentage), { hideSmallPercentage: false })})`}
-              </Text>
-            </HStack>
-          </VStack>
-        </PopoverContent>
-      </Popover>
+          <Text
+            _after={{
+              borderBottom: '1px dotted',
+              borderColor: 'currentColor',
+              bottom: '-2px',
+              content: '""',
+              left: 0,
+              opacity: 0.5,
+              position: 'absolute',
+              width: '100%',
+            }}
+            _groupHover={{
+              color: 'font.link',
+            }}
+            color="font.secondary"
+            fontSize="sm"
+            position="relative"
+            transition="color 0.2s"
+          >
+            Swap route: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
+            {maxHops} hops (Bv{protocolVersion})
+          </Text>
+          <Box as="span" className="arrow-icon" display="flex" transition="transform 0.2s">
+            <ArrowRight size="12" />
+          </Box>
+        </HStack>
+      </RoutesPopover>
     </Box>
   )
 }

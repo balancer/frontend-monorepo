@@ -21,9 +21,10 @@ import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import pluralize from 'pluralize'
 import { BaseDefaultSwapHandler } from './handlers/BaseDefaultSwap.handler'
 import { getFullPriceImpactLabel, getMaxSlippageLabel } from '../price-impact/price-impact.utils'
+import { RoutesPopover } from './RoutesCard'
 
 export function OrderRoute() {
-  const { simulationQuery } = useSwap()
+  const { simulationQuery, tokenIn, tokenOut, selectedChain } = useSwap()
 
   const queryData = simulationQuery.data as SdkSimulateSwapResponse
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
@@ -41,31 +42,84 @@ export function OrderRoute() {
     return `${pathsText}${hopCount} ${pluralize('hop', hopCount)} (Bv${orderRouteVersion})`
   }
 
+  const label = getRouteHopsLabel()
+  const hasPaths = queryData?.paths && queryData.paths.length > 0
+
   return (
     <HStack justify="space-between" w="full">
       <Text color="grayText" fontSize="sm">
         Order route
       </Text>
       <HStack>
-        <Text color="grayText" fontSize="sm">
-          {getRouteHopsLabel()}
-        </Text>
-        <Popover trigger="hover">
-          <PopoverTrigger>
-            <Box
-              _hover={{ opacity: 1 }}
-              opacity="0.5"
-              transition="opacity 0.2s var(--ease-out-cubic)"
+        {hasPaths ? (
+          <HStack>
+            <RoutesPopover
+              chain={selectedChain}
+              maxHops={hopCount}
+              paths={queryData.paths || []}
+              protocolVersion={orderRouteVersion}
+              totalInputAmount={Number(tokenIn.amount)}
+              totalOutputAmount={Number(tokenOut.amount)}
             >
-              <InfoIcon />
-            </Box>
-          </PopoverTrigger>
-          <PopoverContent maxW="300px" p="sm" w="auto">
-            <Text fontSize="sm" variant="secondary">
-              Balancer Vault version and number of swap hops
+              <Text
+                _after={{
+                  borderBottom: '1px dotted',
+                  borderColor: 'currentColor',
+                  bottom: '-2px',
+                  content: '""',
+                  left: 0,
+                  opacity: 0.5,
+                  position: 'absolute',
+                  width: '100%',
+                }}
+                color="grayText"
+                cursor="pointer"
+                fontSize="sm"
+                position="relative"
+              >
+                {label}
+              </Text>
+            </RoutesPopover>
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <Box
+                  _hover={{ opacity: 1 }}
+                  opacity="0.5"
+                  transition="opacity 0.2s var(--ease-out-cubic)"
+                >
+                  <InfoIcon />
+                </Box>
+              </PopoverTrigger>
+              <PopoverContent maxW="300px" p="sm" w="auto">
+                <Text fontSize="sm" variant="secondary">
+                  Balancer Vault version and number of swap hops
+                </Text>
+              </PopoverContent>
+            </Popover>
+          </HStack>
+        ) : (
+          <HStack>
+            <Text color="grayText" fontSize="sm">
+              {label}
             </Text>
-          </PopoverContent>
-        </Popover>
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <Box
+                  _hover={{ opacity: 1 }}
+                  opacity="0.5"
+                  transition="opacity 0.2s var(--ease-out-cubic)"
+                >
+                  <InfoIcon />
+                </Box>
+              </PopoverTrigger>
+              <PopoverContent maxW="300px" p="sm" w="auto">
+                <Text fontSize="sm" variant="secondary">
+                  Balancer Vault version and number of swap hops
+                </Text>
+              </PopoverContent>
+            </Popover>
+          </HStack>
+        )}
       </HStack>
     </HStack>
   )
