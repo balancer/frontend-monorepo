@@ -13,7 +13,7 @@ export function UnstakeForm() {
 
   const { isDisabled, disabledReason, isLoading, unstakeTxHash, pool } = useUnstake()
 
-  const { onClose, onOpen, isOpen } = useModalWithPoolRedirect(pool, unstakeTxHash)
+  const { onClose, onOpen, open: isOpen } = useModalWithPoolRedirect(pool, unstakeTxHash)
 
   return (
     <Box h="full" maxW="lg" mx="auto" w="full">

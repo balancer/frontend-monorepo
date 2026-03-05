@@ -6,13 +6,13 @@ import { useMemo } from 'react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { addDays, format } from 'date-fns'
 
-export function MyVotesHintModal({ isOpen = false, onClose = () => {} }: UseDisclosureProps) {
+export function MyVotesHintModal({ open: isOpen = false, onClose = () => {} }: UseDisclosureProps) {
   const formattedUnlockDate = useMemo(() => {
     const today = new Date()
     return format(addDays(today, 10), 'dd MMM yyyy')
   }, [])
   return (
-    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={e => {
+    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={(e: any) => {
       if (!e.open) {
         onClose();
       }

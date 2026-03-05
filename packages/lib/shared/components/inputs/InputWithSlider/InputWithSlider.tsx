@@ -7,16 +7,12 @@ import {
   BoxProps,
   HStack,
   NumberInput,
-  NumberInputField,
-  NumberInputProps,
   Slider,
-  SliderFilledTrack,
   SliderThumb,
   SliderTrack,
   VStack,
   useChakraContext } from '@chakra-ui/react';
 import { useState, forwardRef } from 'react';
-import { useTheme as useNextTheme } from 'next-themes'
 
 type Props = {
   value?: string
@@ -24,6 +20,8 @@ type Props = {
   onPercentChanged: (percent: number) => void
   isNumberInputDisabled?: boolean
   isWarning?: boolean
+  children?: React.ReactNode
+  ref?: React.Ref<HTMLDivElement>
 }
 
 function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
@@ -43,13 +41,12 @@ export const InputWithSlider = forwardRef(
       isNumberInputDisabled,
       isWarning,
       ...numberInputProps
-    }: NumberInputProps & Props,
+    }: Props,
     ref
   ) => {
     const [sliderPercent, setSliderPercent] = useState<number>(100)
     const { toCurrency } = useCurrency()
     const system = useChakraContext()
-    const { system: nextTheme } = useNextTheme()
 
     function handleSliderChange(percent: number) {
       setSliderPercent(percent)
@@ -143,7 +140,7 @@ export const InputWithSlider = forwardRef(
                   height="6px"
                   shadow="innerBase"
                 >
-                  <SliderFilledTrack />
+                  <Slider.Range />
                 </SliderTrack>
                 <SliderThumb />
               </Slider.Root>

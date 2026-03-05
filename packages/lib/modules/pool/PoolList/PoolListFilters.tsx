@@ -68,7 +68,7 @@ function UserPoolFilter() {
   return (
     <Checkbox.Root
       mb="xxs"
-      onCheckedChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
+      onCheckedChange={(e: { checked: boolean | "indeterminate" }) => toggleUserAddress(!!e.checked, connectedUserAddress as string)}
       checked={isChecked}
     ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
           <Text fontSize="sm">My positions</Text>
@@ -94,7 +94,7 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
           .map(tag => (
             <Box variants={staggeredFadeInUp} asChild><motion.div key={tag}>
                 <Checkbox.Root
-                  onCheckedChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
+                  onCheckedChange={(e: { checked: boolean | "indeterminate" }) => togglePoolTag(!!e.checked, tag as PoolTagType)}
                   checked={!!poolTags.find(selected => selected === tag)}
                 ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
                     <Text fontSize="sm">{poolTagLabel(tag)}</Text>
@@ -126,7 +126,7 @@ function PoolHookFilters() {
         {livePoolHookTagFilters.map(tag => (
           <Box variants={staggeredFadeInUp} asChild><motion.div key={tag}>
               <Checkbox.Root
-                onCheckedChange={e => togglePoolHookTag(e.target.checked, tag as PoolHookTagType)}
+                onCheckedChange={(e: { checked: boolean | "indeterminate" }) => togglePoolHookTag(!!e.checked, tag as PoolHookTagType)}
                 checked={!!poolHookTags.find(selected => selected === tag)}
               ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
                   <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
@@ -167,7 +167,7 @@ export function PoolTypeFilters({
         {_poolTypeFilters.map(poolType => (
           <Box variants={staggeredFadeInUp} asChild><motion.div key={poolType}>
               <Checkbox.Root
-                onCheckedChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
+                onCheckedChange={(e: { checked: boolean | "indeterminate" }) => togglePoolType(!!e.checked, poolType as PoolFilterType)}
                 checked={!!poolTypes.find(selected => selected === poolType)}
               ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
                   <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
@@ -477,12 +477,12 @@ export function PoolListFilters() {
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" pr={{ base: 'md', xl: '0' }} gap="none" w="full">
+      <HStack gap="none" justify="end" pr={{ base: 'md', xl: '0' }} w="full">
         <PoolListSearch />
         <Popover.Root
           lazyMount
           open={isPopoverOpen}
-          onOpenChange={e => {
+          onOpenChange={(e: { open: boolean }) => {
             if (e.open) {
               setIsPopoverOpen(true);
             } else {

@@ -20,7 +20,7 @@ export default function ModalPage() {
   return (
     <>
       <Button onClick={onOpen}>Open Modal</Button>
-      <Dialog.Root placement='center' open={isOpen} onOpenChange={e => {
+      <Dialog.Root placement='center' open={open} onOpenChange={(e: any) => {
         if (!e.open) {
           onClose();
         }

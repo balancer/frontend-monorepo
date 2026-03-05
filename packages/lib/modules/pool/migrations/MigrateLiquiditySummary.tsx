@@ -22,7 +22,7 @@ export function MigrateLiquiditySummary() {
   const totalUSDValue = usdValueFor(amounts)
 
   return (
-    <AnimateHeightChange spacing="sm">
+    <AnimateHeightChange gap="sm">
       {isMobile && hasQuoteContext && (
         <MobileStepTracker
           chain={oldPool?.chain || GqlChain.Mainnet}

@@ -11,7 +11,7 @@ import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 export function StakeForm() {
   const { isDisabled, disabledReason, isLoading, stakeTxHash, pool } = useStake()
   const nextBtn = useRef(null)
-  const { onClose, onOpen, isOpen } = useModalWithPoolRedirect(pool, stakeTxHash)
+  const { onClose, onOpen, open: isOpen } = useModalWithPoolRedirect(pool, stakeTxHash)
 
   return (
     <Box h="full" maxW="lg" mx="auto" w="full">

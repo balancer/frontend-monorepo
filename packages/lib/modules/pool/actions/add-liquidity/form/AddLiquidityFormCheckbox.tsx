@@ -53,7 +53,7 @@ export function AddLiquidityFormCheckbox() {
         <HStack gap="xs">
           <Checkbox.Root
             disabled={isBalancesLoading || hasNoPoolTokensInWallet}
-            onCheckedChange={(e: React.ChangeEvent<HTMLInputElement>) => setHasAcceptedPoolRisks(e.target.checked)}
+            onCheckedChange={(e: { checked: boolean | "indeterminate" }) => setHasAcceptedPoolRisks(!!e.checked)}
             size="lg"
             checked={hasAcceptedPoolRisks}
           ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
@@ -100,7 +100,7 @@ export function AddLiquidityFormCheckbox() {
             <Checkbox.Root
               alignItems="flex-start"
               disabled={isBalancesLoading || hasNoPoolTokensInWallet}
-              onCheckedChange={(e: React.ChangeEvent<HTMLInputElement>) => setHasAcceptedBoostedRisks(e.target.checked)}
+              onCheckedChange={(e: { checked: boolean | "indeterminate" }) => setHasAcceptedBoostedRisks(!!e.checked)}
               size="lg"
               checked={hasAcceptedBoostedRisks}
             ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>

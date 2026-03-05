@@ -36,8 +36,8 @@ export default function TokenInputPage() {
               <TokenInput
                 address={token?.address}
                 chain={token?.chain}
-                onChange={e => setCurrentValue(e.currentTarget.value)}
-                toggleTokenSelect={() => {
+                onChange={(e: any) => setCurrentValue(e.currentTarget.value)}
+                onToggleTokenClicked={() => {
                   tokenSelectDisclosure.onOpen()
                 }}
                 value={currentValue}

@@ -66,7 +66,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
             />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm" w="full">
+              <AnimateHeightChange gap="sm" w="full">
                 {isMobile && (
                   <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
                 )}

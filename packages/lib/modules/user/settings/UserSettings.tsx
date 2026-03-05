@@ -7,7 +7,6 @@ import {
   Heading,
   Input,
   InputGroup,
-  InputElement,
   Popover,
   VStack,
   Text,
@@ -36,7 +35,7 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
 
   return (
     <VStack align="start" w="full">
-      <InputGroup>
+      <InputGroup endElement={<Percent color="grayText" size="20px" />} endElementProps={{ pointerEvents: 'none' }}>
         <Input
           _hover={{
             bg: 'input.bgHover',
@@ -51,9 +50,6 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
           type="number"
           value={String(slippage)}
         />
-        <InputElement placement="right" pointerEvents="none">
-          <Percent color="grayText" size="20px" />
-        </InputElement>
       </InputGroup>
       <HStack>
         {presetOpts.map(preset => (
@@ -78,7 +74,12 @@ export function EnableSignaturesSelect() {
     setEnableSignatures(enableSignatures === 'yes' ? 'no' : 'yes')
   }
 
-  return <Switch checked={enableSignatures === 'yes'} onValueChange={handleChange} />;
+  return (
+    <Switch.Root checked={enableSignatures === 'yes'} onCheckedChange={handleChange}>
+      <Switch.HiddenInput />
+      <Switch.Control><Switch.Thumb /></Switch.Control>
+    </Switch.Root>
+  );
 }
 
 function ToggleAllowSounds() {
@@ -88,7 +89,12 @@ function ToggleAllowSounds() {
     setAllowSounds(allowSounds === 'yes' ? 'no' : 'yes')
   }
 
-  return <Switch checked={allowSounds === 'yes'} onValueChange={handleChange} />;
+  return (
+    <Switch.Root checked={allowSounds === 'yes'} onCheckedChange={handleChange}>
+      <Switch.HiddenInput />
+      <Switch.Control><Switch.Thumb /></Switch.Control>
+    </Switch.Root>
+  );
 }
 
 export function UserSettings() {

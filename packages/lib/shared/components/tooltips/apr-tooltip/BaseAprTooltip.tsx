@@ -418,9 +418,7 @@ function BaseAprTooltip({
       positioning={{
         placement: placement
       }}>
-      <HoverCard.Context>{({
-          open: isOpen
-        }) => (
+      <HoverCard.Context>{({ open: isOpen }: { open: boolean }) => (
           <>
             <HoverCard.Trigger asChild>
               {typeof children === 'function' ? children({ isOpen }) : children}

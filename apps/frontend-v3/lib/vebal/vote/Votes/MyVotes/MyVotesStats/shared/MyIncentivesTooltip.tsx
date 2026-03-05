@@ -7,11 +7,11 @@
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon';
-import { Icon, Stack, Popover, HoverCard } from '@chakra-ui/react';
-import { Popover, HoverCard, Text } from '@chakra-ui/react';
+import { Icon, Stack, HoverCard, Text } from '@chakra-ui/react';
+import { useChakraContext } from '@chakra-ui/react';
 
 export function MyIncentivesTooltip() {
-  const theme = useTheme()
+  const system = useChakraContext()
 
   const popoverContent = (
     <HoverCard.Positioner>
@@ -40,8 +40,8 @@ export function MyIncentivesTooltip() {
         <HoverCard.Trigger asChild>
           <Icon
             as={StarsIcon}
-            gradFrom={theme.colors['red.400']}
-            gradTo={theme.colors['red.400']}
+            gradFrom={system.token('colors.red.400', '#FC8181')}
+            gradTo={system.token('colors.red.400', '#FC8181')}
           />
         </HoverCard.Trigger>
 

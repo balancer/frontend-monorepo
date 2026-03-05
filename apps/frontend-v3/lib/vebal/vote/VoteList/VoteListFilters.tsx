@@ -44,12 +44,12 @@ export function VoteListFilters() {
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" gap="none" w="full">
+      <HStack gap="0" justify="end" w="full">
         <VoteListSearch />
         <Popover.Root
           lazyMount
           open={isPopoverOpen}
-          onOpenChange={e => {
+          onOpenChange={(e: any) => {
             if (e.open) {
               setIsPopoverOpen(true);
             } else {
@@ -150,7 +150,7 @@ export function VoteListFilters() {
                               ><motion.div>
                                   <Box variants={staggeredFadeInUp} asChild><motion.div>
                                       <Checkbox.Root
-                                        onCheckedChange={e => toggleIncludeExpiredPools(e.target.checked)}
+                                        onCheckedChange={(e: any) => toggleIncludeExpiredPools(e.target.checked)}
                                         checked={includeExpiredPools}
                                       ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
                                           <Text fontSize="sm" textTransform="capitalize">

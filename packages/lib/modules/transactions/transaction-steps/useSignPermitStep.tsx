@@ -87,8 +87,8 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
           buttonLabel={buttonLabel}
           error={error}
           isConnected={isConnected}
-          disabled={isDisabled}
-          loading={isLoading}
+          isDisabled={isDisabled}
+          isLoading={isLoading}
           networkSwitchButtonProps={networkSwitchButtonProps}
           shouldChangeNetwork={shouldChangeNetwork}
           signPermit={signPermit}

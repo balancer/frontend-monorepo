@@ -2,10 +2,10 @@
 
 import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react';
 
-export function TextareaWithError({ error, ...props }: { error?: string } & TextareaProps) {
+export function TextareaWithError({ error, isInvalid, isDisabled, ...props }: { error?: string; isInvalid?: boolean; isDisabled?: boolean } & TextareaProps) {
   return (
     <>
-      <Textarea {...props} />
+      <Textarea disabled={isDisabled} invalid={isInvalid} {...props} />
       <Box height="10px">
         {error && (
           <Text color="font.error" fontSize="sm">

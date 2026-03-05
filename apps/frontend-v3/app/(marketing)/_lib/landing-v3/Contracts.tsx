@@ -13,6 +13,7 @@ import { RadialPattern } from './shared/RadialPattern'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
+// @ts-ignore
 import { LuMinus, LuPlus } from 'react-icons/lu';
 
 const contracts = [

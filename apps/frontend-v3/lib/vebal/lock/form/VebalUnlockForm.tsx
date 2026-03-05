@@ -186,7 +186,7 @@ export function VebalUnlockForm() {
       </Card.Root>
       <VebalLockModal
         extendExpired={false}
-        isOpen={previewModalDisclosure.isOpen}
+        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
       />
     </Box>

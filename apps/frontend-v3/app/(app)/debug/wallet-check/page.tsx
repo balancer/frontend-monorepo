@@ -18,7 +18,7 @@ export default function Page() {
 
   return (
     <VStack>
-      <Input onValueChange={e => setAddress(e.target.value)} placeholder="0x..." value={String(address)} />
+      <Input onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddress(e.target.value)} placeholder="0x..." value={String(address)} />
       <Button onClick={checkWallet}>Check wallet address</Button>
       <Box>
         <Code>{JSON.stringify(data, null, 2)}</Code>

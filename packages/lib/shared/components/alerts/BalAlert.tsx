@@ -32,7 +32,7 @@ export function BalAlert({
     h: '24px',
     w: '24px' }
   return (
-    <Alert.Root rounded={isNavAlert ? 'none' : 'default'} status={status} {...rest}>
+    <Alert.Root rounded={isNavAlert ? 'none' : 'default'} status={status as any} {...rest}>
       {ssr ? <Alert.Indicator {...iconSize} /> : <Alert.Indicator as={getAlertIcon(status)} {...iconSize} />}
       {title ? (
         <VStack align="start" gap="0.5" w="full">

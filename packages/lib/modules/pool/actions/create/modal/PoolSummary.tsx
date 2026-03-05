@@ -24,7 +24,7 @@ export function PoolSummary({ transactionSteps }: { transactionSteps: Transactio
   const showTokenAmountSummary = !isReClammPool(poolType) || poolAddress
 
   return (
-    <AnimateHeightChange spacing={3} w="full">
+    <AnimateHeightChange gap={3} w="full">
       {isMobile && <MobileStepTracker chain={network} transactionSteps={transactionSteps} />}
       <PoolTitleCard />
       {showTokenAmountSummary && <PoolTokenAmountsCard />}

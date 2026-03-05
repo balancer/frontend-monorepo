@@ -25,9 +25,9 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
   const stepLabel = `Step ${currentStepNumber}/${totalSteps}`
 
   return (
-    <Accordion.Root collapsible textAlign="left" variant="button" width="full">
+    <Accordion.Root collapsible textAlign="left" width="full">
       <Accordion.Item value='item-0'>
-        {({ isExpanded }) => (
+        {(({ open: isExpanded }: { open: boolean }) => (
           <>
             <Accordion.ItemTrigger>
               <HStack fontSize="md" justify="flex-start" width="full">
@@ -48,14 +48,14 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
                 <Text color={isExpanded ? 'font.link' : 'font.highlight'} whiteSpace="nowrap">
                   {stepLabel}
                 </Text>
-                <Accordion.ItemIndicator textColor={isExpanded ? 'font.link' : 'font.highlight'} />
+                <Accordion.ItemIndicator />
               </HStack>
             </Accordion.ItemTrigger>
             <Accordion.ItemContent pt="md"><Accordion.ItemBody>
                 <Steps transactionSteps={transactionSteps} />
               </Accordion.ItemBody></Accordion.ItemContent>
           </>
-        )}
+        )) as any}
       </Accordion.Item>
     </Accordion.Root>
   );

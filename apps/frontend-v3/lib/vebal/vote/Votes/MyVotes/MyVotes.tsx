@@ -69,7 +69,7 @@ export function MyVotes() {
           How it works?
         </Button>
       </HStack>
-      <MyVotesHintModal isOpen={isOpen} onClose={onClose} />
+      <MyVotesHintModal open={open} onClose={onClose} />
       {isConnected && (
         <>
           {vebalIsExpired ? (

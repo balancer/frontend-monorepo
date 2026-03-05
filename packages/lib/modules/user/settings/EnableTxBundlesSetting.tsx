@@ -11,7 +11,12 @@ function EnableTxBundleSelect() {
     setEnableTxBundling(enableTxBundling === 'yes' ? 'no' : 'yes')
   }
 
-  return <Switch checked={enableTxBundling === 'yes'} onValueChange={handleChange} />;
+  return (
+    <Switch.Root checked={enableTxBundling === 'yes'} onCheckedChange={handleChange}>
+      <Switch.HiddenInput />
+      <Switch.Control><Switch.Thumb /></Switch.Control>
+    </Switch.Root>
+  );
 }
 
 export function EnableTxBundleSetting() {

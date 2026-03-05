@@ -1,7 +1,7 @@
 import { Box, BoxProps, CardProps, chakra } from '@chakra-ui/react';
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { ReactNode, MouseEvent } from 'react'
-import { motion, useMotionTemplate, useMotionValue, isValidMotionProp } from 'framer-motion'
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 
 type NoisyCardProps = {
   cardProps?: CardProps
@@ -10,8 +10,7 @@ type NoisyCardProps = {
   children?: ReactNode | ReactNode[]
 }
 
-const MotionBox = chakra(motion.div, {
-  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children' })
+const MotionBox = chakra(motion.div)
 
 export function NoisyCard({
   children,

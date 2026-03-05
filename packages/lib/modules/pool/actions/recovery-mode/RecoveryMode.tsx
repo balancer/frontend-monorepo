@@ -99,7 +99,7 @@ function RecoveryModeBody({ isMobile, pool, transactionSteps }: BodyProps) {
     )
 
   return (
-    <AnimateHeightChange spacing="ms">
+    <AnimateHeightChange gap="ms">
       {isMobile && <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
 
       <VStack p="ms">

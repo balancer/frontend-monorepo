@@ -4,8 +4,6 @@ import {
   Box,
   HStack,
   Popover,
-  PopoverContent,
-  PopoverTrigger,
   Text,
   VStack } from '@chakra-ui/react';
 import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -229,24 +227,26 @@ function TokenItem({ chain, token, position, amountShare, colors, tokenAmount }:
   return !tokenAmount ? (
     item
   ) : (
-    <Popover trigger="hover">
-      <PopoverTrigger>{item}</PopoverTrigger>
-      <PopoverContent p="2" width="fit-content">
-        <VStack alignItems="flex-start">
-          <Text fontSize="lg" fontWeight="bold">
-            {fNum('sharePercent', amountShare)}
-          </Text>
-          <Text fontSize="sm" fontWeight="bold">
-            {`${tokenAmount} ${token.symbol}`}
-          </Text>
-          {tokenAmount && (
-            <Text color="font.secondary" fontSize="sm">
-              {toCurrency(priceFor(token.address, chain) * tokenAmount)}
+    <Popover.Root openDelay={0} closeDelay={0}>
+      <Popover.Trigger asChild>{item}</Popover.Trigger>
+      <Popover.Positioner>
+        <Popover.Content p="2" width="fit-content">
+          <VStack alignItems="flex-start">
+            <Text fontSize="lg" fontWeight="bold">
+              {fNum('sharePercent', amountShare)}
             </Text>
-          )}
-        </VStack>
-      </PopoverContent>
-    </Popover>
+            <Text fontSize="sm" fontWeight="bold">
+              {`${tokenAmount} ${token.symbol}`}
+            </Text>
+            {tokenAmount && (
+              <Text color="font.secondary" fontSize="sm">
+                {toCurrency(priceFor(token.address, chain) * tokenAmount)}
+              </Text>
+            )}
+          </VStack>
+        </Popover.Content>
+      </Popover.Positioner>
+    </Popover.Root>
   )
 }
 
@@ -277,8 +277,8 @@ function PoolItem({
   const poolName = data.pool.name
 
   return (
-    <Popover trigger="hover">
-      <PopoverTrigger>
+    <Popover.Root openDelay={0} closeDelay={0}>
+      <Popover.Trigger asChild>
         <Box
           alignItems="center"
           bgGradient={`linear(to-r, ${colors[inputToken.address]}, ${colors[outputToken.address]})`}
@@ -306,23 +306,25 @@ function PoolItem({
             ))}
           </HStack>
         </Box>
-      </PopoverTrigger>
-      <PopoverContent p="2" width="fit-content">
-        <VStack alignItems="flex-start">
-          <Text fontSize="lg" fontWeight="bold">
-            {fNum('sharePercent', amountShare)}
-          </Text>
-          <Link className="group" href={getPoolPath(data.pool)}>
-            <HStack _hover={{ textDecoration: 'underline' }} cursor="pointer">
-              <Text fontSize="sm" fontWeight="bold">
-                {poolName}
-              </Text>
-              <ArrowRight color="grey" size="14" />
-            </HStack>
-          </Link>
-        </VStack>
-      </PopoverContent>
-    </Popover>
+      </Popover.Trigger>
+      <Popover.Positioner>
+        <Popover.Content p="2" width="fit-content">
+          <VStack alignItems="flex-start">
+            <Text fontSize="lg" fontWeight="bold">
+              {fNum('sharePercent', amountShare)}
+            </Text>
+            <Link className="group" href={getPoolPath(data.pool)}>
+              <HStack _hover={{ textDecoration: 'underline' }} cursor="pointer">
+                <Text fontSize="sm" fontWeight="bold">
+                  {poolName}
+                </Text>
+                <ArrowRight color="grey" size="14" />
+              </HStack>
+            </Link>
+          </VStack>
+        </Popover.Content>
+      </Popover.Positioner>
+    </Popover.Root>
   )
 }
 

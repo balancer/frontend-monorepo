@@ -2,7 +2,7 @@
 
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { Center, HStack, Input, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react';
+import { Center, HStack, Input, RadioGroup, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react'
 import { Address, formatUnits } from 'viem'
 import { sepolia } from 'viem/chains'
@@ -47,7 +47,7 @@ export default function Page() {
           Enter address of token to check permit2 allowance in the current chain:{' '}
           {chain ? chain.name : 'None'}
         </Text>
-        <Input onValueChange={e => setTokenAddress(e.target.value as Address)} type="text" />
+        <Input onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => setTokenAddress(e.target.value as Address)} type="text" />
 
         {data ? (
           <div>

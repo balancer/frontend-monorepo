@@ -3,10 +3,8 @@ import {
   Box,
   VStack,
   NumberInput as ChakraNumberInput,
-  NumberInputField,
   HStack,
-  InputGroup,
-  InputLeftElement } from '@chakra-ui/react';
+  InputGroup } from '@chakra-ui/react';
 import { Controller, Control } from 'react-hook-form'
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
@@ -87,38 +85,31 @@ export function NumberInput({
             const errorMessage = fieldState.error?.message
             return (
               <>
-                <InputGroup width={width}>
-                  {isFiatPrice && (
-                    <InputLeftElement pointerEvents="none">
-                      <Text>$</Text>
-                    </InputLeftElement>
-                  )}
-                  <ChakraNumberInput
+                <InputGroup
+                  width={width}
+                  startElement={isFiatPrice ? <Text pointerEvents="none">$</Text> : undefined}
+                  endElement={isPercentage ? (
+                    <Text
+                      color="font.secondary"
+                      opacity={isDisabled ? 0.3 : 1}
+                    >
+                      %
+                    </Text>
+                  ) : undefined}
+                >
+                  <ChakraNumberInput.Root
                     {...field}
                     disabled={isDisabled}
                     invalid={isInvalid || !!fieldState.error}
-                    allowOverflow={false}
                     onValueChange={field.onChange}
                     value={String(field.value)}
                     w="full"
                   >
-                    <NumberInput.Input
+                    <ChakraNumberInput.Input
                       pl={isFiatPrice ? '8' : undefined}
                       placeholder={placeholder}
                     />
-                  </ChakraNumberInput>
-                  {isPercentage && (
-                    <Text
-                      color="font.secondary"
-                      opacity={isDisabled ? 0.3 : 1}
-                      position="absolute"
-                      right="3"
-                      top="2.5"
-                      zIndex={1}
-                    >
-                      %
-                    </Text>
-                  )}
+                  </ChakraNumberInput.Root>
                 </InputGroup>
                 {errorMessage && (
                   <Text color="font.error" fontSize="sm" textAlign="start" w="full">

@@ -59,7 +59,7 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
             />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm" w="full">
+              <AnimateHeightChange gap="sm" w="full">
                 {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
                 <Card.Root variant="modalSubSection">
                   <TokenRowGroup

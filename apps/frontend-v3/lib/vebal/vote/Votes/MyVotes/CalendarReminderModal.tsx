@@ -15,7 +15,7 @@ function setCalendarEvent(deadline: Date) {
 }
 
 export function CalendarReminderModal({
-  isOpen = false,
+  open: isOpen = false,
   onClose,
   deadline }: UseDisclosureProps & { deadline: Date }) {
   const closeModal = () => onClose && onClose()
@@ -26,7 +26,7 @@ export function CalendarReminderModal({
   }
 
   return (
-    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={e => {
+    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={(e: any) => {
       if (!e.open) {
         closeModal();
       }

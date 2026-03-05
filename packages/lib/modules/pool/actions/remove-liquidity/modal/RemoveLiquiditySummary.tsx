@@ -74,7 +74,7 @@ export function RemoveLiquiditySummary({
   }
 
   return (
-    <AnimateHeightChange spacing="sm">
+    <AnimateHeightChange gap="sm">
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}

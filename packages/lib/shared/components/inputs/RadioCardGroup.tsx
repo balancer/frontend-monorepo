@@ -2,11 +2,7 @@ import {
   Box,
   SimpleGrid,
   type BoxProps,
-  type SimpleGridProps,
-  type UseRadioGroupProps,
-  type UseRadioProps,
-  useRadio,
-  useRadioGroup } from '@chakra-ui/react';
+  type SimpleGridProps } from '@chakra-ui/react';
 import { ReactNode } from 'react'
 
 export type RadioCardStyleProps = {
@@ -14,10 +10,12 @@ export type RadioCardStyleProps = {
   wrapperProps?: BoxProps
 }
 
-export type RadioCardProps = UseRadioProps &
-  RadioCardStyleProps & {
-    children: ReactNode
-  }
+export type RadioCardProps = RadioCardStyleProps & {
+  value: string
+  checked?: boolean
+  onChange?: (value: string) => void
+  children: ReactNode
+}
 
 const defaultWrapperProps: BoxProps = {
   w: 'full' }
@@ -32,19 +30,22 @@ const defaultContainerProps: BoxProps = {
   transition: 'all 0.2s ease',
   w: 'full' }
 
-export function RadioCard({ children, containerProps, wrapperProps, ...props }: RadioCardProps) {
-  const { getInputProps, getRadioProps } = useRadio(props)
-
-  const inputProps = getInputProps()
-  const radioProps = getRadioProps()
-
+export function RadioCard({ children, containerProps, wrapperProps, value, checked, onChange }: RadioCardProps) {
   return (
-    <Box {...defaultWrapperProps} {...wrapperProps} asChild><label>
-        <input {...inputProps} />
-        <Box {...radioProps} {...defaultContainerProps} {...containerProps}>
+    <Box {...defaultWrapperProps} {...wrapperProps} asChild>
+      <label>
+        <input
+          checked={checked}
+          onChange={() => onChange?.(value)}
+          style={{ display: 'none' }}
+          type="radio"
+          value={value}
+        />
+        <Box {...defaultContainerProps} {...containerProps} data-checked={checked || undefined}>
           {children}
         </Box>
-      </label></Box>
+      </label>
+    </Box>
   );
 }
 
@@ -54,10 +55,7 @@ export type RadioCardOption<T extends string> = {
   cardProps?: RadioCardStyleProps
 }
 
-export type RadioCardGroupProps<T extends string> = Omit<
-  UseRadioGroupProps,
-  'name' | 'value' | 'defaultValue' | 'onChange'
-> & {
+export type RadioCardGroupProps<T extends string> = {
   name: string
   options: RadioCardOption<T>[]
   value?: T
@@ -70,40 +68,35 @@ export type RadioCardGroupProps<T extends string> = Omit<
 
 const defaultLayoutProps: SimpleGridProps = {
   columns: { base: 1, sm: 2 },
-  spacing: 'md',
+  gap: 'md',
   w: 'full' }
 
 export function RadioCardGroup<T extends string>({
-  name,
+  name: _name,
   options,
   value,
-  defaultValue,
   onChange,
   layoutProps,
   renderOption,
   radioCardProps,
-  ...groupProps
 }: RadioCardGroupProps<T>) {
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name,
-    value,
-    defaultValue,
-    onChange: selected => onChange?.(selected as T),
-    ...groupProps })
-
-  const rootProps = getRootProps()
   const mergedLayoutProps = { ...defaultLayoutProps, ...layoutProps }
 
   return (
-    <SimpleGrid {...mergedLayoutProps} {...rootProps}>
+    <SimpleGrid {...mergedLayoutProps}>
       {options.map(option => {
-        const radio = getRadioProps({ value: option.value })
         const mergedCardProps: RadioCardStyleProps = {
           ...radioCardProps,
           ...option.cardProps }
 
         return (
-          <RadioCard key={option.value} {...radio} {...mergedCardProps}>
+          <RadioCard
+            checked={value === option.value}
+            key={option.value}
+            onChange={v => onChange?.(v as T)}
+            value={option.value}
+            {...mergedCardProps}
+          >
             {renderOption ? renderOption(option) : option.label}
           </RadioCard>
         )

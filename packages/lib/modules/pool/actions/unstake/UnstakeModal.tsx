@@ -67,7 +67,7 @@ export function UnstakeModal({
             />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm" w="full">
+              <AnimateHeightChange gap="sm" w="full">
                 {isMobile && (
                   <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
                 )}

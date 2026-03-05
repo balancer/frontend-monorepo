@@ -122,7 +122,7 @@ export function ConnectWallet({
                   )}
                 </Box>
               )}
-              <Box above="sm" hideFrom>{chain.name}</Box>
+              <Box hideBelow="sm">{chain.name}</Box>
             </Button>
             <Button onClick={handleWalletClick} variant="tertiary" {...rest} disabled={isSafeApp}>
               <CustomAvatar
@@ -133,7 +133,7 @@ export function ConnectWallet({
                 rounded="full"
                 size={6}
               />
-              <Box above="sm" hideFrom>{account.displayName}</Box>
+              <Box hideBelow="sm">{account.displayName}</Box>
             </Button>
           </HStack>
         );

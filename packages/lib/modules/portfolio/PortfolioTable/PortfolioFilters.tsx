@@ -79,7 +79,7 @@ function CheckboxFilterList<T>({
         {availableItems.map(item => (
           <Box variants={staggeredFadeInUp} asChild><motion.div key={String(item)}>
               <Checkbox.Root
-                onCheckedChange={e => toggleItem(e.target.checked, item)}
+                onCheckedChange={(e: { checked: boolean | "indeterminate" }) => toggleItem(!!e.checked, item)}
                 checked={!!selectedItems.find(selected => selected === item)}
               ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
                   <Text fontSize="sm" textTransform="capitalize">
@@ -254,11 +254,11 @@ export function PortfolioFilters({
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" gap="none" w="full">
+      <HStack gap="none" justify="end" w="full">
         {/* <PoolListSearch /> */}
         <Popover.Root
           open={isPopoverOpen}
-          onOpenChange={e => {
+          onOpenChange={(e: { open: boolean }) => {
             if (e.open) {
               setIsPopoverOpen(true);
             } else {

@@ -9,26 +9,21 @@ import {
   Flex,
   Input,
   InputGroup,
-  InputRightElement,
   NativeSelect,
   Stack,
   Avatar,
   Card,
   Checkbox,
-  Radio,
   RadioGroup,
   Link,
   Image,
   Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
   Tag,
   Alert,
   Field,
   List } from '@chakra-ui/react';
 
-import { darken } from '@chakra-ui/theme-tools'
+function darken(color: string, _amount: number) { return color }
 import Section from '@repo/lib/shared/components/layout/Section'
 
 export default function Components() {
@@ -1078,10 +1073,6 @@ export default function Components() {
                     placeholder="Placeholder"
                     type="text"
                   />
-                  <InputRightElement>
-                    {/* <IoCloseCircle color="input.clearIcon" />  */}
-                    {/* This doesn't work, but color="yellow" does work... */}
-                  </InputRightElement>
                 </InputGroup>
                 <Field.HelperText color="input.fontHint" fontWeight="medium">
                   Hint text that is displayed on focus of the input
@@ -1199,11 +1190,11 @@ export default function Components() {
           <Text mb="4" variant="eyebrow">
             Slider
           </Text>
-          <Slider.Root aria-label="slider-ex-1" defaultValue='30'>
-            <SliderTrack>
-              <SliderFilledTrack />
-            </SliderTrack>
-            <SliderThumb />
+          <Slider.Root aria-label="slider-ex-1" defaultValue={[30]}>
+            <Slider.Track>
+              <Slider.Range />
+            </Slider.Track>
+            <Slider.Thumb />
           </Slider.Root>
         </Box>
       </Section>

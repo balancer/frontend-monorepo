@@ -67,7 +67,7 @@ export function PoolTransactionsCard({
   headerGridProps,
   contentAlignItems = 'flex-start' }: PoolTransactionsCardProps) {
   const cells = headerCells ?? DEFAULT_HEADER_CELLS
-  const noTransactionsState = renderNoTransactions ?? DEFAULT_NO_TRANSACTIONS_STATE
+  const noTransactionsState = renderNoTransactions ? renderNoTransactions() : DEFAULT_NO_TRANSACTIONS_STATE
 
   return (
     <Card.Root ref={cardRef} {...cardProps}>

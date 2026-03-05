@@ -14,7 +14,7 @@ export function RecoveredFundsLearnMoreModal({
   isOpen = false,
   onClose = () => {} }: { isOpen?: boolean; onClose?: () => void }) {
   return (
-    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={e => {
+    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={(e: { open: boolean }) => {
       if (!e.open) {
         onClose();
       }

@@ -41,7 +41,7 @@ export default function Page() {
           Enter address of token to remove allowance in the current chain:{' '}
           {chain ? chain.name : 'None'}
         </Text>
-        <Input onValueChange={e => setTokenAddress(e.target.value as Address)} type="text" />
+        <Input onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => setTokenAddress(e.target.value as Address)} type="text" />
 
         <TransactionStepButton step={{ labels: props.labels, ...transaction }} />
       </VStack>

@@ -67,7 +67,7 @@ export function ClaimModal({
             <TransactionModalHeader chain={chain} label="Claim incentives" txHash={claimTxHash} />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm">
+              <AnimateHeightChange gap="sm">
                 {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
                 {isLoading ? (
                   <Text>Loading data...</Text>

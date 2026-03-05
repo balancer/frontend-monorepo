@@ -9,7 +9,7 @@ export type ButtonGroupOption = {
   disabled?: boolean
   tabTooltipLabel?: string // Popover tooltip on full tab hover
   iconTooltipLabel?: string // Popover tooltip on icon hover
-  rightIcon?: ButtonProps['rightIcon']
+  rightIcon?: React.ReactNode
 }
 
 type Props = {
@@ -49,6 +49,7 @@ export default function ButtonGroup(props: Props) {
                   <Box _hover={{ opacity: 0.75 }} transition="opacity 0.2s var(--ease-out-cubic)">
                     <GroupOptionButton
                       data-active={isActive}
+                      isActive={isActive}
                       option={option}
                       {...props}
                       fontSize={fontSize}
@@ -68,6 +69,7 @@ export default function ButtonGroup(props: Props) {
             <Box flex="1" key={`button-group-option-${option.value}`}>
               <GroupOptionButton
                 data-active={isActive}
+                isActive={isActive}
                 option={option}
                 {...props}
                 fontSize={fontSize}

@@ -27,7 +27,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     userActions } = saleStructureForm.getValues()
 
   return (
-    <AnimateHeightChange spacing="sm" w="full">
+    <AnimateHeightChange gap="sm" w="full">
       {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />}
       <Card.Root variant="modalSubSection">
         <VStack align="start" gap="ms">

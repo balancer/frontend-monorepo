@@ -59,7 +59,7 @@ export function StakeModal({
             <TransactionModalHeader chain={pool.chain} label="Stake LP tokens" txHash={stakeTxHash} />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm">
+              <AnimateHeightChange gap="sm">
                 {isMobile && (
                   <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
                 )}

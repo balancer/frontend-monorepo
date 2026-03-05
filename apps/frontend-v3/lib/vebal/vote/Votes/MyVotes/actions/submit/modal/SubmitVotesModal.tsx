@@ -43,13 +43,13 @@ export function SubmitVotesModal({
 
   return (
     <Dialog.Root
-      finalFocusEl={() => finalFocusRef.current}
+      finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
       placement='center'
       open={isOpen}
       size='xl'
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           handleClose();
         }
@@ -63,7 +63,7 @@ export function SubmitVotesModal({
             <TransactionModalHeader chain={chain} label="Review votes" txHash={txHash} />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm">
+              <AnimateHeightChange gap="sm">
                 {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
                 <SubmitVotesPreview
                   changedVotes={submittingVotesChunk || []}

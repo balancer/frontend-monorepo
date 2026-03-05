@@ -40,7 +40,7 @@ export function PriceImpactAcceptModal({
       placement='center'
       open={isOpen}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose();
         }

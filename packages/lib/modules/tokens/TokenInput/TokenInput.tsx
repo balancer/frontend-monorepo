@@ -14,8 +14,6 @@ import {
   Button,
   HStack,
   Input,
-  InputAddon,
-  InputGroup,
   InputProps,
   Skeleton,
   Text,
@@ -239,9 +237,10 @@ type Props = {
   customUserBalance?: string
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
+  isDisabled?: boolean
 }
 
-export const TokenInput = forwardRef(
+export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
   (
     {
       address,
@@ -259,8 +258,9 @@ export const TokenInput = forwardRef(
       customUserBalance,
       customUsdPrice,
       priceImpactProps,
+      isDisabled,
       ...inputProps
-    }: InputProps & Props,
+    },
     ref
   ) => {
     const { userAddress } = useUserAccount()
@@ -317,7 +317,7 @@ export const TokenInput = forwardRef(
         {...boxProps}
       >
         <VStack align="start" gap="md">
-          <InputGroup background="transparent" border="transparent">
+          <HStack background="transparent" border="transparent" gap="0" align="stretch">
             <Box position="relative" w="full">
               <Input
                 _focus={{
@@ -334,9 +334,9 @@ export const TokenInput = forwardRef(
                 boxShadow="none"
                 fontSize="3xl"
                 fontWeight="medium"
-                disabled={!token}
+                disabled={!token || isDisabled}
                 min={0}
-                onValueChange={handleOnChange}
+                onChange={handleOnChange as any}
                 onKeyDown={blockInvalidNumberInput}
                 onWheel={e => {
                   // Avoid changing the input value when scrolling
@@ -366,20 +366,20 @@ export const TokenInput = forwardRef(
               )}
             </Box>
 
-            <InputAddon placement="right" bg="transparent" border="none" p="0" pl="1">
+            <Box bg="transparent" border="none" p="0" pl="1" flexShrink={0}>
               <TokenInputSelector
                 onToggleTokenClicked={onToggleTokenClicked}
                 token={token}
                 weight={weight}
               />
-            </InputAddon>
-          </InputGroup>
+            </Box>
+          </HStack>
 
           <TokenInputFooter
             customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
             hasPriceImpact={hasPriceImpact}
-            disabled={inputProps.isDisabled}
+            isDisabled={isDisabled || inputProps.disabled}
             isLoadingPriceImpact={isLoadingPriceImpact}
             priceImpactProps={priceImpactProps}
             priceMessage={priceMessage}

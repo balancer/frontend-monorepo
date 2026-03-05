@@ -19,7 +19,7 @@ export function LbpPoolListInfo({ pool }: Props) {
     const daysDiff = differenceInDays(startTime, now())
 
     return (
-      <HStack gap="xs" textColor="green.500">
+      <HStack gap="xs" color="green.500">
         <Clock size="12" />
         <Text color="green.500" fontSize="xs">
           Starts: {hoursDiff < 24 ? `${hoursDiff}h` : `${daysDiff}d`}
@@ -31,7 +31,7 @@ export function LbpPoolListInfo({ pool }: Props) {
     const daysDiff = differenceInDays(endTime, now())
 
     return (
-      <HStack gap="xs" textColor="font.warning">
+      <HStack gap="xs" color="font.warning">
         <Clock size="12" />
         <Text color="font.warning" fontSize="xs">
           Ends: {hoursDiff < 24 ? `${hoursDiff}h` : `${daysDiff}d`}
@@ -40,7 +40,7 @@ export function LbpPoolListInfo({ pool }: Props) {
     )
   } else {
     return (
-      <HStack gap="xs" textColor="font.error">
+      <HStack gap="xs" color="font.error">
         <Clock size="12" />
         <Text color="font.error" fontSize="xs">
           Ended

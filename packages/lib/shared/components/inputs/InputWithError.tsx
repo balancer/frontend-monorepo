@@ -4,8 +4,6 @@ import {
   InputProps,
   Text,
   VStack,
-  InputRightElement,
-  InputLeftElement,
   Button,
   InputGroup } from '@chakra-ui/react';
 import { BalPopover } from '../popover/BalPopover'
@@ -18,6 +16,8 @@ type InputWithErrorProps = {
   tooltip?: string
   pasteFn?: () => void
   isFiatPrice?: boolean
+  isInvalid?: boolean
+  isDisabled?: boolean
 } & InputProps
 
 export function InputWithError({
@@ -27,6 +27,8 @@ export function InputWithError({
   tooltip,
   pasteFn,
   isFiatPrice,
+  isInvalid,
+  isDisabled,
   ...props
 }: InputWithErrorProps) {
   const valueLength = typeof props.value === 'string' ? props.value.length : 0
@@ -56,35 +58,29 @@ export function InputWithError({
         </Text>
       )}
 
-      <InputGroup>
-        {isFiatPrice && (
-          <InputLeftElement pointerEvents="none">
-            <Text>$</Text>
-          </InputLeftElement>
-        )}
-        <Input fontSize={{ base: baseFontSize, md: 'md' }} {...props} />
-
-        {pasteFn && (
-          <InputRightElement w="max-content">
-            <Button
-              aria-label="paste"
-              fontSize={{ base: 'xs', md: 'sm' }}
-              h="28px"
-              letterSpacing="0.25px"
-              lineHeight="1"
-              mr="0.5"
-              onClick={pasteFn}
-              position="relative"
-              px="2"
-              right="3px"
-              rounded="sm"
-              size="sm"
-              variant="tertiary"
-            >
-              Paste
-            </Button>
-          </InputRightElement>
-        )}
+      <InputGroup
+        startElement={isFiatPrice ? <Text pointerEvents="none">$</Text> : undefined}
+        endElement={pasteFn ? (
+          <Button
+            aria-label="paste"
+            fontSize={{ base: 'xs', md: 'sm' }}
+            h="28px"
+            letterSpacing="0.25px"
+            lineHeight="1"
+            mr="0.5"
+            onClick={pasteFn}
+            position="relative"
+            px="2"
+            right="3px"
+            rounded="sm"
+            size="sm"
+            variant="tertiary"
+          >
+            Paste
+          </Button>
+        ) : undefined}
+      >
+        <Input disabled={isDisabled} fontSize={{ base: baseFontSize, md: 'md' }} invalid={isInvalid} {...props} />
       </InputGroup>
 
       {error && (

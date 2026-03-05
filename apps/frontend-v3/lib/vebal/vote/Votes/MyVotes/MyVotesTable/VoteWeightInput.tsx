@@ -6,11 +6,11 @@
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
-import { Input, InputGroup, InputProps, Box, InputRightElement, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@chakra-ui/react';
+import { Input, InputGroup, InputProps, Box, VStack } from '@chakra-ui/react';
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
 import { blockInvalidNumberInput, bn } from '@repo/lib/shared/utils/numbers'
 import { Percent } from 'react-feather'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { clamp } from 'lodash'
 import { votingTimeLockedEndDate } from '../myVotes.helpers'
 import { dateTimeLabelFor } from '@repo/lib/shared/utils/time'
@@ -24,6 +24,7 @@ interface PercentageInputProps extends InputProps {
   noBalance: boolean | undefined
   isTooShort: boolean | undefined
   lastVoteTime: number | undefined
+  isDisabled?: boolean
 }
 
 function parseValue(value: string) {
@@ -39,6 +40,7 @@ export function VoteWeightInput({
   noBalance,
   isTooShort,
   lastVoteTime,
+  isDisabled,
   min = 0,
   max = 100,
   ...inputProps
@@ -55,7 +57,8 @@ export function VoteWeightInput({
     setPercentage(clamp(numberValue, _min, _max).toString())
   }
 
-  const [isEditing, { toggle }] = useBoolean(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const toggle = useCallback(() => setIsEditing(prev => !prev), [])
   const [editingValue, setEditingValue] = useState(parseFloat(percentage).toFixed(2))
 
   const endOfLocking = dateTimeLabelFor(votingTimeLockedEndDate(lastVoteTime || 0))
@@ -86,8 +89,14 @@ export function VoteWeightInput({
 
   return (
     <VStack align="start" w="full">
-      <Tooltip disabled={!inputProps.isDisabled} content={tooltipLabel}>
-        <InputGroup>
+      <Tooltip disabled={!isDisabled} content={tooltipLabel}>
+        <InputGroup endElement={
+          <Box color="font.primary" pointerEvents="none">
+            <Box bg="background.level2" p="3px" rounded="sm" shadow="sm">
+              <Percent color="currentColor" size="13px" />
+            </Box>
+          </Box>
+        }>
           <Input
             autoComplete="off"
             autoCorrect="off"
@@ -106,13 +115,9 @@ export function VoteWeightInput({
             onKeyDown={blockInvalidNumberInput}
             type="number"
             value={String(getInputValue())}
+            disabled={isDisabled}
             {...inputProps}
           />
-          <InputRightElement color="font.primary" pointerEvents="none">
-            <Box bg="background.level2" p="3px" rounded="sm" shadow="sm">
-              <Percent color="currentColor" size="13px" />
-            </Box>
-          </InputRightElement>
         </InputGroup>
       </Tooltip>
     </VStack>

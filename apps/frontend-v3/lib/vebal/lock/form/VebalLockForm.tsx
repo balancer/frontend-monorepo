@@ -1,7 +1,7 @@
 'use client';
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@chakra-ui/react';
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { HumanAmount } from '@balancer/sdk'
 import { LockDurationSlider } from '@bal/lib/vebal/lock/duration/LockDurationSlider'
@@ -284,7 +284,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
           </Tooltip>
         </VStack>
       </Card.Root>
-      <VebalLockModal extendExpired isOpen={previewModalDisclosure.isOpen} onClose={onModalClose} />
+      <VebalLockModal extendExpired isOpen={previewModalDisclosure.open} onClose={onModalClose} />
     </Box>
   );
 }

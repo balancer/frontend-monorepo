@@ -27,34 +27,151 @@ declare module 'react' {
  * 3. Removed v2 props/exports that still appear in the codebase
  */
 declare module '@chakra-ui/react' {
+  // Allow framer-motion props on ALL Chakra components via JsxStyleProps (used with asChild pattern)
+  // Box is typed as ChakraComponent<"div", {}> → HTMLChakraProps<"div"> → JsxHtmlProps<..., Assign<JsxStyleProps, {}>>
+  // BoxProps augmentation does NOT affect Box's type; JsxStyleProps IS in the chain
+  interface JsxStyleProps {
+    animate?: any
+    initial?: any
+    exit?: any
+    variants?: any
+    whileHover?: any
+    whileTap?: any
+    whileFocus?: any
+    whileInView?: any
+    layoutId?: any
+    layout?: any
+    textColor?: string
+    isTruncated?: boolean
+    noOfLines?: number
+    align?: string
+    sx?: any
+    style?: any
+  }
+  interface StackProps {
+    textColor?: string
+  }
+  // Keep BoxProps/StackProps for direction and style (used directly in some components)
+  interface BoxProps {
+    direction?: any
+    transition?: any
+    style?: any
+  }
+  interface StackProps {
+    direction?: any
+    transition?: any
+    style?: any
+  }
   // Custom variants: allow any string until recipes are migrated
   interface ButtonProps {
-    variant?: string
-    size?: string
+    variant?: any
+    size?: any
+    isExternal?: boolean
+    textColor?: string
+    as?: any
+    prefetch?: boolean
+    href?: string
+    rightIcon?: React.ReactNode
+    isLoading?: boolean
+    loadingText?: string
+    isDisabled?: boolean
+    width?: any
   }
   interface TextProps {
-    variant?: string
-    fontSize?: string | number
+    variant?: any
+    fontSize?: any
+    lineClamp?: number
+    size?: any
+    as?: any
+    htmlFor?: string
+  }
+  interface AlertRootProps {
+    variant?: any
   }
   interface HeadingProps {
-    variant?: string
-    size?: string
+    variant?: any
+    size?: any
+    sx?: any
   }
   interface LinkProps {
-    variant?: string
-  }
-  interface CardRootProps {
-    variant?: string
-  }
-  interface BadgeProps {
-    variant?: string
-  }
-  interface TagProps {
-    variant?: string
+    variant?: any
+    isExternal?: boolean
+    as?: any
+    prefetch?: boolean
   }
   interface IconButtonProps {
-    variant?: string
-    size?: string
+    as?: any
+  }
+  interface AccordionRootProps {
+    variant?: any
+  }
+  interface ListRootProps {
+    variant?: any
+  }
+  interface NativeSelectFieldProps {
+    onValueChange?: any
+    variant?: any
+    [key: string]: any
+  }
+  interface InputGroupProps {
+    size?: any
+  }
+  interface PopoverArrowProps {
+    css?: any
+  }
+  interface InputProps {
+    onValueChange?: any
+    invalid?: boolean
+  }
+  interface ProgressCircleRootProps {
+    size?: any
+  }
+  interface TextareaProps {
+    invalid?: boolean
+  }
+  interface PopoverCloseTriggerProps {
+    [key: string]: any
+  }
+  interface StepsSeparatorProps {
+    w?: string
+    [key: string]: any
+  }
+  interface TabsRootProps {
+    variant?: any
+  }
+  interface CardRootProps {
+    variant?: any
+    sx?: any
+  }
+  interface BadgeProps {
+    variant?: any
+    sx?: any
+  }
+  interface TagProps {
+    variant?: any
+  }
+  interface IconButtonProps {
+    variant?: any
+    size?: any
+    isRound?: boolean
+  }
+  interface IconProps {
+    size?: number | string
+    [key: string]: any
+  }
+  interface AccordionItemIndicatorProps {
+    color?: string
+    textColor?: string
+    [key: string]: any
+  }
+  interface CardRootProps {
+    sx?: any
+  }
+  interface CardHeaderProps {
+    isTruncated?: boolean
+    justify?: string
+    children?: React.ReactNode
+    [key: string]: any
   }
   // PopoverArrow and HoverCard.Arrow accept bg styling
   interface PopoverArrowProps {
@@ -215,9 +332,80 @@ declare module '@chakra-ui/react' {
     [key: string]: any
   }
 
+  // InputGroup accepts multiple children (Input + InputElement siblings)
+  interface InputGroupProps {
+    children?: any
+  }
+  // Switch compound component children
+  interface SwitchControlProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  interface SwitchThumbProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  // Slider.Range
+  interface SliderRangeProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  // SliderMarker
+  interface SliderMarkerProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  // NumberInput compound children
+  interface NumberInputRootProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  interface NumberInputInputProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
   // v2 removed type aliases → v3 equivalents
   type ModalProps = DialogRootProps
   type CardProps = CardRootProps
   type AlertProps = AlertRootProps
   type AlertStatus = 'info' | 'warning' | 'success' | 'error' | 'loading'
+  // ChakraProvider accepts cssVarsRoot in v3
+  interface ChakraProviderProps {
+    cssVarsRoot?: string
+  }
+  // Progress.Track accepts children
+  interface ProgressTrackProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  // Card.Footer accepts justify
+  interface CardFooterProps {
+    justify?: string
+    [key: string]: any
+  }
+  // Field compound component children
+  interface FieldLabelProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  interface FieldHelperTextProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  interface FieldErrorTextProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  // Avatar.Image accepts src
+  interface AvatarImageProps {
+    src?: string
+    [key: string]: any
+  }
+  // CheckboxGroup v3 props
+  interface CheckboxGroupProps {
+    defaultValue?: string[]
+    onValueChange?: (value: string[]) => void
+    children?: React.ReactNode
+    [key: string]: any
+  }
 }

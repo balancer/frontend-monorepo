@@ -1,4 +1,4 @@
-import { Box, Center, ResponsiveValue, BoxProps } from '@chakra-ui/react';
+import { Box, Center, BoxProps } from '@chakra-ui/react';
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
 import { Picture } from './other/Picture'
 import { SparkleIconWrapper } from './animations/SparkleIconWrapper'
@@ -8,7 +8,7 @@ interface StoneIconProps extends BoxProps {
   sparkleSize: number
   icon?: ReactElement
   transformBackground?: string
-  boxSize?: ResponsiveValue<number | string>
+  boxSize?: number | string | Record<string, number | string>
 }
 
 export function StoneIcon({

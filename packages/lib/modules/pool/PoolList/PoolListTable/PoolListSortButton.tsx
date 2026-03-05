@@ -24,7 +24,7 @@ export default function PoolListSortButton({ title, isDesc, isCurrentSort, ...re
         <Text color={isCurrentSort ? 'font.highlight' : 'font.primary'} fontWeight="bold">
           {title}
         </Text>
-        <VStack alignContent="center" gap="0" gap="0">
+        <VStack alignContent="center" gap="0">
           {(!isCurrentSort || !isDesc) && (
             <Icon color={getColor(isCurrentSort)} size="10" asChild><ChevronUp /></Icon>
           )}

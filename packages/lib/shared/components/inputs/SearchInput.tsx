@@ -1,4 +1,4 @@
-import { InputGroup, Input, InputRightElement, IconButton, InputProps } from '@chakra-ui/react';
+import { InputGroup, Input, IconButton, InputProps } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form'
 import { useDebounce } from '@repo/lib/shared/hooks/useDebounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
@@ -38,9 +38,28 @@ export function SearchInput({
   }, [autoFocus])
 
   return (
-    <InputGroup size="md">
+    <InputGroup
+      size="md"
+      endElement={
+        <IconButton
+          _hover={{
+            opacity: '1',
+            background: 'background.level1',
+            color: 'font.maxContrast' }}
+          aria-label={ariaLabel}
+          color="font.secondary"
+          loading={isLoading && getFieldState(SEARCH).isTouched}
+          onClick={() => {
+            setSearch('')
+            setValue(SEARCH, '')
+          }}
+          opacity="0.5"
+          size="sm"
+          variant="ghost">{search ? <X size="20" /> : <Search size="20" />}</IconButton>
+      }
+    >
       <Input
-        {...register(SEARCH)}
+        {...(register(SEARCH) as any)}
         _focus={{
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
@@ -67,23 +86,6 @@ export function SearchInput({
         placeholder={placeholder}
         {...rest}
       />
-      <InputRightElement>
-        <IconButton
-          _hover={{
-            opacity: '1',
-            background: 'background.level1',
-            color: 'font.maxContrast' }}
-          aria-label={ariaLabel}
-          color="font.secondary"
-          loading={isLoading && getFieldState(SEARCH).isTouched}
-          onClick={() => {
-            setSearch('')
-            setValue(SEARCH, '')
-          }}
-          opacity="0.5"
-          size="sm"
-          variant="ghost">{search ? <X size="20" /> : <Search size="20" />}</IconButton>
-      </InputRightElement>
     </InputGroup>
   );
 }

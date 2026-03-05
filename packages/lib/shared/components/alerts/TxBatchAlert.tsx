@@ -12,7 +12,7 @@ export function TxBatchAlert({ steps, ...alertProps }: Props) {
   const { isStepWithTxBatch } = useStepWithTxBatch(lastStep)
   if (isStepWithTxBatch && !isMobile) {
     return (
-      <BalAlert content={<Content stepType={lastStep.stepType} />} status="info" {...alertProps} />
+      <BalAlert content={<Content stepType={lastStep.stepType} />} status="info" {...(alertProps as any)} />
     )
   }
   return null

@@ -119,7 +119,7 @@ export function SwapSummary({
           .toString()
 
   return (
-    <AnimateHeightChange spacing="sm" w="full">
+    <AnimateHeightChange gap="sm" w="full">
       {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />}
       <Card.Root variant="modalSubSection">
         <SwapTokenRow

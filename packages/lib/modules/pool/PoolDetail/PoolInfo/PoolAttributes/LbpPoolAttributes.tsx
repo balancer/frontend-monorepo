@@ -44,7 +44,7 @@ export function LbpPoolAttributes({ pool }: { pool: Pool }) {
               width="full"
             >
               <Box minWidth="160px">
-                <Text variant={{ base: 'primary', md: 'secondary' }}>{attribute.title}:</Text>
+                <Text variant="secondary">{attribute.title}:</Text>
               </Box>
               {attribute.link ? (
                 <Link
@@ -58,7 +58,7 @@ export function LbpPoolAttributes({ pool }: { pool: Pool }) {
                   </HStack>
                 </Link>
               ) : (
-                <Text mb={{ base: 'sm', md: '0' }} variant={{ base: 'secondary', md: 'secondary' }}>
+                <Text mb={{ base: 'sm', md: '0' }} variant="secondary">
                   {attribute.value}
                 </Text>
               )}

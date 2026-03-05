@@ -108,7 +108,7 @@ export function PriceImpactAccordion({
       </Accordion.Root>
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
-          <VStack align="start" gap="0" mt="md" gap="0" w="full">
+          <VStack align="start" mt="md" gap="0" w="full">
             {!avoidPriceImpactAlert && (
               <Alert.Root roundedBottom="0" roundedTop="lg" status="error">
                 <PriceImpactIcon

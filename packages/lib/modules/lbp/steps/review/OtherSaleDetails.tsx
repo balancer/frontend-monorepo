@@ -18,14 +18,13 @@ export function OtherSaleDetails({
         </Heading>
 
         <VStack gap="0" w="full">
-          <Text align="left" fontWeight="bold" w="full">
+          <Text fontWeight="bold" textAlign="left" w="full">
             Token creator rights
           </Text>
           <List.Root
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
-            variant="secondary"
             w="full"
           >
             <List.Item>Cancel sale (before start)</List.Item>
@@ -38,14 +37,13 @@ export function OtherSaleDetails({
         </VStack>
 
         <VStack gap="0" w="full">
-          <Text align="left" fontWeight="bold" w="full">
+          <Text fontWeight="bold" textAlign="left" w="full">
             User rights
           </Text>
           <List.Root
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
-            variant="secondary"
             w="full"
           >
             <List.Item>{`Ability to ${userActions.replaceAll('_', ' ')} ${launchTokenSymbol} during the LBP`}</List.Item>
@@ -54,14 +52,13 @@ export function OtherSaleDetails({
         </VStack>
 
         <VStack gap="0" w="full">
-          <Text align="left" fontWeight="bold" w="full">
+          <Text fontWeight="bold" textAlign="left" w="full">
             Fees
           </Text>
           <List.Root
             listStylePosition="outside"
             listStyleType="disc"
             pl="md"
-            variant="secondary"
             w="full"
           >
             <List.Item>Swap fees: {fNum('feePercent', fee / 100)}</List.Item>

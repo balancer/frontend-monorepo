@@ -9,7 +9,7 @@ import {
   Text,
   useToken,
   VStack } from '@chakra-ui/react';
-import { Tooltip } from '@chakra-ui/react';
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
 import Link from 'next/link'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'

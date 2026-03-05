@@ -27,7 +27,7 @@ export function ClaimsSummary({
   const signatureStep = steps.steps.find(step => step.stepType === 'signature')
 
   return (
-    <AnimateHeightChange spacing="md">
+    <AnimateHeightChange gap="md">
       {isMobile && <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={steps} />}
       <Text fontSize="sm" variant="secondary">
         Some of your funds from affected v2 Composable Stable liquidity pools have been recovered.
@@ -46,7 +46,7 @@ export function ClaimsSummary({
       <Checkbox.Root
         alignItems="flex-start"
         disabled={signatureStep?.isComplete()}
-        onCheckedChange={e => setHasAcceptedDisclaimer(e.target.checked)}
+        onCheckedChange={(e: { checked: boolean | "indeterminate" }) => setHasAcceptedDisclaimer(!!e.checked)}
         size="lg"
         checked={hasAcceptedDisclaimer || signatureStep?.isComplete()}
       ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>

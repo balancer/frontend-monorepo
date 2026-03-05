@@ -3,8 +3,6 @@ import {
   Text,
   Stack,
   RadioGroup,
-  InputGroup,
-  InputElement,
   IconButton,
   Heading,
   Box,
@@ -239,7 +237,7 @@ function LaunchTokenAddressInput({
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Contract address of launch token</Text>
-      <InputGroup>
+      <Box position="relative" w="full">
         <Controller
           control={control}
           name="launchTokenAddress"
@@ -266,7 +264,7 @@ function LaunchTokenAddressInput({
             } }}
         />
 
-        <InputElement placement="right" w="max-content">
+        <Box position="absolute" right="0" top="0" h="full" display="flex" alignItems="center" pr="1" zIndex={1}>
           {!locked ? (
             <Button
               aria-label="paste"
@@ -287,8 +285,8 @@ function LaunchTokenAddressInput({
           ) : (
             <IconButton aria-label="edit" onClick={() => resetForm()} variant="link"><Edit size="16px" /></IconButton>
           )}
-        </InputElement>
-      </InputGroup>
+        </Box>
+      </Box>
     </VStack>
   );
 }
@@ -501,29 +499,25 @@ function FeeSelection({
       {value === 'custom' && (
         <Box w="full">
           <FadeInOnView scaleUp={false}>
-            <InputGroup w="full">
-              <Controller
-                control={control}
-                name="fee"
-                render={({ field }) => (
-                  <InputWithError
-                    error={errors[field.name]?.message}
-                    info="Minimum fee: 1.00% - Maximum fee: 10.00%"
-                    isInvalid={!!errors[field.name]}
-                    onChange={e => field.onChange(e.target.value)}
-                    step=".01"
-                    type="number"
-                    value={field.value}
-                  />
-                )}
-                rules={{
-                  required: 'Swap fee is required',
-                  validate: isInRange }}
-              />
-              <InputElement placement="right">
-                <Percent size="20" />
-              </InputElement>
-            </InputGroup>
+            <Controller
+              control={control}
+              name="fee"
+              render={({ field }) => (
+                <InputWithError
+                  error={errors[field.name]?.message}
+                  info="Minimum fee: 1.00% - Maximum fee: 10.00%"
+                  isInvalid={!!errors[field.name]}
+                  onChange={e => field.onChange(e.target.value)}
+                  step=".01"
+                  type="number"
+                  value={field.value}
+                  pasteFn={undefined}
+                />
+              )}
+              rules={{
+                required: 'Swap fee is required',
+                validate: isInRange }}
+            />
           </FadeInOnView>
         </Box>
       )}

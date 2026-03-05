@@ -42,7 +42,7 @@ function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
           gap="xs"
           variant="nav"
           asChild><NextLink
-            href={link.href}
+            href={link.href ?? ''}
             key={link.href}
             onClick={onClick}
             prefetch

@@ -278,7 +278,7 @@ function ConfigureToken({
 
         {poolTokens.length > 2 && (
           <RemoveTokenButton
-            disabled={poolTokens.length <= 2}
+            isDisabled={poolTokens.length <= 2}
             onClick={() => removePoolToken(index)}
           />
         )}

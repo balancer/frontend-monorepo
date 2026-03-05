@@ -40,13 +40,13 @@ export function ClpPoolAttributes({ pool }: { pool: Pool }) {
   return (
     <Accordion.Root collapsible w="full">
       <Accordion.Item border="none" value='item-0'>
-        {({ isExpanded }) => (
+        {(({ open: isExpanded }: { open: boolean }) => (
           <>
             <Accordion.ItemTrigger pl={0}>
-              <Text textColor={isExpanded ? 'green.400' : 'font.link'}>
+              <Text color={isExpanded ? 'green.400' : 'font.link'}>
                 Advanced E-CLP parameters
               </Text>
-              <Accordion.ItemIndicator color={isExpanded ? 'green.400' : 'font.link'} />
+              <Accordion.ItemIndicator />
             </Accordion.ItemTrigger>
 
             <Accordion.ItemContent><Accordion.ItemBody>
@@ -63,7 +63,7 @@ export function ClpPoolAttributes({ pool }: { pool: Pool }) {
                           <Text
                             className="tooltip-dashed-underline"
                             cursor="help"
-                            variant={{ base: 'primary', md: 'secondary' }}
+                            variant="secondary"
                           >
                             {attr.title}:
                           </Text>
@@ -71,7 +71,7 @@ export function ClpPoolAttributes({ pool }: { pool: Pool }) {
                       </Box>
                       <Text
                         mb={{ base: 'sm', md: '0' }}
-                        variant={{ base: 'secondary', md: 'secondary' }}
+                        variant="secondary"
                       >
                         {attr.value}
                       </Text>
@@ -80,7 +80,7 @@ export function ClpPoolAttributes({ pool }: { pool: Pool }) {
                 })}
               </Accordion.ItemBody></Accordion.ItemContent>
           </>
-        )}
+        )) as any}
       </Accordion.Item>
     </Accordion.Root>
   );

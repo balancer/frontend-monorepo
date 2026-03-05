@@ -67,7 +67,7 @@ export function AcceptPoliciesModal() {
               <VStack align="flex-start" gap="md">
                 <Checkbox.Root
                   alignItems="start"
-                  onCheckedChange={(e: React.ChangeEvent<HTMLInputElement>) => setIsChecked(e.target.checked)}
+                  onCheckedChange={(e: { checked: boolean | "indeterminate" }) => setIsChecked(!!e.checked)}
                   size="lg"
                   checked={isChecked}
                 ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>

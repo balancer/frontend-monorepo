@@ -1,21 +1,24 @@
 import {
   Slider,
-  SliderFilledTrack,
-  SliderMark,
+  SliderMarker,
   SliderThumb,
   SliderTrack,
-  SliderProps,
   useToken } from '@chakra-ui/react';
 import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-export interface SliderWithStepsProps extends SliderProps {
+export interface SliderWithStepsProps {
   steps: number[]
   minValue?: number
-  variant?: 'lock'
+  variant?: string
+  value?: number
+  min?: number
+  max?: number
+  onChange?: (value: number) => void
+  [key: string]: any
 }
 
-export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsProps) {
+export function SliderWithSteps({ steps, minValue, variant: _variant, ...props }: SliderWithStepsProps) {
   const [bgSecondary, bgHighlight] = useToken('colors', ['font.secondary', 'background.highlight'])
 
   const value = useMemo(() => {
@@ -83,7 +86,7 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
     <Slider.Root {...props} onValueChange={onChange} value={String(value)}>
       {steps &&
         steps.map(step => (
-          <SliderMark
+          <SliderMarker
             bg={getSliderMarkColor(step)}
             border="1px solid"
             borderColor={step <= value ? 'background.base' : 'transparent'}
@@ -99,13 +102,13 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
       <SliderTrack ref={slider}>
         <Tooltip
           showArrow
-          isOpen={filledTrackFocused && !disabledTooltip}
+          open={filledTrackFocused && !disabledTooltip}
           content="You have an existing lock and can't reduce the lock period. You can only slide right to extend the lock period"
           positioning={{
             placement: "top-start"
           }}
         >
-          <SliderFilledTrack
+          <Slider.Range
             background={filledTrackBackground}
             cursor={filledTrackFocused && !disabledTooltip ? 'not-allowed' : 'pointer'}
             onMouseEnter={() => setFilledTrackFocused(true)}

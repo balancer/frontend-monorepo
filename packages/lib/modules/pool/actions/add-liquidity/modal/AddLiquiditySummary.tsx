@@ -89,7 +89,7 @@ export function AddLiquiditySummary({
   }
 
   return (
-    <AnimateHeightChange spacing="ms">
+    <AnimateHeightChange gap="ms">
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}

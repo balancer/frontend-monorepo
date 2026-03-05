@@ -64,9 +64,7 @@ function AuraAprTooltip({ auraApr, textProps }: Props) {
 
   return (
     <HoverCard.Root>
-      <HoverCard.Context>{({
-          open: isOpen
-        }) => (
+      <HoverCard.Context>{({ open: isOpen }: { open: boolean }) => (
           <>
             <HoverCard.Trigger asChild>
               <HStack align="center" alignItems="center">

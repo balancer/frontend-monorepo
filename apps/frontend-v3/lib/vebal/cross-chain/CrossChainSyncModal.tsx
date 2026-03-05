@@ -72,7 +72,7 @@ function NetworkOptions({ networks, selectedNetworks, toggleNetwork }: NetworkOp
       {networks.map(network => (
         <Checkbox.Root
           key={`checkbox-${String(network)}`}
-          onCheckedChange={e => toggleNetwork(e.target.checked, network)}
+          onCheckedChange={(e: any) => toggleNetwork(e.target.checked, network)}
           checked={selectedNetworks.includes(network)}
         ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
             <HStack w="full">
@@ -120,7 +120,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
       placement='center'
       open={isOpen}
       trapFocus={!isSuccess}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           onModalClose();
         }
@@ -144,7 +144,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
             )}
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="sm" w="full">
+              <AnimateHeightChange gap="sm" w="full">
                 {showTransactionSteps ? (
                   <>
                     {isMobile && (

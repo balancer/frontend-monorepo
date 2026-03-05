@@ -5,7 +5,7 @@ import {
   Checkbox,
   HStack,
   Popover,
-  Radio,
+  RadioGroup,
   Tag,
   Text,
   VStack,
@@ -94,11 +94,17 @@ export function MultiSelect<Value = string>({
             <VStack align="start" gap="sm" w="full">
               {!!toggleAll && (
                 <>
-                  <Radio checked={!hasSelectedOptions} onValueChange={toggleAll} py="xs">
-                    <Text fontSize="sm" fontWeight="medium">
-                      All networks
-                    </Text>
-                  </Radio>
+                  <RadioGroup.Root value={!hasSelectedOptions ? 'all' : ''} py="xs">
+                    <RadioGroup.Item value="all" onClick={toggleAll}>
+                      <RadioGroup.ItemHiddenInput />
+                      <RadioGroup.ItemControl />
+                      <RadioGroup.ItemText>
+                        <Text fontSize="sm" fontWeight="medium">
+                          All networks
+                        </Text>
+                      </RadioGroup.ItemText>
+                    </RadioGroup.Item>
+                  </RadioGroup.Root>
                   <Separator />
                 </>
               )}
@@ -107,7 +113,7 @@ export function MultiSelect<Value = string>({
                   <Checkbox.Root
                     fontWeight="medium"
                     key={`checkbox-${String(option.value)}`}
-                    onCheckedChange={e => toggleOption(e.target.checked, option.value)}
+                    onCheckedChange={(e: { checked: boolean | "indeterminate" }) => toggleOption(!!e.checked, option.value)}
                     checked={isChecked(option.value)}
                   ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
                       <HStack>

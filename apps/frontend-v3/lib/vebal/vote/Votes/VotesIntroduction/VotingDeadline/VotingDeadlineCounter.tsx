@@ -38,7 +38,7 @@ export function VotingDeadlineCounter() {
           </ReminderButton>
           <CalendarReminderModal
             deadline={deadline}
-            isOpen={isCalendarReminderOpen}
+            open={isCalendarReminderOpen}
             onClose={() => setIsCalendarReminderOpen(false)}
           />
         </HStack>

@@ -85,8 +85,8 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
           buttonLabel={buttonLabel}
           error={error}
           isConnected={isConnected}
-          disabled={isDisabled}
-          loading={isLoading}
+          isDisabled={isDisabled}
+          isLoading={isLoading}
           networkSwitchButtonProps={networkSwitchButtonProps}
           shouldChangeNetwork={shouldChangeNetwork}
           signRelayer={signRelayer}

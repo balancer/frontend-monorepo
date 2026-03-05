@@ -9,7 +9,7 @@ import {
   addWeeks,
   isBefore,
   startOfToday } from 'date-fns'
-import { SystemStyleObject } from '@chakra-ui/styled-system'
+import { SystemStyleObject } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { DeadlineDayTooltip } from './DeadlineDayTooltip'
 import { Picture } from '@repo/lib/shared/components/other/Picture'

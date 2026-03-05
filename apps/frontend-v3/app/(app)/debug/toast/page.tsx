@@ -1,6 +1,7 @@
 'use client'
 
-import { Button, useToast, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react';
+import { useToast } from '@repo/lib/shared/hooks/useToast'
 import { useDisclosure } from '@chakra-ui/react'
 import { StaticToast, StaticToastRenderProps } from '@repo/lib/shared/components/toasts/StaticToast'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
@@ -22,15 +23,15 @@ export default function Page() {
     <VStack width="full">
       <StaticToast
         isClosable
-        isOpen={isOpen}
+        isOpen={open}
         onClose={onClose}
         title={`Toast Text (${((now - start) / 1000).toFixed(1)})`}
       >
         {ToastRender}
       </StaticToast>
 
-      <Button onClick={isOpen ? onClose : onOpen}>
-        {isOpen ? 'Close Static Toast' : 'Open Static Toast'}
+      <Button onClick={open ? onClose : onOpen}>
+        {open ? 'Close Static Toast' : 'Open Static Toast'}
       </Button>
 
       <Button

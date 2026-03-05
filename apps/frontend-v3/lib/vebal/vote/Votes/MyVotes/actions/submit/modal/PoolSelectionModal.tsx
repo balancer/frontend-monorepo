@@ -29,7 +29,7 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={e => {
+    <Dialog.Root open={isOpen} onOpenChange={(e: any) => {
       if (!e.open) {
         onClose();
       }
@@ -54,7 +54,7 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
                 </Text>
 
                 <CheckboxGroup
-                  defaultValue={String(selectableVotes.map(vote => vote.vote.id))}
+                  defaultValue={selectableVotes.map(vote => String(vote.vote.id))}
                   onValueChange={(votes: string[]) => setSelectedVotes(votes as Address[])}
                 >
                   {selectableVotes.map(vote => (

@@ -135,9 +135,7 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
         positioning={{
           placement: 'top-start'
         }}>
-        <Popover.Context>{({
-            open: isOpen
-          }) => (
+        <Popover.Context>{({ open: isOpen }: { open: boolean }) => (
             <>
               <Popover.Trigger asChild>
                 <Button

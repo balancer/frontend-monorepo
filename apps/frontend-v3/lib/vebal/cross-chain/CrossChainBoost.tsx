@@ -11,7 +11,7 @@ import {
   Text,
   Icon } from '@chakra-ui/react';
 
-import { Tooltip } from '@chakra-ui/react';
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
 
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import Image from 'next/image'
@@ -22,6 +22,7 @@ import { useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { formatUnits } from 'viem'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
+// @ts-ignore
 import { LuInfo } from 'react-icons/lu';
 
 const tooltipLabel = `Sidechains & Layer 2 networks like Polygon and Arbitrum don't know 

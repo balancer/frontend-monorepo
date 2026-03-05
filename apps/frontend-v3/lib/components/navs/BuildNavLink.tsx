@@ -10,13 +10,13 @@ export function BuildNavLink() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (isOpen) {
+      if (open) {
         onClose()
       }
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (!isOpen) return
+      if (!open) return
       const target = event.target as Node
       const isClickInsideTrigger = triggerRef.current?.contains(target)
       const isClickInsidePopover = popoverRef.current?.contains(target)
@@ -32,11 +32,11 @@ export function BuildNavLink() {
       window.removeEventListener('scroll', handleScroll, true)
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isOpen, onClose])
+  }, [open, onClose])
 
   const handleToggle = () => {
     trackEvent(AnalyticsEvent.ClickNavBuild)
-    if (isOpen) {
+    if (open) {
       onClose()
     } else {
       onOpen()
@@ -44,7 +44,7 @@ export function BuildNavLink() {
   }
 
   return (
-    <Popover.Root closeOnInteractOutside={false} open={isOpen} positioning={{
+    <Popover.Root closeOnInteractOutside={false} open={open} positioning={{
       placement: 'bottom'
     }}>
       <Popover.Trigger asChild>

@@ -92,7 +92,7 @@ export function VebalLockModal({
       open={isOpen}
       trapFocus={!isSuccess}
       {...rest}
-      onOpenChange={e => {
+      onOpenChange={(e: any) => {
         if (!e.open) {
           onClose(!!lockTxHash, redirectPath)
         }
@@ -112,7 +112,7 @@ export function VebalLockModal({
             />
             <Dialog.CloseTrigger />
             <Dialog.Body>
-              <AnimateHeightChange spacing="md">
+              <AnimateHeightChange gap="md">
                 {isMobile ? (
                   <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
                 ) : null}
