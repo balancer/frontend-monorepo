@@ -10,7 +10,7 @@ test('Wrap 1 S to wS', async ({ page }) => {
   await impersonate(page, defaultAnvilAccount)
 
   await selectPopularToken(page, 'wS')
-  await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('1')
+  await page.getByRole('textbox', { name: 'TokenIn' }).fill('1')
 
   await clickButton(page, 'Next')
 
