@@ -17,9 +17,9 @@ type BoostWhitelistResponse = {
 }[]
 
 const WHITELIST_URL = 'https://raw.githubusercontent.com/balancer/metadata/main/erc4626/index.json'
-const BOOSTED_FILTER = ['boosted_aave', 'boosted_morpho']
+const PROTOCOL_FILTER = ['boosted_aave', 'boosted_morpho', 'boosted_fluid']
 
-export const useBoostWhitelist = (tokenAddress: Address | undefined) => {
+export const useBoostedTokenOptions = (tokenAddress: string | undefined) => {
   const { getToken } = useTokens()
   const { poolCreationForm } = usePoolCreationForm()
   const [network] = useWatch({ control: poolCreationForm.control, name: ['network'] })
@@ -33,33 +33,23 @@ export const useBoostWhitelist = (tokenAddress: Address | undefined) => {
     },
   })
 
-  const filteredBoostWhitelist = boostWhitelist
-    ?.filter(list => BOOSTED_FILTER.includes(list.id))
-    .map(list => {
+  if (!boostWhitelist) return undefined
+
+  const filteredWhitelist = boostWhitelist
+    .filter(protocol => PROTOCOL_FILTER.includes(protocol.id))
+    .map(protocol => {
       return {
-        ...list,
-        addresses: list.addresses[chainId] || [],
+        name: protocol.name,
+        tokens: protocol.addresses[chainId].map(address => getToken(address, network)),
       }
     })
 
-  const boostWhitelistMetadta = filteredBoostWhitelist?.map(protocol => {
-    return {
-      name: protocol.name,
-      tokens: protocol.addresses.map(address => getToken(address, network)),
-    }
+  const boostedTokenOptions = filteredWhitelist.flatMap(protocol => {
+    const token = protocol.tokens.find(boostedToken =>
+      isSameAddress(boostedToken?.underlyingTokenAddress || '', tokenAddress)
+    )
+    return token ? [{ protocol: protocol.name, token }] : []
   })
 
-  const boostTokenOptions =
-    boostWhitelistMetadta
-      ?.map(protocol => {
-        return {
-          protocol: protocol.name,
-          token: protocol.tokens.find(boostedToken =>
-            isSameAddress(boostedToken?.underlyingTokenAddress || '', tokenAddress)
-          ),
-        }
-      })
-      .filter(({ token }) => !!token) || []
-
-  return boostTokenOptions.length > 0 ? boostTokenOptions : undefined
+  return boostedTokenOptions.length > 0 ? boostedTokenOptions : undefined
 }

@@ -197,6 +197,7 @@ export function useUninitializedPool() {
         amount: '',
         weight: tokenWeights ? tokenWeights[idx] : '50',
         data,
+        isBoostingUnderlying: false,
       })
     }
 

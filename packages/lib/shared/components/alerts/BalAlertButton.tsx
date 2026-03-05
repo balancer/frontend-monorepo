@@ -3,7 +3,11 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
-export function BalAlertButton({ onClick, children }: PropsWithChildren<ButtonProps>) {
+export function BalAlertButton({
+  onClick,
+  children,
+  isSelected,
+}: PropsWithChildren<ButtonProps & { isSelected?: boolean }>) {
   return (
     <Button
       _focus={{
@@ -11,12 +15,13 @@ export function BalAlertButton({ onClick, children }: PropsWithChildren<ButtonPr
       }}
       _hover={{
         transform: 'scale(1.05)',
-        color: 'font.dark',
+        color: isSelected ? 'white' : 'font.dark',
         borderColor: 'font.dark',
-        backgroundColor: 'transparent',
+        backgroundColor: isSelected ? 'black' : 'transparent',
       }}
+      backgroundColor={isSelected ? 'black' : undefined}
       borderColor="font.dark"
-      color="font.dark"
+      color={isSelected ? 'white' : 'font.dark'}
       fontSize="sm"
       h="24px"
       mb="-2"
