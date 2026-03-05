@@ -337,7 +337,7 @@ export function SwapForm({
                     accordionButtonComponent={
                       <SwapRate customTokenUsdPrice={customTokenUsdPrice} />
                     }
-                    accordionPanelComponent={<SwapDetails />}
+                    accordionPanelComponent={<SwapDetails hideOrderRoute />}
                     action="swap"
                     cowLink={cowLink}
                     isDisabled={!simulationQuery.data}
