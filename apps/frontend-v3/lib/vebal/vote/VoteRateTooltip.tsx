@@ -90,7 +90,7 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
       ? { variant: 'outline', bg: 'font.secondary' }
       : voteDiff > 0
         ? { bg: 'font.highlight', variant: 'solid', color: 'white' }
-        : { colorScheme: 'red', variant: 'solid' }
+        : { colorPalette: 'red', variant: 'solid' }
 
   const votesColor =
     votesState === 'normal' ? undefined : votesState === 'close' ? 'font.warning' : 'red.400'

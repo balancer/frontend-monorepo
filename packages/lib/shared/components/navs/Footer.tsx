@@ -180,21 +180,19 @@ export function Footer({ logoType, title, subTitle }: FooterProps) {
             title={title}
           />
           <Separator />
-          <Stack
-            align="start"
-            alignItems={{ base: 'none', lg: 'center' }}
-            animate="show"
-            as={motion.div}
-            direction={{ base: 'column', lg: 'row' }}
-            gap="md"
-            initial="hidden"
-            justify="space-between"
-            variants={staggeredFadeIn}
-            w="full"
-          >
-            <SocialLinks socialLinks={socialLinks} />
-            <LegalLinks legalLinks={legalLinks} />
-          </Stack>
+          <motion.div animate="show" initial="hidden" variants={staggeredFadeIn}>
+            <Stack
+              align="start"
+              alignItems={{ base: 'none', lg: 'center' }}
+              direction={{ base: 'column', lg: 'row' }}
+              gap="md"
+              justify="space-between"
+              w="full"
+            >
+              <SocialLinks socialLinks={socialLinks} />
+              <LegalLinks legalLinks={legalLinks} />
+            </Stack>
+          </motion.div>
         </VStack>
       </DefaultPageContainer>
     </Box>
