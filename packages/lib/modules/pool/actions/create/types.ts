@@ -41,6 +41,7 @@ export type PoolCreationToken = {
   paysYieldFees: boolean
   weight: string
   amount: string
+  isBoostingUnderlying: boolean
   data?: ApiOrCustomToken
   usdPrice?: string
 }

@@ -47,7 +47,7 @@ import { useFormState, useWatch } from 'react-hook-form'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
-import { useBoostWhitelist } from '../../useBoostWhitelist'
+import { useBoostedTokenOptions } from '../../useBoostedTokenOptions'
 import { getChainShortName } from '@repo/lib/config/app.config'
 
 export function ChoosePoolTokens() {
@@ -94,8 +94,10 @@ export function ChoosePoolTokens() {
       : undefined
   }
 
-  function handleTokenSelect(tokenMetadata: ApiOrCustomToken) {
-    if (!tokenMetadata || selectedTokenIndex === null) return
+  function handleTokenSelect(tokenMetadata: ApiOrCustomToken, selectedBoostIndex?: number) {
+    const tokenIndex = selectedTokenIndex ?? selectedBoostIndex ?? null
+
+    if (!tokenMetadata || tokenIndex === null) return
 
     let rateProvider: Address = zeroAddress
 
@@ -103,12 +105,15 @@ export function ChoosePoolTokens() {
       rateProvider = getVerifiedRateProviderAddress(tokenMetadata) ?? zeroAddress
     }
 
-    updatePoolToken(selectedTokenIndex, {
+    const isBoostingUnderlying = selectedBoostIndex !== undefined
+
+    updatePoolToken(tokenIndex, {
       address: tokenMetadata.address as Address,
       rateProvider,
       data: tokenMetadata,
       paysYieldFees: rateProvider !== zeroAddress,
       usdPrice: '',
+      isBoostingUnderlying,
     })
 
     setSelectedTokenIndex(null)
@@ -135,12 +140,8 @@ export function ChoosePoolTokens() {
         <VStack align="start" spacing="0" w="full">
           <AnimatePresence initial={false}>
             {poolTokens.map((token, index) => {
-              const tokenData = listedTokens.find(
-                t => t.address.toLowerCase() === token.address?.toLowerCase()
-              ) as ApiToken
-
-              const verifiedRateProviderAddress = tokenData
-                ? getVerifiedRateProviderAddress(tokenData)
+              const verifiedRateProviderAddress = token.data
+                ? getVerifiedRateProviderAddress(token.data as ApiToken)
                 : undefined
 
               return (
@@ -154,6 +155,7 @@ export function ChoosePoolTokens() {
                 >
                   <Box pb="xl">
                     <ConfigureToken
+                      handleTokenSelect={handleTokenSelect}
                       index={index}
                       network={network}
                       onToggleTokenClicked={() => {
@@ -163,6 +165,7 @@ export function ChoosePoolTokens() {
                       poolTokens={poolTokens}
                       poolType={poolType}
                       rateProviderAddress={verifiedRateProviderAddress}
+                      setSelectedTokenIndex={setSelectedTokenIndex}
                       token={token}
                       weightedPoolStructure={weightedPoolStructure}
                     />
@@ -216,23 +219,31 @@ interface ConfigureTokenProps {
   poolTokens: PoolCreationToken[]
   network: GqlChain
   poolType: SupportedPoolTypes
+  handleTokenSelect: (tokenMetadata: ApiOrCustomToken, selectedBoostIndex?: number) => void
+  setSelectedTokenIndex: (index: number) => void
 }
 
 function ConfigureToken({
   token,
   index,
+  handleTokenSelect,
   rateProviderAddress,
   onToggleTokenClicked,
   weightedPoolStructure,
   poolTokens,
   network,
   poolType,
+  setSelectedTokenIndex,
 }: ConfigureTokenProps) {
-  const boostTokenOptions = useBoostWhitelist(token.address)
+  const underlyingToken = token.isBoostingUnderlying
+    ? ((token.data as ApiToken | undefined)?.underlyingTokenAddress ?? undefined)
+    : token.address
+  const boostedTokenOptions = useBoostedTokenOptions(underlyingToken)
+  console.log('boostedTokenOptions', boostedTokenOptions)
   const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
   const formState = useFormState({ control: poolCreationForm.control })
 
-  const { priceFor } = useTokens()
+  const { priceFor, getToken } = useTokens()
 
   const apiPriceForToken = priceFor(token?.address || '', network)
   const { cgPriceForToken } = useCoingeckoTokenPrice({ token: token?.address, network })
@@ -254,8 +265,6 @@ function ConfigureToken({
 
   const showWeightInputs = isWeightedPool(poolType) || isCowPool(poolType)
   const showRateProvider = !isCowPool(poolType)
-
-  console.log('boostTokenOptions', boostTokenOptions)
 
   return (
     <VStack align="start" key={index} spacing="sm" w="full">
@@ -301,18 +310,31 @@ function ConfigureToken({
 
       {isWeightedPool(poolType) && <InvalidWeightInputAlert message={tokenWeightErrorMsg} />}
 
-      {boostTokenOptions && (
+      {boostedTokenOptions && (
         <BalAlert
           content={
             <VStack align="start" mb="sm" spacing="md">
-              <Text color="black">{`It’s recommended to use a Boosted version of ${token.data?.symbol} on the ${getChainShortName(network)} network. Balancer v3 is optimized for Boosted tokens. LPs will get additional yield, while still being able to interact with this pool using ${token.data?.symbol}.`}</Text>
-              {boostTokenOptions.map((option, index) => (
-                <BalAlertButton key={index}>Use {option.protocol} token</BalAlertButton>
+              <Text color="black">
+                {!token.isBoostingUnderlying
+                  ? `It’s recommended to use a Boosted version of ${token.data?.symbol} on the ${getChainShortName(network)} network. Balancer v3 is optimized for Boosted tokens. LPs will get additional yield, while still being able to interact with this pool using ${token.data?.symbol}.`
+                  : `You will wrap your ${getToken(underlyingToken || '', network)?.symbol} into ${token.data?.symbol} during the pool creation process.`}
+              </Text>
+              {boostedTokenOptions.map(option => (
+                <BalAlertButton
+                  isSelected={token.address === option.token.address}
+                  key={option.token.address}
+                  onClick={() => {
+                    setSelectedTokenIndex(index)
+                    handleTokenSelect(option.token, index)
+                  }}
+                >
+                  Use {option.protocol} token
+                </BalAlertButton>
               ))}
             </VStack>
           }
-          status="warning"
-          title="Use a Boosted token for better LP returns"
+          status={token.isBoostingUnderlying ? 'success' : 'warning'}
+          title={`${token.isBoostingUnderlying ? 'Using' : 'Use'} a Boosted token for better LP returns`}
         />
       )}
 
