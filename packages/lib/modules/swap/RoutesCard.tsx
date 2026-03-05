@@ -1,6 +1,7 @@
 import { Path, TokenApi } from '@balancer/sdk'
 import {
   Box,
+  Divider,
   HStack,
   Popover,
   PopoverContent,
@@ -29,9 +30,16 @@ type Props = {
   chain: GqlChain
   totalInputAmount: number
   totalOutputAmount: number
+  protocolVersion: number
 }
 
-export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }: Props) {
+export function RoutesCard({
+  paths,
+  chain,
+  totalInputAmount,
+  totalOutputAmount,
+  protocolVersion,
+}: Props) {
   const { getToken, priceFor } = useTokens()
   const { toCurrency } = useCurrency()
 
@@ -51,7 +59,7 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
   const colors = fixTokenColors(chain, paths)
 
   return (
-    <Box pb="1" pt="4" w="full">
+    <Box pt="4" w="full">
       <Popover placement="top" trigger="hover">
         <PopoverTrigger>
           <HStack
@@ -81,7 +89,8 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
               position="relative"
               transition="color 0.2s"
             >
-              {`Swap route: ${paths?.length > 1 ? 'Split paths, ' : ''} ${maxHops} hops`}
+              Swap route: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
+              {maxHops} hops (Bv{protocolVersion})
             </Text>
             <Box as="span" className="arrow-icon" display="flex" transition="transform 0.2s">
               <ArrowRight size="12" />
@@ -97,22 +106,31 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
           rounded="lg"
           w={{ base: '350px', md: 'max-content' }}
         >
-          <VStack p="4" shadow="2xl">
+          <VStack p="4" shadow="2xl" spacing="3">
+            <VStack align="start" w="full">
+              <Text color="font.primary" fontSize="md" fontWeight="bold" pb="1">
+                Proposed: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
+                {maxHops} hops via Balancer v{protocolVersion}
+              </Text>
+            </VStack>
+
+            <Divider mb="2" mt="0" mx="-4" w="calc(100% + 2rem)" />
+
             <HStack justify="space-between" w="full">
               <HStack>
-                <Text fontSize="sm" fontWeight="bold">
+                <Text fontSize="sm" fontWeight="bold" letterSpacing="normal">
                   {`${fNum('token', totalInputAmount)} ${inputToken.symbol}`}
                 </Text>
                 <Text>
                   <ArrowRight size="16" />
                 </Text>
               </HStack>
-              <Text fontSize="sm" fontWeight="bold">
+              <Text fontSize="sm" fontWeight="bold" letterSpacing="normal">
                 {`${fNum('token', totalOutputAmount)} ${outputToken.symbol}`}
               </Text>
             </HStack>
 
-            <HStack h="200" overflowX="auto" pb="2" w="full">
+            <HStack gap="1" h="200" overflowX="auto" w="full">
               <TokenItem
                 amountShare={1}
                 chain={chain}
@@ -122,7 +140,7 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
                 tokenAmount={totalInputAmount}
               />
 
-              <VStack flex="1" h="full">
+              <VStack flex="1" gap="1" h="full">
                 {paths.map((path, i) => (
                   <PathRoute
                     chain={chain}
@@ -179,7 +197,7 @@ function PathRoute({ chain, path, totalAmount, colors }: PathRouteProps) {
   const { getToken } = useTokens()
 
   return (
-    <HStack height={`${amountShare * 100}%`} w="full">
+    <HStack gap="1" height={`${amountShare * 100}%`} w="full">
       {path.pools.map((pool, i) => {
         const isBuffer = !path.isBuffer || path.isBuffer[i] === true
 
@@ -245,11 +263,11 @@ function TokenItem({ chain, token, position, amountShare, colors, tokenAmount }:
       height="100%"
       justifyContent="center"
       px="1"
-      w="48px"
+      w="44px"
       {...borderProps}
     >
       <Box borderRadius="full" boxShadow="xl">
-        <TokenIcon address={token.address} alt={token.symbol} chain={token.chain} size={36} />
+        <TokenIcon address={token.address} alt={token.symbol} chain={token.chain} size={32} />
       </Box>
     </Box>
   )
@@ -343,8 +361,8 @@ function PoolItem({
             {fNum('sharePercent', amountShare)}
           </Text>
           <Link className="group" href={getPoolPath(data.pool)}>
-            <HStack _hover={{ textDecoration: 'underline' }} cursor="pointer">
-              <Text fontSize="sm" fontWeight="bold">
+            <HStack _hover={{ textDecoration: 'underline' }} cursor="pointer" gap="1">
+              <Text color="font.secondary" fontSize="sm">
                 {poolName}
               </Text>
               <ArrowRight color="grey" size="14" />

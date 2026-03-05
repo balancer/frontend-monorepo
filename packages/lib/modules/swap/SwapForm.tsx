@@ -47,6 +47,7 @@ import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 import { useContractWallet } from '../web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '../web3/safe.hooks'
+import { SdkSimulateSwapResponse } from './swap.types'
 import { buildCowSwapUrl } from '../cow/cow.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
@@ -381,6 +382,9 @@ export function SwapForm({
                   simulationQuery.data && 'paths' in simulationQuery.data
                     ? (simulationQuery.data['paths'] as Path[])
                     : []
+                }
+                protocolVersion={
+                  (simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion || 2
                 }
                 totalInputAmount={Number(tokenIn.amount)}
                 totalOutputAmount={Number(tokenOut.amount)}

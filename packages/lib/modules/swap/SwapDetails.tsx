@@ -14,55 +14,10 @@ import { useSwap } from './SwapProvider'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { SdkSimulateSwapResponse } from './swap.types'
 import { useTokens } from '../tokens/TokensProvider'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
-import pluralize from 'pluralize'
-import { BaseDefaultSwapHandler } from './handlers/BaseDefaultSwap.handler'
 import { getFullPriceImpactLabel, getMaxSlippageLabel } from '../price-impact/price-impact.utils'
-
-export function OrderRoute() {
-  const { simulationQuery } = useSwap()
-
-  const queryData = simulationQuery.data as SdkSimulateSwapResponse
-  const orderRouteVersion = queryData ? queryData.protocolVersion : 2
-  const hopCount = queryData ? queryData.hopCount : 0
-
-  function getRouteHopsLabel() {
-    if (hopCount === 0) return 'Unknown'
-    return `Bv${orderRouteVersion}: ${hopCount} ${pluralize('hop', hopCount)}`
-  }
-
-  return (
-    <HStack justify="space-between" w="full">
-      <Text color="grayText" fontSize="sm">
-        Order route
-      </Text>
-      <HStack>
-        <Text color="grayText" fontSize="sm">
-          {getRouteHopsLabel()}
-        </Text>
-        <Popover trigger="hover">
-          <PopoverTrigger>
-            <Box
-              _hover={{ opacity: 1 }}
-              opacity="0.5"
-              transition="opacity 0.2s var(--ease-out-cubic)"
-            >
-              <InfoIcon />
-            </Box>
-          </PopoverTrigger>
-          <PopoverContent maxW="300px" p="sm" w="auto">
-            <Text fontSize="sm" variant="secondary">
-              Balancer Vault version and number of swap hops
-            </Text>
-          </PopoverContent>
-        </Popover>
-      </HStack>
-    </HStack>
-  )
-}
 
 export function SwapDetails() {
   const { toCurrency } = useCurrency()
@@ -72,7 +27,6 @@ export function SwapDetails() {
 
   const { priceImpactLevel, priceImpactColor, PriceImpactIcon, priceImpact } = usePriceImpact()
 
-  const isDefaultSwap = handler instanceof BaseDefaultSwapHandler
   const isNativeWrapOrUnwrap = handler instanceof NativeWrapHandler
 
   const _slippage = isNativeWrapOrUnwrap ? 0 : slippage
@@ -211,8 +165,6 @@ export function SwapDetails() {
           </Popover>
         </HStack>
       </HStack>
-
-      {isDefaultSwap ? <OrderRoute /> : null}
     </VStack>
   )
 }
