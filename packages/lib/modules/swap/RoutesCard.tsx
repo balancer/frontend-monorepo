@@ -1,10 +1,5 @@
 import { Path, TokenApi } from '@balancer/sdk'
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   HStack,
   Popover,
@@ -56,88 +51,115 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
   const colors = fixTokenColors(chain, paths)
 
   return (
-    <Box w="full">
-      <Accordion allowToggle variant="button" w="full">
-        <AccordionItem
-          bg="background.level3"
-          border="1px solid"
-          borderColor="transparent"
-          borderRadius="md"
-          shadow="md"
-          w="full"
-        >
-          <AccordionButton pl="ms" pr="sm">
-            <Box as="span" flex="1" textAlign="left">
-              {`Proposed route: ${paths?.length > 1 ? 'Split route, ' : ''} ${maxHops} hops`}
+    <Box pb="1" pt="4" w="full">
+      <Popover placement="top" trigger="hover">
+        <PopoverTrigger>
+          <HStack
+            _expanded={{ color: 'font.link', '& .arrow-icon': { transform: 'rotate(-45deg)' } }}
+            _hover={{ color: 'font.link', '& .arrow-icon': { transform: 'rotate(-45deg)' } }}
+            color="font.secondary"
+            cursor="pointer"
+            data-group
+            gap="1"
+          >
+            <Text
+              _after={{
+                borderBottom: '1px dotted',
+                borderColor: 'currentColor',
+                bottom: '-2px',
+                content: '""',
+                left: 0,
+                opacity: 0.5,
+                position: 'absolute',
+                width: '100%',
+              }}
+              _groupHover={{
+                color: 'font.link',
+              }}
+              color="font.secondary"
+              fontSize="sm"
+              position="relative"
+              transition="color 0.2s"
+            >
+              {`Swap route: ${paths?.length > 1 ? 'Split paths, ' : ''} ${maxHops} hops`}
+            </Text>
+            <Box as="span" className="arrow-icon" display="flex" transition="transform 0.2s">
+              <ArrowRight size="12" />
             </Box>
-            <AccordionIcon />
-          </AccordionButton>
-
-          <AccordionPanel w="full">
-            <VStack>
-              <HStack justify="space-between" w="full">
-                <HStack>
-                  <Text fontSize="sm" fontWeight="bold">
-                    {`${fNum('token', totalInputAmount)} ${inputToken.symbol}`}
-                  </Text>
-                  <Text>
-                    <ArrowRight size="16" />
-                  </Text>
-                </HStack>
+          </HStack>
+        </PopoverTrigger>
+        <PopoverContent
+          bg="background.level4"
+          maxW="100vw"
+          minW={{ base: '350px', md: '460px' }}
+          overflow="hidden"
+          p="0"
+          rounded="lg"
+          w={{ base: '350px', md: 'max-content' }}
+        >
+          <VStack p="4" shadow="2xl">
+            <HStack justify="space-between" w="full">
+              <HStack>
                 <Text fontSize="sm" fontWeight="bold">
-                  {`${fNum('token', totalOutputAmount)} ${outputToken.symbol}`}
+                  {`${fNum('token', totalInputAmount)} ${inputToken.symbol}`}
+                </Text>
+                <Text>
+                  <ArrowRight size="16" />
                 </Text>
               </HStack>
+              <Text fontSize="sm" fontWeight="bold">
+                {`${fNum('token', totalOutputAmount)} ${outputToken.symbol}`}
+              </Text>
+            </HStack>
 
-              <HStack h="200" overflowX="auto" pb="2" w="full">
-                <TokenItem
-                  amountShare={1}
-                  chain={chain}
-                  colors={colors}
-                  position="start"
-                  token={inputToken}
-                  tokenAmount={totalInputAmount}
-                />
+            <HStack h="200" overflowX="auto" pb="2" w="full">
+              <TokenItem
+                amountShare={1}
+                chain={chain}
+                colors={colors}
+                position="start"
+                token={inputToken}
+                tokenAmount={totalInputAmount}
+              />
 
-                <VStack flex="1" h="full">
-                  {paths.map((path, i) => (
-                    <PathRoute
-                      chain={chain}
-                      colors={colors}
-                      key={`path-${i}`}
-                      path={path}
-                      totalAmount={totalInputAmount}
-                    />
-                  ))}
-                </VStack>
+              <VStack flex="1" h="full">
+                {paths.map((path, i) => (
+                  <PathRoute
+                    chain={chain}
+                    colors={colors}
+                    key={`path-${i}`}
+                    path={path}
+                    totalAmount={totalInputAmount}
+                  />
+                ))}
+              </VStack>
 
-                <TokenItem
-                  amountShare={outputPercentage}
-                  chain={chain}
-                  colors={colors}
-                  position="end"
-                  token={outputToken}
-                  tokenAmount={totalOutputAmount}
-                />
-              </HStack>
+              <TokenItem
+                amountShare={outputPercentage}
+                chain={chain}
+                colors={colors}
+                position="end"
+                token={outputToken}
+                tokenAmount={totalOutputAmount}
+              />
+            </HStack>
 
-              <HStack justify="space-between" w="full">
-                <HStack>
-                  <Text color="font.secondary" fontSize="sm">
-                    {toCurrency(inputValue)}
-                  </Text>
-                  <Text color="font.secondary">
-                    <ArrowRight size="16" />
-                  </Text>
-                </HStack>
+            <HStack justify="space-between" w="full">
+              <HStack>
                 <Text color="font.secondary" fontSize="sm">
-                  {`${toCurrency(outputValue)} (${fNum('sharePercent', -(1 - outputPercentage), { hideSmallPercentage: false })})`}
+                  {toCurrency(inputValue)}
+                </Text>
+                <Text color="font.secondary">
+                  <ArrowRight size="16" />
                 </Text>
               </HStack>
-            </VStack>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+              <Text color="font.secondary" fontSize="sm">
+                {`${toCurrency(outputValue)} (${fNum('sharePercent', -(1 - outputPercentage), { hideSmallPercentage: false })})`}
+              </Text>
+            </HStack>
+          </VStack>
+        </PopoverContent>
+      </Popover>
     </Box>
   )
 }

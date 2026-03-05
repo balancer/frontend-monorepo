@@ -342,19 +342,6 @@ export function SwapForm({
                     isDisabled={!simulationQuery.data}
                     setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                   />
-
-                  {!isPoolSwap && (
-                    <RoutesCard
-                      chain={selectedChain}
-                      paths={
-                        simulationQuery.data && 'paths' in simulationQuery.data
-                          ? (simulationQuery.data['paths'] as Path[])
-                          : []
-                      }
-                      totalInputAmount={Number(tokenIn.amount)}
-                      totalOutputAmount={Number(tokenOut.amount)}
-                    />
-                  )}
                 </>
               )}
               {simulationQuery.isError ? (
@@ -362,7 +349,7 @@ export function SwapForm({
               ) : null}
             </VStack>
           </CardBody>
-          <CardFooter>
+          <CardFooter as={VStack}>
             {isConnected ? (
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
@@ -385,6 +372,18 @@ export function SwapForm({
                 size="lg"
                 variant="primary"
                 w="full"
+              />
+            )}
+            {!simulationQuery.isError && !isPoolSwap && (
+              <RoutesCard
+                chain={selectedChain}
+                paths={
+                  simulationQuery.data && 'paths' in simulationQuery.data
+                    ? (simulationQuery.data['paths'] as Path[])
+                    : []
+                }
+                totalInputAmount={Number(tokenIn.amount)}
+                totalOutputAmount={Number(tokenOut.amount)}
               />
             )}
           </CardFooter>
