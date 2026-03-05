@@ -24,6 +24,7 @@ import { useInitializePoolInput } from './useInitializePoolInput'
 import { RestartPoolCreationModal } from './RestartPoolCreationModal'
 import { useWatch } from 'react-hook-form'
 import { usePoolCreationTransactions } from './usePoolCreationTransactions'
+import { useBoostUnderlyingSteps } from './useBoostUnderlyingSteps'
 
 type PoolCreationModalProps = {
   isOpen: boolean
@@ -40,17 +41,22 @@ export function PoolCreationModal({
 }: PoolCreationModalProps & Omit<ModalProps, 'children'>) {
   const { poolCreationForm, resetPoolCreationForm, poolAddress, setPoolAddress } =
     usePoolCreationForm()
-  const [network, poolType] = useWatch({
+  const [network, poolType, poolTokens] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolType'],
+    name: ['network', 'poolType', 'poolTokens'],
   })
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
   const protocolVersion = createPoolInput.protocolVersion
+  const boostUnderlying = useBoostUnderlyingSteps({
+    poolTokens,
+    chain: network,
+  })
   const initPoolInput = useInitializePoolInput(chainId)
 
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
+    boostUnderlying,
     poolAddress,
     setPoolAddress,
     createPoolInput,

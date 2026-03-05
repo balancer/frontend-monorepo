@@ -10,15 +10,21 @@ export type TokenAllowances = Record<Address, bigint>
 
 export type UseTokenAllowancesResponse = ReturnType<typeof useTokenAllowances>
 
+export type SpenderAddress = Address | ((tokenAddress: Address) => Address)
+
 type Props = {
   chainId: SupportedChainId
   userAddress: Address
-  spenderAddress: Address
+  spenderAddress: SpenderAddress
   tokenAddresses: Address[]
   enabled?: boolean
 }
 
 type AllowanceContracts = ReadContractParameters<Erc20Abi, 'allowance'> & { chainId: number }
+
+function resolveSpender(spenderAddress: SpenderAddress, tokenAddress: Address): Address {
+  return typeof spenderAddress === 'function' ? spenderAddress(tokenAddress) : spenderAddress
+}
 
 export function useTokenAllowances({
   chainId,
@@ -34,7 +40,7 @@ export function useTokenAllowances({
         address: tokenAddress,
         abi: erc20Abi,
         functionName: 'allowance',
-        args: [userAddress, spenderAddress],
+        args: [userAddress, resolveSpender(spenderAddress, tokenAddress)],
       }) satisfies AllowanceContracts
   )
 
