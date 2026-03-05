@@ -20,7 +20,7 @@ test.describe('Stake $S page at /stake', () => {
 
   test('Can unstake stS', async ({ page }) => {
     await expect(page.getByRole('button', { name: 'Stake' })).toBeVisible()
-    await page.locator('#button-group-1').click()
+    await page.locator('[data-id="lst-tab-unstake"]').click()
     await expect(page.getByRole('button', { name: 'stS', exact: true })).toBeVisible()
     await page.getByPlaceholder('0.00').nth(0).fill('10')
     await clickButton(page, 'Next')
