@@ -243,7 +243,9 @@ export function usePoolListLogic({
       }
     })
 
-    return Array.from(uniquePools.values())
+    return Array.from(uniquePools.values()).sort((a, b) => {
+      return bn(b.dynamicData.totalLiquidity).comparedTo(bn(a.dynamicData.totalLiquidity)) ?? 0
+    })
   }, [
     joinablePools,
     poolsData,
