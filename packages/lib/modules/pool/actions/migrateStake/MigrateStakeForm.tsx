@@ -17,7 +17,7 @@ export function MigrateStakeForm() {
   return (
     <Box h="full" maxW="lg" mx="auto" w="full">
       <Card.Root>
-        <Card.Header isTruncated>
+        <Card.Header truncate>
           Migrate to new staking gauge{' '}
           <Tooltip content={migrateStakeTooltipLabel}>
             <Icon asChild color="grayText" fontSize="sm">

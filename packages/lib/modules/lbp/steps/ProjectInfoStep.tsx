@@ -454,10 +454,10 @@ function Disclaimer() {
                 {'I accept the'}
                 <Button
                   asChild
+                  color="font.link"
                   fontSize="lg"
                   fontWeight="medium"
                   px="0.3em"
-                  textColor="font.link"
                   variant="plain"
                 >
                   <NextLink href={'/risks'} target="_blank">
@@ -467,10 +467,10 @@ function Disclaimer() {
                 {'and'}
                 <Button
                   asChild
+                  color="font.link"
                   fontSize="lg"
                   fontWeight="medium"
                   px="0.3em"
-                  textColor="font.link"
                   variant="plain"
                 >
                   <NextLink href={'/terms-of-use'} target="_blank">

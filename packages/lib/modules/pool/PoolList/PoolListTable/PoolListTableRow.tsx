@@ -121,9 +121,9 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                 {hasPoints && (
                   <Tooltip
                     backgroundColor="background.level4"
+                    color="font.secondary"
                     content={<PointsInfo tags={poolTags} />}
                     showArrow
-                    textColor="font.secondary"
                   >
                     <Image
                       alt="points"

@@ -150,10 +150,10 @@ function WeightSlider({
           >{`${launchTokenSymbol}: ${customWeight}%`}</Text>
           <Box textAlign="right" w="100px">
             <Text
+              color="font.secondary"
               fontSize="sm"
               fontWeight="bold"
               pb="2"
-              textColor="font.secondary"
             >{`${collateralTokenSymbol}: ${100 - customWeight}%`}</Text>
           </Box>
         </HStack>

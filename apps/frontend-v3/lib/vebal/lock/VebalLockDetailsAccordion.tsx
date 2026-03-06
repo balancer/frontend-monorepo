@@ -28,7 +28,7 @@ export function VebalLockDetailsAccordion({
                   </Text>
                 </HStack>
               </Box>
-              <Accordion.ItemIndicator textColor="font.secondary" />
+              <Accordion.ItemIndicator color="font.secondary" />
             </Accordion.ItemTrigger>
           </h2>
           <Accordion.ItemContent py="md">

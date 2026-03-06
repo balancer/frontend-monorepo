@@ -169,7 +169,7 @@ function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercent
               <Box bg={color} borderRadius="full" h="8px" w="8px" />
             )}
             {showIcon && <BullseyeIcon />}
-            <Text color={textColor}>
+            <Text color={textColor || color}>
               {token.symbol ? `${token.symbol}: ` : ''}
               {token.weight ? token.weight.toFixed(2) : '0.00'}%
             </Text>

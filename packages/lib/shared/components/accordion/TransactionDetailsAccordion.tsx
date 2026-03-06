@@ -21,11 +21,11 @@ export function TransactionDetailsAccordion() {
           <Box as="span" color="font.primary" flex="1" textAlign="left">
             Transaction Details
           </Box>
-          <Accordion.ItemIndicator textColor="font.highlight" />
+          <Accordion.ItemIndicator color="font.highlight" />
         </Accordion.ItemTrigger>
         <Accordion.ItemContent pb="md">
           <Accordion.ItemBody>
-            <VStack textColor="grayText" w="full">
+            <VStack color="grayText" w="full">
               <HStack justifyContent="space-between" w="full">
                 <div>Total added</div>
                 <div> {toCurrency(totalUSDValue, { abbreviated: false })}</div>

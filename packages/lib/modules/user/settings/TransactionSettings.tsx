@@ -18,7 +18,7 @@ export function TransactionSettings(props: ButtonProps) {
     >
       <Popover.Trigger asChild>
         <Button variant="tertiary" {...props}>
-          <HStack gap="6px" textColor="grayText">
+          <HStack color="grayText" gap="6px">
             <Text color="grayText" fontSize="xs">
               {fNum('slippage', slippage)}
             </Text>

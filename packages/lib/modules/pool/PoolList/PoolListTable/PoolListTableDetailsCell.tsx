@@ -36,22 +36,14 @@ function getPoolDisplayTypeLabel(pool: PoolCore, erc4626Metadata: Erc4626Metadat
           {isGyro(pool.type) && (
             <TooltipWithTouch label="Built by Gyroscope">
               <Box h="18px" rounded="full" shadow="md" w="18px">
-                <ProtocolIcon
-                  protocol={Protocol.Gyro}
-                  size={18}
-                  sx={{ rounded: 'full', shadow: 'md' }}
-                />
+                <ProtocolIcon protocol={Protocol.Gyro} size={18} />
               </Box>
             </TooltipWithTouch>
           )}
           {isQuantAmmPool(pool.type) && (
             <TooltipWithTouch label="Built by QuantAMM">
               <Box rounded="full" shadow="md">
-                <ProtocolIcon
-                  protocol={Protocol.QuantAmm}
-                  size={18}
-                  sx={{ rounded: 'full', shadow: 'md' }}
-                />
+                <ProtocolIcon protocol={Protocol.QuantAmm} size={18} />
               </Box>
             </TooltipWithTouch>
           )}

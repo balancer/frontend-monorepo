@@ -74,10 +74,10 @@ export function MultiSelect<Value = string>({
                 <Text
                   fontSize="sm"
                   fontWeight="medium"
-                  isTruncated
                   lineClamp={1}
                   overflow="hidden"
                   textOverflow="ellipsis"
+                  truncate
                   whiteSpace="nowrap"
                 >
                   {selectedOptions.map(option => option.label).join(', ')}

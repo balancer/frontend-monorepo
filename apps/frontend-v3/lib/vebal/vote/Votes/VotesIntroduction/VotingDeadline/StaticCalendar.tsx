@@ -143,7 +143,7 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
             <>
               {!isDayActive(day) && !isDaySelected(day) ? (
                 <Box position="relative">
-                  <Box {...sharedStyles} sx={getDayStyles(day)}>
+                  <Box {...sharedStyles} css={getDayStyles(day)}>
                     <span style={{ opacity: isDayDisabled(day) ? 0.4 : 1 }}>
                       {format(day, 'd')}
                     </span>

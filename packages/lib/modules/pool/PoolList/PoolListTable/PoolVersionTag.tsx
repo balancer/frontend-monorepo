@@ -78,11 +78,11 @@ export function PoolVersionTag({
     <TooltipWithTouch label={isCow ? 'CoW AMM' : isV3 ? 'Balancer v3' : 'Balancer v2'}>
       <BalBadge
         color="font.secondary"
+        css={isV3 ? v3BadgeStyles : undefined}
         cursor="default"
         fontSize="xs"
         h={size}
         p="0"
-        sx={isV3 ? v3BadgeStyles : undefined}
         textTransform="lowercase"
         w={size}
       >

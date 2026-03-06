@@ -24,7 +24,7 @@ export function ReliquaryAddLiquidityMaturityImpactWarning({
     color: 'black',
     fontSize: 'sm',
     fontWeight: 'medium',
-    sx: { textWrap: 'balance' },
+    css: { textWrap: 'balance' },
   }
 
   const addLiquidityMaturityImpact = addLiquidityMaturityImpactQuery.data

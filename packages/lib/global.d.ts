@@ -27,9 +27,9 @@ declare module 'react' {
  * 3. Removed v2 props/exports that still appear in the codebase
  */
 declare module '@chakra-ui/react' {
-  // Allow framer-motion props on ALL Chakra components via JsxStyleProps (used with asChild pattern)
-  // Box is typed as ChakraComponent<"div", {}> → HTMLChakraProps<"div"> → JsxHtmlProps<..., Assign<JsxStyleProps, {}>>
-  // BoxProps augmentation does NOT affect Box's type; JsxStyleProps IS in the chain
+  // Allow framer-motion props on Chakra components used with asChild + motion.div child pattern
+  // e.g. <Box asChild animate="show" variants={...}><motion.div /></Box>
+  // `style` also accepts MotionValue types (e.g. ParallaxImage)
   interface JsxStyleProps {
     animate?: any
     initial?: any
@@ -41,15 +41,9 @@ declare module '@chakra-ui/react' {
     whileInView?: any
     layoutId?: any
     layout?: any
-    textColor?: string
-    isTruncated?: boolean
-    noOfLines?: number
-    align?: string
-    sx?: any
     style?: any
-  }
-  interface StackProps {
-    textColor?: string
+    // `align` shorthand for alignItems used in legacy call sites
+    align?: string
   }
   // Keep BoxProps/StackProps for direction and style (used directly in some components)
   interface BoxProps {
@@ -63,7 +57,6 @@ declare module '@chakra-ui/react' {
     style?: any
   }
   interface ButtonProps {
-    textColor?: string
     width?: any
   }
   interface TextProps {
@@ -72,20 +65,19 @@ declare module '@chakra-ui/react' {
     as?: any
     htmlFor?: string
   }
-  interface HeadingProps {
-    sx?: any
-  }
   interface LinkProps {
     prefetch?: boolean
+  }
+  // Popover.Arrow accepts css for arrow size token (--arrow-size)
+  interface PopoverArrowProps {
+    css?: any
   }
   interface NativeSelectFieldProps {
     onValueChange?: any
     variant?: any
     [key: string]: any
   }
-  interface PopoverArrowProps {
-    css?: any
-  }
+
   interface InputProps {
     onValueChange?: any
     invalid?: boolean
@@ -103,19 +95,13 @@ declare module '@chakra-ui/react' {
     w?: string
     [key: string]: any
   }
-  interface CardRootProps {
-    sx?: any
-  }
-  interface BadgeProps {
-    sx?: any
-  }
+
   interface IconProps {
     size?: number | string
     [key: string]: any
   }
   interface AccordionItemIndicatorProps {
     color?: string
-    textColor?: string
     [key: string]: any
   }
   interface CardHeaderProps {
@@ -312,6 +298,11 @@ declare module '@chakra-ui/react' {
     [key: string]: any
   }
   interface NumberInputInputProps {
+    children?: React.ReactNode
+    [key: string]: any
+  }
+  // CardRootProps needs children for React 19 compatibility
+  interface CardRootProps {
     children?: React.ReactNode
     [key: string]: any
   }

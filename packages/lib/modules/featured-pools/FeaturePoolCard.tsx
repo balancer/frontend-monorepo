@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPool } from '../pool/PoolProvider'
 import { Pool } from '../pool/pool.types'
@@ -81,8 +82,10 @@ export function FeaturePoolCard({
       cardProps={{
         position: 'relative',
         overflow: 'hidden',
-        onClick: event => poolClickHandler(event, pool as Pool, router),
-        onMouseEnter: event => poolMouseEnterHandler(event, pool as Pool, router),
+        onClick: (event: React.MouseEvent<HTMLElement>) =>
+          poolClickHandler(event, pool as Pool, router),
+        onMouseEnter: (event: React.MouseEvent<HTMLElement>) =>
+          poolMouseEnterHandler(event, pool as Pool, router),
         cursor: 'pointer',
         _hover: { bg: 'background.level0' },
         _dark: { _hover: { bg: 'gray.900' } },
@@ -176,8 +179,8 @@ export function FeaturePoolCard({
                   <PoolName
                     fontSize="md"
                     isCarousel={isCarousel}
+                    lineClamp={1}
                     MemoizedMainAprTooltip={MemoizedMainAprTooltip}
-                    noOfLines={1}
                     pool={pool}
                     showUnderlying={true}
                   />

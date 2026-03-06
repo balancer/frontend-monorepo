@@ -117,11 +117,7 @@ function GroupOptionButton({
           asChild
           bg="background.button.secondary"
           borderRadius="4px"
-          inset="0"
-          layoutId={`active-${groupId}`}
-          position="absolute"
-          shadow="md"
-          sx={
+          css={
             isCompact
               ? {
                   _dark: {
@@ -130,14 +126,15 @@ function GroupOptionButton({
                 }
               : undefined
           }
+          inset="0"
+          position="absolute"
+          shadow="md"
         >
-          <motion.div />
+          <motion.div layoutId={`active-${groupId}`} />
         </Box>
       )}
       <Box
-        fontSize={fontSize}
-        position="relative"
-        sx={
+        css={
           isCompact && isActive
             ? {
                 _dark: {
@@ -146,6 +143,8 @@ function GroupOptionButton({
               }
             : undefined
         }
+        fontSize={fontSize}
+        position="relative"
         zIndex="8"
       >
         {option.label}

@@ -57,9 +57,7 @@ export function PreviewPoolCreationCard({
     <Card.Root
       bg={bg}
       borderColor="transparent"
-      opacity={isBeforeStep(stepTitle) ? 0.5 : 1}
-      position="relative"
-      sx={
+      css={
         borderGradient || backgroundGradient || isBeforeStep(stepTitle)
           ? {
               border: 'none',
@@ -95,6 +93,8 @@ export function PreviewPoolCreationCard({
             }
           : undefined
       }
+      opacity={isBeforeStep(stepTitle) ? 0.5 : 1}
+      position="relative"
     >
       {children}
     </Card.Root>

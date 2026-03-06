@@ -68,14 +68,14 @@ export function HomeHero() {
                   </Text>
                 </Box>
                 <Heading
+                  css={{
+                    fontSize: 'clamp(100px, 18vw, 200px)',
+                  }}
                   fontWeight="normal"
                   left={{ base: '-5px', md: '-16px' }}
                   letterSpacing="-5px"
                   pb="lg"
                   position="relative"
-                  sx={{
-                    fontSize: 'clamp(100px, 18vw, 200px)',
-                  }}
                 >
                   Earn
                 </Heading>
@@ -120,14 +120,14 @@ export function HomeHero() {
                 </Box>
 
                 <Heading
+                  css={{
+                    fontSize: 'clamp(100px, 18vw, 200px)',
+                  }}
                   fontWeight="normal"
                   left={{ base: '-5px', md: '-16px' }}
                   letterSpacing="-5px"
                   pb="lg"
                   position="relative"
-                  sx={{
-                    fontSize: 'clamp(100px, 18vw, 200px)',
-                  }}
                 >
                   Build
                 </Heading>

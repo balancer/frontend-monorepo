@@ -88,7 +88,7 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
       <TransactionIcon status={transaction.status} />
       <VStack align="start" gap="none" w="full">
         <Tooltip content={label} fontSize="sm">
-          <Text isTruncated maxW="85%">
+          <Text maxW="85%" truncate>
             {transaction.init}
           </Text>
         </Tooltip>

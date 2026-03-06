@@ -44,8 +44,8 @@ export function DeadlineDayTooltip({
         <Button
           {...sharedStyles}
           _hover={{}}
+          css={getDayStyles(day)}
           minW={{ base: '32px', lg: '40px' }}
-          sx={getDayStyles(day)}
         >
           {children}
         </Button>
