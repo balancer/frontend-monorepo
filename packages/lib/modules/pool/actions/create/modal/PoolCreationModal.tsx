@@ -46,12 +46,14 @@ export function PoolCreationModal({
     name: ['network', 'poolType', 'poolTokens'],
   })
   const chainId = getChainId(network)
+  const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress, poolType })
 
   const createPoolInput = useCreatePoolInput(chainId)
   const protocolVersion = createPoolInput.protocolVersion
   const boostUnderlying = useBoostUnderlyingSteps({
     poolTokens,
-    chain: network,
+    network,
+    isPoolInitialized,
   })
   const initPoolInput = useInitializePoolInput(chainId)
 
@@ -62,8 +64,6 @@ export function PoolCreationModal({
     createPoolInput,
     initPoolInput,
   })
-
-  const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress, poolType })
 
   const handleReset = () => {
     transactionSteps.resetTransactionSteps()
