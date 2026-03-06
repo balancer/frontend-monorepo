@@ -337,6 +337,7 @@ export const TokenInput = forwardRef(
                 boxShadow="none"
                 fontSize="3xl"
                 fontWeight="medium"
+                inputMode="decimal"
                 isDisabled={!token}
                 min={0}
                 onChange={handleOnChange}
@@ -352,7 +353,6 @@ export const TokenInput = forwardRef(
                 shadow="none"
                 step="any"
                 title={value || ''}
-                type="number"
                 value={value}
                 {...inputProps}
               />

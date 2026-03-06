@@ -53,7 +53,13 @@ export function useTokenInput({
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.currentTarget.value
-    updateValue(newValue)
+
+    let cleanValue = newValue.replace(',', '.')
+    cleanValue = cleanValue.replace(/[^\d.]/g, '')
+    let separators = 0 // Remove all non decimal chars except the first decimal separator
+    cleanValue = cleanValue.replace('.', () => (separators++ === 0 ? '.' : ''))
+
+    updateValue(cleanValue)
   }
 
   return {
