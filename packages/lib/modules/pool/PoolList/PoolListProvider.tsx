@@ -65,12 +65,11 @@ export function usePoolListLogic({
 
   const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
-  const selectedChains = useMemo(() => {
-    return variables.where.chainIn || []
-  }, [variables.where.chainIn])
+  const selectedChains = variables.where.chainIn || []
+  const joinableChains = selectedChains.filter(chain => chain !== GqlChain.Sepolia)
 
   const walletBalanceQueries = useQueries({
-    queries: selectedChains.map(chain => {
+    queries: joinableChains.map(chain => {
       const networkConfig = getNetworkConfig(chain)
       const chainTokens = getTokensByChain(chain)
       const nativeAddress = getNativeAssetAddress(chain)
@@ -121,7 +120,7 @@ export function usePoolListLogic({
           isConnected &&
           isAddress(userAddress) &&
           !isLoadingTokens &&
-          selectedChains.length > 0,
+          joinableChains.length > 0,
         staleTime: 30_000,
       }
     }),
@@ -131,7 +130,7 @@ export function usePoolListLogic({
     const addressesByChain = new Map<GqlChain, string[]>()
     if (!joinablePools) return addressesByChain
 
-    selectedChains.forEach((chain, index) => {
+    joinableChains.forEach((chain, index) => {
       const query = walletBalanceQueries[index]
       if (!query?.data) return
 
@@ -169,13 +168,13 @@ export function usePoolListLogic({
     })
 
     return addressesByChain
-  }, [joinablePools, selectedChains, walletBalanceQueries, priceFor])
+  }, [joinablePools, joinableChains, walletBalanceQueries, priceFor])
 
   const joinablePoolsQuery = useReactQuery({
     queryKey: [
       'pool-list-joinable-pools',
-      selectedChains.join(','),
-      selectedChains
+      joinableChains.join(','),
+      joinableChains
         .map(chain => `${chain}:${(walletTokenAddressesByChain.get(chain) || []).join(',')}`)
         .join('|'),
       queryVariables.first,
@@ -190,7 +189,7 @@ export function usePoolListLogic({
       queryVariables.where.tagNotIn?.join(',') || '',
     ],
     queryFn: async () => {
-      const chainsWithTokens = selectedChains
+      const chainsWithTokens = joinableChains
         .map(chain => ({
           chain,
           tokensIn: (walletTokenAddressesByChain.get(chain) || []).map(address =>
@@ -226,7 +225,7 @@ export function usePoolListLogic({
       isAddress(userAddress) &&
       !isLoadingTokens &&
       !isLoadingTokenPrices &&
-      selectedChains.some(chain => (walletTokenAddressesByChain.get(chain) || []).length > 0),
+      joinableChains.some(chain => (walletTokenAddressesByChain.get(chain) || []).length > 0),
     staleTime: 30_000,
   })
 
