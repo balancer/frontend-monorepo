@@ -45,23 +45,16 @@ declare module '@chakra-ui/react' {
     // `align` shorthand for alignItems used in legacy call sites
     align?: string
   }
-  // Keep BoxProps/StackProps for direction and style (used directly in some components)
+  // BoxProps/StackProps: direction and transition still needed at call sites
   interface BoxProps {
     direction?: any
     transition?: any
-    style?: any
   }
   interface StackProps {
     direction?: any
     transition?: any
-    style?: any
-  }
-  interface ButtonProps {
-    width?: any
   }
   interface TextProps {
-    fontSize?: any
-    lineClamp?: number
     as?: any
     htmlFor?: string
   }
@@ -92,10 +85,8 @@ declare module '@chakra-ui/react' {
     [key: string]: any
   }
   interface StepsSeparatorProps {
-    w?: string
     [key: string]: any
   }
-
   interface IconProps {
     size?: number | string
     [key: string]: any
@@ -105,7 +96,6 @@ declare module '@chakra-ui/react' {
     [key: string]: any
   }
   interface CardHeaderProps {
-    isTruncated?: boolean
     justify?: string
     children?: React.ReactNode
     [key: string]: any
