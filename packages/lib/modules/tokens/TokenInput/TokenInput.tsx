@@ -343,6 +343,7 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
                 disabled={!token || disabled}
                 fontSize="3xl"
                 fontWeight="medium"
+                inputMode="decimal"
                 min={0}
                 onChange={handleOnChange as any}
                 onKeyDown={blockInvalidNumberInput}

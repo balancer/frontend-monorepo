@@ -153,7 +153,6 @@ function PathRoute({ chain, path, totalAmount, colors }: PathRouteProps) {
 
         const inputTokenInfo = getToken(path.tokens[i].address, chain)!
         const outputTokenInfo = getToken(path.tokens[i + 1].address, chain)!
-        const outputTokenIsWrapper = outputTokenInfo?.priceRateProviderData !== null
 
         const hops = path.isBuffer?.filter(buffer => !buffer).length || 0
 
@@ -171,7 +170,7 @@ function PathRoute({ chain, path, totalAmount, colors }: PathRouteProps) {
               />
             )}
 
-            {i < path.pools.length - 1 && !outputTokenIsWrapper && (
+            {i < path.pools.length - 1 && !isBuffer && (
               <TokenItem
                 amountShare={amountShare}
                 chain={chain}
@@ -345,9 +344,11 @@ function fixTokenColors(chain: GqlChain, paths: Path[]) {
 
 function sortTokens(tokens: PoolToken[], inputToken: ApiToken, outputToken: ApiToken) {
   const inputIndex = tokens.findIndex(token => token.address === inputToken.address)
+  if (inputIndex === -1) return tokens
   ;[tokens[0], tokens[inputIndex]] = [tokens[inputIndex], tokens[0]]
 
   const outputIndex = tokens.findIndex(token => token.address === outputToken.address)
+  if (outputIndex === -1) return tokens
   ;[tokens[tokens.length - 1], tokens[outputIndex]] = [
     tokens[outputIndex],
     tokens[tokens.length - 1],

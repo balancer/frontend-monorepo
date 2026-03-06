@@ -8,7 +8,7 @@ test('Swap 1 ETH to GHO)', async ({ page }) => {
 
   await impersonate(page, defaultAnvilAccount)
 
-  await page.getByRole('spinbutton', { name: 'TokenIn' }).fill('0.1')
+  await page.getByRole('textbox', { name: 'TokenIn' }).fill('0.1')
   await selectPopularToken(page, 'GHO')
   await clickButton(page, 'Next')
 
