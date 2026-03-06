@@ -63,15 +63,7 @@ declare module '@chakra-ui/react' {
     style?: any
   }
   interface ButtonProps {
-    isExternal?: boolean
     textColor?: string
-    as?: any
-    prefetch?: boolean
-    href?: string
-    rightIcon?: React.ReactNode
-    isLoading?: boolean
-    loadingText?: string
-    isDisabled?: boolean
     width?: any
   }
   interface TextProps {
@@ -84,20 +76,12 @@ declare module '@chakra-ui/react' {
     sx?: any
   }
   interface LinkProps {
-    isExternal?: boolean
-    as?: any
     prefetch?: boolean
-  }
-  interface IconButtonProps {
-    as?: any
   }
   interface NativeSelectFieldProps {
     onValueChange?: any
     variant?: any
     [key: string]: any
-  }
-  interface InputGroupProps {
-    size?: any
   }
   interface PopoverArrowProps {
     css?: any
@@ -119,17 +103,11 @@ declare module '@chakra-ui/react' {
     w?: string
     [key: string]: any
   }
-  interface TabsRootProps {
-    variant?: any
-  }
   interface CardRootProps {
     sx?: any
   }
   interface BadgeProps {
     sx?: any
-  }
-  interface IconButtonProps {
-    isRound?: boolean
   }
   interface IconProps {
     size?: number | string

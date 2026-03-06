@@ -60,7 +60,6 @@ export function SearchInput({
           {search ? <X size="20" /> : <Search size="20" />}
         </IconButton>
       }
-      size="md"
     >
       <Input
         {...(register(SEARCH) as any)}

@@ -67,30 +67,27 @@ export function SimilarPoolsModal() {
                 {similarPools?.slice(0, 3).map(pool => (
                   <Card.Root key={pool.address} position="relative" variant="modalSubSection">
                     <VStack gap="md">
-                      <Link
-                        as={NextLink}
-                        href={getPoolPath({
-                          chain: pool.chain,
-                          id: pool.address,
-                          type: pool.type,
-                          protocolVersion: pool.protocolVersion,
-                        })}
-                        position="absolute"
-                        rel="noopener noreferrer"
-                        right="sm"
-                        target="_blank"
-                        top="sm"
-                        zIndex={1}
-                      >
-                        <Box
-                          bg="background.level4"
-                          color="font.link"
-                          p="sm"
-                          rounded="full"
-                          shadow="md"
+                      <Link asChild position="absolute" right="sm" top="sm" zIndex={1}>
+                        <NextLink
+                          href={getPoolPath({
+                            chain: pool.chain,
+                            id: pool.address,
+                            type: pool.type,
+                            protocolVersion: pool.protocolVersion,
+                          })}
+                          rel="noopener noreferrer"
+                          target="_blank"
                         >
-                          <ArrowUpRight size={16} />
-                        </Box>
+                          <Box
+                            bg="background.level4"
+                            color="font.link"
+                            p="sm"
+                            rounded="full"
+                            shadow="md"
+                          >
+                            <ArrowUpRight size={16} />
+                          </Box>
+                        </NextLink>
                       </Link>
                       <HStack w="full">
                         <Text>{pool.symbol}</Text>

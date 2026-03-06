@@ -1,4 +1,4 @@
-import { Center, Heading, VStack, Text, Button, Flex, Box, HStack } from '@chakra-ui/react'
+import { Center, Heading, VStack, Text, Button, Flex, Box, HStack, Link } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import React from 'react'
 import NextLink from 'next/link'
@@ -37,12 +37,12 @@ export function LandingSectionContainer({
           <Flex justify="center" pt="2xl">
             <Button asChild minWidth="160px" variant="primary">
               {button.isExternal ? (
-                <a href={button.href} rel="noopener noreferrer" target="_blank">
+                <Link href={button.href} rel="noopener noreferrer" target="_blank">
                   <HStack>
                     <Box>{button.text}</Box>
                     <ArrowUpRight size={16} />
                   </HStack>
-                </a>
+                </Link>
               ) : (
                 <NextLink href={button.href}>{button.text}</NextLink>
               )}

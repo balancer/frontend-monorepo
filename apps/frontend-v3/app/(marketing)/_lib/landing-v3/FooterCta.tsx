@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Text, Button, Center, HStack, VStack, Link } from '@chakra-ui/react'
+import { Box, Text, Button, Center, HStack, Link, VStack } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
@@ -111,33 +111,35 @@ export function FooterCta() {
           <HStack gap="md" justifyContent="center" ref={ref}>
             <MotionButton
               animate={isInView ? { opacity: 1 } : {}}
-              as={Link}
-              href="https://docs.balancer.fi"
+              asChild
               initial={{ opacity: 0 }}
-              rel="noopener"
-              rightIcon={<ArrowUpRight size="14px" />}
               size={{ base: 'md', lg: 'lg' }}
-              target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
               variant="primary"
               w={{ base: '150px', lg: '180px' }}
             >
-              View v3 docs
+              <Link href="https://docs.balancer.fi" rel="noopener" target="_blank">
+                View v3 docs
+                <ArrowUpRight size="14px" />
+              </Link>
             </MotionButton>
             <MotionButton
               animate={isInView ? { opacity: 1 } : {}}
-              as={Link}
-              href="https://github.com/balancer/scaffold-balancer-v3"
+              asChild
               initial={{ opacity: 0 }}
-              rel="noopener"
-              rightIcon={<ArrowUpRight size="14px" />}
               size={{ base: 'md', lg: 'lg' }}
-              target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
               variant="secondary"
               w={{ base: '150px', lg: '180px' }}
             >
-              Prototype on v3
+              <Link
+                href="https://github.com/balancer/scaffold-balancer-v3"
+                rel="noopener"
+                target="_blank"
+              >
+                Prototype on v3
+                <ArrowUpRight size="14px" />
+              </Link>
             </MotionButton>
           </HStack>
         </VStack>

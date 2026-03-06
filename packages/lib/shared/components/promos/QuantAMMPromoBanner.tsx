@@ -1,5 +1,5 @@
 'use client'
-import { Button, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, Link, Text, Stack } from '@chakra-ui/react'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
@@ -25,8 +25,6 @@ export function QuantAMMPromoBanner() {
     cursor: 'pointer',
     flex: '1',
     h: { base: '32px', sm: '40px', lg: '48px' },
-    target: '_blank',
-    rel: 'noopener noreferrer',
     py: 'sm',
     rounded: 'full',
     size: 'md' as const,
@@ -126,25 +124,29 @@ export function QuantAMMPromoBanner() {
             <Flex alignItems="center" gap="ms" maxW="300px">
               <Button
                 {...commonButtonProps}
+                asChild
                 bg={isDarkMode ? 'transparent' : 'transparent'}
                 color={isDarkMode ? '#fff' : '#000'}
-                href={learnMoreUrl}
               >
-                Learn more{' '}
-                <Box pl="xxs">
-                  <ArrowUpRight size="14px" />
-                </Box>
+                <Link href={learnMoreUrl} rel="noopener noreferrer" target="_blank">
+                  Learn more{' '}
+                  <Box pl="xxs">
+                    <ArrowUpRight size="14px" />
+                  </Box>
+                </Link>
               </Button>
               <Button
                 {...commonButtonProps}
+                asChild
                 bg={isDarkMode ? 'white' : '#000'}
                 color={isDarkMode ? '#000' : '#fff'}
-                href={analyticsUrl}
               >
-                View analytics{' '}
-                <Box pl="xxs">
-                  <ArrowUpRight size="14px" />
-                </Box>
+                <Link href={analyticsUrl} rel="noopener noreferrer" target="_blank">
+                  View analytics{' '}
+                  <Box pl="xxs">
+                    <ArrowUpRight size="14px" />
+                  </Box>
+                </Link>
               </Button>
             </Flex>
           </Flex>

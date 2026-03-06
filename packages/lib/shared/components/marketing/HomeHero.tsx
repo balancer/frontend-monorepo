@@ -84,8 +84,10 @@ export function HomeHero() {
                   <Text pb="lg" variant="secondary">
                     Join <span>240,000+</span> Liquidity Providers
                   </Text>
-                  <Button as={NextLink} href="/pools" prefetch size="lg" variant="primary">
-                    Explore pools
+                  <Button asChild size="lg" variant="primary">
+                    <NextLink href="/pools" prefetch>
+                      Explore pools
+                    </NextLink>
                   </Button>
                 </Box>
               </Box>
@@ -181,31 +183,31 @@ export function HomeHero() {
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  as={NextLink}
-                                  href="/build/v3"
-                                  prefetch
+                                  asChild
                                 >
-                                  <Text
-                                    _groupHover={{
-                                      color: 'font.maxContrast',
-                                    }}
-                                    fontWeight="bold"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
-                                    whiteSpace="nowrap"
-                                  >
-                                    Balancer v3
-                                  </Text>
-                                  <Text
-                                    _groupHover={{ color: 'font.maxContrast' }}
-                                    fontSize="sm"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
-                                    variant="secondary"
-                                    whiteSpace="nowrap"
-                                  >
-                                    Learn about the key benefits
-                                  </Text>
+                                  <NextLink href="/build/v3" prefetch>
+                                    <Text
+                                      _groupHover={{
+                                        color: 'font.maxContrast',
+                                      }}
+                                      fontWeight="bold"
+                                      overflow="hidden"
+                                      transition="all 0.2s ease-out 0.1s"
+                                      whiteSpace="nowrap"
+                                    >
+                                      Balancer v3
+                                    </Text>
+                                    <Text
+                                      _groupHover={{ color: 'font.maxContrast' }}
+                                      fontSize="sm"
+                                      overflow="hidden"
+                                      transition="all 0.2s ease-out 0.1s"
+                                      variant="secondary"
+                                      whiteSpace="nowrap"
+                                    >
+                                      Learn about the key benefits
+                                    </Text>
+                                  </NextLink>
                                 </Link>
                               </Box>
 

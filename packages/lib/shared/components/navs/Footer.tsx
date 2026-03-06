@@ -105,9 +105,9 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
           variant="tertiary"
           w="44px"
         >
-          <a href={href} rel="noopener noreferrer" target="_blank">
+          <Link href={href} rel="noopener noreferrer" target="_blank">
             <SocialIcon iconType={iconType} />
-          </a>
+          </Link>
         </IconButton>
       ))}
     </HStack>
@@ -144,14 +144,8 @@ function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
         }
 
         return (
-          <Link
-            as={NextLink}
-            color="font.secondary"
-            fontSize={{ base: 'xs', md: 'sm' }}
-            href={link.href || '#'}
-            key={key}
-          >
-            {link.label}
+          <Link asChild color="font.secondary" fontSize={{ base: 'xs', md: 'sm' }} key={key}>
+            <NextLink href={link.href || '#'}>{link.label}</NextLink>
           </Link>
         )
       })}

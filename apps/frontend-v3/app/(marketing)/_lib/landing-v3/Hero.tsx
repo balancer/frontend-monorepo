@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Button, Center, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, HStack, Link, Stack, Text, VStack } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import Image from 'next/image'
@@ -134,17 +134,16 @@ export function Hero() {
                       }
                     : {}
                 }
-                as={Link}
-                href="https://docs.balancer.fi"
+                asChild
                 initial={{ opacity: 0 }}
-                rel="noopener"
-                rightIcon={<ArrowUpRight size="14px" />}
                 size="lg"
-                target="_blank"
                 transition={{ duration: 2, delay: 1.2 }}
                 variant="primary"
               >
-                View v3 docs
+                <Link href="https://docs.balancer.fi" rel="noopener" target="_blank">
+                  View v3 docs
+                  <ArrowUpRight size="14px" />
+                </Link>
               </MotionButton>
 
               <MotionButton
@@ -156,40 +155,45 @@ export function Hero() {
                       }
                     : {}
                 }
-                as={Link}
-                href="https://github.com/balancer/scaffold-balancer-v3"
+                asChild
                 initial={{ opacity: 0 }}
-                rel="noopener"
-                rightIcon={<ArrowUpRight size="14px" />}
                 size="lg"
-                target="_blank"
                 transition={{ duration: 2, delay: 1.2 }}
                 variant="secondary"
               >
-                Prototype v3
+                <Link
+                  href="https://github.com/balancer/scaffold-balancer-v3"
+                  rel="noopener"
+                  target="_blank"
+                >
+                  Prototype v3
+                  <ArrowUpRight size="14px" />
+                </Link>
               </MotionButton>
             </Stack>
             <HStack alignItems="center" gap="md" mt="xl">
               <MotionBox
                 animate={isInView ? { opacity: 1 } : {}}
-                as={Link}
-                h="56px"
-                href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
+                asChild
                 initial={{ opacity: 0 }}
-                overflow="hidden"
-                position="relative"
-                rel="noopener"
-                rounded="lg"
-                shadow="md"
-                target="_blank"
                 transition={{ duration: 2, delay: 1.4 }}
-                w="90px"
               >
-                <SandBg variant={1} />
-
-                <Center h="full" position="relative" w="full">
-                  <PlayVideoButton size={10} />
-                </Center>
+                <Link
+                  h="56px"
+                  href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
+                  overflow="hidden"
+                  position="relative"
+                  rel="noopener"
+                  rounded="lg"
+                  shadow="md"
+                  target="_blank"
+                  w="90px"
+                >
+                  <SandBg variant={1} />
+                  <Center h="full" position="relative" w="full">
+                    <PlayVideoButton size={10} />
+                  </Center>
+                </Link>
               </MotionBox>
               <MotionText
                 animate={isInView ? { opacity: 1 } : {}}
