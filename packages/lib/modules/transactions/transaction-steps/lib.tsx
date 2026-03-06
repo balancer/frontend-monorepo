@@ -69,6 +69,7 @@ export type StepType =
   | 'setSwapFee'
   | 'finalizePool'
   | 'signature'
+  | 'depositUnderlying'
 
 export type TxActionId =
   | 'SignBatchRelayer'
