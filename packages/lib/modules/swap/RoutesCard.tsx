@@ -150,7 +150,6 @@ type PathRouteProps = {
 }
 
 function PathRoute({ chain, path, totalAmount, colors }: PathRouteProps) {
-  console.log(path)
   const amountShare = bn(path.inputAmountRaw)
     .shiftedBy(-path.tokens[0].decimals)
     .div(totalAmount)
