@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { HStack, Heading, Skeleton, VStack } from '@chakra-ui/react';
+import { HStack, Heading, Skeleton, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -29,7 +29,8 @@ export function PoolSnapshotValues() {
     tokens,
     weeklyRewards,
     weeklyRewardsByToken,
-    isLoading: isLoadingTokens } = useGetPoolRewards(pool)
+    isLoading: isLoadingTokens,
+  } = useGetPoolRewards(pool)
 
   const poolStatsValues: PoolStatsValues | undefined = pool
     ? {
@@ -38,7 +39,8 @@ export function PoolSnapshotValues() {
         income24h: isCowAmmPool(pool.type)
           ? toCurrency(pool.dynamicData.surplus24h, { abbreviated: false, noDecimals: true })
           : toCurrency(pool.dynamicData.fees24h, { abbreviated: false, noDecimals: true }),
-        weeklyRewards: weeklyRewards ? toCurrency(weeklyRewards.toString()) : 'N/A' }
+        weeklyRewards: weeklyRewards ? toCurrency(weeklyRewards.toString()) : 'N/A',
+      }
     : undefined
 
   const incomeLabel = isCowAmmPool(pool.type) ? 'Surplus (24h)' : 'Swap fees (24h)'
@@ -52,7 +54,7 @@ export function PoolSnapshotValues() {
             tooltip="The Total Value Locked (TVL) of the pool. This is the sum of the value of all the assets in the pool."
           />
           {isLoadingPool && !Number(tvl) ? ( // Only show loading state when we have no TVL
-            (<Skeleton height="28px" w="100px" />)
+            <Skeleton height="28px" w="100px" />
           ) : (
             <PoolTotalLiquidityDisplay
               size="h4"
@@ -89,7 +91,8 @@ export function PoolSnapshotValues() {
             textProps={{
               fontSize: ['xl', 'xl', '2xl'],
               fontWeight: 'bold',
-              lineHeight: '28px' }}
+              lineHeight: '28px',
+            }}
           />
         </VStack>
       </FadeInOnView>
@@ -131,7 +134,7 @@ export function PoolSnapshotValues() {
                 <TokenIconStack
                   chain={chain}
                   disablePopover
-                  isLoading={isLoadingTokens}
+                  loading={isLoadingTokens}
                   size={20}
                   tokens={tokens}
                 />
@@ -143,5 +146,5 @@ export function PoolSnapshotValues() {
         </VStack>
       </FadeInOnView>
     </>
-  );
+  )
 }

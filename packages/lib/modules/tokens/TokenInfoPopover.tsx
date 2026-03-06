@@ -42,8 +42,8 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
           aria-label="Token info"
           color="grayText"
           h="24px"
-          isRound
           opacity="0.5"
+          rounded="full"
           size="xs"
           variant="ghost"
         >
@@ -72,13 +72,12 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
                       aria-label="View on Coingecko"
                       asChild
                       h="6"
-                      isExternal
-                      isRound
+                      rounded="full"
                       size="xs"
                       variant="ghost"
                       w="6"
                     >
-                      <Link href={coingeckoUrl}>
+                      <Link href={coingeckoUrl} rel="noopener noreferrer" target="_blank">
                         <CoingeckoIcon height={15} width={15} />
                       </Link>
                     </IconButton>
@@ -90,13 +89,16 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
                     asChild
                     color="grayText"
                     h="6"
-                    isExternal
-                    isRound
+                    rounded="full"
                     size="xs"
                     variant="ghost"
                     w="6"
                   >
-                    <Link href={getBlockExplorerTokenUrl(tokenAddress, chain)}>
+                    <Link
+                      href={getBlockExplorerTokenUrl(tokenAddress, chain)}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
                       <ExternalLink size={12} />
                     </Link>
                   </IconButton>

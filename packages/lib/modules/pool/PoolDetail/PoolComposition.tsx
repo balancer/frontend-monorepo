@@ -11,7 +11,8 @@ import {
   Text,
   VStack,
   Link,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -79,7 +80,8 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                 targetWeight={poolToken.weight || undefined}
                 value={poolToken.balance}
                 {...(poolToken.hasNestedPool && {
-                  isNestedBpt: true })}
+                  isNestedBpt: true,
+                })}
               />
               {poolToken.hasNestedPool && poolToken.nestedPool && (
                 <VStack pl="8" w="full">
@@ -111,7 +113,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
         })}
       </VStack>
     </VStack>
-  );
+  )
 }
 
 export function PoolComposition() {
@@ -157,10 +159,10 @@ export function PoolComposition() {
     <Card.Root ref={cardRef}>
       <Stack
         direction={{ base: 'column', md: 'row' }}
+        gap="md"
         justifyContent="stretch"
         maxH="1000px"
         minH="400px"
-        gap="md"
       >
         <VStack align="flex-start" gap="md" w="full">
           <HStack justifyContent="space-between" w="full">
@@ -182,7 +184,11 @@ export function PoolComposition() {
                         {filteredErc4626Metadata.length > 0 &&
                           filteredErc4626Metadata.map((metadata, index) => (
                             <Fragment key={index}>
-                              <Link href={metadata.readMoreURL} target='_blank' rel='noopener noreferrer'>
+                              <Link
+                                href={metadata.readMoreURL}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
                                 <Box
                                   as="span"
                                   color="purple.500"
@@ -220,8 +226,9 @@ export function PoolComposition() {
                     display="inline-flex"
                     fontSize="sm"
                     href="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
-                    target='_blank'
-                    rel='noopener noreferrer'>
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     <Box as="span">Learn more</Box>
                     <Box as="span" ml={0.5}>
                       <ArrowUpRight size={12} />
@@ -247,5 +254,5 @@ export function PoolComposition() {
         <PoolCompositionChart height={height} isMobile={!!isMobile} />
       </Stack>
     </Card.Root>
-  );
+  )
 }

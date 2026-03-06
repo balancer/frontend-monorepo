@@ -1,5 +1,5 @@
 import { ErrorAlert } from './ErrorAlert'
-import { AlertProps, Text } from '@chakra-ui/react';
+import { AlertProps, Text } from '@chakra-ui/react'
 import { DiscordLink } from '@repo/lib/shared/components/links/DiscordLink'
 
 type Props = AlertProps & {

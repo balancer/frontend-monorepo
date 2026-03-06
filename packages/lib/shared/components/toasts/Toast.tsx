@@ -1,13 +1,5 @@
-'use client';
-import {
-  Box,
-  VStack,
-  IconButton,
-  BoxProps,
-  ProgressCircle,
-  HStack,
-  Text,
-  Link } from '@chakra-ui/react';
+'use client'
+import { Box, VStack, IconButton, BoxProps, ProgressCircle, HStack, Link } from '@chakra-ui/react'
 import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { useRef } from 'react'
 import { ArrowUpRight, X } from 'react-feather'
@@ -26,14 +18,14 @@ type Props = {
 }
 
 export function Toast({ id, status, isClosable, title, description, linkUrl, onClose }: Props) {
-
   const containerStyles: BoxProps = {
     background: 'background.level3',
     border: 'none',
     rounded: 'md',
     shadow: 'xl',
     zIndex: '1000',
-    width: 'xs' }
+    width: 'xs',
+  }
 
   const statusOverlayStyles: BoxProps = {
     position: 'absolute',
@@ -53,14 +45,16 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
             : 'transparent',
     opacity: 0.2,
     rounded: 'md',
-    zIndex: 1001 }
+    zIndex: 1001,
+  }
 
   const contentStyles: BoxProps = {
     w: 'full',
     h: 'full',
     position: 'relative',
     padding: 'md',
-    zIndex: 1002 }
+    zIndex: 1002,
+  }
 
   function closeToast() {
     if (id) {
@@ -82,13 +76,18 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
             <Tooltip content="View on explorer">
               <IconButton
                 aria-label="View on explorer"
+                asChild
                 h="6"
                 position="absolute"
                 right="8"
                 size="xs"
                 top="xs"
                 w="6"
-                asChild><Link href={linkUrl} target="_blank" rel="noopener noreferrer"><ArrowUpRight size={12} strokeWidth={3} /></Link></IconButton>
+              >
+                <Link href={linkUrl} rel="noopener noreferrer" target="_blank">
+                  <ArrowUpRight size={12} strokeWidth={3} />
+                </Link>
+              </IconButton>
             </Tooltip>
           </>
         )}
@@ -102,11 +101,14 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
             right="xs"
             size="xs"
             top="xs"
-            w="6"><X size={12} strokeWidth={3} /></IconButton>
+            w="6"
+          >
+            <X size={12} strokeWidth={3} />
+          </IconButton>
         )}
         <HStack align="start">
           {status === 'loading' && (
-            <ProgressCircle.Root value={null} mt="1" size="sm" trackColor="border.base">
+            <ProgressCircle.Root mt="1" size="sm" trackColor="border.base" value={null}>
               <ProgressCircle.Circle>
                 <ProgressCircle.Track />
                 <ProgressCircle.Range stroke="font.warning" />
@@ -114,7 +116,7 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
             </ProgressCircle.Root>
           )}
           {status === 'success' && (
-            <ProgressCircle.Root value={100} mt="1" size="sm" trackColor="border.base">
+            <ProgressCircle.Root mt="1" size="sm" trackColor="border.base" value={100}>
               <ProgressCircle.Circle>
                 <ProgressCircle.Track />
                 <ProgressCircle.Range stroke="font.highlight" />
@@ -122,7 +124,7 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
             </ProgressCircle.Root>
           )}
           {status === 'error' && (
-            <ProgressCircle.Root value={100} mt="1" size="sm" trackColor="border.base">
+            <ProgressCircle.Root mt="1" size="sm" trackColor="border.base" value={100}>
               <ProgressCircle.Circle>
                 <ProgressCircle.Track />
                 <ProgressCircle.Range stroke="red.500" />
@@ -138,5 +140,5 @@ export function Toast({ id, status, isClosable, title, description, linkUrl, onC
         </HStack>
       </Box>
     </Box>
-  );
+  )
 }

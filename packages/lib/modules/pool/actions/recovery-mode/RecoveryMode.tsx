@@ -1,11 +1,12 @@
-import { Box, Card, HStack, Link, Text, VStack } from '@chakra-ui/react';
+import { Box, Card, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { usePool } from '../../PoolProvider'
 import { useRecoveryModeStep } from './useRecoveryModeStep'
 import {
   TransactionStepsResponse,
-  useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
+  useTransactionSteps,
+} from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useRecoveryModeChangedReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { Pool, ProtocolVersion } from '../../pool.types'
 import { TransactionHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
@@ -35,7 +36,8 @@ export function RecoveryMode() {
     txHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt: transactionSteps.lastTransaction?.result })
+    txReceipt: transactionSteps.lastTransaction?.result,
+  })
 
   const isSuccess = !!txHash && !!receiptProps.data && receiptProps.enabled
 
@@ -73,7 +75,7 @@ export function RecoveryMode() {
         </Card.Footer>
       </Card.Root>
     </Box>
-  );
+  )
 }
 
 type BodyProps = {
@@ -89,8 +91,9 @@ function RecoveryModeBody({ isMobile, pool, transactionSteps }: BodyProps) {
     ) : (
       <Link
         href={getBlockExplorerAddressUrl(pool.pauseManager, pool.chain)}
-        target='_blank'
-        rel='noopener noreferrer'>
+        rel="noopener noreferrer"
+        target="_blank"
+      >
         <HStack gap="xss">
           <Text color="link">{abbreviateAddress(pool.pauseManager)}</Text>
           <ArrowUpRight size="12" />

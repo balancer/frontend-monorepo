@@ -163,13 +163,14 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
 function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
   return poolTokens.map(
     t =>
-      (({
+      ({
         address: t.address as Address,
         name: t.name,
         symbol: t.symbol,
         decimals: t.decimals,
-        index: t.index }) as TokenCore)
-  );
+        index: t.index,
+      }) as TokenCore
+  )
 }
 
 export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBase): boolean {

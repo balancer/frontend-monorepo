@@ -2,9 +2,19 @@
 
 import React from 'react'
 import {
-Box, //BoxProps,
-Button, Center, Flex, Grid, GridItem, HStack, Heading, Progress, Text, VStack, chakra
-} from '@chakra-ui/react';
+  Box, //BoxProps,
+  Button,
+  Center,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Heading,
+  Progress,
+  Text,
+  VStack,
+  chakra,
+} from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BeetsByTheNumbers } from '../components/BeetsByTheNumbers'
@@ -12,7 +22,8 @@ import {
   GetProtocolStatsPerChainQuery,
   GetProtocolStatsQuery,
   GetStakedSonicDataQuery,
-  GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+  GqlChain,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainId } from '@repo/lib/config/app.config'
 //import { fNum } from '@repo/lib/shared/utils/numbers'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -47,7 +58,8 @@ function ChainStats({
   isSonic,
   protocolData,
   stakedSonicData,
-  totalTvl }: {
+  totalTvl,
+}: {
   isSonic?: boolean
   protocolData: GetProtocolStatsPerChainQuery
   stakedSonicData: GetStakedSonicDataQuery
@@ -74,11 +86,11 @@ function ChainStats({
       <Progress.Root
         colorPalette="cyan"
         rounded="lg"
-        value={String(bn(protocolData.protocolMetricsChain.totalLiquidity)
-          .div(totalTvl)
-          .times(100)
-          .toNumber())}
-        w="full">
+        value={String(
+          bn(protocolData.protocolMetricsChain.totalLiquidity).div(totalTvl).times(100).toNumber()
+        )}
+        w="full"
+      >
         <Progress.Track>
           <Progress.Range />
         </Progress.Track>
@@ -111,7 +123,7 @@ function ChainStats({
         </GridItem>
       </Grid>
     </Box>
-  );
+  )
 }
 
 function ChainDataCard({
@@ -121,7 +133,8 @@ function ChainDataCard({
   totalTvl,
   button,
   isSonic,
-  stakedSonicData }: {
+  stakedSonicData,
+}: {
   chain: GqlChain
   networkColor: string
   protocolData: GetProtocolStatsPerChainQuery
@@ -167,7 +180,8 @@ function GlobalStatsCard({ label, value }: { label: string; value: string }) {
 export function LandingBeetsData({
   protocolData,
   protocolDataPerChain,
-  stakedSonicData }: {
+  stakedSonicData,
+}: {
   protocolData: GetProtocolStatsQuery
   protocolDataPerChain: GetProtocolStatsPerChainQuery[]
   stakedSonicData: GetStakedSonicDataQuery
@@ -201,7 +215,8 @@ export function LandingBeetsData({
             templateColumns={{
               base: '1fr',
               lg: '1fr',
-              xl: '1.25fr 1fr 1fr 1fr' }}
+              xl: '1.25fr 1fr 1fr 1fr',
+            }}
             w="full"
           >
             <GridItem alignItems="center" display="flex">
@@ -228,8 +243,9 @@ export function LandingBeetsData({
           <GridItem bg="rgba(255, 255, 255, 0.05)">
             <ChainDataCard
               button={
-                <Button variant="primary" asChild><NextLink href="/pools?networks=SONIC">Sonic Pools
-                                  </NextLink></Button>
+                <Button asChild variant="primary">
+                  <NextLink href="/pools?networks=SONIC">Sonic Pools</NextLink>
+                </Button>
               }
               chain={GqlChain.Sonic}
               isSonic
@@ -242,8 +258,9 @@ export function LandingBeetsData({
           <GridItem bg="rgba(0, 0, 0, 0.2)">
             <ChainDataCard
               button={
-                <Button variant="primary" asChild><NextLink href="/pools?networks=OPTIMISM">Optimism Pools
-                                  </NextLink></Button>
+                <Button asChild variant="primary">
+                  <NextLink href="/pools?networks=OPTIMISM">Optimism Pools</NextLink>
+                </Button>
               }
               chain={GqlChain.Optimism}
               networkColor="red"
@@ -255,5 +272,5 @@ export function LandingBeetsData({
         </Grid>
       </VStack>
     </DefaultPageContainer>
-  );
+  )
 }

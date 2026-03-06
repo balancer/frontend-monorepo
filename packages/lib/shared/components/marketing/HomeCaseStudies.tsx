@@ -1,6 +1,6 @@
 import { MotionValue, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ReactNode, useRef, useState } from 'react'
-import { Box, BoxProps, Flex, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { BeetsIcon } from '@repo/lib/shared/components/icons/logos/BeetsIcon'
 import { AaveIcon } from '@repo/lib/shared/components/icons/logos/AaveIcon'
 import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
@@ -47,14 +47,17 @@ export function HomeCaseStudies() {
           <Box bottom="20px" position="absolute">
             <Box
               alignItems="flex-end"
+              asChild
               display="flex"
               flexWrap="wrap"
               gap="sm"
               justifyContent="center"
               mx="auto"
-              asChild><motion.div
+            >
+              <motion.div
                 onMouseLeave={() => mouseX.set(Infinity)}
-                onMouseMove={e => mouseX.set(e.pageX)}>
+                onMouseMove={e => mouseX.set(e.pageX)}
+              >
                 {logos.map(logo => (
                   <AppIcon
                     Icon={<logo.icon />}
@@ -64,7 +67,8 @@ export function HomeCaseStudies() {
                     onClick={() => openRedirectModal(logo.partner)}
                   />
                 ))}
-              </motion.div></Box>
+              </motion.div>
+            </Box>
           </Box>
         </Flex>
         <Flex
@@ -90,7 +94,7 @@ export function HomeCaseStudies() {
         partner={redirectPartner}
       />
     </Box>
-  );
+  )
 }
 
 function AppIcon({
@@ -121,11 +125,14 @@ function AppIcon({
         _hover: {
           color: 'font.maxContrast',
           bg: 'background.level4',
-          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)' } }}
+          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
+        },
+      }}
       _hover={{
         bg: 'background.level4',
         color: 'brown.500',
-        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)' }}
+        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
+      }}
       alignItems="center"
       aspectRatio={1}
       bg="background.level2"
@@ -141,10 +148,11 @@ function AppIcon({
       w="200px"
       willChange="box-shadow, background-color"
       {...rest}
-      asChild><motion.div ref={ref}>
-        {Icon}
-      </motion.div></Box>
-  );
+      asChild
+    >
+      <motion.div ref={ref}>{Icon}</motion.div>
+    </Box>
+  )
 }
 
 function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & BoxProps) {
@@ -156,13 +164,16 @@ function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & 
         _hover: {
           color: 'font.maxContrast',
           bg: 'background.level4',
-          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)' } }}
+          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
+        },
+      }}
       _hover={{
         bg: 'background.level4',
         color: 'brown.500',
         boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
         transform: 'scale(1.1)',
-        transition: 'scale 0.3s ease-out' }}
+        transition: 'scale 0.3s ease-out',
+      }}
       alignItems="center"
       aspectRatio={1}
       bg="background.level2"

@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react';
+import { HStack, Text } from '@chakra-ui/react'
 import { PoolListItem } from '../pool.types'
 import { differenceInDays, differenceInHours, isAfter, secondsToMilliseconds } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
@@ -19,7 +19,7 @@ export function LbpPoolListInfo({ pool }: Props) {
     const daysDiff = differenceInDays(startTime, now())
 
     return (
-      <HStack gap="xs" color="green.500">
+      <HStack color="green.500" gap="xs">
         <Clock size="12" />
         <Text color="green.500" fontSize="xs">
           Starts: {hoursDiff < 24 ? `${hoursDiff}h` : `${daysDiff}d`}
@@ -31,7 +31,7 @@ export function LbpPoolListInfo({ pool }: Props) {
     const daysDiff = differenceInDays(endTime, now())
 
     return (
-      <HStack gap="xs" color="font.warning">
+      <HStack color="font.warning" gap="xs">
         <Clock size="12" />
         <Text color="font.warning" fontSize="xs">
           Ends: {hoursDiff < 24 ? `${hoursDiff}h` : `${daysDiff}d`}
@@ -40,7 +40,7 @@ export function LbpPoolListInfo({ pool }: Props) {
     )
   } else {
     return (
-      <HStack gap="xs" color="font.error">
+      <HStack color="font.error" gap="xs">
         <Clock size="12" />
         <Text color="font.error" fontSize="xs">
           Ended

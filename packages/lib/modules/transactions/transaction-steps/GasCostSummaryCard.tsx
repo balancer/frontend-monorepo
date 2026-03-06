@@ -1,4 +1,4 @@
-import { Card, HStack, Text } from '@chakra-ui/react';
+import { Card, HStack, Text } from '@chakra-ui/react'
 import { TransactionStep } from './lib'
 import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
@@ -61,5 +61,5 @@ export function GasCostSummaryCard({ chain, transactionSteps }: GasCostSummaryCa
         </Text>
       </HStack>
     </Card.Root>
-  ) : null;
+  ) : null
 }

@@ -1,4 +1,4 @@
-import { Alert, Card, ModalProps, Stack, Text, VStack, Dialog, Portal } from '@chakra-ui/react';
+import { Alert, Card, ModalProps, Stack, Text, VStack, Dialog, Portal } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -14,7 +14,8 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useRouter } from 'next/navigation'
 import {
   useBuildLockSteps,
-  UseBuildLockStepsArgs } from '@bal/lib/vebal/lock/steps/useBuildLockSteps'
+  UseBuildLockStepsArgs,
+} from '@bal/lib/vebal/lock/steps/useBuildLockSteps'
 import { getPreviewLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'
 import { useMemo } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -53,7 +54,8 @@ export function VebalLockModal({
     lockDuration,
     lockMode,
     isIncreasedLockAmount,
-    isLoading: vebalLockIsLoading } = useVebalLock()
+    isLoading: vebalLockIsLoading,
+  } = useVebalLock()
   const { mainnetLockedInfo, isLoading: vebalLockDataIsLoading } = useVebalLockData()
 
   /*
@@ -68,7 +70,8 @@ export function VebalLockModal({
       totalAmount: addedAmount,
       lockDuration,
       isIncreasedLockAmount,
-      mainnetLockedInfo }),
+      mainnetLockedInfo,
+    }),
     [addedAmount, extendExpired, isIncreasedLockAmount, lockDuration, mainnetLockedInfo]
   )
 
@@ -88,17 +91,17 @@ export function VebalLockModal({
 
   return (
     <Dialog.Root
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
           onClose(!!lockTxHash, redirectPath)
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!lockTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -190,8 +193,7 @@ export function VebalLockModal({
             )}
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

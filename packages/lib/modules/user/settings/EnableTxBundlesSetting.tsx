@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, Switch, Text } from '@chakra-ui/react';
+import { Box, Heading, Switch, Text } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
 import { useIsSafeApp } from '../../web3/safe.hooks'
 
@@ -14,9 +14,11 @@ function EnableTxBundleSelect() {
   return (
     <Switch.Root checked={enableTxBundling === 'yes'} onCheckedChange={handleChange}>
       <Switch.HiddenInput />
-      <Switch.Control><Switch.Thumb /></Switch.Control>
+      <Switch.Control>
+        <Switch.Thumb />
+      </Switch.Control>
     </Switch.Root>
-  );
+  )
 }
 
 export function EnableTxBundleSetting() {

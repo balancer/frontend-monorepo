@@ -3,7 +3,7 @@
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { Box, Skeleton, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Skeleton, Flex, Heading, Text } from '@chakra-ui/react'
 import { PropsWithChildren, Suspense } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
@@ -29,7 +29,8 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
     GetFeaturedPoolsDocument,
     {
       variables: { chains: supportedNetworks },
-      fetchPolicy: 'cache-and-network' }
+      fetchPolicy: 'cache-and-network',
+    }
   )
 
   const featuredPools = featuredPoolsData?.featuredPools || []
@@ -103,14 +104,21 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 mb="10"
               >
                 <Box>
-                  <Heading pb="3" css={{
-                    textWrap: 'balance'
-                  }} variant="special">
+                  <Heading
+                    css={{
+                      textWrap: 'balance',
+                    }}
+                    pb="3"
+                    variant="special"
+                  >
                     Earn passively on {PROJECT_CONFIG.projectName}
                   </Heading>
-                  <Text css={{
-                    textWrap: 'balance'
-                  }} variant="secondary">
+                  <Text
+                    css={{
+                      textWrap: 'balance',
+                    }}
+                    variant="secondary"
+                  >
                     {`Join ${fNumCustom(protocolData?.protocolMetricsAggregated.numLiquidityProviders || '0', '0a')}+ Liquidity Providers in yield-bearing pools`}
                   </Text>
                 </Box>
@@ -157,5 +165,5 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
         </DefaultPageContainer>
       )}
     </>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { PoolCore, PoolToken } from './pool.types'
-import { HStack, Text, TextProps, Box } from '@chakra-ui/react';
+import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
 import { FeaturedPool } from './PoolProvider'
 import { getUserReferenceTokens } from './pool-tokens.utils'
 

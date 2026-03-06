@@ -1,29 +1,26 @@
-import { Box, Text, HStack, Skeleton } from '@chakra-ui/react';
+import { Box, Text, HStack, Skeleton } from '@chakra-ui/react'
 
 export function StatRow({
   label,
   value,
   secondaryValue,
   tertiaryValue,
-  isLoading }: {
+  loading,
+}: {
   label: string
   value: string
   secondaryValue?: string
   tertiaryValue?: string
-  isLoading?: boolean
+  loading?: boolean
 }) {
   return (
     <HStack align="flex-start" justify="space-between" w="full">
       <Text color="font.secondary">{label}</Text>
       <Box alignItems="flex-end" display="flex" flexDirection="column">
-        {isLoading ? (
-          <Skeleton h="16px" my="2px" w="80px" />
-        ) : (
-          <Text fontWeight="bold">{value}</Text>
-        )}
+        {loading ? <Skeleton h="16px" my="2px" w="80px" /> : <Text fontWeight="bold">{value}</Text>}
         {secondaryValue && (
           <>
-            {isLoading ? (
+            {loading ? (
               <Skeleton h="16px" my="2px" w="80px" />
             ) : (
               <Text color="grayText" fontSize="sm">
@@ -34,7 +31,7 @@ export function StatRow({
         )}
         {tertiaryValue && (
           <>
-            {isLoading ? (
+            {loading ? (
               <Skeleton h="16px" my="2px" w="80px" />
             ) : (
               <Text color="grayText" fontSize="sm">

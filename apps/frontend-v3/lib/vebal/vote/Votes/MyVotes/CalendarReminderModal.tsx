@@ -1,7 +1,16 @@
 'use client'
 
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { Box, Button, VStack, Text, List, UseDisclosureProps, Dialog, Portal } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  VStack,
+  Text,
+  List,
+  UseDisclosureProps,
+  Dialog,
+  Portal,
+} from '@chakra-ui/react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 
@@ -9,7 +18,8 @@ function setCalendarEvent(deadline: Date) {
   const event = {
     title: 'veBAL voting deadline (Balancer)',
     start: deadline,
-    url: 'https://balancer.fi/vebal/vote' }
+    url: 'https://balancer.fi/vebal/vote',
+  }
 
   openIcalEvent({ event, makeItWeekly: true })
 }
@@ -17,7 +27,8 @@ function setCalendarEvent(deadline: Date) {
 export function CalendarReminderModal({
   open: isOpen = false,
   onClose,
-  deadline }: UseDisclosureProps & { deadline: Date }) {
+  deadline,
+}: UseDisclosureProps & { deadline: Date }) {
   const closeModal = () => onClose && onClose()
 
   function setReminder() {
@@ -26,13 +37,17 @@ export function CalendarReminderModal({
   }
 
   return (
-    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={(e: any) => {
-      if (!e.open) {
-        closeModal();
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(e: any) => {
+        if (!e.open) {
+          closeModal()
+        }
+      }}
+      open={isOpen}
+      placement="center"
+      size="lg"
+    >
       <Portal>
-
         <SuccessOverlay />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -53,11 +68,16 @@ export function CalendarReminderModal({
                   />
                 </Box>
 
-                <List.Root color="font.primary" listStylePosition="outside" listStyleType="disc" pl="md">
+                <List.Root
+                  color="font.primary"
+                  listStylePosition="outside"
+                  listStyleType="disc"
+                  pl="md"
+                >
                   <List.Item mb="xs">
                     <Text>
-                      For people deep into veBAL voting incentives, it can be advantageous to vote as
-                      late as possible in order to see exactly which pool gauges offer the best
+                      For people deep into veBAL voting incentives, it can be advantageous to vote
+                      as late as possible in order to see exactly which pool gauges offer the best
                       incentives per veBAL vote before the deadline.
                     </Text>
                   </List.Item>
@@ -70,8 +90,8 @@ export function CalendarReminderModal({
                   <List.Item mb="xs">
                     <Text>
                       An “.ics” file is a calendar file saved in a universal calendar format used by
-                      several email and calendar programs, including Microsoft Outlook, Google Calendar,
-                      and Apple Calendar.
+                      several email and calendar programs, including Microsoft Outlook, Google
+                      Calendar, and Apple Calendar.
                     </Text>
                   </List.Item>
                 </List.Root>
@@ -82,8 +102,7 @@ export function CalendarReminderModal({
             </Dialog.Body>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

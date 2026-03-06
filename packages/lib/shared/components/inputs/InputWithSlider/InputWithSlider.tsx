@@ -1,6 +1,6 @@
 'use client'
 
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency';
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 import {
   Box,
@@ -11,8 +11,9 @@ import {
   SliderThumb,
   SliderTrack,
   VStack,
-  useChakraContext } from '@chakra-ui/react';
-import { useState, forwardRef } from 'react';
+  useChakraContext,
+} from '@chakra-ui/react'
+import { useState, forwardRef } from 'react'
 
 type Props = {
   value?: string
@@ -93,12 +94,12 @@ export const InputWithSlider = forwardRef(
               autoCorrect="off"
               bg="transparent"
               border="transparent"
+              disabled={isNumberInputDisabled}
               fontSize="xl"
               fontWeight="medium"
-              disabled={isNumberInputDisabled}
               min={0}
-              onValueChange={handleInputChange}
               onKeyDown={blockInvalidNumberInput}
+              onValueChange={handleInputChange}
               p="0"
               placeholder="0.00"
               shadow="none"
@@ -109,14 +110,17 @@ export const InputWithSlider = forwardRef(
               <NumberInput.Input
                 _disabled={{
                   opacity: 1,
-                  textColor: 'input.fontDefault' }}
+                  textColor: 'input.fontDefault',
+                }}
                 _focusVisible={{
                   borderColor: 'transparent',
                   boxShadow: 'none',
-                  shadow: 'none' }}
+                  shadow: 'none',
+                }}
                 _hover={{
                   borderColor: 'transparent',
-                  boxShadow: 'none' }}
+                  boxShadow: 'none',
+                }}
                 aria-valuenow={sliderPercent}
                 boxShadow="none"
                 fontSize="2xl"
@@ -128,7 +132,7 @@ export const InputWithSlider = forwardRef(
             <Box alignSelf="center" pr="sm" w="50%">
               <Slider.Root
                 aria-label="slider"
-                defaultValue='100'
+                defaultValue="100"
                 focusThumbOnChange={false} // this is so the NumberInput won't lose focus after input
                 onValueChange={handleSliderChange}
                 value={String(sliderPercent)}
@@ -148,6 +152,6 @@ export const InputWithSlider = forwardRef(
           </HStack>
         </Box>
       </VStack>
-    );
+    )
   }
 )

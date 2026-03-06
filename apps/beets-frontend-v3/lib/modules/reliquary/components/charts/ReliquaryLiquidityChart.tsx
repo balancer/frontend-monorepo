@@ -7,7 +7,7 @@ import { useChakraContext } from '@chakra-ui/react'
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from 'echarts-for-react'
 import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
 import { format } from 'date-fns'
@@ -33,22 +33,29 @@ export function ReliquaryLiquidityChart({ data }: Props) {
         axisPointer: {
           type: 'cross',
           crossStyle: {
-            color: '#999' } } },
+            color: '#999',
+          },
+        },
+      },
       textStyle: {
-        color: '#D3D3D3' },
+        color: '#D3D3D3',
+      },
       legend: {
         show: false,
         data: ['TVL'],
         textStyle: {
-          color: theme.token('colors.base') },
+          color: theme.token('colors.base'),
+        },
         top: '0',
-        right: '2%' },
+        right: '2%',
+      },
       grid: {
         bottom: '2%',
         right: '1.5%',
         left: '1.5%',
         top: '10%',
-        containLabel: true },
+        containLabel: true,
+      },
       xAxis: {
         type: 'time',
         minorSplitLine: { show: false },
@@ -61,15 +68,19 @@ export function ReliquaryLiquidityChart({ data }: Props) {
           interval: 'auto',
 
           showMaxLabel: false,
-          showMinLabel: false },
+          showMinLabel: false,
+        },
         //maxInterval: 3600 * 1000 * 24,
         axisPointer: {
           type: 'line',
           label: {
             formatter: params => {
               return format(new Date(params.value), 'MMM d')
-            } } },
-        axisLine: { show: false } },
+            },
+          },
+        },
+        axisLine: { show: false },
+      },
       yAxis: [
         {
           type: 'value',
@@ -80,13 +91,17 @@ export function ReliquaryLiquidityChart({ data }: Props) {
             formatter: function (value: number, index: number) {
               return index % 3 === 1 ? `$${fNumCustom(value, '0a')}` : ''
             },
-            color: theme.token('colors.base') },
+            color: theme.token('colors.base'),
+          },
           axisPointer: {
             label: {
               formatter: function (params) {
                 const value = typeof params.value === 'number' ? params.value : Number(params.value)
                 return `$${fNumCustom(value, '0a')}`
-              } } } },
+              },
+            },
+          },
+        },
       ],
       series: [
         {
@@ -99,16 +114,23 @@ export function ReliquaryLiquidityChart({ data }: Props) {
               const numValue = Array.isArray(value) ? value[0] : value
               if (numValue == null || numValue instanceof Date) return '$0'
               return `$${fNumCustom(numValue, '0a')}`
-            } },
+            },
+          },
           itemStyle: {
             opacity: 1,
             borderRadius: [5, 5, 0, 0],
             color: new graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
-              { offset: 0.5, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+              {
+                offset: 0.5,
+                color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from'),
+              },
               { offset: 1, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
-            ]) } },
-      ] }),
+            ]),
+          },
+        },
+      ],
+    }),
     [chartData, theme]
   )
 

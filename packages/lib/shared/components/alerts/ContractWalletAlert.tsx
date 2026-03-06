@@ -1,4 +1,4 @@
-import { HStack, Text, Link, VStack, List } from '@chakra-ui/react';
+import { HStack, Text, Link, VStack, List } from '@chakra-ui/react'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'
 import { ArrowUpRight } from 'react-feather'
@@ -16,7 +16,7 @@ export function ContractWalletAlert() {
             for help.
           </Text>
           <VStack pl="3" pt="1">
-            <List.Root as='ul' w="full">
+            <List.Root as="ul" w="full">
               <WalletLink href={safeAppLink} name={'Safe{wallet}'} />
               <WalletLink href="https://console.fireblocks.io/v2/web3" name="Fireblocks" />
               <WalletLink href="https://app-v2.augustdigital.io/" name="August Digital" />
@@ -27,13 +27,13 @@ export function ContractWalletAlert() {
       }
       status="info"
     />
-  );
+  )
 }
 
 function WalletLink({ href, name }: { href: string; name: string }) {
   return (
     <List.Item color="black" pb="xxs">
-      <Link href={href} target='_blank' rel='noopener noreferrer'>
+      <Link href={href} rel="noopener noreferrer" target="_blank">
         <HStack gap="xs">
           <Text color="black" fontSize="sm">
             {name}
@@ -42,5 +42,5 @@ function WalletLink({ href, name }: { href: string; name: string }) {
         </HStack>
       </Link>
     </List.Item>
-  );
+  )
 }

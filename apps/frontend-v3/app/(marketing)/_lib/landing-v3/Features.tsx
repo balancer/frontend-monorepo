@@ -10,7 +10,8 @@ import {
   Link,
   chakra,
   Stack,
-  Center } from '@chakra-ui/react';
+  Center,
+} from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 import { useState, useEffect, useRef } from 'react'
@@ -36,19 +37,22 @@ const keyFeatures = [
     subTitle: 'Streamlined custom pool creation',
     description:
       'Design pools tailored to your vision with Balancer’s Vault-first architecture. Build smarter, faster, and with less complexity.',
-    icon: <PieIcon size={40} /> },
+    icon: <PieIcon size={40} />,
+  },
   {
     title: 'Hooks Framework',
     subTitle: 'Limitless pool customizability',
     description:
       'Extend pool functionality with modular hooks. Customize pool behavior, implement advanced strategies, and unlock entirely new AMM design spaces with ease.',
-    icon: <HookIcon size={70} /> },
+    icon: <HookIcon size={70} />,
+  },
   {
     title: '100% Boosted Pools',
     subTitle: 'Boosted earnings, simplified strategy.',
     description:
       'Put your liquidity to work 100% of the time. Seamless integration with Aave and Morpho delivers passive, diversified yield in a single click.',
-    icon: <StarsIconPlain size={32} /> },
+    icon: <StarsIconPlain size={32} />,
+  },
 ]
 
 const features = [
@@ -58,54 +62,64 @@ const features = [
       'Balancer v3 focuses on minimizing MEV and maximizing LP profitability by collaborating with intent-centric projects like CowSwap.',
     description:
       'Balancer v3 focuses on minimizing MEV and maximizing LP profitability by collaborating with intent-centric projects like CowSwap.\n\nv3 leverages custom AMM logic and a hooks framework to enable third-party teams easily to develop MEV mitigation strategies.\n\nSupported by Balancer DAO, this approach aims to help bolster MEV innovation for LPs, enhancing fairness and profitability in on-chain interactions for the future to come.',
-    imageSrc: '/images/graphics/stone-2.png' },
+    imageSrc: '/images/graphics/stone-2.png',
+  },
   {
     title: 'Decimal Scaling',
     shortDescription:
       'To alleviate the challenges of managing tokens with variable decimals, the Vault provides the pool with token balances and input values scaled to 18 decimals.',
-    imageSrc: '/images/graphics/stone-1.png' },
+    imageSrc: '/images/graphics/stone-1.png',
+  },
   {
     title: 'Rate Scaling',
     shortDescription:
       'V3 abstracts the complexity of managing LSTs by moving all rate scaling into the Vault, providing pools with uniform rate-scaled balances and input values by default, ensuring that yield from yield-bearing tokens is not captured by arbitrage traders.',
-    imageSrc: '/images/graphics/stone-2.png' },
+    imageSrc: '/images/graphics/stone-2.png',
+  },
   {
     title: 'Liquidity Invariant Approximation',
     shortDescription:
       'Supports unbalanced add/remove liquidity operations across all pool types, drastically enhancing user experience, as users are not forced to add liquidity in proportional amounts.',
-    imageSrc: '/images/graphics/stone-2.png' },
+    imageSrc: '/images/graphics/stone-2.png',
+  },
   {
     title: 'Transient Accounting',
     shortDescription:
       "EIP-1153's transient op-codes unlock a new, expressive design, the “Till” pattern. This allows the Vault to efficiently enforce contract-level invariants in the scope of a callback, supporting design patterns that were previously not possible.",
-    imageSrc: '/images/graphics/stone-1.png' },
+    imageSrc: '/images/graphics/stone-1.png',
+  },
   {
     title: 'ERC20MultiToken',
     shortDescription:
       'Ensures atomic updates to pool token balances and total supply within the Vault, reducing risks of read-only reentrancy attack vectors.',
-    imageSrc: '/images/graphics/stone-1.png' },
+    imageSrc: '/images/graphics/stone-1.png',
+  },
   {
     title: 'Swap Fee Management',
     shortDescription:
       'Standardizes swap fee implementation within the Vault for consistent interfaces across pools, while allowing flexibility at the hook level.',
-    imageSrc: '/images/graphics/stone-2.png' },
+    imageSrc: '/images/graphics/stone-2.png',
+  },
   {
     title: 'Pool Creator Fee',
     shortDescription:
       'Introduces a permissionless mechanism for external pool developers to earn a share of swap fees and yield, incentivizing innovative AMM creation.',
-    imageSrc: '/images/graphics/stone-2.png' },
+    imageSrc: '/images/graphics/stone-2.png',
+  },
   {
     title: 'Pool Pause Manager',
     shortDescription:
       'The pool can define its pause window on registration, relying on the Vault to enforce the time window and manage authentication.',
-    imageSrc: '/images/graphics/stone-1.png' },
+    imageSrc: '/images/graphics/stone-1.png',
+  },
 ]
 
 function FeatureText({
   title,
   shortDescription,
   description,
-  index }: {
+  index,
+}: {
   title: string
   shortDescription: string
   description?: string
@@ -118,8 +132,8 @@ function FeatureText({
   return (
     <VStack
       alignItems="start"
-      position="relative"
       gap="sm"
+      position="relative"
       {...(isOdd && { bg: 'background.level0' })}
       p="md"
       rounded="lg"
@@ -128,9 +142,13 @@ function FeatureText({
         {title}
       </Heading>
       <Box position="relative">
-        <Text color="font.secondary" css={{
-          textWrap: 'balance'
-        }} whiteSpace="pre-line">
+        <Text
+          color="font.secondary"
+          css={{
+            textWrap: 'balance',
+          }}
+          whiteSpace="pre-line"
+        >
           {shortDescription}
           {description && (
             <Link ml="sm" onClick={() => setIsExpanded(!isExpanded)}>
@@ -162,7 +180,7 @@ function FeatureText({
         )}
       </Box>
     </VStack>
-  );
+  )
 }
 
 export function Features() {
@@ -178,7 +196,10 @@ export function Features() {
     show: {
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.3 } } }
+        delayChildren: 0.3,
+      },
+    },
+  }
 
   const gridItemVariants = {
     show: {
@@ -189,8 +210,11 @@ export function Features() {
       transition: {
         type: 'spring' as AnimationGeneratorType,
         stiffness: 100,
-        damping: 10 } },
-    hidden: { opacity: 0, filter: 'blur(3px)', scale: 0.95, y: 15 } }
+        damping: 10,
+      },
+    },
+    hidden: { opacity: 0, filter: 'blur(3px)', scale: 0.95, y: 15 },
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -273,9 +297,13 @@ export function Features() {
                 text="Technical highlights"
               />
               <FadeIn delay={0.2} direction="up" duration={0.6}>
-                <Text color="font.secondary" fontSize="lg" css={{
-                  textWrap: 'pretty'
-                }}>
+                <Text
+                  color="font.secondary"
+                  css={{
+                    textWrap: 'pretty',
+                  }}
+                  fontSize="lg"
+                >
                   Balancer v3 introduces a series of technical enhancements that streamline the
                   development and deployment of custom pools, while maintaining the flexibility and
                   interoperability that have made Balancer a leader in the DeFi space.
@@ -299,7 +327,7 @@ export function Features() {
               </Center>
             )}
           </Box>
-          <VStack ref={containerRef} gap="md" w="full">
+          <VStack gap="md" ref={containerRef} w="full">
             {features.map((feature, index) => (
               <FadeIn direction="up" key={index} zIndex={10 - index}>
                 <FeatureText index={index} {...feature} />
@@ -318,5 +346,5 @@ export function Features() {
         w="full"
       />
     </Noise>
-  );
+  )
 }

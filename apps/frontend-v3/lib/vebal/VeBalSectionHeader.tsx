@@ -1,4 +1,4 @@
-import { Stack, VStack } from '@chakra-ui/react';
+import { Stack, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 interface Props {
@@ -12,8 +12,8 @@ export function VeBalSectionHeader({ before, after }: Props) {
       <Stack
         alignItems="center"
         direction={{ base: 'column', md: 'row' }}
-        justify="space-between"
         gap="md"
+        justify="space-between"
         w="full"
       >
         {before ? (
@@ -29,5 +29,5 @@ export function VeBalSectionHeader({ before, after }: Props) {
         ) : null}
       </Stack>
     </VStack>
-  );
+  )
 }

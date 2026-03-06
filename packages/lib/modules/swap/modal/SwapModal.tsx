@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useSwap } from '../SwapProvider'
@@ -49,14 +49,16 @@ export function SwapPreviewModal({
     hasQuoteContext,
     protocolVersion,
     isLbpSwap,
-    isLbpProjectTokenBuy } = useSwap()
+    isLbpProjectTokenBuy,
+  } = useSwap()
 
   const swapReceipt = useSwapReceipt({
     txHash: swapTxHash,
     userAddress,
     chain: selectedChain,
     protocolVersion,
-    txReceipt: lastTransaction?.result })
+    txReceipt: lastTransaction?.result,
+  })
 
   useEffect(() => {
     if (!isWrap && swapTxHash && !window.location.pathname.includes(swapTxHash) && !isLbpSwap) {
@@ -82,21 +84,22 @@ export function SwapPreviewModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} />
         <Dialog.Positioner>
           <Dialog.Content
-            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}
+          >
             {isDesktop && hasQuoteContext && (
               <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} />
             )}
@@ -122,8 +125,7 @@ export function SwapPreviewModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

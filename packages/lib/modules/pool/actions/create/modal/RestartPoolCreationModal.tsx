@@ -1,7 +1,7 @@
 'use client'
 
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { VStack, Text, HStack, Button, useDisclosure, Icon, Dialog, Portal } from '@chakra-ui/react';
+import { VStack, Text, HStack, Button, useDisclosure, Icon, Dialog, Portal } from '@chakra-ui/react'
 import { Trash2 } from 'react-feather'
 import { getChainName } from '@repo/lib/config/app.config'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -32,7 +32,8 @@ export function RestartPoolCreationModal({
   poolAddress,
   isAbsolutePosition,
   showBalancerWarning,
-  showCowAmmWarning }: RestartPoolCreationModalProps) {
+  showCowAmmWarning,
+}: RestartPoolCreationModalProps) {
   const { open, onOpen, onClose } = useDisclosure()
   const router = useRouter()
 
@@ -61,22 +62,29 @@ export function RestartPoolCreationModal({
           position: 'absolute',
           right: '-240px',
           top: '-40px',
-          width: '250px' })}
+          width: '250px',
+        })}
       >
         <HStack>
-          <Icon boxSize="16px" color="font.secondary" asChild><Trash2 /></Icon>
+          <Icon asChild boxSize="16px" color="font.secondary">
+            <Trash2 />
+          </Icon>
           <Text color="font.secondary" fontWeight="bold">
             {triggerTitle}
           </Text>
         </HStack>
       </Button>
-      <Dialog.Root placement='center' open={open} size='lg' onOpenChange={(e: { open: boolean }) => {
-        if (!e.open) {
-          onClose();
-        }
-      }}>
+      <Dialog.Root
+        onOpenChange={(e: { open: boolean }) => {
+          if (!e.open) {
+            onClose()
+          }
+        }}
+        open={open}
+        placement="center"
+        size="lg"
+      >
         <Portal>
-
           <SuccessOverlay />
           <Dialog.Positioner>
             <Dialog.Content bg="background.level1">
@@ -126,11 +134,10 @@ export function RestartPoolCreationModal({
               </Dialog.Body>
             </Dialog.Content>
           </Dialog.Positioner>
-
         </Portal>
       </Dialog.Root>
     </>
-  );
+  )
 }
 
 interface BeforePoolDeployedWarningProps {
@@ -144,7 +151,8 @@ function BeforePoolDeployedWarning({
   network,
   poolType,
   showCowAmmWarning,
-  showBalancerWarning }: BeforePoolDeployedWarningProps) {
+  showBalancerWarning,
+}: BeforePoolDeployedWarningProps) {
   const poolTypeName = getPoolTypeLabel(poolType)
   const chainName = getChainName(network)
 
@@ -174,7 +182,8 @@ interface AfterPoolDeployedWarningProps {
 function AfterPoolDeployedWarning({
   network,
   poolType,
-  poolAddress }: AfterPoolDeployedWarningProps) {
+  poolAddress,
+}: AfterPoolDeployedWarningProps) {
   return (
     <VStack align="start" gap="md">
       <Text>
@@ -188,5 +197,5 @@ function AfterPoolDeployedWarning({
       </Text>
       <Text>Are you sure you want to abandon it and delete all associated data?</Text>
     </VStack>
-  );
+  )
 }

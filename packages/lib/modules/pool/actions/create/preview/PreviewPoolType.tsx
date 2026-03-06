@@ -1,4 +1,4 @@
-import { VStack, Heading, HStack, Text, Box, Card } from '@chakra-ui/react';
+import { VStack, Heading, HStack, Text, Box, Card } from '@chakra-ui/react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { getChainName } from '@repo/lib/config/app.config'
@@ -12,7 +12,8 @@ export function PreviewPoolType() {
   const { poolCreationForm } = usePoolCreationForm()
   const [network, protocol, poolType, weightedPoolStructure, poolTokens] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure', 'poolTokens'] })
+    name: ['network', 'protocol', 'poolType', 'weightedPoolStructure', 'poolTokens'],
+  })
 
   const selectedPoolTokens = poolTokens.filter(token => token.address)
   const tokenAddresses = selectedPoolTokens.map(token => token.address!)
@@ -25,29 +26,32 @@ export function PreviewPoolType() {
   const cardInformationRows = [
     {
       label: 'Protocol',
-      value: protocol },
+      value: protocol,
+    },
     {
       label: 'Network',
-      value: getChainName(network) },
+      value: getChainName(network),
+    },
     {
       label: 'Pool type',
       value:
         POOL_TYPES[poolType].label +
         (showWeightStructure
           ? `: ${isCustomWeightedPool(poolType, weightedPoolStructure) ? 'Custom' : `${!isCowPool(poolType) ? '2-token ' : ''}${weightedPoolStructure}`}`
-          : '') },
+          : ''),
+    },
   ]
 
   return (
     <PreviewPoolCreationCard stepTitle="Type">
       <Card.Body p="sm">
         <HStack alignItems="start" justify="space-between" w="full">
-          <VStack align="start" h="full" gap="md">
+          <VStack align="start" gap="md" h="full">
             <Heading marginBottom="sm" size="md">
               Pool type
             </Heading>
             {cardInformationRows.map(({ label, value }) => (
-              <HStack align="start" key={label} gap="lg" w="full">
+              <HStack align="start" gap="lg" key={label} w="full">
                 <Text color="font.secondary" w="20">
                   {label}
                 </Text>
@@ -70,5 +74,5 @@ export function PreviewPoolType() {
         </HStack>
       </Card.Body>
     </PreviewPoolCreationCard>
-  );
+  )
 }

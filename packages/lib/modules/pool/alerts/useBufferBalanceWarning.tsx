@@ -1,7 +1,7 @@
 import { HumanTokenAmountWithSymbol, ApiToken } from '@repo/lib/modules/tokens/token.types'
 import BigNumber from 'bignumber.js'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react'
 import { BalAlert } from '../../../shared/components/alerts/BalAlert'
 import { useReadContracts } from 'wagmi'
 import { vaultAdminAbi_V3, AddressProvider } from '@balancer/sdk'
@@ -154,8 +154,10 @@ function useLiquidityBuffers(wrappedTokens: ApiToken[]) {
       abi: vaultAdminAbi_V3,
       address: AddressProvider.Vault(token.chainId),
       functionName: 'getBufferBalance' as const,
-      args: [token.address] })),
-    query: { enabled: wrappedTokens.length > 0 } })
+      args: [token.address],
+    })),
+    query: { enabled: wrappedTokens.length > 0 },
+  })
 
   const { data: maxDepositData, isLoading: isLoadingMaxDeposit } = useReadContracts({
     contracts: wrappedTokens.map(token => ({
@@ -163,7 +165,9 @@ function useLiquidityBuffers(wrappedTokens: ApiToken[]) {
       abi: erc4626Abi,
       address: token.address as Address,
       functionName: 'maxDeposit' as const,
-      args: [AddressProvider.Vault(token.chainId)] })) })
+      args: [AddressProvider.Vault(token.chainId)],
+    })),
+  })
 
   const { data: maxWithdrawData, isLoading: isLoadingMaxWithdraw } = useReadContracts({
     contracts: wrappedTokens.map(token => ({
@@ -171,7 +175,9 @@ function useLiquidityBuffers(wrappedTokens: ApiToken[]) {
       abi: erc4626Abi,
       address: token.address as Address,
       functionName: 'maxWithdraw' as const,
-      args: [AddressProvider.Vault(token.chainId)] })) })
+      args: [AddressProvider.Vault(token.chainId)],
+    })),
+  })
 
   const isLoadingLiquidityBuffers =
     isLoadingBufferBalances || isLoadingMaxDeposit || isLoadingMaxWithdraw
@@ -203,7 +209,8 @@ function useLiquidityBuffers(wrappedTokens: ApiToken[]) {
         wrappedBalance,
         halfTotalLiquidityAsUnderlying,
         maxDeposit,
-        maxWithdraw }
+        maxWithdraw,
+      }
     })
     .filter(b => b !== null)
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Grid, GridItem, Heading, HStack, Text, Link } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, Heading, HStack, Text, Link } from '@chakra-ui/react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { StakedSonicComposabilitySvg } from '../components/StakedSonicComposabilitySvg'
 import { StakedSonicDecentralizationSvg } from '../components/StakedSonicDecentralizationSvg'
@@ -13,7 +13,8 @@ export function LandingBeetsStakedSonic() {
     <LandingSectionContainer
       button={{
         text: 'Stake $S',
-        href: '/stake' }}
+        href: '/stake',
+      }}
       subtitle="stS redefines Liquid Staking by combining deep liquidity, robust security, and competitive yield into one powerful position. Purpose-built for Sonic, stS delivers an unparalleled staking experience—maximizing rewards without sacrificing flexibility."
       title="stS: Liquid Staking on Sonic"
     >
@@ -30,7 +31,8 @@ export function LandingBeetsStakedSonic() {
           gap="sm"
           templateColumns={{
             base: '1fr',
-            lg: '1fr 1fr' }}
+            lg: '1fr 1fr',
+          }}
         >
           <GridItem>
             {/* <Box mb="xl">
@@ -90,14 +92,16 @@ export function LandingBeetsStakedSonic() {
                   <Link
                     href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
                     mr="md"
-                    target='_blank'
-                    rel='noopener noreferrer'>
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     <SpearbitLogo color="#25f2d0" height="36px" width="176px" />
                   </Link>
                   <Link
                     href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
-                    target='_blank'
-                    rel='noopener noreferrer'>
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     <TrailOfBitsLogo color="#ffffff" height="67px" width="110px" />
                   </Link>
                 </HStack>
@@ -107,5 +111,5 @@ export function LandingBeetsStakedSonic() {
         </Grid>
       </Box>
     </LandingSectionContainer>
-  );
+  )
 }

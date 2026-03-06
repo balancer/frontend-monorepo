@@ -1,4 +1,4 @@
-import { AlertProps, HStack } from '@chakra-ui/react';
+import { AlertProps, HStack } from '@chakra-ui/react'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'
@@ -12,7 +12,11 @@ export function TxBatchAlert({ steps, ...alertProps }: Props) {
   const { isStepWithTxBatch } = useStepWithTxBatch(lastStep)
   if (isStepWithTxBatch && !isMobile) {
     return (
-      <BalAlert content={<Content stepType={lastStep.stepType} />} status="info" {...(alertProps as any)} />
+      <BalAlert
+        content={<Content stepType={lastStep.stepType} />}
+        status="info"
+        {...(alertProps as any)}
+      />
     )
   }
   return null

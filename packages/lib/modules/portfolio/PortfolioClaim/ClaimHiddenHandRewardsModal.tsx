@@ -1,4 +1,4 @@
-import { Card, Dialog, Portal } from '@chakra-ui/react';
+import { Card, Dialog, Portal } from '@chakra-ui/react'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { Address } from 'viem'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -34,20 +34,21 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
   const rewards: HumanTokenAmount[] =
     hiddenHandRewardsData?.aggregatedRewards.map(reward => ({
       tokenAddress: reward.tokenAddress as Address,
-      humanAmount: reward.claimable as HumanAmount })) || []
+      humanAmount: reward.claimable as HumanAmount,
+    })) || []
 
   return (
     <Dialog.Root
-      placement='center'
-      open={isOpen}
-      trapFocus={!isSuccess}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+      open={isOpen}
+      placement="center"
+      trapFocus={!isSuccess}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={isSuccess} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -60,7 +61,9 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
             <Dialog.CloseTrigger />
             <Dialog.Body>
               <AnimateHeightChange gap="sm" w="full">
-                {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
+                {isMobile && (
+                  <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />
+                )}
                 <Card.Root variant="modalSubSection">
                   <TokenRowGroup
                     amounts={rewards}
@@ -79,8 +82,7 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

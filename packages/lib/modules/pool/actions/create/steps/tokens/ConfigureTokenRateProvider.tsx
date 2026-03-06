@@ -1,4 +1,4 @@
-import { Text, HStack, VStack, RadioGroup, Stack, Link, Box } from '@chakra-ui/react';
+import { Text, HStack, VStack, RadioGroup, Stack, Link, Box } from '@chakra-ui/react'
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { RATE_PROVIDER_RADIO_OPTIONS, RateProviderOption } from '../../constants'
@@ -24,11 +24,13 @@ interface ConfigureTokenRateProviderProps {
 
 export function ConfigureTokenRateProvider({
   tokenIndex,
-  verifiedRateProviderAddress }: ConfigureTokenRateProviderProps) {
+  verifiedRateProviderAddress,
+}: ConfigureTokenRateProviderProps) {
   const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'network'] })
+    name: ['poolTokens', 'network'],
+  })
   const formState = useFormState({ control: poolCreationForm.control })
 
   // Early return if token doesn't exist or has no address
@@ -80,13 +82,14 @@ export function ConfigureTokenRateProvider({
         </HStack>
         <RadioGroup.Root
           onValueChange={handleRateProviderOptionChange}
-          value={String(rateProviderRadioValue)}>
+          value={String(rateProviderRadioValue)}
+        >
           <Stack gap={3}>
             {adjustedRateProviderOptions.map(({ label, value }) => (
               <Stack
                 direction={{ base: 'column', md: 'row' }}
-                key={value}
                 gap={{ base: 1, md: 'xs' }}
+                key={value}
               >
                 <RadioGroup.Item size="lg" value={String(value)}>
                   <RadioGroup.ItemHiddenInput />
@@ -122,7 +125,7 @@ export function ConfigureTokenRateProvider({
         <ShareYieldFeesCheckbox paysYieldFees={paysYieldFees} tokenIndex={tokenIndex} />
       )}
     </FormSubsection>
-  );
+  )
 }
 
 interface CustomRateProviderInputProps {
@@ -139,7 +142,8 @@ function CustomRateProviderInput({
   control,
   errors,
   chainName,
-  network }: CustomRateProviderInputProps) {
+  network,
+}: CustomRateProviderInputProps) {
   const { updatePoolToken, poolCreationForm } = usePoolCreationForm()
   const rateProviderErrors = errors.poolTokens?.[tokenIndex]?.rateProvider
 
@@ -160,7 +164,8 @@ function CustomRateProviderInput({
         address: address as Address,
         abi: parseAbi(['function getRate() external view returns (uint256)']),
         functionName: 'getRate',
-        args: [] })
+        args: [],
+      })
       if (!rate) return 'invalid rate provider address'
       return true
     } catch (error) {
@@ -172,7 +177,7 @@ function CustomRateProviderInput({
   }
 
   return (
-    <VStack align="start" my="4" gap="md" w="full">
+    <VStack align="start" gap="md" my="4" w="full">
       <VStack align="start" gap="sm" w="full">
         <Controller
           control={control}
@@ -180,7 +185,7 @@ function CustomRateProviderInput({
           render={({ field }) => (
             <InputWithError
               error={rateProviderErrors?.message}
-              isInvalid={!!rateProviderErrors}
+              invalid={!!rateProviderErrors}
               label={`Rate Provider address (on ${chainName})`}
               onChange={e => field.onChange(e.target.value)}
               pasteFn={paste}
@@ -190,7 +195,8 @@ function CustomRateProviderInput({
             />
           )}
           rules={{
-            validate: validateRateProvider }}
+            validate: validateRateProvider,
+          }}
         />
       </VStack>
       <BalAlert
@@ -205,9 +211,10 @@ function CustomRateProviderInput({
               display="inline-flex"
               gap="xs"
               href="https://docs.balancer.fi/partner-onboarding/onboarding-overview/rate-providers.html#what-are-the-requirements-for-a-rate-provider-contract"
+              rel="noopener noreferrer"
+              target="_blank"
               textDecoration="underline"
-              target='_blank'
-              rel='noopener noreferrer'>
+            >
               Learn more
               <ArrowUpRight size={14} />
             </Link>
@@ -216,5 +223,5 @@ function CustomRateProviderInput({
         status="warning"
       />
     </VStack>
-  );
+  )
 }

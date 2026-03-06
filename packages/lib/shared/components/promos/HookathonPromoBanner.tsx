@@ -1,7 +1,7 @@
 'use client'
 
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react';
+import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 
@@ -11,15 +11,15 @@ export function HookathonPromoBanner() {
       background={`url('/images/promos/hookathon/hookathon-bg.jpg') no-repeat left center`}
       backgroundSize="cover"
       boxShadow="lg"
+      css={{
+        width: '100% !important',
+        maxWidth: '100% !important',
+      }}
       height="140px"
       maxW="100%"
       overflow="hidden"
       position="relative"
       rounded="lg"
-      css={{
-        width: '100% !important',
-        maxWidth: '100% !important'
-      }}
       width="full"
     >
       <Center className="copy" h="100%" zIndex="1">
@@ -58,6 +58,7 @@ export function HookathonPromoBanner() {
           </Flex>
           <Button
             _hover={{ bg: '#000', color: '#fff' }}
+            asChild
             bg="font.dark"
             color="font.light"
             cursor="hand"
@@ -68,18 +69,20 @@ export function HookathonPromoBanner() {
             shadow="2xl"
             size="lg"
             w="max-content"
-            asChild><NextLink
-              href="https://medium.com/balancer-protocol/balancer-v3-hookathon-bd3b8015de55">Learn more
-                          <Box
+          >
+            <NextLink href="https://medium.com/balancer-protocol/balancer-v3-hookathon-bd3b8015de55">
+              Learn more
+              <Box
                 _groupHover={{ transform: ' translateX(1.5px)' }}
                 pl="xs"
                 transition="all 0.2s var(--ease-out-cubic)"
               >
                 <ArrowUpRight size={14} style={{ display: 'inline' }} />
               </Box>
-            </NextLink></Button>
+            </NextLink>
+          </Button>
         </Flex>
       </Center>
     </Box>
-  );
+  )
 }

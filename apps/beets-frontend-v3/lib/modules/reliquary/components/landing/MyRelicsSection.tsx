@@ -9,7 +9,8 @@ import {
   Text,
   VStack,
   useDisclosure,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { CheckCircle, XCircle } from 'react-feather'
@@ -39,7 +40,8 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
     display: 'flex',
     gap: '1',
     px: '4',
-    py: '2' }
+    py: '2',
+  }
 
   return (
     <VStack alignItems="flex-start" gap="20" width="full">
@@ -58,8 +60,8 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
               <Stack
                 alignItems="flex-start"
                 direction={{ base: 'column', md: 'row' }}
-                p={{ base: 'sm', md: 'md' }}
                 gap="6"
+                p={{ base: 'sm', md: 'md' }}
                 w="full"
               >
                 <VStack alignItems="flex-start" gap="2" width="full">
@@ -94,7 +96,8 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                       lineHeight: '1rem',
                       fontWeight: 'semibold',
                       fontSize: 'sm',
-                      color: 'beets.base.50' }}
+                      color: 'beets.base.50',
+                    }}
                   />
                   <HStack>
                     {isDelegatedToMDs ? (
@@ -159,5 +162,5 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
         </Card.Root>
       </VStack>
     </VStack>
-  );
+  )
 }

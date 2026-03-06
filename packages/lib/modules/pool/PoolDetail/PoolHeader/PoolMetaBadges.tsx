@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box } from '@chakra-ui/react'
 import Image from 'next/image'
 import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'

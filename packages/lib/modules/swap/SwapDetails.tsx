@@ -1,7 +1,7 @@
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { HStack, VStack, Text, Box, Popover, HoverCard } from '@chakra-ui/react';
+import { HStack, VStack, Text, Box, HoverCard } from '@chakra-ui/react'
 import { useSwap } from './SwapProvider'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
@@ -55,7 +55,7 @@ export function OrderRoute() {
         </HoverCard.Root>
       </HStack>
     </HStack>
-  );
+  )
 }
 
 export function SwapDetails() {
@@ -213,5 +213,5 @@ export function SwapDetails() {
       </HStack>
       {isDefaultSwap ? <OrderRoute /> : null}
     </VStack>
-  );
+  )
 }

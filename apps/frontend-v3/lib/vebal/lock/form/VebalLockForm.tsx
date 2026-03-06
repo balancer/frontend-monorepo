@@ -1,7 +1,7 @@
-'use client';
+'use client'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
-import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { HumanAmount } from '@balancer/sdk'
 import { LockDurationSlider } from '@bal/lib/vebal/lock/duration/LockDurationSlider'
@@ -50,7 +50,8 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
     lockDuration,
     isLoading,
     lockMode,
-    expectedVeBalAmount } = useVebalLock()
+    expectedVeBalAmount,
+  } = useVebalLock()
 
   const router = useRouter()
 
@@ -189,7 +190,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
           </VStack>
 
           <VStack align="start" gap="sm" w="full">
-            <HStack justifyContent="space-between" gap="md" w="full">
+            <HStack gap="md" justifyContent="space-between" w="full">
               <TooltipWithTouch label="The minimum lock period is to the Thursday of the following week. The maximum lock period is to the closest Thursday to the end of a 1 year period. Once locked, you cannot redeem your LP tokens until lock expiry. You can extend your lock period later at any time.">
                 <Text
                   _after={{
@@ -200,7 +201,8 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                     width: 'full',
                     borderBottom: '1px dotted',
                     opacity: 0.8,
-                    pointerEvents: 'none' }}
+                    pointerEvents: 'none',
+                  }}
                   cursor="pointer"
                   display="inline-block"
                   fontSize="sm"
@@ -286,5 +288,5 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
       </Card.Root>
       <VebalLockModal extendExpired isOpen={previewModalDisclosure.open} onClose={onModalClose} />
     </Box>
-  );
+  )
 }

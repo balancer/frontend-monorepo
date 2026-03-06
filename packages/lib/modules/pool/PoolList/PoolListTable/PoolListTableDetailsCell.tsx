@@ -1,12 +1,13 @@
 import { PoolCore, PoolListItem } from '@repo/lib/modules/pool/pool.types'
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react'
 import { PoolVersionTag } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolVersionTag'
 import {
   isBoosted,
   isGyro,
   isLiquidityBootstrapping,
   isQuantAmmPool,
-  isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
+  isV3Pool,
+} from '@repo/lib/modules/pool/pool.helpers'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import Image from 'next/image'
 import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'

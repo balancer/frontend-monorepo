@@ -1,6 +1,6 @@
 import { type Control, Controller } from 'react-hook-form'
 import { PoolCreationForm, SupportedPoolTypes } from '../../types'
-import { VStack, Text, RadioGroup, Stack, HStack } from '@chakra-ui/react';
+import { VStack, Text, RadioGroup, Stack, HStack } from '@chakra-ui/react'
 import { POOL_TYPES, INITIAL_POOL_CREATION_FORM } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
 import { InfoIconPopover } from '../../InfoIconPopover'
@@ -26,7 +26,8 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
 
   const [network] = useWatch({
     control,
-    name: ['network'] })
+    name: ['network'],
+  })
 
   return (
     <VStack align="start" gap="md" w="full">
@@ -44,9 +45,11 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
                 ...INITIAL_POOL_CREATION_FORM,
                 network,
                 swapFeePercentage: getSwapFeePercentageOptions(value)[0].value,
-                poolType: value })
+                poolType: value,
+              })
             }}
-            value={String(field.value)}>
+            value={String(field.value)}
+          >
             <Stack gap={3}>
               {poolTypesKeys.map(poolTypeKey => (
                 <HStack key={poolTypeKey}>
@@ -64,8 +67,9 @@ export function ChoosePoolType({ control }: { control: Control<PoolCreationForm>
           </RadioGroup.Root>
         )}
         rules={{
-          required: 'Please select a pool type' }}
+          required: 'Please select a pool type',
+        }}
       />
     </VStack>
-  );
+  )
 }

@@ -4,7 +4,8 @@ import {
   VStack,
   NumberInput as ChakraNumberInput,
   HStack,
-  InputGroup } from '@chakra-ui/react';
+  InputGroup,
+} from '@chakra-ui/react'
 import { Controller, Control } from 'react-hook-form'
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
@@ -12,8 +13,8 @@ import { InfoIcon } from '../icons/InfoIcon'
 interface NumberInputProps {
   name: string
   control: Control<any>
-  isDisabled?: boolean
-  isInvalid?: boolean
+  disabled?: boolean
+  invalid?: boolean
   label: string
   isPercentage?: boolean
   validate: (value: number) => string | boolean
@@ -29,8 +30,8 @@ interface NumberInputProps {
 
 export function NumberInput({
   placeholder,
-  isInvalid,
-  isDisabled,
+  invalid,
+  disabled,
   control,
   label,
   isPercentage,
@@ -42,7 +43,8 @@ export function NumberInput({
   suggestedValue,
   onClickSuggestion,
   tooltip,
-  isFiatPrice }: NumberInputProps) {
+  isFiatPrice,
+}: NumberInputProps) {
   return (
     <VStack align="start" gap="sm" w="full">
       <HStack justify="space-between" w="full">
@@ -86,21 +88,20 @@ export function NumberInput({
             return (
               <>
                 <InputGroup
-                  width={width}
+                  endElement={
+                    isPercentage ? (
+                      <Text color="font.secondary" opacity={disabled ? 0.3 : 1}>
+                        %
+                      </Text>
+                    ) : undefined
+                  }
                   startElement={isFiatPrice ? <Text pointerEvents="none">$</Text> : undefined}
-                  endElement={isPercentage ? (
-                    <Text
-                      color="font.secondary"
-                      opacity={isDisabled ? 0.3 : 1}
-                    >
-                      %
-                    </Text>
-                  ) : undefined}
+                  width={width}
                 >
                   <ChakraNumberInput.Root
                     {...field}
-                    disabled={isDisabled}
-                    invalid={isInvalid || !!fieldState.error}
+                    disabled={disabled}
+                    invalid={invalid || !!fieldState.error}
                     onValueChange={field.onChange}
                     value={String(field.value)}
                     w="full"
@@ -138,11 +139,11 @@ export function NumberInput({
                   </HStack>
                 )}
               </>
-            );
+            )
           }}
           rules={{ validate }}
         />
       </Box>
     </VStack>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { HStack, Popover, HoverCard, Portal, Text, VStack } from '@chakra-ui/react';
+import { HStack, HoverCard, Portal, Text, VStack } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 
@@ -35,5 +35,5 @@ export function VoteUnallocatedTooltip({ usePortal, unallocatedWeight }: Props) 
       </HoverCard.Trigger>
       {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
     </HoverCard.Root>
-  );
+  )
 }

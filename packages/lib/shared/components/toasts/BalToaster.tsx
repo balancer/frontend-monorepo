@@ -8,7 +8,7 @@ import { ToastRenderProps, ToastStatus } from '../../hooks/useToast'
 export function BalToaster() {
   return (
     <Toaster toaster={toaster}>
-      {(toast) => {
+      {toast => {
         const renderFn = toast.meta?.render as ((props: ToastRenderProps) => ReactNode) | undefined
         if (renderFn) {
           return renderFn({

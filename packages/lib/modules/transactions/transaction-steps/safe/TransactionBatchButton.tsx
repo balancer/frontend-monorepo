@@ -1,4 +1,4 @@
-import { Button, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { getWaitForReceiptTimeout } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
@@ -22,7 +22,8 @@ import {
   isSafeTxSuccess,
   isSafeTxWaitingForConfirmations,
   isSafeTxWaitingForExecution,
-  mapSafeTxStatusToBalancerTxState } from './safe.helpers'
+  mapSafeTxStatusToBalancerTxState,
+} from './safe.helpers'
 import { useRecentTransactions } from '../../RecentTransactionsProvider'
 
 type Props = {
@@ -36,7 +37,8 @@ export function TransactionBatchButton({
   labels,
   chainId,
   currentStep,
-  onTransactionChange }: Props) {
+  onTransactionChange,
+}: Props) {
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
   const { minConfirmations } = useNetworkConfig()
 
@@ -61,7 +63,9 @@ export function TransactionBatchButton({
     confirmations: minConfirmations,
     timeout: getWaitForReceiptTimeout(chainId),
     query: {
-      ...onlyExplicitRefetch } })
+      ...onlyExplicitRefetch,
+    },
+  })
 
   // needed because a re-render will not reset a ref
   useEffect(() => {
@@ -79,11 +83,13 @@ export function TransactionBatchButton({
       execution: {
         data: null,
         status: 'success',
-        reset: noop } as unknown as TransactionExecution,
+        reset: noop,
+      } as unknown as TransactionExecution,
       result: transactionStatusQuery,
 
       executeAsync: noop,
-      isSafeTxLoading: false }
+      isSafeTxLoading: false,
+    }
     receiptReceivedRef.current = true
     onTransactionChange(successFullTransaction)
   }, [chainId, onTransactionChange, transactionStatusQuery])
@@ -125,7 +131,8 @@ export function TransactionBatchButton({
               description: labels.description,
               timestamp: Date.now(),
               safeTxId: tx.txId,
-              safeTxAddress: tx.safeAddress as Address },
+              safeTxAddress: tx.safeAddress as Address,
+            },
             false
           )
         }
@@ -143,7 +150,8 @@ export function TransactionBatchButton({
     return getTransactionButtonLabel({
       transactionState: mapSafeTxStatusToBalancerTxState(safeTxStatus),
       labels,
-      isSmartAccount: true })
+      isSmartAccount: true,
+    })
   }
 
   return (
@@ -167,7 +175,7 @@ export function TransactionBatchButton({
         </Button>
       )}
     </VStack>
-  );
+  )
 }
 
 type ErrorProps = { error: Error }

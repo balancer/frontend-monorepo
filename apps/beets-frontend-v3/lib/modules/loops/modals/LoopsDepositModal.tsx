@@ -1,4 +1,4 @@
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -36,7 +36,8 @@ export function LoopsDepositModal({
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
-    txReceipt: lastTransaction?.result })
+    txReceipt: lastTransaction?.result,
+  })
 
   useEffect(() => {
     if (isOpen) {
@@ -53,17 +54,17 @@ export function LoopsDepositModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!loopsDepositTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -88,8 +89,7 @@ export function LoopsDepositModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

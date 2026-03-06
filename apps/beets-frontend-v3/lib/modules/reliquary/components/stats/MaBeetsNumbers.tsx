@@ -1,4 +1,4 @@
-import { HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { HStack, Link, SimpleGrid, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconPopover'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -33,7 +33,8 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
 
   const relicMaturityLevels = globalStats?.levelBalances.map((balance: any) => ({
     level: bn(balance.level).plus(1),
-    percentageOfTotal: bn(balance.balance).div(globalStats.totalBalance) }))
+    percentageOfTotal: bn(balance.balance).div(globalStats.totalBalance),
+  }))
 
   const avgRelicMaturity = fNumCustom(
     relicMaturityLevels?.reduce(
@@ -55,7 +56,8 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
     if (item.title === 'BEETS reward APR' && item.type === 'STAKING_BOOST') {
       return {
         ...item,
-        apr: item.apr - (baseApr?.apr || 0) }
+        apr: item.apr - (baseApr?.apr || 0),
+      }
     } else {
       return item
     }
@@ -128,5 +130,5 @@ export function MaBeetsNumbers({ onToggleShowMore, chartsVisible }: Props) {
         {chartsVisible ? 'Show less' : 'Show more'}
       </Link>
     </VStack>
-  );
+  )
 }

@@ -1,11 +1,12 @@
 import { useEffect, useRef, ReactNode } from 'react'
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react'
 import { useScroll, useTransform, useSpring } from 'framer-motion'
 
 export function SparkleIconWrapper({
   children,
   rotationRange = 720,
-  size = 44 }: {
+  size = 44,
+}: {
   children: ReactNode
   rotationRange?: number
   size?: number
@@ -14,11 +15,13 @@ export function SparkleIconWrapper({
 
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
-    offset: ['start end', 'end start'] })
+    offset: ['start end', 'end start'],
+  })
 
   const rotate = useSpring(useTransform(scrollYProgress, [0, 1], [0, rotationRange]), {
     stiffness: 80,
-    damping: 20 })
+    damping: 20,
+  })
 
   useEffect(() => {
     const svgElement = wrapperRef.current?.querySelector('svg')
@@ -47,19 +50,20 @@ export function SparkleIconWrapper({
 
   return (
     <Box
-      display="inline-block"
-      height={size}
-      position="relative"
-      ref={wrapperRef}
       css={{
         '& > svg': {
           display: 'block',
           width: '100%',
-          height: '100%' }
+          height: '100%',
+        },
       }}
+      display="inline-block"
+      height={size}
+      position="relative"
+      ref={wrapperRef}
       width={size}
     >
       {children}
     </Box>
-  );
+  )
 }

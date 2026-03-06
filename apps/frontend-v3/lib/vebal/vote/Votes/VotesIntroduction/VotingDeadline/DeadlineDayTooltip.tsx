@@ -1,8 +1,7 @@
-import { Button, Popover, VStack, Text, SystemStyleObject } from '@chakra-ui/react';
+import { Button, Popover, VStack, Text, SystemStyleObject } from '@chakra-ui/react'
 import { ReminderButton } from './ReminderButton'
 import { format } from 'date-fns'
 import { ReactNode, useState } from 'react'
-import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { CalendarReminderModal } from '../../MyVotes/CalendarReminderModal'
 
 type Props = {
@@ -31,16 +30,16 @@ export function DeadlineDayTooltip({
   day,
   deadline,
   sharedStyles,
-  getDayStyles }: Props) {
-  const { isMobile } = useBreakpoints()
-
+  getDayStyles,
+}: Props) {
   const [isCalendarReminderOpen, setIsCalendarReminderOpen] = useState(false)
 
   return (
     <Popover.Root
       positioning={{
-        placement: 'top'
-      }}>
+        placement: 'top',
+      }}
+    >
       <Popover.Trigger asChild>
         <Button
           {...sharedStyles}
@@ -57,9 +56,9 @@ export function DeadlineDayTooltip({
             <VStack
               bg="background.level3"
               boxShadow={popoverBoxShadow}
+              gap="sm"
               p="ms"
               rounded="lg"
-              gap="sm"
             >
               <Text alignSelf="start" fontSize="16px" fontWeight={700} lineHeight="20px">
                 {title}
@@ -74,13 +73,13 @@ export function DeadlineDayTooltip({
 
               <CalendarReminderModal
                 deadline={day}
-                open={isCalendarReminderOpen}
                 onClose={() => setIsCalendarReminderOpen(false)}
+                open={isCalendarReminderOpen}
               />
             </VStack>
           </Popover.Body>
         </Popover.Content>
       </Popover.Positioner>
     </Popover.Root>
-  );
+  )
 }

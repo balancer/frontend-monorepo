@@ -8,7 +8,8 @@ import {
   Icon,
   Box,
   Link,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TokenInputSelector } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
@@ -26,7 +27,8 @@ import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
 import {
   isConstantRateProvider,
-  isDynamicRateProvider } from '@repo/lib/modules/tokens/token.helpers'
+  isDynamicRateProvider,
+} from '@repo/lib/modules/tokens/token.helpers'
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
 import { useCoingeckoTokenPrice } from './useCoingeckoTokenPrice'
@@ -37,7 +39,8 @@ import {
   isCustomWeightedPool,
   isReClammPool,
   isGyroEllipticPool,
-  isCowPool } from '../../helpers'
+  isCowPool,
+} from '../../helpers'
 import { PoolType } from '@balancer/sdk'
 import { ChoosePoolTokensAlert } from './ChoosePoolTokensAlert'
 import { useFormState, useWatch } from 'react-hook-form'
@@ -50,7 +53,8 @@ export function ChoosePoolTokens() {
     usePoolCreationForm()
   const [network, poolTokens, weightedPoolStructure, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'] })
+    name: ['network', 'poolTokens', 'weightedPoolStructure', 'poolType'],
+  })
 
   const isPoolAtMaxTokens = validatePoolTokens.isAtMaxTokens(poolType, poolTokens)
 
@@ -100,7 +104,8 @@ export function ChoosePoolTokens() {
       rateProvider,
       data: tokenMetadata,
       paysYieldFees: rateProvider !== zeroAddress,
-      usdPrice: '' })
+      usdPrice: '',
+    })
 
     setSelectedTokenIndex(null)
     poolCreationForm.setValue('hasAcceptedSimilarPoolsWarning', false)
@@ -166,7 +171,7 @@ export function ChoosePoolTokens() {
             <VStack align="start" gap="lg" w="full">
               <Separator />
               <AddTokenButton
-                isDisabled={isPoolAtMaxTokens}
+                disabled={isPoolAtMaxTokens}
                 onClick={() => addPoolToken()}
                 poolType={poolType}
               />
@@ -194,7 +199,7 @@ export function ChoosePoolTokens() {
         tokens={availableTokens}
       />
     </>
-  );
+  )
 }
 
 interface ConfigureTokenProps {
@@ -216,7 +221,8 @@ function ConfigureToken({
   weightedPoolStructure,
   poolTokens,
   network,
-  poolType }: ConfigureTokenProps) {
+  poolType,
+}: ConfigureTokenProps) {
   const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
   const formState = useFormState({ control: poolCreationForm.control })
 
@@ -229,7 +235,8 @@ function ConfigureToken({
     // automatically hydrate form with coingecko price for unlisted tokens
     if (!apiPriceForToken && cgPriceForToken && token?.usdPrice) {
       updatePoolToken(index, {
-        usdPrice: cgPriceForToken.toString() })
+        usdPrice: cgPriceForToken.toString(),
+      })
     }
   }, [cgPriceForToken, apiPriceForToken, token?.usdPrice])
 
@@ -243,7 +250,7 @@ function ConfigureToken({
   const showRateProvider = !isCowPool(poolType)
 
   return (
-    <VStack align="start" key={index} gap="sm" w="full">
+    <VStack align="start" gap="sm" key={index} w="full">
       <HStack align="end" w="full">
         <VStack align="start" gap="sm" w="full">
           <Text fontWeight="bold">Token {index + 1}</Text>
@@ -253,14 +260,14 @@ function ConfigureToken({
 
         {showWeightInputs && (
           <TooltipWithTouch
-            isDisabled={weightedPoolStructure === WeightedPoolStructure.Custom}
+            disabled={weightedPoolStructure === WeightedPoolStructure.Custom}
             label={`Weight is set to ${weightedPoolStructure} based on your selection above. ${!isCowPool(poolType) ? 'Select "Custom" to set your own weights.' : ''}`}
           >
             <Box>
               <NumberInput
                 control={poolCreationForm.control}
-                isDisabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
-                isInvalid={isInvalidWeight}
+                disabled={weightedPoolStructure !== WeightedPoolStructure.Custom}
+                invalid={isInvalidWeight}
                 isPercentage
                 label="Weight"
                 name={`poolTokens.${index}.weight`}
@@ -278,7 +285,7 @@ function ConfigureToken({
 
         {poolTokens.length > 2 && (
           <RemoveTokenButton
-            isDisabled={poolTokens.length <= 2}
+            disabled={poolTokens.length <= 2}
             onClick={() => removePoolToken(index)}
           />
         )}
@@ -314,19 +321,20 @@ function ConfigureToken({
         />
       )}
     </VStack>
-  );
+  )
 }
 
 function AddTokenButton({
-  isDisabled,
+  disabled,
   onClick,
-  poolType }: {
-  isDisabled: boolean
+  poolType,
+}: {
+  disabled: boolean
   onClick: () => void
   poolType: SupportedPoolTypes
 }) {
   const getTooltipMessage = () => {
-    if (!isDisabled) return undefined
+    if (!disabled) return undefined
 
     switch (poolType) {
       case PoolType.Weighted:
@@ -346,10 +354,10 @@ function AddTokenButton({
   const tooltipMessage = getTooltipMessage()
 
   const buttonContent = (
-    <motion.div transition={{ duration: 0.2 }} whileTap={{ scale: isDisabled ? 1 : 0.98 }}>
+    <motion.div transition={{ duration: 0.2 }} whileTap={{ scale: disabled ? 1 : 0.98 }}>
       <Button
-        cursor={isDisabled ? 'not-allowed' : 'pointer'}
-        disabled={isDisabled}
+        cursor={disabled ? 'not-allowed' : 'pointer'}
+        disabled={disabled}
         onClick={onClick}
         variant="secondary"
       >
@@ -365,7 +373,7 @@ function AddTokenButton({
 
   if (tooltipMessage) {
     return (
-      <TooltipWithTouch hasArrow isDisabled={false} label={tooltipMessage}>
+      <TooltipWithTouch disabled={false} hasArrow label={tooltipMessage}>
         {buttonContent}
       </TooltipWithTouch>
     )
@@ -374,19 +382,19 @@ function AddTokenButton({
   return buttonContent
 }
 
-function RemoveTokenButton({ onClick, isDisabled }: { onClick: () => void; isDisabled: boolean }) {
+function RemoveTokenButton({ onClick, disabled }: { onClick: () => void; disabled: boolean }) {
   return (
     <Button
       _focus={{ color: 'font.error' }}
       _hover={{ color: 'font.error' }}
       color="font.secondary"
-      disabled={isDisabled}
+      disabled={disabled}
       onClick={onClick}
       unstyled
     >
       <Trash2 size={16} />
     </Button>
-  );
+  )
 }
 
 function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
@@ -394,12 +402,14 @@ function InvalidWeightInputAlert({ message }: { message: string | undefined }) {
 
   return (
     <HStack gap="sm" w="full">
-      <Icon boxSize="18px" color="red.500" asChild><AlertTriangle /></Icon>
+      <Icon asChild boxSize="18px" color="red.500">
+        <AlertTriangle />
+      </Icon>
       <Text color="font.error" fontSize="sm" fontWeight="semibold" textAlign="start" w="full">
         {message}
       </Text>
     </HStack>
-  );
+  )
 }
 
 function CoingeckoAttribution() {
@@ -412,11 +422,14 @@ function CoingeckoAttribution() {
         color="font.link"
         fontSize="sm"
         href="https://www.coingecko.com"
-        target='_blank'
-        rel='noopener noreferrer'>
+        rel="noopener noreferrer"
+        target="_blank"
+      >
         CoinGecko
-        <Icon asChild><ArrowUpRight /></Icon>
+        <Icon asChild>
+          <ArrowUpRight />
+        </Icon>
       </Link>
     </HStack>
-  );
+  )
 }

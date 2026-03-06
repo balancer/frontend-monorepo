@@ -1,8 +1,9 @@
 import { PoolDisplayType } from '../../pool.types'
 import { useState, useCallback, useMemo } from 'react'
 import ButtonGroupComponent, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { Box } from '@chakra-ui/react';
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { Box } from '@chakra-ui/react'
 import { usePoolList } from '../PoolListProvider'
 
 const OPTIONS = [

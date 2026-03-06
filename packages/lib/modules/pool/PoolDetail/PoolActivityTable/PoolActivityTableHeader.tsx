@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid, GridItem, Text, Separator } from '@chakra-ui/react';
+import { Grid, GridItem, Text, Separator } from '@chakra-ui/react'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 import { SortingBy } from '../PoolActivity/poolActivity.types'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
@@ -15,7 +15,8 @@ export function PoolActivityTableHeader({ ...rest }) {
     sortingBy,
     sorting,
     isSortedByAction,
-    setSkip } = usePoolActivity()
+    setSkip,
+  } = usePoolActivity()
 
   const handleSort = (newSortingBy: SortingBy) => {
     if (sortingBy === newSortingBy) {
@@ -59,5 +60,5 @@ export function PoolActivityTableHeader({ ...rest }) {
         />
       </Grid>
     </>
-  );
+  )
 }

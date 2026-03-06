@@ -1,12 +1,13 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text } from '@chakra-ui/react';
+import { Card, VStack, Text } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import {
   QuoteBptOut,
-  ReceiptBptOut } from '@repo/lib/modules/pool/actions/add-liquidity/modal/BptOut'
+  ReceiptBptOut,
+} from '@repo/lib/modules/pool/actions/add-liquidity/modal/BptOut'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -19,7 +20,8 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import {
   PROPORTIONAL_ADD_DESCRIPTION,
   SlippageOptions,
-  SlippageSelector } from '@repo/lib/modules/pool/actions/SlippageSelector'
+  SlippageSelector,
+} from '@repo/lib/modules/pool/actions/SlippageSelector'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
@@ -35,7 +37,8 @@ export function ReliquaryAddLiquiditySummary({
   sentTokens,
   receivedBptUnits,
   createNew,
-  relicId }: Props) {
+  relicId,
+}: Props) {
   const {
     totalUSDValue,
     simulationQuery,
@@ -46,7 +49,8 @@ export function ReliquaryAddLiquiditySummary({
     addLiquidityTxHash,
     addLiquidityTxSuccess,
     slippage,
-    wantsProportional } = useAddLiquidity()
+    wantsProportional,
+  } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -60,7 +64,8 @@ export function ReliquaryAddLiquiditySummary({
       ...amount,
       humanAmount: bn(amount?.humanAmount || 0)
         .times(1 - selectedSlippage)
-        .toString() })) as HumanTokenAmountWithSymbol[]
+        .toString(),
+    })) as HumanTokenAmountWithSymbol[]
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -103,8 +108,8 @@ export function ReliquaryAddLiquiditySummary({
         <TokenRowGroup
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
-          isLoading={isLoadingTokens}
           label={shouldShowReceipt || !hasQuoteContext ? 'You added' : addingInputTokenLabel}
+          loading={isLoadingTokens}
           rightElement={
             wantsProportional && (
               <SlippageSelector
@@ -127,13 +132,13 @@ export function ReliquaryAddLiquiditySummary({
                 ? formatUnits(simulationQuery.data.bptOut.amount, BPT_DECIMALS)
                 : receivedBptUnits
             }
-            isLoading={isLoadingReceipt}
             label={createNew ? 'Created Relic with' : `Added liquidity to Relic #${relicId}`}
+            loading={isLoadingReceipt}
           />
         ) : (
           <QuoteBptOut
-            isLoading={isLoadingTokens}
             label={createNew ? 'Creating Relic with' : `Adding liquidity to Relic #${relicId}`}
+            loading={isLoadingTokens}
           />
         )}
       </Card.Root>
@@ -172,5 +177,5 @@ export function ReliquaryAddLiquiditySummary({
         </CardPopAnim>
       ) : null}
     </AnimateHeightChange>
-  );
+  )
 }

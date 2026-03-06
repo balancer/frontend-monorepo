@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Center, Grid, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, Grid, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { MaBeetsAddLiquiditySvg } from '../components/MaBeetsAddLiquiditySvg'
@@ -12,13 +12,14 @@ import { MaBeetsMintMabeetsSvg } from '../components/MaBeetsMintMabeetsSvg'
 function FeatureCard({
   title,
   description,
-  image }: {
+  image,
+}: {
   title: string
   description: string
   image: React.ReactNode
 }) {
   return (
-    <HStack align="start" h="full" gap="none" w="full">
+    <HStack align="start" gap="none" h="full" w="full">
       <Box bg="rgba(0, 0, 0, 0.1)" borderBottom="30px solid rgba(0, 0, 0, 0.4)" h="full" w="40%">
         {image}
       </Box>
@@ -29,13 +30,14 @@ function FeatureCard({
         </Text>
       </VStack>
     </HStack>
-  );
+  )
 }
 
 function HowItWorksCard({
   title,
   description,
-  image }: {
+  image,
+}: {
   title: string
   description: string
   image: React.ReactNode
@@ -66,7 +68,8 @@ export function LandingMaBeetsSection() {
     <LandingSectionContainer
       button={{
         text: 'Get maBEETS',
-        href: 'https://beets.fi/mabeets' }}
+        href: 'https://beets.fi/mabeets',
+      }}
       subtitle="Shape the Future. Earn as You Grow. maBEETS unlocks maturity-adjusted voting power,
             allowing you to participate in governance decisions and earn rewards without locking
             your assets."
@@ -78,7 +81,8 @@ export function LandingMaBeetsSection() {
           mb="xl"
           templateColumns={{
             base: '1fr',
-            lg: '1fr 1fr' }}
+            lg: '1fr 1fr',
+          }}
         >
           <GridItem>
             <FeatureCard
@@ -104,7 +108,8 @@ export function LandingMaBeetsSection() {
           gap="lg"
           templateColumns={{
             base: '1fr',
-            lg: '1fr 1fr 1fr' }}
+            lg: '1fr 1fr 1fr',
+          }}
         >
           <HowItWorksCard
             description="Join the Fresh Beets Pool (80/20 BEETS/stS) to receive fBEETS."

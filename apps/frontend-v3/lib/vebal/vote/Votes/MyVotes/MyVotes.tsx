@@ -10,7 +10,8 @@ import {
   HStack,
   Stack,
   Text,
-  VStack } from '@chakra-ui/react';
+  VStack,
+} from '@chakra-ui/react'
 import { MyVotesTable } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTable'
 import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { MyVotesStatsMyVebal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyVebal'
@@ -35,7 +36,8 @@ export function MyVotes() {
     loading: myVotesLoading,
     hasExpiredGauges,
     hasNewVotes,
-    hasUsablePools } = useMyVotes()
+    hasUsablePools,
+  } = useMyVotes()
   const { open, onOpen, onClose } = useDisclosure()
   const { isConnected } = useUserAccount()
 
@@ -69,13 +71,15 @@ export function MyVotes() {
           How it works?
         </Button>
       </HStack>
-      <MyVotesHintModal open={open} onClose={onClose} />
+      <MyVotesHintModal onClose={onClose} open={open} />
       {isConnected && (
         <>
           {vebalIsExpired ? (
             <GridItem w="full">
               <Alert.Root status="error" variant="WideOnDesktop">
-                <Alert.Indicator asChild><AlertTriangle /></Alert.Indicator>
+                <Alert.Indicator asChild>
+                  <AlertTriangle />
+                </Alert.Indicator>
                 <Stack
                   alignItems="baseline"
                   direction={{ base: 'column', lg: 'row' }}
@@ -84,8 +88,9 @@ export function MyVotes() {
                   <Alert.Title>{`You can't vote due to expired veBAL`}</Alert.Title>
                   <Alert.Description>
                     Voting requires veBAL.{' '}
-                    <Box color="font.dark" textDecoration="underline" asChild><NextLink href="/vebal/manage">Extend or relock
-                                          </NextLink></Box>{' '}
+                    <Box asChild color="font.dark" textDecoration="underline">
+                      <NextLink href="/vebal/manage">Extend or relock</NextLink>
+                    </Box>{' '}
                     your B-80BAL-20-WETH to replenish your veBAL.
                   </Alert.Description>
                 </Stack>
@@ -94,7 +99,9 @@ export function MyVotes() {
           ) : !loading && noVeBALBalance ? (
             <GridItem w="full">
               <Alert.Root status="warning" variant="WideOnDesktop">
-                <Alert.Indicator asChild><AlertTriangle /></Alert.Indicator>
+                <Alert.Indicator asChild>
+                  <AlertTriangle />
+                </Alert.Indicator>
                 <Stack
                   alignItems="baseline"
                   direction={{ base: 'column', lg: 'row' }}
@@ -104,9 +111,11 @@ export function MyVotes() {
                   <Alert.Description>
                     {' '}
                     Get veBAL by locking up LP tokens from the{' '}
-                    <Box color="font.dark" textDecoration="underline" asChild><NextLink
-                      href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">80% BAL / 20% WETH pool
-                                          </NextLink></Box>
+                    <Box asChild color="font.dark" textDecoration="underline">
+                      <NextLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
+                        80% BAL / 20% WETH pool
+                      </NextLink>
+                    </Box>
                     .
                   </Alert.Description>
                 </Stack>
@@ -136,7 +145,9 @@ export function MyVotes() {
                 {hasAllVotingPowerTimeLocked && (
                   <GridItem colSpan={4} w="full">
                     <Alert.Root status="warning" variant="WideOnDesktop">
-                      <Alert.Indicator asChild><AlertTriangle /></Alert.Indicator>
+                      <Alert.Indicator asChild>
+                        <AlertTriangle />
+                      </Alert.Indicator>
                       <Stack
                         alignItems="baseline"
                         direction={{ base: 'column', lg: 'row' }}
@@ -154,7 +165,9 @@ export function MyVotes() {
                 {vebalLockTooShort && (
                   <GridItem colSpan={4} w="full">
                     <Alert.Root status="warning" variant="WideOnDesktop">
-                      <Alert.Indicator asChild><AlertTriangle /></Alert.Indicator>
+                      <Alert.Indicator asChild>
+                        <AlertTriangle />
+                      </Alert.Indicator>
                       <Stack
                         alignItems="baseline"
                         direction={{ base: 'column', lg: 'row' }}
@@ -163,8 +176,11 @@ export function MyVotes() {
                         <Alert.Title>{`You can't vote since your veBAL expires before the next vote period`}</Alert.Title>
                         <Alert.Description>
                           Gauge voting requires your veBAL to be locked for 7+ days.{' '}
-                          <Text color="font.dark" textDecoration="underline" asChild><NextLink href={getVeBalManagePath('extend', 'vote')}>Extend your lock
-                                                      </NextLink></Text>{' '}
+                          <Text asChild color="font.dark" textDecoration="underline">
+                            <NextLink href={getVeBalManagePath('extend', 'vote')}>
+                              Extend your lock
+                            </NextLink>
+                          </Text>{' '}
                           to vote.
                         </Alert.Description>
                       </Stack>
@@ -175,14 +191,18 @@ export function MyVotes() {
                 {hasExpiredGauges && (
                   <GridItem colSpan={4} w="full">
                     <Alert.Root status="warning" variant="WideOnDesktop">
-                      <Alert.Indicator asChild><AlertTriangle /></Alert.Indicator>
+                      <Alert.Indicator asChild>
+                        <AlertTriangle />
+                      </Alert.Indicator>
                       <Stack
                         alignItems="baseline"
                         direction={{ base: 'column', lg: 'row' }}
                         gap={{ base: '0', lg: 'sm' }}
                       >
                         <Alert.Title>You have votes on an expired pool gauge</Alert.Title>
-                        <Alert.Description>Reallocate these to avoid wasting votes</Alert.Description>
+                        <Alert.Description>
+                          Reallocate these to avoid wasting votes
+                        </Alert.Description>
                       </Stack>
                     </Alert.Root>
                   </GridItem>
@@ -191,7 +211,9 @@ export function MyVotes() {
                 {hasNewVotes && hasUsablePools && (
                   <GridItem colSpan={4} w="full">
                     <Alert.Root status="warning">
-                      <Alert.Indicator asChild><AlertTriangle /></Alert.Indicator>
+                      <Alert.Indicator asChild>
+                        <AlertTriangle />
+                      </Alert.Indicator>
                       <Stack alignItems="baseline" gap="0">
                         <Alert.Title>Resubmit your votes to use your full voting power</Alert.Title>
                         <Alert.Description fontSize="sm">
@@ -216,5 +238,5 @@ export function MyVotes() {
         </GridItem>
       </Grid>
     </VStack>
-  );
+  )
 }

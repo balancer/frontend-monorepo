@@ -1,6 +1,6 @@
 import TokenRow, { TokenRowProps } from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { ReactNode } from 'react'
-import { HStack, VStack, Separator } from '@chakra-ui/react';
+import { HStack, VStack, Separator } from '@chakra-ui/react'
 
 export interface TokenRowWithDetailsProps extends TokenRowProps {
   details?: [ReactNode, ReactNode][]
@@ -23,5 +23,5 @@ export function TokenRowWithDetails({ details, ...props }: TokenRowWithDetailsPr
         </>
       )}
     </VStack>
-  );
+  )
 }

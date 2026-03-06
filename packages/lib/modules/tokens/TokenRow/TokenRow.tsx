@@ -128,7 +128,7 @@ export type TokenRowProps = {
   targetWeight?: string
   usdValue?: string
   disabled?: boolean
-  isLoading?: boolean
+  loading?: boolean
   abbreviated?: boolean
   isBpt?: boolean
   isNestedBpt?: boolean
@@ -151,7 +151,7 @@ export default function TokenRow({
   targetWeight,
   chain,
   disabled,
-  isLoading,
+  loading,
   isBpt,
   isNestedBpt,
   isNestedPoolToken,
@@ -235,7 +235,7 @@ export default function TokenRow({
         )}
         <HStack align="start" gap="none">
           <VStack alignItems="flex-end" gap="none" textAlign="right">
-            {isLoading ? (
+            {loading ? (
               <>
                 <Skeleton h="4" w="10" />
                 <Skeleton h="4" w="10" />
@@ -262,7 +262,7 @@ export default function TokenRow({
           </VStack>
           {actualWeight && (
             <VStack alignItems="flex-end" gap="none" w="24">
-              {isLoading ? (
+              {loading ? (
                 <>
                   <Skeleton h="4" w="10" />
                   <Skeleton h="4" w="10" />

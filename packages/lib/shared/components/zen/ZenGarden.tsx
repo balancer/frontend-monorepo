@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Box, BoxProps } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { GqlPoolType } from '../../services/api/generated/graphql'
 import { isClp, isStable, isWeighted, isCowAmmPool } from '@repo/lib/modules/pool/pool.helpers'
 import { CowSandPattern } from '../imgs/CowSandPattern'
@@ -15,7 +15,7 @@ type Props = {
 } & BoxProps
 
 const commonProps = (subdued = false) =>
-  (({
+  ({
     position: 'absolute',
     left: '0',
     right: '0',
@@ -24,8 +24,8 @@ const commonProps = (subdued = false) =>
     marginX: 'auto',
     borderWidth: 1,
     transformOrigin: '50% 0',
-    borderColor: subdued ? 'border.subduedZen' : 'border.zen'
-  }) as BoxProps)
+    borderColor: subdued ? 'border.subduedZen' : 'border.zen',
+  }) as BoxProps
 
 function getZenGardenProps(
   variant: ZenGardenVariant,
@@ -39,31 +39,36 @@ function getZenGardenProps(
         ...commonProps(subdued),
         rounded: 'full',
         height: heightPx,
-        width: widthPx }
+        width: widthPx,
+      }
     case 'pill':
       return {
         ...commonProps(subdued),
         rounded: 'full',
         height: heightPx,
-        width: widthPx }
+        width: widthPx,
+      }
     case 'square':
       return {
         ...commonProps(subdued),
         height: heightPx,
         width: widthPx,
-        rounded: '80px' }
+        rounded: '80px',
+      }
     case 'diamond':
       return {
         ...commonProps(subdued),
         height: heightPx,
         width: widthPx,
-        rounded: '80px' }
+        rounded: '80px',
+      }
     default:
       return {
         ...commonProps(subdued),
         rounded: 'full',
         height: heightPx,
-        width: widthPx }
+        width: widthPx,
+      }
   }
 }
 
@@ -100,7 +105,8 @@ export function PoolZenGarden({
   poolType,
   sizePx,
   subdued = true,
-  repetitions }: {
+  repetitions,
+}: {
   poolType?: GqlPoolType
   sizePx: string
   subdued?: boolean

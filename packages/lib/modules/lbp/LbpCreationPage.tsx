@@ -1,12 +1,12 @@
-'use client';
+'use client'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { LuCheck } from 'react-icons/lu';
+import { LuCheck } from 'react-icons/lu'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
 import { LbpForm } from '@repo/lib/modules/lbp/LbpForm'
 import { LbpPreview } from '@repo/lib/modules/lbp/LbpPreview'
-import { Steps, VStack, Stack, Skeleton, Box, Separator } from '@chakra-ui/react';
+import { Steps, VStack, Stack, Skeleton, Box, Separator } from '@chakra-ui/react'
 import { HeaderBanner } from '@repo/lib/modules/lbp/header/HeaderBanner'
 import { useHydrateLbpForm } from '@repo/lib/modules/lbp/useHydrateLbpForm'
 import { useLbpForm } from '@repo/lib/modules/lbp/LbpFormProvider'
@@ -25,17 +25,17 @@ function LbpCreationPageContent() {
       ) : (
         <>
           <Steps.Root
-            step={currentStepIndex}
             orientation={isMobile ? 'vertical' : 'horizontal'}
+            step={currentStepIndex}
             w="50%"
           >
-                <Steps.List>
+            <Steps.List>
               {steps.map(step => (
                 <Steps.Item key={step.id}>
                   <Steps.Indicator>
                     <Steps.Status
-                      current={<Steps.Number />}
                       complete={<LuCheck />}
+                      current={<Steps.Number />}
                       incomplete={<Steps.Number />}
                     />
                   </Steps.Indicator>
@@ -48,14 +48,14 @@ function LbpCreationPageContent() {
                 </Steps.Item>
               ))}
             </Steps.List>
-              </Steps.Root>
+          </Steps.Root>
 
           <Separator />
 
           <Stack
             direction={{ base: 'column', xl: 'row' }}
-            justifyContent="stretch"
             gap="xl"
+            justifyContent="stretch"
             w="full"
           >
             <LbpForm />
@@ -64,7 +64,7 @@ function LbpCreationPageContent() {
         </>
       )}
     </VStack>
-  );
+  )
 }
 
 function LbpPageSkeleton() {
@@ -82,7 +82,7 @@ function LbpPageSkeleton() {
         <Skeleton h="1300px" w="full" />
       </VStack>
     </>
-  );
+  )
 }
 
 export default function LbpCreationPage() {

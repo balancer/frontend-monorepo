@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
@@ -46,17 +46,17 @@ export function LstWithdrawModal({
 
   return (
     <Dialog.Root
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          handleOnClose();
+          handleOnClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!lstWithdrawTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -76,8 +76,7 @@ export function LstWithdrawModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

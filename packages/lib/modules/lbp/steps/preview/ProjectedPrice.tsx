@@ -1,4 +1,4 @@
-import { Card, Heading, HStack, Spacer, Text, Separator } from '@chakra-ui/react';
+import { Card, Heading, HStack, Spacer, Text, Separator } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '../sale-structure/ProjectedPriceChart'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useState } from 'react'
@@ -27,7 +27,8 @@ export function ProjectedPrice({
   launchTokenSeed,
   collateralTokenSeed,
   collateralTokenPrice,
-  onPriceChange }: Props) {
+  onPriceChange,
+}: Props) {
   const [maxPrice, setMaxPrice] = useState('')
   const updateMaxPrice = (prices: LbpPrice[]) => {
     setMaxPrice(fNum('fiat', max(prices)))
@@ -81,7 +82,8 @@ export function ProjectedPrice({
             style={{
               width: '15px',
               border: '1px dashed',
-              borderColor: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)' }}
+              borderColor: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)',
+            }}
           />
           <Text>{`${launchTokenSymbol} projected price (if no demand)`}</Text>
           <Spacer />
@@ -91,5 +93,5 @@ export function ProjectedPrice({
         </HStack>
       </Card.Body>
     </Card.Root>
-  );
+  )
 }

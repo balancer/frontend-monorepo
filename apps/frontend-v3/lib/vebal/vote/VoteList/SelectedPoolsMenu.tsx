@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
-import { Box, Button, HStack, Text, VStack, Separator } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+import { Box, Button, HStack, Text, VStack, Separator } from '@chakra-ui/react'
 import { Maximize2, Minimize2 } from 'react-feather'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -39,11 +39,8 @@ export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPool
   return (
     <Box
       animate={{ height: expanded ? 'auto' : 'auto' }}
+      asChild
       backdropFilter="blur(8px)"
-      layout
-      position="relative"
-      rounded="xl"
-      shadow="2xl"
       css={{
         '& &::before': {
           content: '""',
@@ -53,72 +50,78 @@ export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPool
           backgroundColor: bgBase,
           opacity: 0.5,
           zIndex: -1,
-          pointerEvents: 'none' }
+          pointerEvents: 'none',
+        },
       }}
-      // @ts-expect-error Framer Motion handles this transition prop for layout animations
+      layout
+      position="relative"
+      rounded="xl"
+      shadow="2xl"
+      // @ts-expect-error Framer Motion transition prop not in Chakra Box types
       transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
       w="320px"
-      asChild
-    ><motion.div>
-          <VStack alignItems="stretch" p="0" rounded="xl" shadow="2xl" gap="0" w="full">
-            <HStack justifyContent="space-between" p="md">
-              <Text color="font.maxContrast" flex="1" fontWeight="700">
-                Pool selection ({sortedPools.length})
-              </Text>
-              <HStack gap="ms">
-                {onAddVotesClick && (
-                  <Button gap="0" onClick={handleGoToVote} size="sm" variant="primary">
-                    Go to vote
-                  </Button>
-                )}
-                {sortedPools.length > 1 && (
-                  <Box
-                    _hover={{ color: 'font.highlight' }}
-                    color="font.maxContrast"
-                    cursor="pointer"
-                    onClick={() => setExpanded(v => !v)}
-                    transition="color 0.3s var(--ease-out-cubic)"
-                  >
-                    {expanded ? (
-                      <FadeInOnView>
-                        <Minimize2 size={16} />
-                      </FadeInOnView>
-                    ) : (
-                      <FadeInOnView>
-                        <Maximize2 size={16} />
-                      </FadeInOnView>
-                    )}
-                  </Box>
-                )}
-              </HStack>
-            </HStack>
-            <AnimatePresence initial={false}>
-              {expanded && (
-                <motion.div
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  initial={{ height: 0, opacity: 0 }}
-                  key="expanded"
-                  style={{ overflow: 'hidden' }}
-                  transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
-                >
-                  <Separator />
-                  <VStack alignItems="start" p="md" gap="md" w="full">
-                    {visiblePools.map(pool => (
-                      <VStack alignItems="start" key={[pool.title, pool.description].join('-')}>
-                        <Text fontSize="sm">{pool.title}</Text>
-                      </VStack>
-                    ))}
-                    {moreCount > 0 && (
-                      <Text fontSize="sm" variant="secondary">
-                        Plus {moreCount} more...
-                      </Text>
-                    )}
-                  </VStack>
-                </motion.div>
+    >
+      <motion.div>
+        <VStack alignItems="stretch" gap="0" p="0" rounded="xl" shadow="2xl" w="full">
+          <HStack justifyContent="space-between" p="md">
+            <Text color="font.maxContrast" flex="1" fontWeight="700">
+              Pool selection ({sortedPools.length})
+            </Text>
+            <HStack gap="ms">
+              {onAddVotesClick && (
+                <Button gap="0" onClick={handleGoToVote} size="sm" variant="primary">
+                  Go to vote
+                </Button>
               )}
-            </AnimatePresence>
-          </VStack>
-        </motion.div></Box>
-  );
+              {sortedPools.length > 1 && (
+                <Box
+                  _hover={{ color: 'font.highlight' }}
+                  color="font.maxContrast"
+                  cursor="pointer"
+                  onClick={() => setExpanded(v => !v)}
+                  transition="color 0.3s var(--ease-out-cubic)"
+                >
+                  {expanded ? (
+                    <FadeInOnView>
+                      <Minimize2 size={16} />
+                    </FadeInOnView>
+                  ) : (
+                    <FadeInOnView>
+                      <Maximize2 size={16} />
+                    </FadeInOnView>
+                  )}
+                </Box>
+              )}
+            </HStack>
+          </HStack>
+          <AnimatePresence initial={false}>
+            {expanded && (
+              <motion.div
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                initial={{ height: 0, opacity: 0 }}
+                key="expanded"
+                style={{ overflow: 'hidden' }}
+                transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+              >
+                <Separator />
+                <VStack alignItems="start" gap="md" p="md" w="full">
+                  {visiblePools.map(pool => (
+                    <VStack alignItems="start" key={[pool.title, pool.description].join('-')}>
+                      <Text fontSize="sm">{pool.title}</Text>
+                    </VStack>
+                  ))}
+                  {moreCount > 0 && (
+                    <Text fontSize="sm" variant="secondary">
+                      Plus {moreCount} more...
+                    </Text>
+                  )}
+                </VStack>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </VStack>
+      </motion.div>
+    </Box>
+  )
 }

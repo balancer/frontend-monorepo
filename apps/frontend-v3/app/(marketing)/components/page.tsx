@@ -24,7 +24,6 @@ import {
   List,
 } from '@chakra-ui/react'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function darken(color: string, _amount: number) {
   return color
 }

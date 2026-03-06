@@ -1,4 +1,4 @@
-import { Button, HStack, Link, Text, Dialog, Portal } from '@chakra-ui/react';
+import { Button, HStack, Link, Text, Dialog, Portal } from '@chakra-ui/react'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { usePathname, useRouter } from 'next/navigation'
 import { Pool } from '../pool.types'
@@ -10,7 +10,12 @@ import { ArrowUpRight } from 'react-feather'
 export function UnstakeWarningModal({
   isOpen = false,
   onClose = () => {},
-  pool }: { isOpen?: boolean; onClose?: () => void; pool: Pool }) {
+  pool,
+}: {
+  isOpen?: boolean
+  onClose?: () => void
+  pool: Pool
+}) {
   const router = useRouter()
   const pathname = usePathname()
 
@@ -35,13 +40,16 @@ export function UnstakeWarningModal({
   }
 
   return (
-    <Dialog.Root placement='center' open={isOpen} onOpenChange={(e: { open: boolean }) => {
-      if (!e.open) {
-        onClose();
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(e: { open: boolean }) => {
+        if (!e.open) {
+          onClose()
+        }
+      }}
+      open={isOpen}
+      placement="center"
+    >
       <Portal>
-
         <SuccessOverlay />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -56,18 +64,19 @@ export function UnstakeWarningModal({
                   Unstake
                 </Button>
               ) : (
-                <Button isExternal variant="secondary" w="full" asChild><Link href={auraRedirectLink}>
+                <Button asChild variant="secondary" w="full">
+                  <Link href={auraRedirectLink} rel="noopener noreferrer" target="_blank">
                     <HStack>
                       <span>Go to Aura to Unstake</span>
                       <ArrowUpRight size={16} />
                     </HStack>
-                  </Link></Button>
+                  </Link>
+                </Button>
               )}
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

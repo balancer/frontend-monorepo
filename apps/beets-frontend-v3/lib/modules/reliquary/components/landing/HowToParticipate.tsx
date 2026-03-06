@@ -1,8 +1,8 @@
-import { Text, VStack, List } from '@chakra-ui/react';
+import { Text, VStack, List } from '@chakra-ui/react'
 
 export function HowToParticipate() {
   return (
-    <VStack align="flex-start" flex="1" pr="15%" gap="4">
+    <VStack align="flex-start" flex="1" gap="4" pr="15%">
       <Text
         background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
         backgroundClip="text"
@@ -11,7 +11,7 @@ export function HowToParticipate() {
       >
         How to Participate
       </Text>
-      <List.Root as='ol' pl="4" gap="3" width="full">
+      <List.Root as="ol" gap="3" pl="4" width="full">
         <List.Item>
           <Text fontWeight="bold">Create a maBEETS Position</Text>
           <Text variant="secondary">
@@ -33,5 +33,5 @@ export function HowToParticipate() {
         </List.Item>
       </List.Root>
     </VStack>
-  );
+  )
 }

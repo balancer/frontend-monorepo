@@ -1,4 +1,4 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { PoolListItem } from '../pool.types'
 import { ExpandedPoolInfo } from '../../portfolio/PortfolioTable/useExpandedPools'

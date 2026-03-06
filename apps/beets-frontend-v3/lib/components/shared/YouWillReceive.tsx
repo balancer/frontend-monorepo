@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Popover, HoverCard, HStack } from '@chakra-ui/react';
+import { Box, Flex, Text, HoverCard, HStack } from '@chakra-ui/react'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -29,8 +29,9 @@ export function YouWillReceive({ label, amount, address, symbol, chain, infoText
                 </Text>
                 <HoverCard.Root
                   positioning={{
-                    placement: 'right'
-                  }}>
+                    placement: 'right',
+                  }}
+                >
                   <HoverCard.Trigger asChild>
                     <Box
                       _hover={{ opacity: 1 }}
@@ -64,5 +65,5 @@ export function YouWillReceive({ label, amount, address, symbol, chain, infoText
         </Flex>
       </FadeInOnView>
     </Box>
-  );
+  )
 }

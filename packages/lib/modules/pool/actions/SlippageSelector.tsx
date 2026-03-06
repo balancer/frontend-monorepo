@@ -1,6 +1,7 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useState } from 'react'
 
@@ -59,7 +60,7 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
   return (
     <HStack>
       <TooltipWithTouch
-        isDisabled={!description}
+        disabled={!description}
         label={
           <VStack alignItems="start">
             <Text color="font.primary" fontSize="sm" fontWeight="bold" pb="xs">
@@ -74,9 +75,6 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
       >
         <Box
           as="span"
-          cursor="default"
-          display="inline-block"
-          position="relative"
           css={{
             '& &::after': {
               content: '""',
@@ -87,8 +85,12 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
               height: '0px',
               borderBottom: '1px dotted',
               borderColor: 'font.secondary',
-              opacity: 0.5 }
+              opacity: 0.5,
+            },
           }}
+          cursor="default"
+          display="inline-block"
+          position="relative"
           top="-3px"
         >
           <Text as="span" fontSize="xs" variant="secondary">
@@ -106,5 +108,5 @@ export function SlippageSelector({ title, description, onChange, selectedIndex }
         size="xxxs"
       />
     </HStack>
-  );
+  )
 }

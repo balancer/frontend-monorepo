@@ -1,6 +1,6 @@
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack } from '@chakra-ui/react';
+import { Card, VStack } from '@chakra-ui/react'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
@@ -24,7 +24,8 @@ export function RemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
   receivedTokens,
   sentBptUnits,
-  error }: RemoveLiquidityReceiptResult) {
+  error,
+}: RemoveLiquidityReceiptResult) {
   const {
     transactionSteps,
     humanBptIn,
@@ -32,7 +33,8 @@ export function RemoveLiquiditySummary({
     amountsOut,
     hasQuoteContext,
     removeLiquidityTxHash,
-    removeLiquidityTxSuccess } = useRemoveLiquidity()
+    removeLiquidityTxSuccess,
+  } = useRemoveLiquidity()
   const { isMobile } = useBreakpoints()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -81,8 +83,8 @@ export function RemoveLiquiditySummary({
       <Card.Root variant="modalSubSection">
         <BptRow
           bptAmount={shouldShowReceipt ? sentBptUnits : humanBptIn}
-          isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You removed' : "You're removing"}
+          loading={shouldShowReceipt ? isLoadingReceipt : false}
           pool={pool}
         />
       </Card.Root>
@@ -90,8 +92,8 @@ export function RemoveLiquiditySummary({
         <TokenRowGroup
           amounts={shouldShowReceipt ? receivedTokens : _amountsOut}
           chain={pool.chain}
-          isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
+          loading={shouldShowReceipt ? isLoadingReceipt : false}
           pool={pool}
           tokens={shouldShowReceipt ? tokens : undefined}
           totalUSDValue={shouldShowReceipt ? undefined : totalUSDValue}
@@ -114,5 +116,5 @@ export function RemoveLiquiditySummary({
         </CardPopAnim>
       )}
     </AnimateHeightChange>
-  );
+  )
 }

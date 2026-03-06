@@ -1,6 +1,6 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
-import { Center, HStack, VStack, Text, Link, Dialog } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+import { Center, HStack, VStack, Text, Link, Dialog } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode } from 'react'
 import { ArrowUpRight, Check } from 'react-feather'
@@ -20,7 +20,7 @@ export function TransactionModalHeader(props: Props) {
     <Dialog.Header>
       <TransactionHeader {...props} />
     </Dialog.Header>
-  );
+  )
 }
 
 export function TransactionHeader({
@@ -29,7 +29,8 @@ export function TransactionHeader({
   txHash,
   chain,
   // true by default for flows that do not have a receipt
-  isReceiptLoading = true }: Props) {
+  isReceiptLoading = true,
+}: Props) {
   const colorMode = useThemeColorMode()
 
   return (
@@ -73,9 +74,10 @@ export function TransactionHeader({
                     href={getBlockExplorerTxUrl(txHash, chain)}
                     left="-1px"
                     position="relative"
+                    rel="noopener noreferrer"
+                    target="_blank"
                     top="1px"
-                    target='_blank'
-                    rel='noopener noreferrer'>
+                  >
                     <ArrowUpRight size={14} />
                   </Link>
                 </HStack>
@@ -85,5 +87,5 @@ export function TransactionHeader({
         )}
       </AnimatePresence>
     </HStack>
-  );
+  )
 }

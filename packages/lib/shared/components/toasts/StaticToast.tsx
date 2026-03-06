@@ -9,7 +9,8 @@ export type StaticToastProps = Omit<ToastProps, 'id' | 'children' | 'render' | '
 }
 
 const defaultProps = {
-  duration: null }
+  duration: null,
+}
 
 export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
   const toast = useToast()

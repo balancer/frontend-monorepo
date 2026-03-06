@@ -1,11 +1,12 @@
-import { HStack, Heading } from '@chakra-ui/react';
+import { HStack, Heading } from '@chakra-ui/react'
 import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { AlertTriangle } from 'react-feather'
 import { usePoolTokenPriceWarnings } from '../usePoolTokenPriceWarnings'
 
 export function PoolTotalLiquidityDisplay({
   totalLiquidity,
-  size = 'h4' }: {
+  size = 'h4',
+}: {
   totalLiquidity: string
   size?: 'h4' | 'h5'
 }) {
@@ -19,12 +20,15 @@ export function PoolTotalLiquidityDisplay({
         {totalLiquidity}
       </Heading>
       {isAnyTokenWithoutPrice && (
-        <Tooltip content={totalLiquidityTip} positioning={{
-          placement: "top"
-        }}>
+        <Tooltip
+          content={totalLiquidityTip}
+          positioning={{
+            placement: 'top',
+          }}
+        >
           <AlertTriangle size={22} />
         </Tooltip>
       )}
     </HStack>
-  );
+  )
 }

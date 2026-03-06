@@ -1,67 +1,80 @@
-import { Box, HStack, Link, Text, VStack, Flex } from '@chakra-ui/react';
+import { Box, HStack, Link, Text, VStack, Flex } from '@chakra-ui/react'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
 import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIconCircular'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import NextLink from 'next/link'
 import {
   COW_PROTOCOL_ID,
-  BALANCER_PROTOCOL_ID } from '@repo/lib/modules/pool/actions/create/constants'
+  BALANCER_PROTOCOL_ID,
+} from '@repo/lib/modules/pool/actions/create/constants'
 
 const RESOURCE_LINKS = {
   'Builder resources': [
     {
       label: 'v3 Scaffold',
       href: 'https://github.com/balancer/scaffold-balancer-v3',
-      isExternal: true },
+      isExternal: true,
+    },
     { label: 'Code & Contracts', href: 'https://github.com/balancer', isExternal: true },
     {
       label: 'Data & Analytics',
       href: 'https://docs.balancer.fi/data-and-analytics/data-and-analytics/subgraph.html',
-      isExternal: true },
+      isExternal: true,
+    },
     {
       label: 'Partner onboarding',
       href: 'https://docs.balancer.fi/partner-onboarding/onboarding-overview/introduction.html',
-      isExternal: true },
+      isExternal: true,
+    },
     {
       label: 'DAO & Partner OPs',
       href: 'https://balancer.defilytica.tools/',
-      isExternal: true },
+      isExternal: true,
+    },
   ],
   'In the docs': [
     {
       label: 'v3 core concepts',
       href: 'https://docs.balancer.fi/concepts/core-concepts/introduction.html',
-      isExternal: true },
+      isExternal: true,
+    },
     {
       label: 'Build an AMM',
       href: 'https://docs.balancer.fi/build/build-an-amm/create-custom-amm-with-novel-invariant.html',
-      isExternal: true },
+      isExternal: true,
+    },
     {
       label: 'Build a hook',
       href: 'https://docs.balancer.fi/build/build-a-hook/extend-existing-pool-type.html',
-      isExternal: true },
+      isExternal: true,
+    },
     {
       label: 'Build a router',
       href: 'https://docs.balancer.fi/build/build-a-router/create-custom-router.html',
-      isExternal: true },
+      isExternal: true,
+    },
     {
       label: 'Integration guides',
       href: 'https://docs.balancer.fi/integration-guides/',
-      isExternal: true },
-  ] }
+      isExternal: true,
+    },
+  ],
+}
 
 const CREATE_POOL_LINKS = {
   'Create a pool': [
     {
       label: 'Balancer',
       href: `/create?protocol=${BALANCER_PROTOCOL_ID.toLowerCase()}`,
-      icon: <BalancerIconCircular size={32} /> },
+      icon: <BalancerIconCircular size={32} />,
+    },
     {
       label: 'CoW AMM',
       href: `/create?protocol=${COW_PROTOCOL_ID.toLowerCase()}`,
-      icon: <CowIconCircular size={32} /> },
-  ] }
+      icon: <CowIconCircular size={32} />,
+    },
+  ],
+}
 
 export function BuildPopover({ closePopover }: { closePopover?: () => void }) {
   return (
@@ -72,7 +85,7 @@ export function BuildPopover({ closePopover }: { closePopover?: () => void }) {
     >
       <CreateAPool closePopover={closePopover} />
       {Object.entries(RESOURCE_LINKS).map(([title, links]) => (
-        <VStack align="flex-start" key={title} minW={{ base: 'auto', md: '150px' }} gap="sm">
+        <VStack align="flex-start" gap="sm" key={title} minW={{ base: 'auto', md: '150px' }}>
           <Text fontWeight="bold">{title}</Text>
           <VStack align="flex-start" mt="xs">
             {links.map(link => (
@@ -87,8 +100,9 @@ export function BuildPopover({ closePopover }: { closePopover?: () => void }) {
                 href={link.href}
                 key={link.label}
                 onClick={closePopover}
-                target='_blank'
-                rel='noopener noreferrer'>
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {link.label}{' '}
                 {link.isExternal && (
                   <Box
@@ -105,7 +119,7 @@ export function BuildPopover({ closePopover }: { closePopover?: () => void }) {
         </VStack>
       ))}
     </Flex>
-  );
+  )
 }
 
 function CreateAPool({ closePopover }: { closePopover?: () => void }) {
@@ -146,7 +160,7 @@ function CreateAPool({ closePopover }: { closePopover?: () => void }) {
         zIndex={2}
       >
         {Object.entries(CREATE_POOL_LINKS).map(([title, links]) => (
-          <VStack align="flex-start" key={title} minW={{ base: 'auto', md: '150px' }} gap="sm">
+          <VStack align="flex-start" gap="sm" key={title} minW={{ base: 'auto', md: '150px' }}>
             <Text fontWeight="bold">{title}</Text>
             <VStack align="flex-start" h="full" justify="space-evenly" mt="xs">
               {links.map(link => (
@@ -163,7 +177,7 @@ function CreateAPool({ closePopover }: { closePopover?: () => void }) {
         ))}
       </Flex>
     </Flex>
-  );
+  )
 }
 
 type PoolLinkProps = {
@@ -178,7 +192,6 @@ function PoolLink({ href, icon, isExternal, label, onClick }: PoolLinkProps) {
   return (
     <Link
       _hover={{ color: 'font.highlight', textDecoration: 'none' }}
-      as={isExternal ? Link : NextLink}
       color="font.maxContrast"
       href={href}
       onClick={onClick}
@@ -186,8 +199,8 @@ function PoolLink({ href, icon, isExternal, label, onClick }: PoolLinkProps) {
       role="group"
       rounded="md"
       w="full"
-      target='_blank'
-      rel='noopener noreferrer'>
+      {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
       <HStack
         _groupHover={{ color: 'font.highlight' }}
         color="white"
@@ -212,5 +225,5 @@ function PoolLink({ href, icon, isExternal, label, onClick }: PoolLinkProps) {
         </Text>
       </HStack>
     </Link>
-  );
+  )
 }

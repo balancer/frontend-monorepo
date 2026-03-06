@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import {
   Button,
   Card,
@@ -9,9 +9,10 @@ import {
   Skeleton,
   Stack,
   Text,
-  Icon } from '@chakra-ui/react';
+  Icon,
+} from '@chakra-ui/react'
 
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import Image from 'next/image'
@@ -22,8 +23,7 @@ import { useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { formatUnits } from 'viem'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
-// @ts-ignore
-import { LuInfo } from 'react-icons/lu';
+import { LuInfo } from 'react-icons/lu'
 
 const tooltipLabel = `Sidechains & Layer 2 networks like Polygon and Arbitrum don't know 
                     your veBAL balance on Ethereum Mainnet, 
@@ -51,7 +51,9 @@ export function CrossChainBoost() {
         </Text>
 
         <Tooltip content={tooltipLabel}>
-          <Icon color="font.light" fontSize="sm" asChild><LuInfo /></Icon>
+          <Icon asChild color="font.light" fontSize="sm">
+            <LuInfo />
+          </Icon>
         </Tooltip>
       </HStack>
       {isConnected ? (
@@ -137,5 +139,5 @@ export function CrossChainBoost() {
         <Text>Once you have some veBAL, sync your balance here to other networks.</Text>
       )}
     </Stack>
-  );
+  )
 }

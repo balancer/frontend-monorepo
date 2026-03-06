@@ -1,7 +1,7 @@
 'use client'
 
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { HStack, Text } from '@chakra-ui/react';
+import { HStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from './TokenIcon'
 import { useTokens } from './TokensProvider'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
@@ -21,7 +21,8 @@ export function TokenSelectInput({
   onChange,
   tokenAddresses,
   chain,
-  defaultTokenAddress }: Props) {
+  defaultTokenAddress,
+}: Props) {
   const { getToken } = useTokens()
 
   const tokenOptions = tokenAddresses.map(tokenAddress => {
@@ -32,7 +33,8 @@ export function TokenSelectInput({
           <Text>{getToken(tokenAddress, chain)?.symbol}</Text>
         </HStack>
       ),
-      value: tokenAddress }
+      value: tokenAddress,
+    }
   })
 
   useEffect(() => {

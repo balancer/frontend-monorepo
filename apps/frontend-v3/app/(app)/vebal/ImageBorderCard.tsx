@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Box, BoxProps } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 
@@ -14,10 +14,6 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
   return (
     <Box
       borderRadius="xl"
-      overflow="visible"
-      p={4}
-      position="relative"
-      shadow="2xl"
       css={{
         '& ::before': {
           backgroundPosition: 'center',
@@ -28,8 +24,13 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
           inset: 0,
           pointerEvents: 'none',
           position: 'absolute',
-          zIndex: 0 }
+          zIndex: 0,
+        },
       }}
+      overflow="visible"
+      p={4}
+      position="relative"
+      shadow="2xl"
       {...props}
     >
       <Box
@@ -69,5 +70,5 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
         </Noise>
       </Box>
     </Box>
-  );
+  )
 }

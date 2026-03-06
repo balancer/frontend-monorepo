@@ -1,4 +1,4 @@
-import { Popover, HoverCard, Box, Text } from '@chakra-ui/react';
+import { HoverCard, Box, Text } from '@chakra-ui/react'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 
 interface InfoIconPopoverProps {
@@ -10,8 +10,9 @@ export function InfoIconPopover({ message, placement = 'top-start' }: InfoIconPo
   return (
     <HoverCard.Root
       positioning={{
-        placement: placement
-      }}>
+        placement: placement,
+      }}
+    >
       <HoverCard.Trigger asChild>
         <Box
           _hover={{ opacity: 1 }}
@@ -30,5 +31,5 @@ export function InfoIconPopover({ message, placement = 'top-start' }: InfoIconPo
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>
-  );
+  )
 }

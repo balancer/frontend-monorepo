@@ -1,4 +1,4 @@
-import { Badge, HStack, Text, Box } from '@chakra-ui/react';
+import { Badge, HStack, Text, Box } from '@chakra-ui/react'
 import { fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { Repeat } from 'react-feather'
 import { Pool } from '../../pool.types'
@@ -8,7 +8,8 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 import {
   FeeManagersId,
-  FeeManagersMetadata } from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
+  FeeManagersMetadata,
+} from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useFeeManager } from '@repo/lib/modules/fee-managers/useFeeManager'
 import { zeroAddress } from 'viem'

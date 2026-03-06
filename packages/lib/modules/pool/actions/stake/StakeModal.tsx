@@ -1,7 +1,7 @@
 'use client'
 
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -41,22 +41,28 @@ export function StakeModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!stakeTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
-            {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
-            <TransactionModalHeader chain={pool.chain} label="Stake LP tokens" txHash={stakeTxHash} />
+            {isDesktop && (
+              <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
+            )}
+            <TransactionModalHeader
+              chain={pool.chain}
+              label="Stake LP tokens"
+              txHash={stakeTxHash}
+            />
             <Dialog.CloseTrigger />
             <Dialog.Body>
               <AnimateHeightChange gap="sm">
@@ -74,8 +80,7 @@ export function StakeModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

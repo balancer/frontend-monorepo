@@ -1,13 +1,13 @@
 'use client'
 
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { VotingDeadlineCalendar } from './VotingDeadlineCalendar'
 import { VotingDeadlineCounter } from './VotingDeadlineCounter'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function VotingDeadline() {
   return (
-    <VStack p={{ base: 'ms', lg: '20px' }} position="relative" gap="16px" zIndex="1">
+    <VStack gap="16px" p={{ base: 'ms', lg: '20px' }} position="relative" zIndex="1">
       <Box inset={0} overflow="hidden" position="absolute" rounded="lg" shadow="2xl">
         <Picture
           altText="Slate background texture"
@@ -43,5 +43,5 @@ export function VotingDeadline() {
         <VotingDeadlineCounter />
       </HStack>
     </VStack>
-  );
+  )
 }

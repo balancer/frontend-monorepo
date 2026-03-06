@@ -1,25 +1,30 @@
-'use client';
-import { BoxProps, Card, Box, Text, HStack } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+'use client'
+import { BoxProps, Card, Box, Text, HStack } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { FeaturePoolCard } from './FeaturePoolCard'
 import { GetFeaturedPoolsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolCarousel } from './PoolCarousel'
 import {
   FeaturedPool1SVG,
   FeaturedPool2SVG,
-  FeaturedPool3SVG } from '@repo/lib/shared/components/imgs/FeaturedPoolSvgs'
+  FeaturedPool3SVG,
+} from '@repo/lib/shared/components/imgs/FeaturedPoolSvgs'
 
 export const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center' },
+    justifyContent: 'center',
+  },
   cardProps: {
     position: 'relative',
-    overflow: 'hidden' } }
+    overflow: 'hidden',
+  },
+}
 
 export function FeaturedPools({
-  featuredPools }: {
+  featuredPools,
+}: {
   featuredPools: GetFeaturedPoolsQuery['featuredPools']
 }) {
   const getGraphicCarousel = (index: number) => {
@@ -103,5 +108,5 @@ export function FeaturedPools({
         </HStack>
       </Card.Root>
     </>
-  );
+  )
 }

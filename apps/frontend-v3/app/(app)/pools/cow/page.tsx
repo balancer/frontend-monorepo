@@ -1,7 +1,7 @@
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { Box, Skeleton } from '@chakra-ui/react';
+import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   description: `
     CoW AMM protects LPs from LVR so they can provide liquidity
     with less risk and more return.
-  ` }
+  `,
+}
 
 export default function PoolsPage() {
   return (

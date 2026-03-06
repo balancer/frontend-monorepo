@@ -1,4 +1,4 @@
-import { Text, HStack, Dialog } from '@chakra-ui/react';
+import { Text, HStack, Dialog } from '@chakra-ui/react'
 
 export function PoolCreationModalFooter({ onReset }: { onReset: () => void }) {
   return (
@@ -18,5 +18,5 @@ export function PoolCreationModalFooter({ onReset }: { onReset: () => void }) {
         </Text>
       </HStack>
     </Dialog.Footer>
-  );
+  )
 }

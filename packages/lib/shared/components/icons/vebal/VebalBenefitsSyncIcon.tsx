@@ -1,5 +1,5 @@
 import { SVGProps, forwardRef, useId } from 'react'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 export interface VebalBenefitsSyncIconProps extends SVGProps<SVGSVGElement> {
   size?: number
@@ -9,7 +9,7 @@ export const VebalBenefitsSyncIcon = forwardRef<SVGSVGElement, VebalBenefitsSync
   ({ size = 24, ...props }, ref) => {
     const colorMode = useThemeColorMode()
     // Use React.useId instead (available in React 18+)
-    const id = useId();
+    const id = useId()
     const clipPathId = `sync-clip-${id}`
     const maskId = `sync-mask-${id}`
     const gradientId = `sync-gradient-${id}`

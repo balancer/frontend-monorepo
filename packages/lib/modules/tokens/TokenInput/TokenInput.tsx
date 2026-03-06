@@ -119,7 +119,7 @@ type TokenInputFooterProps = {
   isLoadingPriceImpact?: boolean
   priceMessage?: string
   customUserBalance?: string
-  isDisabled?: boolean
+  disabled?: boolean
   customUsdPrice?: number
   priceImpactProps: PriceImpactProps | undefined
 }
@@ -132,7 +132,7 @@ function TokenInputFooter({
   isLoadingPriceImpact,
   priceMessage,
   customUserBalance,
-  isDisabled,
+  disabled,
   customUsdPrice,
   priceImpactProps,
 }: TokenInputFooterProps) {
@@ -158,7 +158,7 @@ function TokenInputFooter({
   const _isNativeAsset = token && isNativeAsset(token.chain, token.address)
 
   const showPriceImpact = !isLoadingPriceImpact && hasPriceImpact && priceImpactProps?.priceImpact
-  const hasDisabledInteraction = noBalance || _isNativeAsset || isDisabled
+  const hasDisabledInteraction = noBalance || _isNativeAsset || disabled
 
   function handleBalanceClick() {
     // We return for _isNativeAsset because you can't use your full native asset
@@ -240,7 +240,7 @@ type Props = {
   customUserBalance?: string
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
-  isDisabled?: boolean
+  disabled?: boolean
 }
 
 export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
@@ -261,7 +261,7 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
       customUserBalance,
       customUsdPrice,
       priceImpactProps,
-      isDisabled,
+      disabled,
       ...inputProps
     },
     ref
@@ -340,7 +340,7 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
                 bg="transparent"
                 border="0px solid transparent"
                 boxShadow="none"
-                disabled={!token || isDisabled}
+                disabled={!token || disabled}
                 fontSize="3xl"
                 fontWeight="medium"
                 min={0}
@@ -386,8 +386,8 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
           <TokenInputFooter
             customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
+            disabled={disabled}
             hasPriceImpact={hasPriceImpact}
-            isDisabled={isDisabled || inputProps.disabled}
             isLoadingPriceImpact={isLoadingPriceImpact}
             priceImpactProps={priceImpactProps}
             priceMessage={priceMessage}

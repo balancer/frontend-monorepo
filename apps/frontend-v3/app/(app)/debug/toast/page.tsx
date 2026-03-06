@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react'
 import { useToast } from '@repo/lib/shared/hooks/useToast'
 import { useDisclosure } from '@chakra-ui/react'
 import { StaticToast, StaticToastRenderProps } from '@repo/lib/shared/components/toasts/StaticToast'

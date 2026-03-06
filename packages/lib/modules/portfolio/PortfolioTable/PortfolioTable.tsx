@@ -13,7 +13,8 @@ import {
   Text,
   useBreakpointValue,
   VStack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
@@ -21,7 +22,8 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import {
   PortfolioFilters,
   PortfolioFilterTags,
-  usePortfolioFilterTagsVisible } from './PortfolioFilters'
+  usePortfolioFilterTagsVisible,
+} from './PortfolioFilters'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { motion } from 'framer-motion'
 import { usePortfolioSorting } from './usePortfolioSorting'
@@ -33,7 +35,8 @@ const rowProps = (addExtraColumn: boolean, needsLastColumnWider: boolean) => ({
   px: [0, 4],
   gridTemplateColumns: `32px minmax(320px, 1fr) minmax(180px, max-content) minmax(100px, max-content) 126px ${addExtraColumn ? '120px' : ''} ${needsLastColumnWider ? '160px' : 'minmax(100px, max-content)'}`,
   alignItems: 'center',
-  gap: { base: 'xxs', xl: 'lg' } })
+  gap: { base: 'xxs', xl: 'lg' },
+})
 
 export function PortfolioTable() {
   const { isLoadingPortfolio } = usePortfolio()
@@ -55,15 +58,19 @@ export function PortfolioTable() {
     selectedStakingTypes,
     hasTinyBalances,
     setShouldFilterTinyBalances,
-    shouldFilterTinyBalances } = usePortfolioFilters()
+    shouldFilterTinyBalances,
+  } = usePortfolioFilters()
 
   const { projectName, options } = PROJECT_CONFIG
 
   const variants = {
     visible: {
-      transform: isMd ? 'translateY(-40px)' : 'translateY(0)' },
+      transform: isMd ? 'translateY(-40px)' : 'translateY(0)',
+    },
     hidden: {
-      transform: 'translateY(0)' } }
+      transform: 'translateY(0)',
+    },
+  }
 
   const { needsMigration } = usePoolMigrations()
   const poolsThatNeedMigration = sortedPools
@@ -86,6 +93,7 @@ export function PortfolioTable() {
               <Box position="relative" top="0">
                 <Box
                   animate={isFilterVisible ? 'visible' : 'hidden'}
+                  asChild
                   left="0"
                   minW={{ base: 'auto', md: '270px' }}
                   position={{ base: 'relative', md: 'absolute' }}
@@ -93,12 +101,13 @@ export function PortfolioTable() {
                   transition="all 0.15s var(--ease-out-cubic)"
                   variants={variants}
                   willChange="transform"
-                  asChild
-                ><motion.div>
+                >
+                  <motion.div>
                     <Heading as="h2" size="h4" variant="special" w="full">
                       {`${projectName} portfolio`}
                     </Heading>
-                  </motion.div></Box>
+                  </motion.div>
+                </Box>
               </Box>
             </HStack>
 
@@ -197,18 +206,52 @@ export function PortfolioTable() {
         )}
         {hasTinyBalances && (
           <Checkbox.Root
+            checked={shouldFilterTinyBalances}
             onCheckedChange={() => {
               setShouldFilterTinyBalances(!shouldFilterTinyBalances)
             }}
             size="lg"
-            checked={shouldFilterTinyBalances}
-          ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-              <Text fontSize="md" variant="secondary">
-                Hide pools under $0.01
-              </Text>
-            </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+          >
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            <Checkbox.Label>
+              <Checkbox.Root>
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+              </Checkbox.Root>
+              <Checkbox.Root>
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Checkbox.Label>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                  </Checkbox.Root>
+                </Checkbox.Label>
+              </Checkbox.Root>
+              <Checkbox.Root>
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Checkbox.Label>
+                  <Text fontSize="md" variant="secondary">
+                    Hide pools under $0.01
+                  </Text>
+                </Checkbox.Label>
+              </Checkbox.Root>
+            </Checkbox.Label>
+          </Checkbox.Root>
         )}
       </VStack>
     </FadeInOnView>
-  );
+  )
 }

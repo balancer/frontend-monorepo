@@ -1,4 +1,4 @@
-import { Box, HStack, SkeletonCircle, StackProps } from '@chakra-ui/react';
+import { Box, HStack, SkeletonCircle, StackProps } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from './token.types'
 import { TokenIcon } from './TokenIcon'
@@ -14,7 +14,7 @@ type Props = {
   size?: number
   tokenBalances?: TokenBalances
   tokens: ApiToken[]
-  isLoading?: boolean
+  loading?: boolean
 }
 
 export function TokenIconStack({
@@ -22,7 +22,7 @@ export function TokenIconStack({
   disablePopover,
   size = 64,
   tokens,
-  isLoading,
+  loading,
   ...rest
 }: Props & StackProps) {
   const getNestingMargin = () => {
@@ -47,7 +47,7 @@ export function TokenIconStack({
             width={`${size + 4}px`}
             zIndex={9 - i}
           >
-            {isLoading ? (
+            {loading ? (
               <SkeletonCircle size={`${size + 4}px`} />
             ) : (
               <TokenIcon

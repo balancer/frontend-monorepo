@@ -10,7 +10,8 @@ import {
   Popover,
   VStack,
   Text,
-  Switch } from '@chakra-ui/react';
+  Switch,
+} from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
 import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 import { Percent, Settings } from 'react-feather'
@@ -35,18 +36,22 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
 
   return (
     <VStack align="start" w="full">
-      <InputGroup endElement={<Percent color="grayText" size="20px" />} endElementProps={{ pointerEvents: 'none' }}>
+      <InputGroup
+        endElement={<Percent color="grayText" size="20px" />}
+        endElementProps={{ pointerEvents: 'none' }}
+      >
         <Input
           _hover={{
             bg: 'input.bgHover',
-            borderColor: 'input.borderHover' }}
+            borderColor: 'input.borderHover',
+          }}
           autoComplete="off"
           autoCorrect="off"
           bg="background.level1"
           // max={50}
           min={0}
-          onValueChange={handleChange}
           onKeyDown={blockInvalidNumberInput}
+          onValueChange={handleChange}
           type="number"
           value={String(slippage)}
         />
@@ -64,7 +69,7 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
         ))}
       </HStack>
     </VStack>
-  );
+  )
 }
 
 export function EnableSignaturesSelect() {
@@ -77,9 +82,11 @@ export function EnableSignaturesSelect() {
   return (
     <Switch.Root checked={enableSignatures === 'yes'} onCheckedChange={handleChange}>
       <Switch.HiddenInput />
-      <Switch.Control><Switch.Thumb /></Switch.Control>
+      <Switch.Control>
+        <Switch.Thumb />
+      </Switch.Control>
     </Switch.Root>
-  );
+  )
 }
 
 function ToggleAllowSounds() {
@@ -92,9 +99,11 @@ function ToggleAllowSounds() {
   return (
     <Switch.Root checked={allowSounds === 'yes'} onCheckedChange={handleChange}>
       <Switch.HiddenInput />
-      <Switch.Control><Switch.Thumb /></Switch.Control>
+      <Switch.Control>
+        <Switch.Thumb />
+      </Switch.Control>
     </Switch.Root>
-  );
+  )
 }
 
 export function UserSettings() {
@@ -122,7 +131,7 @@ export function UserSettings() {
                 Settings
               </Heading>
             </HStack>
-            <VStack align="start" p="md" gap="lg">
+            <VStack align="start" gap="lg" p="md">
               <Box w="full">
                 <Heading pb="2" size="sm">
                   Currency
@@ -161,5 +170,5 @@ export function UserSettings() {
         </Popover.Content>
       </Popover.Positioner>
     </Popover.Root>
-  );
+  )
 }

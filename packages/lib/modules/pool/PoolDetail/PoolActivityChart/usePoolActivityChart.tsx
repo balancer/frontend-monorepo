@@ -1,13 +1,13 @@
 'use client'
 
-import * as echarts from 'echarts/core';
+import * as echarts from 'echarts/core'
 import { useRef } from 'react'
 import { useParams } from 'next/navigation'
 import { secondsToMilliseconds, differenceInDays, format } from 'date-fns'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
-import { useChakraContext } from '@chakra-ui/react';
+import { useChakraContext } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -17,13 +17,15 @@ import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 import {
   PoolActivityMetaData,
   PoolActivityTokens,
-  PoolActivityEl } from '../PoolActivity/poolActivity.types'
+  PoolActivityEl,
+} from '../PoolActivity/poolActivity.types'
 import {
   getBlockExplorerAddressUrl,
-  getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
+  getBlockExplorerTxUrl,
+} from '@repo/lib/shared/utils/blockExplorer'
 
 const getDefaultPoolActivityChartOptions = (
-  nextTheme: string = 'dark',
+  _nextTheme: string = 'dark',
   system: ReturnType<typeof useChakraContext>,
   currencyFormatter: NumberFormatter,
   isMobile = false,
@@ -46,7 +48,8 @@ const getDefaultPoolActivityChartOptions = (
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
     container: `background: ${resolveToken('background.level3')};`,
-    text: resolveToken('font.secondary') }
+    text: resolveToken('font.secondary'),
+  }
 
   return {
     grid: {
@@ -54,7 +57,8 @@ const getDefaultPoolActivityChartOptions = (
       right: '40', // Smallest margin for worst case scenario (big ball at the edge)
       top: '40',
       bottom: isExpanded ? '10.5%' : '50%',
-      containLabel: false },
+      containLabel: false,
+    },
     xAxis: {
       show: isExpanded && sortedPoolEvents.length,
       type: 'time',
@@ -75,16 +79,20 @@ const getDefaultPoolActivityChartOptions = (
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,
-        showMinLabel: false },
+        showMinLabel: false,
+      },
       axisPointer: {
         type: 'line',
         label: {
           formatter: (params: any) => {
             return format(new Date(params.value * 1000), 'MMM d')
-          } } },
+          },
+        },
+      },
       axisLine: { show: false },
       min: minDate,
-      max: maxDate },
+      max: maxDate,
+    },
     yAxis: {
       show: isExpanded && sortedPoolEvents.length,
       type: 'value',
@@ -100,8 +108,10 @@ const getDefaultPoolActivityChartOptions = (
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: true,
-        showMinLabel: true },
-      max: maxYAxisValue },
+        showMinLabel: true,
+      },
+      max: maxYAxisValue,
+    },
     tooltip: {
       triggerOn: 'mousemove|click',
       confine: is2xl ? false : true,
@@ -185,7 +195,8 @@ const getDefaultPoolActivityChartOptions = (
             </div>
           </div>
       `
-      } },
+      },
+    },
     series: [
       {
         name: 'Events',
@@ -196,28 +207,36 @@ const getDefaultPoolActivityChartOptions = (
             return new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: resolveToken(`chart.pool.scatter.${action}.from`) },
+                color: resolveToken(`chart.pool.scatter.${action}.from`),
+              },
               {
                 offset: 1,
-                color: resolveToken(`chart.pool.scatter.${action}.to`) },
-            ]);
-          } },
+                color: resolveToken(`chart.pool.scatter.${action}.to`),
+              },
+            ])
+          },
+        },
         emphasis: {
           focus: 'self',
-          scale: 1.5 },
+          scale: 1.5,
+        },
         symbolSize: getSymbolSize,
         data: sortedPoolEvents,
-        type: 'scatter' },
+        type: 'scatter',
+      },
     ],
     title: {
       show: !sortedPoolEvents.length && !isLoading,
       textStyle: {
         color: 'grey',
         fontSize: 15,
-        fontWeight: 'bold' },
+        fontWeight: 'bold',
+      },
       text: 'No events to show',
       left: 'center',
-      top: 'center' } };
+      top: 'center',
+    },
+  }
 }
 
 function getSymbolSize(dataItem?: PoolActivityEl) {
@@ -260,5 +279,6 @@ export function usePoolActivityChart() {
       isLoading
     ),
     eChartsRef,
-    chartHeight };
+    chartHeight,
+  }
 }

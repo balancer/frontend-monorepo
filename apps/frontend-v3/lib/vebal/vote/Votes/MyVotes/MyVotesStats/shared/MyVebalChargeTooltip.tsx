@@ -1,13 +1,4 @@
-import {
-  Badge,
-  Box,
-  Button,
-  HStack,
-  Popover,
-  HoverCard,
-  Portal,
-  Text,
-  VStack } from '@chakra-ui/react';
+import { Badge, Box, Button, HStack, HoverCard, Portal, Text, VStack } from '@chakra-ui/react'
 import { differenceInSeconds, format } from 'date-fns'
 import { oneYearInSecs } from '@repo/lib/shared/utils/time'
 import { BatteryChargeIcon } from '@repo/lib/shared/components/icons/BatteryChargeIcon'
@@ -33,7 +24,8 @@ export function MyVebalChargeTooltip({
   lockedEndDate,
   isLockExpired,
   expectedVeBalAmount,
-  usePortal }: Props) {
+  usePortal,
+}: Props) {
   const lockedEndDatePercentage = getLockedEndDatePercentage(lockedEndDate)
 
   const popoverContent = (
@@ -64,12 +56,14 @@ export function MyVebalChargeTooltip({
               {fNum('token', expectedVeBalAmount)}
             </Text>
           </HStack>
-          <HStack mt="sm" gap="sm">
-            <Button size="sm" variant="secondary" asChild><NextLink href={getVeBalManagePath('extend', 'vote')}>Extend lock
-                          </NextLink></Button>
+          <HStack gap="sm" mt="sm">
+            <Button asChild size="sm" variant="secondary">
+              <NextLink href={getVeBalManagePath('extend', 'vote')}>Extend lock</NextLink>
+            </Button>
             {isLockExpired && (
-              <Button size="sm" variant="tertiary" asChild><NextLink href={getVeBalManagePath('unlock', 'vote')}>Unlock
-                              </NextLink></Button>
+              <Button asChild size="sm" variant="tertiary">
+                <NextLink href={getVeBalManagePath('unlock', 'vote')}>Unlock</NextLink>
+              </Button>
             )}
           </HStack>
         </VStack>
@@ -101,5 +95,5 @@ export function MyVebalChargeTooltip({
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
       </>
     </HoverCard.Root>
-  );
+  )
 }

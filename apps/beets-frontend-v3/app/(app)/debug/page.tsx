@@ -1,5 +1,5 @@
 'use client'
-import { Heading, VStack } from '@chakra-ui/react';
+import { Heading, VStack } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export default function Debug() {

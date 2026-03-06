@@ -1,9 +1,9 @@
-'use client';
-import { IconButton, IconButtonProps } from '@chakra-ui/react';
+'use client'
+import { IconButton, IconButtonProps } from '@chakra-ui/react'
 import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 import { useIsSafeApp } from '../web3/safe.hooks'
-import { LuCircleCheck, LuCopy } from 'react-icons/lu';
+import { LuCircleCheck, LuCopy } from 'react-icons/lu'
 
 export function CopyAddressButton({
   address,
@@ -20,12 +20,15 @@ export function CopyAddressButton({
       <IconButton
         aria-label="Copy address"
         h="6"
-        isRound
         onClick={() => copyToClipboard(address)}
+        rounded="full"
         size="xs"
         variant="ghost"
         w="6"
-        {...rest}>{isCopied ? <LuCircleCheck /> : <LuCopy />}</IconButton>
+        {...rest}
+      >
+        {isCopied ? <LuCircleCheck /> : <LuCopy />}
+      </IconButton>
     </Tooltip>
-  );
+  )
 }

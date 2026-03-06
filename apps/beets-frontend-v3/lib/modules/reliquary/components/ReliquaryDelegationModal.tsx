@@ -1,4 +1,4 @@
-import { Box, Card, ModalProps, Text, VStack, Dialog, Portal } from '@chakra-ui/react';
+import { Box, Card, ModalProps, Text, VStack, Dialog, Portal } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -63,17 +63,17 @@ export function ReliquaryDelegationModal({
 
   return (
     <Dialog.Root
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          handleOnClose();
+          handleOnClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={isSuccess} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -128,8 +128,7 @@ export function ReliquaryDelegationModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { Card, Grid, Heading, Text, Flex, Box } from '@chakra-ui/react';
+import { Card, Grid, Heading, Text, Flex, Box } from '@chakra-ui/react'
 import Section from '@repo/lib/shared/components/layout/Section'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -23,18 +23,18 @@ export function HomeBuilders() {
             </Text>
             <Heading
               as="h2"
+              css={{
+                textWrap: 'balance',
+              }}
               pb="md"
               size="2xl"
-              css={{
-                textWrap: 'balance'
-              }}
               w="full"
             >
               DeFi&rsquo;s most extensive AMM product suite
             </Heading>
             <Text
               css={{
-                textWrap: 'balance'
+                textWrap: 'balance',
               }}
               w="full"
             >
@@ -52,7 +52,8 @@ export function HomeBuilders() {
               templateColumns={{
                 base: 'repeat(1, 1fr',
                 md: 'repeat(2, 1fr',
-                lg: 'repeat(4, 1fr' }}
+                lg: 'repeat(4, 1fr',
+              }}
               templateRows={{ base: 'repeat(4, 1fr', md: 'repeat(3, 1fr', lg: 'repeat(2, 1fr' }}
             >
               <Card.Root
@@ -80,17 +81,17 @@ export function HomeBuilders() {
                   </Box>
                   <Heading
                     as="h5"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     pb="sm"
                     size="h5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     Code less. Build more.
                   </Heading>
                   <Text
                     css={{
-                      textWrap: 'balance'
+                      textWrap: 'balance',
                     }}
                   >
                     Focus on innovation rather than low level tasks like accounting and security.
@@ -121,17 +122,17 @@ export function HomeBuilders() {
                   </Box>
                   <Heading
                     as="h5"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     pb="sm"
                     size="h5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     Booststrap liquidity
                   </Heading>
                   <Text
                     css={{
-                      textWrap: 'balance'
+                      textWrap: 'balance',
                     }}
                   >
                     Plug into Balancer&lsquo;s veBAL incentive mechanism and grants framework to
@@ -161,17 +162,17 @@ export function HomeBuilders() {
                   </Box>
                   <Heading
                     as="h5"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     pb="sm"
                     size="h5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     Launch your product faster
                   </Heading>
                   <Text
                     css={{
-                      textWrap: 'balance'
+                      textWrap: 'balance',
                     }}
                   >
                     Eliminate the cold start AMM problem with streamlined aggregator integrations
@@ -205,17 +206,17 @@ export function HomeBuilders() {
                   </Box>
                   <Heading
                     as="h5"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     pb="sm"
                     size="h5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     Join the largest AMM network
                   </Heading>
                   <Text
                     css={{
-                      textWrap: 'balance'
+                      textWrap: 'balance',
                     }}
                   >
                     Unlock an extensive network of AMM expertise, audit pipelines, and partnership
@@ -228,5 +229,5 @@ export function HomeBuilders() {
         </FadeInOnView>
       </Box>
     </Section>
-  );
+  )
 }

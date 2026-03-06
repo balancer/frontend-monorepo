@@ -1,4 +1,4 @@
-import { useBreakpointValue } from '@chakra-ui/react';
+import { useBreakpointValue } from '@chakra-ui/react'
 
 export function useBreakpoints() {
   const isMobile = useBreakpointValue({ base: true, lg: false }, { ssr: true })
@@ -7,5 +7,6 @@ export function useBreakpoints() {
   return {
     isMobile,
     isDesktop: !isMobile,
-    is2xl }
+    is2xl,
+  }
 }

@@ -1,13 +1,23 @@
-'use client';
-import { Box, Button, Card, useDisclosure, VStack, BoxProps, Grid, GridItem } from '@chakra-ui/react';
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+'use client'
+import {
+  Box,
+  Button,
+  Card,
+  useDisclosure,
+  VStack,
+  BoxProps,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react'
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useRef, useState } from 'react'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useLst } from './LstProvider'
 import { LstStakeModal } from './modals/LstStakeModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -42,12 +52,15 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     borderTopLeftRadius: 'none',
     borderBottomRightRadius: 'none',
     rounded: 'lg',
-    overflow: 'hidden' },
+    overflow: 'hidden',
+  },
   cardProps: {
     position: 'relative',
     height: 'full',
     rounded: 'lg',
-    overflow: 'hidden' } }
+    overflow: 'hidden',
+  },
+}
 
 function LstForm() {
   const nextBtn = useRef(null)
@@ -79,7 +92,8 @@ function LstForm() {
     getAmountAssets,
     isRateLoading,
     chain,
-    tabs } = useLst()
+    tabs,
+  } = useLst()
 
   const isLoading = !isMounted || isBalancesLoading
 
@@ -118,7 +132,8 @@ function LstForm() {
 
   return (
     <VStack h="full" w="full">
-      <Card.Body align="start" h="full" w="full" asChild><VStack>
+      <Card.Body align="start" asChild h="full" w="full">
+        <VStack>
           <Box h="full" w="full">
             <VStack gap="md" w="full">
               <ButtonGroup
@@ -164,7 +179,8 @@ function LstForm() {
               symbol={nativeAsset?.symbol || ''}
             />
           )}
-        </VStack></Card.Body>
+        </VStack>
+      </Card.Body>
       <Card.Footer w="full">
         {isConnected && !isWithdrawTab && (
           <Tooltip content={isDisabled ? disabledReason : ''}>
@@ -184,7 +200,7 @@ function LstForm() {
         )}
         {!isConnected && (
           <ConnectWallet
-            isLoading={isLoading}
+            loading={isLoading}
             loadingText={loadingText}
             size="lg"
             variant="primary"
@@ -205,12 +221,13 @@ function LstForm() {
         onOpen={unstakeModalDisclosure.onOpen}
       />
     </VStack>
-  );
+  )
 }
 
 function LstInfo({
   stakedSonicData,
-  isStakedSonicDataLoading }: {
+  isStakedSonicDataLoading,
+}: {
   stakedSonicData?: GetStakedSonicDataQuery
   isStakedSonicDataLoading: boolean
 }) {
@@ -231,26 +248,26 @@ function LstInfo({
       </Box>
       <VStack
         align="flex-start"
+        gap="sm"
         h="full"
         justify="flex-start"
         m="auto"
         p={{ base: 'md', md: 'lg' }}
         role="group"
-        gap="sm"
         w="full"
         zIndex={1}
       >
         <StatRow
-          isLoading={isStakedSonicDataLoading}
           label="Total ($S)"
+          loading={isStakedSonicDataLoading}
           secondaryValue={toCurrency(
             usdValueForToken(lstToken, stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')
           )}
           value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
         />
         <StatRow
-          isLoading={isStakedSonicDataLoading}
           label="Delegated ($S)"
+          loading={isStakedSonicDataLoading}
           secondaryValue={toCurrency(
             usdValueForToken(
               lstToken,
@@ -263,8 +280,8 @@ function LstInfo({
           )}
         />
         <StatRow
-          isLoading={isStakedSonicDataLoading}
           label="Pending delegation ($S)"
+          loading={isStakedSonicDataLoading}
           secondaryValue={toCurrency(
             usdValueForToken(
               lstToken,
@@ -274,8 +291,8 @@ function LstInfo({
           value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
         />
         <StatRow
-          isLoading={isStakedSonicDataLoading}
           label="stS rate"
+          loading={isStakedSonicDataLoading}
           secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
           value={`1 stS = ${fNum('token', assetsToSharesRate)} S`}
         />
@@ -285,7 +302,7 @@ function LstInfo({
         </Box> */}
       </VStack>
     </NoisyCard>
-  );
+  )
 }
 
 export function Lst() {
@@ -313,5 +330,5 @@ export function Lst() {
         </VStack>
       </DefaultPageContainer>
     </FadeInOnView>
-  );
+  )
 }

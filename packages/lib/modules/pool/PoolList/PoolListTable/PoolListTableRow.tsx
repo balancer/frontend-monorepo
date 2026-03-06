@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, GridProps, HStack, Text, Image, VStack } from '@chakra-ui/react';
+import { Box, Grid, GridItem, GridProps, HStack, Text, Image, VStack } from '@chakra-ui/react'
 import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -32,7 +32,8 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest }: Props) {
   const {
     queryState: { userAddress },
-    poolDisplayType } = usePoolList()
+    poolDisplayType,
+  } = usePoolList()
   const { name } = usePoolMetadata(pool)
   const { toCurrency } = useCurrency()
 
@@ -47,7 +48,8 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.level0' }}
+          bg: 'background.level0',
+        }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         rounded="md"
@@ -119,8 +121,8 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                 {hasPoints && (
                   <Tooltip
                     backgroundColor="background.level4"
-                    showArrow
                     content={<PointsInfo tags={poolTags} />}
+                    showArrow
                     textColor="font.secondary"
                   >
                     <Image
@@ -138,7 +140,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
         </Link>
       </Box>
     </FadeInOnView>
-  );
+  )
 }
 
 function lbpSaleIsOngoing(pool: PoolListItem) {

@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react';
+import { HStack, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useCountdown } from 'usehooks-ts'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
@@ -11,7 +11,8 @@ function useRemoveLiquidityTimeout() {
   // remove-liquidity flow component tree every second.
   const [secondsToRefetch, { startCountdown, stopCountdown, resetCountdown }] = useCountdown({
     countStart: 30,
-    intervalMs: 1000 })
+    intervalMs: 1000,
+  })
 
   const { simulationQuery, priceImpactQuery, previewModalDisclosure, lastTransaction } =
     useRemoveLiquidity()
@@ -57,17 +58,21 @@ function useRemoveLiquidityTimeout() {
 export function RemoveLiquidityTimeout() {
   const { secondsToRefetch, shouldFreezeQuote } = useRemoveLiquidityTimeout()
 
-  return (!shouldFreezeQuote && (<HStack fontSize="sm" fontWeight="normal" gap="xs">
-    <Text color="grayText" fontSize="sm">
-      Quote refresh:
-    </Text>
-    <HStack gap="none">
-      <NumberText color="grayText" fontSize="sm" textAlign="right">
-        {secondsToRefetch}
-      </NumberText>
-      <Text color="grayText" fontSize="sm" left="1px" position="relative">
-        s
-      </Text>
-    </HStack>
-  </HStack>));
+  return (
+    !shouldFreezeQuote && (
+      <HStack fontSize="sm" fontWeight="normal" gap="xs">
+        <Text color="grayText" fontSize="sm">
+          Quote refresh:
+        </Text>
+        <HStack gap="none">
+          <NumberText color="grayText" fontSize="sm" textAlign="right">
+            {secondsToRefetch}
+          </NumberText>
+          <Text color="grayText" fontSize="sm" left="1px" position="relative">
+            s
+          </Text>
+        </HStack>
+      </HStack>
+    )
+  )
 }

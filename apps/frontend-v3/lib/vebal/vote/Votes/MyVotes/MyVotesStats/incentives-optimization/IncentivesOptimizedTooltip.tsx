@@ -1,5 +1,5 @@
-import { Icon, Popover, HoverCard, Portal, Stack, Text, Separator } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Icon, HoverCard, Portal, Stack, Text, Separator } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
 import { TooltipItem } from './TooltipItem'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -14,7 +14,8 @@ const baseItemProps = {
   pr: 2,
   pb: 3,
   backgroundColor: 'background.level1',
-  fontWeight: 700 }
+  fontWeight: 700,
+}
 
 const rewardGradient =
   'linear-gradient(90deg, rgba(179, 174, 245, 0.5) 0%, rgba(215, 203, 231, 0.5) 25%, rgba(229, 200, 200, 0.5) 50%, rgba(234, 168, 121, 0.5) 100%)'
@@ -32,7 +33,9 @@ export function IncentivesOptimizedTooltip({ totalIncentives, protocolRevenueSha
     <HoverCard.Root lazyMount>
       <>
         <HoverCard.Trigger asChild>
-          <Icon gradFrom={gradColorFrom} gradTo={gradColorTo} asChild><StarsIcon /></Icon>
+          <Icon asChild gradFrom={gradColorFrom} gradTo={gradColorTo}>
+            <StarsIcon />
+          </Icon>
         </HoverCard.Trigger>
 
         <Portal>
@@ -43,7 +46,8 @@ export function IncentivesOptimizedTooltip({ totalIncentives, protocolRevenueSha
               overflow="hidden"
               p="0"
               shadow="3xl"
-              w="fit-content">
+              w="fit-content"
+            >
               <Stack gap={0} roundedBottom="md">
                 <TooltipItem
                   pt={3}
@@ -78,7 +82,15 @@ export function IncentivesOptimizedTooltip({ totalIncentives, protocolRevenueSha
                 <Separator />
 
                 <Stack backgroundColor="background.level1">
-                  <Text fontSize="sm" maxWidth={300} pb="3" pl="4" pr="2" pt="3" variant="secondary">
+                  <Text
+                    fontSize="sm"
+                    maxWidth={300}
+                    pb="3"
+                    pl="4"
+                    pr="2"
+                    pt="3"
+                    variant="secondary"
+                  >
                     Note: In addition, veBAL holders earn extra BAL incentives when they LP in
                     eligible pools (based on veBAL pools)
                   </Text>
@@ -89,5 +101,5 @@ export function IncentivesOptimizedTooltip({ totalIncentives, protocolRevenueSha
         </Portal>
       </>
     </HoverCard.Root>
-  );
+  )
 }

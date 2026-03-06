@@ -1,4 +1,4 @@
-import { differenceInDays, format, isAfter, isBefore } from 'date-fns';
+import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import { formatDateAxisLabel } from './helpers'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
@@ -6,7 +6,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react';
+import { Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { dividePrices, range } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
@@ -16,7 +16,7 @@ type Props = {
   onPriceChange?: (prices: LbpPrice[]) => void
   prices: LbpPrice[]
   cutTime?: Date
-  isLoading?: boolean
+  loading?: boolean
   gridLeft?: string
 }
 
@@ -33,8 +33,9 @@ export function ProjectedPriceChart({
   onPriceChange,
   prices,
   cutTime,
-  isLoading,
-  gridLeft }: Props) {
+  loading,
+  gridLeft,
+}: Props) {
   const { toCurrency } = useCurrency()
   const system = useChakraContext()
   const { isMobile } = useBreakpoints()
@@ -51,7 +52,8 @@ export function ProjectedPriceChart({
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
     container: `background: ${grayColor};`,
-    text: grayColor }
+    text: grayColor,
+  }
 
   const chartInfo: EChartsOption = {
     grid: {
@@ -59,7 +61,8 @@ export function ProjectedPriceChart({
       right: '4%',
       top: '10%',
       bottom: '10%',
-      containLabel: isMobile },
+      containLabel: isMobile,
+    },
     tooltip: {
       show: true,
       showContent: true,
@@ -69,7 +72,9 @@ export function ProjectedPriceChart({
         animation: false,
         type: 'shadow',
         label: {
-          show: false } },
+          show: false,
+        },
+      },
       extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
       formatter: (params: any) => {
         if (!params || params.length === 0) return ''
@@ -90,7 +95,8 @@ export function ProjectedPriceChart({
       </div>
     </div>
   `
-      } },
+      },
+    },
     xAxis: {
       show: true,
       type: 'time',
@@ -106,7 +112,8 @@ export function ProjectedPriceChart({
         fontSize: isMobile ? 10 : 12,
         margin: 8,
         color: resolveToken(system, 'font.primary'),
-        opacity: 0.5 },
+        opacity: 0.5,
+      },
       splitNumber: (() => {
         const totalDays = differenceInDays(endDateTime, startDateTime)
 
@@ -115,7 +122,8 @@ export function ProjectedPriceChart({
         if (totalDays <= 90) return 6
         if (totalDays <= 365) return 8
         return 10
-      })() },
+      })(),
+    },
     yAxis: {
       show: true,
       type: 'value',
@@ -127,7 +135,9 @@ export function ProjectedPriceChart({
           return toCurrency(value)
         },
         color: resolveToken(system, 'font.primary'),
-        opacity: 0.5 } },
+        opacity: 0.5,
+      },
+    },
     series: [
       {
         id: 'launch-token-price',
@@ -143,7 +153,8 @@ export function ProjectedPriceChart({
           ]),
           width: 2,
           join: 'round',
-          cap: 'round' },
+          cap: 'round',
+        },
         showSymbol: false,
         markLine: {
           silent: true,
@@ -152,14 +163,19 @@ export function ProjectedPriceChart({
             { yAxis: priceRange.max },
             { yAxis: 0 },
             {
-              yAxis: priceRange.max / 2 },
+              yAxis: priceRange.max / 2,
+            },
           ],
           lineStyle: {
             type: 'dashed',
             color: 'grey',
-            width: 1 },
+            width: 1,
+          },
           label: {
-            show: false } } },
+            show: false,
+          },
+        },
+      },
       {
         id: 'launch-token-price-after-cut-time',
         name: '',
@@ -171,8 +187,10 @@ export function ProjectedPriceChart({
           color: 'rgb(63, 70, 80)', //TODO: update for light theme
         },
         symbol: 'none',
-        showSymbol: false },
-    ] }
+        showSymbol: false,
+      },
+    ],
+  }
 
   if (cutTime && isAfter(cutTime, startDateTime) && isBefore(cutTime, endDateTime)) {
     const percentage =
@@ -191,7 +209,8 @@ export function ProjectedPriceChart({
         type: 'dashed',
         width: 1,
         cap: 'round',
-        join: 'round' },
+        join: 'round',
+      },
       label: {
         show: true,
         position: percentage < 0.8 ? 'right' : 'left',
@@ -211,14 +230,19 @@ export function ProjectedPriceChart({
           progressFormat: {
             color: '#25E2A4',
             fontWeight: 'bold',
-            padding: 2 },
+            padding: 2,
+          },
           dateFormat: {
             color: '#A0AEC0',
-            padding: 2 } } },
-      showSymbol: true })
+            padding: 2,
+          },
+        },
+      },
+      showSymbol: true,
+    })
   }
 
-  return isLoading ? (
+  return loading ? (
     <Skeleton h="full" w="full" />
   ) : prices.length > 0 ? (
     <ReactECharts option={chartInfo} style={{ height: '100%', width: '100%' }} />

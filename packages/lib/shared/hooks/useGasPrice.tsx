@@ -4,7 +4,7 @@ import { getViemClient } from '../services/viem/viem.client'
 import { formatUnits } from 'viem'
 import { bn, fNum } from '../utils/numbers'
 import { secs } from '../utils/time'
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react'
 import { GasIcon } from '../components/icons/GasIcon'
 import { onlyExplicitRefetch } from '../utils/queries'
 
@@ -37,7 +37,7 @@ export function GasPriceCard({ chain }: { chain: GqlChain }) {
         </Text>
       </HStack>
     </Box>
-  );
+  )
 }
 
 export function useGasPriceQuery(chain: GqlChain) {
@@ -46,7 +46,8 @@ export function useGasPriceQuery(chain: GqlChain) {
     queryFn: () => getGasPrice(chain),
     refetchInterval: secs(30).toMs(),
     gcTime: secs(30).toMs(),
-    ...onlyExplicitRefetch })
+    ...onlyExplicitRefetch,
+  })
 
   const gasPrice = query.data ? formatGasPrice(query.data) : undefined
 

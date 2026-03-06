@@ -3,7 +3,8 @@ import { useToast } from '@repo/lib/shared/hooks/useToast'
 import {
   SignatureState,
   isSignatureDisabled,
-  isSignatureLoading } from '@repo/lib/modules/web3/signatures/signature.helpers'
+  isSignatureLoading,
+} from '@repo/lib/modules/web3/signatures/signature.helpers'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
 import { useEffect, useState } from 'react'
@@ -41,7 +42,8 @@ export function useSignPermit2({
   wethIsEth,
   chainId,
   signPermit2Fn,
-  isSimulationReady }: BasePermit2Params) {
+  isSimulationReady,
+}: BasePermit2Params) {
   const { sdkClient, isLoading } = useSdkWalletClient()
 
   const toast = useToast()
@@ -79,7 +81,8 @@ export function useSignPermit2({
           status: 'success',
           duration: 5000,
           isClosable: true,
-          render: ({ ...rest }) => <Toast {...rest} /> })
+          render: ({ ...rest }) => <Toast {...rest} />,
+        })
       } else {
         setSignPermit2State(SignatureState.Ready)
       }
@@ -101,7 +104,8 @@ export function useSignPermit2({
     ),
     isLoading: isSignatureLoading(signPermit2State) || !tokenAmountsIn,
     isDisabled: isSignatureDisabled(signPermit2State) || !nonces || !sdkClient,
-    error }
+    error,
+  }
 }
 
 function getButtonLabel(signPermit2State: SignatureState, tokenSymbols?: (string | undefined)[]) {

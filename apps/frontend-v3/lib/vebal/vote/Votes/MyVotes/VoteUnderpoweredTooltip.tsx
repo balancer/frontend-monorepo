@@ -1,4 +1,4 @@
-import { HStack, Popover, HoverCard, Portal, Text, VStack } from '@chakra-ui/react';
+import { HStack, HoverCard, Portal, Text, VStack } from '@chakra-ui/react'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 
 type Props = {
@@ -19,9 +19,9 @@ export function VoteUnderpoweredTooltip({ usePortal, isTimelocked }: Props) {
             {title}
           </Text>
           <Text color="font.secondary" fontSize="sm">
-            Your pool gauge was set at the time of your last vote and decays linearly until your veBAL
-            expiry. You have acquired new veBAL since your last vote. Re-vote to update the gauge with
-            your full veBAL voting power.
+            Your pool gauge was set at the time of your last vote and decays linearly until your
+            veBAL expiry. You have acquired new veBAL since your last vote. Re-vote to update the
+            gauge with your full veBAL voting power.
           </Text>
         </VStack>
       </HoverCard.Content>
@@ -37,5 +37,5 @@ export function VoteUnderpoweredTooltip({ usePortal, isTimelocked }: Props) {
       </HoverCard.Trigger>
       {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
     </HoverCard.Root>
-  );
+  )
 }

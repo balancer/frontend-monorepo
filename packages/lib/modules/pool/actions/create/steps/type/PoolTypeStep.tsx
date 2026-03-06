@@ -1,4 +1,4 @@
-import { VStack, Heading, Box } from '@chakra-ui/react';
+import { VStack, Heading, Box } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { ChooseNetwork } from './ChooseNetwork'
@@ -16,7 +16,8 @@ export function PoolTypeStep() {
   const showChooseProtocol = isBalancer
 
   return (
-    <Box style={{ width: '100%' }} asChild><form>
+    <Box asChild style={{ width: '100%' }}>
+      <form>
         <VStack align="start" gap="xl" w="full">
           <Heading color="font.maxContrast" size="md">
             Pool type
@@ -26,6 +27,7 @@ export function PoolTypeStep() {
           <ChoosePoolType control={control} />
           <PoolCreationFormAction disabled={!formState.isValid} />
         </VStack>
-      </form></Box>
-  );
+      </form>
+    </Box>
+  )
 }

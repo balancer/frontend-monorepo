@@ -1,5 +1,5 @@
-import ReactECharts from 'echarts-for-react';
-import { Box, HStack, Skeleton, Text, Separator, useChakraContext } from '@chakra-ui/react';
+import ReactECharts from 'echarts-for-react'
+import { Box, HStack, Skeleton, Text, Separator, useChakraContext } from '@chakra-ui/react'
 import { usePoolActivityChart } from './usePoolActivityChart'
 import { PropsWithChildren } from 'react'
 import { motion, easeOut } from 'framer-motion'
@@ -32,13 +32,16 @@ export function PoolActivityChart() {
   const legendTabs = [
     {
       label: 'Adds',
-      color: resolveToken(system, 'chart.pool.scatter.add.label') },
+      color: resolveToken(system, 'chart.pool.scatter.add.label'),
+    },
     {
       label: 'Removes',
-      color: resolveToken(system, 'chart.pool.scatter.remove.label') },
+      color: resolveToken(system, 'chart.pool.scatter.remove.label'),
+    },
     {
       label: 'Swaps',
-      color: resolveToken(system, 'chart.pool.scatter.swap.label') },
+      color: resolveToken(system, 'chart.pool.scatter.swap.label'),
+    },
   ]
 
   return (
@@ -63,7 +66,7 @@ export function PoolActivityChart() {
       {!isLoading && isExpanded && (
         <AnimateOpacity>
           <Separator mb="4" pt="2" />
-          <HStack px={['1', '2']} gap="4">
+          <HStack gap="4" px={['1', '2']}>
             {legendTabs.map((tab, index) => (
               <HStack alignItems="center" gap="2" key={index}>
                 <Box
@@ -82,5 +85,5 @@ export function PoolActivityChart() {
         </AnimateOpacity>
       )}
     </Box>
-  );
+  )
 }

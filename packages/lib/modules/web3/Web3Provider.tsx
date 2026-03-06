@@ -1,5 +1,5 @@
-'use client';
-import '@rainbow-me/rainbowkit/styles.css';
+'use client'
+import '@rainbow-me/rainbowkit/styles.css'
 import { RainbowKitProvider, Theme, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
 import { ReactQueryClientProvider } from '@repo/lib/shared/app/react-query.provider'

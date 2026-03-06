@@ -5,12 +5,12 @@ import {
   Button,
   Card,
   HStack,
-  Popover,
   HoverCard,
   Skeleton,
   Text,
   VStack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
@@ -25,7 +25,8 @@ import { TransactionSettings } from '@repo/lib/modules/user/settings/Transaction
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect, useRef, useState } from 'react'
@@ -51,10 +52,12 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
   const TABS: ButtonGroupOption[] = [
     {
       value: 'proportional',
-      label: 'Proportional' },
+      label: 'Proportional',
+    },
     {
       value: 'single',
-      label: 'Single token' },
+      label: 'Single token',
+    },
   ] as const
 
   const [activeTab, setActiveTab] = useState(TABS[0])
@@ -75,7 +78,8 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
     tokens,
     humanBptInPercent,
     setHumanBptInPercent,
-    isSingleTokenBalanceMoreThat25Percent } = useRemoveLiquidity()
+    isSingleTokenBalanceMoreThat25Percent,
+  } = useRemoveLiquidity()
 
   const { pool, chain } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -163,8 +167,8 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
                         Single token Removal
                       </Text>
                       <Text fontSize="sm" variant="secondary">
-                        Single-token removal can be convenient but may lower your returns due to price
-                        impact.
+                        Single-token removal can be convenient but may lower your returns due to
+                        price impact.
                       </Text>
                     </Box>
                   </VStack>
@@ -211,13 +215,13 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
                 accordionPanelComponent={
                   <PoolActionsPriceImpactDetails
                     bptAmount={undefined}
-                    isLoading={isFetching}
+                    loading={isFetching}
                     slippage={slippage}
                     totalUSDValue={totalUSDValue}
                   />
                 }
                 action="remove"
-                isDisabled={!isProportionalTabSelected && !priceImpactQuery.data}
+                disabled={!isProportionalTabSelected && !priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
@@ -243,5 +247,5 @@ function ReliquaryRemoveLiquidityForm({ relicId }: { relicId: string }) {
         relicId={relicId}
       />
     </Box>
-  );
+  )
 }

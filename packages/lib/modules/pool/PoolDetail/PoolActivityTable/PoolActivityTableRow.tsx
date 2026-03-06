@@ -8,7 +8,8 @@ import {
   Link,
   Badge,
   BadgeProps,
-  useChakraContext } from '@chakra-ui/react';
+  useChakraContext,
+} from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
@@ -88,7 +89,8 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.level0' }}
+          bg: 'background.level0',
+        }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         rounded="md"
@@ -102,9 +104,10 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
           <GridItem>
             <HStack>
               <Box
-                backgroundImage={
-                  resolveToken(system, `chart.pool.scatter.${poolEvent.action}.label`)
-                }
+                backgroundImage={resolveToken(
+                  system,
+                  `chart.pool.scatter.${poolEvent.action}.label`
+                )}
                 borderRadius="50%"
                 display="inline-block"
                 height="2"
@@ -127,12 +130,14 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
           <GridItem>
             <Link
               href={getBlockExplorerTxUrl(poolEvent.tx, chain)}
-              target='_blank'
-              rel='noopener noreferrer'>
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <HStack gap="0.5" justifyContent="flex-end">
                 <Text>
                   {formatDistanceToNow(new Date(secondsToMilliseconds(event[0])), {
-                    addSuffix: true })}
+                    addSuffix: true,
+                  })}
                 </Text>
                 <Text variant="secondary">
                   <ArrowUpRight size={12} />
@@ -143,5 +148,5 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
         </Grid>
       </Box>
     </FadeInOnView>
-  );
+  )
 }

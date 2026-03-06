@@ -7,7 +7,8 @@ import {
   HStack,
   Heading,
   Dialog,
-  Portal } from '@chakra-ui/react';
+  Portal,
+} from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
@@ -56,7 +57,7 @@ function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: Ne
         />
       </Card.Root>
     </VStack>
-  );
+  )
 }
 
 interface NetworkOptionsProps {
@@ -71,18 +72,52 @@ function NetworkOptions({ networks, selectedNetworks, toggleNetwork }: NetworkOp
     <VStack align="start" gap="xs" w="full">
       {networks.map(network => (
         <Checkbox.Root
+          checked={selectedNetworks.includes(network)}
           key={`checkbox-${String(network)}`}
           onCheckedChange={(e: any) => toggleNetwork(e.target.checked, network)}
-          checked={selectedNetworks.includes(network)}
-        ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-            <HStack w="full">
-              <Text>{getChainShortName(network)}</Text>
-              <Text>{l2VeBalBalances[network]} veBAL</Text>
-            </HStack>
-          </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+        >
+          <Checkbox.HiddenInput />
+          <Checkbox.Control>
+            <Checkbox.Indicator />
+          </Checkbox.Control>
+          <Checkbox.Label>
+            <Checkbox.Root>
+              <Checkbox.HiddenInput />
+              <Checkbox.Control>
+                <Checkbox.Indicator />
+              </Checkbox.Control>
+            </Checkbox.Root>
+            <Checkbox.Root>
+              <Checkbox.HiddenInput />
+              <Checkbox.Control>
+                <Checkbox.Indicator />
+              </Checkbox.Control>
+              <Checkbox.Label>
+                <Checkbox.Root>
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                </Checkbox.Root>
+              </Checkbox.Label>
+            </Checkbox.Root>
+            <Checkbox.Root>
+              <Checkbox.HiddenInput />
+              <Checkbox.Control>
+                <Checkbox.Indicator />
+              </Checkbox.Control>
+              <Checkbox.Label>
+                <HStack w="full">
+                  <Text>{getChainShortName(network)}</Text>
+                  <Text>{l2VeBalBalances[network]} veBAL</Text>
+                </HStack>
+              </Checkbox.Label>
+            </Checkbox.Root>
+          </Checkbox.Label>
+        </Checkbox.Root>
       ))}
     </VStack>
-  );
+  )
 }
 
 export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
@@ -92,7 +127,8 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
   const { isDesktop, isMobile } = useBreakpoints()
 
   const steps = useCrossChainSyncSteps({
-    networks: selectedNetworks })
+    networks: selectedNetworks,
+  })
   const transactionSteps = useTransactionSteps(steps)
 
   const transactionHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
@@ -117,16 +153,16 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
 
   return (
     <Dialog.Root
-      placement='center'
-      open={isOpen}
-      trapFocus={!isSuccess}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          onModalClose();
+          onModalClose()
         }
-      }}>
+      }}
+      open={isOpen}
+      placement="center"
+      trapFocus={!isSuccess}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!transactionHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -148,7 +184,10 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
                 {showTransactionSteps ? (
                   <>
                     {isMobile && (
-                      <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
+                      <MobileStepTracker
+                        chain={GqlChain.Mainnet}
+                        transactionSteps={transactionSteps}
+                      />
                     )}
                   </>
                 ) : (
@@ -181,8 +220,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
             )}
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

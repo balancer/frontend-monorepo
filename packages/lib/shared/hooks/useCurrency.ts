@@ -30,7 +30,7 @@ export function useCurrency() {
   }
 
   function parseCurrency(value: string) {
-    return value.replace(/^\$/, '');
+    return value.replace(/^\$/, '')
   }
 
   // Converts a USD value to the user's currency and formats in fiat style.
@@ -40,14 +40,16 @@ export function useCurrency() {
       withSymbol = true,
       abbreviated = true,
       noDecimals = false,
-      forceThreeDecimals = false }: CurrencyOpts = {}
+      forceThreeDecimals = false,
+    }: CurrencyOpts = {}
   ): string {
     const symbol = hasFxRates ? symbolForCurrency(currency) : '$'
     const convertedAmount = toUserCurrency(usdVal)
 
     const formattedAmount = fNum(noDecimals ? 'integer' : 'fiat', convertedAmount, {
       abbreviated,
-      forceThreeDecimals })
+      forceThreeDecimals,
+    })
 
     if (formattedAmount.startsWith('<')) {
       return withSymbol ? '<' + symbol + formattedAmount.substring(1) : formattedAmount

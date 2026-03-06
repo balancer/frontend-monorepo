@@ -1,4 +1,4 @@
-import { VStack, HStack, Text, RadioGroup, Stack } from '@chakra-ui/react';
+import { VStack, HStack, Text, RadioGroup, Stack } from '@chakra-ui/react'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { Controller } from 'react-hook-form'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -11,7 +11,7 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 export interface PoolSettingsRadioGroupProps {
   title: string
   tooltip: string
-  isDisabled?: boolean
+  disabled?: boolean
   name:
     | 'poolCreator'
     | 'swapFeeManager'
@@ -37,9 +37,11 @@ export function PoolSettingsRadioGroup({
   validate,
   validateAsync,
   isPercentage,
-  isDisabled }: PoolSettingsRadioGroupProps) {
+  disabled,
+}: PoolSettingsRadioGroupProps) {
   const {
-    poolCreationForm: { control, setValue, trigger, resetField, formState } } = usePoolCreationForm()
+    poolCreationForm: { control, setValue, trigger, resetField, formState },
+  } = usePoolCreationForm()
 
   const handlePaste = async () => {
     const clipboardText = await navigator.clipboard.readText()
@@ -78,14 +80,15 @@ export function PoolSettingsRadioGroup({
                 }
               }}
               value={String(selectedRadioGroupValue)}
-              w="full">
+              w="full"
+            >
               <Stack gap={4}>
                 {optionsPlusCustom.map((option, idx) => {
                   const isCustomOption = option.value === ''
 
                   return (
                     <VStack align="start" key={idx} w="full">
-                      <RadioGroup.Item disabled={isDisabled} size="lg" value={String(option.value)}>
+                      <RadioGroup.Item disabled={disabled} size="lg" value={String(option.value)}>
                         <RadioGroup.ItemHiddenInput />
                         <RadioGroup.ItemIndicator />
                         <RadioGroup.ItemText>
@@ -105,7 +108,7 @@ export function PoolSettingsRadioGroup({
                               render={({ field }) => (
                                 <InputWithError
                                   error={errors?.message}
-                                  isInvalid={!!errors}
+                                  invalid={!!errors}
                                   label={customInputLabel}
                                   onChange={e => field.onChange(e.target.value)}
                                   pasteFn={handlePaste}
@@ -129,8 +132,8 @@ export function PoolSettingsRadioGroup({
                           <FormSubsection>
                             <NumberInput
                               control={control}
-                              isDisabled={false}
-                              isInvalid={false}
+                              disabled={false}
+                              invalid={false}
                               isPercentage={!!isPercentage}
                               label={customInputLabel}
                               name={name}
@@ -140,13 +143,13 @@ export function PoolSettingsRadioGroup({
                           </FormSubsection>
                         ))}
                     </VStack>
-                  );
+                  )
                 })}
               </Stack>
             </RadioGroup.Root>
-          );
+          )
         }}
       />
     </VStack>
-  );
+  )
 }

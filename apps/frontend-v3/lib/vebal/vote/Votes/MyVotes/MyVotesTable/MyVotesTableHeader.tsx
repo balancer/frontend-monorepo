@@ -8,7 +8,8 @@ import {
   Icon,
   Text,
   VStack,
-  Popover } from '@chakra-ui/react';
+  Popover,
+} from '@chakra-ui/react'
 import { Globe, Trash2 } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { SortingBy } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.types'
@@ -22,7 +23,8 @@ interface Props extends GridProps {
 
 export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
   const {
-    filtersState: { sorting, setSorting, sortingBy, setSortingBy, toggleSorting } } = useMyVotes()
+    filtersState: { sorting, setSorting, sortingBy, setSortingBy, toggleSorting },
+  } = useMyVotes()
 
   const handleSort = (newSortingBy: SortingBy) => {
     if (sortingBy === newSortingBy) {
@@ -37,7 +39,9 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
     <Grid {...rest} p={['sm', 'md']} w="full">
       <GridItem {...cellProps}>
         <VStack align="start" w="full">
-          <Icon boxSize="5" color="font.primary" asChild><Globe /></Icon>
+          <Icon asChild boxSize="5" color="font.primary">
+            <Globe />
+          </Icon>
         </VStack>
       </GridItem>
       <GridItem {...cellProps}>
@@ -52,7 +56,8 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
             textAlign: 'right',
             ...cellProps,
             position: 'relative',
-            right: '-8px' }}
+            right: '-8px',
+          }}
           isSorted={sortingBy === orderByItem}
           key={orderByItem}
           label={orderByHash[orderByItem].label}
@@ -81,9 +86,11 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
       ))}
       <GridItem {...cellProps}>
         <VStack align="center" w="full">
-          <Icon boxSize="5" color="font.primary" asChild><Trash2 /></Icon>
+          <Icon asChild boxSize="5" color="font.primary">
+            <Trash2 />
+          </Icon>
         </VStack>
       </GridItem>
     </Grid>
-  );
+  )
 }

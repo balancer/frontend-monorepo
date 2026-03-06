@@ -1,7 +1,7 @@
 'use client'
 
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -41,21 +41,23 @@ export function MigrateStakeModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!restakeTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
-            {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+            {isDesktop && (
+              <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
+            )}
             <TransactionModalHeader
               chain={pool.chain}
               label="Confirm gauge migration"
@@ -78,8 +80,7 @@ export function MigrateStakeModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

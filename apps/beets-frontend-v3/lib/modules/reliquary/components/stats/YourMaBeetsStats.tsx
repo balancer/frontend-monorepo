@@ -5,7 +5,8 @@ import {
   Stack,
   Text,
   VStack,
-  useBreakpointValue } from '@chakra-ui/react';
+  useBreakpointValue,
+} from '@chakra-ui/react'
 import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { useReliquary } from '../../ReliquaryProvider'
 import RelicStat, { StatLabel, StatValueText } from './RelicStat'
@@ -27,7 +28,8 @@ export function YourMaBeetsStats() {
     relicPositions,
     totalMaBeetsVP,
     totalPendingRewardsUSD,
-    isLoading: isLoadingReliquary } = useReliquary()
+    isLoading: isLoadingReliquary,
+  } = useReliquary()
 
   const isLoading = isLoadingReliquary || isLoadingGlobalStats
 
@@ -87,15 +89,15 @@ export function YourMaBeetsStats() {
         </RelicStat>
         <RelicStat>
           <Stack alignItems="center" direction={{ base: 'column', md: 'row' }} h="full" w="full">
-            <VStack alignItems="flex-start" h="full" gap="0" w="full">
+            <VStack alignItems="flex-start" gap="0" h="full" w="full">
               <StatLabel label="Total Pending Rewards" />
               <Skeleton loading={!!isLoading}>
                 <StatValueText>{toCurrency(totalPendingRewardsUSD)}</StatValueText>
               </Skeleton>
             </VStack>
             <TooltipWithTouch
+              disabled={!isDisabledButton}
               fullWidth={isMobile}
-              isDisabled={!isDisabledButton}
               label={`The minimum amount to claim is ${toCurrency(0.01)}`}
             >
               <Button
@@ -129,5 +131,5 @@ export function YourMaBeetsStats() {
         onOpen={() => setIsClaimAllModalOpen(true)}
       />
     </VStack>
-  );
+  )
 }

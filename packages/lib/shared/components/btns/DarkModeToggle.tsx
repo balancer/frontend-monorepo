@@ -1,5 +1,5 @@
-'use client';
-import { Button } from '@chakra-ui/react';
+'use client'
+import { Button } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { Moon, Sun } from 'react-feather'
@@ -16,12 +16,14 @@ export default function DarkModeToggle() {
   const animationSun = {
     initial: { rotate: 0, scale: 0, opacity: 0 },
     animate: { rotate: 90, scale: 1, opacity: 1 },
-    exit: { rotate: 0, scale: 0, opacity: 0 } }
+    exit: { rotate: 0, scale: 0, opacity: 0 },
+  }
 
   const animationMoon = {
     initial: { rotate: 90, scale: 0, opacity: 0 },
     animate: { rotate: 0, scale: 1, opacity: 1 },
-    exit: { rotate: 90, scale: 0, opacity: 0 } }
+    exit: { rotate: 90, scale: 0, opacity: 0 },
+  }
 
   return (
     <Button onClick={toggleColorMode} p="0" variant="tertiary">

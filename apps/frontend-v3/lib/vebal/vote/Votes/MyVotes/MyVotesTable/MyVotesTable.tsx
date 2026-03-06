@@ -3,7 +3,7 @@
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { MyVotesTableHeader } from './MyVotesTableHeader'
 import { MyVotesTableRow } from './MyVotesTableRow'
-import { Card, Skeleton } from '@chakra-ui/react';
+import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useMemo } from 'react'
@@ -21,13 +21,15 @@ interface Props {
 enum RowType {
   Data = 'Data',
   Total = 'Total',
-  Submit = 'Submit' }
+  Submit = 'Submit',
+}
 
 const rowProps = {
   px: { base: 'sm', sm: '0' },
   gridTemplateColumns: `32px minmax(320px, 1fr) minmax(100px, max-content) minmax(140px, max-content) minmax(130px, max-content) minmax(120px, max-content) 50px`,
   alignItems: 'center',
-  gap: { base: 'xxs', xl: 'lg' } }
+  gap: { base: 'xxs', xl: 'lg' },
+}
 
 export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
   const isMounted = useIsMounted()
@@ -41,20 +43,23 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
 
     const rows = myVotes.map(
       myVote =>
-        (({
+        ({
           id: myVote.id,
           vote: myVote,
-          type: RowType.Data }) as const)
+          type: RowType.Data,
+        }) as const
     )
 
     return [
       ...rows,
       {
         id: RowType.Total,
-        type: RowType.Total } as const,
+        type: RowType.Total,
+      } as const,
       {
         id: RowType.Submit,
-        type: RowType.Submit } as const,
+        type: RowType.Submit,
+      } as const,
     ]
   }, [myVotes])
 
@@ -118,5 +123,5 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
         showPagination={false}
       />
     </Card.Root>
-  );
+  )
 }

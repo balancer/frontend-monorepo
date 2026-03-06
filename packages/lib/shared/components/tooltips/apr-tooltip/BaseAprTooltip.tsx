@@ -2,8 +2,9 @@ import {
   GqlChain,
   GqlHookType,
   GqlPoolAprItem,
-  GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { Popover, HoverCard, Stack, Portal, Separator } from '@chakra-ui/react';
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
+import { HoverCard, Stack, Portal, Separator } from '@chakra-ui/react'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import {
   swapFeesTooltipText,
@@ -14,7 +15,8 @@ import {
   votingIncentivesTooltipText,
   merklIncentivesTooltipText,
   surplusIncentivesTooltipText,
-  SupportedHookType } from '@repo/lib/shared/hooks/useAprTooltip'
+  SupportedHookType,
+} from '@repo/lib/shared/hooks/useAprTooltip'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -50,7 +52,8 @@ const basePopoverAprItemProps = {
   pr: 2,
   pb: 3,
   backgroundColor: 'background.level1',
-  fontWeight: 700 }
+  fontWeight: 700,
+}
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 const defaultNumberFormatter = (value: string) => bn(value)
@@ -87,7 +90,8 @@ function BaseAprTooltip({
   poolType,
   chain,
   usePortal = true,
-  hookType }: Props) {
+  hookType,
+}: Props) {
   const colorMode = useThemeColorMode()
 
   const isVebal = isVebalPool(poolId)
@@ -131,11 +135,13 @@ function BaseAprTooltip({
     dynamicSwapFeesDisplayed,
     dynamicSwapFeesTooltipText,
     fuulIncentivesDisplayed,
-    fuulTooltipText } = useAprTooltip({
+    fuulTooltipText,
+  } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
     numberFormatter: usedNumberFormatter,
-    chain })
+    chain,
+  })
 
   const totalBaseTitle = isVebal
     ? totalBaseVeBalText
@@ -153,7 +159,8 @@ function BaseAprTooltip({
         overflow="hidden"
         p="0"
         shadow="3xl"
-        w="fit-content">
+        w="fit-content"
+      >
         <TooltipAprItem
           {...basePopoverAprItemProps}
           apr={swapFeesDisplayed}
@@ -416,9 +423,11 @@ function BaseAprTooltip({
     <HoverCard.Root
       lazyMount
       positioning={{
-        placement: placement
-      }}>
-      <HoverCard.Context>{({ open: isOpen }: { open: boolean }) => (
+        placement: placement,
+      }}
+    >
+      <HoverCard.Context>
+        {({ open: isOpen }: { open: boolean }) => (
           <>
             <HoverCard.Trigger asChild>
               {typeof children === 'function' ? children({ isOpen }) : children}
@@ -426,9 +435,10 @@ function BaseAprTooltip({
 
             {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
           </>
-        )}</HoverCard.Context>
+        )}
+      </HoverCard.Context>
     </HoverCard.Root>
-  );
+  )
 }
 
 export type { Props as BaseAprTooltipProps }

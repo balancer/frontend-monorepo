@@ -1,4 +1,4 @@
-import { Box, Card, HStack, Popover, HoverCard, VStack, Text, Skeleton } from '@chakra-ui/react';
+import { Box, Card, HStack, HoverCard, VStack, Text, Skeleton } from '@chakra-ui/react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -15,7 +15,8 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 export function LoopsWithdrawSummary({
   isLoading: isLoadingReceipt,
-  receivedToken }: LoopsWithdrawReceiptResult) {
+  receivedToken,
+}: LoopsWithdrawReceiptResult) {
   const { isMobile } = useBreakpoints()
   const { usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
@@ -26,12 +27,14 @@ export function LoopsWithdrawSummary({
     loopsWithdrawTxHash,
     wNativeAsset,
     loopedAsset,
-    amountShares } = useLoops()
+    amountShares,
+  } = useLoops()
 
   const {
     wethAmountOut,
     isLoading: isLoadingFlyQuote,
-    minWethAmountOut } = useLoopsGetFlyQuote(amountShares, chain)
+    minWethAmountOut,
+  } = useLoopsGetFlyQuote(amountShares, chain)
 
   const slippage = bn(wethAmountOut).isZero()
     ? bn(0)
@@ -49,8 +52,8 @@ export function LoopsWithdrawSummary({
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={false}
           label={shouldShowReceipt ? 'You withdrew' : 'You withdraw'}
+          loading={false}
           tokenAddress={loopedAsset?.address || ''}
           tokenAmount={amountShares}
         />
@@ -58,8 +61,8 @@ export function LoopsWithdrawSummary({
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingFlyQuote || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
+          loading={isLoadingFlyQuote || isLoadingReceipt}
           tokenAddress={wNativeAsset?.address || ''}
           tokenAmount={
             shouldShowReceipt
@@ -68,7 +71,7 @@ export function LoopsWithdrawSummary({
           }
         />
       </Card.Root>
-      <VStack align="start" fontSize="sm" mt="sm" gap="sm" w="full">
+      <VStack align="start" fontSize="sm" gap="sm" mt="sm" w="full">
         <HStack justify="space-between" w="full">
           <Text color="grayText" fontSize="sm">
             Max slippage
@@ -112,7 +115,8 @@ export function LoopsWithdrawSummary({
             ) : (
               <NumberText color="grayText" fontSize="sm">
                 {fNum('token', formatUnits(minWethAmountOut, wNativeAsset?.decimals ?? 18), {
-                  abbreviated: false })}{' '}
+                  abbreviated: false,
+                })}{' '}
                 {wNativeAsset?.symbol}
               </NumberText>
             )}
@@ -138,5 +142,5 @@ export function LoopsWithdrawSummary({
         </HStack>
       </VStack>
     </AnimateHeightChange>
-  );
+  )
 }

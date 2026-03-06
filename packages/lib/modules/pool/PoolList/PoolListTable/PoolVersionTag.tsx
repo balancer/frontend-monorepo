@@ -1,4 +1,4 @@
-import { Center, Text } from '@chakra-ui/react';
+import { Center, Text } from '@chakra-ui/react'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { isCowAmmPool } from '../../pool.helpers'
@@ -31,29 +31,39 @@ const v3BadgeStyles = {
     WebkitMaskComposite: 'xor',
     maskComposite: 'exclude',
     transition: 'all 0.2s var(--ease-out-cubic)',
-    zIndex: '0' },
+    zIndex: '0',
+  },
   '[role="group"]:hover &::before': {
     transition: 'all 0.2s var(--ease-out-cubic)',
     padding: '1.5px',
-    animation: 'rotateMaskedBg 1s ease-in-out infinite' },
+    animation: 'rotateMaskedBg 1s ease-in-out infinite',
+  },
   '@keyframes rotateMaskedBg': {
     '0%': {
       transform: 'rotate(0deg)',
-      background: 'background.special' },
+      background: 'background.special',
+    },
     '25%': {
-      background: 'background.special' },
+      background: 'background.special',
+    },
     '50%': {
       transform: 'rotate(180deg)',
-      background: 'background.special' },
+      background: 'background.special',
+    },
     '75%': {
-      background: 'background.special' },
+      background: 'background.special',
+    },
     '100%': {
       transform: 'rotate(360deg)',
-      background: 'background.special' } } }
+      background: 'background.special',
+    },
+  },
+}
 
 export function PoolVersionTag({
   pool,
-  isSmall }: {
+  isSmall,
+}: {
   pool: Pick<PoolListItem | Pool, 'protocolVersion' | 'type'>
   isSmall?: boolean
 }) {
@@ -82,7 +92,8 @@ export function PoolVersionTag({
               fontWeight: isV3 ? 'bold' : 'medium',
               background: isCow ? 'auto' : isV3 ? 'background.special' : 'font.maxContrast',
               color: isCow ? 'font.maxContrast' : 'auto',
-              backgroundClip: isCow ? 'unset' : 'text' }}
+              backgroundClip: isCow ? 'unset' : 'text',
+            }}
             background={isCow ? 'auto' : isV3 ? 'font.special' : 'font.secondary'}
             backgroundClip={isCow ? 'unset' : 'text'}
             fontSize="xs"

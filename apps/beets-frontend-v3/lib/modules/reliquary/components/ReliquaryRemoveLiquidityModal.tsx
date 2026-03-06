@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useRemoveLiquidity } from '@repo/lib/modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
@@ -52,7 +52,8 @@ export function ReliquaryRemoveLiquidityModal({
     txHash: removeLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt })
+    txReceipt,
+  })
 
   useEffect(() => {
     if (isOpen) {
@@ -101,21 +102,22 @@ export function ReliquaryRemoveLiquidityModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          handleOnClose();
+          handleOnClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
         <Dialog.Positioner>
           <Dialog.Content
-            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}
+          >
             {isDesktop && hasQuoteContext && (
               <DesktopStepTracker
                 chain={pool.chain}
@@ -143,8 +145,7 @@ export function ReliquaryRemoveLiquidityModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

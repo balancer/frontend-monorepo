@@ -6,8 +6,8 @@
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
-import { Input, InputGroup, InputProps, Box, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+import { Input, InputGroup, InputProps, Box, VStack } from '@chakra-ui/react'
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 import { blockInvalidNumberInput, bn } from '@repo/lib/shared/utils/numbers'
 import { Percent } from 'react-feather'
 import { useState, useCallback } from 'react'
@@ -89,37 +89,39 @@ export function VoteWeightInput({
 
   return (
     <VStack align="start" w="full">
-      <Tooltip disabled={!isDisabled} content={tooltipLabel}>
-        <InputGroup endElement={
-          <Box color="font.primary" pointerEvents="none">
-            <Box bg="background.level2" p="3px" rounded="sm" shadow="sm">
-              <Percent color="currentColor" size="13px" />
+      <Tooltip content={tooltipLabel} disabled={!isDisabled}>
+        <InputGroup
+          endElement={
+            <Box color="font.primary" pointerEvents="none">
+              <Box bg="background.level2" p="3px" rounded="sm" shadow="sm">
+                <Percent color="currentColor" size="13px" />
+              </Box>
             </Box>
-          </Box>
-        }>
+          }
+        >
           <Input
             autoComplete="off"
             autoCorrect="off"
             bg="background.level1"
+            disabled={isDisabled}
             max={max}
             min={0}
             onBlur={() => {
               setEditingValue(parseFloat(percentage).toFixed(2))
               toggle()
             }}
-            onValueChange={handleChange}
             onFocus={() => {
               setEditingValue(parseFloat(percentage).toFixed(2))
               toggle()
             }}
             onKeyDown={blockInvalidNumberInput}
+            onValueChange={handleChange}
             type="number"
             value={String(getInputValue())}
-            disabled={isDisabled}
             {...inputProps}
           />
         </InputGroup>
       </Tooltip>
     </VStack>
-  );
+  )
 }

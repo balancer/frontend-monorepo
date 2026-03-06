@@ -1,6 +1,6 @@
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { Button, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react'
 import { useToast } from '@repo/lib/shared/hooks/useToast'
 import { ManagedResult, TransactionLabels, TransactionState, getTransactionState } from './lib'
 import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
@@ -65,7 +65,8 @@ export function TransactionStepButton({ step }: Props) {
       transactionState,
       labels,
       isStepComplete: step.isComplete,
-      isSmartAccount: isSafeAccount })
+      isSmartAccount: isSafeAccount,
+    })
   }
 
   const { isTxTracked, addTrackedTransaction } = useRecentTransactions()
@@ -88,7 +89,8 @@ export function TransactionStepButton({ step }: Props) {
               description: labels.description,
               timestamp: Date.now(),
               safeTxId: tx.txId,
-              safeTxAddress: tx.safeAddress as Address },
+              safeTxAddress: tx.safeAddress as Address,
+            },
             false
           )
         }
@@ -119,7 +121,7 @@ export function TransactionStepButton({ step }: Props) {
         </Button>
       )}
     </VStack>
-  );
+  )
 }
 
 function TransactionError({ step }: Props) {
@@ -145,5 +147,5 @@ function TransactionError({ step }: Props) {
 }
 
 export function DisabledTransactionButton() {
-  return <Button disabled loading size="lg" variant="primary" w="full" width="full" />;
+  return <Button disabled loading size="lg" variant="primary" w="full" width="full" />
 }

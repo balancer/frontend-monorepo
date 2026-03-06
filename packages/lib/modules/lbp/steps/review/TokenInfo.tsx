@@ -1,4 +1,4 @@
-import { Circle, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react';
+import { Circle, HStack, Image, Spacer, Text, VStack } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function TokenInfo({
@@ -6,7 +6,8 @@ export function TokenInfo({
   symbol,
   name,
   amount,
-  value }: {
+  value,
+}: {
   iconURL: string
   symbol: string
   name: string
@@ -34,5 +35,5 @@ export function TokenInfo({
         </HStack>
       </VStack>
     </HStack>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { VStack, HStack, Text } from '@chakra-ui/react';
+import { VStack, HStack, Text } from '@chakra-ui/react'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { PoolCreationCheckbox } from '../../PoolCreationCheckbox'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
@@ -19,7 +19,8 @@ export function LiquidityManagement() {
         'disableUnbalancedLiquidity',
         'poolHooksContract',
         'network',
-      ] })
+      ],
+    })
 
   const { hookFlags } = usePoolHooksContract(poolHooksContract, network)
 
@@ -52,8 +53,8 @@ export function LiquidityManagement() {
         placement="right"
       >
         <PoolCreationCheckbox
+          disabled={isUnbalancedToggleDisabled}
           isChecked={!disableUnbalancedLiquidity}
-          isDisabled={isUnbalancedToggleDisabled}
           label="Allow unbalanced joins and removes"
           onChange={e => poolCreationForm.setValue('disableUnbalancedLiquidity', !e.target.checked)}
         />
@@ -64,12 +65,12 @@ export function LiquidityManagement() {
         placement="right"
       >
         <PoolCreationCheckbox
+          disabled={isDonationToggleDisabled}
           isChecked={enableDonation}
-          isDisabled={isDonationToggleDisabled}
           label="Allow donations"
           onChange={e => poolCreationForm.setValue('enableDonation', e.target.checked)}
         />
       </TooltipWithTouch>
     </VStack>
-  );
+  )
 }

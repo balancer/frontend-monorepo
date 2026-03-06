@@ -1,4 +1,4 @@
-import { HStack, Stack, Text, Separator } from '@chakra-ui/react';
+import { HStack, Stack, Text, Separator } from '@chakra-ui/react'
 import { WeightsChart } from '@repo/lib/modules/lbp/steps/sale-structure/WeightsChart'
 import { parseISO } from 'date-fns'
 
@@ -21,7 +21,8 @@ export function WeightsChartContainer({
   startDateTime,
   endDateTime,
   salePeriodText,
-  cutTime }: WeightsChartContainerProps) {
+  cutTime,
+}: WeightsChartContainerProps) {
   return (
     <>
       <WeightsChart
@@ -50,5 +51,5 @@ export function WeightsChartContainer({
         </Text>
       </Stack>
     </>
-  );
+  )
 }

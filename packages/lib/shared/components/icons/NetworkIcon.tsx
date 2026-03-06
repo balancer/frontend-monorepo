@@ -1,4 +1,4 @@
-import { Circle, SquareProps } from '@chakra-ui/react';
+import { Circle, SquareProps } from '@chakra-ui/react'
 import { GqlChain } from '../../services/api/generated/graphql'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import Image from 'next/image'
@@ -26,7 +26,8 @@ export function NetworkIcon({
             position: 'absolute',
             top: '50%',
             left: '50%',
-            transform: 'translate(-50%, -50%)' }}
+            transform: 'translate(-50%, -50%)',
+          }}
         />
       )}
     </Circle>

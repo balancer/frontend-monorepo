@@ -1,6 +1,6 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTokens } from '../TokensProvider'
 import { useMemo } from 'react'
 import { TokenIcon } from '../TokenIcon'
@@ -21,9 +21,11 @@ export function TokenSelectPopular({
   currentToken,
   excludeNativeAsset,
   onTokenSelect,
-  excludedTokens = [] }: Props) {
+  excludedTokens = [],
+}: Props) {
   const {
-    tokens: { popularTokens } } = getNetworkConfig(chain)
+    tokens: { popularTokens },
+  } = getNetworkConfig(chain)
   const { getToken } = useTokens()
 
   const tokens = useMemo(() => {
@@ -63,5 +65,5 @@ export function TokenSelectPopular({
         </WrapItem>
       ))}
     </Wrap>
-  );
+  )
 }

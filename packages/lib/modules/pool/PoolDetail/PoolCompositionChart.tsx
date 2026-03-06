@@ -1,16 +1,18 @@
 import { getCompositionTokens, getFlatCompositionTokens } from '../pool-tokens.utils'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { usePool } from '../PoolProvider'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import {
   GqlChain,
-  GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolLiquidityBootstrappingV3,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
-import { VStack, Skeleton, Box, HStack, Text, Flex, Link, Separator } from '@chakra-ui/react';
+import { VStack, Skeleton, Box, HStack, Text, Flex, Link, Separator } from '@chakra-ui/react'
 
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useState } from 'react'
 import { isQuantAmmPool, isV3LBP } from '../pool.helpers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
@@ -45,14 +47,19 @@ function BTFTimeSelector({ pool, chain }: { pool: Pool; chain: GqlChain }) {
     option: (provided, state) => ({
       ...chakraStyles.option?.(provided, state),
       ...(state.isSelected && {
-        color: 'font.highlight' }) }),
+        color: 'font.highlight',
+      }),
+    }),
     menu: (provided, state) => ({
       ...chakraStyles.menu?.(provided, state),
-      w: '160px' }),
+      w: '160px',
+    }),
     menuList: (provided, state) => ({
       ...chakraStyles.menuList?.(provided, state),
       padding: 0,
-      mt: '2' }) }
+      mt: '2',
+    }),
+  }
 
   const customComponents = {
     MenuList: ({ children, ...props }: any) => {
@@ -66,18 +73,23 @@ function BTFTimeSelector({ pool, chain }: { pool: Pool; chain: GqlChain }) {
               <Link
                 _hover={{ textDecoration: 'none' }}
                 alignItems="center"
+                asChild
                 color="font.link"
                 display="flex"
                 fontSize="sm"
                 textDecoration="underline"
-                asChild><Link href={analyticsUrl} target='_blank' rel='noopener noreferrer'>QuantAMM
-                                  <ArrowUpRight size={12} />
-                </Link></Link>
+              >
+                <Link href={analyticsUrl} rel="noopener noreferrer" target="_blank">
+                  QuantAMM
+                  <ArrowUpRight size={12} />
+                </Link>
+              </Link>
             </Text>
           </Box>
         </chakraComponents.MenuList>
-      );
-    } }
+      )
+    },
+  }
 
   return (
     <Box maxW="max-content">
@@ -90,7 +102,8 @@ function BTFTimeSelector({ pool, chain }: { pool: Pool; chain: GqlChain }) {
         options={BTF_TIME_OPTIONS}
         size="sm"
         styles={{
-          menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+          menuPortal: base => ({ ...base, zIndex: 9999 }),
+        }}
         value={BTF_TIME_OPTIONS[0]}
       />
     </Box>
@@ -154,20 +167,22 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
     isMobile,
     pool,
     totalLiquidity,
-    hasTabs }
+    hasTabs,
+  }
 
   return (
     <NoisyCard
       cardProps={{
         height: [hasTabs ? '395px' : '300px', `${heightPx}px`],
         overflow: 'hidden',
-        position: 'relative' }}
+        position: 'relative',
+      }}
       contentProps={{ alignItems: 'center', display: 'flex', justifyContent: 'center' }}
     >
       {isLoading ? (
         <Skeleton h="full" w="full" />
       ) : hasTabs ? (
-        <VStack h="full" p={{ base: 'sm', md: 'md' }} gap="md" w="full">
+        <VStack gap="md" h="full" p={{ base: 'sm', md: 'md' }} w="full">
           <HStack alignSelf="flex-start" gap="ms" w="full">
             <ButtonGroup
               currentOption={activeTab}
@@ -192,7 +207,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
         <CompositionView {...compositionViewProps} />
       )}
     </NoisyCard>
-  );
+  )
 }
 
 // FIXME: [JUANJO] we can maybe merge this one with the one on the pool creation page

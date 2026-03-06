@@ -1,4 +1,4 @@
-import { BoxProps, ButtonProps } from '@chakra-ui/react';
+import { BoxProps, ButtonProps } from '@chakra-ui/react'
 import { HTMLMotionProps } from 'framer-motion'
 
 /**

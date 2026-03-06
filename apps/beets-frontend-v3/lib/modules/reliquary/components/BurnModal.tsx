@@ -1,4 +1,4 @@
-import { Card, ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { Card, ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -42,21 +42,23 @@ export function BurnModal({
 
   return (
     <Dialog.Root
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          handleOnClose();
+          handleOnClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!burnTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
-            {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={burnTransactionSteps} />}
+            {isDesktop && (
+              <DesktopStepTracker chain={chain} transactionSteps={burnTransactionSteps} />
+            )}
             <TransactionModalHeader
               chain={chain}
               label={`Burn Relic #${relicId}`}
@@ -81,8 +83,7 @@ export function BurnModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

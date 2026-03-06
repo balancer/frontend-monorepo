@@ -2,7 +2,7 @@
 
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Box, HStack, RadioGroup, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, RadioGroup, Text, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
@@ -20,7 +20,8 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
     amountOutForToken,
     setWethIsEth,
     simulationQuery,
-    priceImpactQuery } = useRemoveLiquidity()
+    priceImpactQuery,
+  } = useRemoveLiquidity()
 
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
 
@@ -50,7 +51,8 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
       >
         <RadioGroup.Root
           onValueChange={onChange}
-          value={String(singleTokenOutAddress ?? tokens[0]?.address)}>
+          value={String(singleTokenOutAddress ?? tokens[0]?.address)}
+        >
           <VStack w="full">
             {tokens.map(
               token =>
@@ -64,7 +66,7 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
                       address={token.address as Address}
                       chain={chain}
                       disabled={token.address !== singleTokenOutAddress}
-                      isLoading={isLoading}
+                      loading={isLoading}
                       showZeroAmountAsDash
                       value={amountOutForToken(token.address as Address)}
                     />
@@ -75,5 +77,5 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
         </RadioGroup.Root>
       </Box>
     </VStack>
-  );
+  )
 }

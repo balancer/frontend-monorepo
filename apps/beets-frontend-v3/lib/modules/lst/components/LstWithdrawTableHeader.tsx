@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { Grid, GridItem, Text } from '@chakra-ui/react'
 
 export function LstWithdrawTableHeader({ ...rest }) {
   return (

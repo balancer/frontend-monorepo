@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Container, Box, Separator } from '@chakra-ui/react';
+import { Container, Box, Separator } from '@chakra-ui/react'
 import { Prose } from '@repo/lib/shared/components/prose/Prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -1970,5 +1970,5 @@ export default function Privacy() {
         </div>
       </Prose>
     </Container>
-  );
+  )
 }

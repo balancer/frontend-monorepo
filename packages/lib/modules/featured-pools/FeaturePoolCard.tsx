@@ -4,7 +4,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPool } from '../pool/PoolProvider'
 import { Pool } from '../pool/pool.types'
 import { useRouter } from 'next/navigation'
-import { VStack, Text, Box, HStack, Image } from '@chakra-ui/react';
+import { VStack, Text, Box, HStack, Image } from '@chakra-ui/react'
 import { poolClickHandler, poolMouseEnterHandler, getPoolTypeLabel } from '../pool/pool.utils'
 import { PoolName } from '../pool/PoolName'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
@@ -30,20 +30,27 @@ interface Props {
 const slideVariants = {
   hiddenRight: {
     x: '100%',
-    opacity: 0 },
+    opacity: 0,
+  },
   hiddenLeft: {
     x: '-100%',
-    opacity: 0 },
+    opacity: 0,
+  },
   visible: {
     x: '0',
     opacity: 1,
     transition: {
-      duration: 0.5 } },
+      duration: 0.5,
+    },
+  },
   exit: {
     opacity: 0,
     scale: 0.8,
     transition: {
-      duration: 0.5 } } }
+      duration: 0.5,
+    },
+  },
+}
 
 export function FeaturePoolCard({
   pool,
@@ -53,7 +60,8 @@ export function FeaturePoolCard({
   isCarousel = false,
   carouselDirection = 'left',
   carouselIndex = 1,
-  graphic }: Props) {
+  graphic,
+}: Props) {
   const router = useRouter()
   const { rockTexture } = usePoolTextures()
 
@@ -64,7 +72,8 @@ export function FeaturePoolCard({
         initial: carouselDirection === 'left' ? 'hiddenLeft' : 'hiddenRight',
         animate: 'visible',
         exit: 'exit',
-        variants: slideVariants }
+        variants: slideVariants,
+      }
     : {}
 
   return (
@@ -76,11 +85,13 @@ export function FeaturePoolCard({
         onMouseEnter: event => poolMouseEnterHandler(event, pool as Pool, router),
         cursor: 'pointer',
         _hover: { bg: 'background.level0' },
-        _dark: { _hover: { bg: 'gray.900' } } }}
+        _dark: { _hover: { bg: 'gray.900' } },
+      }}
       contentProps={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center' }}
+        justifyContent: 'center',
+      }}
     >
       <Box
         height={{ base: '100%', md: '280px' }}
@@ -89,17 +100,22 @@ export function FeaturePoolCard({
         transition="all 0.2s var(--ease-out-cubic)"
         width="100%"
         {...anim}
+        asChild
         role="group"
-        asChild><motion.div key={carouselIndex}>
-          <VStack cursor="pointer" h="full" justifyContent="center" gap={isSmall ? 'sm' : 'md'}>
+      >
+        <motion.div key={carouselIndex}>
+          <VStack cursor="pointer" gap={isSmall ? 'sm' : 'md'} h="full" justifyContent="center">
             <VStack gap="4">
               <Box
                 _groupHover={{ opacity: '1', transform: 'translateY(0)' }}
                 css={{
                   '@media(pointer: fine)': {
-                    opacity: '0' },
+                    opacity: '0',
+                  },
                   '@media(pointer: coarse)': {
-                    opacity: '1' } }}
+                    opacity: '1',
+                  },
+                }}
                 textAlign="center"
                 transform="translateY(2px)"
                 transition="all 0.3s var(--ease-out-cubic)"
@@ -121,7 +137,8 @@ export function FeaturePoolCard({
                   <Box
                     _groupHover={{
                       background: 'background.level4',
-                      transform: 'translateX(-50%, -50%) scale(1.5)' }}
+                      transform: 'translateX(-50%, -50%) scale(1.5)',
+                    }}
                     background="background.level2"
                     backgroundImage={`url(${rockTexture})`}
                     height="44px"
@@ -138,7 +155,8 @@ export function FeaturePoolCard({
                   >
                     <Image
                       _groupHover={{
-                        transform: 'translate(-50%, -50%) scale(1.15)' }}
+                        transform: 'translate(-50%, -50%) scale(1.15)',
+                      }}
                       alt={`Chain icon for ${chain.toLowerCase()}`}
                       height="28px"
                       left="50%"
@@ -188,7 +206,8 @@ export function FeaturePoolCard({
               width={800}
             />
           </Box>
-        </motion.div></Box>
+        </motion.div>
+      </Box>
     </NoisyCard>
-  );
+  )
 }

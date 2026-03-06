@@ -1,4 +1,4 @@
-import { useDisclosure, VStack } from '@chakra-ui/react';
+import { useDisclosure, VStack } from '@chakra-ui/react'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputs } from './TokenInputs'
 import { useProportionalInputs } from './useProportionalInputs'
@@ -27,7 +27,8 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     setWethIsEth,
     setWrapUnderlyingByIndex,
     wrapUnderlying,
-    clearAmountsIn } = useAddLiquidity()
+    clearAmountsIn,
+  } = useAddLiquidity()
   const { chain, pool } = usePool()
   const { balanceFor } = useTokenBalances()
 
@@ -115,5 +116,5 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
         tokens={wrappedAndUnderlying as ApiToken[]}
       />
     </VStack>
-  );
+  )
 }

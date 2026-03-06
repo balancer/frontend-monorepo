@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Popover, HoverCard, Text } from '@chakra-ui/react';
+import { Box, Flex, HoverCard, Text } from '@chakra-ui/react'
 import Stat from '../../components/other/Stat'
 import { bn, safeToNumber } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
@@ -26,22 +26,26 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
   const fees: Fee[] = [
     {
       label: 'Swap fees',
-      value: protocolData?.protocolMetricsAggregated.swapFee24h },
+      value: protocolData?.protocolMetricsAggregated.swapFee24h,
+    },
     {
       label: 'Yield-bearing tokens',
-      value: protocolData?.protocolMetricsAggregated.yieldCapture24h },
+      value: protocolData?.protocolMetricsAggregated.yieldCapture24h,
+    },
   ]
 
   if (rewardsClaimed24h && rewardsClaimed24h !== '0') {
     fees.push({
       label: 'stS rewards',
-      value: rewardsClaimed24h })
+      value: rewardsClaimed24h,
+    })
   }
 
   if (surplus24h && surplus24h !== '0') {
     fees.push({
       label: 'CoW AMM LVR surplus',
-      value: surplus24h })
+      value: surplus24h,
+    })
   }
 
   const totalFees = fees
@@ -99,8 +103,9 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
       <Box flex={{ base: '1', sm: '1' }}>
         <HoverCard.Root
           positioning={{
-            placement: 'top'
-          }}>
+            placement: 'top',
+          }}
+        >
           <HoverCard.Trigger asChild>
             <Box>
               <Stat
@@ -121,7 +126,8 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
               p={2}
               shadow="2xl"
               w="auto"
-              zIndex={9999}>
+              zIndex={9999}
+            >
               <Box p="0">
                 <Flex direction="column" gap={1}>
                   {fees.map(fee => (
@@ -141,5 +147,5 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
         </HoverCard.Root>
       </Box>
     </Flex>
-  );
+  )
 }

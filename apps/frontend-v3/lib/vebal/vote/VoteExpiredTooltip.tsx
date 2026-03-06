@@ -1,4 +1,4 @@
-import { Badge, Popover, HoverCard, Portal, Text, VStack } from '@chakra-ui/react';
+import { Badge, HoverCard, Portal, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
 interface Props {
@@ -15,8 +15,8 @@ export function VoteExpiredTooltip({ usePortal, children }: PropsWithChildren<Pr
           </Text>
           <Text color="font.secondary" fontSize="sm">
             This pool gauge that collects votes from veBAL holders to distribute BAL liquidity
-            incentives is no longer active. If you have active votes to this pool, reallocate them to
-            active pool gauges to avoid wasting your vote.
+            incentives is no longer active. If you have active votes to this pool, reallocate them
+            to active pool gauges to avoid wasting your vote.
           </Text>
         </VStack>
       </HoverCard.Content>
@@ -43,5 +43,5 @@ export function VoteExpiredTooltip({ usePortal, children }: PropsWithChildren<Pr
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
       </>
     </HoverCard.Root>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 import { Control, Controller, UseFormSetValue } from 'react-hook-form'
 import { SaleStructureForm, WeightAdjustmentType } from '../lbp.types'
-import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { ArrowRight } from 'react-feather'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -13,7 +13,8 @@ export function WeightAdjustmentTypeInput({
   setValue,
   weightAdjustmentType,
   customStartWeight,
-  customEndWeight }: {
+  customEndWeight,
+}: {
   control: Control<SaleStructureForm>
   launchTokenSymbol: string
   collateralTokenSymbol: string
@@ -38,7 +39,8 @@ export function WeightAdjustmentTypeInput({
           </HStack>
         </HStack>
       ),
-      value: WeightAdjustmentType.LINEAR_90_10 },
+      value: WeightAdjustmentType.LINEAR_90_10,
+    },
     {
       label: (
         <HStack justify="space-between" w="full">
@@ -54,14 +56,16 @@ export function WeightAdjustmentTypeInput({
           </HStack>
         </HStack>
       ),
-      value: WeightAdjustmentType.LINEAR_90_50 },
+      value: WeightAdjustmentType.LINEAR_90_50,
+    },
     {
       label: (
         <HStack justify="space-between" w="full">
           <Text>Custom sale</Text>
         </HStack>
       ),
-      value: WeightAdjustmentType.CUSTOM },
+      value: WeightAdjustmentType.CUSTOM,
+    },
   ]
 
   return (
@@ -114,7 +118,8 @@ function WeightSlider({
   collateralTokenSymbol,
   customWeight,
   setValue,
-  isDisabled }: {
+  isDisabled,
+}: {
   name: keyof SaleStructureForm
   title: string
   launchTokenSymbol: string
@@ -130,14 +135,14 @@ function WeightSlider({
         bg="background.level0"
         border="white"
         borderRadius="md"
-        shadow="innerBase"
         css={{
           paddingX: 'md',
-          paddingY: 'lg'
+          paddingY: 'lg',
         }}
+        shadow="innerBase"
         w="full"
       >
-        <HStack justifyContent="space-between" gap="md" w="full">
+        <HStack gap="md" justifyContent="space-between" w="full">
           <Text
             fontSize="sm"
             fontWeight="bold"
@@ -154,7 +159,7 @@ function WeightSlider({
         </HStack>
         <SliderWithSteps
           aria-label="weights-slider"
-          isDisabled={isDisabled}
+          disabled={isDisabled}
           max={99}
           min={1}
           onChange={(value: number) => setValue(name, value)}
@@ -164,5 +169,5 @@ function WeightSlider({
         />
       </Box>
     </VStack>
-  );
+  )
 }

@@ -1,6 +1,6 @@
-'use client';
+'use client'
 import { memo, useMemo } from 'react'
-import { Button, HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Button, HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { Tooltip } from '../../../../../shared/components/tooltips/Tooltip'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
@@ -42,12 +42,14 @@ export function UserSnapshotValues() {
     previewModalDisclosure,
     isLoading: isLoadingClaiming,
     balRewards,
-    nonBalRewards } = useClaim()
+    nonBalRewards,
+  } = useClaim()
 
   const { myClaimableRewards, tokens, rewardsByToken } = useGetUserPoolRewards({
     pool,
     balRewards,
-    nonBalRewards })
+    nonBalRewards,
+  })
 
   const boost = useMemo(() => {
     if (isEmpty(veBalBoostMap)) return
@@ -71,7 +73,8 @@ export function UserSnapshotValues() {
         myPotentialWeeklyYield: bn(totalBalanceUsd || POSSIBLE_STAKED_BALANCE_USD)
           .times(bn(myAprRaw).div(52))
           .toFixed(2),
-        myClaimableRewards: myClaimableRewards }
+        myClaimableRewards: myClaimableRewards,
+      }
     }
   }, [pool, myAprRaw, myClaimableRewards, isLoadingPool, isLoadingClaiming])
 
@@ -191,8 +194,8 @@ export function UserSnapshotValues() {
                 </TokenStackPopover>
                 <Tooltip content={isDisabled ? disabledReason : ''}>
                   <Button
-                    fontSize="sm"
                     disabled={isDisabled}
+                    fontSize="sm"
                     onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
                     rounded="sm"
                     size="xxs"
@@ -209,11 +212,7 @@ export function UserSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <ClaimModal
-        chain={pool.chain}
-        isOpen={previewModalDisclosure.open}
-        onClose={onModalClose}
-      />
+      <ClaimModal chain={pool.chain} isOpen={previewModalDisclosure.open} onClose={onModalClose} />
     </>
-  );
+  )
 }

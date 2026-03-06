@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react'
 import { Calendar } from 'react-feather'
 
 export function ReminderButton({ children, ...buttonProps }: ButtonProps) {
@@ -7,6 +7,9 @@ export function ReminderButton({ children, ...buttonProps }: ButtonProps) {
       _hover={{ color: 'font.linkHover' }}
       bg="none"
       color="font.link"
+      css={{
+        '& & > span': { marginInlineEnd: '0' },
+      }}
       fontSize="14px"
       fontWeight={500}
       gap="6px"
@@ -14,9 +17,10 @@ export function ReminderButton({ children, ...buttonProps }: ButtonProps) {
       letterSpacing="-0.28px"
       lineHeight="20px"
       px="0"
-      css={{
-        '& & > span': { marginInlineEnd: '0' }
-      }}
-      {...buttonProps}><Calendar height="18px" strokeWidth="1.5px" width="18px" />{children}</Button>
-  );
+      {...buttonProps}
+    >
+      <Calendar height="18px" strokeWidth="1.5px" width="18px" />
+      {children}
+    </Button>
+  )
 }

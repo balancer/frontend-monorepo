@@ -1,9 +1,10 @@
-import { HStack, Popover, HoverCard, Portal, Text, VStack } from '@chakra-ui/react';
+import { HStack, HoverCard, Portal, Text, VStack } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import {
   bpsToPercentage,
-  WEIGHT_MAX_VOTES } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+  WEIGHT_MAX_VOTES,
+} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 interface Props {
   exceededWeight: BigNumber
@@ -35,5 +36,5 @@ export function VoteExceededTooltip({ usePortal, exceededWeight }: Props) {
       </HoverCard.Trigger>
       {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
     </HoverCard.Root>
-  );
+  )
 }

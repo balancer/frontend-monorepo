@@ -1,11 +1,11 @@
 'use client'
 
-import { Card, HStack, IconButton } from '@chakra-ui/react';
+import { Card, HStack, IconButton } from '@chakra-ui/react'
 import Image from 'next/image'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import Link from 'next/link'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { LuX } from 'react-icons/lu';
+import { LuX } from 'react-icons/lu'
 
 export interface ModalActionsNavProps {
   chain: GqlChain
@@ -16,7 +16,8 @@ export interface ModalActionsNavProps {
 export function FocussedActionNav({
   chain,
   redirectPath,
-  closeButton = true }: ModalActionsNavProps) {
+  closeButton = true,
+}: ModalActionsNavProps) {
   const networkConfig = getNetworkConfig(chain)
 
   return (
@@ -31,8 +32,12 @@ export function FocussedActionNav({
         <Image alt={networkConfig.shortName} height="24" src={networkConfig.iconPath} width="24" />
       </Card.Root>
       {closeButton && (
-        <IconButton aria-label="Close" isRound variant="outline" asChild><Link href={redirectPath} prefetch><LuX /></Link></IconButton>
+        <IconButton aria-label="Close" asChild rounded="full" variant="outline">
+          <Link href={redirectPath} prefetch>
+            <LuX />
+          </Link>
+        </IconButton>
       )}
     </HStack>
-  );
+  )
 }

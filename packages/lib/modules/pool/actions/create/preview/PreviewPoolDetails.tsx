@@ -1,4 +1,4 @@
-import { Heading, VStack, HStack, Text, Card } from '@chakra-ui/react';
+import { Heading, VStack, HStack, Text, Card } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { zeroAddress } from 'viem'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
@@ -20,7 +20,7 @@ export function PreviewPoolDetails() {
         </VStack>
       </Card.Body>
     </PreviewPoolCreationCard>
-  );
+  )
 }
 
 export function PoolDetailsContent() {
@@ -53,7 +53,8 @@ export function PoolDetailsContent() {
       'enableDonation',
       'poolType',
       'poolCreator',
-    ] })
+    ],
+  })
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
@@ -90,7 +91,9 @@ export function PoolDetailsContent() {
       ...(showAmplificationParameter && { 'Amplification parameter': amplificationParameter }),
       'Pool hook': formatPoolHook(poolHooksContract),
       'Allow flexible adds/removes': disableUnbalancedLiquidity ? 'No' : 'Yes',
-      'Allow donations': enableDonation ? 'Yes' : 'No' }) }
+      'Allow donations': enableDonation ? 'Yes' : 'No',
+    }),
+  }
 
   const isDetailsActive = isStep('Details')
 
@@ -98,13 +101,13 @@ export function PoolDetailsContent() {
     <HStack
       _hover={isDetailsActive ? { bg: 'background.level0' } : undefined}
       align="start"
+      css={{
+        '&:hover p': isDetailsActive ? { color: 'font.maxContrast' } : {},
+      }}
       justify="space-between"
       key={label}
       px="md"
       py="sm"
-      css={{
-        '&:hover p': isDetailsActive ? { color: 'font.maxContrast' } : {}
-      }}
       transition="1s all var(--ease-out-cubic)"
       w="calc((100% + var(--chakra-space-md) * 2) - 2px)"
     >
@@ -113,5 +116,5 @@ export function PoolDetailsContent() {
         {isBeforeStep('Details') ? '—' : value}
       </Text>
     </HStack>
-  ));
+  ))
 }

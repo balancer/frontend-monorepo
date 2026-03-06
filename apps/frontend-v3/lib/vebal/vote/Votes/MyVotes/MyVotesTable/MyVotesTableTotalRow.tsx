@@ -8,7 +8,8 @@ import {
   Skeleton,
   Text,
   VStack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
@@ -35,7 +36,8 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
       <Separator />
       <Box
         _hover={{
-          bg: 'background.level0' }}
+          bg: 'background.level0',
+        }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         transition="all 0.2s ease-in-out"
@@ -65,7 +67,8 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               <Text color="font.maxContrast">
                 {toCurrency(totalInfo.averageRewardPerVote, {
                   abbreviated: false,
-                  forceThreeDecimals: true })}
+                  forceThreeDecimals: true,
+                })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
@@ -98,8 +101,8 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
             <VStack align="center" w="full">
               <Button
                 color="font.secondary"
-                fontSize="xs"
                 disabled={!hasChanges}
+                fontSize="xs"
                 onClick={clearAll}
                 size="xs"
                 variant="ghost"
@@ -112,5 +115,5 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
       </Box>
       <Separator />
     </FadeInOnView>
-  );
+  )
 }

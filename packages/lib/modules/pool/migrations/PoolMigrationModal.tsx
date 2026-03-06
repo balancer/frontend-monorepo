@@ -1,4 +1,4 @@
-import { Dialog, Portal } from '@chakra-ui/react';
+import { Dialog, Portal } from '@chakra-ui/react'
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
@@ -25,7 +25,8 @@ export function PoolMigrationModal() {
     txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: oldPool?.protocolVersion as ProtocolVersion,
-    txReceipt: addLiquidityTx?.result })
+    txReceipt: addLiquidityTx?.result,
+  })
 
   const isSuccess = !!addLiquidityTxHash && addLiquidityReceipt.hasReceipt
 
@@ -35,17 +36,21 @@ export function PoolMigrationModal() {
   useOnUserAccountChanged(redirectToOldPoolPage)
 
   return (
-    <Dialog.Root placement='center' open={true} onOpenChange={(e: { open: boolean }) => {
-      if (!e.open) {
-        redirectToPoolPage();
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(e: { open: boolean }) => {
+        if (!e.open) {
+          redirectToPoolPage()
+        }
+      }}
+      open={true}
+      placement="center"
+    >
       <Portal>
-
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content
-            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}
+          >
             {isDesktop && hasQuoteContext && (
               <DesktopStepTracker
                 chain={oldPool?.chain || GqlChain.Mainnet}
@@ -72,8 +77,7 @@ export function PoolMigrationModal() {
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

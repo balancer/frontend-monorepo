@@ -1,4 +1,4 @@
-import { Box, Popover, HoverCard, VStack, Text } from '@chakra-ui/react';
+import { Box, HoverCard, VStack, Text } from '@chakra-ui/react'
 import { ApiToken } from './token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import TokenRow from './TokenRow/TokenRow'
@@ -24,7 +24,8 @@ export function TokenStackPopover({
   children,
   rewardsByToken = {},
   tokens,
-  headerText }: TokenStackPopoverProps) {
+  headerText,
+}: TokenStackPopoverProps) {
   const { isMobile } = useBreakpoints()
 
   if (!hasDefinedValues(tokens)) {
@@ -34,19 +35,23 @@ export function TokenStackPopover({
   return (
     <HoverCard.Root
       positioning={{
-        placement: 'top'
-      }}>
+        placement: 'top',
+      }}
+    >
       <HoverCard.Trigger asChild>
         <Box
-          display="inline-block"
           css={{
             '& &:hover': {
               '& > *': {
-                transform: 'scale(1.1)' } },
+                transform: 'scale(1.1)',
+              },
+            },
 
             '& & > *': {
-              transition: 'all 0.2s var(--ease-out-cubic)' }
+              transition: 'all 0.2s var(--ease-out-cubic)',
+            },
           }}
+          display="inline-block"
         >
           {children}
         </Box>
@@ -77,5 +82,5 @@ export function TokenStackPopover({
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>
-  );
+  )
 }

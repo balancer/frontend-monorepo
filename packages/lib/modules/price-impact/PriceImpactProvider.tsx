@@ -1,7 +1,7 @@
 import { AlertTriangle, XOctagon } from 'react-feather'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '../../shared/utils/contexts'
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react'
 import { getPriceImpactColor, getPriceImpactLevel } from './price-impact.utils'
 
 export type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
@@ -82,7 +82,8 @@ export function usePriceImpactLogic() {
     PriceImpactIcon,
     setPriceImpact,
     setPriceImpactLevel,
-    resetPriceImpact }
+    resetPriceImpact,
+  }
 }
 
 export type Result = ReturnType<typeof usePriceImpactLogic>

@@ -1,4 +1,4 @@
-import { Stack, Button, VStack, useDisclosure, HStack, Text } from '@chakra-ui/react';
+import { Stack, Button, VStack, useDisclosure, HStack, Text } from '@chakra-ui/react'
 import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
@@ -9,7 +9,8 @@ import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
 import {
   PartnerRedirectModal,
-  RedirectPartner } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+  RedirectPartner,
+} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
 import { PoolAdvancedOptions } from './PoolAdvancedOptions'
@@ -53,17 +54,23 @@ export function PoolHeader() {
       <Stack
         align={{ base: 'start', lg: 'end' }}
         direction={{ base: 'column', lg: 'row' }}
+        gap="md"
         justify="space-between"
         mt="xs"
-        gap="md"
         w="full"
       >
         <VStack align="start" gap="md">
           <PoolMetaBadges />
           {poolMetadata?.description && (
-            <Text fontSize="sm" maxW="xl" mb="xxs" css={{
-              textWrap: 'pretty'
-            }} variant="secondary">
+            <Text
+              css={{
+                textWrap: 'pretty',
+              }}
+              fontSize="sm"
+              maxW="xl"
+              mb="xxs"
+              variant="secondary"
+            >
               {poolMetadata.description}
             </Text>
           )}
@@ -72,12 +79,12 @@ export function PoolHeader() {
           <PoolTags />
           <HStack alignItems="end" gap="sm">
             <Tooltip
-              disabled={!blockingReasons}
               content={
                 <Text color="primaryTextColor" whiteSpace="pre-line">
                   {blockingReasons}
                 </Text>
               }
+              disabled={!blockingReasons}
             >
               <Button
                 disabled={isAddLiquidityBlocked}
@@ -100,5 +107,5 @@ export function PoolHeader() {
         </Stack>
       </Stack>
     </VStack>
-  );
+  )
 }

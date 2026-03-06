@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -45,17 +45,17 @@ export function SubmitVotesModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
-      size='xl'
+      placement="center"
+      size="xl"
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          handleClose();
+          handleClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!txHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -64,7 +64,9 @@ export function SubmitVotesModal({
             <Dialog.CloseTrigger />
             <Dialog.Body>
               <AnimateHeightChange gap="sm">
-                {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
+                {isMobile && (
+                  <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />
+                )}
                 <SubmitVotesPreview
                   changedVotes={submittingVotesChunk || []}
                   isPoolGaugeExpired={isPoolGaugeExpired}
@@ -86,8 +88,7 @@ export function SubmitVotesModal({
             )}
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

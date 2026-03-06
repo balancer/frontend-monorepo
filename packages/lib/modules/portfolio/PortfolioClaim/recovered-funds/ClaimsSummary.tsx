@@ -3,12 +3,13 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRecoveredFundsClaims } from './RecoveredFundsClaimsProvider'
-import { Badge, Card, Checkbox, HStack, Link, Text, VStack, Separator } from '@chakra-ui/react';
+import { Badge, Card, Checkbox, HStack, Link, Text, VStack, Separator } from '@chakra-ui/react'
 import {
   RecoveredTokenClaim,
   useRecoveredFunds,
   CHAINS,
-  sumRecoveredFundsTotal } from './useRecoveredFunds'
+  sumRecoveredFundsTotal,
+} from './useRecoveredFunds'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import Image from 'next/image'
 import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
@@ -17,7 +18,8 @@ import { useUnderlyingToken } from './useUnderlyingToken'
 import { Dispatch, SetStateAction } from 'react'
 
 export function ClaimsSummary({
-  setShowSettlementTerms }: {
+  setShowSettlementTerms,
+}: {
   setShowSettlementTerms: Dispatch<SetStateAction<boolean>>
 }) {
   const { isMobile } = useBreakpoints()
@@ -45,25 +47,61 @@ export function ClaimsSummary({
       <ClaimsTotalCard claims={claims} />
       <Checkbox.Root
         alignItems="flex-start"
-        disabled={signatureStep?.isComplete()}
-        onCheckedChange={(e: { checked: boolean | "indeterminate" }) => setHasAcceptedDisclaimer(!!e.checked)}
-        size="lg"
         checked={hasAcceptedDisclaimer || signatureStep?.isComplete()}
-      ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-          <Text fontSize="sm">
-            I have read and agree to the terms and confirm my acceptance of the {''}
-            <Link
-              alignItems="center"
-              display="inline-flex"
-              onClick={() => setShowSettlementTerms(true)}
-              textDecoration="underline"
-            >
-              Claim Settlement Terms
-            </Link>
-          </Text>
-        </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+        disabled={signatureStep?.isComplete()}
+        onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
+          setHasAcceptedDisclaimer(!!e.checked)
+        }
+        size="lg"
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control>
+          <Checkbox.Indicator />
+        </Checkbox.Control>
+        <Checkbox.Label>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+          </Checkbox.Root>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            <Checkbox.Label>
+              <Checkbox.Root>
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+              </Checkbox.Root>
+            </Checkbox.Label>
+          </Checkbox.Root>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            <Checkbox.Label>
+              <Text fontSize="sm">
+                I have read and agree to the terms and confirm my acceptance of the {''}
+                <Link
+                  alignItems="center"
+                  display="inline-flex"
+                  onClick={() => setShowSettlementTerms(true)}
+                  textDecoration="underline"
+                >
+                  Claim Settlement Terms
+                </Link>
+              </Text>
+            </Checkbox.Label>
+          </Checkbox.Root>
+        </Checkbox.Label>
+      </Checkbox.Root>
     </AnimateHeightChange>
-  );
+  )
 }
 
 type ChainClaimCardProps = {
@@ -121,7 +159,7 @@ function ChainClaimCard({ claims, chainId }: ChainClaimCardProps) {
         </VStack>
       </VStack>
     </Card.Root>
-  );
+  )
 }
 
 type TokenClaimProps = {
@@ -136,8 +174,8 @@ function TokenClaim({ claim, chainId }: TokenClaimProps) {
     <TokenRow
       address={address}
       chain={getGqlChain(chainId)}
-      isLoading={isLoading}
       key={claim.amount.tokenAddress}
+      loading={isLoading}
       value={claim.amount.humanAmount}
     />
   )
@@ -161,5 +199,5 @@ function ClaimsTotalCard({ claims }: ClaimsTotalCardProps) {
         </Text>
       </HStack>
     </Card.Root>
-  );
+  )
 }

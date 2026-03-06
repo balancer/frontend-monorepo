@@ -1,5 +1,5 @@
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
-import { Accordion, Box, HStack, VStack } from '@chakra-ui/react';
+import { Accordion, Box, HStack, VStack } from '@chakra-ui/react'
 import { useCurrency } from '../../hooks/useCurrency'
 import { bn, fNum } from '../../utils/numbers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
@@ -16,14 +16,15 @@ export function TransactionDetailsAccordion() {
 
   return (
     <Accordion.Root collapsible variant="button" w="full">
-      <Accordion.Item value='item-0'>
+      <Accordion.Item value="item-0">
         <Accordion.ItemTrigger>
           <Box as="span" color="font.primary" flex="1" textAlign="left">
             Transaction Details
           </Box>
           <Accordion.ItemIndicator textColor="font.highlight" />
         </Accordion.ItemTrigger>
-        <Accordion.ItemContent pb="md"><Accordion.ItemBody>
+        <Accordion.ItemContent pb="md">
+          <Accordion.ItemBody>
             <VStack textColor="grayText" w="full">
               <HStack justifyContent="space-between" w="full">
                 <div>Total added</div>
@@ -46,8 +47,9 @@ export function TransactionDetailsAccordion() {
                 </HStack>
               )}
             </VStack>
-          </Accordion.ItemBody></Accordion.ItemContent>
+          </Accordion.ItemBody>
+        </Accordion.ItemContent>
       </Accordion.Item>
     </Accordion.Root>
-  );
+  )
 }

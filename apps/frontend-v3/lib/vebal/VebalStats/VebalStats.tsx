@@ -1,6 +1,6 @@
-'use client';
-import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+'use client'
+import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { UserVebalStatsValues } from './UserVebalStatsValues'
 import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
@@ -12,10 +12,13 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     justifyContent: 'center',
     borderBottomLeftRadius: 'none',
     borderTopLeftRadius: 'none',
-    borderBottomRightRadius: 'none' },
+    borderBottomRightRadius: 'none',
+  },
   cardProps: {
     position: 'relative',
-    height: 'full' } }
+    height: 'full',
+  },
+}
 
 export function VebalStats({ ...props }: CardProps) {
   const colorMode = useThemeColorMode()
@@ -43,12 +46,12 @@ export function VebalStats({ ...props }: CardProps) {
         </Box>
         <VStack
           align="flex-start"
+          gap="xl"
           h="full"
           justify="flex-start"
           m="auto"
           p={{ base: 'lg', md: 'lg' }}
           role="group"
-          gap="xl"
           w="full"
           zIndex={1}
         >
@@ -56,5 +59,5 @@ export function VebalStats({ ...props }: CardProps) {
         </VStack>
       </NoisyCard>
     </Card.Root>
-  );
+  )
 }

@@ -1,8 +1,8 @@
 'use client'
 
-import { Box, HStack, Flex, Popover, HoverCard, Portal, Text, Icon } from '@chakra-ui/react';
+import { Box, HStack, Flex, HoverCard, Portal, Text, Icon } from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
-import { LuInfo } from 'react-icons/lu';
+import { LuInfo } from 'react-icons/lu'
 
 type AlertContentProps = {
   title?: string
@@ -20,7 +20,8 @@ export function BalAlertContent({
   // Set to true to always display the title and description in a column layout
   forceColumnMode = false,
   wrapText = false,
-  children }: PropsWithChildren<AlertContentProps>) {
+  children,
+}: PropsWithChildren<AlertContentProps>) {
   return (
     <HStack flexWrap="wrap" justifyContent="space-between" w="full">
       <HStack flexWrap="wrap" maxWidth={{ base: '100%', md: '50ch' }}>
@@ -43,7 +44,9 @@ export function BalAlertContent({
                       opacity="0.8"
                       transition="opacity 0.2s var(--ease-out-cubic)"
                     >
-                      <Icon color="font.dark" fontSize="sm" asChild><LuInfo /></Icon>
+                      <Icon asChild color="font.dark" fontSize="sm">
+                        <LuInfo />
+                      </Icon>
                     </Box>
                   </HoverCard.Trigger>
                   <Portal>
@@ -72,5 +75,5 @@ export function BalAlertContent({
       </HStack>
       <Box>{children}</Box>
     </HStack>
-  );
+  )
 }

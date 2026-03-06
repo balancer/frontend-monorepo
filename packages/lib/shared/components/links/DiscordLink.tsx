@@ -3,9 +3,5 @@ import { getDiscordLink } from '@repo/lib/shared/utils/links'
 
 export function DiscordLink() {
   const discordUrl = getDiscordLink()
-  return (
-    <BalAlertLink href={discordUrl} isExternal>
-      our discord
-    </BalAlertLink>
-  )
+  return <BalAlertLink href={discordUrl}>our discord</BalAlertLink>
 }

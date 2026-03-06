@@ -58,8 +58,7 @@ function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
             key={link.href}
             onClick={onClick}
             prefetch
-            rel="noopener noreferrer"
-            target="_blank"
+            {...(link.isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           >
             {link.label}
             {link.isExternal && (
@@ -106,8 +105,8 @@ function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
       {socialLinks.map(({ href, iconType }) => (
-        <Button asChild isExternal variant="tertiary">
-          <Link href={href} key={href}>
+        <Button asChild key={href} variant="tertiary">
+          <Link href={href} rel="noopener noreferrer" target="_blank">
             <SocialIcon iconType={iconType} />
           </Link>
         </Button>

@@ -1,4 +1,4 @@
-import { Card } from '@chakra-ui/react';
+import { Card } from '@chakra-ui/react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -10,7 +10,8 @@ import { formatUnits, parseUnits } from 'viem'
 
 export function LoopsDepositSummary({
   isLoading: isLoadingReceipt,
-  receivedToken }: LoopsDepositReceiptResult) {
+  receivedToken,
+}: LoopsDepositReceiptResult) {
   const { isMobile } = useBreakpoints()
 
   const {
@@ -19,7 +20,8 @@ export function LoopsDepositSummary({
     loopsDepositTxHash,
     nativeAsset,
     loopedAsset,
-    amountAssets } = useLoops()
+    amountAssets,
+  } = useLoops()
 
   const { sharesAmount, isLoading: isLoadingSharesAmount } = useLoopsGetConvertToShares(
     amountAssets && nativeAsset?.decimals ? parseUnits(amountAssets, nativeAsset.decimals) : 0n,
@@ -34,8 +36,8 @@ export function LoopsDepositSummary({
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={false}
           label={shouldShowReceipt ? 'You deposited' : 'You deposit'}
+          loading={false}
           tokenAddress={nativeAsset?.address || ''}
           tokenAmount={amountAssets}
         />
@@ -43,8 +45,8 @@ export function LoopsDepositSummary({
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingSharesAmount || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
+          loading={isLoadingSharesAmount || isLoadingReceipt}
           tokenAddress={loopedAsset?.address || ''}
           tokenAmount={
             shouldShowReceipt
@@ -54,5 +56,5 @@ export function LoopsDepositSummary({
         />
       </Card.Root>
     </AnimateHeightChange>
-  );
+  )
 }

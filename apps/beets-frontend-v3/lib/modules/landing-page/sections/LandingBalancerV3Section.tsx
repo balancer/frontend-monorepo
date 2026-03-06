@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react';
+import { Box, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react'
 import React from 'react'
 import { BalancerV3BoostedPoolsSvg } from '../components/BalancerV3BoostedPoolsSvg'
 import { BalancerV3CustomPoolsSvg } from '../components/BalancerV3CustomPoolsSvg'
@@ -9,7 +9,8 @@ import { LandingSectionContainer } from '../components/LandingSectionContainer'
 function Card({
   title,
   description,
-  image }: {
+  image,
+}: {
   title: string
   description: string
   image: React.ReactNode
@@ -41,7 +42,8 @@ export function LandingBalancerV3Section() {
       button={{
         text: 'Discover Balancer v3',
         href: 'https://docs.balancer.fi',
-        isExternal: true }}
+        isExternal: true,
+      }}
       subtitle="Revolutionizing Liquidity, Redefining DeFi"
       title="Powered by Balancer v3"
     >
@@ -74,7 +76,8 @@ export function LandingBalancerV3Section() {
             gap="lg"
             templateColumns={{
               base: '1fr',
-              lg: '1fr 1fr 1fr' }}
+              lg: '1fr 1fr 1fr',
+            }}
           >
             <Card
               description="Easily build specialized liquidity pools tailored to your needs."
@@ -108,5 +111,5 @@ export function LandingBalancerV3Section() {
         </Center>
       </Box>
     </LandingSectionContainer>
-  );
+  )
 }

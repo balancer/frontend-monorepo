@@ -1,7 +1,7 @@
-'use client';
+'use client'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
-import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react'
 import NextLink from 'next/link'
 
 export function CowPromoBanner() {
@@ -12,15 +12,15 @@ export function CowPromoBanner() {
     <Box
       background={bgColor}
       boxShadow="lg"
+      css={{
+        width: '100% !important',
+        maxWidth: '100% !important',
+      }}
       height="140px"
       maxW="100%"
       overflow="hidden"
       position="relative"
       rounded="lg"
-      css={{
-        width: '100% !important',
-        maxWidth: '100% !important'
-      }}
       width="full"
     >
       <Box zIndex="0">
@@ -79,6 +79,7 @@ export function CowPromoBanner() {
           </Flex>
           <Button
             _hover={{ bg: '#E2F8BF' }}
+            asChild
             bg="#BCEC79"
             color="#194D05"
             flex="1"
@@ -87,10 +88,13 @@ export function CowPromoBanner() {
             rounded="full"
             size="lg"
             w="max-content"
-            asChild><NextLink href="/pools/cow" prefetch>View pools
-                      </NextLink></Button>
+          >
+            <NextLink href="/pools/cow" prefetch>
+              View pools
+            </NextLink>
+          </Button>
         </Flex>
       </Center>
     </Box>
-  );
+  )
 }

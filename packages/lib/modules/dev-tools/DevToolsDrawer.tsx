@@ -1,11 +1,4 @@
-import {
-  Button,
-  Drawer,
-  Tabs,
-  useDisclosure,
-  VStack,
-  Separator,
-  Portal } from '@chakra-ui/react';
+import { Button, Drawer, Tabs, useDisclosure, VStack, Separator, Portal } from '@chakra-ui/react'
 import { Tool } from 'react-feather'
 import { ImpersonateAccount } from '../web3/impersonation/ImpersonateAccount'
 import TimeMocker from '../web3/impersonation/TimeMocker'
@@ -38,13 +31,17 @@ function DevToolsDrawer({ isOpen, onClose }: Props) {
   const { reset } = useImpersonateAccount()
 
   return (
-    <Drawer.Root open={isOpen} placement='end' size='lg' onOpenChange={(e: { open: boolean }) => {
-      if (!e.open) {
-        onClose();
-      }
-    }}>
+    <Drawer.Root
+      onOpenChange={(e: { open: boolean }) => {
+        if (!e.open) {
+          onClose()
+        }
+      }}
+      open={isOpen}
+      placement="end"
+      size="lg"
+    >
       <Portal>
-
         <Drawer.Backdrop />
         <Drawer.Positioner>
           <Drawer.Content data-testid="dev-tools-drawer">
@@ -82,8 +79,7 @@ function DevToolsDrawer({ isOpen, onClose }: Props) {
             </Drawer.Footer>
           </Drawer.Content>
         </Drawer.Positioner>
-
       </Portal>
     </Drawer.Root>
-  );
+  )
 }

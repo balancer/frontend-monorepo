@@ -1,8 +1,4 @@
-import {
-  Box,
-  SimpleGrid,
-  type BoxProps,
-  type SimpleGridProps } from '@chakra-ui/react';
+import { Box, SimpleGrid, type BoxProps, type SimpleGridProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 export type RadioCardStyleProps = {
@@ -18,7 +14,8 @@ export type RadioCardProps = RadioCardStyleProps & {
 }
 
 const defaultWrapperProps: BoxProps = {
-  w: 'full' }
+  w: 'full',
+}
 
 const defaultContainerProps: BoxProps = {
   borderRadius: 'lg',
@@ -28,9 +25,17 @@ const defaultContainerProps: BoxProps = {
   px: 5,
   py: 3,
   transition: 'all 0.2s ease',
-  w: 'full' }
+  w: 'full',
+}
 
-export function RadioCard({ children, containerProps, wrapperProps, value, checked, onChange }: RadioCardProps) {
+export function RadioCard({
+  children,
+  containerProps,
+  wrapperProps,
+  value,
+  checked,
+  onChange,
+}: RadioCardProps) {
   return (
     <Box {...defaultWrapperProps} {...wrapperProps} asChild>
       <label>
@@ -46,7 +51,7 @@ export function RadioCard({ children, containerProps, wrapperProps, value, check
         </Box>
       </label>
     </Box>
-  );
+  )
 }
 
 export type RadioCardOption<T extends string> = {
@@ -69,7 +74,8 @@ export type RadioCardGroupProps<T extends string> = {
 const defaultLayoutProps: SimpleGridProps = {
   columns: { base: 1, sm: 2 },
   gap: 'md',
-  w: 'full' }
+  w: 'full',
+}
 
 export function RadioCardGroup<T extends string>({
   name: _name,
@@ -87,7 +93,8 @@ export function RadioCardGroup<T extends string>({
       {options.map(option => {
         const mergedCardProps: RadioCardStyleProps = {
           ...radioCardProps,
-          ...option.cardProps }
+          ...option.cardProps,
+        }
 
         return (
           <RadioCard

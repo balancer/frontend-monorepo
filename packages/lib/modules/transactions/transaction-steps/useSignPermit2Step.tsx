@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
@@ -10,7 +10,8 @@ import {
   filterTokensForPermit2,
   getTokenAddressesForPermit2,
   getTokenSymbolsForPermit2,
-  hasValidPermit2 } from '../../tokens/approvals/permit2/permit2.helpers'
+  hasValidPermit2,
+} from '../../tokens/approvals/permit2/permit2.helpers'
 import { usePermit2Allowance } from '../../tokens/approvals/permit2/usePermit2Allowance'
 import { BasePermit2Params, useSignPermit2 } from '../../tokens/approvals/permit2/useSignPermit2'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
@@ -35,12 +36,14 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     tokenAddresses: getTokenAddressesForPermit2(tokenAmountsIn),
     owner: userAddress,
     enabled: isPermit2 && !!spender,
-    spender: spender })
+    spender: spender,
+  })
 
   const filteredTokenAmountsIn = filterTokensForPermit2({
     chain: getGqlChain(chainId),
     wethIsEth,
-    tokenAmountsIn })
+    tokenAmountsIn,
+  })
 
   const isValidPermit2 = hasValidPermit2(filteredTokenAmountsIn, expirations, allowedAmounts)
 
@@ -50,9 +53,11 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     isLoading: isLoadingSignature,
     isDisabled,
     buttonLabel,
-    error } = useSignPermit2({
+    error,
+  } = useSignPermit2({
     ...params,
-    nonces })
+    nonces,
+  })
 
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
@@ -65,7 +70,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     return (
       <VStack width="full">
         {error && <BalAlert content={error} status="error" />}
-        {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
+        {!isConnected && <ConnectWallet loading={isLoading} width="full" />}
         {shouldChangeNetwork && isConnected && (
           <NetworkSwitchButton {...networkSwitchButtonProps} />
         )}
@@ -84,7 +89,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
           </Button>
         ) : null}
       </VStack>
-    );
+    )
   }
 
   const isComplete = () =>
@@ -96,7 +101,9 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
       chainId,
       getToken,
       tokenAmountsIn,
-      wethIsEth: params.wethIsEth }) }
+      wethIsEth: params.wethIsEth,
+    }),
+  }
 
   if (!isPermit2) return
   return {
@@ -106,9 +113,11 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     labels: {
       title: getTitle(details),
       init: `Sign permit`,
-      tooltip: 'Sign permit' },
+      tooltip: 'Sign permit',
+    },
     isComplete,
-    renderAction: () => <SignPermitButton /> }
+    renderAction: () => <SignPermitButton />,
+  }
 }
 
 function getTitle(details?: StepDetails): string {

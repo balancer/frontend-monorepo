@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, Flex, Box, Center } from '@chakra-ui/react';
+import { Heading, Flex, Box, Center } from '@chakra-ui/react'
 
 export function BeetsPromoBanner() {
   return (
@@ -8,16 +8,16 @@ export function BeetsPromoBanner() {
       background={`url('/images/misc/banner1.png') no-repeat center center`}
       backgroundSize="cover"
       boxShadow="lg"
+      css={{
+        width: '100% !important',
+        maxWidth: '100% !important',
+      }}
       h={{ base: '200px', sm: '140px' }}
       height="140px"
       maxW="100%"
       overflow="hidden"
       position="relative"
       rounded="lg"
-      css={{
-        width: '100% !important',
-        maxWidth: '100% !important'
-      }}
       w="full"
     >
       <Center className="copy" h="100%" w="full" zIndex="1">
@@ -54,5 +54,5 @@ export function BeetsPromoBanner() {
         </Flex>
       </Center>
     </Box>
-  );
+  )
 }

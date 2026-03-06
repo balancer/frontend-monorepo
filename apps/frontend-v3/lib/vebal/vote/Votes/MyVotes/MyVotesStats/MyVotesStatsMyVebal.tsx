@@ -1,5 +1,5 @@
-import { Badge, Button, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+import { Badge, Button, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
@@ -29,11 +29,13 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
     : undefined
 
   const { maxLockEndDate } = useLockEndDate({
-    lockedEndDate: lockedEndDate ? new Date(lockedEndDate) : undefined })
+    lockedEndDate: lockedEndDate ? new Date(lockedEndDate) : undefined,
+  })
 
   const expectedVeBalAmount = expectedTotalVeBal({
     bpt: lockedAmount ?? '0',
-    lockEndDate: maxLockEndDate })
+    lockEndDate: maxLockEndDate,
+  })
 
   const balance = !isLockExpired ? fNum('token', formatUnits(myVebalBalance || 0n, 18)) : '0'
 
@@ -88,14 +90,16 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
             <ConnectWallet size="sm" variant="primary" />
           </VStack>
         ) : isLockExpired || myVebalBalance ? (
-          <Button size="sm" variant="tertiary" asChild><NextLink href="/vebal/manage">Manage
-                      </NextLink></Button>
+          <Button asChild size="sm" variant="tertiary">
+            <NextLink href="/vebal/manage">Manage</NextLink>
+          </Button>
         ) : (
-          <Button size="sm" variant="primary" asChild><NextLink href={getVeBalManagePath('lock', 'vote')}>Get veBAL
-                      </NextLink></Button>
+          <Button asChild size="sm" variant="primary">
+            <NextLink href={getVeBalManagePath('lock', 'vote')}>Get veBAL</NextLink>
+          </Button>
         )
       }
       variant={isLockExpired ? 'expired' : 'default'}
     />
-  );
+  )
 }

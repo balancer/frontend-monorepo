@@ -1,4 +1,4 @@
-import { VStack, Heading, HStack } from '@chakra-ui/react';
+import { VStack, Heading, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PreviewPoolType } from './PreviewPoolType'
 import { PreviewPoolTokens } from './PreviewPoolTokens'
@@ -25,9 +25,10 @@ export function PreviewPoolCreation() {
       cardProps={{
         w: 'full',
         overflow: 'hidden',
-        rounded: 'xl' }}
+        rounded: 'xl',
+      }}
     >
-      <VStack align="start" p="lg" gap="md" w="full">
+      <VStack align="start" gap="md" p="lg" w="full">
         <PreviewPoolHeader />
         <PreviewPoolType />
         <PreviewPoolChart />
@@ -36,19 +37,21 @@ export function PreviewPoolCreation() {
         <PreviewPoolDetails />
       </VStack>
     </NoisyCard>
-  );
+  )
 }
 
 function PreviewPoolHeader() {
   const { resetPoolCreationForm, poolCreationForm } = usePoolCreationForm()
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolType'] })
+    name: ['network', 'poolType'],
+  })
 
   const gqlPoolType = getGqlPoolType(poolType)
 
   const { setupCowCreation, showCowAmmWarning, showBalancerWarning } = useProtocolSearchParams({
-    poolType: gqlPoolType })
+    poolType: gqlPoolType,
+  })
 
   const handleRestart = () => {
     resetPoolCreationForm()
@@ -79,7 +82,7 @@ function PreviewPoolHeader() {
         />
       </HStack>
     </HStack>
-  );
+  )
 }
 
 function PreviewPoolChart() {

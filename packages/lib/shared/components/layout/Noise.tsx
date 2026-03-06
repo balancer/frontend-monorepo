@@ -1,5 +1,5 @@
 'use client'
-import { Container, ContainerProps } from '@chakra-ui/react';
+import { Container, ContainerProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 export default function Noise({

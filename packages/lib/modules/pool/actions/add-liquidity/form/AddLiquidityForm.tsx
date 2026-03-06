@@ -1,8 +1,9 @@
-'use client';
+'use client'
 import {
   TokenBalancesProvider,
-  useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
-import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
+  useTokenBalances,
+} from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { Tooltip } from '../../../../../shared/components/tooltips/Tooltip'
 import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
@@ -13,7 +14,8 @@ import { usePool } from '../../../PoolProvider'
 import {
   hasNoLiquidity,
   requiresProportionalInput,
-  supportsNestedActions } from '../../LiquidityActionHelpers'
+  supportsNestedActions,
+} from '../../LiquidityActionHelpers'
 import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
@@ -74,7 +76,8 @@ function AddLiquidityMainForm() {
     setWantsProportional,
     wantsProportional,
     humanAmountsIn,
-    validTokens } = useAddLiquidity()
+    validTokens,
+  } = useAddLiquidity()
 
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
@@ -154,7 +157,8 @@ function AddLiquidityMainForm() {
   const bufferBalanceWarning = useBufferBalanceWarning({
     amounts: humanAmountsIn,
     operation: 'add',
-    validTokens })
+    validTokens,
+  })
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
@@ -225,7 +229,7 @@ function AddLiquidityMainForm() {
                   <PoolActionsPriceImpactDetails
                     bptAmount={simulationQuery.data?.bptOut.amount}
                     isAddLiquidity
-                    isLoading={isFetching}
+                    loading={isFetching}
                     slippage={slippage}
                     totalUSDValue={totalUSDValue}
                   />
@@ -233,7 +237,7 @@ function AddLiquidityMainForm() {
                 action="add"
                 avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
-                isDisabled={!wantsProportional && !priceImpactQuery.data}
+                disabled={!wantsProportional && !priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
@@ -247,7 +251,8 @@ function AddLiquidityMainForm() {
                   </Text>
                   <Text fontSize="md" fontWeight="700" lineHeight="16px">
                     {formatFalsyValueAsDash(totalUSDValue, toCurrency, {
-                      showZeroAmountAsDash: true })}
+                      showZeroAmountAsDash: true,
+                    })}
                   </Text>
                 </VStack>
               </Card.Root>
@@ -300,5 +305,5 @@ function AddLiquidityMainForm() {
         onOpen={previewModalDisclosure.onOpen}
       />
     </Box>
-  );
+  )
 }

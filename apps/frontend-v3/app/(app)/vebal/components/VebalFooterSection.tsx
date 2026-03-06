@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Center, Flex, Heading, Link, Text, HStack, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Link, Text, HStack, Stack } from '@chakra-ui/react'
 import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
@@ -39,13 +39,13 @@ export function VebalFooterSection() {
               </Heading>
               <Text
                 color="font.secondary"
+                css={{
+                  textWrap: 'pretty',
+                }}
                 display="flex"
                 justifyContent="center"
                 lineHeight="1.4"
                 maxWidth="40ch"
-                css={{
-                  textWrap: 'pretty'
-                }}
                 textAlign="center"
                 width="full"
               >
@@ -61,16 +61,19 @@ export function VebalFooterSection() {
               maxWidth={320}
               width="full"
             >
-              <Button flex={1} size="lg" variant="gold" asChild><NextLink href="/vebal/manage">Manage veBAL
-                              </NextLink></Button>
+              <Button asChild flex={1} size="lg" variant="gold">
+                <NextLink href="/vebal/manage">Manage veBAL</NextLink>
+              </Button>
               <Button
+                asChild
                 bg="background.gold"
                 bgClip="text"
                 flex={1}
                 size="lg"
                 variant="tertiary"
-                asChild><NextLink href="/vebal/vote">Vote on gauges
-                              </NextLink></Button>
+              >
+                <NextLink href="/vebal/vote">Vote on gauges</NextLink>
+              </Button>
             </Flex>
             <Link
               alignItems="center"
@@ -79,8 +82,9 @@ export function VebalFooterSection() {
               href="https://docs.balancer.fi/concepts/governance/veBAL/"
               justifyContent="center"
               mt="sm"
-              target='_blank'
-              rel='noopener noreferrer'>
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <HStack gap="xxs">
                 <Text color="font.secondary" fontSize={{ base: 'sm', md: 'md' }}>
                   View veBAL docs
@@ -95,5 +99,5 @@ export function VebalFooterSection() {
         </FadeInOnView>
       </Center>
     </Box>
-  );
+  )
 }

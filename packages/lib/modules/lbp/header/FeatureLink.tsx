@@ -1,4 +1,4 @@
-import { HStack, Text } from '@chakra-ui/react';
+import { HStack, Text } from '@chakra-ui/react'
 import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import { StoneIcon } from '@repo/lib/shared/components/StoneIcon'
 import { ReactElement } from 'react'
@@ -17,14 +17,14 @@ export function FeatureLink({ title, description, icon, transformBackground }: P
       <Tooltip
         bg="background.level3"
         color="font.maxContrast"
-        showArrow
         content={description}
         lineHeight="short"
         p="ms"
-        shadow="2xl"
         positioning={{
-          placement: "top"
+          placement: 'top',
         }}
+        shadow="2xl"
+        showArrow
       >
         <Text
           _hover={{ color: 'var(--chakra-colors-font-primary)' }}
@@ -43,5 +43,5 @@ export function FeatureLink({ title, description, icon, transformBackground }: P
         </Text>
       </Tooltip>
     </HStack>
-  );
+  )
 }

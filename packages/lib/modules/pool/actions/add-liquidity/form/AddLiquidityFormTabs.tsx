@@ -1,6 +1,7 @@
-import { Box, VStack, HStack, Popover, HoverCard, Text, Separator, List } from '@chakra-ui/react';
+import { Box, VStack, HStack, HoverCard, Text, Separator, List } from '@chakra-ui/react'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useEffect } from 'react'
 import { usePool } from '../../../PoolProvider'
@@ -8,7 +9,8 @@ import {
   requiresProportionalInput,
   requiresProportionalInputReason,
   supportsProportionalAddLiquidityKind,
-  supportsProportionalAddLiquidityReasons } from '../../LiquidityActionHelpers'
+  supportsProportionalAddLiquidityReasons,
+} from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -39,11 +41,11 @@ function PoolWeightsInfo() {
               <Box
                 as="span"
                 color="black"
+                css={{
+                  textWrap: 'balance',
+                }}
                 fontSize="sm"
                 fontWeight="medium"
-                css={{
-                  textWrap: 'balance'
-                }}
               >
                 Proportional adds avoid price impact by matching the current ratio of each token's
                 USD value within the pool:
@@ -52,7 +54,7 @@ function PoolWeightsInfo() {
             forceColumnMode
             wrapText
           >
-            <List.Root as='ul'>
+            <List.Root as="ul">
               <List.Item
                 color="font.black"
                 fontSize="sm"
@@ -67,7 +69,8 @@ function PoolWeightsInfo() {
                         'weight',
                         poolTokensWithActualWeights[token.address],
                         {
-                          abbreviated: false }
+                          abbreviated: false,
+                        }
                       )}`
                   )
                   .join(', ')}
@@ -80,7 +83,7 @@ function PoolWeightsInfo() {
         pb="xxs !important"
         status="info"
       />
-    );
+    )
   }
 }
 
@@ -104,7 +107,8 @@ export function AddLiquidityFormTabs({
   nestedAddLiquidityEnabled,
   tabIndex,
   setFlexibleTab,
-  setProportionalTab }: {
+  setProportionalTab,
+}: {
   totalUSDValue: string
   nestedAddLiquidityEnabled: boolean
   tabIndex: number
@@ -153,7 +157,8 @@ export function AddLiquidityFormTabs({
       value: '0',
       label: 'Flexible',
       disabled: isDisabledFlexibleTab,
-      tabTooltipLabel: getFlexibleTabTooltipLabel() },
+      tabTooltipLabel: getFlexibleTabTooltipLabel(),
+    },
     {
       value: '1',
       label: 'Proportional',
@@ -161,7 +166,8 @@ export function AddLiquidityFormTabs({
       tabTooltipLabel: isDisabledProportionalTab
         ? supportsProportionalAddLiquidityReasons(pool) ||
           'This pool does not support liquidity to be added proportionally'
-        : undefined },
+        : undefined,
+    },
   ]
 
   useEffect(() => {
@@ -187,8 +193,9 @@ export function AddLiquidityFormTabs({
         />
         <HoverCard.Root
           positioning={{
-            placement: 'top'
-          }}>
+            placement: 'top',
+          }}
+        >
           <HoverCard.Trigger asChild>
             <Box
               _hover={{ opacity: 1 }}
@@ -229,5 +236,5 @@ export function AddLiquidityFormTabs({
       {isOutOfRange && <OutOfRangeWarning />}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
-  );
+  )
 }

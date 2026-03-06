@@ -1,4 +1,4 @@
-import { VStack, Heading, Text } from '@chakra-ui/react';
+import { VStack, Heading, Text } from '@chakra-ui/react'
 import { zeroAddress, Address, isAddress } from 'viem'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
@@ -28,7 +28,8 @@ export function PoolSettings() {
   const { poolCreationForm } = usePoolCreationForm()
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolType'] })
+    name: ['network', 'poolType'],
+  })
 
   const { poolHooksWhitelist } = usePoolHooksWhitelist(network)
 
@@ -47,14 +48,16 @@ export function PoolSettings() {
     {
       label: 'My connected wallet:',
       value: userAddress,
-      detail: <BlockExplorerLink address={userAddress} chain={network} /> },
+      detail: <BlockExplorerLink address={userAddress} chain={network} />,
+    },
   ]
 
   const swapFeePercentageOptions: PoolSettingsOption[] = [
     ...getSwapFeePercentageOptions(poolType).map(option => ({
       label: `${option.value}%`,
       value: option.value,
-      detail: <Text color="font.secondary">{option.tip}</Text> })),
+      detail: <Text color="font.secondary">{option.tip}</Text>,
+    })),
   ]
 
   const poolHooksOptions: PoolSettingsOption[] = [
@@ -88,7 +91,8 @@ export function PoolSettings() {
         address: address as Address,
         abi: reClammPoolAbi,
         functionName: 'getHookFlags',
-        args: [] })
+        args: [],
+      })
       if (!hookFlags) return 'Invalid hooks contract address'
       return true
     } catch (error) {
@@ -162,7 +166,7 @@ export function PoolSettings() {
         <PoolSettingsRadioGroup
           customInputLabel="Custom pool hooks address"
           customInputType="address"
-          isDisabled={isStableSurgePool(poolType)}
+          disabled={isStableSurgePool(poolType)}
           name="poolHooksContract"
           options={poolHooksOptions}
           title="Pool hooks"
@@ -172,5 +176,5 @@ export function PoolSettings() {
       )}
       <LiquidityManagement />
     </VStack>
-  );
+  )
 }

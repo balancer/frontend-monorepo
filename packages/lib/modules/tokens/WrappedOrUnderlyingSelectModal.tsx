@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, ModalProps, Text, VStack, Separator, Dialog, Portal } from '@chakra-ui/react';
+import { Box, ModalProps, Text, VStack, Separator, Dialog, Portal } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { RefObject } from 'react'
 import { CompactTokenSelectList } from './TokenSelectModal/TokenSelectList/CompactTokenSelectList'
@@ -32,16 +32,16 @@ export function WrappedOrUnderlyingSelectModal({
   return (
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -54,15 +54,14 @@ export function WrappedOrUnderlyingSelectModal({
                 </Box>
                 <Separator w="90%" />
                 <Text color="font.secondary" p="md" pt="0">
-                  This Boosted pool wraps the underlying token into yield bearing tokens. You can use
-                  either token to enter or exit a pool.
+                  This Boosted pool wraps the underlying token into yield bearing tokens. You can
+                  use either token to enter or exit a pool.
                 </Text>
               </VStack>
             </Dialog.Body>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

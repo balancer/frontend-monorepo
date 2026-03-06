@@ -4,7 +4,7 @@ import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
-import { Text, Popover, HoverCard } from '@chakra-ui/react';
+import { Text, HoverCard } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { SmartCircularImage } from '@repo/lib/shared/components/image/SmartCircularImage'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
@@ -50,7 +50,8 @@ export function TokenIcon({
     radius: 50,
     backgroundType: ['solid'],
     scale: 80,
-    ...tokenColor })
+    ...tokenColor,
+  })
 
   const iconSrc = (() => {
     const src = logoURI ?? token?.logoURI
@@ -92,5 +93,5 @@ export function TokenIcon({
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { VStack, HStack, Text } from '@chakra-ui/react';
+import { VStack, HStack, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import TokenRow from './TokenRow'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -11,7 +11,8 @@ import { ReactNode } from 'react'
 export function ReceiptTokenOutRow({
   chain,
   actualReceivedTokenAmount,
-  tokenAddress }: {
+  tokenAddress,
+}: {
   chain: GqlChain
   actualReceivedTokenAmount: HumanAmount
   tokenAddress: string
@@ -41,7 +42,8 @@ export function SwapTokenRow({
   chain,
   tokenAmount,
   tokenAddress,
-  customToken }: {
+  customToken,
+}: {
   label: string
   chain: GqlChain
   tokenAmount: string
@@ -65,5 +67,5 @@ export function SwapTokenRow({
         value={tokenAmount}
       />
     </VStack>
-  );
+  )
 }

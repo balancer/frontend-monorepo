@@ -10,7 +10,8 @@ import {
   Flex,
   HStack,
   Button,
-  useDisclosure } from '@chakra-ui/react';
+  useDisclosure,
+} from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -49,11 +50,13 @@ const balancerNetworksConfig: NetworkConfig[] = [
   {
     chain: GqlChain.Arbitrum,
     name: 'Arbitrum',
-    displayProps: { display: { base: 'none', md: 'block' } } },
+    displayProps: { display: { base: 'none', md: 'block' } },
+  },
   {
     chain: GqlChain.Base,
     name: 'Base',
-    displayProps: { display: { base: 'none', md: 'none', lg: 'block' } } },
+    displayProps: { display: { base: 'none', md: 'none', lg: 'block' } },
+  },
 ]
 
 const beetsNetworksConfig: NetworkConfig[] = [
@@ -61,7 +64,8 @@ const beetsNetworksConfig: NetworkConfig[] = [
   {
     chain: GqlChain.Optimism,
     name: 'Optimism',
-    displayProps: { display: { base: 'none', md: 'block' } } },
+    displayProps: { display: { base: 'none', md: 'block' } },
+  },
 ]
 
 export function ClaimNetworkPools() {
@@ -72,7 +76,8 @@ export function ClaimNetworkPools() {
     poolsWithOnchainUserBalances,
     isLoadingRewards,
     isLoadingPortfolio,
-    hiddenHandRewardsData } = usePortfolio()
+    hiddenHandRewardsData,
+  } = usePortfolio()
 
   const { hasRecoveredFunds, claims: recoveredFundsClaims } = useRecoveredFunds()
 
@@ -81,11 +86,13 @@ export function ClaimNetworkPools() {
   const {
     open: isClaimRecoveredFundModalOpen,
     onOpen: openClaimRecoveredFundModal,
-    onClose: onClaimRecoveredFundModalClose } = useDisclosure()
+    onClose: onClaimRecoveredFundModalClose,
+  } = useDisclosure()
   const {
     open: isRecoveredFundsLearnMoreModalOpen,
     onOpen: openRecoveredFundsLearnMoreModal,
-    onClose: onRecoveredFundsLearnMoreModalClose } = useDisclosure()
+    onClose: onRecoveredFundsLearnMoreModalClose,
+  } = useDisclosure()
   const { isConnected } = useUserAccount()
   const router = useRouter()
 
@@ -155,7 +162,8 @@ export function ClaimNetworkPools() {
                 columns={{
                   base: 1,
                   md: 2,
-                  lg: isBeets ? 2 : 3 }}
+                  lg: isBeets ? 2 : 3,
+                }}
                 gap="md"
               >
                 {currentNetworks.map(network => (
@@ -198,7 +206,8 @@ export function ClaimNetworkPools() {
                 columns={{
                   base: 1,
                   md: 2,
-                  lg: isBeets ? 2 : 3 }}
+                  lg: isBeets ? 2 : 3,
+                }}
                 gap="md"
               >
                 {currentNetworks.map(network => (
@@ -232,7 +241,8 @@ export function ClaimNetworkPools() {
               columns={{
                 base: 1,
                 md: 2,
-                lg: isBeets ? 2 : 3 }}
+                lg: isBeets ? 2 : 3,
+              }}
               gap="md"
             >
               {(() => {
@@ -244,7 +254,8 @@ export function ClaimNetworkPools() {
                     claimableItems.push({
                       type: 'chain',
                       chain: pools[0].chain,
-                      amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber() })
+                      amount: totalFiatClaimableBalanceByChain[pools[0].chain].toNumber(),
+                    })
                   }
                 })
 
@@ -252,14 +263,16 @@ export function ClaimNetworkPools() {
                   claimableItems.push({
                     type: 'protocol',
                     chain: GqlChain.Mainnet,
-                    amount: protocolRewardsBalance.toNumber() })
+                    amount: protocolRewardsBalance.toNumber(),
+                  })
                 }
 
                 if (hasHiddenHandRewards && !isPastJulyFirst) {
                   claimableItems.push({
                     type: 'hidden-hand',
                     chain: PROJECT_CONFIG.defaultNetwork,
-                    amount: hiddenHandRewardsData.totalValueUsd })
+                    amount: hiddenHandRewardsData.totalValueUsd,
+                  })
                 }
 
                 if (isBalancer && hasRecoveredFunds) {
@@ -267,7 +280,8 @@ export function ClaimNetworkPools() {
                     type: 'recovered-funds',
                     chain: PROJECT_CONFIG.defaultNetwork,
                     amount: sumRecoveredFundsTotal(recoveredFundsClaims),
-                    icon: '/images/icons/heart.svg' })
+                    icon: '/images/icons/heart.svg',
+                  })
                 }
 
                 // Sort by amount (highest first)
@@ -370,7 +384,7 @@ export function ClaimNetworkPools() {
         )}
       </Stack>
     </FadeInOnView>
-  );
+  )
 }
 
 function getCardTitle(itemType: string) {

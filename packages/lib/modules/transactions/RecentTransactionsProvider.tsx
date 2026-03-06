@@ -74,7 +74,8 @@ const TransactionStatusToastStatusMapping: Record<TransactionStatus, AlertStatus
   reverted: 'error',
   rejected: 'error',
   timeout: 'warning',
-  unknown: 'warning' }
+  unknown: 'warning',
+}
 
 export function useRecentTransactionsLogic() {
   const [transactions, setTransactions] = useState<Record<string, TrackedTransaction>>({})
@@ -112,7 +113,8 @@ export function useRecentTransactionsLogic() {
         const receipt = await waitForTransactionReceipt(config, {
           hash: tx.hash,
           chainId: getChainId(tx.chain),
-          timeout: getWaitForReceiptTimeout(getChainId(tx.chain)) })
+          timeout: getWaitForReceiptTimeout(getChainId(tx.chain)),
+        })
         if (receipt?.status === 'success') {
           updatePayload[tx.hash] = { ...tx, status: 'confirmed' }
         } else {
@@ -136,7 +138,8 @@ export function useRecentTransactionsLogic() {
         const isTimeoutError = ensureError(error).name === 'WaitForTransactionReceiptTimeoutError'
         updatePayload[tx.hash] = {
           ...tx,
-          status: isTimeoutError ? 'timeout' : 'unknown' }
+          status: isTimeoutError ? 'timeout' : 'unknown',
+        }
         setTransactions(updatePayload)
       }
     }
@@ -165,7 +168,8 @@ export function useRecentTransactionsLogic() {
             linkUrl={getBlockExplorerTxUrl(trackedTransaction.hash, trackedTransaction.chain)}
             {...rest}
           />
-        ) })
+        ),
+      })
     }
 
     if (!trackedTransaction.hash) {
@@ -174,7 +178,8 @@ export function useRecentTransactionsLogic() {
     // Make sure to store a reference to the toast on this transaction
     const updatedTrackedTransactions = {
       ...transactions,
-      [trackedTransaction.hash]: { ...trackedTransaction, toastId } }
+      [trackedTransaction.hash]: { ...trackedTransaction, toastId },
+    }
 
     // keep only the 'n' most recent transactions
     const mostRecentTransactions = keyBy(
@@ -200,11 +205,13 @@ export function useRecentTransactionsLogic() {
 
     const updatedCachedTransaction = {
       ...cachedTransaction,
-      ...updatePayload }
+      ...updatePayload,
+    }
 
     const updatedCache = {
       ...transactions,
-      [hash]: updatedCachedTransaction }
+      [hash]: updatedCachedTransaction,
+    }
 
     setTransactions(updatedCache)
     updateLocalStorage(updatedCache)
@@ -232,7 +239,8 @@ export function useRecentTransactionsLogic() {
             )}
             {...rest}
           />
-        ) })
+        ),
+      })
     }
   }
 
@@ -261,7 +269,8 @@ export function useRecentTransactionsLogic() {
     unconfirmedTransactions.forEach(safeTrackedTx => {
       safeAppsSdk.txs.getBySafeTxHash(safeTrackedTx.hash).then(tx => {
         updateTrackedTransaction(safeTrackedTx.hash, {
-          status: safeStatusToBalancerStatus(tx.txStatus) })
+          status: safeStatusToBalancerStatus(tx.txStatus),
+        })
 
         if (
           tx.txHash &&
@@ -277,7 +286,8 @@ export function useRecentTransactionsLogic() {
               chain: safeTrackedTx.chain,
               init: safeTrackedTx.label,
               description: safeTrackedTx.description,
-              timestamp: Date.now() },
+              timestamp: Date.now(),
+            },
             false
           )
         }
@@ -290,7 +300,8 @@ export function useRecentTransactionsLogic() {
     addTrackedTransaction,
     updateTrackedTransaction,
     clearTransactions,
-    isTxTracked }
+    isTxTracked,
+  }
 }
 
 export function RecentTransactionsProvider({ children }: { children: ReactNode }) {

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, ModalProps, VStack, Dialog, Portal } from '@chakra-ui/react';
+import { Box, ModalProps, VStack, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useState } from 'react'
 import { TokenSelectList } from './TokenSelectList/TokenSelectList'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -54,20 +54,22 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   return (
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          closeModal();
+          closeModal()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content>
-            <Dialog.Header color="font.primary">Select a token: {getChainShortName(chain)}</Dialog.Header>
+            <Dialog.Header color="font.primary">
+              Select a token: {getChainShortName(chain)}
+            </Dialog.Header>
             <Dialog.CloseTrigger />
             <Dialog.Body p={0}>
               <VStack align="start" gap="md" w="full">
@@ -108,8 +110,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
             </Dialog.Body>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

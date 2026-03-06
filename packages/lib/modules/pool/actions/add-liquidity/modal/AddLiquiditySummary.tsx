@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Box, Card, VStack, Button, Text, Separator } from '@chakra-ui/react';
+import { Box, Card, VStack, Button, Text, Separator } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -21,14 +21,16 @@ import { useRouter } from 'next/navigation'
 import {
   PROPORTIONAL_ADD_DESCRIPTION,
   SlippageOptions,
-  SlippageSelector } from '../../SlippageSelector'
+  SlippageSelector,
+} from '../../SlippageSelector'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
   error,
   sentTokens,
-  receivedBptUnits }: AddLiquidityReceiptResult) {
+  receivedBptUnits,
+}: AddLiquidityReceiptResult) {
   const {
     totalUSDValue,
     simulationQuery,
@@ -39,7 +41,8 @@ export function AddLiquiditySummary({
     addLiquidityTxHash,
     addLiquidityTxSuccess,
     slippage,
-    wantsProportional } = useAddLiquidity()
+    wantsProportional,
+  } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -54,7 +57,8 @@ export function AddLiquiditySummary({
       ...amount,
       humanAmount: bn(amount?.humanAmount || 0)
         .times(1 - selectedSlippage)
-        .toString() })) as HumanTokenAmountWithSymbol[]
+        .toString(),
+    })) as HumanTokenAmountWithSymbol[]
 
   const shouldShowErrors = hasQuoteContext ? addLiquidityTxSuccess : addLiquidityTxHash
   const shouldShowReceipt = addLiquidityTxHash && !isLoadingReceipt && sentTokens.length > 0
@@ -97,8 +101,8 @@ export function AddLiquiditySummary({
         <TokenRowGroup
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
-          isLoading={isLoadingTokens}
           label={shouldShowReceipt || !hasQuoteContext ? 'You added' : addingInputTokenLabel}
+          loading={isLoadingTokens}
           rightElement={
             wantsProportional && (
               <SlippageSelector
@@ -115,9 +119,9 @@ export function AddLiquiditySummary({
       </Card.Root>
       <Card.Root p="ms" variant="modalSubSection">
         {shouldShowReceipt ? (
-          <ReceiptBptOut actualBptOut={receivedBptUnits} isLoading={isLoadingReceipt} />
+          <ReceiptBptOut actualBptOut={receivedBptUnits} loading={isLoadingReceipt} />
         ) : (
-          <QuoteBptOut isLoading={isLoadingTokens} />
+          <QuoteBptOut loading={isLoadingTokens} />
         )}
       </Card.Root>
       {shouldShowReceipt ? (
@@ -164,5 +168,5 @@ export function AddLiquiditySummary({
         </CardPopAnim>
       ) : null}
     </AnimateHeightChange>
-  );
+  )
 }

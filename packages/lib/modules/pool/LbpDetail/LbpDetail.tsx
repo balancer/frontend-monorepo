@@ -1,4 +1,4 @@
-import { Stack, VStack, Grid, GridItem } from '@chakra-ui/react';
+import { Stack, VStack, Grid, GridItem } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { PoolActivity } from '../PoolDetail/PoolActivity/PoolActivity'
 import { PoolComposition } from '../PoolDetail/PoolComposition'
@@ -43,12 +43,12 @@ export function LbpDetail() {
           {hasPoolEvents && (
             <Stack
               direction={{ base: 'column', xl: 'row' }}
-              justifyContent="stretch"
               gap="md"
+              justifyContent="stretch"
               w="full"
             >
-              <MyPurchases isLoading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
-              <MyTransactions isLoading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
+              <MyPurchases loading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
+              <MyTransactions loading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
             </Stack>
           )}
 
@@ -59,5 +59,5 @@ export function LbpDetail() {
         </VStack>
       </DefaultPageContainer>
     </>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import { Text, VStack, List } from '@chakra-ui/react';
+import { Text, VStack, List } from '@chakra-ui/react'
 
 export function SettlementTerms() {
   return (
     <VStack>
       <Text width="100%">I confirm and agree to the following:</Text>
       <br />
-      <List.Root as='ul'>
+      <List.Root as="ul">
         <List.Item>
           I accept the terms and conditions applicable to this claim, including all provisions of
           the Balancer Terms of Use and all relevant Balancer governance resolutions.
@@ -41,5 +41,5 @@ export function SettlementTerms() {
         </List.Item>
       </List.Root>
     </VStack>
-  );
+  )
 }

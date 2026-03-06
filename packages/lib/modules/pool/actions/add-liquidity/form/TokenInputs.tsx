@@ -2,7 +2,7 @@ import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { Address } from 'viem'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity } from '../../LiquidityActionHelpers'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
@@ -48,7 +48,7 @@ export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props
             address={token.address}
             apiToken={token}
             chain={token.chain}
-            isDisabled={hasNoLiquidity(pool)}
+            disabled={hasNoLiquidity(pool)}
             key={token.address}
             onChange={e => setAmountIn(token, e.currentTarget.value as HumanAmount)}
             onToggleTokenClicked={getToggleTokenCallback(token)}
@@ -58,5 +58,5 @@ export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props
         )
       })}
     </VStack>
-  );
+  )
 }

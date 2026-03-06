@@ -1,11 +1,12 @@
-import { Text, Box, Button, HStack, VStack, Link, Dialog, Portal } from '@chakra-ui/react';
+import { Text, Box, Button, HStack, VStack, Link, Dialog, Portal } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../other/Picture'
 
 export enum VebalRedirectPartner {
   Aura = 'aura',
   StakeDAO = 'stake',
-  Palladin = 'palladin' }
+  Palladin = 'palladin',
+}
 
 type Props = {
   partner: VebalRedirectPartner
@@ -33,7 +34,8 @@ const partnerInfo: PartnerInfo = {
     description:
       "Aura Finance is a protocol built on top of the Balancer protocol to provide maximum incentives to Balancer liquidity providers and BAL stakers (into veBAL) through social aggregation of BAL deposits and via additional incentives of Aura's native token.",
     url: 'https://app.aura.finance',
-    imageName: 'aura' },
+    imageName: 'aura',
+  },
   [VebalRedirectPartner.StakeDAO]: {
     shortName: 'Votemarket',
     fullName: 'Votemarket',
@@ -41,7 +43,8 @@ const partnerInfo: PartnerInfo = {
     description:
       "Votemarket is a key participant in veBAL through its 'Liquid Locker' product for BAL tokens. Votemarket enables users and DAOs to lock BAL in the 80BAL/20WETH Balancer pool, minting sdBAL—a liquid wrapper that provides the benefits of veBAL for LPs (voting power, boosted rewards, and protocol fees) without sacrificing liquidity.",
     url: 'https://www.stakedao.org/lockers/bal',
-    imageName: 'stakedao' },
+    imageName: 'stakedao',
+  },
 
   [VebalRedirectPartner.Palladin]: {
     shortName: 'Paladin',
@@ -50,22 +53,24 @@ const partnerInfo: PartnerInfo = {
     description:
       "Paladin is a marketplace for voting incentives, commonly referred to as 'bribes' in DeFi. Paladin allows third party protocols to offer additional weekly incentives for veBAL holders who vote for certain eligible Pool Gauges.",
     url: 'https://palladin.io',
-    imageName: 'paladin' } }
+    imageName: 'paladin',
+  },
+}
 
 export function VebalPartnerRedirectModal({ partner, redirectUrl, isOpen, onClose }: Props) {
   const info = partnerInfo[partner]
 
   return (
     <Dialog.Root
-      placement='center'
-      open={isOpen}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+      open={isOpen}
+      placement="center"
+    >
       <Portal>
-
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -95,8 +100,9 @@ export function VebalPartnerRedirectModal({ partner, redirectUrl, isOpen, onClos
                     color="font.secondary"
                     fontSize="sm"
                     href={info.url}
-                    target='_blank'
-                    rel='noopener noreferrer'>
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     {info.url}
                   </Link>
                 </VStack>
@@ -109,17 +115,18 @@ export function VebalPartnerRedirectModal({ partner, redirectUrl, isOpen, onClos
               </VStack>
             </Dialog.Body>
             <Dialog.Footer pb="lg">
-              <Button isExternal variant="primary" w="full" asChild><Link href={redirectUrl ?? info.url}>
+              <Button asChild variant="primary" w="full">
+                <Link href={redirectUrl ?? info.url} rel="noopener noreferrer" target="_blank">
                   <HStack>
                     <span>Go to {info.shortName}</span>
                     <ArrowUpRight size={16} />
                   </HStack>
-                </Link></Button>
+                </Link>
+              </Button>
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

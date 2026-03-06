@@ -1,4 +1,4 @@
-import { HStack, Icon, Text, VStack, Box } from '@chakra-ui/react';
+import { HStack, Icon, Text, VStack, Box } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
@@ -40,13 +40,13 @@ function Tile({ children }: PropsWithChildren) {
   return (
     <VStack
       alignItems="center"
+      gap="none"
       justifyContent="center"
       minH="100%"
       position="relative"
       px="sm"
       rounded="lg"
       shadow="2xl"
-      gap="none"
     >
       <Box
         h="full"
@@ -81,7 +81,7 @@ function Tile({ children }: PropsWithChildren) {
       />
       {children}
     </VStack>
-  );
+  )
 }
 
 export function LbpHeaderTimeInfo() {
@@ -110,7 +110,9 @@ export function LbpHeaderTimeInfo() {
             justifyContent="start"
             px="2"
           >
-            <Icon fontVariant="special" asChild><Clock /></Icon>
+            <Icon asChild fontVariant="special">
+              <Clock />
+            </Icon>
             <Text variant="special">{`LBP starts ${startTimeFormatted}`}</Text>
           </HStack>
 
@@ -128,7 +130,9 @@ export function LbpHeaderTimeInfo() {
           px="2"
           w="full"
         >
-          <Icon asChild><AlertTriangle /></Icon>
+          <Icon asChild>
+            <AlertTriangle />
+          </Icon>
           <Text color="black">{`LBP ended ${endTimeFormatted}`}</Text>
         </HStack>
       ) : (
@@ -143,7 +147,9 @@ export function LbpHeaderTimeInfo() {
             justifyContent="start"
             px="2"
           >
-            <Icon asChild><Clock /></Icon>
+            <Icon asChild>
+              <Clock />
+            </Icon>
             <Text color="black">{`LBP is live! Ends ${endTimeFormatted}`}</Text>
           </HStack>
 
@@ -151,14 +157,14 @@ export function LbpHeaderTimeInfo() {
         </HStack>
       )}
     </>
-  );
+  )
 }
 
 function Countdown({ until }: { until: Date }) {
   const info = useDateCountdown(until)
 
   return (
-    <HStack flexShrink="0" h="48px" gap="xs">
+    <HStack flexShrink="0" gap="xs" h="48px">
       <Tile>
         <TimeElement title="D" value={String(String(info.daysDiff))} />
       </Tile>
@@ -170,5 +176,5 @@ function Countdown({ until }: { until: Date }) {
         </HStack>
       </Tile>
     </HStack>
-  );
+  )
 }

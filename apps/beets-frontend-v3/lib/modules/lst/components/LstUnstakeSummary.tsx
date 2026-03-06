@@ -1,4 +1,4 @@
-import { Button, Card } from '@chakra-ui/react';
+import { Button, Card } from '@chakra-ui/react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -23,7 +23,9 @@ export function LstUnstakeSummary() {
         start,
         description:
           'Return to the Withdraw tab to withdraw your $S after the withdrawal delay of 14 days has passed.',
-        url: 'https://beets.fi/stake' } })
+        url: 'https://beets.fi/stake',
+      },
+    })
   }
 
   return (
@@ -54,5 +56,5 @@ export function LstUnstakeSummary() {
         </Button>
       )}
     </AnimateHeightChange>
-  );
+  )
 }

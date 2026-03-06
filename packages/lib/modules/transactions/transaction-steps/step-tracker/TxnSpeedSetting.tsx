@@ -1,4 +1,4 @@
-import { Box, Popover, HoverCard, HStack, Image, Text } from '@chakra-ui/react';
+import { Box, HoverCard, HStack, Image, Text } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { SpeedIcon } from '@repo/lib/shared/components/icons/SpeedIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
@@ -24,8 +24,9 @@ export function TxnSpeedSetting() {
   return (
     <HoverCard.Root
       positioning={{
-        placement: 'top'
-      }}>
+        placement: 'top',
+      }}
+    >
       <HoverCard.Trigger asChild>
         <HStack gap="xs">
           {connector && connector.icon ? (
@@ -50,5 +51,5 @@ export function TxnSpeedSetting() {
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>
-  );
+  )
 }

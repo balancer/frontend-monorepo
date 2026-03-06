@@ -1,8 +1,9 @@
-import { Heading, VStack, Text, HStack, RadioGroup, SimpleGrid } from '@chakra-ui/react';
+import { Heading, VStack, Text, HStack, RadioGroup, SimpleGrid } from '@chakra-ui/react'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import {
   useReClammConfigurationOptions,
-  ReClammConfigOptionsGroup } from './useReClammConfigurationOptions'
+  ReClammConfigOptionsGroup,
+} from './useReClammConfigurationOptions'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { NumberInput } from '@repo/lib/shared/components/inputs/NumberInput'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -32,7 +33,7 @@ export function ReClammConfiguration() {
         />
       ))}
     </VStack>
-  );
+  )
 }
 
 function ConfigOptionsGroup({
@@ -42,11 +43,13 @@ function ConfigOptionsGroup({
   validateFn,
   name,
   customInputLabel,
-  tooltip }: ReClammConfigOptionsGroup) {
+  tooltip,
+}: ReClammConfigOptionsGroup) {
   const { reClammConfigForm } = usePoolCreationForm()
   const [initialMinPrice, initialTargetPrice, initialMaxPrice] = useWatch({
     control: reClammConfigForm.control,
-    name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'] })
+    name: ['initialMinPrice', 'initialTargetPrice', 'initialMaxPrice'],
+  })
   const formValue = useWatch({ control: reClammConfigForm.control, name })
   const normalizedFormValue = formValue?.toString?.() ?? ''
   const matchedOption = options.find(option => {
@@ -90,9 +93,12 @@ function ConfigOptionsGroup({
       bg: '#63F2BE0D',
       borderColor: 'green.400 !important',
       boxShadow: 'none',
-      color: 'font.maxContrast' },
+      color: 'font.maxContrast',
+    },
     _hover: {
-      boxShadow: 'md' } } as const
+      boxShadow: 'md',
+    },
+  } as const
 
   return (
     <VStack align="start" gap="md" w="full">
@@ -107,8 +113,8 @@ function ConfigOptionsGroup({
           const key = `${label.replace(/\s+/g, '-')}-${idx}`
 
           return (
-            <RadioCard key={key} value={option.rawValue} containerProps={cardContainerProps}>
-              <VStack align="center" h="full" justify="center" gap="3" textAlign="center">
+            <RadioCard containerProps={cardContainerProps} key={key} value={option.rawValue}>
+              <VStack align="center" gap="3" h="full" justify="center" textAlign="center">
                 {option.svg && <option.svg height="100%" width="100%" />}
                 <VStack gap="1">
                   <Text color="inherit" fontSize={{ base: 'xs', sm: 'sm' }}>
@@ -120,14 +126,14 @@ function ConfigOptionsGroup({
                 </VStack>
               </VStack>
             </RadioCard>
-          );
+          )
         })}
       </SimpleGrid>
       {customOption ? (
         <RadioGroup.Root
           mt="2"
-          value={selectedValue}
           onValueChange={(value: string) => updateFn(value)}
+          value={selectedValue}
         >
           <RadioGroup.Item value={String(customOption.rawValue)}>
             <RadioGroup.ItemHiddenInput />
@@ -200,5 +206,5 @@ function ConfigOptionsGroup({
         />
       ) : null}
     </VStack>
-  );
+  )
 }

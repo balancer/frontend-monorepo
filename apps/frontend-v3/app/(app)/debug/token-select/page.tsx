@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, Text, useDisclosure } from '@chakra-ui/react'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
@@ -36,5 +36,5 @@ export default function TokenSelectPage() {
         tokens={getTokensByChain(1)}
       />
     </TokenBalancesProvider>
-  );
+  )
 }

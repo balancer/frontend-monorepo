@@ -4,7 +4,7 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { VoteListTableHeader } from './VoteListTableHeader'
 import { VoteListTableRow } from './VoteListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
-import { Card, Skeleton } from '@chakra-ui/react';
+import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useVoteList } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
@@ -20,12 +20,14 @@ const rowProps = {
   px: { base: 'sm', sm: '0' },
   gridTemplateColumns: `32px minmax(320px, 1fr) minmax(144px, max-content) minmax(100px, max-content) minmax(140px, max-content) minmax(120px, max-content) minmax(96px, max-content)`,
   alignItems: 'center',
-  gap: { base: 'xxs', xl: 'lg' } }
+  gap: { base: 'xxs', xl: 'lg' },
+}
 
 export function VoteListTable({ voteList, count, loading }: Props) {
   const isMounted = useIsMounted()
   const {
-    filtersState: { pagination, setPagination } } = useVoteList()
+    filtersState: { pagination, setPagination },
+  } = useVoteList()
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!voteList.length && !!count && count > pagination.pageSize
 
@@ -67,5 +69,5 @@ export function VoteListTable({ voteList, count, loading }: Props) {
         showPagination={showPagination}
       />
     </Card.Root>
-  );
+  )
 }

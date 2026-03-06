@@ -1,5 +1,5 @@
 import { SVGProps, forwardRef } from 'react'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 export interface VebalBenefitsVoteIconProps extends SVGProps<SVGSVGElement> {
   size?: number

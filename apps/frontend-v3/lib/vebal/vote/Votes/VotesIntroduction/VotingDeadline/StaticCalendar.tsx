@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Text } from '@chakra-ui/react'
 import {
   endOfWeek,
   format,
@@ -8,7 +8,8 @@ import {
   isSameDay,
   addWeeks,
   isBefore,
-  startOfToday } from 'date-fns'
+  startOfToday,
+} from 'date-fns'
 import { SystemStyleObject } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { DeadlineDayTooltip } from './DeadlineDayTooltip'
@@ -26,7 +27,8 @@ function getVisibleDays(startDate: Date, endDate: Date) {
 
   return days.map(day => ({
     day,
-    visible: isWithinInterval(day, { start: firstDay, end: lastDay }) }))
+    visible: isWithinInterval(day, { start: firstDay, end: lastDay }),
+  }))
 }
 
 export interface StaticCalendarProps {
@@ -47,7 +49,8 @@ const sharedStyles = {
   letterSpacing: '0',
   fontWeight: 500,
   shadow: '2xl',
-  color: 'font.secondary' }
+  color: 'font.secondary',
+}
 
 export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarProps) {
   const weekDays = getWeekDays()
@@ -72,7 +75,8 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
     if (isDisabled) {
       return {
         bg: 'background.level1',
-        shadow: 'sm' }
+        shadow: 'sm',
+      }
     }
 
     const styles: SystemStyleObject = {}

@@ -12,7 +12,8 @@ import {
   Skeleton,
   Text,
   VStack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 
 export type PoolTransactionsCardHeaderCell = {
   label: string
@@ -22,7 +23,7 @@ export type PoolTransactionsCardHeaderCell = {
 
 export type PoolTransactionsCardProps = {
   title: string
-  isLoading: boolean
+  loading: boolean
   headerCells?: PoolTransactionsCardHeaderCell[]
   headerTemplateColumns: string
   hasNoTransactions: boolean
@@ -54,7 +55,7 @@ const DEFAULT_NO_TRANSACTIONS_STATE = (
 
 export function PoolTransactionsCard({
   title,
-  isLoading,
+  loading,
   headerCells,
   headerTemplateColumns,
   hasNoTransactions,
@@ -65,13 +66,16 @@ export function PoolTransactionsCard({
   cardRef,
   listContainerProps,
   headerGridProps,
-  contentAlignItems = 'flex-start' }: PoolTransactionsCardProps) {
+  contentAlignItems = 'flex-start',
+}: PoolTransactionsCardProps) {
   const cells = headerCells ?? DEFAULT_HEADER_CELLS
-  const noTransactionsState = renderNoTransactions ? renderNoTransactions() : DEFAULT_NO_TRANSACTIONS_STATE
+  const noTransactionsState = renderNoTransactions
+    ? renderNoTransactions()
+    : DEFAULT_NO_TRANSACTIONS_STATE
 
   return (
     <Card.Root ref={cardRef} {...cardProps}>
-      {isLoading ? (
+      {loading ? (
         <Skeleton h="full" w="full" />
       ) : (
         <Box
@@ -116,5 +120,5 @@ export function PoolTransactionsCard({
         </Box>
       )}
     </Card.Root>
-  );
+  )
 }

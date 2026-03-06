@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Text, Button, Center, HStack, VStack, Link } from '@chakra-ui/react';
+import { Box, Text, Button, Center, HStack, VStack, Link } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
@@ -90,7 +90,7 @@ export function FooterCta() {
           top="calc(50% - 350px)"
           width={700}
         ></RadialPattern>
-        <VStack position="relative" pt="md" gap="lg">
+        <VStack gap="lg" position="relative" pt="md">
           <WordsPullUp
             as="h2"
             color="font.primary"
@@ -108,7 +108,7 @@ export function FooterCta() {
               system.
             </Text>
           </Box>
-          <HStack justifyContent="center" ref={ref} gap="md">
+          <HStack gap="md" justifyContent="center" ref={ref}>
             <MotionButton
               animate={isInView ? { opacity: 1 } : {}}
               as={Link}
@@ -143,5 +143,5 @@ export function FooterCta() {
         </VStack>
       </Center>
     </Noise>
-  );
+  )
 }

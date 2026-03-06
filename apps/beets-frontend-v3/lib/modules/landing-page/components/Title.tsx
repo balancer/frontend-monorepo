@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, Heading } from '@chakra-ui/react';
+import { Box, BoxProps, Heading } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -56,13 +56,15 @@ export function Title({ ...rest }: BoxProps) {
         <AnimatePresence mode="wait">
           <motion.div
             animate={{
-              width: widths[words[currentWordIndex].word] || 'auto' }}
+              width: widths[words[currentWordIndex].word] || 'auto',
+            }}
             key="width"
             transition={{
               type: 'spring',
               stiffness: 150,
               damping: 15,
-              mass: 1 }}
+              mass: 1,
+            }}
           >
             {words.map(
               ({ word, color }) =>
@@ -84,7 +86,8 @@ export function Title({ ...rest }: BoxProps) {
           style={{
             visibility: 'hidden',
             position: 'absolute',
-            whiteSpace: 'nowrap' }}
+            whiteSpace: 'nowrap',
+          }}
         />
         {!isMobile && <> on Sonic</>}
       </Heading>

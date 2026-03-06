@@ -1,6 +1,6 @@
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
-import { VStack, Card, HStack, Text } from '@chakra-ui/react';
+import { VStack, Card, HStack, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useStake } from './StakeProvider'
@@ -41,5 +41,5 @@ export function StakePreview() {
         <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
       )}
     </VStack>
-  );
+  )
 }

@@ -1,10 +1,11 @@
-import { Button, Circle, Link, Text } from '@chakra-ui/react';
+import { Button, Circle, Link, Text } from '@chakra-ui/react'
 import { IconType, SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
 
 export function SocialLink({
   title,
   socialNetwork,
-  href }: {
+  href,
+}: {
   title: string
   socialNetwork: IconType
   href: string
@@ -22,5 +23,12 @@ export function SocialLink({
     </Circle>
   )
 
-  return (<Button isExternal asChild><Link href={href}>{icon}<Text color="font.secondary">{title}</Text></Link></Button>);
+  return (
+    <Button asChild>
+      <Link href={href} rel="noopener noreferrer" target="_blank">
+        {icon}
+        <Text color="font.secondary">{title}</Text>
+      </Link>
+    </Button>
+  )
 }

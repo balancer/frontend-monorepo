@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react'
 import { useRef, ReactNode } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
@@ -19,21 +19,23 @@ export function ParallaxImage({
   yStart = '-20%',
   yEnd = '20%',
   transformOrigin = 'bottom',
-  overflow = 'hidden' }: ParallaxImageProps) {
+  overflow = 'hidden',
+}: ParallaxImageProps) {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start end', 'end start'] })
+    offset: ['start end', 'end start'],
+  })
   const y = useTransform(scrollYProgress, [0, 1], [yStart, yEnd])
   const scale = useTransform(scrollYProgress, [0, 1], [scaleStart, scaleEnd])
 
   return (
     <Box h="100%" overflow={overflow} position="relative">
       <div ref={ref}>
-        <Box style={{ y, scale, transformOrigin }} asChild><motion.div>
-            {children}
-          </motion.div></Box>
+        <Box asChild style={{ y, scale, transformOrigin }}>
+          <motion.div>{children}</motion.div>
+        </Box>
       </div>
     </Box>
-  );
+  )
 }

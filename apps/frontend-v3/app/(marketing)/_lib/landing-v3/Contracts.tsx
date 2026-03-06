@@ -1,7 +1,7 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Box, Card, Grid, GridItem, HStack, IconButton, Text, VStack, Link } from '@chakra-ui/react';
+import { Box, Card, Grid, GridItem, HStack, IconButton, Text, VStack, Link } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 // @ts-ignore
@@ -14,7 +14,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 // @ts-ignore
-import { LuMinus, LuPlus } from 'react-icons/lu';
+import { LuMinus, LuPlus } from 'react-icons/lu'
 
 const contracts = [
   {
@@ -31,7 +31,9 @@ const contracts = [
         'Vault integration',
         'Custom logic',
         'Dynamic updating',
-      ] } },
+      ],
+    },
+  },
   {
     title: 'Pool',
     url: 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/',
@@ -45,7 +47,9 @@ const contracts = [
         '80/20 pool',
         'Boosted pool',
         'Liquidity Boostrapping Pools (LBP)',
-      ] } },
+      ],
+    },
+  },
   {
     title: 'Vault',
     url: 'https://docs.balancer.fi/concepts/vault/',
@@ -64,7 +68,9 @@ const contracts = [
         'Swap fee',
         'Live balances',
         'Liquidity invariant approximation',
-      ] } },
+      ],
+    },
+  },
   {
     title: 'Hook',
     url: 'https://docs.balancer.fi/concepts/core-concepts/hooks.html',
@@ -79,13 +85,16 @@ const contracts = [
         'Removes (before/after)',
         'Swaps (before/after)',
         'Dynamic swap fee computation',
-      ] } },
+      ],
+    },
+  },
 ]
 
 function ContractCard({
   contract,
   isExpanded,
-  onToggle }: {
+  onToggle,
+}: {
   contract: (typeof contracts)[number]
   isExpanded: boolean
   onToggle: () => void
@@ -104,11 +113,14 @@ function ContractCard({
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             fontSize="12px"
             h="30px"
-            isRound
             onClick={onToggle}
+            rounded="full"
             size="xs"
             variant="primary"
-            w="30px">{isExpanded ? <LuMinus /> : <LuPlus />}</IconButton>
+            w="30px"
+          >
+            {isExpanded ? <LuMinus /> : <LuPlus />}
+          </IconButton>
         </HStack>
         <VStack alignItems="start" mb="lg">
           <HStack justifyContent="space-between" w="full">
@@ -116,7 +128,7 @@ function ContractCard({
               {contract.title}
             </Text>
             {isExpanded && (
-              <Link href={contract.url} target='_blank' rel='noopener noreferrer'>
+              <Link href={contract.url} rel="noopener noreferrer" target="_blank">
                 <HStack gap={0}>
                   <span>View docs</span>
                   <ArrowUpRight size={16} />
@@ -125,9 +137,13 @@ function ContractCard({
             )}
           </HStack>
 
-          <Text color="font.secondary" css={{
-            textWrap: 'balance'
-          }} w="80%">
+          <Text
+            color="font.secondary"
+            css={{
+              textWrap: 'balance',
+            }}
+            w="80%"
+          >
             {contract.shortDescription}
           </Text>
           {isExpanded && (
@@ -138,7 +154,7 @@ function ContractCard({
         </VStack>
       </VStack>
     </Card.Root>
-  );
+  )
 }
 
 const MotionGridItem = motion(GridItem)
@@ -210,15 +226,18 @@ export function Contracts() {
                     <MotionGridItem
                       animate={{
                         opacity: expandedCard && expandedCard !== contract.title ? 0 : 1,
-                        scale: 1 }}
+                        scale: 1,
+                      }}
                       exit={{
                         opacity: 0,
-                        scale: 0 }}
+                        scale: 0,
+                      }}
                       gridColumn={expandedCard === contract.title ? 'span 2' : 'auto'}
                       gridRow={expandedCard === contract.title ? 'span 2' : 'auto'}
                       initial={{
                         opacity: 1,
-                        scale: 1 }}
+                        scale: 1,
+                      }}
                       key={contract.title}
                       layout
                       order={expandedCard && expandedCard == contract.title ? 0 : index + 1}
@@ -226,13 +245,16 @@ export function Contracts() {
                         display:
                           expandedCard && expandedCard !== contract.title ? 'hidden' : 'block',
                         position:
-                          expandedCard && expandedCard !== contract.title ? 'absolute' : 'relative' }}
+                          expandedCard && expandedCard !== contract.title ? 'absolute' : 'relative',
+                      }}
                       transition={{
                         layout: {
                           type: 'spring',
                           bounce: 0.2,
-                          duration: 0.4 },
-                        opacity: { duration: 0.2 } }}
+                          duration: 0.4,
+                        },
+                        opacity: { duration: 0.2 },
+                      }}
                     >
                       <ContractCard
                         contract={contract}
@@ -250,5 +272,5 @@ export function Contracts() {
         </DefaultPageContainer>
       </Box>
     </Noise>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { Alert, HStack, Spacer } from '@chakra-ui/react';
+import { Alert, HStack, Spacer } from '@chakra-ui/react'
 import { BalAlertButtonLink } from '@repo/lib/shared/components/alerts/BalAlertButtonLink'
 import { AlertTriangle } from 'react-feather'
 import { getPoolPath } from '../pool.utils'
@@ -12,11 +12,14 @@ export function GetFundsWarning() {
     id: pool.address,
     chain: pool.chain,
     type: GqlPoolType.LiquidityBootstrapping,
-    protocolVersion: 3 as const })
+    protocolVersion: 3 as const,
+  })
 
   return (
     <Alert.Root status="warning">
-      <Alert.Indicator asChild><AlertTriangle /></Alert.Indicator>
+      <Alert.Indicator asChild>
+        <AlertTriangle />
+      </Alert.Indicator>
       <HStack>
         <Alert.Title>Access the funds that you raised</Alert.Title>
         <Alert.Description>
@@ -28,5 +31,5 @@ export function GetFundsWarning() {
         Get funds
       </BalAlertButtonLink>
     </Alert.Root>
-  );
+  )
 }

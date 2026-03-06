@@ -1,4 +1,4 @@
-import { Card } from '@chakra-ui/react';
+import { Card } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useWatch } from 'react-hook-form'
@@ -15,11 +15,13 @@ export function PreviewPoolCreationCard({
   children,
   stepTitle,
   hasWarning = false,
-  isConnected = true }: Props) {
+  isConnected = true,
+}: Props) {
   const { poolCreationForm, isBeforeStep, isStep } = usePoolCreationForm()
   const [poolTokens, network] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'network'] })
+    name: ['poolTokens', 'network'],
+  })
   const { priceFor } = useTokens()
 
   const areAllTokensChosen = (poolTokens || []).every(token => token.address)
@@ -72,7 +74,8 @@ export function PreviewPoolCreationCard({
                 WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
                 WebkitMaskComposite: 'xor',
                 maskComposite: 'exclude',
-                pointerEvents: 'none' },
+                pointerEvents: 'none',
+              },
               ...(backgroundGradient && {
                 '&::after': {
                   content: '""',
@@ -82,14 +85,18 @@ export function PreviewPoolCreationCard({
                   background: backgroundGradient,
                   pointerEvents: 'none',
                   zIndex: 0,
-                  opacity: 0.4 } }),
+                  opacity: 0.4,
+                },
+              }),
               '& > *': {
                 position: 'relative',
-                zIndex: 1 } }
+                zIndex: 1,
+              },
+            }
           : undefined
       }
     >
       {children}
     </Card.Root>
-  );
+  )
 }

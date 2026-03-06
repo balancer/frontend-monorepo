@@ -2,12 +2,13 @@ import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BaseVariant, Pool } from '../pool.types'
-import { HStack, Link, Text, useDisclosure } from '@chakra-ui/react';
+import { HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
 import { UnstakeWarningModal } from './UnstakeWarningModal'
 import {
   hasAuraStakedBalance,
   hasBalancerStakedBalance,
-  hasTotalBalance } from '../user-balance.helpers'
+  hasTotalBalance,
+} from '../user-balance.helpers'
 import { useRouter } from 'next/navigation'
 import { chainToSlugMap, getPoolPath } from '../pool.utils'
 import { usePoolMigrations } from './PoolMigrationsProvider'

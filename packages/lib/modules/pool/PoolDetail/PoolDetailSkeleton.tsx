@@ -1,5 +1,5 @@
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { HStack, Skeleton, VStack } from '@chakra-ui/react';
+import { HStack, Skeleton, VStack } from '@chakra-ui/react'
 
 export function PoolDetailSkeleton() {
   return (
@@ -17,5 +17,5 @@ export function PoolDetailSkeleton() {
         <Skeleton h="400px" w="full" />
       </VStack>
     </DefaultPageContainer>
-  );
+  )
 }

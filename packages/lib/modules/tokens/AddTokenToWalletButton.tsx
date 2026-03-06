@@ -1,11 +1,11 @@
-'use client';
-import { IconButton, IconButtonProps } from '@chakra-ui/react';
+'use client'
+import { IconButton, IconButtonProps } from '@chakra-ui/react'
 import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { useWalletClient } from 'wagmi'
 import { useTokens } from './TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ensureError } from '@repo/lib/shared/utils/errors'
-import { LuSquarePlus } from 'react-icons/lu';
+import { LuSquarePlus } from 'react-icons/lu'
 
 export function AddTokenToWalletButton({
   tokenAddress,
@@ -29,7 +29,9 @@ export function AddTokenToWalletButton({
           address: token.address,
           decimals: token.decimals,
           symbol: token.symbol,
-          ...(token.logoURI && { image: token.logoURI }) } })
+          ...(token.logoURI && { image: token.logoURI }),
+        },
+      })
     } catch (e) {
       const error = ensureError(e)
       /*
@@ -47,12 +49,15 @@ export function AddTokenToWalletButton({
       <IconButton
         aria-label={label}
         h="6"
-        isRound
         onClick={addToWallet}
+        rounded="full"
         size="xs"
         variant="ghost"
         w="6"
-        {...rest}><LuSquarePlus /></IconButton>
+        {...rest}
+      >
+        <LuSquarePlus />
+      </IconButton>
     </Tooltip>
-  );
+  )
 }

@@ -6,9 +6,9 @@
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
-import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon';
-import { Icon, Stack, HoverCard, Text } from '@chakra-ui/react';
-import { useChakraContext } from '@chakra-ui/react';
+import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
+import { Icon, Stack, HoverCard, Text } from '@chakra-ui/react'
+import { useChakraContext } from '@chakra-ui/react'
 
 export function MyIncentivesTooltip() {
   const system = useChakraContext()
@@ -21,8 +21,9 @@ export function MyIncentivesTooltip() {
         minWidth={['100px']}
         px="0"
         py="ms"
-        shadow="3xl">
-        <Stack px="sm" gap="sm" w="full">
+        shadow="3xl"
+      >
+        <Stack gap="sm" px="sm" w="full">
           <Text color="font.secondary" fontSize="sm">
             {`Weekly bribes are provided by unaffiliated 3rd parties through the Votemarket platform
             to incentivize liquidity to certain pools. This does not include additional yield that veBAL
@@ -48,5 +49,5 @@ export function MyIncentivesTooltip() {
         {popoverContent}
       </>
     </HoverCard.Root>
-  );
+  )
 }

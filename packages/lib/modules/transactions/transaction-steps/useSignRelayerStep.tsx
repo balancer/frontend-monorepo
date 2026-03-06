@@ -3,7 +3,7 @@
 import { useSignRelayerApproval } from '@repo/lib/modules/relayer/signRelayerApproval.hooks'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { Alert, Button, VStack } from '@chakra-ui/react';
+import { Alert, Button, VStack } from '@chakra-ui/react'
 import { TransactionStep } from './lib'
 import { useMemo } from 'react'
 import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
@@ -17,10 +17,10 @@ export const signRelayerStepTitle = 'Sign relayer'
 interface SignRelayerButtonProps {
   error: string | undefined
   isConnected: boolean
-  isLoading: boolean
+  loading: boolean
   shouldChangeNetwork: boolean
   networkSwitchButtonProps: ReturnType<typeof useChainSwitch>['networkSwitchButtonProps']
-  isDisabled: boolean
+  disabled: boolean
   buttonLabel: string
   signRelayer: () => void
 }
@@ -28,12 +28,13 @@ interface SignRelayerButtonProps {
 function SignRelayerButton({
   error,
   isConnected,
-  isLoading,
+  loading,
   shouldChangeNetwork,
   networkSwitchButtonProps,
-  isDisabled,
+  disabled,
   buttonLabel,
-  signRelayer }: SignRelayerButtonProps) {
+  signRelayer,
+}: SignRelayerButtonProps) {
   return (
     <VStack width="full">
       {error && (
@@ -41,12 +42,12 @@ function SignRelayerButton({
           {error}
         </Alert.Root>
       )}
-      {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
+      {!isConnected && <ConnectWallet loading={loading} width="full" />}
       {shouldChangeNetwork && isConnected && <NetworkSwitchButton {...networkSwitchButtonProps} />}
       {!shouldChangeNetwork && isConnected && (
         <Button
-          disabled={isDisabled}
-          loading={isLoading}
+          disabled={disabled}
+          loading={loading}
           loadingText={buttonLabel}
           onClick={signRelayer}
           size="lg"
@@ -58,14 +59,20 @@ function SignRelayerButton({
         </Button>
       )}
     </VStack>
-  );
+  )
 }
 
 export function useSignRelayerStep(chain: GqlChain): TransactionStep {
   const chainId = getChainId(chain)
   const { isConnected } = useUserAccount()
-  const { signRelayer, signRelayerState, isLoading, isDisabled, buttonLabel, error } =
-    useSignRelayerApproval(chainId)
+  const {
+    signRelayer,
+    signRelayerState,
+    isLoading: loading,
+    isDisabled: disabled,
+    buttonLabel,
+    error,
+  } = useSignRelayerApproval(chainId)
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
   const isComplete = signRelayerState === SignatureState.Completed
@@ -78,31 +85,33 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
       labels: {
         title: 'Sign relayer',
         init: 'Sign relayer',
-        tooltip: 'Sign relayer' },
+        tooltip: 'Sign relayer',
+      },
       isComplete: () => isComplete,
       renderAction: () => (
         <SignRelayerButton
           buttonLabel={buttonLabel}
+          disabled={disabled}
           error={error}
           isConnected={isConnected}
-          isDisabled={isDisabled}
-          isLoading={isLoading}
+          loading={loading}
           networkSwitchButtonProps={networkSwitchButtonProps}
           shouldChangeNetwork={shouldChangeNetwork}
           signRelayer={signRelayer}
         />
-      ) }),
+      ),
+    }),
 
     [
       isComplete,
-      isLoading,
+      loading,
       isConnected,
       error,
       shouldChangeNetwork,
       networkSwitchButtonProps,
-      isDisabled,
+      disabled,
       buttonLabel,
       signRelayer,
     ]
-  );
+  )
 }

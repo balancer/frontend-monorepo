@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertProps, Text } from '@chakra-ui/react';
+import { AlertProps, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { GqlChain } from '../../services/api/generated/graphql'
 import { BlockExplorerLink } from '../BlockExplorerLink'

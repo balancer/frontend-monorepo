@@ -1,7 +1,7 @@
 'use client'
 
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -42,7 +42,8 @@ export function AddLiquidityModal({
     addLiquidityTxHash,
     hasQuoteContext,
     urlTxHash,
-    setInitialHumanAmountsIn } = useAddLiquidity()
+    setInitialHumanAmountsIn,
+  } = useAddLiquidity()
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { redirectToPoolPage } = usePoolRedirect(pool)
@@ -56,7 +57,8 @@ export function AddLiquidityModal({
     txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt })
+    txReceipt,
+  })
 
   useEffect(() => {
     if (isOpen) {
@@ -82,21 +84,22 @@ export function AddLiquidityModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!addLiquidityTxHash && hasQuoteContext} />
         <Dialog.Positioner>
           <Dialog.Content
-            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}
+          >
             {isDesktop && hasQuoteContext && (
               <DesktopStepTracker
                 chain={pool.chain}
@@ -125,8 +128,7 @@ export function AddLiquidityModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

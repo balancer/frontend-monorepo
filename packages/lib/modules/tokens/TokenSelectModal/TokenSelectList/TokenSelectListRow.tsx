@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, HStack, VStack, Text } from '@chakra-ui/react';
+import { Box, BoxProps, HStack, VStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from '../../TokenIcon'
 import { TokenAmount } from '../../token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -49,20 +49,22 @@ export function TokenSelectListRow({
     _hover: isCurrentToken
       ? {}
       : {
-          bg: active ? 'background.level3' : 'background.level2' },
-    transition: 'all 0.2s var(--ease-out-cubic)' }
+          bg: active ? 'background.level3' : 'background.level2',
+        },
+    transition: 'all 0.2s var(--ease-out-cubic)',
+  }
 
   return (
     <Box {...boxStyles} {...rest} role="group">
-      <HStack height="full" justify="space-between" maxW="full" gap="md">
-        <HStack height="full" maxW="full" gap="ms">
+      <HStack gap="md" height="full" justify="space-between" maxW="full">
+        <HStack gap="ms" height="full" maxW="full">
           <Box
             _groupHover={isCurrentToken ? {} : { transform: 'scale(1.075)' }}
             transition="all 0.2s var(--ease-out-cubic)"
           >
             <TokenIcon address={token.address} alt={token.symbol} chain={token.chain} />
           </Box>
-          <VStack align="start" height="full" justify="center" maxW="full" gap="none">
+          <VStack align="start" gap="none" height="full" justify="center" maxW="full">
             <HStack gap="xxs">
               <Text color={active ? 'font.link' : 'font.primary'} fontWeight="bold">
                 {token.symbol}
@@ -86,7 +88,7 @@ export function TokenSelectListRow({
           </VStack>
         </HStack>
         {isConnected && tokenBalance !== '0' && (
-          <VStack align="end" justify="center" gap="none">
+          <VStack align="end" gap="none" justify="center">
             <Text
               color={active ? 'font.link' : 'font.primary'}
               fontWeight="bold"
@@ -101,5 +103,5 @@ export function TokenSelectListRow({
         )}
       </HStack>
     </Box>
-  );
+  )
 }

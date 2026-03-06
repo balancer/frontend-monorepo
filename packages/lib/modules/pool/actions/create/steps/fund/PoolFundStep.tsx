@@ -1,4 +1,4 @@
-import { Box, Heading, VStack } from '@chakra-ui/react';
+import { Box, Heading, VStack } from '@chakra-ui/react'
 import { PoolCreationFormAction } from '../../PoolCreationFormAction'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationRiskCheckboxes } from './PoolCreationRiskCheckboxes'
@@ -19,7 +19,8 @@ export function PoolFundStep() {
         'poolTokens',
         'hasAcceptedTokenWeightsRisk',
         'hasAcceptedPoolCreationRisk',
-      ] }
+      ],
+    }
   )
   const { hasValidationErrors } = useTokenInputsValidation()
 
@@ -36,7 +37,8 @@ export function PoolFundStep() {
   const showTokenAmountInputs = !isReClammPool(poolType) || poolAddress
 
   return (
-    <Box style={{ width: '100%' }} asChild><form>
+    <Box asChild style={{ width: '100%' }}>
+      <form>
         <VStack align="start" gap="lg" w="full">
           <Heading color="font.maxContrast" size="md">
             Seed initial pool liquidity
@@ -62,6 +64,7 @@ export function PoolFundStep() {
 
           <PoolCreationFormAction disabled={isDisabled} />
         </VStack>
-      </form></Box>
-  );
+      </form>
+    </Box>
+  )
 }

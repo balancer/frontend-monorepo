@@ -1,7 +1,7 @@
-'use client';
+'use client'
 import React from 'react'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
-import { Button, Heading, Flex, Box, Center, Text, Link } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+import { Button, Heading, Flex, Box, Center, Text, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../other/Picture'
@@ -12,6 +12,10 @@ export function MevCapturePromoBanner() {
   return (
     <Box rounded="lg" shadow="2xl">
       <Box
+        css={{
+          width: '100% !important',
+          maxWidth: '100% !important',
+        }}
         height={{ base: '100%', md: '132px' }}
         maxW="100%"
         overflow="hidden"
@@ -22,10 +26,6 @@ export function MevCapturePromoBanner() {
             ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
             : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
         }
-        css={{
-          width: '100% !important',
-          maxWidth: '100% !important'
-        }}
         width="full"
       >
         <Box height="100%" position="absolute" width="100%" zIndex="-1">
@@ -57,14 +57,14 @@ export function MevCapturePromoBanner() {
               <Box>
                 <Heading
                   color={colorMode === 'dark' ? '#fff' : '#000'}
+                  css={{
+                    textWrap: 'pretty',
+                  }}
                   fontSize={{ base: '18px', md: '22px', lg: '24px' }}
                   fontWeight="bold"
                   letterSpacing="-0.7px"
                   lineHeight="1.2"
                   pb="ms"
-                  css={{
-                    textWrap: 'pretty'
-                  }}
                 >
                   New pools that capture MEV for you
                 </Heading>
@@ -72,14 +72,14 @@ export function MevCapturePromoBanner() {
               <Box>
                 <Text
                   color={colorMode === 'dark' ? 'font.maxContrast' : '#222'}
+                  css={{
+                    textWrap: 'balance',
+                  }}
                   fontSize={{ base: 'sm', md: 'md' }}
                   fontWeight="medium"
                   lineHeight="1.2"
                   maxW="600px"
                   opacity="0.95"
-                  css={{
-                    textWrap: 'balance'
-                  }}
                 >
                   Introducing the MEV Capture Hook—a new revenue stream for LPs on Base.
                 </Text>
@@ -90,35 +90,45 @@ export function MevCapturePromoBanner() {
                 _hover={{
                   bg: 'gradient.sandDark',
                   color: '#000',
-                  borderColor: colorMode === 'dark' ? 'font.light' : 'font.light' }}
+                  borderColor: colorMode === 'dark' ? 'font.light' : 'font.light',
+                }}
+                asChild
                 borderColor="font.maxContrast"
                 color="font.maxContrast"
                 cursor="hand"
                 flex="1"
                 gap="xs"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}
-                isExternal
                 py="sm"
                 role="group"
                 rounded="full"
                 size="md"
                 variant="outline"
                 w="132px"
-                asChild><Link
-                  href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295">Learn more
-                                  <Box
+              >
+                <Link
+                  href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Learn more
+                  <Box
                     _groupHover={{
-                      transform: 'translateX(2px)' }}
+                      transform: 'translateX(2px)',
+                    }}
                     as="span"
                     transition="transform 0.2s"
                   >
                     <ArrowUpRight size="14px" />
                   </Box>
-                </Link></Button>
+                </Link>
+              </Button>
               <Button
                 _hover={{
                   bg: colorMode === 'dark' ? 'gradient.dawnDark' : 'gradient.dawnDark',
-                  color: colorMode === 'dark' ? '#000' : '#000' }}
+                  color: colorMode === 'dark' ? '#000' : '#000',
+                }}
+                asChild
                 bg="font.maxContrast"
                 color={colorMode === 'dark' ? 'font.dark' : '#fff'}
                 cursor="hand"
@@ -128,12 +138,13 @@ export function MevCapturePromoBanner() {
                 rounded="full"
                 size="md"
                 w="132px"
-                asChild><NextLink href="/pools?poolTags=MevCapture">View pools
-                              </NextLink></Button>
+              >
+                <NextLink href="/pools?poolTags=MevCapture">View pools</NextLink>
+              </Button>
             </Flex>
           </Flex>
         </Center>
       </Box>
     </Box>
-  );
+  )
 }

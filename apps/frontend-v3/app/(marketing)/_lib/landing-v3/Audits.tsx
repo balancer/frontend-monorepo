@@ -181,10 +181,10 @@ const AuditCard = memo(function AuditCard({
           _groupHover={ICON_BUTTON_HOVER_STYLES}
           aria-label="View report"
           h="40px"
-          isRound
           opacity={0}
           position="absolute"
           right="md"
+          rounded="full"
           shadow="2xl"
           top="md"
           transition="opacity 0.3s ease"
@@ -238,8 +238,12 @@ export function Audits() {
                 text="Audited by the best"
               />
             </VStack>
-            <Button asChild isExternal variant="secondary">
-              <Link href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits">
+            <Button asChild variant="secondary">
+              <Link
+                href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 View reports
                 {ARROW_ICON}
               </Link>

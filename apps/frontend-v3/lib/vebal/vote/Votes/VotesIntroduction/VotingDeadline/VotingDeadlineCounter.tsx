@@ -1,4 +1,4 @@
-import { HStack, VStack, Text, Box } from '@chakra-ui/react';
+import { HStack, VStack, Text, Box } from '@chakra-ui/react'
 import { useCurrentDate, useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
 import { differenceInMinutes, format } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
@@ -38,14 +38,14 @@ export function VotingDeadlineCounter() {
           </ReminderButton>
           <CalendarReminderModal
             deadline={deadline}
-            open={isCalendarReminderOpen}
             onClose={() => setIsCalendarReminderOpen(false)}
+            open={isCalendarReminderOpen}
           />
         </HStack>
         <HStack gap="sm" w="full">
           {counters.map(counter => (
             <Box flex="1" key={counter.title}>
-              <VStack position="relative" px="ms" py="13px" rounded="lg" shadow="2xl" gap="sm">
+              <VStack gap="sm" position="relative" px="ms" py="13px" rounded="lg" shadow="2xl">
                 <Box
                   h="full"
                   inset={0}
@@ -97,5 +97,5 @@ export function VotingDeadlineCounter() {
         </HStack>
       </VStack>
     </VotingDeadlineContainer>
-  );
+  )
 }

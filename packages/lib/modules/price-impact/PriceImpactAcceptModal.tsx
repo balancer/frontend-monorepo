@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, VStack, Text, Button, Input, Code, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, VStack, Text, Button, Input, Code, Dialog, Portal } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDebounce } from '@repo/lib/shared/hooks/useDebounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
@@ -37,16 +37,16 @@ export function PriceImpactAcceptModal({
 
   return (
     <Dialog.Root
-      placement='center'
       open={isOpen}
+      placement="center"
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <Dialog.Backdrop bg="blackAlpha.900" />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -74,8 +74,7 @@ export function PriceImpactAcceptModal({
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

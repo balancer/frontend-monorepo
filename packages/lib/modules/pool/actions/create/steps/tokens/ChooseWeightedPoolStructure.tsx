@@ -1,6 +1,6 @@
 import { type Control, Controller, useWatch } from 'react-hook-form'
 import { WEIGHTED_POOL_STRUCTURES, WeightedPoolStructure } from '../../constants'
-import { VStack, Heading, RadioGroup, Stack, Text } from '@chakra-ui/react';
+import { VStack, Heading, RadioGroup, Stack, Text } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolCreationForm } from '../../types'
 import { isCowPool } from '../../helpers'
@@ -9,7 +9,8 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'poolType'] })
+    name: ['poolTokens', 'poolType'],
+  })
 
   const weightedPoolStructures = WEIGHTED_POOL_STRUCTURES.filter(structure => {
     return isCowPool(poolType) ? structure !== WeightedPoolStructure.Custom : true
@@ -49,7 +50,8 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
               updatePoolTokenWeights(details.value as WeightedPoolStructure)
               field.onChange(details.value)
             }}
-            value={String(field.value)}>
+            value={String(field.value)}
+          >
             <Stack gap={3}>
               {weightedPoolStructures.map(structure => (
                 <RadioGroup.Item key={structure} size="lg" value={String(structure)}>
@@ -67,8 +69,9 @@ export function ChooseWeightedPoolStructure({ control }: { control: Control<Pool
           </RadioGroup.Root>
         )}
         rules={{
-          required: 'Please select a pool type' }}
+          required: 'Please select a pool type',
+        }}
       />
     </VStack>
-  );
+  )
 }

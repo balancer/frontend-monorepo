@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanAmount, Path } from '@balancer/sdk'
@@ -10,7 +10,8 @@ import {
   useDisclosure,
   IconButton,
   Button,
-  Box } from '@chakra-ui/react';
+  Box,
+} from '@chakra-ui/react'
 import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { useRef, useState } from 'react'
 import { useSwap } from './SwapProvider'
@@ -59,7 +60,8 @@ export function SwapForm({
   hasDisabledInputs,
   nextButtonText,
   customToken,
-  customTokenUsdPrice }: Props) {
+  customTokenUsdPrice,
+}: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
   const {
@@ -88,7 +90,8 @@ export function SwapForm({
     switchTokens,
     setNeedsToAcceptHighPI,
     resetSwapAmounts,
-    replaceUrlPath } = useSwap()
+    replaceUrlPath,
+  } = useSwap()
 
   const [copiedDeepLink, setCopiedDeepLink] = useState(false)
   const tokenSelectDisclosure = useDisclosure()
@@ -199,11 +202,13 @@ export function SwapForm({
         _disabled: { opacity: 1 },
         isDisabled: true,
         cursor: 'default',
-        _hover: {} }
+        _hover: {},
+      }
     : {
         'aria-label': 'Switch tokens',
         onClick: switchTokens,
-        icon: <Repeat size={16} /> }
+        icon: <Repeat size={16} />,
+      }
 
   const { isContractWallet, isLoading: isLoadingContractWallet } = useContractWallet()
   const isSafeAccount = useIsSafeAccount()
@@ -212,14 +217,16 @@ export function SwapForm({
     ? buildCowSwapUrl({
         chain: selectedChain,
         tokenInAddress: tokenIn.address,
-        tokenOutAddress: tokenOut.address })
+        tokenOutAddress: tokenOut.address,
+      })
     : undefined
 
   return (
     <FadeInOnView>
       <Center h="full" maxW="lg" mx="auto" position="relative" w="full">
         <Card.Root rounded="xl">
-          <Card.Header justify="space-between" w="full" zIndex={11} asChild><HStack>
+          <Card.Header asChild justify="space-between" w="full" zIndex={11}>
+            <HStack>
               <span>
                 {isLbpSwap
                   ? `${isLbpProjectTokenBuy ? 'Buy' : 'Sell'} $${customToken?.symbol}`
@@ -238,8 +245,10 @@ export function SwapForm({
 
                 <TransactionSettings size="xs" />
               </HStack>
-            </HStack></Card.Header>
-          <Card.Body align="start" asChild><VStack>
+            </HStack>
+          </Card.Header>
+          <Card.Body align="start" asChild>
+            <VStack>
               <VStack gap="md" w="full">
                 {isLbpSwap && <LbpSwapCard />}
                 {/* an LBP swap is also a pool swap but not the other way around */}
@@ -264,25 +273,27 @@ export function SwapForm({
                     address={tokenIn.address}
                     aria-label="TokenIn"
                     chain={selectedChain}
-                    isDisabled={hasDisabledInputs}
+                    disabled={hasDisabledInputs}
                     onChange={e => setTokenInAmount(e.currentTarget.value as HumanAmount)}
                     ref={finalRefTokenIn}
                     value={tokenIn.amount}
                     {...(!isLbpSwap && {
-                      onToggleTokenClicked: () => openTokenSelectModal('tokenIn') })}
+                      onToggleTokenClicked: () => openTokenSelectModal('tokenIn'),
+                    })}
                     {...(isLbpSwap &&
                       tokenIn.address === customToken?.address && {
                         apiToken: customToken,
-                        customUsdPrice: customTokenUsdPrice })}
+                        customUsdPrice: customTokenUsdPrice,
+                      })}
                   />
                   <Box position="relative" zIndex={10}>
                     <IconButton
                       fontSize="2xl"
                       h="8"
-                      isRound
                       ml="-4"
                       mt="-4"
                       position="absolute"
+                      rounded="full"
                       size="sm"
                       variant="tertiary"
                       w="8"
@@ -294,8 +305,8 @@ export function SwapForm({
                     aria-label="TokenOut"
                     chain={selectedChain}
                     disableBalanceValidation
+                    disabled={hasDisabledInputs}
                     hasPriceImpact
-                    isDisabled={hasDisabledInputs}
                     isLoadingPriceImpact={
                       simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                     }
@@ -304,15 +315,18 @@ export function SwapForm({
                     priceImpactProps={{
                       priceImpact,
                       priceImpactColor,
-                      priceImpactLevel }}
+                      priceImpactLevel,
+                    }}
                     ref={finalRefTokenOut}
                     value={tokenOut.amount}
                     {...(!isLbpSwap && {
-                      onToggleTokenClicked: () => openTokenSelectModal('tokenOut') })}
+                      onToggleTokenClicked: () => openTokenSelectModal('tokenOut'),
+                    })}
                     {...(isLbpSwap &&
                       tokenOut.address === customToken?.address && {
                         apiToken: customToken,
-                        customUsdPrice: customTokenUsdPrice })}
+                        customUsdPrice: customTokenUsdPrice,
+                      })}
                   />
                 </VStack>
                 {!simulationQuery.isError && (
@@ -324,7 +338,7 @@ export function SwapForm({
                       accordionPanelComponent={<SwapDetails />}
                       action="swap"
                       cowLink={cowLink}
-                      isDisabled={!simulationQuery.data}
+                      disabled={!simulationQuery.data}
                       setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                     />
 
@@ -346,7 +360,8 @@ export function SwapForm({
                   <SwapSimulationError errorMessage={simulationQuery.error?.message} />
                 ) : null}
               </VStack>
-            </VStack></Card.Body>
+            </VStack>
+          </Card.Body>
           <Card.Footer>
             {isConnected ? (
               <Tooltip content={isDisabled ? disabledReason : ''}>
@@ -365,7 +380,7 @@ export function SwapForm({
               </Tooltip>
             ) : (
               <ConnectWallet
-                isLoading={isLoading}
+                loading={isLoading}
                 loadingText={loadingText}
                 size="lg"
                 variant="primary"
@@ -404,5 +419,5 @@ export function SwapForm({
         onOpen={previewModalDisclosure.onOpen}
       />
     </FadeInOnView>
-  );
+  )
 }

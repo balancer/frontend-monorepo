@@ -1,4 +1,4 @@
-import { HStack, Text, Popover, HoverCard, Portal, VStack } from '@chakra-ui/react';
+import { HStack, Text, HoverCard, Portal, VStack } from '@chakra-ui/react'
 import { VoteCapIcon } from '@repo/lib/shared/components/icons/VoteCapIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -47,5 +47,5 @@ export function VoteCapTooltip({ relativeWeightCap, votesState, usePortal = true
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
       </>
     </HoverCard.Root>
-  );
+  )
 }

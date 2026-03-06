@@ -1,4 +1,4 @@
-import { Box, Button, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { format } from 'date-fns'
 import { useLst } from '../LstProvider'
@@ -31,7 +31,8 @@ export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...re
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.level0' }}
+          bg: 'background.level0',
+        }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         rounded="md"
@@ -69,5 +70,5 @@ export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...re
         </Grid>
       </Box>
     </FadeInOnView>
-  );
+  )
 }

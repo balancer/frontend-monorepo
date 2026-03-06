@@ -10,31 +10,29 @@ export interface TooltipProps extends ChakraTooltip.RootProps {
   label?: ReactNode // v2 compat alias for content
 }
 
-export const Tooltip = forwardRef<HTMLDivElement, PropsWithChildren<TooltipProps>>(
-  function Tooltip(
-    { children, showArrow = true, portalled = true, content, label, disabled, ...rest },
-    ref
-  ) {
-    const tooltipContent = content ?? label
+export const Tooltip = forwardRef<HTMLDivElement, PropsWithChildren<TooltipProps>>(function Tooltip(
+  { children, showArrow = true, portalled = true, content, label, disabled, ...rest },
+  ref
+) {
+  const tooltipContent = content ?? label
 
-    if (disabled || !tooltipContent) return <>{children}</>
+  if (disabled || !tooltipContent) return <>{children}</>
 
-    return (
-      <ChakraTooltip.Root {...rest}>
-        <ChakraTooltip.Trigger asChild>{children}</ChakraTooltip.Trigger>
-        <Portal disabled={!portalled}>
-          <ChakraTooltip.Positioner>
-            <ChakraTooltip.Content ref={ref}>
-              {showArrow && (
-                <ChakraTooltip.Arrow>
-                  <ChakraTooltip.ArrowTip />
-                </ChakraTooltip.Arrow>
-              )}
-              {tooltipContent}
-            </ChakraTooltip.Content>
-          </ChakraTooltip.Positioner>
-        </Portal>
-      </ChakraTooltip.Root>
-    )
-  }
-)
+  return (
+    <ChakraTooltip.Root {...rest}>
+      <ChakraTooltip.Trigger asChild>{children}</ChakraTooltip.Trigger>
+      <Portal disabled={!portalled}>
+        <ChakraTooltip.Positioner>
+          <ChakraTooltip.Content ref={ref}>
+            {showArrow && (
+              <ChakraTooltip.Arrow>
+                <ChakraTooltip.ArrowTip />
+              </ChakraTooltip.Arrow>
+            )}
+            {tooltipContent}
+          </ChakraTooltip.Content>
+        </ChakraTooltip.Positioner>
+      </Portal>
+    </ChakraTooltip.Root>
+  )
+})

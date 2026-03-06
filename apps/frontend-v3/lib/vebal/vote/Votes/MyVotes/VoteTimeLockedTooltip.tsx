@@ -1,4 +1,4 @@
-import { HStack, Popover, HoverCard, Portal, Text, VStack } from '@chakra-ui/react';
+import { HStack, HoverCard, Portal, Text, VStack } from '@chakra-ui/react'
 import { WEIGHT_VOTE_DELAY } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { TimeLockIcon } from '@repo/lib/shared/components/icons/TimeLockIcon'
 import { oneDayInMs } from '@repo/lib/shared/utils/time'
@@ -37,5 +37,5 @@ export function VoteTimeLockedTooltip({ timeLockedEndDate, usePortal }: Props) {
       </HoverCard.Trigger>
       {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
     </HoverCard.Root>
-  );
+  )
 }

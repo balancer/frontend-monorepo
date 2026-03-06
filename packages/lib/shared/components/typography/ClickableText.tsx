@@ -1,4 +1,4 @@
-import { Text, TextProps } from '@chakra-ui/react';
+import { Text, TextProps } from '@chakra-ui/react'
 
 export type ClickableTextProps = TextProps
 

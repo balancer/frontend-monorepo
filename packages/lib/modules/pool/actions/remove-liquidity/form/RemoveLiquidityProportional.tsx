@@ -1,7 +1,7 @@
 'use client'
 
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
-import { Card, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { Card, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens/token.helpers'
@@ -24,7 +24,8 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
     setWethIsEth,
     simulationQuery,
     priceImpactQuery,
-    setWrapUnderlyingByIndex } = useRemoveLiquidity()
+    setWrapUnderlyingByIndex,
+  } = useRemoveLiquidity()
   // Array with the underlying and wrapped tokens to be selected in WrappedOrUnderlyingSelectModal
   const [wrappedAndUnderlying, setWrappedAndUnderlying] = useState<ApiToken[] | undefined>()
   const nativeTokenSelectDisclosure = useDisclosure()
@@ -90,15 +91,16 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
               ? {
                   pool,
                   logoURI: token.logoURI || '',
-                  customUsdPrice: priceFor(token.address as Address, pool.chain) }
+                  customUsdPrice: priceFor(token.address as Address, pool.chain),
+                }
               : {}
 
             return (
               <TokenRow
                 address={token.address as Address}
                 chain={pool.chain}
-                isLoading={isLoading}
                 key={token.address}
+                loading={isLoading}
                 value={amountOutForToken(token.address as Address)}
                 {...lbpProps}
                 {...(!isInRecoveryMode ? { toggleTokenSelect: getToggleTokenCallback(token) } : {})}
@@ -128,5 +130,5 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
         />
       )}
     </>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Popover, Link, Portal, useDisclosure } from '@chakra-ui/react';
+import { Popover, Link, Portal, useDisclosure } from '@chakra-ui/react'
 import { BuildPopover } from './BuildPopover'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
@@ -44,9 +44,13 @@ export function BuildNavLink() {
   }
 
   return (
-    <Popover.Root closeOnInteractOutside={false} open={open} positioning={{
-      placement: 'bottom'
-    }}>
+    <Popover.Root
+      closeOnInteractOutside={false}
+      open={open}
+      positioning={{
+        placement: 'bottom',
+      }}
+    >
       <Popover.Trigger asChild>
         <Link
           bg="transparent"
@@ -65,7 +69,8 @@ export function BuildNavLink() {
             _focus={{ borderColor: 'transparent !important' }}
             ref={popoverRef}
             rounded="lg"
-            w="fit-content">
+            w="fit-content"
+          >
             <Popover.Arrow bg="background.level3" />
             <Popover.Body p={{ base: 'ms', md: 'md' }}>
               <BuildPopover closePopover={onClose} />
@@ -74,5 +79,5 @@ export function BuildNavLink() {
         </Popover.Positioner>
       </Portal>
     </Popover.Root>
-  );
+  )
 }

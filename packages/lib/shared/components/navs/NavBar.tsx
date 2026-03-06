@@ -80,8 +80,7 @@ function NavLinks({
                   href={link.href}
                   onClick={() => handleLinkClick(link.analyticsEvent)}
                   prefetch
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  {...(link.isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   <HStack gap="xxs">
                     <Box as="span">{link.label}</Box>

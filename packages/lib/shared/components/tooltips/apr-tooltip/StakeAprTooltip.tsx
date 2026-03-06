@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack } from '@chakra-ui/react';
+import { Card, HStack, Text, VStack } from '@chakra-ui/react'
 import BaseAprTooltip from './BaseAprTooltip'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useCallback } from 'react'
@@ -61,7 +61,7 @@ function StakeAprTooltip({ pool, totalUsdValue, weeklyRewards }: Props) {
         </VStack>
       </Card.Root>
     </BaseAprTooltip>
-  );
+  )
 }
 
 export default StakeAprTooltip

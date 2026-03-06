@@ -1,4 +1,4 @@
-import { Card, Flex, Heading, HStack, Progress, Stack, Text, VStack } from '@chakra-ui/react';
+import { Card, Flex, Heading, HStack, Progress, Stack, Text, VStack } from '@chakra-ui/react'
 import { fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { formatUserVebal, useVebalUserStats } from './VebalStats/useVeBalUserStats'
 import { useMaxAmountOfVeBAL } from './useMaxAmountOfVeBal'
@@ -52,7 +52,8 @@ export function VeBalPotentialBar() {
             rounded="lg"
             size="sm"
             value={String(progressPercentage)}
-            w="full">
+            w="full"
+          >
             <Progress.Track>
               <Progress.Range />
             </Progress.Track>
@@ -62,5 +63,5 @@ export function VeBalPotentialBar() {
         </HStack>
       </Card.Root>
     </VStack>
-  );
+  )
 }

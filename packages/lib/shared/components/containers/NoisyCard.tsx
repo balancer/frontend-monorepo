@@ -1,5 +1,5 @@
-import { Box, BoxProps, CardProps, chakra } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Box, BoxProps, CardProps, chakra } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { ReactNode, MouseEvent } from 'react'
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 
@@ -16,7 +16,8 @@ export function NoisyCard({
   children,
   cardProps = {},
   contentProps = {},
-  shadowContainerProps = {} }: NoisyCardProps) {
+  shadowContainerProps = {},
+}: NoisyCardProps) {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
@@ -27,7 +28,8 @@ export function NoisyCard({
   }
 
   const colorMode = useThemeColorMode()
-  const gradientColor = colorMode === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.4)'
+  const gradientColor =
+    colorMode === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.4)'
 
   const gradient = useMotionTemplate`
     radial-gradient(
@@ -45,8 +47,10 @@ export function NoisyCard({
       rounded="sm"
       width="full"
       {...cardProps}
+      asChild
       role="group"
-      asChild><motion.div onMouseMove={handleMouseMove}>
+    >
+      <motion.div onMouseMove={handleMouseMove}>
         <MotionBox
           _groupHover={{ opacity: 1 }}
           borderRadius="xl"
@@ -56,7 +60,8 @@ export function NoisyCard({
           pointerEvents="none"
           position="absolute"
           style={{
-            background: gradient }}
+            background: gradient,
+          }}
           transition="opacity 300ms"
           w="full"
           zIndex="0"
@@ -78,6 +83,7 @@ export function NoisyCard({
         >
           {children}
         </Box>
-      </motion.div></Box>
-  );
+      </motion.div>
+    </Box>
+  )
 }

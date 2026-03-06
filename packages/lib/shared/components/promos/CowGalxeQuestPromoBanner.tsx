@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react';
+import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 
@@ -11,16 +11,16 @@ export function CowGalxeQuestPromoBanner() {
       background={`url('/images/promos/cow-galxe-quest/bg.jpeg') no-repeat center center`}
       backgroundSize="cover"
       boxShadow="lg"
+      css={{
+        width: '100% !important',
+        maxWidth: '100% !important',
+      }}
       h={{ base: '200px', sm: '140px' }}
       height="140px"
       maxW="100%"
       overflow="hidden"
       position="relative"
       rounded="lg"
-      css={{
-        width: '100% !important',
-        maxWidth: '100% !important'
-      }}
       width="full"
     >
       <Center className="copy" h="100%" zIndex="1">
@@ -60,6 +60,7 @@ export function CowGalxeQuestPromoBanner() {
           </Flex>
           <Button
             _hover={{ bg: '#fff', color: '#000' }}
+            asChild
             bg="font.light"
             color="font.dark"
             cursor="hand"
@@ -70,17 +71,20 @@ export function CowGalxeQuestPromoBanner() {
             shadow="2xl"
             size="lg"
             w="max-content"
-            asChild><NextLink href="https://app.galxe.com/quest/Balancer/GC863txfST">Join the quest
-                          <Box
+          >
+            <NextLink href="https://app.galxe.com/quest/Balancer/GC863txfST">
+              Join the quest
+              <Box
                 _groupHover={{ transform: ' translateX(1.5px)' }}
                 pl="xs"
                 transition="all 0.2s var(--ease-out-cubic)"
               >
                 <ArrowUpRight size={14} style={{ display: 'inline' }} />
               </Box>
-            </NextLink></Button>
+            </NextLink>
+          </Button>
         </Flex>
       </Center>
     </Box>
-  );
+  )
 }

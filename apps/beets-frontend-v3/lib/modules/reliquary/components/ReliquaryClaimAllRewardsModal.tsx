@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -45,22 +45,28 @@ export function ReliquaryClaimAllRewardsModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          onCloseModal();
+          onCloseModal()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!claimTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
-            {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
-            <TransactionModalHeader chain={pool.chain} label="Claim all rewards" txHash={claimTxHash} />
+            {isDesktop && (
+              <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
+            )}
+            <TransactionModalHeader
+              chain={pool.chain}
+              label="Claim all rewards"
+              txHash={claimTxHash}
+            />
             <Dialog.CloseTrigger />
             <Dialog.Body>
               <ReliquaryClaimAllSummary
@@ -77,8 +83,7 @@ export function ReliquaryClaimAllRewardsModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

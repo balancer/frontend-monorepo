@@ -1,6 +1,6 @@
-'use client';
-import { Box, VStack, Card } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+'use client'
+import { Box, VStack, Card } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { PropsWithChildren, ReactNode } from 'react'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { FocussedActionNav } from '@repo/lib/shared/components/layout/FocussedActionNav'
@@ -20,7 +20,8 @@ export function FocussedActionLayout({
   redirectPath,
   leftSlot,
   chain,
-  closeButton }: ModalLayoutProps) {
+  closeButton,
+}: ModalLayoutProps) {
   const colorMode = useThemeColorMode()
   const bg = colorMode === 'dark' ? 'blackAlpha.700' : 'blackAlpha.800'
   const blur = colorMode === 'dark' ? 'blur(5px)' : 'blur(8px)'
@@ -56,5 +57,5 @@ export function FocussedActionLayout({
         </Box>
       </VStack>
     </Box>
-  );
+  )
 }

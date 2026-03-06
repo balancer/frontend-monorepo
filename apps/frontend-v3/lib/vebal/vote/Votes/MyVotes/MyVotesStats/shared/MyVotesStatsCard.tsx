@@ -1,4 +1,4 @@
-import { Card, HStack, Text, Box, VStack } from '@chakra-ui/react';
+import { Card, HStack, Text, Box, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 interface HeaderCardProps {
@@ -22,20 +22,25 @@ const cardSpecialStyles = {
     WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
     WebkitMaskComposite: 'xor',
     maskComposite: 'exclude',
-    pointerEvents: 'none' } }
+    pointerEvents: 'none',
+  },
+}
 
 const cardExpiredStyles = {
   background:
-    'radial-gradient(123.13% 233.05% at 50% 50%, rgba(244, 137, 117, 0) 0%, rgba(244, 137, 117, 0.15) 100%)' }
+    'radial-gradient(123.13% 233.05% at 50% 50%, rgba(244, 137, 117, 0) 0%, rgba(244, 137, 117, 0.15) 100%)',
+}
 
 function getCardProps(variant: HeaderCardProps['variant']) {
   switch (variant) {
     case 'special':
       return {
-        sx: cardSpecialStyles }
+        sx: cardSpecialStyles,
+      }
     case 'expired':
       return {
-        sx: cardExpiredStyles }
+        sx: cardExpiredStyles,
+      }
     default:
       return {}
   }
@@ -45,19 +50,20 @@ export function MyVotesStatsCard({
   headerText,
   variant = 'default',
   leftContent,
-  rightContent }: HeaderCardProps) {
+  rightContent,
+}: HeaderCardProps) {
   const cardProps = getCardProps(variant)
   return (
     <Card.Root h="full" w="full" {...cardProps}>
-      <VStack align="start" h="full" justifyContent="space-between" gap="ms" w="full">
+      <VStack align="start" gap="ms" h="full" justifyContent="space-between" w="full">
         <Box as="span" color="font.secondary" fontSize="sm" fontWeight="medium">
           {headerText}
         </Box>
         <HStack
           alignItems="center"
+          gap="sm"
           justifyContent="space-between"
           minHeight="36px"
-          gap="sm"
           w="full"
         >
           {leftContent || <Text color="font.maxContrast">&mdash;</Text>}
@@ -65,5 +71,5 @@ export function MyVotesStatsCard({
         </HStack>
       </VStack>
     </Card.Root>
-  );
+  )
 }

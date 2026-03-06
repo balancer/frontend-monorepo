@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Alert, Button, HStack, Link } from '@chakra-ui/react';
+import { Box, Text, Flex, Alert, Button, HStack, Link } from '@chakra-ui/react'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { ArrowUpRight } from 'react-feather'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -8,7 +8,7 @@ export function MerklAlert() {
     <Alert.Root shadow="2xl" status="info" width="full">
       <MerklTitle />
     </Alert.Root>
-  );
+  )
 }
 
 function MerklTitle() {
@@ -32,19 +32,30 @@ function MerklTitle() {
         _hover={{
           bg: 'font.dark',
           color: 'white',
-          textDecoration: 'none' }}
+          textDecoration: 'none',
+        }}
+        asChild
         borderColor="font.dark"
         color="font.dark"
         cursor="pointer"
-        isExternal
         ml={{ base: '32px', md: 'ms' }}
         role="group"
         size="xs"
         variant="outline"
         width="120px"
-        asChild><Link href="https://app.merkl.xyz/"><Text _groupHover={{ color: 'white' }} color="font.dark" fontSize="14px" fontWeight="bold">
-              Learn more
-            </Text><ArrowUpRight size="14" /></Link></Button>
+      >
+        <Link href="https://app.merkl.xyz/" rel="noopener noreferrer" target="_blank">
+          <Text
+            _groupHover={{ color: 'white' }}
+            color="font.dark"
+            fontSize="14px"
+            fontWeight="bold"
+          >
+            Learn more
+          </Text>
+          <ArrowUpRight size="14" />
+        </Link>
+      </Button>
     </Flex>
-  );
+  )
 }

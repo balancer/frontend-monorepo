@@ -1,4 +1,4 @@
-import { Card, VStack, Text, SimpleGrid, Box, HStack, Button, Separator } from '@chakra-ui/react';
+import { Card, VStack, Text, SimpleGrid, Box, HStack, Button, Separator } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
@@ -12,7 +12,8 @@ export function PreviewGyroEclpConfig() {
     usePoolCreationForm()
   const [alpha, beta, peakPrice] = useWatch({
     control: eclpConfigForm.control,
-    name: ['alpha', 'beta', 'peakPrice'] })
+    name: ['alpha', 'beta', 'peakPrice'],
+  })
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const { options } = useEclpChart()
@@ -21,15 +22,18 @@ export function PreviewGyroEclpConfig() {
     {
       color: 'purple.400',
       label: 'Lower bound',
-      value: alpha ? fNumCustom(alpha, NUM_FORMAT) : '-' },
+      value: alpha ? fNumCustom(alpha, NUM_FORMAT) : '-',
+    },
     {
       color: 'green.400',
       label: 'Peak price',
-      value: peakPrice ? fNumCustom(peakPrice, NUM_FORMAT) : '-' },
+      value: peakPrice ? fNumCustom(peakPrice, NUM_FORMAT) : '-',
+    },
     {
       color: 'orange.400',
       label: 'Upper bound',
-      value: beta ? fNumCustom(beta, NUM_FORMAT) : '-' },
+      value: beta ? fNumCustom(beta, NUM_FORMAT) : '-',
+    },
   ]
   const tokenSymbols = poolTokens.map(token => token.data?.symbol).filter(Boolean)
   const tokenSymbolsString = tokenSymbols.join(' / ')
@@ -84,5 +88,5 @@ export function PreviewGyroEclpConfig() {
         </HStack>
       </VStack>
     </Card.Root>
-  );
+  )
 }

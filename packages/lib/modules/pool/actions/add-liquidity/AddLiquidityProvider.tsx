@@ -15,7 +15,8 @@ import {
   injectNativeAsset,
   replaceWrappedWithNativeAsset,
   requiresProportionalInput,
-  supportsNestedActions } from '../LiquidityActionHelpers'
+  supportsNestedActions,
+} from '../LiquidityActionHelpers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
@@ -24,7 +25,8 @@ import { AddLiquidityHandler } from './handlers/AddLiquidity.handler'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import {
   AddLiquidityStepsParams,
-  useAddLiquiditySteps as useAddLiquidityStepsBase } from './useAddLiquiditySteps'
+  useAddLiquiditySteps as useAddLiquidityStepsBase,
+} from './useAddLiquiditySteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
@@ -48,10 +50,11 @@ type AddLiquidityStepsHook = (
 function mapTokensToEmptyHumanAmounts(tokens: ApiToken[]): HumanTokenAmountWithSymbol[] {
   return tokens.map(
     token =>
-      (({
+      ({
         tokenAddress: token.address as Address,
-        humanAmount: '' }) as HumanTokenAmountWithSymbol)
-  );
+        humanAmount: '',
+      }) as HumanTokenAmountWithSymbol
+  )
 }
 
 export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
@@ -122,7 +125,8 @@ export function useAddLiquidityLogic(
       {
         tokenAddress,
         humanAmount,
-        symbol: token.symbol },
+        symbol: token.symbol,
+      },
     ])
   }
 
@@ -143,7 +147,8 @@ export function useAddLiquidityLogic(
   const totalUSDValue = isLoadingTokenPrices ? '0' : usdValueFor(humanAmountsIn)
   const { isMinimumDepositMet, errors: minimumDepositErrors } = useIsMinimumDepositMet({
     humanAmountsIn,
-    totalUSDValue })
+    totalUSDValue,
+  })
 
   /**
    * Queries
@@ -154,19 +159,22 @@ export function useAddLiquidityLogic(
     handler,
     humanAmountsIn,
     enabled,
-    referenceAmountAddress })
+    referenceAmountAddress,
+  })
 
   const priceImpactQuery = useAddLiquidityPriceImpactQuery({
     handler,
     humanAmountsIn,
-    enabled })
+    enabled,
+  })
 
   const { steps, isLoadingSteps } = useAddLiquiditySteps({
     helpers,
     handler,
     humanAmountsIn,
     simulationQuery,
-    slippage })
+    slippage,
+  })
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
   const addLiquidityTxHash =
@@ -264,7 +272,8 @@ export function useAddLiquidityLogic(
     wrapUnderlying,
     setInitialHumanAmountsIn,
     isMinimumDepositMet,
-    minimumDepositErrors }
+    minimumDepositErrors,
+  }
 }
 
 type Props = PropsWithChildren<{
@@ -279,7 +288,8 @@ export function AddLiquidityProvider({
   addLiquidityHandlerSelector,
   useAddLiquiditySteps,
   enablePoolRedirect,
-  children }: Props) {
+  children,
+}: Props) {
   const hook = useAddLiquidityLogic(
     urlTxHash,
     addLiquidityHandlerSelector,

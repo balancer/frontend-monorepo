@@ -10,7 +10,8 @@ import {
   useDisclosure,
   Link,
   Dialog,
-  Portal } from '@chakra-ui/react';
+  Portal,
+} from '@chakra-ui/react'
 import { ArrowUpRight, HelpCircle } from 'react-feather'
 import { getDiscordLink } from '@repo/lib/shared/utils/links'
 
@@ -27,7 +28,8 @@ export function LearnMoreModal({
   docsUrl,
   headerText,
   listItems,
-  showHelpIcon = false }: LearnMoreModalProps) {
+  showHelpIcon = false,
+}: LearnMoreModalProps) {
   const { open, onOpen, onClose } = useDisclosure()
 
   return (
@@ -42,13 +44,17 @@ export function LearnMoreModal({
         {showHelpIcon && <HelpCircle size={16} />}
         {buttonLabel}
       </Button>
-      <Dialog.Root placement='center' open={open} size='lg' onOpenChange={(e: { open: boolean }) => {
-        if (!e.open) {
-          onClose();
-        }
-      }}>
+      <Dialog.Root
+        onOpenChange={(e: { open: boolean }) => {
+          if (!e.open) {
+            onClose()
+          }
+        }}
+        open={open}
+        placement="center"
+        size="lg"
+      >
         <Portal>
-
           <SuccessOverlay />
           <Dialog.Positioner>
             <Dialog.Content>
@@ -56,7 +62,12 @@ export function LearnMoreModal({
               <Dialog.CloseTrigger />
               <Dialog.Body pb="lg">
                 <VStack gap="lg">
-                  <List.Root color="font.primary" listStylePosition="outside" listStyleType="disc" pl="md">
+                  <List.Root
+                    color="font.primary"
+                    listStylePosition="outside"
+                    listStyleType="disc"
+                    pl="md"
+                  >
                     {listItems.map((item, index) => (
                       <List.Item key={index}>
                         <Text>{item}</Text>
@@ -65,34 +76,39 @@ export function LearnMoreModal({
                   </List.Root>
                   <HStack gap="ms" w="full">
                     <Button
+                      asChild
                       display="flex"
                       gap="1"
-                      isExternal
                       minWidth="184px"
                       size="md"
                       variant="secondary"
-                      asChild><Link href={docsUrl}>View docs
-                                              <ArrowUpRight size={14} />
-                      </Link></Button>
+                    >
+                      <Link href={docsUrl} rel="noopener noreferrer" target="_blank">
+                        View docs
+                        <ArrowUpRight size={14} />
+                      </Link>
+                    </Button>
 
                     <Button
+                      asChild
                       display="flex"
                       gap="1"
-                      isExternal
                       minWidth="184px"
                       size="md"
                       variant="tertiary"
-                      asChild><Link href={getDiscordLink() || ''}>Get help on Discord
-                                              <ArrowUpRight size={14} />
-                      </Link></Button>
+                    >
+                      <Link href={getDiscordLink() || ''} rel="noopener noreferrer" target="_blank">
+                        Get help on Discord
+                        <ArrowUpRight size={14} />
+                      </Link>
+                    </Button>
                   </HStack>
                 </VStack>
               </Dialog.Body>
             </Dialog.Content>
           </Dialog.Positioner>
-
         </Portal>
       </Dialog.Root>
     </>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
-import { VStack, Card } from '@chakra-ui/react';
+import { VStack, Card } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useUnstake } from './UnstakeProvider'
@@ -35,5 +35,5 @@ export function UnstakePreview() {
         <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
       )}
     </VStack>
-  );
+  )
 }

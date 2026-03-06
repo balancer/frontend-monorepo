@@ -1,8 +1,8 @@
-'use client';
+'use client'
 import { GetFeaturedPoolsQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { useState, type JSX } from 'react'
-import { Box, BoxProps, Card, Center, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Card, Center, Text } from '@chakra-ui/react'
 import { FeaturePoolCard } from './FeaturePoolCard'
 import { Pool } from '../pool/pool.types'
 import { useSwipeable } from 'react-swipeable'
@@ -18,7 +18,8 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
   const colorMode = useThemeColorMode()
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => next(),
-    onSwipedRight: () => prev() })
+    onSwipedRight: () => prev(),
+  })
 
   function next() {
     setDirection('right')
@@ -97,5 +98,5 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
         ))}
       </Center>
     </Box>
-  );
+  )
 }

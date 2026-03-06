@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { ReactNode, useMemo } from 'react'
@@ -30,7 +30,8 @@ function Circle({
   shadowWhiteOpacity,
   shadowBlackOpacity,
   isInnermost,
-  children }: {
+  children,
+}: {
   progress: number | undefined
   circleProgressStage: number
   currentOpacity: number
@@ -48,7 +49,8 @@ function Circle({
       animate={
         progress !== undefined
           ? {
-              opacity: progress > circleProgressStage ? currentOpacity : 0 }
+              opacity: progress > circleProgressStage ? currentOpacity : 0,
+            }
           : undefined
       }
       borderRadius={`${borderRadius}px`}
@@ -66,7 +68,8 @@ function Circle({
         progress !== undefined
           ? {
               duration: 0.5,
-              ease: 'easeOut' }
+              ease: 'easeOut',
+            }
           : undefined
       }
       width={currentWidth}
@@ -115,7 +118,8 @@ export function RadialPattern({
         currentOpacity: maxOpacity - opacityStep * (i - 1),
         isInnermost: i === 1,
         borderRadius: Math.max(parseInt(currentHeight), parseInt(currentWidth)) / 2,
-        circleProgressStage: (100 / circleCount) * (circleCount - i) })
+        circleProgressStage: (100 / circleCount) * (circleCount - i),
+      })
     }
     return circles
   }, [

@@ -1,4 +1,4 @@
-import { HStack, Text, Checkbox } from '@chakra-ui/react';
+import { HStack, Text, Checkbox } from '@chakra-ui/react'
 import { InfoIconPopover } from './InfoIconPopover'
 
 interface PoolCreationCheckboxProps {
@@ -7,7 +7,7 @@ interface PoolCreationCheckboxProps {
   title?: string
   tooltip?: string
   isChecked: boolean
-  isDisabled?: boolean
+  disabled?: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -17,8 +17,9 @@ export function PoolCreationCheckbox({
   labelColor,
   tooltip,
   isChecked,
-  isDisabled,
-  onChange }: PoolCreationCheckboxProps) {
+  disabled,
+  onChange,
+}: PoolCreationCheckboxProps) {
   return (
     <>
       {title && (
@@ -27,9 +28,43 @@ export function PoolCreationCheckbox({
           {tooltip && <InfoIconPopover message={tooltip} placement="right-start" />}
         </HStack>
       )}
-      <Checkbox.Root disabled={isDisabled} onCheckedChange={onChange} size="lg" checked={isChecked}><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-          <Text color={labelColor}>{label}</Text>
-        </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+      <Checkbox.Root checked={isChecked} disabled={disabled} onCheckedChange={onChange} size="lg">
+        <Checkbox.HiddenInput />
+        <Checkbox.Control>
+          <Checkbox.Indicator />
+        </Checkbox.Control>
+        <Checkbox.Label>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+          </Checkbox.Root>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            <Checkbox.Label>
+              <Checkbox.Root>
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+              </Checkbox.Root>
+            </Checkbox.Label>
+          </Checkbox.Root>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            <Checkbox.Label>
+              <Text color={labelColor}>{label}</Text>
+            </Checkbox.Label>
+          </Checkbox.Root>
+        </Checkbox.Label>
+      </Checkbox.Root>
     </>
-  );
+  )
 }

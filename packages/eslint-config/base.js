@@ -66,6 +66,15 @@ const baseConfig = [
     },
     rules: {
       'turbo/no-undeclared-env-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
       ...reactHooksPlugin.configs.recommended.rules,
       // Disable the 'no-explicit-any' rule to prevent warnings about using 'any' type
       '@typescript-eslint/no-explicit-any': 'off',

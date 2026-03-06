@@ -1,12 +1,12 @@
-'use client';
-import { Box, Button, Card, useDisclosure, Icon } from '@chakra-ui/react';
+'use client'
+import { Box, Button, Card, useDisclosure, Icon } from '@chakra-ui/react'
 import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { useRef } from 'react'
 import { useMigrateStake } from './MigrateStakeProvider'
 import { MigrateStakePreview } from './MigrateStakePreview'
 import { MigrateStakeModal } from './MigrateStakeModal'
 import { migrateStakeTooltipLabel } from '../stake.helpers'
-import { LuInfo } from 'react-icons/lu';
+import { LuInfo } from 'react-icons/lu'
 
 export function MigrateStakeForm() {
   const nextBtn = useRef(null)
@@ -20,7 +20,9 @@ export function MigrateStakeForm() {
         <Card.Header isTruncated>
           Migrate to new staking gauge{' '}
           <Tooltip content={migrateStakeTooltipLabel}>
-            <Icon color="grayText" fontSize="sm" asChild><LuInfo /></Icon>
+            <Icon asChild color="grayText" fontSize="sm">
+              <LuInfo />
+            </Icon>
           </Tooltip>
         </Card.Header>
 
@@ -43,12 +45,7 @@ export function MigrateStakeForm() {
           </Tooltip>
         </Card.Footer>
       </Card.Root>
-      <MigrateStakeModal
-        finalFocusRef={nextBtn}
-        isOpen={open}
-        onClose={onClose}
-        onOpen={onOpen}
-      />
+      <MigrateStakeModal finalFocusRef={nextBtn} isOpen={open} onClose={onClose} onOpen={onOpen} />
     </Box>
-  );
+  )
 }

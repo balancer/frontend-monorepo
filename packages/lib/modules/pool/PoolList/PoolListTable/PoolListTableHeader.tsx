@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react';
+import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { orderByHash, PoolsColumnSort } from '../../pool.types'
 import { usePoolOrderByState } from '../usePoolOrderByState'
@@ -15,7 +15,8 @@ const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
 
 export function PoolListTableHeader({ ...rest }) {
   const {
-    queryState: { sorting, setSorting } } = usePoolList()
+    queryState: { sorting, setSorting },
+  } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const sortingObj = sorting[0]
 
@@ -23,7 +24,8 @@ export function PoolListTableHeader({ ...rest }) {
     setSorting([
       {
         id: newSortingBy,
-        desc: setIsDesc(newSortingBy, sortingObj) },
+        desc: setIsDesc(newSortingBy, sortingObj),
+      },
     ])
   }
 
@@ -31,7 +33,9 @@ export function PoolListTableHeader({ ...rest }) {
     <Grid {...rest} p={['sm', 'md']} w="full">
       <GridItem>
         <VStack align="start" w="full">
-          <Icon boxSize="5" color="font.primary" asChild><Globe /></Icon>
+          <Icon asChild boxSize="5" color="font.primary">
+            <Globe />
+          </Icon>
         </VStack>
       </GridItem>
       <GridItem>
@@ -63,5 +67,5 @@ export function PoolListTableHeader({ ...rest }) {
         </GridItem>
       ))}
     </Grid>
-  );
+  )
 }

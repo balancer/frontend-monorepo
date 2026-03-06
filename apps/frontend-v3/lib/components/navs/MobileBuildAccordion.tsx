@@ -1,6 +1,6 @@
 'use client'
 
-import { Accordion, Box, HStack, Link, Text, VStack } from '@chakra-ui/react';
+import { Accordion, Box, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
@@ -8,29 +8,35 @@ import { CowIconCircular } from '@repo/lib/shared/components/icons/logos/CowIcon
 import { FormSubsection } from '@repo/lib/shared/components/inputs/FormSubsection'
 import {
   COW_PROTOCOL_ID,
-  BALANCER_PROTOCOL_ID } from '@repo/lib/modules/pool/actions/create/constants'
+  BALANCER_PROTOCOL_ID,
+} from '@repo/lib/modules/pool/actions/create/constants'
 
 const CREATE_POOL_LINKS = [
   {
     label: 'Balancer',
     href: `/create?protocol=${BALANCER_PROTOCOL_ID.toLowerCase()}`,
-    icon: <BalancerIconCircular size={24} /> },
+    icon: <BalancerIconCircular size={24} />,
+  },
   {
     label: 'CoW AMM',
     href: `/create?protocol=${COW_PROTOCOL_ID.toLowerCase()}`,
-    icon: <CowIconCircular size={24} /> },
+    icon: <CowIconCircular size={24} />,
+  },
 ]
 
 const RESOURCE_LINKS = [
   {
     label: 'v3 Scaffold',
-    href: 'https://github.com/balancer/scaffold-balancer-v3' },
+    href: 'https://github.com/balancer/scaffold-balancer-v3',
+  },
   {
     label: 'Code & Contracts',
-    href: 'https://github.com/balancer' },
+    href: 'https://github.com/balancer',
+  },
   {
     label: 'Documentation',
-    href: 'https://docs.balancer.fi/' },
+    href: 'https://docs.balancer.fi/',
+  },
 ]
 
 type MobileBuildAccordionProps = {
@@ -40,14 +46,15 @@ type MobileBuildAccordionProps = {
 export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
   return (
     <Accordion.Root collapsible w="full">
-      <Accordion.Item border="none" value='item-0'>
+      <Accordion.Item border="none" value="item-0">
         <Accordion.ItemTrigger _hover={{ bg: 'transparent' }} pt="sm" px="0">
           <Text flex="1" fontSize="xl" fontWeight="medium" textAlign="left">
             Build
           </Text>
           <Accordion.ItemIndicator />
         </Accordion.ItemTrigger>
-        <Accordion.ItemContent pb="0" pt="0" px="0"><Accordion.ItemBody>
+        <Accordion.ItemContent pb="0" pt="0" px="0">
+          <Accordion.ItemBody>
             <FormSubsection mx="0" py="0">
               <VStack align="start" gap="md">
                 {/* Create a pool section */}
@@ -99,8 +106,9 @@ export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
                       href={link.href}
                       key={link.label}
                       onClick={onClose}
-                      target='_blank'
-                      rel='noopener noreferrer'>
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
                       {link.label}
                       <Box color="grayText">
                         <ArrowUpRight size={12} />
@@ -110,8 +118,9 @@ export function MobileBuildAccordion({ onClose }: MobileBuildAccordionProps) {
                 </VStack>
               </VStack>
             </FormSubsection>
-          </Accordion.ItemBody></Accordion.ItemContent>
+          </Accordion.ItemBody>
+        </Accordion.ItemContent>
       </Accordion.Item>
     </Accordion.Root>
-  );
+  )
 }

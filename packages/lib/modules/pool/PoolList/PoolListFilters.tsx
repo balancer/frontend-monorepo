@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import {
   Badge,
   Box,
@@ -12,8 +12,9 @@ import {
   Icon,
   Popover,
   Text,
-  VStack } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+  VStack,
+} from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { PoolListSearch } from './PoolListSearch'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import {
@@ -22,9 +23,10 @@ import {
   PoolHookTagType,
   poolTagFilters,
   PoolTagType,
-  poolTypeFilters } from '../pool.types'
+  poolTypeFilters,
+} from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState, forwardRef } from 'react'
 import { Filter, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -36,7 +38,8 @@ import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import Image from 'next/image'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
@@ -47,7 +50,8 @@ import NextLink from 'next/link'
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion } } = usePoolList()
+    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion },
+  } = usePoolList()
 
   return (
     networks.length > 0 ||
@@ -61,24 +65,62 @@ export function useFilterTagsVisible() {
 
 function UserPoolFilter() {
   const {
-    queryState: { userAddress, toggleUserAddress } } = usePoolList()
+    queryState: { userAddress, toggleUserAddress },
+  } = usePoolList()
   const { userAddress: connectedUserAddress } = useUserAccount()
   const isChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
 
   return (
     <Checkbox.Root
-      mb="xxs"
-      onCheckedChange={(e: { checked: boolean | "indeterminate" }) => toggleUserAddress(!!e.checked, connectedUserAddress as string)}
       checked={isChecked}
-    ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-          <Text fontSize="sm">My positions</Text>
-        </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
-  );
+      mb="xxs"
+      onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
+        toggleUserAddress(!!e.checked, connectedUserAddress as string)
+      }
+    >
+      <Checkbox.HiddenInput />
+      <Checkbox.Control>
+        <Checkbox.Indicator />
+      </Checkbox.Control>
+      <Checkbox.Label>
+        <Checkbox.Root>
+          <Checkbox.HiddenInput />
+          <Checkbox.Control>
+            <Checkbox.Indicator />
+          </Checkbox.Control>
+        </Checkbox.Root>
+        <Checkbox.Root>
+          <Checkbox.HiddenInput />
+          <Checkbox.Control>
+            <Checkbox.Indicator />
+          </Checkbox.Control>
+          <Checkbox.Label>
+            <Checkbox.Root>
+              <Checkbox.HiddenInput />
+              <Checkbox.Control>
+                <Checkbox.Indicator />
+              </Checkbox.Control>
+            </Checkbox.Root>
+          </Checkbox.Label>
+        </Checkbox.Root>
+        <Checkbox.Root>
+          <Checkbox.HiddenInput />
+          <Checkbox.Control>
+            <Checkbox.Indicator />
+          </Checkbox.Control>
+          <Checkbox.Label>
+            <Text fontSize="sm">My positions</Text>
+          </Checkbox.Label>
+        </Checkbox.Root>
+      </Checkbox.Label>
+    </Checkbox.Root>
+  )
 }
 
 function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   const {
-    queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel } } = usePoolList()
+    queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
+  } = usePoolList()
 
   // remove query param when empty
   useEffect(() => {
@@ -88,26 +130,67 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   }, [poolTags])
 
   return (
-    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+    <Box animate="show" asChild exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      <motion.div>
         {poolTagFilters
           .filter(tag => !hidePoolTags?.includes(tag))
           .map(tag => (
-            <Box variants={staggeredFadeInUp} asChild><motion.div key={tag}>
+            <Box asChild variants={staggeredFadeInUp}>
+              <motion.div key={tag}>
                 <Checkbox.Root
-                  onCheckedChange={(e: { checked: boolean | "indeterminate" }) => togglePoolTag(!!e.checked, tag as PoolTagType)}
                   checked={!!poolTags.find(selected => selected === tag)}
-                ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-                    <Text fontSize="sm">{poolTagLabel(tag)}</Text>
-                  </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
-              </motion.div></Box>
+                  onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
+                    togglePoolTag(!!e.checked, tag as PoolTagType)
+                  }
+                >
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Checkbox.Label>
+                    <Checkbox.Root>
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control>
+                        <Checkbox.Indicator />
+                      </Checkbox.Control>
+                    </Checkbox.Root>
+                    <Checkbox.Root>
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control>
+                        <Checkbox.Indicator />
+                      </Checkbox.Control>
+                      <Checkbox.Label>
+                        <Checkbox.Root>
+                          <Checkbox.HiddenInput />
+                          <Checkbox.Control>
+                            <Checkbox.Indicator />
+                          </Checkbox.Control>
+                        </Checkbox.Root>
+                      </Checkbox.Label>
+                    </Checkbox.Root>
+                    <Checkbox.Root>
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control>
+                        <Checkbox.Indicator />
+                      </Checkbox.Control>
+                      <Checkbox.Label>
+                        <Text fontSize="sm">{poolTagLabel(tag)}</Text>
+                      </Checkbox.Label>
+                    </Checkbox.Root>
+                  </Checkbox.Label>
+                </Checkbox.Root>
+              </motion.div>
+            </Box>
           ))}
-      </motion.div></Box>
-  );
+      </motion.div>
+    </Box>
+  )
 }
 
 function PoolHookFilters() {
   const {
-    queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel } } = usePoolList()
+    queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel },
+  } = usePoolList()
 
   // Exclude hooks that are not live
   const livePoolHookTagFilters = poolHookTagFilters.filter(
@@ -122,19 +205,59 @@ function PoolHookFilters() {
   }, [poolHookTags])
 
   return (
-    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+    <Box animate="show" asChild exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      <motion.div>
         {livePoolHookTagFilters.map(tag => (
-          <Box variants={staggeredFadeInUp} asChild><motion.div key={tag}>
+          <Box asChild variants={staggeredFadeInUp}>
+            <motion.div key={tag}>
               <Checkbox.Root
-                onCheckedChange={(e: { checked: boolean | "indeterminate" }) => togglePoolHookTag(!!e.checked, tag as PoolHookTagType)}
                 checked={!!poolHookTags.find(selected => selected === tag)}
-              ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-                  <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
-                </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
-            </motion.div></Box>
+                onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
+                  togglePoolHookTag(!!e.checked, tag as PoolHookTagType)
+                }
+              >
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Checkbox.Label>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                  </Checkbox.Root>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                      </Checkbox.Root>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
+                </Checkbox.Label>
+              </Checkbox.Root>
+            </motion.div>
+          </Box>
         ))}
-      </motion.div></Box>
-  );
+      </motion.div>
+    </Box>
+  )
 }
 
 export interface PoolTypeFiltersArgs {
@@ -150,7 +273,8 @@ export function PoolTypeFilters({
   poolTypes,
   poolTypeLabel,
   setPoolTypes,
-  hidePoolTypes }: PoolTypeFiltersArgs) {
+  hidePoolTypes,
+}: PoolTypeFiltersArgs) {
   // remove query param when empty
   useEffect(() => {
     if (!poolTypes.length) {
@@ -163,19 +287,59 @@ export function PoolTypeFilters({
   )
 
   return (
-    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+    <Box animate="show" asChild exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      <motion.div>
         {_poolTypeFilters.map(poolType => (
-          <Box variants={staggeredFadeInUp} asChild><motion.div key={poolType}>
+          <Box asChild variants={staggeredFadeInUp}>
+            <motion.div key={poolType}>
               <Checkbox.Root
-                onCheckedChange={(e: { checked: boolean | "indeterminate" }) => togglePoolType(!!e.checked, poolType as PoolFilterType)}
                 checked={!!poolTypes.find(selected => selected === poolType)}
-              ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-                  <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
-                </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
-            </motion.div></Box>
+                onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
+                  togglePoolType(!!e.checked, poolType as PoolFilterType)
+                }
+              >
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Checkbox.Label>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                  </Checkbox.Root>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                      </Checkbox.Root>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
+                </Checkbox.Label>
+              </Checkbox.Root>
+            </motion.div>
+          </Box>
         ))}
-      </motion.div></Box>
-  );
+      </motion.div>
+    </Box>
+  )
 }
 
 export interface PoolNetworkFiltersArgs {
@@ -187,7 +351,8 @@ export interface PoolNetworkFiltersArgs {
 export function PoolNetworkFilters({
   toggledNetworks,
   toggleNetwork,
-  setNetworks }: PoolNetworkFiltersArgs) {
+  setNetworks,
+}: PoolNetworkFiltersArgs) {
   const { supportedNetworks } = PROJECT_CONFIG
 
   // const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()] // Alphabetical order after Mainnet
@@ -207,7 +372,8 @@ export function PoolNetworkFilters({
           <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
         </Box>
       </HStack>
-    ) }))
+    ),
+  }))
 
   function isCheckedNetwork(network: GqlChain): boolean {
     return !!toggledNetworks.includes(network)
@@ -264,7 +430,8 @@ export function FilterTags({
   togglePoolHookTag,
   poolHookTagLabel,
   protocolVersion,
-  setProtocolVersion }: FilterTagsPops) {
+  setProtocolVersion,
+}: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
   // prevents layout shift in mobile view
@@ -344,51 +511,54 @@ export function FilterTags({
           ))}
       </AnimatePresence>
     </HStack>
-  );
+  )
 }
 
-export const FilterButton = forwardRef<HTMLButtonElement, ButtonProps & { totalFilterCount: number }>(
-  ({ totalFilterCount, onClick, ...props }, ref) => {
-    const { isMobile } = useBreakpoints()
-    const colorMode = useThemeColorMode()
-    const textColor = colorMode === 'dark' ? 'font.dark' : '#fff'
+export const FilterButton = forwardRef<
+  HTMLButtonElement,
+  ButtonProps & { totalFilterCount: number }
+>(({ totalFilterCount, onClick, ...props }, ref) => {
+  const { isMobile } = useBreakpoints()
+  const colorMode = useThemeColorMode()
+  const textColor = colorMode === 'dark' ? 'font.dark' : '#fff'
 
-    const handleFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      trackEvent(AnalyticsEvent.ClickPoolListFilter)
-      onClick?.(e)
-    }
-
-    return (
-      <Button
-        ref={ref}
-        {...props}
-        display="flex"
-        gap="2"
-        onClick={handleFilterClick}
-        variant="tertiary"
-      >
-        <Icon boxSize={4} asChild><Filter /></Icon>
-        {!isMobile && 'Filters'}
-        {totalFilterCount > 0 && (
-          <Badge
-            bg="font.highlight"
-            borderRadius="full"
-            color={textColor}
-            p="0"
-            position="absolute"
-            right="-9px"
-            shadow="lg"
-            top="-9px"
-          >
-            <Center h="5" w="5">
-              {totalFilterCount}
-            </Center>
-          </Badge>
-        )}
-      </Button>
-    );
+  const handleFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    trackEvent(AnalyticsEvent.ClickPoolListFilter)
+    onClick?.(e)
   }
-)
+
+  return (
+    <Button
+      ref={ref}
+      {...props}
+      display="flex"
+      gap="2"
+      onClick={handleFilterClick}
+      variant="tertiary"
+    >
+      <Icon asChild boxSize={4}>
+        <Filter />
+      </Icon>
+      {!isMobile && 'Filters'}
+      {totalFilterCount > 0 && (
+        <Badge
+          bg="font.highlight"
+          borderRadius="full"
+          color={textColor}
+          p="0"
+          position="absolute"
+          right="-9px"
+          shadow="lg"
+          top="-9px"
+        >
+          <Center h="5" w="5">
+            {totalFilterCount}
+          </Center>
+        </Badge>
+      )}
+    </Button>
+  )
+})
 
 export interface ProtocolVersionFilterProps {
   setProtocolVersion: (version: number | null) => any
@@ -405,7 +575,8 @@ export function ProtocolVersionFilter({
   poolTypes,
   activeProtocolVersionTab,
   setActiveProtocolVersionTab,
-  hideProtocolVersion }: ProtocolVersionFilterProps) {
+  hideProtocolVersion,
+}: ProtocolVersionFilterProps) {
   const tabs = PROTOCOL_VERSION_TABS
 
   function toggleTab(option: ButtonGroupOption) {
@@ -464,7 +635,9 @@ export function PoolListFilters() {
       setPoolTypes,
       setProtocolVersion,
       protocolVersion,
-      activeProtocolVersionTab } } = usePoolList()
+      activeProtocolVersionTab,
+    },
+  } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
 
@@ -481,17 +654,18 @@ export function PoolListFilters() {
         <PoolListSearch />
         <Popover.Root
           lazyMount
-          open={isPopoverOpen}
           onOpenChange={(e: { open: boolean }) => {
             if (e.open) {
-              setIsPopoverOpen(true);
+              setIsPopoverOpen(true)
             } else {
-              setIsPopoverOpen(false);
+              setIsPopoverOpen(false)
             }
           }}
+          open={isPopoverOpen}
           positioning={{
-            placement: 'bottom-end'
-          }}>
+            placement: 'bottom-end',
+          }}
+        >
           <Popover.Trigger asChild>
             <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
           </Popover.Trigger>
@@ -506,14 +680,21 @@ export function PoolListFilters() {
                       <VStack
                         align="start"
                         animate="show"
-                        exit="exit"
-                        initial="hidden"
-                        gap="md"
-                        variants={staggeredFadeInUp}
                         asChild
-                      ><motion.div>
-                          <Box lineHeight="0" p="0" variants={staggeredFadeInUp} asChild><motion.div>
-                              <Flex alignItems="center" gap="ms" justifyContent="space-between" w="full">
+                        exit="exit"
+                        gap="md"
+                        initial="hidden"
+                        variants={staggeredFadeInUp}
+                      >
+                        <motion.div>
+                          <Box asChild lineHeight="0" p="0" variants={staggeredFadeInUp}>
+                            <motion.div>
+                              <Flex
+                                alignItems="center"
+                                gap="ms"
+                                justifyContent="space-between"
+                                w="full"
+                              >
                                 <Text
                                   background="font.special"
                                   backgroundClip="text"
@@ -528,23 +709,27 @@ export function PoolListFilters() {
                                     h="fit-content"
                                     onClick={_resetFilters}
                                     size="xs"
-                                    variant='plain'
+                                    variant="plain"
                                   >
                                     Reset all
                                   </Button>
                                 )}
                               </Flex>
-                            </motion.div></Box>
+                            </motion.div>
+                          </Box>
                           {isConnected ? (
-                            <Box variants={staggeredFadeInUp} asChild><motion.div>
+                            <Box asChild variants={staggeredFadeInUp}>
+                              <motion.div>
                                 <Heading as="h3" my="sm" size="sm">
                                   My liquidity
                                 </Heading>
                                 <UserPoolFilter />
-                              </motion.div></Box>
+                              </motion.div>
+                            </Box>
                           ) : null}
                           {/* TODO: filter for cow networks when 'isCowPath' is true */}
-                          <Box variants={staggeredFadeInUp} w="full" asChild><motion.div>
+                          <Box asChild variants={staggeredFadeInUp} w="full">
+                            <motion.div>
                               <Heading as="h3" mb="sm" size="sm">
                                 Networks
                               </Heading>
@@ -553,9 +738,11 @@ export function PoolListFilters() {
                                 toggledNetworks={toggledNetworks}
                                 toggleNetwork={toggleNetwork}
                               />
-                            </motion.div></Box>
+                            </motion.div>
+                          </Box>
                           {!isCowPath && (
-                            <Box variants={staggeredFadeInUp} asChild><motion.div>
+                            <Box asChild variants={staggeredFadeInUp}>
+                              <motion.div>
                                 <Heading as="h3" mb="sm" size="sm">
                                   Protocol version
                                 </Heading>
@@ -567,10 +754,12 @@ export function PoolListFilters() {
                                   setActiveProtocolVersionTab={setActiveProtocolVersionTab}
                                   setProtocolVersion={setProtocolVersion}
                                 />
-                              </motion.div></Box>
+                              </motion.div>
+                            </Box>
                           )}
                           {!isFixedPoolType && (
-                            <Box variants={staggeredFadeInUp} asChild><motion.div>
+                            <Box asChild variants={staggeredFadeInUp}>
+                              <motion.div>
                                 <Heading as="h3" mb="sm" size="sm">
                                   Pool types
                                 </Heading>
@@ -581,29 +770,37 @@ export function PoolListFilters() {
                                   setPoolTypes={setPoolTypes}
                                   togglePoolType={togglePoolType}
                                 />
-                              </motion.div></Box>
+                              </motion.div>
+                            </Box>
                           )}
                           {!isCowPath && (
                             <>
-                              <Box variants={staggeredFadeInUp} asChild><motion.div>
+                              <Box asChild variants={staggeredFadeInUp}>
+                                <motion.div>
                                   <Heading as="h3" mb="sm" size="sm">
                                     Pool categories
                                   </Heading>
                                   <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
-                                </motion.div></Box>
+                                </motion.div>
+                              </Box>
 
-                              <Box variants={staggeredFadeInUp} asChild><motion.div>
+                              <Box asChild variants={staggeredFadeInUp}>
+                                <motion.div>
                                   <Heading as="h3" mb="sm" size="sm">
                                     Hooks
                                   </Heading>
                                   <PoolHookFilters />
-                                </motion.div></Box>
+                                </motion.div>
+                              </Box>
                             </>
                           )}
-                          <Box mb="xs" variants={staggeredFadeInUp} w="full" asChild><motion.div>
+                          <Box asChild mb="xs" variants={staggeredFadeInUp} w="full">
+                            <motion.div>
                               <PoolMinTvlFilter />
-                            </motion.div></Box>
-                        </motion.div></VStack>
+                            </motion.div>
+                          </Box>
+                        </motion.div>
+                      </VStack>
                     ) : null}
                   </AnimatePresence>
                 </Popover.Body>
@@ -612,12 +809,16 @@ export function PoolListFilters() {
           </Box>
         </Popover.Root>
         {isBeets && (
-          <Button display="flex" gap="2" ml="ms" variant="tertiary" asChild><NextLink href="/create">
-              <Icon boxSize={4} asChild><Plus /></Icon>
+          <Button asChild display="flex" gap="2" ml="ms" variant="tertiary">
+            <NextLink href="/create">
+              <Icon asChild boxSize={4}>
+                <Plus />
+              </Icon>
               {!isMobile && 'Create a pool'}
-            </NextLink></Button>
+            </NextLink>
+          </Button>
         )}
       </HStack>
     </VStack>
-  );
+  )
 }

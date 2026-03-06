@@ -1,4 +1,4 @@
-import { Card, Heading, HStack, Spacer, Text } from '@chakra-ui/react';
+import { Card, Heading, HStack, Spacer, Text } from '@chakra-ui/react'
 import { WeightsChartContainer } from '../sale-structure/WeightsChartContainer'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
@@ -19,7 +19,8 @@ export function PoolWeights({
   startWeight,
   endWeight,
   launchTokenMetadata,
-  collateralToken }: Props) {
+  collateralToken,
+}: Props) {
   const daysDiff = differenceInDays(parseISO(endDateTime), parseISO(startDateTime))
   const hoursDiff =
     differenceInHours(parseISO(endDateTime), parseISO(startDateTime)) - daysDiff * 24
@@ -51,5 +52,5 @@ export function PoolWeights({
         />
       </Card.Body>
     </Card.Root>
-  );
+  )
 }

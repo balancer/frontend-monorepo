@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Center, Dialog } from '@chakra-ui/react';
+import { Box, Center, Dialog } from '@chakra-ui/react'
 
 export function SuccessOverlay({ startAnimation }: { startAnimation?: boolean }) {
   return (
@@ -12,5 +12,5 @@ export function SuccessOverlay({ startAnimation }: { startAnimation?: boolean })
         </Center>
       )}
     </Dialog.Backdrop>
-  );
+  )
 }

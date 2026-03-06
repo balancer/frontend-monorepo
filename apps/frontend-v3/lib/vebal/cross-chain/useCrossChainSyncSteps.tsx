@@ -2,7 +2,8 @@ import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transac
 import {
   ManagedResult,
   TransactionLabels,
-  TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
+  TransactionStep,
+} from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
@@ -10,7 +11,7 @@ import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useEstimateSendUserBalance } from '@bal/lib/vebal/cross-chain/useEstimateSendUserBalance'
-import { Button } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react'
 import { getChainShortName, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
@@ -26,7 +27,8 @@ function ChainSyncButton({
   layerZeroChainId,
   stepId,
   network,
-  onTransactionChange }: {
+  onTransactionChange,
+}: {
   omniVotingEscrow: Address
   layerZeroChainId: number
   stepId: string
@@ -43,7 +45,7 @@ function ChainSyncButton({
   }
 
   if (!data) {
-    return <Button loading={isLoading}>Loading</Button>;
+    return <Button loading={isLoading}>Loading</Button>
   }
 
   const nativeFee = BigInt(data.nativeFee.toString())
@@ -54,7 +56,8 @@ function ChainSyncButton({
       userAddress,
       layerZeroChainId,
       stepId,
-      chainId }
+      chainId,
+    }
   )
 
   // FIX: actual labels
@@ -64,7 +67,8 @@ function ChainSyncButton({
     title: `Sync veBAL to ${getChainShortName(network)}`,
     description: `Sync veBAL to ${getChainShortName(network)}`,
     confirming: `Syncing veBAL to ${getChainShortName(network)}`,
-    confirmed: `Synced to ${getChainShortName(network)}` }
+    confirmed: `Synced to ${getChainShortName(network)}`,
+  }
 
   const props: ManagedTransactionInput = {
     contractId: 'balancer.omniVotingEscrowAbi',
@@ -75,7 +79,8 @@ function ChainSyncButton({
     txSimulationMeta,
     args: [userAddress, layerZeroChainId, userAddress],
     labels,
-    onTransactionChange }
+    onTransactionChange,
+  }
 
   return <ManagedTransactionButton id={stepId} {...props} />
 }
@@ -107,7 +112,8 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
         description: 'description - Cross Chain Sync.',
         confirming: 'confirming - Cross Chain Sync...',
         confirmed: 'confirmed - Cross Chain Sync!',
-        tooltip: 'tooltip - Cross Chain Sync' }
+        tooltip: 'tooltip - Cross Chain Sync',
+      }
       const layerZeroChainId = networkConfig.layerZeroChainId
 
       if (!layerZeroChainId) {
@@ -137,6 +143,7 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
         labels,
         transaction,
         isComplete,
-        renderAction }
+        renderAction,
+      }
     })
 }

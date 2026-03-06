@@ -9,12 +9,14 @@ import {
   Center,
   ProgressCircle,
   Box,
-  useDisclosure } from '@chakra-ui/react';
+  useDisclosure,
+} from '@chakra-ui/react'
 import { Tooltip } from '../../../shared/components/tooltips/Tooltip'
 import {
   TrackedTransaction,
   TransactionStatus,
-  useRecentTransactions } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
+  useRecentTransactions,
+} from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { isEmpty, orderBy } from 'lodash'
 import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'react-feather'
 import { getChainId, getChainShortName } from '@repo/lib/config/app.config'
@@ -27,13 +29,13 @@ function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
     case 'confirming':
       return (
-        <ProgressCircle.Root value={String(null)} size="sm" trackColor="border.base">
+        <ProgressCircle.Root size="sm" trackColor="border.base" value={String(null)}>
           <ProgressCircle.Circle>
             <ProgressCircle.Track />
             <ProgressCircle.Range stroke="orange.300" />
           </ProgressCircle.Circle>
         </ProgressCircle.Root>
-      );
+      )
     case 'confirmed':
       return (
         <Box color="font.highlight">
@@ -85,7 +87,7 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
     <HStack align="start" key={transaction.hash} py="sm" w="95%">
       <TransactionIcon status={transaction.status} />
       <VStack align="start" gap="none" w="full">
-        <Tooltip fontSize="sm" content={label}>
+        <Tooltip content={label} fontSize="sm">
           <Text isTruncated maxW="85%">
             {transaction.init}
           </Text>
@@ -95,25 +97,25 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
             {transaction.chain ? getChainShortName(transaction.chain) : 'Unknown'},&nbsp;
             {formatDistanceToNowAbbr(new Date(transaction.timestamp))}
           </Text>
-          <Link color="grayText" href={txLink} target='_blank' rel='noopener noreferrer'>
+          <Link color="grayText" href={txLink} rel="noopener noreferrer" target="_blank">
             <ArrowUpRight size={16} />
           </Link>
         </HStack>
       </VStack>
     </HStack>
-  );
+  )
 }
 
 function Transactions({ transactions }: { transactions: Record<string, TrackedTransaction> }) {
   const orderedRecentTransactions = orderBy(Object.values(transactions), 'timestamp', 'desc')
 
   return (
-    <VStack align="start" maxH="250px" overflowY="auto" p="md" gap="none">
+    <VStack align="start" gap="none" maxH="250px" overflowY="auto" p="md">
       {orderedRecentTransactions.map(transaction => (
         <TransactionRow key={transaction.hash} transaction={transaction} />
       ))}
     </VStack>
-  );
+  )
 }
 
 export default function RecentTransactions() {
@@ -131,22 +133,24 @@ export default function RecentTransactions() {
 
   return (
     <Popover.Root
-      open={open}
       onOpenChange={(e: { open: boolean }) => {
         if (e.open) {
-          onOpen();
+          onOpen()
         } else {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+      open={open}
+    >
       <Popover.Trigger asChild>
         <Button onClick={handleActivityClick} p="0" variant="tertiary">
           {confirmingTxCount > 0 ? (
-            <ProgressCircle.Root value={String(null)} size="md" trackColor="border.base">
+            <ProgressCircle.Root size="md" trackColor="border.base" value={String(null)}>
               <ProgressCircle.Circle
                 css={{
-                  "--thickness": "8"
-                }}>
+                  '--thickness': '8',
+                }}
+              >
                 <ProgressCircle.Track />
                 <ProgressCircle.Range stroke="font.warning" />
               </ProgressCircle.Circle>
@@ -179,5 +183,5 @@ export default function RecentTransactions() {
         </Popover.Content>
       </Popover.Positioner>
     </Popover.Root>
-  );
+  )
 }

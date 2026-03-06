@@ -3,12 +3,12 @@ import {
   Button,
   GridItem,
   HStack,
-  Popover,
   HoverCard,
   Portal,
   Text,
   GridItemProps,
-  TextProps } from '@chakra-ui/react';
+  TextProps,
+} from '@chakra-ui/react'
 import { SortableIcon } from '../icons/SortableIcon'
 import { ArrowDownIcon } from '../icons/ArrowDownIcon'
 import { ArrowUpIcon } from '../icons/ArrowUpIcon'
@@ -16,7 +16,8 @@ import { ReactNode } from 'react'
 
 export enum Sorting {
   asc = 'asc',
-  desc = 'desc' }
+  desc = 'desc',
+}
 
 type SortableHeaderProps = {
   label: string
@@ -39,7 +40,8 @@ export function SortableHeader({
   popoverContent,
   usePortal,
   containerProps,
-  textProps }: SortableHeaderProps) {
+  textProps,
+}: SortableHeaderProps) {
   const renderSortIcon = () => {
     return !isSorted ? (
       <SortableIcon />
@@ -79,18 +81,21 @@ export function SortableHeader({
       <GridItem justifySelf={justifySelf} {...containerProps}>
         <HoverCard.Root
           positioning={{
-            placement: 'top'
-          }}>
-          <HoverCard.Context>{() => (
+            placement: 'top',
+          }}
+        >
+          <HoverCard.Context>
+            {() => (
               <>
                 <HoverCard.Trigger asChild>{HeaderContent}</HoverCard.Trigger>
 
                 {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
               </>
-            )}</HoverCard.Context>
+            )}
+          </HoverCard.Context>
         </HoverCard.Root>
       </GridItem>
-    );
+    )
   }
 
   return (

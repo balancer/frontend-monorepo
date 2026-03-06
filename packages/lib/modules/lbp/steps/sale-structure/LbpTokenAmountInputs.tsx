@@ -11,7 +11,7 @@ import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
 import { SaleStructureForm } from '../../lbp.types'
 import { Control, Controller, FieldErrors, useFormState, useWatch } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { VStack, Text, Heading, Alert } from '@chakra-ui/react';
+import { VStack, Text, Heading, Alert } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
 import { LightbulbIcon } from '@repo/lib/shared/components/icons/LightbulbIcon'
 import { format, parseISO } from 'date-fns'
@@ -21,11 +21,13 @@ export function LbpTokenAmountInputs() {
   const { getToken } = useTokens()
   const {
     launchToken,
-    saleStructureForm: { control } } = useLbpForm()
+    saleStructureForm: { control },
+  } = useLbpForm()
   const { errors } = useFormState({ control })
   const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
     control,
-    name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'] })
+    name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'],
+  })
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
   const saleStart = startDateTime
 
@@ -71,14 +73,15 @@ export function LbpTokenAmountInputs() {
         </TokenBalancesProvider>
       )}
     </TokenInputsValidationProvider>
-  );
+  )
 }
 
 function SaleTokenAmountInput({
   control,
   errors,
   selectedChain,
-  launchToken }: {
+  launchToken,
+}: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
@@ -86,7 +89,8 @@ function SaleTokenAmountInput({
 }) {
   const { balanceData, isLoading } = useUserBalance({
     chainId: getChainId(selectedChain),
-    token: launchToken.address })
+    token: launchToken.address,
+  })
 
   const haveEnoughAmount = (value: string) => {
     if (isLoading) return true
@@ -124,7 +128,8 @@ function SaleTokenAmountInput({
         )}
         rules={{
           required: 'Sale token amount is required',
-          validate: { isGreaterThanZeroValidation, haveEnoughAmount } }}
+          validate: { isGreaterThanZeroValidation, haveEnoughAmount },
+        }}
       />
       <Text
         _groupFocusWithin={{ opacity: '1' }}
@@ -151,7 +156,8 @@ function CollateralTokenAmountInput({
   errors,
   selectedChain,
   collateralTokenAddress,
-  collateralTokenSymbol }: {
+  collateralTokenSymbol,
+}: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
@@ -194,7 +200,8 @@ function CollateralTokenAmountInput({
         )}
         rules={{
           required: 'Collateral token amount is required',
-          validate: { isGreaterThanZeroValidation, haveEnoughAmount } }}
+          validate: { isGreaterThanZeroValidation, haveEnoughAmount },
+        }}
       />
       <Text
         _groupFocusWithin={{ opacity: '1' }}

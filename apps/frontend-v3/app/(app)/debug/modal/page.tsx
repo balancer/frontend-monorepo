@@ -4,7 +4,7 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useDisclosure } from '@chakra-ui/react'
-import { Button, Box, Dialog, Portal } from '@chakra-ui/react';
+import { Button, Box, Dialog, Portal } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { Hex } from 'viem'
@@ -20,17 +20,24 @@ export default function ModalPage() {
   return (
     <>
       <Button onClick={onOpen}>Open Modal</Button>
-      <Dialog.Root placement='center' open={open} onOpenChange={(e: any) => {
-        if (!e.open) {
-          onClose();
-        }
-      }}>
+      <Dialog.Root
+        onOpenChange={(e: any) => {
+          if (!e.open) {
+            onClose()
+          }
+        }}
+        open={open}
+        placement="center"
+      >
         <Portal>
-
           <SuccessOverlay startAnimation={!!txHash} />
           <Dialog.Positioner>
             <Dialog.Content>
-              <TransactionModalHeader chain={GqlChain.Mainnet} label="Add liquidity" txHash={txHash} />
+              <TransactionModalHeader
+                chain={GqlChain.Mainnet}
+                label="Add liquidity"
+                txHash={txHash}
+              />
               <Dialog.CloseTrigger />
               <motion.div animate={{ height: 'auto' }}>
                 <AnimatePresence initial={false}>
@@ -94,9 +101,8 @@ export default function ModalPage() {
               </Dialog.Footer>
             </Dialog.Content>
           </Dialog.Positioner>
-
         </Portal>
       </Dialog.Root>
     </>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { Button, HStack, Heading, Popover, VStack, Text, ButtonProps, Box } from '@chakra-ui/react';
+import { Button, HStack, Heading, Popover, VStack, Text, ButtonProps, Box } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Settings } from 'react-feather'
@@ -10,9 +10,12 @@ export function TransactionSettings(props: ButtonProps) {
   const { slippage, setSlippage } = useUserSettings()
 
   return (
-    <Popover.Root lazyMount positioning={{
-      placement: 'bottom-end'
-    }}>
+    <Popover.Root
+      lazyMount
+      positioning={{
+        placement: 'bottom-end',
+      }}
+    >
       <Popover.Trigger asChild>
         <Button variant="tertiary" {...props}>
           <HStack gap="6px" textColor="grayText">
@@ -56,5 +59,5 @@ export function TransactionSettings(props: ButtonProps) {
         </Popover.Content>
       </Popover.Positioner>
     </Popover.Root>
-  );
+  )
 }

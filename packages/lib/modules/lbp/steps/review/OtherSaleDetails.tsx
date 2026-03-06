@@ -1,11 +1,12 @@
-import { Card, Heading, List, Text, VStack } from '@chakra-ui/react';
+import { Card, Heading, List, Text, VStack } from '@chakra-ui/react'
 import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function OtherSaleDetails({
   launchTokenSymbol,
   fee,
-  userActions }: {
+  userActions,
+}: {
   launchTokenSymbol: string
   fee: number
   userActions: UserActions
@@ -21,12 +22,7 @@ export function OtherSaleDetails({
           <Text fontWeight="bold" textAlign="left" w="full">
             Token creator rights
           </Text>
-          <List.Root
-            listStylePosition="outside"
-            listStyleType="disc"
-            pl="md"
-            w="full"
-          >
+          <List.Root listStylePosition="outside" listStyleType="disc" pl="md" w="full">
             <List.Item>Cancel sale (before start)</List.Item>
             <List.Item>Pause sale (during LBP)</List.Item>
             <List.Item>Unpause sale (during LBP)</List.Item>
@@ -40,12 +36,7 @@ export function OtherSaleDetails({
           <Text fontWeight="bold" textAlign="left" w="full">
             User rights
           </Text>
-          <List.Root
-            listStylePosition="outside"
-            listStyleType="disc"
-            pl="md"
-            w="full"
-          >
+          <List.Root listStylePosition="outside" listStyleType="disc" pl="md" w="full">
             <List.Item>{`Ability to ${userActions.replaceAll('_', ' ')} ${launchTokenSymbol} during the LBP`}</List.Item>
             <List.Item>{`Immediate access to ${launchTokenSymbol} on swap (no claiming delay or vesting)`}</List.Item>
           </List.Root>
@@ -55,16 +46,11 @@ export function OtherSaleDetails({
           <Text fontWeight="bold" textAlign="left" w="full">
             Fees
           </Text>
-          <List.Root
-            listStylePosition="outside"
-            listStyleType="disc"
-            pl="md"
-            w="full"
-          >
+          <List.Root listStylePosition="outside" listStyleType="disc" pl="md" w="full">
             <List.Item>Swap fees: {fNum('feePercent', fee / 100)}</List.Item>
           </List.Root>
         </VStack>
       </VStack>
     </Card.Root>
-  );
+  )
 }

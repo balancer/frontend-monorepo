@@ -1,4 +1,4 @@
-import { SimpleGrid, Flex, Box, Heading, Stack, Text } from '@chakra-ui/react';
+import { SimpleGrid, Flex, Box, Heading, Stack, Text } from '@chakra-ui/react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { VebalBenefitsVoteIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsVoteIcon'
 import { VebalBenefitsShareIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsShareIcon'
@@ -18,7 +18,8 @@ export function VebalBenefitsSection() {
       ),
       title: "Vote on Balancer's future",
       description:
-        'veBAL holders govern the direction of the protocol including liquidity incentives.' },
+        'veBAL holders govern the direction of the protocol including liquidity incentives.',
+    },
     {
       icon: (
         <SparkleIconWrapper size={45}>
@@ -28,7 +29,8 @@ export function VebalBenefitsSection() {
       title: 'Share protocol revenue',
       description:
         'veBAL holders earn a share of protocol revenue in proportion to their holdings.',
-      transformBackground: 'rotate(90deg)' },
+      transformBackground: 'rotate(90deg)',
+    },
     {
       icon: (
         <SparkleIconWrapper size={45}>
@@ -38,7 +40,8 @@ export function VebalBenefitsSection() {
       title: 'Earn weekly voting incentives',
       description:
         "veBAL holders can earn lucrative 'bribes' from 3rd parties for voting for their pools.",
-      transformBackground: 'rotate(180deg)' },
+      transformBackground: 'rotate(180deg)',
+    },
     {
       icon: (
         <SparkleIconWrapper size={41}>
@@ -48,7 +51,8 @@ export function VebalBenefitsSection() {
       title: 'Boost liquidity mining yield',
       description:
         'Liquidity Providers with veBAL can get up to a 2.5x boost on BAL liquidity incentives.',
-      transformBackground: 'rotate(-90deg)' },
+      transformBackground: 'rotate(-90deg)',
+    },
   ]
 
   return (
@@ -75,12 +79,12 @@ export function VebalBenefitsSection() {
           </Heading>
           <Text
             color="font.secondary"
+            css={{
+              textWrap: 'pretty',
+            }}
             lineHeight="1.4"
             maxWidth="38ch"
             pt="0"
-            css={{
-              textWrap: 'pretty'
-            }}
             textAlign="center"
           >
             Turn your BAL tokens into voting power and rewards.
@@ -90,8 +94,8 @@ export function VebalBenefitsSection() {
       <SimpleGrid
         alignItems="stretch"
         columns={{ base: 1, md: 2 }}
-        mt="lg"
         gap={{ base: 'ms', md: 'md', lg: 'lg' }}
+        mt="lg"
       >
         {benefits.map(benefit => (
           <FadeInOnView animateOnce={false} key={benefit.title}>
@@ -146,23 +150,23 @@ export function VebalBenefitsSection() {
                     as="h3"
                     bg="background.gold"
                     bgClip="text"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     fontSize={{ base: 'lg', md: 'xl' }}
                     mb={{ base: 'xxs', md: '2' }}
                     pb="0.5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     {benefit.title}
                   </Heading>
                   <Text
                     color="font.secondary"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     fontSize={{ base: 'sm', md: 'md' }}
                     lineHeight="1.4"
                     pb="0.5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     {benefit.description}
                   </Text>
@@ -173,5 +177,5 @@ export function VebalBenefitsSection() {
         ))}
       </SimpleGrid>
     </Stack>
-  );
+  )
 }

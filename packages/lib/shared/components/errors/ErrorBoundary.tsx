@@ -1,7 +1,7 @@
 'use client'
 
 import { FallbackProps } from 'react-error-boundary'
-import { Button, Box, Text, Heading, VStack } from '@chakra-ui/react';
+import { Button, Box, Text, Heading, VStack } from '@chakra-ui/react'
 import { ensureError } from '../../utils/errors'
 import { DefaultPageContainer } from '../containers/DefaultPageContainer'
 import { captureSentryError } from '../../utils/query-errors'
@@ -40,7 +40,7 @@ export function BoundaryError({ error, resetErrorBoundary }: BoundaryErrorProps)
         </Button>
       </VStack>
     </Box>
-  );
+  )
 }
 
 export function PageErrorBoundary(props: BoundaryErrorProps) {

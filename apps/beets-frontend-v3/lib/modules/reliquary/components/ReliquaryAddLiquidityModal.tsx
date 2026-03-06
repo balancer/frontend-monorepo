@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useMemo, useRef } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
@@ -44,7 +44,8 @@ export function ReliquaryAddLiquidityModal({
     addLiquidityTxHash,
     hasQuoteContext,
     urlTxHash,
-    setInitialHumanAmountsIn } = useAddLiquidity()
+    setInitialHumanAmountsIn,
+  } = useAddLiquidity()
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
   const { userAddress } = useUserAccount()
@@ -59,7 +60,8 @@ export function ReliquaryAddLiquidityModal({
     txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt })
+    txReceipt,
+  })
 
   useEffect(() => {
     if (isOpen) {
@@ -120,21 +122,22 @@ export function ReliquaryAddLiquidityModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          handleOnClose();
+          handleOnClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!addLiquidityTxHash && hasQuoteContext} />
         <Dialog.Positioner>
           <Dialog.Content
-            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}
+          >
             {isDesktop && hasQuoteContext && (
               <DesktopStepTracker
                 chain={pool.chain}
@@ -151,7 +154,11 @@ export function ReliquaryAddLiquidityModal({
             <Dialog.CloseTrigger />
             <Dialog.Body>
               {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
-              <ReliquaryAddLiquiditySummary {...receiptProps} createNew={createNew} relicId={relicId} />
+              <ReliquaryAddLiquiditySummary
+                {...receiptProps}
+                createNew={createNew}
+                relicId={relicId}
+              />
             </Dialog.Body>
             <ActionModalFooter
               currentStep={transactionSteps.currentStep}
@@ -162,8 +169,7 @@ export function ReliquaryAddLiquidityModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

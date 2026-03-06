@@ -7,7 +7,7 @@ import { VoteListProvider } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
 import { MyVotesProvider } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { VotesIntroductionLayout } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/VotesIntroductionLayout'
-import { Box, VStack } from '@chakra-ui/react';
+import { Box, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 export async function VotesContainer() {
@@ -20,7 +20,9 @@ export async function VotesContainer() {
       context: {
         fetchOptions: {
           cache: 'no-store', // Disable Next.js cache for large responses (>2MB)
-        } } })
+        },
+      },
+    })
   }
 
   const { data: voteListQueryData } = await getVebalVotingList()
@@ -43,5 +45,5 @@ export async function VotesContainer() {
         </VotesProvider>
       </DefaultPageContainer>
     </Box>
-  );
+  )
 }

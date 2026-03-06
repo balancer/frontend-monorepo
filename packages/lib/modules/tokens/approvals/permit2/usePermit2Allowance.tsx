@@ -23,19 +23,22 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
 
   const contracts = tokenAddresses?.map(
     tokenAddress =>
-      (({
+      ({
         chainId,
         address: permit2Address,
         abi: permit2Abi,
         functionName: 'allowance',
-        args: [owner, tokenAddress, spender] }) as const)
+        args: [owner, tokenAddress, spender],
+      }) as const
   )
 
   const { data, isLoading, refetch } = useReadContracts({
     contracts,
     allowFailure: false,
     query: {
-      enabled: enabled && tokenAddresses.length > 0 && !!owner && !!spender } })
+      enabled: enabled && tokenAddresses.length > 0 && !!owner && !!spender,
+    },
+  })
 
   const nonces: NoncesByTokenAddress | undefined = data
     ? zipObject(
@@ -68,5 +71,6 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
     expirations,
     allowedAmounts,
     allowanceFor,
-    refetchPermit2Allowances: refetch }
+    refetchPermit2Allowances: refetch,
+  }
 }

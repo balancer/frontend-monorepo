@@ -1,7 +1,7 @@
 'use client'
-import { HStack, Heading, VStack, Text } from '@chakra-ui/react';
+import { HStack, Heading, VStack, Text } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { Link } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { boostedPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
 import { flatPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
@@ -12,7 +12,7 @@ import { PoolExample } from '@repo/lib/modules/pool/__mocks__/pool-examples/pool
 export default function DebugPools() {
   return (
     <FadeInOnView>
-      <HStack align="start" margin="xs" mx="auto" gap="24px" width="90%">
+      <HStack align="start" gap="24px" margin="xs" mx="auto" width="90%">
         <VStack align="start" margin="xs" padding="0" width="40%">
           <Heading size="md">Flat pool examples</Heading>
           <PoolExampleLinks poolExamples={flatPoolExamples} />
@@ -141,7 +141,7 @@ export default function DebugPools() {
         </VStack>
       </HStack>
     </FadeInOnView>
-  );
+  )
 }
 
 function PoolExampleLinks({ poolExamples }: { poolExamples: PoolExample[] }) {

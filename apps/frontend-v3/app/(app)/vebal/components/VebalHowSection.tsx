@@ -1,5 +1,5 @@
 'use client'
-import { Grid, GridItem, Heading, Stack, Text, chakra, Link } from '@chakra-ui/react';
+import { Grid, GridItem, Heading, Stack, Text, chakra, Link } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { VebalStepCard } from './VebalStepCard'
 import NextLink from 'next/link'
@@ -14,12 +14,12 @@ export function VebalHowSection() {
           </Heading>
           <Text
             color="font.secondary"
+            css={{
+              textWrap: 'pretty',
+            }}
             lineHeight="1.4"
             maxWidth="38ch"
             pt="0"
-            css={{
-              textWrap: 'pretty'
-            }}
             textAlign="center"
           >
             Add liquidity to the ve8020 BAL/WETH pool and lock it up. The longer you lock, the more
@@ -41,14 +41,17 @@ export function VebalHowSection() {
               description={
                 <>
                   <Link
+                    asChild
                     color="font.secondary"
                     textDecoration="underline"
                     textDecorationStyle="dotted"
                     textDecorationThickness="1px"
                     textUnderlineOffset="3px"
-                    asChild><NextLink
-                    href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">Join
-                                      </NextLink></Link>
+                  >
+                    <NextLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
+                      Join
+                    </NextLink>
+                  </Link>
                   &nbsp;80/20 BAL/WETH—aka the ve8020 Balancer protocol liquidity pool—to get the{' '}
                   <chakra.span style={{ whiteSpace: 'nowrap' }}>B-80BAL-20WETH</chakra.span> LP
                   token.
@@ -67,13 +70,15 @@ export function VebalHowSection() {
               description={
                 <>
                   <Link
+                    asChild
                     color="font.secondary"
                     textDecoration="underline"
                     textDecorationStyle="dotted"
                     textDecorationThickness="1px"
                     textUnderlineOffset="3px"
-                    asChild><NextLink href="/vebal/manage/">Lock
-                                      </NextLink></Link>{' '}
+                  >
+                    <NextLink href="/vebal/manage/">Lock</NextLink>
+                  </Link>{' '}
                   your <chakra.span style={{ whiteSpace: 'nowrap' }}>B-80BAL-20WETH</chakra.span> LP
                   tokens for a period to receive veBAL. The longer you lock, the more veBAL you get.
                 </>
@@ -102,5 +107,5 @@ export function VebalHowSection() {
         </GridItem>
       </Grid>
     </Stack>
-  );
+  )
 }

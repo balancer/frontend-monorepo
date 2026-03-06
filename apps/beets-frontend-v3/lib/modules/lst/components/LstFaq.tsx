@@ -1,4 +1,4 @@
-import { Box, Card, HStack, Heading, VStack, Accordion, Text, Link } from '@chakra-ui/react';
+import { Box, Card, HStack, Heading, VStack, Accordion, Text, Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 
 const FAQ_ITEMS = [
@@ -10,7 +10,8 @@ const FAQ_ITEMS = [
         The value of stS naturally appreciates in relation to $S thanks to native network staking
         rewards from validator delegation being automatically compounded within the token.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What are the stS fees?',
     answer: (
@@ -20,7 +21,8 @@ const FAQ_ITEMS = [
         APY displayed on the UI is the APY the user receives (all fees have been subtracted
         automatically).
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'How do I get stS tokens?',
     answer: (
@@ -29,7 +31,8 @@ const FAQ_ITEMS = [
         deposit. As an alternative to staking, users can swap into stS on DEXs by swapping their $S
         for stS on the Swap Page.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'How do I unstake stS for $S?',
     answer: (
@@ -40,7 +43,8 @@ const FAQ_ITEMS = [
         note that swapping may offer a less favorable exchange rate than unstaking, depending on the
         pool’s liquidity.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'Where can I use stS tokens?',
     answer: (
@@ -48,7 +52,8 @@ const FAQ_ITEMS = [
         stS is fully liquid, meaning you can use stS seamlessly across DeFi and access lending
         markets, liquidity pools, and more without pausing your rewards.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What is the stS exchange rate and how does it change?',
     answer: (
@@ -57,7 +62,8 @@ const FAQ_ITEMS = [
         validators on the network. Every time staking rewards are added to the pool, the stS
         exchange rate to $S increases.
       </Text>
-    ) },
+    ),
+  },
   {
     question:
       'What steps have been taken to ensure the security and reliability of the stS smart contract code?',
@@ -69,8 +75,9 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
-          target='_blank'
-          rel='noopener noreferrer'>
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           <Box as="span" fontSize="lg" fontWeight="thin">
             Spearbit
           </Box>
@@ -83,8 +90,9 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
-          target='_blank'
-          rel='noopener noreferrer'>
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           <Box as="span" fontSize="lg" fontWeight="thin">
             Trail of Bits
           </Box>
@@ -93,7 +101,8 @@ const FAQ_ITEMS = [
           </Box>
         </Link>
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What is the contract address for stS?',
     answer: (
@@ -103,8 +112,9 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://sonicscan.org/token/0xe5da20f15420ad15de0fa650600afc998bbe3955"
-          target='_blank'
-          rel='noopener noreferrer'>
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           <Box as="span" fontSize="lg" fontWeight="thin">
             0xE5DA20F15420aD15DE0fa650600aFc998bbE3955
           </Box>
@@ -113,7 +123,8 @@ const FAQ_ITEMS = [
           </Box>
         </Link>
       </Text>
-    ) },
+    ),
+  },
 ]
 
 export function LstFaq() {
@@ -125,7 +136,7 @@ export function LstFaq() {
         </Heading>
       </Card.Header>
       <Card.Body align="start" as={VStack}>
-        <Accordion.Root collapsible bg="transparent" variant="button" w="full">
+        <Accordion.Root bg="transparent" collapsible variant="button" w="full">
           {FAQ_ITEMS.map(item => (
             <Accordion.Item key={item.question} mb="sm" value={item.question}>
               <h2>
@@ -136,11 +147,13 @@ export function LstFaq() {
                   <Accordion.ItemIndicator />
                 </Accordion.ItemTrigger>
               </h2>
-              <Accordion.ItemContent pb="md"><Accordion.ItemBody>{item.answer}</Accordion.ItemBody></Accordion.ItemContent>
+              <Accordion.ItemContent pb="md">
+                <Accordion.ItemBody>{item.answer}</Accordion.ItemBody>
+              </Accordion.ItemContent>
             </Accordion.Item>
           ))}
         </Accordion.Root>
       </Card.Body>
     </Card.Root>
-  );
+  )
 }

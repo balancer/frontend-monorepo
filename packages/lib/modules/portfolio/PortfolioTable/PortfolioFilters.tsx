@@ -11,8 +11,9 @@ import {
   HStack,
   Popover,
   VStack,
-  Checkbox } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+  Checkbox,
+} from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -20,7 +21,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef } from 'react'
 import { Filter } from 'react-feather'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { PoolFilterType } from '../../pool/pool.types'
@@ -39,13 +40,15 @@ export function PortfolioNetworkFilters({
   toggledNetworks,
   toggleNetwork,
   setNetworks,
-  networks }: PortfolioNetworkFiltersArgs) {
+  networks,
+}: PortfolioNetworkFiltersArgs) {
   const networkOptions = networks.map(network => ({
     label: getChainShortName(network),
     value: network,
     selectedLabel: (
       <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
-    ) }))
+    ),
+  }))
 
   function isCheckedNetwork(network: GqlChain): boolean {
     return !!toggledNetworks.includes(network)
@@ -73,23 +76,64 @@ function CheckboxFilterList<T>({
   availableItems,
   selectedItems,
   toggleItem,
-  getItemLabel }: CheckboxFilterListProps<T>) {
+  getItemLabel,
+}: CheckboxFilterListProps<T>) {
   return (
-    <Box animate="show" exit="exit" initial="hidden" variants={staggeredFadeInUp} asChild><motion.div>
+    <Box animate="show" asChild exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      <motion.div>
         {availableItems.map(item => (
-          <Box variants={staggeredFadeInUp} asChild><motion.div key={String(item)}>
+          <Box asChild variants={staggeredFadeInUp}>
+            <motion.div key={String(item)}>
               <Checkbox.Root
-                onCheckedChange={(e: { checked: boolean | "indeterminate" }) => toggleItem(!!e.checked, item)}
                 checked={!!selectedItems.find(selected => selected === item)}
-              ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-                  <Text fontSize="sm" textTransform="capitalize">
-                    {getItemLabel(item)}
-                  </Text>
-                </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
-            </motion.div></Box>
+                onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
+                  toggleItem(!!e.checked, item)
+                }
+              >
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+                <Checkbox.Label>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                  </Checkbox.Root>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                      </Checkbox.Root>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
+                  <Checkbox.Root>
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Text fontSize="sm" textTransform="capitalize">
+                        {getItemLabel(item)}
+                      </Text>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
+                </Checkbox.Label>
+              </Checkbox.Root>
+            </motion.div>
+          </Box>
         ))}
-      </motion.div></Box>
-  );
+      </motion.div>
+    </Box>
+  )
 }
 
 export interface PortfolioPoolTypeFiltersArgs {
@@ -102,7 +146,8 @@ export interface PortfolioPoolTypeFiltersArgs {
 export function PoolTypeFilters({
   togglePoolType,
   poolTypes,
-  availablePoolTypes }: PortfolioPoolTypeFiltersArgs) {
+  availablePoolTypes,
+}: PortfolioPoolTypeFiltersArgs) {
   return (
     <CheckboxFilterList
       availableItems={availablePoolTypes}
@@ -122,7 +167,8 @@ export interface PortfolioStakingTypeFiltersArgs {
 export function StakingTypeFilters({
   availableStakingTypes,
   stakingTypes,
-  toggleStakingType }: PortfolioStakingTypeFiltersArgs) {
+  toggleStakingType,
+}: PortfolioStakingTypeFiltersArgs) {
   return (
     <CheckboxFilterList
       availableItems={availableStakingTypes}
@@ -156,7 +202,8 @@ export function PortfolioFilterTags({
   poolTypes,
   togglePoolType,
   stakingTypes,
-  toggleStakingType }: PortfolioFilterTagsPops) {
+  toggleStakingType,
+}: PortfolioFilterTagsPops) {
   // prevents layout shift in mobile view
   if (networks.length === 0 && poolTypes.length === 0 && stakingTypes.length === 0) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
@@ -188,43 +235,47 @@ export function PortfolioFilterTags({
         ))}
       </AnimatePresence>
     </HStack>
-  );
+  )
 }
 
-export const FilterButton = forwardRef<HTMLButtonElement, ButtonProps & { totalFilterCount: number }>(
-  ({ totalFilterCount, ...props }, ref) => {
-    const { isMobile } = useBreakpoints()
-    const colorMode = useThemeColorMode()
-    const textColor = colorMode === 'dark' ? 'font.dark' : '#fff'
+export const FilterButton = forwardRef<
+  HTMLButtonElement,
+  ButtonProps & { totalFilterCount: number }
+>(({ totalFilterCount, ...props }, ref) => {
+  const { isMobile } = useBreakpoints()
+  const colorMode = useThemeColorMode()
+  const textColor = colorMode === 'dark' ? 'font.dark' : '#fff'
 
-    return (
-      <Button ref={ref} {...props} display="flex" gap="2" variant="tertiary">
-        <Icon boxSize={4} asChild><Filter /></Icon>
-        {!isMobile && 'Filters'}
-        {totalFilterCount > 0 && (
-          <Badge
-            bg="font.highlight"
-            borderRadius="full"
-            color={textColor}
-            p="0"
-            position="absolute"
-            right="-9px"
-            shadow="lg"
-            top="-9px"
-          >
-            <Center h="5" w="5">
-              {totalFilterCount}
-            </Center>
-          </Badge>
-        )}
-      </Button>
-    );
-  }
-)
+  return (
+    <Button ref={ref} {...props} display="flex" gap="2" variant="tertiary">
+      <Icon asChild boxSize={4}>
+        <Filter />
+      </Icon>
+      {!isMobile && 'Filters'}
+      {totalFilterCount > 0 && (
+        <Badge
+          bg="font.highlight"
+          borderRadius="full"
+          color={textColor}
+          p="0"
+          position="absolute"
+          right="-9px"
+          shadow="lg"
+          top="-9px"
+        >
+          <Center h="5" w="5">
+            {totalFilterCount}
+          </Center>
+        </Badge>
+      )}
+    </Button>
+  )
+})
 
 export function PortfolioFilters({
   selectedNetworks,
-  selectedPoolTypes }: {
+  selectedPoolTypes,
+}: {
   selectedNetworks?: GqlChain[]
   selectedPoolTypes?: PoolFilterType[]
 }) {
@@ -242,7 +293,8 @@ export function PortfolioFilters({
     availablePoolTypes,
     selectedStakingTypes,
     toggleStakingType,
-    availableStakingTypes } = usePortfolioFilters()
+    availableStakingTypes,
+  } = usePortfolioFilters()
 
   const effectiveSelectedNetworks = selectedNetworks || hookSelectedNetworks
   const effectiveSelectedPoolTypes = selectedPoolTypes || hookSelectedPoolTypes
@@ -257,19 +309,20 @@ export function PortfolioFilters({
       <HStack gap="none" justify="end" w="full">
         {/* <PoolListSearch /> */}
         <Popover.Root
-          open={isPopoverOpen}
           onOpenChange={(e: { open: boolean }) => {
             if (e.open) {
-              setIsPopoverOpen(true);
+              setIsPopoverOpen(true)
             } else {
-              setIsPopoverOpen(false);
+              setIsPopoverOpen(false)
             }
           }}
+          open={isPopoverOpen}
           positioning={{
-            placement: 'bottom-end'
-          }}>
+            placement: 'bottom-end',
+          }}
+        >
           <Popover.Trigger asChild>
-            <FilterButton isDisabled={isDisabled} ml="ms" totalFilterCount={totalFilterCount} />
+            <FilterButton disabled={isDisabled} ml="ms" totalFilterCount={totalFilterCount} />
           </Popover.Trigger>
           <Box shadow="2xl" zIndex="popover">
             <Popover.Positioner>
@@ -282,14 +335,21 @@ export function PortfolioFilters({
                       <VStack
                         align="start"
                         animate="show"
-                        exit="exit"
-                        initial="hidden"
-                        gap="md"
-                        variants={staggeredFadeInUp}
                         asChild
-                      ><motion.div>
-                          <Box lineHeight="0" p="0" variants={staggeredFadeInUp} asChild><motion.div>
-                              <Flex alignItems="center" gap="ms" justifyContent="space-between" w="full">
+                        exit="exit"
+                        gap="md"
+                        initial="hidden"
+                        variants={staggeredFadeInUp}
+                      >
+                        <motion.div>
+                          <Box asChild lineHeight="0" p="0" variants={staggeredFadeInUp}>
+                            <motion.div>
+                              <Flex
+                                alignItems="center"
+                                gap="ms"
+                                justifyContent="space-between"
+                                w="full"
+                              >
                                 <Text
                                   background="font.special"
                                   backgroundClip="text"
@@ -300,14 +360,21 @@ export function PortfolioFilters({
                                   Filters
                                 </Text>
                                 {totalFilterCount > 0 && (
-                                  <Button h="fit-content" onClick={resetFilters} size="xs" variant='plain'>
+                                  <Button
+                                    h="fit-content"
+                                    onClick={resetFilters}
+                                    size="xs"
+                                    variant="plain"
+                                  >
                                     Reset all
                                   </Button>
                                 )}
                               </Flex>
-                            </motion.div></Box>
+                            </motion.div>
+                          </Box>
                           {availableNetworks.length > 1 && (
-                            <Box variants={staggeredFadeInUp} w="full" asChild><motion.div>
+                            <Box asChild variants={staggeredFadeInUp} w="full">
+                              <motion.div>
                                 <Heading as="h3" mb="sm" size="sm">
                                   Networks
                                 </Heading>
@@ -317,9 +384,11 @@ export function PortfolioFilters({
                                   toggledNetworks={effectiveSelectedNetworks}
                                   toggleNetwork={toggleNetwork}
                                 />
-                              </motion.div></Box>
+                              </motion.div>
+                            </Box>
                           )}
-                          <Box variants={staggeredFadeInUp} asChild><motion.div>
+                          <Box asChild variants={staggeredFadeInUp}>
+                            <motion.div>
                               <Heading as="h3" mb="sm" size="sm">
                                 Pool types
                               </Heading>
@@ -329,8 +398,10 @@ export function PortfolioFilters({
                                 setPoolTypes={setSelectedPoolTypes}
                                 togglePoolType={togglePoolType}
                               />
-                            </motion.div></Box>
-                          <Box variants={staggeredFadeInUp} asChild><motion.div>
+                            </motion.div>
+                          </Box>
+                          <Box asChild variants={staggeredFadeInUp}>
+                            <motion.div>
                               <Heading as="h3" mb="sm" size="sm">
                                 Staking types
                               </Heading>
@@ -339,8 +410,10 @@ export function PortfolioFilters({
                                 stakingTypes={selectedStakingTypes}
                                 toggleStakingType={toggleStakingType}
                               />
-                            </motion.div></Box>
-                        </motion.div></VStack>
+                            </motion.div>
+                          </Box>
+                        </motion.div>
+                      </VStack>
                     ) : null}
                   </AnimatePresence>
                 </Popover.Body>
@@ -350,5 +423,5 @@ export function PortfolioFilters({
         </Popover.Root>
       </HStack>
     </VStack>
-  );
+  )
 }

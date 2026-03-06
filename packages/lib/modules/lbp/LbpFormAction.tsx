@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, HStack, IconButton, useDisclosure, Icon } from '@chakra-ui/react';
+import { Button, HStack, IconButton, useDisclosure, Icon } from '@chakra-ui/react'
 import { useLbpForm } from './LbpFormProvider'
 import { LbpCreationModal } from './modal/LbpCreationModal'
 import { useRef } from 'react'
@@ -8,7 +8,7 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 import { useFormState, useWatch } from 'react-hook-form'
-import { LuChevronLeft } from 'react-icons/lu';
+import { LuChevronLeft } from 'react-icons/lu'
 
 export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { isConnected } = useUserAccount()
@@ -18,7 +18,8 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     goToNextStep,
     goToPreviousStep,
     saleStructureForm,
-    poolAddress } = useLbpForm()
+    poolAddress,
+  } = useLbpForm()
   const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
   const previewModalDisclosure = useDisclosure()
   const nextBtn = useRef(null)
@@ -34,7 +35,11 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   return (
     <HStack gap="md" w="full">
       {!isFirstStep && (
-        <IconButton aria-label="Back" onClick={goToPreviousStep} size="lg"><Icon h="8" w="8" asChild><LuChevronLeft /></Icon></IconButton>
+        <IconButton aria-label="Back" onClick={goToPreviousStep} size="lg">
+          <Icon asChild h="8" w="8">
+            <LuChevronLeft />
+          </Icon>
+        </IconButton>
       )}
       {poolAddress && (
         <Button
@@ -70,5 +75,5 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
         />
       )}
     </HStack>
-  );
+  )
 }

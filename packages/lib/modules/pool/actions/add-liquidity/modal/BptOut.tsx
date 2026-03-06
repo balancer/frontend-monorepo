@@ -5,16 +5,17 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { BptRow } from '@repo/lib/modules/tokens/TokenRow/BptRow'
 import { FLEXIBLE_ADD_DESCRIPTION, SlippageOptions, SlippageSelector } from '../../SlippageSelector'
-import { Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 export function ReceiptBptOut({
   actualBptOut,
-  isLoading,
-  label = 'You got' }: {
+  loading,
+  label = 'You got',
+}: {
   actualBptOut: string
-  isLoading?: boolean
+  loading?: boolean
   label?: string
 }) {
   const { pool } = usePool()
@@ -27,7 +28,7 @@ export function ReceiptBptOut({
   const bptDiff = bn(actualBptOut).minus(expectedBptOut)
 
   const diffLabel = () => {
-    if (!simulationQuery?.data || isLoading) return ''
+    if (!simulationQuery?.data || loading) return ''
     if (bptDiff.isZero()) return 'Slippage: 0%'
 
     const slippage = bptDiff.div(expectedBptOut).times(100).toString()
@@ -38,8 +39,8 @@ export function ReceiptBptOut({
   return (
     <BptRow
       bptAmount={actualBptOut}
-      isLoading={isLoading}
       label={label}
+      loading={loading}
       pool={pool}
       rightElement={
         <Text color="grayText" fontSize="sm">
@@ -50,7 +51,7 @@ export function ReceiptBptOut({
   )
 }
 
-export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLoading?: boolean }) {
+export function QuoteBptOut({ label, loading = false }: { label?: string; loading?: boolean }) {
   const { simulationQuery, wantsProportional } = useAddLiquidity()
   const { slippage } = useUserSettings()
   const bptOut = simulationQuery?.data?.bptOut
@@ -72,8 +73,8 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
   return (
     <BptRow
       bptAmount={bptOutWithSlippage}
-      isLoading={isLoading}
       label={_label}
+      loading={loading}
       pool={pool}
       rightElement={
         !wantsProportional && (

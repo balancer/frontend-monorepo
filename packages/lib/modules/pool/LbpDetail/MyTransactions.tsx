@@ -1,11 +1,12 @@
-import { Grid, GridItem, Text, Box, HStack, Link } from '@chakra-ui/react';
+import { Grid, GridItem, Text, Box, HStack, Link } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import {
   GetPoolEventsQuery,
   GqlChain,
   GqlPoolAddRemoveEventV3,
   GqlPoolLiquidityBootstrappingV3,
-  GqlPoolSwapEventV3 } from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolSwapEventV3,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { secondsToMilliseconds } from 'date-fns'
 import { ArrowRight, ArrowUpRight } from 'react-feather'
@@ -33,9 +34,10 @@ const GRID_COLUMNS = '1fr 4fr 1fr 3fr'
 
 export function MyTransactions({
   userPoolEvents,
-  isLoading }: {
+  loading,
+}: {
   userPoolEvents: GetPoolEventsQuery['poolEvents'] | undefined
-  isLoading: boolean
+  loading: boolean
 }) {
   const { toCurrency } = useCurrency()
 
@@ -47,7 +49,8 @@ export function MyTransactions({
 
   const tokenLogoURIs: Record<string, string> = {
     [projectToken.address]: projectToken.logoURI || '',
-    [reserveToken.address]: reserveToken.logoURI || '' }
+    [reserveToken.address]: reserveToken.logoURI || '',
+  }
 
   const isEmptyState = !userPoolEvents || isEmpty(userPoolEvents)
 
@@ -57,10 +60,11 @@ export function MyTransactions({
       cardRef={myLbpTransactionsSectionRef}
       hasNoTransactions={isEmptyState}
       headerTemplateColumns={GRID_COLUMNS}
-      isLoading={isLoading}
       listContainerProps={{
         maxH: { base: '200px', md: '250px' },
-        overflowX: 'hidden' }}
+        overflowX: 'hidden',
+      }}
+      loading={loading}
       title="My transactions"
     >
       {!isEmptyState &&
@@ -106,7 +110,8 @@ function PoolEventRow({
   chain,
   txUrl,
   projectTokenAddress,
-  tokenLogoURIs }: PoolEventRowProps) {
+  tokenLogoURIs,
+}: PoolEventRowProps) {
   if (!['GqlPoolSwapEventV3', 'GqlPoolAddRemoveEventV3'].includes(poolEvent.__typename)) {
     return null
   }
@@ -128,7 +133,8 @@ function PoolEventRow({
       templateAreas={{
         base: `"action value time"
                "tokens tokens tokens"`,
-        md: `"action tokens value time"` }}
+        md: `"action tokens value time"`,
+      }}
       templateColumns={{ base: 'fit-content(150px) 50px 1fr', md: GRID_COLUMNS }}
       w="full"
     >
@@ -158,19 +164,20 @@ function PoolEventRow({
           <Text color="grayText" textAlign="right">
             {formatDistanceToNowAbbr(new Date(secondsToMilliseconds(poolEvent.timestamp)))}
           </Text>
-          <Link color="grayText" href={txUrl} target='_blank' rel='noopener noreferrer'>
+          <Link color="grayText" href={txUrl} rel="noopener noreferrer" target="_blank">
             <ArrowUpRight size={16} />
           </Link>
         </HStack>
       </GridItem>
     </Grid>
-  );
+  )
 }
 
 function SwapTokens({
   event,
   chain,
-  tokenLogoURIs }: {
+  tokenLogoURIs,
+}: {
   event: GqlPoolSwapEventV3
   chain: GqlChain
   tokenLogoURIs: Record<string, string>
@@ -214,7 +221,8 @@ function SwapTokens({
 function AddOrRemoveTokens({
   event,
   chain,
-  tokenLogoURIs }: {
+  tokenLogoURIs,
+}: {
   event: GqlPoolAddRemoveEventV3
   chain: GqlChain
   tokenLogoURIs: Record<string, string>

@@ -1,4 +1,4 @@
-import { VStack, HStack, Text } from '@chakra-ui/react';
+import { VStack, HStack, Text } from '@chakra-ui/react'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
@@ -8,12 +8,13 @@ export function BeetsTokenRow({
   chain,
   tokenAmount,
   tokenAddress,
-  isLoading = false }: {
+  loading = false,
+}: {
   label: string
   chain: GqlChain
   tokenAmount: string
   tokenAddress: string
-  isLoading?: boolean
+  loading?: boolean
 }) {
   return (
     <VStack align="start" gap="md">
@@ -26,9 +27,9 @@ export function BeetsTokenRow({
         abbreviated={false}
         address={tokenAddress as Address}
         chain={chain}
-        isLoading={isLoading}
+        loading={loading}
         value={tokenAmount}
       />
     </VStack>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
@@ -120,7 +120,7 @@ export function Code() {
                 w="full"
               >
                 <Box w="full">
-                  <VStack alignItems="start" px={{ base: 'md', lg: '0' }} gap="lg">
+                  <VStack alignItems="start" gap="lg" px={{ base: 'md', lg: '0' }}>
                     <BlurIn delay={0.4}>
                       <Text
                         background="font.special"
@@ -157,14 +157,16 @@ export function Code() {
                       style={{
                         padding: '2rem',
                         borderRadius: '8px',
-                        minHeight: '400px' }}
+                        minHeight: '400px',
+                      }}
                     >
                       <code
                         className="language-solidity"
                         dangerouslySetInnerHTML={{ __html: displayedText }}
                         style={{
                           whiteSpace: isMobile ? 'pre-line' : 'pre',
-                          wordBreak: isMobile ? 'break-word' : 'normal' }}
+                          wordBreak: isMobile ? 'break-word' : 'normal',
+                        }}
                       />
                     </pre>
                   </Card.Root>
@@ -184,5 +186,5 @@ export function Code() {
         w="full"
       />
     </Noise>
-  );
+  )
 }

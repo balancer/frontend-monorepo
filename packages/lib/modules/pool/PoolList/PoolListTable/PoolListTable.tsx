@@ -5,7 +5,7 @@ import { PoolListTableHeader } from './PoolListTableHeader'
 import { PoolListTableRow } from './PoolListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { PoolListItem } from '../../pool.types'
-import { Card, Skeleton } from '@chakra-ui/react';
+import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from '../PoolListProvider'
 import { useCallback, useMemo } from 'react'
@@ -19,7 +19,8 @@ interface Props {
 export function PoolListTable({ pools, count, loading }: Props) {
   const isMounted = useIsMounted()
   const {
-    queryState: { pagination, setPagination, userAddress } } = usePoolList()
+    queryState: { pagination, setPagination, userAddress },
+  } = usePoolList()
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!pools.length && !!count && count > pagination.pageSize
 
@@ -33,7 +34,8 @@ export function PoolListTable({ pools, count, loading }: Props) {
         userAddress ? furthestLeftColWidth : ''
       } ${userAddress ? numberColumnWidth : furthestLeftColWidth} ${numberColumnWidth} 200px`,
       alignItems: 'center',
-      gap: { base: 'xxs', xl: 'lg' } }),
+      gap: { base: 'xxs', xl: 'lg' },
+    }),
     [userAddress, furthestLeftColWidth, numberColumnWidth]
   )
 
@@ -78,5 +80,5 @@ export function PoolListTable({ pools, count, loading }: Props) {
         showPagination={showPagination}
       />
     </Card.Root>
-  );
+  )
 }

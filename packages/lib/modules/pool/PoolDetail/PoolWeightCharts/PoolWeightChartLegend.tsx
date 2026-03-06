@@ -1,11 +1,11 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
 import { Address } from 'viem'
 
 export default function PoolWeightChartLegend({ displayTokens }: { displayTokens: ApiToken[] }) {
   return (
-    <HStack justify="center" mt="4" gap="4" wrap="wrap" zIndex={2}>
+    <HStack gap="4" justify="center" mt="4" wrap="wrap" zIndex={2}>
       {displayTokens.map((token, i) => {
         return (
           <Box
@@ -26,8 +26,8 @@ export default function PoolWeightChartLegend({ displayTokens }: { displayTokens
               </Text>
             </HStack>
           </Box>
-        );
+        )
       })}
     </HStack>
-  );
+  )
 }

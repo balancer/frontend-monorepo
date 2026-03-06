@@ -4,7 +4,7 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
-import { VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react'
 
 const exceptionName = 'Error fetching swap'
 const exceptionMessage = `Execution reverted for an unknown reason. Raw Call Arguments:

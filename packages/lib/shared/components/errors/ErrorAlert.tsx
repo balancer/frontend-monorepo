@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, AlertProps, Box } from '@chakra-ui/react';
+import { Alert, AlertProps, Box } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { XCircle } from 'react-feather'
 
@@ -11,11 +11,13 @@ type Props = AlertProps & {
 export function ErrorAlert({ title, children, ...rest }: PropsWithChildren<Props>) {
   return (
     <Alert.Root mb="0" rounded="md" status="error" {...rest}>
-      <Alert.Indicator boxSize="1.5em" asChild><XCircle /></Alert.Indicator>
+      <Alert.Indicator asChild boxSize="1.5em">
+        <XCircle />
+      </Alert.Indicator>
       <Box maxHeight="160" ml="md" overflowY="auto" paddingRight="2">
         {title && <Alert.Title color="black">{title}</Alert.Title>}
         <Alert.Description>{children}</Alert.Description>
       </Box>
     </Alert.Root>
-  );
+  )
 }

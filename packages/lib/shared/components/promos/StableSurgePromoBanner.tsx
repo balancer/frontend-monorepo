@@ -1,6 +1,6 @@
-'use client';
-import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+'use client'
+import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
@@ -10,16 +10,16 @@ export function StableSurgePromoBanner() {
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
+        css={{
+          width: '100% !important',
+          maxWidth: '100% !important',
+        }}
         height={{ base: '100%', md: '132px' }}
         maxW="100%"
         overflow="hidden"
         position="relative"
         rounded="lg"
         shadow="innerRockShadow"
-        css={{
-          width: '100% !important',
-          maxWidth: '100% !important'
-        }}
         width="full"
       >
         <Box height="100%" position="absolute" width="100%" zIndex="-1">
@@ -111,14 +111,14 @@ export function StableSurgePromoBanner() {
                   <Box>
                     <Text
                       color="font.maxContrast"
+                      css={{
+                        textWrap: 'balance',
+                      }}
                       fontSize={{ base: 'md' }}
                       fontWeight="medium"
                       lineHeight="1.25"
                       maxW="600px"
                       opacity={colorMode === 'dark' ? '0.9' : '1'}
-                      css={{
-                        textWrap: 'balance'
-                      }}
                     >
                       Applies a dynamic directional surge swap fee in times of volatility to help
                       defend the peg. LPs get MEV protection and increased fees.
@@ -130,14 +130,15 @@ export function StableSurgePromoBanner() {
             <Button
               _hover={{
                 bg: colorMode === 'dark' ? '#000' : '#fff',
-                color: colorMode === 'dark' ? '#fff' : '#000' }}
+                color: colorMode === 'dark' ? '#fff' : '#000',
+              }}
+              asChild
               borderColor="font.maxContrast"
               color="font.maxContrast"
               cursor="hand"
               flex="1"
               gap="xs"
               h={{ base: '32px', sm: '40px', lg: '48px' }}
-              isExternal
               maxW="132px"
               py="sm"
               role="group"
@@ -145,20 +146,27 @@ export function StableSurgePromoBanner() {
               size="md"
               variant="outline"
               w="132px"
-              asChild><Link
-                href="https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219">Learn more
-                              <Box
+            >
+              <Link
+                href="https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Learn more
+                <Box
                   _groupHover={{
-                    transform: 'translateX(2px)' }}
+                    transform: 'translateX(2px)',
+                  }}
                   as="span"
                   transition="all 0.3s var(--ease-out-cubic)"
                 >
                   <ArrowUpRight size="14px" />
                 </Box>
-              </Link></Button>
+              </Link>
+            </Button>
           </Flex>
         </Center>
       </Box>
     </Box>
-  );
+  )
 }

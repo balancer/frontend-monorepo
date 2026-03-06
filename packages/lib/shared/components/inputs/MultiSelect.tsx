@@ -9,7 +9,8 @@ import {
   Tag,
   Text,
   VStack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { ChevronDown } from 'react-feather'
 import useMeasure from 'react-use-measure'
@@ -48,16 +49,17 @@ export function MultiSelect<Value = string>({
   return (
     <Popover.Root
       lazyMount
-      variant="multiSelect"
       positioning={{
         placement: 'bottom-start',
-        preventOverflow: true
-      }}>
+        preventOverflow: true,
+      }}
+      variant="multiSelect"
+    >
       <Popover.Trigger asChild>
         <Button h="auto" py="sm" ref={ref} variant="tertiary" w="full" {...buttonProps}>
           <HStack justify="space-between" w="full">
             {hasSelectedOptions ? (
-              <HStack overflow="hidden" gap="6px" w="full">
+              <HStack gap="6px" overflow="hidden" w="full">
                 <HStack gap="xs">
                   {selectedOptions.map(option =>
                     option.selectedLabel ? (
@@ -94,8 +96,8 @@ export function MultiSelect<Value = string>({
             <VStack align="start" gap="sm" w="full">
               {!!toggleAll && (
                 <>
-                  <RadioGroup.Root value={!hasSelectedOptions ? 'all' : ''} py="xs">
-                    <RadioGroup.Item value="all" onClick={toggleAll}>
+                  <RadioGroup.Root py="xs" value={!hasSelectedOptions ? 'all' : ''}>
+                    <RadioGroup.Item onClick={toggleAll} value="all">
                       <RadioGroup.ItemHiddenInput />
                       <RadioGroup.ItemControl />
                       <RadioGroup.ItemText>
@@ -108,19 +110,55 @@ export function MultiSelect<Value = string>({
                   <Separator />
                 </>
               )}
-              <VStack align="start" py="xs" gap="ms" w="full">
+              <VStack align="start" gap="ms" py="xs" w="full">
                 {options.map(option => (
                   <Checkbox.Root
+                    checked={isChecked(option.value)}
                     fontWeight="medium"
                     key={`checkbox-${String(option.value)}`}
-                    onCheckedChange={(e: { checked: boolean | "indeterminate" }) => toggleOption(!!e.checked, option.value)}
-                    checked={isChecked(option.value)}
-                  ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-                      <HStack>
-                        {option.icon}
-                        <Text fontSize="sm">{option.label}</Text>
-                      </HStack>
-                    </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+                    onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
+                      toggleOption(!!e.checked, option.value)
+                    }
+                  >
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                      </Checkbox.Root>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label>
+                          <Checkbox.Root>
+                            <Checkbox.HiddenInput />
+                            <Checkbox.Control>
+                              <Checkbox.Indicator />
+                            </Checkbox.Control>
+                          </Checkbox.Root>
+                        </Checkbox.Label>
+                      </Checkbox.Root>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label>
+                          <HStack>
+                            {option.icon}
+                            <Text fontSize="sm">{option.label}</Text>
+                          </HStack>
+                        </Checkbox.Label>
+                      </Checkbox.Root>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
                 ))}
               </VStack>
             </VStack>
@@ -128,5 +166,5 @@ export function MultiSelect<Value = string>({
         </Popover.Content>
       </Popover.Positioner>
     </Popover.Root>
-  );
+  )
 }

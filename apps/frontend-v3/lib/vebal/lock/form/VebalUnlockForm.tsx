@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Card, HStack, VStack, Flex, Text, Alert, CardProps, Skeleton } from '@chakra-ui/react';
+import { Box, Card, HStack, VStack, Flex, Text, Alert, CardProps, Skeleton } from '@chakra-ui/react'
 import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { VebalLockModal } from '@bal/lib/vebal/lock/modal/VebalLockModal'
 import NextLink from 'next/link'
@@ -20,7 +20,7 @@ export interface ClickableCardProps extends CardProps {
 }
 
 export function ClickableCard(props: ClickableCardProps) {
-  return <Card.Root cursor="pointer" {...props} />;
+  return <Card.Root cursor="pointer" {...props} />
 }
 
 export function VebalUnlockForm() {
@@ -98,7 +98,7 @@ export function VebalUnlockForm() {
             )}
           </VStack>
           <VStack align="start" gap="md" w="full">
-            <HStack justifyContent="space-between" gap="md" w="full">
+            <HStack gap="md" justifyContent="space-between" w="full">
               <Text fontSize="sm" fontWeight="700" lineHeight="18px">
                 Your options:
               </Text>
@@ -108,10 +108,12 @@ export function VebalUnlockForm() {
             ) : (
               <Card.Root
                 _hover={{ shadow: 'sm' }}
+                asChild
                 role="group"
                 shadow="2xl"
                 variant="subSection"
-                asChild><NextLink href="/vebal/manage/extend">
+              >
+                <NextLink href="/vebal/manage/extend">
                   <Flex
                     alignItems="center"
                     gap={{ base: 'lg', md: '2xl' }}
@@ -124,10 +126,10 @@ export function VebalUnlockForm() {
                       <Card.Body color="font.secondary">
                         <Text
                           _groupHover={{ color: 'font.maxContrast' }}
-                          fontSize="sm"
                           css={{
-                            textWrap: 'balanced'
+                            textWrap: 'balanced',
                           }}
+                          fontSize="sm"
                           variant="secondary"
                         >
                           Regain your veBAL benefits: Voting incentives, protocol revenue, voting
@@ -139,7 +141,8 @@ export function VebalUnlockForm() {
                       <ArrowRight size="16" />
                     </Box>
                   </Flex>
-                </NextLink></Card.Root>
+                </NextLink>
+              </Card.Root>
             )}
             {isLoading ? (
               <Skeleton h="100px" w="full" />
@@ -163,10 +166,10 @@ export function VebalUnlockForm() {
                       <Card.Body color="font.secondary">
                         <Text
                           _groupHover={{ color: 'font.maxContrast' }}
-                          fontSize="sm"
                           css={{
-                            textWrap: 'balanced'
+                            textWrap: 'balanced',
                           }}
+                          fontSize="sm"
                           variant="secondary"
                         >
                           Unlock tokens first and then be free to withdraw the underlying BAL / WETH
@@ -190,5 +193,5 @@ export function VebalUnlockForm() {
         onClose={onModalClose}
       />
     </Box>
-  );
+  )
 }

@@ -1,14 +1,5 @@
-import {
-  Popover,
-  HoverCard,
-  HStack,
-  Button,
-  Heading,
-  Text,
-  Icon,
-  Portal,
-  Separator } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { HoverCard, HStack, Button, Heading, Text, Icon, Portal, Separator } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -24,7 +15,8 @@ const basePopoverAprItemProps = {
   pr: 2,
   pb: 3,
   backgroundColor: 'background.level1',
-  fontWeight: 700 }
+  fontWeight: 700,
+}
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 
@@ -64,7 +56,8 @@ function AuraAprTooltip({ auraApr, textProps }: Props) {
 
   return (
     <HoverCard.Root>
-      <HoverCard.Context>{({ open: isOpen }: { open: boolean }) => (
+      <HoverCard.Context>
+        {({ open: isOpen }: { open: boolean }) => (
           <>
             <HoverCard.Trigger asChild>
               <HStack align="center" alignItems="center">
@@ -83,10 +76,13 @@ function AuraAprTooltip({ auraApr, textProps }: Props) {
                       </Heading>
                     )}
                     <Icon
+                      asChild
                       gradFrom={isOpen ? 'green' : auraGradFrom}
                       gradTo={isOpen ? 'green' : auraGradTo}
                       variant="gradient"
-                      asChild><StarsIcon /></Icon>
+                    >
+                      <StarsIcon />
+                    </Icon>
                   </HStack>
                 </Button>
               </HStack>
@@ -94,9 +90,10 @@ function AuraAprTooltip({ auraApr, textProps }: Props) {
 
             <Portal>{popoverContent}</Portal>
           </>
-        )}</HoverCard.Context>
+        )}
+      </HoverCard.Context>
     </HoverCard.Root>
-  );
+  )
 }
 
 export type { Props as BaseAprTooltipProps }

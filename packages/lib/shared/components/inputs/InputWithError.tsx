@@ -1,11 +1,4 @@
-import {
-  Box,
-  Input,
-  InputProps,
-  Text,
-  VStack,
-  Button,
-  InputGroup } from '@chakra-ui/react';
+import { Box, Input, InputProps, Text, VStack, Button, InputGroup } from '@chakra-ui/react'
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
 
@@ -59,28 +52,35 @@ export function InputWithError({
       )}
 
       <InputGroup
+        endElement={
+          pasteFn ? (
+            <Button
+              aria-label="paste"
+              fontSize={{ base: 'xs', md: 'sm' }}
+              h="28px"
+              letterSpacing="0.25px"
+              lineHeight="1"
+              mr="0.5"
+              onClick={pasteFn}
+              position="relative"
+              px="2"
+              right="3px"
+              rounded="sm"
+              size="sm"
+              variant="tertiary"
+            >
+              Paste
+            </Button>
+          ) : undefined
+        }
         startElement={isFiatPrice ? <Text pointerEvents="none">$</Text> : undefined}
-        endElement={pasteFn ? (
-          <Button
-            aria-label="paste"
-            fontSize={{ base: 'xs', md: 'sm' }}
-            h="28px"
-            letterSpacing="0.25px"
-            lineHeight="1"
-            mr="0.5"
-            onClick={pasteFn}
-            position="relative"
-            px="2"
-            right="3px"
-            rounded="sm"
-            size="sm"
-            variant="tertiary"
-          >
-            Paste
-          </Button>
-        ) : undefined}
       >
-        <Input disabled={isDisabled} fontSize={{ base: baseFontSize, md: 'md' }} invalid={isInvalid} {...props} />
+        <Input
+          disabled={isDisabled}
+          fontSize={{ base: baseFontSize, md: 'md' }}
+          invalid={isInvalid}
+          {...props}
+        />
       </InputGroup>
 
       {error && (

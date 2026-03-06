@@ -1,4 +1,4 @@
-import { HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '../token.types'
@@ -19,15 +19,16 @@ export function TokenRowGroup({
   chain,
   tokens = [],
   totalUSDValue,
-  isLoading = false,
-  pool }: {
+  loading = false,
+  pool,
+}: {
   label: string
   rightElement?: ReactNode
   amounts: HumanTokenAmountWithSymbol[]
   chain: GqlChain
   totalUSDValue?: string
   tokens?: ApiToken[]
-  isLoading?: boolean
+  loading?: boolean
   pool?: Pool
 }) {
   const { toCurrency } = useCurrency()
@@ -53,7 +54,8 @@ export function TokenRowGroup({
           humanAmount: bn(amountMap[key].humanAmount)
             .plus(bn(amount.humanAmount))
             .toString() as HumanAmount,
-          symbol: symbol || amount.symbol }
+          symbol: symbol || amount.symbol,
+        }
       } else {
         amountMap[key] = { ...amount }
       }
@@ -72,7 +74,7 @@ export function TokenRowGroup({
         </Text>
         {rightElement ? (
           rightElement
-        ) : isLoading ? (
+        ) : loading ? (
           <Skeleton h="5" w="12" />
         ) : (
           hasMultipleAmounts && (
@@ -90,8 +92,8 @@ export function TokenRowGroup({
             abbreviated={false}
             address={amount.tokenAddress}
             chain={chain}
-            isLoading={isLoading}
             key={amount.tokenAddress}
+            loading={loading}
             pool={pool}
             showZeroAmountAsDash
             symbol={amount?.symbol}
@@ -100,5 +102,5 @@ export function TokenRowGroup({
         )
       })}
     </VStack>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Dialog, Portal } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Dialog, Portal } from '@chakra-ui/react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
@@ -56,18 +56,25 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
   }, [])
 
   return (
-    <Dialog.Root placement='center' open={isOpen} onOpenChange={(e: { open: boolean }) => {
-      if (!e.open) {
-        closeModal();
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(e: { open: boolean }) => {
+        if (!e.open) {
+          closeModal()
+        }
+      }}
+      open={isOpen}
+      placement="center"
+    >
       <Portal>
-
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
             {isDesktop && (
-              <DesktopStepTracker chain={GqlChain.Mainnet} isTxBatch={false} transactionSteps={steps} />
+              <DesktopStepTracker
+                chain={GqlChain.Mainnet}
+                isTxBatch={false}
+                transactionSteps={steps}
+              />
             )}
             <TransactionModalHeader
               chain={GqlChain.Mainnet}
@@ -109,8 +116,7 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
             )}
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

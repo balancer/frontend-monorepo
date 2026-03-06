@@ -1,4 +1,4 @@
-import { Card, CardProps, Text, VStack } from '@chakra-ui/react';
+import { Card, CardProps, Text, VStack } from '@chakra-ui/react'
 
 import ReactECharts from 'echarts-for-react'
 import { useVebalLocksChart, UseVebalLocksChartParams } from './useVebalLocksChart'
@@ -30,5 +30,5 @@ export function VebalLocksChart({
         />
       )}
     </Card.Root>
-  );
+  )
 }

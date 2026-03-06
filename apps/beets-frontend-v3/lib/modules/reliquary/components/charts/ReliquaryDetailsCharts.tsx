@@ -1,11 +1,13 @@
 import { useQuery } from '@apollo/client/react'
-import { Box, HStack, Stack, VStack } from '@chakra-ui/react';
+import { Box, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import {
   GetReliquaryFarmSnapshotsDocument,
-  GqlPoolSnapshotDataRange } from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolSnapshotDataRange,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { ReliquaryLiquidityChart } from './ReliquaryLiquidityChart'
@@ -40,7 +42,9 @@ export function ReliquaryDetailsCharts() {
     variables: {
       id: networkConfig.reliquary?.fbeets.farmId.toString() || '',
       chain: networkConfig.chain,
-      range: selectedRangeOption.value as GqlPoolSnapshotDataRange } })
+      range: selectedRangeOption.value as GqlPoolSnapshotDataRange,
+    },
+  })
 
   return (
     <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
@@ -74,7 +78,8 @@ export function ReliquaryDetailsCharts() {
             style={{
               position: 'absolute',
               width: '100%',
-              height: '100%' }}
+              height: '100%',
+            }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             {selectedChartOption.value === 'FB_LEV' && <ReliquaryMaturityChart />}

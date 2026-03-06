@@ -1,4 +1,4 @@
-import { Box, VStack, useChakraContext } from '@chakra-ui/react';
+import { Box, VStack, useChakraContext } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
@@ -38,7 +38,8 @@ const smallSize: ChartSizeValues = {
   haloTop: '40%',
   haloLeft: '55px',
   haloWidth: '40px',
-  haloHeigth: '40px' }
+  haloHeigth: '40px',
+}
 
 const normalSize: ChartSizeValues = {
   chartHeight: '250px',
@@ -47,7 +48,8 @@ const normalSize: ChartSizeValues = {
   haloTop: '49%',
   haloLeft: '95px',
   haloWidth: '60px',
-  haloHeigth: '60px' }
+  haloHeigth: '60px',
+}
 
 function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
   const cssVar = system.token.var(`colors.${path}`)
@@ -64,7 +66,6 @@ function resolveShadow(system: ReturnType<typeof useChakraContext>, path: string
 }
 
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
-  const colorMode = useThemeColorMode()
   const system = useChakraContext()
   const chartOuter = isSmall ? '' : resolveShadow(system, 'chartIconOuter')
   return (
@@ -116,7 +117,8 @@ export function FeaturedPoolWeightChart({
   displayTokens,
   chain,
   hasLegend,
-  isSmall }: PoolWeightChartProps) {
+  isSmall,
+}: PoolWeightChartProps) {
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const system = useChakraContext()
@@ -127,15 +129,18 @@ export function FeaturedPoolWeightChart({
       ...(chartSizeValues.chartHeight && { height: chartSizeValues.chartHeight }),
       tooltip: {
         trigger: 'item',
-        show: false },
+        show: false,
+      },
       animation: false,
       legend: {
-        show: false },
+        show: false,
+      },
       grid: {
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0 },
+        bottom: 0,
+      },
       series: [
         {
           name: 'Access From',
@@ -143,14 +148,18 @@ export function FeaturedPoolWeightChart({
           radius: ['70%', '99%'],
           itemStyle: {
             borderColor: resolveToken(system, 'chartBorder'),
-            borderWidth: 1.5 },
+            borderWidth: 1.5,
+          },
           label: {
             show: false,
-            position: 'center' },
+            position: 'center',
+          },
           labelLine: {
-            show: false },
+            show: false,
+          },
           emphasis: {
-            scale: false },
+            scale: false,
+          },
           data: displayTokens.map((token, i) => ({
             value: parseFloat(token.weight || '0') * 100,
             name: token.symbol,
@@ -158,12 +167,18 @@ export function FeaturedPoolWeightChart({
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 1,
-                  color: getTokenColor(chain, token.address as Address, i).from },
+                  color: getTokenColor(chain, token.address as Address, i).from,
+                },
                 {
                   offset: 0,
-                  color: getTokenColor(chain, token.address as Address, i).to },
-              ]) } })) },
-      ] }
+                  color: getTokenColor(chain, token.address as Address, i).to,
+                },
+              ]),
+            },
+          })),
+        },
+      ],
+    }
   }, [chartSizeValues, chain, displayTokens, colorMode, system])
 
   return (
@@ -178,6 +193,7 @@ export function FeaturedPoolWeightChart({
         <Box height="full" position="absolute" rounded="full" shadow="md" top="0" width="full" />
         <Box
           alignItems="center"
+          asChild
           bottom="0"
           display="flex"
           height={`${chartSizeValues.boxHeight * 0.7}px`}
@@ -191,18 +207,20 @@ export function FeaturedPoolWeightChart({
           transform="translateY(-50%)"
           width={`${chartSizeValues.boxWidth * 0.7}px`}
           zIndex={4}
-          asChild
-        ><motion.div>
+        >
+          <motion.div>
             <NoisyCard
               cardProps={{
-                rounded: 'full' }}
+                rounded: 'full',
+              }}
               contentProps={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 position: 'relative',
                 shadow: 'innerXl',
-                rounded: 'full' }}
+                rounded: 'full',
+              }}
               shadowContainerProps={{ shadow: 'none' }}
             >
               <Box
@@ -232,7 +250,8 @@ export function FeaturedPoolWeightChart({
               <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
               <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
             </NoisyCard>
-          </motion.div></Box>
+          </motion.div>
+        </Box>
         <Box
           height={`${chartSizeValues.boxHeight}`}
           position="relative"
@@ -244,11 +263,12 @@ export function FeaturedPoolWeightChart({
             ref={eChartsRef}
             style={{
               width: `${chartSizeValues.boxWidth}px`,
-              height: `${chartSizeValues.boxHeight}px` }}
+              height: `${chartSizeValues.boxHeight}px`,
+            }}
           />
         </Box>
       </Box>
       {hasLegend && <PoolWeightChartLegend displayTokens={displayTokens} />}
     </VStack>
-  );
+  )
 }

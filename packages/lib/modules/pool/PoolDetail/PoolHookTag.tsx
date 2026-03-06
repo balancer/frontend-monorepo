@@ -1,6 +1,6 @@
-import { Box, Center, HStack, Text } from '@chakra-ui/react';
+import { Box, Center, HStack, Text } from '@chakra-ui/react'
 
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 import { useHook } from '../../hooks/useHook'
 import { PoolCore } from '../pool.types'

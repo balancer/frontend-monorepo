@@ -1,4 +1,4 @@
-import { Card, Flex, Text, VStack } from '@chakra-ui/react';
+import { Card, Flex, Text, VStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ReliquaryCurveChart } from './ReliquaryCurveChart'
 import { ReliquaryDetailsCharts } from './ReliquaryDetailsCharts'
@@ -6,7 +6,7 @@ import { ReliquaryDetailsCharts } from './ReliquaryDetailsCharts'
 export function MaBeetsCharts() {
   return (
     <Flex flexWrap="wrap" gap="8" width="full">
-      <VStack align="flex-start" flex="1" minWidth="300px" gap="4">
+      <VStack align="flex-start" flex="1" gap="4" minWidth="300px">
         <Text
           background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
           backgroundClip="text"
@@ -21,7 +21,7 @@ export function MaBeetsCharts() {
           </NoisyCard>
         </Card.Root>
       </VStack>
-      <VStack align="flex-start" flex="1" minWidth="300px" gap="4">
+      <VStack align="flex-start" flex="1" gap="4" minWidth="300px">
         <Text
           background="linear-gradient(90deg, #CCFFCC 0%, #05D690 100%)"
           backgroundClip="text"
@@ -37,5 +37,5 @@ export function MaBeetsCharts() {
         </Card.Root>
       </VStack>
     </Flex>
-  );
+  )
 }

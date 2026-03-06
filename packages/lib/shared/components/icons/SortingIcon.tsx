@@ -1,6 +1,6 @@
 'use client'
-import { Flex, Icon } from '@chakra-ui/react';
-import { LuTriangle } from 'react-icons/lu';
+import { Flex, Icon } from '@chakra-ui/react'
+import { LuTriangle } from 'react-icons/lu'
 
 interface Props {
   direction?: undefined | 'asc' | 'desc'
@@ -11,12 +11,18 @@ export function SortingIcon({ direction }: Props) {
     <Flex direction="column">
       <Icon
         aria-label={direction === 'asc' ? 'sorted ascending' : 'unsorted'}
+        asChild
         color={direction === 'asc' ? 'black' : 'lightgrey'}
-        asChild><LuTriangle /></Icon>
+      >
+        <LuTriangle />
+      </Icon>
       <Icon
         aria-label={direction === 'desc' ? 'sorted descending' : 'unsorted'}
+        asChild
         color={direction === 'desc' ? 'black' : 'lightgrey'}
-        asChild><LuTriangle /></Icon>
+      >
+        <LuTriangle />
+      </Icon>
     </Flex>
-  );
+  )
 }

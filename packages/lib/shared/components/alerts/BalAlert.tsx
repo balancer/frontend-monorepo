@@ -1,4 +1,4 @@
-import { Alert, AlertProps, AlertStatus, IconButton, VStack } from '@chakra-ui/react';
+import { Alert, AlertProps, AlertStatus, IconButton, VStack } from '@chakra-ui/react'
 import { MouseEventHandler, ReactNode } from 'react'
 import { AlertTriangle, Check, Loader, X, XOctagon } from 'react-feather'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
@@ -30,10 +30,15 @@ export function BalAlert({
 }: BalAlertProps) {
   const iconSize = {
     h: '24px',
-    w: '24px' }
+    w: '24px',
+  }
   return (
     <Alert.Root rounded={isNavAlert ? 'none' : 'default'} status={status as any} {...rest}>
-      {ssr ? <Alert.Indicator {...iconSize} /> : <Alert.Indicator as={getAlertIcon(status)} {...iconSize} />}
+      {ssr ? (
+        <Alert.Indicator {...iconSize} />
+      ) : (
+        <Alert.Indicator as={getAlertIcon(status)} {...iconSize} />
+      )}
       {title ? (
         <VStack align="start" gap="0.5" w="full">
           <Alert.Title
@@ -78,10 +83,12 @@ export function BalAlert({
           onClick={onClose}
           size="sm"
           variant="ghost"
-        ><X size={16} /></IconButton>
+        >
+          <X size={16} />
+        </IconButton>
       )}
     </Alert.Root>
-  );
+  )
 }
 
 function getAlertIcon(status: AlertStatus) {

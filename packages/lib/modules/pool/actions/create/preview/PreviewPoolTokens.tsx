@@ -1,4 +1,4 @@
-import { VStack, HStack, Text, Icon, Box, Card, Separator } from '@chakra-ui/react';
+import { VStack, HStack, Text, Icon, Box, Card, Separator } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -94,7 +94,7 @@ export function PreviewPoolTokens() {
         </VStack>
       </Card.Body>
     </PreviewPoolCreationCard>
-  );
+  )
 }
 
 interface MarketCapValueProps {
@@ -173,7 +173,7 @@ function RateProviderRows({ poolTokens }: { poolTokens: PoolCreationForm['poolTo
           )
         })}
     </>
-  );
+  )
 }
 
 function RateProviderReviewedCell({ hasBeenReviewed }: { hasBeenReviewed: boolean | undefined }) {
@@ -182,14 +182,18 @@ function RateProviderReviewedCell({ hasBeenReviewed }: { hasBeenReviewed: boolea
       {hasBeenReviewed ? (
         <>
           <Text>Yes</Text>
-          <Icon color="green.500" size={12} asChild><CheckCircle /></Icon>
+          <Icon asChild color="green.500" size={12}>
+            <CheckCircle />
+          </Icon>
         </>
       ) : (
         <>
           <Text>No</Text>
-          <Icon color="red.500" size={12} asChild><XCircle /></Icon>
+          <Icon asChild color="red.500" size={12}>
+            <XCircle />
+          </Icon>
         </>
       )}
     </HStack>
-  );
+  )
 }

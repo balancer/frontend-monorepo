@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react'
 import { Step } from './Step'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { TransactionStepsResponse } from '../useTransactionSteps'
@@ -29,5 +29,5 @@ export function Steps({ transactionSteps, isTxBatch }: Props) {
           </div>
         ))}
     </VStack>
-  );
+  )
 }

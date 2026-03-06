@@ -9,20 +9,21 @@ import {
   useDisclosure,
   Alert,
   Link,
-  Icon } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+  Icon,
+} from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
 import { getPriceImpactLevel } from './price-impact.utils'
-import { LuCheck } from 'react-icons/lu';
+import { LuCheck } from 'react-icons/lu'
 
 interface PriceImpactAccordionProps {
   setNeedsToAcceptPIRisk: (value: boolean) => void
   accordionButtonComponent: ReactNode
   accordionPanelComponent: ReactNode
-  isDisabled?: boolean
+  disabled?: boolean
   // Unknown price impact due to limitations in ABA priceImpact calculation
   cannotCalculatePriceImpact?: boolean
   avoidPriceImpactAlert?: boolean
@@ -34,11 +35,12 @@ export function PriceImpactAccordion({
   setNeedsToAcceptPIRisk,
   accordionButtonComponent,
   accordionPanelComponent,
-  isDisabled,
+  disabled,
   cannotCalculatePriceImpact = false,
   avoidPriceImpactAlert = false,
   action,
-  cowLink }: PriceImpactAccordionProps) {
+  cowLink,
+}: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
   const {
     priceImpactLevel,
@@ -47,7 +49,8 @@ export function PriceImpactAccordion({
     hasToAcceptHighPriceImpact,
     setAcceptPriceImpactRisk,
     PriceImpactIcon,
-    priceImpact } = usePriceImpact()
+    priceImpact,
+  } = usePriceImpact()
 
   const isUnknownPriceImpact = cannotCalculatePriceImpact || priceImpactLevel === 'unknown'
 
@@ -81,14 +84,15 @@ export function PriceImpactAccordion({
     <Box w="full">
       <Accordion.Root collapsible variant="button" w="full">
         <Accordion.Item
-          bg={isDisabled ? 'background.level2' : 'background.level3'}
+          bg={disabled ? 'background.level2' : 'background.level3'}
           border="1px solid"
-          borderColor={isDisabled ? 'border.base' : 'transparent'}
+          borderColor={disabled ? 'border.base' : 'transparent'}
           borderRadius="md"
-          disabled={isDisabled}
-          shadow={isDisabled ? 'none' : 'md'}
+          disabled={disabled}
+          shadow={disabled ? 'none' : 'md'}
+          value="item-0"
           w="full"
-          value='item-0'>
+        >
           <h2>
             <Accordion.ItemTrigger pl="ms" pr="sm">
               <Box as="span" flex="1" textAlign="left">
@@ -103,12 +107,14 @@ export function PriceImpactAccordion({
               </HStack>
             </Accordion.ItemTrigger>
           </h2>
-          <Accordion.ItemContent p="ms"><Accordion.ItemBody>{accordionPanelComponent}</Accordion.ItemBody></Accordion.ItemContent>
+          <Accordion.ItemContent p="ms">
+            <Accordion.ItemBody>{accordionPanelComponent}</Accordion.ItemBody>
+          </Accordion.ItemContent>
         </Accordion.Item>
       </Accordion.Root>
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
-          <VStack align="start" mt="md" gap="0" w="full">
+          <VStack align="start" gap="0" mt="md" w="full">
             {!avoidPriceImpactAlert && (
               <Alert.Root roundedBottom="0" roundedTop="lg" status="error">
                 <PriceImpactIcon
@@ -199,12 +205,13 @@ export function PriceImpactAccordion({
         </>
       )}
     </Box>
-  );
+  )
 }
 
 function PriceImpactMessage({
   action,
-  cowLink }: {
+  cowLink,
+}: {
   action: 'swap' | 'add' | 'remove'
   cowLink: string | undefined
 }) {
@@ -226,13 +233,15 @@ function PriceImpactMessage({
                 or try{' '}
                 <Link
                   _hover={{
-                    color: '#fff' }}
+                    color: '#fff',
+                  }}
                   color="#000"
                   fontSize="sm"
                   href={cowLink}
+                  rel="noopener noreferrer"
+                  target="_blank"
                   textDecor="underline"
-                  target='_blank'
-                  rel='noopener noreferrer'>
+                >
                   CoW Swap
                 </Link>
                 .
@@ -242,7 +251,7 @@ function PriceImpactMessage({
             )}
           </Text>
         </>
-      );
+      )
     case 'add':
       return (
         <>

@@ -1,5 +1,5 @@
-import { Box, Button, Center, HStack, Icon, Text, TextProps, Popover } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Box, Button, Center, HStack, Icon, Text, TextProps, Popover } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import BaseAprTooltip, { BaseAprTooltipProps } from './BaseAprTooltip'
 import { Info } from 'react-feather'
 import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
@@ -31,7 +31,8 @@ export function SparklesIcon({
   isOpen,
   pool,
   id,
-  hoverColor }: {
+  hoverColor,
+}: {
   isOpen: boolean
   pool: Pool | PoolListItem | FeaturedPool
   id?: string
@@ -77,24 +78,32 @@ export function SparklesIcon({
     <Box h="auto" minW="16px" w="16px">
       <Center w="16px">
         {isLBP(pool.type) ? (
-          <Icon boxSize={4} color={isOpen ? 'inherit' : 'gray.400'} asChild><Info /></Icon>
+          <Icon asChild boxSize={4} color={isOpen ? 'inherit' : 'gray.400'}>
+            <Info />
+          </Icon>
         ) : hasOnlySwapApr ? (
           <Icon
+            asChild
             boxSize={4}
             gradFrom={isOpen ? hoverColor : defaultGradFrom}
             gradTo={isOpen ? hoverColor : defaultGradTo}
             id={id || ''}
-            asChild><StarIcon /></Icon>
+          >
+            <StarIcon />
+          </Icon>
         ) : (
           <Icon
+            asChild
             gradFrom={isOpen ? hoverColor : gradFromColor}
             gradTo={isOpen ? hoverColor : gradToColor}
             id={id || ''}
-            asChild><StarsIcon /></Icon>
+          >
+            <StarsIcon />
+          </Icon>
         )}
       </Center>
     </Box>
-  );
+  )
 }
 
 function MainAprTooltip({
@@ -173,7 +182,7 @@ function MainAprTooltip({
         </HStack>
       )}
     </BaseAprTooltip>
-  );
+  )
 }
 
 export default MainAprTooltip

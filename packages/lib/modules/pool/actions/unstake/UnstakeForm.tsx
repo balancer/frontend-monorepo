@@ -1,5 +1,5 @@
-'use client';
-import { Box, Button, Card } from '@chakra-ui/react';
+'use client'
+import { Box, Button, Card } from '@chakra-ui/react'
 import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { useRef } from 'react'
 import { useUnstake } from './UnstakeProvider'
@@ -41,5 +41,5 @@ export function UnstakeForm() {
       </Card.Root>
       <UnstakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
     </Box>
-  );
+  )
 }

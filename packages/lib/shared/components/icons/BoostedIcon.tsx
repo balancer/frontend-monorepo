@@ -1,5 +1,5 @@
 import { SVGProps } from 'react'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 export function BoostedIcon({ size = 24, ...props }: { size?: number } & SVGProps<SVGSVGElement>) {
   const colorMode = useThemeColorMode()

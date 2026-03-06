@@ -9,7 +9,8 @@ import { SdkQueryRemoveLiquidityOutput } from '@repo/lib/modules/pool/actions/re
 import {
   SignatureState,
   isSignatureDisabled,
-  isSignatureLoading } from '@repo/lib/modules/web3/signatures/signature.helpers'
+  isSignatureLoading,
+} from '@repo/lib/modules/web3/signatures/signature.helpers'
 import { signRemoveLiquidityPermit } from './signRemoveLiquidityPermit'
 
 export type RemoveLiquidityPermitParams = {
@@ -22,7 +23,8 @@ export function useSignPermit({
   pool,
   wethIsEth,
   queryOutput,
-  slippagePercent }: RemoveLiquidityPermitParams) {
+  slippagePercent,
+}: RemoveLiquidityPermitParams) {
   const toast = useToast()
   const { userAddress } = useUserAccount()
   const { setSignPermitState, setPermitSignature, signPermitState } = usePermitSignature()
@@ -48,9 +50,11 @@ export function useSignPermit({
         permitInput: {
           account: userAddress,
           slippagePercent,
-          sdkQueryOutput: queryOutput.sdkQueryOutput },
+          sdkQueryOutput: queryOutput.sdkQueryOutput,
+        },
         wethIsEth,
-        pool })
+        pool,
+      })
 
       if (signature) {
         setSignPermitState(SignatureState.Completed)
@@ -60,7 +64,8 @@ export function useSignPermit({
           status: 'success',
           duration: 5000,
           isClosable: true,
-          render: ({ ...rest }) => <Toast {...rest} /> })
+          render: ({ ...rest }) => <Toast {...rest} />,
+        })
       } else {
         setSignPermitState(SignatureState.Ready)
       }
@@ -79,7 +84,8 @@ export function useSignPermit({
     buttonLabel: getButtonLabel(signPermitState, pool.symbol),
     isLoading: isSignatureLoading(signPermitState) || !queryOutput,
     isDisabled: isSignatureDisabled(signPermitState),
-    error }
+    error,
+  }
 }
 
 function getButtonLabel(signPermitState: SignatureState, poolSymbol?: string) {

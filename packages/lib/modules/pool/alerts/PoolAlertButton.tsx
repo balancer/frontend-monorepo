@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
 export function PoolAlertButton({ onClick, children }: PropsWithChildren<ButtonProps>) {

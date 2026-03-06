@@ -1,5 +1,5 @@
-'use client';
-import { Card, Button, Box } from '@chakra-ui/react';
+'use client'
+import { Card, Button, Box } from '@chakra-ui/react'
 import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { useStake } from './StakeProvider'
 import { useRef } from 'react'
@@ -39,5 +39,5 @@ export function StakeForm() {
       </Card.Root>
       <StakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
     </Box>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { InputGroup, Input, IconButton, InputProps } from '@chakra-ui/react';
+import { InputGroup, Input, IconButton, InputProps } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from '@repo/lib/shared/hooks/useDebounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
@@ -10,7 +10,7 @@ interface SearchInputProps {
   setSearch: (search: string) => void
   placeholder: string
   ariaLabel: string
-  isLoading?: boolean
+  loading?: boolean
   autoFocus?: boolean
 }
 
@@ -21,7 +21,7 @@ export function SearchInput({
   setSearch,
   placeholder,
   ariaLabel,
-  isLoading,
+  loading,
   autoFocus = true,
   ...rest
 }: SearchInputProps & InputProps) {
@@ -39,24 +39,28 @@ export function SearchInput({
 
   return (
     <InputGroup
-      size="md"
       endElement={
         <IconButton
           _hover={{
             opacity: '1',
             background: 'background.level1',
-            color: 'font.maxContrast' }}
+            color: 'font.maxContrast',
+          }}
           aria-label={ariaLabel}
           color="font.secondary"
-          loading={isLoading && getFieldState(SEARCH).isTouched}
+          loading={loading && getFieldState(SEARCH).isTouched}
           onClick={() => {
             setSearch('')
             setValue(SEARCH, '')
           }}
           opacity="0.5"
           size="sm"
-          variant="ghost">{search ? <X size="20" /> : <Search size="20" />}</IconButton>
+          variant="ghost"
+        >
+          {search ? <X size="20" /> : <Search size="20" />}
+        </IconButton>
       }
+      size="md"
     >
       <Input
         {...(register(SEARCH) as any)}
@@ -64,12 +68,14 @@ export function SearchInput({
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
           boxShadow: 'var(--chakra-shadows-input-innerFocus) !important',
-          color: 'input.fontFocus' }}
+          color: 'input.fontFocus',
+        }}
         _focusVisible={{
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
           boxShadow: 'var(--chakra-shadows-input-innerFocus) !important',
-          color: 'input.fontFocus' }}
+          color: 'input.fontFocus',
+        }}
         _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
         autoComplete="off"
         bg="input.bgDefault"
@@ -77,15 +83,15 @@ export function SearchInput({
         borderColor="input.borderDefault"
         defaultValue={String(search ?? '')}
         id={SEARCH}
-        onValueChange={debouncedChangeHandler}
         onKeyDown={event => {
           if (event.key === 'Enter') {
             event.preventDefault()
           }
         }}
+        onValueChange={debouncedChangeHandler}
         placeholder={placeholder}
         {...rest}
       />
     </InputGroup>
-  );
+  )
 }

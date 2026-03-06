@@ -1,4 +1,4 @@
-import { VStack, Heading } from '@chakra-ui/react';
+import { VStack, Heading } from '@chakra-ui/react'
 import { InputWithSuggestion } from './InputWithSuggestion'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolDetails } from '../../validatePoolCreationForm'
@@ -72,5 +72,5 @@ export function PoolDetails() {
         validate={validatePoolDetails.symbol}
       />
     </VStack>
-  );
+  )
 }

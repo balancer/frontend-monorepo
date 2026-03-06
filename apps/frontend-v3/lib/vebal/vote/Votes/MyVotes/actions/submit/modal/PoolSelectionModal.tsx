@@ -6,7 +6,8 @@ import {
   Text,
   VStack,
   Dialog,
-  Portal } from '@chakra-ui/react';
+  Portal,
+} from '@chakra-ui/react'
 import { SubmittingVote, useMyVotes } from '../../../MyVotesProvider'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -29,13 +30,15 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(e: any) => {
-      if (!e.open) {
-        onClose();
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(e: any) => {
+        if (!e.open) {
+          onClose()
+        }
+      }}
+      open={isOpen}
+    >
       <Portal>
-
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -44,9 +47,10 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
             <Dialog.Body>
               <VStack>
                 <Text color="font.secondary">
-                  Since you are not utilizing your full voting power on the pools listed below, it is
-                  assumed you will want to re-submit your vote now. However, there are some cases where
-                  you may not want to re-submit (e.g. to avoid the 10-day time lock), so please confirm.
+                  Since you are not utilizing your full voting power on the pools listed below, it
+                  is assumed you will want to re-submit your vote now. However, there are some cases
+                  where you may not want to re-submit (e.g. to avoid the 10-day time lock), so
+                  please confirm.
                 </Text>
 
                 <Text fontWeight="bold" mt="4" w="full">
@@ -58,16 +62,90 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
                   onValueChange={(votes: string[]) => setSelectedVotes(votes as Address[])}
                 >
                   {selectableVotes.map(vote => (
-                    <Checkbox.Root key={vote.vote.id} value={String(vote.vote.id)} w="full"><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-                        <VoteDescription vote={vote} />
-                      </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+                    <Checkbox.Root key={vote.vote.id} value={String(vote.vote.id)} w="full">
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control>
+                        <Checkbox.Indicator />
+                      </Checkbox.Control>
+                      <Checkbox.Label>
+                        <Checkbox.Root>
+                          <Checkbox.HiddenInput />
+                          <Checkbox.Control>
+                            <Checkbox.Indicator />
+                          </Checkbox.Control>
+                        </Checkbox.Root>
+                        <Checkbox.Root>
+                          <Checkbox.HiddenInput />
+                          <Checkbox.Control>
+                            <Checkbox.Indicator />
+                          </Checkbox.Control>
+                          <Checkbox.Label>
+                            <Checkbox.Root>
+                              <Checkbox.HiddenInput />
+                              <Checkbox.Control>
+                                <Checkbox.Indicator />
+                              </Checkbox.Control>
+                            </Checkbox.Root>
+                          </Checkbox.Label>
+                        </Checkbox.Root>
+                        <Checkbox.Root>
+                          <Checkbox.HiddenInput />
+                          <Checkbox.Control>
+                            <Checkbox.Indicator />
+                          </Checkbox.Control>
+                          <Checkbox.Label>
+                            <VoteDescription vote={vote} />
+                          </Checkbox.Label>
+                        </Checkbox.Root>
+                      </Checkbox.Label>
+                    </Checkbox.Root>
                   ))}
                 </CheckboxGroup>
 
                 {updatedWeightVotes.map(vote => (
-                  <Checkbox.Root defaultChecked disabled key={vote.vote.id} value={String(vote.vote.id)} w="full"><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-                      <VoteDescription vote={vote} />
-                    </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+                  <Checkbox.Root
+                    defaultChecked
+                    disabled
+                    key={vote.vote.id}
+                    value={String(vote.vote.id)}
+                    w="full"
+                  >
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control>
+                      <Checkbox.Indicator />
+                    </Checkbox.Control>
+                    <Checkbox.Label>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                      </Checkbox.Root>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label>
+                          <Checkbox.Root>
+                            <Checkbox.HiddenInput />
+                            <Checkbox.Control>
+                              <Checkbox.Indicator />
+                            </Checkbox.Control>
+                          </Checkbox.Root>
+                        </Checkbox.Label>
+                      </Checkbox.Root>
+                      <Checkbox.Root>
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label>
+                          <VoteDescription vote={vote} />
+                        </Checkbox.Label>
+                      </Checkbox.Root>
+                    </Checkbox.Label>
+                  </Checkbox.Root>
                 ))}
               </VStack>
             </Dialog.Body>
@@ -78,10 +156,9 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }
 
 function poolName(vote: VotingPoolWithData) {

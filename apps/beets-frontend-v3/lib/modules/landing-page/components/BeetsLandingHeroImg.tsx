@@ -4,7 +4,7 @@
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import Image from 'next/image'
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react'
 
 // @ts-ignore
 import bgSrc from '../images/hero-bg.png'
@@ -26,7 +26,8 @@ export function BeetsLandingHeroImg() {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0 }}
+            bottom: 0,
+          }}
           transition={{ duration: 2, ease: 'easeInOut' }}
         >
           <Image

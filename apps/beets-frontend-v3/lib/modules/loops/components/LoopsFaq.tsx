@@ -1,4 +1,4 @@
-import { Box, Card, HStack, Heading, VStack, Accordion, Text, Link, List } from '@chakra-ui/react';
+import { Box, Card, HStack, Heading, VStack, Accordion, Text, Link, List } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 
 const FAQ_ITEMS = [
@@ -9,7 +9,8 @@ const FAQ_ITEMS = [
         loopS is a leveraged staking vault that compounds your stS yield. It borrows $S against your
         stS and restakes it through Aave to increase rewards safely and automatically.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What can I deposit into loopS?',
     answer: (
@@ -17,7 +18,8 @@ const FAQ_ITEMS = [
         You need to deposit $S. When you deposit $S, it’s automatically staked into stS before
         entering the vault. All loopS positions use stS as collateral behind the scenes.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What happens when I deposit?',
     answer: (
@@ -25,7 +27,8 @@ const FAQ_ITEMS = [
         Your deposit becomes stS collateral. loopS borrows $S from Aave, restakes it, and repeats
         the process to boost your yield.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What do I receive when depositing?',
     answer: (
@@ -37,7 +40,8 @@ const FAQ_ITEMS = [
         , a liquid representation of your position in the vault. These tokens accrue value as yield
         builds up and can be held, transferred, or integrated across DeFi as liquidity grows.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'How does loopS protect against liquidation?',
     answer: (
@@ -45,7 +49,8 @@ const FAQ_ITEMS = [
         loopS continuously monitors your health factor and adjusts positions automatically when
         needed to minimize risk from price or rate changes on Aave.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'Can I withdraw anytime?',
     answer: (
@@ -53,7 +58,8 @@ const FAQ_ITEMS = [
         Yes. You can withdraw anytime. loopS unwinds your position, repays the borrowed $S, and
         returns wS.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'Are there any fees?',
     answer: (
@@ -61,7 +67,8 @@ const FAQ_ITEMS = [
         A small protocol fee of 10% applies to the yield earned. Standard network gas fees also
         apply for deposits and withdrawals.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'Why do I get slightly less $S on withdrawal?',
     answer: (
@@ -71,7 +78,8 @@ const FAQ_ITEMS = [
         than the displayed rate due to price impact and slippage. This is normal and depends on
         current liquidity conditions.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'Why is the amount I receive on withdrawal slightly less than the loopS rate?',
     answer: (
@@ -82,7 +90,7 @@ const FAQ_ITEMS = [
           receive slightly lower than the displayed rate. The difference depends on:
         </Text>
         <br />
-        <List.Root as='ul'>
+        <List.Root as="ul">
           <List.Item>
             <Text color="font.primary" fontSize="lg" fontWeight="thin">
               Leverage — higher leverage means more assets need to be sold to close your position.
@@ -99,7 +107,8 @@ const FAQ_ITEMS = [
           This ensures the vault remains fully collateralized and solvent after every withdrawal.
         </Text>
       </>
-    ) },
+    ),
+  },
   {
     question: 'What is Total Collateral?',
     answer: (
@@ -107,7 +116,8 @@ const FAQ_ITEMS = [
         Total collateral shows the total amount of stS that is supplied to the vault, including any
         restaked amounts created through looping.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What is Total Debt?',
     answer: (
@@ -115,7 +125,8 @@ const FAQ_ITEMS = [
         Total debt is the amount of $S borrowed from Aave to create the leveraged positions. It’s
         managed automatically to stay within safe limits.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What does the loopS rate mean?',
     answer: (
@@ -123,7 +134,8 @@ const FAQ_ITEMS = [
         The loopS rate shows how much $S each loopS token is worth. As rewards build up, this rate
         gradually increases over time.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What is Health Factor?',
     answer: (
@@ -131,7 +143,8 @@ const FAQ_ITEMS = [
         Health factor measures how safe the positions are. A higher number means lower liquidation
         risk. If it falls too low, part of the collateral may be sold to repay debt.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What does Current Leverage represent?',
     answer: (
@@ -139,7 +152,8 @@ const FAQ_ITEMS = [
         It shows how many times the stS has been looped. For example, 3.25x means you’re earning
         yield on over three times your initial deposit.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'What is Actual Supply?',
     answer: (
@@ -147,7 +161,8 @@ const FAQ_ITEMS = [
         Actual supply refers to the total number of loopS tokens issued, representing all users’
         positions in the vault.
       </Text>
-    ) },
+    ),
+  },
 
   {
     question: 'Which wallets can I use?',
@@ -155,7 +170,8 @@ const FAQ_ITEMS = [
       <Text color="font.primary" fontSize="lg" fontWeight="thin">
         loopS works with all major Sonic-compatible wallets such as MetaMask and Rabby.
       </Text>
-    ) },
+    ),
+  },
   {
     question: 'Is loopS audited?',
     answer: (
@@ -170,8 +186,9 @@ const FAQ_ITEMS = [
             alignItems="center"
             display="inline-flex"
             href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beets-Looped-Sonic-Spearbit-Security-Review-September-2025.pdf"
-            target='_blank'
-            rel='noopener noreferrer'>
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <Box as="span" fontSize="lg" fontWeight="thin">
               here
             </Box>
@@ -182,7 +199,8 @@ const FAQ_ITEMS = [
           .
         </Text>
       </>
-    ) },
+    ),
+  },
   {
     question: 'What is the loopS contract address?',
     answer: (
@@ -192,8 +210,9 @@ const FAQ_ITEMS = [
           alignItems="center"
           display="inline-flex"
           href="https://sonicscan.org/address/0xc76995054ce51dfbbc954840d699b2f33d2538ee"
-          target='_blank'
-          rel='noopener noreferrer'>
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           <Box as="span" fontSize="lg" fontWeight="thin">
             0xC76995054Ce51DfBBC954840D699b2F33D2538Ee
           </Box>
@@ -203,7 +222,8 @@ const FAQ_ITEMS = [
         </Link>
         . Always verify that you are interacting with the correct address before depositing.
       </Text>
-    ) },
+    ),
+  },
 ]
 
 export function LoopsFaq() {
@@ -215,7 +235,7 @@ export function LoopsFaq() {
         </Heading>
       </Card.Header>
       <Card.Body align="start" as={VStack}>
-        <Accordion.Root collapsible bg="transparent" variant="button" w="full">
+        <Accordion.Root bg="transparent" collapsible variant="button" w="full">
           {FAQ_ITEMS.map(item => (
             <Accordion.Item key={item.question} mb="sm" value={item.question}>
               <h2>
@@ -226,11 +246,13 @@ export function LoopsFaq() {
                   <Accordion.ItemIndicator />
                 </Accordion.ItemTrigger>
               </h2>
-              <Accordion.ItemContent pb="md"><Accordion.ItemBody>{item.answer}</Accordion.ItemBody></Accordion.ItemContent>
+              <Accordion.ItemContent pb="md">
+                <Accordion.ItemBody>{item.answer}</Accordion.ItemBody>
+              </Accordion.ItemContent>
             </Accordion.Item>
           ))}
         </Accordion.Root>
       </Card.Body>
     </Card.Root>
-  );
+  )
 }

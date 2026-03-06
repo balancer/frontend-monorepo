@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, BoxProps, Button, HStack, Text, Separator } from '@chakra-ui/react';
+import { Box, BoxProps, Button, HStack, Text, Separator } from '@chakra-ui/react'
 import { TokenSelectListRow } from './TokenSelectListRow'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '../../TokenBalancesProvider'
@@ -44,7 +44,7 @@ function OtherTokens() {
       </HStack>
       <Separator pt="2" />
     </Box>
-  );
+  )
 }
 
 interface InYourWalletProps {
@@ -74,7 +74,7 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
               onClick={openConnectModal}
               padding="0"
               size="sm"
-              variant='plain'
+              variant="plain"
             >
               Connect wallet
             </Button>
@@ -90,7 +90,7 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
       </Box>
       {isConnected && !hasNoTokensInWallet && <Separator />}
     </Box>
-  );
+  )
 }
 
 interface TokenRowProps {
@@ -114,7 +114,8 @@ function TokenRow({
   isLoadingTokenPrices,
   activeIndex,
   isCurrentToken,
-  onTokenSelect }: TokenRowProps) {
+  onTokenSelect,
+}: TokenRowProps) {
   const userBalance = isConnected ? balanceFor(token.address) : undefined
 
   return (
@@ -191,7 +192,8 @@ export function TokenSelectList({
           decimals,
           chain,
           chainId: getChainId(chain),
-          address: searchTerm as `0x${string}` }
+          address: searchTerm as `0x${string}`,
+        }
       : undefined
 
   const tokensWithBalance = isConnected

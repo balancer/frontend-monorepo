@@ -1,6 +1,6 @@
 'use client'
 
-import { Container, Link } from '@chakra-ui/react';
+import { Container, Link } from '@chakra-ui/react'
 import { Prose } from '@repo/lib/shared/components/prose/Prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -27,8 +27,9 @@ export default function Terms() {
               <Link
                 color="white"
                 href="https://docs.beets.fi/dao/operating-agreement"
-                target='_blank'
-                rel='noopener noreferrer'>
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 here
               </Link>
               . The NFT is referred to as the “Token” in the Agreement.
@@ -54,5 +55,5 @@ export default function Terms() {
         </FadeInOnView>
       </Prose>
     </Container>
-  );
+  )
 }

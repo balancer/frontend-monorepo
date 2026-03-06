@@ -8,7 +8,8 @@ import {
   Image,
   Popover,
   Text,
-  VStack } from '@chakra-ui/react';
+  VStack,
+} from '@chakra-ui/react'
 import { Tooltip } from '../../../../shared/components/tooltips/Tooltip'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
@@ -34,7 +35,8 @@ export function TokenSummary({
   chain,
   projectInfoForm,
   launchTokenAddress,
-  launchTokenMetadata }: Props) {
+  launchTokenMetadata,
+}: Props) {
   const tokenIconURL = useWatch({ control: projectInfoForm.control, name: 'tokenIconUrl' })
   const formState = useFormState({ control: projectInfoForm.control, name: 'tokenIconUrl' })
   const hasIconErrors = formState.errors.tokenIconUrl !== undefined
@@ -53,8 +55,9 @@ export function TokenSummary({
             <HStack gap="md">
               <Popover.Root
                 positioning={{
-                  placement: 'top'
-                }}>
+                  placement: 'top',
+                }}
+              >
                 <Popover.Trigger asChild>
                   <Circle
                     bg="background.level4"
@@ -85,7 +88,7 @@ export function TokenSummary({
                         render={({ field }) => (
                           <InputWithError
                             error={formState.errors.tokenIconUrl?.message}
-                            isInvalid={!!formState.errors.tokenIconUrl}
+                            invalid={!!formState.errors.tokenIconUrl}
                             onChange={e => field.onChange(e.target.value)}
                             placeholder="https://project-name.com/token.svg"
                             value={field.value}
@@ -140,7 +143,7 @@ export function TokenSummary({
         </Grid>
       </Card.Body>
     </Card.Root>
-  );
+  )
 }
 
 type BalanceInfoProps = {
@@ -151,7 +154,8 @@ type BalanceInfoProps = {
 function BalanceInfo({ chain, tokenAddress }: BalanceInfoProps) {
   const { balanceData, isLoading: isLoadingBalance } = useUserBalance({
     chainId: getChainId(chain),
-    token: tokenAddress })
+    token: tokenAddress,
+  })
 
   return (
     <>
@@ -163,13 +167,13 @@ function BalanceInfo({ chain, tokenAddress }: BalanceInfoProps) {
           {balanceData.value === 0n && (
             <Tooltip
               backgroundColor="background.level4"
-              showArrow
               content={`You’ll need some tokens in your wallet in order to seed liquidity
                       in the pool before the start time of the LBP or it will fail to launch.`}
-              textColor="font.secondary"
               positioning={{
-                placement: "top"
+                placement: 'top',
               }}
+              showArrow
+              textColor="font.secondary"
             >
               <AlertTriangle color="#f48975" size="16" />
             </Tooltip>
@@ -181,5 +185,5 @@ function BalanceInfo({ chain, tokenAddress }: BalanceInfoProps) {
         </Text>
       )}
     </>
-  );
+  )
 }

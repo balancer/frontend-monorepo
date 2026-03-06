@@ -1,7 +1,7 @@
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
-import { Card, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Card, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { Pool } from '../pool.types'
 import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'
 import { useMigrateLiquidity } from './MigrateLiquidityProvider'
@@ -68,7 +68,7 @@ function AmountInfo({ title, pool, amounts, totalAmount }: AmountInfoProps) {
         <Skeleton h="40px" w="full" />
       )}
     </Card.Root>
-  );
+  )
 }
 
 type PoolCardProps = {
@@ -107,13 +107,14 @@ function PoolCard({ title, pool }: PoolCardProps) {
               poolId={pool.id}
               textProps={{
                 fontSize: ['md', 'md', 'lg'],
-                lineHeight: '28px' }}
+                lineHeight: '28px',
+              }}
             />
           )}
         </HStack>
       </VStack>
     </Card.Root>
-  );
+  )
 }
 
 function PriceImpactCard() {
@@ -138,5 +139,5 @@ function PriceImpactCard() {
         />
       </VStack>
     </Card.Root>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
-import { Card, VStack } from '@chakra-ui/react';
+import { Card, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useMigrateStake as useMigrateStake } from './MigrateStakeProvider'
@@ -36,5 +36,5 @@ export function MigrateStakePreview() {
       )}
       <StakeAprTooltip pool={pool} totalUsdValue={migratedAmount} />
     </VStack>
-  );
+  )
 }

@@ -7,12 +7,13 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
-import { HStack, Image, Link, Text } from '@chakra-ui/react';
+import { HStack, Image, Link, Text } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 
 export function EnsOrAddress({
   userAddress,
-  chain }: {
+  chain,
+}: {
   userAddress: `0x${string}`
   chain: GqlChain
 }) {
@@ -21,16 +22,19 @@ export function EnsOrAddress({
 
   const { data: ensAvatar } = useEnsAvatar({
     name: name as string,
-    chainId })
+    chainId,
+  })
 
   const fallbackSVG = createAvatar(identicon, {
-    seed: userAddress || 'unknown' })
+    seed: userAddress || 'unknown',
+  })
 
   return (
     <Link
       href={getBlockExplorerAddressUrl(userAddress, chain)}
-      target='_blank'
-      rel='noopener noreferrer'>
+      rel="noopener noreferrer"
+      target="_blank"
+    >
       <HStack>
         <Image
           alt={name || userAddress}
@@ -48,5 +52,5 @@ export function EnsOrAddress({
         </HStack>
       </HStack>
     </Link>
-  );
+  )
 }

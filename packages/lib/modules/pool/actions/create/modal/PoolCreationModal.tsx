@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal, VStack, Button, HStack, Text } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal, VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
@@ -41,7 +41,8 @@ export function PoolCreationModal({
     usePoolCreationForm()
   const [network, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['network', 'poolType'] })
+    name: ['network', 'poolType'],
+  })
   const chainId = getChainId(network)
 
   const createPoolInput = useCreatePoolInput(chainId)
@@ -52,7 +53,8 @@ export function PoolCreationModal({
     poolAddress,
     setPoolAddress,
     createPoolInput,
-    initPoolInput })
+    initPoolInput,
+  })
 
   const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress, poolType })
 
@@ -66,7 +68,8 @@ export function PoolCreationModal({
     id: poolAddress as Address,
     chain: network,
     type: getGqlPoolType(poolType),
-    protocolVersion })
+    protocolVersion,
+  })
 
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
@@ -79,25 +82,27 @@ export function PoolCreationModal({
     shouldToggleBlockSize,
     setUsingBigBlocks,
     isSetUsingBigBlocksPending,
-    setUsingBigBlocksError } = useHyperEvm({
+    setUsingBigBlocksError,
+  } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvmTx: network === GqlChain.Hyperevm })
+    isHyperEvmTx: network === GqlChain.Hyperevm,
+  })
 
   return (
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isPoolInitialized}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!initPoolTxHash} />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -142,7 +147,7 @@ export function PoolCreationModal({
                     w="full"
                     width="full"
                   >
-                    <HStack justifyContent="center" gap="sm" width="100%">
+                    <HStack gap="sm" justifyContent="center" width="100%">
                       <Text color="font.primaryGradient" fontWeight="bold">
                         View pool page
                       </Text>
@@ -158,7 +163,7 @@ export function PoolCreationModal({
                     w="full"
                     width="full"
                   >
-                    <HStack justifyContent="center" gap="sm" width="100%">
+                    <HStack gap="sm" justifyContent="center" width="100%">
                       <Text color="font.primaryGradient" fontWeight="bold">
                         Create another pool
                       </Text>
@@ -185,8 +190,7 @@ export function PoolCreationModal({
             )}
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

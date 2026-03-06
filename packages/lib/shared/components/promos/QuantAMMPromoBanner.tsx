@@ -1,5 +1,5 @@
 'use client'
-import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
@@ -20,13 +20,13 @@ export function QuantAMMPromoBanner() {
       color: isDarkMode ? '#000' : '#000',
       borderColor: isDarkMode ? 'transparent' : '#000',
     },
-    as: Link,
     border: '1px solid',
     borderColor: isDarkMode ? '#fff' : '#000',
     cursor: 'pointer',
     flex: '1',
     h: { base: '32px', sm: '40px', lg: '48px' },
-    isExternal: true,
+    target: '_blank',
+    rel: 'noopener noreferrer',
     py: 'sm',
     rounded: 'full',
     size: 'md' as const,

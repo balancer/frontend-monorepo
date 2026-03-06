@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -39,7 +39,8 @@ export function LstStakeModal({
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
-    txReceipt: lastTransaction?.result })
+    txReceipt: lastTransaction?.result,
+  })
 
   useEffect(() => {
     if (isOpen) {
@@ -56,22 +57,29 @@ export function LstStakeModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!lstStakeTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
-            {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
-            <TransactionModalHeader chain={chain} isReceiptLoading label="Review stake" txHash="0x" />
+            {isDesktop && (
+              <DesktopStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />
+            )}
+            <TransactionModalHeader
+              chain={chain}
+              isReceiptLoading
+              label="Review stake"
+              txHash="0x"
+            />
             <Dialog.CloseTrigger />
             <Dialog.Body>
               <LstStakeSummary {...lstStakeReceipt} />
@@ -84,8 +92,7 @@ export function LstStakeModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

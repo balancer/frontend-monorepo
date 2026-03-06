@@ -48,11 +48,13 @@ export function testHook<TResult, TProps>(
 
   const result = renderHook<TResult, TProps>(hook, {
     ...options,
-    wrapper: MixedProviders as React.ComponentType<{ children: React.ReactNode }> })
+    wrapper: MixedProviders as React.ComponentType<{ children: React.ReactNode }>,
+  })
 
   return {
     ...result,
-    waitForLoadedUseQuery }
+    waitForLoadedUseQuery,
+  }
 }
 
 function GlobalProviders({ children }: PropsWithChildren) {
@@ -120,7 +122,7 @@ export function DefaultRemoveLiquidityTestProvider({ children }: PropsWithChildr
 
 /* Builds a PoolProvider that injects the provided pool data*/
 export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElementMock()) =>
-  (function({ children }: PropsWithChildren) {
+  function ({ children }: PropsWithChildren) {
     return (
       <TransactionStateProvider>
         <RelayerSignatureProvider>
@@ -129,7 +131,8 @@ export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElem
               chain={pool.chain}
               data={{
                 __typename: 'Query',
-                pool }}
+                pool,
+              }}
               id={pool.id}
               variant={BaseVariant.v2}
             >
@@ -139,7 +142,7 @@ export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElem
         </RelayerSignatureProvider>
       </TransactionStateProvider>
     )
-  })
+  }
 
 export const DefaultPoolTestProvider = buildDefaultPoolTestProvider(aGqlPoolElementMock())
 

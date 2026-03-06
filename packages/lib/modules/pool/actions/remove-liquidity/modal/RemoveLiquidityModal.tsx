@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
@@ -49,7 +49,8 @@ export function RemoveLiquidityModal({
     txHash: removeLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
-    txReceipt: lastTransaction?.result })
+    txReceipt: lastTransaction?.result,
+  })
 
   useEffect(() => {
     if (isOpen) {
@@ -72,21 +73,22 @@ export function RemoveLiquidityModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
         <Dialog.Positioner>
           <Dialog.Content
-            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+            {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}
+          >
             {isDesktop && hasQuoteContext && (
               <DesktopStepTracker
                 chain={pool.chain}
@@ -115,8 +117,7 @@ export function RemoveLiquidityModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

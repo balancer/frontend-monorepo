@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import {
   Box,
   Button,
@@ -8,15 +8,17 @@ import {
   BoxProps,
   Grid,
   GridItem,
-  Separator } from '@chakra-ui/react';
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+  Separator,
+} from '@chakra-ui/react'
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useEffect, useRef, useState } from 'react'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useLoops } from './LoopsProvider'
 import { LoopsDepositModal } from './modals/LoopsDepositModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -48,12 +50,15 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     borderTopLeftRadius: 'none',
     borderBottomRightRadius: 'none',
     rounded: 'lg',
-    overflow: 'hidden' },
+    overflow: 'hidden',
+  },
   cardProps: {
     position: 'relative',
     height: 'full',
     rounded: 'lg',
-    overflow: 'hidden' } }
+    overflow: 'hidden',
+  },
+}
 
 function LoopsForm() {
   const nextBtn = useRef(null)
@@ -82,7 +87,8 @@ function LoopsForm() {
     getAmountShares,
     isRateLoading,
     amountShares,
-    wNativeAsset } = useLoops()
+    wNativeAsset,
+  } = useLoops()
 
   const { wethAmountOut, isLoading: isLoadingFlyQuote } = useLoopsGetFlyQuote(amountShares, chain)
 
@@ -93,11 +99,13 @@ function LoopsForm() {
     {
       value: '0',
       label: 'Deposit',
-      disabled: false },
+      disabled: false,
+    },
     {
       value: '1',
       label: 'Withdraw',
-      disabled: false },
+      disabled: false,
+    },
   ]
 
   useEffect(() => {
@@ -132,7 +140,8 @@ function LoopsForm() {
 
   return (
     <VStack h="full" w="full">
-      <Card.Body align="start" h="full" w="full" asChild><VStack>
+      <Card.Body align="start" asChild h="full" w="full">
+        <VStack>
           <Box h="full" w="full">
             <VStack gap="md" w="full">
               <ButtonGroup
@@ -167,7 +176,8 @@ function LoopsForm() {
               symbol={wNativeAsset?.symbol || ''}
             />
           )}
-        </VStack></Card.Body>
+        </VStack>
+      </Card.Body>
       <Card.Footer w="full">
         {isConnected && (
           <Tooltip content={isDisabled ? disabledReason : ''}>
@@ -187,7 +197,7 @@ function LoopsForm() {
         )}
         {!isConnected && (
           <ConnectWallet
-            isLoading={isLoading}
+            loading={isLoading}
             loadingText={loadingText}
             size="lg"
             variant="primary"
@@ -206,12 +216,13 @@ function LoopsForm() {
         onClose={onModalClose}
       />
     </VStack>
-  );
+  )
 }
 
 function LoopsInfo({
   loopsData,
-  isLoopsDataLoading }: {
+  isLoopsDataLoading,
+}: {
   loopsData?: GetLoopsDataQuery
   isLoopsDataLoading: boolean
 }) {
@@ -248,54 +259,54 @@ function LoopsInfo({
       </Box>
       <VStack
         align="flex-start"
+        gap="sm"
         h="full"
         justify="flex-start"
         m="auto"
         p={{ base: 'md', md: 'lg' }}
         role="group"
-        gap="sm"
         w="full"
         zIndex={1}
       >
         <StatRow
-          isLoading={isLoopsDataLoading}
           label="Total collateral"
+          loading={isLoopsDataLoading}
           secondaryValue={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmountInEth || '0'))} S`}
           tertiaryValue={toCurrency(collateralUsdValue)}
           value={`${fNum('token', bn(loopsData?.loopsGetData.collateralAmount || '0'))} stS`}
         />
         <StatRow
-          isLoading={isLoopsDataLoading}
           label="Total debt"
+          loading={isLoopsDataLoading}
           secondaryValue={toCurrency(debtUsdValue)}
           value={`${fNum('token', bn(loopsData?.loopsGetData.debtAmount || '0'))} S`}
         />
         <StatRow
-          isLoading={isLoopsDataLoading}
           label="loopS rate"
+          loading={isLoopsDataLoading}
           secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} loopS`}
           value={`1 loopS = ${fNum('token', assetsToSharesRate)} S`}
         />
         <Separator my="md" />
         <StatRow
-          isLoading={isLoopsDataLoading}
           label="Health factor"
+          loading={isLoopsDataLoading}
           value={`${fNumCustom(bn(loopsData?.loopsGetData.healthFactor || '0'), customFormat)}`}
         />
         <StatRow
-          isLoading={isLoopsDataLoading}
           label="Current leverage"
+          loading={isLoopsDataLoading}
           value={`${fNumCustom(bn(loopsData?.loopsGetData.leverage || '0'), customFormat)}x`}
         />
         <StatRow
-          isLoading={isLoopsDataLoading}
           label="Actual supply"
+          loading={isLoopsDataLoading}
           value={fNum('token', bn(loopsData?.loopsGetData.actualSupply || '0'))}
         />
         <Box minH="20px" w="full" />
       </VStack>
     </NoisyCard>
-  );
+  )
 }
 
 export function Loops() {
@@ -320,5 +331,5 @@ export function Loops() {
         </VStack>
       </DefaultPageContainer>
     </FadeInOnView>
-  );
+  )
 }

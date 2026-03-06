@@ -1,26 +1,26 @@
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import {
-  Link,
-  Box,
-  VStack,
-  Text,
-  List,
-  Button,
-  Dialog,
-  Portal } from '@chakra-ui/react';
+import { Link, Box, VStack, Text, List, Button, Dialog, Portal } from '@chakra-ui/react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function RecoveredFundsLearnMoreModal({
   isOpen = false,
-  onClose = () => {} }: { isOpen?: boolean; onClose?: () => void }) {
+  onClose = () => {},
+}: {
+  isOpen?: boolean
+  onClose?: () => void
+}) {
   return (
-    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={(e: { open: boolean }) => {
-      if (!e.open) {
-        onClose();
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(e: { open: boolean }) => {
+        if (!e.open) {
+          onClose()
+        }
+      }}
+      open={isOpen}
+      placement="center"
+      size="lg"
+    >
       <Portal>
-
         <SuccessOverlay />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -41,7 +41,12 @@ export function RecoveredFundsLearnMoreModal({
                   />
                 </Box>
 
-                <List.Root color="font.primary" listStylePosition="outside" listStyleType="disc" pl="md">
+                <List.Root
+                  color="font.primary"
+                  listStylePosition="outside"
+                  listStyleType="disc"
+                  pl="md"
+                >
                   <List.Item mb="xs">
                     <Text>
                       There was a security incident affecting some v2 composable stable pools in
@@ -59,13 +64,14 @@ export function RecoveredFundsLearnMoreModal({
                       Your share has been calculated by following{' '}
                       <Link
                         href="https://forum.balancer.fi/t/bip-892-distribution-of-rescued-funds-from-balancer-v2-november-3rd-2025-attacks/6883"
-                        target='_blank'
-                        rel='noopener noreferrer'>
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
                         BIP-892
                       </Link>{' '}
                       . That means that each pool's funds go only to LPs of that specific pool and
-                      network, pro-rata by BPT holdings at the snapshot block and you receive the same
-                      tokens rescued
+                      network, pro-rata by BPT holdings at the snapshot block and you receive the
+                      same tokens rescued
                     </Text>
                   </List.Item>
                   <List.Item mb="xs">
@@ -73,24 +79,30 @@ export function RecoveredFundsLearnMoreModal({
                   </List.Item>
                   <List.Item mb="xs">
                     <Text>
-                      NO KYC is required, but you will need to make an onchain signature to acknowledge
-                      and agree to the Claim Settlement Terms.
+                      NO KYC is required, but you will need to make an onchain signature to
+                      acknowledge and agree to the Claim Settlement Terms.
                     </Text>
                   </List.Item>
                 </List.Root>
               </VStack>
             </Dialog.Body>
             <Dialog.Footer gap={3}>
-              <Button flex="1" isExternal variant="secondary" asChild><Link href="https://x.com/Balancer/status/2021554863314977087">Read post
-                              </Link></Button>
+              <Button asChild flex="1" variant="secondary">
+                <Link
+                  href="https://x.com/Balancer/status/2021554863314977087"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Read post
+                </Link>
+              </Button>
               <Button flex="1" onClick={onClose} variant="tertiary">
                 Close
               </Button>
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

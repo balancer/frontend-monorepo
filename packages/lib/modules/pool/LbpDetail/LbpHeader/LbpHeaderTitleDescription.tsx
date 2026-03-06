@@ -1,4 +1,4 @@
-import { HStack, VStack, Heading, Text, Button, IconButton, Link, Stack } from '@chakra-ui/react';
+import { HStack, VStack, Heading, Text, Button, IconButton, Link, Stack } from '@chakra-ui/react'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { IconType, SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
@@ -15,13 +15,16 @@ export function LbpHeaderTitleDescription() {
   const socialLinks = [
     {
       iconType: 'x',
-      href: lbpPool.x ? `https://twitter.com/${lbpPool.x}` : undefined },
+      href: lbpPool.x ? `https://twitter.com/${lbpPool.x}` : undefined,
+    },
     {
       iconType: 'discord',
-      href: lbpPool.discord || undefined },
+      href: lbpPool.discord || undefined,
+    },
     {
       iconType: 'tg',
-      href: lbpPool.telegram ? `https://t.me/${lbpPool.telegram}` : undefined },
+      href: lbpPool.telegram ? `https://t.me/${lbpPool.telegram}` : undefined,
+    },
   ] as { iconType: IconType; href: string | undefined }[]
 
   return (
@@ -54,12 +57,14 @@ export function LbpHeaderTitleDescription() {
         {lbpPool.description}
       </Text>
       <HStack mt="auto">
-        <Button isExternal variant="tertiary" asChild><Link href={lbpPool.website || ''}>
+        <Button asChild variant="tertiary">
+          <Link href={lbpPool.website || ''} rel="noopener noreferrer" target="_blank">
             <HStack gap="xxs">
               <Text>View project</Text>
               <ArrowUpRight size={12} />
             </HStack>
-          </Link></Button>
+          </Link>
+        </Button>
         <Text opacity="0.25" px={{ base: '0', sm: 'ms' }} variant="secondary">
           |
         </Text>
@@ -69,21 +74,22 @@ export function LbpHeaderTitleDescription() {
               {href && (
                 <IconButton
                   aria-label={`Visit us on ${iconType}`}
+                  asChild
                   bg="background.level2"
                   h="32px"
-                  isExternal
-                  isRound
                   rounded="full"
                   size="sm"
                   variant="tertiary"
-                  asChild><Link href={href}>
+                >
+                  <Link href={href} rel="noopener noreferrer" target="_blank">
                     <SocialIcon iconType={iconType} size={16} />
-                  </Link></IconButton>
+                  </Link>
+                </IconButton>
               )}
             </Stack>
           ))}
         </HStack>
       </HStack>
     </VStack>
-  );
+  )
 }

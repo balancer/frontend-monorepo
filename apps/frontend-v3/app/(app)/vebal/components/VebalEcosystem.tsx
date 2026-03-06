@@ -1,6 +1,6 @@
 import { MotionValue, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ReactNode, useRef, useState } from 'react'
-import { Box, BoxProps, Flex, Text, useDisclosure, VStack, Stack, Heading } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, Text, useDisclosure, VStack, Stack, Heading } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { StakedaoIcon } from '@repo/lib/shared/components/icons/logos/StakedaoIcon'
 import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
@@ -9,7 +9,8 @@ import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 import {
   VebalPartnerRedirectModal,
-  VebalRedirectPartner } from '@repo/lib/shared/components/modals/VebalPartnerRedirectModal'
+  VebalRedirectPartner,
+} from '@repo/lib/shared/components/modals/VebalPartnerRedirectModal'
 
 export function VebalEcosystem() {
   const [redirectPartner, setRedirectPartner] = useState<VebalRedirectPartner>(
@@ -47,6 +48,7 @@ export function VebalEcosystem() {
         <Flex display={{ base: 'none', md: 'flex' }} justifyContent="center" w="full">
           <Box
             alignItems="center"
+            asChild
             display="flex"
             flexWrap="wrap"
             gap="ms"
@@ -54,9 +56,11 @@ export function VebalEcosystem() {
             minH="150px"
             mx="auto"
             w="full"
-            asChild><motion.div
+          >
+            <motion.div
               onMouseLeave={() => mouseX.set(Infinity)}
-              onMouseMove={e => mouseX.set(e.pageX)}>
+              onMouseMove={e => mouseX.set(e.pageX)}
+            >
               {logos.map(logo => (
                 <AppIcon
                   Icon={<logo.icon size={logo.size} />}
@@ -66,7 +70,8 @@ export function VebalEcosystem() {
                   onClick={() => openRedirectModal(logo.partner)}
                 />
               ))}
-            </motion.div></Box>
+            </motion.div>
+          </Box>
         </Flex>
         <Flex
           display={{ base: 'flex', md: 'none' }}
@@ -91,7 +96,7 @@ export function VebalEcosystem() {
         partner={redirectPartner}
       />
     </Box>
-  );
+  )
 }
 
 function AppIcon({
@@ -123,11 +128,14 @@ function AppIcon({
           _hover: {
             color: 'font.maxContrast',
             bg: 'background.level4',
-            boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)' } }}
+            boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
+          },
+        }}
         _hover={{
           bg: 'background.level4',
           color: 'brown.500',
-          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)' }}
+          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
+        }}
         alignItems="center"
         aspectRatio={1}
         bg="background.level2"
@@ -143,7 +151,9 @@ function AppIcon({
         transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out"
         willChange="box-shadow, background-color"
         {...rest}
-        asChild><motion.div ref={ref}>
+        asChild
+      >
+        <motion.div ref={ref}>
           <Box
             borderRadius="full"
             inset={0}
@@ -180,9 +190,10 @@ function AppIcon({
           >
             {Icon}
           </Box>
-        </motion.div></Box>
+        </motion.div>
+      </Box>
     </FadeInOnView>
-  );
+  )
 }
 
 function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & BoxProps) {
@@ -194,13 +205,16 @@ function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & 
         _hover: {
           color: 'font.maxContrast',
           bg: 'background.level4',
-          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)' } }}
+          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
+        },
+      }}
       _hover={{
         bg: 'background.level4',
         color: 'brown.500',
         boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
         transform: 'scale(1.1)',
-        transition: 'scale 0.3s ease-out' }}
+        transition: 'scale 0.3s ease-out',
+      }}
       alignItems="center"
       aspectRatio={1}
       bg="background.level2"

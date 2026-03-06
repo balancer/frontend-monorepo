@@ -107,7 +107,8 @@ export function useTransactionSteps(
     lastTransactionConfirmingOrConfirmed,
     lastTransactionConfirmed,
     isLastStep,
-    resetTransactionSteps }
+    resetTransactionSteps,
+  }
 }
 
 function findCurrentIndex(steps: TransactionStep[]) {

@@ -1,11 +1,12 @@
-import { Card, HStack, Text, VStack, Popover } from '@chakra-ui/react';
+import { Card, HStack, Text, VStack, Popover } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useCallback } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import BaseAprTooltip, {
-  BaseAprTooltipProps } from '@repo/lib/shared/components/tooltips/apr-tooltip/BaseAprTooltip'
+  BaseAprTooltipProps,
+} from '@repo/lib/shared/components/tooltips/apr-tooltip/BaseAprTooltip'
 import { SparklesIcon } from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { ArrowRight } from 'react-feather'
 
@@ -97,5 +98,5 @@ export function WeeklyYieldTooltip({
         </Card.Root>
       </HStack>
     </BaseAprTooltip>
-  );
+  )
 }

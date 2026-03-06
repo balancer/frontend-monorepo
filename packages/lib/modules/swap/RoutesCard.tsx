@@ -1,11 +1,5 @@
 import { Path, TokenApi } from '@balancer/sdk'
-import {
-  Accordion,
-  Box,
-  HStack,
-  Popover,
-  Text,
-  VStack } from '@chakra-ui/react';
+import { Accordion, Box, HStack, Popover, Text, VStack } from '@chakra-ui/react'
 import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../tokens/TokensProvider'
 import { getTokenColor } from '@repo/lib/styles/token-colors'
@@ -57,8 +51,9 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
           borderColor="transparent"
           borderRadius="md"
           shadow="md"
+          value="item-0"
           w="full"
-          value='item-0'>
+        >
           <Accordion.ItemTrigger pl="ms" pr="sm">
             <Box as="span" flex="1" textAlign="left">
               {`Proposed route: ${paths?.length > 1 ? 'Split route, ' : ''} ${maxHops} hops`}
@@ -66,7 +61,8 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
             <Accordion.ItemIndicator />
           </Accordion.ItemTrigger>
 
-          <Accordion.ItemContent w="full"><Accordion.ItemBody>
+          <Accordion.ItemContent w="full">
+            <Accordion.ItemBody>
               <VStack>
                 <HStack justify="space-between" w="full">
                   <HStack>
@@ -128,11 +124,12 @@ export function RoutesCard({ paths, chain, totalInputAmount, totalOutputAmount }
                   </Text>
                 </HStack>
               </VStack>
-            </Accordion.ItemBody></Accordion.ItemContent>
+            </Accordion.ItemBody>
+          </Accordion.ItemContent>
         </Accordion.Item>
       </Accordion.Root>
     </Box>
-  );
+  )
 }
 
 type PathRouteProps = {
@@ -205,7 +202,8 @@ function TokenItem({ chain, token, position, amountShare, colors, tokenAmount }:
 
   const borderProps = {
     borderLeftRadius: position === 'start' ? '10px' : undefined,
-    borderRightRadius: position === 'end' ? '10px' : undefined }
+    borderRightRadius: position === 'end' ? '10px' : undefined,
+  }
 
   const item = (
     <Box
@@ -227,7 +225,7 @@ function TokenItem({ chain, token, position, amountShare, colors, tokenAmount }:
   return !tokenAmount ? (
     item
   ) : (
-    <Popover.Root openDelay={0} closeDelay={0}>
+    <Popover.Root closeDelay={0} openDelay={0}>
       <Popover.Trigger asChild>{item}</Popover.Trigger>
       <Popover.Positioner>
         <Popover.Content p="2" width="fit-content">
@@ -267,9 +265,11 @@ function PoolItem({
   outputToken,
   amountShare,
   hops,
-  colors }: PoolItemProps) {
+  colors,
+}: PoolItemProps) {
   const { data } = useQuery(GetPoolDocument, {
-    variables: { id: poolId, chain } })
+    variables: { id: poolId, chain },
+  })
 
   if (!data) return null
 
@@ -277,7 +277,7 @@ function PoolItem({
   const poolName = data.pool.name
 
   return (
-    <Popover.Root openDelay={0} closeDelay={0}>
+    <Popover.Root closeDelay={0} openDelay={0}>
       <Popover.Trigger asChild>
         <Box
           alignItems="center"

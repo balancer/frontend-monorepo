@@ -9,6 +9,7 @@ export function showErrorAsToast(toast: CreateToastFnReturn, cause: ErrorCause) 
       description: cause.description,
       status: 'error',
       duration: 300000,
-      isClosable: true })
+      isClosable: true,
+    })
   }
 }

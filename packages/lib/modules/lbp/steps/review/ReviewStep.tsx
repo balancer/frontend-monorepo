@@ -1,4 +1,4 @@
-import { Card, Circle, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Card, Circle, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { differenceInDays, differenceInHours, format, isValid, parseISO } from 'date-fns'
 import { getChainName } from '@repo/lib/config/app.config'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -18,7 +18,8 @@ export function ReviewStep() {
   const { projectInfoForm, saleStructureForm } = useLbpForm()
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl] = useWatch({
     control: projectInfoForm.control,
-    name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'] })
+    name: ['name', 'tokenIconUrl', 'description', 'websiteUrl', 'xHandle', 'discordUrl'],
+  })
   const [
     selectedChain,
     launchTokenAddress,
@@ -41,7 +42,8 @@ export function ReviewStep() {
       'endDateTime',
       'fee',
       'userActions',
-    ] })
+    ],
+  })
 
   const chain = selectedChain || PROJECT_CONFIG.defaultNetwork
 
@@ -153,5 +155,5 @@ export function ReviewStep() {
       />
       <LbpFormAction />
     </VStack>
-  );
+  )
 }

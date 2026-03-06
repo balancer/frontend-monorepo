@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react'
 import { BalAlert } from './BalAlert'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
 import { BalAlertContent } from './BalAlertContent'
@@ -13,19 +13,22 @@ export function SafeAppAlert() {
   const safeAppLink = useSafeAppLink()
 
   const {
-    options: { isOnSafeAppList } } = PROJECT_CONFIG
+    options: { isOnSafeAppList },
+  } = PROJECT_CONFIG
 
   const content = isOnSafeAppList
     ? {
         description: `For a better experience, use the ${PROJECT_CONFIG.projectName} Safe app with your Safe wallet.`,
         title: `Consider using the ${PROJECT_CONFIG.projectName} Safe web app`,
         href: safeAppLink,
-        buttonLabel: 'Open app' }
+        buttonLabel: 'Open app',
+      }
     : {
         description: `For a better experience, add ${PROJECT_CONFIG.projectName} as a custom Safe app in your Safe wallet. Use 'https://${PROJECT_CONFIG.projectId}.fi/pools' as the Safe App URL when adding the custom app.`,
         title: `Consider adding ${PROJECT_CONFIG.projectName} as a custom Safe web app`,
         href: 'https://app.safe.global',
-        buttonLabel: 'Go to Safe App' }
+        buttonLabel: 'Go to Safe App',
+      }
 
   if (isSafeAccountViaWalletConnect && !isMobile) {
     return <BalAlert content={<Content content={content} />} status="info" />
@@ -34,7 +37,8 @@ export function SafeAppAlert() {
 }
 
 function Content({
-  content }: {
+  content,
+}: {
   content: { description: string; title: string; href: string; buttonLabel: string }
 }) {
   return (

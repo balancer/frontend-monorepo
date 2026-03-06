@@ -3,7 +3,7 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolType } from '@balancer/sdk'
 import { isGyroEllipticPool, isReClammPool } from '@repo/lib/modules/pool/actions/create/helpers'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { VStack, List } from '@chakra-ui/react';
+import { VStack, List } from '@chakra-ui/react'
 
 export function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
   const { poolAddress } = usePoolCreationForm()
@@ -39,7 +39,7 @@ export function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
   return (
     <BalAlert
       content={
-        <List.Root as='ul'>
+        <List.Root as="ul">
           <List.Item color="black">
             The pool will only be listed on the {projectName} UI once it is seeded.
           </List.Item>
@@ -55,5 +55,5 @@ export function SeedPoolAlert({ poolType }: { poolType: PoolType }) {
       }
       status="info"
     />
-  );
+  )
 }

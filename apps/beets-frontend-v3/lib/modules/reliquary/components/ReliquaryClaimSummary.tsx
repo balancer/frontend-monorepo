@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text } from '@chakra-ui/react';
+import { Card, VStack, Text } from '@chakra-ui/react'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -23,7 +23,8 @@ export function ReliquaryClaimSummary({
   relicId,
   claimTxHash,
   transactionSteps,
-  isLoadingSteps }: Props) {
+  isLoadingSteps,
+}: Props) {
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const { chain, pendingRewardsByRelicId, beetsPrice, beetsAddress } = useReliquary()
@@ -39,7 +40,8 @@ export function ReliquaryClaimSummary({
       {
         tokenAddress: beetsAddress,
         humanAmount: pendingRewardsAmount as `${number}` | '',
-        symbol: 'BEETS' },
+        symbol: 'BEETS',
+      },
     ]
   }, [pendingRewardsAmount, pendingRewardsUsdValue, chain, beetsAddress])
 
@@ -61,8 +63,8 @@ export function ReliquaryClaimSummary({
         <TokenRowGroup
           amounts={claimTokens}
           chain={chain}
-          isLoading={isLoadingSteps}
           label={shouldShowReceipt ? 'You claimed' : 'You will claim'}
+          loading={isLoadingSteps}
           tokens={[]}
           totalUSDValue={pendingRewardsUsdValue.toString()}
         />
@@ -86,5 +88,5 @@ export function ReliquaryClaimSummary({
         </>
       ) : null}
     </AnimateHeightChange>
-  );
+  )
 }

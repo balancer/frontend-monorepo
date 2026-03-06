@@ -1,13 +1,15 @@
-import * as React from 'react';
+import * as React from 'react'
 import ReactECharts from 'echarts-for-react'
 import { HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import {
   PoolChartTab,
-  usePoolChartTabs } from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
+  usePoolChartTabs,
+} from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import {
   getDefaultPoolChartOptions,
-  PoolChartTypeOptions } from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
-import { Box, Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react';
+  PoolChartTypeOptions,
+} from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
+import { Box, Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
@@ -16,7 +18,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 interface Props {
   chartType: PoolChartTab
   hourlyData: HourlyDataPoint[]
-  isLoading?: boolean
+  loading?: boolean
   hasHourlyData?: boolean
 }
 
@@ -32,8 +34,9 @@ function resolveToken(system: ReturnType<typeof useChakraContext>, path: string)
 export function LbpVolumeTVLFeesCharts({
   chartType,
   hourlyData = [],
-  isLoading = false,
-  hasHourlyData = false }: Props) {
+  loading = false,
+  hasHourlyData = false,
+}: Props) {
   const system = useChakraContext()
   const { toCurrency } = useCurrency()
   const { resolvedTheme: nextTheme } = useNextTheme()
@@ -51,12 +54,16 @@ export function LbpVolumeTVLFeesCharts({
         colorStops: [
           {
             offset: 0,
-            color: resolveToken(system, 'chart.pool.bar.volume.from') },
+            color: resolveToken(system, 'chart.pool.bar.volume.from'),
+          },
           {
             offset: 1,
-            color: resolveToken(system, 'chart.pool.bar.volume.to') },
-        ] },
-      hoverColor: '#ED64A6' },
+            color: resolveToken(system, 'chart.pool.bar.volume.to'),
+          },
+        ],
+      },
+      hoverColor: '#ED64A6',
+    },
     [PoolChartTab.TVL]: {
       type: 'line',
       color: '#3182CE',
@@ -72,15 +79,22 @@ export function LbpVolumeTVLFeesCharts({
           colorStops: [
             {
               offset: 0,
-              color: 'rgba(14, 165, 233, 0.08)' },
+              color: 'rgba(14, 165, 233, 0.08)',
+            },
             {
               offset: 1,
-              color: 'rgba(68, 9, 236, 0)' },
-          ] } } },
+              color: 'rgba(68, 9, 236, 0)',
+            },
+          ],
+        },
+      },
+    },
     [PoolChartTab.FEES]: {
       type: 'bar',
       color: '#F6E05E',
-      hoverColor: '#ED64A6' } }
+      hoverColor: '#ED64A6',
+    },
+  }
 
   const getChartData = (): Array<[number, number]> => {
     if ((!hourlyData || !hourlyData.length) && chartType !== PoolChartTab.PRICE) {
@@ -99,19 +113,16 @@ export function LbpVolumeTVLFeesCharts({
   }
 
   const chartData = getChartData()
-  const defaultChartOptions = getDefaultPoolChartOptions(
-    toCurrency,
-    nextTheme,
-    system,
-    {
-      useTimeRange: true }
-  )
+  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme, system, {
+    useTimeRange: true,
+  })
 
   const option = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[chartType as SupportedPoolChartTab] || {
       type: 'line',
       color: '#4299E1',
-      hoverColor: '#ED64A6' }
+      hoverColor: '#ED64A6',
+    }
 
     return {
       ...defaultChartOptions,
@@ -119,7 +130,8 @@ export function LbpVolumeTVLFeesCharts({
         left: '7%',
         right: '4%',
         top: '10%',
-        bottom: '10%' },
+        bottom: '10%',
+      },
       series: [
         {
           type: activeTabOptions.type,
@@ -127,22 +139,28 @@ export function LbpVolumeTVLFeesCharts({
           smooth: true,
           symbol: 'none',
           lineStyle: {
-            width: 2 },
+            width: 2,
+          },
           itemStyle: {
             color: activeTabOptions.color,
-            borderRadius: 100 },
+            borderRadius: 100,
+          },
           emphasis: {
             itemStyle: {
               color: activeTabOptions.hoverColor,
-              borderColor: activeTabOptions.hoverBorderColor } },
+              borderColor: activeTabOptions.hoverBorderColor,
+            },
+          },
           areaStyle: activeTabOptions.areaStyle,
           animationEasing: function (k: number) {
             return k === 1 ? 1 : 1 - Math.pow(2, -10 * k)
-          } },
-      ] }
+          },
+        },
+      ],
+    }
   }, [chartType, chartData, defaultChartOptions, poolChartTypeOptions])
 
-  if (isLoading) {
+  if (loading) {
     return <Skeleton h="full" w="full" />
   }
 
@@ -167,7 +185,8 @@ export function LbpVolumeTVLFeesCharts({
           style={{
             position: 'absolute',
             width: '100%',
-            height: '100%' }}
+            height: '100%',
+          }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />

@@ -1,5 +1,5 @@
-import { Box, Center, BoxProps } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { Box, Center, BoxProps } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Picture } from './other/Picture'
 import { SparkleIconWrapper } from './animations/SparkleIconWrapper'
 import { ReactElement } from 'react'

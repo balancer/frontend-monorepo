@@ -7,7 +7,7 @@ import { useChakraContext } from '@chakra-ui/react'
 
  See: https://chakra-ui.com/docs/get-started/migration#hooks
 */
-import { useMemo } from 'react';
+import { useMemo } from 'react'
 import { EChartsOption, graphic } from 'echarts'
 import { format } from 'date-fns'
 import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
@@ -35,7 +35,8 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
         borderColor: 'transparent',
         borderRadius: 8,
         textStyle: {
-          color: 'white' },
+          color: 'white',
+        },
         padding: 16,
         axisPointer: {
           animation: false,
@@ -43,11 +44,15 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           lineStyle: {
             color: theme.token('colors.base'),
             width: 2,
-            opacity: 1 } },
+            opacity: 1,
+          },
+        },
         // any -> https://github.com/apache/echarts/issues/14277
-        formatter: (params: any) => `# of Relics: ${fNumCustom(params[0].data[1], '0a')}` },
+        formatter: (params: any) => `# of Relics: ${fNumCustom(params[0].data[1], '0a')}`,
+      },
       textStyle: {
-        color: theme.token('colors.gray') },
+        color: theme.token('colors.gray'),
+      },
       xAxis: {
         show: true,
         type: 'time',
@@ -60,25 +65,31 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           },
           color: theme.token('colors.gray'),
           showMaxLabel: false,
-          showMinLabel: false },
+          showMinLabel: false,
+        },
         axisPointer: {
           type: 'line',
           label: {
             formatter: params => {
               return format(new Date(params.value), 'MMM d')
-            } } },
-        axisLine: { show: false } },
+            },
+          },
+        },
+        axisLine: { show: false },
+      },
       yAxis: {
         show: false,
         scale: true,
         splitLine: { show: false },
-        offset: 0 },
+        offset: 0,
+      },
       grid: {
         left: 0,
         right: 0,
         top: '5%',
         bottom: '7.5%',
-        containLabel: false },
+        containLabel: false,
+      },
       series: [
         {
           type: 'line',
@@ -87,21 +98,29 @@ export function ReliquaryRelicsCountChart({ data }: Props) {
           showSymbol: false,
           data: chartData,
           itemStyle: {
-            color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+            color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from'),
+          },
           areaStyle: {
             opacity: 0.2,
             color: new graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
-              { offset: 0.5, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from') },
+              {
+                offset: 0.5,
+                color: theme.token('semanticTokens.colors.chart.pool.bar.volume.from'),
+              },
               { offset: 1, color: theme.token('semanticTokens.colors.chart.pool.bar.volume.to') },
-            ]) },
+            ]),
+          },
           axisLine: { show: false },
           minorSplitLine: { show: false },
           splitLine: { show: false },
 
           tooltip: {
-            valueFormatter: value => fNumCustom(value as number, '0a') } },
-      ] }),
+            valueFormatter: value => fNumCustom(value as number, '0a'),
+          },
+        },
+      ],
+    }),
     [chartData, theme]
   )
 

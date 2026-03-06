@@ -1,4 +1,4 @@
-import { Box, Button, ButtonProps, HStack, Icon, Popover, HoverCard, Text } from '@chakra-ui/react';
+import { Box, Button, ButtonProps, HStack, Icon, HoverCard, Text } from '@chakra-ui/react'
 import { LayoutGroup, motion } from 'framer-motion'
 import { ReactNode } from 'react'
 import { Info } from 'react-feather'
@@ -33,11 +33,11 @@ export default function ButtonGroup(props: Props) {
     <LayoutGroup id={groupId}>
       <HStack
         background={isGray ? 'gray.600' : 'level0'}
+        gap={isCompact ? '0' : '1'}
         p="1"
         pt={isCompact ? '0' : '3px'} // TODO: maybe there a better way to align the buttons
         rounded="md"
         shadow="innerXl"
-        gap={isCompact ? '0' : '1'}
         w={isFullWidth ? 'full' : undefined}
       >
         {options.map(function (option) {
@@ -75,11 +75,11 @@ export default function ButtonGroup(props: Props) {
                 fontSize={fontSize}
               />
             </Box>
-          );
+          )
         })}
       </HStack>
     </LayoutGroup>
-  );
+  )
 }
 
 function GroupOptionButton({
@@ -92,7 +92,8 @@ function GroupOptionButton({
   minWidth,
   size,
   width,
-  onChange }: { option: ButtonGroupOption; isActive: boolean } & Props) {
+  onChange,
+}: { option: ButtonGroupOption; isActive: boolean } & Props) {
   const variant = isActive ? 'buttonGroupActive' : 'buttonGroupInactive'
   const variantGray = isActive ? 'buttonGroupActiveGray' : 'buttonGroupInactiveGray'
   const variantCompact = isActive ? 'buttonGroupActiveCompact' : 'buttonGroupInactiveCompact'
@@ -101,59 +102,72 @@ function GroupOptionButton({
   return (
     <Button
       bg="transparent"
-      id={`button-group-${option.value}`}
       disabled={option.disabled}
+      id={`button-group-${option.value}`}
       minWidth={minWidth}
       onClick={() => onChange(option)}
       position="relative"
       role="group"
       size={size}
       variant={variantToUse}
-      width={width || 'full'}>{isActive && (
-          <Box
-            bg="background.button.secondary"
-            borderRadius="4px"
-            inset="0"
-            layoutId={`active-${groupId}`}
-            position="absolute"
-            shadow="md"
-            sx={
-              isCompact
-                ? {
-                    _dark: {
-                      bg: 'background.level4' } }
-                : undefined
-            }
-            asChild><motion.div /></Box>
-        )}<Box
-          fontSize={fontSize}
-          position="relative"
+      width={width || 'full'}
+    >
+      {isActive && (
+        <Box
+          asChild
+          bg="background.button.secondary"
+          borderRadius="4px"
+          inset="0"
+          layoutId={`active-${groupId}`}
+          position="absolute"
+          shadow="md"
           sx={
-            isCompact && isActive
+            isCompact
               ? {
                   _dark: {
-                    color: 'white' } }
+                    bg: 'background.level4',
+                  },
+                }
               : undefined
           }
-          zIndex="8"
         >
-          {option.label}
-        </Box>{
-          !option.tabTooltipLabel && option.iconTooltipLabel ? (
-            <IconPopover option={option} />
-          ) : undefined
-        }</Button>
-  );
+          <motion.div />
+        </Box>
+      )}
+      <Box
+        fontSize={fontSize}
+        position="relative"
+        sx={
+          isCompact && isActive
+            ? {
+                _dark: {
+                  color: 'white',
+                },
+              }
+            : undefined
+        }
+        zIndex="8"
+      >
+        {option.label}
+      </Box>
+      {!option.tabTooltipLabel && option.iconTooltipLabel ? (
+        <IconPopover option={option} />
+      ) : undefined}
+    </Button>
+  )
 }
 
 function IconPopover({ option }: { option: ButtonGroupOption }) {
   return (
     <HoverCard.Root
       positioning={{
-        placement: 'top'
-      }}>
+        placement: 'top',
+      }}
+    >
       <HoverCard.Trigger asChild>
-        <Icon asChild><Info /></Icon>
+        <Icon asChild>
+          <Info />
+        </Icon>
       </HoverCard.Trigger>
       <HoverCard.Positioner>
         <HoverCard.Content maxW="300px" p="sm" w="auto">
@@ -163,5 +177,5 @@ function IconPopover({ option }: { option: ButtonGroupOption }) {
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>
-  );
+  )
 }

@@ -5,12 +5,12 @@ import {
   GridItem,
   GridProps,
   HStack,
-  Popover,
   HoverCard,
   Portal,
   Skeleton,
-  Text } from '@chakra-ui/react';
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+  Text,
+} from '@chakra-ui/react'
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 import Link from 'next/link'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -55,7 +55,8 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
     <FadeInOnView>
       <Box
         _hover={{
-          bg: 'background.level0' }}
+          bg: 'background.level0',
+        }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
         rounded="md"
@@ -122,7 +123,8 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               <Text>
                 {toCurrency(vote.votingIncentive.valuePerVote, {
                   abbreviated: false,
-                  forceThreeDecimals: true })}
+                  forceThreeDecimals: true,
+                })}
               </Text>
             ) : (
               <HoverCard.Root>
@@ -152,21 +154,21 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             {vote.gauge.isKilled || voted ? (
               <Button
                 color="font.secondary"
+                disabled
                 fontSize="sm"
                 fontWeight="700"
-                disabled
                 variant="outline"
                 w="80px"
               >
                 {vote.gauge.isKilled ? 'Expired' : 'Voted'}
               </Button>
             ) : (
-              <Tooltip disabled={!isDisabled} content={disabledReason}>
+              <Tooltip content={disabledReason} disabled={!isDisabled}>
                 <Button
                   color={selected ? 'font.secondary' : undefined}
+                  disabled={isDisabled}
                   fontSize="sm"
                   fontWeight="700"
-                  disabled={isDisabled}
                   onClick={() => toggleVotingPool(vote)}
                   rounded="md"
                   size="xs"
@@ -181,5 +183,5 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
         </Grid>
       </Box>
     </FadeInOnView>
-  );
+  )
 }

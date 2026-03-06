@@ -1,5 +1,5 @@
 import { Address, isSameAddress } from '@balancer/sdk'
-import { Card, Text, VStack } from '@chakra-ui/react';
+import { Card, Text, VStack } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
@@ -11,7 +11,8 @@ import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import {
   ApiToken,
   HumanTokenAmount,
-  HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
+  HumanTokenAmountWithSymbol,
+} from '@repo/lib/modules/tokens/token.types'
 import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 import { RemoveLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
@@ -34,7 +35,8 @@ export function ReliquaryRemoveLiquiditySummary({
   receivedTokens,
   sentBptUnits,
   error,
-  relicId }: Props) {
+  relicId,
+}: Props) {
   const {
     transactionSteps,
     humanBptIn,
@@ -42,7 +44,8 @@ export function ReliquaryRemoveLiquiditySummary({
     amountsOut,
     hasQuoteContext,
     removeLiquidityTxHash,
-    removeLiquidityTxSuccess } = useRemoveLiquidity()
+    removeLiquidityTxSuccess,
+  } = useRemoveLiquidity()
   const { isMobile } = useBreakpoints()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
@@ -62,7 +65,8 @@ export function ReliquaryRemoveLiquiditySummary({
       ? {
           tokenAddress: networkConfig.tokens.addresses.beets as `0x${string}`,
           humanAmount: pendingRewardsAmount as `${number}` | '',
-          symbol: 'BEETS' }
+          symbol: 'BEETS',
+        }
       : null
 
   const tokens = allPoolTokens(pool).flatMap(token => {
@@ -93,7 +97,8 @@ export function ReliquaryRemoveLiquiditySummary({
     if (isSameAddress(token.tokenAddress, networkConfig.tokens.addresses.beets as Address)) {
       return {
         ...token,
-        humanAmount: `${Number(token.humanAmount) + Number(rewardsAmount?.humanAmount)}` }
+        humanAmount: `${Number(token.humanAmount) + Number(rewardsAmount?.humanAmount)}`,
+      }
     }
     return token
   })
@@ -128,12 +133,12 @@ export function ReliquaryRemoveLiquiditySummary({
       <Card.Root variant="modalSubSection">
         <BptRow
           bptAmount={shouldShowReceipt ? sentBptUnits : humanBptIn}
-          isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={
             shouldShowReceipt
               ? `Removed liquidity from Relic #${relicId || ''}`
               : `Removing liquidity from Relic #${relicId || ''}`
           }
+          loading={shouldShowReceipt ? isLoadingReceipt : false}
           pool={pool}
         />
       </Card.Root>
@@ -153,7 +158,6 @@ export function ReliquaryRemoveLiquiditySummary({
         <TokenRowGroup
           amounts={shouldShowReceipt ? receivedTokensWithoutBpt : _amountsOutWithRewards}
           chain={chain}
-          isLoading={shouldShowReceipt ? isLoadingReceipt : false}
           label={
             shouldShowReceipt
               ? 'You received'
@@ -161,6 +165,7 @@ export function ReliquaryRemoveLiquiditySummary({
                 ? 'Total expected (with rewards)'
                 : "You're expected to get (if no slippage)"
           }
+          loading={shouldShowReceipt ? isLoadingReceipt : false}
           pool={pool}
           tokens={shouldShowReceipt ? tokens : undefined}
           totalUSDValue={
@@ -202,5 +207,5 @@ export function ReliquaryRemoveLiquiditySummary({
         )
       )}
     </AnimateHeightChange>
-  );
+  )
 }

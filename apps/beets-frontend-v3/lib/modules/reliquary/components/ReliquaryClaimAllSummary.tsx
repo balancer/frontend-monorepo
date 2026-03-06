@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Text } from '@chakra-ui/react';
+import { Card, VStack, Text } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { TokenRowGroup } from '@repo/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
@@ -33,7 +33,8 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
       {
         tokenAddress: beetsAddress,
         humanAmount: pendingRewardsData.rewards[0].amount as `${number}` | '',
-        symbol: 'BEETS' },
+        symbol: 'BEETS',
+      },
     ]
   }, [pendingRewardsData, totalPendingRewardsUSD, pool, beetsAddress])
 
@@ -48,8 +49,8 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
         <TokenRowGroup
           amounts={claimTokens}
           chain={pool.chain}
-          isLoading={isLoadingSteps}
           label={shouldShowReceipt ? 'You claimed' : 'You will claim'}
+          loading={isLoadingSteps}
           tokens={[]}
           totalUSDValue={totalPendingRewardsUSD.toString()}
         />
@@ -71,5 +72,5 @@ export function ReliquaryClaimAllSummary({ claimTxHash, transactionSteps, isLoad
         </>
       ) : null}
     </AnimateHeightChange>
-  );
+  )
 }

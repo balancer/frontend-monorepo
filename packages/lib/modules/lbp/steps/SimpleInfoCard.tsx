@@ -1,4 +1,4 @@
-import { Card, Text } from '@chakra-ui/react';
+import { Card, Text } from '@chakra-ui/react'
 
 export function SimpleInfoCard({ title, info }: { title: string; info: string }) {
   return (
@@ -10,5 +10,5 @@ export function SimpleInfoCard({ title, info }: { title: string; info: string })
         <Text fontWeight="bold">{info}</Text>
       </Card.Body>
     </Card.Root>
-  );
+  )
 }

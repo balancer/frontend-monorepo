@@ -1,4 +1,4 @@
-import { BoxProps, Card, Heading, Icon, Skeleton } from '@chakra-ui/react';
+import { BoxProps, Card, Heading, Icon, Skeleton } from '@chakra-ui/react'
 import { usePortfolio } from './PortfolioProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
@@ -16,18 +16,22 @@ const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
     justifyContent: 'center',
     borderTopRightRadius: 'none',
     borderBottomRightRadius: 'none',
-    py: [8] },
+    py: [8],
+  },
   cardProps: {
     position: 'relative',
     overflow: 'hidden',
-    flex: 1 } }
+    flex: 1,
+  },
+}
 export function PortfolioSummary() {
   const {
     portfolioData,
     totalFiatClaimableBalance,
     protocolRewardsBalance,
     isLoadingPortfolio,
-    isLoadingClaimableRewards } = usePortfolio()
+    isLoadingClaimableRewards,
+  } = usePortfolio()
   const { toCurrency } = useCurrency()
 
   const totalBalance = portfolioData?.userTotalBalance?.toNumber()
@@ -50,11 +54,14 @@ export function PortfolioSummary() {
       >
         <NoisyCard
           cardProps={{
-            ...commonNoisyCardProps.cardProps }}
+            ...commonNoisyCardProps.cardProps,
+          }}
           contentProps={commonNoisyCardProps.contentProps}
         >
           <ZenGarden sizePx="225px" variant="diamond" />
-          <Icon color="font.primary" height="30px" mb="sm" width="30px" asChild><BarChart /></Icon>
+          <Icon asChild color="font.primary" height="30px" mb="sm" width="30px">
+            <BarChart />
+          </Icon>
           <Heading color="grayText" mb="sm" size="sm">
             {`My ${PROJECT_CONFIG.projectName} liquidity`}
           </Heading>
@@ -67,11 +74,14 @@ export function PortfolioSummary() {
 
         <NoisyCard
           cardProps={{
-            ...commonNoisyCardProps.cardProps }}
+            ...commonNoisyCardProps.cardProps,
+          }}
           contentProps={commonNoisyCardProps.contentProps}
         >
           <ZenGarden sizePx="225px" variant="diamond" />
-          <Icon height="30px" mb="sm" width="30px" asChild><StarsIcon /></Icon>
+          <Icon asChild height="30px" mb="sm" width="30px">
+            <StarsIcon />
+          </Icon>
           <Heading color="grayText" mb="sm" size="sm">
             Claimable incentives
           </Heading>
@@ -86,5 +96,5 @@ export function PortfolioSummary() {
         </NoisyCard>
       </Card.Root>
     </FadeInOnView>
-  );
+  )
 }

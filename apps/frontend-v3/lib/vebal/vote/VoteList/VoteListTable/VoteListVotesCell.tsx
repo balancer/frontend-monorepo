@@ -1,6 +1,6 @@
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { getVotesState } from '@repo/lib/modules/vebal/vote/vote.helpers'
-import { HStack } from '@chakra-ui/react';
+import { HStack } from '@chakra-ui/react'
 import { VoteCapTooltip } from '@bal/lib/vebal/vote/VoteCapTooltip'
 import { VoteRateTooltip } from '@bal/lib/vebal/vote/VoteRateTooltip'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -32,5 +32,5 @@ export function VoteListVotesCell({ vote }: Props) {
         votesState={votesState}
       />
     </HStack>
-  );
+  )
 }

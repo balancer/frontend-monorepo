@@ -250,10 +250,10 @@ function LaunchTokenAddressInput({
           name="launchTokenAddress"
           render={({ field }) => (
             <InputWithError
+              disabled={locked}
               error={errors.launchTokenAddress?.message}
               info="First create the token on the chosen network, if you haven't already."
-              isDisabled={locked}
-              isInvalid={!!errors.launchTokenAddress}
+              invalid={!!errors.launchTokenAddress}
               onChange={e => field.onChange(e.target.value)}
               placeholder="Enter token address"
               value={field.value}
@@ -419,7 +419,7 @@ function DateTimeInput({
         render={({ field }) => (
           <InputWithError
             error={errors[field.name]?.message}
-            isInvalid={!!errors[field.name]}
+            invalid={!!errors[field.name]}
             min={min || today}
             onChange={e => field.onChange(e.target.value)}
             type="datetime-local"
@@ -548,7 +548,7 @@ function FeeSelection({
                 <InputWithError
                   error={errors[field.name]?.message}
                   info="Minimum fee: 1.00% - Maximum fee: 10.00%"
-                  isInvalid={!!errors[field.name]}
+                  invalid={!!errors[field.name]}
                   onChange={e => field.onChange(e.target.value)}
                   pasteFn={undefined}
                   step=".01"

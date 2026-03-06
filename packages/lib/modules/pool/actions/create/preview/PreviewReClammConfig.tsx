@@ -1,4 +1,4 @@
-import { Card, SimpleGrid, VStack, Text, HStack, Button, Box, Separator } from '@chakra-ui/react';
+import { Card, SimpleGrid, VStack, Text, HStack, Button, Box, Separator } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
 import { RefreshCcw } from 'react-feather'
 import { formatNumber } from '../helpers'
@@ -17,25 +17,31 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
   const { reClammConfigForm, poolCreationForm, invertReClammPriceParams } = usePoolCreationForm()
   const [initialTargetPrice, initialMinPrice, initialMaxPrice, priceShiftDailyRate] = useWatch({
     control: reClammConfigForm.control,
-    name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'] })
+    name: ['initialTargetPrice', 'initialMinPrice', 'initialMaxPrice', 'priceShiftDailyRate'],
+  })
   const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
 
   const reClammConfigCards = [
     {
       label: 'Min Price',
-      value: initialMinPrice ? formatNumber(initialMinPrice) : '-' },
+      value: initialMinPrice ? formatNumber(initialMinPrice) : '-',
+    },
     {
       label: 'Lower Target',
-      value: upperMarginValue ? formatNumber(upperMarginValue.toString()) : '-' },
+      value: upperMarginValue ? formatNumber(upperMarginValue.toString()) : '-',
+    },
     {
       label: 'Current Price',
-      value: initialTargetPrice ? formatNumber(initialTargetPrice) : '-' },
+      value: initialTargetPrice ? formatNumber(initialTargetPrice) : '-',
+    },
     {
       label: 'Upper Target',
-      value: lowerMarginValue ? formatNumber(lowerMarginValue.toString()) : '-' },
+      value: lowerMarginValue ? formatNumber(lowerMarginValue.toString()) : '-',
+    },
     {
       label: 'Max Price',
-      value: initialMaxPrice ? formatNumber(initialMaxPrice) : '-' },
+      value: initialMaxPrice ? formatNumber(initialMaxPrice) : '-',
+    },
   ]
 
   const tokenSymbols = poolTokens.map(token => token.data?.symbol).filter(Boolean)
@@ -89,7 +95,6 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
                     p={2.5}
                   >
                     <Text
-                      fontSize="xs"
                       css={{
                         background:
                           'linear-gradient(89.81deg, #B3AEF5 -1.06%, #D7CBE7 27.62%, #E5C8C8 49.42%, #EAA879 98.68%)',
@@ -97,8 +102,9 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
                         backgroundClip: 'text',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
-                        color: 'transparent'
+                        color: 'transparent',
                       }}
+                      fontSize="xs"
                     >
                       Concentration density: {priceShiftDailyRate}%
                     </Text>
@@ -110,5 +116,5 @@ export function PreviewReClammConfig({ isBeforeStep, lowerMarginValue, upperMarg
         </VStack>
       </Card.Body>
     </Card.Root>
-  );
+  )
 }

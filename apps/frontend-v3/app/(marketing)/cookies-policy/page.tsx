@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Box, Container } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react'
 import { Prose } from '@repo/lib/shared/components/prose/Prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 

@@ -1,7 +1,7 @@
-'use client';
+'use client'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
-import { Button, Flex, Box, Center, Link } from '@chakra-ui/react';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+import { Button, Flex, Box, Center, Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 
 export function CowPoolBanner() {
@@ -11,15 +11,15 @@ export function CowPoolBanner() {
   return (
     <Box
       background={bgColor}
+      css={{
+        width: '100% !important',
+        maxWidth: '100% !important',
+      }}
       height="140px"
       maxW="100%"
       overflow="hidden"
       position="relative"
       rounded="lg"
-      css={{
-        width: '100% !important',
-        maxWidth: '100% !important'
-      }}
       width="full"
     >
       <Box zIndex="0">
@@ -59,26 +59,29 @@ export function CowPoolBanner() {
           </Box>
           <Button
             _hover={{ bg: '#E2F8BF' }}
+            asChild
             bg="#BCEC79"
             color="#194D05"
             flex="1"
             h={{ base: '32px', sm: '40px', md: '48px' }}
-            isExternal
             role="group"
             rounded="full"
             size="lg"
             w="max-content"
-            asChild><Link href="https://cow.fi/cow-amm">How it works
-                          <Box
+          >
+            <Link href="https://cow.fi/cow-amm" rel="noopener noreferrer" target="_blank">
+              How it works
+              <Box
                 _groupHover={{ transform: ' translateX(1.5px)' }}
                 pl="xs"
                 transition="all 0.2s var(--ease-out-cubic)"
               >
                 <ArrowUpRight size={14} style={{ display: 'inline' }} />
               </Box>
-            </Link></Button>
+            </Link>
+          </Button>
         </Flex>
       </Center>
     </Box>
-  );
+  )
 }

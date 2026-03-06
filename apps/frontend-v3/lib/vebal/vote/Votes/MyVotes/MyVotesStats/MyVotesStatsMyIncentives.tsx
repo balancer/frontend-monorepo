@@ -1,4 +1,4 @@
-import { HStack, Skeleton, Text } from '@chakra-ui/react';
+import { HStack, Skeleton, Text } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
 import { GainBadge } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
@@ -30,7 +30,8 @@ export function MyVotesStatsMyIncentives() {
               left: 0,
               opacity: 0.5,
               position: 'absolute',
-              width: '100%' }}
+              width: '100%',
+            }}
             fontSize="sm"
             position="relative"
             variant="secondary"
@@ -55,5 +56,5 @@ export function MyVotesStatsMyIncentives() {
         )
       }
     />
-  );
+  )
 }

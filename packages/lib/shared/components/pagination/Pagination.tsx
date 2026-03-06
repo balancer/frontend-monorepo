@@ -6,8 +6,9 @@ import {
   Center,
   Stack,
   JsxStyleProps,
-  Icon } from '@chakra-ui/react';
-import { LuArrowLeft, LuArrowRight, LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+  Icon,
+} from '@chakra-ui/react'
+import { LuArrowLeft, LuArrowRight, LuChevronLeft, LuChevronRight } from 'react-icons/lu'
 
 export interface PaginationProps {
   goToFirstPage: () => void
@@ -52,13 +53,23 @@ export function Pagination({
           disabled={!canPreviousPage}
           mr="2"
           onClick={goToFirstPage}
-          size="sm"><Icon h="3" w="3" asChild><LuArrowLeft /></Icon></IconButton>
+          size="sm"
+        >
+          <Icon asChild h="3" w="3">
+            <LuArrowLeft />
+          </Icon>
+        </IconButton>
 
         <IconButton
           aria-label="previous page"
           disabled={!canPreviousPage}
           onClick={goToPreviousPage}
-          size="sm"><Icon h="6" w="6" asChild><LuChevronLeft /></Icon></IconButton>
+          size="sm"
+        >
+          <Icon asChild h="6" w="6">
+            <LuChevronLeft />
+          </Icon>
+        </IconButton>
         <Center>
           <Text color="grayText" flexShrink="0" fontSize="sm">
             Page{' '}
@@ -71,17 +82,22 @@ export function Pagination({
             </Text>
           </Text>
         </Center>
-        <IconButton
-          aria-label="next page"
-          disabled={!canNextPage}
-          onClick={goToNextPage}
-          size="sm"><Icon h="6" w="6" asChild><LuChevronRight /></Icon></IconButton>
+        <IconButton aria-label="next page" disabled={!canNextPage} onClick={goToNextPage} size="sm">
+          <Icon asChild h="6" w="6">
+            <LuChevronRight />
+          </Icon>
+        </IconButton>
         <IconButton
           aria-label="last page"
           disabled={!canNextPage}
           ml="2"
           onClick={goToLastPage}
-          size="sm"><Icon h="3" w="3" asChild><LuArrowRight /></Icon></IconButton>
+          size="sm"
+        >
+          <Icon asChild h="3" w="3">
+            <LuArrowRight />
+          </Icon>
+        </IconButton>
       </HStack>
       {!hideDropdown && (
         <NativeSelect.Root>
@@ -93,7 +109,8 @@ export function Pagination({
             size="sm"
             value={String(pageSize)}
             variant="tertiary"
-            w="32">
+            w="32"
+          >
             {[10, 20, 30, 40, 50].map(pageSize => (
               <option key={pageSize} value={pageSize}>
                 {`Show ${pageSize}`}
@@ -104,5 +121,5 @@ export function Pagination({
         </NativeSelect.Root>
       )}
     </Stack>
-  );
+  )
 }

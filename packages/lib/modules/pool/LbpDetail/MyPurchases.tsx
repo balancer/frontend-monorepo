@@ -1,5 +1,5 @@
 import TokenRow from '../../tokens/TokenRow/TokenRow'
-import { Card, HStack, Heading, Text, VStack, Spacer, Skeleton, Separator } from '@chakra-ui/react';
+import { Card, HStack, Heading, Text, VStack, Spacer, Skeleton, Separator } from '@chakra-ui/react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -7,15 +7,17 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import {
   GetPoolEventsQuery,
   GqlPoolLiquidityBootstrappingV3,
-  GqlPoolSwapEventV3 } from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolSwapEventV3,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useState, useEffect } from 'react'
 
 export function MyPurchases({
   userPoolEvents,
-  isLoading }: {
+  loading,
+}: {
   userPoolEvents: GetPoolEventsQuery['poolEvents'] | undefined
-  isLoading: boolean
+  loading: boolean
 }) {
   const { pool, chain, myLbpTransactionsSectionRef } = usePool()
   const { priceFor } = useTokens()
@@ -38,9 +40,9 @@ export function MyPurchases({
 
   return (
     <Card.Root h={['fit-content', height]}>
-      {isLoading && <Skeleton h="full" w="full" />}
-      {!isLoading && (
-        <VStack align="start" h="full" gap="md" width="full">
+      {loading && <Skeleton h="full" w="full" />}
+      {!loading && (
+        <VStack align="start" gap="md" h="full" width="full">
           <Heading backgroundClip="text" bg="font.special" fontWeight="bold" size="h5">
             My purchases
           </Heading>
@@ -68,7 +70,7 @@ export function MyPurchases({
         </VStack>
       )}
     </Card.Root>
-  );
+  )
 }
 
 function calculateBalance(

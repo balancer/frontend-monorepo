@@ -1,5 +1,5 @@
 import { useProtocolStats } from '@repo/lib/shared/hooks/useProtocolStats'
-import { Center, Box, Text, SimpleGrid, Skeleton } from '@chakra-ui/react';
+import { Center, Box, Text, SimpleGrid, Skeleton } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { AnimatedNumber } from '@repo/lib/shared/components/marketing/AnimatedNumber'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
@@ -9,9 +9,9 @@ type ProtocolStatsSectionProps = {
   title: string
   imgName: string
   value: string
-  isLoading?: boolean
+  loading?: boolean
 }
-function ProtocolStatItem({ title, value, imgName, isLoading }: ProtocolStatsSectionProps) {
+function ProtocolStatItem({ title, value, imgName, loading }: ProtocolStatsSectionProps) {
   const formatValue = (v: number) => {
     if (title === 'LPs') return v.toLocaleString()
     return '$' + abbreviateNumber(v)
@@ -47,7 +47,7 @@ function ProtocolStatItem({ title, value, imgName, isLoading }: ProtocolStatsSec
               </Text>
             </Box>
             <Box left="50%" position="absolute" transform="translateX(-50%)">
-              {isLoading ? (
+              {loading ? (
                 <Skeleton height="8" w="16" />
               ) : (
                 <Text color="font.dark" fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold">
@@ -62,7 +62,7 @@ function ProtocolStatItem({ title, value, imgName, isLoading }: ProtocolStatsSec
         </Center>
       </Box>
     </ParallaxImage>
-  );
+  )
 }
 
 export function ProtocolStatsSection() {
@@ -79,39 +79,43 @@ export function ProtocolStatsSection() {
       {
         title: 'TVL',
         value: totalLiquidity,
-        imgName: 'enso1' },
+        imgName: 'enso1',
+      },
       {
         title: 'Vol 24h',
         value: swapVolume24h,
-        imgName: 'enso2' },
+        imgName: 'enso2',
+      },
       {
         title: 'Swap fees 24h',
         value: swapFee24h,
-        imgName: 'enso3' },
+        imgName: 'enso3',
+      },
       {
         title: 'LPs',
         value: numLiquidityProviders,
-        imgName: 'enso4' },
+        imgName: 'enso4',
+      },
     ]
   }, [statQuery.data])
 
   return (
     <SimpleGrid
       columns={{ base: 2, md: 4 }}
-      maxW={{ base: '500px', md: '100%' }}
       gap={{ base: 6, md: 8 }}
+      maxW={{ base: '500px', md: '100%' }}
     >
       {stats.map(stat => (
         <ProtocolStatItem
           imgName={stat.imgName}
-          isLoading={statQuery.loading}
           key={stat.title}
+          loading={statQuery.loading}
           title={stat.title}
           value={stat.value.toString()}
         />
       ))}
     </SimpleGrid>
-  );
+  )
 }
 
 function abbreviateNumber(num: number): string {

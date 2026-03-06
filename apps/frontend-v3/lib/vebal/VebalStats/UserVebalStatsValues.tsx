@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { differenceInDays, format } from 'date-fns'
@@ -100,5 +100,5 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
     </>
-  );
+  )
 }

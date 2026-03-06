@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react';
+import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -48,24 +48,29 @@ export function LstUnstakeModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: any) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!lstUnstakeTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
             {isDesktop && (
               <DesktopStepTracker chain={chain} transactionSteps={unstakeTransactionSteps} />
             )}
-            <TransactionModalHeader chain={chain} isReceiptLoading label="Review unstake" txHash="0x" />
+            <TransactionModalHeader
+              chain={chain}
+              isReceiptLoading
+              label="Review unstake"
+              txHash="0x"
+            />
             <Dialog.CloseTrigger />
             <Dialog.Body>
               <LstUnstakeSummary />
@@ -78,8 +83,7 @@ export function LstUnstakeModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

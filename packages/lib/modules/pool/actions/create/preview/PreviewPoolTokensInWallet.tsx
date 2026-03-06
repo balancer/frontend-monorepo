@@ -1,4 +1,4 @@
-import { VStack, Text, HStack, Box, Icon, Card, Separator } from '@chakra-ui/react';
+import { VStack, Text, HStack, Box, Icon, Card, Separator } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -35,33 +35,36 @@ export function PreviewPoolTokensInWallet() {
         </VStack>
       </Card.Body>
     </PreviewPoolCreationCard>
-  );
+  )
 }
 
 function ZeroBalanceWarning({ isConnected }: { isConnected: boolean }) {
   if (!isConnected) {
     return (
-      <HStack color="font.disabled" justify="end" gap="xs">
+      <HStack color="font.disabled" gap="xs" justify="end">
         <Text color="font.disabled">–</Text>
       </HStack>
-    );
+    )
   }
 
   return (
     <TooltipWithTouch label="Your wallet has none of this token." placement="top">
-      <HStack color="font.warning" justify="end" gap="xs">
+      <HStack color="font.warning" gap="xs" justify="end">
         <Text color="font.warning">$0.00</Text>
         <Box>
-          <Icon boxSize="16px" asChild><AlertTriangle /></Icon>
+          <Icon asChild boxSize="16px">
+            <AlertTriangle />
+          </Icon>
         </Box>
       </HStack>
     </TooltipWithTouch>
-  );
+  )
 }
 
 function PoolTokensInWalletContent({
   hasNoTokensWithBalance,
-  selectedPoolTokens }: {
+  selectedPoolTokens,
+}: {
   hasNoTokensWithBalance: boolean
   selectedPoolTokens: SelectedPoolToken[]
 }) {
@@ -157,7 +160,7 @@ function PoolTokensInWalletContent({
         </>
       )}
     </>
-  );
+  )
 }
 
 function DefaultCardContent() {

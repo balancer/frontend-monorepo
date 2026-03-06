@@ -4,7 +4,7 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { PoolActivityTableHeader } from './PoolActivityTableHeader'
 import { PoolActivityTableRow } from './PoolActivityTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
-import { Box, Skeleton } from '@chakra-ui/react';
+import { Box, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
@@ -14,15 +14,18 @@ export function PoolActivityTable() {
   const { sortedPoolEvents, pagination, setPagination, isLoading, count, showPagination } =
     usePoolActivity()
   const paginationProps = {
-    ...getPaginationProps(count, pagination, setPagination, true) }
+    ...getPaginationProps(count, pagination, setPagination, true),
+  }
 
   const rowProps = {
     px: { base: 'sm', sm: '0' },
     gridTemplateColumns: {
       base: '165px 85px 1fr 65px 175px',
-      lg: '200px 100px 1fr 100px 200px' },
+      lg: '200px 100px 1fr 100px 200px',
+    },
     alignItems: 'center',
-    gap: { base: 'xxs', xl: 'lg' } }
+    gap: { base: 'xxs', xl: 'lg' },
+  }
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 

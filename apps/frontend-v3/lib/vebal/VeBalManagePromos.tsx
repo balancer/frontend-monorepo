@@ -1,4 +1,4 @@
-import { Box, Heading, Link, Text, Stack, SimpleGrid, Flex } from '@chakra-ui/react';
+import { Box, Heading, Link, Text, Stack, SimpleGrid, Flex } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -21,14 +21,16 @@ export function VeBalManagePromos() {
           Sync your veBAL balance to L2s to maximize veBAL boosted liquidity incentives. Sync on the{' '}
           <Link
             href="https://app.balancer.fi/#/ethereum/vebal"
+            rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'baseline' }}
-            target='_blank'
-            rel='noopener noreferrer'>
+            target="_blank"
+          >
             legacy site
             <ArrowUpRight size={12} style={{ marginLeft: 2 }} />
           </Link>
         </Box>
-      ) },
+      ),
+    },
     {
       icon: (
         <SparkleIconWrapper size={41}>
@@ -48,7 +50,8 @@ export function VeBalManagePromos() {
           </Link>
           .
         </Box>
-      ) },
+      ),
+    },
   ]
 
   return (
@@ -56,8 +59,8 @@ export function VeBalManagePromos() {
       <SimpleGrid
         alignItems="stretch"
         columns={{ base: 1, md: 2 }}
-        mb="2xl"
         gap={{ base: 'ms', md: 'md', lg: 'lg' }}
+        mb="2xl"
         w="full"
       >
         {gridItems.map(item => (
@@ -114,23 +117,23 @@ export function VeBalManagePromos() {
                     as="h3"
                     bg="background.gold"
                     bgClip="text"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     fontSize={{ base: 'lg', md: 'xl' }}
                     mb={{ base: 'xxs', md: '2' }}
                     pb="0.5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     {item.title}
                   </Heading>
                   <Text
                     color="font.secondary"
+                    css={{
+                      textWrap: 'balance',
+                    }}
                     fontSize={{ base: 'sm', md: 'md' }}
                     lineHeight="1.4"
                     pb="0.5"
-                    css={{
-                      textWrap: 'balance'
-                    }}
                   >
                     {item.description}
                   </Text>
@@ -141,5 +144,5 @@ export function VeBalManagePromos() {
         ))}
       </SimpleGrid>
     </Stack>
-  );
+  )
 }

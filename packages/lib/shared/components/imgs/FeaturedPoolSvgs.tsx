@@ -1,11 +1,18 @@
 import { CSSProperties, useId } from 'react'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 export function usePoolTextures() {
   const colorMode = useThemeColorMode()
-  const marbleTexture = colorMode === 'dark' ? '/images/textures/marble-square-dark.avif' : '/images/textures/marble-square.avif'
-  const rockTexture = colorMode === 'dark' ? '/images/textures/slate-square-small-dark.avif' : '/images/textures/slate-square-small.avif'
-  const blendMode: CSSProperties['mixBlendMode'] = colorMode === 'dark' ? 'plus-lighter' : 'multiply'
+  const marbleTexture =
+    colorMode === 'dark'
+      ? '/images/textures/marble-square-dark.avif'
+      : '/images/textures/marble-square.avif'
+  const rockTexture =
+    colorMode === 'dark'
+      ? '/images/textures/slate-square-small-dark.avif'
+      : '/images/textures/slate-square-small.avif'
+  const blendMode: CSSProperties['mixBlendMode'] =
+    colorMode === 'dark' ? 'plus-lighter' : 'multiply'
   return { marbleTexture, rockTexture, blendMode }
 }
 
@@ -27,7 +34,7 @@ function SvgShadowFilter({ id }: { id: string }) {
 
 export function FeaturedPool1SVG() {
   // Use React.useId instead (available in React 18+)
-  const id = useId();
+  const id = useId()
   const { marbleTexture, rockTexture, blendMode } = usePoolTextures()
   return (
     <svg
@@ -107,7 +114,7 @@ export function FeaturedPool1SVG() {
 // FeaturedPool2SVG.tsx
 export function FeaturedPool2SVG() {
   // Use React.useId instead (available in React 18+)
-  const id = useId();
+  const id = useId()
   const { marbleTexture, rockTexture, blendMode } = usePoolTextures()
   return (
     <svg
@@ -217,7 +224,7 @@ export function FeaturedPool2SVG() {
 // FeaturedPool3SVG.tsx
 export function FeaturedPool3SVG() {
   // Use React.useId instead (available in React 18+)
-  const id = useId();
+  const id = useId()
   const { marbleTexture, rockTexture, blendMode } = usePoolTextures()
   return (
     <svg

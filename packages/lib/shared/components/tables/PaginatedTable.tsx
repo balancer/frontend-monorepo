@@ -8,7 +8,8 @@ import {
   VStack,
   Skeleton,
   JsxStyleProps,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { Pagination, PaginationProps } from '@repo/lib/shared/components/pagination/Pagination'
 
 interface Props<T> extends BoxProps {
@@ -34,7 +35,8 @@ export function PaginatedTable<T>({
   noItemsFoundLabel,
   getRowId,
   loadingLength = 20,
-  paginationStyles }: Props<T>) {
+  paginationStyles,
+}: Props<T>) {
   const previousPageCountRef = useRef(0)
 
   useEffect(() => {
@@ -90,7 +92,8 @@ export function PaginatedTable<T>({
                   left: 0,
                   borderRadius: 10,
                   zIndex: 10,
-                  backdropFilter: 'blur(3px)' }}
+                  backdropFilter: 'blur(3px)',
+                }}
               >
                 <Center py="4xl">
                   <Spinner size="xl" />
@@ -107,5 +110,5 @@ export function PaginatedTable<T>({
         </>
       )}
     </>
-  );
+  )
 }

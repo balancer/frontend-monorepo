@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex, SimpleGrid, Skeleton, VStack } from '@chakra-ui/react';
+import { Flex, SimpleGrid, Skeleton, VStack } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -23,7 +23,7 @@ export default function ReliquaryLanding() {
   const isLoading = isAccountLoading || isLoadingRelicPositions
 
   return (
-    <VStack py="4" gap="32" width="full">
+    <VStack gap="32" py="4" width="full">
       <MaBeetsHeader />
       {isLoading ? (
         <LoadingSkeletons />
@@ -31,13 +31,14 @@ export default function ReliquaryLanding() {
         <Content focusRelicId={focusRelicId} hasRelics={hasRelics} isConnected={isConnected} />
       )}
     </VStack>
-  );
+  )
 }
 
 function Content({
   hasRelics,
   focusRelicId,
-  isConnected }: {
+  isConnected,
+}: {
   hasRelics: boolean
   focusRelicId?: string | null
   isConnected: boolean
@@ -55,7 +56,7 @@ function Content({
       <MyRelicsSection focusRelicId={focusRelicId} isConnected={isConnected} />
       <ReliquaryFaq />
     </VStack>
-  );
+  )
 }
 
 function LoadingSkeletons() {
@@ -101,5 +102,5 @@ function LoadingSkeletons() {
         </VStack>
       </VStack>
     </VStack>
-  );
+  )
 }

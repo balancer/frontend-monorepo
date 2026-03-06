@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { Dialog, Portal, VStack, Button, HStack, Text } from '@chakra-ui/react';
+import { Dialog, Portal, VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { RefObject, useRef, useEffect } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
@@ -33,12 +33,7 @@ type Props = {
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
-export function LbpCreationModal({
-  isOpen,
-  onClose,
-  finalFocusRef,
-  ...rest
-}: Props) {
+export function LbpCreationModal({ isOpen, onClose, finalFocusRef, ...rest }: Props) {
   const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
@@ -55,14 +50,16 @@ export function LbpCreationModal({
     poolAddress,
     setPoolAddress,
     createPoolInput,
-    initPoolInput })
+    initPoolInput,
+  })
 
   const shouldBatchTransactions = useShouldBatchTransactions()
   const {
     saveMetadata,
     error: saveMetadataError,
     isMetadataSaved,
-    reset: resetSaveMetadata } = useLbpMetadata()
+    reset: resetSaveMetadata,
+  } = useLbpMetadata()
 
   const hasAttemptedSaveMetadata = useRef(false)
   const chainId = getChainId(selectedChain)
@@ -79,7 +76,8 @@ export function LbpCreationModal({
     id: poolAddress as Address,
     chain: selectedChain,
     type: GqlPoolType.LiquidityBootstrapping,
-    protocolVersion: 3 as const })
+    protocolVersion: 3 as const,
+  })
 
   const { redirectToPage: redirectToPoolPage } = useRedirect(path)
 
@@ -103,10 +101,12 @@ export function LbpCreationModal({
       stepType: 'sendLbpMetadata' as const,
       details: {
         gasless: true,
-        type: 'Offchain action' },
+        type: 'Offchain action',
+      },
       labels: { init: 'Save metadata', title: 'Save metadata', tooltip: 'Save metadata' },
       isComplete: () => isMetadataSaved,
-      renderAction: () => undefined })
+      renderAction: () => undefined,
+    })
   }
 
   const isSuccess = !!isPoolInitialized && isMetadataSaved
@@ -116,25 +116,27 @@ export function LbpCreationModal({
     shouldToggleBlockSize,
     setUsingBigBlocks,
     isSetUsingBigBlocksPending,
-    setUsingBigBlocksError } = useHyperEvm({
+    setUsingBigBlocksError,
+  } = useHyperEvm({
     isContractDeploymentStep: transactionSteps.currentStepIndex === 0,
-    isHyperEvmTx: selectedChain === GqlChain.Hyperevm })
+    isHyperEvmTx: selectedChain === GqlChain.Hyperevm,
+  })
 
   return (
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current || undefined}
       initialFocusEl={() => initialFocusRef.current}
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!initPoolTxHash} />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -166,7 +168,7 @@ export function LbpCreationModal({
                     w="full"
                     width="full"
                   >
-                    <HStack justifyContent="center" gap="sm" width="100%">
+                    <HStack gap="sm" justifyContent="center" width="100%">
                       <Text color="font.primaryGradient" fontWeight="bold">
                         View LBP page
                       </Text>
@@ -182,7 +184,7 @@ export function LbpCreationModal({
                     w="full"
                     width="full"
                   >
-                    <HStack justifyContent="center" gap="sm" width="100%">
+                    <HStack gap="sm" justifyContent="center" width="100%">
                       <Text color="font.primaryGradient" fontWeight="bold">
                         Create another LBP
                       </Text>
@@ -192,7 +194,7 @@ export function LbpCreationModal({
               )}
 
               {!!saveMetadataError && (
-                <VStack marginTop="4" gap="3" width="full">
+                <VStack gap="3" marginTop="4" width="full">
                   <BalAlert
                     content="The pool has been created and seeded onchain. However, there was an error syncing the metadata to the Balancer API. Your pool will not display on the Balancer UI until the sync is completed."
                     status="error"
@@ -206,7 +208,7 @@ export function LbpCreationModal({
                     variant="secondary"
                     w="full"
                   >
-                    <HStack justifyContent="center" gap="sm" width="100%">
+                    <HStack gap="sm" justifyContent="center" width="100%">
                       <Text color="font.primaryGradient" fontWeight="bold">
                         Retry sync metadata
                       </Text>
@@ -234,8 +236,7 @@ export function LbpCreationModal({
             {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

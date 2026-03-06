@@ -1,12 +1,13 @@
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
-import { HStack, Text, Checkbox } from '@chakra-ui/react';
+import { HStack, Text, Checkbox } from '@chakra-ui/react'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function ShareYieldFeesCheckbox({
   tokenIndex,
-  paysYieldFees }: {
+  paysYieldFees,
+}: {
   tokenIndex: number
   paysYieldFees: boolean
 }) {
@@ -22,12 +23,46 @@ export function ShareYieldFeesCheckbox({
         />
       </HStack>
       <Checkbox.Root
+        checked={paysYieldFees}
         onCheckedChange={() => updatePoolToken(tokenIndex, { paysYieldFees: !paysYieldFees })}
         size="lg"
-        checked={paysYieldFees}
-      ><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>
-          <Text>Share yield with {PROJECT_CONFIG.projectName} protocol</Text>
-        </Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control>
+          <Checkbox.Indicator />
+        </Checkbox.Control>
+        <Checkbox.Label>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+          </Checkbox.Root>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            <Checkbox.Label>
+              <Checkbox.Root>
+                <Checkbox.HiddenInput />
+                <Checkbox.Control>
+                  <Checkbox.Indicator />
+                </Checkbox.Control>
+              </Checkbox.Root>
+            </Checkbox.Label>
+          </Checkbox.Root>
+          <Checkbox.Root>
+            <Checkbox.HiddenInput />
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            <Checkbox.Label>
+              <Text>Share yield with {PROJECT_CONFIG.projectName} protocol</Text>
+            </Checkbox.Label>
+          </Checkbox.Root>
+        </Checkbox.Label>
+      </Checkbox.Root>
       {!paysYieldFees ? (
         isBalancer ? (
           <BalAlert
@@ -42,5 +77,5 @@ export function ShareYieldFeesCheckbox({
         )
       ) : null}
     </>
-  );
+  )
 }

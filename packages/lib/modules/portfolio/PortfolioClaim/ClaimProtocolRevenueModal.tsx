@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Dialog, Portal } from '@chakra-ui/react';
+import { Card, Dialog, Portal } from '@chakra-ui/react'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
@@ -37,22 +37,23 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
     .sort((a, b) => b.fiatBalance.minus(a.fiatBalance).toNumber())
     .map(reward => ({
       tokenAddress: reward.tokenAddress as Address,
-      humanAmount: reward.humanBalance }))
+      humanAmount: reward.humanBalance,
+    }))
 
   const isSuccess = !!claimTxHash
 
   return (
     <Dialog.Root
-      placement='center'
-      open={isOpen}
-      trapFocus={!isSuccess}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
-          onClose();
+          onClose()
         }
-      }}>
+      }}
+      open={isOpen}
+      placement="center"
+      trapFocus={!isSuccess}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!claimTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -89,8 +90,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

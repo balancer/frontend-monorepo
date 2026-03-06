@@ -1,5 +1,5 @@
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { Card, VStack, Text, HStack, Separator } from '@chakra-ui/react';
+import { Card, VStack, Text, HStack, Separator } from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { Address } from 'viem'
@@ -24,7 +24,8 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     startDateTime,
     endDateTime,
     weightAdjustmentType,
-    userActions } = saleStructureForm.getValues()
+    userActions,
+  } = saleStructureForm.getValues()
 
   return (
     <AnimateHeightChange gap="sm" w="full">
@@ -74,7 +75,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
       </Card.Root>
       <GasCostSummaryCard chain={selectedChain} transactionSteps={transactionSteps.steps} />
     </AnimateHeightChange>
-  );
+  )
 }
 
 const humanWeightShifts: Record<WeightAdjustmentType, ReactNode> = {
@@ -92,8 +93,10 @@ const humanWeightShifts: Record<WeightAdjustmentType, ReactNode> = {
       <Text color="grayText">50</Text>
     </HStack>
   ),
-  [WeightAdjustmentType.CUSTOM]: 'Custom' }
+  [WeightAdjustmentType.CUSTOM]: 'Custom',
+}
 
 const humanUserActions: Record<UserActions, ReactNode> = {
   [UserActions.BUY_ONLY]: 'Users can ‘Buy’ only',
-  [UserActions.BUY_AND_SELL]: 'Users can ‘Buy & Sell’' }
+  [UserActions.BUY_AND_SELL]: 'Users can ‘Buy & Sell’',
+}

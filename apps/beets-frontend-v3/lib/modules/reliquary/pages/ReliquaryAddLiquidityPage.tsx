@@ -1,10 +1,11 @@
-'use client';
-import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip';
+'use client'
+import { Box, Button, Card, Grid, GridItem, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Tooltip } from '@repo/lib/shared/components/tooltips/Tooltip'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import {
   requiresProportionalInput,
-  supportsNestedActions } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
+  supportsNestedActions,
+} from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
 import { PoolActionsPriceImpactDetails } from '@repo/lib/modules/pool/actions/PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
@@ -64,7 +65,8 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
     previewModalDisclosure,
     slippage,
     setWantsProportional,
-    wantsProportional } = useAddLiquidity()
+    wantsProportional,
+  } = useAddLiquidity()
 
   const createNew = !relicId
 
@@ -171,14 +173,14 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
                   <PoolActionsPriceImpactDetails
                     bptAmount={simulationQuery.data?.bptOut.amount}
                     isAddLiquidity
-                    isLoading={isFetching}
+                    loading={isFetching}
                     slippage={slippage}
                     totalUSDValue={totalUSDValue}
                   />
                 }
                 action="add"
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
-                isDisabled={!wantsProportional && !priceImpactQuery.data}
+                disabled={!wantsProportional && !priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
@@ -192,7 +194,8 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
                   </Text>
                   <Text fontSize="md" fontWeight="700" lineHeight="16px">
                     {formatFalsyValueAsDash(totalUSDValue, toCurrency, {
-                      showZeroAmountAsDash: true })}
+                      showZeroAmountAsDash: true,
+                    })}
                   </Text>
                 </VStack>
               </Card.Root>
@@ -238,5 +241,5 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
         relicId={relicId}
       />
     </Box>
-  );
+  )
 }

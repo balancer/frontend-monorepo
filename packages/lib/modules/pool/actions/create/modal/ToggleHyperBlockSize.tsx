@@ -1,10 +1,10 @@
-import { Button, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { ExternalLink } from 'react-feather'
-import { Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react'
 
 interface ToggleHyperBlockSizeProps {
   isSetUsingBigBlocksPending: boolean
@@ -17,16 +17,10 @@ export function ToggleHyperBlockSize({
   isSetUsingBigBlocksPending,
   setUsingBigBlocks,
   setUsingBigBlocksError,
-  shouldUseBigBlocks }: ToggleHyperBlockSizeProps) {
+  shouldUseBigBlocks,
+}: ToggleHyperBlockSizeProps) {
   return (
-    <VStack
-      marginTop="2"
-      paddingBottom="6"
-      paddingLeft="6"
-      paddingRight="6"
-      gap="3"
-      width="full"
-    >
+    <VStack gap="3" marginTop="2" paddingBottom="6" paddingLeft="6" paddingRight="6" width="full">
       {setUsingBigBlocksError ? (
         <BalAlert content={setUsingBigBlocksError.message} status="error" title="Error:" />
       ) : (
@@ -40,7 +34,8 @@ export function ToggleHyperBlockSize({
                 alignItems="center"
                 display="inline-flex"
                 href="https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm/dual-block-architecture"
-                isExternal
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 <span>See more information</span>
                 <ExternalLink size={16} style={{ marginLeft: 2, verticalAlign: 'middle' }} />
@@ -63,5 +58,5 @@ export function ToggleHyperBlockSize({
         </LabelWithIcon>
       </Button>
     </VStack>
-  );
+  )
 }

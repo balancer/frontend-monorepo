@@ -1,4 +1,4 @@
-import { Card, Text, VStack } from '@chakra-ui/react';
+import { Card, Text, VStack } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 
@@ -37,5 +37,5 @@ export function AddLiquidityPotentialWeeklyYield({ weeklyYield, totalUsdValue }:
         </VStack>
       </Card.Root>
     </CustomPopover>
-  );
+  )
 }

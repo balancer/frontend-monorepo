@@ -1,5 +1,5 @@
 'use client'
-import { Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react'
 import { PortfolioSummary } from './PortfolioSummary'
 import { PortfolioTable } from './PortfolioTable/PortfolioTable'
 import { ClaimNetworkPools } from './PortfolioClaim/ClaimNetworkPools/ClaimNetworkPools'

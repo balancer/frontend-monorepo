@@ -1,5 +1,5 @@
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, HStack, Text } from '@chakra-ui/react';
+import { Card, HStack, Text } from '@chakra-ui/react'
 import { SwapTokenRow } from '../../tokens/TokenRow/SwapTokenRow'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { SwapDetails } from '../SwapDetails'
@@ -19,7 +19,8 @@ import {
   EXACT_IN_SWAP_DESCRIPTION,
   EXACT_OUT_SWAP_DESCRIPTION,
   SlippageOptions,
-  SlippageSelector } from '../../pool/actions/SlippageSelector'
+  SlippageSelector,
+} from '../../pool/actions/SlippageSelector'
 import { useState } from 'react'
 import { useUserSettings } from '../../user/settings/UserSettingsProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -28,7 +29,8 @@ export function SwapSummary({
   isLoading: isLoadingReceipt,
   receivedToken,
   sentToken,
-  error }: SwapReceiptResult) {
+  error,
+}: SwapReceiptResult) {
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
   const {
@@ -44,7 +46,8 @@ export function SwapSummary({
     isLbpSwap,
     lbpToken,
     isLbpProjectTokenBuy,
-    swapType } = useSwap()
+    swapType,
+  } = useSwap()
 
   const { slippage } = useUserSettings()
   const [selectedSlippage, setSelectedSlippage] = useState(
@@ -139,7 +142,8 @@ export function SwapSummary({
           tokenAmount={shouldShowReceipt ? sentToken.humanAmount : inAmountWithSlippage}
           {...(isLbpSwap &&
             !isLbpProjectTokenBuy && {
-              customToken: lbpToken as CustomToken })}
+              customToken: lbpToken as CustomToken,
+            })}
         />
       </Card.Root>
       <Card.Root variant="modalSubSection">
@@ -151,7 +155,8 @@ export function SwapSummary({
           tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : outAmountWithSlippage}
           {...(isLbpSwap &&
             isLbpProjectTokenBuy && {
-              customToken: lbpToken as CustomToken })}
+              customToken: lbpToken as CustomToken,
+            })}
         />
       </Card.Root>
       {shouldShowReceipt && (
@@ -179,5 +184,5 @@ export function SwapSummary({
         </>
       )}
     </AnimateHeightChange>
-  );
+  )
 }

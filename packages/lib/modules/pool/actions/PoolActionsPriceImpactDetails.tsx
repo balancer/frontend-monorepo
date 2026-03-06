@@ -1,6 +1,6 @@
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
-import { HStack, VStack, Text, Icon, Box, Skeleton, Popover, HoverCard } from '@chakra-ui/react';
+import { HStack, VStack, Text, Icon, Box, Skeleton, HoverCard } from '@chakra-ui/react'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePool } from '../PoolProvider'
@@ -16,7 +16,7 @@ interface PoolActionsPriceImpactDetailsProps {
   totalUSDValue: string
   slippage: string
   isAddLiquidity?: boolean
-  isLoading?: boolean
+  loading?: boolean
   isSummary?: boolean
 }
 
@@ -25,8 +25,9 @@ export function PoolActionsPriceImpactDetails({
   totalUSDValue,
   slippage,
   isAddLiquidity = false,
-  isLoading = false,
-  isSummary = false }: PoolActionsPriceImpactDetailsProps) {
+  loading = false,
+  isSummary = false,
+}: PoolActionsPriceImpactDetailsProps) {
   const { toCurrency } = useCurrency()
   const { pool } = usePool()
 
@@ -58,7 +59,7 @@ export function PoolActionsPriceImpactDetails({
           Potential losses
         </Text>
         <HStack>
-          {isLoading ? (
+          {loading ? (
             <Skeleton h="16px" w="40px" />
           ) : priceImpactLevel === 'unknown' ? (
             <Text>Unknown</Text>
@@ -98,7 +99,7 @@ export function PoolActionsPriceImpactDetails({
           Max slippage
         </Text>
         <HStack>
-          {isLoading ? (
+          {loading ? (
             <Skeleton h="16px" w="40px" />
           ) : (
             <NumberText color="grayText" fontSize="sm">
@@ -119,8 +120,8 @@ export function PoolActionsPriceImpactDetails({
               <HoverCard.Content maxW="300px" p="sm" w="auto">
                 <Text fontSize="sm" variant="secondary">
                   Slippage occurs when market conditions change between the time your order is
-                  submitted and the time it gets executed on-chain. Slippage tolerance is the maximum
-                  change in price you are willing to accept.
+                  submitted and the time it gets executed on-chain. Slippage tolerance is the
+                  maximum change in price you are willing to accept.
                 </Text>
               </HoverCard.Content>
             </HoverCard.Positioner>
@@ -134,7 +135,7 @@ export function PoolActionsPriceImpactDetails({
           </Text>
           <HStack>
             <HStack gap="0.5">
-              {isLoading || !bptAmount ? (
+              {loading || !bptAmount ? (
                 <Skeleton h="16px" w="40px" />
               ) : (
                 <NumberText color="grayText" fontSize="sm">
@@ -155,9 +156,9 @@ export function PoolActionsPriceImpactDetails({
               <HoverCard.Positioner>
                 <HoverCard.Content maxW="300px" p="sm" w="auto">
                   <Text fontSize="sm" variant="secondary">
-                    LP tokens are digital assets which are issued to Liquidity Providers to represent
-                    their share of the pool. LP tokens can be redeemed to reclaim the original tokens
-                    plus certain types of accumulated yield (like swap fees).
+                    LP tokens are digital assets which are issued to Liquidity Providers to
+                    represent their share of the pool. LP tokens can be redeemed to reclaim the
+                    original tokens plus certain types of accumulated yield (like swap fees).
                   </Text>
                 </HoverCard.Content>
               </HoverCard.Positioner>
@@ -171,14 +172,16 @@ export function PoolActionsPriceImpactDetails({
         </Text>
         <HStack>
           <HStack gap="0.5">
-            {isLoading ? (
+            {loading ? (
               <Skeleton h="16px" w="40px" />
             ) : (
               <>
                 <NumberText color="grayText" fontSize="sm" opacity="0.7">
                   {fNum('sharePercent', currentShareOfPool)}
                 </NumberText>
-                <Icon color="grayText" opacity="0.7" asChild><ArrowRight /></Icon>
+                <Icon asChild color="grayText" opacity="0.7">
+                  <ArrowRight />
+                </Icon>
                 <NumberText color="grayText" fontSize="sm">
                   {fNum('sharePercent', futureShareOfPool)}
                 </NumberText>
@@ -206,5 +209,5 @@ export function PoolActionsPriceImpactDetails({
         </HStack>
       </HStack>
     </VStack>
-  );
+  )
 }

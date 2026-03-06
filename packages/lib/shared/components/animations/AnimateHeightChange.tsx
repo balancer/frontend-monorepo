@@ -1,6 +1,6 @@
 'use client'
 
-import { StackProps, VStack } from '@chakra-ui/react';
+import { StackProps, VStack } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PropsWithChildren } from 'react'
 

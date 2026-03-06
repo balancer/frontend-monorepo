@@ -1,7 +1,7 @@
 'use client'
 
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { Box, Card, Center, Heading, Link, VStack, Image } from '@chakra-ui/react';
+import { Box, Card, Center, Heading, Link, VStack, Image } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 
 export function CowHeader() {
@@ -10,7 +10,8 @@ export function CowHeader() {
       <Card.Root
         backgroundImage={{
           base: '/images/partners/cow/banner-mobile.svg',
-          md: '/images/partners/cow/banner-desktop.svg' }}
+          md: '/images/partners/cow/banner-desktop.svg',
+        }}
         backgroundPosition={{ base: 'bottom', md: 'bottom' }}
         backgroundRepeat="no-repeat"
         backgroundSize="cover"
@@ -18,11 +19,11 @@ export function CowHeader() {
         rounded="xl"
       >
         <Center>
-          <VStack maxW="xl" p="xl" gap="lg" textAlign="center">
+          <VStack gap="lg" maxW="xl" p="xl" textAlign="center">
             <Heading
               color="#BCEC79"
               css={{
-                textWrap: 'balance'
+                textWrap: 'balance',
               }}
             >
               The first MEV-capturing AMM
@@ -35,10 +36,11 @@ export function CowHeader() {
                 color="#BCEC79"
                 href="https://cow.fi/cow-amm"
                 position="relative"
+                rel="noopener noreferrer"
                 role="group"
+                target="_blank"
                 textDecoration="underline"
-                target='_blank'
-                rel='noopener noreferrer'>
+              >
                 Learn more
                 <Box
                   _groupHover={{ transform: 'translateX(1.5px)' }}
@@ -55,5 +57,5 @@ export function CowHeader() {
         </Center>
       </Card.Root>
     </FadeInOnView>
-  );
+  )
 }

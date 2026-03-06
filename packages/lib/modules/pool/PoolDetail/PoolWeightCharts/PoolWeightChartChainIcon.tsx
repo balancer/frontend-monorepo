@@ -1,5 +1,5 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 
@@ -23,6 +23,7 @@ export default function PoolWeightChartChainIcon({ chain, isChartLoaded, isSmall
       </Box>
       <Box
         animate={{ opacity: isChartLoaded ? 0.2 : 0, transition: { delay: 0.2 } }}
+        asChild
         background="white"
         borderRadius="full"
         bottom="0"
@@ -35,9 +36,12 @@ export default function PoolWeightChartChainIcon({ chain, isChartLoaded, isSmall
         transform={`scale(${isSmall ? '1.95' : '1.75'})`}
         width={`${size}px`}
         zIndex={1}
-        asChild><motion.div /></Box>
+      >
+        <motion.div />
+      </Box>
       <Box
         animate={{ opacity: isChartLoaded ? 0.1 : 0, transition: { delay: 0.45 } }}
+        asChild
         background="white"
         borderRadius="full"
         bottom="0"
@@ -50,7 +54,9 @@ export default function PoolWeightChartChainIcon({ chain, isChartLoaded, isSmall
         transform={`scale(${isSmall ? '2.35' : '2.15'})`}
         width={`${size}px`}
         zIndex={1}
-        asChild><motion.div /></Box>
+      >
+        <motion.div />
+      </Box>
     </Box>
-  );
+  )
 }

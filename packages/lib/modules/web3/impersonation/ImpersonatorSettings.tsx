@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, HStack, Heading, Popover, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, Popover, VStack } from '@chakra-ui/react'
 import { Tool } from 'react-feather'
 import { useImpersonateAccount } from './useImpersonateAccount'
 import { isAddress } from 'viem'
@@ -31,7 +31,7 @@ export function ImpersonatorSettings({ impersonatedAddress, setIsFakeTime }: Pro
                 Impersonation settings
               </Heading>
             </HStack>
-            <VStack align="start" p="md" gap="lg">
+            <VStack align="start" gap="lg" p="md">
               <Box w="full">
                 <Button disabled={!isAddress(impersonatedAddress)} onClick={() => reset()}>
                   Reset fork
@@ -48,5 +48,5 @@ export function ImpersonatorSettings({ impersonatedAddress, setIsFakeTime }: Pro
         </Popover.Content>
       </Popover.Positioner>
     </Popover.Root>
-  );
+  )
 }

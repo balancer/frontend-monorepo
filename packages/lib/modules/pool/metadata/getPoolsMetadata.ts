@@ -1,5 +1,5 @@
 import { mins } from '@repo/lib/shared/utils/time'
-import { AlertStatus } from '@chakra-ui/react';
+import { AlertStatus } from '@chakra-ui/react'
 
 const POOLS_METADATA_URL =
   'https://raw.githubusercontent.com/balancer/metadata/main/pools/index.json'
@@ -28,7 +28,8 @@ export type PoolsMetadata = {
 export async function getPoolsMetadata(): Promise<PoolsMetadata | undefined> {
   try {
     const res = await fetch(POOLS_METADATA_URL, {
-      next: { revalidate: mins(15).toSecs() } })
+      next: { revalidate: mins(15).toSecs() },
+    })
 
     return (await res.json()) as PoolsMetadata
   } catch (error) {

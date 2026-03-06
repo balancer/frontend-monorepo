@@ -1,7 +1,7 @@
 'use client'
 
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
-import { Link, Box, VStack, Text, List, UseDisclosureProps, Dialog, Portal } from '@chakra-ui/react';
+import { Link, Box, VStack, Text, List, UseDisclosureProps, Dialog, Portal } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { addDays, format } from 'date-fns'
@@ -12,13 +12,17 @@ export function MyVotesHintModal({ open: isOpen = false, onClose = () => {} }: U
     return format(addDays(today, 10), 'dd MMM yyyy')
   }, [])
   return (
-    <Dialog.Root placement='center' open={isOpen} size='lg' onOpenChange={(e: any) => {
-      if (!e.open) {
-        onClose();
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(e: any) => {
+        if (!e.open) {
+          onClose()
+        }
+      }}
+      open={isOpen}
+      placement="center"
+      size="lg"
+    >
       <Portal>
-
         <SuccessOverlay />
         <Dialog.Positioner>
           <Dialog.Content>
@@ -39,24 +43,29 @@ export function MyVotesHintModal({ open: isOpen = false, onClose = () => {} }: U
                   />
                 </Box>
 
-                <List.Root color="font.primary" listStylePosition="outside" listStyleType="disc" pl="md">
+                <List.Root
+                  color="font.primary"
+                  listStylePosition="outside"
+                  listStyleType="disc"
+                  pl="md"
+                >
                   <List.Item mb="xs">
                     <Text>
-                      Your vote directs liquidity mining emissions for the future periods starting next
-                      Thursday at 0:00 UTC.
+                      Your vote directs liquidity mining emissions for the future periods starting
+                      next Thursday at 0:00 UTC.
                     </Text>
                   </List.Item>
                   <List.Item mb="xs">
                     <Text>
-                      There are vote incentives offered by 3rd parties (also known as bribes). If you
-                      vote on pools with bribes, you can claim these bribes on third party platforms
-                      like Votemarket and Paladin.
+                      There are vote incentives offered by 3rd parties (also known as bribes). If
+                      you vote on pools with bribes, you can claim these bribes on third party
+                      platforms like Votemarket and Paladin.
                     </Text>
                   </List.Item>
                   <List.Item mb="xs">
                     <Text>
-                      You can vote on multiple pools in a single transaction. Simply add multiple pools
-                      to your vote list.
+                      You can vote on multiple pools in a single transaction. Simply add multiple
+                      pools to your vote list.
                     </Text>
                   </List.Item>
                   <List.Item mb="xs">
@@ -67,8 +76,8 @@ export function MyVotesHintModal({ open: isOpen = false, onClose = () => {} }: U
                   </List.Item>
                   <List.Item mb="xs">
                     <Text>
-                      Voting power is set at the time of a vote. If you get more veBAL later, resubmit
-                      your vote to use your increased power.
+                      Voting power is set at the time of a vote. If you get more veBAL later,
+                      resubmit your vote to use your increased power.
                     </Text>
                   </List.Item>
                   <List.Item>
@@ -83,8 +92,7 @@ export function MyVotesHintModal({ open: isOpen = false, onClose = () => {} }: U
             </Dialog.Body>
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

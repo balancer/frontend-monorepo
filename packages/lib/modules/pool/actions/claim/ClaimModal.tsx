@@ -1,4 +1,4 @@
-import { Card, ModalProps, Text, Dialog, Portal } from '@chakra-ui/react';
+import { Card, ModalProps, Text, Dialog, Portal } from '@chakra-ui/react'
 import { useClaim } from './ClaimProvider'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
@@ -40,7 +40,8 @@ export function ClaimModal({
       allClaimableRewards
         .map(reward => ({
           humanAmount: (reward?.humanBalance || '0') as HumanAmount,
-          tokenAddress: (reward?.tokenAddress || '') as Address }))
+          tokenAddress: (reward?.tokenAddress || '') as Address,
+        }))
         .filter(Boolean) as HumanTokenAmountWithSymbol[],
     [allClaimableRewards]
   )
@@ -49,17 +50,17 @@ export function ClaimModal({
 
   return (
     <Dialog.Root
-      placement='center'
       open={isOpen}
+      placement="center"
       trapFocus={!isSuccess}
       {...rest}
       onOpenChange={(e: { open: boolean }) => {
         if (!e.open) {
           onClose(!!claimTxHash)
         }
-      }}>
+      }}
+    >
       <Portal>
-
         <SuccessOverlay startAnimation={!!claimTxHash} />
         <Dialog.Positioner>
           <Dialog.Content {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -68,7 +69,9 @@ export function ClaimModal({
             <Dialog.CloseTrigger />
             <Dialog.Body>
               <AnimateHeightChange gap="sm">
-                {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
+                {isMobile && (
+                  <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />
+                )}
                 {isLoading ? (
                   <Text>Loading data...</Text>
                 ) : rewards.length === 0 ? (
@@ -99,8 +102,7 @@ export function ClaimModal({
             />
           </Dialog.Content>
         </Dialog.Positioner>
-
       </Portal>
     </Dialog.Root>
-  );
+  )
 }

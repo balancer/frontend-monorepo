@@ -2,7 +2,8 @@
 
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import ButtonGroup, {
-  ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { InputWithSlider } from '@repo/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import {
@@ -12,11 +13,11 @@ import {
   HStack,
   Skeleton,
   Text,
-  Popover,
   HoverCard,
   VStack,
   Stack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { RemoveLiquidityModal } from '../modal/RemoveLiquidityModal'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
@@ -58,12 +59,14 @@ export function RemoveLiquidityForm() {
   const TABS: ButtonGroupOption[] = [
     {
       value: 'proportional',
-      label: 'Proportional' },
+      label: 'Proportional',
+    },
     {
       value: 'single',
       label: 'Single token',
       tabTooltipLabel,
-      disabled: isDisabledSingleTokenTab },
+      disabled: isDisabledSingleTokenTab,
+    },
   ] as const
 
   const [activeTab, setActiveTab] = useState(TABS[0])
@@ -89,7 +92,8 @@ export function RemoveLiquidityForm() {
     setSingleTokenType,
     setHumanBptInPercent,
     setNeedsToAcceptHighPI,
-    amountsOut } = useRemoveLiquidity()
+    amountsOut,
+  } = useRemoveLiquidity()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
@@ -149,7 +153,8 @@ export function RemoveLiquidityForm() {
   const bufferBalanceWarning = useBufferBalanceWarning({
     amounts: amountsOut,
     operation: 'remove',
-    validTokens })
+    validTokens,
+  })
 
   return (
     <TokenBalancesProvider extTokens={validTokens}>
@@ -199,8 +204,8 @@ export function RemoveLiquidityForm() {
                             Proportional Removal
                           </Text>
                           <Text fontSize="sm" variant="secondary">
-                            Proportional liquidity removal keeps token prices unchanged, ensuring zero
-                            price impact to maximize your returns.
+                            Proportional liquidity removal keeps token prices unchanged, ensuring
+                            zero price impact to maximize your returns.
                           </Text>
                         </Box>
                         <Box>
@@ -267,13 +272,13 @@ export function RemoveLiquidityForm() {
                   accordionPanelComponent={
                     <PoolActionsPriceImpactDetails
                       bptAmount={BigInt(parseUnits(humanBptIn, 18))}
-                      isLoading={isFetching}
+                      loading={isFetching}
                       slippage={slippage}
                       totalUSDValue={totalUSDValue}
                     />
                   }
                   action="remove"
-                  isDisabled={priceImpactQuery.isLoading && !priceImpactQuery.isSuccess}
+                  disabled={priceImpactQuery.isLoading && !priceImpactQuery.isSuccess}
                   setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 />
               )}
@@ -317,5 +322,5 @@ export function RemoveLiquidityForm() {
         />
       </Box>
     </TokenBalancesProvider>
-  );
+  )
 }

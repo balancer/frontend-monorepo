@@ -1,4 +1,4 @@
-import { VStack, Text, SimpleGrid, Heading, Box, HStack, Card, Separator } from '@chakra-ui/react';
+import { VStack, Text, SimpleGrid, Heading, Box, HStack, Card, Separator } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -8,7 +8,7 @@ export function CardHeaderRow({ columnNames }: { columnNames: string[] }) {
   return (
     <Card.Header>
       <VStack align="start" w="full">
-        <SimpleGrid alignItems="baseline" columns={4} pb="1.5" gap={5} w="full">
+        <SimpleGrid alignItems="baseline" columns={4} gap={5} pb="1.5" w="full">
           <Heading gridColumn="span 2" size="md">
             {columnNames[0]}
           </Heading>
@@ -22,7 +22,7 @@ export function CardHeaderRow({ columnNames }: { columnNames: string[] }) {
         <Separator />
       </VStack>
     </Card.Header>
-  );
+  )
 }
 
 export function CardDataRow({ data }: { data: ReactNode[] }) {
@@ -38,14 +38,15 @@ export function CardDataRow({ data }: { data: ReactNode[] }) {
         </Box>
       ))}
     </SimpleGrid>
-  );
+  )
 }
 
 export function IdentifyTokenCell({
   address,
   chain,
   symbol,
-  name }: {
+  name,
+}: {
   address: string
   chain: GqlChain
   symbol: string
@@ -66,7 +67,7 @@ export function IdentifyTokenCell({
         </Text>
       </VStack>
     </HStack>
-  );
+  )
 }
 
 export function DefaultDataRow() {

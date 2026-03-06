@@ -1,6 +1,6 @@
-'use client';
-import { Button, HStack, VStack, Link, Separator, Dialog } from '@chakra-ui/react';
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode';
+'use client'
+import { Button, HStack, VStack, Link, Separator, Dialog } from '@chakra-ui/react'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -12,38 +12,50 @@ import { getDiscordLink } from '../../utils/links'
 
 export function SuccessActions({
   returnLabel,
-  returnAction }: {
+  returnAction,
+}: {
   returnLabel?: string
   returnAction?: () => void
 }) {
   const { openNpsModal } = useAppzi()
   const colorMode = useThemeColorMode()
   const {
-    options: { showVeBal } } = PROJECT_CONFIG
+    options: { showVeBal },
+  } = PROJECT_CONFIG
 
   return (
     <VStack w="full">
       <Separator />
       <HStack justify="space-between" w="full">
-        <Button aria-label={returnLabel} onClick={returnAction} size="xs" variant="ghost"><CornerDownLeft size="14" />{returnLabel}</Button>
+        <Button aria-label={returnLabel} onClick={returnAction} size="xs" variant="ghost">
+          <CornerDownLeft size="14" />
+          {returnLabel}
+        </Button>
         {showVeBal && (
-          <Button onClick={openNpsModal} size="xs" variant="ghost"><ThumbsUp size="14" />Give feedback
-                      </Button>
+          <Button onClick={openNpsModal} size="xs" variant="ghost">
+            <ThumbsUp size="14" />
+            Give feedback
+          </Button>
         )}
         <Button
           _hover={{
             color: 'font.maxContrast',
             textDecoration: 'none',
-            background: colorMode === 'light' ? 'gray.100' : 'whiteAlpha.200' }}
+            background: colorMode === 'light' ? 'gray.100' : 'whiteAlpha.200',
+          }}
+          asChild
           fontSize="xs !important"
-          isExternal
           size="xs"
           variant="ghost"
-          asChild><Link href={getDiscordLink()}><MessageSquare size="14" />Ask on Discord
-                              </Link></Button>
+        >
+          <Link href={getDiscordLink()} rel="noopener noreferrer" target="_blank">
+            <MessageSquare size="14" />
+            Ask on Discord
+          </Link>
+        </Button>
       </HStack>
     </VStack>
-  );
+  )
 }
 
 type Props = {
@@ -59,7 +71,7 @@ export function ActionModalFooter(props: Props) {
     <Dialog.Footer>
       <ActionFooter {...props} />
     </Dialog.Footer>
-  );
+  )
 }
 
 export function ActionFooter({
@@ -67,7 +79,8 @@ export function ActionFooter({
   currentStep,
   returnLabel,
   returnAction,
-  urlTxHash }: Props) {
+  urlTxHash,
+}: Props) {
   // Avoid animations when displaying a historic receipt
   if (urlTxHash) {
     return <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />

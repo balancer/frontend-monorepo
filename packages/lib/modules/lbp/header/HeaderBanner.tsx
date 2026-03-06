@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { FeatureLink } from './FeatureLink'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
@@ -33,35 +33,45 @@ export function HeaderBanner() {
         w: 'full',
         overflow: 'hidden',
         rounded: 'xl',
-        mb: 'xl' }}
+        mb: 'xl',
+      }}
     >
       <HStack
         alignItems={{ base: 'start', md: 'center' }}
         flexDirection={{ base: 'column', lg: 'row' }}
+        gap={{ base: 'md', lg: undefined }}
         justifyContent={{ base: 'start', lg: 'space-between' }}
         p={{ base: 'lg', lg: 'xl' }}
-        gap={{ base: 'md', lg: undefined }}
         w="full"
       >
         <VStack
           alignItems="start"
-          pt="sm"
           gap="30px"
+          pt="sm"
           w={{ base: 'full', lg: undefined }}
           zIndex={1}
         >
           <VStack alignItems="start" gap="ms">
             <Box maxW="290px">
-              <Heading as="h1" size="lg" css={{
-                textWrap: 'nowrap'
-              }} variant="special">
+              <Heading
+                as="h1"
+                css={{
+                  textWrap: 'nowrap',
+                }}
+                size="lg"
+                variant="special"
+              >
                 Create an LBP token sale
               </Heading>
             </Box>
 
-            <Text color="font.secondary" maxW="38ch" css={{
-              textWrap: 'balance'
-            }}>
+            <Text
+              color="font.secondary"
+              css={{
+                textWrap: 'balance',
+              }}
+              maxW="38ch"
+            >
               A fair, transparent mechanism for price discovery that protects both project creators
               and early supporters.
             </Text>
@@ -72,8 +82,8 @@ export function HeaderBanner() {
 
         <Stack
           direction={{ base: 'column', md: 'row' }}
-          justifyContent="stretch"
           gap={{ base: 4, md: 2, lg: 4, xl: 8 }}
+          justifyContent="stretch"
           w="full"
         >
           <RadialPattern
@@ -122,5 +132,5 @@ export function HeaderBanner() {
         </Stack>
       </HStack>
     </NoisyCard>
-  );
+  )
 }

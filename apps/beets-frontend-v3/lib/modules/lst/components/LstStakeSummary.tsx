@@ -1,4 +1,4 @@
-import { Card } from '@chakra-ui/react';
+import { Card } from '@chakra-ui/react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -10,7 +10,8 @@ import { formatUnits, parseUnits } from 'viem'
 
 export function LstStakeSummary({
   isLoading: isLoadingReceipt,
-  receivedToken }: LstStakeReceiptResult) {
+  receivedToken,
+}: LstStakeReceiptResult) {
   const { isMobile } = useBreakpoints()
 
   const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amountAssets } =
@@ -29,8 +30,8 @@ export function LstStakeSummary({
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingSharesAmount}
           label={shouldShowReceipt ? 'You staked' : 'You stake'}
+          loading={isLoadingSharesAmount}
           tokenAddress={nativeAsset?.address || ''}
           tokenAmount={amountAssets}
         />
@@ -38,8 +39,8 @@ export function LstStakeSummary({
       <Card.Root variant="modalSubSection">
         <BeetsTokenRow
           chain={chain}
-          isLoading={isLoadingSharesAmount || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
+          loading={isLoadingSharesAmount || isLoadingReceipt}
           tokenAddress={stakedAsset?.address || ''}
           tokenAmount={
             shouldShowReceipt ? receivedToken.humanAmount : formatUnits(sharesAmount, 18)
@@ -47,5 +48,5 @@ export function LstStakeSummary({
         />
       </Card.Root>
     </AnimateHeightChange>
-  );
+  )
 }

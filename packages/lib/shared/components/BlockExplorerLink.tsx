@@ -1,13 +1,13 @@
 'use client'
 
-import { HStack, Link, Text } from '@chakra-ui/react';
+import { HStack, Link, Text } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Address } from 'viem'
 import { GqlChain } from '../services/api/generated/graphql'
 import { getBlockExplorerName, getBlockExplorerTxUrl } from '../utils/blockExplorer'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
-import { Icon } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react'
 
 type Props = {
   transactionHash?: Address
@@ -22,7 +22,8 @@ export function BlockExplorerLink({
   transactionHash,
   address,
   customLabel,
-  fontSize = { base: 'sm', sm: 'md' } }: Props) {
+  fontSize = { base: 'sm', sm: 'md' },
+}: Props) {
   if (!transactionHash && !address) return null
 
   let href: string | undefined = undefined
@@ -32,7 +33,7 @@ export function BlockExplorerLink({
   const label = address ? abbreviateAddress(address) : 'View on ' + getBlockExplorerName(chain)
 
   return (
-    <Link href={href} target='_blank' rel='noopener noreferrer'>
+    <Link href={href} rel="noopener noreferrer" target="_blank">
       <HStack color="grayText" gap="xs">
         <Text as="span" fontSize={fontSize} variant="secondary">
           {customLabel || label}
@@ -40,5 +41,5 @@ export function BlockExplorerLink({
         <Icon as={ArrowUpRight} color="font.secondary" size={14} />
       </HStack>
     </Link>
-  );
+  )
 }

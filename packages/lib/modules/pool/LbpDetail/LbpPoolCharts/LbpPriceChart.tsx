@@ -1,5 +1,5 @@
 import { isAfter, isBefore } from 'date-fns'
-import { HStack, Text, VStack, Box, Heading, Stack, Separator } from '@chakra-ui/react';
+import { HStack, Text, VStack, Box, Heading, Stack, Separator } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
 import { max } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -15,7 +15,7 @@ export function LbpPriceChart() {
         cutTime={now}
         endDateTime={endDateTime}
         gridLeft="7.5%"
-        isLoading={isLoading}
+        loading={isLoading}
         prices={snapshots}
         startDateTime={startDateTime}
       />
@@ -23,8 +23,8 @@ export function LbpPriceChart() {
       <Stack
         align="start"
         direction={{ base: 'column', md: 'row' }}
-        mt="2"
         gap={{ base: 2, md: 4 }}
+        mt="2"
         w="full"
       >
         <HStack>
@@ -41,7 +41,8 @@ export function LbpPriceChart() {
                 maskImage:
                   'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
                 WebkitMaskImage:
-                  'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)' }}
+                  'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
+              }}
             />
           </Box>
           <Text fontSize="sm">Projected price with no buys</Text>
@@ -51,7 +52,7 @@ export function LbpPriceChart() {
         </Text>
       </Stack>
     </VStack>
-  );
+  )
 }
 
 export function PriceInfo() {
@@ -80,7 +81,7 @@ export function PriceInfo() {
         </Text>
       )}
     </VStack>
-  );
+  )
 }
 
 function percentageChange(oldValue: number, newValue: number) {
