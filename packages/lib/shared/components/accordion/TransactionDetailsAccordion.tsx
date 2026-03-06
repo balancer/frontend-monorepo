@@ -21,7 +21,7 @@ export function TransactionDetailsAccordion() {
           <Box as="span" color="font.primary" flex="1" textAlign="left">
             Transaction Details
           </Box>
-          <Accordion.ItemIndicator color="font.highlight" />
+          <Accordion.ItemIndicator css={{ color: 'font.highlight' }} />
         </Accordion.ItemTrigger>
         <Accordion.ItemContent pb="md">
           <Accordion.ItemBody>

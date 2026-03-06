@@ -1,16 +1,18 @@
 'use client'
 
-import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react'
+import { Box, Field, Text, Textarea, TextareaProps } from '@chakra-ui/react'
 
 export function TextareaWithError({
   error,
-  isInvalid,
+  invalid,
   isDisabled,
   ...props
-}: { error?: string; isInvalid?: boolean; isDisabled?: boolean } & TextareaProps) {
+}: { error?: string; invalid?: boolean; isDisabled?: boolean } & TextareaProps) {
   return (
     <>
-      <Textarea disabled={isDisabled} invalid={isInvalid} {...props} />
+      <Field.Root invalid={invalid}>
+        <Textarea disabled={isDisabled} {...props} />
+      </Field.Root>
       <Box height="10px">
         {error && (
           <Text color="font.error" fontSize="sm">

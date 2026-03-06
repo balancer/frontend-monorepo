@@ -73,14 +73,9 @@ declare module '@chakra-ui/react' {
 
   interface InputProps {
     onValueChange?: any
-    invalid?: boolean
   }
-  interface ProgressCircleRootProps {
-    size?: any
-  }
-  interface TextareaProps {
-    invalid?: boolean
-  }
+  // PopoverCloseTrigger: Chakra v3 type doesn't expose JsxStyleProps (top/css)
+  // Used for close button positioning in filter popovers
   interface PopoverCloseTriggerProps {
     [key: string]: any
   }
@@ -92,7 +87,6 @@ declare module '@chakra-ui/react' {
     [key: string]: any
   }
   interface AccordionItemIndicatorProps {
-    color?: string
     [key: string]: any
   }
   interface CardHeaderProps {

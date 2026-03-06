@@ -56,9 +56,10 @@ export function StepIndicator({
 
   if (status === 'complete') {
     return (
-      <ProgressCircle.Root size="7" trackColor="border.base" value="100">
+      <ProgressCircle.Root trackColor="border.base" value="100">
         <ProgressCircle.Circle
           css={{
+            '--size': '28px',
             '--thickness': '5',
           }}
         >
@@ -73,12 +74,12 @@ export function StepIndicator({
     <ProgressCircle.Root
       bg={isActive ? 'background.special' : 'transparent'}
       rounded="full"
-      size="7"
       trackColor="border.base"
       value={String(null)}
     >
       <ProgressCircle.Circle
         css={{
+          '--size': '28px',
           '--thickness': isActive ? 0 : 5,
         }}
       >
@@ -204,9 +205,10 @@ function TransactionBatchSteps({
 
 function SubStepIndicator({ color }: { color: string; label: string }) {
   return (
-    <ProgressCircle.Root size="6" trackColor="border.base" value="100">
+    <ProgressCircle.Root trackColor="border.base" value="100">
       <ProgressCircle.Circle
         css={{
+          '--size': '24px',
           '--thickness': '2',
         }}
       >

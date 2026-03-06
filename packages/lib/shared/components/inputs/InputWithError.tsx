@@ -1,4 +1,4 @@
-import { Box, Input, InputProps, Text, VStack, Button, InputGroup } from '@chakra-ui/react'
+import { Box, Field, Input, InputProps, Text, VStack, Button, InputGroup } from '@chakra-ui/react'
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
 
@@ -9,7 +9,7 @@ type InputWithErrorProps = {
   tooltip?: string
   pasteFn?: () => void
   isFiatPrice?: boolean
-  isInvalid?: boolean
+  invalid?: boolean
   isDisabled?: boolean
 } & InputProps
 
@@ -20,7 +20,7 @@ export function InputWithError({
   tooltip,
   pasteFn,
   isFiatPrice,
-  isInvalid,
+  invalid,
   isDisabled,
   ...props
 }: InputWithErrorProps) {
@@ -51,37 +51,34 @@ export function InputWithError({
         </Text>
       )}
 
-      <InputGroup
-        endElement={
-          pasteFn ? (
-            <Button
-              aria-label="paste"
-              fontSize={{ base: 'xs', md: 'sm' }}
-              h="28px"
-              letterSpacing="0.25px"
-              lineHeight="1"
-              mr="0.5"
-              onClick={pasteFn}
-              position="relative"
-              px="2"
-              right="3px"
-              rounded="sm"
-              size="sm"
-              variant="tertiary"
-            >
-              Paste
-            </Button>
-          ) : undefined
-        }
-        startElement={isFiatPrice ? <Text pointerEvents="none">$</Text> : undefined}
-      >
-        <Input
-          disabled={isDisabled}
-          fontSize={{ base: baseFontSize, md: 'md' }}
-          invalid={isInvalid}
-          {...props}
-        />
-      </InputGroup>
+      <Field.Root invalid={invalid}>
+        <InputGroup
+          endElement={
+            pasteFn ? (
+              <Button
+                aria-label="paste"
+                fontSize={{ base: 'xs', md: 'sm' }}
+                h="28px"
+                letterSpacing="0.25px"
+                lineHeight="1"
+                mr="0.5"
+                onClick={pasteFn}
+                position="relative"
+                px="2"
+                right="3px"
+                rounded="sm"
+                size="sm"
+                variant="tertiary"
+              >
+                Paste
+              </Button>
+            ) : undefined
+          }
+          startElement={isFiatPrice ? <Text pointerEvents="none">$</Text> : undefined}
+        >
+          <Input disabled={isDisabled} fontSize={{ base: baseFontSize, md: 'md' }} {...props} />
+        </InputGroup>
+      </Field.Root>
 
       {error && (
         <Text color="font.error" fontSize="sm" textAlign="start" w="full">

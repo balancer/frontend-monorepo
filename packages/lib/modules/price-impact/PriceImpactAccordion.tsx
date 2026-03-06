@@ -103,7 +103,7 @@ export function PriceImpactAccordion({
                 <Text color={priceImpactColor} fontSize="sm">
                   Details
                 </Text>
-                <Accordion.ItemIndicator color={priceImpactColor} />
+                <Accordion.ItemIndicator css={{ color: priceImpactColor }} />
               </HStack>
             </Accordion.ItemTrigger>
           </h2>
