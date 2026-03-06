@@ -1,8 +1,9 @@
-import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react';
+import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react'
 import {
   GqlChain,
   GqlPoolTokenDetail,
-  GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
@@ -17,7 +18,8 @@ import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
 function NestedTokenPill({
   nestedTokens,
   chain,
-  iconSize = 24 }: {
+  iconSize = 24,
+}: {
   nestedTokens: GqlPoolTokenDetail[]
   chain: GqlChain
   iconSize?: number
@@ -94,9 +96,9 @@ function WeightedTokenPills({
                     {tokens.length < 5 && (
                       <Text
                         _groupHover={{ color: 'font.maxContrast' }}
+                        fontSize={nameSize}
                         fontWeight="bold"
                         lineClamp={1}
-                        size={nameSize}
                         transition="color 0.2s var(--ease-out-cubic)"
                       >
                         {token.symbol}
@@ -124,9 +126,9 @@ function WeightedTokenPills({
                   <HStack gap={['xs', '1.5']}>
                     <Text
                       _groupHover={{ color: 'font.maxContrast' }}
+                      fontSize={nameSize}
                       fontWeight="bold"
                       lineClamp={1}
-                      size={nameSize}
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
                       {token.name}
@@ -145,10 +147,10 @@ function WeightedTokenPills({
               )}
             </HStack>
           </Badge>
-        );
+        )
       })}
     </Wrap>
-  );
+  )
 }
 
 function StableTokenPills({
@@ -199,9 +201,9 @@ function StableTokenPills({
                   {tokens.length < 5 && (
                     <Text
                       _groupHover={{ color: 'font.maxContrast' }}
+                      fontSize={nameSize}
                       fontWeight="bold"
                       lineClamp={1}
-                      size={nameSize}
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
                       {token.symbol}
@@ -218,9 +220,9 @@ function StableTokenPills({
                   />
                   <Text
                     _groupHover={{ color: 'font.maxContrast' }}
+                    fontSize={nameSize}
                     fontWeight="bold"
                     lineClamp={1}
-                    size={nameSize}
                     transition="color 0.2s var(--ease-out-cubic)"
                   >
                     {token.name}
@@ -229,10 +231,10 @@ function StableTokenPills({
               )}
             </HStack>
           </Badge>
-        );
+        )
       })}
     </HStack>
-  );
+  )
 }
 
 type VotingListTokenPillsProps = {
@@ -315,7 +317,7 @@ function PoolTokenPills({
         ) : (
           <TokenIconStack chain={chain} size={iconSize} tokens={tokens} />
         )}
-        <Heading size={nameSize}>{poolName}</Heading>
+        <Heading fontSize={nameSize}>{poolName}</Heading>
       </HStack>
     )
   }

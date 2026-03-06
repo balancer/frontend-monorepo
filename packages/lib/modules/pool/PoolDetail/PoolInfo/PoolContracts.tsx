@@ -12,10 +12,10 @@ import {
   Icon,
   Link,
   Text,
-  Popover,
   HoverCard,
   VStack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
@@ -24,7 +24,8 @@ import {
   GqlHookReviewData,
   Erc4626ReviewData,
   HookFragment,
-  GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
+  GqlPoolLiquidityBootstrappingV3,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
@@ -53,12 +54,20 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
   let level
 
   if (!hasData) {
-    icon = <Icon color="font.warning" cursor="pointer" size={16} asChild><AlertTriangle /></Icon>
+    icon = (
+      <Icon asChild color="font.warning" cursor="pointer" size={16}>
+        <AlertTriangle />
+      </Icon>
+    )
     level = 1
   } else {
     if (isSafe) {
       if (hasWarnings) {
-        icon = <Icon color="font.warning" cursor="pointer" size={16} asChild><AlertTriangle /></Icon>
+        icon = (
+          <Icon asChild color="font.warning" cursor="pointer" size={16}>
+            <AlertTriangle />
+          </Icon>
+        )
         level = 1
       } else {
         icon = (
@@ -69,7 +78,11 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
         level = 2
       }
     } else {
-      icon = <Icon color="red.500" cursor="pointer" size={16} asChild><XCircle /></Icon>
+      icon = (
+        <Icon asChild color="red.500" cursor="pointer" size={16}>
+          <XCircle />
+        </Icon>
+      )
       level = 0
     }
   }
@@ -140,14 +153,16 @@ export function PoolContracts({ ...props }: CardProps) {
       {
         label: 'Pool address',
         address: pool.address,
-        explorerLink: poolExplorerLink },
+        explorerLink: poolExplorerLink,
+      },
     ]
 
     if (hasGaugeAddress) {
       contracts.push({
         label: 'Incentives gauge',
         address: gaugeAddress,
-        explorerLink: gaugeExplorerLink })
+        explorerLink: gaugeExplorerLink,
+      })
     }
 
     if (isV3LBP(pool)) {
@@ -155,7 +170,8 @@ export function PoolContracts({ ...props }: CardProps) {
       contracts.push({
         label: 'Sale token contract',
         address: abbreviateAddress(lbpPool.projectToken as Address),
-        explorerLink: getBlockExplorerAddressUrl(lbpPool.projectToken as Address, pool.chain) })
+        explorerLink: getBlockExplorerAddressUrl(lbpPool.projectToken as Address, pool.chain),
+      })
     }
 
     return contracts
@@ -167,7 +183,8 @@ export function PoolContracts({ ...props }: CardProps) {
         tokenAddress: token.address,
         tokenSymbol: token.symbol,
         rateProviderAddress: token.priceRateProvider,
-        priceRateProviderData: token.priceRateProviderData }))
+        priceRateProviderData: token.priceRateProviderData,
+      }))
       .filter(
         item => item.rateProviderAddress && item.rateProviderAddress !== zeroAddress
       ) as RateProvider[]
@@ -201,7 +218,7 @@ export function PoolContracts({ ...props }: CardProps) {
   return (
     <Card.Root {...props}>
       <VStack alignItems="flex-start" gap="md" width="full">
-        <Heading fontSize="xl" variant="h4">
+        <Heading fontSize="xl" size="h4">
           Pool contracts
         </Heading>
         <Separator />
@@ -221,9 +238,10 @@ export function PoolContracts({ ...props }: CardProps) {
               <HStack gap="xxs">
                 <Link
                   href={contract.explorerLink}
+                  rel="noopener noreferrer"
+                  target="_blank"
                   variant="link"
-                  target='_blank'
-                  rel='noopener noreferrer'>
+                >
                   <HStack gap="xxs">
                     <Text color="link">{abbreviateAddress(contract.address)}</Text>
                     <ArrowUpRight size={12} />
@@ -257,24 +275,29 @@ export function PoolContracts({ ...props }: CardProps) {
             <GridItem>
               <VStack alignItems="flex-start">
                 {hooks.map((hook, index) => {
-                  return (hook && (<HStack key={hook.address}>
-                    <Link
-                      href={getBlockExplorerAddressUrl(hook.address, chain)}
-                      key={hook.address}
-                      variant="link"
-                      target='_blank'
-                      rel='noopener noreferrer'>
-                      <HStack gap="xxs">
-                        <Text color="link">
-                          {abbreviateAddress(hook.address)} (
-                          {getHookName(hook, pool, hooksMetadata)})
-                        </Text>
-                        <ArrowUpRight size={12} />
+                  return (
+                    hook && (
+                      <HStack key={hook.address}>
+                        <Link
+                          href={getBlockExplorerAddressUrl(hook.address, chain)}
+                          key={hook.address}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          variant="link"
+                        >
+                          <HStack gap="xxs">
+                            <Text color="link">
+                              {abbreviateAddress(hook.address)} (
+                              {getHookName(hook, pool, hooksMetadata)})
+                            </Text>
+                            <ArrowUpRight size={12} />
+                          </HStack>
+                        </Link>
+                        {(index > 0 || !pool.hook) && <Text variant="secondary">(nested)</Text>}
+                        {getHookIcon(hook.reviewData)}
                       </HStack>
-                    </Link>
-                    {(index > 0 || !pool.hook) && <Text variant="secondary">(nested)</Text>}
-                    {getHookIcon(hook.reviewData)}
-                  </HStack>));
+                    )
+                  )
                 })}
               </VStack>
             </GridItem>
@@ -307,7 +330,8 @@ export function PoolContracts({ ...props }: CardProps) {
                   const token = {
                     address: provider.tokenAddress,
                     symbol: provider.tokenSymbol,
-                    chain }
+                    chain,
+                  }
 
                   return (
                     <HStack key={provider.tokenAddress}>
@@ -320,9 +344,10 @@ export function PoolContracts({ ...props }: CardProps) {
                       <Link
                         href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
                         key={provider.rateProviderAddress}
+                        rel="noopener noreferrer"
+                        target="_blank"
                         variant="link"
-                        target='_blank'
-                        rel='noopener noreferrer'>
+                      >
                         <HStack gap="xxs">
                           <Text color="link">
                             {abbreviateAddress(provider.rateProviderAddress)}
@@ -332,7 +357,7 @@ export function PoolContracts({ ...props }: CardProps) {
                       </Link>
                       {getRateProviderIcon(provider.priceRateProviderData, token)}
                     </HStack>
-                  );
+                  )
                 })}
               </VStack>
             </GridItem>
@@ -352,7 +377,8 @@ export function PoolContracts({ ...props }: CardProps) {
                     <Text fontSize="sm" variant="secondary">
                       ERC-4626 (tokenized vault) is a standard to optimize and unify the technical
                       parameters of yield-bearing vaults. It provides a standard API for tokenized
-                      yield-bearing vaults that represent shares of a single underlying ERC-20 token.
+                      yield-bearing vaults that represent shares of a single underlying ERC-20
+                      token.
                     </Text>
                   </HoverCard.Content>
                 </HoverCard.Positioner>
@@ -364,7 +390,8 @@ export function PoolContracts({ ...props }: CardProps) {
                   const token = {
                     address: erc4626Token.address as Address,
                     symbol: erc4626Token.symbol,
-                    chain }
+                    chain,
+                  }
 
                   return (
                     <HStack key={erc4626Token.address}>
@@ -377,9 +404,10 @@ export function PoolContracts({ ...props }: CardProps) {
                       <Link
                         href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
                         key={erc4626Token.address}
+                        rel="noopener noreferrer"
+                        target="_blank"
                         variant="link"
-                        target='_blank'
-                        rel='noopener noreferrer'>
+                      >
                         <HStack gap="xxs">
                           <Text color="link">{abbreviateAddress(erc4626Token.address)}</Text>
                           <ArrowUpRight size={12} />
@@ -387,7 +415,7 @@ export function PoolContracts({ ...props }: CardProps) {
                       </Link>
                       {getErc4626Icon(erc4626Token.erc4626ReviewData, token)}
                     </HStack>
-                  );
+                  )
                 })}
               </VStack>
             </GridItem>
@@ -395,5 +423,5 @@ export function PoolContracts({ ...props }: CardProps) {
         )}
       </VStack>
     </Card.Root>
-  );
+  )
 }

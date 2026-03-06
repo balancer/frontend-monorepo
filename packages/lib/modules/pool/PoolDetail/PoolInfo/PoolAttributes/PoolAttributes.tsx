@@ -1,4 +1,4 @@
-import { Box, Card, Stack, Heading, Text, VStack, HStack, Link, Separator } from '@chakra-ui/react';
+import { Box, Card, Stack, Heading, Text, VStack, HStack, Link, Separator } from '@chakra-ui/react'
 import { useFormattedPoolAttributes } from './useFormattedPoolAttributes'
 import { ArrowUpRight } from 'react-feather'
 import { isGyroEPool, isV3LBP } from '../../../pool.helpers'
@@ -14,7 +14,7 @@ export function PoolAttributes() {
   return (
     <Card.Root>
       <VStack alignItems="flex-start" gap={{ base: 'sm', md: 'md' }} width="full">
-        <Heading fontSize="1.25rem" variant="h4">
+        <Heading fontSize="1.25rem" size="h4">
           Pool attributes
         </Heading>
         <Separator />
@@ -23,8 +23,8 @@ export function PoolAttributes() {
             return (
               <Stack
                 direction={{ base: 'column', md: 'row' }}
-                key={`pool-attribute-${attribute.title}`}
                 gap={{ base: 'xxs', md: 'xl' }}
+                key={`pool-attribute-${attribute.title}`}
                 width="full"
               >
                 <Box minWidth="160px">
@@ -33,9 +33,10 @@ export function PoolAttributes() {
                 {attribute.link ? (
                   <Link
                     href={attribute.link}
+                    rel="noopener noreferrer"
+                    target="_blank"
                     variant="link"
-                    target='_blank'
-                    rel='noopener noreferrer'>
+                  >
                     <HStack gap="xxs">
                       <Text color="link">{attribute.value}</Text>
                       <ArrowUpRight size={12} />
@@ -47,7 +48,7 @@ export function PoolAttributes() {
                   </Text>
                 )}
               </Stack>
-            );
+            )
           })}
         </VStack>
 
@@ -60,5 +61,5 @@ export function PoolAttributes() {
         {isGyroEPool(pool) && <ClpPoolAttributes pool={pool} />}
       </VStack>
     </Card.Root>
-  );
+  )
 }

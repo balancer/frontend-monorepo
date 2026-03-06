@@ -1,6 +1,6 @@
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { GqlPriceRateProviderData } from '@repo/lib/shared/services/api/generated/graphql'
-import { Popover, HoverCard, VStack, HStack, Text, Heading, Box, Icon } from '@chakra-ui/react';
+import { HoverCard, VStack, HStack, Text, Heading, Box, Icon } from '@chakra-ui/react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
@@ -91,21 +91,24 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
                 <Text color="font.link" fontSize="sm">
                   View review details
                 </Text>
-                <Icon color="font.link" size={12} asChild><ArrowUpRight /></Icon>
+                <Icon asChild color="font.link" size={12}>
+                  <ArrowUpRight />
+                </Icon>
               </HStack>
             </Link>
           )}
         </>
       )}
     </>
-  );
+  )
 }
 
 export function RateProviderInfoPopOver({
   token,
   data,
   level,
-  children }: RateProviderInfoPopOverProps) {
+  children,
+}: RateProviderInfoPopOverProps) {
   const body = data ? (
     <PopoverInfoBody data={data} level={level} />
   ) : (
@@ -125,7 +128,7 @@ export function RateProviderInfoPopOver({
           <Box>
             <VStack alignItems="flex-start" gap="ms" w="full">
               <HStack w="full">
-                <Heading fontSize="1.125rem" variant="h4">
+                <Heading fontSize="1.125rem" size="h4">
                   {token.symbol} rate provider
                 </Heading>
                 <Box ml="auto">
@@ -143,5 +146,5 @@ export function RateProviderInfoPopOver({
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>
-  );
+  )
 }

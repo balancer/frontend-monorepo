@@ -1,5 +1,5 @@
 'use client'
-import { Heading, Text, Box, SimpleGrid } from '@chakra-ui/react';
+import { Heading, Text, Box, SimpleGrid } from '@chakra-ui/react'
 import Section from '@repo/lib/shared/components/layout/Section'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -24,18 +24,18 @@ export function HomeProtocols() {
             </Text>
             <Heading
               as="h2"
+              css={{
+                textWrap: 'balance',
+              }}
               pb="md"
               size="2xl"
-              css={{
-                textWrap: 'balance'
-              }}
               w="full"
             >
               Plug in to DeFi&rsquo;s liquidity hub
             </Heading>
             <Text
               css={{
-                textWrap: 'balance'
+                textWrap: 'balance',
               }}
             >
               Launch your token with confidence by plugging into the Balancer vault and ecosystem.
@@ -63,9 +63,9 @@ export function HomeProtocols() {
       </Box>
       <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <FadeInOnView>
-          <SimpleGrid columns={{ base: 2, md: 4 }} py="xl" gap={{ base: 8, md: 8, xl: '12' }}>
+          <SimpleGrid columns={{ base: 2, md: 4 }} gap={{ base: 8, md: 8, xl: '12' }} py="xl">
             <Box>
-              <Heading as="h5" pb="sm" size="h5" variant="h5">
+              <Heading as="h5" pb="sm" size="h5">
                 Get swaps on day 1
               </Heading>
               <Text>
@@ -74,7 +74,7 @@ export function HomeProtocols() {
               </Text>
             </Box>
             <Box>
-              <Heading as="h5" pb="sm" size="h5" variant="h5">
+              <Heading as="h5" pb="sm" size="h5">
                 Liquidity incentives
               </Heading>
               <Text>
@@ -83,7 +83,7 @@ export function HomeProtocols() {
               </Text>
             </Box>
             <Box>
-              <Heading as="h5" pb="sm" size="h5" variant="h5">
+              <Heading as="h5" pb="sm" size="h5">
                 Access Balancer&lsquo;s community
               </Heading>
               <Text>
@@ -92,7 +92,7 @@ export function HomeProtocols() {
               </Text>
             </Box>
             <Box>
-              <Heading as="h5" pb="sm" size="h5" variant="h5">
+              <Heading as="h5" pb="sm" size="h5">
                 ve8020 tokenomics
               </Heading>
               <Text>
@@ -104,5 +104,5 @@ export function HomeProtocols() {
         </FadeInOnView>
       </Box>
     </Section>
-  );
+  )
 }

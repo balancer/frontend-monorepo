@@ -62,10 +62,7 @@ declare module '@chakra-ui/react' {
     transition?: any
     style?: any
   }
-  // Custom variants: allow any string until recipes are migrated
   interface ButtonProps {
-    variant?: any
-    size?: any
     isExternal?: boolean
     textColor?: string
     as?: any
@@ -78,35 +75,21 @@ declare module '@chakra-ui/react' {
     width?: any
   }
   interface TextProps {
-    variant?: any
     fontSize?: any
     lineClamp?: number
-    size?: any
     as?: any
     htmlFor?: string
   }
-  interface AlertRootProps {
-    variant?: any
-  }
   interface HeadingProps {
-    variant?: any
-    size?: any
     sx?: any
   }
   interface LinkProps {
-    variant?: any
     isExternal?: boolean
     as?: any
     prefetch?: boolean
   }
   interface IconButtonProps {
     as?: any
-  }
-  interface AccordionRootProps {
-    variant?: any
-  }
-  interface ListRootProps {
-    variant?: any
   }
   interface NativeSelectFieldProps {
     onValueChange?: any
@@ -140,19 +123,12 @@ declare module '@chakra-ui/react' {
     variant?: any
   }
   interface CardRootProps {
-    variant?: any
     sx?: any
   }
   interface BadgeProps {
-    variant?: any
     sx?: any
   }
-  interface TagProps {
-    variant?: any
-  }
   interface IconButtonProps {
-    variant?: any
-    size?: any
     isRound?: boolean
   }
   interface IconProps {
@@ -163,9 +139,6 @@ declare module '@chakra-ui/react' {
     color?: string
     textColor?: string
     [key: string]: any
-  }
-  interface CardRootProps {
-    sx?: any
   }
   interface CardHeaderProps {
     isTruncated?: boolean

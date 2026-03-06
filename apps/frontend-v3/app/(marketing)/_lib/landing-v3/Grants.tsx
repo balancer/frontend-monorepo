@@ -1,6 +1,6 @@
 'use client'
 
-import { VStack, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react';
+import { VStack, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { GraniteBg } from './shared/GraniteBg'
@@ -12,15 +12,18 @@ const grantIdeas = [
   {
     title: 'Pool hook',
     description:
-      'Hooks enable limitless pool customization possibilities in v3. We actively fund innovative products that solve real problems or create new value. Pool creators can earn additional revenue through customizable fees.' },
+      'Hooks enable limitless pool customization possibilities in v3. We actively fund innovative products that solve real problems or create new value. Pool creators can earn additional revenue through customizable fees.',
+  },
   {
     title: 'Custom AMM',
     description:
-      'Balancer is the home for AMM innovation and development is now easier than ever on v3. We are looking to fund innovative ideas to solve LVR, recapture MEV and other ways to bring more value to LPs.' },
+      'Balancer is the home for AMM innovation and development is now easier than ever on v3. We are looking to fund innovative ideas to solve LVR, recapture MEV and other ways to bring more value to LPs.',
+  },
   {
     title: 'Custom pool',
     description:
-      'Build your custom pool easily on Balancer v3 and follow in the footsteps of Gyroscope and Xave Finance. Get a grant to kickstart your project using custom invariants to create the next innovation in DeFi.' },
+      'Build your custom pool easily on Balancer v3 and follow in the footsteps of Gyroscope and Xave Finance. Get a grant to kickstart your project using custom invariants to create the next innovation in DeFi.',
+  },
 ]
 
 export function Grants() {
@@ -75,9 +78,7 @@ export function Grants() {
                 <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="2xl">
                   <GraniteBg />
                   <VStack align="start" p="md" position="relative">
-                    <Heading fontSize="lg" variant="h6">
-                      {idea.title}
-                    </Heading>
+                    <Heading fontSize="lg">{idea.title}</Heading>
                     <Text color="font.secondary">{idea.description}</Text>
                   </VStack>
                 </Box>
@@ -96,5 +97,5 @@ export function Grants() {
         w="full"
       />
     </Noise>
-  );
+  )
 }

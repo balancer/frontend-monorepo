@@ -3,7 +3,6 @@ import { ArrowDownIcon } from '@repo/lib/shared/components/icons/ArrowDownIcon'
 import {
   HStack,
   Text,
-  Popover,
   HoverCard,
   Portal,
   VStack,
@@ -12,7 +11,8 @@ import {
   Box,
   useToken,
   Center,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import { ReactNode, useState } from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -87,10 +87,10 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
   )
   const badgeColorScheme =
     !voteDiff || voteDiff === 0
-      ? { variant: 'outline', bg: 'font.secondary' }
+      ? { variant: 'outline' as const, bg: 'font.secondary' }
       : voteDiff > 0
-        ? { bg: 'font.highlight', variant: 'solid', color: 'white' }
-        : { colorPalette: 'red', variant: 'solid' }
+        ? { bg: 'font.highlight', variant: 'solid' as const, color: 'white' }
+        : { colorPalette: 'red', variant: 'solid' as const }
 
   const votesColor =
     votesState === 'normal' ? undefined : votesState === 'close' ? 'font.warning' : 'red.400'
@@ -114,25 +114,32 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
         <VStack alignItems="stretch" gap="xs" width="full">
           <TooltipItem
             label={
-              <Text fontWeight="bold" asChild><b>veBAL votes
-                              </b></Text>
+              <Text asChild fontWeight="bold">
+                <b>veBAL votes</b>
+              </Text>
             }
             mb="xs"
-            value={String(<Badge {...badgeColorScheme} rounded="full">
-              <HStack gap="xxs" p="xxs" pl="0">
-                <Box color="font.dark" fontSize="xs">
-                  {diffIcon}
-                </Box>
-                <Text color="font.dark" fontSize="sm" fontWeight="bold">
-                  {voteDiffText}
-                </Text>
-              </HStack>
-            </Badge>)}
+            value={String(
+              <Badge {...badgeColorScheme} rounded="full">
+                <HStack gap="xxs" p="xxs" pl="0">
+                  <Box color="font.dark" fontSize="xs">
+                    {diffIcon}
+                  </Box>
+                  <Text color="font.dark" fontSize="sm" fontWeight="bold">
+                    {voteDiffText}
+                  </Text>
+                </HStack>
+              </Badge>
+            )}
           />
 
           <Separator />
 
-          <TooltipItem label="Current period" mt="sm" value={String(votesShareText ?? <>&mdash;</>)} />
+          <TooltipItem
+            label="Current period"
+            mt="sm"
+            value={String(votesShareText ?? <>&mdash;</>)}
+          />
           <TooltipItem
             color="font.secondary"
             label="veBAL votes"
@@ -177,5 +184,5 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
         <Portal>{popoverContent}</Portal>
       </>
     </HoverCard.Root>
-  );
+  )
 }

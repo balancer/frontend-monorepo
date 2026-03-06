@@ -17,7 +17,8 @@ import {
   InputProps,
   Skeleton,
   Text,
-  VStack } from '@chakra-ui/react';
+  VStack,
+} from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
@@ -29,7 +30,7 @@ import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { ChevronDown } from 'react-feather'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { PriceImpactLevel } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { useEffect, forwardRef } from 'react';
+import { useEffect, forwardRef } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
@@ -45,7 +46,7 @@ type TokenInputSelectorProps = {
 
 type TokenSelectorConfigProps = {
   label: string
-  variant: string
+  variant: 'tertiary' | 'secondary'
   showIcon: boolean
 }
 
@@ -53,7 +54,8 @@ export function TokenInputSelector({
   token,
   weight,
   onToggleTokenClicked,
-  showWeight = true }: TokenInputSelectorProps) {
+  showWeight = true,
+}: TokenInputSelectorProps) {
   const DEFAULT_TOKEN_LABEL = 'Select token'
 
   const tokenConfig: TokenSelectorConfigProps | undefined = token
@@ -100,7 +102,7 @@ export function TokenInputSelector({
     </Button>
   ) : (
     <Skeleton height="40px" width="110px" />
-  );
+  )
 }
 
 type PriceImpactProps = {
@@ -132,7 +134,8 @@ function TokenInputFooter({
   customUserBalance,
   isDisabled,
   customUsdPrice,
-  priceImpactProps }: TokenInputFooterProps) {
+  priceImpactProps,
+}: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
@@ -276,7 +279,8 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
     const { handleOnChange, updateValue, validateInput } = useTokenInput({
       token,
       onChange,
-      disableBalanceValidation })
+      disableBalanceValidation,
+    })
 
     const hasError = hasValidationError(token)
 
@@ -301,11 +305,13 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
                 opacity: 0.05,
                 borderRadius: 'md',
                 pointerEvents: 'none',
-                zIndex: 0 }
+                zIndex: 0,
+              }
             : undefined
         }
         _focusWithin={{
-          boxShadow: hasError ? 'input.innerError' : 'input.innerFocus' }}
+          boxShadow: hasError ? 'input.innerError' : 'input.innerFocus',
+        }}
         bg="background.level0"
         border="white"
         borderRadius="md"
@@ -317,24 +323,26 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
         {...boxProps}
       >
         <VStack align="start" gap="md">
-          <HStack background="transparent" border="transparent" gap="0" align="stretch">
+          <HStack align="stretch" background="transparent" border="transparent" gap="0">
             <Box position="relative" w="full">
               <Input
                 _focus={{
                   outline: 'none',
                   border: '0px solid transparent',
-                  boxShadow: 'none' }}
+                  boxShadow: 'none',
+                }}
                 _hover={{
                   border: '0px solid transparent',
-                  boxShadow: 'none' }}
+                  boxShadow: 'none',
+                }}
                 autoComplete="off"
                 autoCorrect="off"
                 bg="transparent"
                 border="0px solid transparent"
                 boxShadow="none"
+                disabled={!token || isDisabled}
                 fontSize="3xl"
                 fontWeight="medium"
-                disabled={!token || isDisabled}
                 min={0}
                 onChange={handleOnChange as any}
                 onKeyDown={blockInvalidNumberInput}
@@ -366,7 +374,7 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
               )}
             </Box>
 
-            <Box bg="transparent" border="none" p="0" pl="1" flexShrink={0}>
+            <Box bg="transparent" border="none" flexShrink={0} p="0" pl="1">
               <TokenInputSelector
                 onToggleTokenClicked={onToggleTokenClicked}
                 token={token}
@@ -389,6 +397,6 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
           />
         </VStack>
       </Box>
-    );
+    )
   }
 )

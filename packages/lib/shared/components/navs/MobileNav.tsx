@@ -1,5 +1,15 @@
 import { useDisclosure } from '@chakra-ui/react'
-import { Box, Button, Drawer, HStack, Link, Text, VStack, Separator, Portal } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Drawer,
+  HStack,
+  Link,
+  Text,
+  VStack,
+  Separator,
+  Portal,
+} from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
@@ -36,35 +46,39 @@ function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
       {appLinks.map(link => (
         <Link
           alignItems="center"
+          asChild
           color={linkColorFor(link.href || '')}
           display="flex"
           fontSize="xl"
           gap="xs"
           variant="nav"
-          asChild><NextLink
+        >
+          <NextLink
             href={link.href ?? ''}
             key={link.href}
             onClick={onClick}
             prefetch
-            target='_blank'
-            rel='noopener noreferrer'>
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             {link.label}
             {link.isExternal && (
               <Box color="grayText">
                 <ArrowUpRight size={14} />
               </Box>
             )}
-          </NextLink></Link>
+          </NextLink>
+        </Link>
       ))}
       {customLinks}
     </VStack>
-  );
+  )
 }
 
 function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
   return (
     <VStack align="start" w="full">
-      <Text color="grayText" mb="sm" size="xs">
+      <Text color="grayText" fontSize="xs" mb="sm">
         Ecosystem
       </Text>
       {ecosystemLinks.map(link => (
@@ -74,9 +88,10 @@ function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
           gap="xs"
           href={link.href}
           key={link.href}
+          rel="noopener noreferrer"
+          target="_blank"
           variant="nav"
-          target='_blank'
-          rel='noopener noreferrer'>
+        >
           {link.label}
           <Box color="grayText">
             <ArrowUpRight size={14} />
@@ -84,19 +99,21 @@ function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
         </Link>
       ))}
     </VStack>
-  );
+  )
 }
 
 function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
       {socialLinks.map(({ href, iconType }) => (
-        <Button isExternal variant="tertiary" asChild><Link href={href} key={href}>
+        <Button asChild isExternal variant="tertiary">
+          <Link href={href} key={href}>
             <SocialIcon iconType={iconType} />
-          </Link></Button>
+          </Link>
+        </Button>
       ))}
     </HStack>
-  );
+  )
 }
 
 export function MobileNav({
@@ -105,7 +122,8 @@ export function MobileNav({
   ecosystemLinks,
   socialLinks,
   LogoType,
-  customLinks }: MobileNavProps) {
+  customLinks,
+}: MobileNavProps) {
   const { open, onOpen, onClose } = useDisclosure()
   const btnRef = useRef(null)
   const router = useRouter()
@@ -120,13 +138,17 @@ export function MobileNav({
       <Button onClick={onOpen} ref={btnRef} variant="tertiary">
         <Menu size={18} />
       </Button>
-      <Drawer.Root finalFocusEl={() => btnRef.current} open={open} placement='end' onOpenChange={(e: { open: boolean }) => {
-        if (!e.open) {
-          onClose();
-        }
-      }}>
+      <Drawer.Root
+        finalFocusEl={() => btnRef.current}
+        onOpenChange={(e: { open: boolean }) => {
+          if (!e.open) {
+            onClose()
+          }
+        }}
+        open={open}
+        placement="end"
+      >
         <Portal>
-
           <Drawer.Backdrop />
           <Drawer.Positioner>
             <Drawer.Content>
@@ -145,9 +167,8 @@ export function MobileNav({
               </Drawer.Footer>
             </Drawer.Content>
           </Drawer.Positioner>
-
         </Portal>
       </Drawer.Root>
     </>
-  );
+  )
 }

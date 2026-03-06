@@ -1,4 +1,4 @@
-import { Accordion, CardProps, Flex, HStack, Icon, Text } from '@chakra-ui/react';
+import { Accordion, CardProps, Flex, HStack, Icon, Text } from '@chakra-ui/react'
 import StarsIcon from '../icons/StarsIcon'
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 export function IncentiveBadge({ special = false, label, value, children }: Props) {
   return (
     <Accordion.Root collapsible variant="incentives">
-      <Accordion.Item border="none" value='item-0'>
+      <Accordion.Item border="none" value="item-0">
         <Accordion.ItemTrigger>
           <HStack justifyContent="space-between" width="full" zIndex="2">
             <HStack gap="4" width="full">
@@ -33,18 +33,18 @@ export function IncentiveBadge({ special = false, label, value, children }: Prop
               <HStack
                 alignItems="flex-start"
                 fontWeight="medium"
-                justifyContent="space-between"
                 gap="2"
+                justifyContent="space-between"
                 width="full"
               >
-                <Text fontSize="1.15rem" fontWeight="semibold" variant="primary">
+                <Text fontSize="1.15rem" fontWeight="semibold">
                   {label}
                 </Text>
                 <HStack>
                   <Text
                     fontSize="1.15rem"
                     fontWeight="semibold"
-                    variant={special ? 'specialSecondary' : 'primary'}
+                    variant={special ? 'specialSecondary' : undefined}
                   >
                     {value}
                   </Text>
@@ -54,8 +54,10 @@ export function IncentiveBadge({ special = false, label, value, children }: Prop
             </HStack>
           </HStack>
         </Accordion.ItemTrigger>
-        <Accordion.ItemContent><Accordion.ItemBody>{children}</Accordion.ItemBody></Accordion.ItemContent>
+        <Accordion.ItemContent>
+          <Accordion.ItemBody>{children}</Accordion.ItemBody>
+        </Accordion.ItemContent>
       </Accordion.Item>
     </Accordion.Root>
-  );
+  )
 }

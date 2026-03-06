@@ -6,11 +6,11 @@ import {
   Heading,
   Skeleton,
   Text,
-  Popover,
   HoverCard,
   VStack,
   Flex,
-  Link } from '@chakra-ui/react';
+  Link,
+} from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -60,7 +60,8 @@ function TokenInfo({
   isBpt = false,
   isNestedPoolToken = false,
   iconSize = 40,
-  logoURI }: TokenInfoProps) {
+  logoURI,
+}: TokenInfoProps) {
   const tokenSymbol = isBpt ? '‘LP’ pool token' : poolToken?.symbol || token?.symbol || symbol
   const tokenName = isBpt ? pool?.symbol : poolToken?.name || token?.name
 
@@ -69,13 +70,15 @@ function TokenInfo({
     fontSize: isNestedPoolToken ? 'sm' : 'md',
     fontWeight: 'bold',
     lineHeight: isNestedPoolToken ? '18px' : '24px',
-    variant: disabled ? 'secondary' : 'primary' }
+    variant: disabled ? ('secondary' as const) : undefined,
+  }
 
   const tokenNameProps = {
     fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
     lineHeight: isNestedPoolToken ? '12px' : '18px',
-    variant: 'secondary' }
+    variant: 'secondary' as const,
+  }
 
   return (
     <HStack gap={{ base: 'sm', md: 'ms' }}>
@@ -92,9 +95,11 @@ function TokenInfo({
       <VStack alignItems="flex-start" gap="none">
         <HStack gap="none">
           {isBpt && pool ? (
-            <Link asChild><NextLink href={getNestedPoolPath({ pool, nestedPoolAddress: address })}>
+            <Link asChild>
+              <NextLink href={getNestedPoolPath({ pool, nestedPoolAddress: address })}>
                 <Heading {...headingProps}>{tokenSymbol}</Heading>
-              </NextLink></Link>
+              </NextLink>
+            </Link>
           ) : (
             <Heading {...headingProps}>{tokenSymbol}</Heading>
           )}
@@ -110,7 +115,7 @@ function TokenInfo({
         </Box>
       )}
     </HStack>
-  );
+  )
 }
 
 export type TokenRowProps = {
@@ -157,7 +162,8 @@ export default function TokenRow({
   iconSize,
   logoURI,
   customToken,
-  customUsdPrice }: TokenRowProps) {
+  customUsdPrice,
+}: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
@@ -183,7 +189,8 @@ export default function TokenRow({
     iconSize,
     isNestedPoolToken,
     symbol,
-    logoURI }
+    logoURI,
+  }
 
   let usdValue: string | undefined
 
@@ -205,13 +212,15 @@ export default function TokenRow({
     as: 'h6' as const,
     fontSize: isNestedPoolToken ? 'sm' : 'md',
     fontWeight: isNestedPoolToken ? 'medium' : 'bold',
-    lineHeight: isNestedPoolToken ? '18px' : '24px' }
+    lineHeight: isNestedPoolToken ? '18px' : '24px',
+  }
 
   const subTextProps = {
     fontSize: isNestedPoolToken ? 'xs' : 'sm',
     fontWeight: 'medium',
     lineHeight: isNestedPoolToken ? '12px' : '18px',
-    variant: 'secondary' }
+    variant: 'secondary' as const,
+  }
 
   return (
     <VStack align="start" gap="md" w="full">
@@ -235,7 +244,8 @@ export default function TokenRow({
               <>
                 <Heading {...headingProps} title={value.toString()}>
                   {formatFalsyValueAsDash(value, val => fNum('token', val), {
-                    showZeroAmountAsDash })}
+                    showZeroAmountAsDash,
+                  })}
                 </Heading>
                 {isTokenPriceMissing ? (
                   <TokenMissingPriceWarning message={tokenPriceTip} />
@@ -243,7 +253,8 @@ export default function TokenRow({
                   <Text {...subTextProps}>
                     {formatFalsyValueAsDash(usdValue, toCurrency, {
                       abbreviated,
-                      showZeroAmountAsDash })}
+                      showZeroAmountAsDash,
+                    })}
                   </Text>
                 )}
               </>
@@ -342,5 +353,5 @@ export default function TokenRow({
         </HStack>
       </HStack>
     </VStack>
-  );
+  )
 }

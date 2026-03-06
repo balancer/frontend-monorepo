@@ -50,6 +50,7 @@ next-env.d.ts
 
 # for packages/lib
 generated/
+
 .eslintcache
 .prettiercache
 

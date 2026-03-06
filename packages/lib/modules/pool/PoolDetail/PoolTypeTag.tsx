@@ -1,4 +1,4 @@
-import { Box, HStack, Text, JsxStyleProps } from '@chakra-ui/react';
+import { Box, HStack, Text, JsxStyleProps } from '@chakra-ui/react'
 import { Pool } from '../pool.types'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
@@ -27,7 +27,8 @@ const tagWrapperProps = {
   py: 'xs',
   rounded: 'full',
   shadow: 'sm',
-  gap: 'xs' }
+  gap: 'xs',
+}
 
 function TagWrapper({ children, ...rest }: { children: React.ReactNode } & JsxStyleProps) {
   return (
@@ -37,7 +38,7 @@ function TagWrapper({ children, ...rest }: { children: React.ReactNode } & JsxSt
   )
 }
 
-const TEXT_PROPS = { fontSize: 'sm', variant: 'secondary' }
+const TEXT_PROPS = { fontSize: 'sm', variant: 'secondary' as const }
 
 function getPoolTypeLabel(pool: Pool | PoolListItem) {
   const { tags, type } = pool

@@ -1,5 +1,5 @@
 import { GqlHookReviewData } from '@repo/lib/shared/services/api/generated/graphql'
-import { Popover, HoverCard, VStack, HStack, Text, Heading, Box, Icon } from '@chakra-ui/react';
+import { HoverCard, VStack, HStack, Text, Heading, Box, Icon } from '@chakra-ui/react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
@@ -70,14 +70,16 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
                 <Text color="font.link" fontSize="sm">
                   View review details
                 </Text>
-                <Icon color="font.link" size={12} asChild><ArrowUpRight /></Icon>
+                <Icon asChild color="font.link" size={12}>
+                  <ArrowUpRight />
+                </Icon>
               </HStack>
             </Link>
           )}
         </>
       )}
     </>
-  );
+  )
 }
 
 export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps) {
@@ -100,7 +102,7 @@ export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps)
           <Box>
             <VStack alignItems="flex-start" gap="ms" w="full">
               <HStack w="full">
-                <Heading fontSize="1.125rem" variant="h4">
+                <Heading fontSize="1.125rem" size="h4">
                   Hook
                 </Heading>
               </HStack>
@@ -110,5 +112,5 @@ export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps)
         </HoverCard.Content>
       </HoverCard.Positioner>
     </HoverCard.Root>
-  );
+  )
 }

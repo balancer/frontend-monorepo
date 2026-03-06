@@ -1,12 +1,6 @@
-import {
-  Box,
-  ProgressCircle,
-  HStack,
-  Text,
-  VStack,
-  Link } from '@chakra-ui/react';
+import { Box, ProgressCircle, HStack, Text, TextProps, VStack, Link } from '@chakra-ui/react'
 import { StepProps, getStepSettings } from './getStepSettings'
-import { ArrowUpRight, Check } from 'react-feather'
+import { ArrowUpRight } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
 import { indexToLetter } from '@repo/lib/shared/labels'
 import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
@@ -51,48 +45,48 @@ export function Step(props: StepProps) {
         )}
       </VStack>
     </HStack>
-  );
+  )
 }
 
 export function StepIndicator({
   transaction,
   ...props
 }: StepProps & { transaction?: ManagedResult }) {
-  const { color, isActive, isActiveLoading, status, stepNumber } = getStepSettings(
-    props,
-    transaction
-  )
+  const { color, isActive, status } = getStepSettings(props, transaction)
 
   if (status === 'complete') {
     return (
-      <ProgressCircle.Root value='100' size="7" trackColor="border.base">
+      <ProgressCircle.Root size="7" trackColor="border.base" value="100">
         <ProgressCircle.Circle
           css={{
-            "--thickness": "5"
-          }}>
+            '--thickness': '5',
+          }}
+        >
           <ProgressCircle.Track />
           <ProgressCircle.Range stroke="font.highlight" />
         </ProgressCircle.Circle>
       </ProgressCircle.Root>
-    );
+    )
   }
 
   return (
     <ProgressCircle.Root
-      value={String(null)}
       bg={isActive ? 'background.special' : 'transparent'}
       rounded="full"
       size="7"
-      trackColor="border.base">
+      trackColor="border.base"
+      value={String(null)}
+    >
       <ProgressCircle.Circle
         css={{
-          "--thickness": isActive ? 0 : 5
-        }}>
+          '--thickness': isActive ? 0 : 5,
+        }}
+      >
         <ProgressCircle.Track />
         <ProgressCircle.Range stroke={color} />
       </ProgressCircle.Circle>
     </ProgressCircle.Root>
-  );
+  )
 }
 
 function NestedInfo({
@@ -100,11 +94,12 @@ function NestedInfo({
   details,
   transaction,
   variant,
-  step }: {
+  step,
+}: {
   color: string
   details?: StepDetails
   transaction?: ManagedResult
-  variant?: string
+  variant?: TextProps['variant']
   step: TransactionStep
 }) {
   const gasCostData = useTransactionGasCost(transaction)
@@ -114,7 +109,8 @@ function NestedInfo({
   const textProps = {
     fontSize: 'sm',
     lineHeight: '1.2',
-    variant }
+    variant,
+  }
 
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
@@ -141,8 +137,9 @@ function NestedInfo({
               transaction?.result?.data?.transactionHash,
               getGqlChain(transaction?.result?.data?.chainId)
             )}
-            target='_blank'
-            rel='noopener noreferrer'>
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <ArrowUpRight size={14} />
           </Link>
         )}
@@ -158,7 +155,7 @@ function NestedInfo({
           </HStack>
         ))}
     </Box>
-  );
+  )
 }
 
 /*
@@ -171,7 +168,8 @@ function NestedInfo({
 function TransactionBatchSteps({
   color,
   mainStepTitle,
-  nestedSteps }: {
+  nestedSteps,
+}: {
   mainStepTitle?: string
   color: string
   nestedSteps?: TransactionStep[]
@@ -204,16 +202,17 @@ function TransactionBatchSteps({
   )
 }
 
-function SubStepIndicator({ color, label }: { color: string; label: string }) {
+function SubStepIndicator({ color }: { color: string; label: string }) {
   return (
-    <ProgressCircle.Root value='100' size="6" trackColor="border.base">
+    <ProgressCircle.Root size="6" trackColor="border.base" value="100">
       <ProgressCircle.Circle
         css={{
-          "--thickness": "2"
-        }}>
+          '--thickness': '2',
+        }}
+      >
         <ProgressCircle.Track />
         <ProgressCircle.Range stroke={color} />
       </ProgressCircle.Circle>
     </ProgressCircle.Root>
-  );
+  )
 }

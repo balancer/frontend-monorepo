@@ -1,4 +1,4 @@
-import { BoxProps, Box, HStack, Text, Portal, Popover, HoverCard } from '@chakra-ui/react';
+import { BoxProps, Box, HStack, Text, TextProps, Portal, HoverCard } from '@chakra-ui/react'
 import BigNumber from 'bignumber.js'
 import { ReactNode } from 'react'
 
@@ -16,7 +16,7 @@ interface PopoverAprItemProps extends BoxProps {
   textBackground?: string
   textBackgroundClip?: string
   tooltipText?: string
-  textVariant?: string
+  textVariant?: TextProps['variant']
   children?: ReactNode
 }
 
@@ -62,7 +62,8 @@ export function TooltipAprItem({
                   left: 0,
                   opacity: 0.5,
                   position: 'absolute',
-                  width: '100%' }}
+                  width: '100%',
+                }}
                 color={apr.gte(0) ? (valueFontColor ?? fontColor) : 'font.warning'}
                 fontSize="sm"
                 fontWeight={fontWeight}
@@ -97,5 +98,5 @@ export function TooltipAprItem({
       </HStack>
       {children}
     </Box>
-  );
+  )
 }

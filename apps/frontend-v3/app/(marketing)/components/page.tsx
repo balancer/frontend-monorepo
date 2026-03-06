@@ -21,22 +21,26 @@ import {
   Tag,
   Alert,
   Field,
-  List } from '@chakra-ui/react';
+  List,
+} from '@chakra-ui/react'
 
-function darken(color: string, _amount: number) { return color }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function darken(color: string, _amount: number) {
+  return color
+}
 import Section from '@repo/lib/shared/components/layout/Section'
 
 export default function Components() {
   return (
     <Box maxW="maxContent" mt="xl" mx="auto" p="mx">
       <Box as="section" mb="24">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Components
         </Heading>
         <Heading as="h2" size="h4">
           Contents
         </Heading>
-        <List.Root as='ul'>
+        <List.Root as="ul">
           <List.Item>
             <a href="#colors">Colors</a>
           </List.Item>
@@ -68,7 +72,7 @@ export default function Components() {
         </List.Root>
       </Box>
       <Section fontWeight="bold" id="colors">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Colors
         </Heading>
 
@@ -77,7 +81,8 @@ export default function Components() {
           <Stack direction="row">
             <Center
               _hover={{
-                bg: darken('blue.50', 10) }}
+                bg: darken('blue.50', 10),
+              }}
               bg="blue.50"
               color="black"
               fontSize="xs"
@@ -89,7 +94,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.100', 10) }}
+                bg: darken('blue.100', 10),
+              }}
               bg="blue.100"
               color="font.dark"
               fontSize="xs"
@@ -101,7 +107,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.200', 10) }}
+                bg: darken('blue.200', 10),
+              }}
               bg="blue.200"
               color="font.dark"
               fontSize="xs"
@@ -113,7 +120,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.300', 10) }}
+                bg: darken('blue.300', 10),
+              }}
               bg="blue.300"
               color="font.dark"
               fontSize="xs"
@@ -125,7 +133,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.400', 10) }}
+                bg: darken('blue.400', 10),
+              }}
               bg="blue.400"
               color="font.dark"
               fontSize="xs"
@@ -137,7 +146,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.500', 10) }}
+                bg: darken('blue.500', 10),
+              }}
               bg="blue.500"
               color="font.light"
               fontSize="xs"
@@ -149,7 +159,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.600', 10) }}
+                bg: darken('blue.600', 10),
+              }}
               bg="blue.600"
               color="font.light"
               fontSize="xs"
@@ -161,7 +172,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('blue.700', 10) }}
+                bg: darken('blue.700', 10),
+              }}
               bg="blue.700"
               color="font.light"
               fontSize="xs"
@@ -172,7 +184,8 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('blue.800', 10) }}
+                bg: darken('blue.800', 10),
+              }}
               bg="blue.800"
               color="font.light"
               fontSize="xs"
@@ -183,7 +196,8 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('blue.900', 10) }}
+                bg: darken('blue.900', 10),
+              }}
               bg="blue.900"
               color="font.light"
               fontSize="xs"
@@ -200,7 +214,8 @@ export default function Components() {
           <Stack direction="row">
             <Center
               _hover={{
-                bg: darken('gray.50', 10) }}
+                bg: darken('gray.50', 10),
+              }}
               bg="gray.50"
               color="black"
               fontSize="xs"
@@ -212,7 +227,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.100', 10) }}
+                bg: darken('gray.100', 10),
+              }}
               bg="gray.100"
               color="font.dark"
               fontSize="xs"
@@ -224,7 +240,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.200', 10) }}
+                bg: darken('gray.200', 10),
+              }}
               bg="gray.200"
               color="font.dark"
               fontSize="xs"
@@ -236,7 +253,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.300', 10) }}
+                bg: darken('gray.300', 10),
+              }}
               bg="gray.300"
               color="font.dark"
               fontSize="xs"
@@ -248,7 +266,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.400', 10) }}
+                bg: darken('gray.400', 10),
+              }}
               bg="gray.400"
               color="font.dark"
               fontSize="xs"
@@ -260,7 +279,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.500', 10) }}
+                bg: darken('gray.500', 10),
+              }}
               bg="gray.500"
               color="font.light"
               fontSize="xs"
@@ -272,7 +292,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.600', 10) }}
+                bg: darken('gray.600', 10),
+              }}
               bg="gray.600"
               color="font.light"
               fontSize="xs"
@@ -284,7 +305,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('gray.700', 10) }}
+                bg: darken('gray.700', 10),
+              }}
               bg="gray.700"
               color="font.light"
               fontSize="xs"
@@ -295,7 +317,8 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('gray.800', 10) }}
+                bg: darken('gray.800', 10),
+              }}
               bg="gray.800"
               color="font.light"
               fontSize="xs"
@@ -306,7 +329,8 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('gray.900', 10) }}
+                bg: darken('gray.900', 10),
+              }}
               bg="gray.900"
               color="font.light"
               fontSize="xs"
@@ -359,7 +383,8 @@ export default function Components() {
           <Stack direction="row">
             <Center
               _hover={{
-                bg: darken('orange.50', 10) }}
+                bg: darken('orange.50', 10),
+              }}
               bg="orange.50"
               color="black"
               fontSize="xs"
@@ -371,7 +396,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.100', 10) }}
+                bg: darken('orange.100', 10),
+              }}
               bg="orange.100"
               color="font.dark"
               fontSize="xs"
@@ -383,7 +409,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.200', 10) }}
+                bg: darken('orange.200', 10),
+              }}
               bg="orange.200"
               color="font.dark"
               fontSize="xs"
@@ -395,7 +422,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.300', 10) }}
+                bg: darken('orange.300', 10),
+              }}
               bg="orange.300"
               color="font.dark"
               fontSize="xs"
@@ -407,7 +435,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.400', 10) }}
+                bg: darken('orange.400', 10),
+              }}
               bg="orange.400"
               color="font.dark"
               fontSize="xs"
@@ -419,7 +448,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.500', 10) }}
+                bg: darken('orange.500', 10),
+              }}
               bg="orange.500"
               color="font.light"
               fontSize="xs"
@@ -431,7 +461,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.600', 10) }}
+                bg: darken('orange.600', 10),
+              }}
               bg="orange.600"
               color="font.light"
               fontSize="xs"
@@ -443,7 +474,8 @@ export default function Components() {
 
             <Center
               _hover={{
-                bg: darken('orange.700', 10) }}
+                bg: darken('orange.700', 10),
+              }}
               bg="orange.700"
               color="font.light"
               fontSize="xs"
@@ -454,7 +486,8 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('orange.800', 10) }}
+                bg: darken('orange.800', 10),
+              }}
               bg="orange.800"
               color="font.light"
               fontSize="xs"
@@ -465,7 +498,8 @@ export default function Components() {
             </Center>
             <Center
               _hover={{
-                bg: darken('orange.900', 10) }}
+                bg: darken('orange.900', 10),
+              }}
               bg="orange.900"
               color="font.light"
               fontSize="xs"
@@ -585,12 +619,12 @@ export default function Components() {
         <Section variant="subsection">
           <Heading size="h3">Gradients</Heading>
 
-          <Stack direction="column" mb="8" gap="8">
+          <Stack direction="column" gap="8" mb="8">
             <Center bg="background.special" h="16" w="100%">
               Background special
             </Center>
           </Stack>
-          <Stack direction="column" mb="8" gap="8">
+          <Stack direction="column" gap="8" mb="8">
             <Center bg="background.specialSecondary" h="16" w="100%">
               Background special secondary
             </Center>
@@ -604,7 +638,7 @@ export default function Components() {
 
         <Box mb="8">
           <Text variant="eyebrow">H1 Hero</Text>
-          <Heading as="h1" size="h1" variant="specialSecondary ">
+          <Heading as="h1" size="h1" variant="specialSecondary">
             Hero heading 1
           </Heading>
         </Box>
@@ -618,14 +652,14 @@ export default function Components() {
 
         <Box mb="8">
           <Text variant="eyebrow">H2</Text>
-          <Heading as="h2" size="h2" variant="h2">
+          <Heading as="h2" size="h2">
             Heading 2
           </Heading>
         </Box>
 
         <Box mb="8">
           <Text variant="eyebrow">H3</Text>
-          <Heading as="h3" size="h3" variant="h3">
+          <Heading as="h3" size="h3">
             Heading 3
           </Heading>
         </Box>
@@ -639,14 +673,14 @@ export default function Components() {
 
         <Box mb="8">
           <Text variant="eyebrow">H5</Text>
-          <Heading as="h5" size="h5" variant="h5">
+          <Heading as="h5" size="h5">
             Heading 5
           </Heading>
         </Box>
 
         <Box mb="8">
           <Text variant="eyebrow">H6</Text>
-          <Heading as="h6" size="h6" variant="h6">
+          <Heading as="h6" size="h6">
             Heading 6
           </Heading>
         </Box>
@@ -694,7 +728,7 @@ export default function Components() {
           <Tag.Root colorPalette="red" my="2">
             To do
           </Tag.Root>
-          <List.Root as='ul'>
+          <List.Root as="ul">
             <List.Item>
               <a href="#colors">Colors</a>
             </List.Item>
@@ -732,7 +766,7 @@ export default function Components() {
         </Box>
       </Section>
       <Section id="buttons">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Buttons
         </Heading>
         <Section variant="subsection">
@@ -754,7 +788,7 @@ export default function Components() {
             <Button variant="solid">Solid button (default)</Button>
             <Button variant="outline">Outline button</Button>
             <Button variant="ghost">Ghost button</Button>
-            <Button variant='plain'>Link button</Button>
+            <Button variant="plain">Link button</Button>
           </Flex>
         </Section>
         <Section variant="subsection">
@@ -775,7 +809,7 @@ export default function Components() {
         </Section>
       </Section>
       <Section id="radius">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Border Radius
         </Heading>
         <Stack direction="row" flexWrap="wrap" mb="8">
@@ -827,20 +861,20 @@ export default function Components() {
         </Stack>
       </Section>
       <Section id="elevation">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Elevation
         </Heading>
         <Text mb="4">8 level elevation system</Text>
-        <List.Root as='ul' mb="4">
+        <List.Root as="ul" mb="4">
           <List.Item>
             Background color is determined by height.
-            <List.Root as='ul'>
+            <List.Root as="ul">
               <List.Item>The higher it is, the lighter the color.</List.Item>
             </List.Root>
           </List.Item>
           <List.Item>
             Shadows are relative.
-            <List.Root as='ul'>
+            <List.Root as="ul">
               <List.Item>
                 The shadow size is dependent on the relative distance between it and the next level.
               </List.Item>
@@ -877,78 +911,78 @@ export default function Components() {
         </Section>
       </Section>
       <Section id="shadows">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Shadows
         </Heading>
         <Stack direction="row" flexWrap="wrap" mb="8">
-          <Card.Root shadow="xs" variant="level5">
+          <Card.Root shadow="xs" variant="level4">
             <Card.Body>
               <Text>xs</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="sm" variant="level5">
+          <Card.Root shadow="sm" variant="level4">
             <Card.Body>
               <Text>sm</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="base" variant="level5">
+          <Card.Root shadow="base" variant="level4">
             <Card.Body>
               <Text>base</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="md" variant="level5">
+          <Card.Root shadow="md" variant="level4">
             <Card.Body>
               <Text>md</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="lg" variant="level5">
+          <Card.Root shadow="lg" variant="level4">
             <Card.Body>
               <Text>lg</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="xl" variant="level5">
+          <Card.Root shadow="xl" variant="level4">
             <Card.Body>
               <Text>xl</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="2xl" variant="level5">
+          <Card.Root shadow="2xl" variant="level4">
             <Card.Body>
               <Text>2xl</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="dark-lg" variant="level5">
+          <Card.Root shadow="dark-lg" variant="level4">
             <Card.Body>
               <Text>dark-lg</Text>
             </Card.Body>
           </Card.Root>
         </Stack>
         <Stack direction="row" flexWrap="wrap">
-          <Card.Root shadow="outline" variant="level5">
+          <Card.Root shadow="outline" variant="level4">
             <Card.Body>
               <Text>outline</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="innerBase" variant="level5">
+          <Card.Root shadow="innerBase" variant="level4">
             <Card.Body>
               <Text>inner base</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="inner" variant="level5">
+          <Card.Root shadow="inner" variant="level4">
             <Card.Body>
               <Text>inner</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="innerSm" variant="level5">
+          <Card.Root shadow="innerSm" variant="level4">
             <Card.Body>
               <Text>innerSm</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="innerMd" variant="level5">
+          <Card.Root shadow="innerMd" variant="level4">
             <Card.Body>
               <Text>innerMd</Text>
             </Card.Body>
           </Card.Root>
-          <Card.Root shadow="innerLg" variant="level5">
+          <Card.Root shadow="innerLg" variant="level4">
             <Card.Body>
               <Text>innerLg</Text>
             </Card.Body>
@@ -956,7 +990,7 @@ export default function Components() {
         </Stack>
       </Section>
       <Section id="alerts">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Alerts
         </Heading>
         <Section variant="subsection">
@@ -991,14 +1025,23 @@ export default function Components() {
         </Section>
       </Section>
       <Section id="cards">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Cards
         </Heading>
         <Card.Root maxW="md">
           <Card.Header>
             <Flex>
               <Flex alignItems="center" flex="1" flexWrap="wrap" gap="4">
-                <Avatar.Root><Avatar.Fallback /><Avatar.Root><Avatar.Fallback name="Avatar name" /></Avatar.Root><Avatar.Root><Avatar.Fallback /><Avatar.Image src="https://placehold.co/80" /></Avatar.Root></Avatar.Root>
+                <Avatar.Root>
+                  <Avatar.Fallback />
+                  <Avatar.Root>
+                    <Avatar.Fallback name="Avatar name" />
+                  </Avatar.Root>
+                  <Avatar.Root>
+                    <Avatar.Fallback />
+                    <Avatar.Image src="https://placehold.co/80" />
+                  </Avatar.Root>
+                </Avatar.Root>
 
                 <Box>
                   <Heading size="sm">Title</Heading>
@@ -1017,12 +1060,13 @@ export default function Components() {
           <Image alt="Chakra UI" objectFit="cover" src="https://placehold.co/400x200" />
 
           <Card.Footer
-            flexWrap="wrap"
-            justify="space-between"
             css={{
               '& & > button': {
-                minW: '136px' }
+                minW: '136px',
+              },
             }}
+            flexWrap="wrap"
+            justify="space-between"
           >
             <Button flex="1" variant="ghost">
               Like
@@ -1037,12 +1081,12 @@ export default function Components() {
         </Card.Root>
       </Section>
       <Section id="forms" maxW="375px">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" size="h1-hero" variant="gradient">
           Form fields
         </Heading>
 
         <Box mb="8">
-          <Heading as="h3" size="h3" variant="gradient-dusk">
+          <Heading as="h3" size="h3" variant="gradient">
             Custom input fields
           </Heading>
           <Text>
@@ -1060,12 +1104,14 @@ export default function Components() {
                   <Input
                     _focus={{
                       bg: 'input.bgFocus',
-                      borderColor: 'input.borderFocus' }}
+                      borderColor: 'input.borderFocus',
+                    }}
                     _focusVisible={{
                       bg: 'input.bgFocus',
                       borderColor: 'input.borderFocus',
                       shadow: 'input.innerFocus',
-                      color: 'input.fontFocus' }}
+                      color: 'input.fontFocus',
+                    }}
                     _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
                     bg="input.bgDefault"
                     border="1px solid"
@@ -1086,7 +1132,8 @@ export default function Components() {
               <Input
                 _focusVisible={{
                   shadow: 'input.innerError', // Working
-                  bg: 'input.bgFocus' }}
+                  bg: 'input.bgFocus',
+                }}
                 _hover={{ bg: 'input.bgHover' }}
                 border="1px solid"
                 // Not working
@@ -1095,7 +1142,8 @@ export default function Components() {
                 placeholder="Placeholder"
                 // Not working
                 shadow="input.innerError"
-                type="text" />
+                type="text"
+              />
               <Field.ErrorText color="input.fontHintError" fontWeight="medium">
                 Exceeds wallet balance
               </Field.ErrorText>
@@ -1108,11 +1156,13 @@ export default function Components() {
                 <Input
                   _focus={{
                     bg: 'input.bgFocus',
-                    borderColor: 'input.borderFocus' }}
+                    borderColor: 'input.borderFocus',
+                  }}
                   _focusVisible={{
                     bg: 'input.bgFocus',
                     borderColor: 'input.borderFocus',
-                    shadow: 'input.innerFocus' }}
+                    shadow: 'input.innerFocus',
+                  }}
                   _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
                   bg="input.bgDefault"
                   border="1px solid"
@@ -1128,7 +1178,7 @@ export default function Components() {
         </Section>
 
         <Box mb="8">
-          <Heading as="h3" size="h3" variant="gradient-dusk">
+          <Heading as="h3" size="h3" variant="gradient">
             Theme inputs
           </Heading>
           <Text>This is how it comes out of the theme.</Text>
@@ -1167,8 +1217,76 @@ export default function Components() {
             Checkbox
           </Text>
           <Stack>
-            <Checkbox.Root defaultChecked><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>Checkbox</Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
-            <Checkbox.Root disabled><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control></Checkbox.Root></Checkbox.Label></Checkbox.Root><Checkbox.Root><Checkbox.HiddenInput /><Checkbox.Control><Checkbox.Indicator /></Checkbox.Control><Checkbox.Label>Checkbox</Checkbox.Label></Checkbox.Root></Checkbox.Label></Checkbox.Root>
+            <Checkbox.Root defaultChecked>
+              <Checkbox.HiddenInput />
+              <Checkbox.Control>
+                <Checkbox.Indicator />
+              </Checkbox.Control>
+              <Checkbox.Label>
+                <Checkbox.Root>
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                </Checkbox.Root>
+                <Checkbox.Root>
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Checkbox.Label>
+                    <Checkbox.Root>
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control>
+                        <Checkbox.Indicator />
+                      </Checkbox.Control>
+                    </Checkbox.Root>
+                  </Checkbox.Label>
+                </Checkbox.Root>
+                <Checkbox.Root>
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Checkbox.Label>Checkbox</Checkbox.Label>
+                </Checkbox.Root>
+              </Checkbox.Label>
+            </Checkbox.Root>
+            <Checkbox.Root disabled>
+              <Checkbox.HiddenInput />
+              <Checkbox.Control>
+                <Checkbox.Indicator />
+              </Checkbox.Control>
+              <Checkbox.Label>
+                <Checkbox.Root>
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                </Checkbox.Root>
+                <Checkbox.Root>
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Checkbox.Label>
+                    <Checkbox.Root>
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control>
+                        <Checkbox.Indicator />
+                      </Checkbox.Control>
+                    </Checkbox.Root>
+                  </Checkbox.Label>
+                </Checkbox.Root>
+                <Checkbox.Root>
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control>
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  <Checkbox.Label>Checkbox</Checkbox.Label>
+                </Checkbox.Root>
+              </Checkbox.Label>
+            </Checkbox.Root>
           </Stack>
         </Box>
 
@@ -1178,10 +1296,21 @@ export default function Components() {
           </Text>
           <RadioGroup.Root defaultValue="1">
             <Stack>
-              <RadioGroup.Item disabled value="1"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Checked
-                                </RadioGroup.ItemText></RadioGroup.Item>
-              <RadioGroup.Item value="2"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Unchecked</RadioGroup.ItemText></RadioGroup.Item>
-              <RadioGroup.Item value="3"><RadioGroup.ItemHiddenInput /><RadioGroup.ItemIndicator /><RadioGroup.ItemText>Unchecked</RadioGroup.ItemText></RadioGroup.Item>
+              <RadioGroup.Item disabled value="1">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Checked</RadioGroup.ItemText>
+              </RadioGroup.Item>
+              <RadioGroup.Item value="2">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Unchecked</RadioGroup.ItemText>
+              </RadioGroup.Item>
+              <RadioGroup.Item value="3">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Unchecked</RadioGroup.ItemText>
+              </RadioGroup.Item>
             </Stack>
           </RadioGroup.Root>
         </Box>
@@ -1199,5 +1328,5 @@ export default function Components() {
         </Box>
       </Section>
     </Box>
-  );
+  )
 }

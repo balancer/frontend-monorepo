@@ -1,5 +1,5 @@
 // CustomPopover.tsx
-import { Popover, PopoverRootProps, Text, HStack, Link } from '@chakra-ui/react';
+import { Popover, PopoverRootProps, Text, HStack, Link } from '@chakra-ui/react'
 import { ReactNode, type JSX } from 'react'
 import { ArrowUpRight } from 'react-feather'
 
@@ -27,7 +27,7 @@ export function CustomPopover({
         {showArrow && <Popover.Arrow bg="background.level3" />}
         {headerText && (
           <Popover.Title marginInline="0" p="0">
-            <Text color="font.primary" fontWeight="bold" pb="sm" size="md">
+            <Text color="font.primary" fontSize="md" fontWeight="bold" pb="sm">
               {headerText}
             </Text>
           </Popover.Title>
@@ -41,7 +41,7 @@ export function CustomPopover({
         )}
         {footerUrl && (
           <Popover.Footer p="0">
-            <Link href={footerUrl} variant="link" target='_blank' rel='noopener noreferrer'>
+            <Link href={footerUrl} rel="noopener noreferrer" target="_blank" variant="link">
               <HStack gap="xxs">
                 <Text color="link" fontSize="sm">
                   Learn more
@@ -64,14 +64,16 @@ export function CustomPopover({
   if (useIsOpen) {
     return (
       <Popover.Root {...props}>
-        <Popover.Context>{(state: { open: boolean }) => (
+        <Popover.Context>
+          {(state: { open: boolean }) => (
             <>
               {renderTrigger(state.open)}
               {popoverContent}
             </>
-          )}</Popover.Context>
+          )}
+        </Popover.Context>
       </Popover.Root>
-    );
+    )
   }
 
   return (
@@ -79,5 +81,5 @@ export function CustomPopover({
       {renderTrigger(false)}
       {popoverContent}
     </Popover.Root>
-  );
+  )
 }

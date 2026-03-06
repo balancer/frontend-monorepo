@@ -1,4 +1,4 @@
-import { Box, Card, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Card, CardRootProps, HStack, Text, VStack } from '@chakra-ui/react'
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -19,13 +19,14 @@ const WEIGHT_COLORS = [
   'yellow.300',
 ]
 
-type Props = { variant?: string; displayAlert?: boolean }
+type Props = { variant?: CardRootProps['variant']; displayAlert?: boolean }
 
 export function SeedAmountProportions({ variant = 'level3', displayAlert = false }: Props) {
   const { poolCreationForm } = usePoolCreationForm()
   const [poolTokens, poolType] = useWatch({
     control: poolCreationForm.control,
-    name: ['poolTokens', 'poolType'] })
+    name: ['poolTokens', 'poolType'],
+  })
   const { usdValueForTokenAddress } = useTokens()
 
   const tokenAmountToUsd = poolTokens.map(token => {
@@ -40,7 +41,8 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
 
   const tokenAmountToUsdWithWeights = tokenAmountToUsd.map(token => ({
     ...token,
-    usdWeight: totalSeedUsdValue ? (token.usdValue * 100) / totalSeedUsdValue : 0 }))
+    usdWeight: totalSeedUsdValue ? (token.usdValue * 100) / totalSeedUsdValue : 0,
+  }))
 
   const targetWeights = poolTokens.map(t => Number(t.weight))
   const usdWeights = tokenAmountToUsdWithWeights.map(t => t.usdWeight)
@@ -76,7 +78,8 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
             <WeightsPercentageLabels
               tokens={tokenAmountToUsdWithWeights.map(t => ({
                 symbol: t.symbol,
-                weight: t.usdWeight }))}
+                weight: t.usdWeight,
+              }))}
             />
 
             <WeightsBarChart
@@ -103,7 +106,7 @@ export function SeedAmountProportions({ variant = 'level3', displayAlert = false
         </Card.Body>
       </Card.Root>
     </VStack>
-  );
+  )
 }
 
 interface WeightsBarChartProps {
@@ -116,7 +119,7 @@ function WeightsBarChart({ weights, height, opacity }: WeightsBarChartProps) {
   const allZeroWeights = weights.every(weight => weight === 0)
 
   return (
-    <HStack opacity={opacity} gap={allZeroWeights ? 0 : 0.5} w="full">
+    <HStack gap={allZeroWeights ? 0 : 0.5} opacity={opacity} w="full">
       {weights.map((weight, idx) => {
         const isFirst = idx === 0
         const isLast = idx === weights.length - 1
@@ -136,7 +139,7 @@ function WeightsBarChart({ weights, height, opacity }: WeightsBarChartProps) {
         )
       })}
     </HStack>
-  );
+  )
 }
 
 interface WeightsPercentageLabelsProps {
@@ -149,7 +152,7 @@ function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercent
   const isMoreThanTwoTokens = tokens.length > 2
 
   return (
-    <HStack justify="space-between" gap={0.5} w="full">
+    <HStack gap={0.5} justify="space-between" w="full">
       {tokens.map((token, idx) => {
         const isFirst = idx === 0
         const isLast = idx === tokens.length - 1
@@ -158,9 +161,9 @@ function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercent
         return (
           <HStack
             align="center"
+            gap="xs"
             justify={isFirst ? 'flex-start' : isLast ? 'flex-end' : 'center'}
             key={idx}
-            gap="xs"
           >
             {(!isLast || isMoreThanTwoTokens) && (
               <Box bg={color} borderRadius="full" h="8px" w="8px" />
@@ -174,8 +177,8 @@ function WeightsPercentageLabels({ tokens, showIcon, textColor }: WeightsPercent
               <Box bg={color} borderRadius="full" h="8px" w="8px" />
             )}
           </HStack>
-        );
+        )
       })}
     </HStack>
-  );
+  )
 }

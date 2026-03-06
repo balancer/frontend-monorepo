@@ -9,6 +9,8 @@
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev --turbopack\"",
     "dev:no-gen": "next dev --turbo",
+    "gen:theme-typings": "chakra typegen ./lib/services/chakra/themes/bal/bal.theme.ts --strict --tsconfig ./tsconfig.json",
+    "postinstall": "pnpm run gen:theme-typings",
     "gen:wagmi": "pnpm wagmi generate",
     "lint": "eslint . --max-warnings 0 --cache",
     "lint:fix": "eslint . --fix --max-warnings 0 --cache",

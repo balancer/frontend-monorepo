@@ -1,4 +1,4 @@
-import { Badge, Card, Center, Heading, HStack, Stack, Text } from '@chakra-ui/react';
+import { Badge, Card, Center, Heading, HStack, Stack, Text } from '@chakra-ui/react'
 import { useHook } from '../../../hooks/useHook'
 import { usePool } from '../../PoolProvider'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
@@ -41,7 +41,7 @@ export function PoolHookBanner() {
               </Center>
             </Badge>
             <Stack>
-              <Heading fontSize="1.25rem" variant="h4">
+              <Heading fontSize="1.25rem" size="h4">
                 {hook.name}
               </Heading>
               <Text fontSize="sm" fontWeight="medium" variant="secondary">
@@ -50,7 +50,7 @@ export function PoolHookBanner() {
             </Stack>
           </HStack>
         </Card.Root>
-      );
+      )
     }
-  });
+  })
 }

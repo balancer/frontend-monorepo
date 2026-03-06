@@ -1,4 +1,4 @@
-import { BoxProps, Box, HStack, Text, Portal, Popover, HoverCard } from '@chakra-ui/react';
+import { BoxProps, Box, HStack, Text, TextProps, Portal, HoverCard } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 interface Props extends BoxProps {
@@ -14,7 +14,7 @@ interface Props extends BoxProps {
   textBackground?: string
   textBackgroundClip?: string
   tooltipText?: string
-  textVariant?: string
+  textVariant?: TextProps['variant']
   children?: ReactNode
 }
 
@@ -59,7 +59,8 @@ export function TooltipItem({
                   left: 0,
                   opacity: 0.5,
                   position: 'absolute',
-                  width: '100%' }}
+                  width: '100%',
+                }}
                 color={valueFontColor ?? fontColor}
                 fontSize="sm"
                 fontWeight={fontWeight}
@@ -92,5 +93,5 @@ export function TooltipItem({
       </HStack>
       {children}
     </Box>
-  );
+  )
 }

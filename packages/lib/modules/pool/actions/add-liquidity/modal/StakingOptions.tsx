@@ -1,6 +1,16 @@
-'use client';
+'use client'
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
-import { Button, Card, Flex, Box, HStack, Icon, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import {
+  Button,
+  Card,
+  Flex,
+  Box,
+  HStack,
+  Icon,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { Tooltip } from '../../../../../shared/components/tooltips/Tooltip'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,7 +20,8 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { getChainId } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
-  RedirectPartner } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+  RedirectPartner,
+} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isQuantAmmPool } from '../../../pool.helpers'
@@ -26,7 +37,8 @@ export function StakingOptions() {
   const stakePath = getPoolActionPath({
     id: pool.id,
     chain: pool.chain,
-    action: 'stake' })
+    action: 'stake',
+  })
 
   const auraDisclosure = useDisclosure()
 
@@ -43,8 +55,8 @@ export function StakingOptions() {
           top="3px"
         >
           <Tooltip
-            display="inline-block"
             content="You’ve just added liquidity and received LP tokens for a pool eligible for liquidity mining incentives. To earn your share, stake your LP tokens. There’s no lock-up period—you can stake or unstake anytime."
+            display="inline-block"
           >
             <InfoIcon display="inline-block" />
           </Tooltip>
@@ -63,7 +75,9 @@ export function StakingOptions() {
                 {/* skip vebal boost here */}
                 {getTotalAprLabel(pool.dynamicData.aprItems, undefined, canBeNegative)}
               </Text>
-              <Icon height="16px" width="16px" asChild><StarsIcon /></Icon>
+              <Icon asChild height="16px" width="16px">
+                <StarsIcon />
+              </Icon>
             </HStack>
             <Flex position="absolute" right={1.5} top={1.5}>
               <Image
@@ -73,12 +87,11 @@ export function StakingOptions() {
                 width={30}
               />
             </Flex>
-            <Button
-              disabled={!canStake}
-              variant={canStake ? 'primary' : 'disabled'}
-              w="full"
-              asChild><Link href={stakePath} prefetch>Stake
-                          </Link></Button>
+            <Button asChild disabled={!canStake} variant="primary" w="full">
+              <Link href={stakePath} prefetch>
+                Stake
+              </Link>
+            </Button>
           </VStack>
         </Card.Root>
         {(PROJECT_CONFIG.options.showVeBal || pool.chain === GqlChain.Optimism) &&
@@ -114,5 +127,5 @@ export function StakingOptions() {
           )}
       </HStack>
     </>
-  );
+  )
 }

@@ -10,7 +10,8 @@ import {
   Stack,
   Text,
   VStack,
-  Separator } from '@chakra-ui/react';
+  Separator,
+} from '@chakra-ui/react'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
@@ -19,7 +20,8 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import {
   PoolActivityChartTypeTab,
   gradientMap,
-  useEcosystemPoolActivityChart } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
+  useEcosystemPoolActivityChart,
+} from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 function AnimateOpacity({ children }: PropsWithChildren) {
@@ -42,12 +44,14 @@ export function EcosystemActivityChart() {
     setActiveNetwork,
     tabsList,
     headerInfo,
-    eChartsRef } = useEcosystemPoolActivityChart()
+    eChartsRef,
+  } = useEcosystemPoolActivityChart()
 
   const legendTabs = PROJECT_CONFIG.supportedNetworks.map(key => {
     return {
       label: getChainShortName(key),
-      color: `linear-gradient(to bottom, ${gradientMap[key]?.from || '#F7F7F7'}, ${gradientMap[key]?.to || '#A4C6EE'})` }
+      color: `linear-gradient(to bottom, ${gradientMap[key]?.from || '#F7F7F7'}, ${gradientMap[key]?.to || '#A4C6EE'})`,
+    }
   })
 
   return (
@@ -69,9 +73,7 @@ export function EcosystemActivityChart() {
               <Heading fontWeight="bold" size="h5">
                 {headerInfo.total} transactions
               </Heading>
-              <Text fontSize="0.85rem" variant="primary">
-                In the last {headerInfo.elapsedMinutes} mins
-              </Text>
+              <Text fontSize="0.85rem">In the last {headerInfo.elapsedMinutes} mins</Text>
             </VStack>
 
             <Flex flexWrap="wrap" gap="2">
@@ -124,5 +126,5 @@ export function EcosystemActivityChart() {
         </Box>
       </Box>
     </Card.Root>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { HStack, IconButton, Popover, Text, Link } from '@chakra-ui/react';
+import { HStack, IconButton, Popover, Text, Link } from '@chakra-ui/react'
 import { Tooltip } from '../../shared/components/tooltips/Tooltip'
 import { Address } from 'viem'
 import { CopyAddressButton } from './CopyAddressButton'
@@ -11,7 +11,8 @@ import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { useTokens } from './TokensProvider'
 import {
   getBlockExplorerName,
-  getBlockExplorerTokenUrl } from '@repo/lib/shared/utils/blockExplorer'
+  getBlockExplorerTokenUrl,
+} from '@repo/lib/shared/utils/blockExplorer'
 
 type Props = {
   tokenAddress: string | Address
@@ -28,29 +29,35 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
 
   return (
     <Popover.Root
-      variant="tooltip"
       positioning={{
-        placement: 'right'
-      }}>
+        placement: 'right',
+      }}
+      variant="tooltip"
+    >
       <Popover.Trigger asChild>
         <IconButton
           _hover={{
-            opacity: '1' }}
+            opacity: '1',
+          }}
           aria-label="Token info"
           color="grayText"
           h="24px"
           isRound
           opacity="0.5"
           size="xs"
-          variant="link"><InfoIcon /></IconButton>
+          variant="ghost"
+        >
+          <InfoIcon />
+        </IconButton>
       </Popover.Trigger>
       <Popover.Positioner>
         <Popover.Content w="auto">
           <Popover.Arrow
             bg="background.level2"
             css={{
-              '--arrow-size': 12
-            }} />
+              '--arrow-size': 12,
+            }}
+          />
           <Popover.Body>
             <HStack>
               <Text color="inherit" fontSize="sm" fontWeight="medium">
@@ -63,18 +70,24 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
                   <Tooltip content="View on Coingecko">
                     <IconButton
                       aria-label="View on Coingecko"
+                      asChild
                       h="6"
                       isExternal
                       isRound
                       size="xs"
                       variant="ghost"
                       w="6"
-                      asChild><Link href={coingeckoUrl}><CoingeckoIcon height={15} width={15} /></Link></IconButton>
+                    >
+                      <Link href={coingeckoUrl}>
+                        <CoingeckoIcon height={15} width={15} />
+                      </Link>
+                    </IconButton>
                   </Tooltip>
                 )}
                 <Tooltip content={`View on ${getBlockExplorerName(chain)}`}>
                   <IconButton
                     aria-label="View on block explorer"
+                    asChild
                     color="grayText"
                     h="6"
                     isExternal
@@ -82,7 +95,11 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
                     size="xs"
                     variant="ghost"
                     w="6"
-                    asChild><Link href={getBlockExplorerTokenUrl(tokenAddress, chain)}><ExternalLink size={12} /></Link></IconButton>
+                  >
+                    <Link href={getBlockExplorerTokenUrl(tokenAddress, chain)}>
+                      <ExternalLink size={12} />
+                    </Link>
+                  </IconButton>
                 </Tooltip>
               </HStack>
             </HStack>
@@ -90,5 +107,5 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
         </Popover.Content>
       </Popover.Positioner>
     </Popover.Root>
-  );
+  )
 }

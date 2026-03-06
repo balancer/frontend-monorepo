@@ -1,4 +1,4 @@
-import { Button, Popover, VStack, HStack, Text, useDisclosure, Separator } from '@chakra-ui/react';
+import { Button, Popover, VStack, HStack, Text, useDisclosure, Separator } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode } from 'react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -9,14 +9,16 @@ import {
   calcGaugeStakedBalance,
   calcAuraStakedBalance,
   calcAuraStakedBalanceUsd,
-  calcGaugeStakedBalanceUsd } from '../user-balance.helpers'
+  calcGaugeStakedBalanceUsd,
+} from '../user-balance.helpers'
 import { Pool } from '../pool.types'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
 import { getTotalApr } from '../pool.utils'
 import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import {
   PartnerRedirectModal,
-  RedirectPartner } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+  RedirectPartner,
+} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { BalancerIconCircular } from '@repo/lib/shared/components/icons/logos/BalancerIconCircular'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
@@ -46,7 +48,7 @@ function Option({ icon, title, apr, disabled, onClick, action, usdValue }: Optio
       disabled={disabled}
       onClick={onClick}
       px="xs"
-      variant='plain'
+      variant="plain"
       width="40"
     >
       <HStack alignContent="start" w="full">
@@ -73,7 +75,7 @@ function Option({ icon, title, apr, disabled, onClick, action, usdValue }: Optio
         </VStack>
       </HStack>
     </Button>
-  );
+  )
 }
 
 export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
@@ -104,13 +106,7 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
   const hasBalanceForAction = isStakeAction ? hasUnstakedBalance : hasAnyStakedBalance
   const isDisabled = isStakeAction ? !(canStake && hasUnstakedBalance) : !hasAnyStakedBalance
 
-  const buttonVariant = isStakeAction
-    ? canStake && hasUnstakedBalance
-      ? 'secondary'
-      : 'disabled'
-    : hasAnyStakedBalance
-      ? 'tertiary'
-      : 'disabled'
+  const buttonVariant = isStakeAction ? 'secondary' : 'tertiary'
 
   if (
     hidePopover ||
@@ -118,44 +114,51 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
   ) {
     return (
       <Button
-        flex="1"
         disabled={isDisabled}
+        flex="1"
         maxW="120px"
         onClick={isStakeAction ? stakeOnProtocol : unstakeFromProtocol}
         variant={buttonVariant}
       >
         {isStakeAction ? 'Stake' : 'Unstake'}
       </Button>
-    );
+    )
   }
 
   return (
     <>
       <Popover.Root
         positioning={{
-          placement: 'top-start'
-        }}>
-        <Popover.Context>{({ open: isOpen }: { open: boolean }) => (
+          placement: 'top-start',
+        }}
+      >
+        <Popover.Context>
+          {({ open: isOpen }: { open: boolean }) => (
             <>
               <Popover.Trigger asChild>
                 <Button
-                  flex="1"
-                  disabled={isDisabled}
-                  maxW="120px"
-                  position="relative"
-                  px="md"
                   css={{
                     '& & .chakra-button__icon': {
                       position: 'absolute',
                       right: '8px',
                       marginInlineStart: '0',
                       transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.2s var(--ease-out-cubic)' }
+                      transition: 'transform 0.2s var(--ease-out-cubic)',
+                    },
                   }}
+                  disabled={isDisabled}
+                  flex="1"
+                  maxW="120px"
+                  position="relative"
+                  px="md"
                   variant={buttonVariant}
-                  w="full"><span style={{ marginLeft: hasBalanceForAction ? '-12px' : '0' }}>
+                  w="full"
+                >
+                  <span style={{ marginLeft: hasBalanceForAction ? '-12px' : '0' }}>
                     {isStakeAction ? 'Stake' : 'Unstake'}
-                  </span>{hasBalanceForAction ? <ChevronUp size="16" /> : undefined}</Button>
+                  </span>
+                  {hasBalanceForAction ? <ChevronUp size="16" /> : undefined}
+                </Button>
               </Popover.Trigger>
               <Popover.Positioner>
                 <Popover.Content boxSize="44" height="max-content">
@@ -194,7 +197,8 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
                 </Popover.Content>
               </Popover.Positioner>
             </>
-          )}</Popover.Context>
+          )}
+        </Popover.Context>
       </Popover.Root>
       <PartnerRedirectModal
         isOpen={auraDisclosure.open}
@@ -203,5 +207,5 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
         redirectUrl={getAuraPoolLink(getChainId(pool.chain), pool.staking?.aura?.auraPoolId || '')}
       />
     </>
-  );
+  )
 }

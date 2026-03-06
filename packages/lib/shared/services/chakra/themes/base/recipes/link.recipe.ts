@@ -12,6 +12,8 @@ export const linkRecipe = defineRecipe({
   },
   variants: {
     variant: {
+      // link: alias for base style (v2 compat)
+      link: {},
       nav: {
         color: 'font.primary',
         fontSize: ['sm', 'md'],
