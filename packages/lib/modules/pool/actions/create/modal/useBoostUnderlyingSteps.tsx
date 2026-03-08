@@ -1,5 +1,5 @@
 import { PoolCreationToken } from '../types'
-import { useReadContracts } from 'wagmi'
+import { usePublicClient, useReadContracts } from 'wagmi'
 import { erc4626Abi, parseUnits, Address } from 'viem'
 import { isApiToken } from '../helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -12,7 +12,9 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { encodeFunctionData } from 'viem'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
-import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { parseDepositUnderlyingReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt-parsers'
+import { usePoolCreationForm } from '../PoolCreationFormProvider'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type Params = {
   poolTokens: PoolCreationToken[]
@@ -36,31 +38,34 @@ export function useBoostUnderlyingSteps({ poolTokens, network, isPoolInitialized
       }
 
       return {
-        wrappedAddress: token.address,
-        wrappedAmountRaw: parseUnits(token.amount, token.data.decimals),
-        underlyingAddress: token.data.underlyingTokenAddress as Address,
+        wrapped: {
+          address: token.address,
+          amountRaw: parseUnits(token.amount, token.data.decimals),
+          symbol: token.data.symbol,
+        },
+        underlying: { address: token.data.underlyingTokenAddress as Address },
       }
     })
 
   const { data: underlyingAmounts, isLoading: isLoadingUnderlyingAmounts } = useReadContracts({
-    contracts: poolTokensToBoost.map(({ wrappedAddress, wrappedAmountRaw }) => ({
-      address: wrappedAddress,
+    contracts: poolTokensToBoost.map(({ wrapped }) => ({
+      address: wrapped.address,
       abi: erc4626Abi,
       functionName: 'previewMint' as const,
-      args: [wrappedAmountRaw],
+      args: [wrapped.amountRaw],
     })),
     query: { enabled: poolTokensToBoost.length > 0 },
   })
 
   const tokenToSpender = Object.fromEntries(
-    poolTokensToBoost.map(t => [t.underlyingAddress, t.wrappedAddress])
+    poolTokensToBoost.map(t => [t.underlying.address, t.wrapped.address])
   ) as Record<Address, Address>
 
   const amounts = poolTokensToBoost.map((t, index) => {
-    const symbol = getToken(t.underlyingAddress, network)?.symbol
-    const underlyingAmountRaw = underlyingAmounts?.[index]?.result ?? 0n
+    const symbol = getToken(t.underlying.address, network)?.symbol
+    const amountRaw = underlyingAmounts?.[index]?.result ?? 0n
 
-    return { ...t, underlyingAmountRaw, symbol }
+    return { ...t, underlying: { ...t.underlying, amountRaw, symbol } }
   })
 
   const { steps: approvalSteps, isLoading: isLoadingApprovalSteps } = useTokenApprovalSteps({
@@ -68,18 +73,15 @@ export function useBoostUnderlyingSteps({ poolTokens, network, isPoolInitialized
     chain: network,
     approvalAmounts: amounts.map(a => ({
       ...a,
-      address: a.underlyingAddress,
-      rawAmount: a.underlyingAmountRaw,
+      address: a.underlying.address,
+      rawAmount: a.underlying.amountRaw,
     })),
     actionType: 'Wrapping',
     enabled: poolTokensToBoost.length > 0 && !isLoadingUnderlyingAmounts,
   })
 
-  const { depositSteps, isLoadingDepositSteps } = useDepositSteps(
-    amounts,
-    network,
-    isPoolInitialized
-  )
+  const depositStepsParams = { poolTokens, amounts, network, isPoolInitialized }
+  const { depositSteps, isLoadingDepositSteps } = useDepositSteps(depositStepsParams)
   const isLoading = isLoadingUnderlyingAmounts || isLoadingApprovalSteps || isLoadingDepositSteps
   const steps = [...approvalSteps, ...depositSteps]
 
@@ -87,16 +89,31 @@ export function useBoostUnderlyingSteps({ poolTokens, network, isPoolInitialized
 }
 
 type BoostAmounts = {
-  underlyingAmountRaw: bigint
-  symbol: string | undefined
-  wrappedAddress: `0x${string}`
-  wrappedAmountRaw: bigint
-  underlyingAddress: `0x${string}`
+  underlying: {
+    amountRaw: bigint
+    symbol: string | undefined
+    address: `0x${string}`
+  }
+  wrapped: {
+    address: `0x${string}`
+    amountRaw: bigint
+    symbol: string | undefined
+  }
 }[]
 
-function useDepositSteps(amounts: BoostAmounts, network: GqlChain, isPoolInitialized: boolean) {
+type DepositStepsParams = {
+  poolTokens: PoolCreationToken[]
+  amounts: BoostAmounts
+  network: GqlChain
+  isPoolInitialized: boolean
+}
+
+function useDepositSteps({ poolTokens, amounts, network, isPoolInitialized }: DepositStepsParams) {
+  const { getToken } = useTokens()
   const { userAddress } = useUserAccount()
   const chainId = getChainId(network)
+  const { updatePoolToken } = usePoolCreationForm()
+  const publicClient = usePublicClient({ chainId })
 
   const { getTransaction, setTransactionFn } = useStepsTransactionState()
   const { buildTenderlyUrl } = useTenderly({ chainId })
@@ -108,74 +125,92 @@ function useDepositSteps(amounts: BoostAmounts, network: GqlChain, isPoolInitial
   } = useReadContracts({
     contracts: amounts.map(a => ({
       chainId,
-      address: a.wrappedAddress,
+      address: a.wrapped.address,
       abi: erc4626Abi,
       functionName: 'balanceOf' as const,
       args: [userAddress],
     })),
   })
 
-  const depositSteps = amounts.map(
-    ({ wrappedAddress, underlyingAmountRaw, symbol, wrappedAmountRaw }, idx) => {
-      const id = `deposit-${wrappedAddress}`
+  const depositSteps = amounts.map(({ underlying, wrapped }, idx) => {
+    const id = `deposit-${wrapped.address}`
 
-      const labels = {
-        init: `Deposit ${symbol}`,
-        title: `Deposit ${symbol}`,
-        tooltip: `Deposit ${symbol}`,
-        confirming: `Confirming deposit ${symbol}`,
-        confirmed: `Deposit ${symbol} confirmed`,
-      }
-
-      const txConfig = {
-        account: userAddress,
-        chainId,
-        to: wrappedAddress,
-        data: encodeFunctionData({
-          abi: erc4626Abi,
-          functionName: 'deposit',
-          args: [underlyingAmountRaw, userAddress],
-        }),
-      }
-
-      const gasEstimationMeta = sentryMetaForWagmiSimulation(
-        'Error in finalize pool gas estimation',
-        {
-          buildCallQueryData: txConfig,
-          tenderlyUrl: buildTenderlyUrl(txConfig),
-        }
-      )
-
-      // TODO: parse receipt logs for amount minted to replace init amount?
-      const transaction = getTransaction(id)
-
-      // get user balance for wrapped token
-      const wrappedBalance = userWrappedBalances?.[idx]?.result ?? 0n
-      const hasSufficientWrappedBalance = wrappedBalance >= wrappedAmountRaw
-      const isComplete = () =>
-        isTransactionSuccess(transaction) || hasSufficientWrappedBalance || isPoolInitialized
-
-      return {
-        id,
-        stepType: 'depositUnderlying' as const,
-        labels,
-        transaction,
-        renderAction: () => (
-          <ManagedSendTransactionButton
-            gasEstimationMeta={gasEstimationMeta}
-            id={id}
-            key={id}
-            labels={labels}
-            onTransactionChange={setTransactionFn(id)}
-            txConfig={txConfig}
-          />
-        ),
-        onTransactionChange: setTransactionFn(id),
-        isComplete,
-        onSuccess: () => refetchWrappedUserBalances(),
-      }
+    const labels = {
+      init: `Deposit ${underlying.symbol} to ${wrapped.symbol}`,
+      title: `Deposit ${underlying.symbol} to ${wrapped.symbol}`,
+      tooltip: `Deposit ${underlying.symbol} into ${wrapped.symbol} vault`,
+      confirming: `Confirming deposit ${underlying.symbol}`,
+      confirmed: `Deposit ${underlying.symbol} confirmed`,
     }
-  )
+
+    const txConfig = {
+      account: userAddress,
+      chainId,
+      to: wrapped.address,
+      data: encodeFunctionData({
+        abi: erc4626Abi,
+        functionName: 'deposit',
+        args: [underlying.amountRaw, userAddress],
+      }),
+    }
+
+    const gasEstimationMeta = sentryMetaForWagmiSimulation(
+      'Error in finalize pool gas estimation',
+      {
+        buildCallQueryData: txConfig,
+        tenderlyUrl: buildTenderlyUrl(txConfig),
+      }
+    )
+
+    const transaction = getTransaction(id)
+
+    const wrappedBalanceRaw = userWrappedBalances?.[idx]?.result ?? 0n
+    const hasSufficientWrappedBalance = wrappedBalanceRaw >= wrapped.amountRaw
+    const isComplete = () => hasSufficientWrappedBalance || isPoolInitialized
+
+    return {
+      id,
+      stepType: 'depositUnderlying' as const,
+      labels,
+      transaction,
+      renderAction: () => (
+        <ManagedSendTransactionButton
+          gasEstimationMeta={gasEstimationMeta}
+          id={id}
+          key={id}
+          labels={labels}
+          onTransactionChange={setTransactionFn(id)}
+          txConfig={txConfig}
+        />
+      ),
+      onTransactionChange: setTransactionFn(id),
+      isComplete,
+      onSuccess: async () => {
+        if (!transaction?.execution?.data) return
+        if (!publicClient) throw new Error('missing public client')
+
+        const receipt = await publicClient.getTransactionReceipt({
+          hash: transaction?.execution?.data,
+        })
+
+        const { mintedShares } = parseDepositUnderlyingReceipt({
+          receiptLogs: receipt.logs,
+          chain: network,
+          getToken,
+          userAddress,
+          txValue: 0n,
+          protocolVersion: 3,
+        })
+
+        if (mintedShares) {
+          const idx = poolTokens.findIndex(t => isSameAddress(t.address, wrapped.address))
+          updatePoolToken(idx, { amount: mintedShares.humanAmount })
+        }
+
+        refetchWrappedUserBalances()
+      },
+    }
+  })
 
   return { depositSteps, isLoadingDepositSteps: isLoadingWrappedBalances }
 }
