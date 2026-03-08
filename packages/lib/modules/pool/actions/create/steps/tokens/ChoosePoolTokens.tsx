@@ -239,7 +239,6 @@ function ConfigureToken({
     ? ((token.data as ApiToken | undefined)?.underlyingTokenAddress ?? undefined)
     : token.address
   const boostedTokenOptions = useBoostedTokenOptions(underlyingToken)
-  console.log('boostedTokenOptions', boostedTokenOptions)
   const { poolCreationForm, removePoolToken, updatePoolToken } = usePoolCreationForm()
   const formState = useFormState({ control: poolCreationForm.control })
 

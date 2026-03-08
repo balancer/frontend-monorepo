@@ -3,7 +3,16 @@ import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
-import { Address, Log, erc20Abi, formatUnits, parseAbiItem, parseAbi, parseEventLogs } from 'viem'
+import {
+  Address,
+  Log,
+  erc20Abi,
+  erc4626Abi,
+  formatUnits,
+  parseAbiItem,
+  parseAbi,
+  parseEventLogs,
+} from 'viem'
 import { HumanTokenAmount } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
@@ -27,6 +36,7 @@ export type ParseReceipt =
   | typeof parseLstWithdrawReceipt
   | typeof parsePoolCreationReceipt
   | typeof parseRecoveryModeChangedReceipt
+  | typeof parseDepositUnderlyingReceipt
 
 export function parseAddLiquidityReceipt({
   chain,
@@ -165,6 +175,20 @@ export function parsePoolCreationReceipt({ receiptLogs }: ParseProps) {
   if (!log) return { poolAddress: undefined }
 
   return { poolAddress: log.eventName === 'PoolCreated' ? log.args.pool : log.args.bPool }
+}
+
+export function parseDepositUnderlyingReceipt({ receiptLogs, chain, getToken }: ParseProps) {
+  const logs = parseEventLogs({ abi: erc4626Abi, logs: receiptLogs, eventName: ['Deposit'] })
+
+  const log = logs[0]
+  if (!log) return { mintedShares: undefined }
+
+  const wrappedTokenAddress = log.address
+  const tokenDecimals = getToken(wrappedTokenAddress, chain)?.decimals
+
+  return {
+    mintedShares: _toHumanAmount(wrappedTokenAddress, log.args.shares, tokenDecimals),
+  }
 }
 
 export function parseRecoveryModeChangedReceipt({ receiptLogs }: ParseProps) {
