@@ -118,7 +118,7 @@ export function RelicCarousel({ focusRelicId }: Props = {}) {
     return (
       <Box py="16" textAlign="center">
         <Text color="gray.400" fontSize="lg">
-          No maBEETS positions yet — your first maBEETS positionwill appear here.
+          No maBEETS positions yet — your first maBEETS position will appear here.
         </Text>
       </Box>
     )
