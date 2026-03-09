@@ -88,4 +88,7 @@ export const cardSlotRecipe = defineSlotRecipe({
       },
     },
   },
+  defaultVariants: {
+    variant: 'level2',
+  },
 })
