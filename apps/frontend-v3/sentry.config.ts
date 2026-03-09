@@ -30,13 +30,9 @@ export const sentryOptions: SentryBuildOptions = {
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
 
-  sourcemaps: {
-    disable: !shouldEnableSourceMaps,
-  },
+  sourcemaps: { disable: !shouldEnableSourceMaps },
   telemetry: shouldEnableSourceMaps,
-  reactComponentAnnotation: {
-    enabled: true,
-  },
+  reactComponentAnnotation: { enabled: shouldEnableSourceMaps },
 }
 
 const productionSentryDSN =

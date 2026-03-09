@@ -1,19 +1,12 @@
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
+import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { usePoolListQueryState } from './usePoolListQueryState'
 
-function updateUrlQueryString(queryString: `?${string}`) {
-  window.location.href = 'http://app.balancer.fi/' + queryString
-}
-
-// TODO: For some reason the test no longer respects the update of the window.location.href
-// This is why we have .skip. It happend in the transition to monorepo.
-describe.skip('Pool list state query', () => {
-  // Setting window.location.href no longer works in unit tests. Looks like the
-  // nuqs package is being actively worked on for the nextjs app router. So may
-  // be possible again in the future. https://nuqs.47ng.com/docs/testing
-  it.skip('calculates pagination based on first and ', () => {
-    updateUrlQueryString('?first=50&skip=150')
-    const { result } = testHook(() => usePoolListQueryState())
+describe('Pool list state query', () => {
+  it('calculates pagination based on first and skip', () => {
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: withNuqsTestingAdapter({ searchParams: '?first=50&skip=150' }),
+    })
 
     expect(result.current.pagination).toMatchInlineSnapshot(`
       {
@@ -23,8 +16,10 @@ describe.skip('Pool list state query', () => {
     `)
   })
 
-  it('calculates pagination based on first and ', () => {
-    const { result } = testHook(() => usePoolListQueryState())
+  it('returns zero totalFilterCount with no filters', () => {
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: withNuqsTestingAdapter(),
+    })
 
     expect(result.current.totalFilterCount).toBe(0)
   })

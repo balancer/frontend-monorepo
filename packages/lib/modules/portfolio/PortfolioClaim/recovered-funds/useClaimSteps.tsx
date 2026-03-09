@@ -7,7 +7,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { Address, zeroAddress } from 'viem'
+import { Address } from 'viem'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
@@ -38,7 +38,7 @@ export function useClaimSteps(claims: RecoveredTokenClaim[]) {
       labels,
       chainId,
       contractId: 'merkl.claims',
-      contractAddress: getNetworkConfig(chainId).contracts.merkl?.claims || zeroAddress,
+      contractAddress: getNetworkConfig(chainId).contracts.merkl?.claims as Address,
       functionName: 'claim',
       args: [claimData.users, claimData.tokens, claimData.amounts, claimData.proofs],
       enabled: !!userAddress,

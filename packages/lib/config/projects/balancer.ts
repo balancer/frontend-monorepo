@@ -10,20 +10,21 @@ export const ProjectConfigBalancer: ProjectConfig = {
   projectLogo: 'https://balancer.fi/images/icons/balancer.svg',
   supportedNetworks: [
     GqlChain.Mainnet,
-    GqlChain.Plasma,
+    GqlChain.Monad,
     GqlChain.Arbitrum,
-    GqlChain.Avalanche,
     GqlChain.Base,
     GqlChain.Gnosis,
     GqlChain.Hyperevm,
+    GqlChain.Avalanche,
     GqlChain.Optimism,
+    GqlChain.Plasma,
     GqlChain.Polygon,
     GqlChain.Zkevm,
     GqlChain.Fraxtal,
     GqlChain.Mode,
 
     // testnets only in dev mode
-    ...(isProd ? [] : [GqlChain.Monad, GqlChain.Xlayer, GqlChain.Sepolia]),
+    ...(isProd ? [] : [GqlChain.Xlayer, GqlChain.Sepolia]),
   ],
   variantConfig: {
     [PartnerVariant.cow]: {
@@ -178,16 +179,15 @@ export const ProjectConfigBalancer: ProjectConfig = {
   promoItems: [
     {
       id: 0,
-      icon: 'plasma',
-      label: 'Plasma Chain',
-      title: 'Balancer is live on Plasma Chain',
+      icon: 'monad',
+      label: 'Monad',
+      title: 'Balancer is live on Monad',
       description:
-        'Global Reach. Real Impact. Balancer brings stable-optimized pools to the stablecoins-focused blockchain.',
+        'The High-Performance EVM Blockchain Built for Scale. 10,000 TPS, sub-second finality, low fees, and scalable decentralization.',
       buttonText: 'View pools',
-      buttonLink: '/pools?networks=PLASMA',
+      buttonLink: '/pools?networks=MONAD',
       linkText: 'Learn more',
-      linkURL:
-        'https://vote.balancer.fi/#/proposal/0x382b5f20c7e03f643df9fbf7c5981f1f9aa80ae12ba60fb1b3bf87affe42cf7c',
+      linkURL: 'https://www.monad.xyz/',
       linkExternal: true,
       bgImageActive: {
         directory: '/images/promos/promo-banner/',
@@ -263,6 +263,28 @@ export const ProjectConfigBalancer: ProjectConfig = {
         imgName: 'bg-inactive3',
       },
     },
+    // {
+    //   id: 0,
+    //   icon: 'plasma',
+    //   label: 'Plasma Chain',
+    //   title: 'Balancer is live on Plasma Chain',
+    //   description:
+    //     'Global Reach. Real Impact. Balancer brings stable-optimized pools to the stablecoins-focused blockchain.',
+    //   buttonText: 'View pools',
+    //   buttonLink: '/pools?networks=PLASMA',
+    //   linkText: 'Learn more',
+    //   linkURL:
+    //     'https://vote.balancer.fi/#/proposal/0x382b5f20c7e03f643df9fbf7c5981f1f9aa80ae12ba60fb1b3bf87affe42cf7c',
+    //   linkExternal: true,
+    //   bgImageActive: {
+    //     directory: '/images/promos/promo-banner/',
+    //     imgName: 'bg-active2',
+    //   },
+    //   bgImageInactive: {
+    //     directory: '/images/promos/promo-banner/',
+    //     imgName: 'bg-inactive2',
+    //   },
+    // },
     // {
     //   id: 2,
     //   icon: 'gyro',

@@ -14,16 +14,14 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useQuery } from '@tanstack/react-query'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { ensureLastQueryResponse } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
-import { ReliquaryProportionalRemoveLiquidityHandler } from '../handlers/ReliquaryProportionalRemoveLiquidity.handler'
-import { ReliquarySingleTokenRemoveLiquidityHandler } from '../handlers/ReliquarySingleTokenRemoveLiquidity.handler'
 import { RemoveLiquidityHandler } from '@repo/lib/modules/pool/actions/remove-liquidity/handlers/RemoveLiquidity.handler'
 import { useReliquary } from '../ReliquaryProvider'
-import { Address, zeroAddress } from 'viem'
+import { Address } from 'viem'
 
 const reliquaryMulticallStepId = 'reliquary-multicall-remove-liquidity'
 
 export type ReliquaryRemoveLiquidityStepParams = {
-  handler: RemoveLiquidityHandler // Accept base type but check for reliquary handlers in runtime
+  handler: RemoveLiquidityHandler
   simulationQuery: any
   slippage: string
   relicId: number
@@ -51,44 +49,20 @@ function useReliquaryBuildCallDataQuery({
   const { userAddress, isConnected } = useUserAccount()
 
   const queryFn = async () => {
-    if (handler instanceof ReliquarySingleTokenRemoveLiquidityHandler) {
-      const queryOutput = ensureLastQueryResponse(
-        'Reliquary remove liquidity query',
-        simulationQuery.data
-      )
+    const queryOutput = ensureLastQueryResponse(
+      'Reliquary remove liquidity query',
+      simulationQuery.data
+    )
 
-      const response = await handler.buildCallData({
-        account: userAddress,
-        slippagePercent: slippage,
-        queryOutput,
-        tokenOut: singleTokenOutAddress || zeroAddress,
-      })
+    const response = await handler.buildCallData({
+      account: userAddress,
+      slippagePercent: slippage,
+      queryOutput,
+      tokenOut: singleTokenOutAddress,
+    })
 
-      console.log('Reliquary remove liquidity call data built:', response)
-      return response
-    }
-
-    if (handler instanceof ReliquaryProportionalRemoveLiquidityHandler) {
-      const queryOutput = ensureLastQueryResponse(
-        'Reliquary remove liquidity query',
-        simulationQuery.data
-      )
-
-      const response = await handler.buildCallData({
-        account: userAddress,
-        slippagePercent: slippage,
-        queryOutput,
-      })
-
-      console.log('Reliquary remove liquidity call data built:', response)
-      return response
-    }
-
-    {
-      throw new Error(
-        'Handler must be a ReliquaryProportionalRemoveLiquidityHandler or ReliquarySingleTokenRemoveLiquidityHandler'
-      )
-    }
+    console.log('Reliquary remove liquidity call data built:', response)
+    return response
   }
 
   return useQuery({

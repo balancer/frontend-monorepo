@@ -26,7 +26,7 @@ import {
   SortingState,
 } from '../pool.types'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
@@ -108,8 +108,13 @@ export function usePoolListQueryState() {
     poolListQueryStateParsers.userAddress
   )
 
+  const isFirstRender = useRef(true)
   // on toggle always start at the beginning of the list
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
     if (skip) setSkip(0)
   }, [poolTypes, networks, minTvl, poolTags])
 

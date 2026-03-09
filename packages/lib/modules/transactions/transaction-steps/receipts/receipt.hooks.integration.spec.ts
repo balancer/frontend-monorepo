@@ -124,8 +124,7 @@ test('queries add liquidity transaction', async () => {
   expect(result.current.receivedBptUnits).toBe('7.669852124112308228')
 })
 
-// unskip when anvil + polygon is stable again
-test.skip('queries add liquidity with native token', async () => {
+test('queries add liquidity with native token', async () => {
   // https://polygonscan.com/tx/0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8
   const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
   const txHash = '0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8'
@@ -145,8 +144,7 @@ test.skip('queries add liquidity with native token', async () => {
   expect(result.current.receivedBptUnits).toBe('0.984524168989962117')
 })
 
-// FIXME: [JUANJO] check why is returning an error for the tx hash
-test.skip('queries add liquidity in V3 GNOSIS pool', async () => {
+test('queries add liquidity in V3 GNOSIS pool', async () => {
   const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
 
   // const poolId = '0xecc5aebd9569c82a0944007b22d03801a8fdfe99' // 59EURe 1sDAI 40USDC.e
@@ -158,11 +156,9 @@ test.skip('queries add liquidity in V3 GNOSIS pool', async () => {
   await waitFor(() => expect(result.current.isLoading).toBeFalsy(), { timeout: 120000 })
   await waitFor(() => expect(result.current.sentTokens).toBeDefined())
 
-  console.log(result.current)
-
   expect(result.current.sentTokens).toEqual([
     {
-      humanAmount: '0.00000000000001',
+      humanAmount: '0.01',
       tokenAddress: '0x2a22f9c3b484c3629090feed35f17ff8f88f76f0',
     },
     {
@@ -208,8 +204,7 @@ test('queries remove liquidity transaction', async () => {
   expect(result.current.sentBptUnits).toBe('6439.400687368663510166')
 })
 
-// unskip when anvil is stable in polygon again
-describe.skip('queries swap transaction in polygon', () => {
+describe('queries swap transaction in polygon', () => {
   const maticAddress = '0x0000000000000000000000000000000000001010'
   const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
@@ -275,11 +270,10 @@ describe.skip('queries swap transaction in polygon', () => {
   })
 })
 describe('queries swap transaction in non polygon networks', () => {
-  //TODO: adapt to a sepolia swap in v12
-  test.skip('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
-    const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
-    // https://sepolia.etherscan.io/tx/0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04
-    const txHash = '0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04'
+  test('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
+    const userAddress = '0x5036388C540994Ed7b74b82F71175a441F85BdA1'
+    // https://sepolia.etherscan.io/tx/0x2ecd5a98edb0fb58160a85d913ab1623d7f48cc72b14567059f831bf3d1686d5
+    const txHash = '0x2ecd5a98edb0fb58160a85d913ab1623d7f48cc72b14567059f831bf3d1686d5'
 
     const protocolVersion = 3
     const result = await testSwapReceipt(userAddress, txHash, GqlChain.Sepolia, protocolVersion)
@@ -289,12 +283,12 @@ describe('queries swap transaction in non polygon networks', () => {
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
     expect(result.current.sentToken).toEqual({
-      humanAmount: '25',
+      humanAmount: '0.033',
       tokenAddress: stataEthDai.toLowerCase(),
     })
 
     expect(result.current.receivedToken).toEqual({
-      humanAmount: '0.136746996966924842',
+      humanAmount: '0.002482954579272987',
       tokenAddress: ethAddress,
     })
   })

@@ -16,6 +16,10 @@ export function useCheckForSimilarPools() {
     name: ['network', 'poolType', 'poolTokens'],
   })
 
+  const selectedTokenAddresses = poolTokens
+    .map(({ address }) => address?.toLowerCase())
+    .filter(address => address !== undefined)
+
   const { data, loading, error } = useQuery(GetPoolsDocument, {
     variables: {
       orderBy: GqlPoolOrderBy.TotalLiquidity,
@@ -23,24 +27,32 @@ export function useCheckForSimilarPools() {
       where: {
         chainIn: [network],
         poolTypeIn: [getGqlPoolType(poolType)],
-        tokensIn: poolTokens.map(({ address }) => address!),
+        tokensIn: selectedTokenAddresses,
         protocolVersionIn: [isCowPool(poolType) ? 1 : 3],
       },
     },
     skip: !network || !poolType || !poolTokens?.every(token => token.address),
   })
 
-  const similarPools = data?.pools.filter(pool => {
-    const sameNumberOfTokens = pool.poolTokens.length === poolTokens.length
-    const sameWeights =
-      !isWeightedPool(poolType) ||
-      pool.poolTokens.every(
-        token =>
-          poolTokens.find(poolToken => poolToken.address === token.address)?.weight ===
-          (Number(token.weight) * 100).toString()
-      )
+  const selectedTokensSet = new Set(selectedTokenAddresses)
 
-    return sameNumberOfTokens && sameWeights
+  const similarPools = data?.pools.filter(similarPool => {
+    const sameNumberOfTokens = similarPool.poolTokens.length === poolTokens.length
+    if (!sameNumberOfTokens) return false
+
+    const sameTokens = similarPool.poolTokens.every(({ address }) =>
+      selectedTokensSet.has(address.toLowerCase())
+    )
+    if (!sameTokens) return false
+
+    const sameWeights = similarPool.poolTokens.every(
+      token =>
+        poolTokens.find(poolToken => poolToken.address === token.address)?.weight ===
+        (Number(token.weight) * 100).toString()
+    )
+    if (isWeightedPool(poolType) && !sameWeights) return false
+
+    return true
   })
 
   return {
