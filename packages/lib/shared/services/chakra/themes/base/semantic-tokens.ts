@@ -403,7 +403,7 @@ export function getSemanticTokens(tokens: any, colors: any) {
         },
       },
     },
-    space: {
+    spacing: {
       none: '0',
       xxs: '0.125rem',
       xs: '0.25rem',
