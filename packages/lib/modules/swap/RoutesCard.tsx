@@ -25,6 +25,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getCompositionTokens } from '../pool/pool-tokens.utils'
 import { PoolToken } from '../pool/pool.types'
 import React from 'react'
+import pluralize from 'pluralize'
 
 type RoutesPopoverProps = {
   children: React.ReactElement
@@ -74,7 +75,7 @@ export function RoutesPopover({
           <VStack align="start" w="full">
             <Text color="font.primary" fontSize="md" fontWeight="bold" pb="1">
               Proposed: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
-              {maxHops} hops via Balancer v{protocolVersion}
+              {maxHops} {pluralize('hop', maxHops)} via Balancer v{protocolVersion}
             </Text>
           </VStack>
 
@@ -204,7 +205,7 @@ export function RoutesCard({
             transition="color 0.2s"
           >
             Swap route: {paths && paths.length > 1 ? `${paths.length} paths, ` : ''}
-            {maxHops} hops (Bv{protocolVersion})
+            {maxHops} {pluralize('hop', maxHops)} (Bv{protocolVersion})
           </Text>
           <Box as="span" className="arrow-icon" display="flex" transition="transform 0.2s">
             <ArrowRight size="12" />
