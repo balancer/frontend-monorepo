@@ -42,7 +42,7 @@ export function ReliquaryRemoveLiquidityPage({ relicId }: { relicId: string }) {
 
   return (
     <PriceImpactProvider>
-      <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusRelic=${relicId}` : ''}`}>
+      <PoolActionsLayout redirectPath={`/mabeets${relicId ? `?focusPosition=${relicId}` : ''}`}>
         <TokenBalancesProvider extTokens={validTokens}>
           <ReliquaryRemoveLiquidityForm relicId={relicId} />
         </TokenBalancesProvider>

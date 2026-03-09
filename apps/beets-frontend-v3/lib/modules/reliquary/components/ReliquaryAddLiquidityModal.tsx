@@ -110,7 +110,7 @@ export function ReliquaryAddLiquidityModal({
 
   function handleReturnAction() {
     const focusRelic = latestRelicId ?? relicId
-    router.push(`/mabeets${focusRelic ? `?focusRelic=${focusRelic}` : ''}`)
+    router.push(`/mabeets${focusRelic ? `?focusPosition=${focusRelic}` : ''}`)
     baseOnClose()
   }
 

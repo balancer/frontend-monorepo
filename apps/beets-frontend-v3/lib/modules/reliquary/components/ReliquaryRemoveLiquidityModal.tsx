@@ -92,7 +92,7 @@ export function ReliquaryRemoveLiquidityModal({
   }
 
   function handleReturnAction() {
-    router.push(`/mabeets?focusRelic=${relicId}`)
+    router.push(`/mabeets?focusPosition=${relicId}`)
     baseOnClose()
   }
 
