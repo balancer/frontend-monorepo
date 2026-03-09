@@ -29,7 +29,7 @@ test.describe('Weighted pool v2', () => {
       await clickButton(page, 'Add liquidity')
       await expect(button(page, 'Next')).toBeVisible()
 
-      await page.locator('#button-group-1').click() // proportional tab
+      await page.locator('[data-id="add-liquidity-tab-proportional"]').click()
       await page.getByPlaceholder('0.00').nth(0).fill('1')
       await page.getByText('I accept the risks of').click()
       await clickButton(page, 'Next')
@@ -88,7 +88,7 @@ test.describe('Boosted stable pool v3', () => {
     test('proportional', async ({ page }) => {
       await page.getByRole('button', { name: 'Add liquidity' }).click()
 
-      await page.locator('#button-group-1').click() // proportional tab
+      await page.locator('[data-id="add-liquidity-tab-proportional"]').click()
       await page.getByPlaceholder('0.00').nth(1).fill('100')
       await agreeToBoostedPoolRisks(page)
       await clickButton(page, 'Next')

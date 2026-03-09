@@ -26,16 +26,19 @@ const TABS: ButtonGroupOption[] = [
   {
     value: '0',
     label: 'Stake',
+    dataId: 'lst-tab-stake',
     disabled: false,
   },
   {
     value: '1',
     label: 'Unstake',
+    dataId: 'lst-tab-unstake',
     disabled: false,
   },
   {
     value: '2',
     label: 'Withdraw',
+    dataId: 'lst-tab-withdraw',
     disabled: false,
   },
 ]
