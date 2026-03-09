@@ -176,7 +176,12 @@ export function Footer({ logoType, title, subTitle }: FooterProps) {
             title={title}
           />
           <Separator />
-          <motion.div animate="show" initial="hidden" variants={staggeredFadeIn}>
+          <motion.div
+            animate="show"
+            initial="hidden"
+            style={{ width: '100%' }}
+            variants={staggeredFadeIn}
+          >
             <Stack
               align="start"
               alignItems={{ base: 'none', lg: 'center' }}
