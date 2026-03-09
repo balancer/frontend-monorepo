@@ -55,6 +55,16 @@ export function ms(_ms: number) {
   }
 }
 
+export function dateTimeToUnixTimestampBigInt(value?: string): bigint {
+  if (!value) return 0n
+
+  const milliseconds = new Date(value).getTime()
+
+  if (!Number.isFinite(milliseconds)) return 0n
+
+  return BigInt(millisecondsToSeconds(milliseconds))
+}
+
 export function dateTimeLabelFor(date: Date): string {
   return date.toLocaleString(undefined, {
     weekday: 'short',

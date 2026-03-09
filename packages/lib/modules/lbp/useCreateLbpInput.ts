@@ -6,13 +6,13 @@ import { PoolType } from '@balancer/sdk'
 import { parseUnits, zeroAddress } from 'viem'
 import { Address } from 'viem'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { millisecondsToSeconds } from 'date-fns'
 import { DEFAULT_DECIMALS, PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 import { CreatePoolInput } from '@repo/lib/modules/pool/actions/create/types'
+import { dateTimeToUnixTimestampBigInt } from '@repo/lib/shared/utils/time'
 
 export function useCreateLbpInput(): CreatePoolInput {
   const { saleStructureForm, projectInfoForm, isCollateralNativeAsset, isFixedSale } = useLbpForm()
@@ -68,8 +68,8 @@ export function useCreateLbpInput(): CreatePoolInput {
     owner: (owner as Address) || userAddress,
     projectToken: launchTokenAddress as Address,
     reserveToken: reserveTokenAddress as Address,
-    startTimestamp: BigInt(millisecondsToSeconds(new Date(startDateTime || '').getTime())),
-    endTimestamp: BigInt(millisecondsToSeconds(new Date(endDateTime || '').getTime())),
+    startTimestamp: dateTimeToUnixTimestampBigInt(startDateTime),
+    endTimestamp: dateTimeToUnixTimestampBigInt(endDateTime),
   }
 
   const lbpParams = {
