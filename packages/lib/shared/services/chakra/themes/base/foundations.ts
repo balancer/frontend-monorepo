@@ -20,7 +20,7 @@ export const styles = {
     '::-webkit-scrollbar': {
       width: '10px',
     },
-    '.chakra-ui-light ::-webkit-scrollbar, .chakra-ui-dark ::-webkit-scrollbar': {
+    '.light ::-webkit-scrollbar, .dark ::-webkit-scrollbar': {
       width: '6px',
     },
     '::-webkit-scrollbar-track': {
@@ -36,14 +36,12 @@ export const styles = {
       transition: 'all 0.3s ease',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    '.chakra-ui-light ::-webkit-scrollbar-thumb, .chakra-ui-dark ::-webkit-scrollbar-thumb': {},
-    '.chakra-ui-dark::-webkit-scrollbar-thumb, .chakra-ui-dark ::-webkit-scrollbar-thumb': {
+    '.dark::-webkit-scrollbar-thumb, .dark ::-webkit-scrollbar-thumb': {
       backgroundColor: 'rgba(255, 255, 255, 0.4)',
     },
-    '.chakra-ui-dark::-webkit-scrollbar-thumb:hover, .chakra-ui-dark ::-webkit-scrollbar-thumb:hover':
-      {
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
-      },
+    '.dark::-webkit-scrollbar-thumb:hover, .dark ::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    },
     'p + ul': {
       mt: '1',
     },

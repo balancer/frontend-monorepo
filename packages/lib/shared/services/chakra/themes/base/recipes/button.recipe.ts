@@ -67,8 +67,9 @@ export const buttonRecipe = defineRecipe({
         _dark: { color: 'font.dark' },
       },
       goldSecondary: {
+        background: 'background.gold',
         backgroundClip: 'text',
-        border: '1px solid',
+        border: '1px solid transparent',
         borderColor: 'red',
         color: 'font.gold',
         _dark: { color: 'font.gold' },

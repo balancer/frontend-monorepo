@@ -33,6 +33,7 @@ import {
   listSlotRecipe,
   nativeSelectSlotRecipe,
   numberInputSlotRecipe,
+  separatorRecipe,
 } from '@repo/lib/shared/services/chakra/themes/base/recipes'
 
 const tokens = getCowTokens(colors, primaryTextColor)
@@ -63,6 +64,7 @@ export const theme = createSystem(defaultConfig, {
       tooltip: tooltipRecipe,
       iconButton: iconButtonRecipe,
       closeButton: closeButtonRecipe,
+      separator: separatorRecipe,
     },
     slotRecipes: {
       card: cardSlotRecipe,
