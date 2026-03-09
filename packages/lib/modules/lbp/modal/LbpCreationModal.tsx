@@ -25,6 +25,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCreateLbpInput } from '../useCreateLbpInput'
 import { useInitializeLbpInput } from '../useInitializeLbpInput'
 import { usePoolCreationTransactions } from '@repo/lib/modules/pool/actions/create/modal/usePoolCreationTransactions'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   isOpen: boolean
@@ -197,7 +198,7 @@ export function LbpCreationModal({
           {!!saveMetadataError && (
             <VStack marginTop="4" spacing="3" width="full">
               <BalAlert
-                content="The pool has been created and seeded onchain. However, there was an error syncing the metadata to the Balancer API. Your pool will not display on the Balancer UI until the sync is completed."
+                content={`The pool has been created and seeded onchain. However, there was an error syncing the metadata to the ${PROJECT_CONFIG.projectName} API. Your pool will not display on the ${PROJECT_CONFIG.projectName} UI until the sync is completed.`}
                 status="error"
                 title="Error syncing metadata"
               />
