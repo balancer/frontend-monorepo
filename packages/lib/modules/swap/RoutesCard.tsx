@@ -24,11 +24,11 @@ import { ArrowRight } from 'react-feather'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getCompositionTokens } from '../pool/pool-tokens.utils'
 import { PoolToken } from '../pool/pool.types'
-import React from 'react'
+import React, { ReactElement } from 'react'
 import pluralize from 'pluralize'
 
 type RoutesPopoverProps = {
-  children: React.ReactElement
+  children: ReactElement
   paths: Path[]
   chain: GqlChain
   totalInputAmount: number
@@ -66,7 +66,6 @@ export function RoutesPopover({
         bg="background.level4"
         maxW="100vw"
         minW={{ base: '350px', md: '460px' }}
-        overflow="hidden"
         p="0"
         rounded="lg"
         w={{ base: '350px', md: 'max-content' }}
