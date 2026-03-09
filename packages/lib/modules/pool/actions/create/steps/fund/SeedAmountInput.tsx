@@ -10,7 +10,9 @@ import { useWatch } from 'react-hook-form'
 import { VStack, Text } from '@chakra-ui/react'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { validatePoolTokens } from '../../validatePoolCreationForm'
-
+import { usePoolTokenBoostAmounts } from '../../modal/useBoostUnderlyingSteps'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 interface TokenAmountInputProps {
   token: PoolCreationToken
   idx: number
@@ -30,6 +32,11 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
 
   const otherTokenInputIdx = idx === 0 ? 1 : 0
   const otherToken = poolTokens[otherTokenInputIdx]
+
+  const { poolTokenBoostAmounts } = usePoolTokenBoostAmounts({ network, poolTokens })
+  const boostToken = poolTokenBoostAmounts.find(amount =>
+    isSameAddress(amount.wrapped.address, token.address)
+  )
 
   useEffect(() => {
     if (!token.address) return
@@ -89,6 +96,7 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
   return (
     <VStack align="start" key={idx} spacing="sm" w="full">
       <Text fontWeight="bold">Token {idx + 1}</Text>
+
       <TokenInput
         apiToken={token.data}
         aria-label={`Token ${idx + 1}`}
@@ -97,6 +105,13 @@ export function SeedAmountInput({ token, idx, poolType, poolTokens }: TokenAmoun
         onChange={e => handleAmountChange(idx, e.currentTarget.value)}
         value={token.amount}
       />
+
+      {boostToken && (
+        <BalAlert
+          content={`You will be required to deposit ${boostToken?.underlying?.amountHuman} ${boostToken?.underlying?.symbol}`}
+          status="warning"
+        />
+      )}
     </VStack>
   )
 }

@@ -1,6 +1,6 @@
 import { PoolCreationToken } from '../types'
 import { usePublicClient, useReadContracts } from 'wagmi'
-import { erc4626Abi, parseUnits, Address } from 'viem'
+import { erc4626Abi, parseUnits, Address, encodeFunctionData, formatUnits } from 'viem'
 import { isApiToken } from '../helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
@@ -9,7 +9,6 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { getChainId } from '@repo/lib/config/app.config'
-import { encodeFunctionData } from 'viem'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { parseDepositUnderlyingReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt-parsers'
@@ -23,6 +22,45 @@ type Params = {
 }
 
 export function useBoostUnderlyingSteps({ poolTokens, network, isPoolInitialized }: Params) {
+  const { poolTokenBoostAmounts, isLoadingUnderlyingAmounts } = usePoolTokenBoostAmounts({
+    poolTokens,
+    network,
+  })
+
+  const tokenToSpender = Object.fromEntries(
+    poolTokenBoostAmounts.map(t => [t.underlying.address, t.wrapped.address])
+  ) as Record<Address, Address>
+
+  const { steps: approvalSteps, isLoading: isLoadingApprovalSteps } = useTokenApprovalSteps({
+    spenderAddress: (tokenAddress: Address) => tokenToSpender[tokenAddress],
+    chain: network,
+    approvalAmounts: poolTokenBoostAmounts.map(a => ({
+      symbol: a.underlying.symbol,
+      address: a.underlying.address,
+      rawAmount: a.underlying.amountRaw,
+    })),
+    actionType: 'Wrapping',
+    enabled: poolTokenBoostAmounts.length > 0 && !isLoadingUnderlyingAmounts,
+  })
+
+  const depositStepsParams = {
+    poolTokens,
+    amounts: poolTokenBoostAmounts,
+    network,
+    isPoolInitialized,
+  }
+  const { depositSteps, isLoadingDepositSteps } = useDepositSteps(depositStepsParams)
+  const isLoading = isLoadingUnderlyingAmounts || isLoadingApprovalSteps || isLoadingDepositSteps
+  const steps = [...approvalSteps, ...depositSteps]
+
+  return { steps, isLoading }
+}
+
+type UsePoolTokenBoostAmountsParams = {
+  poolTokens: PoolCreationToken[]
+  network: GqlChain
+}
+export function usePoolTokenBoostAmounts({ poolTokens, network }: UsePoolTokenBoostAmountsParams) {
   const { getToken } = useTokens()
 
   const poolTokensToBoost = poolTokens
@@ -38,6 +76,7 @@ export function useBoostUnderlyingSteps({ poolTokens, network, isPoolInitialized
       }
 
       return {
+        poolTokensIndex: poolTokens.findIndex(t => isSameAddress(t.address, token.address)),
         wrapped: {
           address: token.address,
           amountRaw: parseUnits(token.amount, token.data.decimals),
@@ -57,38 +96,22 @@ export function useBoostUnderlyingSteps({ poolTokens, network, isPoolInitialized
     query: { enabled: poolTokensToBoost.length > 0 },
   })
 
-  const tokenToSpender = Object.fromEntries(
-    poolTokensToBoost.map(t => [t.underlying.address, t.wrapped.address])
-  ) as Record<Address, Address>
-
-  const amounts = poolTokensToBoost.map((t, index) => {
-    const symbol = getToken(t.underlying.address, network)?.symbol
+  const poolTokenBoostAmounts = poolTokensToBoost.map((t, index) => {
+    const underlyingToken = getToken(t.underlying.address, network)
     const amountRaw = underlyingAmounts?.[index]?.result ?? 0n
+    const amountHuman = formatUnits(amountRaw, underlyingToken?.decimals || 0)
 
-    return { ...t, underlying: { ...t.underlying, amountRaw, symbol } }
+    return {
+      ...t,
+      underlying: { ...t.underlying, amountRaw, amountHuman, symbol: underlyingToken?.symbol },
+    }
   })
 
-  const { steps: approvalSteps, isLoading: isLoadingApprovalSteps } = useTokenApprovalSteps({
-    spenderAddress: (tokenAddress: Address) => tokenToSpender[tokenAddress],
-    chain: network,
-    approvalAmounts: amounts.map(a => ({
-      ...a,
-      address: a.underlying.address,
-      rawAmount: a.underlying.amountRaw,
-    })),
-    actionType: 'Wrapping',
-    enabled: poolTokensToBoost.length > 0 && !isLoadingUnderlyingAmounts,
-  })
-
-  const depositStepsParams = { poolTokens, amounts, network, isPoolInitialized }
-  const { depositSteps, isLoadingDepositSteps } = useDepositSteps(depositStepsParams)
-  const isLoading = isLoadingUnderlyingAmounts || isLoadingApprovalSteps || isLoadingDepositSteps
-  const steps = [...approvalSteps, ...depositSteps]
-
-  return { steps, isLoading }
+  return { poolTokenBoostAmounts, isLoadingUnderlyingAmounts }
 }
 
 type BoostAmounts = {
+  poolTokensIndex: number
   underlying: {
     amountRaw: bigint
     symbol: string | undefined
@@ -102,13 +125,12 @@ type BoostAmounts = {
 }[]
 
 type DepositStepsParams = {
-  poolTokens: PoolCreationToken[]
   amounts: BoostAmounts
   network: GqlChain
   isPoolInitialized: boolean
 }
 
-function useDepositSteps({ poolTokens, amounts, network, isPoolInitialized }: DepositStepsParams) {
+function useDepositSteps({ amounts, network, isPoolInitialized }: DepositStepsParams) {
   const { getToken } = useTokens()
   const { userAddress } = useUserAccount()
   const chainId = getChainId(network)
@@ -132,7 +154,7 @@ function useDepositSteps({ poolTokens, amounts, network, isPoolInitialized }: De
     })),
   })
 
-  const depositSteps = amounts.map(({ underlying, wrapped }, idx) => {
+  const depositSteps = amounts.map(({ underlying, wrapped, poolTokensIndex }, idx) => {
     const id = `deposit-${wrapped.address}`
 
     const labels = {
@@ -203,8 +225,7 @@ function useDepositSteps({ poolTokens, amounts, network, isPoolInitialized }: De
         })
 
         if (mintedShares) {
-          const idx = poolTokens.findIndex(t => isSameAddress(t.address, wrapped.address))
-          updatePoolToken(idx, { amount: mintedShares.humanAmount })
+          updatePoolToken(poolTokensIndex, { amount: mintedShares.humanAmount })
         }
 
         refetchWrappedUserBalances()
