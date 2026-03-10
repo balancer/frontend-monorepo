@@ -8,7 +8,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
-import { isLiquidityBootstrapping, isStableLike, isWeightedLike } from '../pool.helpers'
+import { isLiquidityBootstrapping, isStableLike } from '../pool.helpers'
 import { getUserReferenceTokens } from '../pool-tokens.utils'
 import { PoolCore, PoolToken } from '../pool.types'
 import { VotingPoolWithData } from '../../vebal/vote/vote.types'
@@ -16,6 +16,36 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
 
 type IsTokenInWallet = (tokenAddress: string) => boolean
+
+function walletBadgeHighlightStyles(hasWalletBalance: boolean) {
+  return {
+    _after: hasWalletBalance
+      ? {
+          bg: 'green.500',
+          content: '""',
+          inset: 0,
+          opacity: 0.08,
+          pointerEvents: 'none',
+          position: 'absolute' as const,
+          zIndex: 0,
+        }
+      : undefined,
+    _before: hasWalletBalance
+      ? {
+          border: '1px solid',
+          borderColor: 'green.500',
+          borderRadius: 'full',
+          content: '""',
+          inset: 0,
+          opacity: 0.25,
+          pointerEvents: 'none',
+          position: 'absolute' as const,
+          zIndex: 1,
+        }
+      : undefined,
+    borderColor: hasWalletBalance ? 'transparent' : 'border.base',
+  }
+}
 
 function NestedTokenPill({
   nestedTokens,
@@ -78,37 +108,9 @@ function WeightedTokenPills({
           <Badge
             key={`${token.address}-${index}`}
             {...badgeProps}
-            _after={
-              hasWalletBalance
-                ? {
-                    bg: 'green.500',
-                    content: '""',
-                    inset: 0,
-                    opacity: 0.08,
-                    pointerEvents: 'none',
-                    position: 'absolute',
-                    zIndex: 0,
-                  }
-                : undefined
-            }
-            _before={
-              hasWalletBalance
-                ? {
-                    border: '1px solid',
-                    borderColor: 'green.500',
-                    borderRadius: 'full',
-                    content: '""',
-                    inset: 0,
-                    opacity: 0.25,
-                    pointerEvents: 'none',
-                    position: 'absolute',
-                    zIndex: 1,
-                  }
-                : undefined
-            }
+            {...walletBadgeHighlightStyles(hasWalletBalance)}
             alignItems="center"
             bg="background.level2"
-            borderColor={hasWalletBalance ? 'transparent' : 'border.base'}
             borderRadius="full"
             borderWidth={1}
             display="flex"
@@ -215,37 +217,9 @@ function StableTokenPills({
           <Badge
             key={[token.address, token.chain, i].join('-')}
             {...badgeProps}
-            _after={
-              hasWalletBalance
-                ? {
-                    bg: 'green.500',
-                    content: '""',
-                    inset: 0,
-                    opacity: 0.08,
-                    pointerEvents: 'none',
-                    position: 'absolute',
-                    zIndex: 0,
-                  }
-                : undefined
-            }
-            _before={
-              hasWalletBalance
-                ? {
-                    border: '1px solid',
-                    borderColor: 'green.500',
-                    borderRadius: 'full',
-                    content: '""',
-                    inset: 0,
-                    opacity: 0.25,
-                    pointerEvents: 'none',
-                    position: 'absolute',
-                    zIndex: 1,
-                  }
-                : undefined
-            }
+            {...walletBadgeHighlightStyles(hasWalletBalance)}
             alignItems="center"
             bg="background.level2"
-            borderColor={hasWalletBalance ? 'transparent' : 'border.base'}
             borderRadius="full"
             borderWidth={1}
             display="flex"
@@ -378,7 +352,6 @@ function PoolTokenPills({
   ...badgeProps
 }: PoolTokenPillsProps) {
   const shouldUseStablePills = isStableLike(poolType)
-  const shouldUseWeightedPills = isWeightedLike(poolType)
   const isV3LBP = isLiquidityBootstrapping(poolType) && protocolVersion === 3
 
   if (poolName) {
@@ -400,19 +373,6 @@ function PoolTokenPills({
         chain={chain}
         iconSize={iconSize}
         isTokenInWallet={isTokenInWallet}
-        tokens={tokens}
-        {...badgeProps}
-      />
-    )
-  }
-
-  if (shouldUseWeightedPills) {
-    return (
-      <WeightedTokenPills
-        chain={chain}
-        iconSize={iconSize}
-        isTokenInWallet={isTokenInWallet}
-        preciseWeight={isV3LBP}
         tokens={tokens}
         {...badgeProps}
       />
