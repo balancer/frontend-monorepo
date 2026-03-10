@@ -63,12 +63,19 @@ export function useTokenApprovalSteps({
   const _approvalAmounts = useMemo(
     () =>
       approvalAmounts.filter(amount => {
+        // Filter out amounts that are 0 (for reserve token amount if fixed lbp)
+        if (amount.rawAmount === 0n) {
+          return false
+        }
+
         // Always filter out native asset
         if (isSameAddress(amount.address, nativeAssetAddress)) return false
+
         // If wethIsEth is true, also filter out wrapped native asset
         if (wethIsEth && isSameAddress(amount.address, getWrappedNativeAssetAddress(chain))) {
           return false
         }
+
         return true
       }),
     [approvalAmounts, wethIsEth, chain]

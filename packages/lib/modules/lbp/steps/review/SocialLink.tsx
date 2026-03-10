@@ -1,5 +1,19 @@
-import { Button, Circle, Link, Text } from '@chakra-ui/react'
-import { IconType, SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
+import { Circle, Link, HStack, Text } from '@chakra-ui/react'
+import { IconType, SocialIcon as Icon } from '@repo/lib/shared/components/navs/SocialIcon'
+
+function SocialIcon({ socialNetwork }: { socialNetwork: IconType }) {
+  return (
+    <Circle
+      bg="background.level4"
+      boxShadow="var(--chakra-shadows-xl)"
+      color="inherit"
+      rounded="full"
+      size="8"
+    >
+      <Icon iconType={socialNetwork} size={16} />
+    </Circle>
+  )
+}
 
 export function SocialLink({
   title,
@@ -10,22 +24,12 @@ export function SocialLink({
   socialNetwork: IconType
   href: string
 }) {
-  const icon = (
-    <Circle
-      bg="background.level4"
-      boxShadow="var(--chakra-shadows-xl)"
-      color="font.primary"
-      key={href}
-      rounded="full"
-      size="8"
-    >
-      <SocialIcon iconType={socialNetwork} size={16} />
-    </Circle>
-  )
-
   return (
-    <Button as={Link} href={href} isExternal leftIcon={icon}>
-      <Text color="font.secondary">{title}</Text>
-    </Button>
+    <Link _hover={{ color: 'font.linkHover' }} color="font.link" href={href} isExternal>
+      <HStack>
+        <SocialIcon socialNetwork={socialNetwork} />
+        <Text color="inherit">{title}</Text>
+      </HStack>
+    </Link>
   )
 }

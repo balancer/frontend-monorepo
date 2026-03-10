@@ -8,7 +8,7 @@ import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useInitializeLbpInput() {
-  const { saleStructureForm, isCollateralNativeAsset } = useLbpForm()
+  const { saleStructureForm, isCollateralNativeAsset, isFixedSale } = useLbpForm()
   const [
     selectedChain,
     collateralTokenAddress,
@@ -66,7 +66,8 @@ export function useInitializeLbpInput() {
   const reserveTokenAmountIn: InitPoolInputAmount = {
     address: reserveTokenAddress as Address,
     decimals: reserveTokenDecimals,
-    rawAmount: parseUnits(collateralTokenAmount, reserveTokenDecimals),
+    // sdk requires reserve token amount to be zero for fixed sale
+    rawAmount: isFixedSale ? 0n : parseUnits(collateralTokenAmount, reserveTokenDecimals),
     symbol: reserveTokenSymbol,
   }
 
