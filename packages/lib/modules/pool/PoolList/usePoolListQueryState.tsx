@@ -9,6 +9,7 @@ import {
 import { uniq } from 'lodash'
 import {
   parseAsArrayOf,
+  parseAsStringLiteral,
   parseAsFloat,
   parseAsInteger,
   parseAsString,
@@ -67,7 +68,7 @@ const poolListQueryStateParsers = {
   protocolVersion: parseAsInteger,
   textSearch: parseAsString,
   userAddress: parseAsString,
-  joinablePools: parseAsString,
+  joinablePools: parseAsStringLiteral(['true'] as const),
   minTvl: parseAsFloat.withDefault(0),
   poolTags: parseAsArrayOf(
     parseAsStringEnum<PoolTagType>(poolTagFilters as unknown as PoolTagType[])
@@ -114,10 +115,7 @@ export function usePoolListQueryState() {
     'joinablePools',
     poolListQueryStateParsers.joinablePools
   )
-  const normalizedJoinablePoolsValue = joinablePoolsValue?.toLowerCase()
-  const joinablePools =
-    normalizedJoinablePoolsValue !== undefined &&
-    ['true', '1', ''].includes(normalizedJoinablePoolsValue)
+  const joinablePools = joinablePoolsValue === 'true'
 
   // on toggle always start at the beginning of the list
   useEffect(() => {
