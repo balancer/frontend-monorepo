@@ -77,7 +77,7 @@
     "use-debounce": "10.1.0",
     "use-sound": "^4.0.1",
     "usehooks-ts": "3.1.1",
-    "viem": "2.45.1",
+    "viem": "2.46.2",
     "wagmi": "3.2.0",
     "zod": "3.25.76"
   },

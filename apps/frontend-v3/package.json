@@ -58,7 +58,7 @@
     "thread-stream": "0.15.2",
     "tinycolor2": "^1.6.0",
     "usehooks-ts": "3.1.1",
-    "viem": "2.45.1"
+    "viem": "2.46.2"
   },
   "devDependencies": {
     "@chakra-ui/cli": "2.5.8",
