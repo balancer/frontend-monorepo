@@ -17,8 +17,8 @@ export function PlayVideoButton({ size = 24 }: { size?: number }) {
         asChild
         color="#000"
         h={size / 2}
-        mr="-2px"
-        style={{ transform: 'rotate(270deg)' }}
+        ml="3px"
+        style={{ transform: 'rotate(90deg)' }}
         w={size / 2}
       >
         <LuTriangle />

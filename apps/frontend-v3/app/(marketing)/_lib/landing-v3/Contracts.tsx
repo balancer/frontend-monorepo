@@ -13,7 +13,6 @@ import { RadialPattern } from './shared/RadialPattern'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
-// @ts-ignore
 import { LuMinus, LuPlus } from 'react-icons/lu'
 
 const contracts = [
@@ -164,7 +163,7 @@ export function Contracts() {
   const { isMobile } = useBreakpoints()
 
   return (
-    <Noise>
+    <Noise position="relative">
       <Box position="relative">
         <Box
           bottom={0}
@@ -180,7 +179,7 @@ export function Contracts() {
             height={700}
             innerHeight={150}
             innerWidth={500}
-            left={-400}
+            left="-400px"
             padding="15px"
             position="absolute"
             top={0}

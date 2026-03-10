@@ -163,11 +163,11 @@ function FeatureText({
             borderRadius="md"
             boxShadow="lg"
             initial={{ opacity: 0 }}
-            left={-4}
+            left="-16px"
             maxW="600px"
             p={4}
             position="absolute"
-            top={-4}
+            top="-16px"
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <Text color="font.secondary" fontSize="lg" whiteSpace="pre-line">
@@ -252,7 +252,7 @@ export function Features() {
         py={['3xl', '10rem']}
       >
         <FadeIn delay={0.2} direction="up" duration={0.6}>
-          <Heading as="h4" mx="auto" size="lg">
+          <Heading as="h4" mx="auto" size="h4">
             <chakra.span color="font.primary">Custom liquidity solutions.</chakra.span>
             <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
               {' '}
@@ -319,7 +319,7 @@ export function Features() {
                   innerWidth={150}
                   position="absolute"
                   progress={scrollPercentage}
-                  top={-10}
+                  top="-10px"
                   width={600}
                 >
                   <BalancerLogoAnimated size={100} />
@@ -337,13 +337,14 @@ export function Features() {
         </Stack>
       </DefaultPageContainer>
       <Box
-        bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
+        background="linear-gradient(transparent 0%, var(--chakra-colors-background-level0) 50%, transparent 100%)"
         bottom="0"
         h="200px"
         left="0"
         mb="-100px"
         position="absolute"
         w="full"
+        zIndex={1}
       />
     </Noise>
   )

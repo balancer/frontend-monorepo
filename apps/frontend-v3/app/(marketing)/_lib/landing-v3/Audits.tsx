@@ -90,11 +90,11 @@ const AuditCard = memo(function AuditCard({
   )
 
   return (
-    <Link cursor="pointer" href={href} rel="noopener noreferrer" target="_blank">
+    <Link cursor="pointer" display="block" href={href} rel="noopener noreferrer" target="_blank">
       <MotionBox
         _hover={{ shadow: 'sm' }}
         data-group
-        minH="180px"
+        h="180px"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         overflow="hidden"
@@ -106,13 +106,13 @@ const AuditCard = memo(function AuditCard({
       >
         {/* Background with rock texture and gradient overlay */}
         <Box
-          h="full"
+          bottom="0"
           left="0"
           overflow="hidden"
           pointerEvents="none"
           position="absolute"
+          right="0"
           top="0"
-          w="full"
           zIndex="0"
         >
           <Picture
@@ -130,6 +130,7 @@ const AuditCard = memo(function AuditCard({
           {/* Flash overlay on initial hover */}
           <Box
             bg="white"
+            bottom="0"
             css={{
               animation: isHovered ? 'flash 0.3s ease-out' : 'none',
 
@@ -138,41 +139,40 @@ const AuditCard = memo(function AuditCard({
                 '100%': { opacity: 0 },
               },
             }}
-            h="full"
             left="0"
             opacity={0}
             position="absolute"
+            right="0"
             top="0"
-            w="full"
             zIndex="1"
           />
           {/* Gradient overlay with blend mode shown on hover */}
           <Box
             background={gradientOverlay?.background}
+            bottom="0"
             css={{
               mixBlendMode: gradientOverlay?.blendMode,
             }}
-            h="full"
             left="0"
             opacity={isHovered ? 1 : 0}
             position="absolute"
+            right="0"
             top="0"
             transition="opacity 0.5s var(--ease-out-cubic) 0.05s"
-            w="full"
             zIndex="3"
           />
         </Box>
         <Center
           _groupHover={CENTER_HOVER_STYLES}
           _hover={{ shadow: 'innerRockShadow' }}
+          bottom="0"
           color="font.primary"
-          h="full"
           left="0"
           position="absolute"
+          right="0"
           shadow="innerRockShadowSm"
           top="0"
           transition="transform 1s var(--ease-out-cubic), color 1s var(--ease-out-cubic)"
-          w="full"
           zIndex="1"
         >
           {logo}
@@ -206,7 +206,7 @@ export function Audits() {
   const certoraLogo = useMemo(() => <CertoraLogo />, [])
 
   return (
-    <Noise backgroundColor="background.level0WithOpacity ">
+    <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
         <VStack align="start" gap="lg" w="full">
           <Stack
@@ -303,6 +303,16 @@ export function Audits() {
           </VStack>
         </VStack>
       </DefaultPageContainer>
+      <Box
+        background="linear-gradient(transparent 0%, var(--chakra-colors-background-level0) 50%, transparent 100%)"
+        bottom="0"
+        h="200px"
+        left="0"
+        mb="-100px"
+        position="absolute"
+        w="full"
+        zIndex={1}
+      />
     </Noise>
   )
 }

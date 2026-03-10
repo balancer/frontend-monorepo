@@ -5,7 +5,6 @@ import {
   Box,
   BoxProps,
   Button,
-  Card,
   Grid,
   GridItem,
   VStack,
@@ -20,7 +19,6 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ReactNode } from 'react'
 import { ArrowUpRight } from 'react-feather'
 import { SandBg } from './shared/SandBg'
-import Image from 'next/image'
 
 // @ts-ignore
 import createCustomAMMsSrc from './images/video-createCustomAMMs.png'
@@ -73,7 +71,7 @@ export function VideoBox({
   const video = videos[id]
 
   return (
-    <Link href={video.url} rel="noopener noreferrer" role="group" target="_blank">
+    <Link display="block" href={video.url} rel="noopener noreferrer" role="group" target="_blank">
       <Box
         background="background.level0"
         overflow="hidden"
@@ -84,28 +82,33 @@ export function VideoBox({
       >
         {feature && (
           <>
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               alt="initial frame"
-              fill
-              sizes="100vw"
-              src={video.src}
+              src={video.src?.src ?? video.src}
               style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
                 objectFit: 'cover',
               }}
             />
             <Box
               _groupHover={{ opacity: 0.5 }}
               bg="background.base"
-              h="full"
+              bottom="0"
+              left="0"
               opacity={0}
               position="absolute"
+              right="0"
+              top="0"
               transition="opacity 0.2s var(--ease-out-cubic)"
-              w="full"
             />
           </>
         )}
         {bgVariant && <SandBg variant={bgVariant} />}
-        <Center h="full" position="absolute" w="full">
+        <Center bottom="0" left="0" position="absolute" right="0" top="0" zIndex={2}>
           <Box
             _groupHover={{ transform: 'scale(1.1)' }}
             transition="opacity 0.3s var(--ease-out-cubic)"
@@ -120,6 +123,7 @@ export function VideoBox({
           position="absolute"
           right="0"
           textAlign="center"
+          zIndex={2}
           {...labelProps}
         >
           {label}
@@ -141,8 +145,8 @@ export function Videos() {
             innerWidth={500}
             padding="15px"
             position="absolute"
-            right={-400}
-            top={-100}
+            right="-400px"
+            top="-100px"
             width={1000}
           />
         </Box>
@@ -176,7 +180,15 @@ export function Videos() {
               </Link>
             </Button>
           </Stack>
-          <Card.Root>
+          <Box
+            background="background.level2"
+            borderColor="transparent"
+            borderWidth="1px"
+            p={{ base: 'sm', md: 'md' }}
+            rounded="lg"
+            shadow="xl"
+            w="full"
+          >
             <VideoBox
               feature
               id="createCustomAMMs"
@@ -226,7 +238,7 @@ export function Videos() {
                 />
               </GridItem>
             </Grid>
-          </Card.Root>
+          </Box>
         </VStack>
       </DefaultPageContainer>
       <Box minH="500px" position="absolute" w="full" zIndex={-1}>
@@ -236,10 +248,10 @@ export function Videos() {
             height={700}
             innerHeight={150}
             innerWidth={500}
-            left={-400}
+            left="-400px"
             padding="15px"
             position="absolute"
-            top={-500}
+            top="-500px"
             width={1000}
           />
         </Box>

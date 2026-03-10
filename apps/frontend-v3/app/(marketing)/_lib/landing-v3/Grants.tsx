@@ -88,13 +88,14 @@ export function Grants() {
         </VStack>
       </DefaultPageContainer>
       <Box
-        bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
+        background="linear-gradient(transparent 0%, var(--chakra-colors-background-level0) 50%, transparent 100%)"
         bottom="0"
         h="200px"
         left="0"
         mb="-100px"
         position="absolute"
         w="full"
+        zIndex={1}
       />
     </Noise>
   )

@@ -32,7 +32,7 @@ export function FeatureCard({
   ...rest
 }: FeatureCardProps & BoxProps) {
   return (
-    <Box minH="175px" overflow="hidden" position="relative" rounded="lg" shadow="2xl" {...rest}>
+    <Box h="175px" overflow="hidden" position="relative" rounded="lg" shadow="2xl" {...rest}>
       <GraniteBg />
       <RadialPattern
         circleCount={8}
@@ -40,7 +40,7 @@ export function FeatureCard({
         padding="15px"
         position="absolute"
         right="-20px"
-        top={-50}
+        top="-50px"
         width={180}
         {...radialPatternProps}
       >

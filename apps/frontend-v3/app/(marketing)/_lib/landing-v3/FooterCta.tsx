@@ -60,7 +60,7 @@ export function FooterCta() {
             padding="15px"
             position="absolute"
             progress={patternProgress}
-            right={{ base: -700, lg: -700, xl: -600, '2xl': -480 }}
+            right={{ base: '-700px', lg: '-700px', xl: '-600px', '2xl': '-480px' }}
             top="calc(50% - 300px)"
             width={1000}
           />
@@ -69,7 +69,7 @@ export function FooterCta() {
             height={600}
             innerHeight={150}
             innerWidth={500}
-            left={{ base: -700, lg: -700, xl: -600, '2xl': -480 }}
+            left={{ base: '-700px', lg: '-700px', xl: '-600px', '2xl': '-480px' }}
             padding="15px"
             position="absolute"
             progress={patternProgress}
