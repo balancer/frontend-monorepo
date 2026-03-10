@@ -5,12 +5,11 @@ import { Erc20Abi } from './contracts/contract.types'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { useCallback, useMemo } from 'react'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { SpenderAddress, resolveSpender } from '../tokens/approvals/approval-rules'
 
 export type TokenAllowances = Record<Address, bigint>
 
 export type UseTokenAllowancesResponse = ReturnType<typeof useTokenAllowances>
-
-export type SpenderAddress = Address | ((tokenAddress: Address) => Address)
 
 type Props = {
   chainId: SupportedChainId
@@ -21,10 +20,6 @@ type Props = {
 }
 
 type AllowanceContracts = ReadContractParameters<Erc20Abi, 'allowance'> & { chainId: number }
-
-function resolveSpender(spenderAddress: SpenderAddress, tokenAddress: Address): Address {
-  return typeof spenderAddress === 'function' ? spenderAddress(tokenAddress) : spenderAddress
-}
 
 export function useTokenAllowances({
   chainId,

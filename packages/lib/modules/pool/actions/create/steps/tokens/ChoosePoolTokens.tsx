@@ -314,9 +314,9 @@ function ConfigureToken({
           content={
             <VStack align="start" mb="sm" spacing="md">
               <Text color="black">
-                {!token.isBoostingUnderlying
-                  ? `It’s recommended to use a Boosted version of ${token.data?.symbol} on the ${getChainShortName(network)} network. Balancer v3 is optimized for Boosted tokens. LPs will get additional yield, while still being able to interact with this pool using ${token.data?.symbol}.`
-                  : `You will wrap your ${getToken(underlyingToken || '', network)?.symbol} into ${token.data?.symbol} during the pool creation process.`}
+                {token.isBoostingUnderlying
+                  ? `You will wrap your ${getToken(underlyingToken || '', network)?.symbol} into ${token.data?.symbol} during the pool creation process.`
+                  : `It’s recommended to use a Boosted version of ${token.data?.symbol} on the ${getChainShortName(network)} network. Balancer v3 is optimized for Boosted tokens. LPs will get additional yield, while still being able to interact with this pool using ${token.data?.symbol}.`}
               </Text>
               {boostedTokenOptions.map(option => (
                 <BalAlertButton
