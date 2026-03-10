@@ -491,7 +491,7 @@ importers:
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.4))(@types/react@19.2.10)(react@19.2.4)
       '@hookform/resolvers':
         specifier: ^5.2.2
-        version: 5.2.2(react-hook-form@7.65.0(react@19.2.4))
+        version: 5.2.2(react-hook-form@7.71.2(react@19.2.4))
       '@layerzerolabs/scan-client':
         specifier: ^0.0.8
         version: 0.0.8(axios@1.13.1)
@@ -11166,10 +11166,10 @@ snapshots:
     dependencies:
       '@hapi/hoek': 9.3.0
 
-  '@hookform/resolvers@5.2.2(react-hook-form@7.65.0(react@19.2.4))':
+  '@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@19.2.4))':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.65.0(react@19.2.4)
+      react-hook-form: 7.71.2(react@19.2.4)
 
   '@humanfs/core@0.19.1': {}
 
@@ -11695,7 +11695,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.3.4
+      debug: 4.4.3
       pony-cause: 2.1.11
       semver: 7.7.4
       uuid: 9.0.1
@@ -11710,7 +11710,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.12
-      debug: 4.3.4
+      debug: 4.4.3
       pony-cause: 2.1.11
       semver: 7.7.4
       uuid: 9.0.1
@@ -18136,11 +18136,11 @@ snapshots:
   ox@0.6.7(typescript@5.9.2)(zod@4.3.5):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
-      '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.9.2)(zod@4.3.5)
+      '@noble/curves': 1.9.7
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      abitype: 1.2.3(typescript@5.9.2)(zod@4.3.5)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.2
@@ -18364,7 +18364,7 @@ snapshots:
   porto@0.2.35(@tanstack/react-query@5.90.5(react@19.2.4))(@types/react@19.2.10)(@wagmi/core@3.1.0(@tanstack/query-core@5.90.5)(@types/react@19.2.10)(ox@0.11.3(typescript@5.9.2)(zod@3.25.76))(react@19.2.4)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.45.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76)))(react@19.2.4)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.45.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@3.2.0):
     dependencies:
       '@wagmi/core': 3.1.0(@tanstack/query-core@5.90.5)(@types/react@19.2.10)(ox@0.11.3(typescript@5.9.2)(zod@3.25.76))(react@19.2.4)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.45.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))
-      hono: 4.11.7
+      hono: 4.12.4
       idb-keyval: 6.2.2
       mipd: 0.0.7(typescript@5.9.2)
       ox: 0.9.17(typescript@5.9.2)(zod@4.3.5)
