@@ -112,6 +112,7 @@ export function useImpersonateAccount() {
     isReconnecting?: boolean
   }) {
     const { forkBalances, chainId } = await getOptions()
+
     if (forkBalances[chainId] && !isReconnecting) {
       await setTokenBalances({
         impersonatedAddress,

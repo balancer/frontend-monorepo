@@ -8,7 +8,6 @@ import { LbpSummary } from './LbpSummary'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
@@ -26,6 +25,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCreateLbpInput } from '../useCreateLbpInput'
 import { useInitializeLbpInput } from '../useInitializeLbpInput'
 import { usePoolCreationTransactions } from '@repo/lib/modules/pool/actions/create/modal/usePoolCreationTransactions'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   isOpen: boolean
@@ -46,12 +46,12 @@ export function LbpCreationModal({
   )
 
   const initialFocusRef = useRef(null)
+  const hasAttemptedSaveMetadata = useRef(false)
   const { isDesktop } = useBreakpoints()
   const { saleStructureForm, resetLbpCreation } = useLbpForm()
-  const { selectedChain } = saleStructureForm.getValues()
-
   const createPoolInput = useCreateLbpInput()
   const initPoolInput = useInitializeLbpInput()
+
   const { transactionSteps, initPoolTxHash, urlTxHash } = usePoolCreationTransactions({
     poolAddress,
     setPoolAddress,
@@ -67,7 +67,7 @@ export function LbpCreationModal({
     reset: resetSaveMetadata,
   } = useLbpMetadata()
 
-  const hasAttemptedSaveMetadata = useRef(false)
+  const [selectedChain, saleType] = saleStructureForm.getValues(['selectedChain', 'saleType'])
   const chainId = getChainId(selectedChain)
   const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress })
 
@@ -81,7 +81,7 @@ export function LbpCreationModal({
   const path = getPoolPath({
     id: poolAddress as Address,
     chain: selectedChain,
-    type: GqlPoolType.LiquidityBootstrapping,
+    type: saleType,
     protocolVersion: 3 as const,
   })
 
@@ -89,7 +89,7 @@ export function LbpCreationModal({
 
   useEffect(() => {
     const handleSaveMetadata = async () => {
-      if (isPoolInitialized && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
+      if (poolAddress && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
         hasAttemptedSaveMetadata.current = true
         try {
           await saveMetadata()
@@ -99,7 +99,7 @@ export function LbpCreationModal({
       }
     }
     handleSaveMetadata()
-  }, [isPoolInitialized, isMetadataSaved, saveMetadata])
+  }, [poolAddress, isMetadataSaved, saveMetadata])
 
   if (saveMetadataError && !transactionSteps.steps.some(step => step.id === 'save-metadata')) {
     transactionSteps.steps.push({
@@ -198,7 +198,7 @@ export function LbpCreationModal({
           {!!saveMetadataError && (
             <VStack marginTop="4" spacing="3" width="full">
               <BalAlert
-                content="The pool has been created and seeded onchain. However, there was an error syncing the metadata to the Balancer API. Your pool will not display on the Balancer UI until the sync is completed."
+                content={`The pool has been created and seeded onchain. However, there was an error syncing the metadata to the ${PROJECT_CONFIG.projectName} API. Your pool will not display on the ${PROJECT_CONFIG.projectName} UI until the sync is completed.`}
                 status="error"
                 title="Error syncing metadata"
               />

@@ -10,7 +10,7 @@ import { ConnectWallet } from '../web3/ConnectWallet'
 import { useCopyToClipboard } from '@repo/lib/shared/hooks/useCopyToClipboard'
 import { useFormState, useWatch } from 'react-hook-form'
 
-export function LbpFormAction({ disabled }: { disabled?: boolean }) {
+export function LbpFormAction() {
   const { isConnected } = useUserAccount()
   const {
     isLastStep,
@@ -18,6 +18,8 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
     goToNextStep,
     goToPreviousStep,
     saleStructureForm,
+    projectInfoForm,
+    validateCurrentStep,
     poolAddress,
   } = useLbpForm()
   const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
@@ -25,7 +27,8 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const nextBtn = useRef(null)
   const { copyToClipboard, isCopied } = useCopyToClipboard()
   const saleFormState = useFormState({ control: saleStructureForm.control })
-  const isFormStateValid = saleFormState.isValid
+  const projectFormState = useFormState({ control: projectInfoForm.control })
+  const isFormStateValid = saleFormState.isValid && projectFormState.isValid
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 
@@ -55,8 +58,9 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
       )}
 
       <Button
-        disabled={disabled}
-        onClick={() => {
+        onClick={async () => {
+          const isStepValid = await validateCurrentStep()
+          if (!isStepValid) return
           if (isLastStep) {
             previewModalDisclosure.onOpen()
           } else {

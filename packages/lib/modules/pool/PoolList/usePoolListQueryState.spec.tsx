@@ -1,18 +1,14 @@
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { act } from '@testing-library/react'
-import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
+import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { usePoolListQueryState } from './usePoolListQueryState'
 
 const testAddress = '0x000000000000000000000000000000000000dEaD'
 
-function TestWrapper({ children }: { children: React.ReactNode }) {
-  return <NuqsTestingAdapter>{children}</NuqsTestingAdapter>
-}
-
 describe('Pool list state query', () => {
   it('toggles joinablePools and updates total filter count', () => {
     const { result } = testHook(() => usePoolListQueryState(), {
-      wrapper: TestWrapper,
+      wrapper: withNuqsTestingAdapter({ searchParams: '?first=20&skip=0' }),
     })
 
     expect(result.current.joinablePools).toBe(false)
@@ -40,7 +36,7 @@ describe('Pool list state query', () => {
 
   it('allows My positions and Joinable pools to be selected together', () => {
     const { result } = testHook(() => usePoolListQueryState(), {
-      wrapper: TestWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     act(() => {
@@ -67,7 +63,7 @@ describe('Pool list state query', () => {
 
   it('resetFilters clears joinablePools', () => {
     const { result } = testHook(() => usePoolListQueryState(), {
-      wrapper: TestWrapper,
+      wrapper: withNuqsTestingAdapter(),
     })
 
     act(() => {
@@ -81,5 +77,13 @@ describe('Pool list state query', () => {
     })
 
     expect(result.current.joinablePools).toBe(false)
+  })
+
+  it('returns zero totalFilterCount with no filters', () => {
+    const { result } = testHook(() => usePoolListQueryState(), {
+      wrapper: withNuqsTestingAdapter(),
+    })
+
+    expect(result.current.totalFilterCount).toBe(0)
   })
 })

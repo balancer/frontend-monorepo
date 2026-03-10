@@ -110,13 +110,13 @@ export function ReliquaryAddLiquidityModal({
 
   function handleReturnAction() {
     const focusRelic = latestRelicId ?? relicId
-    router.push(`/mabeets${focusRelic ? `?focusRelic=${focusRelic}` : ''}`)
+    router.push(`/mabeets${focusRelic ? `?focusPosition=${focusRelic}` : ''}`)
     baseOnClose()
   }
 
   const modalLabel = createNew
-    ? 'Create new Relic & add liquidity'
-    : `Add liquidity to Relic #${relicId}`
+    ? 'Create new maBEETS position & add liquidity'
+    : `Add liquidity to maBEETS #${relicId}`
 
   return (
     <Modal

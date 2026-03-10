@@ -165,12 +165,14 @@ export function AddLiquidityFormTabs({
     {
       value: '0',
       label: 'Flexible',
+      dataId: 'add-liquidity-tab-flexible',
       disabled: isDisabledFlexibleTab,
       tabTooltipLabel: getFlexibleTabTooltipLabel(),
     },
     {
       value: '1',
       label: 'Proportional',
+      dataId: 'add-liquidity-tab-proportional',
       disabled: isDisabledProportionalTab,
       tabTooltipLabel: isDisabledProportionalTab
         ? supportsProportionalAddLiquidityReasons(pool) ||

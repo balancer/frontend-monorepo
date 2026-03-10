@@ -23,13 +23,15 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
     queryOutput,
     slippagePercent,
     tokenOut,
-  }: SdkBuildRemoveLiquidityInput & {
-    tokenOut: Address
-  }): Promise<TransactionConfig> {
+  }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
     const relicId = this.relicId
 
     if (relicId === undefined || relicId === null) {
       throw new Error('relicId is required for reliquary remove liquidity')
+    }
+
+    if (!tokenOut) {
+      throw new Error('tokenOut is required for single token reliquary remove liquidity')
     }
 
     const removeLiquidity = new RemoveLiquidity()
@@ -42,7 +44,7 @@ export class ReliquarySingleTokenRemoveLiquidityHandler extends BaseSingleTokenR
       recipient: account,
     })
 
-    // Get remove liquidity from Relic call data
+    // Get remove liquidity from maBEETS position call data
     const removeLiquidityCallData = this.getRelicRemoveLiquidityAndClaimCallData({
       account,
       relicId,

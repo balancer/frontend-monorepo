@@ -1,16 +1,42 @@
 import { daiAddress, polAddress } from '@repo/lib/debug-helpers'
 import { alternativeTestUserAccount, defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
+import { setUserTokenBalance } from '@repo/lib/test/integration/sdk-utils'
+import {
+  mainnetTestPublicClient,
+  polygonTestPublicClient,
+  baseTestPublicClient,
+} from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { erc20Abi } from 'viem'
 import { ChainContractConfig, useMulticall } from './useMulticall'
-import { mainnet, polygon } from 'viem/chains'
+import { mainnet, polygon, base } from 'viem/chains'
 
-// Skip until this vitest issue is fixed:
-// https://github.com/vitest-dev/vitest/issues/6589
-describe.skip('Performs multicall in multiple chains', () => {
+describe('Performs multicall in multiple chains', () => {
+  beforeAll(async () => {
+    await setUserTokenBalance({
+      client: mainnetTestPublicClient,
+      account: defaultTestUserAccount,
+      tokenAddress: daiAddress,
+      slot: 2,
+      balance: 1n,
+    })
+
+    await setUserTokenBalance({
+      client: baseTestPublicClient,
+      account: defaultTestUserAccount,
+      tokenAddress: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
+      slot: 4,
+      balance: 7702n,
+    })
+
+    await polygonTestPublicClient.setBalance({
+      address: alternativeTestUserAccount,
+      value: 721n,
+    })
+  })
   const mainnetRequest: ChainContractConfig = {
-    id: 'ethBalance',
+    id: 'daiBalanceOnMainnet',
     chainId: mainnet.id,
     abi: erc20Abi,
     address: daiAddress,
@@ -18,8 +44,17 @@ describe.skip('Performs multicall in multiple chains', () => {
     args: [defaultTestUserAccount],
   }
 
+  const baseRequest: ChainContractConfig = {
+    id: 'ghoBalanceOnBase',
+    chainId: base.id,
+    abi: erc20Abi,
+    address: '0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee',
+    functionName: 'balanceOf',
+    args: [defaultTestUserAccount],
+  }
+
   const polygonRequest: ChainContractConfig = {
-    id: 'polBalance',
+    id: 'polBalanceOnPolygon',
     chainId: polygon.id,
     abi: erc20Abi,
     address: polAddress,
@@ -28,16 +63,25 @@ describe.skip('Performs multicall in multiple chains', () => {
   }
 
   test('including mixed mainnet and polygon contracts', async () => {
-    const multicallRequests: ChainContractConfig[] = [mainnetRequest, polygonRequest]
+    const multicallRequests: ChainContractConfig[] = [mainnetRequest, baseRequest, polygonRequest]
 
     const { result } = testHook(() => useMulticall(multicallRequests))
 
     await waitFor(() => expect(result.current.results[mainnet.id].data).toBeDefined())
-
     expect(result.current.results[mainnet.id].data).toMatchInlineSnapshot(`
       {
-        "ethBalance": {
+        "daiBalanceOnMainnet": {
           "result": 1n,
+          "status": "success",
+        },
+      }
+    `)
+
+    await waitFor(() => expect(result.current.results[base.id].data).toBeDefined())
+    expect(result.current.results[base.id].data).toMatchInlineSnapshot(`
+      {
+        "ghoBalanceOnBase": {
+          "result": 7702n,
           "status": "success",
         },
       }
@@ -46,8 +90,8 @@ describe.skip('Performs multicall in multiple chains', () => {
     await waitFor(() => expect(result.current.results[polygon.id].data).toBeDefined())
     expect(result.current.results[polygon.id].data).toMatchInlineSnapshot(`
     {
-      "polBalance": {
-        "result": 10000000000000000000000n,
+      "polBalanceOnPolygon": {
+        "result": 721n,
         "status": "success",
       },
     }

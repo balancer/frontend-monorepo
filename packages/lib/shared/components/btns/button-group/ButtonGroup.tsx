@@ -16,6 +16,7 @@ import { Info } from 'react-feather'
 export type ButtonGroupOption = {
   value: string
   label: string | ReactNode
+  dataId?: string
   disabled?: boolean
   tabTooltipLabel?: string // Popover tooltip on full tab hover
   iconTooltipLabel?: string // Popover tooltip on icon hover
@@ -108,6 +109,7 @@ function GroupOptionButton({
   return (
     <Button
       bg="transparent"
+      data-id={option.dataId}
       id={`button-group-${option.value}`}
       isDisabled={option.disabled}
       minWidth={minWidth}

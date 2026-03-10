@@ -4,7 +4,9 @@ import { ReviewStep } from './steps/review/ReviewStep'
 import { FormStep } from '@repo/lib/shared/hooks/useFormSteps'
 import { UserActions, WeightAdjustmentType } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const LBP_FORM_STEPS: FormStep[] = [
   { id: 'step-1-sale-structure', title: 'Sale structure', Component: SaleStructureStep },
@@ -12,17 +14,22 @@ export const LBP_FORM_STEPS: FormStep[] = [
   { id: 'step-3-review', title: 'Review', Component: ReviewStep },
 ]
 
+const defaultNetworkConfig = getNetworkConfig(PROJECT_CONFIG.defaultNetwork)
+const defaultCollateralTokenAddress = defaultNetworkConfig?.lbps?.collateralTokens?.[0] ?? ''
+
 export const INITIAL_SALE_STRUCTURE: SaleStructureForm = {
   selectedChain: PROJECT_CONFIG.defaultNetwork,
   launchTokenAddress: '',
+  saleType: GqlPoolType.LiquidityBootstrapping,
   userActions: UserActions.BUY_AND_SELL,
   fee: 1.0,
   startDateTime: '',
   endDateTime: '',
-  collateralTokenAddress: '',
+  collateralTokenAddress: defaultCollateralTokenAddress,
   weightAdjustmentType: WeightAdjustmentType.LINEAR_90_10,
   customStartWeight: 90,
   customEndWeight: 10,
+  launchTokenRate: '',
   saleTokenAmount: '',
   collateralTokenAmount: '',
 }

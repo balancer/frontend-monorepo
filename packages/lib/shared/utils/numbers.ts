@@ -329,8 +329,10 @@ export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
   return parseUnits(safeValue, decimals)
 }
 
-export const isGreaterThanZeroValidation = (value: string): string | true =>
-  isValidNumber(value) && !isZero(value) ? true : 'Amount must be greater than 0'
+export const isGreaterThanZeroValidation = (value: string | undefined): string | true => {
+  if (value == null) return 'Amount must be greater than 0'
+  return isValidNumber(value) && !isZero(value) ? true : 'Amount must be greater than 0'
+}
 
 export function sum<T>(items: T[], extractFn: (item: T) => BigNumber): BigNumber {
   return items.reduce((acc, item) => {

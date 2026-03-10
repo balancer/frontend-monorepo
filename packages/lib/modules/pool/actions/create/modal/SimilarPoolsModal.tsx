@@ -51,7 +51,7 @@ export function SimilarPoolsModal() {
             <BalAlert
               content="You can still create this pool, but you'll fragment liquidity making your pool less profitable (on top of additional set up gas fees)."
               status="warning"
-              title={`Similar pools already exist on ${getChainShortName(network)} (${PROJECT_CONFIG.projectName})`}
+              title={`Similar ${PROJECT_CONFIG.projectName} pools already exist on ${getChainShortName(network)}`}
             />
 
             {similarPools?.slice(0, 3).map(pool => (

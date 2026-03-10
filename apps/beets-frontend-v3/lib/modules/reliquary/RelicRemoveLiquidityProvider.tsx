@@ -30,7 +30,7 @@ export function RelicRemoveLiquidityProvider({
 }) {
   const { relicPositions, refetchRelicPositions } = useReliquary()
 
-  // Find the Relic from positions
+  // Find the maBEETS position from positions
   const relic = relicPositions.find(r => r.relicId === relicId)
 
   // Convert relicId string to number for handler

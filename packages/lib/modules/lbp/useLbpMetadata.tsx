@@ -18,7 +18,7 @@ export function useLbpMetadata() {
   )
 
   const { saleStructureForm, projectInfoForm } = useLbpForm()
-  const { selectedChain } = saleStructureForm.getValues()
+  const { selectedChain, saleType } = saleStructureForm.getValues()
   const { name, description, websiteUrl, tokenIconUrl, telegramHandle, xHandle, discordUrl } =
     projectInfoForm.getValues()
 
@@ -40,8 +40,10 @@ export function useLbpMetadata() {
             x: xHandle ? normalizeHandle(xHandle) : undefined,
           },
         },
+        type: saleType,
       },
     })
+
     if (data?.createLBP) setIsMetadataSaved(true)
   }
 

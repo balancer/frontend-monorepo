@@ -135,7 +135,6 @@ export function TokenSummary({
                       ? fNum('token', launchTokenMetadata?.totalSupply)
                       : '—'}
                   </Text>
-
                   <BalanceInfo chain={chain} tokenAddress={launchTokenAddress} />
                 </VStack>
               </GridItem>
@@ -169,8 +168,7 @@ function BalanceInfo({ chain, tokenAddress }: BalanceInfoProps) {
             <Tooltip
               backgroundColor="background.level4"
               hasArrow
-              label={`You’ll need some tokens in your wallet in order to seed liquidity
-                      in the pool before the start time of the LBP or it will fail to launch.`}
+              label={`This wallet currently holds no ${balanceData?.symbol} tokens, so it cannot be used to create an LBP. To proceed, transfer the full amount of ${balanceData?.symbol} tokens to be included in the token sale, into this wallet first.`}
               placement="top"
               textColor="font.secondary"
             >

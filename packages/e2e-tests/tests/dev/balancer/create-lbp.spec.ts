@@ -8,6 +8,33 @@ import { LBP_FORM_STEPS } from '@repo/lib/modules/lbp/constants.lbp'
 const BASE_URL = 'http://localhost:3000/lbp/create'
 const stepUrl = (index: number) => `${BASE_URL}/${LBP_FORM_STEPS[index].id}`
 
+async function mockCreateLbpMetadata(page: Page) {
+  await page.route('**/graphql', async route => {
+    const request = route.request()
+    if (request.method() !== 'POST') {
+      await route.continue()
+      return
+    }
+
+    const payload = request.postDataJSON?.()
+    const operationName = payload?.operationName as string | undefined
+    const query = payload?.query as string | undefined
+    const isCreateLbpMutation =
+      operationName === 'CreateLBP' || query?.includes('mutation CreateLBP') || false
+
+    if (!isCreateLbpMutation) {
+      await route.continue()
+      return
+    }
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ data: { createLBP: true } }),
+    })
+  })
+}
+
 async function doSaleStructureStep(page: Page, { continue: shouldContinue = false } = {}) {
   await expect(page).toHaveURL(stepUrl(0))
 
@@ -25,7 +52,6 @@ async function doSaleStructureStep(page: Page, { continue: shouldContinue = fals
 
   const nextButton = button(page, 'Next')
 
-  await expect(nextButton).toBeDisabled()
   await page.getByLabel('Sale token').fill('100')
   await page.getByLabel('Collateral token').fill('1')
   await expect(nextButton).toBeEnabled()
@@ -47,9 +73,7 @@ async function doProjectInfoStep(page: Page, { continue: shouldContinue = false 
     .getByLabel('Token icon URL')
     .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
 
-  await expect(nextButton).toBeDisabled()
   await page.getByRole('checkbox').check({ force: true })
-  await expect(nextButton).toBeEnabled()
 
   if (shouldContinue) await nextButton.click()
 }
@@ -62,9 +86,6 @@ async function doReviewStep(page: Page) {
   await clickButton(page, 'Approve TERM')
   await clickButton(page, 'Sign approvals: WETH, TERM')
   await clickButton(page, 'Seed pool liquidity')
-
-  // API sync fails because pool only exists on fork
-  await expect(button(page, 'Retry sync metadata')).toBeVisible()
 }
 
 async function clickResetAndConfirm(page: Page) {
@@ -79,6 +100,7 @@ async function expectInitialFormState(page: Page) {
 
 test.describe('Create LBP page', () => {
   test.beforeEach(async ({ page }) => {
+    await mockCreateLbpMetadata(page)
     await page.goto(BASE_URL)
     await impersonate(page, defaultAnvilAccount)
   })
@@ -87,6 +109,34 @@ test.describe('Create LBP page', () => {
     await doSaleStructureStep(page, { continue: true })
     await doProjectInfoStep(page, { continue: true })
     await doReviewStep(page)
+  })
+
+  test('shows validation errors when required fields are missing', async ({ page }) => {
+    await expect(page).toHaveURL(stepUrl(0))
+
+    await clickButton(page, 'Next')
+
+    await expect(page.getByText('Token address is required')).toBeVisible()
+    await expect(page.getByText('Start date and time is required')).toBeVisible()
+    await expect(page.getByText('End date and time is required')).toBeVisible()
+    await expect(page.getByText('Sale token amount is required')).toBeVisible()
+    await expect(page.getByText('Collateral token amount is required')).toBeVisible()
+    await expect(page).toHaveURL(stepUrl(0))
+  })
+
+  test('blocks sale period shorter than 24 hours', async ({ page }) => {
+    await doSaleStructureStep(page)
+
+    const dateInputs = page.locator('input[type="datetime-local"]')
+    const invalidEndTime = toISOString(Date.now() + oneDayInMs + 60 * 60 * 1000).slice(0, 16)
+    await dateInputs.last().fill(invalidEndTime)
+
+    await clickButton(page, 'Next')
+
+    await expect(
+      page.getByText('End time must be at least 24 hours after start time'),
+    ).toBeVisible()
+    await expect(page).toHaveURL(stepUrl(0))
   })
 
   test.describe('Form reset', () => {

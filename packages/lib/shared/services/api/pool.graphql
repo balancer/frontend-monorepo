@@ -1,3 +1,5 @@
+#import "./pool-tokens.graphql"
+
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
     address
@@ -123,29 +125,10 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       lambda
     }
     ... on GqlPoolLiquidityBootstrappingV3 {
-      endTime
-      lbpName
-      lbpOwner
-      description
-      discord
-      isProjectTokenSwapInBlocked
-      poolTokens {
-        ...PoolTokens
-      }
-      projectToken
-      projectTokenIndex
-      projectTokenEndWeight
-      projectTokenStartWeight
-      reserveToken
-      reserveTokenIndex
-      telegram
-      startTime
-      website
-      x
-      topTrades {
-        address
-        value
-      }
+      ...LbpV3CommonMetadataFields
+    }
+    ... on GqlPoolFixedPriceLBP {
+      ...FixedPriceLbpCommonMetadataFields
     }
     ... on GqlPoolGyro {
       alpha

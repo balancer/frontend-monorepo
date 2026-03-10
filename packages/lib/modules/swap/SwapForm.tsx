@@ -2,7 +2,7 @@
 
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { HumanAmount } from '@balancer/sdk'
+import { HumanAmount, Path } from '@balancer/sdk'
 import {
   Card,
   Center,
@@ -47,9 +47,11 @@ import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 import { useContractWallet } from '../web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '../web3/safe.hooks'
+import { SdkSimulateSwapResponse } from './swap.types'
 import { buildCowSwapUrl } from '../cow/cow.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { RoutesCard } from './RoutesCard'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -330,21 +332,25 @@ export function SwapForm({
                 />
               </VStack>
               {!simulationQuery.isError && (
-                <PriceImpactAccordion
-                  accordionButtonComponent={<SwapRate customTokenUsdPrice={customTokenUsdPrice} />}
-                  accordionPanelComponent={<SwapDetails />}
-                  action="swap"
-                  cowLink={cowLink}
-                  isDisabled={!simulationQuery.data}
-                  setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
-                />
+                <>
+                  <PriceImpactAccordion
+                    accordionButtonComponent={
+                      <SwapRate customTokenUsdPrice={customTokenUsdPrice} />
+                    }
+                    accordionPanelComponent={<SwapDetails hideOrderRoute />}
+                    action="swap"
+                    cowLink={cowLink}
+                    isDisabled={!simulationQuery.data}
+                    setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
+                  />
+                </>
               )}
               {simulationQuery.isError ? (
                 <SwapSimulationError errorMessage={simulationQuery.error?.message} />
               ) : null}
             </VStack>
           </CardBody>
-          <CardFooter>
+          <CardFooter as={VStack}>
             {isConnected ? (
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
@@ -367,6 +373,21 @@ export function SwapForm({
                 size="lg"
                 variant="primary"
                 w="full"
+              />
+            )}
+            {!simulationQuery.isError && !isPoolSwap && (
+              <RoutesCard
+                chain={selectedChain}
+                paths={
+                  simulationQuery.data && 'paths' in simulationQuery.data
+                    ? (simulationQuery.data['paths'] as Path[])
+                    : []
+                }
+                protocolVersion={
+                  (simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion || 2
+                }
+                totalInputAmount={Number(tokenIn.amount)}
+                totalOutputAmount={Number(tokenOut.amount)}
               />
             )}
           </CardFooter>

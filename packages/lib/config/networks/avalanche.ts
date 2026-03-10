@@ -66,6 +66,7 @@ const networkConfig: NetworkConfig = {
   supportsVeBalSync: true,
   lbps: {
     collateralTokens: [
+      '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // WAVAX
       '0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab', // WETH.e
       '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e', // USDC
     ],

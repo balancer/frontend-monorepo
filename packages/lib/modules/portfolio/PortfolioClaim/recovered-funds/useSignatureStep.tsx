@@ -13,7 +13,7 @@ import { useReadContract } from 'wagmi'
 import { signatureRegistryAbi } from './signatureRegistryAbi'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import terms from './terms'
-import { Address, BaseError, ContractFunctionRevertedError, zeroAddress } from 'viem'
+import { Address, BaseError, ContractFunctionRevertedError } from 'viem'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { getGqlChain } from '@repo/lib/config/app.config'
 
@@ -30,8 +30,8 @@ const labels: TransactionLabels = {
 export function useSignatureStep(signatureChain: number) {
   const { isConnected, userAddress } = useUserAccount()
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(signatureChain)
-  const signatureContract =
-    getNetworkConfig(getGqlChain(signatureChain)).contracts.signatureRegistry || zeroAddress
+  const chain = getGqlChain(signatureChain)
+  const signatureContract = getNetworkConfig(chain).contracts.signatureRegistry
 
   const [hasAcceptedDisclaimer, setHasAcceptedDisclaimer] = useState(false)
   const {
@@ -49,6 +49,7 @@ export function useSignatureStep(signatureChain: number) {
 
   async function storeSignature() {
     if (!sdkClient) return
+    if (!signatureContract) throw new Error(`Signature contract not found for chain: ${chain}`)
 
     try {
       const signature = await sdkClient.signMessage({
@@ -125,7 +126,7 @@ export function useSignatureStep(signatureChain: number) {
   }
 }
 
-function useFetchSignature(signatureChain: number, signatureContract: Address) {
+function useFetchSignature(signatureChain: number, signatureContract: Address | undefined) {
   const { userAddress } = useUserAccount()
   const { shouldChangeNetwork } = useChainSwitch(signatureChain)
 
@@ -135,7 +136,7 @@ function useFetchSignature(signatureChain: number, signatureContract: Address) {
     address: signatureContract,
     functionName: 'signatures',
     args: [userAddress],
-    query: { enabled: userAddress && !shouldChangeNetwork },
+    query: { enabled: userAddress && !shouldChangeNetwork && !!signatureContract },
   })
 
   return {
