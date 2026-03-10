@@ -26,6 +26,6 @@
     "beets-frontend-v3": "workspace:*",
     "dotenv": "17.2.3",
     "frontend-v3": "workspace:*",
-    "start-server-and-test": "2.0.13"
+    "start-server-and-test": "2.1.5"
   }
 }
