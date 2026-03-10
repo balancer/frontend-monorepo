@@ -289,7 +289,7 @@ export function usePoolListLogic({
     pools: filteredPools,
     count: joinablePools ? filteredPools.length : data?.count || previousData?.count,
     queryState,
-    loading: loading || (joinablePools && isJoinableBalanceLoading),
+    loading: loading || isJoinableBalanceLoading,
     error,
     networkStatus,
     isFixedPoolType,
