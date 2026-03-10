@@ -4,24 +4,24 @@ import { expect, test, type Page } from '@playwright/test'
 import { defaultAnvilAccount, forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 const baseUrl = 'http://localhost:3001'
-const mabeetsUrlPattern = new RegExp(`${baseUrl}/mabeets(?:\\?focusRelic=\\d+)?$`)
+const mabeetsUrlPattern = new RegExp(`${baseUrl}/mabeets(?:\\?focusPosition=\\d+)?$`)
 const nextButtonName = 'Next'
 const returnToMabeetsButtonName = /Return to maBEETS/i
 
 test.describe('Reliquary page at /mabeets', () => {
   test('Shows reliquary landing sections', async ({ page }) => {
     await gotoMabeetsAndImpersonate(page)
-    await expect(page.getByText('Your Relics')).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Create New Relic' })).toBeVisible()
+    await expect(page.getByText('Your maBEETS positions')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Create New maBEETS position' })).toBeVisible()
   })
 
-  test('Can create a new Relic', async ({ page }) => {
+  test('Can create a new maBEETS position', async ({ page }) => {
     await gotoMabeetsAndImpersonate(page)
-    await createRelicAndReturnToMabeets(page)
+    await createPositionAndReturnToMabeets(page)
   })
 
-  test.describe('Existing Relic Actions', () => {
-    let existingRelicSnapshotId: `0x${string}`
+  test.describe('Existing maBEETS position Actions', () => {
+    let existingPositionSnapshotId: `0x${string}`
 
     test.beforeAll(async ({ browser }) => {
       await forkClient.reset()
@@ -30,24 +30,24 @@ test.describe('Reliquary page at /mabeets', () => {
       const page = await context.newPage()
 
       await gotoMabeetsAndImpersonate(page)
-      await createRelicAndReturnToMabeets(page)
-      existingRelicSnapshotId = await forkClient.snapshot()
+      await createPositionAndReturnToMabeets(page)
+      existingPositionSnapshotId = await forkClient.snapshot()
 
       await context.close()
     })
 
     test.beforeEach(async ({ page }) => {
-      await forkClient.revert({ id: existingRelicSnapshotId })
-      existingRelicSnapshotId = await forkClient.snapshot()
+      await forkClient.revert({ id: existingPositionSnapshotId })
+      existingPositionSnapshotId = await forkClient.snapshot()
       await gotoMabeetsAndImpersonate(page)
     })
 
-    test('Can add liquidity to created Relic', async ({ page }) => {
-      await addLiquidityToExistingRelicAndReturn(page)
+    test('Can add liquidity to created maBEETS position', async ({ page }) => {
+      await addLiquidityToExistingPositionAndReturn(page)
     })
 
-    test('Can remove liquidity from created Relic', async ({ page }) => {
-      await removeLiquidityFromExistingRelicAndReturn(page)
+    test('Can remove liquidity from created maBEETS position', async ({ page }) => {
+      await removeLiquidityFromExistingPositionAndReturn(page)
     })
   })
 })
@@ -61,12 +61,14 @@ async function gotoMabeetsAndImpersonate(page: Page) {
   })
 }
 
-async function createRelicAndReturnToMabeets(page: Page) {
-  await clickButton(page, 'Create New Relic')
+async function createPositionAndReturnToMabeets(page: Page) {
+  await clickButton(page, 'Create New maBEETS position')
 
   await page.waitForURL(`${baseUrl}/mabeets/add-liquidity/new`, { waitUntil: 'commit' })
-  await expect(page.getByText('Add liquidity to Relic')).toBeVisible()
-  await expect(page.getByText('A new Relic will be created with this add liquidity')).toBeVisible()
+  await expect(page.getByText('Add liquidity to maBEETS position')).toBeVisible()
+  await expect(
+    page.getByText('A new maBEETS position will be created with this add liquidity'),
+  ).toBeVisible()
   await expect(page.getByRole('button', { name: nextButtonName, exact: true })).toBeVisible()
 
   await page.locator('[data-id="add-liquidity-tab-proportional"]').click()
@@ -81,20 +83,20 @@ async function createRelicAndReturnToMabeets(page: Page) {
 
   await clickEnabledNextButton(page)
 
-  await doCreateRelicTxSteps(page)
+  await docreatePositionTxSteps(page)
   await expect(page.getByText('Transaction confirmed')).toBeVisible()
   await expect(
-    page.getByText("You've successfully created a new Relic and added liquidity to it!"),
+    page.getByText("You've successfully created a new maBEETS position and added liquidity to it!"),
   ).toBeVisible()
 
   await returnToMabeets(page)
 }
 
-async function addLiquidityToExistingRelicAndReturn(page: Page) {
+async function addLiquidityToExistingPositionAndReturn(page: Page) {
   await clickButton(page, 'Add')
   await expect(page).toHaveURL(new RegExp(`${baseUrl}/mabeets/add-liquidity/\\d+`))
-  await expect(page.getByText('Add liquidity to Relic')).toBeVisible()
-  await expect(page.getByText('Adding liquidity to Relic #')).toBeVisible()
+  await expect(page.getByText('Add liquidity to maBEETS position')).toBeVisible()
+  await expect(page.getByText('Adding liquidity to maBEETS #')).toBeVisible()
 
   // Flexible tab is default; provide only BEETS amount.
   await page.getByPlaceholder('0.00').first().fill('1000')
@@ -103,38 +105,40 @@ async function addLiquidityToExistingRelicAndReturn(page: Page) {
 
   await clickEnabledNextButton(page)
 
-  const addLiquidityButton = page.getByRole('button', { name: /Add liquidity to Relic/i })
+  const addLiquidityButton = page.getByRole('button', { name: /Add liquidity to maBEETS/i })
   await addLiquidityButton.click()
 
   await confirmTxAndReturnToMabeets(page)
 }
 
-async function removeLiquidityFromExistingRelicAndReturn(page: Page) {
+async function removeLiquidityFromExistingPositionAndReturn(page: Page) {
   await clickButton(page, 'Remove')
   await expect(page).toHaveURL(new RegExp(`${baseUrl}/mabeets/remove-liquidity/\\d+`))
-  await expect(page.getByText('Remove liquidity from Relic')).toBeVisible()
+  await expect(page.getByText('Remove liquidity from maBEETS position')).toBeVisible()
 
   await clickEnabledNextButton(page)
 
-  const removeLiquidityButton = page.getByRole('button', { name: /Remove liquidity from Relic/i })
+  const removeLiquidityButton = page.getByRole('button', {
+    name: /Remove liquidity from maBEETS position/i,
+  })
   await removeLiquidityButton.click()
 
   await confirmTxAndReturnToMabeets(page)
 }
 
-async function doCreateRelicTxSteps(page: Page) {
+async function docreatePositionTxSteps(page: Page) {
   const modal = page
     .getByRole('dialog')
-    .filter({ has: page.getByText(/Create new Relic\s*(?:&|and)\s*add liquidity/i) })
-  const createRelicButton = modal.getByRole('button', {
-    name: /Create(?: new)? Relic\s*(?:&|and)\s*add liquidity/i,
+    .filter({ has: page.getByText(/Create new maBEETS position\s*(?:&|and)\s*add liquidity/i) })
+  const createPositionButton = modal.getByRole('button', {
+    name: /Create(?: new)? maBEETS position\s*(?:&|and)\s*add liquidity/i,
   })
 
   const approveOrSignButton = modal.getByRole('button', { name: /(Approve|Sign)/i })
 
   while (true) {
-    await createRelicButton.or(approveOrSignButton).first().waitFor()
-    if ((await createRelicButton.isVisible()) && (await createRelicButton.isEnabled())) break
+    await createPositionButton.or(approveOrSignButton).first().waitFor()
+    if ((await createPositionButton.isVisible()) && (await createPositionButton.isEnabled())) break
     try {
       if (
         (await approveOrSignButton.first().isVisible()) &&
@@ -147,7 +151,7 @@ async function doCreateRelicTxSteps(page: Page) {
     }
   }
 
-  await createRelicButton.click()
+  await createPositionButton.click()
 }
 
 async function clickEnabledNextButton(page: Page) {

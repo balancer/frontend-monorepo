@@ -94,21 +94,21 @@ export function useReliquaryAddLiquidityStep(
   // Labels for the multicall transaction (joinPool + add liquidity into Reliquary)
   const addLiquidityLabels: TransactionLabels = createNew
     ? {
-        init: 'Create Relic & add liquidity',
-        title: 'Create Relic and add liquidity',
-        description: `Create a new maBEETS Relic and add liquidity to ${pool.name || 'pool'}.`,
-        confirming: 'Creating Relic and adding liquidity...',
+        init: 'Create maBEETS position & add liquidity',
+        title: 'Create maBEETS position and add liquidity',
+        description: `Create a new maBEETS maBEETS position and add liquidity to ${pool.name || 'pool'}.`,
+        confirming: 'Creating maBEETS position and adding liquidity...',
         confirmed: 'Relic created and liquidity added!',
-        tooltip: `Create a new maBEETS Relic and add liquidity to ${pool.name || 'pool'}.`,
+        tooltip: `Create a new maBEETS maBEETS position and add liquidity to ${pool.name || 'pool'}.`,
         poolId: pool.id,
       }
     : {
-        init: 'Add liquidity to Relic',
-        title: `Add liquidity to Relic #${relicId}`,
-        description: `Add liquidity to ${pool.name || 'pool'} and Relic #${relicId}.`,
-        confirming: 'Adding liquidity to Relic...',
-        confirmed: 'Liquidity added to Relic!',
-        tooltip: `Add liquidity to ${pool.name || 'pool'} and Relic #${relicId}`,
+        init: 'Add liquidity to maBEETS',
+        title: `Add liquidity to maBEETS #${relicId}`,
+        description: `Add liquidity to ${pool.name || 'pool'} and maBEETS #${relicId}.`,
+        confirming: 'Adding liquidity to maBEETS...',
+        confirmed: 'Liquidity added to maBEETS!',
+        tooltip: `Add liquidity to ${pool.name || 'pool'} and maBEETS #${relicId}`,
         poolId: pool.id,
       }
 

@@ -92,11 +92,11 @@ export function ReliquaryRemoveLiquidityModal({
   }
 
   function handleReturnAction() {
-    router.push(`/mabeets?focusRelic=${relicId}`)
+    router.push(`/mabeets?focusPosition=${relicId}`)
     baseOnClose()
   }
 
-  const modalLabel = `Remove liquidity from Relic #${relicId}`
+  const modalLabel = `Remove liquidity from maBEETS #${relicId}`
 
   return (
     <Modal
