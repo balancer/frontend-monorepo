@@ -34,7 +34,7 @@ const networkConfig: NetworkConfig = {
       '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee': 'xDAI',
       '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d': 'WXDAI',
       '0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1': 'WETH',
-      '0x6c76971f98945ae98dd7d4dfca8711ebea946ea6': 'wsETH',
+      '0x6c76971f98945ae98dd7d4dfca8711ebea946ea6': 'wstETH',
       '0x9c58bacc331c9aa871afd802db6379a98e80cedb': 'GNO',
       '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83': 'USDC',
       '0x7ef541e2a22058048904fe5744f9c7e4c57af717': 'BAL',

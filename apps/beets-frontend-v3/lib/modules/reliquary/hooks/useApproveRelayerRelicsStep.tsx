@@ -30,12 +30,12 @@ export function useApproveRelayerRelicsStep(): {
   const { hasApprovedRelayerForAllRelics, isLoading, refetch } = useHasApprovedRelayerForAllRelics()
 
   const labels: TransactionLabels = {
-    title: 'Approve relayer for all Relics',
-    description: 'Approve the relayer for all Relics.',
-    init: 'Approve relayer for all Relics',
+    title: 'Approve relayer for all maBEETS positions',
+    description: 'Approve the relayer for all maBEETS positions.',
+    init: 'Approve relayer for all maBEETS positions',
     confirming: 'Confirming approval...',
     confirmed: 'Relayer approved!',
-    tooltip: 'Approve the relayer for all Relics.',
+    tooltip: 'Approve the relayer for all maBEETS positions.',
   }
 
   const props: ManagedTransactionInput = {

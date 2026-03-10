@@ -47,6 +47,7 @@ import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
 import { ContractWalletAlert } from '@repo/lib/shared/components/alerts/ContractWalletAlert'
 import { useContractWallet } from '../web3/wallets/useContractWallet'
 import { useIsSafeAccount } from '../web3/safe.hooks'
+import { SdkSimulateSwapResponse } from './swap.types'
 import { buildCowSwapUrl } from '../cow/cow.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
@@ -336,25 +337,12 @@ export function SwapForm({
                     accordionButtonComponent={
                       <SwapRate customTokenUsdPrice={customTokenUsdPrice} />
                     }
-                    accordionPanelComponent={<SwapDetails />}
+                    accordionPanelComponent={<SwapDetails hideOrderRoute />}
                     action="swap"
                     cowLink={cowLink}
                     isDisabled={!simulationQuery.data}
                     setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                   />
-
-                  {!isPoolSwap && (
-                    <RoutesCard
-                      chain={selectedChain}
-                      paths={
-                        simulationQuery.data && 'paths' in simulationQuery.data
-                          ? (simulationQuery.data['paths'] as Path[])
-                          : []
-                      }
-                      totalInputAmount={Number(tokenIn.amount)}
-                      totalOutputAmount={Number(tokenOut.amount)}
-                    />
-                  )}
                 </>
               )}
               {simulationQuery.isError ? (
@@ -362,7 +350,7 @@ export function SwapForm({
               ) : null}
             </VStack>
           </CardBody>
-          <CardFooter>
+          <CardFooter as={VStack}>
             {isConnected ? (
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
@@ -385,6 +373,21 @@ export function SwapForm({
                 size="lg"
                 variant="primary"
                 w="full"
+              />
+            )}
+            {!simulationQuery.isError && !isPoolSwap && (
+              <RoutesCard
+                chain={selectedChain}
+                paths={
+                  simulationQuery.data && 'paths' in simulationQuery.data
+                    ? (simulationQuery.data['paths'] as Path[])
+                    : []
+                }
+                protocolVersion={
+                  (simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion || 2
+                }
+                totalInputAmount={Number(tokenIn.amount)}
+                totalOutputAmount={Number(tokenOut.amount)}
               />
             )}
           </CardFooter>

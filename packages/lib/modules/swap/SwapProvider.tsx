@@ -336,7 +336,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ...newState,
         swapType: GqlSorSwapType.ExactIn,
       })
-      setTokenOutAmount('', { userTriggered: false })
+      if (state.tokenIn.amount !== newState.tokenIn.amount) {
+        setTokenOutAmount('', { userTriggered: false })
+      }
     } else {
       // Sometimes we want to set the amount without triggering a fetch or
       // swapType change, like when we populate the amount after a change from the other input.
@@ -386,7 +388,9 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
         ...newState,
         swapType: GqlSorSwapType.ExactOut,
       })
-      setTokenInAmount('', { userTriggered: false })
+      if (state.tokenOut.amount !== newState.tokenOut.amount) {
+        setTokenInAmount('', { userTriggered: false })
+      }
     } else {
       // Sometimes we want to set the amount without triggering a fetch or
       // swapType change, like when we populate the amount after a change from

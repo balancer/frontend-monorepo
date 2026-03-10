@@ -51,7 +51,7 @@ export function YourMaBeetsStats() {
         }, 0)
       : 0
 
-  // Calculate Total Relic Share as percentage
+  // Calculate Total maBEETS Share as percentage
   const globalTotalBalance = bn(globalStats?.totalBalance || '1').toNumber() // Avoid division by zero
   const relicShareDecimal =
     globalTotalBalance > 0 ? bn(userTotalBalance).div(globalTotalBalance).toNumber() : 0
@@ -70,7 +70,7 @@ export function YourMaBeetsStats() {
       </Text>
       <SimpleGrid columns={2} spacing={{ base: 'sm', md: 'md' }} w="full">
         <RelicStat>
-          <StatLabel label="Your Relics" />
+          <StatLabel label="Your maBEETS positions" />
           <Skeleton isLoaded={!isLoading}>
             <StatValueText>{relicPositions.length}</StatValueText>
           </Skeleton>
@@ -113,7 +113,7 @@ export function YourMaBeetsStats() {
           </Stack>
         </RelicStat>
         <RelicStat>
-          <StatLabel label="Total Relic Share" />
+          <StatLabel label="Total maBEETS Share" />
           <Skeleton isLoaded={!isLoading}>
             <StatValueText>{fNum('sharePercent', relicShareDecimal)}</StatValueText>
           </Skeleton>
