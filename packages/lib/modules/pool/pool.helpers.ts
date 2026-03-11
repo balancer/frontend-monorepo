@@ -96,7 +96,7 @@ export function isUnknownType(poolType: any): boolean {
 }
 
 export function isLiquidityBootstrapping(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.LiquidityBootstrapping
+  return poolType === GqlPoolType.LiquidityBootstrapping || poolType === GqlPoolType.FixedLbp
 }
 
 export function isLBP(poolType: GqlPoolType): boolean {
@@ -104,7 +104,10 @@ export function isLBP(poolType: GqlPoolType): boolean {
 }
 
 export function isV3LBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
-  return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
+  return (
+    pool.__typename === 'GqlPoolLiquidityBootstrappingV3' ||
+    pool.__typename === 'GqlPoolFixedPriceLBP'
+  )
 }
 
 export function isWeighted(poolType: GqlPoolType): boolean {
