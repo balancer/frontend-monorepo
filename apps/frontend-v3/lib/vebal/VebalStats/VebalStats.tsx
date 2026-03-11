@@ -1,5 +1,5 @@
 'use client'
-import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, Card, CardRootProps, VStack } from '@chakra-ui/react'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { UserVebalStatsValues } from './UserVebalStatsValues'
@@ -20,7 +20,7 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
   },
 }
 
-export function VebalStats({ ...props }: CardProps) {
+export function VebalStats({ ...props }: CardRootProps) {
   const colorMode = useThemeColorMode()
 
   return (

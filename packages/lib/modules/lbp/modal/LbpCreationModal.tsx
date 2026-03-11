@@ -27,13 +27,13 @@ import { useInitializeLbpInput } from '../useInitializeLbpInput'
 import { usePoolCreationTransactions } from '@repo/lib/modules/pool/actions/create/modal/usePoolCreationTransactions'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
-export function LbpCreationModal({ isOpen, onClose, finalFocusRef, ...rest }: Props) {
+export function LbpCreationModal({ open, onClose, finalFocusRef, ...rest }: Props) {
   const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
@@ -126,7 +126,7 @@ export function LbpCreationModal({ isOpen, onClose, finalFocusRef, ...rest }: Pr
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current || undefined}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

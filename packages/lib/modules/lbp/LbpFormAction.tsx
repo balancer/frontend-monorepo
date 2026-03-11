@@ -69,9 +69,9 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
       {isFormStateValid && isLastStep && (
         <LbpCreationModal
           finalFocusRef={nextBtn}
-          isOpen={previewModalDisclosure.open}
           onClose={previewModalDisclosure.onClose}
           onOpen={previewModalDisclosure.onOpen}
+          open={previewModalDisclosure.open}
         />
       )}
     </HStack>

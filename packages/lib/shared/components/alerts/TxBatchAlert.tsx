@@ -1,11 +1,11 @@
-import { AlertProps, HStack } from '@chakra-ui/react'
+import { AlertRootProps, HStack } from '@chakra-ui/react'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'
 import { StepType, TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 
-type Props = AlertProps & { steps: TransactionStep[] }
+type Props = AlertRootProps & { steps: TransactionStep[] }
 export function TxBatchAlert({ steps, ...alertProps }: Props) {
   const { isMobile } = useBreakpoints()
   const lastStep = steps[steps.length - 1]

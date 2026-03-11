@@ -1,4 +1,4 @@
-import { Alert, Card, ModalProps, Stack, Text, VStack, Dialog, Portal } from '@chakra-ui/react'
+import { Alert, Card, DialogRootProps, Stack, Text, VStack, Dialog, Portal } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -30,17 +30,17 @@ import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(isSuccess: boolean, redirectPath: string): void
   extendExpired: boolean
 }
 
 export function VebalLockModal({
-  isOpen,
+  open,
   onClose,
   extendExpired,
   ...rest
-}: Props & Omit<ModalProps, 'children' | 'onClose'>) {
+}: Props & Omit<DialogRootProps, 'children' | 'onClose'>) {
   const router = useRouter()
   const { redirectPath, returnLabel } = useVeBalRedirectPath()
 
@@ -91,7 +91,7 @@ export function VebalLockModal({
 
   return (
     <Dialog.Root
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

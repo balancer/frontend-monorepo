@@ -235,9 +235,9 @@ function ReliquaryAddLiquidityForm({ relicId }: { relicId?: string }) {
       <ReliquaryAddLiquidityModal
         createNew={createNew}
         finalFocusRef={nextBtn}
-        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
+        open={previewModalDisclosure.open}
         relicId={relicId}
       />
     </Box>

@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useRemoveLiquidity } from '@repo/lib/modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation'
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
@@ -28,12 +28,12 @@ type Props = {
 }
 
 export function ReliquaryRemoveLiquidityModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   relicId,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { transactionSteps, lastTransaction, removeLiquidityTxHash, hasQuoteContext, urlTxHash } =
@@ -56,11 +56,11 @@ export function ReliquaryRemoveLiquidityModal({
   })
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       // stop polling for token prices when modal is opened to prevent unwanted re-renders
       stopTokenPricePolling()
     }
-  }, [isOpen])
+  }, [open])
 
   useEffect(() => {
     if (removeLiquidityTxHash && !window.location.pathname.includes(removeLiquidityTxHash)) {
@@ -102,7 +102,7 @@ export function ReliquaryRemoveLiquidityModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

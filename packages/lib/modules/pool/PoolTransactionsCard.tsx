@@ -3,7 +3,7 @@ import {
   Box,
   BoxProps,
   Card,
-  CardProps,
+  CardRootProps,
   Grid,
   GridItem,
   GridItemProps,
@@ -21,7 +21,7 @@ export type PoolTransactionsCardHeaderCell = {
   marginRight?: GridItemProps['mr']
 }
 
-export type PoolTransactionsCardProps = {
+export type PoolTransactionsCardRootProps = {
   title: string
   loading: boolean
   headerCells?: PoolTransactionsCardHeaderCell[]
@@ -30,7 +30,7 @@ export type PoolTransactionsCardProps = {
   renderNoTransactions?: () => ReactNode
   children: ReactNode
   footer?: ReactNode
-  cardProps?: CardProps
+  cardProps?: CardRootProps
   cardRef?: Ref<HTMLDivElement>
   listContainerProps?: BoxProps
   headerGridProps?: GridProps
@@ -67,7 +67,7 @@ export function PoolTransactionsCard({
   listContainerProps,
   headerGridProps,
   contentAlignItems = 'flex-start',
-}: PoolTransactionsCardProps) {
+}: PoolTransactionsCardRootProps) {
   const cells = headerCells ?? DEFAULT_HEADER_CELLS
   const noTransactionsState = renderNoTransactions
     ? renderNoTransactions()

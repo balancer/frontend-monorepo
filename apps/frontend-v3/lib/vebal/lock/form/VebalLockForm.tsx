@@ -286,7 +286,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
           </Tooltip>
         </VStack>
       </Card.Root>
-      <VebalLockModal extendExpired isOpen={previewModalDisclosure.open} onClose={onModalClose} />
+      <VebalLockModal extendExpired onClose={onModalClose} open={previewModalDisclosure.open} />
     </Box>
   )
 }

@@ -207,13 +207,13 @@ function LoopsForm() {
       </Card.Footer>
       <LoopsDepositModal
         finalFocusRef={nextBtn}
-        isOpen={depositModalDisclosure.open}
         onClose={onModalClose}
+        open={depositModalDisclosure.open}
       />
       <LoopsWithdrawModal
         finalFocusRef={nextBtn}
-        isOpen={withdrawModalDisclosure.open}
         onClose={onModalClose}
+        open={withdrawModalDisclosure.open}
       />
     </VStack>
   )

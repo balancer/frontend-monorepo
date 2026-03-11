@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, ModalProps, VStack, Dialog, Portal } from '@chakra-ui/react'
+import { Box, DialogRootProps, VStack, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { CompactTokenSelectList } from './CompactTokenSelectList'
@@ -8,7 +8,7 @@ import { ApiToken } from '../../token.types'
 
 type Props = {
   chain: GqlChain
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
@@ -17,13 +17,13 @@ type Props = {
 }
 
 export function CompactTokenSelectModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   onTokenSelect,
   tokens,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   function closeOnSelect(token: ApiToken) {
     onClose()
     onTokenSelect(token)
@@ -32,7 +32,7 @@ export function CompactTokenSelectModal({
   return (
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
-      open={isOpen}
+      open={open}
       placement="center"
       {...rest}
       onOpenChange={(e: { open: boolean }) => {

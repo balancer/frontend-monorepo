@@ -15,17 +15,17 @@ export function DevToolsDrawerButton() {
         <Tool size={18} />
       </Button>
 
-      <DevToolsDrawer isOpen={open} onClose={onClose} />
+      <DevToolsDrawer onClose={onClose} open={open} />
     </>
   )
 }
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose: () => void
 }
 
-function DevToolsDrawer({ isOpen, onClose }: Props) {
+function DevToolsDrawer({ open, onClose }: Props) {
   const { isFakeTime, setIsFakeTime } = useFakeTime()
   const currentDate = useCurrentDate(oneSecondInMs)
   const { reset } = useImpersonateAccount()
@@ -37,7 +37,7 @@ function DevToolsDrawer({ isOpen, onClose }: Props) {
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="end"
       size="lg"
     >

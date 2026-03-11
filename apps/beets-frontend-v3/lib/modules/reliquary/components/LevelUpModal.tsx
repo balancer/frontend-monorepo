@@ -1,4 +1,4 @@
-import { Card, ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { Card, DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -12,7 +12,7 @@ import { useLevelUpStep } from '../hooks/useLevelUpStep'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   chain: GqlChain
   nextLevel: number
@@ -20,13 +20,13 @@ type Props = {
 }
 
 export function LevelUpModal({
-  isOpen,
+  open,
   onClose,
   chain,
   nextLevel,
   relicId,
   ...rest
-}: Props & Omit<ModalProps, 'children' | 'onClose'>) {
+}: Props & Omit<DialogRootProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
   const { step: levelUpStep } = useLevelUpStep(relicId)
   const levelUpTransactionSteps = useTransactionSteps([levelUpStep], false)
@@ -41,7 +41,7 @@ export function LevelUpModal({
 
   return (
     <Dialog.Root
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

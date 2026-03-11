@@ -365,20 +365,20 @@ export function ClaimNetworkPools() {
             </SimpleGrid>
 
             <ClaimProtocolRevenueModal
-              isOpen={isOpenedProtocolRevenueModal}
               onClose={() => setIsOpenedProtocolRevenueModal(false)}
+              open={isOpenedProtocolRevenueModal}
             />
             <ClaimHiddenHandRewardsModal
-              isOpen={isOpenedHiddenHandRewardsModal}
               onClose={() => setIsOpenedHiddenHandRewardsModal(false)}
+              open={isOpenedHiddenHandRewardsModal}
             />
             <ClaimRecoveredFundsModal
-              isOpen={isClaimRecoveredFundModalOpen}
               onClose={onClaimRecoveredFundModalClose}
+              open={isClaimRecoveredFundModalOpen}
             />
             <RecoveredFundsLearnMoreModal
-              isOpen={isRecoveredFundsLearnMoreModalOpen}
               onClose={onRecoveredFundsLearnMoreModalClose}
+              open={isRecoveredFundsLearnMoreModalOpen}
             />
           </>
         )}

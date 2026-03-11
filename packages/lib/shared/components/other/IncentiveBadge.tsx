@@ -1,11 +1,11 @@
-import { Accordion, CardProps, Flex, HStack, Icon, Text } from '@chakra-ui/react'
+import { Accordion, CardRootProps, Flex, HStack, Icon, Text } from '@chakra-ui/react'
 import StarsIcon from '../icons/StarsIcon'
 
 type Props = {
   special?: boolean
   label: string
   value: string
-} & CardProps
+} & CardRootProps
 
 export function IncentiveBadge({ special = false, label, value, children }: Props) {
   return (

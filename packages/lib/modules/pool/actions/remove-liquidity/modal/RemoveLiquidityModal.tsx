@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
@@ -22,18 +22,18 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function RemoveLiquidityModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { transactionSteps, removeLiquidityTxHash, urlTxHash, hasQuoteContext, lastTransaction } =
@@ -53,11 +53,11 @@ export function RemoveLiquidityModal({
   })
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       // stop polling for token prices when modal is opened to prevent unwanted re-renders
       stopTokenPricePolling()
     }
-  }, [isOpen])
+  }, [open])
 
   useEffect(() => {
     if (removeLiquidityTxHash && !window.location.pathname.includes(removeLiquidityTxHash)) {
@@ -73,7 +73,7 @@ export function RemoveLiquidityModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

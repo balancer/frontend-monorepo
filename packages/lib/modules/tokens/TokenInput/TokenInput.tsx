@@ -364,7 +364,10 @@ export const TokenInput = forwardRef<HTMLInputElement, InputProps & Props>(
               />
               {token && (
                 <Box
-                  bgGradient="linear(to-r, transparent, background.level0 70%)"
+                  css={{
+                    background:
+                      'linear-gradient(to right, transparent, var(--chakra-colors-background-level0) 70%)',
+                  }}
                   h="full"
                   position="absolute"
                   right={0}

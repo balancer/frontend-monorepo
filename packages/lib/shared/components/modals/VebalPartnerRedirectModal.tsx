@@ -11,7 +11,7 @@ export enum VebalRedirectPartner {
 type Props = {
   partner: VebalRedirectPartner
   redirectUrl?: string
-  isOpen: boolean
+  open: boolean
   onClose: () => void
 }
 
@@ -57,7 +57,7 @@ const partnerInfo: PartnerInfo = {
   },
 }
 
-export function VebalPartnerRedirectModal({ partner, redirectUrl, isOpen, onClose }: Props) {
+export function VebalPartnerRedirectModal({ partner, redirectUrl, open, onClose }: Props) {
   const info = partnerInfo[partner]
 
   return (
@@ -67,7 +67,7 @@ export function VebalPartnerRedirectModal({ partner, redirectUrl, isOpen, onClos
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
     >
       <Portal>

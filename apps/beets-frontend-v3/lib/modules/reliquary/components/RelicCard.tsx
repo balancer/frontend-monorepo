@@ -265,7 +265,7 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
             colorPalette="blue"
             height="24px"
             rounded="md"
-            value={String(isMaxMaturity ? 100 : progressToNextLevel)}
+            value={isMaxMaturity ? 100 : progressToNextLevel}
             width="full"
           >
             <Progress.Track>
@@ -351,21 +351,21 @@ export function RelicCard({ relic, isSelected = false }: RelicCardSimpleProps) {
       )}
       <LevelUpModal
         chain={chain}
-        isOpen={isLevelUpModalOpen}
         nextLevel={relic.level + 2}
         onClose={() => setIsLevelUpModalOpen(false)}
+        open={isLevelUpModalOpen}
         relicId={relic.relicId}
       />
       <ReliquaryClaimModal
-        isOpen={isClaimModalOpen}
         onClose={() => setIsClaimModalOpen(false)}
         onOpen={() => setIsClaimModalOpen(true)}
+        open={isClaimModalOpen}
         relicId={relic.relicId}
       />
       <BurnModal
         chain={chain}
-        isOpen={isBurnModalOpen}
         onClose={() => setIsBurnModalOpen(false)}
+        open={isBurnModalOpen}
         relicId={relic.relicId}
       />
     </VStack>

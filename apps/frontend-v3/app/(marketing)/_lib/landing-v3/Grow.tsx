@@ -258,8 +258,8 @@ export function Grow() {
         </Text>
       </DefaultPageContainer>
       <PartnerRedirectModal
-        isOpen={partnerRedirectDisclosure.open}
         onClose={partnerRedirectDisclosure.onClose}
+        open={partnerRedirectDisclosure.open}
         partner={redirectPartner}
       />
     </Noise>

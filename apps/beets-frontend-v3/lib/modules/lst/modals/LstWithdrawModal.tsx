@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
@@ -14,17 +14,17 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useLstWithdrawReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   chain: GqlChain
 }
 
 export function LstWithdrawModal({
-  isOpen,
+  open,
   onClose,
   chain,
   ...rest
-}: Props & Omit<ModalProps, 'children' | 'onClose'>) {
+}: Props & Omit<DialogRootProps, 'children' | 'onClose'>) {
   const { isDesktop } = useBreakpoints()
   const { userAddress } = useUserAccount()
   const { withdrawTransactionSteps, lstWithdrawTxHash, setWithdrawId } = useLst()
@@ -46,7 +46,7 @@ export function LstWithdrawModal({
 
   return (
     <Dialog.Root
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

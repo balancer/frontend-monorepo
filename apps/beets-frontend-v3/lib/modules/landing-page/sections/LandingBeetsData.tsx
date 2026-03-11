@@ -86,9 +86,10 @@ function ChainStats({
       <Progress.Root
         colorPalette="cyan"
         rounded="lg"
-        value={String(
-          bn(protocolData.protocolMetricsChain.totalLiquidity).div(totalTvl).times(100).toNumber()
-        )}
+        value={bn(protocolData.protocolMetricsChain.totalLiquidity)
+          .div(totalTvl)
+          .times(100)
+          .toNumber()}
         w="full"
       >
         <Progress.Track>

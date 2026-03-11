@@ -1,4 +1,4 @@
-import { Card, ModalProps, Text, Dialog, Portal } from '@chakra-ui/react'
+import { Card, DialogRootProps, Text, Dialog, Portal } from '@chakra-ui/react'
 import { useClaim } from './ClaimProvider'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
@@ -18,17 +18,17 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(isSuccess: boolean): void
   chain: GqlChain
 }
 
 export function ClaimModal({
-  isOpen,
+  open,
   onClose,
   chain,
   ...rest
-}: Props & Omit<ModalProps, 'children' | 'onClose'>) {
+}: Props & Omit<DialogRootProps, 'children' | 'onClose'>) {
   const router = useRouter()
 
   const { isDesktop, isMobile } = useBreakpoints()
@@ -50,7 +50,7 @@ export function ClaimModal({
 
   return (
     <Dialog.Root
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

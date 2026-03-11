@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -13,7 +13,7 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
@@ -21,12 +21,12 @@ type Props = {
 }
 
 export function ReliquaryClaimModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   relicId,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { pool } = usePool()
@@ -47,7 +47,7 @@ export function ReliquaryClaimModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

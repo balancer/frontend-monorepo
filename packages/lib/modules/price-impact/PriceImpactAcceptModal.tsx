@@ -1,12 +1,21 @@
 'use client'
 
-import { ModalProps, VStack, Text, Button, Input, Code, Dialog, Portal } from '@chakra-ui/react'
+import {
+  DialogRootProps,
+  VStack,
+  Text,
+  Button,
+  Input,
+  Code,
+  Dialog,
+  Portal,
+} from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDebounce } from '@repo/lib/shared/hooks/useDebounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   setAcceptHighPriceImpact: (value: boolean) => void
@@ -15,11 +24,11 @@ type Props = {
 const INPUT_TEXT = 'rekt risk'
 
 export function PriceImpactAcceptModal({
-  isOpen,
+  open,
   onClose,
   setAcceptHighPriceImpact,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   const [inputText, setInputText] = useState('')
 
   const handleClick = () => {
@@ -37,7 +46,7 @@ export function PriceImpactAcceptModal({
 
   return (
     <Dialog.Root
-      open={isOpen}
+      open={open}
       placement="center"
       {...rest}
       onOpenChange={(e: { open: boolean }) => {

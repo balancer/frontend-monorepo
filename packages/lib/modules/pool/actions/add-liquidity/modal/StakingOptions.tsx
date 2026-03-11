@@ -115,8 +115,8 @@ export function StakingOptions() {
                       Learn more
                     </Button>
                     <PartnerRedirectModal
-                      isOpen={auraDisclosure.open}
                       onClose={auraDisclosure.onClose}
+                      open={auraDisclosure.open}
                       partner={RedirectPartner.Aura}
                       redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
                     />

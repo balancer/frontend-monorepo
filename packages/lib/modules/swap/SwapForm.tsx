@@ -394,10 +394,10 @@ export function SwapForm({
         <CompactTokenSelectModal
           chain={selectedChain}
           finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
-          isOpen={tokenSelectDisclosure.open}
           onClose={tokenSelectDisclosure.onClose}
           onOpen={tokenSelectDisclosure.onOpen}
           onTokenSelect={handleTokenSelectForPoolSwap}
+          open={tokenSelectDisclosure.open}
           tokens={poolActionableTokens || []}
         />
       ) : (
@@ -405,18 +405,18 @@ export function SwapForm({
           chain={selectedChain}
           currentToken={tokenSelectKey === 'tokenIn' ? tokenIn.address : tokenOut.address}
           finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
-          isOpen={tokenSelectDisclosure.open}
           onClose={tokenSelectDisclosure.onClose}
           onOpen={tokenSelectDisclosure.onOpen}
           onTokenSelect={handleTokenSelect}
+          open={tokenSelectDisclosure.open}
           tokens={tokens}
         />
       )}
       <SwapPreviewModal
         finalFocusRef={nextBtn}
-        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
+        open={previewModalDisclosure.open}
       />
     </FadeInOnView>
   )

@@ -126,9 +126,9 @@ export function YourMaBeetsStats() {
         </RelicStat>
       </SimpleGrid>
       <ReliquaryClaimAllRewardsModal
-        isOpen={isClaimAllModalOpen}
         onClose={() => setIsClaimAllModalOpen(false)}
         onOpen={() => setIsClaimAllModalOpen(true)}
+        open={isClaimAllModalOpen}
       />
     </VStack>
   )

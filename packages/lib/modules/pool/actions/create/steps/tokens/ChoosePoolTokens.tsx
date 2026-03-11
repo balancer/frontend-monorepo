@@ -192,10 +192,10 @@ export function ChoosePoolTokens() {
         enableUnlistedToken
         excludedTokens={excludedTokens}
         excludeNativeAsset={true}
-        isOpen={tokenSelectDisclosure.open}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
         onTokenSelect={handleTokenSelect}
+        open={tokenSelectDisclosure.open}
         tokens={availableTokens}
       />
     </>
@@ -373,7 +373,7 @@ function AddTokenButton({
 
   if (tooltipMessage) {
     return (
-      <TooltipWithTouch disabled={false} hasArrow label={tooltipMessage}>
+      <TooltipWithTouch disabled={false} label={tooltipMessage} showArrow>
         {buttonContent}
       </TooltipWithTouch>
     )

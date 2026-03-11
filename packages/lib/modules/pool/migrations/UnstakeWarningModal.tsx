@@ -8,11 +8,11 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { ArrowUpRight } from 'react-feather'
 
 export function UnstakeWarningModal({
-  isOpen = false,
+  open = false,
   onClose = () => {},
   pool,
 }: {
-  isOpen?: boolean
+  open?: boolean
   onClose?: () => void
   pool: Pool
 }) {
@@ -46,7 +46,7 @@ export function UnstakeWarningModal({
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
     >
       <Portal>

@@ -51,7 +51,7 @@ export function VeBalPotentialBar() {
             colorPalette="green"
             rounded="lg"
             size="sm"
-            value={String(progressPercentage)}
+            value={progressPercentage}
             w="full"
           >
             <Progress.Track>

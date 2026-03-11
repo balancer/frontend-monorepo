@@ -28,13 +28,21 @@ export function LbpPriceChart() {
         w="full"
       >
         <HStack>
-          <Box bgGradient="linear(to-r, #B3AEF5, #EAA879)" height="2px" width="15px" />
+          <Box
+            bgGradient="to-r"
+            gradientFrom="#B3AEF5"
+            gradientTo="#EAA879"
+            height="2px"
+            width="15px"
+          />
           <Text fontSize="sm">Spot price</Text>
         </HStack>
         <HStack>
           <Box height="2px" overflow="hidden" position="relative" width="15px">
             <Box
-              bgGradient="linear(to-r, #B3AEF5, #EAA879)"
+              bgGradient="to-r"
+              gradientFrom="#B3AEF5"
+              gradientTo="#EAA879"
               inset="0"
               position="absolute"
               style={{

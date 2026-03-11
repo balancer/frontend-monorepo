@@ -1,4 +1,4 @@
-import { Card, ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { Card, DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
@@ -13,19 +13,19 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   chain: GqlChain
   relicId: string
 }
 
 export function BurnModal({
-  isOpen,
+  open,
   onClose,
   chain,
   relicId,
   ...rest
-}: Props & Omit<ModalProps, 'children' | 'onClose'>) {
+}: Props & Omit<DialogRootProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
   const { step: burnStep } = useBurnRelicStep(relicId, chain)
   const { refetchRelicPositions } = useReliquary()
@@ -42,7 +42,7 @@ export function BurnModal({
 
   return (
     <Dialog.Root
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

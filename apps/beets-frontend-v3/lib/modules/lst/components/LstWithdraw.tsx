@@ -69,7 +69,7 @@ export function LstWithdraw() {
         )}
         showPagination={showPagination}
       />
-      <LstWithdrawModal chain={chain} isOpen={open} onClose={onClose} />
+      <LstWithdrawModal chain={chain} onClose={onClose} open={open} />
     </>
   )
 }

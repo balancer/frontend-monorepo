@@ -64,9 +64,9 @@ export function CrossChainBoost() {
             <SimpleGrid columns={{ base: 1, md: 2 }} gap="md">
               {showingUnsyncedNetworks.length > 0 && (
                 <CrossChainSyncModal
-                  isOpen={syncIsOpen}
                   networks={showingUnsyncedNetworks}
                   onClose={() => setSyncIsOpen(false)}
+                  open={syncIsOpen}
                 />
               )}
               <GridItem>

@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useSwap } from '../SwapProvider'
@@ -20,18 +20,18 @@ import { useTokens } from '../../tokens/TokensProvider'
 import { useIsPoolSwapUrl } from '../useIsPoolSwapUrl'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function SwapPreviewModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
@@ -70,11 +70,11 @@ export function SwapPreviewModal({
   }, [swapTxHash])
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       // stop polling for token prices when modal is opened to prevent unwanted re-renders
       stopTokenPricePolling()
     }
-  }, [isOpen])
+  }, [open])
 
   useOnUserAccountChanged(onClose)
 
@@ -84,7 +84,7 @@ export function SwapPreviewModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

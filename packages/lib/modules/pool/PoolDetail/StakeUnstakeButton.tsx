@@ -201,8 +201,8 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
         </Popover.Context>
       </Popover.Root>
       <PartnerRedirectModal
-        isOpen={auraDisclosure.open}
         onClose={auraDisclosure.onClose}
+        open={auraDisclosure.open}
         partner={RedirectPartner.Aura}
         redirectUrl={getAuraPoolLink(getChainId(pool.chain), pool.staking?.aura?.auraPoolId || '')}
       />

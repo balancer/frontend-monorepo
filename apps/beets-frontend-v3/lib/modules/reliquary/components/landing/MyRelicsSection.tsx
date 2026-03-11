@@ -118,9 +118,9 @@ export function MyRelicsSection({ focusRelicId, isConnected }: Props) {
                   {open && (
                     <ReliquaryDelegationModal
                       isDelegated={isDelegatedToMDs}
-                      isOpen={open}
                       onClose={onClose}
                       onOpen={onOpen}
+                      open={open}
                     />
                   )}
                 </VStack>

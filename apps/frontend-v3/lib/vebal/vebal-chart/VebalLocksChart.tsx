@@ -1,4 +1,4 @@
-import { Card, CardProps, Text, VStack } from '@chakra-ui/react'
+import { Card, CardRootProps, Text, VStack } from '@chakra-ui/react'
 
 import ReactECharts from 'echarts-for-react'
 import { useVebalLocksChart, UseVebalLocksChartParams } from './useVebalLocksChart'
@@ -8,7 +8,7 @@ export function VebalLocksChart({
   mainnetLockedInfo,
   lockSnapshots,
   ...props
-}: CardProps & UseVebalLocksChartParams) {
+}: CardRootProps & UseVebalLocksChartParams) {
   const chartInfo = useVebalLocksChart({ mainnetLockedInfo, lockSnapshots })
 
   return (

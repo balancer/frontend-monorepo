@@ -3,10 +3,10 @@ import { Link, Box, VStack, Text, List, Button, Dialog, Portal } from '@chakra-u
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function RecoveredFundsLearnMoreModal({
-  isOpen = false,
+  open = false,
   onClose = () => {},
 }: {
-  isOpen?: boolean
+  open?: boolean
   onClose?: () => void
 }) {
   return (
@@ -16,7 +16,7 @@ export function RecoveredFundsLearnMoreModal({
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
       size="lg"
     >

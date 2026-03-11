@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal, VStack, Button, HStack, Text } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal, VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
@@ -25,18 +25,18 @@ import { useWatch } from 'react-hook-form'
 import { usePoolCreationTransactions } from './usePoolCreationTransactions'
 
 type PoolCreationModalProps = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function PoolCreationModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   ...rest
-}: PoolCreationModalProps & Omit<ModalProps, 'children'>) {
+}: PoolCreationModalProps & Omit<DialogRootProps, 'children'>) {
   const { poolCreationForm, resetPoolCreationForm, poolAddress, setPoolAddress } =
     usePoolCreationForm()
   const [network, poolType] = useWatch({
@@ -92,7 +92,7 @@ export function PoolCreationModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isPoolInitialized}
       {...rest}

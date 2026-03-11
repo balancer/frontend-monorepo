@@ -107,14 +107,14 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
       </FadeInOnView>
       <SubmitVotesModal
         finalFocusRef={submitBtn}
-        isOpen={submitModalIsOpen}
         onClose={handleClose}
         onOpen={submitModalOnOpen}
+        open={submitModalIsOpen}
       />
       <PoolSelectionModal
-        isOpen={poolSelectionIsOpen}
         onClose={poolSelectionOnClose}
         onContinue={continueAfterPoolSelection}
+        open={poolSelectionIsOpen}
       />
     </>
   )

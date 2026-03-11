@@ -1,6 +1,16 @@
 'use client'
 
-import { Box, Card, HStack, VStack, Flex, Text, Alert, CardProps, Skeleton } from '@chakra-ui/react'
+import {
+  Box,
+  Card,
+  HStack,
+  VStack,
+  Flex,
+  Text,
+  Alert,
+  CardRootProps,
+  Skeleton,
+} from '@chakra-ui/react'
 import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { VebalLockModal } from '@bal/lib/vebal/lock/modal/VebalLockModal'
 import NextLink from 'next/link'
@@ -15,11 +25,11 @@ import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowW
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 import { ArrowRight } from 'react-feather'
 
-export interface ClickableCardProps extends CardProps {
+export interface ClickableCardRootProps extends CardRootProps {
   color?: string
 }
 
-export function ClickableCard(props: ClickableCardProps) {
+export function ClickableCard(props: ClickableCardRootProps) {
   return <Card.Root cursor="pointer" {...props} />
 }
 
@@ -189,8 +199,8 @@ export function VebalUnlockForm() {
       </Card.Root>
       <VebalLockModal
         extendExpired={false}
-        isOpen={previewModalDisclosure.open}
         onClose={onModalClose}
+        open={previewModalDisclosure.open}
       />
     </Box>
   )

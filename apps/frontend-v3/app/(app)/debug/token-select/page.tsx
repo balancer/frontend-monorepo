@@ -28,10 +28,10 @@ export default function TokenSelectPage() {
       <TokenSelectModal
         chain={GqlChain.Mainnet}
         finalFocusRef={tokenSelectBtn}
-        isOpen={tokenSelectDisclosure.open}
         onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
         onTokenSelect={handleTokenSelect}
+        open={tokenSelectDisclosure.open}
         pinNativeAsset
         tokens={getTokensByChain(1)}
       />

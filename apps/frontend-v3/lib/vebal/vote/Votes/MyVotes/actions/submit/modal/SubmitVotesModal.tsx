@@ -1,5 +1,5 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -15,18 +15,18 @@ import { useSubmittingVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/su
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(anySuccess: boolean): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function SubmitVotesModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   ...rest
-}: Props & Omit<ModalProps, 'children' | 'onClose'>) {
+}: Props & Omit<DialogRootProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { transactionSteps, txHash, totalInfo, timeLockedVotes, unchangedVotes } = useMyVotes()
@@ -45,7 +45,7 @@ export function SubmitVotesModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       size="xl"
       {...rest}

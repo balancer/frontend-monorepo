@@ -210,15 +210,15 @@ function LstForm() {
       </Card.Footer>
       <LstStakeModal
         finalFocusRef={nextBtn}
-        isOpen={stakeModalDisclosure.open}
         onClose={onModalClose}
         onOpen={stakeModalDisclosure.onOpen}
+        open={stakeModalDisclosure.open}
       />
       <LstUnstakeModal
         finalFocusRef={nextBtn}
-        isOpen={unstakeModalDisclosure.open}
         onClose={onModalClose}
         onOpen={unstakeModalDisclosure.onOpen}
+        open={unstakeModalDisclosure.open}
       />
     </VStack>
   )

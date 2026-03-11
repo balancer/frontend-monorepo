@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, ModalProps, VStack, Dialog, Portal } from '@chakra-ui/react'
+import { Box, DialogRootProps, VStack, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useState } from 'react'
 import { TokenSelectList } from './TokenSelectList/TokenSelectList'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -17,7 +17,7 @@ type Props<T extends ApiOrCustomToken = ApiToken> = {
   excludeNativeAsset?: boolean
   pinNativeAsset?: boolean
   enableUnlistedToken?: boolean
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
@@ -32,13 +32,13 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   excludeNativeAsset = false,
   pinNativeAsset = false,
   enableUnlistedToken = false,
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   onTokenSelect,
   excludedTokens,
   ...rest
-}: Props<T> & Omit<ModalProps, 'children'>) {
+}: Props<T> & Omit<DialogRootProps, 'children'>) {
   const [searchTerm, setSearchTerm] = useState('')
 
   function closeOnSelect(token: ApiOrCustomToken) {
@@ -54,7 +54,7 @@ export function TokenSelectModal<T extends ApiOrCustomToken = ApiToken>({
   return (
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current}
-      open={isOpen}
+      open={open}
       placement="center"
       {...rest}
       onOpenChange={(e: { open: boolean }) => {

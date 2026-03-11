@@ -1,4 +1,4 @@
-import { Alert, AlertProps, AlertStatus, IconButton, VStack } from '@chakra-ui/react'
+import { Alert, AlertRootProps, AlertStatus, IconButton, VStack } from '@chakra-ui/react'
 import { MouseEventHandler, ReactNode } from 'react'
 import { AlertTriangle, Check, Loader, X, XOctagon } from 'react-feather'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
@@ -14,7 +14,7 @@ export type BalAlertProps = {
   onClose?: MouseEventHandler
   ssr?: boolean
   action?: ReactNode
-} & Omit<AlertProps, 'status' | 'children' | 'content'>
+} & Omit<AlertRootProps, 'status' | 'children' | 'content'>
 
 export function BalAlert({
   content,

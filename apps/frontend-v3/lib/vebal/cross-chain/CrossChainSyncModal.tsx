@@ -28,7 +28,7 @@ import { formatUnits } from 'viem'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   networks: GqlChain[]
 }
@@ -120,7 +120,7 @@ function NetworkOptions({ networks, selectedNetworks, toggleNetwork }: NetworkOp
   )
 }
 
-export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
+export function CrossChainSyncModal({ open, onClose, networks }: Props) {
   const { refetch } = useCrossChainSync()
   const [selectedNetworks, setSelectedNetworks] = useState<GqlChain[]>([])
   const [showTransactionSteps, setShowTransactionSteps] = useState(false)
@@ -158,7 +158,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
           onModalClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
     >

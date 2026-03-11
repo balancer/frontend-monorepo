@@ -3,7 +3,7 @@
 import {
   Box,
   Card,
-  CardProps,
+  CardRootProps,
   Heading,
   Text,
   TextProps,
@@ -50,7 +50,7 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
   )
 }
 
-export function PoolRisks({ ...props }: CardProps) {
+export function PoolRisks({ ...props }: CardRootProps) {
   return (
     <Card.Root {...props}>
       <VStack alignItems="flex-start" gap="4" width="full">

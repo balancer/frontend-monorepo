@@ -316,9 +316,9 @@ export function RemoveLiquidityForm() {
 
         <RemoveLiquidityModal
           finalFocusRef={nextBtn}
-          isOpen={previewModalDisclosure.open}
           onClose={onModalClose}
           onOpen={previewModalDisclosure.onOpen}
+          open={previewModalDisclosure.open}
         />
       </Box>
     </TokenBalancesProvider>

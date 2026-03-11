@@ -50,10 +50,10 @@ export default function TokenInputPage() {
 
           <TokenSelectModal
             chain={GqlChain.Mainnet}
-            isOpen={tokenSelectDisclosure.open}
             onClose={tokenSelectDisclosure.onClose}
             onOpen={tokenSelectDisclosure.onOpen}
             onTokenSelect={handleTokenSelect}
+            open={tokenSelectDisclosure.open}
             tokens={tokens}
           />
         </VStack>

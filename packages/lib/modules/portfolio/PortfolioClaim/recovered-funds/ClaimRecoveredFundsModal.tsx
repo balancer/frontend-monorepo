@@ -13,13 +13,13 @@ import { useCallback, useRef, useState } from 'react'
 import { SettlementTerms } from './SettlementTerms'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose: () => void
 }
 
 const MotionFlex = motion(Flex)
 
-export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
+export function ClaimRecoveredFundsModal({ open, onClose }: Props) {
   const { isDesktop } = useBreakpoints()
   const { redirectToPage: redirectToPortfolioPage } = useRedirect('/portfolio')
 
@@ -62,7 +62,7 @@ export function ClaimRecoveredFundsModal({ isOpen, onClose }: Props) {
           closeModal()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
     >
       <Portal>

@@ -19,11 +19,11 @@ import { useClaimVeBalRewardsStep } from '../../pool/actions/claim/useClaimVeBal
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
 }
 
-export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
+export default function ClaimProtocolRevenueModal({ open, onClose }: Props) {
   const { protocolRewardsData, protocolRewardsBalance, refetchProtocolRewards } = usePortfolio()
   const { isDesktop, isMobile } = useBreakpoints()
 
@@ -49,7 +49,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
     >

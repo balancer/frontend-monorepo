@@ -91,8 +91,8 @@ export function VebalEcosystem() {
         </Flex>
       </VStack>
       <VebalPartnerRedirectModal
-        isOpen={partnerRedirectDisclosure.open}
         onClose={partnerRedirectDisclosure.onClose}
+        open={partnerRedirectDisclosure.open}
         partner={redirectPartner}
       />
     </Box>

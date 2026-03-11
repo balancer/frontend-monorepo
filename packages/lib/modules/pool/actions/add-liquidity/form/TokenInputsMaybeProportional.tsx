@@ -100,19 +100,19 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
       {!!validTokens.length && (
         <NativeAssetSelectModal
           chain={validTokens[0].chain}
-          isOpen={nativeTokenSelectDisclosure.open}
           nativeAssets={nativeAssets}
           onClose={nativeTokenSelectDisclosure.onClose}
           onOpen={nativeTokenSelectDisclosure.onOpen}
           onTokenSelect={handleNativeTokenSelect}
+          open={nativeTokenSelectDisclosure.open}
         />
       )}
       <WrappedOrUnderlyingSelectModal
         chain={chain}
-        isOpen={boostedTokenSelectDisclosure.open && !!wrappedAndUnderlying}
         onClose={boostedTokenSelectDisclosure.onClose}
         onOpen={boostedTokenSelectDisclosure.onOpen}
         onTokenSelect={onBoostedTokenSelect}
+        open={boostedTokenSelectDisclosure.open && !!wrappedAndUnderlying}
         tokens={wrappedAndUnderlying as ApiToken[]}
       />
     </VStack>

@@ -1,12 +1,12 @@
 'use client'
 
-import { AlertProps, Text } from '@chakra-ui/react'
+import { AlertRootProps, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { GqlChain } from '../../services/api/generated/graphql'
 import { BlockExplorerLink } from '../BlockExplorerLink'
 import { ErrorAlert } from './ErrorAlert'
 
-type Props = AlertProps & { transactionHash?: Address; chain: GqlChain }
+type Props = AlertRootProps & { transactionHash?: Address; chain: GqlChain }
 
 export function TransactionTimeoutError({ transactionHash, chain, ...rest }: Props) {
   return (

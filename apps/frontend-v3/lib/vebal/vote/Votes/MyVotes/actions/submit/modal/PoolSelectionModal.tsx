@@ -14,12 +14,12 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { Address } from 'viem'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onContinue(): void
 }
 
-export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
+export function PoolSelectionModal({ open, onClose, onContinue }: Props) {
   const { selectableVotes, setSelectedVotes, changedVotes, submittableVotes } = useMyVotes()
   const selectableVotesIds = selectableVotes.map(vote => vote.vote.id)
   const updatedWeightVotes = changedVotes.filter(vote => !selectableVotesIds.includes(vote.vote.id))
@@ -36,7 +36,7 @@ export function PoolSelectionModal({ isOpen, onClose, onContinue }: Props) {
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
     >
       <Portal>
         <Dialog.Backdrop />

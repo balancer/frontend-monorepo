@@ -133,7 +133,6 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
           <ClaimProvider pools={modalPools}>
             <ClaimModal
               chain={gqlChain}
-              isOpen={modalPools.length > 0}
               onClose={(isSuccess: boolean) => {
                 if (isSuccess) {
                   refetchClaimPoolData()
@@ -141,6 +140,7 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
 
                 setModalPools([])
               }}
+              open={modalPools.length > 0}
             />
           </ClaimProvider>
         )}

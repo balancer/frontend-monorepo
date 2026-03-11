@@ -197,9 +197,9 @@ export function PriceImpactAccordion({
             </Card.Root>
           </VStack>
           <PriceImpactAcceptModal
-            isOpen={acceptHighImpactDisclosure.open}
             onClose={acceptHighImpactDisclosure.onClose}
             onOpen={acceptHighImpactDisclosure.onOpen}
+            open={acceptHighImpactDisclosure.open}
             setAcceptHighPriceImpact={setAcceptPriceImpactRisk}
           />
         </>

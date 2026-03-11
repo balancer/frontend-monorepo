@@ -1,11 +1,11 @@
 import { PropsWithChildren } from 'react'
-import { Card, CardProps, Box } from '@chakra-ui/react'
+import { Card, CardRootProps, Box } from '@chakra-ui/react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function VotingDeadlineContainer({
   children,
   ...stackProps
-}: PropsWithChildren & CardProps) {
+}: PropsWithChildren & CardRootProps) {
   return (
     <Card.Root
       bg="transparent"

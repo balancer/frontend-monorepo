@@ -1,10 +1,10 @@
-import { Box, BoxProps, CardProps, chakra } from '@chakra-ui/react'
+import { Box, BoxProps, CardRootProps, chakra } from '@chakra-ui/react'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { ReactNode, MouseEvent } from 'react'
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 
-type NoisyCardProps = {
-  cardProps?: CardProps
+type NoisyCardRootProps = {
+  cardProps?: CardRootProps
   contentProps?: BoxProps
   shadowContainerProps?: BoxProps
   children?: ReactNode | ReactNode[]
@@ -17,7 +17,7 @@ export function NoisyCard({
   cardProps = {},
   contentProps = {},
   shadowContainerProps = {},
-}: NoisyCardProps) {
+}: NoisyCardRootProps) {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 

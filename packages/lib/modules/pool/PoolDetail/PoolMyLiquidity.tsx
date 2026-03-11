@@ -383,8 +383,8 @@ export default function PoolMyLiquidity() {
               })
             )}
             <PartnerRedirectModal
-              isOpen={partnerRedirectDisclosure.open}
               onClose={partnerRedirectDisclosure.onClose}
+              open={partnerRedirectDisclosure.open}
               partner={redirectPartner}
               redirectUrl={redirectPartnerUrl}
             />

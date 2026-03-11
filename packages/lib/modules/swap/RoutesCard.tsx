@@ -280,9 +280,11 @@ function PoolItem({
       <Popover.Trigger asChild>
         <Box
           alignItems="center"
-          bgGradient={`linear(to-r, ${colors[inputToken.address]}, ${colors[outputToken.address]})`}
+          bgGradient="to-r"
           display="flex"
           flex="1"
+          gradientFrom={colors[inputToken.address]}
+          gradientTo={colors[outputToken.address]}
           h="full"
           justifyContent="center"
           px="1"

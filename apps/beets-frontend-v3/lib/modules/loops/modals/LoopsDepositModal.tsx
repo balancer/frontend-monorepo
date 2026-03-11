@@ -1,4 +1,4 @@
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -14,17 +14,17 @@ import { LoopsDepositSummary } from '../components/LoopsDepositSummary'
 import { useLoops } from '@/lib/modules/loops/LoopsProvider'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function LoopsDepositModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
@@ -40,11 +40,11 @@ export function LoopsDepositModal({
   })
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       // stop polling for token prices when modal is opened to prevent unwanted re-renders
       stopTokenPricePolling()
     }
-  }, [isOpen])
+  }, [open])
 
   useOnUserAccountChanged(onClose)
 
@@ -54,7 +54,7 @@ export function LoopsDepositModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

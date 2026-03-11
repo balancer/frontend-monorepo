@@ -39,7 +39,7 @@ export function UnstakeForm() {
           </Tooltip>
         </Card.Footer>
       </Card.Root>
-      <UnstakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      <UnstakeModal finalFocusRef={nextBtn} onClose={onClose} onOpen={onOpen} open={isOpen} />
     </Box>
   )
 }

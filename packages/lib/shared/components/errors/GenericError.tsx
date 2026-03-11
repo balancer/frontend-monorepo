@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertProps, Text } from '@chakra-ui/react'
+import { AlertRootProps, Text } from '@chakra-ui/react'
 import { ErrorAlert } from './ErrorAlert'
 import {
   isLedgerUnknownError,
@@ -15,7 +15,7 @@ import { DiscordLink } from '@repo/lib/shared/components/links/DiscordLink'
 
 export type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
 
-type Props = AlertProps & {
+type Props = AlertRootProps & {
   error: ErrorWithOptionalShortMessage
   customErrorName?: string
   skipError?: boolean

@@ -17,11 +17,11 @@ import { HumanAmount } from '@balancer/sdk'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
 }
 
-export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) {
+export default function ClaimHiddenHandRewardsModal({ open, onClose }: Props) {
   const { hiddenHandRewardsData, refetchHiddenHandRewards } = usePortfolio()
   const { isDesktop, isMobile } = useBreakpoints()
   const step = useClaimHiddenHandRewardsStep({ onSuccess: refetchHiddenHandRewards })
@@ -44,7 +44,7 @@ export default function ClaimHiddenHandRewardsModal({ isOpen, onClose }: Props) 
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
     >

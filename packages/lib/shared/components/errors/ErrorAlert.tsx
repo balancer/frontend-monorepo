@@ -1,10 +1,10 @@
 'use client'
 
-import { Alert, AlertProps, Box } from '@chakra-ui/react'
+import { Alert, AlertRootProps, Box } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { XCircle } from 'react-feather'
 
-type Props = AlertProps & {
+type Props = AlertRootProps & {
   title?: string
 }
 

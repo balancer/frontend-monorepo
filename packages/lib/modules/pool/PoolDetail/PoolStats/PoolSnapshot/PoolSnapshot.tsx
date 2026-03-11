@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
-import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, Card, CardRootProps, VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import ButtonGroup, {
@@ -38,7 +38,7 @@ const TABS = [
   },
 ] as const
 
-export function PoolSnapshot({ ...props }: CardProps) {
+export function PoolSnapshot({ ...props }: CardRootProps) {
   const { pool } = usePool()
   const colorMode = useThemeColorMode()
   const defaultTab = hasTotalBalance(pool) ? TABS[1] : TABS[0]

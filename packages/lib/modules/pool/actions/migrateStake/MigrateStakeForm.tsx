@@ -45,7 +45,7 @@ export function MigrateStakeForm() {
           </Tooltip>
         </Card.Footer>
       </Card.Root>
-      <MigrateStakeModal finalFocusRef={nextBtn} isOpen={open} onClose={onClose} onOpen={onOpen} />
+      <MigrateStakeModal finalFocusRef={nextBtn} onClose={onClose} onOpen={onOpen} open={open} />
     </Box>
   )
 }

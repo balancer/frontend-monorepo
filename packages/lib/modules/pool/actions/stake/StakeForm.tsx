@@ -37,7 +37,7 @@ export function StakeForm() {
           </Tooltip>
         </Card.Footer>
       </Card.Root>
-      <StakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      <StakeModal finalFocusRef={nextBtn} onClose={onClose} onOpen={onOpen} open={isOpen} />
     </Box>
   )
 }

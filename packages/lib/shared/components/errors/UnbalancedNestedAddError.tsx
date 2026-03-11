@@ -1,8 +1,8 @@
 import { ErrorAlert } from './ErrorAlert'
-import { AlertProps, Text } from '@chakra-ui/react'
+import { AlertRootProps, Text } from '@chakra-ui/react'
 import { DiscordLink } from '@repo/lib/shared/components/links/DiscordLink'
 
-type Props = AlertProps & {
+type Props = AlertRootProps & {
   error: Error
   isProportionalSupported?: boolean
 }

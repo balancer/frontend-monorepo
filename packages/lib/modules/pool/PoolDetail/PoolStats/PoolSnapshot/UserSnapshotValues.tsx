@@ -212,7 +212,7 @@ export function UserSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <ClaimModal chain={pool.chain} isOpen={previewModalDisclosure.open} onClose={onModalClose} />
+      <ClaimModal chain={pool.chain} onClose={onModalClose} open={previewModalDisclosure.open} />
     </>
   )
 }

@@ -4,7 +4,7 @@ import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import {
   Box,
   Card,
-  CardProps,
+  CardRootProps,
   Grid,
   GridItem,
   HStack,
@@ -142,7 +142,7 @@ function getHookName(hook: HookFragment, pool: Pool, hooksMetadata: (HooksMetada
   )?.name
 }
 
-export function PoolContracts({ ...props }: CardProps) {
+export function PoolContracts({ ...props }: CardRootProps) {
   const { pool, chain, poolExplorerLink, hasGaugeAddress, gaugeAddress, gaugeExplorerLink } =
     usePool()
 

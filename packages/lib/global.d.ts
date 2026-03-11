@@ -291,9 +291,6 @@ declare module '@chakra-ui/react' {
     [key: string]: any
   }
   // v2 removed type aliases → v3 equivalents
-  type ModalProps = DialogRootProps
-  type CardProps = CardRootProps
-  type AlertProps = AlertRootProps
   type AlertStatus = 'info' | 'warning' | 'success' | 'error' | 'loading'
   // Progress.Track accepts children
   interface ProgressTrackProps {

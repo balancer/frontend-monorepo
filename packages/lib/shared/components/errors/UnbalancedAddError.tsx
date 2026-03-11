@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertProps, Text } from '@chakra-ui/react'
+import { AlertRootProps, Text } from '@chakra-ui/react'
 import {
   isInvariantRatioAboveMaxSimulationErrorMessage,
   isInvariantRatioAboveMinSimulationErrorMessage,
@@ -15,7 +15,7 @@ import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/Ad
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { hasSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 
-type Props = AlertProps & {
+type Props = AlertRootProps & {
   error: Error
   goToProportionalAdds: () => void
   isProportionalSupported?: boolean

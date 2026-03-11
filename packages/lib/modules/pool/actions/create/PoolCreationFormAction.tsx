@@ -91,9 +91,9 @@ export function PoolCreationFormAction({ disabled }: { disabled?: boolean }) {
       {formState.isValid && isLastStep && (
         <PoolCreationModal
           finalFocusRef={nextBtn}
-          isOpen={previewModalDisclosure.open}
           onClose={previewModalDisclosure.onClose}
           onOpen={previewModalDisclosure.onOpen}
+          open={previewModalDisclosure.open}
         />
       )}
     </>

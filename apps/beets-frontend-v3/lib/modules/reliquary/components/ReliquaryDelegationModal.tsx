@@ -1,4 +1,4 @@
-import { Box, Card, ModalProps, Text, VStack, Dialog, Portal } from '@chakra-ui/react'
+import { Box, Card, DialogRootProps, Text, VStack, Dialog, Portal } from '@chakra-ui/react'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -15,18 +15,18 @@ import { useState } from 'react'
 import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   isDelegated: boolean // true for delegate, false for undelegate
 }
 
 export function ReliquaryDelegationModal({
-  isOpen,
+  open,
   onClose,
   isDelegated,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   // Determine action based on current delegation state
   const [action] = useState<DelegationAction>(isDelegated ? 'undelegate' : 'delegate')
 
@@ -63,7 +63,7 @@ export function ReliquaryDelegationModal({
 
   return (
     <Dialog.Root
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}

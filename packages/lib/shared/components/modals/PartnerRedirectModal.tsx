@@ -17,7 +17,7 @@ export enum RedirectPartner {
 type Props = {
   partner: RedirectPartner
   redirectUrl?: string
-  isOpen: boolean
+  open: boolean
   onClose: () => void
 }
 
@@ -116,7 +116,7 @@ const partnerInfo: PartnerInfo = {
   },
 }
 
-export function PartnerRedirectModal({ partner, redirectUrl, isOpen, onClose }: Props) {
+export function PartnerRedirectModal({ partner, redirectUrl, open, onClose }: Props) {
   const info = partnerInfo[partner]
 
   return (
@@ -126,7 +126,7 @@ export function PartnerRedirectModal({ partner, redirectUrl, isOpen, onClose }: 
           onClose()
         }
       }}
-      open={isOpen}
+      open={open}
       placement="center"
     >
       <Portal>

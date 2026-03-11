@@ -3,7 +3,6 @@ import { Box, Heading, Text, Link, Stack, VStack, Image as ChakraImage } from '@
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from './Picture'
-// import { ArrowRightIcon } from '@chakra-ui/icons'
 
 interface PartnerCardProps {
   title: string

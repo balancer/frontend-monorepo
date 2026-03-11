@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalProps, Dialog, Portal } from '@chakra-ui/react'
+import { DialogRootProps, Dialog, Portal } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -14,31 +14,31 @@ import { useLst } from '../LstProvider'
 import { LstUnstakeSummary } from '../components/LstUnstakeSummary'
 
 type Props = {
-  isOpen: boolean
+  open: boolean
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function LstUnstakeModal({
-  isOpen,
+  open,
   onClose,
   finalFocusRef,
   ...rest
-}: Props & Omit<ModalProps, 'children'>) {
+}: Props & Omit<DialogRootProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { stopTokenPricePolling } = useTokens()
   const { unstakeTransactionSteps, chain, lstUnstakeTxHash, setUnstakeEnabled } = useLst()
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       stopTokenPricePolling() // stop polling for token prices when modal is opened to prevent unwanted re-renders
       setUnstakeEnabled(true) // enable query for unstake api
     } else {
       setUnstakeEnabled(false) // disable query for unstake api
     }
-  }, [isOpen])
+  }, [open])
 
   useOnUserAccountChanged(onClose)
 
@@ -48,7 +48,7 @@ export function LstUnstakeModal({
     <Dialog.Root
       finalFocusEl={() => finalFocusRef?.current ?? null}
       initialFocusEl={() => initialFocusRef.current}
-      open={isOpen}
+      open={open}
       placement="center"
       trapFocus={!isSuccess}
       {...rest}
