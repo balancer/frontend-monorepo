@@ -39,7 +39,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
 
   return (
     <>
-      <Box borderBottom="1px solid" borderColor="border.base">
+      <Box borderBottomColor="border.base" borderBottomWidth="1px">
         <Noise
           backgroundColor="background.level0WithOpacity"
           overflow="hidden"
@@ -109,6 +109,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                       textWrap: 'balance',
                     }}
                     pb="3"
+                    size="h3"
                     variant="special"
                   >
                     Earn passively on {PROJECT_CONFIG.projectName}
@@ -135,6 +136,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
         </Noise>
       </Box>
       <DefaultPageContainer
+        bg={{ base: 'background.level1', _dark: 'background.level0' }}
         noVerticalPadding
         pb="xl"
         pr={{ base: '0 !important', xl: 'md !important' }}

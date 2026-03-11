@@ -3,7 +3,7 @@ import { colors as baseColors } from '@repo/lib/shared/services/chakra/themes/ba
 export const colors = {
   ...baseColors,
   base: {
-    light: 'background.level1',
+    light: '#EFEDE6',
     hslLight: '44,22%,90%',
     dark: 'hsla(216,12%,25%,1)',
     hslDark: '216,12%,25%',

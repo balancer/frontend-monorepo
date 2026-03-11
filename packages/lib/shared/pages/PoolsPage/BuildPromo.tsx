@@ -27,12 +27,11 @@ export function BuildPromo() {
             <Stack alignItems="center" gap="md" px="md" width="full">
               <Heading
                 as="h2"
-                backgroundClip="text"
-                bg="background.special"
                 display="flex"
                 justifyContent="center"
                 pb="0.5"
-                size="lg"
+                size="h3"
+                variant="special"
                 width="full"
               >
                 Ready to build on Balancer?
@@ -61,13 +60,27 @@ export function BuildPromo() {
               maxWidth={356}
               width="full"
             >
-              <Button asChild flex={1} size="lg" variant="primary">
+              <Button
+                asChild
+                flex={1}
+                fontSize={{ base: 'md', md: 'lg' }}
+                fontWeight="bold"
+                size="lg"
+                variant="primary"
+              >
                 <NextLink href="/create">Create a pool</NextLink>
               </Button>
-              <Button asChild flex={1} size="lg" variant="tertiary">
+              <Button
+                asChild
+                flex={1}
+                fontSize={{ base: 'md', md: 'lg' }}
+                fontWeight="bold"
+                size="lg"
+                variant="tertiary"
+              >
                 <NextLink href="https://github.com/balancer/scaffold-balancer-v3">
                   Prototype on v3
-                  <ArrowUpRight size="14px" />
+                  <ArrowUpRight style={{ width: '14px', height: '14px', flexShrink: 0 }} />
                 </NextLink>
               </Button>
             </Flex>

@@ -68,10 +68,10 @@ export function PoolListLayout() {
               >
                 <motion.div>
                   <HStack w="full">
-                    <Heading as="h2" size="lg" variant="special">
+                    <Heading size="h4" variant="special">
                       Liquidity pools
                     </Heading>
-                    <Heading mt="1" size="md" variant="secondary">
+                    <Heading mt="1" size="h5" variant="secondary">
                       ({fNum('integer', count || 0)})
                     </Heading>
                   </HStack>

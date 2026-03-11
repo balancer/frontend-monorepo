@@ -32,7 +32,7 @@ export default function ButtonGroup(props: Props) {
   return (
     <LayoutGroup id={groupId}>
       <HStack
-        background={isGray ? 'gray.600' : 'level0'}
+        background={isGray ? 'gray.600' : 'background.level0'}
         gap={isCompact ? '0' : '1'}
         p="1"
         pt={isCompact ? '0' : '3px'} // TODO: maybe there a better way to align the buttons

@@ -15,7 +15,7 @@ export const styles = {
       minHeight: '100vh',
     },
     body: {
-      background: 'background.base',
+      background: 'background.level1',
     },
     '::-webkit-scrollbar': {
       width: '10px',
