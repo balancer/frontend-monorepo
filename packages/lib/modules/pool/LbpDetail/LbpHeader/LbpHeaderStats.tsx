@@ -4,8 +4,8 @@ import { AnimatedNumber } from '@repo/lib/shared/components/other/AnimatedNumber
 import Stat from '@repo/lib/shared/components/other/Stat'
 import { safeToNumber } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '../../PoolProvider'
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { hasSaleStarted } from '@repo/lib/modules/lbp/pool/lbp.helpers'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 type StatItem = {
   label: string
@@ -16,7 +16,7 @@ const IMAGE_TRANSFORM_ARRAY = ['rotate(180deg) scale(2)', 'rotate(180deg)', 'sca
 
 export function LbpHeaderStats() {
   const { pool } = usePool()
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
   const stats = usePoolStats(lbpPool)
 
   const statItems: StatItem[] = [

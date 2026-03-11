@@ -2,11 +2,11 @@ import { HStack, Icon, Text, VStack, Box } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { format, isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
 import { AlertTriangle, Clock } from 'react-feather'
 import { PropsWithChildren } from 'react'
 import { now } from '@repo/lib/shared/utils/time'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 function TimeElement({ title, value }: { title: string; value: string }) {
   return (
@@ -88,7 +88,7 @@ export function LbpHeaderTimeInfo() {
   const { pool } = usePool()
 
   // this will only be rendered for LBPs so we can be sure it is a liquidity bootstrapping pool
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
   const startTimeFormatted = format(secondsToMilliseconds(lbpPool.startTime), 'haaa, MM/dd/yy')
   const endTimeFormatted = format(secondsToMilliseconds(lbpPool.endTime), 'haaa, MM/dd/yy')
   const currentTime = now()
