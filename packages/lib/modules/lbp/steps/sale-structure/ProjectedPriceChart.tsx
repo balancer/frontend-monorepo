@@ -7,6 +7,7 @@ import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { dividePrices, range } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
@@ -18,13 +19,6 @@ type Props = {
   cutTime?: Date
   loading?: boolean
   gridLeft?: string
-}
-
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
 }
 
 export function ProjectedPriceChart({
@@ -111,7 +105,7 @@ export function ProjectedPriceChart({
         rotate: isMobile ? 45 : 0, // Rotate labels on mobile
         fontSize: isMobile ? 10 : 12,
         margin: 8,
-        color: resolveToken(system, 'font.primary'),
+        color: resolveChakraToken(system, 'colors', 'font.primary'),
         opacity: 0.5,
       },
       splitNumber: (() => {
@@ -134,7 +128,7 @@ export function ProjectedPriceChart({
         formatter: (value: number) => {
           return toCurrency(value)
         },
-        color: resolveToken(system, 'font.primary'),
+        color: resolveChakraToken(system, 'colors', 'font.primary'),
         opacity: 0.5,
       },
     },

@@ -1,4 +1,5 @@
 import { useChakraContext } from '@chakra-ui/react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import { addHours, differenceInDays, format } from 'date-fns'
 import {
   GetPoolSnapshotsDocument,
@@ -81,13 +82,6 @@ export const getDefaultPoolChartOptions = (
   system: ReturnType<typeof useChakraContext>,
   options: { useTimeRange: boolean } = { useTimeRange: false }
 ) => {
-  function resolveToken(path: string): string {
-    const cssVar = system.token.var(`colors.${path}`)
-    if (typeof window === 'undefined') return ''
-    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-  }
-
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
     container: `background: ${system.token('colors.gray.700', '#374151')};`,
@@ -112,7 +106,7 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return format(new Date(value * 1000), 'MMM d')
         },
-        color: resolveToken('font.primary'),
+        color: resolveChakraToken(system, 'colors', 'font.primary'),
         opacity: 0.5,
         interval: 0,
         showMaxLabel: false,
@@ -145,7 +139,7 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return currencyFormatter(value)
         },
-        color: resolveToken('font.primary'),
+        color: resolveChakraToken(system, 'colors', 'font.primary'),
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,
@@ -383,13 +377,6 @@ export function usePoolChartsLogic() {
     pool.dynamicData.totalLiquidity,
   ])
 
-  function resolveToken(path: string): string {
-    const cssVar = system.token.var(`colors.${path}`)
-    if (typeof window === 'undefined') return ''
-    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-  }
-
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme, system)
 
   type SupportedPoolChartTab =
@@ -411,18 +398,20 @@ export function usePoolChartsLogic() {
           {
             offset: 0,
             color: isCowPool
-              ? resolveToken('chart.pool.bar.volume.cow.from')
-              : resolveToken('chart.pool.bar.volume.from'),
+              ? resolveChakraToken(system, 'colors', 'chart.pool.bar.volume.cow.from')
+              : resolveChakraToken(system, 'colors', 'chart.pool.bar.volume.from'),
           },
           {
             offset: 1,
             color: isCowPool
-              ? resolveToken('chart.pool.bar.volume.cow.to')
-              : resolveToken('chart.pool.bar.volume.to'),
+              ? resolveChakraToken(system, 'colors', 'chart.pool.bar.volume.cow.to')
+              : resolveChakraToken(system, 'colors', 'chart.pool.bar.volume.to'),
           },
         ],
       },
-      hoverColor: isCowPool ? resolveToken('chart.pool.bar.volume.cow.hover') : '#ED64A6',
+      hoverColor: isCowPool
+        ? resolveChakraToken(system, 'colors', 'chart.pool.bar.volume.cow.hover')
+        : '#ED64A6',
     },
     [PoolChartTab.TVL]: {
       type: 'line',

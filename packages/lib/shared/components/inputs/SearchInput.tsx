@@ -82,12 +82,12 @@ export function SearchInput({
         borderColor="input.borderDefault"
         defaultValue={String(search ?? '')}
         id={SEARCH}
+        onChange={debouncedChangeHandler}
         onKeyDown={event => {
           if (event.key === 'Enter') {
             event.preventDefault()
           }
         }}
-        onValueChange={debouncedChangeHandler}
         placeholder={placeholder}
         {...rest}
       />

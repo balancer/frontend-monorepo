@@ -7,6 +7,7 @@ import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'framer-motion'
 import { ChartSizeValues } from './PoolWeightChart'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { Pool } from '../../pool.types'
 import { calcTotalStakedBalanceUsd, getUserWalletBalanceUsd } from '../../user-balance.helpers'
@@ -31,13 +32,6 @@ const normalSize: ChartSizeValues = {
   haloHeight: '60px',
 }
 
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-}
-
 export default function StakedBalanceDistributionChart({
   pool,
   isSmall = true,
@@ -56,13 +50,13 @@ export default function StakedBalanceDistributionChart({
         value: getUserWalletBalanceUsd(pool),
         name: 'Unstaked balance',
         itemStyle: {
-          color: resolveToken(system, 'font.light'),
+          color: resolveChakraToken(system, 'colors', 'font.light'),
         },
       },
       {
         value: calcTotalStakedBalanceUsd(pool),
         name: 'Staked balance',
-        itemStyle: { color: resolveToken(system, 'chart.stakedBalance') },
+        itemStyle: { color: resolveChakraToken(system, 'colors', 'chart.stakedBalance') },
       },
     ]
 
@@ -87,7 +81,7 @@ export default function StakedBalanceDistributionChart({
           type: 'pie',
           radius: ['49%', '80%'],
           itemStyle: {
-            borderColor: resolveToken(system, 'chartBorder'),
+            borderColor: resolveChakraToken(system, 'colors', 'chartBorder'),
             borderWidth: 0,
           },
           label: {

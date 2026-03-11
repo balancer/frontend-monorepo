@@ -12,13 +12,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
 import { type ECLPLiquidityProfile } from './useGetECLPLiquidityProfile'
 import { useChakraContext } from '@chakra-ui/react'
-
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1)
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-}
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 
 type EclpChartContextType = ReturnType<typeof useEclpChartLogic>
 
@@ -59,8 +53,8 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
 
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${resolveToken(system, 'gray.700')};`,
-    text: resolveToken(system, 'gray.700'),
+    container: `background: ${resolveChakraToken(system, 'colors', 'gray.700')};`,
+    text: resolveChakraToken(system, 'colors', 'gray.700'),
   }
 
   const options = useMemo(() => {
@@ -160,8 +154,8 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
             label: {
               show: true,
               fontSize: 12,
-              color: resolveToken(system, 'gray.700'),
-              backgroundColor: resolveToken(system, 'gray.700'),
+              color: resolveChakraToken(system, 'colors', 'gray.700'),
+              backgroundColor: resolveChakraToken(system, 'colors', 'gray.700'),
               padding: [2, 3, 2, 3],
               borderRadius: 2,
               fontWeight: 'bold',
@@ -202,8 +196,8 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
             label: {
               show: true,
               fontSize: 12,
-              color: resolveToken(system, 'gray.700'),
-              backgroundColor: resolveToken(system, 'gray.700'),
+              color: resolveChakraToken(system, 'colors', 'gray.700'),
+              backgroundColor: resolveChakraToken(system, 'colors', 'gray.700'),
               padding: [2, 3, 2, 3],
               borderRadius: 2,
               fontWeight: 'bold',
@@ -287,8 +281,8 @@ export function useEclpChartLogic(eclpLiquidityProfile: ECLPLiquidityProfile) {
                 label: {
                   show: true,
                   fontSize: 12,
-                  color: resolveToken(system, 'gray.700'),
-                  backgroundColor: resolveToken(system, 'green.500'),
+                  color: resolveChakraToken(system, 'colors', 'gray.700'),
+                  backgroundColor: resolveChakraToken(system, 'colors', 'green.500'),
                   padding: [2, 3, 2, 3],
                   borderRadius: 2,
                   fontWeight: 'bold',

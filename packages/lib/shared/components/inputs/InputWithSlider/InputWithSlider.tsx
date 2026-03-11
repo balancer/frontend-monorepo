@@ -14,6 +14,7 @@ import {
   useChakraContext,
 } from '@chakra-ui/react'
 import { useState, forwardRef } from 'react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 
 type Props = {
   value?: string
@@ -23,13 +24,6 @@ type Props = {
   isWarning?: boolean
   children?: React.ReactNode
   ref?: React.Ref<HTMLDivElement>
-}
-
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
 }
 
 export const InputWithSlider = forwardRef(
@@ -65,7 +59,7 @@ export const InputWithSlider = forwardRef(
       // setSliderPercent(newPercent)
     }
 
-    const boxShadowColor = resolveToken(system, 'font.warning')
+    const boxShadowColor = resolveChakraToken(system, 'colors', 'font.warning')
 
     const boxShadow = isWarning ? `0 0 0 1px ${boxShadowColor}` : undefined
 

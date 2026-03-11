@@ -11,6 +11,7 @@ import {
   useChakraContext,
 } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
 import { ArrowUpRight } from 'react-feather'
@@ -21,13 +22,6 @@ import React from 'react'
 import { usePool } from '../../PoolProvider'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { EnsOrAddress } from '@repo/lib/modules/user/EnsOrAddress'
-
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-}
 
 interface Props extends GridProps {
   event: PoolActivityEl
@@ -104,8 +98,9 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
           <GridItem>
             <HStack>
               <Box
-                backgroundImage={resolveToken(
+                backgroundImage={resolveChakraToken(
                   system,
+                  'colors',
                   `chart.pool.scatter.${poolEvent.action}.label`
                 )}
                 borderRadius="50%"

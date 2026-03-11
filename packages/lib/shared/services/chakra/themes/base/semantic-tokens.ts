@@ -368,6 +368,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
         light: '#E5D3BE', // always light
       },
 
+      chartBorder: {
+        default: colors.chartBorder.light,
+        _dark: colors.chartBorder.dark,
+      },
       chart: {
         stakedBalance: '#9F95F0',
         pool: {

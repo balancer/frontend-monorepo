@@ -103,7 +103,7 @@ export function Pagination({
         <NativeSelect.Root>
           <NativeSelect.Field
             disabled={!changeSize}
-            onValueChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setPageSize(Number(e.target.value))
             }}
             size="sm"

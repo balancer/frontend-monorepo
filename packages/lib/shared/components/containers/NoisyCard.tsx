@@ -52,8 +52,8 @@ export function NoisyCard({
     >
       <motion.div onMouseMove={handleMouseMove}>
         <MotionBox
-          _groupHover={{ opacity: 1 }}
           borderRadius="xl"
+          css={{ '[role=group]:hover &, [data-group]:hover &': { opacity: 1 } }}
           h="full"
           inset="-1px"
           opacity="0"
@@ -67,7 +67,7 @@ export function NoisyCard({
           zIndex="0"
         />
         <Box
-          content=""
+          content='""'
           height="full"
           pointerEvents="none"
           position="absolute"

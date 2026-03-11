@@ -10,6 +10,7 @@ import {
   PoolChartTypeOptions,
 } from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
 import { Box, Skeleton, Stack, Text, useChakraContext } from '@chakra-ui/react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import { useTheme as useNextTheme } from 'next-themes'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
@@ -23,13 +24,6 @@ interface Props {
 }
 
 type SupportedPoolChartTab = PoolChartTab.VOLUME | PoolChartTab.TVL | PoolChartTab.FEES
-
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-}
 
 export function LbpVolumeTVLFeesCharts({
   chartType,
@@ -54,11 +48,11 @@ export function LbpVolumeTVLFeesCharts({
         colorStops: [
           {
             offset: 0,
-            color: resolveToken(system, 'chart.pool.bar.volume.from'),
+            color: resolveChakraToken(system, 'colors', 'chart.pool.bar.volume.from'),
           },
           {
             offset: 1,
-            color: resolveToken(system, 'chart.pool.bar.volume.to'),
+            color: resolveChakraToken(system, 'colors', 'chart.pool.bar.volume.to'),
           },
         ],
       },

@@ -8,6 +8,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
 import { useChakraContext } from '@chakra-ui/react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -38,17 +39,10 @@ const getDefaultPoolActivityChartOptions = (
   sortedPoolEvents: PoolActivityEl[],
   isLoading: boolean
 ): echarts.EChartsCoreOption => {
-  function resolveToken(path: string): string {
-    const cssVar = system.token.var(`colors.${path}`)
-    if (typeof window === 'undefined') return ''
-    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-  }
-
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${resolveToken('background.level3')};`,
-    text: resolveToken('font.secondary'),
+    container: `background: ${resolveChakraToken(system, 'colors', 'background.level3')};`,
+    text: resolveChakraToken(system, 'colors', 'font.secondary'),
   }
 
   return {
@@ -75,7 +69,7 @@ const getDefaultPoolActivityChartOptions = (
                 : ''
             }`
           ),
-        color: resolveToken('font.primary'),
+        color: resolveChakraToken(system, 'colors', 'font.primary'),
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,
@@ -104,7 +98,7 @@ const getDefaultPoolActivityChartOptions = (
         formatter: (value: number) => {
           return currencyFormatter(value)
         },
-        color: resolveToken('font.primary'),
+        color: resolveChakraToken(system, 'colors', 'font.primary'),
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: true,
@@ -207,11 +201,11 @@ const getDefaultPoolActivityChartOptions = (
             return new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: resolveToken(`chart.pool.scatter.${action}.from`),
+                color: resolveChakraToken(system, 'colors', `chart.pool.scatter.${action}.from`),
               },
               {
                 offset: 1,
-                color: resolveToken(`chart.pool.scatter.${action}.to`),
+                color: resolveChakraToken(system, 'colors', `chart.pool.scatter.${action}.to`),
               },
             ])
           },

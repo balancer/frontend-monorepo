@@ -1,6 +1,26 @@
+import { useChakraContext } from '@chakra-ui/react'
+
 // Function to create a color with opacity
 export const createBackgroundOpacity = (baseColor: string, opacity: number) =>
   `hsla(${baseColor}, ${opacity})`
+
+/**
+ * Resolves a Chakra token path to its actual CSS value at runtime.
+ * Handles both CSS variable references (var(--chakra-...)) and raw values.
+ * Used for passing token values to third-party renderers like echarts that need raw colors.
+ */
+export function resolveChakraToken(
+  system: ReturnType<typeof useChakraContext>,
+  category: 'colors' | 'shadows',
+  path: string
+): string {
+  const cssVar = system.token.var(`${category}.${path}`)
+  if (!cssVar) return ''
+  if (!cssVar.startsWith('var(')) return cssVar // already a raw value
+  if (typeof window === 'undefined') return ''
+  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
 
 /**
  * Recursively wraps all leaf values in `{ value: string }` for Chakra v3 raw token format.

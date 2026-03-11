@@ -2,6 +2,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useChakraContext } from '@chakra-ui/react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'framer-motion'
 import { useRef, useMemo } from 'react'
@@ -53,23 +54,9 @@ const normalSize: ChartSizeValues = {
   haloHeight: '60px',
 }
 
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-}
-
-function resolveShadow(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`shadows.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-}
-
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
   const system = useChakraContext()
-  const chartOuter = isSmall ? '' : resolveShadow(system, 'chartIconOuter')
+  const chartOuter = isSmall ? '' : resolveChakraToken(system, 'shadows', 'chartIconOuter')
   return (
     <Box
       alignItems="center"
@@ -151,7 +138,7 @@ export function PoolWeightChart({
           type: 'pie',
           radius: ['70%', '99%'],
           itemStyle: {
-            borderColor: resolveToken(system, 'chartBorder'),
+            borderColor: resolveChakraToken(system, 'colors', 'chartBorder'),
             borderWidth: 1.5,
           },
           label: {

@@ -6,6 +6,7 @@ import { format, millisecondsToSeconds, secondsToMinutes } from 'date-fns'
 import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { useChakraContext } from '@chakra-ui/react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -126,17 +127,10 @@ const getDefaultPoolActivityChartOptions = (
   is2xl = false
   // chain: GqlChain
 ): echarts.EChartsCoreOption => {
-  function resolveToken(path: string): string {
-    const cssVar = system.token.var(`colors.${path}`)
-    if (typeof window === 'undefined') return ''
-    const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-  }
-
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${resolveToken('background.level3')};`,
-    text: resolveToken('font.primary'),
+    container: `background: ${resolveChakraToken(system, 'colors', 'background.level3')};`,
+    text: resolveChakraToken(system, 'colors', 'font.primary'),
   }
 
   return {

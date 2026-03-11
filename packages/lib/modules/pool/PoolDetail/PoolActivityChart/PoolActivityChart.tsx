@@ -1,16 +1,10 @@
 import ReactECharts from 'echarts-for-react'
 import { Box, HStack, Skeleton, Text, Separator, useChakraContext } from '@chakra-ui/react'
+import { resolveChakraToken } from '@repo/lib/shared/services/chakra/theme-helpers'
 import { usePoolActivityChart } from './usePoolActivityChart'
 import { PropsWithChildren } from 'react'
 import { motion, easeOut } from 'framer-motion'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
-
-function resolveToken(system: ReturnType<typeof useChakraContext>, path: string): string {
-  const cssVar = system.token.var(`colors.${path}`)
-  if (typeof window === 'undefined') return ''
-  const varName = cssVar.slice(4, -1) // strip 'var(' and ')'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
-}
 
 function AnimateOpacity({ children }: PropsWithChildren) {
   return (
@@ -32,15 +26,15 @@ export function PoolActivityChart() {
   const legendTabs = [
     {
       label: 'Adds',
-      color: resolveToken(system, 'chart.pool.scatter.add.label'),
+      color: resolveChakraToken(system, 'colors', 'chart.pool.scatter.add.label'),
     },
     {
       label: 'Removes',
-      color: resolveToken(system, 'chart.pool.scatter.remove.label'),
+      color: resolveChakraToken(system, 'colors', 'chart.pool.scatter.remove.label'),
     },
     {
       label: 'Swaps',
-      color: resolveToken(system, 'chart.pool.scatter.swap.label'),
+      color: resolveChakraToken(system, 'colors', 'chart.pool.scatter.swap.label'),
     },
   ]
 
