@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { VStack, HStack, Text, RadioGroup, Radio, Stack } from '@chakra-ui/react'
 import { InfoIconPopover } from '../../InfoIconPopover'
 import { Controller } from 'react-hook-form'
@@ -39,6 +40,8 @@ export function PoolSettingsRadioGroup({
   isPercentage,
   isDisabled,
 }: PoolSettingsRadioGroupProps) {
+  const [isCustomMode, setIsCustomMode] = useState(false)
+
   const {
     poolCreationForm: { control, setValue, trigger, resetField, formState },
   } = usePoolCreationForm()
@@ -67,25 +70,26 @@ export function PoolSettingsRadioGroup({
         name={name}
         render={({ field }) => {
           const recommendedOptions = options.map(option => option.value)
-          const isCustomOptionSelected = !recommendedOptions.includes(field.value)
-          const selectedRadioGroupValue = isCustomOptionSelected ? '' : field.value
+          const isCustomOptionSelected = isCustomMode || !recommendedOptions.includes(field.value)
 
           return (
             <RadioGroup
               aria-label={title}
               onChange={value => {
                 if (value === '') {
+                  setIsCustomMode(true)
                   resetField(name, { defaultValue: '' })
                 } else {
+                  setIsCustomMode(false)
                   field.onChange(value)
                 }
               }}
-              value={selectedRadioGroupValue}
+              value={isCustomOptionSelected ? '' : field.value}
               w="full"
             >
               <Stack spacing={4}>
                 {optionsPlusCustom.map((option, idx) => {
-                  const isCustomOption = option.value === ''
+                  const showCustomInput = option.value === '' && isCustomOptionSelected
 
                   return (
                     <VStack align="start" key={idx} w="full">
@@ -95,8 +99,7 @@ export function PoolSettingsRadioGroup({
                           {option.detail && option.detail}
                         </HStack>
                       </Radio>
-                      {isCustomOption &&
-                        isCustomOptionSelected &&
+                      {showCustomInput &&
                         (customInputType === 'address' ? (
                           <FormSubsection>
                             <Controller
