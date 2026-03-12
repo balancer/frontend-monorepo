@@ -102,13 +102,13 @@ export const colors = {
     dawnLightAlpha15:
       'linear-gradient(45deg, hsla(245, 97%, 76%, 0.15) 0%, hsla(266, 85%, 69%, 0.15) 40%, hsla(9, 85%, 71%, 0.15) 100%)',
     dawnDark:
-      'linear-gradient(135deg, hsla(244, 78%, 82%, 1) 0%, hsla(266, 37%, 85%, 1) 40%, hsla(0, 36%, 84%, 1) 60%, hsla(25, 73%, 70%, 1) 100%)',
+      'linear-gradient(135deg, hsla(244, 78%, 82%, 1) 0%, hsla(266, 37%, 85%, 1) 40%, hsla(0, 36%, 84%, 1) 60%, rgb(239, 148, 84) 100%, rgb(255, 138, 54) 140%)',
     dawnDarkAlpha15:
       'linear-gradient(45deg, hsla(244, 78%, 82%, 0.15) 0%, hsla(266, 37%, 85%, 0.15) 25%, hsla(0, 36%, 84%, 0.15) 50%, hsla(25, 73%, 70%, 0.15) 100%)',
     sunsetLight: 'linear-gradient(45deg, #F06147 0%, #EA9A43 100%)',
     sunsetDark: 'linear-gradient(45deg, #F06147 0%, #EA9A43 100%)',
     sandLight: 'linear-gradient(180deg, #E5D3BE 0%, #E6C6A0 100%)',
-    sandDark: 'linear-gradient(180deg, #E5D3BE 0%, #E6C6A0 100%)',
+    sandDark: 'linear-gradient(90deg, #E5D3BE 0%, #E6C6A0 100%, #ffffff 120%)',
     special:
       'linear-gradient(266.76deg, rgba(234, 168, 121, 0.5) -20.29%, rgba(179, 174, 245, 0.5) 45.08%, rgba(234, 168, 121, 0) 110.45%)',
 
