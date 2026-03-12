@@ -6,6 +6,7 @@ import { StakedaoIcon } from '@repo/lib/shared/components/icons/logos/StakedaoIc
 import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
 import { PaladinIcon } from '@repo/lib/shared/components/icons/logos/PaladinIcon'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
+import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 
 import {
   VebalPartnerRedirectModal,
@@ -32,8 +33,50 @@ export function VebalEcosystem() {
   }
 
   return (
-    <Box>
-      <VStack alignItems="center" px={['ms', 'md']} py={['xl', 'xl']} w="full">
+    <Box overflow="hidden" position="relative" py="140px">
+      <Box
+        display={{ base: 'none', lg: 'block' }}
+        h="full"
+        left={0}
+        pointerEvents="none"
+        position="absolute"
+        top={0}
+        transform="translateZ(0)"
+        w="full"
+        willChange="transform"
+      >
+        <RadialPattern
+          circleCount={6}
+          height={600}
+          innerHeight={150}
+          innerWidth={500}
+          padding="15px"
+          position="absolute"
+          right={{ base: -700, lg: -700, xl: -600, '2xl': -480 }}
+          top="calc(50% - 300px)"
+          width={1000}
+        />
+        <RadialPattern
+          circleCount={6}
+          height={600}
+          innerHeight={150}
+          innerWidth={500}
+          left={{ base: -700, lg: -700, xl: -600, '2xl': -480 }}
+          padding="15px"
+          position="absolute"
+          top="calc(50% - 300px)"
+          width={1000}
+        />
+      </Box>
+      <VStack
+        alignItems="center"
+        my="0px"
+        pb={['md', 'lg']}
+        position="relative"
+        pt={['xl', 'xl']}
+        px={['ms', 'md']}
+        w="full"
+      >
         <FadeInOnView animateOnce={false}>
           <Stack alignItems="center" gap="md" mb="ms" px="md">
             <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">
