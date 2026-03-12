@@ -9,6 +9,7 @@ import { usePoolMigrations } from '../migrations/PoolMigrationsProvider'
 import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../migrations/MigrationAlert'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { isChainDeprecated } from '../../chains/chain.utils'
 
 export function PoolAlerts() {
   const { pool } = usePool()
@@ -16,9 +17,9 @@ export function PoolAlerts() {
   const { needsMigration } = usePoolMigrations()
 
   const affectedByV2Exploit = pool.protocolVersion === 2 && isComposableStablePool(pool)
-  const isChainDeprecated = [GqlChain.Mode, GqlChain.Fraxtal, GqlChain.Zkevm].includes(pool.chain)
+  const chainDeprecated = isChainDeprecated(pool.chain)
 
-  if (poolAlerts.length === 0 && !needsMigration && !affectedByV2Exploit && !isChainDeprecated) {
+  if (poolAlerts.length === 0 && !needsMigration && !affectedByV2Exploit && !chainDeprecated) {
     return null
   }
 
@@ -37,7 +38,7 @@ export function PoolAlerts() {
 
       {affectedByV2Exploit && <BalAlert content={<V2ExploitContentWarning />} status="warning" />}
 
-      {isChainDeprecated && (
+      {chainDeprecated && (
         <BalAlert content={<DeprecatedChainWarningContent chain={pool.chain} />} status="warning" />
       )}
 
