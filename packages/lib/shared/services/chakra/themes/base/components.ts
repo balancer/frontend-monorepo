@@ -562,10 +562,12 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           color: 'font.primary',
           shadow: 'md',
           _hover: {
+            background: 'background.level2',
             shadow: 'sm',
+            color: 'font.maxContrast',
           },
           _active: {
-            background: 'background.level2',
+            background: 'background.level1',
             shadow: 'none',
           },
         },
