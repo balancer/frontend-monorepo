@@ -8,7 +8,7 @@ interface ThemeSettings {
 }
 
 const defaultSettings: ThemeSettings = {
-  hideDarkModeToggle: false,
+  hideDarkModeToggle: true,
 }
 
 const ThemeSettingsContext = createContext<ThemeSettings | null>(null)
