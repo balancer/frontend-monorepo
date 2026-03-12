@@ -113,8 +113,8 @@ function AppIcon({
     return val - bounds.x - bounds.width / 2
   })
 
-  const widthSync = useTransform(distance, [-100, -50, 0, 50, 100], [120, 150, 150, 150, 120])
-  const width = useSpring(widthSync, { mass: 2, stiffness: 100, damping: 30 })
+  const widthSync = useTransform(distance, [-150, -75, 0, 75, 150], [120, 150, 150, 150, 120])
+  const width = useSpring(widthSync, { mass: 0.5, stiffness: 200, damping: 25 })
 
   return (
     <FadeInOnView animateOnce={false}>
@@ -182,6 +182,7 @@ function AppIcon({
           position="relative"
           rounded="full"
           shadow="innerRockShadowSm"
+          sx={{ '& svg': { width: '35%', height: '35%' } }}
           w="full"
           zIndex={1}
         >
