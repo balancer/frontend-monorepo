@@ -45,5 +45,9 @@ export const styles = {
     'p + ul': {
       mt: '1',
     },
+    // Suppress hover ring on checked checkboxes
+    '[data-scope=checkbox][data-state=checked] [data-part=control]:hover': {
+      boxShadow: 'none',
+    },
   },
 }

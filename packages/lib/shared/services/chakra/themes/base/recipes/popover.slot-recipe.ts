@@ -7,16 +7,22 @@ export const popoverSlotRecipe = defineSlotRecipe({
       bg: 'background.level3',
       boxShadow: '3xl !important',
       border: '1px solid',
-      borderColor: 'border.base',
+      borderColor: 'border.divider',
+      maxH: 'none',
+      _open: {
+        animationName: 'fade-in',
+        animationDuration: '0.15s',
+        animationTimingFunction: 'ease-out',
+      },
+      _closed: {
+        animationName: 'fade-out',
+        animationDuration: '0.1s',
+        animationTimingFunction: 'ease-in',
+      },
     },
     arrow: {
-      bg: 'background.level3',
-      borderColor: 'background.level3',
-      color: 'background.level3',
-      '--popper-arrow-shadow-color': '#fff',
-      _dark: {
-        '--popper-arrow-shadow-color': 'border.base',
-      },
+      '--arrow-background': 'colors.background.level3',
+      borderColor: 'border.base',
     },
     closeTrigger: {
       color: 'font.primary',

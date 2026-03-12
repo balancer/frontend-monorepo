@@ -140,7 +140,7 @@ export const InputWithSlider = forwardRef(
                 >
                   <Slider.Range />
                 </SliderTrack>
-                <SliderThumb />
+                <SliderThumb index={0} />
               </Slider.Root>
             </Box>
           </HStack>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { VStack, HStack, Heading, Slider, SliderTrack, SliderThumb } from '@chakra-ui/react'
+import { VStack, HStack, Heading, Slider } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePoolList } from './PoolListProvider'
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
@@ -93,14 +93,14 @@ export function PoolMinTvlFilter() {
     setSliderValue(tvlToSliderValue(minTvl))
   }, [minTvl])
 
-  const handleSliderChange = (val: number) => {
-    const rawValue = sliderValueToTvl(val)
+  const handleSliderChange = ({ value }: { value: number[] }) => {
+    const rawValue = sliderValueToTvl(value[0])
     const snappedValue = snapToStep(rawValue)
     setSliderValue(tvlToSliderValue(snappedValue))
   }
 
-  const handleSliderChangeEnd = (val: number) => {
-    const rawValue = sliderValueToTvl(val)
+  const handleSliderChangeEnd = ({ value }: { value: number[] }) => {
+    const rawValue = sliderValueToTvl(value[0])
     const snappedValue = snapToStep(rawValue)
     setMinTvl(snappedValue > 0 ? snappedValue : null)
   }
@@ -116,17 +116,19 @@ export function PoolMinTvlFilter() {
         </NumberText>
       </HStack>
       <Slider.Root
-        aria-label="slider-min-tvl"
+        aria-label={['slider-min-tvl']}
         max={SLIDER_MAX_SLIDER_VALUE}
         min={0}
         ml="sm"
         onValueChange={handleSliderChange}
         onValueChangeEnd={handleSliderChangeEnd}
         step={1}
-        value={String(sliderValue)}
+        value={[sliderValue]}
       >
-        <SliderTrack />
-        <SliderThumb />
+        <Slider.Track>
+          <Slider.Range />
+        </Slider.Track>
+        <Slider.Thumb index={0} />
       </Slider.Root>
     </VStack>
   )

@@ -117,7 +117,7 @@ export function SliderWithSteps({
           />
         </Tooltip>
       </SliderTrack>
-      <SliderThumb />
+      <SliderThumb index={0} />
     </Slider.Root>
   )
 }

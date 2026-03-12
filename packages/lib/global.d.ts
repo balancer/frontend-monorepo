@@ -327,4 +327,8 @@ declare module '@chakra-ui/react' {
     children?: React.ReactNode
     [key: string]: any
   }
+  // SliderThumb requires index (from Zag ThumbProps) but TypeScript loses it in the HTMLChakraProps chain
+  interface SliderThumbProps {
+    index: number
+  }
 }

@@ -11,6 +11,7 @@ import {
   HStack,
   Icon,
   Popover,
+  Portal,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -77,41 +78,12 @@ function UserPoolFilter() {
       onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
         toggleUserAddress(!!e.checked, connectedUserAddress as string)
       }
+      size="sm"
     >
       <Checkbox.HiddenInput />
-      <Checkbox.Control>
-        <Checkbox.Indicator />
-      </Checkbox.Control>
+      <Checkbox.Control />
       <Checkbox.Label>
-        <Checkbox.Root>
-          <Checkbox.HiddenInput />
-          <Checkbox.Control>
-            <Checkbox.Indicator />
-          </Checkbox.Control>
-        </Checkbox.Root>
-        <Checkbox.Root>
-          <Checkbox.HiddenInput />
-          <Checkbox.Control>
-            <Checkbox.Indicator />
-          </Checkbox.Control>
-          <Checkbox.Label>
-            <Checkbox.Root>
-              <Checkbox.HiddenInput />
-              <Checkbox.Control>
-                <Checkbox.Indicator />
-              </Checkbox.Control>
-            </Checkbox.Root>
-          </Checkbox.Label>
-        </Checkbox.Root>
-        <Checkbox.Root>
-          <Checkbox.HiddenInput />
-          <Checkbox.Control>
-            <Checkbox.Indicator />
-          </Checkbox.Control>
-          <Checkbox.Label>
-            <Text fontSize="sm">My positions</Text>
-          </Checkbox.Label>
-        </Checkbox.Root>
+        <Text fontSize="sm">My positions</Text>
       </Checkbox.Label>
     </Checkbox.Root>
   )
@@ -135,48 +107,19 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
         {poolTagFilters
           .filter(tag => !hidePoolTags?.includes(tag))
           .map(tag => (
-            <Box asChild variants={staggeredFadeInUp}>
+            <Box asChild key={tag} variants={staggeredFadeInUp}>
               <motion.div key={tag}>
                 <Checkbox.Root
                   checked={!!poolTags.find(selected => selected === tag)}
                   onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
                     togglePoolTag(!!e.checked, tag as PoolTagType)
                   }
+                  size="sm"
                 >
                   <Checkbox.HiddenInput />
-                  <Checkbox.Control>
-                    <Checkbox.Indicator />
-                  </Checkbox.Control>
+                  <Checkbox.Control />
                   <Checkbox.Label>
-                    <Checkbox.Root>
-                      <Checkbox.HiddenInput />
-                      <Checkbox.Control>
-                        <Checkbox.Indicator />
-                      </Checkbox.Control>
-                    </Checkbox.Root>
-                    <Checkbox.Root>
-                      <Checkbox.HiddenInput />
-                      <Checkbox.Control>
-                        <Checkbox.Indicator />
-                      </Checkbox.Control>
-                      <Checkbox.Label>
-                        <Checkbox.Root>
-                          <Checkbox.HiddenInput />
-                          <Checkbox.Control>
-                            <Checkbox.Indicator />
-                          </Checkbox.Control>
-                        </Checkbox.Root>
-                      </Checkbox.Label>
-                    </Checkbox.Root>
-                    <Checkbox.Root>
-                      <Checkbox.HiddenInput />
-                      <Checkbox.Control>
-                        <Checkbox.Indicator />
-                      </Checkbox.Control>
-                      <Checkbox.Label>
-                        <Text fontSize="sm">{poolTagLabel(tag)}</Text>
-                      </Checkbox.Label>
-                    </Checkbox.Root>
+                    <Text fontSize="sm">{poolTagLabel(tag)}</Text>
                   </Checkbox.Label>
                 </Checkbox.Root>
               </motion.div>
@@ -208,48 +151,19 @@ function PoolHookFilters() {
     <Box animate="show" asChild exit="exit" initial="hidden" variants={staggeredFadeInUp}>
       <motion.div>
         {livePoolHookTagFilters.map(tag => (
-          <Box asChild variants={staggeredFadeInUp}>
+          <Box asChild key={tag} variants={staggeredFadeInUp}>
             <motion.div key={tag}>
               <Checkbox.Root
                 checked={!!poolHookTags.find(selected => selected === tag)}
                 onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
                   togglePoolHookTag(!!e.checked, tag as PoolHookTagType)
                 }
+                size="sm"
               >
                 <Checkbox.HiddenInput />
-                <Checkbox.Control>
-                  <Checkbox.Indicator />
-                </Checkbox.Control>
+                <Checkbox.Control />
                 <Checkbox.Label>
-                  <Checkbox.Root>
-                    <Checkbox.HiddenInput />
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                  </Checkbox.Root>
-                  <Checkbox.Root>
-                    <Checkbox.HiddenInput />
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Label>
-                      <Checkbox.Root>
-                        <Checkbox.HiddenInput />
-                        <Checkbox.Control>
-                          <Checkbox.Indicator />
-                        </Checkbox.Control>
-                      </Checkbox.Root>
-                    </Checkbox.Label>
-                  </Checkbox.Root>
-                  <Checkbox.Root>
-                    <Checkbox.HiddenInput />
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Label>
-                      <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
-                    </Checkbox.Label>
-                  </Checkbox.Root>
+                  <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
                 </Checkbox.Label>
               </Checkbox.Root>
             </motion.div>
@@ -290,48 +204,19 @@ export function PoolTypeFilters({
     <Box animate="show" asChild exit="exit" initial="hidden" variants={staggeredFadeInUp}>
       <motion.div>
         {_poolTypeFilters.map(poolType => (
-          <Box asChild variants={staggeredFadeInUp}>
+          <Box asChild key={poolType} variants={staggeredFadeInUp}>
             <motion.div key={poolType}>
               <Checkbox.Root
                 checked={!!poolTypes.find(selected => selected === poolType)}
                 onCheckedChange={(e: { checked: boolean | 'indeterminate' }) =>
                   togglePoolType(!!e.checked, poolType as PoolFilterType)
                 }
+                size="sm"
               >
                 <Checkbox.HiddenInput />
-                <Checkbox.Control>
-                  <Checkbox.Indicator />
-                </Checkbox.Control>
+                <Checkbox.Control />
                 <Checkbox.Label>
-                  <Checkbox.Root>
-                    <Checkbox.HiddenInput />
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                  </Checkbox.Root>
-                  <Checkbox.Root>
-                    <Checkbox.HiddenInput />
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Label>
-                      <Checkbox.Root>
-                        <Checkbox.HiddenInput />
-                        <Checkbox.Control>
-                          <Checkbox.Indicator />
-                        </Checkbox.Control>
-                      </Checkbox.Root>
-                    </Checkbox.Label>
-                  </Checkbox.Root>
-                  <Checkbox.Root>
-                    <Checkbox.HiddenInput />
-                    <Checkbox.Control>
-                      <Checkbox.Indicator />
-                    </Checkbox.Control>
-                    <Checkbox.Label>
-                      <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
-                    </Checkbox.Label>
-                  </Checkbox.Root>
+                  <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
                 </Checkbox.Label>
               </Checkbox.Root>
             </motion.div>
@@ -663,16 +548,19 @@ export function PoolListFilters() {
           }}
           open={isPopoverOpen}
           positioning={{
+            fitViewport: false,
+            flip: false,
             placement: 'bottom-end',
+            sizeMiddleware: false,
           }}
         >
           <Popover.Trigger asChild>
             <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
           </Popover.Trigger>
-          <Box shadow="2xl" zIndex="popover">
+          <Portal>
             <Popover.Positioner>
-              <Popover.Content motionProps={{ animate: { scale: 1, opacity: 1 } }}>
-                <Popover.Arrow bg="background.level3" />
+              <Popover.Content shadow="2xl" zIndex="popover">
+                <Popover.Arrow />
                 <Popover.CloseTrigger top="sm" />
                 <Popover.Body p="md">
                   <AnimatePresence>
@@ -806,7 +694,7 @@ export function PoolListFilters() {
                 </Popover.Body>
               </Popover.Content>
             </Popover.Positioner>
-          </Box>
+          </Portal>
         </Popover.Root>
         {isBeets && (
           <Button asChild display="flex" gap="2" ml="ms" variant="tertiary">
