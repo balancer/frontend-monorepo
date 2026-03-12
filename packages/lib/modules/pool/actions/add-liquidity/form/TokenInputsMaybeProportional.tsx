@@ -189,6 +189,28 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     },
   }
 
+  const validOverlayStyles = {
+    _before: {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      bg: 'font.highlight',
+      opacity: 0.03,
+      borderRadius: 'inherit',
+      pointerEvents: 'none',
+    },
+    _after: {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      border: '1px solid',
+      borderColor: 'font.highlight',
+      opacity: 0.4,
+      borderRadius: 'inherit',
+      pointerEvents: 'none',
+    },
+  }
+
   function handleFlexibleMaxClick() {
     if (isFlexibleMaxApplied || !hasAnyPoolTokenBalance) return
 
@@ -247,15 +269,16 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     <VStack spacing="md" w="full">
       {(isConnected || isUserAccountLoading) && (
         <Card
-          borderColor="base"
+          bg="background.level1"
+          borderColor="transparent"
           p={['sm', 'ms']}
           position="relative"
           variant="subSection"
           w="full"
-          {...(!isBalancesLoading &&
-          !isUserAccountLoading &&
-          ((!isProportional && isFlexibleWarning) || (isProportional && isProportionalWarning))
-            ? warningOverlayStyles
+          {...(!isBalancesLoading && !isUserAccountLoading
+            ? (!isProportional && isFlexibleWarning) || (isProportional && isProportionalWarning)
+              ? warningOverlayStyles
+              : validOverlayStyles
             : {})}
         >
           {isBalancesLoading || isUserAccountLoading ? (
