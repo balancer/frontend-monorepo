@@ -11,6 +11,7 @@ import {
   HStack,
   Button,
   useDisclosure,
+  Link,
 } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
@@ -26,7 +27,7 @@ import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
 import { isBalancer, isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
@@ -38,6 +39,7 @@ import { sumRecoveredFundsTotal, useRecoveredFunds } from '../recovered-funds/us
 import { ClaimRecoveredFundsModal } from '../recovered-funds/ClaimRecoveredFundsModal'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { RecoveredFundsLearnMoreModal } from '../recovered-funds/RecoveredFundsLearnMoreModal'
+import { isChainDeprecated } from '@repo/lib/modules/chains/chain.utils'
 
 interface NetworkConfig {
   chain: GqlChain
@@ -122,6 +124,10 @@ export function ClaimNetworkPools() {
   const julyFirstMidnightUTC = new Date(Date.UTC(2026, 6, 1, 0, 0, 0))
   const isPastJulyFirst = isAfter(new Date(), julyFirstMidnightUTC)
 
+  const deprecatedChains = poolsWithChain
+    .map(item => item[0])
+    .filter(chain => isChainDeprecated(chain as GqlChain)) as GqlChain[]
+
   return (
     <FadeInOnView>
       <Stack gap={5}>
@@ -148,6 +154,8 @@ export function ClaimNetworkPools() {
             status="warning"
           />
         )}
+
+        {deprecatedChains.length > 0 && <DeprecatedChainsAlert chains={deprecatedChains} />}
 
         {isLoadingRewards || isLoadingPortfolio ? (
           <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: isBeets ? 2 : 3 }} spacing="md">
@@ -412,4 +420,42 @@ function getCardTitle(itemType: string) {
     default:
       return undefined
   }
+}
+
+function DeprecatedChainsAlert({ chains }: { chains: GqlChain[] }) {
+  const listFormatter = new Intl.ListFormat('en-GB', {
+    style: 'long',
+    type: 'conjunction',
+  })
+  const chainNames = listFormatter.format(chains.map(getChainName))
+  const title = `${chainNames} ${chains.length > 1 ? 'are' : 'is'} being sunset on Balancer soon.`
+  const content = `Claim your incentives asap before ${chains.length > 1 ? 'they are' : 'it is'} no longer supported.`
+  const learnMoreLink =
+    'https://forum.balancer.fi/t/bip-906-deprecation-of-polygon-zkevm-fraxtal-and-mode/6951'
+
+  return (
+    <BalAlert
+      content={
+        <HStack>
+          <Text color="#000" fontWeight="bold">
+            {title}
+          </Text>
+          <Text color="#000">{content}</Text>
+          <Link
+            _hover={{
+              color: '#555',
+            }}
+            color="#000"
+            fontWeight="bold"
+            href={learnMoreLink}
+            isExternal
+            textDecoration="underline"
+          >
+            Learn more
+          </Link>
+        </HStack>
+      }
+      status="warning"
+    />
+  )
 }
