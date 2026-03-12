@@ -531,13 +531,12 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         primary: {
           color: 'font.dark',
           background: 'background.button.primary',
-          backgroundPosition: '100% 0',
-          backgroundSize: '100% 100%',
-          transition: '0.3s ease-in-out',
+          backgroundPosition: '0% 0%',
+          backgroundSize: '120% 100%',
+          transition: 'background-position 0.4s ease, box-shadow 0.3s ease',
           boxShadow: '0 3px 20px hsla(245, 97%, 76%, 0.4)',
           _hover: {
-            shadow: 'sm',
-            backgroundSize: '120% 100%',
+            backgroundPosition: '100% 0%',
             color: 'font.dark',
             boxShadow: '0 3px 20px hsla(9, 85%, 71%, 0.4)',
             _disabled: {
