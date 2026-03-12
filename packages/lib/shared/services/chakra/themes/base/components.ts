@@ -580,9 +580,13 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
         gold: {
           background: 'background.gold',
+          backgroundSize: '200% 100%',
+          backgroundPosition: '0% 0%',
           color: 'white',
           shadow: '2xl',
+          transition: 'background-position 0.4s ease, box-shadow 0.2s ease',
           _hover: {
+            backgroundPosition: '100% 0%',
             shadow: 'sm',
           },
           _dark: {
