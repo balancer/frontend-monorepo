@@ -12,7 +12,7 @@ export function BuildPromo() {
       <Box zIndex="-1">
         <RadialPattern
           bottom="-900px"
-          circleCount={12}
+          circleCount={14}
           height={1400}
           innerHeight={150}
           innerWidth={150}
