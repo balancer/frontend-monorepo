@@ -7,10 +7,12 @@ export function PoolListPoolDisplay({
   pool,
   name,
   poolDisplayType,
+  isTokenInWallet,
 }: {
   pool: PoolListItem | ExpandedPoolInfo
   name: string | undefined
   poolDisplayType: PoolDisplayType
+  isTokenInWallet?: (tokenAddress: string) => boolean
 }) {
   let component
 
@@ -24,6 +26,7 @@ export function PoolListPoolDisplay({
         <PoolListTokenPills
           h={['32px', '36px']}
           iconSize={name ? 24 : 20}
+          isTokenInWallet={isTokenInWallet}
           nameSize="sm"
           p={['xxs', 'sm']}
           pool={pool}

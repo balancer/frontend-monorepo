@@ -28,6 +28,8 @@ export function PoolListLayout() {
       poolHookTags,
       togglePoolHookTag,
       poolHookTagLabel,
+      joinablePools,
+      toggleJoinablePools,
       protocolVersion,
       setProtocolVersion,
     },
@@ -78,6 +80,7 @@ export function PoolListLayout() {
             </Box>
           </HStack>
           <FilterTags
+            joinablePools={joinablePools}
             minTvl={minTvl}
             networks={networks}
             poolHookTagLabel={poolHookTagLabel}
@@ -89,6 +92,7 @@ export function PoolListLayout() {
             protocolVersion={protocolVersion}
             setMinTvl={setMinTvl}
             setProtocolVersion={setProtocolVersion}
+            toggleJoinablePools={toggleJoinablePools}
             toggleNetwork={toggleNetwork}
             togglePoolHookTag={togglePoolHookTag}
             togglePoolTag={togglePoolTag}

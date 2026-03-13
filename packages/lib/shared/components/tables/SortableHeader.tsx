@@ -25,6 +25,7 @@ type SortableHeaderProps = {
   isSorted: boolean
   sorting: Sorting
   onSort: (newSortingBy: any) => void
+  isDisabled?: boolean
   align?: 'left' | 'right'
   popoverContent?: ReactNode
   usePortal?: string
@@ -37,6 +38,7 @@ export function SortableHeader({
   isSorted,
   onSort,
   sorting,
+  isDisabled = false,
   align = 'left',
   popoverContent,
   usePortal,
@@ -53,11 +55,16 @@ export function SortableHeader({
     )
   }
 
-  const color = isSorted ? 'font.highlight' : 'font.primary'
+  const color = isDisabled ? 'font.secondary' : isSorted ? 'font.highlight' : 'font.primary'
   const justifySelf = align === 'left' ? 'start' : 'end'
 
   const HeaderContent = (
-    <Button onClick={() => onSort(label.toLowerCase())} size="sm" variant="ghost">
+    <Button
+      isDisabled={isDisabled}
+      onClick={() => onSort(label.toLowerCase())}
+      size="sm"
+      variant="ghost"
+    >
       <HStack alignItems="center" gap="0">
         <Text
           color={color}

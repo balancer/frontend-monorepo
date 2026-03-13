@@ -34,7 +34,7 @@ import {
 } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
-import { Filter, Plus } from 'react-feather'
+import { Filter, Info, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -54,10 +54,19 @@ import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import NextLink from 'next/link'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion },
+    queryState: {
+      networks,
+      poolTypes,
+      minTvl,
+      poolTags,
+      poolHookTags,
+      protocolVersion,
+      joinablePools,
+    },
   } = usePoolList()
 
   return (
@@ -66,25 +75,52 @@ export function useFilterTagsVisible() {
     minTvl > 0 ||
     poolTags.length > 0 ||
     poolHookTags.length > 0 ||
+    joinablePools ||
     !!protocolVersion
   )
 }
 
-function UserPoolFilter() {
+function UserLiquidityFilters() {
   const {
-    queryState: { userAddress, toggleUserAddress },
+    queryState: { userAddress, toggleUserAddress, joinablePools, toggleJoinablePools },
   } = usePoolList()
   const { userAddress: connectedUserAddress } = useUserAccount()
-  const isChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
+  const isMyPositionsChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
 
   return (
-    <Checkbox
-      isChecked={isChecked}
-      mb="xxs"
-      onChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
-    >
-      <Text fontSize="sm">My positions</Text>
-    </Checkbox>
+    <VStack align="start" spacing="xs">
+      <Checkbox
+        isChecked={isMyPositionsChecked}
+        mb="xxs"
+        onChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
+      >
+        <Text fontSize="sm">My positions</Text>
+      </Checkbox>
+
+      <Checkbox
+        isChecked={joinablePools}
+        mb="xxs"
+        onChange={e => toggleJoinablePools(e.target.checked)}
+      >
+        <HStack gap="xs">
+          <Text fontSize="sm">Joinable pools</Text>
+          <TooltipWithTouch
+            label="This shows pools across networks where you have at least one token in your wallet. For performance reasons, this will only filter from the top 100 pools for your current search criteria."
+            placement="top"
+          >
+            <Icon
+              _hover={{ opacity: 1 }}
+              as={Info}
+              boxSize={3}
+              color="font.secondary"
+              opacity={0.6}
+              position="relative"
+              top="1px"
+            />
+          </TooltipWithTouch>
+        </HStack>
+      </Checkbox>
+    </VStack>
   )
 }
 
@@ -262,6 +298,8 @@ export interface FilterTagsPops {
   poolHookTags?: PoolHookTagType[]
   togglePoolHookTag?: (checked: boolean, value: PoolHookTagType) => void
   poolHookTagLabel?: (poolHookTag: PoolHookTagType) => string
+  joinablePools?: boolean
+  toggleJoinablePools?: (checked: boolean) => void
 }
 
 export function FilterTags({
@@ -280,6 +318,8 @@ export function FilterTags({
   poolHookTags,
   togglePoolHookTag,
   poolHookTagLabel,
+  joinablePools,
+  toggleJoinablePools,
   protocolVersion,
   setProtocolVersion,
 }: FilterTagsPops) {
@@ -293,6 +333,7 @@ export function FilterTags({
     (poolTags ? poolTags.length === 0 : true) &&
     !includeExpiredPools &&
     (poolHookTags ? poolHookTags.length === 0 : true) &&
+    !joinablePools &&
     !protocolVersion
   ) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
@@ -360,6 +401,14 @@ export function FilterTags({
               onClose={() => togglePoolHookTag && togglePoolHookTag(false, tag)}
             />
           ))}
+
+        {joinablePools && (
+          <AnimatedTag
+            key="joinablePools"
+            label="Joinable pools"
+            onClose={() => toggleJoinablePools && toggleJoinablePools(false)}
+          />
+        )}
       </AnimatePresence>
     </HStack>
   )
@@ -552,9 +601,9 @@ export function PoolListFilters() {
                       {isConnected ? (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
                           <Heading as="h3" my="sm" size="sm">
-                            My liquidity
+                            Based on my wallet
                           </Heading>
-                          <UserPoolFilter />
+                          <UserLiquidityFilters />
                         </Box>
                       ) : null}
                       {/* TODO: filter for cow networks when 'isCowPath' is true */}
