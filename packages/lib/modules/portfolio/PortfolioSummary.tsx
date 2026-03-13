@@ -1,10 +1,10 @@
-import { BoxProps, Card, Heading, Icon, Skeleton } from '@chakra-ui/react'
+import { BoxProps, Card, Heading, Icon, Skeleton, useColorMode } from '@chakra-ui/react'
 import { usePortfolio } from './PortfolioProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
 import { BarChart } from 'react-feather'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
+import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
@@ -25,6 +25,7 @@ const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
   },
 }
 export function PortfolioSummary() {
+  const { colorMode } = useColorMode()
   const {
     portfolioData,
     totalFiatClaimableBalance,
@@ -58,7 +59,20 @@ export function PortfolioSummary() {
           }}
           contentProps={commonNoisyCardProps.contentProps}
         >
-          <ZenGarden sizePx="225px" variant="diamond" />
+          <RadialPattern
+            circleCount={8}
+            height={800}
+            innerHeight={220}
+            innerWidth={220}
+            left="50%"
+            opacity={colorMode === 'dark' ? 0.35 : 0.75}
+            pointerEvents="none"
+            position="absolute"
+            top="50%"
+            transform="translate(-50%, -50%)"
+            width={800}
+            zIndex={0}
+          />
           <Icon as={BarChart} color="font.primary" height="30px" mb="sm" width="30px" />
           <Heading color="grayText" mb="sm" size="sm">
             {`My ${PROJECT_CONFIG.projectName} liquidity`}
@@ -76,7 +90,20 @@ export function PortfolioSummary() {
           }}
           contentProps={commonNoisyCardProps.contentProps}
         >
-          <ZenGarden sizePx="225px" variant="diamond" />
+          <RadialPattern
+            circleCount={8}
+            height={800}
+            innerHeight={220}
+            innerWidth={220}
+            left="50%"
+            opacity={colorMode === 'dark' ? 0.35 : 0.75}
+            pointerEvents="none"
+            position="absolute"
+            top="50%"
+            transform="translate(-50%, -50%)"
+            width={800}
+            zIndex={0}
+          />
           <Icon as={StarsIcon} height="30px" mb="sm" width="30px" />
           <Heading color="grayText" mb="sm" size="sm">
             Claimable incentives

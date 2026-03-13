@@ -62,17 +62,28 @@ export function VebalFooterSection() {
               <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
                 Manage veBAL
               </Button>
-              <Button
-                as={NextLink}
-                bg="background.gold"
-                bgClip="text"
-                flex={1}
-                href="/vebal/vote"
-                size="lg"
-                variant="tertiary"
+              <Box
+                _hover={{ bg: 'background.level0' }}
+                bg="background.level1"
+                rounded="md"
+                transition="background 0.2s ease"
               >
-                Vote on gauges
-              </Button>
+                <Button
+                  _hover={{ backgroundPosition: '100% 0%' }}
+                  as={NextLink}
+                  backgroundPosition="0% 0%"
+                  backgroundSize="200% 100%"
+                  bg="background.gold"
+                  bgClip="text"
+                  flex={1}
+                  href="/vebal/vote"
+                  size="lg"
+                  transition="background-position 0.4s ease"
+                  variant="tertiary"
+                >
+                  Vote on gauges
+                </Button>
+              </Box>
             </Flex>
             <Link
               alignItems="center"

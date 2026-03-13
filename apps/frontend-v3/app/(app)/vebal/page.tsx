@@ -1,6 +1,6 @@
 'use client'
 import Section from '@repo/lib/shared/components/layout/Section'
-
+import { Box } from '@chakra-ui/react'
 import { VebalBenefitsSection } from './components/VebalBenefitsSection'
 import { VebalFooterSection } from './components/VebalFooterSection'
 import { VebalHowSection } from './components/VebalHowSection'
@@ -17,9 +17,9 @@ export default function VeBALPage() {
       <Section>
         <VebalHowSection />
       </Section>
-      <Section>
+      <Box mb="120px">
         <VebalEcosystem />
-      </Section>
+      </Box>
       <VebalFooterSection />
     </>
   )

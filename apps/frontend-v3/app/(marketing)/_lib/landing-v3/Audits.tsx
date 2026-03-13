@@ -93,7 +93,7 @@ const AuditCard = memo(function AuditCard({
   return (
     <Link cursor="pointer" href={href} isExternal>
       <MotionBox
-        _hover={{ shadow: 'sm' }}
+        _hover={{ shadow: 'xl' }}
         data-group
         minH="180px"
         onMouseEnter={() => setIsHovered(true)}
