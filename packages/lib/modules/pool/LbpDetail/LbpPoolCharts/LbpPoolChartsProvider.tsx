@@ -2,7 +2,6 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 import { usePool } from '../../PoolProvider'
 import { getCurrentPrice, usePriceInfo } from '@repo/lib/modules/lbp/pool/usePriceInfo'
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import {
   secondsToMilliseconds,
@@ -11,6 +10,7 @@ import {
   differenceInDays,
   differenceInHours,
 } from 'date-fns'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 type LbpPoolChartsContextType = ReturnType<typeof useLbpPoolChartsLogic>
 
@@ -19,7 +19,7 @@ const LbpPoolChartsContext = createContext<LbpPoolChartsContextType | null>(null
 export function useLbpPoolChartsLogic() {
   const { pool } = usePool()
 
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
   const startDateTime = new Date(secondsToMilliseconds(lbpPool.startTime))
   const endDateTime = new Date(secondsToMilliseconds(lbpPool.endTime))
   const now = new Date()

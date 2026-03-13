@@ -3,6 +3,7 @@ import {
   GqlChain,
   GqlHookType,
   GqlPoolBase,
+  GqlPoolFixedPriceLbp,
   GqlPoolGyro,
   GqlPoolLiquidityBootstrappingV3,
   GqlPoolStakingGauge,
@@ -29,7 +30,7 @@ import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { vaultAbi_V3 } from '@balancer/sdk'
-import { Pool, PoolCore } from './pool.types'
+import { LbpV3, Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 import { PoolMetadata } from './metadata/getPoolsMetadata'
@@ -96,14 +97,25 @@ export function isUnknownType(poolType: any): boolean {
 }
 
 export function isLiquidityBootstrapping(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.LiquidityBootstrapping
+  return poolType === GqlPoolType.LiquidityBootstrapping || poolType === GqlPoolType.FixedLbp
 }
 
 export function isLBP(poolType: GqlPoolType): boolean {
   return isLiquidityBootstrapping(poolType)
 }
 
-export function isV3LBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
+export function isV3LBP(pool: Pool): pool is LbpV3 {
+  return (
+    pool.__typename === 'GqlPoolLiquidityBootstrappingV3' ||
+    pool.__typename === 'GqlPoolFixedPriceLBP'
+  )
+}
+
+export function isFixedLBP(pool: Pool): pool is GqlPoolFixedPriceLbp {
+  return pool.__typename === 'GqlPoolFixedPriceLBP'
+}
+
+export function isDynamicLBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
   return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
 }
 

@@ -4,7 +4,6 @@ import {
   GetPoolEventsQuery,
   GqlChain,
   GqlPoolAddRemoveEventV3,
-  GqlPoolLiquidityBootstrappingV3,
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -18,6 +17,7 @@ import { PoolEventItem } from '../usePoolEvents'
 import { Address } from 'viem'
 import { formatDistanceToNowAbbr } from '@repo/lib/shared/utils/time'
 import { PoolTransactionsCard } from '../PoolTransactionsCard'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 type PoolEventRowProps = {
   poolEvent: PoolEventItem
@@ -42,7 +42,7 @@ export function MyTransactions({
   const { toCurrency } = useCurrency()
 
   const { chain, pool, myLbpTransactionsSectionRef } = usePool()
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
 
   const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
   const reserveToken = lbpPool.poolTokens[lbpPool.reserveTokenIndex]

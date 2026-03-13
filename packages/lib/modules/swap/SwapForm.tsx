@@ -39,7 +39,7 @@ import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { isPoolSwapAllowed, isV3LBP } from '../pool/pool.helpers'
+import { isFixedLBP, isPoolSwapAllowed, isV3LBP } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ApiToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
@@ -195,8 +195,11 @@ export function SwapForm({
     }
   }
 
+  const isProjectTokenSwapInBlocked =
+    pool && 'isProjectTokenSwapInBlocked' in pool && pool.isProjectTokenSwapInBlocked
+
   const disableLbpProjectTokenBuys =
-    isLbpSwap && pool && isV3LBP(pool) && pool.isProjectTokenSwapInBlocked
+    isLbpSwap && pool && isV3LBP(pool) && (isProjectTokenSwapInBlocked || isFixedLBP(pool))
 
   const isLbpProjectTokenBuy = isLbpSwap && customToken && tokenOut.address === customToken.address
 
