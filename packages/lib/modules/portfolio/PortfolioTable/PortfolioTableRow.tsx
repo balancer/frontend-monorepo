@@ -25,6 +25,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { AlertTriangle } from 'react-feather'
 import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
 import { getChainId } from '@repo/lib/config/app.config'
+import { isChainDeprecated } from '../../chains/chain.utils'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -58,7 +59,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
   const { needsMigration } = usePoolMigrations()
   const { options } = PROJECT_CONFIG
 
-  const vebalBoostValue = veBalBoostMap?.[pool.id]
+  const vebalBoostValue = veBalBoostMap?.[pool.id] === 'NaN' ? undefined : veBalBoostMap?.[pool.id]
   const filterKey = getStakingFilterKey(pool.poolType)
   const stakingText = STAKING_LABEL_MAP[filterKey]
 
@@ -77,7 +78,14 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
         <Link href={getPoolPath(pool)} prefetch>
           <Grid {...rest} py={{ base: 'ms', md: 'md' }} role="group">
             <GridItem>
-              <NetworkIcon chain={pool.chain} size={6} />
+              <HStack>
+                <NetworkIcon chain={pool.chain} size={6} />
+                {isChainDeprecated(pool.chain) && (
+                  <Box color="font.warning">
+                    <AlertTriangle size="16" />
+                  </Box>
+                )}
+              </HStack>
             </GridItem>
             <GridItem>
               <PoolListPoolDisplay
