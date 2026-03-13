@@ -20,13 +20,15 @@ import {
   areEmptyRawAmounts,
   getRequiredTokenApprovals,
   isTheApprovedAmountEnough,
+  SpenderAddress,
+  resolveSpender,
 } from './approval-rules'
 import { isVeBalBtpAddress, requiresDoubleApproval } from '../token.helpers'
 import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 
 export type Params = {
-  spenderAddress: Address
+  spenderAddress: SpenderAddress
   chain: GqlChain
   approvalAmounts: RawAmount[]
   actionType: ApprovalAction
@@ -168,14 +170,15 @@ export function useTokenApprovalSteps({
       return errors
     }
 
-    const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
+    const resolvedSpender = resolveSpender(spenderAddress, tokenAddress)
+    const isTxEnabled = !!resolvedSpender && !tokenAllowances.isAllowancesLoading
     const props: ManagedErc20TransactionInput = {
       tokenAddress,
       functionName: isVeBalBtpAddress(tokenAddress) ? 'increaseApproval' : 'approve',
       labels,
       isComplete,
       chainId: getChainId(chain),
-      args: [spenderAddress, requestedRawAmount],
+      args: [resolvedSpender, requestedRawAmount],
       enabled: isTxEnabled,
       simulationMeta: sentryMetaForWagmiSimulation(
         'Error in wagmi tx simulation: Approving token',

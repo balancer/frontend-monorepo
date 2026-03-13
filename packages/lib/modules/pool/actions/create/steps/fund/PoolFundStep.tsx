@@ -10,7 +10,7 @@ import { SeedPoolAlert } from './SeedPoolAlert'
 import { SeedAmountInput } from './SeedAmountInput'
 
 export function PoolFundStep() {
-  const { poolAddress, poolCreationForm } = usePoolCreationForm()
+  const { poolAddress, poolCreationForm, isBoostingUnderlying } = usePoolCreationForm()
   const [poolType, poolTokens, hasAcceptedTokenWeightsRisk, hasAcceptedPoolCreationRisk] = useWatch(
     {
       control: poolCreationForm.control,
@@ -24,7 +24,8 @@ export function PoolFundStep() {
   )
   const { hasValidationErrors } = useTokenInputsValidation()
 
-  const isTokenAmountsValid = !hasValidationErrors || (isReClammPool(poolType) && !poolAddress)
+  const isTokenAmountsValid =
+    !hasValidationErrors || (isReClammPool(poolType) && !poolAddress) || isBoostingUnderlying
 
   const isWeightRiskRequired = isWeightedPool(poolType) || isCowPool(poolType)
 

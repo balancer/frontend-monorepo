@@ -139,6 +139,7 @@ export const RATE_PROVIDER_RADIO_OPTIONS = [
 
 export const INITIAL_TOKEN_CONFIG: PoolCreationToken = {
   address: undefined,
+  isBoostingUnderlying: false,
   rateProvider: zeroAddress,
   paysYieldFees: false,
   data: undefined,

@@ -115,3 +115,9 @@ export function isTheApprovedAmountEnough(
   const isAllowed = tokenAllowance >= requiredRawAmount
   return requiredRawAmount > 0n && isAllowed
 }
+
+export type SpenderAddress = Address | ((tokenAddress: Address) => Address)
+
+export function resolveSpender(spenderAddress: SpenderAddress, tokenAddress: Address): Address {
+  return typeof spenderAddress === 'function' ? spenderAddress(tokenAddress) : spenderAddress
+}
