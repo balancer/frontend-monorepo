@@ -70,12 +70,12 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
           bg: 'background.base',
         }}
         key={keyValue}
+        minW="max-content"
         px={{ base: 'ms', sm: '0' }}
-        rounded="md"
         transition="all 0.2s ease-in-out"
         w="full"
       >
-        <Link href={getPoolPath(pool)} prefetch>
+        <Box as={Link} display="block" href={getPoolPath(pool)} prefetch>
           <Grid {...rest} py={{ base: 'ms', md: 'md' }} role="group">
             <GridItem>
               <HStack>
@@ -150,7 +150,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               )}
             </GridItem>
           </Grid>
-        </Link>
+        </Box>
       </Box>
     </FadeInOnView>
   )

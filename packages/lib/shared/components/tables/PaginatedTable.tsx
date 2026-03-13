@@ -36,6 +36,7 @@ export function PaginatedTable<T>({
   getRowId,
   loadingLength = 20,
   paginationStyles,
+  ...rest
 }: Props<T>) {
   const previousPageCountRef = useRef(0)
 
@@ -51,12 +52,12 @@ export function PaginatedTable<T>({
 
   return (
     <>
-      <VStack gap="0" w="full">
+      <VStack align="stretch" gap="0" w="full" {...rest}>
         <TableHeader />
         <Divider />
         <Box position="relative" w="full">
           {items.length > 0 && (
-            <VStack gap="0">
+            <VStack align="stretch" gap="0" w="full">
               {items.map((item, index) => (
                 <Box key={getRowId(item, index)} w="full">
                   <TableRow index={index} item={item} />
