@@ -6,6 +6,7 @@ fragment LbpV3CommonMetadataFields on GqlPoolLiquidityBootstrappingV3 {
   description
   discord
   endTime
+  farcaster
   isProjectTokenSwapInBlocked
   lbpName
   lbpOwner
@@ -30,6 +31,7 @@ fragment FixedPriceLbpCommonMetadataFields on GqlPoolFixedPriceLBP {
   discord
   endTime
   farcaster
+  isProjectTokenSwapInBlocked
   lbpName
   lbpOwner
   projectToken

@@ -195,11 +195,8 @@ export function SwapForm({
     }
   }
 
-  const isProjectTokenSwapInBlocked =
-    pool && 'isProjectTokenSwapInBlocked' in pool && pool.isProjectTokenSwapInBlocked
-
   const disableLbpProjectTokenBuys =
-    isLbpSwap && pool && isV3LBP(pool) && (isProjectTokenSwapInBlocked || isFixedLBP(pool))
+    isLbpSwap && pool && isV3LBP(pool) && (pool.isProjectTokenSwapInBlocked || isFixedLBP(pool))
 
   const isLbpProjectTokenBuy = isLbpSwap && customToken && tokenOut.address === customToken.address
 

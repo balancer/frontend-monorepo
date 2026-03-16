@@ -13,8 +13,6 @@ export function LbpPoolAttributes({ pool }: { pool: LbpV3 }) {
   const token = pool.poolTokens[pool.projectTokenIndex]
   const { now: currentTime, currentPrice, hasSnapshots, snapshots } = useLbpPoolCharts()
   const hasEnded = hasSnapshots && isAfter(currentTime, snapshots[snapshots.length - 1].timestamp)
-  const isProjectTokenSwapInBlocked =
-    'isProjectTokenSwapInBlocked' in pool && pool.isProjectTokenSwapInBlocked
 
   const attributes = [
     {
@@ -24,7 +22,7 @@ export function LbpPoolAttributes({ pool }: { pool: LbpV3 }) {
     },
     {
       title: 'Available user actions',
-      value: `Users can ${isProjectTokenSwapInBlocked || isFixedLBP(pool) ? 'only buy' : 'buy and sell'} the sale token`,
+      value: `Users can ${pool.isProjectTokenSwapInBlocked || isFixedLBP(pool) ? 'only buy' : 'buy and sell'} the sale token`,
     },
     {
       title: hasEnded ? `${token.symbol} price at the end of LBP` : `${token.symbol} spot price`,
