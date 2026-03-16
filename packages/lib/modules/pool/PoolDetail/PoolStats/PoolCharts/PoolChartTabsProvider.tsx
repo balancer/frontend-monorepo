@@ -98,6 +98,8 @@ export function usePoolChartTabsLogic() {
         return 'Total value locked'
       case PoolChartTab.FEES:
         return `${activePeriod.label} fees`
+      case PoolChartTab.FUNDS_RAISED:
+        return `${activePeriod.label} funds raised`
       case PoolChartTab.VOLUME:
         return `${activePeriod.label} volume`
     }

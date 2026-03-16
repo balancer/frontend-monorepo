@@ -106,18 +106,29 @@ function aggregateToHourlyData(prices: LbpPriceChartDataFragment[]): HourlyDataP
 }
 
 export function getCurrentPrice(snapshots: LbpSnapshot[]) {
+  return getCurrentSnapshotValue(snapshots, snapshot => snapshot.projectTokenPrice)
+}
+
+export function getCurrentReserveTokenBalance(snapshots: LbpSnapshot[]) {
+  return getCurrentSnapshotValue(snapshots, snapshot => snapshot.reserveTokenBalance)
+}
+
+function getCurrentSnapshotValue(
+  snapshots: LbpSnapshot[],
+  selector: (snapshot: LbpSnapshot) => number
+) {
   if (snapshots.length === 0) return 0
 
   const currentTime = now()
-  if (isBefore(currentTime, snapshots[0].timestamp)) return snapshots[0].projectTokenPrice
+  if (isBefore(currentTime, snapshots[0].timestamp)) return selector(snapshots[0])
   if (isAfter(currentTime, snapshots[snapshots.length - 1].timestamp)) {
-    return snapshots[snapshots.length - 1].projectTokenPrice
+    return selector(snapshots[snapshots.length - 1])
   }
 
   for (let i = 0; i < snapshots.length; i++) {
-    if (isSameHour(currentTime, snapshots[i].timestamp)) return snapshots[i].projectTokenPrice
+    if (isSameHour(currentTime, snapshots[i].timestamp)) return selector(snapshots[i])
     if (isSameHour(currentTime, snapshots[i + 1].timestamp)) {
-      return snapshots[i + 1].projectTokenPrice
+      return selector(snapshots[i + 1])
     }
     if (
       isWithinInterval(currentTime, {
@@ -125,8 +136,8 @@ export function getCurrentPrice(snapshots: LbpSnapshot[]) {
         end: snapshots[i + 1].timestamp,
       })
     ) {
-      return bn(snapshots[i].projectTokenPrice)
-        .plus(snapshots[i + 1].projectTokenPrice)
+      return bn(selector(snapshots[i]))
+        .plus(selector(snapshots[i + 1]))
         .div(2)
         .toNumber()
     }

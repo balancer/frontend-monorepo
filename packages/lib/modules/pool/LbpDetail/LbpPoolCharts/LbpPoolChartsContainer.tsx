@@ -7,6 +7,7 @@ import {
 } from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { LbpPriceChart, PriceInfo } from './LbpPriceChart'
+import { FundsRaisedInfo, LbpFundsRaisedChart } from './LbpFundsRaisedChart'
 import { LbpPoolChartsProvider, useLbpPoolCharts } from './LbpPoolChartsProvider'
 import { LbpVolumeTVLFeesCharts } from './LbpVolumeTVLFeesCharts'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -37,7 +38,11 @@ function PoolChartsContent() {
           size="xxs"
         />
         {activeTab.value === PoolChartTab.PRICE && <PriceInfo />}
-        {activeTab.value !== PoolChartTab.PRICE && <VolTvlFeesInfo chartType={activeTab.value} />}
+        {activeTab.value === PoolChartTab.FUNDS_RAISED && <FundsRaisedInfo />}
+        {activeTab.value !== PoolChartTab.PRICE &&
+          activeTab.value !== PoolChartTab.FUNDS_RAISED && (
+            <VolTvlFeesInfo chartType={activeTab.value} />
+          )}
       </HStack>
       <Box h="full" overflow="hidden" position="relative" w="full">
         <AnimatePresence mode="wait">
@@ -55,6 +60,21 @@ function PoolChartsContent() {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
               <LbpPriceChart />
+            </motion.div>
+          ) : activeTab.value === PoolChartTab.FUNDS_RAISED ? (
+            <motion.div
+              animate={{ x: '0%' }}
+              exit={{ x: '-100%' }}
+              initial={{ x: '100%' }}
+              key={activeTab.value}
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+              }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <LbpFundsRaisedChart />
             </motion.div>
           ) : (
             <LbpVolumeTVLFeesCharts

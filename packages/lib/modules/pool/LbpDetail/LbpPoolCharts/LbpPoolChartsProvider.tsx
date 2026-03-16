@@ -1,7 +1,11 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 import { usePool } from '../../PoolProvider'
-import { getCurrentPrice, usePriceInfo } from '@repo/lib/modules/lbp/pool/usePriceInfo'
+import {
+  getCurrentPrice,
+  getCurrentReserveTokenBalance,
+  usePriceInfo,
+} from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { Address } from 'viem'
 import {
   secondsToMilliseconds,
@@ -11,6 +15,7 @@ import {
   differenceInHours,
 } from 'date-fns'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 type LbpPoolChartsContextType = ReturnType<typeof useLbpPoolChartsLogic>
 
@@ -34,8 +39,20 @@ export function useLbpPoolChartsLogic() {
   const { snapshots, hourlyData, isLoading } = usePriceInfo(pool.chain, pool.id as Address)
 
   const currentPrice = getCurrentPrice(snapshots)
+  const currentSnapshot = snapshots[snapshots.length - 1]
   const hasSnapshots = snapshots.length > 0
   const hasHourlyData = hourlyData.length > 0
+
+  const reserveTokenSymbol =
+    lbpPool.poolTokens.find(
+      token => token.address.toLowerCase() === lbpPool.reserveToken.toLowerCase()
+    )?.symbol || 'Reserve'
+
+  const currentFundsRaised = getCurrentReserveTokenBalance(snapshots)
+
+  const currentFundsRaisedUsd = bn(currentFundsRaised)
+    .times(currentSnapshot?.reserveTokenPrice || 0)
+    .toNumber()
 
   return {
     salePeriodText,
@@ -49,6 +66,9 @@ export function useLbpPoolChartsLogic() {
     daysDiff,
     hoursDiff,
     currentPrice,
+    currentFundsRaised,
+    currentFundsRaisedUsd,
+    reserveTokenSymbol,
     hasSnapshots,
     hasHourlyData,
   }
