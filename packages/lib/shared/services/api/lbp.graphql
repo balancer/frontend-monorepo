@@ -36,6 +36,7 @@ fragment FixedPriceLbpCommonMetadataFields on GqlPoolFixedPriceLBP {
   lbpOwner
   projectToken
   projectTokenIndex
+  projectTokenRate
   reserveToken
   reserveTokenIndex
   startTime

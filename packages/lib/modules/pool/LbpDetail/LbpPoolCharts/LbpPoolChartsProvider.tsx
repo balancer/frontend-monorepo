@@ -53,6 +53,19 @@ export function useLbpPoolChartsLogic() {
   const currentFundsRaisedUsd = bn(currentFundsRaised)
     .times(currentSnapshot?.reserveTokenPrice || 0)
     .toNumber()
+  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
+  const fundsRaisedGoal =
+    projectToken?.balance && lbpPool.projectTokenRate
+      ? bn(projectToken.balance).times(lbpPool.projectTokenRate).toNumber()
+      : null
+  const currentFundsRaisedPercentage =
+    fundsRaisedGoal && fundsRaisedGoal > 0
+      ? bn(currentFundsRaised).div(fundsRaisedGoal).times(100).toNumber()
+      : null
+
+  function formatFundsRaisedPercentage(value: number) {
+    return bn(value).toFixed(1)
+  }
 
   return {
     salePeriodText,
@@ -68,6 +81,9 @@ export function useLbpPoolChartsLogic() {
     currentPrice,
     currentFundsRaised,
     currentFundsRaisedUsd,
+    fundsRaisedGoal,
+    currentFundsRaisedPercentage,
+    formatFundsRaisedPercentage,
     reserveTokenSymbol,
     hasSnapshots,
     hasHourlyData,

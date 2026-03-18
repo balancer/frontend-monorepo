@@ -8,7 +8,7 @@ import {
   useTheme as useChakraTheme,
   VStack,
 } from '@chakra-ui/react'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { differenceInDays, format } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import { useTheme as useNextTheme } from 'next-themes'
@@ -20,8 +20,17 @@ import { range } from './chart.helper'
 import { useLbpPoolCharts } from './LbpPoolChartsProvider'
 
 export function LbpFundsRaisedChart() {
-  const { snapshots, isLoading, startDateTime, endDateTime, reserveTokenSymbol, salePeriodText } =
-    useLbpPoolCharts()
+  const {
+    snapshots,
+    isLoading,
+    startDateTime,
+    endDateTime,
+    reserveTokenSymbol,
+    salePeriodText,
+    fundsRaisedGoal,
+    isSaleOngoing,
+    formatFundsRaisedPercentage,
+  } = useLbpPoolCharts()
   const theme = useChakraTheme()
   const { theme: nextTheme } = useNextTheme()
   const { isMobile } = useBreakpoints()
@@ -61,14 +70,18 @@ export function LbpFundsRaisedChart() {
 
         const timestamp = params[0].data[0]
         const fundsRaised = params[0].data[1]
+        const progressLabel =
+          isSaleOngoing && fundsRaisedGoal
+            ? `<div style="font-size: 0.95rem; font-weight: 600; color: #68D391; margin-top: 4px;">${formatFundsRaisedPercentage(
+                bn(fundsRaised).div(fundsRaisedGoal).times(100).toNumber()
+              )}% complete</div>`
+            : ''
 
         return `
   <div style="width: 170px; padding: 8px; display: flex; flex-direction: column; justify-content: center; background: ${theme.colors.gray[800]};">
+      ${progressLabel}
       <div style="font-size: 0.85rem; font-weight: 500; color: ${theme.colors.gray[400]}; margin-bottom: 4px;">
         ${format(new Date(timestamp), 'MMM dd, yyyy h:mm a')}
-      </div>
-      <div style="font-size: 0.95rem; font-weight: 500; color: ${theme.colors.gray[400]};">
-        Funds raised: ${fNum('token', fundsRaised)} ${reserveTokenSymbol}
       </div>
     </div>
   `
@@ -168,16 +181,37 @@ export function LbpFundsRaisedChart() {
 }
 
 export function FundsRaisedInfo() {
-  const { currentFundsRaised, currentFundsRaisedUsd, reserveTokenSymbol, hasSnapshots } =
-    useLbpPoolCharts()
+  const {
+    currentFundsRaised,
+    currentFundsRaisedUsd,
+    reserveTokenSymbol,
+    hasSnapshots,
+    fundsRaisedGoal,
+    currentFundsRaisedPercentage,
+    formatFundsRaisedPercentage,
+    isSaleOngoing,
+  } = useLbpPoolCharts()
+
+  const progressLabel =
+    hasSnapshots && isSaleOngoing && fundsRaisedGoal && currentFundsRaisedPercentage !== null
+      ? `${formatFundsRaisedPercentage(currentFundsRaisedPercentage)}% of ${fNum(
+          'token',
+          fundsRaisedGoal,
+          {
+            abbreviated: false,
+          }
+        )} ${reserveTokenSymbol} goal`
+      : null
 
   return (
     <VStack alignItems="end" spacing="0.5">
       <Heading fontWeight="bold" size="h5">
-        {hasSnapshots ? `${fNum('token', currentFundsRaised)} ${reserveTokenSymbol}` : '—'}
+        {hasSnapshots
+          ? `${fNum('token', currentFundsRaised, { abbreviated: false })} ${reserveTokenSymbol}`
+          : '—'}
       </Heading>
       <Text color="font.secondary" fontSize="12px">
-        {hasSnapshots ? `${toUsdLabel(currentFundsRaisedUsd)}` : 'No data'}
+        {hasSnapshots ? (progressLabel ?? `${toUsdLabel(currentFundsRaisedUsd)}`) : 'No data'}
       </Text>
     </VStack>
   )
