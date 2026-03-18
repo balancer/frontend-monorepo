@@ -73,7 +73,6 @@ describe('LbpFundsRaisedChart', () => {
       fundsRaisedGoal: 10000,
       hasSnapshots: true,
       isSaleOngoing: true,
-      formatFundsRaisedPercentage: (value: number) => value.toFixed(1),
       ...overrides,
     }
   }
@@ -96,7 +95,7 @@ describe('LbpFundsRaisedChart', () => {
     )
 
     expect(screen.getByText('6,800 USDC')).toBeInTheDocument()
-    expect(screen.getByText('68.0% of 10,000 USDC goal')).toBeInTheDocument()
+    expect(screen.getByText('68% of 10,000 USDC goal')).toBeInTheDocument()
   })
 
   it('omits goal progress copy when no goal is available', () => {
@@ -155,6 +154,6 @@ describe('LbpFundsRaisedChart', () => {
       },
     ])
 
-    expect(tooltip).toContain('68.0% complete')
+    expect(tooltip).toContain('68% complete')
   })
 })

@@ -67,10 +67,6 @@ export function useLbpPoolChartsLogic() {
       ? bn(currentFundsRaised).div(fundsRaisedGoal).times(100).toNumber()
       : null
 
-  function formatFundsRaisedPercentage(value: number) {
-    return bn(value).toFixed(1)
-  }
-
   return {
     salePeriodText,
     snapshots,
@@ -87,7 +83,6 @@ export function useLbpPoolChartsLogic() {
     currentFundsRaisedUsd,
     fundsRaisedGoal,
     currentFundsRaisedPercentage,
-    formatFundsRaisedPercentage,
     reserveTokenSymbol,
     hasSnapshots,
     hasHourlyData,

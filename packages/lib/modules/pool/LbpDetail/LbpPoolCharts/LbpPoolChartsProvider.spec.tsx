@@ -97,7 +97,7 @@ describe('useLbpPoolChartsLogic', () => {
     expect(result.current.currentFundsRaisedPercentage).toBeNull()
   })
 
-  it('rounds the current funds raised percentage to one decimal place for chart copy', () => {
+  it('keeps the current funds raised percentage as an integer-style percent input', () => {
     usePriceInfoMock.mockReturnValue({
       isLoading: false,
       hourlyData: [],
@@ -117,7 +117,6 @@ describe('useLbpPoolChartsLogic', () => {
 
     const { result } = renderHook(() => useLbpPoolChartsLogic())
 
-    expect(result.current.formatFundsRaisedPercentage(67.89)).toBe('67.9')
     expect(result.current.currentFundsRaisedPercentage).toBe(67.89)
   })
 })

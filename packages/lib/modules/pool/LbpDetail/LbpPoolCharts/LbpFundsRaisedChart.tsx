@@ -29,7 +29,6 @@ export function LbpFundsRaisedChart() {
     salePeriodText,
     fundsRaisedGoal,
     isSaleOngoing,
-    formatFundsRaisedPercentage,
   } = useLbpPoolCharts()
   const theme = useChakraTheme()
   const { theme: nextTheme } = useNextTheme()
@@ -72,9 +71,10 @@ export function LbpFundsRaisedChart() {
         const fundsRaised = params[0].data[1]
         const progressLabel =
           isSaleOngoing && fundsRaisedGoal
-            ? `<div style="font-size: 0.95rem; font-weight: 600; color: #68D391; margin-top: 4px;">${formatFundsRaisedPercentage(
-                bn(fundsRaised).div(fundsRaisedGoal).times(100).toNumber()
-              )}% complete</div>`
+            ? `<div style="font-size: 0.95rem; font-weight: 600; color: #68D391; margin-top: 4px;">${fNum(
+                'percentage',
+                bn(fundsRaised).div(fundsRaisedGoal).toNumber()
+              )} complete</div>`
             : ''
 
         return `
@@ -188,13 +188,12 @@ export function FundsRaisedInfo() {
     hasSnapshots,
     fundsRaisedGoal,
     currentFundsRaisedPercentage,
-    formatFundsRaisedPercentage,
     isSaleOngoing,
   } = useLbpPoolCharts()
 
   const progressLabel =
     hasSnapshots && isSaleOngoing && fundsRaisedGoal && currentFundsRaisedPercentage !== null
-      ? `${formatFundsRaisedPercentage(currentFundsRaisedPercentage)}% of ${fNum(
+      ? `${fNum('percentage', bn(currentFundsRaisedPercentage).div(100).toNumber())} of ${fNum(
           'token',
           fundsRaisedGoal,
           {
