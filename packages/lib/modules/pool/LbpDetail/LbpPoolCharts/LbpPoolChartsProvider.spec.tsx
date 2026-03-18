@@ -20,11 +20,18 @@ vi.mock('@repo/lib/modules/lbp/pool/usePriceInfo', async importOriginal => {
 })
 
 describe('useLbpPoolChartsLogic', () => {
+  function makeFixedPool() {
+    return {
+      ...structuredClone(sepoliaFixedLbpMock),
+      __typename: 'GqlPoolFixedPriceLBP' as const,
+    }
+  }
+
   beforeEach(() => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-03-17T12:00:00Z'))
 
-    usePoolMock.mockReturnValue({ pool: structuredClone(sepoliaFixedLbpMock) })
+    usePoolMock.mockReturnValue({ pool: makeFixedPool() })
     usePriceInfoMock.mockReturnValue({
       isLoading: false,
       hourlyData: [],
@@ -68,9 +75,21 @@ describe('useLbpPoolChartsLogic', () => {
   })
 
   it('returns null goal-derived labels when the pool is missing project token goal inputs', () => {
-    const poolWithoutRate = structuredClone(sepoliaFixedLbpMock)
-    delete (poolWithoutRate as typeof poolWithoutRate & { projectTokenRate?: string }).projectTokenRate
-    usePoolMock.mockReturnValue({ pool: poolWithoutRate })
+    const dynamicPool = {
+      ...makeFixedPool(),
+      __typename: 'GqlPoolLiquidityBootstrappingV3',
+      projectTokenEndWeight: 0.2,
+      projectTokenStartWeight: 0.8,
+      reserveTokenEndWeight: 0.8,
+      reserveTokenStartWeight: 0.2,
+      isSeedless: false,
+    }
+    delete (
+      dynamicPool as typeof dynamicPool & {
+        projectTokenRate?: string
+      }
+    ).projectTokenRate
+    usePoolMock.mockReturnValue({ pool: dynamicPool })
 
     const { result } = renderHook(() => useLbpPoolChartsLogic())
 

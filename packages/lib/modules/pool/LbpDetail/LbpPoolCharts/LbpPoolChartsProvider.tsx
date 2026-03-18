@@ -15,6 +15,7 @@ import {
   differenceInHours,
 } from 'date-fns'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
+import { isFixedLBP } from '@repo/lib/modules/pool/pool.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 type LbpPoolChartsContextType = ReturnType<typeof useLbpPoolChartsLogic>
@@ -49,15 +50,18 @@ export function useLbpPoolChartsLogic() {
     )?.symbol || 'Reserve'
 
   const currentFundsRaised = getCurrentReserveTokenBalance(snapshots)
+  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
+  const projectTokenRate = isFixedLBP(lbpPool) ? lbpPool.projectTokenRate : null
 
   const currentFundsRaisedUsd = bn(currentFundsRaised)
     .times(currentSnapshot?.reserveTokenPrice || 0)
     .toNumber()
-  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
+
   const fundsRaisedGoal =
-    projectToken?.balance && lbpPool.projectTokenRate
-      ? bn(projectToken.balance).times(lbpPool.projectTokenRate).toNumber()
+    projectToken?.balance && projectTokenRate
+      ? bn(projectToken.balance).times(projectTokenRate).toNumber()
       : null
+
   const currentFundsRaisedPercentage =
     fundsRaisedGoal && fundsRaisedGoal > 0
       ? bn(currentFundsRaised).div(fundsRaisedGoal).times(100).toNumber()
