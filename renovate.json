@@ -21,7 +21,7 @@
     {
       "description": "To avoid problems keep viem version matched with balancer sdk",
       "groupName": "balancer sdk / viem",
-      "matchPackageNames": ["viem", "@balancer-labs/sdk"]
+      "matchPackageNames": ["viem", "@balancer/sdk"]
     },
     {
       "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
