@@ -7,8 +7,6 @@ import {
 import {
   isAfter,
   isBefore,
-  isSameHour,
-  isWithinInterval,
   millisecondsToSeconds,
   secondsToMilliseconds,
   startOfHour,
@@ -125,25 +123,14 @@ function getCurrentSnapshotValue(
     return selector(snapshots[snapshots.length - 1])
   }
 
-  for (let i = 0; i < snapshots.length; i++) {
-    if (isSameHour(currentTime, snapshots[i].timestamp)) return selector(snapshots[i])
-    if (isSameHour(currentTime, snapshots[i + 1].timestamp)) {
-      return selector(snapshots[i + 1])
-    }
-    if (
-      isWithinInterval(currentTime, {
-        start: snapshots[i].timestamp,
-        end: snapshots[i + 1].timestamp,
-      })
-    ) {
-      return bn(selector(snapshots[i]))
-        .plus(selector(snapshots[i + 1]))
-        .div(2)
-        .toNumber()
+  // Find the last snapshot before or at current time
+  for (let i = snapshots.length - 1; i >= 0; i--) {
+    if (!isAfter(snapshots[i].timestamp, currentTime)) {
+      return selector(snapshots[i])
     }
   }
 
-  throw new Error('Unreachable code')
+  return selector(snapshots[0])
 }
 
 export function min(prices: LbpPrice[]) {
