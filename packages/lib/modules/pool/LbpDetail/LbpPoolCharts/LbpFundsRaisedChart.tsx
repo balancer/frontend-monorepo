@@ -9,12 +9,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { differenceInDays, format } from 'date-fns'
+import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { useMemo } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { formatDateAxisLabel } from '@repo/lib/modules/lbp/steps/sale-structure/helpers'
+import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import * as echarts from 'echarts/core'
 import { range } from './chart.helper'
 import { useLbpPoolCharts } from './LbpPoolChartsProvider'
@@ -29,63 +30,49 @@ export function LbpFundsRaisedChart() {
     salePeriodText,
     fundsRaisedGoal,
     isSaleOngoing,
+    currentFundsRaised,
+    currentFundsRaisedPercentage,
   } = useLbpPoolCharts()
   const theme = useChakraTheme()
   const { theme: nextTheme } = useNextTheme()
   const { isMobile } = useBreakpoints()
 
   const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
+  const now = new Date()
 
-  const chartData = useMemo(
-    () => snapshots.map(snapshot => [snapshot.timestamp.getTime(), snapshot.reserveTokenBalance]),
-    [snapshots]
-  )
+  const chartData = useMemo(() => {
+    const now = new Date()
+    return snapshots
+      .filter(snapshot => snapshot.timestamp <= now)
+      .map(snapshot => [snapshot.timestamp.getTime(), snapshot.reserveTokenBalance])
+  }, [snapshots])
 
   const reserveRange = range(snapshots.map(item => item.reserveTokenBalance))
+  const yMax = fundsRaisedGoal || reserveRange.max
+  const cutTimeYMax = yMax * 1.05
 
   const chartInfo: EChartsOption = {
     grid: {
-      left: '7.5%',
+      left: '0%',
       right: '4%',
       top: '10%',
       bottom: '10%',
       containLabel: isMobile,
     },
+    graphic: {
+      type: 'text',
+      left: '0%',
+      top: '4%',
+      style: {
+        text: reserveTokenSymbol,
+        fill: theme.semanticTokens.colors.font.primary[colorMode],
+        opacity: 0.8,
+        fontSize: 12,
+        fontWeight: 600,
+      },
+    },
     tooltip: {
-      show: true,
-      showContent: true,
-      trigger: 'axis',
-      confine: true,
-      axisPointer: {
-        animation: false,
-        type: 'shadow',
-        label: {
-          show: false,
-        },
-      },
-      extraCssText: `padding-right:2rem;border: none;background: ${theme.colors.gray[800]};`,
-      formatter: (params: any) => {
-        if (!params || params.length === 0) return ''
-
-        const timestamp = params[0].data[0]
-        const fundsRaised = params[0].data[1]
-        const progressLabel =
-          isSaleOngoing && fundsRaisedGoal
-            ? `<div style="font-size: 0.95rem; font-weight: 600; color: #68D391; margin-top: 4px;">${fNum(
-                'percentage',
-                bn(fundsRaised).div(fundsRaisedGoal).toNumber()
-              )} complete</div>`
-            : ''
-
-        return `
-  <div style="width: 170px; padding: 8px; display: flex; flex-direction: column; justify-content: center; background: ${theme.colors.gray[800]};">
-      ${progressLabel}
-      <div style="font-size: 0.85rem; font-weight: 500; color: ${theme.colors.gray[400]}; margin-bottom: 4px;">
-        ${format(new Date(timestamp), 'MMM dd, yyyy h:mm a')}
-      </div>
-    </div>
-  `
-      },
+      show: false,
     },
     xAxis: {
       show: true,
@@ -120,8 +107,13 @@ export function LbpFundsRaisedChart() {
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
+      max: cutTimeYMax,
       axisLabel: {
-        formatter: (value: number) => `${fNum('token', value)} ${reserveTokenSymbol}`,
+        formatter: (value: number) => {
+          if (Math.abs(value - cutTimeYMax) < 0.000001) return ''
+
+          return `${fNum('token', value)}`
+        },
         color: theme.semanticTokens.colors.font.primary[colorMode],
         opacity: 0.5,
       },
@@ -147,7 +139,7 @@ export function LbpFundsRaisedChart() {
         markLine: {
           silent: true,
           symbol: 'none',
-          data: [{ yAxis: reserveRange.max }, { yAxis: reserveRange.max / 2 }],
+          data: [{ yAxis: 0 }, { yAxis: yMax / 2 }, { yAxis: yMax }],
           lineStyle: {
             type: 'dashed',
             color: 'grey',
@@ -159,6 +151,66 @@ export function LbpFundsRaisedChart() {
         },
       },
     ],
+  }
+
+  if (isAfter(now, startDateTime) && isBefore(now, endDateTime)) {
+    const percentage =
+      (now.getTime() - startDateTime.getTime()) / (endDateTime.getTime() - startDateTime.getTime())
+
+    chartInfo.series?.push({
+      id: 'cut-time',
+      type: 'line',
+      z: 10,
+      zlevel: 1,
+      data: [
+        [now, 0],
+        [now, cutTimeYMax],
+      ],
+      lineStyle: {
+        color: 'grey',
+        type: 'dashed',
+        width: 1,
+        cap: 'round',
+        join: 'round',
+      },
+      label: {
+        show: true,
+        position: percentage < 0.8 ? 'right' : 'left',
+        formatter: (value: LabelFormatterParams) => {
+          if (value.data[1] === cutTimeYMax) {
+            return isSaleOngoing && fundsRaisedGoal && currentFundsRaisedPercentage !== null
+              ? `{green|${fNum('percentage', bn(currentFundsRaisedPercentage).div(100).toNumber())} complete}\n{time|${format(now, 'h:mma, MM/dd/yy')}}`
+              : `{value|${fNum('token', currentFundsRaised)} ${reserveTokenSymbol}}\n{time|${format(now, 'h:mma, MM/dd/yy')}}`
+          }
+
+          return ''
+        },
+        backgroundColor: '#57616f',
+        padding: 3,
+        borderRadius: 2,
+        shadowColor: '#1A000000',
+        shadowBlur: 2,
+        shadowOffsetX: 1,
+        shadowOffsetY: 1,
+        rich: {
+          green: {
+            color: '#25E2A4',
+            fontWeight: 'bold',
+            padding: 2,
+          },
+          value: {
+            color: theme.semanticTokens.colors.font.primary[colorMode],
+            fontWeight: 'bold',
+            padding: 2,
+          },
+          time: {
+            color: '#A0AEC0',
+            padding: 2,
+          },
+        },
+      },
+      showSymbol: true,
+    })
   }
 
   return isLoading ? (
