@@ -147,7 +147,7 @@ function useTxReceipt({
   protocolVersion,
   txReceipt,
 }: ReceiptProps) {
-  const { getToken, isLoadingTokenPrices } = useTokens()
+  const { getToken, isLoadingTokenPrices, isLoadingTokens } = useTokens()
   const chainId = getChainId(chain)
   // These query will be skipped if we are in the context of a transaction flow (where txReceipt is defined)
   // or will be fetched if the user is visiting an historic transaction receipt (where txReceipt is undefined)
@@ -170,7 +170,10 @@ function useTxReceipt({
   const txValue = transactionQuery.data?.value || 0n
 
   const isLoading =
-    isLoadingTokenPrices || historicReceiptQuery.isLoading || transactionQuery.isLoading
+    isLoadingTokenPrices ||
+    isLoadingTokens ||
+    historicReceiptQuery.isLoading ||
+    transactionQuery.isLoading
   const error = historicReceiptQuery.error || transactionQuery.error
 
   const data =
