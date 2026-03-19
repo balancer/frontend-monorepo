@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@balancer/sdk": "5.1.1",
+    "@balancer/sdk": "5.2.3",
     "@playwright/test": "1.53.1",
     "@repo/lib": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -26,6 +26,6 @@
     "beets-frontend-v3": "workspace:*",
     "dotenv": "17.2.3",
     "frontend-v3": "workspace:*",
-    "start-server-and-test": "2.0.13"
+    "start-server-and-test": "2.1.5"
   }
 }

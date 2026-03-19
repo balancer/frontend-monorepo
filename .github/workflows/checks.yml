@@ -48,6 +48,8 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run typecheck
+        env:
+          NODE_OPTIONS: '--max_old_space_size=6144'
         run: pnpm typecheck
       - name: Run unit tests
         run: pnpm test:unit

@@ -6,17 +6,51 @@ import { usePoolAlerts } from './usePoolAlerts'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { isComposableStablePool } from '../pool.utils'
 import { usePoolMigrations } from '../migrations/PoolMigrationsProvider'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../migrations/MigrationAlert'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { isChainDeprecated } from '../../chains/chain.utils'
 
 export function PoolAlerts() {
   const { pool } = usePool()
   const { poolAlerts, dismissAlert } = usePoolAlerts(pool)
   const { needsMigration } = usePoolMigrations()
-  if (poolAlerts.length === 0) return null
 
   const affectedByV2Exploit = pool.protocolVersion === 2 && isComposableStablePool(pool)
-  const v2ExploitWarningContent = (
+  const chainDeprecated = isChainDeprecated(pool.chain)
+
+  if (poolAlerts.length === 0 && !needsMigration && !affectedByV2Exploit && !chainDeprecated) {
+    return null
+  }
+
+  return (
+    <VStack width="full">
+      {poolAlerts.map(alert => (
+        <BalAlert
+          key={alert.identifier}
+          onClose={e => {
+            e.preventDefault()
+            dismissAlert(alert.identifier)
+          }}
+          {...alert}
+        />
+      ))}
+
+      {affectedByV2Exploit && <BalAlert content={<V2ExploitContentWarning />} status="warning" />}
+
+      {chainDeprecated && (
+        <BalAlert content={<DeprecatedChainWarningContent chain={pool.chain} />} status="warning" />
+      )}
+
+      {needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
+        <MigrationAlert pool={pool} />
+      )}
+    </VStack>
+  )
+}
+
+function V2ExploitContentWarning() {
+  return (
     <HStack>
       <Text color="#000">
         This pool was part of an exploit on some v2 Composable Stable pools (v3 pools not affected).
@@ -35,25 +69,37 @@ export function PoolAlerts() {
       </Link>
     </HStack>
   )
+}
+
+function DeprecatedChainWarningContent({ chain }: { chain: GqlChain }) {
+  const chainName = getChainName(chain)
+  const learnMoreLink =
+    chain === GqlChain.Zkevm
+      ? 'https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020'
+      : 'https://forum.balancer.fi/t/bip-906-deprecation-of-polygon-zkevm-fraxtal-and-mode/6951'
+  const problem =
+    chain === GqlChain.Zkevm
+      ? `Polygon has decided to sunset the ${chainName} network`
+      : `The ${chainName} network is being sunset on Balancer.`
 
   return (
-    <VStack width="full">
-      {poolAlerts.map(alert => (
-        <BalAlert
-          key={alert.identifier}
-          onClose={e => {
-            e.preventDefault()
-            dismissAlert(alert.identifier)
-          }}
-          {...alert}
-        />
-      ))}
-
-      {affectedByV2Exploit && <BalAlert content={v2ExploitWarningContent} status="warning" />}
-
-      {needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
-        <MigrationAlert pool={pool} />
-      )}
-    </VStack>
+    <HStack>
+      <Text color="#000" fontWeight="bold">
+        {problem}
+      </Text>
+      <Text color="#000">{`Remove any liquidity you have in ${chainName} pools.`}</Text>
+      <Link
+        _hover={{
+          color: '#555',
+        }}
+        color="#000"
+        fontWeight="bold"
+        href={learnMoreLink}
+        isExternal
+        textDecoration="underline"
+      >
+        Learn more
+      </Link>
+    </HStack>
   )
 }
