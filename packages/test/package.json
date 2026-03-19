@@ -10,7 +10,7 @@
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.0",
+    "@testing-library/react": "16.3.2",
     "@types/node": "24.0.3",
     "@viem/anvil": "^0.0.10",
     "cross-fetch": "4.1.0",

@@ -98,7 +98,7 @@
     "@sentry/core": "10.33.0",
     "@sentry/types": "10.33.0",
     "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.1",
+    "@testing-library/react": "16.3.2",
     "@types/echarts": "4.9.22",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "4.17.23",

@@ -24,7 +24,7 @@ importers:
         version: 4.3.1(vite@7.0.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))
       '@vitest/coverage-v8':
         specifier: 3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
+        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
       happy-dom:
         specifier: 20.0.10
         version: 20.0.10
@@ -63,10 +63,10 @@ importers:
         version: 5.9.2
       vitest:
         specifier: 3.2.4
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
+        version: 3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
       vitest-mock-extended:
         specifier: 3.1.0
-        version: 3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
+        version: 3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
 
   apps/beets-frontend-v3:
     dependencies:
@@ -322,8 +322,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@testing-library/react':
-        specifier: 16.3.1
-        version: 16.3.1(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: 16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
@@ -671,8 +671,8 @@ importers:
         specifier: 6.9.1
         version: 6.9.1
       '@testing-library/react':
-        specifier: 16.3.1
-        version: 16.3.1(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: 16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@types/echarts':
         specifier: 4.9.22
         version: 4.9.22
@@ -751,8 +751,8 @@ importers:
         specifier: 6.9.1
         version: 6.9.1
       '@testing-library/react':
-        specifier: 16.3.0
-        version: 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: 16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@types/node':
         specifier: 24.0.3
         version: 24.0.3
@@ -1034,10 +1034,6 @@ packages:
 
   '@babel/runtime@7.27.1':
     resolution: {integrity: sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/runtime@7.28.3':
-    resolution: {integrity: sha512-9uIQ10o0WGdpP6GDhXcdOJPJuDgFtIDtN/9+ArJQ2NAfAmiuhTQdzkaTGR33v43GYS2UrSA0eX2pPPHoFVvpxA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.28.4':
@@ -3860,23 +3856,8 @@ packages:
     resolution: {integrity: sha512-zIcONa+hVtVSSep9UT3jZ5rizo2BsxgyDYU7WFD5eICBE7no3881HGeb/QkGfsJs6JTkY1aQhT7rIPC7e+0nnA==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
 
-  '@testing-library/react@16.3.0':
-    resolution: {integrity: sha512-kFSyxiEDwv1WLl2fgsq6pPBbw5aWKrsY2/noi1Id0TK0UParSF62oFQFGHXIyaG4pp2tEub/Zlel+fjjZILDsw==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@testing-library/dom': ^10.0.0
-      '@types/react': '19.2'
-      '@types/react-dom': '19.2'
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      '@types/react-dom':
-        optional: true
-
-  '@testing-library/react@16.3.1':
-    resolution: {integrity: sha512-gr4KtAWqIOQoucWYD/f6ki+j5chXfcPc74Col/6poTyqTmn7zRmodWahWRCp8tYd+GMqBonw6hstNzqjbs6gjw==}
+  '@testing-library/react@16.3.2':
+    resolution: {integrity: sha512-XU5/SytQM+ykqMnAnvB2umaJNIOsLF3PVv//1Ew4CTcpz0/BRyy/af40qqrt7SjKpDdT1saBMc42CUok5gaw+g==}
     engines: {node: '>=18'}
     peerDependencies:
       '@testing-library/dom': ^10.0.0
@@ -3916,9 +3897,6 @@ packages:
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
-
-  '@types/debug@4.1.12':
-    resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
 
   '@types/debug@4.1.13':
     resolution: {integrity: sha512-KSVgmQmzMwPlmtljOomayoR89W4FynCAi3E8PPs7vmDVPe84hT+vGPKkJfThkmXs0x0jAaa9U8uW8bbfyS2fWw==}
@@ -9359,7 +9337,7 @@ snapshots:
     dependencies:
       '@babel/generator': 7.27.5
       '@babel/parser': 7.27.5
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.2
       chalk: 4.1.2
       fb-watchman: 2.0.2
       graphql: 16.12.0
@@ -9648,8 +9626,6 @@ snapshots:
       regenerator-runtime: 0.14.1
 
   '@babel/runtime@7.27.1': {}
-
-  '@babel/runtime@7.28.3': {}
 
   '@babel/runtime@7.28.4': {}
 
@@ -13248,19 +13224,9 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@testing-library/react@16.3.2(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
-      '@babel/runtime': 7.28.3
-      '@testing-library/dom': 10.4.0
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
-    optionalDependencies:
-      '@types/react': 19.2.10
-      '@types/react-dom': 19.2.3(@types/react@19.2.10)
-
-  '@testing-library/react@16.3.1(@testing-library/dom@10.4.0)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
-    dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.2
       '@testing-library/dom': 10.4.0
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
@@ -13308,11 +13274,6 @@ snapshots:
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 24.0.3
-
-  '@types/debug@4.1.12':
-    dependencies:
-      '@types/ms': 2.1.0
-    optional: true
 
   '@types/debug@4.1.13':
     dependencies:
@@ -13709,7 +13670,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))':
+  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -13724,7 +13685,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
+      vitest: 3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -18796,7 +18757,7 @@ snapshots:
 
   relay-runtime@12.0.0:
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.29.2
       fbjs: 3.0.5
       invariant: 2.2.4
     transitivePeerDependencies:
@@ -20130,13 +20091,13 @@ snapshots:
       terser: 5.46.1
       yaml: 2.8.2
 
-  vitest-mock-extended@3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)):
+  vitest-mock-extended@3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)):
     dependencies:
       ts-essentials: 10.1.1(typescript@5.9.2)
       typescript: 5.9.2
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
+      vitest: 3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
 
-  vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2):
+  vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.0.3)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.9(@types/node@24.0.3)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
@@ -20162,7 +20123,7 @@ snapshots:
       vite-node: 3.2.4(@types/node@24.0.3)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/debug': 4.1.12
+      '@types/debug': 4.1.13
       '@types/node': 24.0.3
       happy-dom: 20.0.10
     transitivePeerDependencies:
