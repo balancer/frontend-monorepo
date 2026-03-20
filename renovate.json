@@ -71,8 +71,10 @@
       "addLabels": ["major-update"]
     },
     {
-      "description": "Keep Chakra v2-compatible framer-motion in place and block the motion package replacement for now.",
+      "description": "Block the framer-motion to motion replacement while still allowing normal framer-motion updates.",
+      "matchDatasources": ["npm"],
       "matchPackageNames": ["framer-motion"],
+      "matchUpdateTypes": ["replacement"],
       "enabled": false
     },
     {
