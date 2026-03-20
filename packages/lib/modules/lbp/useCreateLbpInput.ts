@@ -95,11 +95,6 @@ export function useCreateLbpInput(): CreatePoolInput {
     )
   }
 
-  const fixedPriceLbpParams = {
-    ...baseLbpProps,
-    projectTokenRate: parseUnits(`${launchTokenRate}`, DEFAULT_DECIMALS),
-  }
-
   const basePoolProps = {
     protocolVersion: 3 as const,
     symbol: `${launchTokenSymbol}-${reserveTokenSymbol}-LBP`,
@@ -113,7 +108,10 @@ export function useCreateLbpInput(): CreatePoolInput {
     return {
       ...basePoolProps,
       poolType: PoolType.LiquidityBootstrappingFixedPrice,
-      fixedPriceLbpParams,
+      fixedPriceLbpParams: {
+        ...baseLbpProps,
+        projectTokenRate: parseUnits(`${launchTokenRate}`, DEFAULT_DECIMALS),
+      },
     }
   } else {
     return {
