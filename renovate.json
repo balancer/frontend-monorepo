@@ -82,6 +82,12 @@
       "matchPackageNames": ["@chakra-ui/cli", "@chakra-ui/react"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Block the ESLint v10 major bump until we are ready to migrate the lint stack.",
+      "matchPackageNames": ["@eslint/js", "eslint"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
