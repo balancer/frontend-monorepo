@@ -107,6 +107,24 @@
       "matchPackageNames": ["chakra-react-select"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Block Vitest v4 until we are ready to migrate the test tooling.",
+      "matchPackageNames": ["vitest", "@vitest/**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block Stylelint major upgrades until we are ready to migrate the style linting stack.",
+      "matchPackageNames": ["stylelint", "stylelint-**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block zod v4 until we are ready for that migration.",
+      "matchPackageNames": ["zod"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
