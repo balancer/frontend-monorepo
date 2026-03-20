@@ -479,10 +479,10 @@ importers:
         version: 2.2.6(@chakra-ui/styled-system@2.12.0(react@19.2.4))(react@19.2.4)
       '@dicebear/collection':
         specifier: 9.3.2
-        version: 9.3.2(@dicebear/core@9.3.1)
+        version: 9.3.2(@dicebear/core@9.4.1)
       '@dicebear/core':
-        specifier: 9.3.1
-        version: 9.3.1
+        specifier: 9.4.1
+        version: 9.4.1
       '@emotion/react':
         specifier: 11.14.0
         version: 11.14.0(@types/react@19.2.10)(react@19.2.4)
@@ -1320,8 +1320,8 @@ packages:
     peerDependencies:
       '@dicebear/core': ^9.0.0
 
-  '@dicebear/core@9.3.1':
-    resolution: {integrity: sha512-N6Gl9z3SxYp1OVtOzQegtURFqr0D62l3QcXgvshDAVXDNjkziZ5gWj//JxYJRWldNZfVp9/pm97V3ExKI5AXPg==}
+  '@dicebear/core@9.4.1':
+    resolution: {integrity: sha512-yzmoEhAc6CTaY9v0xz4MI3FTt5I5O+cvphpE+kd6Qz8XjW3/YveXEQcdO4CW0CTSUao88a8+/IMvnMGfUmDW1Q==}
     engines: {node: '>=18.0.0'}
 
   '@dicebear/croodles-neutral@9.3.2':
@@ -6108,8 +6108,8 @@ packages:
     resolution: {integrity: sha512-DKKrynuQRne0PNpEbzuEdHlYOMksHSUI8Zc9Unei5gTsMNA2/vMpoMz/yKba50pejK56qj98qM0SjYxAKi13gQ==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
-  h3@1.15.8:
-    resolution: {integrity: sha512-iOH6Vl8mGd9nNfu9C0IZ+GuOAfJHcyf3VriQxWaSWIB76Fg4BnFuk4cxBxjmQSSxJS664+pgjP6e7VBnUzFfcg==}
+  h3@1.15.9:
+    resolution: {integrity: sha512-H7UPnyIupUOYUQu7f2x7ABVeMyF/IbJjqn20WSXpMdnQB260luADUkSgJU7QTWLutq8h3tUayMQ1DdbSYX5LkA==}
 
   happy-dom@20.0.10:
     resolution: {integrity: sha512-6umCCHcjQrhP5oXhrHQQvLB0bwb1UzHAHdsXy+FjtKoYjUhmNZsQL8NivwM1vDvNEChJabVrUYxUnp/ZdYmy2g==}
@@ -9918,168 +9918,168 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.0.0
 
-  '@dicebear/adventurer-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/adventurer-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/adventurer@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/adventurer@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/avataaars-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/avataaars-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/avataaars@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/avataaars@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/big-ears-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/big-ears-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/big-ears@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/big-ears@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/big-smile@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/big-smile@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/bottts-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/bottts-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/bottts@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/bottts@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/collection@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/collection@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/adventurer': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/adventurer-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/avataaars': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/avataaars-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/big-ears': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/big-ears-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/big-smile': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/bottts': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/bottts-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/core': 9.3.1
-      '@dicebear/croodles': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/croodles-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/dylan': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/fun-emoji': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/glass': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/icons': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/identicon': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/initials': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/lorelei': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/lorelei-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/micah': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/miniavs': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/notionists': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/notionists-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/open-peeps': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/personas': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/pixel-art': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/pixel-art-neutral': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/rings': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/shapes': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/thumbs': 9.3.2(@dicebear/core@9.3.1)
-      '@dicebear/toon-head': 9.3.2(@dicebear/core@9.3.1)
+      '@dicebear/adventurer': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/adventurer-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/avataaars': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/avataaars-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/big-ears': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/big-ears-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/big-smile': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/bottts': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/bottts-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/core': 9.4.1
+      '@dicebear/croodles': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/croodles-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/dylan': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/fun-emoji': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/glass': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/icons': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/identicon': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/initials': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/lorelei': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/lorelei-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/micah': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/miniavs': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/notionists': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/notionists-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/open-peeps': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/personas': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/pixel-art': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/pixel-art-neutral': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/rings': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/shapes': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/thumbs': 9.3.2(@dicebear/core@9.4.1)
+      '@dicebear/toon-head': 9.3.2(@dicebear/core@9.4.1)
 
-  '@dicebear/core@9.3.1':
+  '@dicebear/core@9.4.1':
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@dicebear/croodles-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/croodles-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/croodles@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/croodles@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/dylan@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/dylan@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/fun-emoji@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/fun-emoji@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/glass@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/glass@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/icons@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/icons@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/identicon@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/identicon@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/initials@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/initials@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/lorelei-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/lorelei-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/lorelei@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/lorelei@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/micah@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/micah@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/miniavs@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/miniavs@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/notionists-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/notionists-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/notionists@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/notionists@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/open-peeps@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/open-peeps@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/personas@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/personas@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/pixel-art-neutral@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/pixel-art-neutral@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/pixel-art@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/pixel-art@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/rings@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/rings@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/shapes@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/shapes@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/thumbs@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/thumbs@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
-  '@dicebear/toon-head@9.3.2(@dicebear/core@9.3.1)':
+  '@dicebear/toon-head@9.3.2(@dicebear/core@9.4.1)':
     dependencies:
-      '@dicebear/core': 9.3.1
+      '@dicebear/core': 9.4.1
 
   '@dual-bundle/import-meta-resolve@4.1.0': {}
 
@@ -16752,7 +16752,7 @@ snapshots:
 
   graphql@16.12.0: {}
 
-  h3@1.15.8:
+  h3@1.15.9:
     dependencies:
       cookie-es: 1.2.2
       crossws: 0.3.5
@@ -19535,7 +19535,7 @@ snapshots:
       anymatch: 3.1.3
       chokidar: 5.0.0
       destr: 2.0.5
-      h3: 1.15.8
+      h3: 1.15.9
       lru-cache: 11.2.7
       node-fetch-native: 1.6.7
       ofetch: 1.5.1
