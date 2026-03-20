@@ -69,6 +69,62 @@
       "description": "Flag major bumps for manual review.",
       "matchUpdateTypes": ["major"],
       "addLabels": ["major-update"]
+    },
+    {
+      "description": "Block the framer-motion to motion replacement while still allowing normal framer-motion updates.",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["framer-motion"],
+      "matchUpdateTypes": ["replacement"],
+      "enabled": false
+    },
+    {
+      "description": "Block Chakra UI major upgrades while the repo is still on Chakra v2.",
+      "matchPackageNames": ["@chakra-ui/**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block Emotion major upgrades while Chakra v2 is still in place.",
+      "matchPackageNames": ["@emotion/react", "@emotion/styled"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block ESLint ecosystem major bumps until we are ready to migrate the lint stack.",
+      "matchPackageNames": [
+        "eslint",
+        "@eslint/**",
+        "@typescript-eslint/**",
+        "typescript-eslint",
+        "eslint-config-**",
+        "eslint-plugin-**"
+      ],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block chakra-react-select v6 until we are ready for that migration.",
+      "matchPackageNames": ["chakra-react-select"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block Vitest v4 until we are ready to migrate the test tooling.",
+      "matchPackageNames": ["vitest", "@vitest/**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block Stylelint major upgrades until we are ready to migrate the style linting stack.",
+      "matchPackageNames": ["stylelint", "stylelint-**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block zod v4 until we are ready for that migration.",
+      "matchPackageNames": ["zod"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
