@@ -26,6 +26,7 @@ import { useCreateLbpInput } from '../useCreateLbpInput'
 import { useInitializeLbpInput } from '../useInitializeLbpInput'
 import { usePoolCreationTransactions } from '@repo/lib/modules/pool/actions/create/modal/usePoolCreationTransactions'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { SeedType } from '../lbp.types'
 
 type Props = {
   isOpen: boolean
@@ -67,7 +68,11 @@ export function LbpCreationModal({
     reset: resetSaveMetadata,
   } = useLbpMetadata()
 
-  const [selectedChain, saleType] = saleStructureForm.getValues(['selectedChain', 'saleType'])
+  const [selectedChain, saleType, seedType] = saleStructureForm.getValues([
+    'selectedChain',
+    'saleType',
+    'seedType',
+  ])
   const chainId = getChainId(selectedChain)
   const { isPoolInitialized } = useIsPoolInitialized({ chainId, poolAddress })
 
@@ -151,7 +156,7 @@ export function LbpCreationModal({
         )}
         <TransactionModalHeader
           chain={selectedChain}
-          label={'Preview: Create an LBP'}
+          label={`Preview: Create ${seedType === SeedType.SEEDED ? "a 'seeded'" : "a 'seedless'"} LBP`}
           txHash={initPoolTxHash}
         />
         <ModalCloseButton />

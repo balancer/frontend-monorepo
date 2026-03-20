@@ -114,7 +114,7 @@ type TokenInputFooterProps = {
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
   priceMessage?: string
-  customUserBalance?: string
+  customUserBalance?: BigNumber
   isDisabled?: boolean
   customUsdPrice?: number
   priceImpactProps: PriceImpactProps | undefined
@@ -142,7 +142,7 @@ function TokenInputFooter({
   const inputLabelColor = hasError ? 'input.fontHintError' : 'grayText'
 
   const balance = token ? balanceFor(token?.address) : undefined
-  const userBalance = customUserBalance || (token ? balance?.formatted || '0' : '0')
+  const userBalance = customUserBalance || bn(token ? balance?.formatted || '0' : '0')
   const usdValue =
     value && customUsdPrice
       ? bn(value).times(customUsdPrice).toString()
@@ -161,10 +161,12 @@ function TokenInputFooter({
     // balance, you need to save some for a swap.
     if (hasDisabledInteraction) return
 
+    if (customUserBalance && !customUserBalance.isFinite()) return
+
     if (value && bn(value).eq(userBalance)) {
       updateValue('')
     } else {
-      updateValue(userBalance)
+      updateValue(userBalance.toString())
     }
   }
 
@@ -233,7 +235,7 @@ type Props = {
   isLoadingPriceImpact?: boolean
   priceMessage?: string
   disableBalanceValidation?: boolean
-  customUserBalance?: string
+  customUserBalance?: BigNumber
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
 }

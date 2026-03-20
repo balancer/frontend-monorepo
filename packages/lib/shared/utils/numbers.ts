@@ -111,6 +111,7 @@ function fiatFormat(
 // Formats a token value.
 function tokenFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): string {
   const bnVal = bn(val)
+  if (!bnVal.isFinite() && bnVal.isPositive()) return '∞'
 
   if (!bnVal.isZero() && bnVal.lte(bn('0.00001'))) return '< 0.00001'
   if (!bnVal.isZero() && bnVal.lt(bn('0.0001'))) return '< 0.0001'

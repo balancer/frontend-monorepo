@@ -2,12 +2,12 @@ import { useLbpForm } from './LbpFormProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useLbpWeights } from './useLbpWeights'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { PoolType } from '@balancer/sdk'
+import { LBPParams, PoolType } from '@balancer/sdk'
 import { parseUnits, zeroAddress } from 'viem'
 import { Address } from 'viem'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { DEFAULT_DECIMALS, PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
-import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
+import { SeedType, UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
@@ -19,23 +19,27 @@ export function useCreateLbpInput(): CreatePoolInput {
   const [
     launchTokenAddress,
     collateralTokenAddress,
+    collateralTokenAmount,
     startDateTime,
     endDateTime,
     selectedChain,
     userActions,
     fee,
     launchTokenRate,
+    seedType,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
       'launchTokenAddress',
       'collateralTokenAddress',
+      'collateralTokenAmount',
       'startDateTime',
       'endDateTime',
       'selectedChain',
       'userActions',
       'fee',
       'launchTokenRate',
+      'seedType',
     ],
   })
   const [name, owner, poolCreator] = useWatch({
@@ -62,7 +66,10 @@ export function useCreateLbpInput(): CreatePoolInput {
   const blockProjectTokenSwapsIn = userActions === UserActions.BUY_ONLY
 
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress || '', chain)
-  const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, chain)
+  const { symbol: reserveTokenSymbol, decimals: reserveTokenDecimals } = useTokenMetadata(
+    reserveTokenAddress,
+    chain
+  )
 
   const baseLbpProps = {
     owner: (owner as Address) || userAddress,
@@ -72,13 +79,20 @@ export function useCreateLbpInput(): CreatePoolInput {
     endTimestamp: dateTimeToUnixTimestampBigInt(endDateTime),
   }
 
-  const lbpParams = {
+  const lbpParams: LBPParams = {
     ...baseLbpProps,
     blockProjectTokenSwapsIn,
     projectTokenStartWeight: parseUnits(`${projectTokenStartWeight}`, PERCENTAGE_DECIMALS),
     reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight}`, PERCENTAGE_DECIMALS),
     projectTokenEndWeight: parseUnits(`${projectTokenEndWeight}`, PERCENTAGE_DECIMALS),
     reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight}`, PERCENTAGE_DECIMALS),
+  }
+
+  if (seedType === SeedType.SEEDLESS) {
+    lbpParams.reserveTokenVirtualBalance = parseUnits(
+      collateralTokenAmount,
+      reserveTokenDecimals || 0
+    )
   }
 
   const fixedPriceLbpParams = {

@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
-import { SaleStructureForm, UserActions, WeightAdjustmentType } from '../lbp.types'
+import { SaleStructureForm, SeedType, UserActions, WeightAdjustmentType } from '../lbp.types'
 import { Control, Controller, SubmitHandler, UseFormSetValue } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
@@ -156,6 +156,9 @@ export function SaleStructureStep() {
             <Heading color="font.maxContrast" size="md">
               LBP mechanism
             </Heading>
+
+            {!isFixedSale && <SeedSelection control={control} />}
+
             <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
             {isDynamicSale && (
               <WeightAdjustmentTypeInput
@@ -386,10 +389,13 @@ function CollateralTokenAddressInput({
   const chainConfig = getNetworkConfig(selectedChain)
   const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
   const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || []), nativeAsset]
+  const [seedType] = useWatch({ control, name: ['seedType'] })
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Collateral token</Text>
+      <Text color="font.primary">
+        {seedType === SeedType.SEEDED ? 'Collateral token' : 'Paired token'}
+      </Text>
       <Controller
         control={control}
         name="collateralTokenAddress"
@@ -408,6 +414,10 @@ function CollateralTokenAddressInput({
           </FormControl>
         )}
       />
+      <Text fontSize="sm" variant="secondary">
+        People will buy your sale token with this. For seeded LBPs, you will supply you will supply
+        some of this token upfront as seed collateral to set the initial LBP price.
+      </Text>
     </VStack>
   )
 }
@@ -448,6 +458,62 @@ function UserActionsInput({
                 Buy & sell
               </Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
+            </Stack>
+          </RadioGroup>
+        )}
+      />
+    </VStack>
+  )
+}
+
+function SeedSelection({ control }: { control: Control<SaleStructureForm> }) {
+  return (
+    <VStack align="start" w="full">
+      <HStack>
+        <Text color="font.primary">Seed token sale with collateral upfront</Text>
+        <InfoIconPopover
+          message={
+            <VStack alignItems="start">
+              <Text fontSize="sm" fontWeight="bold" variant="secondary">
+                Seedless LBPs:
+              </Text>
+              <Text fontSize="sm" variant="secondary">
+                No collateral tokens are required. Simply send your project token that you would
+                like to sell to get it started.
+              </Text>
+              <Text fontSize="sm" fontWeight="bold" variant="secondary">
+                Seeded LBPs:
+              </Text>
+              <Text fontSize="sm" variant="secondary">
+                This is the 'traditional' LBP style where you put in both the project token and an
+                amount of a collateral token.
+              </Text>
+            </VStack>
+          }
+        />
+      </HStack>
+      <Controller
+        control={control}
+        name="seedType"
+        render={({ field }) => (
+          <RadioGroup onChange={field.onChange} value={field.value}>
+            <Stack gap="md">
+              <Radio value={SeedType.SEEDLESS}>
+                <VStack alignItems="start">
+                  <Text>No — seedless LBP</Text>
+                  <Text color="font.secondary" fontSize="sm">
+                    Simple and safest. Recommended for most LBPs
+                  </Text>
+                </VStack>
+              </Radio>
+              <Radio value={SeedType.SEEDED}>
+                <VStack alignItems="start">
+                  <Text> Yes — seeded LBP</Text>
+                  <Text color="font.secondary" fontSize="sm">
+                    The original system, requires collateral upfront.
+                  </Text>
+                </VStack>
+              </Radio>
             </Stack>
           </RadioGroup>
         )}

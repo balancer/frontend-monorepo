@@ -23,6 +23,7 @@ import { normalizeUrl } from '@repo/lib/shared/utils/urls'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { SeedType } from '../../lbp.types'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
@@ -51,6 +52,7 @@ export function ReviewStep() {
     endDateTime,
     fee,
     userActions,
+    seedType,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -63,6 +65,7 @@ export function ReviewStep() {
       'endDateTime',
       'fee',
       'userActions',
+      'seedType',
     ],
   })
 
@@ -143,7 +146,7 @@ export function ReviewStep() {
       {isDynamicSale && (
         <Card>
           <CardHeader>
-            <Heading size="md">Seed liquidity</Heading>
+            <Heading size="md">{`Sale token + ${seedType === SeedType.SEEDED ? 'collateral token' : 'paired token'}`}</Heading>
           </CardHeader>
           <CardBody>
             <VStack gap="md" w="full">
