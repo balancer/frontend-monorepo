@@ -88,6 +88,12 @@
       "matchPackageNames": ["@eslint/js", "eslint"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Block chakra-react-select v6 until we are ready for that migration.",
+      "matchPackageNames": ["chakra-react-select"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
