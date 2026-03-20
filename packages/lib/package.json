@@ -113,7 +113,7 @@
     "@wagmi/cli": "2.8.0",
     "autoprefixer": "10.4.23",
     "cross-fetch": "4.1.0",
-    "eslint": "9.27.0",
+    "eslint": "9.39.4",
     "lokijs": "^1.5.12",
     "msw": "2.12.9",
     "sentry-testkit": "6.2.2"
