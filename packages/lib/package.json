@@ -33,7 +33,7 @@
     "@chakra-ui/react": "2.10.6",
     "@chakra-ui/theme-tools": "2.2.6",
     "@dicebear/collection": "9.3.2",
-    "@dicebear/core": "9.3.1",
+    "@dicebear/core": "9.4.1",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@hookform/resolvers": "^5.2.2",
