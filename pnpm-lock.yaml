@@ -334,8 +334,8 @@ importers:
         specifier: 24.12.0
         version: 24.12.0
       '@types/prismjs':
-        specifier: 1.26.5
-        version: 1.26.5
+        specifier: 1.26.6
+        version: 1.26.6
       '@types/react':
         specifier: '19.2'
         version: 19.2.10
@@ -3909,8 +3909,8 @@ packages:
   '@types/pluralize@0.0.33':
     resolution: {integrity: sha512-JOqsl+ZoCpP4e8TDke9W79FDcSgPAR0l6pixx2JHkhnRjvShyYiAYw2LVsnA7K08Y6DeOnaU6ujmENO4os/cYg==}
 
-  '@types/prismjs@1.26.5':
-    resolution: {integrity: sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==}
+  '@types/prismjs@1.26.6':
+    resolution: {integrity: sha512-vqlvI7qlMvcCBbVe0AKAb4f97//Hy0EBTaiW8AalRnG/xAN5zOiWWyrNqNXeq8+KAuvRewjCVY1+IPxk4RdNYw==}
 
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
@@ -13032,7 +13032,7 @@ snapshots:
 
   '@types/pluralize@0.0.33': {}
 
-  '@types/prismjs@1.26.5': {}
+  '@types/prismjs@1.26.6': {}
 
   '@types/react-dom@19.2.3(@types/react@19.2.10)':
     dependencies:
