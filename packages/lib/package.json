@@ -116,6 +116,6 @@
     "eslint": "9.39.4",
     "lokijs": "1.5.12",
     "msw": "2.12.13",
-    "sentry-testkit": "6.2.2"
+    "sentry-testkit": "6.3.1"
   }
 }
