@@ -31,7 +31,7 @@ jobs:
   Lint:
     runs-on: macos-14
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run lint
@@ -44,7 +44,7 @@ jobs:
   Unit-Test:
     runs-on: macos-14
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run typecheck
@@ -65,11 +65,11 @@ jobs:
   Integration-Test:
     runs-on: macos-14
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
@@ -79,14 +79,14 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       - name: Setup
         uses: ./.github/actions/setup
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright smoke tests
         run: pnpm test:e2e:build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-smoke-report
@@ -100,18 +100,18 @@ jobs:
     env:
       NEXT_PUBLIC_PROJECT_ID: balancer
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1
       - name: Start anvil fork in mainnet
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/ethereum/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests (Balancer)
         run: pnpm test:e2e:dev:bal
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-dev-report-bal
@@ -126,18 +126,18 @@ jobs:
       NEXT_PUBLIC_PROJECT_ID: beets
       NEXT_PUBLIC_BALANCER_API_URL: https://backend-v3.beets-ftm-node.com/
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1
       - name: Start anvil fork in sonic
         run: anvil --mnemonic "${{ env.TEST_ACCOUNT_MNEMONIC }}" --fork-url "https://lb.drpc.live/sonic/${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests (Beets)
         run: pnpm test:e2e:dev:beets
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-dev-report-beets
