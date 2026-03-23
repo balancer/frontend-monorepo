@@ -40,7 +40,7 @@
     "happy-dom": "20.8.4",
     "husky": "9.1.7",
     "import-in-the-middle": "3.0.0",
-    "lint-staged": "16.2.7",
+    "lint-staged": "16.4.0",
     "prettier": "3.8.1",
     "require-in-the-middle": "8.0.1",
     "sharp": "0.34.5",
