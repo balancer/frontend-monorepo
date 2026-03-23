@@ -59,11 +59,11 @@
     "@types/tinycolor2": "1.4.6",
     "@wagmi/cli": "2.8.0",
     "autoprefixer": "10.4.23",
-    "babel-plugin-react-compiler": "^1.0.0",
+    "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "9.2.0",
     "cross-fetch": "4.1.0",
     "eslint": "9.39.4",
-    "lokijs": "^1.5.12"
+    "lokijs": "1.5.12"
   },
   "engines": {
     "node": "24.x"
