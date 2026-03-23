@@ -21,13 +21,13 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: 4.7.0
-        version: 4.7.0(vite@7.0.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))
+        version: 4.7.0(vite@7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))
       '@vitest/coverage-v8':
         specifier: 3.2.4
-        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
+        version: 3.2.4(vitest@3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
       happy-dom:
-        specifier: 20.0.10
-        version: 20.0.10
+        specifier: 20.8.4
+        version: 20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -63,10 +63,10 @@ importers:
         version: 5.9.2
       vitest:
         specifier: 3.2.4
-        version: 3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
+        version: 3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
       vitest-mock-extended:
         specifier: 3.1.0
-        version: 3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
+        version: 3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))
 
   apps/beets-frontend-v3:
     dependencies:
@@ -205,7 +205,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 4.1.5
-        version: 4.1.5(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
+        version: 4.1.5(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer/sdk':
         specifier: 5.2.3
         version: 5.2.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.6)
@@ -308,7 +308,7 @@ importers:
     devDependencies:
       '@chakra-ui/cli':
         specifier: 2.5.8
-        version: 2.5.8(react@19.2.4)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+        version: 2.5.8(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@chakra-ui/styled-system':
         specifier: 2.12.0
         version: 2.12.0(react@19.2.4)
@@ -374,7 +374,7 @@ importers:
     devDependencies:
       '@balancer/sdk':
         specifier: 5.2.3
-        version: 5.2.3(typescript@5.9.2)
+        version: 5.2.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@playwright/test':
         specifier: 1.58.2
         version: 1.58.2
@@ -734,7 +734,7 @@ importers:
     devDependencies:
       '@apollo/client':
         specifier: 4.1.5
-        version: 4.1.5(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
+        version: 4.1.5(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer/sdk':
         specifier: 5.2.3
         version: 5.2.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.6)
@@ -3854,14 +3854,14 @@ packages:
   '@types/node@18.19.119':
     resolution: {integrity: sha512-d0F6m9itIPaKnrvEMlzE48UjwZaAnFW7Jwibacw9MNdqadjKNpUm9tfJYDwmShJmgqcoqYUX3EMKO1+RWiuuNg==}
 
-  '@types/node@20.19.25':
-    resolution: {integrity: sha512-ZsJzA5thDQMSQO788d7IocwwQbI8B5OPzmqNvpf3NY/+MHDAS759Wo0gd2WQeXYt5AAAQjzcrTVC6SKCuYgoCQ==}
-
   '@types/node@24.0.3':
     resolution: {integrity: sha512-R4I/kzCYAdRLzfiCabn9hxWfbuHS573x+r0dJMkkzThEa7pbrcDWK+9zu3e7aBOouf+rQAciqPFMnxwr0aWgKg==}
 
   '@types/node@24.12.0':
     resolution: {integrity: sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==}
+
+  '@types/node@25.5.0':
+    resolution: {integrity: sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw==}
 
   '@types/numeral@2.0.5':
     resolution: {integrity: sha512-kH8I7OSSwQu9DS9JYdFWbuvhVzvFRoCPCkGxNwoGgaPeDfEPJlcxNvEOypZhQ3XXHsGbfIuYcxcJxKUfJHnRfw==}
@@ -5335,6 +5335,10 @@ packages:
     resolution: {integrity: sha512-Qohcme7V1inbAfvjItgw0EaxVX5q2rdVEZHRBrEQdRZTssLDGsL8Lwrznl8oQ/6kuTJONLaDcGjkNP247XEhcA==}
     engines: {node: '>=10.13.0'}
 
+  entities@7.0.1:
+    resolution: {integrity: sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==}
+    engines: {node: '>=0.12'}
+
   env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
@@ -5955,8 +5959,8 @@ packages:
   h3@1.15.10:
     resolution: {integrity: sha512-YzJeWSkDZxAhvmp8dexjRK5hxziRO7I9m0N53WhvYL5NiWfkUkzssVzY9jvGu0HBoLFW6+duYmNSn6MaZBCCtg==}
 
-  happy-dom@20.0.10:
-    resolution: {integrity: sha512-6umCCHcjQrhP5oXhrHQQvLB0bwb1UzHAHdsXy+FjtKoYjUhmNZsQL8NivwM1vDvNEChJabVrUYxUnp/ZdYmy2g==}
+  happy-dom@20.8.4:
+    resolution: {integrity: sha512-GKhjq4OQCYB4VLFBzv8mmccUadwlAusOZOI7hC1D9xDIT5HhzkJK17c4el2f6R6C715P9xB4uiMxeKUa2nHMwQ==}
     engines: {node: '>=20.0.0'}
 
   has-bigints@1.0.2:
@@ -8314,11 +8318,11 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
-  undici-types@6.21.0:
-    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
-
   undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
   undici-types@7.8.0:
     resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
@@ -8809,6 +8813,18 @@ packages:
       utf-8-validate:
         optional: true
 
+  ws@8.20.0:
+    resolution: {integrity: sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
   xdg-basedir@5.1.0:
     resolution: {integrity: sha512-GCPAHLvrIH13+c0SuacwvRYj2SxJXQ4kaVTT5xgL3kPrz56XxkF21IGhjSE1+W0aw7gpBWRGXLCPnPby6lSpmQ==}
     engines: {node: '>=12'}
@@ -9013,6 +9029,22 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       graphql-ws: 6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
+  '@apollo/client@4.1.5(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)':
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.12.0)
+      '@wry/caches': 1.0.1
+      '@wry/equality': 0.5.7
+      '@wry/trie': 0.5.0
+      graphql: 16.12.0
+      graphql-tag: 2.12.6(graphql@16.12.0)
+      optimism: 0.18.1
+      rxjs: 7.8.2
+      tslib: 2.8.1
+    optionalDependencies:
+      graphql-ws: 6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
@@ -9271,6 +9303,16 @@ snapshots:
 
   '@balancer-labs/balancer-maths@0.0.38': {}
 
+  '@balancer/sdk@5.2.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)':
+    dependencies:
+      '@balancer-labs/balancer-maths': 0.0.38
+      viem: 2.46.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+
   '@balancer/sdk@5.2.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.38
@@ -9285,16 +9327,6 @@ snapshots:
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.38
       viem: 2.46.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.3.6)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-
-  '@balancer/sdk@5.2.3(typescript@5.9.2)':
-    dependencies:
-      '@balancer-labs/balancer-maths': 0.0.38
-      viem: 2.46.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -9328,6 +9360,20 @@ snapshots:
       bundle-n-require: 1.1.1
       chokidar: 3.6.0
       cli-welcome: 2.2.3(react@19.2.4)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      commander: 11.1.0
+      ora: 7.0.1
+      prettier: 3.6.2
+      update-notifier: 6.0.2
+    transitivePeerDependencies:
+      - encoding
+      - react
+      - ws
+
+  '@chakra-ui/cli@2.5.8(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))':
+    dependencies:
+      bundle-n-require: 1.1.1
+      chokidar: 3.6.0
+      cli-welcome: 2.2.3(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       commander: 11.1.0
       ora: 7.0.1
       prettier: 3.6.2
@@ -10889,6 +10935,14 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.12.0
 
+  '@inquirer/confirm@5.1.21(@types/node@25.5.0)':
+    dependencies:
+      '@inquirer/core': 10.3.2(@types/node@25.5.0)
+      '@inquirer/type': 3.0.10(@types/node@25.5.0)
+    optionalDependencies:
+      '@types/node': 25.5.0
+    optional: true
+
   '@inquirer/core@10.3.2(@types/node@24.12.0)':
     dependencies:
       '@inquirer/ansi': 1.0.2
@@ -10901,6 +10955,20 @@ snapshots:
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 24.12.0
+
+  '@inquirer/core@10.3.2(@types/node@25.5.0)':
+    dependencies:
+      '@inquirer/ansi': 1.0.2
+      '@inquirer/figures': 1.0.15
+      '@inquirer/type': 3.0.10(@types/node@25.5.0)
+      cli-width: 4.1.0
+      mute-stream: 2.0.0
+      signal-exit: 4.1.0
+      wrap-ansi: 6.2.0
+      yoctocolors-cjs: 2.1.3
+    optionalDependencies:
+      '@types/node': 25.5.0
+    optional: true
 
   '@inquirer/editor@4.2.23(@types/node@24.12.0)':
     dependencies:
@@ -10994,6 +11062,11 @@ snapshots:
   '@inquirer/type@3.0.10(@types/node@24.12.0)':
     optionalDependencies:
       '@types/node': 24.12.0
+
+  '@inquirer/type@3.0.10(@types/node@25.5.0)':
+    optionalDependencies:
+      '@types/node': 25.5.0
+    optional: true
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -12820,10 +12893,6 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@20.19.25':
-    dependencies:
-      undici-types: 6.21.0
-
   '@types/node@24.0.3':
     dependencies:
       undici-types: 7.8.0
@@ -12831,6 +12900,10 @@ snapshots:
   '@types/node@24.12.0':
     dependencies:
       undici-types: 7.16.0
+
+  '@types/node@25.5.0':
+    dependencies:
+      undici-types: 7.18.2
 
   '@types/numeral@2.0.5': {}
 
@@ -12877,7 +12950,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 24.12.0
+      '@types/node': 25.5.0
 
   '@types/zrender@4.0.6': {}
 
@@ -13166,7 +13239,19 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))':
+  '@vitejs/plugin-react@4.7.0(vite@7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))':
+    dependencies:
+      '@babel/core': 7.29.0
+      '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.29.0)
+      '@babel/plugin-transform-react-jsx-source': 7.27.1(@babel/core@7.29.0)
+      '@rolldown/pluginutils': 1.0.0-beta.27
+      '@types/babel__core': 7.20.5
+      react-refresh: 0.17.0
+      vite: 7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
+    transitivePeerDependencies:
+      - supports-color
+
+  '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -13181,7 +13266,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
+      vitest: 3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -13193,14 +13278,14 @@ snapshots:
       chai: 5.2.1
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.2.4(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(vite@7.0.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))':
+  '@vitest/mocker@3.2.4(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(vite@7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))':
     dependencies:
       '@vitest/spy': 3.2.4
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
-      msw: 2.12.13(@types/node@24.12.0)(typescript@5.9.2)
-      vite: 7.0.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
+      msw: 2.12.13(@types/node@25.5.0)(typescript@5.9.2)
+      vite: 7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
 
   '@vitest/pretty-format@3.2.4':
     dependencies:
@@ -14913,6 +14998,14 @@ snapshots:
       - react
       - ws
 
+  clear-any-console@1.16.3(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
+    dependencies:
+      langbase: 1.1.65(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+    transitivePeerDependencies:
+      - encoding
+      - react
+      - ws
+
   cli-boxes@3.0.0: {}
 
   cli-cursor@4.0.0:
@@ -14943,6 +15036,15 @@ snapshots:
     dependencies:
       chalk: 2.4.2
       clear-any-console: 1.16.3(react@19.2.4)(ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+    transitivePeerDependencies:
+      - encoding
+      - react
+      - ws
+
+  cli-welcome@2.2.3(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
+    dependencies:
+      chalk: 2.4.2
+      clear-any-console: 1.16.3(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
     transitivePeerDependencies:
       - encoding
       - react
@@ -15385,6 +15487,8 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.1
+
+  entities@7.0.1: {}
 
   env-paths@2.2.1: {}
 
@@ -16276,6 +16380,14 @@ snapshots:
       crossws: 0.3.5
       ws: 8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
+  graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
+    dependencies:
+      graphql: 16.12.0
+    optionalDependencies:
+      crossws: 0.3.5
+      ws: 8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    optional: true
+
   graphql@16.12.0: {}
 
   h3@1.15.10:
@@ -16291,11 +16403,17 @@ snapshots:
       uncrypto: 0.1.3
     optional: true
 
-  happy-dom@20.0.10:
+  happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10):
     dependencies:
-      '@types/node': 20.19.25
+      '@types/node': 25.5.0
       '@types/whatwg-mimetype': 3.0.2
+      '@types/ws': 8.18.1
+      entities: 7.0.1
       whatwg-mimetype: 3.0.0
+      ws: 8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   has-bigints@1.0.2: {}
 
@@ -16807,6 +16925,18 @@ snapshots:
       - encoding
       - ws
 
+  langbase@1.1.65(react@19.2.4)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
+    dependencies:
+      dotenv: 16.6.1
+      openai: 4.104.0(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76)
+      zod: 3.25.76
+      zod-validation-error: 3.5.3(zod@3.25.76)
+    optionalDependencies:
+      react: 19.2.4
+    transitivePeerDependencies:
+      - encoding
+      - ws
+
   latest-version@7.0.0:
     dependencies:
       package-json: 8.1.1
@@ -17088,6 +17218,32 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
+  msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2):
+    dependencies:
+      '@inquirer/confirm': 5.1.21(@types/node@25.5.0)
+      '@mswjs/interceptors': 0.41.3
+      '@open-draft/deferred-promise': 2.2.0
+      '@types/statuses': 2.0.6
+      cookie: 1.1.1
+      graphql: 16.12.0
+      headers-polyfill: 4.0.3
+      is-node-process: 1.2.0
+      outvariant: 1.4.3
+      path-to-regexp: 6.3.0
+      picocolors: 1.1.1
+      rettime: 0.10.1
+      statuses: 2.0.2
+      strict-event-emitter: 0.5.1
+      tough-cookie: 6.0.1
+      type-fest: 5.5.0
+      until-async: 3.0.2
+      yargs: 17.7.2
+    optionalDependencies:
+      typescript: 5.9.2
+    transitivePeerDependencies:
+      - '@types/node'
+    optional: true
+
   multiformats@9.9.0:
     optional: true
 
@@ -17312,6 +17468,21 @@ snapshots:
       node-fetch: 2.7.0
     optionalDependencies:
       ws: 8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      zod: 3.25.76
+    transitivePeerDependencies:
+      - encoding
+
+  openai@4.104.0(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.25.76):
+    dependencies:
+      '@types/node': 18.19.119
+      '@types/node-fetch': 2.6.12
+      abort-controller: 3.0.0
+      agentkeepalive: 4.6.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0
+    optionalDependencies:
+      ws: 8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       zod: 3.25.76
     transitivePeerDependencies:
       - encoding
@@ -18919,9 +19090,9 @@ snapshots:
 
   undici-types@5.26.5: {}
 
-  undici-types@6.21.0: {}
-
   undici-types@7.16.0: {}
+
+  undici-types@7.18.2: {}
 
   undici-types@7.8.0: {}
 
@@ -19169,13 +19340,13 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite-node@3.2.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2):
+  vite-node@3.2.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2):
     dependencies:
       cac: 6.7.14
       debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 7.0.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
+      vite: 7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -19205,17 +19376,32 @@ snapshots:
       terser: 5.46.1
       yaml: 2.8.2
 
-  vitest-mock-extended@3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)):
+  vite@7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2):
+    dependencies:
+      esbuild: 0.25.6
+      fdir: 6.4.6(picomatch@4.0.3)
+      picomatch: 4.0.3
+      postcss: 8.5.6
+      rollup: 4.45.0
+      tinyglobby: 0.2.14
+    optionalDependencies:
+      '@types/node': 25.5.0
+      fsevents: 2.3.3
+      jiti: 2.6.1
+      terser: 5.46.1
+      yaml: 2.8.2
+
+  vitest-mock-extended@3.1.0(typescript@5.9.2)(vitest@3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)):
     dependencies:
       ts-essentials: 10.1.1(typescript@5.9.2)
       typescript: 5.9.2
-      vitest: 3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
+      vitest: 3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2)
 
-  vitest@3.2.4(@types/debug@4.1.13)(@types/node@24.12.0)(happy-dom@20.0.10)(jiti@2.6.1)(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2):
+  vitest@3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(happy-dom@20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(jiti@2.6.1)(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(terser@5.46.1)(yaml@2.8.2):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
-      '@vitest/mocker': 3.2.4(msw@2.12.13(@types/node@24.12.0)(typescript@5.9.2))(vite@7.0.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))
+      '@vitest/mocker': 3.2.4(msw@2.12.13(@types/node@25.5.0)(typescript@5.9.2))(vite@7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2))
       '@vitest/pretty-format': 3.2.4
       '@vitest/runner': 3.2.4
       '@vitest/snapshot': 3.2.4
@@ -19233,13 +19419,13 @@ snapshots:
       tinyglobby: 0.2.14
       tinypool: 1.1.1
       tinyrainbow: 2.0.0
-      vite: 7.0.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
-      vite-node: 3.2.4(@types/node@24.12.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
+      vite: 7.0.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
+      vite-node: 3.2.4(@types/node@25.5.0)(jiti@2.6.1)(terser@5.46.1)(yaml@2.8.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/debug': 4.1.13
-      '@types/node': 24.12.0
-      happy-dom: 20.0.10
+      '@types/node': 25.5.0
+      happy-dom: 20.8.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - jiti
       - less
@@ -19495,6 +19681,11 @@ snapshots:
       utf-8-validate: 5.0.10
 
   ws@8.19.0(bufferutil@4.0.9)(utf-8-validate@5.0.10):
+    optionalDependencies:
+      bufferutil: 4.0.9
+      utf-8-validate: 5.0.10
+
+  ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10):
     optionalDependencies:
       bufferutil: 4.0.9
       utf-8-validate: 5.0.10
