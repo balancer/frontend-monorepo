@@ -111,7 +111,7 @@
     "@viem/anvil": "0.0.10",
     "@vitejs/plugin-react": "4.3.1",
     "@wagmi/cli": "2.8.0",
-    "autoprefixer": "10.4.23",
+    "autoprefixer": "10.4.27",
     "cross-fetch": "4.1.0",
     "eslint": "9.39.4",
     "lokijs": "1.5.12",
