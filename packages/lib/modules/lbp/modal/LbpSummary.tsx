@@ -10,7 +10,7 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { TransactionStepsResponse } from '../../transactions/transaction-steps/useTransactionSteps'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
-import { SeedType, UserActions, WeightAdjustmentType } from '@repo/lib/modules/lbp/lbp.types'
+import { UserActions, WeightAdjustmentType } from '@repo/lib/modules/lbp/lbp.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 
@@ -22,6 +22,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     launchTokenPriceUsd,
     isDynamicSale,
     isFixedSale,
+    isSeeded,
   } = useLbpForm()
   const { isMobile } = useBreakpoints()
   const { getToken } = useTokens()
@@ -37,7 +38,6 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     weightAdjustmentType,
     userActions,
     launchTokenRate,
-    seedType,
   } = saleStructureForm.getValues()
 
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
@@ -56,7 +56,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
             customToken={launchToken}
             value={saleTokenAmount}
           />
-          {seedType === SeedType.SEEDED && (
+          {(isFixedSale || isSeeded) && (
             <>
               <Divider p="0" />
               <Text fontWeight="bold">Collateral token</Text>

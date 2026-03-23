@@ -4,7 +4,7 @@ import { useLbpForm } from '../../LbpFormProvider'
 import { useTokens } from '../../../tokens/TokensProvider'
 import { TokenInput } from '../../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
-import { SaleStructureForm, SeedType } from '../../lbp.types'
+import { SaleStructureForm } from '../../lbp.types'
 import { Control, Controller, useFormState, useWatch } from 'react-hook-form'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { VStack, Text, Heading, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react'
@@ -21,11 +21,12 @@ export function DynamicLbpTokenAmountInputs() {
   const {
     launchToken,
     saleStructureForm: { control },
+    isSeedless,
   } = useLbpForm()
   useFormState({ control })
-  const [collateralTokenAddress, selectedChain, startDateTime, seedType] = useWatch({
+  const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
     control,
-    name: ['collateralTokenAddress', 'selectedChain', 'startDateTime', 'seedType'],
+    name: ['collateralTokenAddress', 'selectedChain', 'startDateTime'],
   })
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
   const saleStart = startDateTime
@@ -36,14 +37,14 @@ export function DynamicLbpTokenAmountInputs() {
         <TokenBalancesProvider extTokens={[collateralToken]}>
           <VStack align="start" spacing="md" w="full">
             <Heading color="font.maxContrast" size="md">
-              Sale token amount and virtual collateral balance
+              {`Sale token amount and ${isSeedless ? 'virtual' : ''} collateral balance`}
             </Heading>
             <Text color="font.secondary" fontSize="sm">
               The starting liquidity in the pool. The amounts and ratio will determine the starting
               price, projected market cap and price curve.
             </Text>
 
-            {seedType === SeedType.SEEDLESS && (
+            {isSeedless && (
               <BalAlert
                 content="Seedless LBP: Just the sale token, no collateral needed"
                 status="info"
@@ -100,9 +101,9 @@ function CollateralTokenAmountInput({
 }) {
   const {
     saleStructureForm: { clearErrors },
+    isSeedless,
   } = useLbpForm()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
-  const [seedType] = useWatch({ control, name: ['seedType'] })
   const balance = balanceFor(collateralTokenAddress)
 
   const haveEnoughAmount = (value: string) => {
@@ -123,9 +124,7 @@ function CollateralTokenAmountInput({
   return (
     <VStack align="start" data-group w="full">
       <Text as="label" color="font.primary" htmlFor="collateral-token-amount">
-        {seedType === SeedType.SEEDLESS
-          ? 'Virtual paired token initial balance'
-          : 'Collateral token'}
+        {isSeedless ? 'Virtual paired token initial balance' : 'Collateral token'}
       </Text>
       <Controller
         control={control}
@@ -135,8 +134,8 @@ function CollateralTokenAmountInput({
             <TokenInput
               address={collateralTokenAddress}
               chain={selectedChain}
-              customUserBalance={seedType === SeedType.SEEDLESS ? bn(Infinity) : undefined}
-              disableBalanceValidation={seedType === SeedType.SEEDLESS}
+              customUserBalance={isSeedless ? bn(Infinity) : undefined}
+              disableBalanceValidation={isSeedless}
               id="collateral-token-amount"
               onChange={e => {
                 field.onChange(e.currentTarget.value)
@@ -163,7 +162,7 @@ function CollateralTokenAmountInput({
         }}
       />
       <Text color="font.secondary" fontSize="sm">
-        {seedType === SeedType.SEEDLESS
+        {isSeedless
           ? `The virtual paired token balance here is used to set initial price and potential
           sale token market cap. You don't need to add any of this.`
           : 'Add $5k+ of the collateral token to ensure a smooth start.'}

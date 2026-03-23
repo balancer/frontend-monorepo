@@ -20,7 +20,7 @@ export function usePoolStats(pool: GqlPoolLiquidityBootstrappingV3) {
   )
 
   const { isLoading: snapshotsAreLoading, snapshots } = usePriceInfo(pool.chain, pool.id as Address)
-  if (snapshotsAreLoading || metadataIsLoading) return emptyStats
+  if (snapshotsAreLoading || metadataIsLoading || snapshots.length === 0) return emptyStats
   const firstSnapshot = snapshots[0]
   const lastSnapshot = snapshots[snapshots.length - 1]
   const currentPrice = getCurrentPrice(snapshots)

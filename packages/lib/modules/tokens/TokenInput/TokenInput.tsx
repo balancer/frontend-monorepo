@@ -195,28 +195,30 @@ function TokenInputFooter({
       {isBalancesLoading || !isMounted ? (
         <Skeleton h="full" w="12" />
       ) : (
-        <HStack
-          _hover={hasDisabledInteraction ? {} : { color: 'font.highlight' }}
-          color={inputLabelColor}
-          cursor={hasDisabledInteraction ? 'default' : 'pointer'}
-          gap="xs"
-          onClick={handleBalanceClick}
-          title="Use wallet balance"
-        >
-          <Text
-            color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
-            fontSize="sm"
-            opacity={!token ? 0.5 : 1}
+        userBalance.isFinite() && (
+          <HStack
+            _hover={hasDisabledInteraction ? {} : { color: 'font.highlight' }}
+            color={inputLabelColor}
+            cursor={hasDisabledInteraction ? 'default' : 'pointer'}
+            gap="xs"
+            onClick={handleBalanceClick}
+            title="Use wallet balance"
           >
-            {!token ? '–' : fNum('token', userBalance, { abbreviated: false })}
-          </Text>
-          <Box
-            color={!token ? 'font.secondary' : noBalance ? 'font.error' : undefined}
-            opacity={!token ? 0.5 : 1}
-          >
-            <WalletIcon size={16} />
-          </Box>
-        </HStack>
+            <Text
+              color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
+              fontSize="sm"
+              opacity={!token ? 0.5 : 1}
+            >
+              {!token ? '–' : fNum('token', userBalance, { abbreviated: false })}
+            </Text>
+            <Box
+              color={!token ? 'font.secondary' : noBalance ? 'font.error' : undefined}
+              opacity={!token ? 0.5 : 1}
+            >
+              <WalletIcon size={16} />
+            </Box>
+          </HStack>
+        )
       )}
     </HStack>
   )

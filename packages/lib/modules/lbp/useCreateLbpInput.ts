@@ -7,7 +7,7 @@ import { parseUnits, zeroAddress } from 'viem'
 import { Address } from 'viem'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { DEFAULT_DECIMALS, PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
-import { SeedType, UserActions } from '@repo/lib/modules/lbp/lbp.types'
+import { UserActions } from '@repo/lib/modules/lbp/lbp.types'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
@@ -15,7 +15,8 @@ import { CreatePoolInput } from '@repo/lib/modules/pool/actions/create/types'
 import { dateTimeToUnixTimestampBigInt } from '@repo/lib/shared/utils/time'
 
 export function useCreateLbpInput(): CreatePoolInput {
-  const { saleStructureForm, projectInfoForm, isCollateralNativeAsset, isFixedSale } = useLbpForm()
+  const { saleStructureForm, projectInfoForm, isCollateralNativeAsset, isFixedSale, isSeedless } =
+    useLbpForm()
   const [
     launchTokenAddress,
     collateralTokenAddress,
@@ -26,7 +27,6 @@ export function useCreateLbpInput(): CreatePoolInput {
     userActions,
     fee,
     launchTokenRate,
-    seedType,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -39,7 +39,6 @@ export function useCreateLbpInput(): CreatePoolInput {
       'userActions',
       'fee',
       'launchTokenRate',
-      'seedType',
     ],
   })
   const [name, owner, poolCreator] = useWatch({
@@ -88,7 +87,7 @@ export function useCreateLbpInput(): CreatePoolInput {
     reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight}`, PERCENTAGE_DECIMALS),
   }
 
-  if (seedType === SeedType.SEEDLESS) {
+  if (isSeedless) {
     lbpParams.reserveTokenVirtualBalance = parseUnits(
       collateralTokenAmount,
       reserveTokenDecimals || 0

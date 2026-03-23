@@ -6,17 +6,15 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { type InitPoolInputAmount } from '@repo/lib/modules/pool/actions/create/types'
 import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { SeedType } from './lbp.types'
 
 export function useInitializeLbpInput() {
-  const { saleStructureForm, isCollateralNativeAsset, isFixedSale } = useLbpForm()
+  const { saleStructureForm, isCollateralNativeAsset, isFixedSale, isSeeded } = useLbpForm()
   const [
     selectedChain,
     collateralTokenAddress,
     collateralTokenAmount,
     launchTokenAddress,
     saleTokenAmount,
-    seedType,
   ] = useWatch({
     control: saleStructureForm.control,
     name: [
@@ -25,7 +23,6 @@ export function useInitializeLbpInput() {
       'collateralTokenAmount',
       'launchTokenAddress',
       'saleTokenAmount',
-      'seedType',
     ],
   })
 
@@ -75,9 +72,7 @@ export function useInitializeLbpInput() {
   }
 
   const amountsIn =
-    seedType === SeedType.SEEDED
-      ? [reserveTokenAmountIn, launchTokenAmountIn]
-      : [launchTokenAmountIn]
+    isFixedSale || isSeeded ? [reserveTokenAmountIn, launchTokenAmountIn] : [launchTokenAmountIn]
 
   return { amountsIn, minBptAmountOut, chainId, wethIsEth }
 }

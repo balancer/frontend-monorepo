@@ -17,6 +17,7 @@ fragment LbpV3CommonMetadataFields on GqlPoolLiquidityBootstrappingV3 {
   reserveTokenIndex
   startTime
   telegram
+  isSeedless
   topTrades {
     address
     value
