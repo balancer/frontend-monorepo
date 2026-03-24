@@ -1,6 +1,6 @@
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import { usePriceInfo } from './usePriceInfo'
+import { getCurrentPrice, usePriceInfo } from './usePriceInfo'
 import { useTokenMetadata } from '../../tokens/useTokenMetadata'
 
 const emptyStats = {
@@ -23,14 +23,15 @@ export function usePoolStats(pool: GqlPoolLiquidityBootstrappingV3) {
   if (snapshotsAreLoading || metadataIsLoading) return emptyStats
   const firstSnapshot = snapshots[0]
   const lastSnapshot = snapshots[snapshots.length - 1]
+  const currentPrice = getCurrentPrice(snapshots)
 
   return {
     isLoading: snapshotsAreLoading || metadataIsLoading,
     fundsRaised:
       (lastSnapshot.reserveTokenBalance - firstSnapshot.reserveTokenBalance) *
       lastSnapshot.reserveTokenPrice,
-    marketCap: firstSnapshot.projectTokenBalance * lastSnapshot.projectTokenPrice,
-    fdv: lastSnapshot.projectTokenPrice * (totalSupply || 0),
+    marketCap: firstSnapshot.projectTokenBalance * currentPrice,
+    fdv: currentPrice * (totalSupply || 0),
     tvl: lastSnapshot?.tvl || 0,
     totalVolume: lastSnapshot?.cumulativeVolume || 0,
     totalFees: lastSnapshot?.cumulativeFees || 0,
