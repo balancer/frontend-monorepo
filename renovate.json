@@ -69,26 +69,7 @@
       "description": "Group remaining npm devDependencies that are not already covered by more specific package groups.",
       "groupName": "Other devDependencies",
       "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"],
-      "excludePackageNames": [
-        "viem",
-        "@balancer/sdk",
-        "@emotion/react",
-        "@emotion/styled",
-        "@chakra-ui/**",
-        "graphql",
-        "graphql-request",
-        "graphql-tag",
-        "@apollo/client",
-        "@apollo/client-integration-nextjs",
-        "@graphql-typed-document-node/core",
-        "@graphql-codegen/**",
-        "eslint",
-        "eslint-config-**",
-        "eslint-plugin-**",
-        "@eslint/**",
-        "@types/**"
-      ]
+      "matchDepTypes": ["devDependencies"]
     },
     {
       "description": "Flag major bumps for manual review.",
