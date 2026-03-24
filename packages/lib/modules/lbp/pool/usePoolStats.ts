@@ -2,6 +2,7 @@ import { Address } from 'viem'
 import { usePriceInfo } from './usePriceInfo'
 import { useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
+import { isFixedLBP } from '@repo/lib/modules/pool/pool.helpers'
 
 const emptyStats = {
   isLoading: true,
@@ -19,7 +20,11 @@ export function usePoolStats(pool: LbpV3) {
     pool.chain
   )
 
-  const { isLoading: snapshotsAreLoading, snapshots } = usePriceInfo(pool.chain, pool.id as Address)
+  const { isLoading: snapshotsAreLoading, snapshots } = usePriceInfo(
+    pool.chain,
+    pool.id as Address,
+    isFixedLBP(pool)
+  )
   if (snapshotsAreLoading || metadataIsLoading) return emptyStats
   const firstSnapshot = snapshots[0]
   const lastSnapshot = snapshots[snapshots.length - 1]

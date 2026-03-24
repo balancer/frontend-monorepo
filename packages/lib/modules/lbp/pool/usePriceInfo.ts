@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client/react'
 import {
+  GetFixedLbpPriceInfoDocument,
   GetLbpPriceInfoDocument,
   GqlChain,
   LbpPriceChartDataFragment,
@@ -38,8 +39,8 @@ export type HourlyDataPoint = {
   volume: number
 }
 
-export function usePriceInfo(chain: GqlChain, poolId: Address) {
-  const apiResult = useQuery(GetLbpPriceInfoDocument, {
+export function usePriceInfo(chain: GqlChain, poolId: Address, isFixedLbp = false) {
+  const apiResult = useQuery(isFixedLbp ? GetFixedLbpPriceInfoDocument : GetLbpPriceInfoDocument, {
     variables: {
       poolId: poolId.toLowerCase(),
       chain,

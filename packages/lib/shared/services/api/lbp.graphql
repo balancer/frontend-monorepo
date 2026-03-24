@@ -54,7 +54,6 @@ fragment LBPPriceChartData on LBPPriceChartData {
   cumulativeFees
   cumulativeVolume
   fees
-  intervalTimestamp # deprecated
   projectTokenBalance
   projectTokenPrice # in reserve token
   reserveTokenBalance
@@ -68,6 +67,12 @@ fragment LBPPriceChartData on LBPPriceChartData {
 
 query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
   prices: lbpPriceChart(chain: $chain, id: $poolId, dataPoints: $dataPoints) {
+    ...LBPPriceChartData
+  }
+}
+
+query GetFixedLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
+  prices: fixedLbpPriceChart(chain: $chain, id: $poolId, dataPoints: $dataPoints) {
     ...LBPPriceChartData
   }
 }
