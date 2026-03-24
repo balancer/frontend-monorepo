@@ -90,7 +90,7 @@
     "@graphql-codegen/schema-ast": "5.0.1",
     "@graphql-codegen/typescript-document-nodes": "5.0.7",
     "@graphql-typed-document-node/core": "^3.2.0",
-    "@parcel/watcher": "2.5.1",
+    "@parcel/watcher": "2.5.6",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/test": "workspace:*",
@@ -109,13 +109,13 @@
     "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "1.4.6",
     "@viem/anvil": "0.0.10",
-    "@vitejs/plugin-react": "4.3.1",
-    "@wagmi/cli": "2.8.0",
+    "@vitejs/plugin-react": "4.7.0",
+    "@wagmi/cli": "2.10.0",
     "autoprefixer": "10.4.27",
     "cross-fetch": "4.1.0",
     "eslint": "9.39.4",
     "lokijs": "1.5.12",
-    "msw": "2.12.9",
-    "sentry-testkit": "6.2.2"
+    "msw": "2.12.13",
+    "sentry-testkit": "6.3.1"
   }
 }
