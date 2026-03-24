@@ -51,7 +51,10 @@ export const ProjectConfigBalancer: ProjectConfig = {
     isOnSafeAppList: true,
   },
   links: {
-    appLinks: [{ analyticsEvent: 'ClickNavVeBal', href: '/vebal', label: 'veBAL' }],
+    appLinks: [
+      { analyticsEvent: 'ClickNavVeBal', href: '/vebal', label: 'veBAL' },
+      { analyticsEvent: 'ClickNavLbp', href: '/lbp/create', label: 'LBP' },
+    ],
     ecosystemLinks: [
       { label: 'Pool creator', href: '/create' },
       { label: 'Blog', href: 'https://medium.com/balancer-protocol' },
