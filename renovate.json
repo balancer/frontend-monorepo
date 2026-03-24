@@ -4,7 +4,7 @@
   "schedule": ["before 6am on Monday"],
   "timezone": "UTC",
   "labels": ["dependencies"],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "30 days",
   "prConcurrentLimit": 5,
   "automerge": false,
 
