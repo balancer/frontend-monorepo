@@ -4,7 +4,7 @@
   "schedule": ["before 6am on Monday"],
   "timezone": "UTC",
   "labels": ["dependencies"],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "30 days",
   "prConcurrentLimit": 5,
   "automerge": false,
 
@@ -64,6 +64,12 @@
       "description": "Consolidate workflow action bumps",
       "groupName": "GitHub Actions",
       "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "Group remaining npm devDependencies that are not already covered by more specific package groups.",
+      "groupName": "Other devDependencies",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["devDependencies"]
     },
     {
       "description": "Flag major bumps for manual review.",
