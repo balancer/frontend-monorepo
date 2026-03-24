@@ -51,7 +51,6 @@ fragment LBPPriceChartData on LBPPriceChartData {
   cumulativeFees
   cumulativeVolume
   fees
-  intervalTimestamp # deprecated
   projectTokenBalance
   projectTokenPrice # in reserve token
   reserveTokenBalance

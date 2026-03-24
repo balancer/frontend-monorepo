@@ -21,6 +21,7 @@ export enum AnalyticsEvent {
   ClickNavUtilitiesWalletChange = 'click: Nav utilities wallet change',
   ClickNavUtilitiesWalletConnect = 'click: Nav utilities wallet connect',
   ClickNavVeBal = 'click: veBAL primary nav',
+  ClickNavLbp = 'click: LBP primary nav',
   ClickPoolListCreatePool = 'click: Pool list create pool',
   ClickPoolListFilter = 'click: Pool list filter',
   // Transaction events
