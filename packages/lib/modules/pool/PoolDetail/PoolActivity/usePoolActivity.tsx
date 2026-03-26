@@ -28,7 +28,23 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 export type PoolActivityResponse = ReturnType<typeof usePoolActivityLogic>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)
 
-const MAX_EVENTS = 500
+const MAX_EVENTS = 1
+
+export function getPoolActivityTitle(activeTab: string | undefined, count: number) {
+  const singularTitleByTab = {
+    all: 'transaction',
+    adds: 'add',
+    removes: 'remove',
+    swaps: 'swap',
+  } as const
+
+  if (!activeTab) return ''
+
+  const singularTitle = singularTitleByTab[activeTab as keyof typeof singularTitleByTab]
+  if (!singularTitle) return activeTab
+
+  return count === 1 ? singularTitle : `${singularTitle}s`
+}
 
 function usePoolActivityLogic() {
   const { id: poolId, variant, chain } = useParams()
@@ -58,14 +74,6 @@ function usePoolActivityLogic() {
   const isAllOrSwaps = activeTab?.value === 'all' || activeTab?.value === 'swaps'
   const isAllOrAdds = activeTab?.value === 'all' || activeTab?.value === 'adds'
   const isAllOrRemoves = activeTab?.value === 'all' || activeTab?.value === 'removes'
-
-  const getTitle = useCallback(() => {
-    if (activeTab?.value === 'all') {
-      return 'transactions'
-    }
-
-    return activeTab?.value ?? ''
-  }, [activeTab?.value])
 
   const { loading, data: response } = usePoolEvents({
     poolId: poolId as string,
@@ -237,8 +245,9 @@ function usePoolActivityLogic() {
   }, [minDate])
 
   const transactionsLabel = useMemo(() => {
-    return `${fNum('integer', poolEvents.length)} ${getTitle()} ${getDateCaption()}`
-  }, [poolEvents, getTitle, getDateCaption])
+    const title = getPoolActivityTitle(activeTab?.value, poolEvents.length)
+    return `${fNum('integer', poolEvents.length)} ${title} ${getDateCaption()}`
+  }, [activeTab?.value, poolEvents, getDateCaption])
 
   return {
     isLoading: loading,
@@ -265,7 +274,7 @@ function usePoolActivityLogic() {
     setSortingBy,
     setActiveTab,
     setIsExpanded,
-    getTitle,
+    getTitle: () => getPoolActivityTitle(activeTab?.value, poolEvents.length),
     getDateCaption,
     setPagination,
     sortPoolEvents,
