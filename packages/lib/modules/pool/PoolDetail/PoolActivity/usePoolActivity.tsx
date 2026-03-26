@@ -234,7 +234,7 @@ function usePoolActivityLogic() {
 
   const getDateCaption = useCallback(() => {
     const diffInDays = differenceInCalendarDays(new Date(), minDate * 1000)
-    return diffInDays > 0 ? `in last ${diffInDays} days` : 'today'
+    return diffInDays > 1 ? `in last ${diffInDays} days` : 'today'
   }, [minDate])
 
   const transactionsLabel = useMemo(() => {
