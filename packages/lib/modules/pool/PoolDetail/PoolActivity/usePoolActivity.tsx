@@ -28,7 +28,7 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 export type PoolActivityResponse = ReturnType<typeof usePoolActivityLogic>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)
 
-const MAX_EVENTS = 1
+const MAX_EVENTS = 500
 
 function usePoolActivityLogic() {
   const { id: poolId, variant, chain } = useParams()
