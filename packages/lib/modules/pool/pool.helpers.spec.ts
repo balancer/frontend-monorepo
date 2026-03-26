@@ -15,6 +15,7 @@ import {
   getPoolAddBlockedReason,
   shouldBlockAddLiquidity,
   getPoolActivityDateCaption,
+  getPoolActivityTitle,
 } from './pool.helpers'
 import {
   stableSurgeBoosted,
@@ -332,6 +333,26 @@ describe('shouldBlockAddLiquidity', () => {
 
     expect(shouldBlockAddLiquidity(pool)).toBe(true)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+  })
+})
+
+describe('getPoolActivityTitle', () => {
+  it('returns singular labels for a single event', () => {
+    expect(getPoolActivityTitle('all', 1)).toBe('transaction')
+    expect(getPoolActivityTitle('adds', 1)).toBe('add')
+    expect(getPoolActivityTitle('removes', 1)).toBe('remove')
+    expect(getPoolActivityTitle('swaps', 1)).toBe('swap')
+  })
+
+  it('returns plural labels for multiple events', () => {
+    expect(getPoolActivityTitle('all', 2)).toBe('transactions')
+    expect(getPoolActivityTitle('adds', 2)).toBe('adds')
+    expect(getPoolActivityTitle('removes', 2)).toBe('removes')
+    expect(getPoolActivityTitle('swaps', 2)).toBe('swaps')
+  })
+
+  it('returns an empty label when there is no active tab', () => {
+    expect(getPoolActivityTitle(undefined, 0)).toBe('')
   })
 })
 

@@ -160,6 +160,22 @@ export function isQuantAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.QuantAmmWeighted
 }
 
+export function getPoolActivityTitle(activeTab: string | undefined, count: number) {
+  const singularTitleByTab = {
+    all: 'transaction',
+    adds: 'add',
+    removes: 'remove',
+    swaps: 'swap',
+  } as const
+
+  if (!activeTab) return ''
+
+  const singularTitle = singularTitleByTab[activeTab as keyof typeof singularTitleByTab]
+  if (!singularTitle) return activeTab
+
+  return count === 1 ? singularTitle : `${singularTitle}s`
+}
+
 export function noInitLiquidity(pool: GqlPoolBase): boolean {
   // Uncomment to DEBUG
   // if (

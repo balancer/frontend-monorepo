@@ -8,7 +8,7 @@ import { usePool } from '../../PoolProvider'
 import { GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
-import { getPoolActivityDateCaption } from '../../pool.helpers'
+import { getPoolActivityDateCaption, getPoolActivityTitle } from '../../pool.helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -29,22 +29,6 @@ export type PoolActivityResponse = ReturnType<typeof usePoolActivityLogic>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)
 
 const MAX_EVENTS = 1
-
-export function getPoolActivityTitle(activeTab: string | undefined, count: number) {
-  const singularTitleByTab = {
-    all: 'transaction',
-    adds: 'add',
-    removes: 'remove',
-    swaps: 'swap',
-  } as const
-
-  if (!activeTab) return ''
-
-  const singularTitle = singularTitleByTab[activeTab as keyof typeof singularTitleByTab]
-  if (!singularTitle) return activeTab
-
-  return count === 1 ? singularTitle : `${singularTitle}s`
-}
 
 function usePoolActivityLogic() {
   const { id: poolId, variant, chain } = useParams()
