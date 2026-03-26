@@ -366,8 +366,8 @@ describe('getPoolActivityDateCaption', () => {
     expect(getPoolActivityDateCaption(daysAgo(0))).toBe('today')
   })
 
-  it('returns "today" when activity is from yesterday (1 day ago)', () => {
-    expect(getPoolActivityDateCaption(daysAgo(1))).toBe('today')
+  it('returns "since yesterday" for activity from 1 day ago', () => {
+    expect(getPoolActivityDateCaption(daysAgo(1))).toBe('since yesterday')
   })
 
   it('returns "in last 2 days" for activity from 2 days ago', () => {
