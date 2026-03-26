@@ -258,7 +258,6 @@ function usePoolActivityLogic() {
     setSortingBy,
     setActiveTab,
     setIsExpanded,
-    getTitle: () => getPoolActivityTitle(activeTab?.value, poolEvents.length),
     getDateCaption,
     setPagination,
     sortPoolEvents,
