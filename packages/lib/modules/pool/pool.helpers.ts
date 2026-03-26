@@ -25,7 +25,7 @@ import {
   getUserWalletBalance,
   getUserWalletBalanceUsd,
 } from './user-balance.helpers'
-import { differenceInCalendarDays, startOfDay } from 'date-fns'
+import { differenceInCalendarDays, secondsToMilliseconds, startOfDay } from 'date-fns'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
@@ -553,7 +553,7 @@ export function poolHasRateProviderExternalOracle(pool: Pool): boolean {
 export function getPoolActivityDateCaption(minTimestampSeconds: number): string {
   const diffInDays = differenceInCalendarDays(
     startOfDay(new Date()),
-    startOfDay(new Date(minTimestampSeconds * 1000))
+    startOfDay(new Date(secondsToMilliseconds(minTimestampSeconds)))
   )
   return diffInDays > 1 ? `in last ${diffInDays} days` : 'today'
 }

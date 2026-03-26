@@ -10,6 +10,7 @@ import {
   isStandardOrUnderlyingRootToken,
 } from './pool-tokens.utils'
 import { sDAIWeighted } from './__mocks__/pool-examples/flat'
+import { subDays } from 'date-fns'
 import {
   getPoolAddBlockedReason,
   shouldBlockAddLiquidity,
@@ -336,7 +337,7 @@ describe('shouldBlockAddLiquidity', () => {
 
 // Helper: converts "N days ago" → Unix timestamp in seconds
 function daysAgo(n: number): number {
-  return Math.floor((Date.now() - n * 24 * 60 * 60 * 1000) / 1000)
+  return Math.floor(subDays(new Date(), n).getTime() / 1000)
 }
 
 describe('getPoolActivityDateCaption', () => {
