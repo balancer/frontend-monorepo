@@ -16,6 +16,8 @@ import { GetFundsWarning } from './GetFundsWarning'
 import { Top10Trades } from './Top10Trades'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
+const MIN_GRID_ITEM_HEIGHT = '400px'
+
 export function LbpDetail() {
   const { userPoolEvents, isLoadingUserPoolEvents, hasPoolEvents } = useUserPoolEvents()
   const { pool } = usePool()
@@ -32,10 +34,10 @@ export function LbpDetail() {
           {isSaleFinished && fundsAvailable && <GetFundsWarning />}
 
           <Grid gap="4" templateColumns={{ base: '1fr', md: '2fr 1fr' }} w="full">
-            <GridItem>
+            <GridItem minH={MIN_GRID_ITEM_HEIGHT}>
               <LbpPoolChartsContainer />
             </GridItem>
-            <GridItem minH="400px">
+            <GridItem minH={MIN_GRID_ITEM_HEIGHT}>
               {isSaleFinished ? <Top10Trades chain={pool.chain} pool={lbpPool} /> : <LbpSwap />}
             </GridItem>
           </Grid>

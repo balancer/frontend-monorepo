@@ -1,0 +1,136 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "schedule": ["before 6am on Monday"],
+  "timezone": "UTC",
+  "labels": ["dependencies"],
+  "minimumReleaseAge": "30 days",
+  "prConcurrentLimit": 5,
+  "automerge": false,
+
+  "ignoreDeps": [
+    "strip-ansi",
+    "color-convert",
+    "color-name",
+    "is-core-module",
+    "error-ex",
+    "has-ansi"
+  ],
+
+  "packageRules": [
+    {
+      "description": "To avoid problems keep viem version matched with balancer sdk",
+      "groupName": "balancer sdk / viem",
+      "matchPackageNames": ["viem", "@balancer/sdk"]
+    },
+    {
+      "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
+      "groupName": "Chakra UI",
+      "matchPackageNames": [
+        "@emotion/react",
+        "@emotion/styled",
+        "@chakra-ui/**"
+      ]
+    },
+    {
+      "description": "Keep graphql core in sync with clients and codegen tools.",
+      "groupName": "GraphQL / Apollo",
+      "matchPackageNames": [
+        "graphql",
+        "graphql-request",
+        "graphql-tag",
+        "@apollo/client",
+        "@apollo/client-integration-nextjs",
+        "@graphql-typed-document-node/core",
+        "@graphql-codegen/**"
+      ]
+    },
+    {
+      "description": "Keep ESLint plugins compatible with core.",
+      "groupName": "ESLint ecosystem",
+      "matchPackageNames": [
+        "eslint",
+        "eslint-config-**",
+        "eslint-plugin-**",
+        "@eslint/**"
+      ]
+    },
+    {
+      "description": "Low-risk, high-frequency — consolidate to reduce noise.",
+      "groupName": "@types packages",
+      "matchPackageNames": ["@types/**"]
+    },
+    {
+      "description": "Consolidate workflow action bumps",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "Group remaining npm devDependencies that are not already covered by more specific package groups.",
+      "groupName": "Other devDependencies",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["devDependencies"]
+    },
+    {
+      "description": "Flag major bumps for manual review.",
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major-update"]
+    },
+    {
+      "description": "Block the framer-motion to motion replacement while still allowing normal framer-motion updates.",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["framer-motion"],
+      "matchUpdateTypes": ["replacement"],
+      "enabled": false
+    },
+    {
+      "description": "Block Chakra UI major upgrades while the repo is still on Chakra v2.",
+      "matchPackageNames": ["@chakra-ui/**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block Emotion major upgrades while Chakra v2 is still in place.",
+      "matchPackageNames": ["@emotion/react", "@emotion/styled"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block ESLint ecosystem major bumps until we are ready to migrate the lint stack.",
+      "matchPackageNames": [
+        "eslint",
+        "@eslint/**",
+        "@typescript-eslint/**",
+        "typescript-eslint",
+        "eslint-config-**",
+        "eslint-plugin-**"
+      ],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block chakra-react-select v6 until we are ready for that migration.",
+      "matchPackageNames": ["chakra-react-select"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block Vitest v4 until we are ready to migrate the test tooling.",
+      "matchPackageNames": ["vitest", "@vitest/**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block Stylelint major upgrades until we are ready to migrate the style linting stack.",
+      "matchPackageNames": ["stylelint", "stylelint-**"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Block zod v4 until we are ready for that migration.",
+      "matchPackageNames": ["zod"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
+}

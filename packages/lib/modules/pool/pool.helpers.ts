@@ -1,4 +1,4 @@
-import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,
   GqlHookType,
@@ -18,7 +18,7 @@ import BigNumber from 'bignumber.js'
 import { isEmpty, isNil } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
-import { isNotMainnet } from '../chains/chain.utils'
+import { isChainDeprecated, isNotMainnet } from '../chains/chain.utils'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
 import {
@@ -378,6 +378,9 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
 
   if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
   if (pool.hook?.reviewData?.summary === 'unsafe') reasons.push('Unsafe hook')
+  if (isChainDeprecated(pool.chain)) {
+    reasons.push(`${getChainName(pool.chain)} is being sunset on Balancer`)
+  }
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
   for (const token of poolTokens) {
