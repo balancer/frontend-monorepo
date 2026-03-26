@@ -10,7 +10,11 @@ import {
   isStandardOrUnderlyingRootToken,
 } from './pool-tokens.utils'
 import { sDAIWeighted } from './__mocks__/pool-examples/flat'
-import { getPoolAddBlockedReason, shouldBlockAddLiquidity } from './pool.helpers'
+import {
+  getPoolAddBlockedReason,
+  shouldBlockAddLiquidity,
+  getPoolActivityDateCaption,
+} from './pool.helpers'
 import {
   stableSurgeBoosted,
   usdcUsdtAaveBoosted,
@@ -327,5 +331,28 @@ describe('shouldBlockAddLiquidity', () => {
 
     expect(shouldBlockAddLiquidity(pool)).toBe(true)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+  })
+})
+
+// Helper: converts "N days ago" → Unix timestamp in seconds
+function daysAgo(n: number): number {
+  return Math.floor((Date.now() - n * 24 * 60 * 60 * 1000) / 1000)
+}
+
+describe('getPoolActivityDateCaption', () => {
+  it('returns "today" when activity is from today (0 days ago)', () => {
+    expect(getPoolActivityDateCaption(daysAgo(0))).toBe('today')
+  })
+
+  it('returns "today" when activity is from yesterday (1 day ago)', () => {
+    expect(getPoolActivityDateCaption(daysAgo(1))).toBe('today')
+  })
+
+  it('returns "in last 2 days" for activity from 2 days ago', () => {
+    expect(getPoolActivityDateCaption(daysAgo(2))).toBe('in last 2 days')
+  })
+
+  it('returns "in last 7 days" for activity from a week ago', () => {
+    expect(getPoolActivityDateCaption(daysAgo(7))).toBe('in last 7 days')
   })
 })

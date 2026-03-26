@@ -8,8 +8,8 @@ import { usePool } from '../../PoolProvider'
 import { GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
+import { getPoolActivityDateCaption } from '../../pool.helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { differenceInCalendarDays } from 'date-fns'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import {
@@ -233,8 +233,7 @@ function usePoolActivityLogic() {
   }, [poolEvents, pagination])
 
   const getDateCaption = useCallback(() => {
-    const diffInDays = differenceInCalendarDays(new Date(), minDate * 1000)
-    return diffInDays > 1 ? `in last ${diffInDays} days` : 'today'
+    return getPoolActivityDateCaption(minDate)
   }, [minDate])
 
   const transactionsLabel = useMemo(() => {

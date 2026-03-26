@@ -25,6 +25,7 @@ import {
   getUserWalletBalance,
   getUserWalletBalanceUsd,
 } from './user-balance.helpers'
+import { differenceInCalendarDays, startOfDay } from 'date-fns'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
@@ -542,4 +543,17 @@ export function poolHasRateProviderExternalOracle(pool: Pool): boolean {
   return pool.poolTokens.some(token =>
     token.priceRateProviderData?.warnings?.includes('market-rate')
   )
+}
+
+/**
+ * Returns a human-readable caption for pool activity date range.
+ * - 0–1 days ago → 'today'
+ * - 2+ days ago → 'in last N days'
+ */
+export function getPoolActivityDateCaption(minTimestampSeconds: number): string {
+  const diffInDays = differenceInCalendarDays(
+    startOfDay(new Date()),
+    startOfDay(new Date(minTimestampSeconds * 1000))
+  )
+  return diffInDays > 1 ? `in last ${diffInDays} days` : 'today'
 }
