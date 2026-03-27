@@ -12,6 +12,7 @@ import {
   isQuantAmmPool,
   isStable,
   isV2Pool,
+  isV3LBP,
   isV3Pool,
 } from '../../../pool.helpers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -22,6 +23,7 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { Pool } from '../../../pool.types'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 type FormattedPoolAttributes = {
   title: string
@@ -32,6 +34,12 @@ type FormattedPoolAttributes = {
 function getPoolTypeText(pool: Pool) {
   if (isBoosted(pool)) {
     return 'Boosted'
+  }
+
+  if (isV3LBP(pool)) {
+    if ((pool.type = GqlPoolType.LiquidityBootstrapping)) {
+      return `Dynamic Liquidity Bootstrapping Pool (${pool.isSeedless ? 'seedless' : 'seeded'})`
+    }
   }
 
   return getPoolTypeLabel(pool.type)
