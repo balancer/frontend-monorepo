@@ -146,7 +146,6 @@ test.describe('Create LBP page', () => {
   test.describe('Form reset', () => {
     test('sale structure step', async ({ page }) => {
       await doSaleStructureStep(page)
-      await clickButton(page, 'Next')
 
       await clickResetAndConfirm(page)
       await expectInitialFormState(page)
@@ -154,6 +153,7 @@ test.describe('Create LBP page', () => {
 
     test('project info step', async ({ page }) => {
       await doSaleStructureStep(page, { continue: true })
+      await expect(page).toHaveURL(stepUrl(1))
       await doProjectInfoStep(page)
 
       await clickResetAndConfirm(page)
@@ -163,8 +163,8 @@ test.describe('Create LBP page', () => {
     test('review step', async ({ page }) => {
       await doSaleStructureStep(page, { continue: true })
       await doProjectInfoStep(page, { continue: true })
-
       await expect(page).toHaveURL(stepUrl(2))
+
       await clickResetAndConfirm(page)
       await expectInitialFormState(page)
     })

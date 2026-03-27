@@ -3,7 +3,7 @@ import { clickButton, selectPopularToken } from '@/helpers/user.helpers'
 import { expect, test } from '@playwright/test'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
-test('Swap 1 ETH to GHO)', async ({ page }) => {
+test('Swap 1 ETH to GHO', async ({ page }) => {
   await page.goto('http://localhost:3000/swap/ethereum/ETH')
 
   await impersonate(page, defaultAnvilAccount)
