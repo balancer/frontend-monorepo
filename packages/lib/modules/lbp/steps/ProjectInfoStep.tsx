@@ -393,6 +393,7 @@ function Disclaimer() {
           <FormControl isInvalid={fieldState.invalid}>
             <Checkbox
               color="font.primary"
+              data-testid="disclaimer-checkbox"
               fontWeight="medium"
               isChecked={field.value}
               onChange={event => {

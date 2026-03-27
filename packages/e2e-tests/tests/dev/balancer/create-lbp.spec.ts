@@ -1,7 +1,7 @@
 import { impersonate } from '@/helpers/e2e.helpers'
 import { clickButton, button } from '@/helpers/user.helpers'
 import { expect, test, type Page } from '@playwright/test'
-import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { defaultAnvilAccount, forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { oneDayInMs, oneWeekInMs, toISOString } from '@repo/lib/shared/utils/time'
 import { LBP_FORM_STEPS } from '@repo/lib/modules/lbp/constants.lbp'
 
@@ -73,7 +73,16 @@ async function doProjectInfoStep(page: Page, { continue: shouldContinue = false 
     .getByLabel('Token icon URL')
     .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
 
-  await page.getByRole('checkbox').check({ force: true })
+  await page
+    .getByTestId('disclaimer-checkbox')
+    .locator('input')
+    .evaluate(el => {
+      const input = el as HTMLInputElement
+      if (!input.checked) {
+        input.click()
+        input.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+    })
 
   if (shouldContinue) await nextButton.click()
 }
@@ -103,6 +112,10 @@ test.describe('Create LBP page', () => {
     await mockCreateLbpMetadata(page)
     await page.goto(BASE_URL)
     await impersonate(page, defaultAnvilAccount)
+    await forkClient.setBalance({
+      address: defaultAnvilAccount,
+      value: BigInt('1000000000000000000000'),
+    })
   })
 
   test('can complete all steps', async ({ page }) => {
