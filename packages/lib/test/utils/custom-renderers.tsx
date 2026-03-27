@@ -100,6 +100,18 @@ export async function waitForLoadedUseQuery(hookResult: { current: { loading: bo
   await waitFor(() => expect(hookResult.current.loading).toBeFalsy())
 }
 
+/** Surfaces query status and error in assertion failure messages. */
+export function queryFailureContext(result: { current: any }) {
+  const c = result.current
+  const parts = [
+    'status' in c ? `status=${c.status}` : null,
+    'fetchStatus' in c ? `fetchStatus=${c.fetchStatus}` : null,
+    `error=${'error' in c ? (c.error ?? 'none') : 'N/A'}`,
+    `data=${'data' in c ? (c.data === undefined ? 'undefined' : 'present') : 'N/A'}`,
+  ].filter(Boolean)
+  return `Query state: ${parts.join(', ')}`
+}
+
 export function DefaultAddLiquidityTestProvider({ children }: PropsWithChildren) {
   return (
     <RelayerSignatureProvider>

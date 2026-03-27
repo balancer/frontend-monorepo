@@ -1,4 +1,8 @@
-import { DefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
+import {
+  DefaultPoolTestProvider,
+  queryFailureContext,
+  testHook,
+} from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
@@ -41,7 +45,9 @@ test('runs preview query for proportional remove liquidity', async () => {
 
   const result = await testQuery(humanBptIn)
 
-  await waitFor(() => expect(result.current.data?.amountsOut).toBeDefined())
+  await waitFor(() =>
+    expect(result.current.data?.amountsOut, queryFailureContext(result)).toBeDefined()
+  )
 
   const wjAmountOut = result.current.data?.amountsOut?.[0] as TokenAmount
   const wjOutUnits = toHumanAmount(wjAmountOut)

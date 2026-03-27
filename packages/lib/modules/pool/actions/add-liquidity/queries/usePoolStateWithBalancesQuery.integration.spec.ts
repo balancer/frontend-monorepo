@@ -1,5 +1,9 @@
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { buildDefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
+import {
+  buildDefaultPoolTestProvider,
+  queryFailureContext,
+  testHook,
+} from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
 import { partialBoosted } from '../../../__mocks__/pool-examples/boosted'
@@ -19,7 +23,7 @@ describe('usePoolStateWithBalances', () => {
 
     const result = await testQuery(pool)
 
-    await waitFor(() => expect(result.current.data?.id).toBeDefined())
+    await waitFor(() => expect(result.current.data?.id, queryFailureContext(result)).toBeDefined())
 
     expect(result.current.isLoading).toBeFalsy()
     expect(result.current.data?.id).toBeDefined()

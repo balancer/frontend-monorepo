@@ -3,7 +3,7 @@ import {
   aBalWethPoolElementMock,
   toGqlWeighedPoolMock,
 } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
-import { testHook } from '@repo/lib/test/utils/custom-renderers'
+import { queryFailureContext, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
@@ -42,7 +42,11 @@ describe('fetches onchain and overrides user balances', async () => {
 
     const result = await testUseChainPoolBalances(poolMock)
 
-    await waitFor(() => expect(result.current.data[0].userBalance?.walletBalance).toBe('40'))
+    await waitFor(() =>
+      expect(result.current.data[0].userBalance?.walletBalance, queryFailureContext(result)).toBe(
+        '40'
+      )
+    )
   })
 
   test('when the pool does not have staking info', async () => {
@@ -58,7 +62,7 @@ describe('fetches onchain and overrides user balances', async () => {
 
     const result = await testUseChainPoolBalances(poolMockWithUndefinedStaking)
 
-    await waitFor(() => expect(result.current.isFetching).toBeFalsy())
+    await waitFor(() => expect(result.current.isFetching, queryFailureContext(result)).toBeFalsy())
 
     expect(result.current.data[0].userBalance?.walletBalance).toBe('50')
   })
@@ -89,7 +93,7 @@ describe('fetches onchain and overrides user balances', async () => {
 
     const result = await testUseChainPoolBalances(poolMockWithEmptyGaugeAddress)
 
-    await waitFor(() => expect(result.current.isFetching).toBeFalsy())
+    await waitFor(() => expect(result.current.isFetching, queryFailureContext(result)).toBeFalsy())
     expect(result.current.data[0].userBalance?.walletBalance).toBe('60')
   })
 

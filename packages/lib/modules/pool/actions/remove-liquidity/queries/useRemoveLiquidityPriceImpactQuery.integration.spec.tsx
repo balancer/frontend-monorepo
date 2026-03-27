@@ -1,4 +1,8 @@
-import { DefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
+import {
+  DefaultPoolTestProvider,
+  queryFailureContext,
+  testHook,
+} from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
@@ -38,7 +42,7 @@ test('queries price impact for add liquidity', async () => {
 
   const result = await testQuery(humanBptIn)
 
-  await waitFor(() => expect(result.current.data).toBeDefined())
+  await waitFor(() => expect(result.current.data, queryFailureContext(result)).toBeDefined())
 
   expect(result.current.data).toBeCloseTo(0.002368782867485742)
   expect(result.current.isLoading).toBeFalsy()

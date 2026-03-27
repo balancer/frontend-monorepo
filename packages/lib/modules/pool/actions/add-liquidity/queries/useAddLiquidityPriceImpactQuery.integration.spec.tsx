@@ -1,5 +1,9 @@
 import { aaveEthAddress, wstEthAddress } from '@repo/lib/debug-helpers'
-import { DefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
+import {
+  DefaultPoolTestProvider,
+  queryFailureContext,
+  testHook,
+} from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
 import { aWeightedV2PoolMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
@@ -28,7 +32,7 @@ test('queries price impact for add liquidity', async () => {
 
   const result = await testQuery(humanAmountsIn)
 
-  await waitFor(() => expect(result.current.data).not.toBeUndefined())
+  await waitFor(() => expect(result.current.data, queryFailureContext(result)).not.toBeUndefined())
 
   expect(result.current.data).toBeGreaterThan(0.001)
   expect(result.current.isLoading).toBeFalsy()
