@@ -114,7 +114,7 @@ type TokenInputFooterProps = {
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
   priceMessage?: string
-  customUserBalance?: string
+  customUserBalance?: BigNumber
   isDisabled?: boolean
   customUsdPrice?: number
   priceImpactProps: PriceImpactProps | undefined
@@ -142,7 +142,7 @@ function TokenInputFooter({
   const inputLabelColor = hasError ? 'input.fontHintError' : 'grayText'
 
   const balance = token ? balanceFor(token?.address) : undefined
-  const userBalance = customUserBalance || (token ? balance?.formatted || '0' : '0')
+  const userBalance = customUserBalance || bn(token ? balance?.formatted || '0' : '0')
   const usdValue =
     value && customUsdPrice
       ? bn(value).times(customUsdPrice).toString()
@@ -161,10 +161,12 @@ function TokenInputFooter({
     // balance, you need to save some for a swap.
     if (hasDisabledInteraction) return
 
+    if (customUserBalance && !customUserBalance.isFinite()) return
+
     if (value && bn(value).eq(userBalance)) {
       updateValue('')
     } else {
-      updateValue(userBalance)
+      updateValue(userBalance.toString())
     }
   }
 
@@ -193,28 +195,30 @@ function TokenInputFooter({
       {isBalancesLoading || !isMounted ? (
         <Skeleton h="full" w="12" />
       ) : (
-        <HStack
-          _hover={hasDisabledInteraction ? {} : { color: 'font.highlight' }}
-          color={inputLabelColor}
-          cursor={hasDisabledInteraction ? 'default' : 'pointer'}
-          gap="xs"
-          onClick={handleBalanceClick}
-          title="Use wallet balance"
-        >
-          <Text
-            color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
-            fontSize="sm"
-            opacity={!token ? 0.5 : 1}
+        userBalance.isFinite() && (
+          <HStack
+            _hover={hasDisabledInteraction ? {} : { color: 'font.highlight' }}
+            color={inputLabelColor}
+            cursor={hasDisabledInteraction ? 'default' : 'pointer'}
+            gap="xs"
+            onClick={handleBalanceClick}
+            title="Use wallet balance"
           >
-            {!token ? '–' : fNum('token', userBalance, { abbreviated: false })}
-          </Text>
-          <Box
-            color={!token ? 'font.secondary' : noBalance ? 'font.error' : undefined}
-            opacity={!token ? 0.5 : 1}
-          >
-            <WalletIcon size={16} />
-          </Box>
-        </HStack>
+            <Text
+              color={!token ? 'font.secondary' : noBalance ? 'font.error' : 'inherit'}
+              fontSize="sm"
+              opacity={!token ? 0.5 : 1}
+            >
+              {!token ? '–' : fNum('token', userBalance, { abbreviated: false })}
+            </Text>
+            <Box
+              color={!token ? 'font.secondary' : noBalance ? 'font.error' : undefined}
+              opacity={!token ? 0.5 : 1}
+            >
+              <WalletIcon size={16} />
+            </Box>
+          </HStack>
+        )
       )}
     </HStack>
   )
@@ -233,7 +237,7 @@ type Props = {
   isLoadingPriceImpact?: boolean
   priceMessage?: string
   disableBalanceValidation?: boolean
-  customUserBalance?: string
+  customUserBalance?: BigNumber
   customUsdPrice?: number
   priceImpactProps?: PriceImpactProps
 }
