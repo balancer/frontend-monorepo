@@ -18,7 +18,6 @@ async function testQuery(pool: Pool) {
 }
 
 describe('usePoolStateWithBalances', () => {
-  // Gnosis anvil fork can intermittently fail upstream RPC reads
   it('for a partial boosted pool', { retry: 3 }, async () => {
     const pool = getApiPoolMock(partialBoosted)
 
