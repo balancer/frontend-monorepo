@@ -55,10 +55,6 @@ test.describe('Reliquary page at /mabeets', () => {
 async function gotoMabeetsAndImpersonate(page: Page) {
   await page.goto(`${baseUrl}/mabeets`)
   await impersonate(page, defaultAnvilAccount)
-  await forkClient.setBalance({
-    address: defaultAnvilAccount,
-    value: BigInt('1000000000000000000000'),
-  })
 }
 
 async function createPositionAndReturnToMabeets(page: Page) {
