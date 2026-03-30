@@ -1,8 +1,14 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { button, clickButton, setSliderPercent, forceClickButton } from '@/helpers/user.helpers'
+import {
+  button,
+  checkbox,
+  clickButton,
+  setSliderPercent,
+  forceClickButton,
+} from '@/helpers/user.helpers'
 import { test, expect, Page } from '@playwright/test'
 import { aaveWstETH8020Mock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aaveWstETH8020Mock'
-import { aave_USDC_USDTMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aave_USDC_USDTMock'
+import { aave_GHO_USDT_USDCMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/aave_GHO_USDT_USDCMock'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 test.describe('Weighted pool v2', () => {
@@ -68,7 +74,7 @@ test.describe('Weighted pool v2', () => {
 
 test.describe('Boosted stable pool v3', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`http://localhost:3000/pools/ethereum/v3/${aave_USDC_USDTMock.id}`)
+    await page.goto(`http://localhost:3000/pools/ethereum/v3/${aave_GHO_USDT_USDCMock.id}`)
     await impersonate(page, defaultAnvilAccount)
     await expect(button(page, 'Connect')).not.toBeVisible()
   })
@@ -104,12 +110,12 @@ test.describe('Boosted stable pool v3', () => {
       await setSliderPercent(page, 50)
       await clickButton(page, 'Next')
 
-      await clickButton(page, `Sign approval: ${aave_USDC_USDTMock.symbol}`)
+      await clickButton(page, `Sign approval: ${aave_GHO_USDT_USDCMock.symbol}`)
       await clickButton(page, 'Remove liquidity')
       await expect(page.getByText('Transaction confirmed')).toBeVisible()
 
       await forceClickButton(page, 'Return to pool')
-      await expect(page.getByText(aave_USDC_USDTMock.symbol).first()).toBeVisible()
+      await expect(page.getByText(aave_GHO_USDT_USDCMock.symbol).first()).toBeVisible()
     })
 
     test('single token', async ({ page }) => {
@@ -121,8 +127,18 @@ test.describe('Boosted stable pool v3', () => {
 })
 
 async function agreeToBoostedPoolRisks(page: Page) {
-  await page.getByText('I accept the risks of').click()
-  await page.getByText('I accept that by adding tokens').click()
+  const boostedPoolRiskCheckbox = await checkbox(
+    page,
+    /I accept the risks of interacting with this pool/i,
+  )
+
+  const boostedPoolAdditionRiskCheckbox = await checkbox(
+    page,
+    /^I accept that by adding tokens to this Boosted Pool/i,
+  )
+
+  await boostedPoolRiskCheckbox.click()
+  await boostedPoolAdditionRiskCheckbox.click()
 }
 
 async function doAddLiquidityTxSteps(page: Page) {
