@@ -451,8 +451,8 @@ importers:
         specifier: 4.1.5
         version: 4.1.5(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.12.0)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.12.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
       '@balancer-labs/balancer-maths':
-        specifier: 0.0.37
-        version: 0.0.37
+        specifier: 0.0.40
+        version: 0.0.40
       '@balancer/sdk':
         specifier: 5.2.3
         version: 5.2.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76)
@@ -1004,12 +1004,12 @@ packages:
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
 
-  '@balancer-labs/balancer-maths@0.0.37':
-    resolution: {integrity: sha512-BZ8qxuvVEBHKpHcfFEXIs108RqKSIhwiUI+RUlPt9K+7RL7tNGuQSaiLk/VcAIJSXKJZbCveRug1EW3S3JAorw==}
-    engines: {node: '>=18.x'}
-
   '@balancer-labs/balancer-maths@0.0.38':
     resolution: {integrity: sha512-J6qXOyAPnPBg9H3YqWC3geOZ2uMadQ5/cfqAMf3eMUi8W0mlWkkw37/ikBveWPIQEJwUUMLNGWnCRFv9m6VpdA==}
+    engines: {node: '>=18.x'}
+
+  '@balancer-labs/balancer-maths@0.0.40':
+    resolution: {integrity: sha512-oSd9ozJctBv6D/CjPZwCsGRerOHwIRjOciOnwxxNQUaSeFlbm8YSEAdDtQ8eggTmJ75pxEBHrl+rC4IpbgAWBg==}
     engines: {node: '>=18.x'}
 
   '@balancer/sdk@5.2.3':
@@ -9302,9 +9302,9 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@balancer-labs/balancer-maths@0.0.37': {}
-
   '@balancer-labs/balancer-maths@0.0.38': {}
+
+  '@balancer-labs/balancer-maths@0.0.40': {}
 
   '@balancer/sdk@5.2.3(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)':
     dependencies:
