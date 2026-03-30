@@ -1,7 +1,7 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PartnerVariant, PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { isProd } from '@repo/lib/config/app.config'
+import { isProd, isDev, isStaging } from '@repo/lib/config/app.config'
 
 export const ProjectConfigBalancer: ProjectConfig = {
   projectId: 'balancer',
@@ -53,7 +53,9 @@ export const ProjectConfigBalancer: ProjectConfig = {
   links: {
     appLinks: [
       { analyticsEvent: 'ClickNavVeBal', href: '/vebal', label: 'veBAL' },
-      { analyticsEvent: 'ClickNavLbp', href: '/lbp/create', label: 'LBP' },
+      ...(isDev || isStaging
+        ? [{ analyticsEvent: 'ClickNavLbp', href: '/lbp/create', label: 'LBP' }]
+        : []),
     ],
     ecosystemLinks: [
       { label: 'Pool creator', href: '/create' },

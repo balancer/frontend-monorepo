@@ -25,7 +25,8 @@ export function usePoolStats(pool: LbpV3) {
     pool.id as Address,
     isFixedLBP(pool)
   )
-  if (snapshotsAreLoading || metadataIsLoading) return emptyStats
+
+  if (snapshotsAreLoading || metadataIsLoading || snapshots.length === 0) return emptyStats
   const firstSnapshot = snapshots[0]
   const lastSnapshot = snapshots[snapshots.length - 1]
   const currentPrice = getCurrentPrice(snapshots)

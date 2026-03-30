@@ -22,6 +22,7 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
     launchTokenPriceUsd,
     isDynamicSale,
     isFixedSale,
+    isSeeded,
   } = useLbpForm()
   const { isMobile } = useBreakpoints()
   const { getToken } = useTokens()
@@ -55,13 +56,17 @@ export function LbpSummary({ transactionSteps }: { transactionSteps: Transaction
             customToken={launchToken}
             value={saleTokenAmount}
           />
-          <Divider p="0" />
-          <Text fontWeight="bold">Collateral token</Text>
-          <TokenRow
-            address={collateralTokenAddress as Address}
-            chain={selectedChain}
-            value={collateralTokenAmount}
-          />
+          {(isFixedSale || isSeeded) && (
+            <>
+              <Divider p="0" />
+              <Text fontWeight="bold">Collateral token</Text>
+              <TokenRow
+                address={collateralTokenAddress as Address}
+                chain={selectedChain}
+                value={collateralTokenAmount}
+              />
+            </>
+          )}
         </VStack>
       </Card>
       <Card variant="modalSubSection">

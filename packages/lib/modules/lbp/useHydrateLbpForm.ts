@@ -6,7 +6,13 @@ import { useQuery } from '@apollo/client/react'
 import { useReadContract, useReadContracts } from 'wagmi'
 import { Address, formatUnits } from 'viem'
 import { useEffect, useRef } from 'react'
-import { ProjectInfoForm, SaleStructureForm, UserActions, WeightAdjustmentType } from './lbp.types'
+import {
+  ProjectInfoForm,
+  SaleStructureForm,
+  SeedType,
+  UserActions,
+  WeightAdjustmentType,
+} from './lbp.types'
 import { PERCENTAGE_DECIMALS } from '../pool/actions/create/constants'
 import { toJsTimestamp, toISOString } from '@repo/lib/shared/utils/time'
 import { FixedPriceLBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/FixedPriceLBPoolAbi'
@@ -14,6 +20,7 @@ import { LBPoolAbi } from '@repo/lib/modules/web3/contracts/abi/LBPoolAbi'
 import {
   GetPoolDocument,
   GetPoolQuery,
+  GqlPoolLiquidityBootstrappingV3,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -193,7 +200,8 @@ export function useHydrateLbpForm() {
       staticSwapFeePercentage.result === undefined ||
       lbpImmutableData.result === undefined ||
       isProjectTokenSwapInBlocked.result === undefined ||
-      params.chain === undefined
+      params.chain === undefined ||
+      poolData === undefined
     ) {
       return
     }
@@ -231,6 +239,9 @@ export function useHydrateLbpForm() {
       collateralTokenAddress: reserveToken.result,
       saleTokenAmount: '',
       collateralTokenAmount: '',
+      seedType: (poolData.pool as GqlPoolLiquidityBootstrappingV3).isSeedless
+        ? SeedType.SEEDLESS
+        : SeedType.SEEDED,
       userActions,
       weightAdjustmentType,
       customStartWeight,

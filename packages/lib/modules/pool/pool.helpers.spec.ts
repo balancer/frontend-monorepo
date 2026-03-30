@@ -10,7 +10,13 @@ import {
   isStandardOrUnderlyingRootToken,
 } from './pool-tokens.utils'
 import { sDAIWeighted } from './__mocks__/pool-examples/flat'
-import { getPoolAddBlockedReason, shouldBlockAddLiquidity } from './pool.helpers'
+import { subDays } from 'date-fns'
+import {
+  getPoolAddBlockedReason,
+  shouldBlockAddLiquidity,
+  getPoolActivityDateCaption,
+  getPoolActivityTitle,
+} from './pool.helpers'
 import {
   stableSurgeBoosted,
   usdcUsdtAaveBoosted,
@@ -327,5 +333,48 @@ describe('shouldBlockAddLiquidity', () => {
 
     expect(shouldBlockAddLiquidity(pool)).toBe(true)
     expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+  })
+})
+
+describe('getPoolActivityTitle', () => {
+  it('returns singular labels for a single event', () => {
+    expect(getPoolActivityTitle('all', 1)).toBe('transaction')
+    expect(getPoolActivityTitle('adds', 1)).toBe('add')
+    expect(getPoolActivityTitle('removes', 1)).toBe('remove')
+    expect(getPoolActivityTitle('swaps', 1)).toBe('swap')
+  })
+
+  it('returns plural labels for multiple events', () => {
+    expect(getPoolActivityTitle('all', 2)).toBe('transactions')
+    expect(getPoolActivityTitle('adds', 2)).toBe('adds')
+    expect(getPoolActivityTitle('removes', 2)).toBe('removes')
+    expect(getPoolActivityTitle('swaps', 2)).toBe('swaps')
+  })
+
+  it('returns an empty label when there is no active tab', () => {
+    expect(getPoolActivityTitle(undefined, 0)).toBe('')
+  })
+})
+
+// Helper: converts "N days ago" → Unix timestamp in seconds
+function daysAgo(n: number): number {
+  return Math.floor(subDays(new Date(), n).getTime() / 1000)
+}
+
+describe('getPoolActivityDateCaption', () => {
+  it('returns "today" when activity is from today (0 days ago)', () => {
+    expect(getPoolActivityDateCaption(daysAgo(0))).toBe('today')
+  })
+
+  it('returns "since yesterday" for activity from 1 day ago', () => {
+    expect(getPoolActivityDateCaption(daysAgo(1))).toBe('since yesterday')
+  })
+
+  it('returns "in last 2 days" for activity from 2 days ago', () => {
+    expect(getPoolActivityDateCaption(daysAgo(2))).toBe('in last 2 days')
+  })
+
+  it('returns "in last 7 days" for activity from a week ago', () => {
+    expect(getPoolActivityDateCaption(daysAgo(7))).toBe('in last 7 days')
   })
 })

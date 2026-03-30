@@ -8,8 +8,8 @@ import { usePool } from '../../PoolProvider'
 import { GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
+import { getPoolActivityDateCaption, getPoolActivityTitle } from '../../pool.helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { differenceInCalendarDays } from 'date-fns'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import {
@@ -58,14 +58,6 @@ function usePoolActivityLogic() {
   const isAllOrSwaps = activeTab?.value === 'all' || activeTab?.value === 'swaps'
   const isAllOrAdds = activeTab?.value === 'all' || activeTab?.value === 'adds'
   const isAllOrRemoves = activeTab?.value === 'all' || activeTab?.value === 'removes'
-
-  const getTitle = useCallback(() => {
-    if (activeTab?.value === 'all') {
-      return 'transactions'
-    }
-
-    return activeTab?.value ?? ''
-  }, [activeTab?.value])
 
   const { loading, data: response } = usePoolEvents({
     poolId: poolId as string,
@@ -233,13 +225,13 @@ function usePoolActivityLogic() {
   }, [poolEvents, pagination])
 
   const getDateCaption = useCallback(() => {
-    const diffInDays = differenceInCalendarDays(new Date(), minDate * 1000)
-    return diffInDays > 0 ? `in last ${diffInDays} days` : 'today'
+    return getPoolActivityDateCaption(minDate)
   }, [minDate])
 
   const transactionsLabel = useMemo(() => {
-    return `${fNum('integer', poolEvents.length)} ${getTitle()} ${getDateCaption()}`
-  }, [poolEvents, getTitle, getDateCaption])
+    const title = getPoolActivityTitle(activeTab?.value, poolEvents.length)
+    return `${fNum('integer', poolEvents.length)} ${title} ${getDateCaption()}`
+  }, [activeTab?.value, poolEvents, getDateCaption])
 
   return {
     isLoading: loading,
@@ -266,7 +258,6 @@ function usePoolActivityLogic() {
     setSortingBy,
     setActiveTab,
     setIsExpanded,
-    getTitle,
     getDateCaption,
     setPagination,
     sortPoolEvents,
