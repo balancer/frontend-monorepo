@@ -370,7 +370,7 @@ export default function PoolMyLiquidity() {
                               address={nestedPoolToken.address as Address}
                               chain={chain}
                               iconSize={35}
-                              isNestedPoolToken
+                              isNestedToken
                               key={`nested-pool-${nestedPoolToken.address}`}
                               showZeroAmountAsDash
                               value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}

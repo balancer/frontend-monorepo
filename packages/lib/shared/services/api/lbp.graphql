@@ -15,6 +15,7 @@ fragment LbpV3CommonMetadataFields on GqlPoolLiquidityBootstrappingV3 {
   projectTokenStartWeight
   reserveToken
   reserveTokenIndex
+  reserveTokenVirtualBalance
   startTime
   telegram
   isSeedless
