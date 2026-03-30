@@ -108,6 +108,10 @@ export function isV3LBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
   return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
 }
 
+export function isDynamicLBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
+  return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
+}
+
 export function isWeighted(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.Weighted
 }
