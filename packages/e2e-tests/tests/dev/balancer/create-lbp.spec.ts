@@ -1,5 +1,5 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { clickButton, button, checkbox } from '@/helpers/user.helpers'
+import { clickButton, button, clickRadio, checkbox } from '@/helpers/user.helpers'
 import { expect, test, type Page } from '@playwright/test'
 import { defaultAnvilAccount, forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { oneDayInMs, oneWeekInMs, toISOString } from '@repo/lib/shared/utils/time'
@@ -48,7 +48,11 @@ async function doSaleStructureStep(page: Page, { continue: shouldContinue = fals
   await dateInputs.first().fill(toISOString(Date.now() + oneDayInMs).slice(0, 16))
   await dateInputs.last().fill(toISOString(Date.now() + oneWeekInMs).slice(0, 16))
 
-  await expect(page.getByRole('heading', { name: 'Seed initial pool liquidity' })).toBeVisible()
+  await clickRadio(page, 'Seed type', 'Yes — seeded LBP')
+
+  await expect(
+    page.getByRole('heading', { name: 'Sale token amount and collateral balance' }),
+  ).toBeVisible()
 
   const nextButton = button(page, 'Next')
 

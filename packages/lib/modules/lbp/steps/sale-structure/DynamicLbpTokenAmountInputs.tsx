@@ -14,12 +14,14 @@ import { format, parseISO } from 'date-fns'
 import { isSaleStartValid, saleStartsSoon } from './helpers'
 import { SaleTokenAmountInput } from './SaleTokenAmountInput'
 import { formatUnits } from 'viem'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function DynamicLbpTokenAmountInputs() {
   const { getToken } = useTokens()
   const {
     launchToken,
     saleStructureForm: { control },
+    isSeedless,
   } = useLbpForm()
   useFormState({ control })
   const [collateralTokenAddress, selectedChain, startDateTime] = useWatch({
@@ -35,12 +37,20 @@ export function DynamicLbpTokenAmountInputs() {
         <TokenBalancesProvider extTokens={[collateralToken]}>
           <VStack align="start" spacing="md" w="full">
             <Heading color="font.maxContrast" size="md">
-              Seed initial pool liquidity
+              {`Sale token amount and ${isSeedless ? 'virtual' : ''} collateral balance`}
             </Heading>
             <Text color="font.secondary" fontSize="sm">
-              The initial seed amounts and their ratio set the starting price, projected market cap
-              and price curve. The stats and charts in the preview show the impact of your choices.
+              The starting liquidity in the pool. The amounts and ratio will determine the starting
+              price, projected market cap and price curve.
             </Text>
+
+            {isSeedless && (
+              <BalAlert
+                content="Seedless LBP: Just the sale token, no collateral needed"
+                status="info"
+              />
+            )}
+
             {saleStart && isSaleStartValid(saleStart) && (
               <Alert
                 status={saleStartsSoon(saleStart) ? 'warning' : 'info'}
@@ -91,6 +101,7 @@ function CollateralTokenAmountInput({
 }) {
   const {
     saleStructureForm: { clearErrors },
+    isSeedless,
   } = useLbpForm()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const balance = balanceFor(collateralTokenAddress)
@@ -103,7 +114,7 @@ function CollateralTokenAmountInput({
     }
 
     // TODO: do we need this? TokenInput alread has 'Exceeds balance'
-    if (bn(formatUnits(balance.amount, balance.decimals)).lt(value)) {
+    if (bn(formatUnits(balance.amount || 0n, balance.decimals || 0)).lt(value)) {
       return `Your wallet does not have enough ${collateralTokenSymbol}`
     }
 
@@ -113,7 +124,7 @@ function CollateralTokenAmountInput({
   return (
     <VStack align="start" data-group w="full">
       <Text as="label" color="font.primary" htmlFor="collateral-token-amount">
-        Collateral token
+        {isSeedless ? 'Virtual paired token initial balance' : 'Collateral token'}
       </Text>
       <Controller
         control={control}
@@ -123,6 +134,8 @@ function CollateralTokenAmountInput({
             <TokenInput
               address={collateralTokenAddress}
               chain={selectedChain}
+              customUserBalance={isSeedless ? bn(Infinity) : undefined}
+              disableBalanceValidation={isSeedless}
               id="collateral-token-amount"
               onChange={e => {
                 field.onChange(e.currentTarget.value)
@@ -149,7 +162,10 @@ function CollateralTokenAmountInput({
         }}
       />
       <Text color="font.secondary" fontSize="sm">
-        Add $5k+ of the collateral token to ensure a smooth start.
+        {isSeedless
+          ? `The virtual paired token balance here is used to set initial price and potential
+          sale token market cap. You don't need to add any of this.`
+          : 'Add $5k+ of the collateral token to ensure a smooth start.'}
       </Text>
     </VStack>
   )

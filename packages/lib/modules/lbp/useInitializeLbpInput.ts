@@ -8,7 +8,7 @@ import { useWatch } from 'react-hook-form'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useInitializeLbpInput() {
-  const { saleStructureForm, isCollateralNativeAsset, isFixedSale } = useLbpForm()
+  const { saleStructureForm, isCollateralNativeAsset, isFixedSale, isSeeded } = useLbpForm()
   const [
     selectedChain,
     collateralTokenAddress,
@@ -71,7 +71,8 @@ export function useInitializeLbpInput() {
     symbol: reserveTokenSymbol,
   }
 
-  const amountsIn = [reserveTokenAmountIn, launchTokenAmountIn]
+  const amountsIn =
+    isFixedSale || isSeeded ? [reserveTokenAmountIn, launchTokenAmountIn] : [launchTokenAmountIn]
 
   return { amountsIn, minBptAmountOut, chainId, wethIsEth }
 }
