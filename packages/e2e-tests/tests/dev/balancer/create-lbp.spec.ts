@@ -112,10 +112,6 @@ test.describe('Create LBP page', () => {
     await mockCreateLbpMetadata(page)
     await page.goto(BASE_URL)
     await impersonate(page, defaultAnvilAccount)
-    await forkClient.setBalance({
-      address: defaultAnvilAccount,
-      value: BigInt('1000000000000000000000'),
-    })
   })
 
   test('can complete all steps', async ({ page }) => {
