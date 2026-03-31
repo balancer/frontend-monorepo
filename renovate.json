@@ -145,12 +145,6 @@
       "enabled": false
     },
     {
-      "description": "Block Stylelint major upgrades until we are ready to migrate the style linting stack.",
-      "matchPackageNames": ["stylelint", "stylelint-**"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
-    {
       "description": "Block zod v4 until we are ready for that migration.",
       "matchPackageNames": ["zod"],
       "matchUpdateTypes": ["major"],
