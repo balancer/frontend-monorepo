@@ -406,8 +406,8 @@ importers:
         specifier: 9.39.4
         version: 9.39.4
       '@next/eslint-plugin-next':
-        specifier: 16.2.1
-        version: 16.2.1
+        specifier: 16.0.2
+        version: 16.0.2
       '@repo/prettier-config':
         specifier: workspace:*
         version: link:../prettier-config
@@ -2738,11 +2738,9 @@ packages:
 
   '@metamask/sdk-analytics@0.0.5':
     resolution: {integrity: sha512-fDah+keS1RjSUlC8GmYXvx6Y26s3Ax1U9hGpWb6GSY5SAdmTSIqp2CvYy6yW0WgLhnYhW+6xERuD0eVqV63QIQ==}
-    deprecated: No longer maintained, superseded by @metamask/connect-analytics
 
   '@metamask/sdk-communication-layer@0.33.1':
     resolution: {integrity: sha512-0bI9hkysxcfbZ/lk0T2+aKVo1j0ynQVTuB3sJ5ssPWlz+Z3VwveCkP1O7EVu1tsVVCb0YV5WxK9zmURu2FIiaA==}
-    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
     peerDependencies:
       cross-fetch: ^4.0.0
       eciesjs: '*'
@@ -2752,11 +2750,9 @@ packages:
 
   '@metamask/sdk-install-modal-web@0.32.1':
     resolution: {integrity: sha512-MGmAo6qSjf1tuYXhCu2EZLftq+DSt5Z7fsIKr2P+lDgdTPWgLfZB1tJKzNcwKKOdf6q9Qmmxn7lJuI/gq5LrKw==}
-    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
 
   '@metamask/sdk@0.33.1':
     resolution: {integrity: sha512-1mcOQVGr9rSrVcbKPNVzbZ8eCl1K0FATsYH3WJ/MH4WcZDWGECWrXJPNMZoEAkLxWiMe8jOQBumg2pmcDa9zpQ==}
-    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
 
   '@metamask/superstruct@3.2.1':
     resolution: {integrity: sha512-fLgJnDOXFmuVlB38rUN5SmU7hAFQcCjrg3Vrxz67KTY7YHFnSNEKvX4avmEBdOI0yTCxZjwMCFEqsC8k2+Wd3g==}
@@ -2781,8 +2777,8 @@ packages:
   '@next/env@16.1.7':
     resolution: {integrity: sha512-rJJbIdJB/RQr2F1nylZr/PJzamvNNhfr3brdKP6s/GW850jbtR70QlSfFselvIBbcPUOlQwBakexjFzqLzF6pg==}
 
-  '@next/eslint-plugin-next@16.2.1':
-    resolution: {integrity: sha512-r0epZGo24eT4g08jJlg2OEryBphXqO8aL18oajoTKLzHJ6jVr6P6FI58DLMug04MwD3j8Fj0YK0slyzneKVyzA==}
+  '@next/eslint-plugin-next@16.0.2':
+    resolution: {integrity: sha512-xYPCH5pE0QOhQ9AFM4itZgO3YtZz/0/h37L0cbZ2a3s/ePVN9VsZqpDYaZvxH33Vejp//fdvE1Iv8Ra6DUqjjA==}
 
   '@next/swc-darwin-arm64@16.1.7':
     resolution: {integrity: sha512-b2wWIE8sABdyafc4IM8r5Y/dS6kD80JRtOGrUiKTsACFQfWWgUQ2NwoUX1yjFMXVsAwcQeNpnucF2ZrujsBBPg==}
@@ -11300,7 +11296,7 @@ snapshots:
 
   '@next/env@16.1.7': {}
 
-  '@next/eslint-plugin-next@16.2.1':
+  '@next/eslint-plugin-next@16.0.2':
     dependencies:
       fast-glob: 3.3.1
 
