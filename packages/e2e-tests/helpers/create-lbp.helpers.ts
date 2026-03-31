@@ -12,15 +12,28 @@ export type LbpConfig = {
   }
 }
 
-const saleToken = {
-  address: '0xba100000625a3754423978a60c9317c58a424e3d',
-  symbol: 'BAL',
-}
-
 export const LBP_CONFIGS: LbpConfig[] = [
-  { saleType: 'seedless', saleToken },
-  { saleType: 'seeded', saleToken },
-  { saleType: 'fixed-price', saleToken },
+  {
+    saleType: 'seedless',
+    saleToken: {
+      address: '0xba100000625a3754423978a60c9317c58a424e3d',
+      symbol: 'BAL',
+    },
+  },
+  {
+    saleType: 'seeded',
+    saleToken: {
+      address: '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9',
+      symbol: 'AAVE',
+    },
+  },
+  {
+    saleType: 'fixed-price',
+    saleToken: {
+      address: '0xc3d21f79c3120a4ffda7a535f8005a7c297799bf',
+      symbol: 'TERM',
+    },
+  },
 ]
 
 export const BASE_URL = 'http://localhost:3000/lbp/create'
