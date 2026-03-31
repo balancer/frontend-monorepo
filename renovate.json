@@ -60,6 +60,11 @@
       ]
     },
     {
+      "description": "Keep Sentry packages in sync.",
+      "groupName": "Sentry",
+      "matchPackageNames": ["@sentry/**"]
+    },
+    {
       "description": "Low-risk, high-frequency — consolidate to reduce noise.",
       "groupName": "@types packages",
       "matchPackageNames": ["@types/**"]
@@ -99,7 +104,8 @@
         "!@vitest/**",
         "!stylelint",
         "!stylelint-**",
-        "!zod"
+        "!zod",
+        "!@sentry/**"
       ]
     },
     {
