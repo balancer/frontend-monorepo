@@ -152,7 +152,7 @@ export function AddLiquidityFormTabs({
     }
 
     if (surging) {
-      return `Flexible adds are disabled when a pool with stable surge hook is surging`
+      return 'Flexible adds are disabled when a pool with stable surge hook is surging'
     }
 
     return
