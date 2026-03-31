@@ -65,9 +65,21 @@
       "matchPackageNames": ["@sentry/**"]
     },
     {
+      "description": "Keep Next.js packages aligned.",
+      "groupName": "Next ecosystem",
+      "matchPackageNames": [
+        "next",
+        "@next/**",
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ]
+    },
+    {
       "description": "Low-risk, high-frequency — consolidate to reduce noise.",
       "groupName": "@types packages",
-      "matchPackageNames": ["@types/**"]
+      "matchPackageNames": ["@types/**", "!@types/react", "!@types/react-dom"]
     },
     {
       "description": "Consolidate workflow action bumps",
@@ -105,7 +117,9 @@
         "!stylelint",
         "!stylelint-**",
         "!zod",
-        "!@sentry/**"
+        "!@sentry/**",
+        "!next",
+        "!@next/**"
       ]
     },
     {
