@@ -23,11 +23,17 @@ export const LBP_CONFIGS: LbpConfig[] = [
   {
     saleType: 'seeded',
     saleToken: {
+      address: '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9',
+      symbol: 'AAVE',
+    },
+  },
+  {
+    saleType: 'fixed-price',
+    saleToken: {
       address: '0xc3d21f79c3120a4ffda7a535f8005a7c297799bf',
       symbol: 'TERM',
     },
   },
-  // TODO: fixed-price
 ]
 
 export const BASE_URL = 'http://localhost:3000/lbp/create'
@@ -70,6 +76,11 @@ export async function doSaleStructureStep(
   await expect(page).toHaveURL(stepUrl(0))
 
   await expect(page.getByText('Launch token details')).toBeVisible()
+
+  if (lbpConfig.saleType === 'fixed-price') {
+    await page.getByText('Fixed price LBP', { exact: true }).click()
+  }
+
   const launchTokenInput = page.getByPlaceholder('Enter token address')
   await expect(launchTokenInput).toBeEmpty()
   await launchTokenInput.fill(lbpConfig.saleToken.address)
@@ -83,6 +94,7 @@ export async function doSaleStructureStep(
     await expect(
       page.getByRole('heading', { name: 'Sale token amount and virtual collateral balance' }),
     ).toBeVisible()
+    await page.getByLabel('Sale token').fill('100')
     await page.getByLabel('Virtual paired token initial balance').fill('1')
   }
 
@@ -91,10 +103,22 @@ export async function doSaleStructureStep(
     await expect(
       page.getByRole('heading', { name: 'Sale token amount and collateral balance' }),
     ).toBeVisible()
+    await page.getByLabel('Sale token').fill('100')
     await page.getByLabel('Collateral token').fill('1')
   }
 
-  await page.getByLabel('Sale token').fill('100')
+  if (lbpConfig.saleType === 'fixed-price') {
+    // Select USDC as the paired token
+    const tokenSelect = page.locator('#token-select')
+    await tokenSelect.click()
+    await page.locator('[id^="react-select"]').getByText('USDC', { exact: true }).click()
+
+    await expect(page.getByRole('heading', { name: 'Sale configuration' })).toBeVisible()
+    await page
+      .getByLabel(`${lbpConfig.saleToken.symbol} token sale price (against USDC)`)
+      .fill('100')
+    await page.getByLabel('How many tokens do you want to sell in this sale?').fill('100')
+  }
 
   const nextButton = button(page, 'Next')
   await expect(nextButton).toBeEnabled()
@@ -134,7 +158,14 @@ export async function doReviewStep(page: Page, { lbpConfig }: { lbpConfig: LbpCo
     await clickButton(page, 'Approve WETH')
     await clickButton(page, `Approve ${lbpConfig.saleToken.symbol}`)
     await clickButton(page, `Sign approvals: WETH, ${lbpConfig.saleToken.symbol}`)
-  } else if (lbpConfig.saleType === 'seedless') {
+  }
+
+  if (lbpConfig.saleType === 'seedless') {
+    await clickButton(page, `Approve ${lbpConfig.saleToken.symbol}`)
+    await clickButton(page, `Sign permit: ${lbpConfig.saleToken.symbol}`)
+  }
+
+  if (lbpConfig.saleType === 'fixed-price') {
     await clickButton(page, `Approve ${lbpConfig.saleToken.symbol}`)
     await clickButton(page, `Sign permit: ${lbpConfig.saleToken.symbol}`)
   }
