@@ -14,15 +14,26 @@ import {
   BASE_URL,
   LBP_CONFIGS,
 } from '@/helpers/create-lbp.helpers'
+import { forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
-test.describe('Create LBP page', () => {
+test.describe('LBP creation page', () => {
   test.beforeEach(async ({ page }) => {
     await mockCreateLbpMetadata(page)
     await page.goto(BASE_URL)
     await impersonate(page, defaultAnvilAccount)
   })
 
-  test.describe('create each sale type', () => {
+  test.describe('Create each sale type', () => {
+    let snapshotId: `0x${string}`
+
+    test.beforeEach(async () => {
+      snapshotId = await forkClient.snapshot()
+    })
+
+    test.afterEach(async () => {
+      await forkClient.revert({ id: snapshotId })
+    })
+
     for (const lbpConfig of LBP_CONFIGS) {
       test(lbpConfig.saleType, async ({ page }) => {
         await doSaleStructureStep(page, { lbpConfig, continue: true })
@@ -32,36 +43,38 @@ test.describe('Create LBP page', () => {
     }
   })
 
-  test('shows validation errors when required fields are missing', async ({ page }) => {
-    await expect(page).toHaveURL(stepUrl(0))
+  test.describe('Form validations', () => {
+    test('blocks sale period shorter than 24 hours', async ({ page }) => {
+      await doSaleStructureStep(page)
 
-    await clickButton(page, 'Next')
+      const dateInputs = page.locator('input[type="datetime-local"]')
+      const invalidEndTime = toISOString(Date.now() + oneDayInMs + 60 * 60 * 1000).slice(0, 16)
+      await dateInputs.last().fill(invalidEndTime)
 
-    await expect(page.getByText('Token address is required')).toBeVisible()
-    await expect(page.getByText('Start date and time is required')).toBeVisible()
-    await expect(page.getByText('End date and time is required')).toBeVisible()
-    await expect(page.getByText('Sale token amount is required')).toBeVisible()
-    await expect(page.getByText('Collateral token amount is required')).toBeVisible()
-    await expect(page).toHaveURL(stepUrl(0))
+      await clickButton(page, 'Next')
+
+      await expect(
+        page.getByText('End time must be at least 24 hours after start time'),
+      ).toBeVisible()
+      await expect(page).toHaveURL(stepUrl(0))
+    })
+
+    test('shows validation errors when required fields are missing', async ({ page }) => {
+      await expect(page).toHaveURL(stepUrl(0))
+
+      await clickButton(page, 'Next')
+
+      await expect(page.getByText('Token address is required')).toBeVisible()
+      await expect(page.getByText('Start date and time is required')).toBeVisible()
+      await expect(page.getByText('End date and time is required')).toBeVisible()
+      await expect(page.getByText('Sale token amount is required')).toBeVisible()
+      await expect(page.getByText('Collateral token amount is required')).toBeVisible()
+      await expect(page).toHaveURL(stepUrl(0))
+    })
   })
 
-  test('blocks sale period shorter than 24 hours', async ({ page }) => {
-    await doSaleStructureStep(page)
-
-    const dateInputs = page.locator('input[type="datetime-local"]')
-    const invalidEndTime = toISOString(Date.now() + oneDayInMs + 60 * 60 * 1000).slice(0, 16)
-    await dateInputs.last().fill(invalidEndTime)
-
-    await clickButton(page, 'Next')
-
-    await expect(
-      page.getByText('End time must be at least 24 hours after start time'),
-    ).toBeVisible()
-    await expect(page).toHaveURL(stepUrl(0))
-  })
-
-  test.describe('Form reset', () => {
-    test('sale structure step', async ({ page }) => {
+  test.describe('Form reset at each step', () => {
+    test('sale structure', async ({ page }) => {
       await doSaleStructureStep(page)
       await clickButton(page, 'Next')
 
@@ -69,7 +82,7 @@ test.describe('Create LBP page', () => {
       await expectInitialFormState(page)
     })
 
-    test('project info step', async ({ page }) => {
+    test('project info', async ({ page }) => {
       await doSaleStructureStep(page, { continue: true })
       await doProjectInfoStep(page)
 
@@ -77,11 +90,10 @@ test.describe('Create LBP page', () => {
       await expectInitialFormState(page)
     })
 
-    test('review step', async ({ page }) => {
+    test('review', async ({ page }) => {
       await doSaleStructureStep(page, { continue: true })
       await doProjectInfoStep(page, { continue: true })
 
-      await expect(page).toHaveURL(stepUrl(2))
       await clickResetAndConfirm(page)
       await expectInitialFormState(page)
     })
