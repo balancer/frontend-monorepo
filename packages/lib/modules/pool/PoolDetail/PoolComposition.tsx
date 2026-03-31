@@ -43,7 +43,7 @@ type CardContentProps = {
 
 function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentProps) {
   const { toCurrency } = useCurrency()
-  const { poolTokensWithActualWeights } = useGetPoolTokensWithActualWeights()
+  const { poolTokensWithActualWeights } = useGetPoolTokensWithActualWeights(pool)
   const { priceFor } = useTokens()
   const isSeedlessLBP = isDynamicLBP(pool) && pool.isSeedless
   let virtualAmount = '0'

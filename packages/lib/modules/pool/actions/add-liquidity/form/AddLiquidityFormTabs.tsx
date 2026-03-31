@@ -33,12 +33,13 @@ import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetE
 import { usePoolTokenPriceWarnings } from '../../../usePoolTokenPriceWarnings'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { MinimumDepositErrorsAlert } from '../MinimumDepositErrorsAlert'
+import { useStableSurgeMetrics } from '@repo/lib/modules/hooks/stable-surge/useStableSurgeMetrics'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 function PoolWeightsInfo() {
   const { pool } = usePool()
-  const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
+  const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights(pool)
   const { isAnyTokenWithoutPrice, addLiquidityWarning } = usePoolTokenPriceWarnings(pool)
 
   if (isAnyTokenWithoutPrice) {
@@ -128,6 +129,7 @@ export function AddLiquidityFormTabs({
   const { isLoading, pool } = usePool()
   const { toCurrency } = useCurrency()
   const { poolIsInRange } = useGetECLPLiquidityProfile()
+  const { surging } = useStableSurgeMetrics(pool)
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
@@ -139,7 +141,7 @@ export function AddLiquidityFormTabs({
 
   const isOutOfRange = isGyroEPool(pool) && !poolIsInRange
 
-  const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
+  const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold || surging
 
   function getFlexibleTabTooltipLabel(): string | undefined {
     if (requiresProportionalInput(pool)) {
@@ -148,6 +150,11 @@ export function AddLiquidityFormTabs({
     if (isBelowMinTvlThreshold) {
       return `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
     }
+
+    if (surging) {
+      return `Flexible adds are disabled when a pool with stable surge hook is surging`
+    }
+
     return
   }
 
