@@ -72,8 +72,8 @@
   box-shadow: var(--chakra-shadows-md);
   border-radius: var(--chakra-radii-lg);
   letter-spacing: -0.02em;
-  overflow: 'hidden';
-  white-space: 'nowrap';
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .btn-popover:hover {
