@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "4.1.5",
-    "@balancer-labs/balancer-maths": "0.0.37",
+    "@balancer-labs/balancer-maths": "0.0.40",
     "@balancer/sdk": "5.2.3",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
@@ -75,7 +75,7 @@
     "react-virtuoso": "4.12.7",
     "tinycolor2": "^1.6.0",
     "use-debounce": "10.1.0",
-    "use-sound": "^4.0.1",
+    "use-sound": "4.0.4",
     "usehooks-ts": "3.1.1",
     "viem": "2.46.2",
     "wagmi": "3.5.0",
@@ -115,7 +115,7 @@
     "cross-fetch": "4.1.0",
     "eslint": "9.39.4",
     "lokijs": "1.5.12",
-    "msw": "2.12.13",
+    "msw": "2.12.14",
     "sentry-testkit": "6.3.1"
   }
 }

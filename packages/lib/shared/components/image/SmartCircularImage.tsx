@@ -118,39 +118,44 @@ export function SmartCircularImage({
     boxSize: `${size}px`,
     position: 'relative' as const,
     border,
+    p: border ? 1 : 0,
   }
 
   if (isCircular) {
     // For circular images: preserve full image
     return (
       <Box {...containerProps} bg="transparent" overflow="visible">
-        <NextImage
-          alt={alt || 'unknown'}
-          fill
-          sizes={`${size}px`}
-          src={src}
-          style={{
-            objectFit: 'cover',
-          }}
-          {...imageProps}
-        />
+        <Box height="100%" position="relative" width="100%">
+          <NextImage
+            alt={alt || 'unknown'}
+            fill
+            sizes={`${size}px`}
+            src={src}
+            style={{
+              objectFit: 'cover',
+            }}
+            {...imageProps}
+          />
+        </Box>
       </Box>
     )
   } else {
     // For square images: apply circular mask
     return (
       <Box {...containerProps} overflow="hidden">
-        <NextImage
-          alt={alt || 'unknown'}
-          fill
-          sizes={`${size}px`}
-          src={src}
-          style={{
-            objectFit: 'contain',
-            borderRadius: '50%',
-          }}
-          {...imageProps}
-        />
+        <Box height="100%" position="relative" width="100%">
+          <NextImage
+            alt={alt || 'unknown'}
+            fill
+            sizes={`${size}px`}
+            src={src}
+            style={{
+              objectFit: 'contain',
+              borderRadius: '50%',
+            }}
+            {...imageProps}
+          />
+        </Box>
       </Box>
     )
   }

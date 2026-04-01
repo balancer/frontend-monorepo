@@ -4,12 +4,12 @@
   "schedule": ["before 6am on Monday"],
   "timezone": "UTC",
   "labels": ["dependencies"],
-  "minimumReleaseAge": "30 days",
   "prConcurrentLimit": 5,
   "automerge": false,
 
   "ignoreDeps": [
-    "strip-ansi",
+    "viem",
+    "@balancer/sdk",
     "color-convert",
     "color-name",
     "is-core-module",
@@ -19,9 +19,12 @@
 
   "packageRules": [
     {
-      "description": "To avoid problems keep viem version matched with balancer sdk",
-      "groupName": "balancer sdk / viem",
-      "matchPackageNames": ["viem", "@balancer/sdk"]
+      "matchUpdateTypes": ["minor"],
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "minimumReleaseAge": "14 days"
     },
     {
       "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
@@ -56,9 +59,26 @@
       ]
     },
     {
+      "description": "Keep Sentry packages in sync.",
+      "groupName": "Sentry",
+      "matchPackageNames": ["@sentry/**"]
+    },
+    {
+      "description": "Keep Next.js packages aligned.",
+      "groupName": "Next ecosystem",
+      "matchPackageNames": [
+        "next",
+        "@next/**",
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ]
+    },
+    {
       "description": "Low-risk, high-frequency — consolidate to reduce noise.",
       "groupName": "@types packages",
-      "matchPackageNames": ["@types/**"]
+      "matchPackageNames": ["@types/**", "!@types/react", "!@types/react-dom"]
     },
     {
       "description": "Consolidate workflow action bumps",
@@ -69,7 +89,37 @@
       "description": "Group remaining npm devDependencies that are not already covered by more specific package groups.",
       "groupName": "Other devDependencies",
       "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"]
+      "matchDepTypes": ["devDependencies"],
+      "matchPackageNames": [
+        "*",
+        "!@emotion/react",
+        "!@emotion/styled",
+        "!@chakra-ui/**",
+        "!graphql",
+        "!graphql-request",
+        "!graphql-tag",
+        "!@apollo/client",
+        "!@apollo/client-integration-nextjs",
+        "!@graphql-typed-document-node/core",
+        "!@graphql-codegen/**",
+        "!eslint",
+        "!@eslint/**",
+        "!@typescript-eslint/**",
+        "!typescript-eslint",
+        "!eslint-config-**",
+        "!eslint-plugin-**",
+        "!@types/**",
+        "!framer-motion",
+        "!chakra-react-select",
+        "!vitest",
+        "!@vitest/**",
+        "!stylelint",
+        "!stylelint-**",
+        "!zod",
+        "!@sentry/**",
+        "!next",
+        "!@next/**"
+      ]
     },
     {
       "description": "Flag major bumps for manual review.",
@@ -117,12 +167,6 @@
     {
       "description": "Block Vitest v4 until we are ready to migrate the test tooling.",
       "matchPackageNames": ["vitest", "@vitest/**"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    },
-    {
-      "description": "Block Stylelint major upgrades until we are ready to migrate the style linting stack.",
-      "matchPackageNames": ["stylelint", "stylelint-**"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },

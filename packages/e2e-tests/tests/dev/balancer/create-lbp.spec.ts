@@ -1,7 +1,7 @@
 import { impersonate } from '@/helpers/e2e.helpers'
-import { clickButton, button, clickRadio } from '@/helpers/user.helpers'
+import { clickButton, button, clickRadio, checkbox } from '@/helpers/user.helpers'
 import { expect, test, type Page } from '@playwright/test'
-import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { defaultAnvilAccount, forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { oneDayInMs, oneWeekInMs, toISOString } from '@repo/lib/shared/utils/time'
 import { LBP_FORM_STEPS } from '@repo/lib/modules/lbp/constants.lbp'
 
@@ -77,7 +77,12 @@ async function doProjectInfoStep(page: Page, { continue: shouldContinue = false 
     .getByLabel('Token icon URL')
     .fill('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png')
 
-  await page.getByRole('checkbox').check({ force: true })
+  const disclaimerCheckbox = await checkbox(
+    page,
+    'I accept the Risks and Terms of Use for creating an LBP',
+  )
+
+  await disclaimerCheckbox.click()
 
   if (shouldContinue) await nextButton.click()
 }

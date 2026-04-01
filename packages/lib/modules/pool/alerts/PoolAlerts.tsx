@@ -1,6 +1,6 @@
 'use client'
 
-import { Text, VStack, Link, HStack } from '@chakra-ui/react'
+import { Text, VStack, Link, HStack, Box } from '@chakra-ui/react'
 import { usePool } from '../PoolProvider'
 import { usePoolAlerts } from './usePoolAlerts'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
@@ -10,16 +10,26 @@ import { getChainId, getChainName } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../migrations/MigrationAlert'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isChainDeprecated } from '../../chains/chain.utils'
+import { useStableSurgeMetrics } from '../../hooks/stable-surge/useStableSurgeMetrics'
+import { ArrowUpRight } from 'react-feather'
+import { isEmpty } from '@repo/lib/shared/utils/array'
 
 export function PoolAlerts() {
   const { pool } = usePool()
   const { poolAlerts, dismissAlert } = usePoolAlerts(pool)
   const { needsMigration } = usePoolMigrations()
+  const { surging } = useStableSurgeMetrics(pool)
 
   const affectedByV2Exploit = pool.protocolVersion === 2 && isComposableStablePool(pool)
   const chainDeprecated = isChainDeprecated(pool.chain)
 
-  if (poolAlerts.length === 0 && !needsMigration && !affectedByV2Exploit && !chainDeprecated) {
+  if (
+    isEmpty(poolAlerts) &&
+    !needsMigration &&
+    !affectedByV2Exploit &&
+    !chainDeprecated &&
+    !surging
+  ) {
     return null
   }
 
@@ -45,6 +55,8 @@ export function PoolAlerts() {
       {needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id) && (
         <MigrationAlert pool={pool} />
       )}
+
+      {surging && <PoolSurgingWarning />}
     </VStack>
   )
 }
@@ -101,5 +113,32 @@ function DeprecatedChainWarningContent({ chain }: { chain: GqlChain }) {
         Learn more
       </Link>
     </HStack>
+  )
+}
+
+function PoolSurgingWarning() {
+  return (
+    <BalAlert
+      content={
+        <Text color="font.dark" position="relative" top="2px">
+          This pool with a stable surge hook is surging (flexible adds are disabled).{' '}
+          <Link
+            alignItems="center"
+            color="black"
+            display="inline-flex"
+            href="https://docs.balancer.fi/concepts/explore-available-balancer-pools/stable-pool/stable-surge-pool.html"
+            isExternal
+          >
+            <Box as="span" textDecoration="underline">
+              Learn more
+            </Box>
+            <Box as="span" ml={0.5}>
+              <ArrowUpRight size={12} />
+            </Box>
+          </Link>
+        </Text>
+      }
+      status="warning"
+    />
   )
 }

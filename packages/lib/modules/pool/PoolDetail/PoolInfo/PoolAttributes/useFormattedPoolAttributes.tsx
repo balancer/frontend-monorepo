@@ -9,6 +9,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import {
   isBoosted,
   isCowAmmPool,
+  isDynamicLBP,
   isQuantAmmPool,
   isStable,
   isV2Pool,
@@ -32,6 +33,10 @@ type FormattedPoolAttributes = {
 function getPoolTypeText(pool: Pool) {
   if (isBoosted(pool)) {
     return 'Boosted'
+  }
+
+  if (isDynamicLBP(pool)) {
+    return `Dynamic Liquidity Bootstrapping Pool (${pool.isSeedless ? 'seedless' : 'seeded'})`
   }
 
   return getPoolTypeLabel(pool.type)
