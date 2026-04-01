@@ -21,6 +21,7 @@ export function LbpFormAction() {
     projectInfoForm,
     validateCurrentStep,
     poolAddress,
+    isProjectInfoLocked,
   } = useLbpForm()
   const selectedChain = useWatch({ control: saleStructureForm.control, name: 'selectedChain' })
   const previewModalDisclosure = useDisclosure()
@@ -28,7 +29,8 @@ export function LbpFormAction() {
   const { copyToClipboard, isCopied } = useCopyToClipboard()
   const saleFormState = useFormState({ control: saleStructureForm.control })
   const projectFormState = useFormState({ control: projectInfoForm.control })
-  const isFormStateValid = saleFormState.isValid && projectFormState.isValid
+  const isFormStateValid =
+    saleFormState.isValid && (projectFormState.isValid || isProjectInfoLocked)
 
   if (!isConnected) return <ConnectWallet variant="primary" w="full" />
 

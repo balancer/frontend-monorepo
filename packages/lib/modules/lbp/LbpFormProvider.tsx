@@ -81,10 +81,11 @@ export function useLbpFormLogic() {
       return validateSaleStructureStep(saleStructureForm)
     }
     if (formSteps.currentStepIndex === 1) {
+      if (isProjectInfoLocked) return true
       return validateProjectInfoStep(projectInfoForm)
     }
     const saleValid = await validateSaleStructureStep(saleStructureForm)
-    const projectValid = await validateProjectInfoStep(projectInfoForm)
+    const projectValid = (await validateProjectInfoStep(projectInfoForm)) || isProjectInfoLocked
     return saleValid && projectValid
   }
 

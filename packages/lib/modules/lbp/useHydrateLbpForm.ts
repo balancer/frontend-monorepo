@@ -23,6 +23,8 @@ import {
   GqlPoolLiquidityBootstrappingV3,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { LS_KEYS } from '../local-storage/local-storage.constants'
+import { useLocalStorage } from 'usehooks-ts'
 
 type ReadContractResponse<T> = { result: T | undefined; status: 'success' | 'failure' }
 
@@ -84,7 +86,8 @@ export function useHydrateLbpForm() {
   const { slug } = useParams()
   const hasHydratedRef = useRef(false)
   const hasHydratedProjectInfoRef = useRef(false)
-  const { poolAddress, setPoolAddress, saleStructureForm, projectInfoForm } = useLbpForm()
+  const { poolAddress, setPoolAddress, saleStructureForm, projectInfoForm, resetSteps } =
+    useLbpForm()
 
   const params = getLbpPathParams(slug as string[] | undefined)
   const chainId = params.chain ? getChainId(params.chain) : undefined
@@ -307,12 +310,20 @@ export function useHydrateLbpForm() {
     hasHydratedRef.current = true
   }
 
+  const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
+
   useEffect(() => {
     if (!isVersionLoading && poolType && shouldHydrateLbpForm && !hasHydratedRef.current) {
       if (poolType === 'LBPool' && !isContractLoading && contractData) {
         handleLBPoolData(contractData as LbpDataResponse)
       } else if (poolType === 'FixedPriceLBPool' && !isContractLoading && contractData) {
         handleFixedPriceLBPoolData(contractData as FixedPriceLbpDataResponse)
+      }
+
+      if (hasHydratedRef.current) {
+        console.log('resetting steps!')
+        setIsMetadataSaved(true) // safe to assume metadata saved on pool creation?
+        resetSteps() // send user back to sale structure step to input init amounts
       }
     }
   }, [
@@ -325,6 +336,7 @@ export function useHydrateLbpForm() {
     shouldHydrateLbpForm,
     saleStructureForm,
     setPoolAddress,
+    resetSteps,
   ])
 
   useEffect(() => {
