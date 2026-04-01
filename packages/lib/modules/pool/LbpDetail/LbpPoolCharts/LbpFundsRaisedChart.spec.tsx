@@ -85,6 +85,7 @@ describe('LbpFundsRaisedChart', () => {
 
   afterEach(() => {
     vi.clearAllMocks()
+    vi.useRealTimers()
   })
 
   it('shows raised amount and goal progress in the funds raised header', () => {
@@ -142,18 +143,22 @@ describe('LbpFundsRaisedChart', () => {
   })
 
   it('adds progress-aware tooltip copy when the sale is active and a goal is available', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-03-17T11:00:00Z'))
+
     render(
       <ChakraProvider>
         <LbpFundsRaisedChart />
       </ChakraProvider>
     )
 
-    const tooltip = latestOption.tooltip.formatter([
-      {
-        data: [new Date('2026-03-17T11:00:00Z').getTime(), 6800],
-      },
-    ])
+    const cutTimeSeries = latestOption.series.find(
+      (series: { id?: string }) => series.id === 'cut-time'
+    )
+    const label = cutTimeSeries.label.formatter({
+      data: [new Date('2026-03-17T11:00:00Z').getTime(), 10000 * 1.05],
+    })
 
-    expect(tooltip).toContain('68% complete')
+    expect(label).toContain('68% complete')
   })
 })
