@@ -321,9 +321,8 @@ export function useHydrateLbpForm() {
       }
 
       if (hasHydratedRef.current) {
-        console.log('resetting steps!')
-        setIsMetadataSaved(true) // safe to assume metadata saved on pool creation?
-        resetSteps() // send user back to sale structure step to input init amounts
+        setIsMetadataSaved(true)
+        resetSteps()
       }
     }
   }, [
