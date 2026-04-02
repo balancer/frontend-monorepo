@@ -132,7 +132,7 @@ function TokenInfo({
 
 export type TokenRowProps = {
   label?: string | ReactNode
-  address: Address
+  address?: Address
   symbol?: string
   chain: GqlChain
   value: Numberish
@@ -185,9 +185,11 @@ export default function TokenRow({
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
 
-  const token = customToken || getToken(address, chain)
+  const token = customToken || (address ? getToken(address, chain) : undefined)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
-  const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
+  const poolToken = address
+    ? userReferenceTokens.find(t => isSameAddress(t.address, address))
+    : undefined
   const priceCheckAddress = token?.address ?? poolToken?.address ?? address
 
   const isTokenPriceMissing =
@@ -195,26 +197,13 @@ export default function TokenRow({
     Object.keys(tokensWithoutPrice ?? {}).some(a => isSameAddress(a as Address, priceCheckAddress))
 
   // TokenRowTemplate default props
-  const props: TokenInfoProps = {
-    address,
-    chain,
-    token,
-    poolToken,
-    pool,
-    disabled,
-    iconSize,
-    isNestedToken,
-    symbol,
-    logoURI,
-  }
-
   let usdValue: string | undefined
 
   if (!value) {
     usdValue = undefined
   } else if (customUsdPrice) {
     usdValue = bn(customUsdPrice).times(value).toString()
-  } else if ((isBpt || isNestedBpt) && pool) {
+  } else if ((isBpt || isNestedBpt) && pool && address) {
     usdValue = usdValueForTokenAddress(address, chain, value)
   } else if (token) {
     usdValue = usdValueForToken(token, value)
@@ -238,22 +227,55 @@ export default function TokenRow({
     variant: 'secondary',
   }
 
+  const tokenInfo = (() => {
+    if (!address) {
+      return (
+        <HStack spacing={{ base: 'sm', md: 'ms' }}>
+          <Skeleton borderRadius="full" boxSize="40px" flexShrink={0} />
+          <VStack alignItems="flex-start" spacing="1">
+            <Skeleton h="4" w="16" />
+            <Skeleton h="3" w="12" />
+          </VStack>
+        </HStack>
+      )
+    }
+
+    const props: TokenInfoProps = {
+      address,
+      chain,
+      token,
+      poolToken,
+      pool,
+      disabled,
+      iconSize,
+      isNestedToken,
+      symbol,
+      logoURI,
+    }
+
+    if (toggleTokenSelect) {
+      return (
+        <Button cursor="pointer" onClick={toggleTokenSelect} p="2" size="xl" variant="tertiary">
+          <TokenInfo {...props} showInfoPopover={false} showSelect />
+        </Button>
+      )
+    }
+
+    return (
+      <TokenInfo
+        {...props}
+        isBpt={isBpt || isNestedBpt}
+        isVirtual={isVirtual}
+        showInfoPopover={showInfoPopover}
+      />
+    )
+  })()
+
   return (
     <VStack align="start" spacing="md" w="full">
       {label && typeof label === 'string' ? <Text color="grayText">{label}</Text> : label}
       <HStack justifyContent="space-between" width="full">
-        {toggleTokenSelect ? (
-          <Button cursor="pointer" onClick={toggleTokenSelect} p="2" size="xl" variant="tertiary">
-            <TokenInfo {...props} showInfoPopover={false} showSelect />
-          </Button>
-        ) : (
-          <TokenInfo
-            {...props}
-            isBpt={isBpt || isNestedBpt}
-            isVirtual={isVirtual}
-            showInfoPopover={showInfoPopover}
-          />
-        )}
+        {tokenInfo}
         <HStack align="start" spacing="none">
           <VStack alignItems="flex-end" spacing="none" textAlign="right">
             {isLoading ? (
