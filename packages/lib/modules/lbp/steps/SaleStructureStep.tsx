@@ -337,8 +337,8 @@ function SaleEndInput({
       />
       <Text color="font.secondary" fontSize="sm">
         {saleStart && value
-          ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
-          : 'Suggested sale period: 5 days'}
+          ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (3 days suggested)`
+          : 'Suggested sale period: 3 days'}
       </Text>
     </>
   )
