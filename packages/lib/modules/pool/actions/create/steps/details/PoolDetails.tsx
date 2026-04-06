@@ -4,26 +4,24 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolDetails } from '../../validatePoolCreationForm'
 import { useWatch } from 'react-hook-form'
 import { useEffect, useRef } from 'react'
+import { PoolCreationToken, SupportedPoolTypes } from '../../types'
+import { isWeightedPool, isStableSurgePool, isReClammPool } from '../../helpers'
+import { MAX_POOL_NAME_LENGTH, MAX_POOL_SYMBOL_LENGTH } from '../../constants'
 
 export function PoolDetails() {
   const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
-
-  const tokenSymbols = poolTokens.map(token => {
-    const { data, weight } = token
-    if (!data) return ''
-    if (!weight) return data.symbol
-    return weight + '% ' + data.symbol
+  const [poolTokens, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType'],
   })
 
-  const suggestedPoolName = tokenSymbols.join(' / ')
-  const suggestedPoolSymbol = tokenSymbols.join('-').replace(/% /g, '-')
+  const { suggestedPoolName, suggestedPoolSymbol } = getSuggestions(poolTokens, poolType)
 
   const hasInitialized = useRef(false)
 
   useEffect(() => {
     if (hasInitialized.current) return
-    if (!suggestedPoolName || suggestedPoolName === ' / ') return
+    if (!suggestedPoolName || suggestedPoolName === '-') return
 
     const currentName = poolCreationForm.getValues('name')
     const currentSymbol = poolCreationForm.getValues('symbol')
@@ -75,4 +73,30 @@ export function PoolDetails() {
       />
     </VStack>
   )
+}
+
+function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPoolTypes) {
+  const poolTypePrefix = isStableSurgePool(poolType)
+    ? 'surge'
+    : isReClammPool(poolType)
+      ? 'reCLAMM'
+      : ''
+
+  const tokenSymbols = poolTokens
+    .map(({ data, weight }) => {
+      if (!data?.symbol) return ''
+      if (!isWeightedPool(poolType) || !weight) return data.symbol
+      return weight + data.symbol
+    })
+    .join('-')
+
+  const poolSymbol = poolTypePrefix ? `${poolTypePrefix}-${tokenSymbols}` : tokenSymbols
+  const suggestedPoolSymbol =
+    poolSymbol.length <= MAX_POOL_SYMBOL_LENGTH ? poolSymbol : tokenSymbols
+
+  const poolName = poolTypePrefix ? `${poolTypePrefix} ${tokenSymbols}` : tokenSymbols
+  const suggestedPoolName =
+    `Balancer ${poolName}`.length <= MAX_POOL_NAME_LENGTH ? `Balancer ${poolName}` : poolName
+
+  return { suggestedPoolName, suggestedPoolSymbol }
 }
