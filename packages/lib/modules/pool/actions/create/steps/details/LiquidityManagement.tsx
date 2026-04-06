@@ -39,6 +39,10 @@ export function LiquidityManagement() {
     isStableSurgePool(poolType) || hookFlags?.enableHookAdjustedAmounts
   const isDonationToggleDisabled = isReClammPool(poolType)
 
+  const donationsToolTip = isDonationToggleDisabled
+    ? 'The selected pool type does not allow donations to be enabled'
+    : 'Allows the option to add liquidity to the pool without minting additional LP tokens. Most pools should NOT allow donations. Only recommended for advanced users.'
+
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack>
@@ -59,11 +63,7 @@ export function LiquidityManagement() {
           onChange={e => poolCreationForm.setValue('disableUnbalancedLiquidity', !e.target.checked)}
         />
       </TooltipWithTouch>
-      <TooltipWithTouch
-        isHidden={!isDonationToggleDisabled}
-        label="The reClamm pool factory does not allow donations"
-        placement="right"
-      >
+      <TooltipWithTouch label={donationsToolTip} placement="right">
         <PoolCreationCheckbox
           isChecked={enableDonation}
           isDisabled={isDonationToggleDisabled}
