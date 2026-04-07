@@ -41,7 +41,7 @@ export function LiquidityManagement() {
 
   const donationsToolTip = isDonationToggleDisabled
     ? 'The selected pool type does not allow donations to be enabled'
-    : 'Allows the option to add liquidity to the pool without minting additional LP tokens. Most pools should NOT allow donations. Only recommended for advanced users.'
+    : 'Option to add liquidity to a pool without minting additional LP tokens. Most pools should NOT allow donations. Only recommended for advanced users.'
 
   return (
     <VStack align="start" spacing="md" w="full">

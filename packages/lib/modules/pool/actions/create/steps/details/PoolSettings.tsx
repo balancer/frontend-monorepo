@@ -4,7 +4,6 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { PoolSettingsRadioGroup } from './PoolSettingsRadioGroup'
 import { LiquidityManagement } from './LiquidityManagement'
 import { BlockExplorerLink } from '@repo/lib/shared/components/BlockExplorerLink'
-import { AMPLIFICATION_PARAMETER_OPTIONS } from '../../constants'
 import { getSwapFeePercentageOptions } from '../../helpers'
 import { validatePoolSettings } from '../../validatePoolCreationForm'
 import { usePoolHooksWhitelist } from './usePoolHooksWhitelist'
@@ -16,6 +15,12 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isStablePool, isStableSurgePool, isPoolCreatorEnabled } from '../../helpers'
 import { useWatch } from 'react-hook-form'
+import { ConfigOptionsGroup } from './ReClammConfiguration'
+import {
+  SteepCurve,
+  FlatCurve,
+  VeryFlatCurve,
+} from '@repo/lib/shared/components/imgs/AmplificationParameterSvgs'
 
 export type PoolSettingsOption = {
   label: string
@@ -65,10 +70,6 @@ export function PoolSettings() {
     ...(filteredPoolHooksOptions || []),
   ]
 
-  const amplificationParameterOptions: PoolSettingsOption[] = AMPLIFICATION_PARAMETER_OPTIONS.map(
-    value => ({ label: value, value })
-  )
-
   useEffect(() => {
     if (isStableSurgePool(poolType) && poolHooksWhitelist) {
       const stableSurgeHookMetadata = poolHooksWhitelist.find(hook => hook.label === 'StableSurge')
@@ -109,6 +110,45 @@ export function PoolSettings() {
 
   return (
     <VStack align="start" spacing="lg" w="full">
+      {showAmplificationParameter && (
+        <>
+          <Heading color="font.maxContrast" size="md">
+            Stable Pool Configuration
+          </Heading>
+          <ConfigOptionsGroup
+            control={poolCreationForm.control}
+            customInputLabel="Custom amplification parameter"
+            label="Amplification parameter"
+            name="amplificationParameter"
+            options={[
+              {
+                label: 'Steep curve',
+                displayValue: '100',
+                rawValue: '100',
+                svg: SteepCurve,
+              },
+              {
+                label: 'Flat curve',
+                displayValue: '1,000',
+                rawValue: '1000',
+                svg: FlatCurve,
+              },
+              {
+                label: 'Very flat curve',
+                displayValue: '10,000',
+                rawValue: '10000',
+                svg: VeryFlatCurve,
+              },
+            ]}
+            tooltip="Controls the 'flatness' of the invariant curve. Higher values = lower slippage and assumes prices are near parity. Lower values = closer to the constant product curve (e.g., more like a weighted pool). This has higher slippage and accommodates greater price volatility."
+            updateFn={(value: string) => {
+              poolCreationForm.setValue('amplificationParameter', value, { shouldValidate: true })
+            }}
+            validateFn={(value: string) => validatePoolSettings.amplificationParameter(value)}
+          />
+        </>
+      )}
+
       <Heading color="font.maxContrast" size="md">
         Pool settings
       </Heading>
@@ -155,18 +195,6 @@ export function PoolSettings() {
         tooltip="The initial static swap fee percentage of the pool"
         validate={value => validatePoolSettings.swapFeePercentage(value, poolType)}
       />
-
-      {showAmplificationParameter && (
-        <PoolSettingsRadioGroup
-          customInputLabel="Custom amplification parameter"
-          customInputType="number"
-          name="amplificationParameter"
-          options={amplificationParameterOptions}
-          title="Amplification parameter"
-          tooltip='Controls the "flatness" of the invariant curve. Higher values = lower slippage and assumes prices are near parity. Lower values = closer to the constant product curve (e.g., more like a weighted pool). This has higher slippage and accommodates greater price volatility.'
-          validate={validatePoolSettings.amplificationParameter}
-        />
-      )}
 
       {showPoolHooks && (
         <PoolSettingsRadioGroup
