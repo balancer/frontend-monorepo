@@ -5,8 +5,10 @@ import { validatePoolDetails } from '../../validatePoolCreationForm'
 import { useWatch } from 'react-hook-form'
 import { useEffect, useRef } from 'react'
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
-import { isWeightedPool, isStableSurgePool, isReClammPool } from '../../helpers'
+import { isWeightedPool } from '../../helpers'
 import { MAX_POOL_NAME_LENGTH, MAX_POOL_SYMBOL_LENGTH } from '../../constants'
+import { PoolType } from '@balancer/sdk'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PoolDetails() {
   const { poolCreationForm } = usePoolCreationForm()
@@ -76,11 +78,12 @@ export function PoolDetails() {
 }
 
 function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPoolTypes) {
-  const poolTypePrefix = isStableSurgePool(poolType)
-    ? 'surge'
-    : isReClammPool(poolType)
-      ? 'reCLAMM'
-      : ''
+  const poolTypePrefixMap: Partial<Record<SupportedPoolTypes, string>> = {
+    [PoolType.StableSurge]: 'surge',
+    [PoolType.ReClamm]: 'reCLAMM',
+  }
+
+  const poolTypePrefix = poolTypePrefixMap[poolType] ?? ''
 
   const tokenSymbols = poolTokens
     .map(({ data, weight }) => {
@@ -94,9 +97,12 @@ function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPool
   const suggestedPoolSymbol =
     poolSymbol.length <= MAX_POOL_SYMBOL_LENGTH ? poolSymbol : tokenSymbols
 
+  const { projectName } = PROJECT_CONFIG
+
   const poolName = poolTypePrefix ? `${poolTypePrefix} ${tokenSymbols}` : tokenSymbols
+  const poolNameWithProject = `${projectName} ${poolName}`
   const suggestedPoolName =
-    `Balancer ${poolName}`.length <= MAX_POOL_NAME_LENGTH ? `Balancer ${poolName}` : poolName
+    poolNameWithProject.length <= MAX_POOL_NAME_LENGTH ? poolNameWithProject : poolName
 
   return { suggestedPoolName, suggestedPoolSymbol }
 }
