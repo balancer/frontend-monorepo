@@ -3,10 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",
-  "dependencies": {
-    "@apollo/client": "4.1.6"
-  },
   "devDependencies": {
+    "@apollo/client": "4.1.6",
     "@balancer/sdk": "5.2.3",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
