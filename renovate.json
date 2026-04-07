@@ -7,15 +7,7 @@
   "prConcurrentLimit": 5,
   "automerge": false,
 
-  "ignoreDeps": [
-    "viem",
-    "@balancer/sdk",
-    "color-convert",
-    "color-name",
-    "is-core-module",
-    "error-ex",
-    "has-ansi"
-  ],
+  "ignoreDeps": ["viem", "@balancer/sdk"],
 
   "packageRules": [
     {
