@@ -730,10 +730,11 @@ importers:
   packages/prettier-config: {}
 
   packages/test:
-    devDependencies:
+    dependencies:
       '@apollo/client':
         specifier: 4.1.6
         version: 4.1.6(graphql-ws@6.0.7(crossws@0.3.5)(graphql@16.13.2)(ws@8.20.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(graphql@16.13.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rxjs@7.8.2)
+    devDependencies:
       '@balancer/sdk':
         specifier: 5.2.3
         version: 5.2.3(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.6)
