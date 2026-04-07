@@ -43,7 +43,6 @@ export const MAX_POOL_NAME_LENGTH = 32
 export const MAX_POOL_SYMBOL_LENGTH = 26
 export const MAX_SWAP_FEE_PERCENTAGE = 10
 export const REQUIRED_TOTAL_WEIGHT = 100
-export const AMPLIFICATION_PARAMETER_OPTIONS = ['100', '1000']
 export const MIN_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MIN_AMP)
 export const MAX_AMPLIFICATION_PARAMETER = Number(STABLE_POOL_CONSTRAINTS.MAX_AMP)
 export const MAX_LAMBDA = 100000000
@@ -160,7 +159,7 @@ export const INITIAL_POOL_CREATION_FORM: PoolCreationForm = {
   pauseManager: zeroAddress,
   poolCreator: zeroAddress,
   swapFeePercentage: getSwapFeePercentageOptions(PoolType.Stable)[0].value,
-  amplificationParameter: AMPLIFICATION_PARAMETER_OPTIONS[0],
+  amplificationParameter: '100',
   poolHooksContract: zeroAddress,
   enableDonation: false,
   disableUnbalancedLiquidity: false,

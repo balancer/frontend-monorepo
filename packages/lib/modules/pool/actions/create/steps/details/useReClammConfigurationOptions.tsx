@@ -1,10 +1,8 @@
 import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { ReClammConfig } from '../../types'
 import { useEffect, useRef } from 'react'
 import { formatNumber } from '../../helpers'
 import { usePoolSpotPriceWithoutRate } from './usePoolSpotPriceWithoutRate'
-import { SVGProps } from 'react'
 import {
   CurrentPriceMinusFivePercentSVG,
   CurrentPriceSVG,
@@ -20,29 +18,9 @@ import {
   PriceAdjustmentRateFastSVG,
 } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { useWatch } from 'react-hook-form'
+import { ConfigOptionsGroupProps } from './ReClammConfiguration'
 
-export type ReClammConfigOptionsGroup = {
-  label: string
-  options: {
-    label: string
-    displayValue: string
-    rawValue: string
-    svg?: React.ComponentType<SVGProps<SVGSVGElement>>
-  }[]
-  updateFn: (rawValue: string) => void
-  validateFn: (value: string) => string | boolean
-  name: keyof ReClammConfig
-  customInputLabel: string
-  tooltip: string
-}
-
-const CUSTOM_OPTION = {
-  label: 'Or choose custom',
-  displayValue: '',
-  rawValue: '',
-}
-
-export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
+export function useReClammConfigurationOptions(): ConfigOptionsGroupProps[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
 
@@ -73,7 +51,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   }
 
   const targetPrice = {
-    name: 'initialTargetPrice' as const,
+    name: 'initialTargetPrice',
+    control: reClammConfigForm.control,
     label: `Target price: ${tokenSymbolsString}`,
     customInputLabel: 'Custom target price',
     customInputPlaceholder: bn(spotPriceWithoutRate.toString()).toFixed(2),
@@ -96,7 +75,6 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         rawValue: currentPricePlus5,
         svg: CurrentPricePlusFivePercentSVG,
       },
-      CUSTOM_OPTION,
     ],
     tooltip: 'The initial target price of token A in terms of token B',
     updateFn: (rawValue: string) => {
@@ -113,13 +91,13 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
 
   const priceRangeBoundaries = {
     label: `Target concentration density of liquidity`,
-    name: 'priceRangePercentage' as const,
+    name: 'priceRangePercentage',
+    control: reClammConfigForm.control,
     customInputLabel: '???',
     options: [
       { label: 'Narrow', displayValue: '± 25.00%', rawValue: '25', svg: TargetRangeNarrowSVG },
       { label: 'Standard', displayValue: '± 50.00%', rawValue: '50', svg: TargetRangeStandardSVG },
       { label: 'Wide', displayValue: '± 75.00%', rawValue: '75', svg: TargetRangeWideSVG },
-      CUSTOM_OPTION,
     ],
     tooltip: 'The target concentration density of liquidity',
     updateFn: (rawValue: string) => {
@@ -138,14 +116,14 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   }
 
   const marginBuffer = {
-    name: 'centerednessMargin' as const,
+    name: 'centerednessMargin',
+    control: reClammConfigForm.control,
     label: `Margin buffer`,
     customInputLabel: 'Custom margin buffer',
     options: [
       { label: 'Narrow', displayValue: '10%', rawValue: '10', svg: MarginBufferNarrowSVG },
       { label: 'Standard', displayValue: '25%', rawValue: '25', svg: MarginBufferStandardSVG },
       { label: 'Wide', displayValue: '50%', rawValue: '50', svg: MarginBufferWideSVG },
-      CUSTOM_OPTION,
     ],
     tooltip: 'How far the price can be from the center before the price range starts to move',
     updateFn: (rawValue: string) => {
@@ -160,7 +138,8 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
   }
 
   const dailyPriceReadjustmentRate = {
-    name: 'priceShiftDailyRate' as const,
+    name: 'priceShiftDailyRate',
+    control: reClammConfigForm.control,
     label: `Daily price re-adjustment rate, when out-of-range`,
     customInputLabel: 'Custom rate',
     options: [
@@ -177,7 +156,6 @@ export function useReClammConfigurationOptions(): ReClammConfigOptionsGroup[] {
         rawValue: '75',
         svg: PriceAdjustmentRateFastSVG,
       },
-      CUSTOM_OPTION,
     ],
     tooltip: 'Controls the speed of the price shift when out-of-range',
     updateFn: (rawValue: string) => {
