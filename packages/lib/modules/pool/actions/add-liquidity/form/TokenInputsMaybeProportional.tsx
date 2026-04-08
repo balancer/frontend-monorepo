@@ -45,7 +45,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
   const { toCurrency } = useCurrency()
   const { usdValueForToken } = useTokens()
   const { chain, pool } = usePool()
-  const { balanceFor, balances, isBalancesLoading } = useTokenBalances()
+  const { balanceFor, isBalancesLoading } = useTokenBalances()
 
   const {
     handleProportionalHumanInputChange,
@@ -68,19 +68,15 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 
-  const poolTokenBalances = useMemo(
-    () =>
-      tokens.map(token => {
-        const formattedBalance = balanceFor(token.address)?.formatted || '0'
+  const poolTokenBalances = tokens.map(token => {
+    const formattedBalance = balanceFor(token.address)?.formatted || '0'
 
-        return {
-          token,
-          formattedBalance,
-          hasBalance: bn(formattedBalance).gt(0),
-        }
-      }),
-    [tokens, balances, balanceFor]
-  )
+    return {
+      token,
+      formattedBalance,
+      hasBalance: bn(formattedBalance).gt(0),
+    }
+  })
 
   const hasAnyPoolTokenBalance = poolTokenBalances.some(token => token.hasBalance)
   const addableTokenCount = poolTokenBalances.filter(token => token.hasBalance).length
