@@ -68,13 +68,7 @@
     },
     "overrides": {
       "@types/react": "19.2",
-      "@types/react-dom": "19.2",
-      "lint-staged>chalk": "5.3.0",
-      "color-convert": "2.0.1",
-      "color-name": "1.1.4",
-      "is-core-module": "2.13.1",
-      "error-ex": "1.3.2",
-      "has-ansi": "5.0.1"
+      "@types/react-dom": "19.2"
     }
   }
 }
