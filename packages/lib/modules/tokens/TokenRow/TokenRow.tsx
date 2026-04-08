@@ -12,6 +12,7 @@ import {
   VStack,
   Flex,
   Link,
+  Badge,
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
@@ -31,6 +32,7 @@ import { ApiToken, CustomToken, ApiOrCustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 import { usePoolTokenPriceWarnings } from '../../pool/usePoolTokenPriceWarnings'
 import { TokenMissingPriceWarning } from '../TokenMissingPriceWarning'
+import { getTokenColor } from '@repo/lib/styles/token-colors'
 
 export type TokenInfoProps = {
   address: Address
@@ -44,9 +46,10 @@ export type TokenInfoProps = {
   showInfoPopover?: boolean
   isBpt?: boolean
   isNestedBpt?: boolean
-  isNestedPoolToken?: boolean
+  isNestedToken?: boolean
   iconSize?: number
   logoURI?: string
+  isVirtual?: boolean
 }
 
 function TokenInfo({
@@ -60,27 +63,30 @@ function TokenInfo({
   showSelect = false,
   showInfoPopover = true,
   isBpt = false,
-  isNestedPoolToken = false,
+  isNestedToken = false,
   iconSize = 40,
   logoURI,
+  isVirtual,
 }: TokenInfoProps) {
   const tokenSymbol = isBpt ? '‘LP’ pool token' : poolToken?.symbol || token?.symbol || symbol
   const tokenName = isBpt ? pool?.symbol : poolToken?.name || token?.name
 
   const headingProps = {
     as: 'h6' as const,
-    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontSize: isNestedToken ? 'sm' : 'md',
     fontWeight: 'bold',
-    lineHeight: isNestedPoolToken ? '18px' : '24px',
+    lineHeight: isNestedToken ? '18px' : '24px',
     variant: disabled ? 'secondary' : 'primary',
   }
 
   const tokenNameProps = {
-    fontSize: isNestedPoolToken ? 'xs' : 'sm',
+    fontSize: isNestedToken ? 'xs' : 'sm',
     fontWeight: 'medium',
-    lineHeight: isNestedPoolToken ? '12px' : '18px',
+    lineHeight: isNestedToken ? '12px' : '18px',
     variant: 'secondary',
   }
+
+  const tokenColor = getTokenColor(chain, address as Address).from
 
   return (
     <HStack spacing={{ base: 'sm', md: 'ms' }}>
@@ -88,6 +94,7 @@ function TokenInfo({
         <TokenIcon
           address={address}
           alt={token?.symbol || address}
+          border={isVirtual ? `1px dashed ${tokenColor}` : undefined}
           chain={chain}
           logoURI={poolToken?.logoURI || token?.logoURI || logoURI}
           overflow="visible"
@@ -102,6 +109,11 @@ function TokenInfo({
             </Link>
           ) : (
             <Heading {...headingProps}>{tokenSymbol}</Heading>
+          )}
+          {isVirtual && (
+            <Badge colorScheme="yellow" ml="1">
+              Virtual
+            </Badge>
           )}
           {showInfoPopover && (
             <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
@@ -120,7 +132,7 @@ function TokenInfo({
 
 export type TokenRowProps = {
   label?: string | ReactNode
-  address: Address
+  address?: Address
   symbol?: string
   chain: GqlChain
   value: Numberish
@@ -132,7 +144,7 @@ export type TokenRowProps = {
   abbreviated?: boolean
   isBpt?: boolean
   isNestedBpt?: boolean
-  isNestedPoolToken?: boolean
+  isNestedToken?: boolean
   pool?: Pool
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
@@ -140,6 +152,8 @@ export type TokenRowProps = {
   logoURI?: string
   customToken?: CustomToken
   customUsdPrice?: number
+  isVirtual?: boolean
+  showInfoPopover?: boolean
 }
 
 export default function TokenRow({
@@ -154,7 +168,7 @@ export default function TokenRow({
   isLoading,
   isBpt,
   isNestedBpt,
-  isNestedPoolToken,
+  isNestedToken,
   pool,
   abbreviated = true,
   showZeroAmountAsDash = true,
@@ -163,15 +177,19 @@ export default function TokenRow({
   logoURI,
   customToken,
   customUsdPrice,
+  isVirtual,
+  showInfoPopover = true,
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForTokenAddress } = useTokens()
   const { toCurrency } = useCurrency()
   const { isAnyTokenWithoutPrice, tokenPriceTip, tokensWithoutPrice, tokenWeightTip } =
     usePoolTokenPriceWarnings(pool)
 
-  const token = customToken || getToken(address, chain)
+  const token = customToken || (address ? getToken(address, chain) : undefined)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
-  const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
+  const poolToken = address
+    ? userReferenceTokens.find(t => isSameAddress(t.address, address))
+    : undefined
   const priceCheckAddress = token?.address ?? poolToken?.address ?? address
 
   const isTokenPriceMissing =
@@ -179,26 +197,13 @@ export default function TokenRow({
     Object.keys(tokensWithoutPrice ?? {}).some(a => isSameAddress(a as Address, priceCheckAddress))
 
   // TokenRowTemplate default props
-  const props: TokenInfoProps = {
-    address,
-    chain,
-    token,
-    poolToken,
-    pool,
-    disabled,
-    iconSize,
-    isNestedPoolToken,
-    symbol,
-    logoURI,
-  }
-
   let usdValue: string | undefined
 
   if (!value) {
     usdValue = undefined
   } else if (customUsdPrice) {
     usdValue = bn(customUsdPrice).times(value).toString()
-  } else if ((isBpt || isNestedBpt) && pool) {
+  } else if ((isBpt || isNestedBpt) && pool && address) {
     usdValue = usdValueForTokenAddress(address, chain, value)
   } else if (token) {
     usdValue = usdValueForToken(token, value)
@@ -210,29 +215,67 @@ export default function TokenRow({
 
   const headingProps = {
     as: 'h6' as const,
-    fontSize: isNestedPoolToken ? 'sm' : 'md',
-    fontWeight: isNestedPoolToken ? 'medium' : 'bold',
-    lineHeight: isNestedPoolToken ? '18px' : '24px',
+    fontSize: isNestedToken ? 'sm' : 'md',
+    fontWeight: isNestedToken ? 'medium' : 'bold',
+    lineHeight: isNestedToken ? '18px' : '24px',
   }
 
   const subTextProps = {
-    fontSize: isNestedPoolToken ? 'xs' : 'sm',
+    fontSize: isNestedToken ? 'xs' : 'sm',
     fontWeight: 'medium',
-    lineHeight: isNestedPoolToken ? '12px' : '18px',
+    lineHeight: isNestedToken ? '12px' : '18px',
     variant: 'secondary',
   }
+
+  const tokenInfo = (() => {
+    if (!address) {
+      return (
+        <HStack spacing={{ base: 'sm', md: 'ms' }}>
+          <Skeleton borderRadius="full" boxSize="40px" flexShrink={0} />
+          <VStack alignItems="flex-start" spacing="1">
+            <Skeleton h="4" w="16" />
+            <Skeleton h="3" w="12" />
+          </VStack>
+        </HStack>
+      )
+    }
+
+    const props: TokenInfoProps = {
+      address,
+      chain,
+      token,
+      poolToken,
+      pool,
+      disabled,
+      iconSize,
+      isNestedToken,
+      symbol,
+      logoURI,
+    }
+
+    if (toggleTokenSelect) {
+      return (
+        <Button cursor="pointer" onClick={toggleTokenSelect} p="2" size="xl" variant="tertiary">
+          <TokenInfo {...props} showInfoPopover={false} showSelect />
+        </Button>
+      )
+    }
+
+    return (
+      <TokenInfo
+        {...props}
+        isBpt={isBpt || isNestedBpt}
+        isVirtual={isVirtual}
+        showInfoPopover={showInfoPopover}
+      />
+    )
+  })()
 
   return (
     <VStack align="start" spacing="md" w="full">
       {label && typeof label === 'string' ? <Text color="grayText">{label}</Text> : label}
       <HStack justifyContent="space-between" width="full">
-        {toggleTokenSelect ? (
-          <Button cursor="pointer" onClick={toggleTokenSelect} p="2" size="xl" variant="tertiary">
-            <TokenInfo {...props} showInfoPopover={false} showSelect />
-          </Button>
-        ) : (
-          <TokenInfo {...props} isBpt={isBpt || isNestedBpt} />
-        )}
+        {tokenInfo}
         <HStack align="start" spacing="none">
           <VStack alignItems="flex-end" spacing="none" textAlign="right">
             {isLoading ? (

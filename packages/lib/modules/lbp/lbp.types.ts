@@ -12,6 +12,11 @@ export enum WeightAdjustmentType {
   CUSTOM = 'custom',
 }
 
+export enum SeedType {
+  SEEDED = 'seeded',
+  SEEDLESS = 'seedless',
+}
+
 export type SaleTypeOptionValue = GqlPoolType.LiquidityBootstrapping | GqlPoolType.FixedLbp
 
 export type SaleStructureForm = {
@@ -25,6 +30,7 @@ export type SaleStructureForm = {
   customStartWeight?: number
   customEndWeight?: number
   userActions: UserActions
+  seedType?: SeedType
   fee: number
   launchTokenRate?: HumanAmount | ''
   saleTokenAmount: HumanAmount | ''

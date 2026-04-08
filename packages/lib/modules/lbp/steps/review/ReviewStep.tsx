@@ -26,8 +26,14 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
-  const { projectInfoForm, saleStructureForm, launchTokenPriceUsd, isDynamicSale, isFixedSale } =
-    useLbpForm()
+  const {
+    projectInfoForm,
+    saleStructureForm,
+    launchTokenPriceUsd,
+    isDynamicSale,
+    isFixedSale,
+    isSeeded,
+  } = useLbpForm()
   const [name, tokenIconUrl, description, websiteUrl, xHandle, discordUrl, telegramHandle] =
     useWatch({
       control: projectInfoForm.control,
@@ -143,7 +149,7 @@ export function ReviewStep() {
       {isDynamicSale && (
         <Card>
           <CardHeader>
-            <Heading size="md">Seed liquidity</Heading>
+            <Heading size="md">{`Sale token + ${isSeeded ? 'collateral token' : 'paired token'}`}</Heading>
           </CardHeader>
           <CardBody>
             <VStack gap="md" w="full">

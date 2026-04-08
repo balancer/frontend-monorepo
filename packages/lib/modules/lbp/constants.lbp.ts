@@ -2,7 +2,7 @@ import { SaleStructureStep } from './steps/SaleStructureStep'
 import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/review/ReviewStep'
 import { FormStep } from '@repo/lib/shared/hooks/useFormSteps'
-import { UserActions, WeightAdjustmentType } from './lbp.types'
+import { SeedType, UserActions, WeightAdjustmentType } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
@@ -22,6 +22,7 @@ export const INITIAL_SALE_STRUCTURE: SaleStructureForm = {
   launchTokenAddress: '',
   saleType: GqlPoolType.LiquidityBootstrapping,
   userActions: UserActions.BUY_AND_SELL,
+  seedType: SeedType.SEEDLESS,
   fee: 1.0,
   startDateTime: '',
   endDateTime: '',

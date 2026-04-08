@@ -6,7 +6,7 @@ module.exports = {
     // Ignore "display: -webkit-box;"
     // This line clampin technique only works with the webkit prefix.
     // https://css-tricks.com/line-clampin/
-    'value-no-vendor-prefix': [true, { ignoreValues: ['box'] }],
+    'value-no-vendor-prefix': [true, { ignoreValues: ['-webkit-box'] }],
     'property-no-unknown': [
       true,
       {
@@ -32,4 +32,4 @@ module.exports = {
       },
     ],
   },
-}
+};

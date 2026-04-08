@@ -18,6 +18,14 @@ export const usdcUsdtAaveBoosted: PoolExample = {
   version: 3,
 }
 
+export const usdcGhoUsdtAaveBoosted: PoolExample = {
+  name: 'Aave Gho-USDC-USDT',
+  description: 'Edge case: V3 100% Boosted (Aave - 33% GHO, 33% USDC, 34% USDT)',
+  poolId: '0x85b2b559bc2d21104c4defdd6efca8a20343361d',
+  poolChain: GqlChain.Mainnet,
+  version: 3,
+}
+
 export const morphoStakeHouse: PoolExample = {
   name: 'B-csUSDL-steakUSDC',
   description: 'Edge case: boosted with custom morpho stuff',
@@ -73,4 +81,5 @@ export const boostedPoolExamples = [
   partialBoostedSepolia,
   boostedCoinshiftUsdcUsdl,
   stableSurgeBoosted,
+  usdcGhoUsdtAaveBoosted,
 ]
