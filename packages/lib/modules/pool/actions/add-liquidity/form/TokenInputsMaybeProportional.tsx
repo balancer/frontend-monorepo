@@ -29,6 +29,50 @@ type Props = {
   totalUSDValue: string
 }
 
+const warningOverlayStyles = {
+  _before: {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    bg: 'font.warning',
+    opacity: 0.05,
+    borderRadius: 'inherit',
+    pointerEvents: 'none',
+  },
+  _after: {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    border: '1px solid',
+    borderColor: 'font.warning',
+    opacity: 0.5,
+    borderRadius: 'inherit',
+    pointerEvents: 'none',
+  },
+}
+
+const validOverlayStyles = {
+  _before: {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    bg: 'font.highlight',
+    opacity: 0.03,
+    borderRadius: 'inherit',
+    pointerEvents: 'none',
+  },
+  _after: {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    border: '1px solid',
+    borderColor: 'font.highlight',
+    opacity: 0.4,
+    borderRadius: 'inherit',
+    pointerEvents: 'none',
+  },
+}
+
 export function TokenInputsMaybeProportional({ isProportional }: Props) {
   const {
     setHumanAmountIn,
@@ -158,50 +202,6 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     "You don't have any of these pool tokens in your wallet, so you can't add any liquidity to this pool right now. Get some pool tokens and come back"
 
   const proportionalWarningTooltip = `You are missing ${missingPoolTokenCount} pool token${missingPoolTokenCount === 1 ? '' : 's'}. You'll need all of them in order to add proportional liquidity to this pool. Get all pool tokens and come back`
-
-  const warningOverlayStyles = {
-    _before: {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      bg: 'font.warning',
-      opacity: 0.05,
-      borderRadius: 'inherit',
-      pointerEvents: 'none',
-    },
-    _after: {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      border: '1px solid',
-      borderColor: 'font.warning',
-      opacity: 0.5,
-      borderRadius: 'inherit',
-      pointerEvents: 'none',
-    },
-  }
-
-  const validOverlayStyles = {
-    _before: {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      bg: 'font.highlight',
-      opacity: 0.03,
-      borderRadius: 'inherit',
-      pointerEvents: 'none',
-    },
-    _after: {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      border: '1px solid',
-      borderColor: 'font.highlight',
-      opacity: 0.4,
-      borderRadius: 'inherit',
-      pointerEvents: 'none',
-    },
-  }
 
   function handleFlexibleMaxClick() {
     if (isFlexibleMaxApplied || !hasAnyPoolTokenBalance) return
