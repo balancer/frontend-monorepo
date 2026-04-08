@@ -7,9 +7,10 @@ import {
   PlacementWithLogical,
 } from '@chakra-ui/react'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
+import { ReactNode } from 'react'
 
 interface InfoIconPopoverProps {
-  message: string
+  message: ReactNode
   placement?: PlacementWithLogical
 }
 
@@ -27,9 +28,13 @@ export function InfoIconPopover({ message, placement = 'top-start' }: InfoIconPo
         </Box>
       </PopoverTrigger>
       <PopoverContent maxW="300px" p="sm" w="auto">
-        <Text fontSize="sm" variant="secondary">
-          {message}
-        </Text>
+        {typeof message === 'string' ? (
+          <Text fontSize="sm" variant="secondary">
+            {message}
+          </Text>
+        ) : (
+          message
+        )}
       </PopoverContent>
     </Popover>
   )

@@ -1,11 +1,22 @@
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { Button, Card, Flex, HStack, Heading, IconButton, Image, Stack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  HStack,
+  Heading,
+  IconButton,
+  Image,
+  Stack,
+} from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { ChevronRight } from 'react-feather'
+import { AlertTriangle, ChevronRight } from 'react-feather'
+import { isChainDeprecated } from '@repo/lib/modules/chains/chain.utils'
 
 type Props = {
   chain: GqlChain
@@ -44,9 +55,16 @@ export function ClaimNetworkBlock({
           )}
 
           <Stack gap={1}>
-            <Heading size="sm" textTransform="capitalize">
-              {title || chainToSlugMap[chain]}
-            </Heading>
+            <HStack>
+              <Heading size="sm" textTransform="capitalize">
+                {title || chainToSlugMap[chain]}
+              </Heading>
+              {isChainDeprecated(chain) && (
+                <Box color="font.warning">
+                  <AlertTriangle size="16" />
+                </Box>
+              )}
+            </HStack>
             {isDesktop && (
               <Heading size="md" variant="special">
                 {toCurrency(networkTotalClaimableFiatBalance)}

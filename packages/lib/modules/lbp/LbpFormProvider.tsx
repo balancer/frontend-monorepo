@@ -3,7 +3,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
-import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
+import { ProjectInfoForm, SaleStructureForm, SeedType } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLocalStorage } from 'usehooks-ts'
@@ -103,6 +103,7 @@ export function useLbpFormLogic() {
     collateralTokenAddress,
     launchTokenRate,
     saleType,
+    seedType,
   } = useWatch({
     control: saleStructureForm.control,
   })
@@ -158,6 +159,7 @@ export function useLbpFormLogic() {
 
   const isDynamicSale = saleType === GqlPoolType.LiquidityBootstrapping
   const isFixedSale = saleType === GqlPoolType.FixedLbp
+  const isSeeded = seedType === SeedType.SEEDED
 
   return {
     ...formSteps,
@@ -182,6 +184,8 @@ export function useLbpFormLogic() {
     totalValueRaw: totalValue,
     isDynamicSale,
     isFixedSale,
+    isSeeded,
+    isSeedless: !isSeeded,
   }
 }
 

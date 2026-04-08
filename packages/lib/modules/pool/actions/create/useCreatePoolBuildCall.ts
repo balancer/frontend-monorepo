@@ -54,7 +54,7 @@ export function useCreatePoolBuildCall({ createPoolInput, enabled }: Props) {
   }
 
   return useQuery({
-    queryKey: ['create-pool-build-call'],
+    queryKey: ['create-pool-build-call', createPoolInput],
     queryFn,
     enabled: enabled && isConnected,
     gcTime: 0,

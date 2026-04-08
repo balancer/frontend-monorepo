@@ -1,4 +1,4 @@
-import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,
   GqlHookType,
@@ -17,7 +17,7 @@ import BigNumber from 'bignumber.js'
 import { isEmpty, isNil } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
-import { isNotMainnet } from '../chains/chain.utils'
+import { isChainDeprecated, isNotMainnet } from '../chains/chain.utils'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
 import {
@@ -25,6 +25,7 @@ import {
   getUserWalletBalance,
   getUserWalletBalanceUsd,
 } from './user-balance.helpers'
+import { differenceInCalendarDays, secondsToMilliseconds } from 'date-fns'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
@@ -107,6 +108,10 @@ export function isV3LBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
   return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
 }
 
+export function isDynamicLBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
+  return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
+}
+
 export function isWeighted(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.Weighted
 }
@@ -157,6 +162,22 @@ export function isCowAmmPool(poolType: GqlPoolType): boolean {
 
 export function isQuantAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.QuantAmmWeighted
+}
+
+export function getPoolActivityTitle(activeTab: string | undefined, count: number) {
+  const singularTitleByTab = {
+    all: 'transaction',
+    adds: 'add',
+    removes: 'remove',
+    swaps: 'swap',
+  } as const
+
+  if (!activeTab) return ''
+
+  const singularTitle = singularTitleByTab[activeTab as keyof typeof singularTitleByTab]
+  if (!singularTitle) return activeTab
+
+  return count === 1 ? singularTitle : `${singularTitle}s`
 }
 
 export function noInitLiquidity(pool: GqlPoolBase): boolean {
@@ -366,6 +387,9 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
 
   if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
   if (pool.hook?.reviewData?.summary === 'unsafe') reasons.push('Unsafe hook')
+  if (isChainDeprecated(pool.chain)) {
+    reasons.push(`${getChainName(pool.chain)} is being sunset on Balancer`)
+  }
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
   for (const token of poolTokens) {
@@ -539,4 +563,20 @@ export function poolHasRateProviderExternalOracle(pool: Pool): boolean {
   return pool.poolTokens.some(token =>
     token.priceRateProviderData?.warnings?.includes('market-rate')
   )
+}
+
+/**
+ * Returns a human-readable caption for pool activity date range.
+ * - 0 days ago → 'today'
+ * - 1 day ago → 'since yesterday'
+ * - 2+ days ago → 'in last N days'
+ */
+export function getPoolActivityDateCaption(minTimestampSeconds: number): string {
+  const diffInDays = differenceInCalendarDays(
+    new Date(),
+    new Date(secondsToMilliseconds(minTimestampSeconds))
+  )
+  if (diffInDays === 0) return 'today'
+  if (diffInDays === 1) return 'since yesterday'
+  return `in last ${diffInDays} days`
 }

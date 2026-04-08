@@ -401,7 +401,7 @@ function Disclaimer() {
               }}
               size="lg"
             >
-              {'I accept the'}
+              {'I accept the '}
               <Button
                 as={NextLink}
                 fontSize="lg"
@@ -414,7 +414,7 @@ function Disclaimer() {
               >
                 Risks
               </Button>
-              {'and'}
+              {' and '}
               <Button
                 as={NextLink}
                 fontSize="lg"
@@ -427,7 +427,7 @@ function Disclaimer() {
               >
                 Terms of Use
               </Button>
-              {'for creating and LBP'}
+              {' for creating an LBP'}
             </Checkbox>
             <FormErrorMessage>{fieldState.error?.message}</FormErrorMessage>
           </FormControl>

@@ -30,6 +30,8 @@ import { usePortfolioSorting } from './usePortfolioSorting'
 import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
 import { getChainId } from '@repo/lib/config/app.config'
 import { MigrationAlert } from '../../pool/migrations/MigrationAlert'
+import { isChainDeprecated } from '../../chains/chain.utils'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 const rowProps = (addExtraColumn: boolean, needsLastColumnWider: boolean) => ({
   px: [0, 4],
@@ -77,6 +79,8 @@ export function PortfolioTable() {
     .filter(pool => needsMigration(pool.protocolVersion, getChainId(pool.chain), pool.id))
     .sort((a, b) => (b.userBalance?.totalBalanceUsd || 0) - (a.userBalance?.totalBalanceUsd || 0))
     .filter((item, pos, ary) => !pos || item.id != ary[pos - 1].id) // deduplication
+
+  const deprecatedChainPools = sortedPools.filter(pool => isChainDeprecated(pool.chain)).length
 
   return (
     <FadeInOnView>
@@ -136,6 +140,15 @@ export function PortfolioTable() {
         {poolsThatNeedMigration.map(pool => (
           <MigrationAlert key={pool.id} pool={pool} />
         ))}
+
+        {deprecatedChainPools > 0 && (
+          <BalAlert
+            content={`You have ${deprecatedChainPools} affected ${deprecatedChainPools === 1 ? 'position' : 'positions'} on this chains.
+            Please remove your liquidity asap.`}
+            status="warning"
+            title="zkEVM, Mode and Fraxtal are being sunset on Balancer"
+          />
+        )}
 
         {isConnected ? (
           <Card

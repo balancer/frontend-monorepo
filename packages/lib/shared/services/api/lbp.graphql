@@ -15,8 +15,10 @@ fragment LbpV3CommonMetadataFields on GqlPoolLiquidityBootstrappingV3 {
   projectTokenStartWeight
   reserveToken
   reserveTokenIndex
+  reserveTokenVirtualBalance
   startTime
   telegram
+  isSeedless
   topTrades {
     address
     value
@@ -51,7 +53,6 @@ fragment LBPPriceChartData on LBPPriceChartData {
   cumulativeFees
   cumulativeVolume
   fees
-  intervalTimestamp # deprecated
   projectTokenBalance
   projectTokenPrice # in reserve token
   reserveTokenBalance
