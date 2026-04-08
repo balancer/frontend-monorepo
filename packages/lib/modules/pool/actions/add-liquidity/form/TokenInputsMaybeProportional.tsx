@@ -5,7 +5,7 @@ import { TokenInputs } from './TokenInputs'
 import { useProportionalInputs } from './useProportionalInputs'
 import { ApiToken, HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 import { WrappedOrUnderlyingSelectModal } from '@repo/lib/modules/tokens/WrappedOrUnderlyingSelectModal'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
 import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens/token.helpers'
@@ -83,25 +83,21 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
   const totalPoolTokenCount = poolTokenBalances.length
   const missingPoolTokenCount = poolTokenBalances.filter(token => !token.hasBalance).length
 
-  const addableUsdBalance = useMemo(() => {
-    return poolTokenBalances
-      .reduce((sum, { formattedBalance, token }) => {
-        return bn(sum).plus(usdValueForToken(token, formattedBalance))
-      }, bn(0))
-      .toString()
-  }, [poolTokenBalances, usdValueForToken])
+  const addableUsdBalance = poolTokenBalances
+    .reduce((sum, { formattedBalance, token }) => {
+      return bn(sum).plus(usdValueForToken(token, formattedBalance))
+    }, bn(0))
+    .toString()
 
-  const maxHumanAmountsIn = useMemo<HumanTokenAmountWithSymbol[]>(
-    () =>
-      poolTokenBalances.map(({ token, formattedBalance, hasBalance }) => ({
-        tokenAddress: token.address as Address,
-        humanAmount: hasBalance ? (formattedBalance as HumanAmount) : '',
-        symbol: token.symbol,
-      })),
-    [poolTokenBalances]
+  const maxHumanAmountsIn: HumanTokenAmountWithSymbol[] = poolTokenBalances.map(
+    ({ token, formattedBalance, hasBalance }) => ({
+      tokenAddress: token.address as Address,
+      humanAmount: hasBalance ? (formattedBalance as HumanAmount) : '',
+      symbol: token.symbol,
+    })
   )
 
-  const proportionalAddableUsdBalance = useMemo(() => {
+  const proportionalAddableUsdBalance = (() => {
     if (!maxProportionalHumanAmountsIn?.length) return '0'
 
     return maxProportionalHumanAmountsIn
@@ -114,9 +110,9 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
         return bn(sum).plus(usdValueForToken(token, amountIn.humanAmount || '0'))
       }, bn(0))
       .toString()
-  }, [maxProportionalHumanAmountsIn, tokens, usdValueForToken])
+  })()
 
-  const isFlexibleMaxApplied = useMemo(() => {
+  const isFlexibleMaxApplied = (() => {
     if (!hasAnyPoolTokenBalance) return false
 
     return poolTokenBalances.every(({ token, formattedBalance, hasBalance }) => {
@@ -130,9 +126,9 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
       return !currentAmount || bn(currentAmount).isZero()
     })
-  }, [poolTokenBalances, humanAmountsIn, hasAnyPoolTokenBalance])
+  })()
 
-  const isProportionalMaxApplied = useMemo(() => {
+  const isProportionalMaxApplied = (() => {
     if (!maxProportionalHumanAmountsIn?.length) return false
 
     return maxProportionalHumanAmountsIn.every(expectedAmount => {
@@ -146,7 +142,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
       return !!currentAmount && bn(currentAmount).eq(expectedAmount.humanAmount)
     })
-  }, [maxProportionalHumanAmountsIn, humanAmountsIn])
+  })()
 
   const canApplyProportionalMax = !!maxProportionalHumanAmountsIn?.length
   const isFlexibleWarning = !hasAnyPoolTokenBalance
