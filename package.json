@@ -47,10 +47,10 @@
     "stylelint": "17.4.0",
     "stylelint-config-standard": "40.0.0",
     "stylelint-prettier": "5.0.3",
-    "turbo": "2.8.21",
+    "turbo": "2.9.3",
     "typescript": "5.9.3",
     "vitest": "3.2.4",
-    "vitest-mock-extended": "3.1.0"
+    "vitest-mock-extended": "3.1.1"
   },
   "packageManager": "pnpm@10.32.1",
   "engines": {
