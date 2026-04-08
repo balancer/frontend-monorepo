@@ -38,7 +38,8 @@
         "@apollo/client-integration-nextjs",
         "@graphql-typed-document-node/core",
         "@graphql-codegen/**"
-      ]
+      ],
+      "matchDepTypes": ["dependencies", "devDependencies"]
     },
     {
       "description": "Keep ESLint plugins compatible with core.",
