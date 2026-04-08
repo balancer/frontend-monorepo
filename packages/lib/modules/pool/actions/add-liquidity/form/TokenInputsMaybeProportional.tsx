@@ -26,6 +26,64 @@ type Props = {
   totalUSDValue: string
 }
 
+function calcProportionalAddableUsdBalance(
+  maxProportionalHumanAmountsIn: HumanTokenAmountWithSymbol[] | undefined,
+  tokens: ApiToken[],
+  usdValueForToken: (token: ApiToken, amount: string) => string
+): string {
+  if (!maxProportionalHumanAmountsIn?.length) return '0'
+
+  return maxProportionalHumanAmountsIn
+    .reduce((sum, amountIn) => {
+      const token = tokens.find(token =>
+        isSameAddress(token.address as Address, amountIn.tokenAddress)
+      )
+      if (!token) return bn(sum)
+
+      return bn(sum).plus(usdValueForToken(token, amountIn.humanAmount || '0'))
+    }, bn(0))
+    .toString()
+}
+
+function calcIsFlexibleMaxApplied(
+  hasAnyPoolTokenBalance: boolean,
+  poolTokenBalances: { token: ApiToken; formattedBalance: string; hasBalance: boolean }[],
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
+): boolean {
+  if (!hasAnyPoolTokenBalance) return false
+
+  return poolTokenBalances.every(({ token, formattedBalance, hasBalance }) => {
+    const currentAmount = humanAmountsIn.find(amountIn =>
+      isSameAddress(amountIn.tokenAddress, token.address as Address)
+    )?.humanAmount
+
+    if (hasBalance) {
+      return !!currentAmount && bn(currentAmount).eq(formattedBalance)
+    }
+
+    return !currentAmount || bn(currentAmount).isZero()
+  })
+}
+
+function calcIsProportionalMaxApplied(
+  maxProportionalHumanAmountsIn: HumanTokenAmountWithSymbol[] | undefined,
+  humanAmountsIn: HumanTokenAmountWithSymbol[]
+): boolean {
+  if (!maxProportionalHumanAmountsIn?.length) return false
+
+  return maxProportionalHumanAmountsIn.every(expectedAmount => {
+    const currentAmount = humanAmountsIn.find(amountIn =>
+      isSameAddress(amountIn.tokenAddress, expectedAmount.tokenAddress)
+    )?.humanAmount
+
+    if (!expectedAmount.humanAmount) {
+      return !currentAmount || bn(currentAmount).isZero()
+    }
+
+    return !!currentAmount && bn(currentAmount).eq(expectedAmount.humanAmount)
+  })
+}
+
 export function TokenInputsMaybeProportional({ isProportional }: Props) {
   const {
     setHumanAmountIn,
@@ -93,52 +151,22 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     })
   )
 
-  const proportionalAddableUsdBalance = (() => {
-    if (!maxProportionalHumanAmountsIn?.length) return '0'
+  const proportionalAddableUsdBalance = calcProportionalAddableUsdBalance(
+    maxProportionalHumanAmountsIn,
+    tokens,
+    usdValueForToken
+  )
 
-    return maxProportionalHumanAmountsIn
-      .reduce((sum, amountIn) => {
-        const token = tokens.find(token =>
-          isSameAddress(token.address as Address, amountIn.tokenAddress)
-        )
-        if (!token) return bn(sum)
+  const isFlexibleMaxApplied = calcIsFlexibleMaxApplied(
+    hasAnyPoolTokenBalance,
+    poolTokenBalances,
+    humanAmountsIn
+  )
 
-        return bn(sum).plus(usdValueForToken(token, amountIn.humanAmount || '0'))
-      }, bn(0))
-      .toString()
-  })()
-
-  const isFlexibleMaxApplied = (() => {
-    if (!hasAnyPoolTokenBalance) return false
-
-    return poolTokenBalances.every(({ token, formattedBalance, hasBalance }) => {
-      const currentAmount = humanAmountsIn.find(amountIn =>
-        isSameAddress(amountIn.tokenAddress, token.address as Address)
-      )?.humanAmount
-
-      if (hasBalance) {
-        return !!currentAmount && bn(currentAmount).eq(formattedBalance)
-      }
-
-      return !currentAmount || bn(currentAmount).isZero()
-    })
-  })()
-
-  const isProportionalMaxApplied = (() => {
-    if (!maxProportionalHumanAmountsIn?.length) return false
-
-    return maxProportionalHumanAmountsIn.every(expectedAmount => {
-      const currentAmount = humanAmountsIn.find(amountIn =>
-        isSameAddress(amountIn.tokenAddress, expectedAmount.tokenAddress)
-      )?.humanAmount
-
-      if (!expectedAmount.humanAmount) {
-        return !currentAmount || bn(currentAmount).isZero()
-      }
-
-      return !!currentAmount && bn(currentAmount).eq(expectedAmount.humanAmount)
-    })
-  })()
+  const isProportionalMaxApplied = calcIsProportionalMaxApplied(
+    maxProportionalHumanAmountsIn,
+    humanAmountsIn
+  )
 
   const canApplyProportionalMax = !!maxProportionalHumanAmountsIn?.length
   const isFlexibleWarning = !hasAnyPoolTokenBalance
