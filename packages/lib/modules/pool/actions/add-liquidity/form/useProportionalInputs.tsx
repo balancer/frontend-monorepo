@@ -86,39 +86,14 @@ export function useProportionalInputs() {
       return bn(humanBalanceFor(token.address as Address)).gt(0)
     })
 
-  const maxProportionalHumanAmountsIn = (() => {
-    if (!hasBalanceForAllTokens || !poolStateWithBalances) return
-
-    const optimalToken = tokens.find(token => {
-      const userBalance = humanBalanceFor(token.address as Address)
-
-      const proportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
-        token,
-        humanAmount: userBalance,
-        helpers,
-        wethIsEth,
-        wrapUnderlying,
-        poolStateWithBalances,
-      })
-
-      return proportionalHumanAmountsIn.every(({ tokenAddress, humanAmount }) => {
-        if (humanAmount === '') return true
-
-        return bn(humanBalanceFor(tokenAddress)).gte(humanAmount)
-      })
-    })
-
-    if (!optimalToken) return
-
-    return _calculateProportionalHumanAmountsIn({
-      token: optimalToken,
-      humanAmount: humanBalanceFor(optimalToken.address as Address),
-      helpers,
-      wethIsEth,
-      wrapUnderlying,
-      poolStateWithBalances,
-    })
-  })()
+  const maxProportionalHumanAmountsIn = calculateMaxProportionalHumanAmountsIn({
+    tokens,
+    humanBalanceFor,
+    helpers,
+    wethIsEth,
+    wrapUnderlying,
+    poolStateWithBalances,
+  })
 
   function handleMaximizeProportionalAmounts() {
     if (!maxProportionalHumanAmountsIn?.length) return
@@ -200,4 +175,54 @@ export function _calculateProportionalHumanAmountsIn({
       return 0
     }
   }
+}
+
+type CalculateMaxParams = {
+  tokens: ApiToken[]
+  humanBalanceFor: (tokenAddress: Address) => HumanAmount
+  helpers: LiquidityActionHelpers
+  wethIsEth: boolean
+  wrapUnderlying: boolean[]
+  poolStateWithBalances?: PoolStateWithUnderlyingBalances | PoolStateWithBalances
+}
+
+function calculateMaxProportionalHumanAmountsIn({
+  tokens,
+  humanBalanceFor,
+  helpers,
+  wethIsEth,
+  wrapUnderlying,
+  poolStateWithBalances,
+}: CalculateMaxParams): HumanTokenAmountWithSymbol[] | undefined {
+  if (!poolStateWithBalances) return
+
+  const optimalToken = tokens.find(token => {
+    const userBalance = humanBalanceFor(token.address as Address)
+
+    const proportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
+      token,
+      humanAmount: userBalance,
+      helpers,
+      wethIsEth,
+      wrapUnderlying,
+      poolStateWithBalances,
+    })
+
+    return proportionalHumanAmountsIn.every(({ tokenAddress, humanAmount }) => {
+      if (humanAmount === '') return true
+
+      return bn(humanBalanceFor(tokenAddress)).gte(humanAmount)
+    })
+  })
+
+  if (!optimalToken) return
+
+  return _calculateProportionalHumanAmountsIn({
+    token: optimalToken,
+    humanAmount: humanBalanceFor(optimalToken.address as Address),
+    helpers,
+    wethIsEth,
+    wrapUnderlying,
+    poolStateWithBalances,
+  })
 }
