@@ -28,6 +28,12 @@ This monorepo includes the following apps & packages:
   eslint configurations.
 - [packages/typescript-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/typescript-config):
   Typescript config's used throughout the monorepo.
+- [packages/e2e-tests](https://github.com/balancer/frontend-monorepo/tree/main/packages/e2e-tests):
+  Playwright end-to-end test suite for the frontend apps.
+- [packages/test](https://github.com/balancer/frontend-monorepo/tree/main/packages/test): Shared
+  test utilities (vitest setup, anvil fork helpers) used across the workspace.
+- [packages/prettier-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/prettier-config):
+  Shared Prettier configuration used by all apps and packages.
 
 ## Getting started
 
