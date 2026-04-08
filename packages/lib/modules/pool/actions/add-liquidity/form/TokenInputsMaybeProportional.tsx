@@ -84,6 +84,9 @@ function calcIsProportionalMaxApplied(
   })
 }
 
+const addableLabel = (count: number, total?: number) =>
+  `${total ? `${count}/${total}` : count} addable token${(total ?? count) === 1 ? '' : 's'}`
+
 export function TokenInputsMaybeProportional({ isProportional }: Props) {
   const {
     setHumanAmountIn,
@@ -172,11 +175,11 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
   const isFlexibleWarning = !hasAnyPoolTokenBalance
   const isProportionalWarning = missingPoolTokenCount > 0
 
-  const flexibleAddableLabel = `${addableTokenCount} Addable token${addableTokenCount === 1 ? '' : 's'}`
+  const flexibleAddableLabel = addableLabel(addableTokenCount)
 
   const proportionalAddableLabel = isProportionalWarning
-    ? `${addableTokenCount}/${totalPoolTokenCount} Addable token${totalPoolTokenCount === 1 ? '' : 's'}`
-    : `${totalPoolTokenCount} Addable token${totalPoolTokenCount === 1 ? '' : 's'}`
+    ? addableLabel(addableTokenCount, totalPoolTokenCount)
+    : addableLabel(totalPoolTokenCount)
 
   const flexibleWarningTooltip =
     "You don't have any of these pool tokens in your wallet, so you can't add any liquidity to this pool right now. Get some pool tokens and come back"
