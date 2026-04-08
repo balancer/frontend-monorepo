@@ -1,4 +1,4 @@
-import { Card, HStack, Skeleton, Text } from '@chakra-ui/react'
+import { Box, Card, HStack, Skeleton, Text } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
@@ -150,26 +150,19 @@ export function AddableTokensSummary({
 
           {!isProportional ? (
             <HStack gap={1.5}>
-              <motion.div layout transition={{ duration: 0.2, ease: 'easeIn' }}>
-                <Text color="grayText" fontSize="sm">
-                  {toCurrency(addableUsdBalance, { abbreviated: false })}
-                </Text>
-              </motion.div>
-              <motion.div
-                layout
-                style={{ position: 'relative' }}
-                transition={{ duration: 0.2, ease: 'easeIn' }}
-              >
-                <AnimatePresence initial={false} mode="popLayout">
-                  {isFlexibleMaxApplied && !isFlexibleWarning ? (
-                    <motion.div
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, transition: { duration: 0 } }}
-                      initial={{ opacity: 0, x: 5 }}
-                      key="clear"
-                      style={{ transformOrigin: 'right', whiteSpace: 'nowrap' }}
-                      transition={{ duration: 0.2, ease: 'easeIn' }}
-                    >
+              <Text color="grayText" fontSize="sm">
+                {toCurrency(addableUsdBalance, { abbreviated: false })}
+              </Text>
+              <Box minW="36px" textAlign="right">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0 }}
+                    key={isFlexibleMaxApplied ? 'reset' : 'max'}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {isFlexibleMaxApplied && !isFlexibleWarning ? (
                       <Text
                         color="font.default"
                         cursor="pointer"
@@ -178,16 +171,7 @@ export function AddableTokensSummary({
                       >
                         Reset
                       </Text>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, transition: { duration: 0 } }}
-                      initial={{ opacity: 0, x: -5 }}
-                      key="max"
-                      style={{ transformOrigin: 'right', whiteSpace: 'nowrap' }}
-                      transition={{ duration: 0.2, ease: 'easeIn' }}
-                    >
+                    ) : (
                       <Text
                         color={isFlexibleWarning ? 'grayText' : 'font.highlight'}
                         cursor={isFlexibleWarning ? 'not-allowed' : 'pointer'}
@@ -197,10 +181,10 @@ export function AddableTokensSummary({
                       >
                         Max
                       </Text>
-                    </motion.div>
-                  )}
+                    )}
+                  </motion.div>
                 </AnimatePresence>
-              </motion.div>
+              </Box>
             </HStack>
           ) : (
             <HStack gap={1.5}>
