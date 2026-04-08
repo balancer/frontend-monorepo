@@ -6,7 +6,6 @@ import { isAfter } from 'date-fns'
 import { Address } from 'viem'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
-import { isFixedLBP } from '../../../pool.helpers'
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 export function LbpPoolAttributes({ pool }: { pool: LbpV3 }) {
@@ -22,7 +21,7 @@ export function LbpPoolAttributes({ pool }: { pool: LbpV3 }) {
     },
     {
       title: 'Available user actions',
-      value: `Users can ${pool.isProjectTokenSwapInBlocked || isFixedLBP(pool) ? 'only buy' : 'buy and sell'} the sale token`,
+      value: `Users can ${pool.isProjectTokenSwapInBlocked ? 'only buy' : 'buy and sell'} the sale token`,
     },
     {
       title: hasEnded ? `${token.symbol} price at the end of LBP` : `${token.symbol} spot price`,
