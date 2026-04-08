@@ -1,7 +1,4 @@
 import {
-  AlertDescription,
-  AlertIcon,
-  Alert,
   Card,
   Modal,
   ModalBody,
@@ -10,8 +7,6 @@ import {
   ModalProps,
   Stack,
   Text,
-  AlertTitle,
-  VStack,
 } from '@chakra-ui/react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -37,11 +32,6 @@ import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowW
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useVeBalRedirectPath } from '../../vebal-navigation'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { useVeBALPool } from '../../vote/Votes/MyVotes/MyVotesStats/useVeBALPool'
-import { useGetPoolRewards } from '@repo/lib/modules/pool/useGetPoolRewards'
-import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type Props = {
   isOpen: boolean
@@ -58,8 +48,7 @@ export function VebalLockModal({
   const router = useRouter()
   const { redirectPath, returnLabel } = useVeBalRedirectPath()
 
-  const { userAddress, isLoading: userAccountIsLoading } = useUserAccount()
-  const { toCurrency } = useCurrency()
+  const { isLoading: userAccountIsLoading } = useUserAccount()
   const { isDesktop, isMobile } = useBreakpoints()
   const {
     vebalBptToken,
@@ -97,12 +86,6 @@ export function VebalLockModal({
 
   const isSuccess = !!lockTxHash
 
-  const { pool, poolIsLoading } = useVeBALPool(userAddress)
-  const { calculatePotentialYield } = useGetPoolRewards(pool || ({} as Pool))
-  const { usdValueForToken } = useTokens()
-  const totalUsdValue = usdValueForToken(vebalBptToken, totalAmount)
-  const weeklyYield = !poolIsLoading ? calculatePotentialYield(totalUsdValue) : '0'
-
   return (
     <Modal
       isCentered
@@ -135,27 +118,6 @@ export function VebalLockModal({
               <Text>Loading data...</Text>
             ) : (
               <>
-                {lockMode === LockMode.Unlock && extendExpired && (
-                  <Alert status="info">
-                    <AlertIcon />
-                    <AlertDescription>
-                      To extend an expired lock, unlock the old one first, then confirm the new
-                      lock-up period.
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {isUnlocking && (
-                  <Alert status="info">
-                    <AlertIcon />
-                    <VStack alignItems="start" spacing="none">
-                      <AlertTitle>Reconsider unlocking?</AlertTitle>
-                      <AlertDescription>
-                        {`Extending your lock to 1 year could generate ${toCurrency(weeklyYield, { abbreviated: false })}
-                        in yield next week from voting incentives, protocol revenue and swap fees.`}
-                      </AlertDescription>
-                    </VStack>
-                  </Alert>
-                )}
                 <Stack direction="column" spacing="sm" w="full">
                   <Text>{isUnlocking ? 'Locked amount' : 'Lock amount'}</Text>
                   <Card variant="modalSubSection">
