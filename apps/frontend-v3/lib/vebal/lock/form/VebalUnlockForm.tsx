@@ -11,14 +11,12 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
-  AlertDescription,
   CardBody,
   CardProps,
   Skeleton,
 } from '@chakra-ui/react'
 import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { VebalLockModal } from '@bal/lib/vebal/lock/modal/VebalLockModal'
-import NextLink from 'next/link'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
@@ -77,10 +75,6 @@ export function VebalUnlockForm() {
                   lockedEndDateFormatted
                 )}
               </AlertTitle>
-              <AlertDescription>
-                You are no longer receiving veBAL benefits like voting incentives and a share of
-                protocol revenue.
-              </AlertDescription>
             </VStack>
           </Alert>
           <VStack align="start" spacing="sm" w="full">
@@ -114,49 +108,6 @@ export function VebalUnlockForm() {
             )}
           </VStack>
           <VStack align="start" spacing="md" w="full">
-            <HStack justifyContent="space-between" spacing="md" w="full">
-              <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                Your options:
-              </Text>
-            </HStack>
-            {isLoading ? (
-              <Skeleton h="100px" w="full" />
-            ) : (
-              <Card
-                _hover={{ shadow: 'sm' }}
-                as={NextLink}
-                href="/vebal/manage/extend"
-                role="group"
-                shadow="2xl"
-                variant="subSection"
-              >
-                <Flex
-                  alignItems="center"
-                  gap={{ base: 'lg', md: '2xl' }}
-                  justifyContent="space-between"
-                >
-                  <Box>
-                    <Text _groupHover={{ color: 'font.highlight' }} fontWeight="700" mb="xs">
-                      Extend lock
-                    </Text>
-                    <CardBody color="font.secondary">
-                      <Text
-                        _groupHover={{ color: 'font.maxContrast' }}
-                        fontSize="sm"
-                        sx={{ textWrap: 'balanced' }}
-                        variant="secondary"
-                      >
-                        Regain your veBAL benefits: Voting incentives, protocol revenue, voting
-                        power and boosted LP yield
-                      </Text>
-                    </CardBody>
-                  </Box>
-                  <Box _groupHover={{ color: 'font.highlight' }} color="font.link">
-                    <ArrowRight size="16" />
-                  </Box>
-                </Flex>
-              </Card>
-            )}
             {isLoading ? (
               <Skeleton h="100px" w="full" />
             ) : (

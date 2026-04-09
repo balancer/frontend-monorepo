@@ -2,7 +2,6 @@
 
 import {
   Alert,
-  Box,
   AlertDescription,
   AlertIcon,
   AlertTitle,
@@ -89,44 +88,6 @@ export function MyVotes() {
                   gap={{ base: '0', lg: 'sm' }}
                 >
                   <AlertTitle>{`You can't vote due to expired veBAL`}</AlertTitle>
-                  <AlertDescription>
-                    Voting requires veBAL.{' '}
-                    <Box
-                      as={NextLink}
-                      color="font.dark"
-                      href="/vebal/manage"
-                      textDecoration="underline"
-                    >
-                      Extend or relock
-                    </Box>{' '}
-                    your B-80BAL-20-WETH to replenish your veBAL.
-                  </AlertDescription>
-                </Stack>
-              </Alert>
-            </GridItem>
-          ) : !loading && noVeBALBalance ? (
-            <GridItem w="full">
-              <Alert status="warning" variant="WideOnDesktop">
-                <AlertIcon as={AlertTriangle} />
-                <Stack
-                  alignItems="baseline"
-                  direction={{ base: 'column', lg: 'row' }}
-                  gap={{ base: '0', lg: 'sm' }}
-                >
-                  <AlertTitle>You need some veBAL to vote on gauges</AlertTitle>
-                  <AlertDescription>
-                    {' '}
-                    Get veBAL by locking up LP tokens from the{' '}
-                    <Box
-                      as={NextLink}
-                      color="font.dark"
-                      href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014"
-                      textDecoration="underline"
-                    >
-                      80% BAL / 20% WETH pool
-                    </Box>
-                    .
-                  </AlertDescription>
                 </Stack>
               </Alert>
             </GridItem>

@@ -7,8 +7,6 @@ import { MyVotesStatsCard } from '../shared/MyVotesStatsCard'
 import { useVeBALIncentives } from '../useVeBALIncentives'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
-import NextLink from 'next/link'
-import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
 import { areAllVotesTimelocked, useIncentivesOptimized } from './useIncentivesOptimized'
 import { canReceiveIncentives, useBlacklistedVotes } from '../../incentivesBlacklist'
 import { useVotes } from '../../../VotesProvider'
@@ -175,16 +173,11 @@ export function MyVotesStatsMyIncentivesOptimized() {
       rightContent={
         isLoading ? (
           <Skeleton height="28px" w="100px" />
-        ) : isConnected && noVeBALBalance ? (
-          <Button
-            as={NextLink}
-            href={getVeBalManagePath('lock', 'vote')}
-            size="sm"
-            variant="primary"
-          >
-            Get veBAL
-          </Button>
-        ) : isConnected ? (
+        ) : !isConnected ? (
+          <Stack>
+            <ConnectWallet size="sm" variant="primary" />
+          </Stack>
+        ) : !noVeBALBalance ? (
           <TooltipWithTouch
             bg="background.base"
             color="font.secondary"
@@ -207,11 +200,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
               </Button>
             </Stack>
           </TooltipWithTouch>
-        ) : (
-          <Stack>
-            <ConnectWallet size="sm" variant="primary" />
-          </Stack>
-        )
+        ) : null
       }
       variant="special"
     />

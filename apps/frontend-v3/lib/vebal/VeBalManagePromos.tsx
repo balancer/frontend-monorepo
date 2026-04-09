@@ -1,35 +1,12 @@
 import { Box, Heading, Link, Text, Stack, SimpleGrid, Flex } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { SparkleIconWrapper } from '@repo/lib/shared/components/animations/SparkleIconWrapper'
-import { VebalBenefitsSyncIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSyncIcon'
 import { VebalBenefitsSparklesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSparklesIcon'
 import { StoneIcon } from '@repo/lib/shared/components/StoneIcon'
 
 export function VeBalManagePromos() {
   const gridItems = [
-    {
-      icon: (
-        <SparkleIconWrapper size={49}>
-          <VebalBenefitsSyncIcon />
-        </SparkleIconWrapper>
-      ),
-      title: 'Cross-chain sync for max boosts',
-      description: (
-        <Box as="span">
-          Sync your veBAL balance to L2s to maximize veBAL boosted liquidity incentives. Sync on the{' '}
-          <Link
-            href="https://app.balancer.fi/#/ethereum/vebal"
-            isExternal
-            style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'baseline' }}
-          >
-            legacy site
-            <ArrowUpRight size={12} style={{ marginLeft: 2 }} />
-          </Link>
-        </Box>
-      ),
-    },
     {
       icon: (
         <SparkleIconWrapper size={41}>
