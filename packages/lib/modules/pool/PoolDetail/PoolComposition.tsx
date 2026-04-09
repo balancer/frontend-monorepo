@@ -81,14 +81,6 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
           const isVirtualPairedToken =
             isSeedlessLBP && pool.poolTokens[pool.reserveTokenIndex].address === poolToken.address
 
-          const tokenWeight =
-            isSeedlessLBP && isVirtualPairedToken
-              ? bn(actualWeight)
-                  .plus(
-                    bn(actualWeight).times(pool.reserveTokenVirtualBalance).div(poolToken.balance)
-                  )
-                  .toString()
-              : actualWeight
           const tokenValue =
             isSeedlessLBP && isVirtualPairedToken
               ? bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance)
@@ -97,7 +89,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
           return (
             <VStack key={`pool-${poolToken.address}`} w="full">
               <TokenRow
-                actualWeight={tokenWeight}
+                actualWeight={actualWeight}
                 address={poolToken.address as Address}
                 chain={chain}
                 pool={pool}
@@ -139,7 +131,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                   <TokenRow
                     actualWeight={bn(actualWeight)
                       .times(pool.reserveTokenVirtualBalance)
-                      .div(poolToken.balance)
+                      .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
                       .toString()}
                     address={poolToken.address as Address}
                     chain={chain}
@@ -151,7 +143,10 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
                     value={pool.reserveTokenVirtualBalance}
                   />
                   <TokenRow
-                    actualWeight={actualWeight}
+                    actualWeight={bn(actualWeight)
+                      .times(poolToken.balance)
+                      .div(bn(poolToken.balance).plus(pool.reserveTokenVirtualBalance))
+                      .toString()}
                     address={poolToken.address as Address}
                     chain={chain}
                     iconSize={28}
