@@ -79,6 +79,12 @@
       "matchManagers": ["github-actions"]
     },
     {
+      "description": "Keep Next server external workaround packages pinned to the transitive versions required by the current WalletConnect/pino stack.",
+      "groupName": "Pinned Next server externals",
+      "matchPackageNames": ["thread-stream", "real-require"],
+      "enabled": false
+    },
+    {
       "description": "Group remaining npm devDependencies that are not already covered by more specific package groups.",
       "groupName": "Other devDependencies",
       "matchManagers": ["npm"],
