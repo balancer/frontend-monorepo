@@ -10,22 +10,15 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { Address, erc20Abi, formatUnits, isAddress } from 'viem'
+import { isAddress } from 'viem'
 import { PoolDisplayType } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
 import { PoolListItem } from '../pool.types'
-import {
-  getNativeAssetAddress,
-  getNetworkConfig,
-  getWrappedNativeAssetAddress,
-} from '@repo/lib/config/app.config'
-import { useConfig } from 'wagmi'
-import { getBalance, multicall } from 'wagmi/actions'
-import { useQueries, useQuery as useReactQuery } from '@tanstack/react-query'
-import { includesAddress } from '@repo/lib/shared/utils/addresses'
+import { useQuery as useReactQuery } from '@tanstack/react-query'
 import { useTokens } from '../../tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { useWalletTokenBalances } from '../../tokens/useWalletTokenBalances'
 
 export function usePoolListLogic({
   fixedPoolTypes,
@@ -36,9 +29,8 @@ export function usePoolListLogic({
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress, isConnected } = useUserAccount()
-  const config = useConfig()
   const apolloClient = useApolloClient()
-  const { getTokensByChain, priceFor, isLoadingTokens, isLoadingTokenPrices } = useTokens()
+  const { isLoadingTokens, isLoadingTokenPrices } = useTokens()
   const [poolDisplayType, setPoolDisplayType] = useState<PoolDisplayType>(
     PROJECT_CONFIG.options.poolDisplayType
   )
@@ -68,107 +60,12 @@ export function usePoolListLogic({
   const selectedChains = variables.where.chainIn || []
   const joinableChains = selectedChains.filter(chain => chain !== GqlChain.Sepolia)
 
-  const walletBalanceQueries = useQueries({
-    queries: joinableChains.map(chain => {
-      const networkConfig = getNetworkConfig(chain)
-      const chainTokens = getTokensByChain(chain)
-      const nativeAddress = getNativeAssetAddress(chain)
-      const erc20Tokens = chainTokens.filter(
-        token => !includesAddress([nativeAddress], token.address)
-      )
-
-      return {
-        queryKey: [
-          'pool-list-wallet-balances',
-          chain,
-          userAddress,
-          erc20Tokens.length,
-          chainTokens.length,
-        ],
-        queryFn: async () => {
-          const nativeBalance = await getBalance(config, {
-            chainId: networkConfig.chainId,
-            address: userAddress as Address,
-          })
-
-          const contracts = erc20Tokens.map(token => ({
-            chainId: networkConfig.chainId,
-            abi: erc20Abi,
-            address: token.address as Address,
-            functionName: 'balanceOf',
-            args: [userAddress as Address],
-          }))
-
-          const tokenBalances =
-            contracts.length > 0
-              ? await multicall(config, {
-                  chainId: networkConfig.chainId,
-                  contracts,
-                  allowFailure: true,
-                  batchSize: 0,
-                })
-              : []
-
-          return {
-            nativeBalance,
-            tokenBalances,
-            erc20Tokens,
-          }
-        },
-        enabled:
-          joinablePools &&
-          isConnected &&
-          isAddress(userAddress) &&
-          !isLoadingTokens &&
-          joinableChains.length > 0,
-        staleTime: 30_000,
-      }
-    }),
-  })
-
-  const walletTokenAddressesByChain = useMemo(() => {
-    const addressesByChain = new Map<GqlChain, string[]>()
-    if (!joinablePools) return addressesByChain
-
-    joinableChains.forEach((chain, index) => {
-      const query = walletBalanceQueries[index]
-      if (!query?.data) return
-
-      const currentAddresses: string[] = []
-      const nativeAddress = getNativeAssetAddress(chain)
-      const wrappedNativeAddress = getWrappedNativeAssetAddress(chain)
-      const nativeDecimals = query.data.nativeBalance.decimals
-      const nativePrice = priceFor(nativeAddress, chain)
-      const nativeBalanceUsd = bn(
-        formatUnits(query.data.nativeBalance.value, nativeDecimals)
-      ).times(nativePrice)
-
-      if (nativeBalanceUsd.gte(1)) {
-        currentAddresses.push(nativeAddress, wrappedNativeAddress)
-      }
-
-      query.data.erc20Tokens.forEach((token, tokenIndex) => {
-        const balanceResult = query.data.tokenBalances[tokenIndex]
-        if (balanceResult?.status !== 'success') return
-
-        const amount = balanceResult.result as bigint
-        if (amount <= 0n) return
-
-        const usdValue = bn(formatUnits(amount, token.decimals)).times(
-          priceFor(token.address, chain)
-        )
-        if (usdValue.gte(1) && !includesAddress(currentAddresses, token.address)) {
-          currentAddresses.push(token.address)
-        }
-      })
-
-      if (currentAddresses.length > 0) {
-        addressesByChain.set(chain, currentAddresses)
-      }
-    })
-
-    return addressesByChain
-  }, [joinablePools, joinableChains, walletBalanceQueries, priceFor])
+  const {
+    tokenBalancesByChain: walletTokenAddressesByChain,
+    isLoading: isWalletBalancesLoading,
+    errors: walletBalanceErrors,
+    hasBalance: hasWalletTokenBalance,
+  } = useWalletTokenBalances(joinableChains, joinablePools)
 
   const joinablePoolsQuery = useReactQuery({
     queryKey: [
@@ -231,7 +128,7 @@ export function usePoolListLogic({
 
   const joinablePoolsData = useMemo(() => {
     if (!joinablePools || !isConnected || !isAddress(userAddress)) return poolsData
-    if (walletBalanceQueries.some(query => query.isError)) return poolsData
+    if (walletBalanceErrors.length > 0) return poolsData
 
     const allJoinablePools = joinablePoolsQuery.data || []
     const uniquePools = new Map<string, PoolListItem>()
@@ -251,23 +148,16 @@ export function usePoolListLogic({
     isConnected,
     userAddress,
     joinablePoolsQuery.data,
-    walletBalanceQueries,
+    walletBalanceErrors,
   ])
 
   const isJoinableBalanceLoading =
     joinablePools &&
     (isLoadingTokens ||
       isLoadingTokenPrices ||
-      walletBalanceQueries.some(query => query.isLoading || query.isFetching) ||
+      isWalletBalancesLoading ||
       joinablePoolsQuery.isLoading ||
       joinablePoolsQuery.isFetching)
-
-  function hasWalletTokenBalance(chain: GqlChain, tokenAddress: string) {
-    if (!tokenAddress) return false
-
-    const tokenAddresses = walletTokenAddressesByChain.get(chain) || []
-    return includesAddress(tokenAddresses, tokenAddress)
-  }
 
   const filteredPools = joinablePools
     ? isJoinableBalanceLoading
