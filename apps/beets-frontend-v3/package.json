@@ -22,7 +22,7 @@
     "@apollo/client": "4.1.6",
     "@balancer/sdk": "5.2.3",
     "@chakra-ui/hooks": "2.4.2",
-    "@chakra-ui/react": "2.10.6",
+    "@chakra-ui/react": "2.10.9",
     "@chakra-ui/theme-tools": "2.2.6",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
