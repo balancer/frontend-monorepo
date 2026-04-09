@@ -17,6 +17,7 @@ import {
 import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 import { isFixedLBP } from '@repo/lib/modules/pool/pool.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type LbpPoolChartsContextType = ReturnType<typeof useLbpPoolChartsLogic>
 
@@ -49,9 +50,8 @@ export function useLbpPoolChartsLogic() {
   const hasHourlyData = hourlyData.length > 0
 
   const reserveTokenSymbol =
-    lbpPool.poolTokens.find(
-      token => token.address.toLowerCase() === lbpPool.reserveToken.toLowerCase()
-    )?.symbol || 'Reserve'
+    lbpPool.poolTokens.find(token => isSameAddress(token.address, lbpPool.reserveToken))?.symbol ||
+    'Reserve'
 
   const currentFundsRaised = getCurrentReserveTokenBalance(snapshots)
   const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
