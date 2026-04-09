@@ -48,7 +48,9 @@
         "eslint",
         "eslint-config-**",
         "eslint-plugin-**",
-        "@eslint/**"
+        "@eslint/**",
+        "@typescript-eslint/**",
+        "typescript-eslint"
       ]
     },
     {
