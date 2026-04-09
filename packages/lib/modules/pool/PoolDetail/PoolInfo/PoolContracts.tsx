@@ -26,7 +26,6 @@ import {
   GqlHookReviewData,
   Erc4626ReviewData,
   HookFragment,
-  GqlPoolLiquidityBootstrappingV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -41,7 +40,7 @@ import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer
 import { useHook } from '@repo/lib/modules/hooks/useHook'
 import { getChainId } from '@repo/lib/config/app.config'
 import { HooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
-import { Pool } from '../../pool.types'
+import { LbpV3, Pool } from '../../pool.types'
 import { CopyAddressButton } from '@repo/lib/modules/tokens/CopyAddressButton'
 
 type RateProvider = {
@@ -156,7 +155,7 @@ export function PoolContracts({ ...props }: CardProps) {
     }
 
     if (isV3LBP(pool)) {
-      const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+      const lbpPool = pool as LbpV3
       contracts.push({
         label: 'Sale token contract',
         address: abbreviateAddress(lbpPool.projectToken as Address),

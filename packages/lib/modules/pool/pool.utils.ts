@@ -201,7 +201,7 @@ const poolTypeLabelMap: Partial<Record<GqlPoolType, string>> = {
   [GqlPoolType.Gyro3]: '3-CLP',
   [GqlPoolType.Gyroe]: 'E-CLP',
   [GqlPoolType.Investment]: 'Managed',
-  [GqlPoolType.LiquidityBootstrapping]: 'LBP',
+  [GqlPoolType.LiquidityBootstrapping]: 'Dynamic LBP',
   [GqlPoolType.MetaStable]: 'Stable',
   [GqlPoolType.PhantomStable]: 'Stable',
   [GqlPoolType.Stable]: 'Stable',
@@ -211,6 +211,7 @@ const poolTypeLabelMap: Partial<Record<GqlPoolType, string>> = {
   [GqlPoolType.CowAmm]: 'CoW AMM',
   [GqlPoolType.QuantAmmWeighted]: 'BTF',
   [GqlPoolType.Reclamm]: 'reCLAMM',
+  [GqlPoolType.FixedLbp]: 'Fixed LBP',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {

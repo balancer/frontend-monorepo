@@ -7,7 +7,6 @@ import { useUserPoolEvents } from '../useUserPoolEvents'
 import { LbpHeader } from './LbpHeader/LbpHeader'
 import { LbpSwap } from './LbpSwap'
 import { usePool } from '../PoolProvider'
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { now } from '@repo/lib/shared/utils/time'
 import { isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
 import { LbpPoolChartsContainer } from './LbpPoolCharts/LbpPoolChartsContainer'
@@ -15,6 +14,7 @@ import { MyPurchases } from './MyPurchases'
 import { MyTransactions } from './MyTransactions'
 import { GetFundsWarning } from './GetFundsWarning'
 import { Top10Trades } from './Top10Trades'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 const MIN_GRID_ITEM_HEIGHT = '400px'
 
@@ -22,7 +22,7 @@ export function LbpDetail() {
   const { userPoolEvents, isLoadingUserPoolEvents, hasPoolEvents } = useUserPoolEvents()
   const { pool } = usePool()
 
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
   const isSaleFinished = isAfter(now(), secondsToMilliseconds(lbpPool.endTime))
   const fundsAvailable = Number(lbpPool.userBalance?.totalBalance) > 0
 

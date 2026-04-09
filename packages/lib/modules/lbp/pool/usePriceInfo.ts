@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client/react'
 import {
+  GetFixedLbpPriceInfoDocument,
   GetLbpPriceInfoDocument,
   GqlChain,
   LbpPriceChartDataFragment,
@@ -7,8 +8,6 @@ import {
 import {
   isAfter,
   isBefore,
-  isSameHour,
-  isWithinInterval,
   millisecondsToSeconds,
   secondsToMilliseconds,
   startOfHour,
@@ -40,8 +39,8 @@ export type HourlyDataPoint = {
   volume: number
 }
 
-export function usePriceInfo(chain: GqlChain, poolId: Address) {
-  const apiResult = useQuery(GetLbpPriceInfoDocument, {
+export function usePriceInfo(chain: GqlChain, poolId: Address, isFixedLbp = false) {
+  const apiResult = useQuery(isFixedLbp ? GetFixedLbpPriceInfoDocument : GetLbpPriceInfoDocument, {
     variables: {
       poolId: poolId.toLowerCase(),
       chain,
@@ -106,33 +105,33 @@ function aggregateToHourlyData(prices: LbpPriceChartDataFragment[]): HourlyDataP
 }
 
 export function getCurrentPrice(snapshots: LbpSnapshot[]) {
+  return getCurrentSnapshotValue(snapshots, snapshot => snapshot.projectTokenPrice)
+}
+
+export function getCurrentReserveTokenBalance(snapshots: LbpSnapshot[]) {
+  return getCurrentSnapshotValue(snapshots, snapshot => snapshot.reserveTokenBalance)
+}
+
+function getCurrentSnapshotValue(
+  snapshots: LbpSnapshot[],
+  selector: (snapshot: LbpSnapshot) => number
+) {
   if (snapshots.length === 0) return 0
 
   const currentTime = now()
-  if (isBefore(currentTime, snapshots[0].timestamp)) return snapshots[0].projectTokenPrice
+  if (isBefore(currentTime, snapshots[0].timestamp)) return selector(snapshots[0])
   if (isAfter(currentTime, snapshots[snapshots.length - 1].timestamp)) {
-    return snapshots[snapshots.length - 1].projectTokenPrice
+    return selector(snapshots[snapshots.length - 1])
   }
 
-  for (let i = 0; i < snapshots.length; i++) {
-    if (isSameHour(currentTime, snapshots[i].timestamp)) return snapshots[i].projectTokenPrice
-    if (isSameHour(currentTime, snapshots[i + 1].timestamp)) {
-      return snapshots[i + 1].projectTokenPrice
-    }
-    if (
-      isWithinInterval(currentTime, {
-        start: snapshots[i].timestamp,
-        end: snapshots[i + 1].timestamp,
-      })
-    ) {
-      return bn(snapshots[i].projectTokenPrice)
-        .plus(snapshots[i + 1].projectTokenPrice)
-        .div(2)
-        .toNumber()
+  // Find the last snapshot before or at current time
+  for (let i = snapshots.length - 1; i >= 0; i--) {
+    if (!isAfter(snapshots[i].timestamp, currentTime)) {
+      return selector(snapshots[i])
     }
   }
 
-  throw new Error('Unreachable code')
+  return selector(snapshots[0])
 }
 
 export function min(prices: LbpPrice[]) {
