@@ -1,6 +1,6 @@
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Box, Divider, Card, VStack, Button, Text } from '@chakra-ui/react'
+import { Box, Divider, Card, VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -11,13 +11,11 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { AddLiquidityReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { StakingOptions } from './StakingOptions'
-import { isVebalPool } from '../../../pool.helpers'
 import { GasCostSummaryCard } from '@repo/lib/modules/transactions/transaction-steps/GasCostSummaryCard'
 
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useMemo, useState } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useRouter } from 'next/navigation'
 import {
   PROPORTIONAL_ADD_DESCRIPTION,
   SlippageOptions,
@@ -46,7 +44,6 @@ export function AddLiquiditySummary({
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
-  const router = useRouter()
 
   // Order amountsIn like the form inputs which uses the tokens array.
   const [selectedSlippage, setSelectedSlippage] = useState(0)
@@ -131,27 +128,11 @@ export function AddLiquiditySummary({
         <>
           <GasCostSummaryCard chain={pool.chain} transactionSteps={transactionSteps.steps} />
           <CardPopAnim key="staking-options">
-            {isVebalPool(pool.id) ? (
-              <Card variant="modalSubSection">
-                <VStack align="start" spacing="md" w="full">
-                  <Text>Get extra incentives with veBAL</Text>
-                  <Button
-                    onClick={() => router.push('/vebal/manage')}
-                    size="lg"
-                    variant="primary"
-                    w="full"
-                  >
-                    Lock to get veBAL
-                  </Button>
-                </VStack>
-              </Card>
-            ) : (
-              pool.staking && (
-                <Box pt="sm">
-                  <Divider mb="md" />
-                  <StakingOptions />
-                </Box>
-              )
+            {pool.staking && (
+              <Box pt="sm">
+                <Divider mb="md" />
+                <StakingOptions />
+              </Box>
             )}
           </CardPopAnim>
         </>

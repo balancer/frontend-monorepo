@@ -4,13 +4,13 @@ runs:
   using: 'composite'
   steps:
     - name: Set up pnpm
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
       with:
-        version: 10.28.0
+        version: 10.32.1
         cache: true
 
     - name: Install Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
       with:
         cache: pnpm
         node-version: 24

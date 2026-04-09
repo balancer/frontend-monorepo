@@ -48,7 +48,7 @@ export function LbpCreationModal({
   const initialFocusRef = useRef(null)
   const hasAttemptedSaveMetadata = useRef(false)
   const { isDesktop } = useBreakpoints()
-  const { saleStructureForm, resetLbpCreation } = useLbpForm()
+  const { saleStructureForm, resetLbpCreation, isFixedSale, isSeeded } = useLbpForm()
   const createPoolInput = useCreateLbpInput()
   const initPoolInput = useInitializeLbpInput()
 
@@ -151,7 +151,7 @@ export function LbpCreationModal({
         )}
         <TransactionModalHeader
           chain={selectedChain}
-          label={'Preview: Create an LBP'}
+          label={`Preview: Create a '${isFixedSale ? "fixed price'" : isSeeded ? "seeded'" : "seedless'"} LBP`}
           txHash={initPoolTxHash}
         />
         <ModalCloseButton />

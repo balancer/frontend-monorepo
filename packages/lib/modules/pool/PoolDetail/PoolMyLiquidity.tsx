@@ -194,9 +194,6 @@ export default function PoolMyLiquidity() {
   const stakedBalance = calcStakedBalanceUsd(pool, getStakingType(activeTab.value))
   const unstakedBalance = getUserWalletBalanceUsd(pool)
 
-  const lockBtnText =
-    bn(stakedBalance).gt(0) && bn(unstakedBalance).isEqualTo(0) ? 'Extend lock' : 'Lock'
-
   function getTotalBalanceUsd() {
     if (!isConnected || isConnecting) return 0
 
@@ -370,7 +367,7 @@ export default function PoolMyLiquidity() {
                               address={nestedPoolToken.address as Address}
                               chain={chain}
                               iconSize={35}
-                              isNestedPoolToken
+                              isNestedToken
                               key={`nested-pool-${nestedPoolToken.address}`}
                               showZeroAmountAsDash
                               value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
@@ -431,11 +428,8 @@ export default function PoolMyLiquidity() {
             <Text opacity="0.25" px={{ base: '0', sm: 'ms' }} variant="secondary">
               |
             </Text>
-            {isVeBal ? (
-              <Button flex="1" onClick={() => router.push('/vebal/manage')} variant="secondary">
-                {lockBtnText}
-              </Button>
-            ) : (
+
+            {!isVeBal && (
               <>
                 <StakeUnstakeButton action="stake" pool={pool} />
 

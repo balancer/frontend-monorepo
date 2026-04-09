@@ -3,6 +3,7 @@ import {
   GqlChain,
   GqlHookType,
   GqlPoolBase,
+  GqlPoolFixedPriceLbp,
   GqlPoolGyro,
   GqlPoolLiquidityBootstrappingV3,
   GqlPoolStakingGauge,
@@ -25,11 +26,12 @@ import {
   getUserWalletBalance,
   getUserWalletBalanceUsd,
 } from './user-balance.helpers'
+import { differenceInCalendarDays, secondsToMilliseconds } from 'date-fns'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { vaultAbi_V3 } from '@balancer/sdk'
-import { Pool, PoolCore } from './pool.types'
+import { LbpV3, Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 import { PoolMetadata } from './metadata/getPoolsMetadata'
@@ -96,14 +98,25 @@ export function isUnknownType(poolType: any): boolean {
 }
 
 export function isLiquidityBootstrapping(poolType: GqlPoolType): boolean {
-  return poolType === GqlPoolType.LiquidityBootstrapping
+  return poolType === GqlPoolType.LiquidityBootstrapping || poolType === GqlPoolType.FixedLbp
 }
 
 export function isLBP(poolType: GqlPoolType): boolean {
   return isLiquidityBootstrapping(poolType)
 }
 
-export function isV3LBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
+export function isV3LBP(pool: Pool): pool is LbpV3 {
+  return (
+    pool.__typename === 'GqlPoolLiquidityBootstrappingV3' ||
+    pool.__typename === 'GqlPoolFixedPriceLBP'
+  )
+}
+
+export function isFixedLBP(pool: Pool): pool is GqlPoolFixedPriceLbp {
+  return pool.__typename === 'GqlPoolFixedPriceLBP'
+}
+
+export function isDynamicLBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
   return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
 }
 
@@ -157,6 +170,22 @@ export function isCowAmmPool(poolType: GqlPoolType): boolean {
 
 export function isQuantAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.QuantAmmWeighted
+}
+
+export function getPoolActivityTitle(activeTab: string | undefined, count: number) {
+  const singularTitleByTab = {
+    all: 'transaction',
+    adds: 'add',
+    removes: 'remove',
+    swaps: 'swap',
+  } as const
+
+  if (!activeTab) return ''
+
+  const singularTitle = singularTitleByTab[activeTab as keyof typeof singularTitleByTab]
+  if (!singularTitle) return activeTab
+
+  return count === 1 ? singularTitle : `${singularTitle}s`
 }
 
 export function noInitLiquidity(pool: GqlPoolBase): boolean {
@@ -542,4 +571,20 @@ export function poolHasRateProviderExternalOracle(pool: Pool): boolean {
   return pool.poolTokens.some(token =>
     token.priceRateProviderData?.warnings?.includes('market-rate')
   )
+}
+
+/**
+ * Returns a human-readable caption for pool activity date range.
+ * - 0 days ago → 'today'
+ * - 1 day ago → 'since yesterday'
+ * - 2+ days ago → 'in last N days'
+ */
+export function getPoolActivityDateCaption(minTimestampSeconds: number): string {
+  const diffInDays = differenceInCalendarDays(
+    new Date(),
+    new Date(secondsToMilliseconds(minTimestampSeconds))
+  )
+  if (diffInDays === 0) return 'today'
+  if (diffInDays === 1) return 'since yesterday'
+  return `in last ${diffInDays} days`
 }

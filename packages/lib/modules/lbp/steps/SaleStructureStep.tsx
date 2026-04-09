@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
-import { SaleStructureForm, UserActions, WeightAdjustmentType } from '../lbp.types'
+import { SaleStructureForm, SeedType, UserActions, WeightAdjustmentType } from '../lbp.types'
 import { Control, Controller, SubmitHandler, UseFormSetValue } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
@@ -41,7 +41,8 @@ import { InfoIconPopover } from '@repo/lib/modules/pool/actions/create/InfoIconP
 export function SaleStructureStep() {
   const { getToken } = useTokens()
 
-  const { saleStructureForm, goToNextStep, poolAddress, isDynamicSale, isFixedSale } = useLbpForm()
+  const { saleStructureForm, goToNextStep, poolAddress, isDynamicSale, isFixedSale, isSeeded } =
+    useLbpForm()
 
   const { handleSubmit, setValue, control, clearErrors } = saleStructureForm
 
@@ -56,6 +57,7 @@ export function SaleStructureStep() {
     customStartWeight,
     weightAdjustmentType,
     fee,
+    seedType,
   ] = useWatch({
     control,
     name: [
@@ -69,6 +71,7 @@ export function SaleStructureStep() {
       'customStartWeight',
       'weightAdjustmentType',
       'fee',
+      'seedType',
     ],
   })
 
@@ -98,7 +101,8 @@ export function SaleStructureStep() {
   useEffect(() => {
     const chainConfig = getNetworkConfig(selectedChain)
     const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
-    const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || []), nativeAsset]
+    const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || [])]
+    if (isSeeded) collateralTokens.push(nativeAsset)
     const normalizedTokens = collateralTokens.filter(Boolean).map(token => token?.toLowerCase())
     const hasValidCollateral = normalizedTokens.includes(
       (collateralTokenAddress || '').toLowerCase()
@@ -107,7 +111,7 @@ export function SaleStructureStep() {
     if (!hasValidCollateral) {
       setValue('collateralTokenAddress', collateralTokens?.[0] || '', { shouldDirty: true })
     }
-  }, [collateralTokenAddress, selectedChain, setValue])
+  }, [collateralTokenAddress, selectedChain, setValue, seedType])
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
     goToNextStep()
   }
@@ -156,6 +160,9 @@ export function SaleStructureStep() {
             <Heading color="font.maxContrast" size="md">
               LBP mechanism
             </Heading>
+
+            {isDynamicSale && <SeedSelection control={control} />}
+
             <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
             {isDynamicSale && (
               <WeightAdjustmentTypeInput
@@ -330,8 +337,8 @@ function SaleEndInput({
       />
       <Text color="font.secondary" fontSize="sm">
         {saleStart && value
-          ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
-          : 'Suggested sale period: 5 days'}
+          ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (3 days suggested)`
+          : 'Suggested sale period: 3 days'}
       </Text>
     </>
   )
@@ -383,13 +390,15 @@ function CollateralTokenAddressInput({
   selectedChain: GqlChain
   control: Control<SaleStructureForm>
 }) {
+  const { isSeeded } = useLbpForm()
   const chainConfig = getNetworkConfig(selectedChain)
   const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
-  const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || []), nativeAsset]
+  const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || [])]
+  if (isSeeded) collateralTokens.push(nativeAsset)
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Collateral token</Text>
+      <Text color="font.primary">{isSeeded ? 'Collateral token' : 'Paired token'}</Text>
       <Controller
         control={control}
         name="collateralTokenAddress"
@@ -408,6 +417,10 @@ function CollateralTokenAddressInput({
           </FormControl>
         )}
       />
+      <Text fontSize="sm" variant="secondary">
+        People will buy your sale token with this. For seeded LBPs, you will supply some of this
+        token upfront as seed collateral to set the initial LBP price.
+      </Text>
     </VStack>
   )
 }
@@ -448,6 +461,62 @@ function UserActionsInput({
                 Buy & sell
               </Radio>
               <Radio value={UserActions.BUY_ONLY}>Buy only</Radio>
+            </Stack>
+          </RadioGroup>
+        )}
+      />
+    </VStack>
+  )
+}
+
+function SeedSelection({ control }: { control: Control<SaleStructureForm> }) {
+  return (
+    <VStack align="start" w="full">
+      <HStack>
+        <Text color="font.primary">Seed token sale with collateral upfront</Text>
+        <InfoIconPopover
+          message={
+            <VStack alignItems="start">
+              <Text fontSize="sm" fontWeight="bold" variant="secondary">
+                Seedless LBPs:
+              </Text>
+              <Text fontSize="sm" variant="secondary">
+                No collateral tokens are required. Simply send your project token that you would
+                like to sell to get it started.
+              </Text>
+              <Text fontSize="sm" fontWeight="bold" variant="secondary">
+                Seeded LBPs:
+              </Text>
+              <Text fontSize="sm" variant="secondary">
+                This is the 'traditional' LBP style where you put in both the project token and an
+                amount of a collateral token.
+              </Text>
+            </VStack>
+          }
+        />
+      </HStack>
+      <Controller
+        control={control}
+        name="seedType"
+        render={({ field }) => (
+          <RadioGroup aria-label="Seed type" onChange={field.onChange} value={field.value}>
+            <Stack gap="md">
+              <Radio alignItems="flex-start" value={SeedType.SEEDLESS}>
+                <VStack alignItems="start" mt="-3px" spacing="1">
+                  <Text>No — seedless LBP</Text>
+                  <Text color="font.secondary" fontSize="sm">
+                    Simple and safest. Recommended for most LBPs
+                  </Text>
+                </VStack>
+              </Radio>
+              <Radio alignItems="flex-start" value={SeedType.SEEDED}>
+                <VStack alignItems="start" mt="-3px" spacing="1">
+                  <Text>Yes — seeded LBP</Text>
+                  <Text color="font.secondary" fontSize="sm">
+                    The original system, requires collateral upfront.
+                  </Text>
+                </VStack>
+              </Radio>
             </Stack>
           </RadioGroup>
         )}

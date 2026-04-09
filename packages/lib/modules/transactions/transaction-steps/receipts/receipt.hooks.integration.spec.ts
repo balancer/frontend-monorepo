@@ -165,12 +165,6 @@ test('queries add liquidity in V3 GNOSIS pool', async () => {
       humanAmount: '0.000063840672042232',
       tokenAddress: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
     },
-    // the following one is excluded to avoid duplication
-    // ERC-20: Monerium EURe (EURe)
-    // {
-    //   humanAmount: '0.014361104681096343',
-    //   tokenAddress: '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430',
-    // },
     {
       humanAmount: '0.014361104681096343',
       tokenAddress: '0xcb444e90d8198415266c6a2724b7900fb12fc56e', // Monerium EUR emoney (EURe)

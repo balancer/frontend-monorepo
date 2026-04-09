@@ -28,7 +28,7 @@ import {
 import { now } from '@repo/lib/shared/utils/time'
 import { usePool } from '../../PoolProvider'
 import { isV3LBP } from '../../pool.helpers'
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 export function PoolActivity() {
   return (
@@ -83,7 +83,7 @@ function Content() {
 
   let subtitle = transactionsLabel
   if (isV3LBP(pool)) {
-    const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+    const lbpPool = pool as LbpV3
     const currentTime = now()
     if (
       isWithinInterval(currentTime, {

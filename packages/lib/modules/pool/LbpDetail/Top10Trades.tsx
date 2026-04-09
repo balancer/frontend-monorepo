@@ -1,20 +1,11 @@
 import { Card, Center, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
-import {
-  GqlChain,
-  GqlLbpTopTrade,
-  GqlPoolLiquidityBootstrappingV3,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlLbpTopTrade } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { EnsOrAddress } from '../../user/EnsOrAddress'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
-export function Top10Trades({
-  chain,
-  pool,
-}: {
-  chain: GqlChain
-  pool: GqlPoolLiquidityBootstrappingV3
-}) {
+export function Top10Trades({ chain, pool }: { chain: GqlChain; pool: LbpV3 }) {
   const trades = pool.topTrades || []
 
   return (

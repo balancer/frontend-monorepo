@@ -42,7 +42,7 @@ export async function setSliderPercent(page: Page, percent: number, scope?: Loca
   })
 }
 
-export async function checkbox(page: Page, text: string) {
+export async function checkbox(page: Page, text: string | RegExp) {
   return page.locator('label', { hasText: text }).locator('.chakra-checkbox__control')
 }
 

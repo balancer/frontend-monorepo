@@ -7,3 +7,5 @@ export function allEqual<T>(array: T[]): boolean {
 export function hasDefinedValues<T>(array: T[]) {
   return array.filter(value => value !== undefined).length > 0
 }
+
+export const isEmpty = hasDefinedValues

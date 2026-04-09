@@ -9,6 +9,7 @@ import { Control, Controller } from 'react-hook-form'
 import { formatUnits } from 'viem'
 import { useLbpForm } from '../../LbpFormProvider'
 import { isEmpty } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function SaleTokenAmountInput({
   control,
@@ -53,7 +54,7 @@ export function SaleTokenAmountInput({
               apiToken={launchToken}
               chain={selectedChain}
               customUserBalance={
-                balanceData ? formatUnits(balanceData.value, balanceData.decimals) : undefined
+                balanceData ? bn(formatUnits(balanceData.value, balanceData.decimals)) : undefined
               }
               id="sale-token-amount"
               onChange={e => {

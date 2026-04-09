@@ -75,7 +75,7 @@ body {
 .picture {
   height: 100%;
   display: flex;
-  border-radius: '9999px';
+  border-radius: 9999px;
 }
 
 .picture img {

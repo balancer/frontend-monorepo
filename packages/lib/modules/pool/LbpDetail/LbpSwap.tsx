@@ -6,15 +6,15 @@ import SwapLayout from '@repo/lib/modules/swap/SwapLayout'
 import { SwapProviderProps, PathParams } from '@repo/lib/modules/swap/SwapProvider'
 import { isBefore, secondsToMilliseconds, format } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 export function LbpSwap() {
   const { pool } = usePool()
   const { priceFor } = useTokens()
 
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
   const poolActionableTokens = getPoolActionableTokens(lbpPool)
 
   const launchToken = lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
