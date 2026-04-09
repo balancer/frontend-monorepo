@@ -236,7 +236,7 @@ function enrichPool({
   clone.poolTokens.forEach((token, index) => {
     if (!poolTokenBalances) return
     const poolTokenBalance = poolTokenBalances[index]
-    if (!poolTokenBalance) return
+    if (poolTokenBalance === undefined) return
     const tokenBalance = formatUnits(poolTokenBalance, token.decimals)
     token.balance = tokenBalance
     token.balanceUSD = bn(tokenBalance).times(priceFor(token.address, pool.chain)).toString()
