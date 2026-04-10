@@ -189,18 +189,22 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
                     title="Balancer"
                     usdValue={isStakeAction ? undefined : gaugeStakedBalanceUsdFormatted}
                   />
-                  <Divider />
-                  <Option
-                    action={action}
-                    apr={isStakeAction ? pool.staking?.aura?.apr || 0 : undefined}
-                    disabled={
-                      isStakeAction ? !(canStake && hasUnstakedBalance) : !hasAuraStakedBalance
-                    }
-                    icon={<ProtocolIcon protocol={Protocol.Aura} size={28} />}
-                    onClick={redirectToAura}
-                    title="Aura"
-                    usdValue={isStakeAction ? undefined : auraStakedBalanceUsdFormatted}
-                  />
+                  {!isStakeAction && (
+                    <>
+                      <Divider />
+                      <Option
+                        action={action}
+                        apr={isStakeAction ? pool.staking?.aura?.apr || 0 : undefined}
+                        disabled={
+                          isStakeAction ? !(canStake && hasUnstakedBalance) : !hasAuraStakedBalance
+                        }
+                        icon={<ProtocolIcon protocol={Protocol.Aura} size={28} />}
+                        onClick={redirectToAura}
+                        title="Aura"
+                        usdValue={isStakeAction ? undefined : auraStakedBalanceUsdFormatted}
+                      />
+                    </>
+                  )}
                 </VStack>
               </PopoverBody>
             </PopoverContent>

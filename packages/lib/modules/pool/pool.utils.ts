@@ -146,7 +146,7 @@ export function getTotalApr(aprItems: GqlPoolAprItem[]): [BigNumber, BigNumber] 
       if (item.type === GqlPoolAprItemType.VebalEmissions) {
         // We don't add this to maxTotal as is already included on the staking boost
         minTotal = bn(item.apr).plus(minTotal)
-        return
+        return // Deprecated, should be 0 once emissions stop
       }
 
       if (item.type === GqlPoolAprItemType.MabeetsEmissions) {
