@@ -29,6 +29,7 @@ query GetTokens($chains: [GqlChain!]!) {
       address
       reviewed
       name
+      warnings
     }
   }
 }

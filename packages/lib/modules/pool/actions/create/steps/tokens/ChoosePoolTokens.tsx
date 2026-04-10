@@ -28,6 +28,7 @@ import { validatePoolTokens } from '../../validatePoolCreationForm'
 import {
   isConstantRateProvider,
   isDynamicRateProvider,
+  isMarketRateProvider,
 } from '@repo/lib/modules/tokens/token.helpers'
 import { PoolCreationToken, SupportedPoolTypes } from '../../types'
 import { useEffect } from 'react'
@@ -79,8 +80,8 @@ export function ChoosePoolTokens() {
     return !isTokenAlreadyInPool
   })
 
-  function getVerifiedRateProviderAddress(token: ApiToken) {
-    if (!token.priceRateProviderData) return undefined
+  function getVerifiedRateProviderAddress(token: ApiOrCustomToken) {
+    if (!('priceRateProviderData' in token) || !token.priceRateProviderData) return undefined
 
     const isRateProviderConstant = isConstantRateProvider(token)
     const isRateProviderDynamic = isDynamicRateProvider(token)
@@ -93,17 +94,14 @@ export function ChoosePoolTokens() {
   function handleTokenSelect(tokenMetadata: ApiOrCustomToken) {
     if (!tokenMetadata || selectedTokenIndex === null) return
 
-    let rateProvider: Address = zeroAddress
-
-    if ('priceRateProviderData' in tokenMetadata) {
-      rateProvider = getVerifiedRateProviderAddress(tokenMetadata) ?? zeroAddress
-    }
+    const rateProvider = getVerifiedRateProviderAddress(tokenMetadata) ?? zeroAddress
+    const paysYieldFees = rateProvider !== zeroAddress && !isMarketRateProvider(tokenMetadata)
 
     updatePoolToken(selectedTokenIndex, {
       address: tokenMetadata.address as Address,
       rateProvider,
       data: tokenMetadata,
-      paysYieldFees: rateProvider !== zeroAddress,
+      paysYieldFees,
       usdPrice: '',
     })
 
