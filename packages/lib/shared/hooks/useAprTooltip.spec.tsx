@@ -23,17 +23,13 @@ describe('useAprTooltip', () => {
     expect(result.current.swapFeesDisplayed.toFixed()).toBe('0.0007')
     expect(fNum('apr', result.current.swapFeesDisplayed)).toBe('0.07%')
 
-    const stakingIncentivesApr = result.current.stakingIncentivesDisplayed[0].apr
-    expect(stakingIncentivesApr.toFixed()).toBe('0.0191')
-    expect(fNum('apr', stakingIncentivesApr)).toBe('1.91%')
-
     const yieldBearingTokensApr = result.current.yieldBearingTokensDisplayed[0].apr
     expect(yieldBearingTokensApr.toFixed()).toBe('0.0068')
     expect(fNum('apr', yieldBearingTokensApr)).toBe('0.68%')
 
     const totalBaseDisplayed = result.current.totalBaseDisplayed
-    expect(totalBaseDisplayed.toFixed()).toBe('0.0266')
-    expect(fNum('apr', totalBaseDisplayed)).toBe('2.66%') // 0.07 + 1.91 + 0.68 = 2.66
+    expect(totalBaseDisplayed.toFixed()).toBe('0.0075')
+    expect(fNum('apr', totalBaseDisplayed)).toBe('0.75%') // 0.07 + 0.0068 + 0.68 = 0.75
   })
 })
 

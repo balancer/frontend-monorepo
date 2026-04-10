@@ -13,7 +13,6 @@ export const fakeTokenSymbols = [
   'aUSDC',
   'USDC',
   'USDC-DAI-USDT',
-  'B-80BAL-20WETH',
 ] as const
 export type FakeTokenSymbol = (typeof fakeTokenSymbols)[number]
 

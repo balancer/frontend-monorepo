@@ -4,7 +4,7 @@ import { fakeTokenBySymbol } from '@repo/lib/test/data/all-gql-tokens.fake'
 import { PropsWithChildren } from 'react'
 
 export function TokenBalancesProviderMock({ children }: PropsWithChildren) {
-  const vebalBptToken = fakeTokenBySymbol('B-80BAL-20WETH')
+  const vebalBptToken = fakeTokenBySymbol('USDC-DAI-USDT')
 
   return (
     <VebalLockDataProvider>
