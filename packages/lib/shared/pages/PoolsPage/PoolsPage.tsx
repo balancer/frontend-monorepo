@@ -13,29 +13,48 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { useQuery } from '@apollo/client/react'
-import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetFeaturedPoolsDocument,
+  GetFeaturedPoolsQuery,
+  GetProtocolStatsQuery,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { BuildPromo } from './BuildPromo'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
+  // Optional server-fetched data to avoid client loading state
+  initialFeaturedPools?: GetFeaturedPoolsQuery['featuredPools']
+  initialProtocolStats?: GetProtocolStatsQuery['protocolMetricsAggregated']
 }
 
-export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
+export function PoolsPage({
+  children,
+  rewardsClaimed24h,
+  initialFeaturedPools,
+  initialProtocolStats,
+}: PoolsPageProps) {
   const { supportedNetworks } = PROJECT_CONFIG
 
+  // Skip query if we have initial data (server-rendered)
   const { data: featuredPoolsData, loading: featuredPoolsLoading } = useQuery(
     GetFeaturedPoolsDocument,
     {
       variables: { chains: supportedNetworks },
       fetchPolicy: 'cache-and-network',
+      skip: !!initialFeaturedPools, // Skip if we have server data
     }
   )
 
-  const featuredPools = featuredPoolsData?.featuredPools || []
+  const featuredPools = initialFeaturedPools ?? featuredPoolsData?.featuredPools ?? []
+  const featuredPoolsLoadingState = initialFeaturedPools ? false : featuredPoolsLoading
 
-  const { protocolData } = useProtocolStats()
+  // Use server stats if available, otherwise fall back to context
+  const { protocolData: clientProtocolData } = useProtocolStats()
+  const protocolData = initialProtocolStats
+    ? { protocolMetricsAggregated: initialProtocolStats }
+    : clientProtocolData
 
   return (
     <>
@@ -135,13 +154,13 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
-      {isBalancer && (featuredPools.length > 0 || featuredPoolsLoading) && (
+      {isBalancer && (featuredPools.length > 0 || featuredPoolsLoadingState) && (
         <DefaultPageContainer mb="lg" py="0" rounded="2xl">
           <Box>
             {!featuredPoolsLoading && featuredPools.length > 0 && (
               <FeaturedPools featuredPools={featuredPools} />
             )}
-            {featuredPoolsLoading && <Skeleton height="327px" width="100%" />}
+            {featuredPoolsLoadingState && <Skeleton height="327px" width="100%" />}
           </Box>
         </DefaultPageContainer>
       )}

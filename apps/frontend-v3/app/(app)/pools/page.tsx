@@ -1,11 +1,5 @@
-import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage/PoolsPage'
-
-import { PromoBanners } from '@repo/lib/shared/components/promos/PromoBanners'
+import ServerPoolsPage from './_components/ServerPoolsPage'
 
 export default async function PoolsPageWrapper() {
-  return (
-    <PoolsPage>
-      <PromoBanners />
-    </PoolsPage>
-  )
+  return <ServerPoolsPage />
 }

@@ -11,10 +11,9 @@ import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
-import { PoolDisplayType } from '../pool.types'
+import { PoolDisplayType, PoolListItem } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
-import { PoolListItem } from '../pool.types'
 
 export function usePoolListLogic({
   fixedPoolTypes,
