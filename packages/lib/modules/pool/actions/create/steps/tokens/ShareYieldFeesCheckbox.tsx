@@ -33,7 +33,7 @@ export function ShareYieldFeesCheckbox({
       </Checkbox>
       {isMarketRateProvider && (
         <BalAlert
-          content='Yield fees should remain disabled since the verified rate provider for this token reports the "market rate"'
+          content='Yield fees should remain disabled since the verified rate provider for this token reports a "market rate" instead of yield bearing rate (e.g. FX rates)'
           status="warning"
         />
       )}
