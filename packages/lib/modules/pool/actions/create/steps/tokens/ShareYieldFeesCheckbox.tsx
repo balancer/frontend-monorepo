@@ -7,9 +7,11 @@ import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 export function ShareYieldFeesCheckbox({
   tokenIndex,
   paysYieldFees,
+  isMarketRateProvider,
 }: {
   tokenIndex: number
   paysYieldFees: boolean
+  isMarketRateProvider: boolean
 }) {
   const { updatePoolToken } = usePoolCreationForm()
 
@@ -29,7 +31,13 @@ export function ShareYieldFeesCheckbox({
       >
         <Text>Share yield with {PROJECT_CONFIG.projectName} protocol</Text>
       </Checkbox>
-      {!paysYieldFees ? (
+      {isMarketRateProvider && (
+        <BalAlert
+          content='Yield fees should remain disabled since the verified rate provider for this token reports the "market rate"'
+          status="warning"
+        />
+      )}
+      {!paysYieldFees && !isMarketRateProvider ? (
         isBalancer ? (
           <BalAlert
             content="Pools that don’t share yield fees with Balancer are unlikely to receive approval for a BAL liquidity mining gauge due to misalignment with the Balancer ecosystem."

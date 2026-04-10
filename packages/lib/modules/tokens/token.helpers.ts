@@ -173,8 +173,9 @@ export const isConstantRateProvider = (token: ApiToken) =>
 export const isDynamicRateProvider = (token: ApiToken) =>
   token.priceRateProviderData && token.priceRateProviderData.name?.toLowerCase().includes('dynamic')
 
-export const isMarketRateProvider = (token: ApiOrCustomToken | undefined) =>
-  token &&
-  'priceRateProviderData' in token &&
-  token.priceRateProviderData &&
-  token.priceRateProviderData.warnings?.includes('market-rate')
+export const isMarketRateProvider = (token: ApiOrCustomToken | undefined): boolean =>
+  Boolean(
+    token &&
+    'priceRateProviderData' in token &&
+    token.priceRateProviderData?.warnings?.includes('market-rate')
+  )

@@ -117,7 +117,11 @@ export function ConfigureTokenRateProvider({
         />
       )}
       {showYieldFeesToggle && (
-        <ShareYieldFeesCheckbox paysYieldFees={paysYieldFees} tokenIndex={tokenIndex} />
+        <ShareYieldFeesCheckbox
+          isMarketRateProvider={isMarketRateProvider(poolTokens[tokenIndex].data)}
+          paysYieldFees={paysYieldFees}
+          tokenIndex={tokenIndex}
+        />
       )}
     </FormSubsection>
   )
