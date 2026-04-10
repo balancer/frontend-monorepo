@@ -2,7 +2,6 @@ import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
 import { Globe } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PortfolioSortingData, portfolioOrderByFn } from './usePortfolioSorting'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const setIsDesc = (id: PortfolioSortingData['id'], currentSortingObj: PortfolioSortingData) =>
   currentSortingObj.id === id ? !currentSortingObj.desc : true
@@ -12,7 +11,7 @@ type Props = {
   setCurrentSortingObj: (value: PortfolioSortingData) => void
 }
 export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, ...rest }: Props) {
-  const portfolioOrderBy = portfolioOrderByFn(PROJECT_CONFIG.options.showVeBal)
+  const portfolioOrderBy = portfolioOrderByFn()
 
   return (
     <Grid {...rest} p={['ms', 'md']} px="xs" w="full">

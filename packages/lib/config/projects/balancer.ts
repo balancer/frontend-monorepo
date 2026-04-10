@@ -45,14 +45,13 @@ export const ProjectConfigBalancer: ProjectConfig = {
     hidePoolTypes: [GqlPoolType.Fx, ...(isProd ? [GqlPoolType.LiquidityBootstrapping] : [])],
     hideProtocolVersion: [],
     showPoolName: false,
-    showVeBal: true,
     showMaBeets: false,
     allowCreateWallet: true,
     isOnSafeAppList: true,
   },
   links: {
     appLinks: [
-      { href: '/vebal', label: 'veBAL' },
+      { href: '/vebal/manage', label: 'veBAL' },
       ...(isDev || isStaging ? [{ href: '/lbp/create', label: 'LBP' }] : []),
     ],
     ecosystemLinks: [

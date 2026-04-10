@@ -5,7 +5,6 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import {
   GetPoolEventsQuery,
   GqlChain,
-  GqlPoolStakingType,
   GqlPoolAddRemoveEventV3,
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -16,9 +15,7 @@ import { PoolEventItem } from '../../usePoolEvents'
 import { calcTotalStakedBalance, getUserTotalBalance } from '../../user-balance.helpers'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
 import { isEmpty } from 'lodash'
-import { BoostText } from './BoostText'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { formatDistanceToNowAbbr } from '@repo/lib/shared/utils/time'
 import { PoolTransactionsCard } from '../../PoolTransactionsCard'
 
@@ -170,28 +167,12 @@ export default function PoolUserEvents({
   const [height, setHeight] = useState(0)
   const { toCurrency } = useCurrency()
 
-  const {
-    options: { showVeBal },
-  } = PROJECT_CONFIG
-
-  const isVeBalPoolStaking = pool.staking?.type === GqlPoolStakingType.Vebal
-  const showBoostValue =
-    pool.staking?.type === GqlPoolStakingType.Gauge && !isVeBalPoolStaking && showVeBal
-
   // keep this card the same height as the 'My liquidity' section
   useLayoutEffect(() => {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
       setHeight(myLiquiditySectionRef.current.offsetHeight)
     }
   }, [])
-
-  function getShareTitle() {
-    if (showVeBal) {
-      return 'locked'
-    }
-
-    return 'staked'
-  }
 
   const stakedPercentage = useMemo(() => {
     const totalBalance = getUserTotalBalance(pool)
@@ -216,9 +197,8 @@ export default function PoolUserEvents({
           <Divider />
           <HStack mt="auto" spacing="4">
             <Text fontSize="0.85rem" variant="secondary">
-              {`${stakedPercentage} ${getShareTitle()}`}
+              {`${stakedPercentage} staked`}
             </Text>
-            {showBoostValue && <BoostText pool={pool} />}
           </HStack>
         </>
       }

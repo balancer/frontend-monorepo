@@ -33,9 +33,9 @@ import { MigrationAlert } from '../../pool/migrations/MigrationAlert'
 import { isChainDeprecated } from '../../chains/chain.utils'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
-const rowProps = (addExtraColumn: boolean, needsLastColumnWider: boolean) => ({
+const rowProps = (needsLastColumnWider: boolean) => ({
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(180px, max-content) minmax(100px, max-content) 126px ${addExtraColumn ? '120px' : ''} ${needsLastColumnWider ? '160px' : 'minmax(100px, max-content)'}`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(180px, max-content) minmax(100px, max-content) 126px ${needsLastColumnWider ? '160px' : 'minmax(100px, max-content)'}`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 })
@@ -45,7 +45,7 @@ export function PortfolioTable() {
   const { isConnected } = useUserAccount()
   const isFilterVisible = usePortfolioFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
-  const { sortedPools, setSorting, currentSortingObj, veBalBoostMap } = usePortfolioSorting()
+  const { sortedPools, setSorting, currentSortingObj } = usePortfolioSorting()
 
   const hasStakingBoost = sortedPools.some(pool =>
     pool.dynamicData?.aprItems?.some(item => item.type === 'STAKING_BOOST')
@@ -63,7 +63,7 @@ export function PortfolioTable() {
     shouldFilterTinyBalances,
   } = usePortfolioFilters()
 
-  const { projectName, options } = PROJECT_CONFIG
+  const { projectName } = PROJECT_CONFIG
 
   const variants = {
     visible: {
@@ -175,7 +175,7 @@ export function PortfolioTable() {
                 <PortfolioTableHeader
                   currentSortingObj={currentSortingObj}
                   setCurrentSortingObj={setSorting}
-                  {...rowProps(options.showVeBal, hasStakingBoost)}
+                  {...rowProps(hasStakingBoost)}
                 />
               )}
               renderTableRow={({ item }) => {
@@ -183,8 +183,7 @@ export function PortfolioTable() {
                   <PortfolioTableRow
                     keyValue={item.id}
                     pool={item}
-                    veBalBoostMap={veBalBoostMap}
-                    {...rowProps(options.showVeBal, hasStakingBoost)}
+                    {...rowProps(hasStakingBoost)}
                   />
                 )
               }}
@@ -205,7 +204,7 @@ export function PortfolioTable() {
             <PortfolioTableHeader
               currentSortingObj={currentSortingObj}
               setCurrentSortingObj={setSorting}
-              {...rowProps(options.showVeBal, hasStakingBoost)}
+              {...rowProps(hasStakingBoost)}
             />
             <Divider />
             <Center h="160px" rounded="lg" w="full">

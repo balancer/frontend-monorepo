@@ -5,7 +5,6 @@ import { getTotalApr } from '../../pool/pool.utils'
 import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { usePortfolio } from '../PortfolioProvider'
-import { useVebalBoost } from '../../vebal/useVebalBoost'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
@@ -14,22 +13,14 @@ export interface PortfolioSortingData {
   desc: boolean
 }
 
-export const portfolioOrderByFn: (addExtraColumn: boolean) => {
+export const portfolioOrderByFn: () => {
   title: string
   id: PortfolioTableSortingId
-}[] = (addExtraColumn: boolean) => [
+}[] = () => [
   {
     title: 'Staking',
     id: 'staking',
   },
-  ...(addExtraColumn
-    ? [
-        {
-          title: 'veBAL boost',
-          id: 'vebal' as PortfolioTableSortingId,
-        },
-      ]
-    : []),
   {
     title: 'My liquidity',
     id: 'liquidity',
@@ -77,7 +68,6 @@ export function usePortfolioSorting() {
     usePortfolioFilters()
 
   const { portfolioData } = usePortfolio()
-  const { veBalBoostMap } = useVebalBoost(portfolioData.stakedPools)
 
   const [manualSortingObj, dispatch] = useReducer(sortingReducer, null)
 
@@ -151,12 +141,6 @@ export function usePortfolioSorting() {
         return weightDiff
       }
 
-      if (currentSortingObj.id === 'vebal') {
-        const aVebalBoost = Number(veBalBoostMap?.[a.id] || 0)
-        const bVebalBoost = Number(veBalBoostMap?.[b.id] || 0)
-        return currentSortingObj.desc ? bVebalBoost - aVebalBoost : aVebalBoost - bVebalBoost
-      }
-
       if (currentSortingObj.id === 'liquidity') {
         const aTotalBalance = a.poolPositionUsd
         const bTotalBalance = b.poolPositionUsd
@@ -182,13 +166,7 @@ export function usePortfolioSorting() {
 
       return 0
     })
-  }, [
-    portfolioData?.pools,
-    filteredExpandedPools,
-    currentSortingObj.id,
-    currentSortingObj.desc,
-    veBalBoostMap,
-  ])
+  }, [portfolioData?.pools, filteredExpandedPools, currentSortingObj.id, currentSortingObj.desc])
 
-  return { sortedPools, setSorting, currentSortingObj, veBalBoostMap }
+  return { sortedPools, setSorting, currentSortingObj }
 }

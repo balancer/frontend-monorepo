@@ -30,7 +30,6 @@ import { isChainDeprecated } from '../../chains/chain.utils'
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
   keyValue: string
-  veBalBoostMap: Record<string, string>
 }
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
@@ -53,13 +52,11 @@ const getStakingFilterKey = (poolType: ExpandedPoolType): StakingFilterKeyType =
   }
 }
 
-export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Props) {
+export function PortfolioTableRow({ pool, keyValue, ...rest }: Props) {
   const { toCurrency } = useCurrency()
   const { name } = usePoolMetadata(pool)
   const { needsMigration } = usePoolMigrations()
-  const { options } = PROJECT_CONFIG
 
-  const vebalBoostValue = veBalBoostMap?.[pool.id] === 'NaN' ? undefined : veBalBoostMap?.[pool.id]
   const filterKey = getStakingFilterKey(pool.poolType)
   const stakingText = STAKING_LABEL_MAP[filterKey]
 
@@ -100,20 +97,9 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             <GridItem display="flex" justifyContent="left" px="sm">
               <HStack>
                 <Text fontWeight="medium">{stakingText} </Text>
-                <StakingIcons pool={pool} showIcon={options.showVeBal} />
+                <StakingIcons pool={pool} showIcon={false} />
               </HStack>
             </GridItem>
-            {options?.showVeBal && (
-              <GridItem px="sm">
-                <Text
-                  fontWeight="medium"
-                  textAlign="right"
-                  title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
-                >
-                  {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
-                </Text>
-              </GridItem>
-            )}
             <GridItem display="flex" justifyContent="flex-end" px="sm">
               <HStack>
                 <Text fontWeight="medium">
@@ -145,7 +131,6 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                   pool={pool}
                   poolId={pool.id}
                   textProps={{ fontWeight: 'medium' }}
-                  vebalBoost={vebalBoostValue}
                 />
               )}
             </GridItem>

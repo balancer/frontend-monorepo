@@ -74,8 +74,7 @@ export function StakingOptions() {
               <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {/* SHOULD WE USE MAX APR instead of the range?? */}
                 {/* {fNum('apr', totalApr)} */}
-                {/* skip vebal boost here */}
-                {getTotalAprLabel(pool.dynamicData.aprItems, undefined, canBeNegative)}
+                {getTotalAprLabel(pool.dynamicData.aprItems, canBeNegative)}
               </Text>
               <Icon as={StarsIcon} height="16px" width="16px" />
             </HStack>
@@ -99,37 +98,36 @@ export function StakingOptions() {
             </Button>
           </VStack>
         </Card>
-        {(PROJECT_CONFIG.options.showVeBal || pool.chain === GqlChain.Optimism) &&
-          pool.staking?.aura && (
-            <Card p="ms" position="relative" variant="modalSubSection">
-              <VStack align="left" spacing="md">
-                <Text color="font.maxContrast" fontWeight="bold">
-                  Aura
+        {pool.chain === GqlChain.Optimism && pool.staking?.aura && (
+          <Card p="ms" position="relative" variant="modalSubSection">
+            <VStack align="left" spacing="md">
+              <Text color="font.maxContrast" fontWeight="bold">
+                Aura
+              </Text>
+              <HStack>
+                <Text color="font.primary" fontSize="md" fontWeight="bold">
+                  {pool.staking?.aura ? fNum('apr', pool.staking.aura.apr) : 'Not available'}
                 </Text>
-                <HStack>
-                  <Text color="font.primary" fontSize="md" fontWeight="bold">
-                    {pool.staking?.aura ? fNum('apr', pool.staking.aura.apr) : 'Not available'}
-                  </Text>
-                </HStack>
-                <Flex position="absolute" right={1.5} top={1.5}>
-                  <Image alt="balancer" height={30} src="/images/protocols/aura.svg" width={30} />
-                </Flex>
-                {pool.staking && pool.staking.aura && (
-                  <>
-                    <Button onClick={auraDisclosure.onOpen} variant="secondary" w="full">
-                      Learn more
-                    </Button>
-                    <PartnerRedirectModal
-                      isOpen={auraDisclosure.isOpen}
-                      onClose={auraDisclosure.onClose}
-                      partner={RedirectPartner.Aura}
-                      redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
-                    />
-                  </>
-                )}
-              </VStack>
-            </Card>
-          )}
+              </HStack>
+              <Flex position="absolute" right={1.5} top={1.5}>
+                <Image alt="balancer" height={30} src="/images/protocols/aura.svg" width={30} />
+              </Flex>
+              {pool.staking && pool.staking.aura && (
+                <>
+                  <Button onClick={auraDisclosure.onOpen} variant="secondary" w="full">
+                    Learn more
+                  </Button>
+                  <PartnerRedirectModal
+                    isOpen={auraDisclosure.isOpen}
+                    onClose={auraDisclosure.onClose}
+                    partner={RedirectPartner.Aura}
+                    redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
+                  />
+                </>
+              )}
+            </VStack>
+          </Card>
+        )}
       </HStack>
     </>
   )

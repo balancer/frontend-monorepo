@@ -60,7 +60,7 @@ export function VebalUnlockForm() {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>{getModalLabel(LockMode.Unlock, false, false)}</span>
+            <span>{getModalLabel(LockMode.Unlock)}</span>
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
@@ -149,11 +149,7 @@ export function VebalUnlockForm() {
           </VStack>
         </VStack>
       </Card>
-      <VebalLockModal
-        extendExpired={false}
-        isOpen={previewModalDisclosure.isOpen}
-        onClose={onModalClose}
-      />
+      <VebalLockModal isOpen={previewModalDisclosure.isOpen} onClose={onModalClose} />
     </Box>
   )
 }

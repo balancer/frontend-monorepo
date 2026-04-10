@@ -24,7 +24,6 @@ import {
   calcGaugeStakedBalanceUsd,
 } from '../user-balance.helpers'
 import { Pool } from '../pool.types'
-import { useVebalBoost } from '../../vebal/useVebalBoost'
 import { getTotalApr } from '../pool.utils'
 import { getNetworkConfig, getChainId } from '@repo/lib/config/app.config'
 import {
@@ -94,13 +93,11 @@ export function StakeUnstakeButton({ pool, action }: StakeUnstakeButtonProps) {
   const router = useRouter()
   const pathname = usePathname()
   const auraDisclosure = useDisclosure()
-  const { veBalBoostMap } = useVebalBoost([pool])
   const { toCurrency } = useCurrency()
 
   const canStake = getCanStake(pool)
   const hasUnstakedBalance = bn(getUserWalletBalance(pool)).gt(0)
-  const vebalBoost = veBalBoostMap[pool.address]
-  const [, balancerMaxApr] = getTotalApr(pool.dynamicData.aprItems, vebalBoost)
+  const [, balancerMaxApr] = getTotalApr(pool.dynamicData.aprItems)
 
   const hasGaugeStakedBalance = bn(calcGaugeStakedBalance(pool)).gt(0)
   const hasAuraStakedBalance = bn(calcAuraStakedBalance(pool)).gt(0)

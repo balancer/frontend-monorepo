@@ -11,8 +11,8 @@ import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 import { toJsTimestamp } from '@repo/lib/shared/utils/time'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LockActionType } from './vote/vote.types'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export type UseVebalLockDataResult = ReturnType<typeof useVebalLockDataLogic>
 export const VebalLockDataContext = createContext<UseVebalLockDataResult | null>(null)
@@ -23,17 +23,11 @@ function getAvailableLockActions(
 ): Record<LockActionType, boolean> {
   if (typeof hasLock === 'boolean' && typeof isExpired === 'boolean') {
     return {
-      [LockActionType.CreateLock]: !hasLock,
       [LockActionType.Unlock]: isExpired,
-      [LockActionType.IncreaseLock]: hasLock,
-      [LockActionType.ExtendLock]: hasLock,
     }
   }
   return {
-    [LockActionType.CreateLock]: false,
     [LockActionType.Unlock]: false,
-    [LockActionType.IncreaseLock]: false,
-    [LockActionType.ExtendLock]: false,
   }
 }
 
@@ -93,7 +87,7 @@ export function useVebalLockDataLogic() {
   })
 
   const { results, refetchAll, isLoading } = useMulticall(lockDataRequests, {
-    enabled: isConnected && PROJECT_CONFIG.options.showVeBal,
+    enabled: isConnected && isBalancer,
   })
 
   const now = useCurrentDate()
