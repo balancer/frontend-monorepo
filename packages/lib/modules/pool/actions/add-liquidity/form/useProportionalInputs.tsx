@@ -132,9 +132,15 @@ export function _calculateProportionalHumanAmountsIn({
 }: Params): HumanTokenAmountWithSymbol[] {
   const tokenAddress = token.address as Address
   const symbol = token.symbol
-  const referenceAmount: InputAmount = helpers.toSdkInputAmounts([
+  const referenceAmount: InputAmount | undefined = helpers.toSdkInputAmounts([
     { tokenAddress, humanAmount, symbol },
   ])[0]
+
+  if (!referenceAmount) {
+    throw new Error(
+      `Cannot calculate proportional amounts: invalid reference amount for token ${tokenAddress}`
+    )
+  }
 
   if (!poolStateWithBalances) {
     throw new Error('Cannot calculate proportional amounts without pool state')
@@ -198,6 +204,10 @@ function calculateMaxProportionalHumanAmountsIn({
 
   const optimalToken = tokens.find(token => {
     const userBalance = humanBalanceFor(token.address as Address)
+
+    if (isEmptyHumanAmount(userBalance)) {
+      return
+    }
 
     const proportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
       token,
