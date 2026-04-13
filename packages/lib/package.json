@@ -39,7 +39,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@nktkas/hyperliquid": "0.23.1",
+    "@nktkas/hyperliquid": "0.32.2",
     "@rainbow-me/rainbowkit": "2.2.10",
     "@safe-global/safe-apps-sdk": "9.1.0",
     "@sentry/nextjs": "10.38.0",
