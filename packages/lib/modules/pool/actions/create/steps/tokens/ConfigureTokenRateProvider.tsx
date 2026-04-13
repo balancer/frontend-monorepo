@@ -16,6 +16,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ArrowUpRight } from 'react-feather'
+import { isMarketRateProvider } from '@repo/lib/modules/tokens/token.helpers'
 
 interface ConfigureTokenRateProviderProps {
   tokenIndex: number
@@ -48,14 +49,14 @@ export function ConfigureTokenRateProvider({
 
   const handleRateProviderOptionChange = (value: RateProviderOption) => {
     let rateProvider: Address | '' = zeroAddress
+    let paysYieldFees = false
 
     if (value === RateProviderOption.Verified) {
       rateProvider = verifiedRateProviderAddress as Address
+      paysYieldFees = !isMarketRateProvider(poolTokens[tokenIndex].data)
     } else if (value === RateProviderOption.Custom) {
       rateProvider = '' // to be updated by user input
     }
-
-    const paysYieldFees = value !== RateProviderOption.Null
 
     updatePoolToken(tokenIndex, { rateProvider, paysYieldFees })
     // must trigger validation for text input since radio not kept in form state (instead we infer value for radio above)
@@ -116,7 +117,11 @@ export function ConfigureTokenRateProvider({
         />
       )}
       {showYieldFeesToggle && (
-        <ShareYieldFeesCheckbox paysYieldFees={paysYieldFees} tokenIndex={tokenIndex} />
+        <ShareYieldFeesCheckbox
+          isMarketRateProvider={isMarketRateProvider(poolTokens[tokenIndex].data)}
+          paysYieldFees={paysYieldFees}
+          tokenIndex={tokenIndex}
+        />
       )}
     </FormSubsection>
   )

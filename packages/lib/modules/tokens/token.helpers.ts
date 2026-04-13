@@ -12,7 +12,7 @@ import { InputAmount } from '@balancer/sdk'
 import { Pool } from '../pool/pool.types'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
 import { PoolToken } from '../pool/pool.types'
-import { ApiToken } from './token.types'
+import { ApiToken, ApiOrCustomToken } from './token.types'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
 export function isNativeAsset(token: TokenBase | string, chain: GqlChain | SupportedChainId) {
@@ -172,3 +172,10 @@ export const isConstantRateProvider = (token: ApiToken) =>
 
 export const isDynamicRateProvider = (token: ApiToken) =>
   token.priceRateProviderData && token.priceRateProviderData.name?.toLowerCase().includes('dynamic')
+
+export const isMarketRateProvider = (token: ApiOrCustomToken | undefined): boolean =>
+  Boolean(
+    token &&
+    'priceRateProviderData' in token &&
+    token.priceRateProviderData?.warnings?.includes('market-rate')
+  )
