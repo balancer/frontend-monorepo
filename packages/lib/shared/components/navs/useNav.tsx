@@ -9,7 +9,6 @@ export type AppLink = {
   icon?: ReactNode
   isExternal?: boolean
   iconType?: IconType
-  analyticsEvent?: string
   onClick?: () => void
 }
 
@@ -20,17 +19,14 @@ export function useNav() {
 
   const defaultAppLinks: AppLink[] = [
     {
-      analyticsEvent: 'ClickNavPools',
       href: '/pools',
       label: 'Pools',
     },
     {
-      analyticsEvent: 'ClickNavSwap',
       href: swapHref,
       label: 'Swap',
     },
     {
-      analyticsEvent: 'ClickNavPortfolio',
       href: '/portfolio',
       label: 'Portfolio',
     },

@@ -10,7 +10,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { BuildPopover } from './BuildPopover'
-import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 export function BuildNavLink() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -44,7 +43,6 @@ export function BuildNavLink() {
   }, [isOpen, onClose])
 
   const handleToggle = () => {
-    trackEvent(AnalyticsEvent.ClickNavBuild)
     if (isOpen) {
       onClose()
     } else {
