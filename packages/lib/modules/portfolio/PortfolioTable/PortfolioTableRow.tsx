@@ -71,7 +71,6 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
         }}
         key={keyValue}
         px={{ base: 'ms', sm: '0' }}
-        rounded="md"
         transition="all 0.2s ease-in-out"
         w="full"
       >
