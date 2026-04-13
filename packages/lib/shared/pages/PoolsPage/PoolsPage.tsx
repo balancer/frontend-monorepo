@@ -41,6 +41,7 @@ export function PoolsPage({
     {
       variables: { chains: supportedNetworks },
       fetchPolicy: 'cache-and-network',
+      skip: !!featuredPoolsServerData,
     }
   )
 
