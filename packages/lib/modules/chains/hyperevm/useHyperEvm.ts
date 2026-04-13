@@ -41,7 +41,7 @@ export function useHyperEvm({
 
     // Create arbitrary wallet
     const agentPrivateKey = generatePrivateKey()
-    const account = privateKeyToAccount(agentPrivateKey)
+    const agentAccount = privateKeyToAccount(agentPrivateKey)
 
     const transport = new hl.HttpTransport()
     const userExchangeClient = new hl.ExchangeClient({
@@ -51,14 +51,14 @@ export function useHyperEvm({
 
     // Approve arbitrary wallet to execute orders on behalf of the user
     await userExchangeClient.approveAgent({
-      agentAddress: account.address,
+      agentAddress: agentAccount.address,
       // no name agent always prunes the last no name agent so we do not have to worry about agent cap?
       agentName: '', // https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/nonces-and-api-wallets#api-wallet-pruning
     })
 
     // Execute block toggle using agent wallet
     const agentExchangeClient = new hl.ExchangeClient({
-      wallet: agentPrivateKey,
+      wallet: agentAccount,
       transport,
     })
 
