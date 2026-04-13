@@ -24,7 +24,7 @@ export function usePoolListLogic({
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
-  serverData?: GetPoolsQuery
+  serverData?: GetPoolsQuery | null
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
@@ -56,6 +56,8 @@ export function usePoolListLogic({
 
   const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
+  const count = loading && previousData ? previousData.count : data?.count || serverData?.count
+
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
 
   // If the user has previously selected to filter by their liquidity and then
@@ -68,7 +70,7 @@ export function usePoolListLogic({
 
   return {
     pools: poolsData,
-    count: data?.count || previousData?.count || serverData?.count,
+    count,
     queryState,
     loading,
     error,
@@ -90,7 +92,7 @@ export function PoolListProvider({
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
-  serverData?: GetPoolsQuery
+  serverData?: GetPoolsQuery | null
 }>) {
   const hook = usePoolListLogic({
     fixedPoolTypes,

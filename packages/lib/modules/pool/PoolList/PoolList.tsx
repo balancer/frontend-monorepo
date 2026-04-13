@@ -15,7 +15,7 @@ export function PoolList({
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
-  serverData?: GetPoolsQuery
+  serverData?: GetPoolsQuery | null
 }) {
   return (
     <PoolListProvider

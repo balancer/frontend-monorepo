@@ -48,21 +48,31 @@ const defaultPoolListVariables = {
 export default async function PoolsPageWrapper() {
   const client = getApolloServerClient()
 
-  const [{ data: poolsServerData }, { data: featuredPoolsServerData }] = await Promise.all([
-    client.query({
-      query: GetPoolsDocument,
-      variables: defaultPoolListVariables,
-      context: revalidateContext,
-    }),
-    client.query({
-      query: GetFeaturedPoolsDocument,
-      variables: { chains: PROJECT_CONFIG.supportedNetworks },
-      context: revalidateContext,
-    }),
-  ])
+  let poolsData = undefined
+  let featuredPoolsData = undefined
+
+  try {
+    const [poolsResult, featuredPoolsResult] = await Promise.all([
+      client.query({
+        query: GetPoolsDocument,
+        variables: defaultPoolListVariables,
+        context: revalidateContext,
+      }),
+      client.query({
+        query: GetFeaturedPoolsDocument,
+        variables: { chains: PROJECT_CONFIG.supportedNetworks },
+        context: revalidateContext,
+      }),
+    ])
+
+    poolsData = poolsResult.data
+    featuredPoolsData = featuredPoolsResult.data
+  } catch (error) {
+    console.error('Failed to prefetch pools data server-side:', error)
+  }
 
   return (
-    <PoolsPage featuredPoolsServerData={featuredPoolsServerData} poolsServerData={poolsServerData}>
+    <PoolsPage featuredPoolsServerData={featuredPoolsData} poolsServerData={poolsData}>
       <PromoBanners />
     </PoolsPage>
   )

@@ -24,8 +24,8 @@ import { BuildPromo } from './BuildPromo'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
-  poolsServerData?: GetPoolsQuery
-  featuredPoolsServerData?: GetFeaturedPoolsQuery
+  poolsServerData?: GetPoolsQuery | null
+  featuredPoolsServerData?: GetFeaturedPoolsQuery | null
 }
 
 export function PoolsPage({
