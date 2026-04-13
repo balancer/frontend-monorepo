@@ -5,7 +5,6 @@ import {
   Center,
   Divider,
   Text,
-  Spinner,
   VStack,
   Skeleton,
   StyleProps,
@@ -58,15 +57,16 @@ export function PaginatedTable<T>({
   }, [paginationProps?.currentPageNumber])
 
   return (
-    <VStack gap="0" w="full" {...rest}>
+    <VStack align="stretch" gap="0" h="full" w="full" {...rest}>
       <Box flexShrink={0} h={`${headerHeight}px`} w="full">
         <TableHeader />
       </Box>
       <Divider flexShrink={0} />
-      <Box minH="300px" position="relative" w="full">
-        {items.length > 0 && !loading && (
+      <Box flex="1" minH="0" position="relative" w="full">
+        {items.length > 0 ? (
           <Virtuoso
             data={items}
+            initialItemCount={10}
             itemContent={(index, item) => (
               <Box key={getRowId(item, index)} w="full">
                 <TableRow index={index} item={item} />
@@ -76,17 +76,7 @@ export function PaginatedTable<T>({
             totalCount={items.length}
             useWindowScroll
           />
-        )}
-
-        {!loading && items.length === 0 && (
-          <Center py="2xl">
-            <Text color="font.secondary" px="md">
-              {noItemsFoundLabel}
-            </Text>
-          </Center>
-        )}
-
-        {loading && (
+        ) : loading ? (
           <VStack gap="0" w="full">
             {Array.from({ length: loadingLength }).map((_, index) => (
               <Box key={`table-row-skeleton-${index}`} px="xs" py="xs" w="full">
@@ -94,28 +84,12 @@ export function PaginatedTable<T>({
               </Box>
             ))}
           </VStack>
-        )}
-
-        {loading && items.length > 0 && (
-          <Box
-            style={{
-              position: 'absolute',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
-              height: '100%',
-              top: 0,
-              left: 0,
-              borderRadius: 10,
-              zIndex: 10,
-              backdropFilter: 'blur(3px)',
-            }}
-          >
-            <Center py="4xl">
-              <Spinner size="xl" />
-            </Center>
-          </Box>
+        ) : (
+          <Center py="2xl">
+            <Text color="font.secondary" px="md">
+              {noItemsFoundLabel}
+            </Text>
+          </Center>
         )}
       </Box>
 
