@@ -3,14 +3,13 @@ import { Divider, Card, HStack, Heading, Text, VStack, Spacer, Skeleton } from '
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-
 import {
   GetPoolEventsQuery,
-  GqlPoolLiquidityBootstrappingV3,
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useState, useEffect } from 'react'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
 
 export function MyPurchases({
   userPoolEvents,
@@ -23,7 +22,7 @@ export function MyPurchases({
   const { priceFor } = useTokens()
   const [height, setHeight] = useState(0)
 
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
   const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
 
   const userProjectTokenBalance = calculateBalance(userPoolEvents, projectToken.address as Address)

@@ -3,7 +3,6 @@ import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import NextTopLoader from 'nextjs-toploader'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import '@repo/lib/assets/css/global.css'
-import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
 import Script from 'next/script'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
@@ -48,9 +47,8 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
-        <Fathom />
         <NextTopLoader color="#7f6ae8" showSpinner={false} />
-        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
+        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE} forcedTheme="dark">
           <ThemeProvider>
             <Providers>
               <NavBarContainer />

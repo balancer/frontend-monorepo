@@ -9,11 +9,7 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
 import { useVault } from '@repo/lib/shared/hooks/useVault'
 import { LABELS } from '@repo/lib/shared/labels'
-import {
-  GqlChain,
-  GqlPoolLiquidityBootstrappingV3,
-  GqlSorSwapType,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
@@ -53,7 +49,7 @@ import {
   isSupportedWrap,
   isWrapOrUnwrap,
 } from './wrap.helpers'
-import { Pool } from '../pool/pool.types'
+import { LbpV3, Pool } from '../pool/pool.types'
 import { getStandardRootTokens, isStandardOrUnderlyingRootToken } from '../pool/pool-tokens.utils'
 import { getChildTokens } from '../pool/pool-tokens.utils'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
@@ -105,7 +101,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
   const isLbpSwap = pool && isV3LBP(pool)
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as LbpV3
 
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
   const shouldDiscardOldPersistedValue = isPoolSwapUrl || isLbpSwap

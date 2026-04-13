@@ -18,12 +18,11 @@ import {
   useColorMode,
   Link,
 } from '@chakra-ui/react'
-
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useState } from 'react'
-import { isQuantAmmPool, isV3LBP } from '../pool.helpers'
+import { isDynamicLBP, isQuantAmmPool, isV3LBP } from '../pool.helpers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShiftsChart'
 import { differenceInDays, differenceInHours, secondsToMilliseconds } from 'date-fns'
@@ -168,7 +167,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
   const compositionTokens = getCompositionTokens(pool)
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
   const heightPx = height - 35
-  const hasTabs = isQuantAmm || isV3LBP(pool)
+  const hasTabs = isQuantAmm || isDynamicLBP(pool)
 
   const compositionViewProps: CompositionViewProps = {
     chain,
@@ -221,7 +220,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
 
 // FIXME: [JUANJO] we can maybe merge this one with the one on the pool creation page
 function LBPWeightsChart({ pool }: { pool: Pool }) {
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3 // only this type has a weights chart
   const startDateTime = new Date(secondsToMilliseconds(lbpPool.startTime))
   const endDateTime = new Date(secondsToMilliseconds(lbpPool.endTime))
   const startWeight = lbpPool.projectTokenStartWeight * 100

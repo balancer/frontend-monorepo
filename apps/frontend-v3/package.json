@@ -25,12 +25,12 @@
     "test:integration:watch": "vitest -c ./vitest.config.integration.ts"
   },
   "dependencies": {
-    "@apollo/client": "4.1.6",
+    "@apollo/client": "4.1.7",
     "@balancer/sdk": "5.2.3",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/icons": "2.2.4",
-    "@chakra-ui/react": "2.10.6",
+    "@chakra-ui/react": "2.10.9",
     "@chakra-ui/theme-tools": "2.2.6",
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
@@ -69,7 +69,7 @@
     "@testing-library/react": "16.3.2",
     "@types/js-cookie": "3.0.6",
     "@types/lodash": "4.17.24",
-    "@types/node": "24.12.0",
+    "@types/node": "24.12.2",
     "@types/prismjs": "1.26.6",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

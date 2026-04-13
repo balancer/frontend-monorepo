@@ -3,7 +3,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 import { usePool } from '../../PoolProvider'
 import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
-import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
 import {
@@ -39,7 +38,6 @@ export function PoolHeader() {
   }
 
   function handleClick() {
-    trackEvent(AnalyticsEvent.ClickAddLiquidity)
     if (isFx(pool.type)) {
       openRedirectModal(RedirectPartner.Xave)
     } else {

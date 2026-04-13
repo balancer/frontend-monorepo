@@ -11,8 +11,9 @@ export function useGetPoolTokensWithActualWeights(pool: Pool) {
 
   const compositionTokens = getCompositionTokens(pool)
   let totalLiquidity = calcTotalUsdValue(compositionTokens, pool.chain)
+  const isSeedlessLBP = isDynamicLBP(pool) && pool.isSeedless
 
-  if (isDynamicLBP(pool) && pool.isSeedless) {
+  if (isSeedlessLBP) {
     const virtualToken = pool.poolTokens[pool.reserveTokenIndex].address
     const price = priceFor(virtualToken, pool.chain)
     totalLiquidity = bn(totalLiquidity)
@@ -21,15 +22,20 @@ export function useGetPoolTokensWithActualWeights(pool: Pool) {
   }
 
   const poolTokensWithActualWeights = Object.fromEntries(
-    compositionTokens.map(compositionToken => [
-      compositionToken.address,
-      calcWeightForBalance(
+    compositionTokens.map(compositionToken => {
+      const isVirtualPairedToken =
+        isSeedlessLBP &&
+        pool.poolTokens[pool.reserveTokenIndex].address === compositionToken.address
+
+      const tokenBalance = isVirtualPairedToken
+        ? bn(compositionToken.balance).plus(pool.reserveTokenVirtualBalance).toString()
+        : compositionToken.balance
+
+      return [
         compositionToken.address,
-        compositionToken.balance,
-        totalLiquidity,
-        pool.chain
-      ),
-    ])
+        calcWeightForBalance(compositionToken.address, tokenBalance, totalLiquidity, pool.chain),
+      ]
+    })
   ) as Record<string, string>
 
   return { poolTokensWithActualWeights, compositionTokens }

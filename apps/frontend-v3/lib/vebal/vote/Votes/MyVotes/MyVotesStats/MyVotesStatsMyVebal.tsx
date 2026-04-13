@@ -8,7 +8,6 @@ import { useLockEndDate } from '@bal/lib/vebal/lock/duration/useLockEndDate'
 import { expectedTotalVeBal } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { MyVotesStatsCard } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
 import { MyVebalChargeTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVebalChargeTooltip'
-import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
 import { formatUnits } from 'viem'
 
 interface Props {
@@ -48,11 +47,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
           <HStack spacing="ms">
             <Text color="font.maxContrast">&mdash;</Text>
             {isLockExpired && (
-              <Tooltip
-                label={
-                  "You can't vote because your lock has expired. Get new veBAL to vote by extending your lock."
-                }
-              >
+              <Tooltip label={"You can't vote because your lock has expired."}>
                 <Badge
                   background="red.400"
                   color="font.dark"
@@ -88,18 +83,9 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
           <VStack>
             <ConnectWallet size="sm" variant="primary" />
           </VStack>
-        ) : isLockExpired || myVebalBalance ? (
+        ) : (
           <Button as={NextLink} href="/vebal/manage" size="sm" variant="tertiary">
             Manage
-          </Button>
-        ) : (
-          <Button
-            as={NextLink}
-            href={getVeBalManagePath('lock', 'vote')}
-            size="sm"
-            variant="primary"
-          >
-            Get veBAL
           </Button>
         )
       }

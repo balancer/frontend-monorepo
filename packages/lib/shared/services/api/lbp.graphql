@@ -6,6 +6,7 @@ fragment LbpV3CommonMetadataFields on GqlPoolLiquidityBootstrappingV3 {
   description
   discord
   endTime
+  farcaster
   isProjectTokenSwapInBlocked
   lbpName
   lbpOwner
@@ -32,10 +33,12 @@ fragment FixedPriceLbpCommonMetadataFields on GqlPoolFixedPriceLBP {
   discord
   endTime
   farcaster
+  isProjectTokenSwapInBlocked
   lbpName
   lbpOwner
   projectToken
   projectTokenIndex
+  projectTokenRate
   reserveToken
   reserveTokenIndex
   startTime
@@ -66,6 +69,12 @@ fragment LBPPriceChartData on LBPPriceChartData {
 
 query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
   prices: lbpPriceChart(chain: $chain, id: $poolId, dataPoints: $dataPoints) {
+    ...LBPPriceChartData
+  }
+}
+
+query GetFixedLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
+  prices: fixedLbpPriceChart(chain: $chain, id: $poolId, dataPoints: $dataPoints) {
     ...LBPPriceChartData
   }
 }

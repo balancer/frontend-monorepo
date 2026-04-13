@@ -1,7 +1,8 @@
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { getCurrentPrice, usePriceInfo } from './usePriceInfo'
 import { useTokenMetadata } from '../../tokens/useTokenMetadata'
+import { LbpV3 } from '@repo/lib/modules/pool/pool.types'
+import { isFixedLBP } from '@repo/lib/modules/pool/pool.helpers'
 
 const emptyStats = {
   isLoading: true,
@@ -13,13 +14,18 @@ const emptyStats = {
   totalFees: 0,
 }
 
-export function usePoolStats(pool: GqlPoolLiquidityBootstrappingV3) {
+export function usePoolStats(pool: LbpV3) {
   const { isLoading: metadataIsLoading, totalSupply } = useTokenMetadata(
     pool.projectToken,
     pool.chain
   )
 
-  const { isLoading: snapshotsAreLoading, snapshots } = usePriceInfo(pool.chain, pool.id as Address)
+  const { isLoading: snapshotsAreLoading, snapshots } = usePriceInfo(
+    pool.chain,
+    pool.id as Address,
+    isFixedLBP(pool)
+  )
+
   if (snapshotsAreLoading || metadataIsLoading || snapshots.length === 0) return emptyStats
   const firstSnapshot = snapshots[0]
   const lastSnapshot = snapshots[snapshots.length - 1]

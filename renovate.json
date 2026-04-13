@@ -19,67 +19,7 @@
       "minimumReleaseAge": "14 days"
     },
     {
-      "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
-      "groupName": "Chakra UI",
-      "matchPackageNames": [
-        "@emotion/react",
-        "@emotion/styled",
-        "@chakra-ui/**"
-      ]
-    },
-    {
-      "description": "Keep graphql core in sync with clients and codegen tools.",
-      "groupName": "GraphQL / Apollo",
-      "matchPackageNames": [
-        "graphql",
-        "graphql-request",
-        "graphql-tag",
-        "@apollo/client",
-        "@apollo/client-integration-nextjs",
-        "@graphql-typed-document-node/core",
-        "@graphql-codegen/**"
-      ],
-      "matchDepTypes": ["dependencies", "devDependencies"]
-    },
-    {
-      "description": "Keep ESLint plugins compatible with core.",
-      "groupName": "ESLint ecosystem",
-      "matchPackageNames": [
-        "eslint",
-        "eslint-config-**",
-        "eslint-plugin-**",
-        "@eslint/**"
-      ]
-    },
-    {
-      "description": "Keep Sentry packages in sync.",
-      "groupName": "Sentry",
-      "matchPackageNames": ["@sentry/**"]
-    },
-    {
-      "description": "Keep Next.js packages aligned.",
-      "groupName": "Next ecosystem",
-      "matchPackageNames": [
-        "next",
-        "@next/**",
-        "react",
-        "react-dom",
-        "@types/react",
-        "@types/react-dom"
-      ]
-    },
-    {
-      "description": "Low-risk, high-frequency — consolidate to reduce noise.",
-      "groupName": "@types packages",
-      "matchPackageNames": ["@types/**", "!@types/react", "!@types/react-dom"]
-    },
-    {
-      "description": "Consolidate workflow action bumps",
-      "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"]
-    },
-    {
-      "description": "Group remaining npm devDependencies that are not already covered by more specific package groups.",
+      "description": "Group remaining npm devDependencies that are not already covered by more specific package groups. This rule should be early so specific rules can override it.",
       "groupName": "Other devDependencies",
       "matchManagers": ["npm"],
       "matchDepTypes": ["devDependencies"],
@@ -113,6 +53,74 @@
         "!next",
         "!@next/**"
       ]
+    },
+    {
+      "description": "Chakra v2 requires @emotion as a peer dep — a version split may cause style failures.",
+      "groupName": "Chakra UI",
+      "matchPackageNames": [
+        "@emotion/react",
+        "@emotion/styled",
+        "@chakra-ui/**"
+      ]
+    },
+    {
+      "description": "Keep graphql core in sync with clients and codegen tools.",
+      "groupName": "GraphQL / Apollo",
+      "matchPackageNames": [
+        "graphql",
+        "graphql-request",
+        "graphql-tag",
+        "@apollo/client",
+        "@apollo/client-integration-nextjs",
+        "@graphql-typed-document-node/core",
+        "@graphql-codegen/**"
+      ],
+      "matchDepTypes": ["dependencies", "devDependencies"]
+    },
+    {
+      "description": "Keep ESLint plugins compatible with core.",
+      "groupName": "ESLint ecosystem",
+      "matchPackageNames": [
+        "eslint",
+        "eslint-config-**",
+        "eslint-plugin-**",
+        "@eslint/**",
+        "@typescript-eslint/**",
+        "typescript-eslint"
+      ]
+    },
+    {
+      "description": "Keep Sentry packages in sync.",
+      "groupName": "Sentry",
+      "matchPackageNames": ["@sentry/**"]
+    },
+    {
+      "description": "Keep Next.js packages aligned.",
+      "groupName": "Next ecosystem",
+      "matchPackageNames": [
+        "next",
+        "@next/**",
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ]
+    },
+    {
+      "description": "Low-risk, high-frequency — consolidate to reduce noise.",
+      "groupName": "@types packages",
+      "matchPackageNames": ["@types/**", "!@types/react", "!@types/react-dom"]
+    },
+    {
+      "description": "Consolidate workflow action bumps",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "Keep Next server external workaround packages pinned to the transitive versions required by the current WalletConnect/pino stack.",
+      "groupName": "Pinned Next server externals",
+      "matchPackageNames": ["thread-stream", "real-require"],
+      "enabled": false
     },
     {
       "description": "Flag major bumps for manual review.",

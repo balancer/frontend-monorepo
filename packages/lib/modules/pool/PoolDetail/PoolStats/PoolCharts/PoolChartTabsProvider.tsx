@@ -14,6 +14,7 @@ export enum PoolChartTab {
   LIQUIDITY_PROFILE = 'liquidity_profile',
   RECLAMM = 'reclamm',
   PRICE = 'price',
+  FUNDS_RAISED = 'funds_raised',
 }
 
 export interface PoolChartTypeTab {
@@ -46,6 +47,10 @@ const POOL_SPECIFIC_TABS: PoolTabsMap = {
   [GqlPoolType.Reclamm]: [{ value: PoolChartTab.RECLAMM, label: 'reCLAMM' }, ...TABS_WITH_FEES],
   [GqlPoolType.LiquidityBootstrapping]: [
     { value: PoolChartTab.PRICE, label: 'Price' },
+    ...TABS_WITH_FEES,
+  ],
+  [GqlPoolType.FixedLbp]: [
+    { value: PoolChartTab.FUNDS_RAISED, label: 'Funds raised' },
     ...TABS_WITH_FEES,
   ],
   default: TABS_WITH_FEES,
@@ -93,6 +98,8 @@ export function usePoolChartTabsLogic() {
         return 'Total value locked'
       case PoolChartTab.FEES:
         return `${activePeriod.label} fees`
+      case PoolChartTab.FUNDS_RAISED:
+        return `${activePeriod.label} funds raised`
       case PoolChartTab.VOLUME:
         return `${activePeriod.label} volume`
     }

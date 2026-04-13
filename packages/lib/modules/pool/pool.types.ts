@@ -7,17 +7,17 @@ import {
   GqlNestedPool,
   GetPoolQuery,
   QuantAmmWeightSnapshot,
+  GqlPoolLiquidityBootstrappingV3,
+  GqlPoolFixedPriceLbp,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
 
 export type Pool = GetPoolQuery['pool']
-
 export type PoolId = Hex
-
 export type PoolList = GetPoolsQuery['pools']
-
 export type PoolListItem = PoolList[0]
+export type LbpV3 = GqlPoolLiquidityBootstrappingV3 | GqlPoolFixedPriceLbp
 
 type ApiTokenWithNestedPool = ApiToken & { nestedPool?: GqlNestedPool }
 export type VotingPool = Pick<

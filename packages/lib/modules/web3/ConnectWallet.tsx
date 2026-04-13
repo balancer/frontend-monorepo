@@ -3,7 +3,6 @@ import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
 import { useIsSafeApp } from './safe.hooks'
-import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 export function ConnectWallet({
   connectLabel = 'Connect wallet',
@@ -35,7 +34,6 @@ export function ConnectWallet({
 
         if (!isConnected) {
           const handleConnectClick = () => {
-            trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletConnect)
             openConnectModal()
           }
 
@@ -86,12 +84,10 @@ export function ConnectWallet({
         }
 
         const handleNetworkClick = () => {
-          trackEvent(AnalyticsEvent.ClickNavUtilitiesNetwork)
           openChainModal()
         }
 
         const handleWalletClick = () => {
-          trackEvent(AnalyticsEvent.ClickNavUtilitiesWalletChange)
           openAccountModal()
         }
 
