@@ -153,6 +153,7 @@ export function PromoBanners() {
                         altText="Background texture"
                         defaultImgType="png"
                         directory={item.bgImageActive.directory}
+                        fetchPriority="high"
                         height="100%"
                         imgAvif
                         imgAvifDark
@@ -161,6 +162,7 @@ export function PromoBanners() {
                         imgName={item.bgImageActive.imgName}
                         imgPng
                         imgPngDark
+                        loading="eager"
                         width="100%"
                       />
                       <Box

@@ -22,6 +22,8 @@ interface PictureProps {
   directory?: string
   width?: string | number
   height?: string | number
+  loading?: 'lazy' | 'eager'
+  fetchPriority?: 'high' | 'low' | 'auto'
 }
 
 export function Picture({
@@ -46,6 +48,8 @@ export function Picture({
   directory = '/images/homepage/',
   width,
   height,
+  loading = 'lazy',
+  fetchPriority,
 }: PictureProps) {
   const imagePath = `${directory}${imgName}`
 
@@ -126,9 +130,10 @@ export function Picture({
       {imgJpg && <source srcSet={`${imagePath}.jpg`} type="image/jpg" />}
       <img
         alt={altText}
-        decoding="async"
+        decoding={loading === 'eager' ? 'sync' : 'async'}
+        fetchPriority={fetchPriority}
         height={height || '100%'}
-        loading="lazy"
+        loading={loading}
         src={`${imagePath}.${defaultImgType}`}
         style={{ objectFit: 'cover' }}
         width={width}

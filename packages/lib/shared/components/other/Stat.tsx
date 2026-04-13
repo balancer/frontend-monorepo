@@ -49,11 +49,13 @@ function Stat({
             altText="MEV Capture Promo Background"
             defaultImgType="jpg"
             directory="/images/homepage/"
+            fetchPriority="high"
             height="100%"
             imgAvif
             imgAvifDark
             imgJpg
             imgName="stone"
+            loading="eager"
             width="100%"
           />
         </Box>
