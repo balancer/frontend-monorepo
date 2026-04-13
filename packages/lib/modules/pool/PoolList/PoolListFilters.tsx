@@ -52,7 +52,6 @@ import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
-import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import NextLink from 'next/link'
 
 export function useFilterTagsVisible() {
@@ -371,7 +370,6 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
     const textColor = useColorModeValue('#fff', 'font.dark')
 
     const handleFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      trackEvent(AnalyticsEvent.ClickPoolListFilter)
       onClick?.(e)
     }
 

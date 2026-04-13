@@ -52,10 +52,8 @@ export const ProjectConfigBalancer: ProjectConfig = {
   },
   links: {
     appLinks: [
-      { analyticsEvent: 'ClickNavVeBal', href: '/vebal', label: 'veBAL' },
-      ...(isDev || isStaging
-        ? [{ analyticsEvent: 'ClickNavLbp', href: '/lbp/create', label: 'LBP' }]
-        : []),
+      { href: '/vebal', label: 'veBAL' },
+      ...(isDev || isStaging ? [{ href: '/lbp/create', label: 'LBP' }] : []),
     ],
     ecosystemLinks: [
       { label: 'Pool creator', href: '/create' },
