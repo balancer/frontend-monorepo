@@ -7,7 +7,7 @@ const defaultHeaders = {
   'x-graphql-client-version': '1.0.0',
 }
 
-export const { getClient: getApolloServerClient } = registerApolloClient(() => {
+export const { getClient: getApolloServerClient, PreloadQuery } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache({
       typePolicies: {
