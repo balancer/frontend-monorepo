@@ -17,11 +17,6 @@ export default function Cookies() {
       iconUrl: '/images/services/the-graph.svg',
     },
     {
-      name: 'Fathom Analytics',
-      description: 'Used to understand user behavior on the site and marketing performance.',
-      iconUrl: '/images/services/fathom-analytics.svg',
-    },
-    {
       name: 'Appzi',
       description: 'Used to capture and store user feedback from optional surveys.',
       iconUrl: '/images/services/appzi.svg',
