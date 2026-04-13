@@ -7,10 +7,7 @@ import {
   GqlPoolOrderDirection,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  getApolloServerClient,
-  PreloadQuery,
-} from '@repo/lib/shared/services/api/apollo-server.client'
+import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const revalidateContext = {
@@ -50,23 +47,27 @@ const defaultPoolListVariables = {
 export default async function PoolsPageWrapper() {
   const client = getApolloServerClient()
 
-  const { data: stakedSonicData } = await client.query({
-    query: GetStakedSonicDataDocument,
-    variables: {},
-  })
+  const [{ data: stakedSonicData }, { data: poolsServerData }] = await Promise.all([
+    client.query({
+      query: GetStakedSonicDataDocument,
+      variables: {},
+    }),
+    client.query({
+      query: GetPoolsDocument,
+      variables: defaultPoolListVariables,
+      context: revalidateContext,
+    }),
+  ])
 
   if (!stakedSonicData) return null
 
   return (
-    <PreloadQuery
-      context={revalidateContext}
-      query={GetPoolsDocument}
-      variables={defaultPoolListVariables}
+    <PoolsPage
+      poolsServerData={poolsServerData}
+      rewardsClaimed24h={stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h}
     >
-      <PoolsPage rewardsClaimed24h={stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h}>
-        {/* TODO: add <PromoBanners /> at a later date */}
-        <BeetsPromoBanner />
-      </PoolsPage>
-    </PreloadQuery>
+      {/* TODO: add <PromoBanners /> at a later date */}
+      <BeetsPromoBanner />
+    </PoolsPage>
   )
 }

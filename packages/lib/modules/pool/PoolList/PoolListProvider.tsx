@@ -3,6 +3,7 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import {
   GetPoolsDocument,
+  GetPoolsQuery,
   GqlChain,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -19,9 +20,11 @@ import { PoolListItem } from '../pool.types'
 export function usePoolListLogic({
   fixedPoolTypes,
   fixedChains,
+  serverData,
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
+  serverData?: GetPoolsQuery
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
@@ -48,7 +51,8 @@ export function usePoolListLogic({
     }
   )
 
-  const pools = loading && previousData ? previousData.pools : data?.pools || []
+  const pools =
+    loading && previousData ? previousData.pools : data?.pools || serverData?.pools || []
 
   const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
@@ -64,7 +68,7 @@ export function usePoolListLogic({
 
   return {
     pools: poolsData,
-    count: data?.count || previousData?.count,
+    count: data?.count || previousData?.count || serverData?.count,
     queryState,
     loading,
     error,
@@ -81,14 +85,17 @@ export const PoolListContext = createContext<ReturnType<typeof usePoolListLogic>
 export function PoolListProvider({
   fixedPoolTypes,
   fixedChains,
+  serverData,
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
+  serverData?: GetPoolsQuery
 }>) {
   const hook = usePoolListLogic({
     fixedPoolTypes,
     fixedChains,
+    serverData,
   })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>

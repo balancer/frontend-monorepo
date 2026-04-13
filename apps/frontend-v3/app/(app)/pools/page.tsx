@@ -1,6 +1,6 @@
 import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage/PoolsPage'
 import { PromoBanners } from '@repo/lib/shared/components/promos/PromoBanners'
-import { PreloadQuery } from '@repo/lib/shared/services/api/apollo-server.client'
+import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import {
   GetPoolsDocument,
   GetFeaturedPoolsDocument,
@@ -46,21 +46,24 @@ const defaultPoolListVariables = {
 }
 
 export default async function PoolsPageWrapper() {
+  const client = getApolloServerClient()
+
+  const [{ data: poolsServerData }, { data: featuredPoolsServerData }] = await Promise.all([
+    client.query({
+      query: GetPoolsDocument,
+      variables: defaultPoolListVariables,
+      context: revalidateContext,
+    }),
+    client.query({
+      query: GetFeaturedPoolsDocument,
+      variables: { chains: PROJECT_CONFIG.supportedNetworks },
+      context: revalidateContext,
+    }),
+  ])
+
   return (
-    <PreloadQuery
-      context={revalidateContext}
-      query={GetFeaturedPoolsDocument}
-      variables={{ chains: PROJECT_CONFIG.supportedNetworks }}
-    >
-      <PreloadQuery
-        context={revalidateContext}
-        query={GetPoolsDocument}
-        variables={defaultPoolListVariables}
-      >
-        <PoolsPage>
-          <PromoBanners />
-        </PoolsPage>
-      </PreloadQuery>
-    </PreloadQuery>
+    <PoolsPage featuredPoolsServerData={featuredPoolsServerData} poolsServerData={poolsServerData}>
+      <PromoBanners />
+    </PoolsPage>
   )
 }

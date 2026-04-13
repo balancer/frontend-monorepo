@@ -13,16 +13,27 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { useQuery } from '@apollo/client/react'
-import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetFeaturedPoolsDocument,
+  GetFeaturedPoolsQuery,
+  GetPoolsQuery,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { BuildPromo } from './BuildPromo'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
+  poolsServerData?: GetPoolsQuery
+  featuredPoolsServerData?: GetFeaturedPoolsQuery
 }
 
-export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
+export function PoolsPage({
+  children,
+  rewardsClaimed24h,
+  poolsServerData,
+  featuredPoolsServerData,
+}: PoolsPageProps) {
   const { supportedNetworks } = PROJECT_CONFIG
 
   const { data: featuredPoolsData, loading: featuredPoolsLoading } = useQuery(
@@ -33,7 +44,8 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
     }
   )
 
-  const featuredPools = featuredPoolsData?.featuredPools || []
+  const featuredPools =
+    featuredPoolsData?.featuredPools || featuredPoolsServerData?.featuredPools || []
 
   const { protocolData } = useProtocolStats()
 
@@ -131,20 +143,21 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
       >
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList />
+            <PoolList serverData={poolsServerData} />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
-      {isBalancer && (featuredPools.length > 0 || featuredPoolsLoading) && (
-        <DefaultPageContainer mb="lg" py="0" rounded="2xl">
-          <Box>
-            {!featuredPoolsLoading && featuredPools.length > 0 && (
-              <FeaturedPools featuredPools={featuredPools} />
-            )}
-            {featuredPoolsLoading && <Skeleton height="327px" width="100%" />}
-          </Box>
-        </DefaultPageContainer>
-      )}
+      {isBalancer &&
+        (featuredPools.length > 0 || (featuredPoolsLoading && !featuredPoolsServerData)) && (
+          <DefaultPageContainer mb="lg" py="0" rounded="2xl">
+            <Box>
+              {!featuredPoolsLoading && featuredPools.length > 0 && (
+                <FeaturedPools featuredPools={featuredPools} />
+              )}
+              {featuredPoolsLoading && <Skeleton height="327px" width="100%" />}
+            </Box>
+          </DefaultPageContainer>
+        )}
       <DefaultPageContainer mb="0" py="0" rounded="2xl">
         <FeaturedPartners />
       </DefaultPageContainer>

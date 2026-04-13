@@ -2,17 +2,27 @@
 
 import { PoolListProvider } from '@repo/lib/modules/pool/PoolList/PoolListProvider'
 import { PoolListLayout } from './PoolListLayout'
-import { GqlPoolType, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetPoolsQuery,
+  GqlPoolType,
+  GqlChain,
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 export function PoolList({
   fixedPoolTypes,
   fixedChains,
+  serverData,
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
+  serverData?: GetPoolsQuery
 }) {
   return (
-    <PoolListProvider fixedChains={fixedChains} fixedPoolTypes={fixedPoolTypes}>
+    <PoolListProvider
+      fixedChains={fixedChains}
+      fixedPoolTypes={fixedPoolTypes}
+      serverData={serverData}
+    >
       <PoolListLayout />
     </PoolListProvider>
   )
