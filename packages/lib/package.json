@@ -22,7 +22,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {
-    "@apollo/client": "4.1.6",
+    "@apollo/client": "4.1.7",
     "@balancer-labs/balancer-maths": "0.0.40",
     "@balancer/sdk": "5.2.3",
     "@chakra-ui/anatomy": "^2.2.2",
@@ -81,7 +81,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@apollo/client-integration-nextjs": "0.14.4",
+    "@apollo/client-integration-nextjs": "0.14.5",
     "@chakra-ui/cli": "2.5.8",
     "@chakra-ui/styled-system": "2.12.0",
     "@graphql-codegen/cli": "6.2.1",
