@@ -15,7 +15,7 @@ const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
 
 export function PoolListTableHeader({ ...rest }) {
   const {
-    queryState: { sorting, setSorting },
+    queryState: { sorting, setSorting, joinablePools },
   } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const sortingObj = sorting[0]
@@ -57,6 +57,7 @@ export function PoolListTableHeader({ ...rest }) {
           right="-6px"
         >
           <SortableHeader
+            isDisabled={joinablePools}
             isSorted={sortingObj.id === orderByItem}
             label={orderByHash[orderByItem]}
             onSort={() => handleSort(orderByItem)}

@@ -9,6 +9,7 @@ import {
 import { uniq } from 'lodash'
 import {
   parseAsArrayOf,
+  parseAsStringLiteral,
   parseAsFloat,
   parseAsInteger,
   parseAsString,
@@ -49,6 +50,8 @@ export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
   },
 ] as const
 
+const JOINABLE_POOLS_FIRST = 100
+
 const poolListQueryStateParsers = {
   first: parseAsInteger.withDefault(20),
   skip: parseAsInteger.withDefault(0),
@@ -65,6 +68,7 @@ const poolListQueryStateParsers = {
   protocolVersion: parseAsInteger,
   textSearch: parseAsString,
   userAddress: parseAsString,
+  joinablePools: parseAsStringLiteral(['true'] as const),
   minTvl: parseAsFloat.withDefault(0),
   poolTags: parseAsArrayOf(
     parseAsStringEnum<PoolTagType>(poolTagFilters as unknown as PoolTagType[])
@@ -107,6 +111,11 @@ export function usePoolListQueryState() {
     'userAddress',
     poolListQueryStateParsers.userAddress
   )
+  const [joinablePoolsValue, setJoinablePoolsValue] = useQueryState(
+    'joinablePools',
+    poolListQueryStateParsers.joinablePools
+  )
+  const joinablePools = joinablePoolsValue === 'true'
 
   const isFirstRender = useRef(true)
   // on toggle always start at the beginning of the list
@@ -116,7 +125,7 @@ export function usePoolListQueryState() {
       return
     }
     if (skip) setSkip(0)
-  }, [poolTypes, networks, minTvl, poolTags])
+  }, [poolTypes, networks, minTvl, poolTags, joinablePools, userAddress])
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {
@@ -124,6 +133,19 @@ export function usePoolListQueryState() {
       setUserAddress(address)
     } else {
       setUserAddress('')
+    }
+  }
+
+  // Set internal checked state
+  function toggleJoinablePools(checked: boolean) {
+    if (checked) {
+      setJoinablePoolsValue('true')
+      setFirst(JOINABLE_POOLS_FIRST)
+      setSkip(null)
+    } else {
+      setJoinablePoolsValue(null)
+      setFirst(null)
+      setSkip(null)
     }
   }
 
@@ -236,6 +258,7 @@ export function usePoolListQueryState() {
     setOrderDirection(null)
     setProtocolVersion(null)
     setPoolHookTags(null)
+    setJoinablePoolsValue(null)
   }
 
   const totalFilterCount =
@@ -245,7 +268,8 @@ export function usePoolListQueryState() {
     (minTvl > 0 ? 1 : 0) +
     poolTags.length +
     (protocolVersion ? 1 : 0) +
-    poolHookTags.length
+    poolHookTags.length +
+    (joinablePools ? 1 : 0)
 
   const sorting: SortingState = orderBy
     ? [{ id: orderBy, desc: orderDirection === GqlPoolOrderDirection.Desc }]
@@ -303,6 +327,7 @@ export function usePoolListQueryState() {
     togglePoolType,
     togglePoolTag,
     togglePoolHookTag,
+    toggleJoinablePools,
     setSorting,
     setPagination,
     setSearch,
@@ -329,6 +354,7 @@ export function usePoolListQueryState() {
     mappedPoolTypes,
     queryVariables,
     userAddress,
+    joinablePools,
     poolHookTags,
   }
 }

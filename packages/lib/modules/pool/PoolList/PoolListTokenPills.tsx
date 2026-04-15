@@ -8,12 +8,44 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
-import { isLiquidityBootstrapping, isStableLike, isWeightedLike } from '../pool.helpers'
+import { isLiquidityBootstrapping, isStableLike } from '../pool.helpers'
 import { getUserReferenceTokens } from '../pool-tokens.utils'
 import { PoolCore, PoolToken } from '../pool.types'
 import { VotingPoolWithData } from '../../vebal/vote/vote.types'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
+
+type IsTokenInWallet = (tokenAddress: string) => boolean
+
+function walletBadgeHighlightStyles(hasWalletBalance: boolean) {
+  return {
+    _after: hasWalletBalance
+      ? {
+          bg: 'green.500',
+          content: '""',
+          inset: 0,
+          opacity: 0.08,
+          pointerEvents: 'none',
+          position: 'absolute' as const,
+          zIndex: 0,
+        }
+      : undefined,
+    _before: hasWalletBalance
+      ? {
+          border: '1px solid',
+          borderColor: 'green.500',
+          borderRadius: 'full',
+          content: '""',
+          inset: 0,
+          opacity: 0.25,
+          pointerEvents: 'none',
+          position: 'absolute' as const,
+          zIndex: 1,
+        }
+      : undefined,
+    borderColor: hasWalletBalance ? 'transparent' : 'border.base',
+  }
+}
 
 function NestedTokenPill({
   nestedTokens,
@@ -54,6 +86,7 @@ function WeightedTokenPills({
   tokens,
   chain,
   iconSize = 24,
+  isTokenInWallet,
   nameSize,
   preciseWeight = false,
   ...badgeProps
@@ -61,6 +94,7 @@ function WeightedTokenPills({
   tokens: (PoolToken | ApiToken)[]
   chain: GqlChain
   iconSize?: number
+  isTokenInWallet?: IsTokenInWallet
   nameSize?: string
   preciseWeight?: boolean
 } & BadgeProps) {
@@ -68,21 +102,24 @@ function WeightedTokenPills({
     <Wrap spacing="xs">
       {tokens.map((token, index) => {
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
+        const hasWalletBalance = Boolean(isTokenInWallet?.(token.address))
 
         return (
           <Badge
             key={`${token.address}-${index}`}
             {...badgeProps}
+            {...walletBadgeHighlightStyles(hasWalletBalance)}
             alignItems="center"
             bg="background.level2"
-            borderColor="border.base"
             borderRadius="full"
             borderWidth={1}
             display="flex"
+            overflow="hidden"
+            position="relative"
             shadow="sm"
             textTransform="none"
           >
-            <HStack gap={['xs', 'sm']}>
+            <HStack gap={['xs', 'sm']} position="relative" zIndex={2}>
               {!nestedPool && (
                 <>
                   <TokenIcon
@@ -157,12 +194,14 @@ function StableTokenPills({
   tokens,
   chain,
   iconSize = 24,
+  isTokenInWallet,
   nameSize,
   ...badgeProps
 }: {
   tokens: (PoolToken | ApiToken)[]
   chain: GqlChain
   iconSize?: number
+  isTokenInWallet?: IsTokenInWallet
   nameSize?: string
 } & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
@@ -172,23 +211,27 @@ function StableTokenPills({
     <HStack spacing={0}>
       {tokens.map((token, i) => {
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
+        const hasWalletBalance = Boolean(isTokenInWallet?.(token.address))
+
         return (
           <Badge
             key={[token.address, token.chain, i].join('-')}
             {...badgeProps}
+            {...walletBadgeHighlightStyles(hasWalletBalance)}
             alignItems="center"
             bg="background.level2"
-            borderColor="border.base"
             borderRadius="full"
             borderWidth={1}
             display="flex"
             ml={isFirstToken(i) ? 0 : -10}
+            overflow="hidden"
             pl={[isFirstToken(i) ? 1 : 12, isFirstToken(i) ? 2 : 12]}
+            position="relative"
             shadow="sm"
             textTransform="none"
             zIndex={zIndices[i]}
           >
-            <HStack gap={['xs', '1.5']}>
+            <HStack gap={['xs', '1.5']} position="relative" zIndex={2}>
               {!nestedPool && (
                 <>
                   <TokenIcon
@@ -263,6 +306,7 @@ export function VotingListTokenPills({ vote, ...props }: VotingListTokenPillsPro
 type PoolListTokenPillsProps = {
   pool: PoolCore
   iconSize?: number
+  isTokenInWallet?: IsTokenInWallet
   nameSize?: string
 } & BadgeProps
 
@@ -285,6 +329,7 @@ export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) 
 
 type PoolTokenPillsProps = {
   chain: GqlChain
+  isTokenInWallet?: IsTokenInWallet
   poolName: string | undefined
   poolType: GqlPoolType
   protocolVersion: number
@@ -296,6 +341,7 @@ type PoolTokenPillsProps = {
 
 function PoolTokenPills({
   chain,
+  isTokenInWallet,
   poolName,
   poolType,
   protocolVersion,
@@ -306,7 +352,6 @@ function PoolTokenPills({
   ...badgeProps
 }: PoolTokenPillsProps) {
   const shouldUseStablePills = isStableLike(poolType)
-  const shouldUseWeightedPills = isWeightedLike(poolType)
   const isV3LBP = isLiquidityBootstrapping(poolType) && protocolVersion === 3
 
   if (poolName) {
@@ -323,15 +368,11 @@ function PoolTokenPills({
   }
 
   if (shouldUseStablePills) {
-    return <StableTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
-  }
-
-  if (shouldUseWeightedPills) {
     return (
-      <WeightedTokenPills
+      <StableTokenPills
         chain={chain}
         iconSize={iconSize}
-        preciseWeight={isV3LBP}
+        isTokenInWallet={isTokenInWallet}
         tokens={tokens}
         {...badgeProps}
       />
@@ -342,6 +383,7 @@ function PoolTokenPills({
     <WeightedTokenPills
       chain={chain}
       iconSize={iconSize}
+      isTokenInWallet={isTokenInWallet}
       preciseWeight={isV3LBP}
       tokens={tokens}
       {...badgeProps}

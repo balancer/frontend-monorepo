@@ -73,6 +73,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
         getRowId={item => item.id}
         items={pools}
         loading={loading}
+        loadingSpinnerPosition="top"
         noItemsFoundLabel="No pools found"
         paginationProps={paginationProps}
         renderTableHeader={renderTableHeader}
