@@ -15,19 +15,11 @@ import { includesAddress } from '@repo/lib/shared/utils/addresses'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useMemo, useCallback } from 'react'
 import { captureNonFatalError } from '@repo/lib/shared/utils/query-errors'
+import { chunkArray } from '@repo/lib/shared/utils/array'
 
 const MIN_TOKEN_VALUE_USD = 1
 const BALANCE_STALE_TIME = 30_000
 const PARALLEL_CHAINS = 3
-
-// Split array into chunks of specified size
-function chunkArray<T>(array: T[], size: number): T[][] {
-  const chunks: T[][] = []
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size))
-  }
-  return chunks
-}
 
 export type WalletTokenBalance = {
   address: string
@@ -151,8 +143,7 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
     return result
   }, [enabled, chains, balanceQuery.data, priceFor])
 
-  const isLoading =
-    isLoadingTokens || isLoadingTokenPrices || balanceQuery.isLoading || balanceQuery.isFetching
+  const isLoading = isLoadingTokens || isLoadingTokenPrices || balanceQuery.isLoading
 
   const errors = balanceQuery.data
     ? balanceQuery.data
