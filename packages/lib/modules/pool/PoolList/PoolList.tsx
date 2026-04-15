@@ -2,23 +2,26 @@
 
 import { PoolListProvider } from '@repo/lib/modules/pool/PoolList/PoolListProvider'
 import { PoolListLayout } from './PoolListLayout'
-import { GqlPoolType, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { QueryRef } from '@apollo/client/react'
+import {
+  GqlPoolType,
+  GqlChain,
+  GetPoolsQuery,
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 export function PoolList({
   fixedPoolTypes,
   fixedChains,
-  initialQueryRef,
+  initialPoolsData,
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
-  initialQueryRef?: QueryRef<any, any>
+  initialPoolsData?: GetPoolsQuery
 }) {
   return (
     <PoolListProvider
       fixedChains={fixedChains}
       fixedPoolTypes={fixedPoolTypes}
-      initialQueryRef={initialQueryRef}
+      initialPoolsData={initialPoolsData}
     >
       <PoolListLayout />
     </PoolListProvider>

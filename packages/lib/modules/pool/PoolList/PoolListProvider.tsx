@@ -3,11 +3,11 @@
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import {
   GetPoolsDocument,
+  GetPoolsQuery,
   GqlChain,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery, useReadQuery } from '@apollo/client/react'
-import type { QueryRef } from '@apollo/client/react'
+import { useQuery } from '@apollo/client/react'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -18,18 +18,14 @@ import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
 import { PoolListItem } from '../pool.types'
 import { poolListDefaultVariables } from './poolListDefaultVariables'
 
-// useReadQuery must always be called (rules of hooks), but we only use its data
-// when variables match the preloaded defaults
-const DUMMY_QUERY_REF = {} as QueryRef<any>
-
 export function usePoolListLogic({
   fixedPoolTypes,
   fixedChains,
-  initialQueryRef,
+  initialPoolsData,
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
-  initialQueryRef?: QueryRef<any, any>
+  initialPoolsData?: GetPoolsQuery
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
@@ -61,12 +57,10 @@ export function usePoolListLogic({
     [variables]
   )
 
-  // Hooks must always be called — pass a dummy ref when not available
-  const preloadedResult = useReadQuery(initialQueryRef ?? DUMMY_QUERY_REF)
-  const preloadedData = initialQueryRef && isDefaultQuery ? preloadedResult.data : null
-
   const pools =
-    loading && previousData ? previousData.pools : data?.pools || (preloadedData?.pools ?? [])
+    loading && previousData
+      ? previousData.pools
+      : (data?.pools ?? (isDefaultQuery ? (initialPoolsData?.pools ?? []) : []))
 
   const poolsData = pools.map((pool: any) =>
     removeHookDataFromPoolIfNecessary(pool)
@@ -84,7 +78,7 @@ export function usePoolListLogic({
 
   return {
     pools: poolsData,
-    count: data?.count || previousData?.count || (preloadedData?.count ?? 0),
+    count: data?.count || previousData?.count || ((isDefaultQuery && initialPoolsData?.count) ?? 0),
     queryState,
     loading,
     error,
@@ -101,17 +95,17 @@ export const PoolListContext = createContext<ReturnType<typeof usePoolListLogic>
 export function PoolListProvider({
   fixedPoolTypes,
   fixedChains,
-  initialQueryRef,
+  initialPoolsData,
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
-  initialQueryRef?: QueryRef<any, any>
+  initialPoolsData?: GetPoolsQuery
 }>) {
   const hook = usePoolListLogic({
     fixedPoolTypes,
     fixedChains,
-    initialQueryRef,
+    initialPoolsData,
   })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>
