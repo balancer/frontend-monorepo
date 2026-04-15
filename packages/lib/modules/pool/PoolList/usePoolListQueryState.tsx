@@ -24,6 +24,7 @@ import {
   poolTypeFilters,
   PoolTagType,
   SortingState,
+  poolListDefaultVariables,
 } from '../pool.types'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useEffect, useRef, useState } from 'react'
@@ -270,10 +271,10 @@ export function usePoolListQueryState() {
     orderBy,
     orderDirection,
     where: {
+      ...poolListDefaultVariables.where,
       poolTypeIn: mappedPoolTypes.filter(
         poolType => poolType !== GqlPoolType.LiquidityBootstrapping
       ),
-      poolTypeNotIn: [GqlPoolType.LiquidityBootstrapping],
       chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
       minTvl,
@@ -281,7 +282,6 @@ export function usePoolListQueryState() {
         mappedPoolTags.length > 0 || poolHookTags.length > 0
           ? [...mappedPoolTags, ...(poolHookTags || [])]
           : null,
-      tagNotIn: ['BLACK_LISTED'],
       protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
     },
     textSearch,

@@ -4,6 +4,7 @@ import {
   GqlChain,
   GqlPoolType,
   GqlPoolOrderBy,
+  GqlPoolOrderDirection,
   GqlNestedPool,
   GetPoolQuery,
   QuantAmmWeightSnapshot,
@@ -12,6 +13,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type Pool = GetPoolQuery['pool']
 export type PoolId = Hex
@@ -158,3 +160,23 @@ export enum PoolDisplayType {
 }
 
 export type PoolWithWeightSnapshots = Pool & { weightSnapshots?: QuantAmmWeightSnapshot[] }
+
+const mappedPoolTypes = Object.values(POOL_TYPE_MAP).flat()
+
+export const poolListDefaultVariables = {
+  first: 20,
+  skip: 0,
+  orderBy: GqlPoolOrderBy.TotalLiquidity,
+  orderDirection: GqlPoolOrderDirection.Desc,
+  where: {
+    poolTypeIn: mappedPoolTypes.filter(t => t !== GqlPoolType.LiquidityBootstrapping),
+    poolTypeNotIn: [GqlPoolType.LiquidityBootstrapping],
+    chainIn: PROJECT_CONFIG.supportedNetworks as GqlChain[],
+    userAddress: null,
+    minTvl: 0,
+    tagIn: null,
+    tagNotIn: ['BLACK_LISTED'],
+    protocolVersionIn: undefined,
+  },
+  textSearch: null,
+}
