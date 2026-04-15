@@ -6,7 +6,7 @@ import {
   getWrappedNativeAssetAddress,
 } from '@repo/lib/config/app.config'
 import { useTokens } from './TokensProvider'
-import { Address, erc20Abi, formatUnits } from 'viem'
+import { Address, formatUnits } from 'viem'
 import { getBalance, multicall } from 'wagmi/actions'
 import { useConfig } from 'wagmi'
 import { useUserAccount } from '../web3/UserAccountProvider'
@@ -20,6 +20,16 @@ import { chunkArray } from '@repo/lib/shared/utils/array'
 const MIN_TOKEN_VALUE_USD = 1
 const BALANCE_STALE_TIME = 30_000
 const PARALLEL_CHAINS = 3
+
+const minimalErc20Abi = [
+  {
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const
 
 export type WalletTokenBalance = {
   address: string
@@ -53,14 +63,12 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
             ? multicall(config, {
                 chainId: networkConfig.chainId,
                 contracts: erc20Tokens.map(token => ({
-                  chainId: networkConfig.chainId,
-                  abi: erc20Abi,
+                  abi: minimalErc20Abi,
                   address: token.address as Address,
                   functionName: 'balanceOf',
                   args: [userAddress as Address],
                 })),
                 allowFailure: true,
-                batchSize: 0,
               })
             : Promise.resolve([]),
         ])
