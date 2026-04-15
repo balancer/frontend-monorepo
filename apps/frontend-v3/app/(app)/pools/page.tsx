@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { PoolsHeroSection } from './_components/PoolsHeroSection'
+import { PoolsPreloadHints } from './_components/PoolsPreloadHints'
 import { PromoBanners } from '@repo/lib/shared/components/promos/PromoBanners'
 import { DefaultPoolListSection } from './_components/DefaultPoolListSection'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
@@ -12,6 +13,7 @@ import { FeaturedPoolsSection } from './_components/FeaturedPoolsSection'
 export default async function PoolsPageWrapper() {
   return (
     <>
+      <PoolsPreloadHints />
       <PoolsHeroSection>
         <PromoBanners />
       </PoolsHeroSection>
