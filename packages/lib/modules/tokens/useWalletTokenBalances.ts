@@ -1,4 +1,4 @@
-import { useQueries } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   getNativeAssetAddress,
@@ -13,11 +13,21 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { isAddress } from 'viem'
 import { includesAddress } from '@repo/lib/shared/utils/addresses'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { captureNonFatalError } from '@repo/lib/shared/utils/query-errors'
 
 const MIN_TOKEN_VALUE_USD = 1
 const BALANCE_STALE_TIME = 30_000
+const PARALLEL_CHAINS = 3
+
+// Split array into chunks of specified size
+function chunkArray<T>(array: T[], size: number): T[][] {
+  const chunks: T[][] = []
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size))
+  }
+  return chunks
+}
 
 export type WalletTokenBalance = {
   address: string
@@ -31,8 +41,9 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
   const config = useConfig()
   const { getTokensByChain, priceFor, isLoadingTokens, isLoadingTokenPrices } = useTokens()
 
-  const balanceQueries = useQueries({
-    queries: chains.map(chain => {
+  // Fetch balances for a single chain
+  const fetchChainBalances = useCallback(
+    async (chain: GqlChain) => {
       const networkConfig = getNetworkConfig(chain)
       const chainTokens = getTokensByChain(chain)
       const nativeAddress = getNativeAssetAddress(chain)
@@ -40,60 +51,72 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
         token => !includesAddress([nativeAddress], token.address)
       )
 
-      return {
-        queryKey: ['wallet-token-balances', chain, userAddress, erc20Tokens.length],
-        queryFn: async () => {
-          try {
-            const [nativeBalance, tokenBalances] = await Promise.all([
-              getBalance(config, {
+      try {
+        const [nativeBalance, tokenBalances] = await Promise.all([
+          getBalance(config, {
+            chainId: networkConfig.chainId,
+            address: userAddress as Address,
+          }),
+          erc20Tokens.length > 0
+            ? multicall(config, {
                 chainId: networkConfig.chainId,
-                address: userAddress as Address,
-              }),
-              erc20Tokens.length > 0
-                ? multicall(config, {
-                    chainId: networkConfig.chainId,
-                    contracts: erc20Tokens.map(token => ({
-                      chainId: networkConfig.chainId,
-                      abi: erc20Abi,
-                      address: token.address as Address,
-                      functionName: 'balanceOf',
-                      args: [userAddress as Address],
-                    })),
-                    allowFailure: true,
-                    batchSize: 0,
-                  })
-                : Promise.resolve([]),
-            ])
+                contracts: erc20Tokens.map(token => ({
+                  chainId: networkConfig.chainId,
+                  abi: erc20Abi,
+                  address: token.address as Address,
+                  functionName: 'balanceOf',
+                  args: [userAddress as Address],
+                })),
+                allowFailure: true,
+                batchSize: 0,
+              })
+            : Promise.resolve([]),
+        ])
 
-            return { nativeBalance, tokenBalances, erc20Tokens, chain }
-          } catch (error) {
-            captureNonFatalError({
-              error,
-              errorName: 'WalletTokenBalancesError',
-              errorMessage: `Error fetching wallet balances for chain ${chain}`,
-            })
-            throw error
-          }
-        },
-        enabled: enabled && isConnected && isAddress(userAddress) && !isLoadingTokens,
-        staleTime: BALANCE_STALE_TIME,
+        return { nativeBalance, tokenBalances, erc20Tokens, chain, success: true as const }
+      } catch (error) {
+        captureNonFatalError({
+          error,
+          errorName: 'WalletTokenBalancesError',
+          errorMessage: `Error fetching wallet balances for chain ${chain}`,
+        })
+        return { chain, success: false as const, error }
       }
-    }),
+    },
+    [config, userAddress, getTokensByChain]
+  )
+
+  // Fetch all balances in batches of PARALLEL_CHAINS
+  const balanceQuery = useQuery({
+    queryKey: ['wallet-token-balances', chains.join(','), userAddress, PARALLEL_CHAINS],
+    queryFn: async () => {
+      const chainChunks = chunkArray(chains, PARALLEL_CHAINS)
+      const results: Awaited<ReturnType<typeof fetchChainBalances>>[] = []
+
+      for (const chunk of chainChunks) {
+        // Process this chunk in parallel
+        const chunkResults = await Promise.all(chunk.map(fetchChainBalances))
+        results.push(...chunkResults)
+      }
+
+      return results
+    },
+    enabled: enabled && isConnected && isAddress(userAddress) && !isLoadingTokens,
+    staleTime: BALANCE_STALE_TIME,
   })
 
   const tokenBalancesByChain = useMemo(() => {
     const result = new Map<GqlChain, string[]>()
 
-    if (!enabled) return result
+    if (!enabled || !balanceQuery.data) return result
 
-    chains.forEach((chain, index) => {
-      const query = balanceQueries[index]
-      if (!query?.data) return
+    for (const chainResult of balanceQuery.data) {
+      if (!chainResult.success) continue
+      const { chain, nativeBalance, tokenBalances, erc20Tokens } = chainResult
 
       const tokenAddresses: string[] = []
       const nativeAddress = getNativeAssetAddress(chain)
       const wrappedNativeAddress = getWrappedNativeAssetAddress(chain)
-      const { nativeBalance, tokenBalances, erc20Tokens } = query.data
 
       const nativePrice = priceFor(nativeAddress, chain)
       const nativeBalanceUsd = bn(formatUnits(nativeBalance.value, nativeBalance.decimals)).times(
@@ -123,15 +146,19 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
       if (tokenAddresses.length > 0) {
         result.set(chain, tokenAddresses)
       }
-    })
+    }
 
     return result
-  }, [enabled, chains, balanceQueries, priceFor])
+  }, [enabled, chains, balanceQuery.data, priceFor])
 
   const isLoading =
-    isLoadingTokens || isLoadingTokenPrices || balanceQueries.some(q => q.isLoading || q.isFetching)
+    isLoadingTokens || isLoadingTokenPrices || balanceQuery.isLoading || balanceQuery.isFetching
 
-  const errors = balanceQueries.map(q => q.error).filter(Boolean)
+  const errors = balanceQuery.data
+    ? balanceQuery.data
+        .filter((r): r is { success: false; error: unknown; chain: GqlChain } => !r.success)
+        .map(r => r.error)
+    : []
 
   const hasBalance = (chain: GqlChain, tokenAddress: string): boolean => {
     if (!tokenAddress) return false
