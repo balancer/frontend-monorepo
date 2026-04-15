@@ -6,7 +6,7 @@ import { poolListDefaultVariables } from '@repo/lib/modules/pool/PoolList/poolLi
 export async function DefaultPoolListSection() {
   return (
     <PreloadQuery query={GetPoolsDocument} variables={poolListDefaultVariables}>
-      <PoolList />
+      {queryRef => <PoolList initialQueryRef={queryRef} />}
     </PreloadQuery>
   )
 }
