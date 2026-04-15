@@ -86,18 +86,29 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
     [config, userAddress, getTokensByChain]
   )
 
+  // Debug: log when hook runs
+  console.log('[useWalletTokenBalances] chains:', chains.join(','), 'enabled:', enabled)
+
   // Fetch all balances in batches of PARALLEL_CHAINS
   const balanceQuery = useQuery({
     queryKey: ['wallet-token-balances', chains.join(','), userAddress, PARALLEL_CHAINS],
-    queryFn: async ({ signal }) => {
+    queryFn: async () => {
+      console.log('[useWalletTokenBalances] queryFn START')
       const chainChunks = chunkArray(chains, PARALLEL_CHAINS)
       const results: Awaited<ReturnType<typeof fetchChainBalances>>[] = []
 
       for (let i = 0; i < chainChunks.length; i++) {
         const chunk = chainChunks[i]
+        console.log(
+          `[useWalletTokenBalances] processing chunk ${i + 1}/${chainChunks.length}:`,
+          chunk.join(',')
+        )
+
         // Process this chunk sequentially
         for (const chain of chunk) {
+          console.log(`[useWalletTokenBalances] fetching ${chain}...`)
           const result = await fetchChainBalances(chain)
+          console.log(`[useWalletTokenBalances] ${chain} done:`, result.success)
           results.push(result)
         }
 
@@ -105,14 +116,9 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
         if (i < chainChunks.length - 1) {
           await new Promise(r => setTimeout(r, 200))
         }
-
-        // If React Query wants to cancel, we still continue but respect it between chunks
-        if (signal?.aborted && results.length > 0) {
-          console.warn('Query aborted, returning partial results')
-          break
-        }
       }
 
+      console.log('[useWalletTokenBalances] queryFn COMPLETE, results:', results.length)
       return results
     },
     enabled: enabled && isConnected && isAddress(userAddress) && !isLoadingTokens,
