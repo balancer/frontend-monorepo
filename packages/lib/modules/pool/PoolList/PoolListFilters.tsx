@@ -34,7 +34,7 @@ import {
 } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
-import { Filter, Info, Plus } from 'react-feather'
+import { Filter, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -53,7 +53,6 @@ import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 import NextLink from 'next/link'
-import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function useFilterTagsVisible() {
   const {
@@ -81,7 +80,7 @@ export function useFilterTagsVisible() {
 
 function UserLiquidityFilters() {
   const {
-    queryState: { userAddress, toggleUserAddress, joinablePools, toggleJoinablePools },
+    queryState: { userAddress, toggleUserAddress },
   } = usePoolList()
   const { userAddress: connectedUserAddress } = useUserAccount()
   const isMyPositionsChecked = connectedUserAddress ? userAddress === connectedUserAddress : false
@@ -96,7 +95,9 @@ function UserLiquidityFilters() {
         <Text fontSize="sm">My positions</Text>
       </Checkbox>
 
-      <Checkbox
+      {/* Disabled for now while investigating why rpc calls fail on vercel */}
+      {/* Add imports and query state back when enabling again! */}
+      {/* <Checkbox
         isChecked={joinablePools}
         mb="xxs"
         onChange={e => toggleJoinablePools(e.target.checked)}
@@ -118,7 +119,7 @@ function UserLiquidityFilters() {
             />
           </TooltipWithTouch>
         </HStack>
-      </Checkbox>
+      </Checkbox> */}
     </VStack>
   )
 }
