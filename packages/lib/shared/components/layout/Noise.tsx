@@ -1,4 +1,3 @@
-'use client'
 import { Container, ContainerProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 

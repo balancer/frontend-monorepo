@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Card, Center, Text, useColorMode } from '@chakra-ui/react'
+import { Box, Flex, Card, Center, Text } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PartnerCard } from '@repo/lib/shared/components/other/PartnerCard'
@@ -9,7 +9,6 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export function FeaturedPartners() {
   const partnerCards = PROJECT_CONFIG.partnerCards
-  const { colorMode } = useColorMode()
 
   return partnerCards?.length ? (
     <Card mb="md">
@@ -19,11 +18,7 @@ export function FeaturedPartners() {
           fontSize="11px"
           opacity="0.75"
           position="relative"
-          textShadow={
-            colorMode === 'dark'
-              ? '0px 1px 1px rgba(0, 0, 0, 0.9)'
-              : '0px 1px 1px rgba(0, 0, 0, 0.15)'
-          }
+          textShadow="0px 1px 1px rgba(0, 0, 0, 0.9)"
           top="-8px"
           variant="eyebrow"
         >

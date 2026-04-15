@@ -9,7 +9,6 @@ import {
   Heading,
   Link,
   Text,
-  useColorMode,
   useBreakpointValue,
 } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
@@ -48,7 +47,6 @@ const promoData: (PromoItem & { iconElement: React.ReactNode })[] =
   })) ?? []
 
 export function PromoBanners() {
-  const { colorMode } = useColorMode()
   // const [activeIndex, setActiveIndex] = useState(getRandomInt(0, promoData.length - 1))
   const [activeIndex, setActiveIndex] = useState(0)
   const isSmallScreen = useBreakpointValue({ base: true, md: false }, { fallback: 'md' }) ?? false
@@ -101,8 +99,8 @@ export function PromoBanners() {
 
           return (
             <Box
-              _hover={!isActive ? { bg: colorMode === 'dark' ? 'gray.750' : 'gray.50' } : {}}
-              bg={colorMode === 'dark' ? 'black' : 'background.level2'}
+              _hover={!isActive ? { bg: 'gray.750' } : {}}
+              bg="black"
               borderRadius="lg"
               cursor={isActive ? 'default' : 'pointer'}
               display="block"
@@ -164,7 +162,7 @@ export function PromoBanners() {
                         width="100%"
                       />
                       <Box
-                        bg={colorMode === 'dark' ? '#000' : 'background.level3'}
+                        bg={'#000'}
                         h="full"
                         left="0"
                         opacity={0}
@@ -207,7 +205,7 @@ export function PromoBanners() {
                         <Box flexShrink={0} h={14} w={14}>
                           <Center h="full" w="full">
                             <Box
-                              color={colorMode === 'dark' ? 'font.maxContrast' : 'brown.500'}
+                              color="font.maxContrast"
                               left={{ base: '-10px', md: '0' }}
                               position="relative"
                             >
@@ -236,7 +234,7 @@ export function PromoBanners() {
                             fontWeight="medium"
                             lineHeight="1.25"
                             maxW="48ch"
-                            opacity={colorMode === 'dark' ? '0.75' : '1'}
+                            opacity="0.75"
                             sx={{
                               textWrap: 'balance',
                             }}
@@ -267,7 +265,7 @@ export function PromoBanners() {
                               index === 2
                                 ? {
                                     bg: 'linear-gradient(to right, rgb(240, 255, 155), rgb(255, 180, 255), rgb(145, 245, 245))',
-                                    color: colorMode === 'dark' ? '#000' : '#000',
+                                    color: '#000',
                                   }
                                 : { bg: 'white', color: 'font.dark', opacity: 0.9 }
                             }
@@ -325,7 +323,7 @@ export function PromoBanners() {
                       />
                       <Box
                         _groupHover={{ opacity: 0.4 }}
-                        bg={colorMode === 'dark' ? '#000' : 'background.level2'}
+                        bg={'#000'}
                         h="full"
                         left="0"
                         opacity={0}
@@ -356,11 +354,11 @@ export function PromoBanners() {
                     >
                       <Box
                         _groupHover={{
-                          color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500',
+                          color: 'font.maxContrast',
                           opacity: 1,
                           transform: 'translateY(-6px)',
                         }}
-                        color={colorMode === 'dark' ? 'font.secondary' : 'brown.400'}
+                        color={'font.secondary'}
                         opacity="0.8"
                         transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic), box-shadow 0.15s var(--ease-out-cubic)"
                       >
@@ -368,7 +366,7 @@ export function PromoBanners() {
                       </Box>
                       <Text
                         _groupHover={{
-                          color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500',
+                          color: 'font.maxContrast',
                           opacity: 1,
                         }}
                         bottom="24px"

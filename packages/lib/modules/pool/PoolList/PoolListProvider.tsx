@@ -44,6 +44,7 @@ export function usePoolListLogic({
     GetPoolsDocument,
     {
       variables,
+      fetchPolicy: 'cache-and-network',
     }
   )
 

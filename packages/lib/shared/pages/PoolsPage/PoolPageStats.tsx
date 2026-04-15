@@ -15,6 +15,7 @@ import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvid
 import { AnimatedNumber } from '../../components/other/AnimatedNumber'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { TooltipWithTouch } from '../../components/tooltips/TooltipWithTouch'
+import { GetProtocolStatsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 
 type Fee = {
   label: string
@@ -23,10 +24,12 @@ type Fee = {
 
 type PoolPageStatsProps = {
   rewardsClaimed24h?: string | number | undefined | null
+  protocolData?: GetProtocolStatsQuery
 }
 
-export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
-  const { protocolData } = useProtocolStats()
+export function PoolPageStats({ rewardsClaimed24h, protocolData: serverData }: PoolPageStatsProps) {
+  const { protocolData: contextData } = useProtocolStats()
+  const protocolData = serverData ?? contextData
 
   const surplus24h = protocolData?.protocolMetricsAggregated.surplus24h
   const feeLabel = isBalancer ? 'Yield (24h)' : 'Fees (24h)'
