@@ -24,8 +24,8 @@ import {
   poolTypeFilters,
   PoolTagType,
   SortingState,
-  poolListDefaultVariables,
 } from '../pool.types'
+import { poolListDefaultVariables } from './poolListDefaultVariables'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useEffect, useRef, useState } from 'react'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
