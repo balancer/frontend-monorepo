@@ -7,6 +7,9 @@ import {
 import type { NextRequest } from 'next/server'
 import { postRpcCall } from '@repo/lib/shared/utils/internal-api/rpc'
 
+// Increase Vercel function timeout (max 60s on Pro, 300s on Enterprise)
+export const maxDuration = 60
+
 type Params = {
   params: Promise<{
     chain: string
