@@ -7,7 +7,7 @@
   "prConcurrentLimit": 5,
   "automerge": false,
 
-  "ignoreDeps": ["viem", "@balancer/sdk"],
+  "ignoreDeps": ["viem", "@balancer/sdk", "@nktkas/hyperliquid"],
 
   "packageRules": [
     {
