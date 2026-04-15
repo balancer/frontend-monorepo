@@ -4,7 +4,6 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { GetProtocolStatsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
@@ -25,6 +24,10 @@ export async function PoolsHeroSection({ children }: { children: React.ReactNode
 
   const numLiquidityProviders =
     protocolData?.protocolMetricsAggregated?.numLiquidityProviders || '0'
+
+  const formattedCount = new Intl.NumberFormat('en', { notation: 'compact' }).format(
+    Number(numLiquidityProviders)
+  )
 
   return (
     <Box borderBottom="1px solid" borderColor="border.base">
@@ -96,7 +99,7 @@ export async function PoolsHeroSection({ children }: { children: React.ReactNode
                   Earn passively on {PROJECT_CONFIG.projectName}
                 </Heading>
                 <Text sx={{ textWrap: 'balance' }} variant="secondary">
-                  {`Join ${fNumCustom(numLiquidityProviders, '0a')}+ Liquidity Providers in yield-bearing pools`}
+                  {`Join ${formattedCount}+ Liquidity Providers in yield-bearing pools`}
                 </Text>
               </Box>
               <Suspense fallback={<Skeleton h="80px" w="400px" />}>
