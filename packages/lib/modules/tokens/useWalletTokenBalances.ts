@@ -19,7 +19,7 @@ import { chunkArray } from '@repo/lib/shared/utils/array'
 
 const MIN_TOKEN_VALUE_USD = 1
 const BALANCE_STALE_TIME = 30_000
-const PARALLEL_CHAINS = 3
+const PARALLEL_CHAINS = 1 // Fully sequential to avoid Vercel concurrency limits
 
 const minimalErc20Abi = [
   {
@@ -89,20 +89,40 @@ export function useWalletTokenBalances(chains: GqlChain[], enabled: boolean) {
   // Fetch all balances in batches of PARALLEL_CHAINS
   const balanceQuery = useQuery({
     queryKey: ['wallet-token-balances', chains.join(','), userAddress, PARALLEL_CHAINS],
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       const chainChunks = chunkArray(chains, PARALLEL_CHAINS)
       const results: Awaited<ReturnType<typeof fetchChainBalances>>[] = []
 
-      for (const chunk of chainChunks) {
-        // Process this chunk in parallel
-        const chunkResults = await Promise.all(chunk.map(fetchChainBalances))
-        results.push(...chunkResults)
+      for (let i = 0; i < chainChunks.length; i++) {
+        const chunk = chainChunks[i]
+        // Process this chunk sequentially
+        for (const chain of chunk) {
+          const result = await fetchChainBalances(chain)
+          results.push(result)
+        }
+
+        // Small delay between batches to avoid overwhelming Vercel
+        if (i < chainChunks.length - 1) {
+          await new Promise(r => setTimeout(r, 200))
+        }
+
+        // If React Query wants to cancel, we still continue but respect it between chunks
+        if (signal?.aborted && results.length > 0) {
+          console.warn('Query aborted, returning partial results')
+          break
+        }
       }
 
       return results
     },
     enabled: enabled && isConnected && isAddress(userAddress) && !isLoadingTokens,
     staleTime: BALANCE_STALE_TIME,
+    gcTime: 5 * 60 * 1000, // Keep data in cache for 5 minutes
+    retry: 2,
+    retryDelay: 1000,
+    networkMode: 'always',
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   })
 
   const tokenBalancesByChain = useMemo(() => {

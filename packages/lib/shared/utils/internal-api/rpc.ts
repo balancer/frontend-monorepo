@@ -24,6 +24,7 @@ export async function postRpcCall(request: NextRequest, chain: GqlChain) {
       method: 'POST',
       body: JSON.stringify(rpcBody),
       signal: controller.signal,
+      keepalive: true, // Prevent browser from cancelling long requests
       next: {
         revalidate: 0,
       },
