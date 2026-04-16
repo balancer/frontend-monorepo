@@ -3,6 +3,7 @@
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import {
   GetPoolsDocument,
+  GetPoolsQuery,
   GqlChain,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -15,6 +16,7 @@ import { PoolDisplayType } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
 import { PoolListItem } from '../pool.types'
+import { poolListDefaultVariables } from './poolListDefaultVariables'
 import { useQuery as useReactQuery } from '@tanstack/react-query'
 import { useTokens } from '../../tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -23,9 +25,11 @@ import { useWalletTokenBalances } from '../../tokens/useWalletTokenBalances'
 export function usePoolListLogic({
   fixedPoolTypes,
   fixedChains,
+  initialPoolsData,
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
+  initialPoolsData?: GetPoolsQuery
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress, isConnected } = useUserAccount()
@@ -50,10 +54,19 @@ export function usePoolListLogic({
     GetPoolsDocument,
     {
       variables,
+      fetchPolicy: 'cache-and-network',
     }
   )
 
-  const pools = loading && previousData ? previousData.pools : data?.pools || []
+  const isDefaultQuery = useMemo(
+    () => JSON.stringify(variables) === JSON.stringify(poolListDefaultVariables),
+    [variables]
+  )
+
+  const pools =
+    loading && previousData
+      ? previousData.pools
+      : (data?.pools ?? (isDefaultQuery ? (initialPoolsData?.pools ?? []) : []))
 
   const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
@@ -195,14 +208,17 @@ export const PoolListContext = createContext<ReturnType<typeof usePoolListLogic>
 export function PoolListProvider({
   fixedPoolTypes,
   fixedChains,
+  initialPoolsData,
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
+  initialPoolsData?: GetPoolsQuery
 }>) {
   const hook = usePoolListLogic({
     fixedPoolTypes,
     fixedChains,
+    initialPoolsData,
   })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>

@@ -13,16 +13,20 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { useQuery } from '@apollo/client/react'
-import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetFeaturedPoolsDocument,
+  GetPoolsQuery,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { BuildPromo } from './BuildPromo'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
+  initialPoolsData?: GetPoolsQuery
 }
 
-export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
+export function PoolsPage({ children, rewardsClaimed24h, initialPoolsData }: PoolsPageProps) {
   const { supportedNetworks } = PROJECT_CONFIG
 
   const { data: featuredPoolsData, loading: featuredPoolsLoading } = useQuery(
@@ -131,7 +135,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
       >
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList />
+            <PoolList initialPoolsData={initialPoolsData} />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
