@@ -10,7 +10,7 @@ import { LbpBenefitsChartIcon } from '@repo/lib/shared/components/icons/lbp/LbpB
 import { LbpBenefitsLightningIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsLightningIcon'
 import { LbpBenefitsHookIcon } from '@repo/lib/shared/components/icons/lbp/LbpBenefitsHookIcon'
 import { usePoolCreationForm } from '../PoolCreationFormProvider'
-import { motion, LayoutGroup } from 'framer-motion'
+import { motion, LayoutGroup } from 'motion/react'
 
 const MotionHeading = motion(Heading)
 

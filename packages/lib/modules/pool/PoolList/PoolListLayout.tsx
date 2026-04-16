@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Heading, Stack, HStack, VStack, useBreakpointValue } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { FilterTags, PoolListFilters, useFilterTagsVisible } from './PoolListFilters'
 import { PoolListTable } from './PoolListTable/PoolListTable'
 import { usePoolList } from './PoolListProvider'

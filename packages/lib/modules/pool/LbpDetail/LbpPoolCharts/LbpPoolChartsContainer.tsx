@@ -10,7 +10,7 @@ import { LbpPriceChart, PriceInfo } from './LbpPriceChart'
 import { FundsRaisedInfo, LbpFundsRaisedChart } from './LbpFundsRaisedChart'
 import { LbpPoolChartsProvider, useLbpPoolCharts } from './LbpPoolChartsProvider'
 import { LbpVolumeTVLFeesCharts } from './LbpVolumeTVLFeesCharts'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { VolTvlFeesInfo } from './VolTvlFeesInfo'
 
 export function LbpPoolChartsContainer() {

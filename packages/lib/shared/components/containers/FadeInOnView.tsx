@@ -1,7 +1,7 @@
 'use client'
 
 import { PropsWithChildren, useRef } from 'react'
-import { useInView } from 'framer-motion'
+import { useInView } from 'motion/react'
 
 interface FadeInOnViewProps extends PropsWithChildren {
   animateOnce?: boolean

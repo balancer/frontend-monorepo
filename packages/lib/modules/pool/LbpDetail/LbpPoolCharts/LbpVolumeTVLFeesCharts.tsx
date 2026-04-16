@@ -21,7 +21,7 @@ import {
 import { useTheme as useNextTheme } from 'next-themes'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 
 interface Props {
   chartType: PoolChartTab

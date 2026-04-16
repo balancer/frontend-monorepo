@@ -5,7 +5,7 @@ import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColo
 import ReactECharts from 'echarts-for-react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import Image from 'next/image'
 import { useMemo, useRef } from 'react'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'

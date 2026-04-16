@@ -4,8 +4,8 @@ import {
   animate,
   useMotionValue,
   useTransform,
-  AnimationPlaybackControls,
-} from 'framer-motion'
+  type AnimationPlaybackControls,
+} from 'motion/react'
 import { fNumCustom } from '../../utils/numbers'
 import { useCurrency } from '../../hooks/useCurrency'
 

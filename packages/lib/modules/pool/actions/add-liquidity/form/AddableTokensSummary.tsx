@@ -1,5 +1,5 @@
 import { Box, Card, HStack, Skeleton, Text } from '@chakra-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'

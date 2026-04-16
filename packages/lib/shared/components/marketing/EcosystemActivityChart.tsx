@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PropsWithChildren } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { EcosystemChainSelect } from './EcosystemChainSelect'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import {

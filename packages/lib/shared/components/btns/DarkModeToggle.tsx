@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, useColorMode } from '@chakra-ui/react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { useTheme } from 'next-themes'
 import { useEffect } from 'react'
 import { Moon, Sun } from 'react-feather'

@@ -1,5 +1,5 @@
 // components/AnimatedNumber.tsx
-import { motion, useSpring, useTransform, useInView } from 'framer-motion'
+import { motion, useSpring, useTransform, useInView } from 'motion/react'
 import { useEffect, useRef } from 'react'
 
 interface AnimatedNumberProps {

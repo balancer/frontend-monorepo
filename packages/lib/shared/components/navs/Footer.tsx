@@ -3,7 +3,7 @@
 import NextLink from 'next/link'
 import { Stack, Divider, Text, Box, VStack, HStack, Link, IconButton } from '@chakra-ui/react'
 import { staggeredFadeIn } from '@repo/lib/shared/utils/animations'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { DefaultPageContainer } from '../containers/DefaultPageContainer'
 import { ArrowUpRight } from 'react-feather'
 import { AppLink } from '../navs/useNav'
