@@ -1,9 +1,10 @@
 'use client'
 
+import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Box, Skeleton, Flex, Heading, Text } from '@chakra-ui/react'
-import { PropsWithChildren, type ReactNode } from 'react'
+import { PropsWithChildren, Suspense, type ReactNode } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PoolPageStats } from './PoolPageStats'
@@ -19,7 +20,7 @@ import { BuildPromo } from './BuildPromo'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
-  poolListSlot: ReactNode
+  poolListSlot?: ReactNode
 }
 
 export function PoolsPage({ children, rewardsClaimed24h, poolListSlot }: PoolsPageProps) {
@@ -129,7 +130,13 @@ export function PoolsPage({ children, rewardsClaimed24h, poolListSlot }: PoolsPa
         pr={{ base: '0 !important', xl: 'md !important' }}
         pt={['lg', '54px']}
       >
-        <FadeInOnView animateOnce={false}>{poolListSlot}</FadeInOnView>
+        <FadeInOnView animateOnce={false}>
+          {poolListSlot ?? (
+            <Suspense fallback={<Skeleton h="500px" w="full" />}>
+              <PoolList />
+            </Suspense>
+          )}
+        </FadeInOnView>
       </DefaultPageContainer>
       {isBalancer && (featuredPools.length > 0 || featuredPoolsLoading) && (
         <DefaultPageContainer mb="lg" py="0" rounded="2xl">

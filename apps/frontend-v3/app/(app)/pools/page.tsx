@@ -2,7 +2,7 @@ import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage/PoolsPage'
 import { PromoBanners } from '@repo/lib/shared/components/promos/PromoBanners'
 import { Suspense } from 'react'
 import { Skeleton } from '@chakra-ui/react'
-import { PoolListWithInitialData } from './_components/PoolListWithInitialData'
+import { PoolListWithInitialData } from '@repo/lib/modules/pool/PoolList/PoolListWithInitialData'
 
 export const revalidate = 60
 
