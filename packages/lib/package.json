@@ -52,7 +52,7 @@
     "deepmerge": "^4.3.1",
     "echarts": "6.0.0",
     "echarts-for-react": "3.0.6",
-    "framer-motion": "12.26.1",
+    "motion": "12.26.1",
     "graphql": "16.13.2",
     "graphql-request": "7.4.0",
     "graphql-tag": "^2.12.6",
