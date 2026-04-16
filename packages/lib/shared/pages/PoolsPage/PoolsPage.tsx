@@ -2,11 +2,10 @@
 
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Box, Skeleton, Flex, Heading, Text } from '@chakra-ui/react'
 import { PropsWithChildren, Suspense } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
+import { StaticRadialPattern } from '@repo/lib/shared/components/zen/StaticRadialPattern'
 import { PoolPageStats } from './PoolPageStats'
 import { FeaturedPartners } from './FeaturedPartners'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -52,7 +51,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
             pt={['xl', '40px']}
           >
             <Box display={{ base: 'none', md: 'block' }}>
-              <RadialPattern
+              <StaticRadialPattern
                 circleCount={8}
                 height={600}
                 innerHeight={150}
@@ -63,7 +62,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 top="40px"
                 width={1000}
               />
-              <RadialPattern
+              <StaticRadialPattern
                 circleCount={8}
                 height={600}
                 innerHeight={150}
@@ -75,7 +74,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 width={1000}
               />
             </Box>
-            <RadialPattern
+            <StaticRadialPattern
               circleCount={8}
               height={600}
               innerHeight={150}
@@ -85,7 +84,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
               top="-300px"
               width={600}
             />
-            <RadialPattern
+            <StaticRadialPattern
               circleCount={8}
               height={600}
               innerHeight={150}
@@ -95,31 +94,27 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
               top="300px"
               width={600}
             />
-            <FadeInOnView animateOnce={false}>
-              <Flex
-                align={{ base: 'start', md: 'start' }}
-                direction={{ base: 'column', lg: 'row' }}
-                gap="4"
-                justify={{ base: 'start', md: 'space-between' }}
-                mb="10"
-              >
-                <Box>
-                  <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
-                    Earn passively on {PROJECT_CONFIG.projectName}
-                  </Heading>
-                  <Text sx={{ textWrap: 'balance' }} variant="secondary">
-                    {`Join ${fNumCustom(protocolData?.protocolMetricsAggregated.numLiquidityProviders || '0', '0a')}+ Liquidity Providers in yield-bearing pools`}
-                  </Text>
-                </Box>
-                <PoolPageStats rewardsClaimed24h={rewardsClaimed24h} />
-              </Flex>
-            </FadeInOnView>
-            <FadeInOnView animateOnce={false}>
-              <Box pb={{ base: '0', md: '3' }}>
-                {/* <BeetsPromoBanner /> */}
-                {children}
+            <Flex
+              align={{ base: 'start', md: 'start' }}
+              direction={{ base: 'column', lg: 'row' }}
+              gap="4"
+              justify={{ base: 'start', md: 'space-between' }}
+              mb="10"
+            >
+              <Box>
+                <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
+                  Earn passively on {PROJECT_CONFIG.projectName}
+                </Heading>
+                <Text sx={{ textWrap: 'balance' }} variant="secondary">
+                  {`Join ${fNumCustom(protocolData?.protocolMetricsAggregated.numLiquidityProviders || '0', '0a')}+ Liquidity Providers in yield-bearing pools`}
+                </Text>
               </Box>
-            </FadeInOnView>
+              <PoolPageStats rewardsClaimed24h={rewardsClaimed24h} />
+            </Flex>
+            <Box pb={{ base: '0', md: '3' }}>
+              {/* <BeetsPromoBanner /> */}
+              {children}
+            </Box>
           </DefaultPageContainer>
         </Noise>
       </Box>
@@ -129,11 +124,9 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
         pr={{ base: '0 !important', xl: 'md !important' }}
         pt={['lg', '54px']}
       >
-        <FadeInOnView animateOnce={false}>
-          <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList />
-          </Suspense>
-        </FadeInOnView>
+        <Suspense fallback={<Skeleton h="500px" w="full" />}>
+          <PoolList />
+        </Suspense>
       </DefaultPageContainer>
       {isBalancer && (featuredPools.length > 0 || featuredPoolsLoading) && (
         <DefaultPageContainer mb="lg" py="0" rounded="2xl">

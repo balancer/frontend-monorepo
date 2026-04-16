@@ -28,6 +28,9 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60,
   },
   transpilePackages: ['@repo/lib'],
+  experimental: {
+    optimizePackageImports: ['@chakra-ui/react'],
+  },
 
   // Safe App setup
   headers: manifestHeaders,
