@@ -10,7 +10,7 @@ import { BuildPromo } from '@repo/lib/shared/pages/PoolsPage/BuildPromo'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { FeaturedPoolsSection } from './_components/FeaturedPoolsSection'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export default async function PoolsPageWrapper() {
   return (

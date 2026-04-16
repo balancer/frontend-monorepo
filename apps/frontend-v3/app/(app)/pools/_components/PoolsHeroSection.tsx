@@ -1,10 +1,23 @@
-import { Box, Flex, Heading } from '@chakra-ui/react'
+'use client'
+
+import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
+import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+
+function PoolsHeroSubtitle() {
+  const { protocolData } = useProtocolStats()
+  return (
+    <Text sx={{ textWrap: 'balance' }} variant="secondary">
+      {`Join ${fNumCustom(protocolData?.protocolMetricsAggregated.numLiquidityProviders || '0', '0a')}+ Liquidity Providers in yield-bearing pools`}
+    </Text>
+  )
+}
 
 export function PoolsHeroSection({ children }: { children: React.ReactNode }) {
   return (
@@ -76,8 +89,9 @@ export function PoolsHeroSection({ children }: { children: React.ReactNode }) {
                 <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
                   Earn passively on {PROJECT_CONFIG.projectName}
                 </Heading>
-                <PoolPageStats />
+                <PoolsHeroSubtitle />
               </Box>
+              <PoolPageStats />
             </Flex>
           </FadeInOnView>
           <FadeInOnView animateOnce={false}>
