@@ -1,34 +1,12 @@
-import { Box, Flex, Heading, Text, Skeleton } from '@chakra-ui/react'
+import { Box, Flex, Heading } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { GetProtocolStatsDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
-import { Suspense } from 'react'
 
-export async function PoolsHeroSection({ children }: { children: React.ReactNode }) {
-  const { data: protocolData } = await getApolloServerClient().query({
-    query: GetProtocolStatsDocument,
-    variables: {
-      chains: PROJECT_CONFIG.networksForProtocolStats || PROJECT_CONFIG.supportedNetworks,
-    },
-    context: {
-      fetchOptions: {
-        next: { revalidate: 60 },
-      },
-    },
-  })
-
-  const numLiquidityProviders =
-    protocolData?.protocolMetricsAggregated?.numLiquidityProviders || '0'
-
-  const formattedCount = new Intl.NumberFormat('en', { notation: 'compact' }).format(
-    Number(numLiquidityProviders)
-  )
-
+export function PoolsHeroSection({ children }: { children: React.ReactNode }) {
   return (
     <Box borderBottom="1px solid" borderColor="border.base">
       <Noise
@@ -98,13 +76,8 @@ export async function PoolsHeroSection({ children }: { children: React.ReactNode
                 <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
                   Earn passively on {PROJECT_CONFIG.projectName}
                 </Heading>
-                <Text sx={{ textWrap: 'balance' }} variant="secondary">
-                  {`Join ${formattedCount}+ Liquidity Providers in yield-bearing pools`}
-                </Text>
+                <PoolPageStats />
               </Box>
-              <Suspense fallback={<Skeleton h="80px" w="400px" />}>
-                <PoolPageStats protocolData={protocolData} />
-              </Suspense>
             </Flex>
           </FadeInOnView>
           <FadeInOnView animateOnce={false}>

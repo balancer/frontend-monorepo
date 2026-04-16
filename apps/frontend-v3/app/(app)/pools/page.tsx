@@ -16,11 +16,9 @@ export default async function PoolsPageWrapper() {
   return (
     <>
       <PoolsPreloadHints />
-      <Suspense fallback={null}>
-        <PoolsHeroSection>
-          <PromoBanners />
-        </PoolsHeroSection>
-      </Suspense>
+      <PoolsHeroSection>
+        <PromoBanners />
+      </PoolsHeroSection>
 
       <DefaultPageContainer
         noVerticalPadding
