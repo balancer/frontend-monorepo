@@ -2,7 +2,7 @@
 
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { Box, Link } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import NextLink from 'next/link'
 import { BeetsLogo } from '../imgs/BeetsLogo'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
