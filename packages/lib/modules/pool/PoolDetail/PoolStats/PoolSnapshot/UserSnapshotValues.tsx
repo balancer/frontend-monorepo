@@ -5,8 +5,6 @@ import { Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakr
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { isEmpty } from 'lodash'
-import { useVebalBoost } from '../../../../vebal/useVebalBoost'
 import { useClaim } from '../../../actions/claim/ClaimProvider'
 import { getTotalAprRaw } from '../../../pool.utils'
 import { usePool } from '../../../PoolProvider'
@@ -18,7 +16,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { LabelWithTooltip } from '@repo/lib/shared/components/tooltips/LabelWithTooltip'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import { hasAuraStakedBalance } from '../../../user-balance.helpers'
-import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -33,7 +31,6 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 export function UserSnapshotValues() {
   const { chain, isLoading: isLoadingPool, myLiquiditySectionRef, pool } = usePool()
   const { toCurrency } = useCurrency()
-  const { veBalBoostMap } = useVebalBoost([pool])
 
   const {
     disabledReason,
@@ -51,18 +48,11 @@ export function UserSnapshotValues() {
     nonBalRewards,
   })
 
-  const boost = useMemo(() => {
-    if (isEmpty(veBalBoostMap)) return
-    return veBalBoostMap[pool.id]
-  }, [veBalBoostMap])
-
   // If user has staked on Aura, use Aura APR
   const auraApr = pool.staking?.aura?.apr !== undefined ? pool.staking?.aura?.apr : undefined
   const hasAuraStakedBalanceValue = hasAuraStakedBalance(pool)
   const myAprRaw =
-    hasAuraStakedBalanceValue && auraApr
-      ? auraApr
-      : getTotalAprRaw(pool.dynamicData.aprItems, boost)
+    hasAuraStakedBalanceValue && auraApr ? auraApr : getTotalAprRaw(pool.dynamicData.aprItems)
 
   const poolMyStatsValues: PoolMyStatsValues | undefined = useMemo(() => {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
@@ -143,7 +133,6 @@ export function UserSnapshotValues() {
                 pool={pool}
                 poolId={pool.id}
                 textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
-                vebalBoost={boost || '1'}
               />
             )
           ) : (
@@ -161,7 +150,7 @@ export function UserSnapshotValues() {
           ) : (
             <LabelWithTooltip
               label="My potential weekly yield"
-              tooltip={`The amount of incentives you could earn this week from staking in this pool${isBalancer ? ' based on your veBAL balance' : ''}.`}
+              tooltip="The amount of incentives you could earn this week from staking in this pool"
             />
           )}
 

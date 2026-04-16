@@ -7,7 +7,6 @@ import {
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export const swapFeesTooltipText = `LPs earn fees when swaps are routed through this pool. The displayed APR is net earnings for LPs (with all protocol fees already deducted). Fees automatically compound into positions—no claiming needed.`
 
@@ -19,9 +18,6 @@ export const merklIncentivesTooltipText = `Merkl is a platform that allows 3rd p
 export const surplusIncentivesTooltipText = `In a traditional AMM, LPs lose money to arbitrageurs. CoW AMM
 prevents this loss (also called LVR), thereby increasing LP returns.`
 
-export const extraBalTooltipText = `veBAL holders can get an extra boost of up to 2.5x on their staking yield.
-The more veBAL held, the higher the boost.`
-
 export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers
                                             with 1-year locked Balancer ve8020 tokens.`
 
@@ -29,8 +25,6 @@ export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL
                         participate in weekly gauge voting by third parties on platforms like Votemarket.
                         Your incentives are determined by your veBAL voting power compared to other voters.
                         The listed APR represents an average rather than a guaranteed return for active participants.`
-
-const stakingBalTooltipText = `LPs who stake earn extra ‘BAL’ liquidity mining incentives. The displayed APR is the base amount that all Stakers in this pool get (determined by weekly gauge voting). In addition, veBAL holders can get an extra boost of up to 2.5x.`
 
 const maBeetsVotingRewardsTooltipText =
   'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
@@ -60,7 +54,6 @@ const TOTAL_BASE_APR_TYPES = [
   GqlPoolAprItemType.Staking,
   GqlPoolAprItemType.Merkl,
   GqlPoolAprItemType.Surplus_24H,
-  GqlPoolAprItemType.VebalEmissions,
   GqlPoolAprItemType.MabeetsEmissions,
   GqlPoolAprItemType.QuantAmmUplift,
   GqlPoolAprItemType.Fuul,
@@ -77,24 +70,12 @@ export const TOTAL_APR_TYPES = [
 export function useAprTooltip({
   aprItems,
   numberFormatter,
-  vebalBoost,
-  chain,
 }: {
   aprItems: GqlPoolAprItem[]
   numberFormatter: (value: string) => BigNumber
-  vebalBoost?: number
   chain: GqlChain
 }) {
   const colorMode = useThemeColorMode()
-
-  const {
-    options: { showVeBal },
-  } = PROJECT_CONFIG
-
-  const hasVeBalBoost =
-    // optimism is the exception here as it's available in the balancer app and beets app
-    (showVeBal || chain === GqlChain.Optimism) &&
-    !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
@@ -133,7 +114,7 @@ export function useAprTooltip({
   const stakingIncentivesDisplayed = stakingIncentives.map(item => ({
     title: item.rewardTokenSymbol || '',
     apr: numberFormatter(item.apr.toString()),
-    tooltipText: `3rd party incentives for LPs who stake. These token incentives are outside the ${showVeBal || chain === GqlChain.Optimism ? 'veBAL' : 'gauge bounty'} system.`,
+    tooltipText: `3rd party incentives for LPs who stake. These token incentives are outside the gauge bounty system.`,
   }))
 
   const votingApr = aprItems.find(item => item.type === GqlPoolAprItemType.Voting)
@@ -207,20 +188,6 @@ export function useAprTooltip({
     .reduce((acc, item) => acc.plus(item.apr), bn(0))
   const totalCombinedDisplayed = numberFormatter(totalCombined.toString())
 
-  // Bal Reward
-  const balReward = aprItems.find(item => item.type === GqlPoolAprItemType.VebalEmissions)
-  const extraVeBALBoost = bn(balReward?.apr || 0).times(vebalBoost ? vebalBoost : 2.5)
-  const extraBalApr = bn(extraVeBALBoost).minus(balReward?.apr || 0)
-  const maxVeBal = totalBase.plus(extraBalApr)
-
-  if (balReward) {
-    stakingIncentivesDisplayed.push({
-      title: balReward.rewardTokenSymbol || '',
-      apr: numberFormatter(balReward.apr.toString()),
-      tooltipText: stakingBalTooltipText,
-    })
-  }
-
   const stakingIncentivesAprDisplayed = stakingIncentivesDisplayed.reduce(
     (acc, item) => acc.plus(item.apr),
     bn(0)
@@ -243,7 +210,6 @@ export function useAprTooltip({
 
   return {
     totalBaseDisplayed,
-    extraBalApr,
     yieldBearingTokensAprDisplayed,
     stakingIncentivesAprDisplayed,
     swapFeesDisplayed,
@@ -261,8 +227,6 @@ export function useAprTooltip({
     isVotingPresent,
     isLockingAprPresent,
     subitemPopoverAprItemProps,
-    hasVeBalBoost,
-    maxVeBal,
     totalBase,
     totalCombined,
     totalCombinedDisplayed,

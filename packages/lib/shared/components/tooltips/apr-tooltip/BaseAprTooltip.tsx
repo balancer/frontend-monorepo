@@ -18,7 +18,6 @@ import {
   swapFeesTooltipText,
   useAprTooltip,
   inherentTokenYieldTooltipText,
-  extraBalTooltipText,
   lockingIncentivesTooltipText,
   votingIncentivesTooltipText,
   merklIncentivesTooltipText,
@@ -38,14 +37,9 @@ interface Props {
   placement?: PlacementWithLogical
   poolId: string
   poolType: GqlPoolType
-  vebalBoost?: string
-  totalBaseText: string | ((hasVeBalBoost?: boolean) => string)
-  totalBaseVeBalText: string
-  totalVeBalTitle?: string
-  maxVeBalText: string
+  totalBaseText: string
   customPopoverContent?: ReactNode
   shouldDisplayBaseTooltip?: boolean
-  shouldDisplayMaxVeBalTooltip?: boolean
   usePortal?: boolean
   children?: ReactNode | (({ isOpen }: { isOpen: boolean }) => ReactNode)
   chain: GqlChain
@@ -86,14 +80,9 @@ function BaseAprTooltip({
   numberFormatter,
   displayValueFormatter,
   placement,
-  vebalBoost,
   customPopoverContent,
   totalBaseText,
-  totalBaseVeBalText,
-  totalVeBalTitle,
-  maxVeBalText,
   shouldDisplayBaseTooltip,
-  shouldDisplayMaxVeBalTooltip,
   children,
   poolType,
   chain,
@@ -111,7 +100,6 @@ function BaseAprTooltip({
 
   const {
     totalBaseDisplayed,
-    extraBalApr,
     yieldBearingTokensAprDisplayed,
     stakingIncentivesAprDisplayed,
     merklIncentivesAprDisplayed,
@@ -125,9 +113,7 @@ function BaseAprTooltip({
     yieldBearingTokensDisplayed,
     stakingIncentivesDisplayed,
     subitemPopoverAprItemProps,
-    hasVeBalBoost,
     totalBase,
-    maxVeBal,
     lockingAprDisplayed,
     votingAprDisplayed,
     isVotingPresent,
@@ -146,18 +132,9 @@ function BaseAprTooltip({
     fuulTooltipText,
   } = useAprTooltip({
     aprItems,
-    vebalBoost: Number(vebalBoost),
     numberFormatter: usedNumberFormatter,
     chain,
   })
-
-  const totalBaseTitle = isVebal
-    ? totalBaseVeBalText
-    : typeof totalBaseText === 'function'
-      ? totalBaseText(hasVeBalBoost)
-      : totalBaseText
-
-  const boostLabel = !vebalBoost ? '2.5x' : `${vebalBoost}x`
 
   const popoverContent = customPopoverContent || (
     <PopoverContent
@@ -291,7 +268,7 @@ function BaseAprTooltip({
         fontColor="font.maxContrast"
         pl={2}
         pt={3}
-        title={totalBaseTitle}
+        title={totalBaseText}
         tooltipText={
           shouldDisplayBaseTooltip
             ? `${defaultDisplayValueFormatter(defaultNumberFormatter(totalBase.toString()))} APR`
@@ -331,51 +308,12 @@ function BaseAprTooltip({
               roundedBottom="md"
               textBackground="background.special"
               textBackgroundClip="text"
-              title={totalVeBalTitle || 'Total APR'}
+              title="Total APR"
             />
           </Stack>
         </>
       ) : null}
-      {hasVeBalBoost ? (
-        <>
-          <Divider />
-          <Stack gap={0} roundedBottom="md">
-            <TooltipAprItem
-              {...basePopoverAprItemProps}
-              apr={extraBalApr}
-              displayValueFormatter={usedDisplayValueFormatter}
-              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
-              fontWeight={500}
-              pl={6}
-              pt={3}
-              title={`Extra BAL (at ${boostLabel} veBAL boost)`}
-              tooltipText={extraBalTooltipText}
-            />
-            <Divider />
-            <TooltipAprItem
-              {...basePopoverAprItemProps}
-              apr={maxVeBal}
-              backgroundColor="background.level3"
-              boxBackground={balRewardGradient}
-              displayValueFormatter={usedDisplayValueFormatter}
-              fontColor="font.special"
-              pl={2}
-              pt={3}
-              roundedBottom="md"
-              textBackground="background.special"
-              textBackgroundClip="text"
-              title={maxVeBalText || 'Max veBAL APR'}
-              tooltipText={
-                shouldDisplayMaxVeBalTooltip
-                  ? `${defaultDisplayValueFormatter(
-                      defaultNumberFormatter(maxVeBal.toString())
-                    )} APR`
-                  : ''
-              }
-            />
-          </Stack>
-        </>
-      ) : null}
+
       {isMaBeetsPresent && (
         <>
           <Divider />

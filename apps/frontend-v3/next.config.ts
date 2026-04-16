@@ -32,6 +32,13 @@ const nextConfig: NextConfig = {
   // Safe App setup
   headers: manifestHeaders,
   reactCompiler: true,
+  redirects: async () => [
+    {
+      source: '/vebal',
+      destination: '/vebal/manage',
+      permanent: true,
+    },
+  ],
 }
 
 // Avoid sentry setup in CI

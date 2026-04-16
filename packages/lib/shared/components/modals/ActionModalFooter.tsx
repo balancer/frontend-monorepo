@@ -7,8 +7,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { PropsWithChildren } from 'react'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getDiscordLink } from '../../utils/links'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export function SuccessActions({
   returnLabel,
@@ -19,9 +19,6 @@ export function SuccessActions({
 }) {
   const { openNpsModal } = useAppzi()
   const { colorMode } = useColorMode()
-  const {
-    options: { showVeBal },
-  } = PROJECT_CONFIG
 
   return (
     <VStack w="full">
@@ -36,7 +33,7 @@ export function SuccessActions({
         >
           {returnLabel}
         </Button>
-        {showVeBal && (
+        {isBalancer && (
           <Button
             leftIcon={<ThumbsUp size="14" />}
             onClick={openNpsModal}

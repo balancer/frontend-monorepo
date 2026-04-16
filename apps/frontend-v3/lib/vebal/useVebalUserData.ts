@@ -4,7 +4,7 @@ import {
   GqlVeBalLockSnapshot,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/client/react'
-import { useVeBALBalance } from './vote/useVeBALBalance'
+import { useVeBALBalance } from './useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { secondsToMilliseconds } from 'framer-motion'
 

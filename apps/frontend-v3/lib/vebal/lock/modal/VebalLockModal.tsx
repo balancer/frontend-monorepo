@@ -16,9 +16,8 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
+import { useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { Address } from 'viem'
-import { VebalLockDetails } from '@bal/lib/vebal/lock/VebalLockDetails'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useRouter } from 'next/navigation'
 import {
@@ -36,13 +35,11 @@ import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 type Props = {
   isOpen: boolean
   onClose(isSuccess: boolean, redirectPath: string): void
-  extendExpired: boolean
 }
 
 export function VebalLockModal({
   isOpen,
   onClose,
-  extendExpired,
   ...rest
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const router = useRouter()
@@ -56,7 +53,6 @@ export function VebalLockModal({
     lpToken,
     lockDuration,
     lockMode,
-    isIncreasedLockAmount,
     isLoading: vebalLockIsLoading,
   } = useVebalLock()
   const { mainnetLockedInfo, isLoading: vebalLockDataIsLoading } = useVebalLockData()
@@ -69,20 +65,16 @@ export function VebalLockModal({
 
   const buildLockStepsArgs = useMemo<UseBuildLockStepsArgs>(
     () => ({
-      extendExpired,
       totalAmount: addedAmount,
       lockDuration,
-      isIncreasedLockAmount,
       mainnetLockedInfo,
     }),
-    [addedAmount, extendExpired, isIncreasedLockAmount, lockDuration, mainnetLockedInfo]
+    [addedAmount, lockDuration, mainnetLockedInfo]
   )
 
   const { transactionSteps, lockTxHash } = useBuildLockSteps(buildLockStepsArgs)
 
   const isLoading = vebalLockIsLoading || vebalLockDataIsLoading || userAccountIsLoading
-
-  const isUnlocking = lockMode === LockMode.Unlock && !extendExpired
 
   const isSuccess = !!lockTxHash
 
@@ -105,7 +97,7 @@ export function VebalLockModal({
         ) : null}
         <TransactionModalHeader
           chain={GqlChain.Mainnet}
-          label={`${getPreviewLabel(lockMode, extendExpired)} preview`}
+          label={`${getPreviewLabel(lockMode)} preview`}
           txHash={lockTxHash}
         />
         <ModalCloseButton />
@@ -119,13 +111,13 @@ export function VebalLockModal({
             ) : (
               <>
                 <Stack direction="column" spacing="sm" w="full">
-                  <Text>{isUnlocking ? 'Locked amount' : 'Lock amount'}</Text>
+                  <Text>{'Locked amount'}</Text>
                   <Card variant="modalSubSection">
                     <TokenRowWithDetails
                       address={vebalBptToken.address as Address}
                       chain={GqlChain.Mainnet}
                       details={
-                        isUnlocking && lockDuration.lockedUntilDateFormatted
+                        lockDuration.lockedUntilDateFormatted
                           ? [
                               [
                                 <Text fontSize="sm" key={1} variant="secondary">
@@ -142,14 +134,6 @@ export function VebalLockModal({
                     />
                   </Card>
                 </Stack>
-                {!isUnlocking && (
-                  <Stack direction="column" spacing="sm" w="full">
-                    <Text>Summary</Text>
-                    <Card variant="modalSubSection">
-                      <VebalLockDetails variant="summary" />
-                    </Card>
-                  </Stack>
-                )}
               </>
             )}
           </AnimateHeightChange>

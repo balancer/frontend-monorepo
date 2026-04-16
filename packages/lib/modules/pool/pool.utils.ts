@@ -128,30 +128,25 @@ export function getPoolActionPath({
  * Calculates the total APR based on the array of APR items and an optional boost value.
  *
  * @param {GqlPoolAprItem[]} aprItems - The array of APR items to calculate the total APR from.
- * @param {string} [vebalBoost] - An optional boost value for calculation.
  * @returns {[BigNumber, BigNumber]} The total APR range.
  */
-export function getTotalApr(
-  aprItems: GqlPoolAprItem[],
-  vebalBoost?: string
-): [BigNumber, BigNumber] {
+export function getTotalApr(aprItems: GqlPoolAprItem[]): [BigNumber, BigNumber] {
   let minTotal = bn(0)
   let maxTotal = bn(0)
-  const boost = vebalBoost || 1
 
   aprItems
     // Filter known APR types to avoid including new unknown API types that are not yet displayed in the APR tooltip
     .filter(item => TOTAL_APR_TYPES.includes(item.type))
     .forEach(item => {
       if (item.type === GqlPoolAprItemType.StakingBoost) {
-        maxTotal = bn(item.apr).times(boost).plus(maxTotal)
+        maxTotal = bn(item.apr).plus(maxTotal)
         return
       }
 
       if (item.type === GqlPoolAprItemType.VebalEmissions) {
         // We don't add this to maxTotal as is already included on the staking boost
         minTotal = bn(item.apr).plus(minTotal)
-        return
+        return // Deprecated, should be 0 once emissions stop
       }
 
       if (item.type === GqlPoolAprItemType.MabeetsEmissions) {
@@ -171,25 +166,20 @@ export function getTotalApr(
  * Calculates the total APR label based on the array of APR items and an optional boost value.
  *
  * @param {GqlPoolAprItem[]} aprItems - The array of APR items to calculate the total APR label from.
- * @param {string} [vebalBoost] - An optional boost value for calculation.
  * @returns {string} The formatted total APR label.
  */
-export function getTotalAprLabel(
-  aprItems: GqlPoolAprItem[],
-  vebalBoost?: string,
-  canBeNegative = false
-): string {
-  const [minTotal, maxTotal] = getTotalApr(aprItems, vebalBoost)
+export function getTotalAprLabel(aprItems: GqlPoolAprItem[], canBeNegative = false): string {
+  const [minTotal, maxTotal] = getTotalApr(aprItems)
 
-  if (minTotal.eq(maxTotal) || vebalBoost) {
+  if (minTotal.eq(maxTotal)) {
     return fNum('apr', minTotal.toString(), { canBeNegative }) // only a single apr could be negative?
   } else {
     return `${fNum('apr', minTotal.toString())} - ${fNum('apr', maxTotal.toString())}`
   }
 }
 
-export function getTotalAprRaw(aprItems: GqlPoolAprItem[], vebalBoost?: string): string {
-  const [minTotal] = getTotalApr(aprItems, vebalBoost)
+export function getTotalAprRaw(aprItems: GqlPoolAprItem[]): string {
+  const [minTotal] = getTotalApr(aprItems)
   return minTotal.toString()
 }
 

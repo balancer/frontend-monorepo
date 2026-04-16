@@ -36,18 +36,13 @@ function StakeAprTooltip({ pool, totalUsdValue, weeklyRewards }: Props) {
       aprItems={pool.dynamicData.aprItems}
       chain={pool.chain}
       displayValueFormatter={displayValueFormatter}
-      maxVeBalText="Total with max veBAL"
       numberFormatter={numberFormatter}
       placement="top-start"
       poolId={pool.id}
       poolType={pool.type}
       shouldDisplayBaseTooltip
-      shouldDisplayMaxVeBalTooltip
       totalBaseText="Total weekly base"
-      totalBaseVeBalText="Total weekly base"
-      totalVeBalTitle="Total weekly"
       usePortal={false}
-      vebalBoost="1"
     >
       <Card cursor="pointer" variant="subSection" w="full">
         <VStack align="start" spacing="sm" w="full">

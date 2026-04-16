@@ -153,7 +153,6 @@ type OptionsConfig = {
   hidePoolTypes: GqlPoolType[]
   hideProtocolVersion: string[]
   showPoolName: boolean
-  showVeBal: boolean
   showMaBeets: boolean
   allowCreateWallet: boolean
   isOnSafeAppList: boolean

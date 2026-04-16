@@ -14,7 +14,6 @@ import {
   getConfirmedLabel,
   getInitLabel,
   getTooltip,
-  parseDate,
   getLockContractFunctionName,
 } from './lock-steps.utils'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -39,7 +38,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
       title: getInitLabel(lockActionType),
       description: getDescription(lockActionType),
       confirming: getConfirmingLabel(lockActionType),
-      confirmed: getConfirmedLabel(lockActionType, lockAmount, lockEndDate),
+      confirmed: getConfirmedLabel(lockActionType),
       tooltip: getTooltip(lockActionType),
     }),
     [lockActionType, lockAmount, lockEndDate]
@@ -56,19 +55,6 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
   )
 
   const props: ManagedTransactionInput = useMemo(() => {
-    function getArgs() {
-      switch (lockActionType) {
-        case LockActionType.CreateLock:
-          return [lockAmount, parseDate(lockEndDate)]
-        case LockActionType.ExtendLock:
-          return [parseDate(lockEndDate)]
-        case LockActionType.IncreaseLock:
-          return [lockAmount]
-        default:
-          return []
-      }
-    }
-
     return {
       enabled: !!lockEndDate,
       labels,
@@ -76,7 +62,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
       contractAddress: mainnetNetworkConfig.contracts.veBAL as Address,
       contractId: 'balancer.veBAL',
       functionName: getLockContractFunctionName(lockActionType),
-      args: getArgs() as any,
+      args: [],
       txSimulationMeta,
       onTransactionChange: setTransaction,
     }

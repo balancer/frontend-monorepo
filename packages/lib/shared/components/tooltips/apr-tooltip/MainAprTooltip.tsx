@@ -130,14 +130,13 @@ function MainAprTooltip({
   onlySparkles,
   textProps,
   apr,
-  vebalBoost,
   aprLabel,
   height = '16px',
   pool,
   id,
   ...props
 }: Props) {
-  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, vebalBoost, true)
+  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, true)
   const isAprNegative = bn(aprToShow.replace('%', '')).lt(0)
 
   // hoverColor here is used for the text and therefore can use a semantic token
@@ -161,11 +160,8 @@ function MainAprTooltip({
       chain={pool.chain}
       customPopoverContent={customPopoverContent}
       hookType={isPool(pool) ? pool.hook?.type : undefined}
-      maxVeBalText="Total APR with veBAL boost"
       poolType={pool.type}
-      totalBaseText={hasVeBalBoost => `Total ${hasVeBalBoost ? 'base' : ''} APR`}
-      totalBaseVeBalText="Total base APR"
-      vebalBoost={vebalBoost}
+      totalBaseText="Total APR"
     >
       {({ isOpen }) => (
         <HStack align="center" alignItems="center">

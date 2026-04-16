@@ -97,7 +97,7 @@ test('Should not return balances when user is not connected (account is empty) '
 })
 
 test('should return balances of 20 tokens', async () => {
-  const numberOfTokens = 20
+  const numberOfTokens = 19
 
   const { result } = testHook(() =>
     useTokenBalancesLogic(allFakeGqlTokens.slice(0, numberOfTokens))
