@@ -1,23 +1,20 @@
 import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage/PoolsPage'
 import { PromoBanners } from '@repo/lib/shared/components/promos/PromoBanners'
-import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-import { poolListDefaultVariables } from '@repo/lib/modules/pool/PoolList/poolListDefaultVariables'
+import { Suspense } from 'react'
+import { Skeleton } from '@chakra-ui/react'
+import { PoolListWithInitialData } from './_components/PoolListWithInitialData'
 
 export const revalidate = 60
 
-export default async function PoolsPageWrapper() {
-  let initialPoolsData = undefined
-  try {
-    const { data } = await getApolloServerClient().query({
-      query: GetPoolsDocument,
-      variables: poolListDefaultVariables,
-    })
-    initialPoolsData = data
-  } catch {}
-
+export default function PoolsPageWrapper() {
   return (
-    <PoolsPage initialPoolsData={initialPoolsData}>
+    <PoolsPage
+      poolListSlot={
+        <Suspense fallback={<Skeleton h="500px" w="full" />}>
+          <PoolListWithInitialData />
+        </Suspense>
+      }
+    >
       <PromoBanners />
     </PoolsPage>
   )

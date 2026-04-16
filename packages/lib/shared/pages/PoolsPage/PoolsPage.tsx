@@ -1,10 +1,9 @@
 'use client'
 
-import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Box, Skeleton, Flex, Heading, Text } from '@chakra-ui/react'
-import { PropsWithChildren, Suspense } from 'react'
+import { PropsWithChildren, type ReactNode } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PoolPageStats } from './PoolPageStats'
@@ -13,20 +12,17 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { useQuery } from '@apollo/client/react'
-import {
-  GetFeaturedPoolsDocument,
-  GetPoolsQuery,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
 import { BuildPromo } from './BuildPromo'
 
 type PoolsPageProps = PropsWithChildren & {
   rewardsClaimed24h?: string
-  initialPoolsData?: GetPoolsQuery
+  poolListSlot: ReactNode
 }
 
-export function PoolsPage({ children, rewardsClaimed24h, initialPoolsData }: PoolsPageProps) {
+export function PoolsPage({ children, rewardsClaimed24h, poolListSlot }: PoolsPageProps) {
   const { supportedNetworks } = PROJECT_CONFIG
 
   const { data: featuredPoolsData, loading: featuredPoolsLoading } = useQuery(
@@ -133,11 +129,7 @@ export function PoolsPage({ children, rewardsClaimed24h, initialPoolsData }: Poo
         pr={{ base: '0 !important', xl: 'md !important' }}
         pt={['lg', '54px']}
       >
-        <FadeInOnView animateOnce={false}>
-          <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList initialPoolsData={initialPoolsData} />
-          </Suspense>
-        </FadeInOnView>
+        <FadeInOnView animateOnce={false}>{poolListSlot}</FadeInOnView>
       </DefaultPageContainer>
       {isBalancer && (featuredPools.length > 0 || featuredPoolsLoading) && (
         <DefaultPageContainer mb="lg" py="0" rounded="2xl">
