@@ -28,6 +28,9 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60,
   },
   transpilePackages: ['@repo/lib'],
+  experimental: {
+    optimizePackageImports: ['@chakra-ui/react', 'date-fns', 'lodash'],
+  },
 
   // Safe App setup
   headers: manifestHeaders,

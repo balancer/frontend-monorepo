@@ -13,15 +13,11 @@ import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@ta
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
 import { isPoolSurgingError, isSwapWithNoPathsError } from '../utils/error-filters'
-import { BaseError, decodeErrorResult } from 'viem'
-import {
-  balancerBatchRouterAbiExtended,
-  balancerCompositeLiquidityRouterBoostedAbiExtended,
-  balancerCompositeLiquidityRouterNestedAbiExtended,
-  balancerRouterAbiExtended,
-} from '@balancer/sdk'
 import { SimulateSwapInputs } from '@repo/lib/modules/swap/swap.types'
 import { sendMessage } from '../services/slack/api'
+
+// ABI and viem imports deferred to reduce initial bundle size
+// Only loaded when decoding swap errors (rare case)
 
 type SwapParams = {
   chainId: number
@@ -92,24 +88,24 @@ export const queryClient = new QueryClient({
   }),
 })
 
-type InternalErrorType = {
-  data: string
-}
+async function decodeError(e: Error) {
+  const { BaseError, decodeErrorResult } = await import('viem')
+  const {
+    balancerBatchRouterAbiExtended,
+    balancerCompositeLiquidityRouterBoostedAbiExtended,
+    balancerCompositeLiquidityRouterNestedAbiExtended,
+    balancerRouterAbiExtended,
+  } = await import('@balancer/sdk')
 
-// This ABI is constructed as an aggregate of multiple ABIs using the same technique as
-// https://github.com/balancer/b-sdk/blob/797540471ad486e4789ee54d4ea47a9833479c39/src/abi/index.ts#L55
-// More ABIs could be added but bear in mind that it would make the probability of collisions
-// higher (as a workaround we could always comment those not used when debugging)
-const megazordBalancerAbi = [
-  ...balancerRouterAbiExtended,
-  ...balancerBatchRouterAbiExtended,
-  ...balancerCompositeLiquidityRouterBoostedAbiExtended,
-  ...balancerCompositeLiquidityRouterNestedAbiExtended,
-]
+  const megazordBalancerAbi = [
+    ...balancerRouterAbiExtended,
+    ...balancerBatchRouterAbiExtended,
+    ...balancerCompositeLiquidityRouterBoostedAbiExtended,
+    ...balancerCompositeLiquidityRouterNestedAbiExtended,
+  ]
 
-function decodeError(e: Error) {
-  const internalError = (e as BaseError).walk() as unknown
-  const internalErrorData = (internalError as InternalErrorType).data as `0x${string}`
+  const internalError = (e as unknown as { walk: () => unknown }).walk() as unknown
+  const internalErrorData = (internalError as { data: string }).data as `0x${string}`
 
   if (internalErrorData === '0x') return 'Unable to find underlying reason'
 
