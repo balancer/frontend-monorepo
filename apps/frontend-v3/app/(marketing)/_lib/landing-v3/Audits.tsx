@@ -23,7 +23,7 @@ import { TrailOfBitsLogo } from '@repo/lib/shared/components/imgs/TrailOfBitsLog
 import { CertoraLogo } from '@repo/lib/shared/components/imgs/CertoraLogo'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { ReactNode, useState, useMemo, memo } from 'react'
 
 const MotionBox = motion(Box)

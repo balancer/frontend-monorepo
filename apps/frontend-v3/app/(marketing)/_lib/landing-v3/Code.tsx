@@ -14,7 +14,7 @@ import Prism from 'prismjs'
 import './vscode.theme.css'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-solidity'
-import { useInView } from 'framer-motion'
+import { useInView } from 'motion/react'
 
 const TYPING_SPEED = 20 // milliseconds per character
 

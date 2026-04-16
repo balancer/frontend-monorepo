@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, BoxProps } from '@chakra-ui/react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { ReactNode, useMemo } from 'react'
 
