@@ -10,7 +10,7 @@ import {
   OptionProps,
 } from 'chakra-react-select'
 import { ChevronDown } from 'react-feather'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { SelectInput, SelectOption } from '@repo/lib/shared/components/inputs/SelectInput'

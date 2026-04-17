@@ -1,5 +1,5 @@
 import { BoxProps, ButtonProps } from '@chakra-ui/react'
-import { HTMLMotionProps } from 'framer-motion'
+import { HTMLMotionProps } from 'motion/react'
 
 /**
  * Common props needed when using a component with NextLink

@@ -25,7 +25,7 @@ import {
   usePortfolioFilterTagsVisible,
 } from './PortfolioFilters'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { usePortfolioSorting } from './usePortfolioSorting'
 import { usePoolMigrations } from '../../pool/migrations/PoolMigrationsProvider'
 import { getChainId } from '@repo/lib/config/app.config'

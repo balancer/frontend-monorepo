@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { SwapIcon } from '@repo/lib/shared/components/icons/SwapIcon'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'

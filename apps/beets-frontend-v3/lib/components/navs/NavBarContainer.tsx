@@ -5,7 +5,7 @@ import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
 

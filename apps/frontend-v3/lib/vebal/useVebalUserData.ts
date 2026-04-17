@@ -6,7 +6,7 @@ import {
 import { useQuery } from '@apollo/client/react'
 import { useVeBALBalance } from './useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { secondsToMilliseconds } from 'framer-motion'
+import { secondsToMilliseconds } from 'date-fns'
 
 export function useVebalUserData() {
   const { userAddress } = useUserAccount()

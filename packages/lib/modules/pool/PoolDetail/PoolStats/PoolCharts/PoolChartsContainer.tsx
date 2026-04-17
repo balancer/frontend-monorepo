@@ -21,7 +21,7 @@ import {
 import { ClpBadge } from '@repo/lib/shared/components/badges/ClpBadge'
 import { EclpChartProvider, useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { PeriodSelect } from './PeriodSelect'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PoolChartsProvider, usePoolCharts } from './PoolChartsProvider'

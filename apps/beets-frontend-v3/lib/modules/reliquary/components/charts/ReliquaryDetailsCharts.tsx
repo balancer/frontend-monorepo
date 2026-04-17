@@ -8,7 +8,7 @@ import {
   GetReliquaryFarmSnapshotsDocument,
   GqlPoolSnapshotDataRange,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { ReliquaryLiquidityChart } from './ReliquaryLiquidityChart'
 import { ReliquaryMaBEETSLevelChart } from './ReliquaryMaBEETSLevelChart'

@@ -18,7 +18,7 @@ import { ClaimsSummary } from './ClaimsSummary'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useRecoveredFundsClaims } from './RecoveredFundsClaimsProvider'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useCallback, useRef, useState } from 'react'
 import { SettlementTerms } from './SettlementTerms'
 

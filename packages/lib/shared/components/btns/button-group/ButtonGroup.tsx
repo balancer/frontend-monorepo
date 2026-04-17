@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
   Text,
 } from '@chakra-ui/react'
-import { LayoutGroup, motion } from 'framer-motion'
+import { LayoutGroup, motion } from 'motion/react'
 import { ReactNode } from 'react'
 import { Info } from 'react-feather'
 

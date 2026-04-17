@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { useRef, ReactNode } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
 
 interface ParallaxImageProps {
   children: ReactNode

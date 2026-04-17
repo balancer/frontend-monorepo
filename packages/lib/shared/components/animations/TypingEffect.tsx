@@ -1,7 +1,7 @@
 'use client'
 
 import { chakra, TextProps } from '@chakra-ui/react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import { useRef } from 'react'
 
 const MotionSpan = motion(chakra.span)

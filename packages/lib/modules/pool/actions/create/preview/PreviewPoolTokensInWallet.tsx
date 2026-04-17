@@ -1,5 +1,5 @@
 import { CardBody, VStack, Text, Divider, HStack, Box, Icon } from '@chakra-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { CardHeaderRow, CardDataRow, IdentifyTokenCell, DefaultDataRow } from './PreviewCardRows'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { PreviewPoolCreationCard } from './PreviewPoolCreationCard'

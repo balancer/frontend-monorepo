@@ -4,7 +4,7 @@ import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { BalancerLogo } from '../imgs/BalancerLogo'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { Box, Link } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import NextLink from 'next/link'
 
 export function NavLogo() {

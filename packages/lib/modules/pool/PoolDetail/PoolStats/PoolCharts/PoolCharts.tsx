@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
 import { usePoolCharts } from './PoolChartsProvider'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { usePoolChartTabs } from './PoolChartTabsProvider'
 
 export function PoolCharts() {

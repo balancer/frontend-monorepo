@@ -1,7 +1,7 @@
 'use client'
 
 import { HStack, Box, BoxProps } from '@chakra-ui/react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import * as React from 'react'
 
 const MotionBox = motion(Box)

@@ -1,6 +1,6 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Box } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import Image from 'next/image'
 
 type Props = {

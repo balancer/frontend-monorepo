@@ -1,7 +1,8 @@
 'use client'
 
 import { Box, BoxProps } from '@chakra-ui/react'
-import { motion, useInView, HTMLMotionProps, Easing } from 'framer-motion'
+import { motion, useInView, type HTMLMotionProps } from 'motion/react'
+import { type Easing } from 'motion'
 import { Children, isValidElement, ReactNode, useRef } from 'react'
 
 const MotionBox = motion<BoxProps>(Box)

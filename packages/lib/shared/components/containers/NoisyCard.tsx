@@ -1,6 +1,6 @@
 import { Box, BoxProps, CardProps, chakra, useColorModeValue } from '@chakra-ui/react'
 import { ReactNode, MouseEvent } from 'react'
-import { motion, useMotionTemplate, useMotionValue, isValidMotionProp } from 'framer-motion'
+import { motion, useMotionTemplate, useMotionValue, isValidMotionProp } from 'motion/react'
 
 type NoisyCardProps = {
   cardProps?: CardProps

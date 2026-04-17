@@ -1,4 +1,4 @@
-import { circOut } from 'framer-motion'
+import { circOut } from 'motion'
 
 export const staggeredFadeIn = {
   hidden: { opacity: 0 },

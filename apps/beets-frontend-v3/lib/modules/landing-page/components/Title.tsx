@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, BoxProps, Heading } from '@chakra-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { LettersPullUp } from '@repo/lib/shared/components/animations/LettersPullUp'

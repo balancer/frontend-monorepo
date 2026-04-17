@@ -1,6 +1,6 @@
 import { useEffect, useRef, ReactNode } from 'react'
 import { Box } from '@chakra-ui/react'
-import { useScroll, useTransform, useSpring } from 'framer-motion'
+import { useScroll, useTransform, useSpring } from 'motion/react'
 
 export function SparkleIconWrapper({
   children,

@@ -2,7 +2,8 @@ import ReactECharts from 'echarts-for-react'
 import { Box, Divider, HStack, Skeleton, Text, useTheme } from '@chakra-ui/react'
 import { usePoolActivityChart } from './usePoolActivityChart'
 import { PropsWithChildren } from 'react'
-import { motion, easeOut } from 'framer-motion'
+import { motion } from 'motion/react'
+import { easeOut } from 'motion'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 
 function AnimateOpacity({ children }: PropsWithChildren) {

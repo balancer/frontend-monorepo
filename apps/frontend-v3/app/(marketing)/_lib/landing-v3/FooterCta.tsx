@@ -4,7 +4,7 @@ import { Box, Text, Button, Center, HStack, VStack, Link } from '@chakra-ui/reac
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 import { useState } from 'react'
