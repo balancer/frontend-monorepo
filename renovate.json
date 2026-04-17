@@ -128,13 +128,6 @@
       "addLabels": ["major-update"]
     },
     {
-      "description": "Block the framer-motion to motion replacement while still allowing normal framer-motion updates.",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["framer-motion"],
-      "matchUpdateTypes": ["replacement"],
-      "enabled": false
-    },
-    {
       "description": "Block Chakra UI major upgrades while the repo is still on Chakra v2.",
       "matchPackageNames": ["@chakra-ui/**"],
       "matchUpdateTypes": ["major"],
