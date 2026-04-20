@@ -1,4 +1,3 @@
-import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { ProtocolStatsProvider } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -17,6 +16,7 @@ import { FeaturedPartners } from './FeaturedPartners'
 import { PROJECT_CONFIG, isBalancer } from '@repo/lib/config/getProjectConfig'
 import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { BuildPromo } from './BuildPromo'
+import { PoolsPagePoolList } from './PoolsPagePoolList'
 
 type PoolsPageProps = PropsWithChildren & {
   featuredPools: GetFeaturedPoolsQuery['featuredPools']
@@ -142,7 +142,7 @@ export function PoolsPage({
         >
           <FadeInOnView animateOnce={false}>
             <Suspense fallback={<Skeleton h="500px" w="full" />}>
-              <PoolList
+              <PoolsPagePoolList
                 initialCount={initialCount}
                 initialPools={initialPools}
                 initialQueryVariables={initialQueryVariables}
