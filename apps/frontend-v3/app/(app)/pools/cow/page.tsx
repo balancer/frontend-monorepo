@@ -1,4 +1,3 @@
-import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { Box, Skeleton } from '@chakra-ui/react'
@@ -7,6 +6,7 @@ import { Metadata } from 'next'
 import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { CowHeader } from '@repo/lib/shared/components/navs/CowHeader'
+import { PoolsPagePoolList } from '@repo/lib/shared/pages/PoolsPage/PoolsPagePoolList'
 
 export const metadata: Metadata = {
   title: `CoW AMM DeFi Liquidity Pools`,
@@ -37,7 +37,7 @@ export default function PoolsPage() {
       <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList fixedPoolTypes={[GqlPoolType.CowAmm]} />
+            <PoolsPagePoolList fixedPoolTypes={[GqlPoolType.CowAmm]} />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
