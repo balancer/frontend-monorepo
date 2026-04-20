@@ -3,6 +3,7 @@
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import {
   GetPoolsDocument,
+  GetPoolsQueryVariables,
   GqlChain,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -11,7 +12,7 @@ import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
-import { PoolDisplayType } from '../pool.types'
+import { PoolDisplayType, PoolList } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
 import { PoolListItem } from '../pool.types'
@@ -19,13 +20,20 @@ import { useQuery as useReactQuery } from '@tanstack/react-query'
 import { useTokens } from '../../tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useWalletTokenBalances } from '../../tokens/useWalletTokenBalances'
+import { isEqual } from 'lodash'
 
 export function usePoolListLogic({
   fixedPoolTypes,
   fixedChains,
+  initialPools,
+  initialCount,
+  initialQueryVariables,
 }: {
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
+  initialPools?: PoolList
+  initialCount?: number
+  initialQueryVariables?: GetPoolsQueryVariables
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress, isConnected } = useUserAccount()
@@ -50,10 +58,25 @@ export function usePoolListLogic({
     GetPoolsDocument,
     {
       variables,
+      fetchPolicy: 'cache-and-network',
     }
   )
 
-  const pools = loading && previousData ? previousData.pools : data?.pools || []
+  const shouldUseInitialData =
+    !!initialPools &&
+    typeof initialCount === 'number' &&
+    !!initialQueryVariables &&
+    isEqual(variables, initialQueryVariables)
+
+  const seededData = shouldUseInitialData
+    ? {
+        count: initialCount,
+        pools: initialPools,
+      }
+    : undefined
+
+  const resolvedData = data || previousData || seededData
+  const pools = resolvedData?.pools || []
 
   const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
@@ -166,6 +189,7 @@ export function usePoolListLogic({
     : poolsData
 
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
+  const isUsingSeededInitialData = shouldUseInitialData && !data && !previousData
 
   // If the user has previously selected to filter by their liquidity and then
   // changes their connected wallet, we want to automatically update the filter.
@@ -177,9 +201,9 @@ export function usePoolListLogic({
 
   return {
     pools: filteredPools,
-    count: joinablePools ? filteredPools.length : data?.count || previousData?.count,
+    count: joinablePools ? filteredPools.length : resolvedData?.count,
     queryState,
-    loading: loading || isJoinableBalanceLoading,
+    loading: (isUsingSeededInitialData ? false : loading) || isJoinableBalanceLoading,
     error,
     networkStatus,
     isFixedPoolType,
@@ -195,14 +219,23 @@ export const PoolListContext = createContext<ReturnType<typeof usePoolListLogic>
 export function PoolListProvider({
   fixedPoolTypes,
   fixedChains,
+  initialPools,
+  initialCount,
+  initialQueryVariables,
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
+  initialPools?: PoolList
+  initialCount?: number
+  initialQueryVariables?: GetPoolsQueryVariables
 }>) {
   const hook = usePoolListLogic({
     fixedPoolTypes,
     fixedChains,
+    initialPools,
+    initialCount,
+    initialQueryVariables,
   })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>
