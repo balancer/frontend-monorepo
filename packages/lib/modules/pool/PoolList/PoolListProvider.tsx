@@ -201,7 +201,7 @@ export function usePoolListLogic({
 
   return {
     pools: filteredPools,
-    count: joinablePools ? filteredPools.length : resolvedData?.count,
+    count: joinablePools ? filteredPools.length : (resolvedData?.count ?? 0),
     queryState,
     loading: (isUsingSeededInitialData ? false : loading) || isJoinableBalanceLoading,
     error,

@@ -87,3 +87,12 @@ test('Does not use seeded initial pool list data when the query state differs fr
 
   expect(result.current.pools[0].name).toBe('FILTERED BAL')
 })
+
+test('Returns count as 0 while the non-seeded query is still unresolved', () => {
+  const { result } = testHook(() => usePoolListLogic(), {
+    wrapper: withNuqsTestingAdapter({ searchParams: '?textSearch=stable' }),
+  })
+
+  expect(result.current.pools).toEqual([])
+  expect(result.current.count).toBe(0)
+})
