@@ -19,9 +19,14 @@ describe('usePoolStateWithBalances', () => {
 
     const result = await testQuery(pool)
 
-    await waitFor(() => expect(result.current.data?.id).toBeDefined())
+    await waitFor(
+      () => {
+        if (result.current.error) throw result.current.error
+        expect(result.current.isSuccess).toBe(true)
+      },
+      { timeout: 30_000 }
+    )
 
-    expect(result.current.isLoading).toBeFalsy()
     expect(result.current.data?.id).toBeDefined()
   })
 })
