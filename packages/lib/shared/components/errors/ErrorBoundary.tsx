@@ -1,23 +1,19 @@
 'use client'
 
-import { FallbackProps } from 'react-error-boundary'
 import { Button, Box, Text, Heading, VStack } from '@chakra-ui/react'
 import { ensureError } from '../../utils/errors'
 import { DefaultPageContainer } from '../containers/DefaultPageContainer'
 import { captureSentryError } from '../../utils/query-errors'
 
-type ErrorWithDigest = Error & {
-  digest?: string
-}
-
-interface BoundaryErrorProps extends FallbackProps {
-  error: ErrorWithDigest
+interface BoundaryErrorProps {
+  error: unknown
+  resetErrorBoundary: () => void
 }
 
 export function BoundaryError({ error, resetErrorBoundary }: BoundaryErrorProps) {
-  captureSentryError(error, { errorMessage: error.message })
-
   const _error = ensureError(error)
+
+  captureSentryError(_error, { errorMessage: _error.message })
 
   return (
     <Box border="2px dashed" borderColor="red.500" minH="200px" p="md" rounded="lg" w="full">
