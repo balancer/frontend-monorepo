@@ -5,7 +5,6 @@ import {
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolList as PoolListType } from '@repo/lib/modules/pool/pool.types'
-import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 export function PoolsPagePoolList({
   fixedPoolTypes,
@@ -21,14 +20,12 @@ export function PoolsPagePoolList({
   initialQueryVariables?: GetPoolsQueryVariables
 }) {
   return (
-    <NuqsAdapter>
-      <PoolList
-        fixedChains={fixedChains}
-        fixedPoolTypes={fixedPoolTypes}
-        initialCount={initialCount}
-        initialPools={initialPools}
-        initialQueryVariables={initialQueryVariables}
-      />
-    </NuqsAdapter>
+    <PoolList
+      fixedChains={fixedChains}
+      fixedPoolTypes={fixedPoolTypes}
+      initialCount={initialCount}
+      initialPools={initialPools}
+      initialQueryVariables={initialQueryVariables}
+    />
   )
 }

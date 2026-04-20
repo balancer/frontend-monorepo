@@ -1,3 +1,4 @@
+import { NuqsAppAdapter } from '@repo/lib/shared/components/site/NuqsAppAdapter'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
@@ -11,5 +12,5 @@ export const metadata: Metadata = {
 }
 
 export default async function Pools({ children }: PropsWithChildren) {
-  return <>{children}</>
+  return <NuqsAppAdapter>{children}</NuqsAppAdapter>
 }

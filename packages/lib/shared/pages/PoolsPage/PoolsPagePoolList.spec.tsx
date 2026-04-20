@@ -2,13 +2,6 @@ import { render, screen } from '@testing-library/react'
 import { aGqlPoolMinimalMock } from '@repo/lib/test/msw/builders/gqlPoolMinimal.builders'
 import { getDefaultPoolListQueryVariables } from '@repo/lib/modules/pool/PoolList/defaultPoolListQuery'
 import { PoolsPagePoolList } from './PoolsPagePoolList'
-import React from 'react'
-
-vi.mock('nuqs/adapters/next/app', () => ({
-  NuqsAdapter: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="nuqs-adapter">{children}</div>
-  ),
-}))
 
 vi.mock('@repo/lib/modules/pool/PoolList/PoolList', () => ({
   PoolList: ({
@@ -31,7 +24,7 @@ vi.mock('@repo/lib/modules/pool/PoolList/PoolList', () => ({
   ),
 }))
 
-test('wraps the pool list in a route-local NuqsAdapter', () => {
+test('passes seeded pool-list props through to PoolList', () => {
   render(
     <PoolsPagePoolList
       initialCount={1}
@@ -40,17 +33,15 @@ test('wraps the pool list in a route-local NuqsAdapter', () => {
     />
   )
 
-  expect(screen.getByTestId('nuqs-adapter')).toBeInTheDocument()
   expect(screen.getByTestId('pool-list-count')).toHaveTextContent('1')
   expect(screen.getByTestId('pool-list-first-row')).toHaveTextContent('SEEDED BAL')
 })
 
-test('passes through fixed route filters under the local adapter', () => {
+test('passes through fixed route filters to PoolList', () => {
   render(
     <PoolsPagePoolList fixedChains={['SONIC' as never]} fixedPoolTypes={['COW_AMM' as never]} />
   )
 
-  expect(screen.getByTestId('nuqs-adapter')).toBeInTheDocument()
   expect(screen.getByTestId('pool-list-fixed-chains')).toHaveTextContent('SONIC')
   expect(screen.getByTestId('pool-list-fixed-pool-types')).toHaveTextContent('COW_AMM')
 })
