@@ -12,8 +12,6 @@ export function createVitestConfig(monorepoRoot: string): ViteUserConfig {
         '@repo': resolveFromRoot('./packages'),
         '@bal': resolveFromRoot('./apps/frontend-v3'),
       },
-      // TODO: remove temp workaround when https://github.com/zivl/sentry-testkit/pull/278 is merged
-      conditions: ['node', 'import', 'require'],
     },
     envPrefix: ['VITE', 'NEXT'],
     test: {

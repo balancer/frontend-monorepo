@@ -58,13 +58,13 @@
     "graphql-tag": "^2.12.6",
     "lodash": "4.18.1",
     "mockdate": "3.0.5",
-    "next": "16.1.7",
+    "next": "16.2.3",
     "next-themes": "0.4.6",
     "numeral": "^2.0.6",
     "nuqs": "2.8.9",
     "pluralize": "^8.0.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
     "react-error-boundary": "6.1.1",
     "react-feather": "^2.0.10",
     "react-hook-form": "7.71.2",
@@ -114,7 +114,7 @@
     "cross-fetch": "4.1.0",
     "eslint": "9.39.4",
     "lokijs": "1.5.12",
-    "msw": "2.12.14",
-    "sentry-testkit": "6.4.0"
+    "msw": "2.13.2",
+    "sentry-testkit": "6.4.1"
   }
 }
