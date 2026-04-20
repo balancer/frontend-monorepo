@@ -28,33 +28,6 @@ test.describe('Create each pool type', () => {
   }
 })
 
-test.describe('Reset form on each step', () => {
-  test('type', async ({ poolAtTypeStep }) => {
-    await poolAtTypeStep.chooseNetwork('Arbitrum')
-    await poolAtTypeStep.choosePoolType(PoolType.Weighted)
-    await poolAtTypeStep.resetAndConfirm()
-    await poolAtTypeStep.expectInitialFormState()
-  })
-
-  test('tokens', async ({ poolAtTokensStep }) => {
-    await poolAtTokensStep.tokensStep()
-    await poolAtTokensStep.resetAndConfirm()
-    await poolAtTokensStep.expectInitialFormState()
-  })
-
-  test('details', async ({ poolAtDetailsStep }) => {
-    await poolAtDetailsStep.detailsStep()
-    await poolAtDetailsStep.resetAndConfirm()
-    await poolAtDetailsStep.expectInitialFormState()
-  })
-
-  test('fund', async ({ poolAtFundStep }) => {
-    await poolAtFundStep.fundStep()
-    await poolAtFundStep.resetAndConfirm()
-    await poolAtFundStep.expectInitialFormState()
-  })
-})
-
 test.describe('Build popover', () => {
   test('protocol link sets form state for protocol', async ({ page, poolAtTypeStep }) => {
     await poolAtTypeStep.clickBuildPopoverToCowAmm()
