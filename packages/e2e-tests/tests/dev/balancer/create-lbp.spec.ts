@@ -7,8 +7,6 @@ import {
   doProjectInfoStep,
   doReviewStep,
   doSaleStructureStep,
-  expectInitialFormState,
-  clickResetAndConfirm,
   mockCreateLbpMetadata,
   stepUrl,
   BASE_URL,
