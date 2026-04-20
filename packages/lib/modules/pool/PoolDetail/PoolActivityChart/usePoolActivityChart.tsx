@@ -6,8 +6,7 @@ import { secondsToMilliseconds, differenceInDays, format } from 'date-fns'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ChainSlug, getChainSlug } from '../../pool.utils'
-import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useTheme as useNextTheme } from 'next-themes'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -24,7 +23,6 @@ import {
 } from '@repo/lib/shared/utils/blockExplorer'
 
 const getDefaultPoolActivityChartOptions = (
-  nextTheme: ColorMode = 'dark',
   theme: any, // TODO: type this
   currencyFormatter: NumberFormatter,
   isMobile = false,
@@ -43,7 +41,7 @@ const getDefaultPoolActivityChartOptions = (
     text: theme.semanticTokens.colors.font.secondary._dark,
   }
 
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
+  const colorMode = '_dark'
 
   return {
     grid: {
@@ -248,7 +246,6 @@ function getSymbolSize(dataItem?: PoolActivityEl) {
 export function usePoolActivityChart() {
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const { isMobile, is2xl } = useBreakpoints()
-  const { theme: nextTheme } = useNextTheme()
   const { toCurrency } = useCurrency()
   const { chain } = useParams()
   const theme = useChakraTheme()
@@ -259,7 +256,6 @@ export function usePoolActivityChart() {
 
   return {
     chartOption: getDefaultPoolActivityChartOptions(
-      nextTheme as ColorMode,
       theme,
       toCurrency,
       isMobile,

@@ -10,11 +10,9 @@ import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } fr
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
-import DarkModeToggle from '../btns/DarkModeToggle'
 import RecentTransactions from '../other/RecentTransactions'
 import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
-import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ArrowUpRight } from 'react-feather'
 import { DevToolsDrawerButton } from '@repo/lib/modules/dev-tools/DevToolsDrawer'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
@@ -132,15 +130,10 @@ export function NavActions({
 }) {
   const pathname = usePathname()
   const { isConnected } = useUserAccount()
-  const { hideDarkModeToggle } = useThemeSettings()
 
   const actions = useMemo(() => {
     if (pathname === '/') {
       return [
-        {
-          el: hideDarkModeToggle ? null : <DarkModeToggle />,
-          display: { base: 'none', lg: 'block' },
-        },
         {
           el: (
             <Button as={NextLink} href="/pools" prefetch px={7} size="md" variant="primary">
@@ -178,10 +171,6 @@ export function NavActions({
           ]
         : []),
       {
-        el: hideDarkModeToggle ? null : <DarkModeToggle />,
-        display: { base: 'none', lg: 'block' },
-      },
-      {
         el: (
           <ConnectWallet
             connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'}
@@ -207,7 +196,7 @@ export function NavActions({
     }
 
     return defaultActions
-  }, [pathname, isConnected, hideDarkModeToggle, mobileNav, allowCreateWallet])
+  }, [pathname, isConnected, mobileNav, allowCreateWallet])
 
   return (
     <>

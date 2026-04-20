@@ -13,7 +13,6 @@ import {
   Stack,
   Portal,
 } from '@chakra-ui/react'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import {
   swapFeesTooltipText,
   useAprTooltip,
@@ -89,8 +88,6 @@ function BaseAprTooltip({
   usePortal = true,
   hookType,
 }: Props) {
-  const colorMode = useThemeColorMode()
-
   const isVebal = isVebalPool(poolId)
 
   const usedDisplayValueFormatter =
@@ -323,7 +320,7 @@ function BaseAprTooltip({
                 {...basePopoverAprItemProps}
                 apr={maxMaBeetsRewardDisplayed}
                 displayValueFormatter={usedDisplayValueFormatter}
-                fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+                fontColor="gray.400"
                 fontWeight={500}
                 pl={6}
                 pt={3}
@@ -335,7 +332,7 @@ function BaseAprTooltip({
               {...basePopoverAprItemProps}
               apr={maxMaBeetsVotingRewardDisplayed}
               displayValueFormatter={usedDisplayValueFormatter}
-              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+              fontColor="gray.400"
               fontWeight={500}
               pl={6}
               pt={maxMaBeetsRewardDisplayed.isZero() ? 3 : 0}

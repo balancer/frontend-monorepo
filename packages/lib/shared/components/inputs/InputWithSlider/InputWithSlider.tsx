@@ -18,7 +18,6 @@ import {
   useTheme as useChakraTheme,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useTheme as useNextTheme } from 'next-themes'
 
 type Props = {
   value?: string
@@ -44,7 +43,6 @@ export const InputWithSlider = forwardRef(
     const [sliderPercent, setSliderPercent] = useState<number>(100)
     const { toCurrency } = useCurrency()
     const theme = useChakraTheme()
-    const { theme: nextTheme } = useNextTheme()
 
     function handleSliderChange(percent: number) {
       setSliderPercent(percent)
@@ -62,10 +60,7 @@ export const InputWithSlider = forwardRef(
       // setSliderPercent(newPercent)
     }
 
-    const boxShadowColor =
-      nextTheme === 'dark'
-        ? theme.semanticTokens.colors.font.warning._dark
-        : theme.semanticTokens.colors.font.warning.default
+    const boxShadowColor = theme.semanticTokens.colors.font.warning._dark
 
     const boxShadow = isWarning ? `0 0 0 1px ${boxShadowColor}` : undefined
 

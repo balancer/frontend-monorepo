@@ -1,15 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Heading,
-  Text,
-  Link,
-  Stack,
-  VStack,
-  Image as ChakraImage,
-  useColorMode,
-} from '@chakra-ui/react'
+import { Box, Heading, Text, Link, Stack, VStack, Image as ChakraImage } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from './Picture'
 // import { ArrowRightIcon } from '@chakra-ui/icons'
@@ -37,7 +28,6 @@ export function PartnerCard({
   externalLink = false,
 }: PartnerCardProps) {
   const iconSrc = iconName ? `/images/logos/circular-bg/${iconName}.svg` : icon
-  const { colorMode } = useColorMode()
 
   return (
     <Box height="100%">
@@ -56,9 +46,7 @@ export function PartnerCard({
           <Box
             _groupHover={{
               shadow:
-                colorMode === 'dark'
-                  ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.25) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.25) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.04) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.1) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.04) inset'
-                  : '-2px -2px 4px 0px rgba(0, 0, 0, 0.1) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.1) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.15) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.15) inset',
+                '-2px -2px 4px 0px rgba(0, 0, 0, 0.25) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.25) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.04) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.1) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.04) inset',
             }}
             backgroundPosition="center"
             backgroundSize="cover"
@@ -67,9 +55,7 @@ export function PartnerCard({
             overflow="hidden"
             position="relative"
             shadow={
-              colorMode === 'dark'
-                ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.5) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.5) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
-                : '-2px -2px 4px 0px rgba(0, 0, 0, 0.2) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.2) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.3) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.3) inset'
+              '-2px -2px 4px 0px rgba(0, 0, 0, 0.5) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.5) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
             }
             transition="all 0.3s var(--ease-out-cubic)"
             width="full"

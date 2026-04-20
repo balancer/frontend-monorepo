@@ -3,7 +3,6 @@
 import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
@@ -37,7 +36,6 @@ function onSwap(PoolSwapParams calldata params)
 }`
 
 export function Code() {
-  const isDarkMode = useIsDarkMode()
   const { isMobile } = useBreakpoints()
   const [displayedText, setDisplayedText] = useState('')
   const codeBoxRef = useRef(null)
@@ -91,7 +89,7 @@ export function Code() {
               bottom={0}
               h="100%"
               left={0}
-              opacity={isDarkMode ? 0.3 : 0.2}
+              opacity={0.3}
               overflow="hidden"
               position="absolute"
               right={0}

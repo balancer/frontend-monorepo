@@ -14,7 +14,6 @@ import { StepIndicator } from './Step'
 import { Steps } from './Steps'
 import { GasPriceCard } from '@repo/lib/shared/hooks/useGasPrice'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { TransactionStepsResponse } from '../useTransactionSteps'
 
 type Props = {
@@ -24,7 +23,6 @@ type Props = {
 
 export function MobileStepTracker({ chain, transactionSteps }: Props) {
   const { steps, currentStepIndex, currentStep, currentTransaction, isLastStep } = transactionSteps
-  const colorMode = useThemeColorMode()
 
   const totalSteps = steps?.length || 1
 
@@ -41,7 +39,6 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
               <HStack fontSize="md" justify="flex-start" width="full">
                 {currentStep && (
                   <StepIndicator
-                    colorMode={colorMode}
                     currentIndex={currentStepIndex}
                     index={currentStepIndex}
                     isLastStep={isLastStep(currentStepIndex)}

@@ -12,7 +12,6 @@ import {
   Stack,
   IconButton,
   Heading,
-  useColorMode,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -38,57 +37,36 @@ const ARROW_ICON = <ArrowUpRight size="14px" />
 const CENTER_HOVER_STYLES = { transform: 'scale(1.12)', color: 'font.maxContrast' }
 const ICON_BUTTON_HOVER_STYLES = { opacity: 1 }
 
-const GRADIENT_OVERLAYS = {
-  light: [
-    {
-      background: 'linear-gradient(90deg, #eee 0%, #999 100%)',
-      blendMode: 'soft-light',
-    },
-    {
-      background: 'linear-gradient(90deg, #666 0%, #eee 100%)',
-      blendMode: 'soft-light',
-    },
-    {
-      background: 'linear-gradient(90deg, #eee 0%, #bbb 100%)',
-      blendMode: 'soft-light',
-    },
-  ],
-  dark: [
-    {
-      background:
-        'linear-gradient(90deg, #B3AEF5 54.87%, #D7CBE7 70.41%, #E5C8C8 82.72%, #EAA879 96.28%)',
-      blendMode: 'overlay',
-    },
-    {
-      background: 'linear-gradient(90deg, rgba(237, 187, 250, 0.00) 0.08%, #F48975 90%)',
-      blendMode: 'soft-light',
-    },
-    {
-      background: 'linear-gradient(90deg, #62E9CA 0%, #42DCFD 98.03%)',
-      blendMode: 'soft-light',
-    },
-  ],
-} as const
+const GRADIENT_OVERLAYS = [
+  {
+    background:
+      'linear-gradient(90deg, #B3AEF5 54.87%, #D7CBE7 70.41%, #E5C8C8 82.72%, #EAA879 96.28%)',
+    blendMode: 'overlay',
+  },
+  {
+    background: 'linear-gradient(90deg, rgba(237, 187, 250, 0.00) 0.08%, #F48975 90%)',
+    blendMode: 'soft-light',
+  },
+  {
+    background: 'linear-gradient(90deg, #62E9CA 0%, #42DCFD 98.03%)',
+    blendMode: 'soft-light',
+  },
+] as const
 
 const AuditCard = memo(function AuditCard({
   href,
   logo,
   bgImageName,
-  colorMode,
   gradientIndex,
 }: {
   href: string
   logo: ReactNode
   bgImageName: string
-  colorMode: 'light' | 'dark'
   gradientIndex: number
 }) {
   const [isHovered, setIsHovered] = useState(false)
 
-  const gradientOverlay = useMemo(
-    () => GRADIENT_OVERLAYS[colorMode][gradientIndex],
-    [colorMode, gradientIndex]
-  )
+  const gradientOverlay = useMemo(() => GRADIENT_OVERLAYS[gradientIndex], [gradientIndex])
 
   return (
     <Link cursor="pointer" href={href} isExternal>
@@ -198,8 +176,6 @@ const AuditCard = memo(function AuditCard({
 })
 
 export function Audits() {
-  const { colorMode } = useColorMode()
-
   const spearbitLogo = useMemo(() => <SpearbitLogo />, [])
   const trailOfBitsLogo = useMemo(() => <TrailOfBitsLogo />, [])
   const certoraLogo = useMemo(() => <CertoraLogo />, [])
@@ -255,7 +231,6 @@ export function Audits() {
             <GridItem>
               <AuditCard
                 bgImageName="0"
-                colorMode={colorMode}
                 gradientIndex={0}
                 href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits/spearbit"
                 logo={spearbitLogo}
@@ -264,7 +239,6 @@ export function Audits() {
             <GridItem>
               <AuditCard
                 bgImageName="1"
-                colorMode={colorMode}
                 gradientIndex={1}
                 href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits/trail-of-bits"
                 logo={trailOfBitsLogo}
@@ -273,7 +247,6 @@ export function Audits() {
             <GridItem>
               <AuditCard
                 bgImageName="2"
-                colorMode={colorMode}
                 gradientIndex={2}
                 href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits/certora"
                 logo={certoraLogo}

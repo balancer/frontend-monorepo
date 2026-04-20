@@ -4,7 +4,6 @@ import { formatDateAxisLabel } from './helpers'
 import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Skeleton, Stack, Text, useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useTheme as useNextTheme } from 'next-themes'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import * as echarts from 'echarts/core'
 
@@ -25,10 +24,9 @@ export function FixedProjectedPriceChart({
 }: Props) {
   const { toCurrency } = useCurrency()
   const theme = useChakraTheme()
-  const { theme: nextTheme } = useNextTheme()
   const { isMobile } = useBreakpoints()
 
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
+  const colorMode = '_dark'
   const priceValue = prices[0]?.projectTokenPrice ?? 0
   const yAxisMin = priceValue ? priceValue * 0.9 : 0
   const yAxisMax = priceValue ? priceValue * 1.1 : 1

@@ -16,7 +16,6 @@ describe('generates step props', () => {
       currentIndex: 0,
       index: 0,
       step,
-      colorMode: 'light',
       isLastStep: true,
     }
     const state = getStepSettings(props, transaction)
@@ -40,7 +39,6 @@ describe('generates step props', () => {
       currentIndex: 0,
       index: 0,
       step,
-      colorMode: 'light',
       isLastStep: true,
     }
     const state = getStepSettings(props, transaction)
@@ -62,7 +60,6 @@ describe('generates step props', () => {
       currentIndex: 0,
       index: 1,
       step,
-      colorMode: 'light',
       isLastStep: true,
     }
     const state = getStepSettings(props, transaction)

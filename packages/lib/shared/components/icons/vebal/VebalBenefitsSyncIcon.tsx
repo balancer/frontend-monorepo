@@ -1,5 +1,4 @@
 import { SVGProps, forwardRef, useId } from 'react'
-import { useColorMode } from '@chakra-ui/react'
 
 export interface VebalBenefitsSyncIconProps extends SVGProps<SVGSVGElement> {
   size?: number
@@ -7,7 +6,6 @@ export interface VebalBenefitsSyncIconProps extends SVGProps<SVGSVGElement> {
 
 export const VebalBenefitsSyncIcon = forwardRef<SVGSVGElement, VebalBenefitsSyncIconProps>(
   ({ size = 24, ...props }, ref) => {
-    const { colorMode } = useColorMode()
     const id = useId()
     const clipPathId = `sync-clip-${id}`
     const maskId = `sync-mask-${id}`
@@ -66,11 +64,7 @@ export const VebalBenefitsSyncIcon = forwardRef<SVGSVGElement, VebalBenefitsSync
           </pattern>
           <image
             height="314"
-            href={
-              colorMode === 'dark'
-                ? '/images/textures/gold-texture-dark.jpg'
-                : '/images/textures/gold-texture.jpg'
-            }
+            href="/images/textures/gold-texture-dark.jpg"
             id={imageId}
             preserveAspectRatio="none"
             width="280"

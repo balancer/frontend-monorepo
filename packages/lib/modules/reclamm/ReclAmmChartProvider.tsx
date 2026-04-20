@@ -3,7 +3,6 @@ import { fNum, invert } from '@repo/lib/shared/utils/numbers'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
-import { useColorMode } from '@chakra-ui/react'
 import type { ReclAmmChartData } from './useReclAmmChartData'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
@@ -26,7 +25,6 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
   const [isReversed, setIsReversed] = useState(false)
   const [chartInstance, setChartInstance] = useState<any>(null)
   const selectColor = useSelectColor()
-  const { colorMode } = useColorMode()
 
   const isLoading = !!chartData?.isLoading
   const isPoolWithinTargetRange = !!chartData?.isPoolWithinTargetRange
@@ -114,14 +112,10 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
     const gridBottomMobile =
       baseOrangeBarCount % 2 === 0 && !(showMinMaxValues && !showTargetValues) ? '28%' : '16%'
 
-    const isDarkMode = colorMode === 'dark'
-
     const baseGreyBarConfig = {
       count: baseGreyBarCount,
       value: isMobile ? 1 : 3,
-      gradientColors: isDarkMode
-        ? ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)']
-        : ['rgba(160, 174, 192, 1)', 'rgba(160, 174, 192, 0.5)'],
+      gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
       borderRadius: 20,
       segmentType: 'grey',
     }
@@ -129,9 +123,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
     const baseOrangeBarConfig = {
       count: baseOrangeBarCount,
       value: 100,
-      gradientColors: isDarkMode
-        ? ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)']
-        : ['rgba(250, 144, 71, 1)', 'rgba(250, 144, 71, 0.5)'],
+      gradientColors: ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)'],
       borderRadius: 20,
       segmentType: 'orange',
     }
@@ -140,9 +132,7 @@ export function useReclAmmChartLogic(chartData: ReclAmmChartData | undefined) {
       name: 'Green',
       count: baseGreenBarCount,
       value: 100,
-      gradientColors: isDarkMode
-        ? ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)']
-        : ['rgba(0, 184, 130, 1)', 'rgba(0, 184, 130, 0.5)'],
+      gradientColors: ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)'],
       borderRadius: 20,
       segmentType: 'green',
     }

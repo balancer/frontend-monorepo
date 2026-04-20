@@ -980,14 +980,6 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             width: 'full',
             height: 'full',
             rounded: '2xl',
-            _light: {
-              backgroundColor: 'transparent',
-              backgroundImage: `radial-gradient(
-                      farthest-corner at 80px 0px,
-                      rgba(235, 220, 204, 0.3) 0%,
-                      rgba(255, 255, 255, 0.0) 100%
-                    )`,
-            },
             _dark: {
               backgroundColor: 'transparent',
               backgroundImage: `radial-gradient(
@@ -1161,9 +1153,6 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           track: {
             _dark: {
               bg: '#282D34', // fix: what token?
-            },
-            _light: {
-              bg: '#D7D2CB', // inversion of #282D34
             },
             height: '5px',
           },

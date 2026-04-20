@@ -1,13 +1,12 @@
 'use client'
 
-import { Button, Heading, Flex, Box, Center, Text, Stack, useColorMode } from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 import { EzklIcon } from '@repo/lib/shared/components/icons/logos/EzklIcon'
 
 export function EzklPromoBanner() {
-  const { colorMode } = useColorMode()
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
@@ -57,7 +56,7 @@ export function EzklPromoBanner() {
                 direction={{ base: 'column', md: 'row' }}
                 gap="md"
               >
-                <Box color={colorMode === 'dark' ? '#FA2424' : '#FA2424'}>
+                <Box color="#FA2424">
                   <EzklIcon width={140} />
                 </Box>
                 <Box>
@@ -80,7 +79,7 @@ export function EzklPromoBanner() {
                       fontWeight="medium"
                       lineHeight="1.25"
                       maxW="600px"
-                      opacity={colorMode === 'dark' ? '0.9' : '1'}
+                      opacity="0.9"
                       sx={{
                         textWrap: 'balance',
                       }}
@@ -97,13 +96,13 @@ export function EzklPromoBanner() {
               <Button
                 _hover={{
                   bg: '#f00',
-                  color: colorMode === 'dark' ? '#fff' : '#fff',
+                  color: '#fff',
                 }}
                 as={NextLink}
-                bg={colorMode === 'dark' ? '#fff' : '#fff'}
+                bg="#fff"
                 border="1px solid"
-                borderColor={colorMode === 'dark' ? '#fff' : 'transparent'}
-                color={colorMode === 'dark' ? '#000' : '#000'}
+                borderColor="#fff"
+                color="#000"
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}

@@ -10,9 +10,6 @@ import { ArrowUpRight } from 'react-feather'
 
 // @ts-ignore
 import bgDarkSrc from './images/hero-bg-dark.png'
-// @ts-ignore
-import bgLightSrc from './images/hero-bg-light.png'
-import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
 import { SandBg } from './shared/SandBg'
 import { useRef } from 'react'
@@ -25,7 +22,6 @@ const MotionButton = motion(Button) as React.FC<MotionButtonProps>
 const MotionBox = motion(Box) as React.FC<MotionBoxProps>
 
 export function Hero() {
-  const isDarkMode = useIsDarkMode()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
 
@@ -34,7 +30,7 @@ export function Hero() {
       <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
         <AnimatePresence>
           <motion.div
-            animate={isInView ? { opacity: isDarkMode ? 0.3 : 0.5, willChange: 'opacity' } : {}}
+            animate={isInView ? { opacity: 0.3, willChange: 'opacity' } : {}}
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.01 }}
             ref={ref}
@@ -47,23 +43,13 @@ export function Hero() {
             }}
             transition={{ duration: 3, ease: 'easeInOut' }}
           >
-            {isDarkMode ? (
-              <Image
-                alt="background"
-                fill
-                sizes="100vw"
-                src={bgDarkSrc}
-                style={{ objectFit: 'cover', objectPosition: 'center' }}
-              />
-            ) : (
-              <Image
-                alt="background"
-                fill
-                sizes="80vw"
-                src={bgLightSrc}
-                style={{ objectFit: 'cover', objectPosition: 'center' }}
-              />
-            )}
+            <Image
+              alt="background"
+              fill
+              sizes="100vw"
+              src={bgDarkSrc}
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
+            />
           </motion.div>
         </AnimatePresence>
       </Box>

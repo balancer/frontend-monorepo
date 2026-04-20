@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Divider, HStack, ModalFooter, VStack, Link, useColorMode } from '@chakra-ui/react'
+import { Button, Divider, HStack, ModalFooter, VStack, Link } from '@chakra-ui/react'
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnimatePresence, motion } from 'motion/react'
@@ -18,7 +18,6 @@ export function SuccessActions({
   returnAction?: () => void
 }) {
   const { openNpsModal } = useAppzi()
-  const { colorMode } = useColorMode()
 
   return (
     <VStack w="full">
@@ -47,7 +46,7 @@ export function SuccessActions({
           _hover={{
             color: 'font.maxContrast',
             textDecoration: 'none',
-            background: colorMode === 'light' ? 'gray.100' : 'whiteAlpha.200',
+            background: 'whiteAlpha.200',
           }}
           as={Link}
           fontSize="xs !important"

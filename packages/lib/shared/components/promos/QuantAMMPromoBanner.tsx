@@ -1,38 +1,26 @@
 'use client'
 
-import {
-  Button,
-  Heading,
-  Flex,
-  Box,
-  Center,
-  Text,
-  Stack,
-  useColorMode,
-  Link,
-} from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 import { usePool } from '../../../modules/pool/PoolProvider'
 
 export function QuantAMMPromoBanner() {
-  const { colorMode } = useColorMode()
   const { pool, chain } = usePool()
 
-  const isDarkMode = colorMode === 'dark'
   const baseUrl = 'https://quantamm.fi'
   const analyticsUrl = pool && chain ? `${baseUrl}/product-explorer/${chain}/${pool.id}` : baseUrl
   const learnMoreUrl = pool && chain ? `${baseUrl}/factsheet/${pool.id}` : baseUrl
 
   const commonButtonProps = {
     _hover: {
-      bg: isDarkMode ? 'background.special' : '#fff',
-      color: isDarkMode ? '#000' : '#000',
-      borderColor: isDarkMode ? 'transparent' : '#000',
+      bg: 'background.special',
+      color: '#000',
+      borderColor: 'transparent',
     },
     as: Link,
     border: '1px solid',
-    borderColor: isDarkMode ? '#fff' : '#000',
+    borderColor: '#fff',
     cursor: 'pointer',
     flex: '1',
     h: { base: '32px', sm: '40px', lg: '48px' },
@@ -120,7 +108,7 @@ export function QuantAMMPromoBanner() {
                       fontWeight="medium"
                       lineHeight="1.25"
                       maxW="600px"
-                      opacity={isDarkMode ? '0.9' : '1'}
+                      opacity="0.9"
                       sx={{
                         textWrap: 'balance',
                       }}
@@ -134,23 +122,13 @@ export function QuantAMMPromoBanner() {
               </Stack>
             </Box>
             <Flex alignItems="center" gap="ms" maxW="300px">
-              <Button
-                {...commonButtonProps}
-                bg={isDarkMode ? 'transparent' : 'transparent'}
-                color={isDarkMode ? '#fff' : '#000'}
-                href={learnMoreUrl}
-              >
+              <Button {...commonButtonProps} bg="transparent" color="#fff" href={learnMoreUrl}>
                 Learn more{' '}
                 <Box pl="xxs">
                   <ArrowUpRight size="14px" />
                 </Box>
               </Button>
-              <Button
-                {...commonButtonProps}
-                bg={isDarkMode ? 'white' : '#000'}
-                color={isDarkMode ? '#000' : '#fff'}
-                href={analyticsUrl}
-              >
+              <Button {...commonButtonProps} bg="white" color="#000" href={analyticsUrl}>
                 View analytics{' '}
                 <Box pl="xxs">
                   <ArrowUpRight size="14px" />

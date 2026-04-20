@@ -1,5 +1,4 @@
 import { SVGProps, forwardRef } from 'react'
-import { useColorMode } from '@chakra-ui/react'
 
 interface VebalBenefitsShareIconProps extends SVGProps<SVGSVGElement> {
   size?: number
@@ -7,8 +6,6 @@ interface VebalBenefitsShareIconProps extends SVGProps<SVGSVGElement> {
 
 export const VebalBenefitsShareIcon = forwardRef<SVGSVGElement, VebalBenefitsShareIconProps>(
   ({ size = 44, ...props }, ref) => {
-    const { colorMode } = useColorMode()
-
     return (
       <svg
         fill="none"
@@ -55,11 +52,7 @@ export const VebalBenefitsShareIcon = forwardRef<SVGSVGElement, VebalBenefitsSha
           </pattern>
           <image
             height="314"
-            href={
-              colorMode === 'dark'
-                ? '/images/textures/gold-texture-dark.jpg'
-                : '/images/textures/gold-texture.jpg'
-            }
+            href="/images/textures/gold-texture-dark.jpg"
             id="image0_77_361"
             preserveAspectRatio="none"
             width="280"

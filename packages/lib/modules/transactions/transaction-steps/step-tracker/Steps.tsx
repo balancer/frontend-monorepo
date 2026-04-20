@@ -1,6 +1,5 @@
 import { VStack } from '@chakra-ui/react'
 import { Step } from './Step'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { TransactionStepsResponse } from '../useTransactionSteps'
 
 type Props = {
@@ -10,7 +9,6 @@ type Props = {
 
 export function Steps({ transactionSteps, isTxBatch }: Props) {
   const { steps, currentStepIndex, isLastStep, lastTransactionConfirmed } = transactionSteps
-  const colorMode = useThemeColorMode()
 
   return (
     <VStack align="start" spacing="ms">
@@ -18,7 +16,6 @@ export function Steps({ transactionSteps, isTxBatch }: Props) {
         steps.map((step, index) => (
           <div key={step.id + index}>
             <Step
-              colorMode={colorMode}
               currentIndex={currentStepIndex}
               index={index}
               isLastStep={isLastStep(index)}

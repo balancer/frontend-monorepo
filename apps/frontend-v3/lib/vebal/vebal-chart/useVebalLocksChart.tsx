@@ -201,19 +201,9 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   const options = useMemo((): EChartsOption => {
     const toolTipTheme = {
       heading: 'font-weight: bold; color: #E5D3BE',
-      container: `background: ${
-        nextTheme === 'dark'
-          ? theme.semanticTokens.colors.background.level3._dark
-          : theme.semanticTokens.colors.background.default
-      };`,
-      text:
-        nextTheme === 'dark'
-          ? theme.semanticTokens.colors.font.primary._dark
-          : theme.semanticTokens.colors.font.primary.default,
-      secondaryText:
-        nextTheme === 'dark'
-          ? theme.semanticTokens.colors.font.secondary._dark
-          : theme.semanticTokens.colors.font.secondary.default,
+      container: `background: ${theme.semanticTokens.colors.background.level3._dark};`,
+      text: theme.semanticTokens.colors.font.primary._dark,
+      secondaryText: theme.semanticTokens.colors.font.secondary._dark,
     }
 
     const badgeStyle =
@@ -224,10 +214,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         text: 'My veBAL over time',
         left: 'left',
         textStyle: {
-          color:
-            nextTheme === 'dark'
-              ? theme.semanticTokens.colors.font.primary._dark
-              : theme.semanticTokens.colors.font.primary.default,
+          color: theme.semanticTokens.colors.font.primary._dark,
           fontWeight: 'bold',
           fontSize: 13,
         },
@@ -307,10 +294,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           formatter: (value: number) => {
             return format(new Date(value), 'd MMM yy')
           },
-          color:
-            nextTheme === 'dark'
-              ? theme.semanticTokens.colors.font.secondary._dark
-              : theme.semanticTokens.colors.font.secondary.default,
+          color: theme.semanticTokens.colors.font.secondary._dark,
           opacity: 1,
         },
         axisPointer: {
@@ -336,10 +320,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         minorSplitLine: { show: false },
         splitLine: { show: false },
         axisLabel: {
-          color:
-            nextTheme === 'dark'
-              ? theme.semanticTokens.colors.font.secondary._dark
-              : theme.semanticTokens.colors.font.secondary.default,
+          color: theme.semanticTokens.colors.font.secondary._dark,
           opacity: 1,
         },
       },

@@ -7,17 +7,7 @@ import {
   GqlPoolLiquidityBootstrappingV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
-import {
-  VStack,
-  Skeleton,
-  Box,
-  Divider,
-  HStack,
-  Text,
-  Flex,
-  useColorMode,
-  Link,
-} from '@chakra-ui/react'
+import { VStack, Skeleton, Box, Divider, HStack, Text, Flex, Link } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -128,7 +118,6 @@ interface CompositionViewProps {
 }
 
 function CompositionView({ chain, pool, totalLiquidity, hasTabs }: CompositionViewProps) {
-  const { colorMode } = useColorMode()
   return (
     <>
       <RadialPattern
@@ -137,7 +126,7 @@ function CompositionView({ chain, pool, totalLiquidity, hasTabs }: CompositionVi
         innerHeight={240}
         innerWidth={240}
         left="calc(50% - 445px)"
-        opacity={colorMode === 'dark' ? 0.35 : 0.45}
+        opacity={0.35}
         pointerEvents="none"
         position="absolute"
         top={hasTabs ? 'calc(50% - 440px)' : 'calc(50% - 465px)'}

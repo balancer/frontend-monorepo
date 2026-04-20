@@ -1,5 +1,3 @@
-import { useColorMode } from '@chakra-ui/react'
-
 interface PictureProps {
   imgName: string
   altText: string
@@ -49,15 +47,11 @@ export function Picture({
 }: PictureProps) {
   const imagePath = `${directory}${imgName}`
 
-  const { colorMode } = useColorMode()
-
   return (
     <picture className="picture">
       {imgSvgPortraitDark && (
         <source
-          media={`(orientation: portrait) and ${
-            colorMode === 'dark' ? '(prefers-color-scheme: dark)' : 'none'
-          }`}
+          media="(orientation: portrait) and (prefers-color-scheme: dark)"
           srcSet={`${imagePath}-portrait-dark.svg`}
           type="image/svg+xml"
         />
@@ -71,26 +65,16 @@ export function Picture({
       )}
       {imgSvgDark && (
         <source
-          media={colorMode === 'dark' ? '(prefers-color-scheme: dark)' : 'none'}
+          media="(prefers-color-scheme: dark)"
           srcSet={`${imagePath}.svg`}
           type="image/svg+xml"
         />
       )}
       {imgSvg && <source srcSet={`${imagePath}.svg`} type="image/svg+xml" />}
 
-      {imgAvifDark && (
-        <source
-          media={colorMode === 'dark' ? 'all' : 'none'}
-          srcSet={`${imagePath}-dark.avif`}
-          type="image/avif"
-        />
-      )}
+      {imgAvifDark && <source media="all" srcSet={`${imagePath}-dark.avif`} type="image/avif" />}
       {imgAvifPortraitDark && (
-        <source
-          media={colorMode === 'dark' ? 'all' : 'none'}
-          srcSet={`${imagePath}-portrait-dark.avif`}
-          type="image/avif"
-        />
+        <source media="all" srcSet={`${imagePath}-portrait-dark.avif`} type="image/avif" />
       )}
       {imgAvifPortrait && (
         <source
@@ -108,21 +92,9 @@ export function Picture({
       {imgAvif && <source srcSet={`${imagePath}.avif`} type="image/avif" />}
       {imgWebp && <source srcSet={`${imagePath}.webp`} type="image/webp" />}
       {imgPng && <source srcSet={`${imagePath}.png`} type="image/png" />}
-      {imgPngDark && (
-        <source
-          media={colorMode === 'dark' ? 'all' : 'none'}
-          srcSet={`${imagePath}-dark.png`}
-          type="image/png"
-        />
-      )}
+      {imgPngDark && <source media="all" srcSet={`${imagePath}-dark.png`} type="image/png" />}
 
-      {imgJpgDark && (
-        <source
-          media={colorMode === 'dark' ? 'all' : 'none'}
-          srcSet={`${imagePath}-dark.jpg`}
-          type="image/jpg"
-        />
-      )}
+      {imgJpgDark && <source media="all" srcSet={`${imagePath}-dark.jpg`} type="image/jpg" />}
       {imgJpg && <source srcSet={`${imagePath}.jpg`} type="image/jpg" />}
       <img
         alt={altText}

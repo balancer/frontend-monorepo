@@ -7,7 +7,6 @@ import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Skeleton, Stack, Text, useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useTheme as useNextTheme } from 'next-themes'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { dividePrices, range } from '@repo/lib/modules/pool/LbpDetail/LbpPoolCharts/chart.helper'
 
@@ -32,10 +31,9 @@ export function ProjectedPriceChart({
 }: Props) {
   const { toCurrency } = useCurrency()
   const theme = useChakraTheme()
-  const { theme: nextTheme } = useNextTheme()
   const { isMobile } = useBreakpoints()
 
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
+  const colorMode = '_dark'
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {

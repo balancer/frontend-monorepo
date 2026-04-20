@@ -1,5 +1,4 @@
 import { SVGProps, forwardRef } from 'react'
-import { useColorMode } from '@chakra-ui/react'
 
 interface LbpBenefitsHookIconProps extends SVGProps<SVGSVGElement> {
   size?: number
@@ -7,8 +6,6 @@ interface LbpBenefitsHookIconProps extends SVGProps<SVGSVGElement> {
 
 export const LbpBenefitsHookIcon = forwardRef<SVGSVGElement, LbpBenefitsHookIconProps>(
   ({ size = 42, ...props }, ref) => {
-    const { colorMode } = useColorMode()
-
     return (
       <svg
         fill="none"
@@ -67,11 +64,7 @@ export const LbpBenefitsHookIcon = forwardRef<SVGSVGElement, LbpBenefitsHookIcon
           </pattern>
           <image
             height="314"
-            href={
-              colorMode === 'dark'
-                ? '/images/textures/gold-texture-dark.jpg'
-                : '/images/textures/gold-texture.jpg'
-            }
+            href="/images/textures/gold-texture-dark.jpg"
             id="image0_77_335-hook"
             preserveAspectRatio="none"
             width="280"

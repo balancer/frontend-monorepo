@@ -2,7 +2,6 @@
 
 import { Box, BoxProps } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { ReactNode, useMemo } from 'react'
 
 export interface RadialPatternProps extends BoxProps {
@@ -92,7 +91,6 @@ export function RadialPattern({
   progress,
   ...rest
 }: RadialPatternProps) {
-  const isDarkMode = useIsDarkMode()
   const baseWidth = typeof width === 'string' ? parseInt(width) : width
   const baseHeight = typeof height === 'string' ? parseInt(height) : height
   const minWidth = typeof innerWidth === 'string' ? parseInt(innerWidth) : innerWidth
@@ -104,8 +102,8 @@ export function RadialPattern({
   const heightDifference = totalHeightDifference / (circleCount - 1)
   const opacityStep = (maxOpacity - minOpacity) / (circleCount - 1)
 
-  const shadowBlackOpacity = isDarkMode ? intensity * 0.3 : intensity * 0.1
-  const shadowWhiteOpacity = isDarkMode ? intensity * 0.1 : intensity * 0.3
+  const shadowBlackOpacity = intensity * 0.3
+  const shadowWhiteOpacity = intensity * 0.1
 
   const circles = useMemo(() => {
     const circles = []
