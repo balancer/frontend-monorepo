@@ -43,10 +43,6 @@ vi.mock('@repo/lib/shared/hooks/useBreakpoints', () => ({
   useBreakpoints: () => useBreakpointsMock(),
 }))
 
-vi.mock('next-themes', () => ({
-  useTheme: () => ({ theme: 'dark' }),
-}))
-
 vi.mock('echarts-for-react', () => ({
   __esModule: true,
   default: ({ option }: { option: unknown }) => {

@@ -4,8 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { format, millisecondsToSeconds, secondsToMinutes } from 'date-fns'
 import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
-import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useTheme as useNextTheme } from 'next-themes'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -118,7 +117,6 @@ function getDefaultChainMeta(): Partial<Record<GqlChain, []>> {
 }
 
 const getDefaultPoolActivityChartOptions = (
-  nextTheme: ColorMode = 'dark',
   theme: any, // TODO: type this
   currencyFormatter: NumberFormatter,
   isMobile = false,
@@ -127,15 +125,8 @@ const getDefaultPoolActivityChartOptions = (
 ): echarts.EChartsCoreOption => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${
-      nextTheme === 'dark'
-        ? theme.semanticTokens.colors.background.level3._dark
-        : theme.semanticTokens.colors.background.default
-    };`,
-    text:
-      nextTheme === 'dark'
-        ? theme.semanticTokens.colors.font.primary._dark
-        : theme.semanticTokens.colors.font.primary.default,
+    container: `background: ${theme.semanticTokens.colors.background.level3._dark};`,
+    text: theme.semanticTokens.colors.font.primary._dark,
   }
 
   return {
@@ -318,7 +309,6 @@ const tabsList: PoolActivityChartTypeTab[] = [
 export function useEcosystemPoolActivityChart() {
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const { isMobile, is2xl } = useBreakpoints()
-  const { theme: nextTheme } = useNextTheme()
   const { getToken } = useTokens()
   const { toCurrency } = useCurrency()
   const [activeTab, setActiveTab] = useState<PoolActivityChartTypeTab>(tabsList[0])
@@ -445,13 +435,7 @@ export function useEcosystemPoolActivityChart() {
 
   return {
     isLoading: loading,
-    chartOption: getDefaultPoolActivityChartOptions(
-      nextTheme as ColorMode,
-      theme,
-      toCurrency,
-      isMobile,
-      is2xl
-    ),
+    chartOption: getDefaultPoolActivityChartOptions(theme, toCurrency, isMobile, is2xl),
     eChartsRef,
     chartData,
     tabsList,

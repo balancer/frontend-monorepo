@@ -15,7 +15,6 @@ import {
 import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { useTheme as useNextTheme } from 'next-themes'
 
 type ChartValueAcc = [string, number][]
 
@@ -116,8 +115,6 @@ export interface UseVebalLocksChartParams {
 
 export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVebalLocksChartParams) {
   const theme = useChakraTheme()
-  const { theme: nextTheme } = useNextTheme()
-
   const instanceRef = useRef<ECharts | undefined>(undefined)
   const [currentTimestampMs, setCurrentTimestampMs] = useState(() => Date.now())
 
@@ -352,7 +349,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         futureLockChartData,
       ],
     }
-  }, [chartValues, futureLockChartData, theme, nextTheme])
+  }, [chartValues, futureLockChartData, theme])
 
   return {
     lockedUntil,
