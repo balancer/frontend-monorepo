@@ -115,12 +115,12 @@ export function useCreatePoolInput(chainId: number): CreatePoolInput {
   if (poolType === PoolType.GyroE) {
     const { alpha, beta, s, c, lambda } = eclpConfigForm.getValues()
 
+    // The SDK's normalizeEclpParamsAndTokens handles token sorting and param inversion
     const eclpParams = {
-      // must invert params if tokens are not in order
-      alpha: parseUnits(areTokensInOrder ? alpha : invertNumber(beta), DEFAULT_DECIMALS),
-      beta: parseUnits(areTokensInOrder ? beta : invertNumber(alpha), DEFAULT_DECIMALS),
-      s: parseUnits(areTokensInOrder ? s : c, DEFAULT_DECIMALS),
-      c: parseUnits(areTokensInOrder ? c : s, DEFAULT_DECIMALS),
+      alpha: parseUnits(alpha, DEFAULT_DECIMALS),
+      beta: parseUnits(beta, DEFAULT_DECIMALS),
+      s: parseUnits(s, DEFAULT_DECIMALS),
+      c: parseUnits(c, DEFAULT_DECIMALS),
       lambda: parseUnits(lambda, DEFAULT_DECIMALS),
     }
     return { ...baseInput, poolType, eclpParams }
