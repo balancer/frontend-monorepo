@@ -2,7 +2,7 @@ import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { buildDefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
-import { partialBoosted } from '../../../__mocks__/pool-examples/boosted'
+import { partialBoostedSepolia } from '../../../__mocks__/pool-examples/boosted'
 import { Pool } from '../../../pool.types'
 import { usePoolStateWithBalancesQuery } from './usePoolStateWithBalancesQuery'
 
@@ -15,13 +15,15 @@ async function testQuery(pool: Pool) {
 
 describe('usePoolStateWithBalances', () => {
   it('for a partial boosted pool', async () => {
-    const pool = getApiPoolMock(partialBoosted)
+    const pool = getApiPoolMock(partialBoostedSepolia)
 
     const result = await testQuery(pool)
 
-    await waitFor(() => expect(result.current.data?.id).toBeDefined())
+    await waitFor(() => {
+      if (result.current.error) throw result.current.error
+      expect(result.current.isSuccess).toBe(true)
+    })
 
-    expect(result.current.isLoading).toBeFalsy()
     expect(result.current.data?.id).toBeDefined()
   })
 })
