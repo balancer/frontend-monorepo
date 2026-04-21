@@ -1,6 +1,5 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useTheme } from '@chakra-ui/react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'motion/react'
@@ -54,9 +53,8 @@ const normalSize: ChartSizeValues = {
 }
 
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
-  const colorMode = useThemeColorMode()
   const theme = useTheme()
-  const colorModeKey = colorMode === 'light' ? 'default' : '_dark'
+  const colorModeKey = '_dark'
   const chartOuter = isSmall ? '' : theme.semanticTokens.shadows.chartIconOuter[colorModeKey]
   return (
     <Box
@@ -113,7 +111,6 @@ export function PoolWeightChart({
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const theme = useTheme()
-  const colorMode = useThemeColorMode()
   const { calcWeightForBalance } = useTokens()
 
   const chartOption = useMemo(() => {
@@ -139,7 +136,7 @@ export function PoolWeightChart({
           type: 'pie',
           radius: ['70%', '99%'],
           itemStyle: {
-            borderColor: theme.colors['chartBorder'][colorMode],
+            borderColor: theme.colors['chartBorder'],
             borderWidth: 1.5,
           },
           label: {
@@ -171,7 +168,14 @@ export function PoolWeightChart({
         },
       ],
     }
-  }, [chartSizeValues, displayTokens, totalLiquidity, chain, colorMode, calcWeightForBalance])
+  }, [
+    chartSizeValues,
+    displayTokens,
+    totalLiquidity,
+    chain,
+    calcWeightForBalance,
+    theme.colors.chartBorder,
+  ])
 
   return (
     <VStack justifyContent="center">

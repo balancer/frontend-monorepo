@@ -2,7 +2,7 @@
 
 import { GetFeaturedPoolsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState, type JSX } from 'react'
-import { Box, BoxProps, Card, Center, Text, useColorMode } from '@chakra-ui/react'
+import { Box, BoxProps, Card, Center, Text } from '@chakra-ui/react'
 import { FeaturePoolCard } from './FeaturePoolCard'
 import { Pool } from '../pool/pool.types'
 import { useSwipeable } from 'react-swipeable'
@@ -15,7 +15,6 @@ type Props = {
 export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & BoxProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState<'left' | 'right'>('left')
-  const { colorMode } = useColorMode()
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => next(),
     onSwipedRight: () => prev(),
@@ -57,11 +56,7 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
             opacity="0.75"
             px="4"
             py="1.5"
-            textShadow={
-              colorMode === 'dark'
-                ? '0px 1px 1px rgba(0, 0, 0, 0.9)'
-                : '0px 1px 1px rgba(0, 0, 0, 0.15)'
-            }
+            textShadow="0px 1px 1px rgba(0, 0, 0, 0.9)"
             variant="eyebrow"
           >
             New / Interesting pools

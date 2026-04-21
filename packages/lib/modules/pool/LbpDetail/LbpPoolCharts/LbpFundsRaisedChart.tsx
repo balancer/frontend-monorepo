@@ -11,7 +11,6 @@ import {
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
-import { useTheme as useNextTheme } from 'next-themes'
 import { useMemo } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { formatDateAxisLabel } from '@repo/lib/modules/lbp/steps/sale-structure/helpers'
@@ -34,10 +33,9 @@ export function LbpFundsRaisedChart() {
     currentFundsRaisedPercentage,
   } = useLbpPoolCharts()
   const theme = useChakraTheme()
-  const { theme: nextTheme } = useNextTheme()
   const { isMobile } = useBreakpoints()
 
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
+  const colorMode = '_dark'
   const now = new Date()
 
   const chartData = useMemo(() => {

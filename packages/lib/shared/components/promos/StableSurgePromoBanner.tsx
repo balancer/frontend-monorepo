@@ -1,22 +1,11 @@
 'use client'
 
-import {
-  Button,
-  Heading,
-  Flex,
-  Box,
-  Center,
-  Text,
-  Stack,
-  useColorMode,
-  Link,
-} from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, Text, Stack, Link } from '@chakra-ui/react'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 
 export function StableSurgePromoBanner() {
-  const { colorMode } = useColorMode()
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
@@ -68,7 +57,7 @@ export function StableSurgePromoBanner() {
                   <Box h={14} rounded="full" shadow="md" w={14}>
                     <Box
                       alignItems="center"
-                      color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
+                      color="font.light"
                       display="flex"
                       fontSize="xs"
                       fontWeight="normal"
@@ -125,7 +114,7 @@ export function StableSurgePromoBanner() {
                       fontWeight="medium"
                       lineHeight="1.25"
                       maxW="600px"
-                      opacity={colorMode === 'dark' ? '0.9' : '1'}
+                      opacity="0.9"
                       sx={{
                         textWrap: 'balance',
                       }}
@@ -139,8 +128,8 @@ export function StableSurgePromoBanner() {
             </Box>
             <Button
               _hover={{
-                bg: colorMode === 'dark' ? '#000' : '#fff',
-                color: colorMode === 'dark' ? '#fff' : '#000',
+                bg: '#000',
+                color: '#fff',
               }}
               as={Link}
               borderColor="font.maxContrast"

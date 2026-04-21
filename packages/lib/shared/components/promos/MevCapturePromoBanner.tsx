@@ -1,14 +1,11 @@
 'use client'
 
-import React from 'react'
-import { Button, Heading, Flex, Box, Center, Text, useColorMode, Link } from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, Text, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../other/Picture'
 
 export function MevCapturePromoBanner() {
-  const { colorMode } = useColorMode()
-
   return (
     <Box rounded="lg" shadow="2xl">
       <Box
@@ -18,9 +15,7 @@ export function MevCapturePromoBanner() {
         position="relative"
         rounded="lg"
         shadow={
-          colorMode === 'dark'
-            ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
-            : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
+          '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
         }
         sx={{
           width: '100% !important',
@@ -56,7 +51,7 @@ export function MevCapturePromoBanner() {
             <Box>
               <Box>
                 <Heading
-                  color={colorMode === 'dark' ? '#fff' : '#000'}
+                  color="#fff"
                   fontSize={{ base: '18px', md: '22px', lg: '24px' }}
                   fontWeight="bold"
                   letterSpacing="-0.7px"
@@ -71,7 +66,7 @@ export function MevCapturePromoBanner() {
               </Box>
               <Box>
                 <Text
-                  color={colorMode === 'dark' ? 'font.maxContrast' : '#222'}
+                  color="font.maxContrast"
                   fontSize={{ base: 'sm', md: 'md' }}
                   fontWeight="medium"
                   lineHeight="1.2"
@@ -90,7 +85,7 @@ export function MevCapturePromoBanner() {
                 _hover={{
                   bg: 'gradient.sandDark',
                   color: '#000',
-                  borderColor: colorMode === 'dark' ? 'font.light' : 'font.light',
+                  borderColor: 'font.light',
                 }}
                 as={Link}
                 borderColor="font.maxContrast"
@@ -121,12 +116,12 @@ export function MevCapturePromoBanner() {
               </Button>
               <Button
                 _hover={{
-                  bg: colorMode === 'dark' ? 'gradient.dawnDark' : 'gradient.dawnDark',
-                  color: colorMode === 'dark' ? '#000' : '#000',
+                  bg: 'gradient.dawnDark',
+                  color: '#000',
                 }}
                 as={NextLink}
                 bg="font.maxContrast"
-                color={colorMode === 'dark' ? 'font.dark' : '#fff'}
+                color="font.dark"
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}

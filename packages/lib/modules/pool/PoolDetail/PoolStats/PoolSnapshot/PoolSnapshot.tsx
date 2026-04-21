@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, BoxProps, Card, CardProps, VStack, useColorMode } from '@chakra-ui/react'
+import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import ButtonGroup, {
@@ -40,7 +40,6 @@ const TABS = [
 
 export function PoolSnapshot({ ...props }: CardProps) {
   const { pool } = usePool()
-  const { colorMode } = useColorMode()
   const defaultTab = hasTotalBalance(pool) ? TABS[1] : TABS[0]
   const [userSelectedTab, setUserSelectedTab] = useState<ButtonGroupOption | null>(null)
   const activeTab = userSelectedTab ?? defaultTab
@@ -62,7 +61,7 @@ export function PoolSnapshot({ ...props }: CardProps) {
             innerHeight={150}
             innerWidth={150}
             left="calc(50% - 400px)"
-            opacity={colorMode === 'dark' ? 0.35 : 0.45}
+            opacity={0.35}
             pointerEvents="none"
             position="absolute"
             top="-180px"

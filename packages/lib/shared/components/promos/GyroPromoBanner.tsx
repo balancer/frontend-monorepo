@@ -1,12 +1,11 @@
 'use client'
 
-import { Button, Heading, Flex, Box, Center, Text, Stack, useColorMode } from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { GyroIcon } from '@repo/lib/shared/components/icons/GyroIcon'
 import { Picture } from '../other/Picture'
 
 export function GyroPromoBanner() {
-  const { colorMode } = useColorMode()
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
@@ -60,7 +59,7 @@ export function GyroPromoBanner() {
                   <Box h={14} rounded="full" shadow="md" w={14}>
                     <Box
                       alignItems="center"
-                      color={colorMode === 'dark' ? 'font.light' : 'font.dark'}
+                      color="font.light"
                       display="flex"
                       fontSize="xs"
                       fontWeight="normal"
@@ -118,7 +117,7 @@ export function GyroPromoBanner() {
                       fontWeight="medium"
                       lineHeight="1.25"
                       maxW="600px"
-                      opacity={colorMode === 'dark' ? '0.9' : '1'}
+                      opacity="0.9"
                       sx={{
                         textWrap: 'balance',
                       }}
@@ -132,8 +131,8 @@ export function GyroPromoBanner() {
             <Flex alignItems="center" gap="ms" maxW="284px">
               {/* <Button
                 _hover={{
-                  bg: colorMode === 'dark' ? '#000' : '#fff',
-                  color: colorMode === 'dark' ? '#fff' : '#000',
+                  bg: '#000',
+                  color: '#fff',
                 }}
                 as={Link}
                 borderColor="font.maxContrast"
@@ -166,13 +165,13 @@ export function GyroPromoBanner() {
               <Button
                 _hover={{
                   bg: 'linear-gradient(to right, rgb(240, 255, 155), rgb(255, 180, 255), rgb(145, 245, 245))',
-                  color: colorMode === 'dark' ? '#000' : '#000',
+                  color: '#000',
                 }}
                 as={NextLink}
                 bg="font.maxContrast"
                 border="1px solid"
                 borderColor="font.dark"
-                color={colorMode === 'dark' ? 'font.dark' : '#fff'}
+                color="font.dark"
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}

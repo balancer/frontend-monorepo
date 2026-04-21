@@ -4,7 +4,6 @@ import {
   TransactionStep,
   getTransactionState,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { ColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 type StepStatus = 'active' | 'complete' | 'incomplete'
 
@@ -12,7 +11,6 @@ export type StepProps = {
   step: TransactionStep
   index: number
   currentIndex: number
-  colorMode: ColorMode
   isLastStep: boolean
   isTxBatch?: boolean
   lastTransactionConfirmed?: boolean
@@ -23,12 +21,12 @@ export type StepProps = {
   It handles title, colors, loading states, etc
 */
 export function getStepSettings(
-  { step, currentIndex, index, colorMode, isLastStep }: StepProps,
+  { step, currentIndex, index, isLastStep }: StepProps,
   transaction?: ManagedResult
 ) {
   const isActive = index === currentIndex
 
-  const color = getColor(colorMode, getStatus(index), transaction)
+  const color = getColor(getStatus(index), transaction)
 
   const stepNumber = index + 1
 
@@ -55,15 +53,15 @@ export function getStepSettings(
   }
 }
 
-function getColor(colorMode: ColorMode, status: StepStatus, transaction?: ManagedResult) {
+function getColor(status: StepStatus, transaction?: ManagedResult) {
   if (status === 'active') {
-    return getActiveColor(transaction)[colorMode]
+    return getActiveColor(transaction)
   }
   if (status === 'complete') {
-    return completeColor[colorMode]
+    return completeColor
   }
   if (status === 'incomplete') {
-    return incompleteColor[colorMode]
+    return incompleteColor
   }
 
   return 'primary'
@@ -92,23 +90,11 @@ function isLoading(status: StepStatus, transaction?: ManagedResult): boolean {
   Step Status Colors
   We show different colors depending on the step status and other variables like the step flow state
 */
-const completeColor = {
-  dark: 'grayText',
-  light: 'grayText',
-}
+const completeColor = 'grayText'
 
-const incompleteColor = {
-  dark: 'font.secondary',
-  light: 'font.secondary',
-}
+const incompleteColor = 'font.secondary'
 
-const activeColor = {
-  dark: 'font.primary',
-  light: 'font.primary',
-}
+const activeColor = 'font.primary'
 
 // When the current step tx is waiting for wallet confirmation
-const activeConfirmingColor = {
-  dark: 'orange.300',
-  light: 'orange.300',
-}
+const activeConfirmingColor = 'orange.300'

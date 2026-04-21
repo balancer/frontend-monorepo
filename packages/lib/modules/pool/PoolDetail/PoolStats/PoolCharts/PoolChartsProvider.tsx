@@ -1,4 +1,4 @@
-import { ColorMode, theme as defaultTheme, useTheme as useChakraTheme } from '@chakra-ui/react'
+import { theme as defaultTheme, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { addHours, differenceInDays, format } from 'date-fns'
 import {
   GetPoolSnapshotsDocument,
@@ -11,7 +11,6 @@ import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
 import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { useTheme as useNextTheme } from 'next-themes'
 import { isCowAmmPool } from '../../../pool.helpers'
 import { PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -77,7 +76,6 @@ const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
 
 export const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
-  nextTheme: ColorMode = 'dark',
   theme: any, // TODO: type this
   options: { useTimeRange: boolean } = { useTimeRange: false }
 ) => {
@@ -87,7 +85,7 @@ export const getDefaultPoolChartOptions = (
     text: theme.colors.gray[400],
   }
 
-  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
+  const colorMode = '_dark'
   return {
     grid: {
       left: '1.5%',
@@ -206,7 +204,6 @@ export function usePoolChartsLogic() {
   const { pool, tvl } = usePool()
   const { id: poolId } = useParams()
   const { toCurrency } = useCurrency()
-  const { theme: nextTheme } = useNextTheme()
   const theme = useChakraTheme()
   const [chartValue, setChartValue] = useState(0)
   const [chartDate, setChartDate] = useState('')
@@ -377,7 +374,7 @@ export function usePoolChartsLogic() {
     pool.dynamicData.totalLiquidity,
   ])
 
-  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
+  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, theme)
 
   type SupportedPoolChartTab =
     | PoolChartTab.VOLUME

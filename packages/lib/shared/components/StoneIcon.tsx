@@ -1,4 +1,4 @@
-import { Box, Center, useColorMode, ResponsiveValue, BoxProps } from '@chakra-ui/react'
+import { Box, Center, ResponsiveValue, BoxProps } from '@chakra-ui/react'
 import { Picture } from './other/Picture'
 import { SparkleIconWrapper } from './animations/SparkleIconWrapper'
 import { ReactElement } from 'react'
@@ -17,14 +17,12 @@ export function StoneIcon({
   transformBackground,
   ...rest
 }: StoneIconProps) {
-  const { colorMode } = useColorMode()
-
   return (
     <Box position="relative" rounded="full" shadow="2xl" zIndex={1} {...rest}>
       <Box rounded="full" shadow="md">
         <Box
           alignItems="center"
-          color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
+          color="font.light"
           display="flex"
           fontSize="xs"
           fontWeight="normal"

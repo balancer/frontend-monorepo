@@ -6,7 +6,6 @@ import ReactECharts from 'echarts-for-react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'motion/react'
 import { ChartSizeValues } from './PoolWeightChart'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { Pool } from '../../pool.types'
 import { calcTotalStakedBalanceUsd, getUserWalletBalanceUsd } from '../../user-balance.helpers'
@@ -41,7 +40,6 @@ export default function StakedBalanceDistributionChart({
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const theme = useTheme()
-  const colorMode = useThemeColorMode()
 
   const chartOption = useMemo(() => {
     const chartData = [
@@ -80,7 +78,7 @@ export default function StakedBalanceDistributionChart({
           type: 'pie',
           radius: ['49%', '80%'],
           itemStyle: {
-            borderColor: theme.colors['chartBorder'][colorMode],
+            borderColor: theme.colors['chartBorder'],
             borderWidth: 0,
           },
           label: {
@@ -97,7 +95,7 @@ export default function StakedBalanceDistributionChart({
         },
       ],
     }
-  }, [pool, colorMode, chartSizeValues, theme])
+  }, [pool, chartSizeValues, theme])
 
   return (
     <HStack p={{ base: 'sm', md: '0' }} spacing={{ base: 'lg', md: '2xl' }}>

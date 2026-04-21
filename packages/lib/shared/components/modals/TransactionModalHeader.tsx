@@ -1,5 +1,5 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Center, HStack, ModalHeader, VStack, Text, Link, useColorMode } from '@chakra-ui/react'
+import { Center, HStack, ModalHeader, VStack, Text, Link } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ReactNode } from 'react'
 import { ArrowUpRight, Check } from 'react-feather'
@@ -30,8 +30,6 @@ export function TransactionHeader({
   // true by default for flows that do not have a receipt
   isReceiptLoading = true,
 }: Props) {
-  const { colorMode } = useColorMode()
-
   return (
     <HStack justify="space-between" pr="lg" w="full">
       <AnimatePresence initial={false} mode="wait">
@@ -49,7 +47,7 @@ export function TransactionHeader({
             >
               <Center
                 bg="font.highlight"
-                color={colorMode === 'dark' ? 'font.dark' : 'white'}
+                color="font.dark"
                 fontWeight="bold"
                 h={10}
                 rounded="full"

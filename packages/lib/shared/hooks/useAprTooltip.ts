@@ -4,7 +4,6 @@ import {
   GqlPoolAprItem,
   GqlPoolAprItemType,
 } from '../services/api/generated/graphql'
-import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'
 
@@ -75,8 +74,6 @@ export function useAprTooltip({
   numberFormatter: (value: string) => BigNumber
   chain: GqlChain
 }) {
-  const colorMode = useThemeColorMode()
-
   // Swap fees
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
@@ -205,7 +202,7 @@ export function useAprTooltip({
     pl: 'sm',
     backgroundColor: 'background.level1',
     fontWeight: 500,
-    fontColor: colorMode == 'light' ? 'gray.600' : 'gray.400',
+    fontColor: 'gray.400',
   }
 
   return {

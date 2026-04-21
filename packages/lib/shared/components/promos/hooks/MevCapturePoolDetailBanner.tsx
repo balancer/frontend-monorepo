@@ -1,24 +1,12 @@
 'use client'
 
-import {
-  Stack,
-  Heading,
-  Button,
-  Flex,
-  Box,
-  Center,
-  Text,
-  useColorMode,
-  Link,
-} from '@chakra-ui/react'
+import { Stack, Heading, Button, Flex, Box, Center, Text, Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../../other/Picture'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 // import Stat from '../../other/Stat'
 
 export function MevCapturePoolDetailBanner() {
-  const { colorMode } = useColorMode()
-
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
@@ -28,9 +16,7 @@ export function MevCapturePoolDetailBanner() {
         position="relative"
         rounded="lg"
         shadow={
-          colorMode === 'dark'
-            ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
-            : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
+          '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
         }
         sx={{
           width: '100% !important',
@@ -70,7 +56,7 @@ export function MevCapturePoolDetailBanner() {
                   <Box h={14} rounded="full" shadow="md" w={14}>
                     <Box
                       alignItems="center"
-                      color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
+                      color="font.light"
                       display="flex"
                       fontSize="xs"
                       fontWeight="normal"
@@ -78,9 +64,7 @@ export function MevCapturePoolDetailBanner() {
                       overflow="hidden"
                       rounded="full"
                       shadow={
-                        colorMode === 'dark'
-                          ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
-                          : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
+                        '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
                       }
                       w={14}
                     >
@@ -149,8 +133,8 @@ export function MevCapturePoolDetailBanner() {
             </Flex> */}
             <Button
               _hover={{
-                bg: colorMode === 'dark' ? '#000' : '#fff',
-                color: colorMode === 'dark' ? '#fff' : '#000',
+                bg: '#000',
+                color: '#fff',
               }}
               as={Link}
               borderColor="font.maxContrast"

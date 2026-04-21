@@ -1,10 +1,9 @@
 'use client'
 
 import '@rainbow-me/rainbowkit/styles.css'
-import { RainbowKitProvider, Theme, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
+import { RainbowKitProvider, Theme, darkTheme } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
 import { ReactQueryClientProvider } from '@repo/lib/shared/app/react-query.provider'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { useTheme } from '@chakra-ui/react'
 import { merge } from 'lodash'
 import { UserSettingsProvider } from '../user/settings/UserSettingsProvider'
@@ -20,8 +19,7 @@ export function Web3Provider({ children }: PropsWithChildren) {
   const isMounted = useIsMounted()
 
   const { colors, radii, shadows, semanticTokens, fonts } = useTheme()
-  const colorMode = useThemeColorMode()
-  const colorModeKey = colorMode === 'light' ? 'default' : '_dark'
+  const colorModeKey = '_dark'
 
   const { wagmiConfig } = useWagmiConfig()
 
@@ -84,15 +82,9 @@ export function Web3Provider({ children }: PropsWithChildren) {
     },
   }
 
-  const _lightTheme = merge(lightTheme(), {
+  const customTheme = merge(darkTheme(), {
     ...sharedConfig,
   } as Theme)
-
-  const _darkTheme = merge(darkTheme(), {
-    ...sharedConfig,
-  } as Theme)
-
-  const customTheme = colorMode === 'dark' ? _darkTheme : _lightTheme
 
   return (
     <ReactQueryClientProvider>

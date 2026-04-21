@@ -1,4 +1,3 @@
-import * as React from 'react'
 import ReactECharts from 'echarts-for-react'
 import { HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import {
@@ -11,14 +10,12 @@ import {
 } from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
 import {
   Box,
-  ColorMode,
   Skeleton,
   Stack,
   Text,
   theme as defaultTheme,
   useTheme as useChakraTheme,
 } from '@chakra-ui/react'
-import { useTheme as useNextTheme } from 'next-themes'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
@@ -40,7 +37,6 @@ export function LbpVolumeTVLFeesCharts({
 }: Props) {
   const theme = useChakraTheme()
   const { toCurrency } = useCurrency()
-  const { theme: nextTheme } = useNextTheme()
   const { activeTab } = usePoolChartTabs()
 
   const poolChartTypeOptions: Record<SupportedPoolChartTab, PoolChartTypeOptions> = {
@@ -114,14 +110,9 @@ export function LbpVolumeTVLFeesCharts({
   }
 
   const chartData = getChartData()
-  const defaultChartOptions = getDefaultPoolChartOptions(
-    toCurrency,
-    nextTheme as ColorMode,
-    theme,
-    {
-      useTimeRange: true,
-    }
-  )
+  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, theme, {
+    useTimeRange: true,
+  })
 
   const option = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[chartType as SupportedPoolChartTab] || {
