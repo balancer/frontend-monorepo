@@ -96,13 +96,11 @@ test('Should not return balances when user is not connected (account is empty) '
   })
 })
 
-test('should return balances of 20 tokens', async () => {
-  const numberOfTokens = 19
+test('returns balances for all tokens on a single chain', async () => {
+  const tokens = allFakeGqlTokens.filter(token => token.chainId === 1)
 
-  const { result } = testHook(() =>
-    useTokenBalancesLogic(allFakeGqlTokens.slice(0, numberOfTokens))
-  )
+  const { result } = testHook(() => useTokenBalancesLogic(tokens))
 
   await waitFor(() => expect(result.current.isBalancesLoading).toBeFalsy())
-  expect(result.current.balances).toHaveLength(numberOfTokens)
+  expect(result.current.balances).toHaveLength(tokens.length)
 })
