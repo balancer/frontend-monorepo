@@ -36,7 +36,7 @@ export async function checkAddressReputation({
       },
       body: JSON.stringify({
         addresses: [address],
-        screenerPolicyId: '8a7dfb26-8b50-416b-811e-77f3dede2319',
+        screenerPolicyId: 'b178a9ce-e82c-4dfd-8de8-9fa59fa7d7df',
       }),
       next: {
         revalidate: hours(12).toSecs(),
