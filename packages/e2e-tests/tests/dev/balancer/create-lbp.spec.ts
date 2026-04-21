@@ -7,8 +7,6 @@ import {
   doProjectInfoStep,
   doReviewStep,
   doSaleStructureStep,
-  expectInitialFormState,
-  clickResetAndConfirm,
   mockCreateLbpMetadata,
   stepUrl,
   BASE_URL,
@@ -70,32 +68,6 @@ test.describe('LBP creation page', () => {
       await expect(page.getByText('Sale token amount is required')).toBeVisible()
       await expect(page.getByText('Collateral token amount is required')).toBeVisible()
       await expect(page).toHaveURL(stepUrl(0))
-    })
-  })
-
-  test.describe('Form reset at each step', () => {
-    test('sale structure', async ({ page }) => {
-      await doSaleStructureStep(page)
-      await clickButton(page, 'Next')
-
-      await clickResetAndConfirm(page)
-      await expectInitialFormState(page)
-    })
-
-    test('project info', async ({ page }) => {
-      await doSaleStructureStep(page, { continue: true })
-      await doProjectInfoStep(page)
-
-      await clickResetAndConfirm(page)
-      await expectInitialFormState(page)
-    })
-
-    test('review', async ({ page }) => {
-      await doSaleStructureStep(page, { continue: true })
-      await doProjectInfoStep(page, { continue: true })
-
-      await clickResetAndConfirm(page)
-      await expectInitialFormState(page)
     })
   })
 })

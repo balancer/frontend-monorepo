@@ -211,15 +211,8 @@ export class CreatePoolPage {
       await expect(this.page.getByText('Pool creation confirmed!')).toBeVisible()
     }
 
-    const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
-    const signApprovalsButton = button(this.page, signApprovalsButtonText)
-
-    // after first pool creation test runs, some tokens may have already been approved
     for (const token of this.config.tokens) {
-      const approveButton = button(this.page, `Approve ${token.symbol}`)
-      await approveButton.or(signApprovalsButton).waitFor()
-
-      if (await approveButton.isVisible()) await approveButton.click()
+      await clickButton(this.page, `Approve ${token.symbol}`)
     }
 
     if (this.isCowAmm) {
@@ -229,7 +222,8 @@ export class CreatePoolPage {
       await clickButton(this.page, 'Set Swap Fee')
       await clickButton(this.page, 'Finalize')
     } else {
-      await signApprovalsButton.click()
+      const signApprovalsButtonText = `Sign approvals: ${this.config.tokens.map(t => t.symbol).join(', ')}`
+      await clickButton(this.page, signApprovalsButtonText)
       await clickButton(this.page, 'Seed pool liquidity')
     }
 
