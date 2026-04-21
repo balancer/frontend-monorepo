@@ -86,7 +86,7 @@ jobs:
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright smoke tests
         run: pnpm test:e2e:build
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-smoke-report
@@ -111,7 +111,7 @@ jobs:
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests (Balancer)
         run: pnpm test:e2e:dev:bal
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-dev-report-bal
@@ -137,7 +137,7 @@ jobs:
         run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests (Beets)
         run: pnpm test:e2e:dev:beets
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ !cancelled() }}
         with:
           name: playwright-dev-report-beets
