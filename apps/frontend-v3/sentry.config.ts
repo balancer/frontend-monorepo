@@ -21,18 +21,13 @@ export const sentryOptions: SentryBuildOptions = {
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
   tunnelRoute: '/monitoring',
 
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
-
-  // Enables automatic instrumentation of Vercel Cron Monitors.
-  // See the following for more information:
-  // https://docs.sentry.io/product/crons/
-  // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: true,
-
   sourcemaps: { disable: !shouldEnableSourceMaps },
   telemetry: shouldEnableSourceMaps,
-  reactComponentAnnotation: { enabled: shouldEnableSourceMaps },
+  _experimental: {
+    turbopackReactComponentAnnotation: {
+      enabled: shouldEnableSourceMaps,
+    },
+  },
 }
 
 const productionSentryDSN =
