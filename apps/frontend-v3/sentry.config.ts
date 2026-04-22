@@ -32,7 +32,11 @@ export const sentryOptions: SentryBuildOptions = {
 
   sourcemaps: { disable: !shouldEnableSourceMaps },
   telemetry: shouldEnableSourceMaps,
-  reactComponentAnnotation: { enabled: shouldEnableSourceMaps },
+  _experimental: {
+    turbopackReactComponentAnnotation: {
+      enabled: shouldEnableSourceMaps,
+    },
+  },
 }
 
 const productionSentryDSN =
