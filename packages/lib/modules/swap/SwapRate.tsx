@@ -3,10 +3,16 @@ import { useState } from 'react'
 import { useSwap } from './SwapProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '../tokens/TokensProvider'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum, bn } from '@repo/lib/shared/utils/numbers'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function SwapRate({ customTokenUsdPrice }: { customTokenUsdPrice?: number }) {
+export function SwapRate({
+  customTokenUsdPrice,
+  isLbpSwap,
+}: {
+  customTokenUsdPrice?: number
+  isLbpSwap: boolean
+}) {
   const [priceDirection, setPriceDirection] = useState<'givenIn' | 'givenOut'>('givenIn')
   const { simulationQuery, tokenInInfo, tokenOutInfo } = useSwap()
   const { toCurrency } = useCurrency()
@@ -49,6 +55,14 @@ export function SwapRate({ customTokenUsdPrice }: { customTokenUsdPrice?: number
           { abbreviated: false }
         )})`
 
+  const priceLabelDefault =
+    tokenInUsdValue !== undefined && tokenOutUsdValue !== undefined && !isLbpSwap
+      ? `1 ${tokenInSymbol} = ${fNum('token', bn(tokenInUsdValue).div(tokenOutUsdValue))} ${tokenOutSymbol} (${toCurrency(
+          tokenInUsdValue || 0,
+          { abbreviated: false }
+        )})`
+      : 'Exchange rate: –'
+
   const togglePriceDirection = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setPriceDirection(priceDirection === 'givenIn' ? 'givenOut' : 'givenIn')
@@ -74,7 +88,7 @@ export function SwapRate({ customTokenUsdPrice }: { customTokenUsdPrice?: number
       variant="secondary"
       w="max-content"
     >
-      {simulationQuery.data ? priceLabel : 'Exchange rate: –'}
+      {simulationQuery.data ? priceLabel : priceLabelDefault}
     </Text>
   )
 }

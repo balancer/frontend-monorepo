@@ -180,7 +180,7 @@ export function SwapSummary({
                 <Text color="grayText" fontSize="sm">
                   Exchange rate
                 </Text>
-                <SwapRate />
+                <SwapRate isLbpSwap={isLbpSwap || false} />
               </HStack>
             </Card>
           </CardPopAnim>
