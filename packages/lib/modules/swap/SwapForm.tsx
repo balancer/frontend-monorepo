@@ -335,7 +335,10 @@ export function SwapForm({
                 <>
                   <PriceImpactAccordion
                     accordionButtonComponent={
-                      <SwapRate customTokenUsdPrice={customTokenUsdPrice} />
+                      <SwapRate
+                        customTokenUsdPrice={customTokenUsdPrice}
+                        isLbpSwap={isLbpSwap || false}
+                      />
                     }
                     accordionPanelComponent={<SwapDetails hideOrderRoute />}
                     action="swap"
