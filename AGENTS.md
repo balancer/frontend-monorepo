@@ -14,79 +14,35 @@ Both apps share `packages/lib`; the active project is resolved from `NEXT_PUBLIC
 
 - Use `PROJECT_CONFIG.projectName`, `projectUrl`, `projectLogo` instead of literal `"Balancer"` / `"Beets"` / domain strings.
 - Gate project-only features (maBEETS, relics, etc.) with `isBalancer` / `isBeets`.
-- New config fields go in `config.types.ts` and must be populated in **both** `projects/balancer.ts` and `projects/beets.ts`.lines
+- New config fields go in `config.types.ts` and must be populated in **both** `projects/balancer.ts` and `projects/beets.ts`.
 
 ## Architecture
 
-**Monorepo** using pnpm workspaces + Turborepo.
-
-### Apps (Next.js with Turbopack, React, Chakra UI)
-
-- `apps/frontend-v3` — Balancer app (balancer.fi). Next.js App Router in `app/`.
-- `apps/beets-frontend-v3` — Beets app (same stack, different branding/config).
-
-Both apps are thin shells: routing lives in `app/(app)/` (pools, swap, portfolio, create, vebal, lbp) and `app/(marketing)/`. Almost all business logic is in `packages/lib`.
-
-### packages/lib — Shared library (`@repo/lib`)
-
-Most domain logic lives here; prefer adding new code to `packages/lib` unless it is genuinely app-specific. Two top-level directories:
-
-- **`modules/`** — Domain-specific feature modules (pool, swap, tokens, transactions, web3, vebal, staking, lbp, reclamm, eclp, cow, etc.). Each module typically contains components, hooks, helpers, actions, and tests.
-- **`shared/`** — Cross-cutting concerns:
-  - `shared/services/` — API clients (GraphQL codegen via `graphql:gen`), Chakra theming, viem config, coingecko, fathom analytics, etc.
-  - `shared/components/` — Reusable UI components (inputs, buttons, layouts, modals, etc.)
-  - `shared/hooks/` — Shared React hooks (currency, breakpoints, debounce, etc.)
-  - `shared/utils/` — Pure utility functions
-
-### Other packages
-
-- `packages/e2e-tests` — Playwright E2E tests
-- `packages/test` (`@repo/test`) — Shared test utilities (wagmi mock config, render helpers)
-- `packages/eslint-config`, `packages/prettier-config`, `packages/typescript-config` — Shared configs
+pnpm workspaces + Turborepo. Both `apps/frontend-v3` (Balancer) and `apps/beets-frontend-v3` (Beets) are thin Next.js App Router shells — almost all business logic lives in `packages/lib` (`@repo/lib`). Prefer adding new code to `packages/lib` unless it is genuinely app-specific.
 
 ### Key patterns
 
-- **Blockchain interaction**: viem + wagmi + RainbowKit for wallet connection. Pool actions (add/remove liquidity, swaps) go through handler patterns in `modules/pool/actions/`. Each action directory typically follows a consistent shape: `form/`, `handlers/`, `queries/`, `modal/`.
-- **Data fetching**: Apollo Client for GraphQL (Balancer API), react-query for other async state. GraphQL codegen runs concurrently with `next dev` (via `graphql:gen --watch`) and runs once before `next build`; generated types land in `packages/lib/shared/services/api/generated/`.
-- **Multi-chain**: Chain-specific config in `modules/chains/`. The app supports Ethereum, Arbitrum, Base, Gnosis, Optimism, Avalanche, Sonic, and others.
+- **Blockchain interaction**: viem + wagmi + RainbowKit. Pool actions (add/remove liquidity, swaps) go through handler patterns in `modules/pool/actions/`.
+- **Data fetching**: Apollo Client for GraphQL (Balancer API), react-query for other async state. GraphQL codegen runs concurrently with `next dev` (via `graphql:gen --watch`) and runs once before `next build`; generated types land in `packages/lib/shared/services/api/generated/` — don't run `graphql:gen` manually unless regenerating outside a dev/build cycle.
+- **Multi-chain**: Chain-specific config in `modules/chains/`.
 - **URL state**: `nuqs` for query-string-based state management.
 - **Pool types**: Weighted, Stable, CowAmm, LBP, reCLAMM, ECLP — each with specific UI and action handlers.
 
 ## Build & Development Commands
 
-```bash
-pnpm install                  # install dependencies
-pnpm dev:bal                  # dev server for Balancer app (localhost:3000)
-pnpm dev:beets                # dev server for Beets app
-pnpm dev:bal:fork             # dev server against local anvil fork (needs make fork-ethereum running)
-pnpm build                    # build all apps/packages via turbo
-pnpm typecheck                # typecheck all packages
-pnpm lint                     # eslint (all packages)
-pnpm lint:fix                 # eslint autofix
-pnpm lint:all                 # eslint + prettier + stylelint
-pnpm lint:all:fix             # autofix all linters
-pnpm graphql:gen              # regenerate GraphQL types
-```
-
-Pre-commit hook runs `lint-staged` (eslint + prettier on staged files).
+- `pnpm dev:bal:fork` — dev server against a local anvil fork. Requires `make fork-ethereum` running separately (needs `TEST_ACCOUNT_MNEMONIC` and `ETHEREUM_RPC_URL` env vars).
+- Pre-commit hook runs `lint-staged` (eslint + prettier on staged files).
 
 ## Testing
 
+Vitest across all packages. Integration tests live in `packages/lib` and use a separate config.
+
+Run a single integration test file:
+
 ```bash
-# Unit tests (vitest, across all packages)
-pnpm test:unit
-pnpm test:unit:watch
-
-# Integration tests (vitest with separate config)
-pnpm test:integration
-pnpm test:integration:watch
-
-# Run a single test file from packages/lib:
 pnpm --filter @repo/lib exec vitest run -c ./vitest.config.integration.ts <path-relative-to-packages/lib>
-# For unit tests, omit the -c flag (uses default vitest.config.ts)
-
-# E2E tests (Playwright) — requires .env.local + local anvil fork
-make fork-ethereum              # start local fork
-pnpm dev:bal:fork               # start app in fork mode
-pnpm test:e2e:dev:ui:bal        # launch Playwright UI
 ```
+
+For unit tests, omit the `-c` flag (uses default `vitest.config.ts`).
+
+**Don't use `pnpm test:integration -- <pattern>`** — the argument doesn't reliably filter to a single file. Use the `pnpm --filter` form above.
