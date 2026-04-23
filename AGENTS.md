@@ -28,11 +28,6 @@ pnpm workspaces + Turborepo. Both `apps/frontend-v3` (Balancer) and `apps/beets-
 - **URL state**: `nuqs` for query-string-based state management.
 - **Pool types**: Weighted, Stable, CowAmm, LBP, reCLAMM, ECLP — each with specific UI and action handlers.
 
-## Build & Development Commands
-
-- `pnpm dev:bal:fork` — dev server against a local anvil fork. Requires `make fork-ethereum` running separately (needs `TEST_ACCOUNT_MNEMONIC` and `ETHEREUM_RPC_URL` env vars).
-- Pre-commit hook runs `lint-staged` (eslint + prettier on staged files).
-
 ## Testing
 
 Vitest across all packages. Integration tests live in `packages/lib` and use a separate config.
