@@ -6,14 +6,14 @@ This file provides guidance to coding agents working in this repository.
 
 ### Next.js: ALWAYS read docs before coding
 
-Before any Next.js work, find and read the relevant doc in `node_modules/next/dist/docs/`. Your training data is outdated — the docs are the source of truth.
+Before any Next.js work, find and read the relevant doc in `apps/frontend-v3/node_modules/next/dist/docs/`. Your training data is outdated — the docs are the source of truth.
 
 ### Never hardcode project-specific values in `packages/lib`
 
 Both apps share `packages/lib`; the active project is resolved from `NEXT_PUBLIC_PROJECT_ID` in `config/getProjectConfig.ts`, which exposes `PROJECT_CONFIG` and `isBalancer` / `isBeets`. Hardcoding breaks the other app silently.
 
 - Use `PROJECT_CONFIG.projectName`, `projectUrl`, `projectLogo` instead of literal `"Balancer"` / `"Beets"` / domain strings.
-- Gate project-only features (veBAL, LBP, maBEETS, etc.) with `isBalancer` / `isBeets`.
+- Gate project-only features (maBEETS, relics, etc.) with `isBalancer` / `isBeets`.
 - New config fields go in `config.types.ts` and must be populated in **both** `projects/balancer.ts` and `projects/beets.ts`.lines
 
 ## Architecture
