@@ -8,11 +8,11 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react'
-import { Controller, Control, FieldPath } from 'react-hook-form'
+import { Controller, Control, FieldPath, FieldValues } from 'react-hook-form'
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
 
-interface NumberInputProps<T extends Record<string, any> = Record<string, any>> {
+interface NumberInputProps<T extends FieldValues = FieldValues> {
   name: FieldPath<T>
   control: Control<T>
   isDisabled?: boolean
@@ -30,7 +30,7 @@ interface NumberInputProps<T extends Record<string, any> = Record<string, any>> 
   isFiatPrice?: boolean
 }
 
-export function NumberInput<T extends Record<string, any> = Record<string, any>>({
+export function NumberInput<T extends FieldValues = FieldValues>({
   placeholder,
   isInvalid,
   isDisabled,

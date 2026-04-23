@@ -1,8 +1,8 @@
 import { VStack, Text, HStack } from '@chakra-ui/react'
-import { Controller, Control, FieldPath } from 'react-hook-form'
+import { Controller, Control, FieldPath, FieldValues } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 
-interface InputWithSuggestionProps<T extends Record<string, any> = Record<string, any>> {
+interface InputWithSuggestionProps<T extends FieldValues = FieldValues> {
   control: Control<T>
   label: string
   name: FieldPath<T>
@@ -16,7 +16,7 @@ interface InputWithSuggestionProps<T extends Record<string, any> = Record<string
   isFiatPrice?: boolean
 }
 
-export function InputWithSuggestion<T extends Record<string, any> = Record<string, any>>({
+export function InputWithSuggestion<T extends FieldValues = FieldValues>({
   control,
   label,
   name,
