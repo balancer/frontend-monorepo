@@ -4,26 +4,26 @@ import { usePoolCreationForm } from '../../PoolCreationFormProvider'
 import { validatePoolDetails } from '../../validatePoolCreationForm'
 import { useWatch } from 'react-hook-form'
 import { useEffect, useRef } from 'react'
+import { PoolCreationToken, SupportedPoolTypes } from '../../types'
+import { isWeightedPool } from '../../helpers'
+import { MAX_POOL_NAME_LENGTH, MAX_POOL_SYMBOL_LENGTH } from '../../constants'
+import { PoolType } from '@balancer/sdk'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PoolDetails() {
   const { poolCreationForm } = usePoolCreationForm()
-  const poolTokens = useWatch({ control: poolCreationForm.control, name: 'poolTokens' })
-
-  const tokenSymbols = poolTokens.map(token => {
-    const { data, weight } = token
-    if (!data) return ''
-    if (!weight) return data.symbol
-    return weight + '% ' + data.symbol
+  const [poolTokens, poolType] = useWatch({
+    control: poolCreationForm.control,
+    name: ['poolTokens', 'poolType'],
   })
 
-  const suggestedPoolName = tokenSymbols.join(' / ')
-  const suggestedPoolSymbol = tokenSymbols.join('-').replace(/% /g, '-')
+  const { suggestedPoolName, suggestedPoolSymbol } = getSuggestions(poolTokens, poolType)
 
   const hasInitialized = useRef(false)
 
   useEffect(() => {
     if (hasInitialized.current) return
-    if (!suggestedPoolName || suggestedPoolName === ' / ') return
+    if (!suggestedPoolName || suggestedPoolName === '-') return
 
     const currentName = poolCreationForm.getValues('name')
     const currentSymbol = poolCreationForm.getValues('symbol')
@@ -75,4 +75,34 @@ export function PoolDetails() {
       />
     </VStack>
   )
+}
+
+function getSuggestions(poolTokens: PoolCreationToken[], poolType: SupportedPoolTypes) {
+  const poolTypePrefixMap: Partial<Record<SupportedPoolTypes, string>> = {
+    [PoolType.StableSurge]: 'surge',
+    [PoolType.ReClamm]: 'reCLAMM',
+  }
+
+  const poolTypePrefix = poolTypePrefixMap[poolType] ?? ''
+
+  const tokenSymbols = poolTokens
+    .map(({ data, weight }) => {
+      if (!data?.symbol) return ''
+      if (!isWeightedPool(poolType) || !weight) return data.symbol
+      return weight + data.symbol
+    })
+    .join('-')
+
+  const poolSymbol = poolTypePrefix ? `${poolTypePrefix}-${tokenSymbols}` : tokenSymbols
+  const suggestedPoolSymbol =
+    poolSymbol.length <= MAX_POOL_SYMBOL_LENGTH ? poolSymbol : tokenSymbols
+
+  const { projectName } = PROJECT_CONFIG
+
+  const poolName = poolTypePrefix ? `${poolTypePrefix} ${tokenSymbols}` : tokenSymbols
+  const poolNameWithProject = `${projectName} ${poolName}`
+  const suggestedPoolName =
+    poolNameWithProject.length <= MAX_POOL_NAME_LENGTH ? poolNameWithProject : poolName
+
+  return { suggestedPoolName, suggestedPoolSymbol }
 }
