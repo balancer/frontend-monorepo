@@ -8,13 +8,13 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react'
-import { Controller, Control } from 'react-hook-form'
+import { Controller, Control, FieldPath } from 'react-hook-form'
 import { BalPopover } from '../popover/BalPopover'
 import { InfoIcon } from '../icons/InfoIcon'
 
-interface NumberInputProps {
-  name: string
-  control: Control<any>
+interface NumberInputProps<T extends Record<string, any> = Record<string, any>> {
+  name: FieldPath<T>
+  control: Control<T>
   isDisabled?: boolean
   isInvalid?: boolean
   label: string
@@ -30,7 +30,7 @@ interface NumberInputProps {
   isFiatPrice?: boolean
 }
 
-export function NumberInput({
+export function NumberInput<T extends Record<string, any> = Record<string, any>>({
   placeholder,
   isInvalid,
   isDisabled,
@@ -46,7 +46,7 @@ export function NumberInput({
   onClickSuggestion,
   tooltip,
   isFiatPrice,
-}: NumberInputProps) {
+}: NumberInputProps<T>) {
   return (
     <VStack align="start" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
