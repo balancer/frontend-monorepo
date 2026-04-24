@@ -15,7 +15,10 @@ export function usePriceImpactLogic() {
       : typeof priceImpact === 'string'
         ? Number(priceImpact)
         : priceImpact
-  const priceImpactLevel = priceImpactValue == null ? 'low' : getPriceImpactLevel(priceImpactValue)
+  const priceImpactLevel =
+    priceImpactValue == null || Number.isNaN(priceImpactValue)
+      ? 'low'
+      : getPriceImpactLevel(priceImpactValue)
   const priceImpactColor = getPriceImpactColor(priceImpactLevel)
   const hasToAcceptHighPriceImpact =
     priceImpactLevel === 'high' || priceImpactLevel === 'max' || priceImpactLevel === 'unknown'
