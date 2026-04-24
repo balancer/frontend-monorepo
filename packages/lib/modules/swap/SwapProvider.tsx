@@ -15,7 +15,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
-import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
+import { PropsWithChildren, createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
 import { ChainSlug, chainToSlugMap, getChainSlug } from '../pool/pool.utils'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
@@ -127,7 +127,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const swapState = useReactiveVar(swapStateVar)
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [tokenSelectKey, setTokenSelectKey] = useState<'tokenIn' | 'tokenOut'>('tokenIn')
-  const [initUserChain, setInitUserChain] = useState<GqlChain | undefined>(undefined)
+  const hasInitializedUserChain = useRef(false)
 
   const { isConnected } = useUserAccount()
   const { chain: walletChain } = useNetworkConfig()
@@ -616,12 +616,14 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   // When wallet chain changes, update the swap form chain
   useEffect(() => {
-    if (isConnected && initUserChain && walletChain !== selectedChain) {
+    if (!isConnected) return
+
+    if (hasInitializedUserChain.current && walletChain !== selectedChain) {
       setSelectedChain(walletChain)
-    } else if (isConnected) {
-      setInitUserChain(walletChain)
+    } else {
+      hasInitializedUserChain.current = true
     }
-  }, [walletChain])
+  }, [isConnected, selectedChain, walletChain])
 
   // When a new simulation is triggered, update the state
   useEffect(() => {
