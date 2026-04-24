@@ -7,7 +7,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { getPercentFromPrice } from '../../helpers'
 import { formatNumber } from '../../helpers'
 import { RadioCard } from '@repo/lib/shared/components/inputs/RadioCardGroup'
-import { useWatch, Control } from 'react-hook-form'
+import { useWatch, Control, FieldPath, FieldValues } from 'react-hook-form'
 import { useState, SVGProps } from 'react'
 
 export function ReClammConfiguration() {
@@ -35,7 +35,7 @@ export function ReClammConfiguration() {
   )
 }
 
-export type ConfigOptionsGroupProps = {
+export type ConfigOptionsGroupProps<T extends FieldValues = FieldValues> = {
   label: string
   options: {
     label: string
@@ -45,13 +45,13 @@ export type ConfigOptionsGroupProps = {
   }[]
   updateFn: (rawValue: string) => void
   validateFn: (value: string) => string | boolean
-  name: string
-  control: Control<any>
+  name: FieldPath<T>
+  control: Control<T>
   customInputLabel: string
   tooltip: string
 }
 
-export function ConfigOptionsGroup({
+export function ConfigOptionsGroup<T extends FieldValues = FieldValues>({
   label,
   options,
   updateFn,
@@ -60,7 +60,7 @@ export function ConfigOptionsGroup({
   control,
   customInputLabel,
   tooltip,
-}: ConfigOptionsGroupProps) {
+}: ConfigOptionsGroupProps<T>) {
   const { reClammConfigForm } = usePoolCreationForm()
   const [initialMinPrice, initialTargetPrice, initialMaxPrice] = useWatch({
     control: reClammConfigForm.control,

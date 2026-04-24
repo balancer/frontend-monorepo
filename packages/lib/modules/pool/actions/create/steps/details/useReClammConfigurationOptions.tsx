@@ -19,8 +19,9 @@ import {
 } from '@repo/lib/shared/components/imgs/ReClammConfigSvgs'
 import { useWatch } from 'react-hook-form'
 import { ConfigOptionsGroupProps } from './ReClammConfiguration'
+import { ReClammConfig } from '../../types'
 
-export function useReClammConfigurationOptions(): ConfigOptionsGroupProps[] {
+export function useReClammConfigurationOptions(): ConfigOptionsGroupProps<ReClammConfig>[] {
   const { poolCreationForm, reClammConfigForm } = usePoolCreationForm()
   const lastCalculatedPriceBoundsRef = useRef({ minPrice: '', maxPrice: '' })
 
@@ -50,12 +51,11 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps[] {
     reClammConfigForm.setValue('initialMaxPrice', initialMaxPrice, { shouldValidate: true })
   }
 
-  const targetPrice = {
+  const targetPrice: ConfigOptionsGroupProps<ReClammConfig> = {
     name: 'initialTargetPrice',
     control: reClammConfigForm.control,
     label: `Target price: ${tokenSymbolsString}`,
     customInputLabel: 'Custom target price',
-    customInputPlaceholder: bn(spotPriceWithoutRate.toString()).toFixed(2),
     options: [
       {
         label: 'Current price -5%',
@@ -89,7 +89,7 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps[] {
     },
   }
 
-  const priceRangeBoundaries = {
+  const priceRangeBoundaries: ConfigOptionsGroupProps<ReClammConfig> = {
     label: `Target concentration density of liquidity`,
     name: 'priceRangePercentage',
     control: reClammConfigForm.control,
@@ -115,7 +115,7 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps[] {
     },
   }
 
-  const marginBuffer = {
+  const marginBuffer: ConfigOptionsGroupProps<ReClammConfig> = {
     name: 'centerednessMargin',
     control: reClammConfigForm.control,
     label: `Margin buffer`,
@@ -137,7 +137,7 @@ export function useReClammConfigurationOptions(): ConfigOptionsGroupProps[] {
     },
   }
 
-  const dailyPriceReadjustmentRate = {
+  const dailyPriceReadjustmentRate: ConfigOptionsGroupProps<ReClammConfig> = {
     name: 'priceShiftDailyRate',
     control: reClammConfigForm.control,
     label: `Daily price re-adjustment rate, when out-of-range`,

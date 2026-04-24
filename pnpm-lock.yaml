@@ -469,7 +469,7 @@ importers:
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.10)(react@19.2.5))(@types/react@19.2.10)(react@19.2.5)
       '@hookform/resolvers':
         specifier: ^5.2.2
-        version: 5.2.2(react-hook-form@7.71.2(react@19.2.5))
+        version: 5.2.2(react-hook-form@7.72.1(react@19.2.5))
       '@layerzerolabs/scan-client':
         specifier: ^0.0.8
         version: 0.0.8(axios@1.13.6)
@@ -558,8 +558,8 @@ importers:
         specifier: ^2.0.10
         version: 2.0.10(react@19.2.5)
       react-hook-form:
-        specifier: 7.71.2
-        version: 7.71.2(react@19.2.5)
+        specifier: 7.72.1
+        version: 7.72.1(react@19.2.5)
       react-hotkeys-hook:
         specifier: 5.2.4
         version: 5.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -7207,8 +7207,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-hook-form@7.71.2:
-    resolution: {integrity: sha512-1CHvcDYzuRUNOflt4MOq3ZM46AronNJtQ1S7tnX6YN4y72qhgiUItpacZUAQ0TyWYci3yz1X+rXaSxiuEm86PA==}
+  react-hook-form@7.72.1:
+    resolution: {integrity: sha512-RhwBoy2ygeVZje+C+bwJ8g0NjTdBmDlJvAUHTxRjTmSUKPYsKfMphkS2sgEMotsY03bP358yEYlnUeZy//D9Ig==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -10324,10 +10324,10 @@ snapshots:
     dependencies:
       '@hapi/hoek': 11.0.7
 
-  '@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@19.2.5))':
+  '@hookform/resolvers@5.2.2(react-hook-form@7.72.1(react@19.2.5))':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.71.2(react@19.2.5)
+      react-hook-form: 7.72.1(react@19.2.5)
 
   '@humanfs/core@0.19.1': {}
 
@@ -17325,7 +17325,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.10
 
-  react-hook-form@7.71.2(react@19.2.5):
+  react-hook-form@7.72.1(react@19.2.5):
     dependencies:
       react: 19.2.5
 

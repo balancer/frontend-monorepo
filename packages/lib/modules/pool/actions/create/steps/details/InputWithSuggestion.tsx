@@ -1,11 +1,11 @@
 import { VStack, Text, HStack } from '@chakra-ui/react'
-import { Controller, Control } from 'react-hook-form'
+import { Controller, Control, FieldPath, FieldValues } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 
-interface InputWithSuggestionProps {
-  control: Control<any>
+interface InputWithSuggestionProps<T extends FieldValues = FieldValues> {
+  control: Control<T>
   label: string
-  name: string
+  name: FieldPath<T>
   onClickSuggestion?: () => void
   placeholder: string
   suggestionLabel?: string
@@ -16,7 +16,7 @@ interface InputWithSuggestionProps {
   isFiatPrice?: boolean
 }
 
-export function InputWithSuggestion({
+export function InputWithSuggestion<T extends FieldValues = FieldValues>({
   control,
   label,
   name,
@@ -28,7 +28,7 @@ export function InputWithSuggestion({
   validate,
   attribution,
   isFiatPrice,
-}: InputWithSuggestionProps) {
+}: InputWithSuggestionProps<T>) {
   return (
     <VStack align="start" spacing="sm" w="full">
       <Controller
