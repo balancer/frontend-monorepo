@@ -137,6 +137,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { setPriceImpact, resetPriceImpact } = usePriceImpact()
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
+  const selectedChainRef = useRef(selectedChain)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
@@ -614,16 +615,23 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
   }, [])
 
+  useEffect(() => {
+    selectedChainRef.current = selectedChain
+  }, [selectedChain])
+
   // When wallet chain changes, update the swap form chain
   useEffect(() => {
-    if (!isConnected) return
+    if (!isConnected) {
+      hasInitializedUserChain.current = false
+      return
+    }
 
-    if (hasInitializedUserChain.current && walletChain !== selectedChain) {
+    if (hasInitializedUserChain.current && walletChain !== selectedChainRef.current) {
       setSelectedChain(walletChain)
     } else {
       hasInitializedUserChain.current = true
     }
-  }, [isConnected, selectedChain, walletChain])
+  }, [isConnected, walletChain])
 
   // When a new simulation is triggered, update the state
   useEffect(() => {
