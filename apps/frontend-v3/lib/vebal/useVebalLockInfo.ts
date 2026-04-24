@@ -7,6 +7,7 @@ import { oneWeekInMs, toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
+import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 
 const MINIMUM_LOCK_TIME = oneWeekInMs
 
@@ -36,8 +37,34 @@ interface MulticallLockInfoResponse {
 
 export type UseVebalLockInfoResult = ReturnType<typeof useVebalLockInfo>
 
+export function getVebalLockState({
+  currentTimestampMs,
+  lockedAmount,
+  lockedEndDate,
+}: {
+  currentTimestampMs: number
+  lockedAmount: bigint
+  lockedEndDate: bigint
+}) {
+  const hasExistingLock = bn(lockedAmount).gt(0)
+  const lockedEndDateNormalised = toJsTimestamp(Number(lockedEndDate))
+  const isExpired = hasExistingLock && currentTimestampMs > lockedEndDateNormalised
+  const lockTooShort =
+    hasExistingLock &&
+    !isExpired &&
+    lockedEndDateNormalised < currentTimestampMs + MINIMUM_LOCK_TIME
+
+  return {
+    hasExistingLock,
+    isExpired,
+    lockTooShort,
+    lockedEndDate: lockedEndDateNormalised,
+  }
+}
+
 export function useVebalLockInfo() {
   const { userAddress, isConnected } = useUserAccount()
+  const currentTimestampMs = useCurrentDate().getTime()
 
   const lockInfoRequestsData = [
     {
@@ -98,11 +125,16 @@ export function useVebalLockInfo() {
     const lockedAmount = lockedData.result?.amount || BigInt(0)
     const lockedEndDate = lockedData.result?.end || BigInt(0)
 
-    const hasExistingLock = bn(lockedAmount).gt(0)
-    const lockedEndDateNormalised = toJsTimestamp(Number(lockedEndDate))
-    const isExpired = hasExistingLock && Date.now() > lockedEndDateNormalised
-    const lockTooShort =
-      hasExistingLock && !isExpired && lockedEndDateNormalised < Date.now() + MINIMUM_LOCK_TIME
+    const {
+      hasExistingLock,
+      isExpired,
+      lockTooShort,
+      lockedEndDate: lockedEndDateNormalised,
+    } = getVebalLockState({
+      currentTimestampMs,
+      lockedAmount,
+      lockedEndDate,
+    })
 
     return {
       lockedEndDate: lockedEndDateNormalised,
@@ -113,7 +145,7 @@ export function useVebalLockInfo() {
       isExpired,
       lockTooShort,
     }
-  }, [results])
+  }, [currentTimestampMs, results])
 
   return { results, mainnetLockedInfo, isLoading, refetchAll }
 }
