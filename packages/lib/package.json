@@ -22,7 +22,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {
-    "@apollo/client": "4.1.7",
+    "@apollo/client": "4.1.9",
     "@balancer-labs/balancer-maths": "0.0.40",
     "@balancer/sdk": "5.2.3",
     "@chakra-ui/anatomy": "^2.2.2",
