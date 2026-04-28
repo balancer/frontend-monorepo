@@ -9,8 +9,20 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-// Maturity thresholds in seconds (1 week per level, 0 → 5 weeks)
-const maturities = ['0', '604800', '1209600', '1814400', '2419200', '3024000']
+// Real on-chain maturity thresholds: 11 levels, 1 week per level (0 → 10 weeks)
+const maturities = [
+  '0',
+  '604800',
+  '1209600',
+  '1814400',
+  '2419200',
+  '3024000',
+  '3628800',
+  '4233600',
+  '4838400',
+  '5443200',
+  '6048000',
+]
 const weekInSeconds = 604800
 
 function makeRelic(overrides: Partial<ReliquaryFarmPosition> = {}): ReliquaryFarmPosition {
@@ -50,13 +62,11 @@ describe('relicGetMaturityProgress', () => {
       const now = 1_700_000_000
       vi.setSystemTime(new Date(now * 1000))
 
-      // Relic created just now
       const relic = makeRelic({ entry: now, level: 0 })
       const result = relicGetMaturityProgress(relic, maturities)
 
       expect(result.canUpgrade).toBe(false)
       expect(result.isMaxMaturity).toBe(false)
-      // Progress should be near 0 since just created
       expect(result.progressToNextLevel).toBeCloseTo(0, 0)
     })
   })
@@ -79,15 +89,14 @@ describe('relicGetMaturityProgress', () => {
       const now = 1_700_000_000
       vi.setSystemTime(new Date(now * 1000))
 
-      // Relic created 3 weeks ago, still at level 0 → should be upgradable to level 3
-      const threeWeeksAgo = now - 3 * weekInSeconds
-      const relic = makeRelic({ entry: threeWeeksAgo, level: 0 })
+      // Relic created 5 weeks ago, still at level 0 → should be upgradable to level 5
+      const fiveWeeksAgo = now - 5 * weekInSeconds
+      const relic = makeRelic({ entry: fiveWeeksAgo, level: 0 })
       const result = relicGetMaturityProgress(relic, maturities)
 
       expect(result.canUpgrade).toBe(true)
-      // 3 weeks elapsed: levels at 0s, 604800s (1w), 1209600s (2w), 1814400s (3w)
-      // So next level maturity index after elapsed time >= 3 weeks → canUpgradeTo = 4
-      expect(result.canUpgradeTo).toBe(4)
+      // 5 weeks elapsed: passes thresholds[0..5] → canUpgradeTo = 6
+      expect(result.canUpgradeTo).toBe(6)
     })
   })
 
@@ -107,13 +116,13 @@ describe('relicGetMaturityProgress', () => {
   })
 
   describe('max maturity', () => {
-    test('isMaxMaturity is true when time elapsed exceeds all thresholds', () => {
+    test('isMaxMaturity is true when time elapsed exceeds all thresholds (>10 weeks)', () => {
       const now = 1_700_000_000
       vi.setSystemTime(new Date(now * 1000))
 
-      // Relic created 6 weeks ago (exceeds max maturity of 5 weeks)
-      const sixWeeksAgo = now - 6 * weekInSeconds
-      const relic = makeRelic({ entry: sixWeeksAgo, level: 4 })
+      // Relic created 11 weeks ago (exceeds max maturity of 10 weeks)
+      const elevenWeeksAgo = now - 11 * weekInSeconds
+      const relic = makeRelic({ entry: elevenWeeksAgo, level: 9 })
       const result = relicGetMaturityProgress(relic, maturities)
 
       expect(result.isMaxMaturity).toBe(true)
@@ -124,9 +133,9 @@ describe('relicGetMaturityProgress', () => {
       const now = 1_700_000_000
       vi.setSystemTime(new Date(now * 1000))
 
-      // Relic created 6 weeks ago but still at level 2
-      const sixWeeksAgo = now - 6 * weekInSeconds
-      const relic = makeRelic({ entry: sixWeeksAgo, level: 2 })
+      // Relic created 11 weeks ago but still at level 5
+      const elevenWeeksAgo = now - 11 * weekInSeconds
+      const relic = makeRelic({ entry: elevenWeeksAgo, level: 5 })
       const result = relicGetMaturityProgress(relic, maturities)
 
       expect(result.isMaxMaturity).toBe(true)
@@ -137,9 +146,9 @@ describe('relicGetMaturityProgress', () => {
       const now = 1_700_000_000
       vi.setSystemTime(new Date(now * 1000))
 
-      // Relic at max level (maturities.length - 1 = 5) and max maturity
-      const sixWeeksAgo = now - 6 * weekInSeconds
-      const relic = makeRelic({ entry: sixWeeksAgo, level: maturities.length - 1 })
+      // Relic at max level (10) and max maturity (>10 weeks)
+      const elevenWeeksAgo = now - 11 * weekInSeconds
+      const relic = makeRelic({ entry: elevenWeeksAgo, level: maturities.length - 1 })
       const result = relicGetMaturityProgress(relic, maturities)
 
       expect(result.isMaxMaturity).toBe(true)
@@ -197,7 +206,7 @@ describe('relicGetMaturityProgress', () => {
       const relic = makeRelic({ entry, level: 0 })
       const result = relicGetMaturityProgress(relic, maturities)
 
-      // For level 0, next level is maturities[1] = 604800 seconds
+      // For level 0, next level is maturities[1] = 604800 seconds (1 week)
       const expectedLevelUpDate = new Date((entry + 604800) * 1000)
       expect(result.levelUpDate.getTime()).toBe(expectedLevelUpDate.getTime())
     })
