@@ -4,7 +4,7 @@
   "license": "MIT",
   "type": "module",
   "devDependencies": {
-    "@apollo/client": "4.1.7",
+    "@apollo/client": "catalog:",
     "@balancer/sdk": "5.2.3",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",

@@ -1,3 +1,6 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+catalog:
+  "@apollo/client": "4.1.9"
