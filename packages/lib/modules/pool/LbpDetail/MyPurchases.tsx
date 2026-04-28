@@ -2,6 +2,7 @@ import TokenRow from '../../tokens/TokenRow/TokenRow'
 import { Divider, Card, HStack, Heading, Text, VStack, Spacer, Skeleton } from '@chakra-ui/react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
+import type BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import {
   GetPoolEventsQuery,

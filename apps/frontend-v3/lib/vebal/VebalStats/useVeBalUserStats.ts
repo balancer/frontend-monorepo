@@ -3,7 +3,7 @@ import { useVebalUserData } from '../useVebalUserData'
 import { formatUnits } from 'viem'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { format } from 'date-fns'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 

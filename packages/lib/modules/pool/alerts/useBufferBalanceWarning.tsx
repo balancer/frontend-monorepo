@@ -1,5 +1,5 @@
 import { HumanTokenAmountWithSymbol, ApiToken } from '@repo/lib/modules/tokens/token.types'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { Text } from '@chakra-ui/react'
 import { BalAlert } from '../../../shared/components/alerts/BalAlert'

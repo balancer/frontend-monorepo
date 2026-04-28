@@ -12,7 +12,7 @@ import {
   secondsToMilliseconds,
   millisecondsToSeconds,
 } from 'date-fns'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 

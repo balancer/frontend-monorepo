@@ -11,7 +11,7 @@ import { useDisclosure } from '@chakra-ui/hooks'
 import { useLockDuration } from '@bal/lib/vebal/lock/duration/useLockDuration'
 import { differenceInSeconds } from 'date-fns'
 import { getPreviousThursday, oneYearInSecs } from '@repo/lib/shared/utils/time'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 
 export type UseVebalLockResult = ReturnType<typeof useVebalLockLogic>
