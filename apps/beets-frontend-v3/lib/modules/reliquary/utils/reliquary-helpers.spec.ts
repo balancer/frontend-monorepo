@@ -27,7 +27,7 @@ const weekInSeconds = 604800
 
 function makeRelic(overrides: Partial<ReliquaryFarmPosition> = {}): ReliquaryFarmPosition {
   return {
-    farmId: '1',
+    farmId: '0', // real fBEETS farmId on Sonic
     relicId: '42',
     amount: '100',
     entry: 0,
