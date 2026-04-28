@@ -56,9 +56,8 @@ export function calculateMaturityImpact(input: MaturityImpactInput): MaturityImp
   const newLevelProgress =
     newLevel >= maxLevel ? 'max level reached' : `${newMaturity}/${maturityLevels[newLevel + 1]}`
 
-  const addLiquidityMaturityImpactTimeInMilliseconds = secondsToMilliseconds(
-    MAX_MATURITY - newMaturity
-  )
+  const remainingSeconds = Math.max(0, MAX_MATURITY - newMaturity)
+  const addLiquidityMaturityImpactTimeInMilliseconds = secondsToMilliseconds(remainingSeconds)
   const staysMax = levelOnUpdate === maxLevel && newLevel === maxLevel
 
   return {

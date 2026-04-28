@@ -228,5 +228,23 @@ describe('calculateMaturityImpact', () => {
       const expectedMs = (MAX_MATURITY - result.newMaturity) * 1000
       expect(result.addLiquidityMaturityImpactTimeInMilliseconds).toBe(expectedMs)
     })
+
+    test('clamps to zero when newMaturity exceeds MAX_MATURITY', () => {
+      const entry = 1_700_000_000
+      const now = entry + 15 * weekInSeconds // 15 weeks old position
+
+      // Small add to a long-held position: newMaturity stays close to 15 weeks (> MAX_MATURITY)
+      const result = calculateMaturityImpact(
+        makeInput({
+          positionEntry: entry,
+          nowTimestamp: now,
+          amount: '1',
+          positionAmount: '1000',
+        })
+      )
+
+      expect(result.newMaturity).toBeGreaterThan(6048000)
+      expect(result.addLiquidityMaturityImpactTimeInMilliseconds).toBe(0)
+    })
   })
 })
