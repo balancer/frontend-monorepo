@@ -26,7 +26,6 @@ export function FixedProjectedPriceChart({
   const theme = useChakraTheme()
   const { isMobile } = useBreakpoints()
 
-  const colorMode = '_dark'
   const priceValue = prices[0]?.projectTokenPrice ?? 0
   const yAxisMin = priceValue ? priceValue * 0.9 : 0
   const yAxisMax = priceValue ? priceValue * 1.1 : 1
@@ -94,7 +93,7 @@ export function FixedProjectedPriceChart({
         rotate: isMobile ? 45 : 0,
         fontSize: isMobile ? 10 : 12,
         margin: 8,
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
       },
       splitNumber: (() => {
@@ -130,7 +129,7 @@ export function FixedProjectedPriceChart({
 
           return toCurrency(value)
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
       },
     },

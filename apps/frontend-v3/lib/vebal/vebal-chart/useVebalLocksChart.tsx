@@ -198,9 +198,9 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   const options = useMemo((): EChartsOption => {
     const toolTipTheme = {
       heading: 'font-weight: bold; color: #E5D3BE',
-      container: `background: ${theme.semanticTokens.colors.background.level3._dark};`,
-      text: theme.semanticTokens.colors.font.primary._dark,
-      secondaryText: theme.semanticTokens.colors.font.secondary._dark,
+      container: `background: ${theme.semanticTokens.colors.background.level3};`,
+      text: theme.semanticTokens.colors.font.primary,
+      secondaryText: theme.semanticTokens.colors.font.secondary,
     }
 
     const badgeStyle =
@@ -211,7 +211,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         text: 'My veBAL over time',
         left: 'left',
         textStyle: {
-          color: theme.semanticTokens.colors.font.primary._dark,
+          color: theme.semanticTokens.colors.font.primary,
           fontWeight: 'bold',
           fontSize: 13,
         },
@@ -291,7 +291,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           formatter: (value: number) => {
             return format(new Date(value), 'd MMM yy')
           },
-          color: theme.semanticTokens.colors.font.secondary._dark,
+          color: theme.semanticTokens.colors.font.secondary,
           opacity: 1,
         },
         axisPointer: {
@@ -317,7 +317,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         minorSplitLine: { show: false },
         splitLine: { show: false },
         axisLabel: {
-          color: theme.semanticTokens.colors.font.secondary._dark,
+          color: theme.semanticTokens.colors.font.secondary,
           opacity: 1,
         },
       },

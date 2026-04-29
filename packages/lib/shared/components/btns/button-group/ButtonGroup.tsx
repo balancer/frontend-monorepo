@@ -134,29 +134,13 @@ function GroupOptionButton({
           layoutId={`active-${groupId}`}
           position="absolute"
           shadow="md"
-          sx={
-            isCompact
-              ? {
-                  _dark: {
-                    bg: 'background.level4',
-                  },
-                }
-              : undefined
-          }
+          sx={isCompact ? { bg: 'background.level4' } : undefined}
         />
       )}
       <Box
         fontSize={fontSize}
         position="relative"
-        sx={
-          isCompact && isActive
-            ? {
-                _dark: {
-                  color: 'white',
-                },
-              }
-            : undefined
-        }
+        sx={isCompact && isActive ? { color: 'white' } : undefined}
         zIndex="8"
       >
         {option.label}

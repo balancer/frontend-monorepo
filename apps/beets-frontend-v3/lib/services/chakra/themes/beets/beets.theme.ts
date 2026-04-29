@@ -12,9 +12,9 @@ const semanticTokens = getSemanticTokens(tokens, colors)
 
 semanticTokens.colors.font.dark = '#111111'
 semanticTokens.colors.font.light = '#FFFFFF'
-semanticTokens.colors.grayText._dark = '#BBBBBB'
+semanticTokens.colors.grayText = '#BBBBBB'
 
-components.Button.variants.buttonGroupActive._dark.color = '#363636'
+components.Button.variants.buttonGroupActive.color = '#363636'
 
 export const beetsTheme = {
   fonts,
