@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { getChainId, getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
@@ -15,7 +15,19 @@ import { getMaxAmountForPermit2 } from './permit2.helpers'
 import { Address, encodeFunctionData } from 'viem'
 import { permit2Abi } from '@balancer/sdk'
 import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
-import { addHours, millisecondsToSeconds } from 'date-fns'
+import { milliseconds, millisecondsToSeconds } from 'date-fns'
+
+const PERMIT2_APPROVAL_EXPIRY_DURATION_MS = milliseconds({ days: 3 })
+
+export function getPermit2ApprovalTimestamps(nowMs: number): {
+  nowInSecs: number
+  permitExpiry: number
+} {
+  return {
+    nowInSecs: millisecondsToSeconds(nowMs),
+    permitExpiry: millisecondsToSeconds(nowMs + PERMIT2_APPROVAL_EXPIRY_DURATION_MS),
+  }
+}
 
 export type Params = {
   chain: GqlChain
@@ -64,9 +76,7 @@ export function usePermit2ApprovalSteps({
   const spenderAddress = router || networkConfig.contracts.balancer.router!
 
   // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
-  const seventyTwoHoursFromNowMs = addHours(new Date(), 72).getTime()
-  const permitExpiry = millisecondsToSeconds(seventyTwoHoursFromNowMs) // in seconds
-  const nowInSecs = millisecondsToSeconds(Date.now())
+  const [{ permitExpiry, nowInSecs }] = useState(() => getPermit2ApprovalTimestamps(Date.now()))
 
   // Unwraps of wrapped native assets do not require approval
   const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'

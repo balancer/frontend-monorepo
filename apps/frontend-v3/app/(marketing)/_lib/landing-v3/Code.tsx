@@ -37,29 +37,34 @@ function onSwap(PoolSwapParams calldata params)
 
 export function Code() {
   const { isMobile } = useBreakpoints()
-  const [displayedText, setDisplayedText] = useState('')
+  const [currentIndex, setCurrentIndex] = useState(-1)
   const codeBoxRef = useRef(null)
   const isInView = useInView(codeBoxRef, { once: true, margin: '-100px' })
 
+  const displayedText =
+    currentIndex < 0
+      ? ''
+      : Prism.highlight(
+          codeSnippet.slice(0, currentIndex + 1),
+          Prism.languages.solidity as Prism.Grammar,
+          'solidity'
+        )
+
   useEffect(() => {
-    if (isInView) {
-      setDisplayedText('')
+    if (!isInView) return
 
-      let currentIndex = 0
-      const intervalId = setInterval(() => {
-        if (currentIndex <= codeSnippet.length - 1) {
-          const nextText = codeSnippet.slice(0, currentIndex + 1)
-          setDisplayedText(
-            Prism.highlight(nextText, Prism.languages.solidity as Prism.Grammar, 'solidity')
-          )
-          currentIndex++
-        } else {
+    const intervalId = setInterval(() => {
+      setCurrentIndex(prevIndex => {
+        if (prevIndex >= codeSnippet.length - 1) {
           clearInterval(intervalId)
+          return prevIndex
         }
-      }, TYPING_SPEED)
 
-      return () => clearInterval(intervalId)
-    }
+        return prevIndex + 1
+      })
+    }, TYPING_SPEED)
+
+    return () => clearInterval(intervalId)
   }, [isInView])
 
   return (

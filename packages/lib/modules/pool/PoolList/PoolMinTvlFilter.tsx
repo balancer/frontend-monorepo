@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   VStack,
   HStack,
@@ -93,13 +93,27 @@ export function PoolMinTvlFilter() {
   const {
     queryState: { minTvl, setMinTvl },
   } = usePoolList()
+
+  return (
+    <PoolMinTvlFilterSlider
+      key={minTvl}
+      minTvl={minTvl}
+      setMinTvl={setMinTvl}
+      toCurrency={toCurrency}
+    />
+  )
+}
+
+type PoolMinTvlFilterSliderProps = {
+  minTvl: number
+  setMinTvl: (value: number | null) => void | Promise<unknown>
+  toCurrency: (value: number) => string
+}
+
+function PoolMinTvlFilterSlider({ minTvl, setMinTvl, toCurrency }: PoolMinTvlFilterSliderProps) {
   const [sliderValue, setSliderValue] = useState(() => tvlToSliderValue(minTvl))
 
   const tvlValue = sliderValueToTvl(sliderValue)
-
-  useEffect(() => {
-    setSliderValue(tvlToSliderValue(minTvl))
-  }, [minTvl])
 
   const handleSliderChange = (val: number) => {
     const rawValue = sliderValueToTvl(val)

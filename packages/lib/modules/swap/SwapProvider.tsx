@@ -15,7 +15,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
-import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
+import { PropsWithChildren, createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
 import { ChainSlug, chainToSlugMap, getChainSlug } from '../pool/pool.utils'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
@@ -127,7 +127,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const swapState = useReactiveVar(swapStateVar)
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [tokenSelectKey, setTokenSelectKey] = useState<'tokenIn' | 'tokenOut'>('tokenIn')
-  const [initUserChain, setInitUserChain] = useState<GqlChain | undefined>(undefined)
+  const hasInitializedUserChain = useRef(false)
 
   const { isConnected } = useUserAccount()
   const { chain: walletChain } = useNetworkConfig()
@@ -137,6 +137,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { setPriceImpact, resetPriceImpact } = usePriceImpact()
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
+  const selectedChainRef = useRef(selectedChain)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
@@ -614,14 +615,23 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
   }, [])
 
+  useEffect(() => {
+    selectedChainRef.current = selectedChain
+  }, [selectedChain])
+
   // When wallet chain changes, update the swap form chain
   useEffect(() => {
-    if (isConnected && initUserChain && walletChain !== selectedChain) {
-      setSelectedChain(walletChain)
-    } else if (isConnected) {
-      setInitUserChain(walletChain)
+    if (!isConnected) {
+      hasInitializedUserChain.current = false
+      return
     }
-  }, [walletChain])
+
+    if (hasInitializedUserChain.current && walletChain !== selectedChainRef.current) {
+      setSelectedChain(walletChain)
+    } else {
+      hasInitializedUserChain.current = true
+    }
+  }, [isConnected, walletChain])
 
   // When a new simulation is triggered, update the state
   useEffect(() => {

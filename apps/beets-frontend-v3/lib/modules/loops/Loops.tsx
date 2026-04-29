@@ -18,7 +18,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -67,7 +67,6 @@ function LoopsForm() {
   const nextBtn = useRef(null)
   const depositModalDisclosure = useDisclosure()
   const withdrawModalDisclosure = useDisclosure()
-  const [disclosure, setDisclosure] = useState(depositModalDisclosure)
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
   const { isBalancesLoading } = useTokenBalances()
@@ -111,19 +110,19 @@ function LoopsForm() {
     },
   ]
 
-  useEffect(() => {
-    if (isDepositTab) {
-      setDisclosure(depositModalDisclosure)
+  const disclosure = isWithdrawTab ? withdrawModalDisclosure : depositModalDisclosure
+
+  function handleTabChange(tab: ButtonGroupOption | undefined) {
+    if (!tab) return
+
+    setActiveTab(tab)
+
+    if (tab.value === '0') {
       setAmountAssets('')
-    } else if (isWithdrawTab) {
-      setDisclosure(withdrawModalDisclosure)
+    } else if (tab.value === '1') {
       setAmountShares('')
     }
-  }, [activeTab])
-
-  useEffect(() => {
-    setActiveTab(tabs[0])
-  }, [])
+  }
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -151,7 +150,7 @@ function LoopsForm() {
               fontSize="lg"
               groupId="add-liquidity"
               isFullWidth
-              onChange={setActiveTab}
+              onChange={handleTabChange}
               options={tabs}
               size="md"
             />
