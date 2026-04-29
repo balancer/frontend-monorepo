@@ -1,4 +1,5 @@
 import { addHours, differenceInDays, format, isAfter, isBefore, isValid } from 'date-fns'
+import type BigNumber from 'bignumber.js'
 import { formatDateAxisLabel } from './helpers'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'

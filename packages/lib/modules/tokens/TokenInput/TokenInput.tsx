@@ -32,6 +32,7 @@ import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
 import { ApiOrCustomToken } from '../token.types'
 import { useUserAccount } from '../../web3/UserAccountProvider'
+import type BigNumber from 'bignumber.js'
 
 type TokenInputSelectorProps = {
   token: ApiOrCustomToken | undefined

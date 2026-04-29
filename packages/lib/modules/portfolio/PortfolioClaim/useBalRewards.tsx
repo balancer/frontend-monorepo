@@ -1,7 +1,7 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { getNetworkConfig } from '@repo/lib/config/networks'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
 import { useReadContracts } from 'wagmi'

@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from '@chakra-ui/react'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { ReactNode } from 'react'
 
 interface PopoverAprItemProps extends BoxProps {

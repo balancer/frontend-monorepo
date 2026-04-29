@@ -10,6 +10,7 @@ import { getCompositionTokens } from '../../pool-tokens.utils'
 import { usePool } from '../../PoolProvider'
 import { useGetMinimumTradeAmount } from '@repo/lib/shared/hooks/useGetMinimumTradeAmount'
 import { PoolToken } from '../../pool.types'
+import type BigNumber from 'bignumber.js'
 
 type Props = { humanAmountsIn: HumanTokenAmountWithSymbol[]; totalUSDValue: string }
 export type MinimumDepositErrors = Record<string, BigNumber>

@@ -8,7 +8,7 @@ import {
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { cloneDeep, invert } from 'lodash'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { Address, formatUnits, parseUnits } from 'viem'
