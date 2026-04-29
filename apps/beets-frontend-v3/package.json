@@ -14,6 +14,8 @@
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
     "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
     "start": "next start -p 3001",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/beets/beets.theme.ts",
     "postinstall": "pnpm run gen:theme-typings"
@@ -56,6 +58,8 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "1.4.6",
+    "@repo/test": "workspace:*",
+    "@testing-library/react": "16.3.2",
     "@wagmi/cli": "2.10.0",
     "autoprefixer": "10.5.0",
     "babel-plugin-react-compiler": "1.0.0",

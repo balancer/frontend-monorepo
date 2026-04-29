@@ -1,12 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
 import { useReliquary } from '../ReliquaryProvider'
 import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
 import { useGetLevelInfo } from './useGetLevelInfo'
 import { useGetLevelOnUpdate } from './useGetLevelOnUpdate'
 import { useGetPositionForId } from './useGetPositionForId'
-
-const MAX_MATURITY = 6048000 // 10 weeks in seconds
+import { calculateMaturityImpact } from '../utils/maturity-impact'
 
 export function useReliquaryAddLiquidityMaturityImpact(amount: Numberish, relicId?: string) {
   const { chain } = useReliquary()
@@ -43,46 +41,13 @@ export function useReliquaryAddLiquidityMaturityImpact(amount: Numberish, relicI
         return
       }
 
-      const maturityLevels = maturityThresholds.map(maturity => BigInt(maturity))
-      const weight = bn(amount).div(bn(amount).plus(position.amount)).toNumber()
-      const nowTimestamp = Math.floor(millisecondsToSeconds(Date.now()))
-      const maturity = nowTimestamp - position.entry
-      const entryTimestampAfterAddLiquidity = Math.round(position.entry + maturity * weight)
-      const newMaturity = nowTimestamp - entryTimestampAfterAddLiquidity
-      const maxLevel = maturityLevels.length - 1
-
-      let newLevel = 0
-      maturityLevels.forEach((level, i) => {
-        if (newMaturity >= Number(level)) {
-          newLevel = i
-        }
+      return calculateMaturityImpact({
+        amount,
+        positionAmount: position.amount,
+        positionEntry: position.entry,
+        levelOnUpdate,
+        maturityThresholds,
       })
-
-      const oldLevelProgress =
-        levelOnUpdate >= maxLevel
-          ? 'max level reached'
-          : `${maturity}/${maturityLevels[levelOnUpdate + 1]}`
-
-      const newLevelProgress =
-        newLevel >= maxLevel
-          ? 'max level reached'
-          : `${newMaturity}/${maturityLevels[newLevel + 1]}`
-
-      const addLiquidityMaturityImpactTimeInMilliseconds = secondsToMilliseconds(
-        MAX_MATURITY - newMaturity
-      )
-      const staysMax = levelOnUpdate === maxLevel && newLevel === maxLevel
-
-      return {
-        oldMaturity: maturity,
-        newMaturity,
-        oldLevel: levelOnUpdate,
-        newLevel,
-        oldLevelProgress,
-        newLevelProgress,
-        addLiquidityMaturityImpactTimeInMilliseconds,
-        staysMax,
-      }
     },
     enabled: isReady,
   })
