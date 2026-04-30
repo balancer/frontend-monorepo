@@ -173,6 +173,8 @@ export function Hero() {
                     height={radialPatternProps?.height}
                     left="50%"
                     position="absolute"
+                    pulse
+                    spotlight
                     top="50%"
                     transform="translate(-50%, -50%)"
                     width={radialPatternProps?.width}
