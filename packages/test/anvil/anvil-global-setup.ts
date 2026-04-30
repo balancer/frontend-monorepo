@@ -1,7 +1,22 @@
 import { startProxy } from '@viem/anvil'
+import { loadEnvFile } from 'node:process'
+import { dirname, resolve } from 'path'
+import { fileURLToPath } from 'url'
 
 import { ANVIL_NETWORKS, getForkUrl } from './anvil-setup'
 import { testChains } from './testWagmiConfig'
+
+const currentDir = dirname(fileURLToPath(import.meta.url))
+
+function loadEnvFileIfExists(path: string) {
+  try {
+    loadEnvFile(path)
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+  }
+}
+
+loadEnvFileIfExists(resolve(currentDir, '../../../.env.local'))
 
 async function sleep(time: number) {
   return new Promise(resolve => {
