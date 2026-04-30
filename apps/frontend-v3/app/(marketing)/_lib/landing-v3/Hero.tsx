@@ -1,203 +1,193 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
-
-import { Box, Button, Center, Heading, HStack, Stack, Text, VStack, Link } from '@chakra-ui/react'
-import Noise from '@repo/lib/shared/components/layout/Noise'
-import { AnimatePresence, motion, useInView } from 'motion/react'
-import Image from 'next/image'
+import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
+import {
+  Box,
+  Button,
+  Link,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Stack,
+  HStack,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import Noise from '@repo/lib/shared/components/layout/Noise'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { ArrowUpRight } from 'react-feather'
-
-// @ts-ignore
-import bgDarkSrc from './images/hero-bg-dark.png'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
-import { SandBg } from './shared/SandBg'
-import { useRef } from 'react'
-import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
-import { MotionButtonProps, MotionBoxProps } from './types'
-
-const MotionText = motion(Text)
-const MotionHeading = motion(Heading)
-const MotionButton = motion(Button) as React.FC<MotionButtonProps>
-const MotionBox = motion(Box) as React.FC<MotionBoxProps>
 
 export function Hero() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  const radialPatternProps = useBreakpointValue({
+    base: { circleCount: 10, height: 1000, width: 1000 },
+    md: { circleCount: 15, height: 1500, width: 1500 },
+    xl: { circleCount: 20, height: 2000, width: 2000 },
+  })
 
   return (
-    <Noise position="relative">
-      <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
-        <AnimatePresence>
-          <motion.div
-            animate={isInView ? { opacity: 0.3, willChange: 'opacity' } : {}}
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0.01 }}
-            ref={ref}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-            transition={{ duration: 3, ease: 'easeInOut' }}
+    <Box
+      borderBottom="1px solid"
+      borderColor="border.base"
+      left="50%"
+      marginLeft="-50vw"
+      marginRight="-50vw"
+      maxWidth="100vw"
+      position="relative"
+      right="50%"
+      width="100vw"
+    >
+      <Noise
+        backgroundColor="background.level0WithOpacity"
+        h="100%"
+        overflow="hidden"
+        position="relative"
+        shadow="innerBase"
+      >
+        <DefaultPageContainer
+          h={{ base: '500px', md: '800px' }}
+          pb={['0', '0', '10']}
+          position="relative"
+          pt={['xl', '40px']}
+          px="0"
+        >
+          <Grid
+            gap={{ base: '0', md: '4' }}
+            h="100%"
+            overflow={{ base: 'hidden', md: 'visible' }}
+            templateColumns={{ base: '1fr', md: '1fr 1fr' }}
           >
-            <Image
-              alt="background"
-              fill
-              sizes="100vw"
-              src={bgDarkSrc}
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
-            />
-          </motion.div>
-        </AnimatePresence>
-      </Box>
+            {/* Content Column */}
+            <GridItem minW={{ base: 'full', md: '420px' }} zIndex={1}>
+              <FadeInOnView animateOnce={false}>
+                <Stack
+                  alignItems={{ base: 'center', md: 'start' }}
+                  gap="md"
+                  justifyContent="center"
+                  margin={{ base: '0 auto', md: '0' }}
+                  pl={{ md: 'md', '2xl': '0' }}
+                  position="relative"
+                  top={{ base: '0', md: '200px' }}
+                >
+                  <Stack alignItems={{ base: 'center', md: 'start' }} px="0">
+                    <Text
+                      background="background.special"
+                      backgroundClip="text"
+                      fontSize="xs"
+                      letterSpacing="1.5px"
+                      mb="md"
+                      variant="eyebrow"
+                    >
+                      Balancer v3 is live
+                    </Text>
+                    <Heading
+                      as="h2"
+                      fontSize="48px"
+                      pb="sm"
+                      sx={{ textWrap: 'pretty' }}
+                      textAlign={{ base: 'center', md: 'start' }}
+                    >
+                      AMMs made easy
+                    </Heading>
+                    <Text
+                      color="font.secondary"
+                      lineHeight="1.4"
+                      maxW="36ch"
+                      mb="sm"
+                      sx={{ textWrap: 'balance' }}
+                      textAlign={{ base: 'center', md: 'start' }}
+                    >
+                      The ultimate platform for custom liquidity solutions. Balancer v3 perfectly
+                      balances simplicity and flexibility to reshape the future of AMMs.
+                    </Text>
+                  </Stack>
 
-      <DefaultPageContainer flex="1" h="100vh" minH="600px" noVerticalPadding position="relative">
-        <Center h="full" justifyContent="start">
-          <VStack alignItems="start" spacing="xl">
-            <MotionText
-              animate={
-                isInView
-                  ? {
-                      opacity: 1,
-                      filter: 'blur(0px)',
-                      willChange: 'opacity, filter',
-                    }
-                  : {}
-              }
-              background="font.special"
-              backgroundClip="text"
-              fontSize="sm"
-              initial={{ opacity: 0, filter: 'blur(3px)' }}
-              transition={{ delay: 0.7, duration: 0.3, delayChildren: 0.5, ease: 'easeInOut' }}
-              variant="eyebrow"
+                  <Flex gap="ms" maxWidth={320} mb="ms">
+                    <Button
+                      as={Link}
+                      href="https://docs.balancer.fi"
+                      rel="noopener"
+                      rightIcon={<ArrowUpRight size="14px" />}
+                      size="lg"
+                      target="_blank"
+                      variant="primary"
+                    >
+                      View v3 docs
+                    </Button>
+
+                    <Box bg="background.level1">
+                      <Button
+                        as={Link}
+                        href="https://github.com/balancer/scaffold-balancer-v3"
+                        rel="noopener"
+                        rightIcon={<ArrowUpRight size="14px" />}
+                        size="lg"
+                        target="_blank"
+                        variant="tertiary"
+                      >
+                        Prototype v3
+                      </Button>
+                    </Box>
+                  </Flex>
+
+                  <HStack
+                    alignItems="center"
+                    as={Link}
+                    href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
+                    mt="2"
+                    spacing="ms"
+                  >
+                    <PlayVideoButton isRound={false} size={8} sx={{ borderRadius: 'xs' }} />
+                    <Text color="font.secondary">Learn about Balancer v3</Text>
+                  </HStack>
+                </Stack>
+              </FadeInOnView>
+            </GridItem>
+
+            <GridItem
+              display="flex"
+              justifyContent={{ base: 'center', md: 'flex-start' }}
+              zIndex={0}
             >
-              Balancer v3 is live
-            </MotionText>
-
-            <WordsPullUp
-              as="h1"
-              color="font.primary"
-              delay={0.7}
-              fontSize={{ base: '4xl', md: '6xl' }}
-              fontWeight="bold"
-              letterSpacing="-2px"
-              lineHeight={1}
-              pr="2"
-              text="AMMs made easy"
-            />
-            <MotionHeading
-              animate={
-                isInView
-                  ? {
-                      opacity: 1,
-                      y: 0,
-                      filter: 'blur(0px)',
-                      willChange: 'transform, opacity, filter',
-                    }
-                  : {}
-              }
-              as="h2"
-              color="font.secondary"
-              fontSize={{ base: 'xl', md: '2xl' }}
-              fontWeight="thin"
-              initial={{ opacity: 0, y: 10, filter: 'blur(3px)' }}
-              maxW="700px"
-              transition={{ duration: 1, delay: 0.9, ease: 'easeInOut' }}
-              w="full"
-            >
-              The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
-              simplicity and flexibility to reshape the future of AMMs.
-            </MotionHeading>
-            <Stack alignItems={{ base: 'start', md: 'center' }} direction="row" mt="0" spacing="ms">
-              <MotionButton
-                animate={
-                  isInView
-                    ? {
-                        opacity: 1,
-                        willChange: 'opacity',
-                      }
-                    : {}
-                }
-                as={Link}
-                href="https://docs.balancer.fi"
-                initial={{ opacity: 0 }}
-                rel="noopener"
-                rightIcon={<ArrowUpRight size="14px" />}
-                size="lg"
-                target="_blank"
-                transition={{ duration: 2, delay: 1.2 }}
-                variant="primary"
-              >
-                View v3 docs
-              </MotionButton>
-
-              <MotionButton
-                animate={
-                  isInView
-                    ? {
-                        opacity: 1,
-                        willChange: 'opacity',
-                      }
-                    : {}
-                }
-                as={Link}
-                href="https://github.com/balancer/scaffold-balancer-v3"
-                initial={{ opacity: 0 }}
-                rel="noopener"
-                rightIcon={<ArrowUpRight size="14px" />}
-                size="lg"
-                target="_blank"
-                transition={{ duration: 2, delay: 1.2 }}
-                variant="secondary"
-              >
-                Prototype v3
-              </MotionButton>
-            </Stack>
-            <HStack alignItems="center" mt="xl" spacing="md">
-              <MotionBox
-                animate={isInView ? { opacity: 1 } : {}}
-                as={Link}
-                h="56px"
-                href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
-                initial={{ opacity: 0 }}
-                overflow="hidden"
-                position="relative"
-                rel="noopener"
-                rounded="lg"
-                shadow="md"
-                target="_blank"
-                transition={{ duration: 2, delay: 1.4 }}
-                w="90px"
-              >
-                <SandBg variant={1} />
-
-                <Center h="full" position="relative" w="full">
-                  <PlayVideoButton size={10} />
-                </Center>
-              </MotionBox>
-              <MotionText
-                animate={isInView ? { opacity: 1 } : {}}
-                initial={{ opacity: 0 }}
-                transition={{ duration: 2, delay: 1.4 }}
-              >
-                Learn about Balancer v3
-              </MotionText>
-            </HStack>
-          </VStack>
-        </Center>
-      </DefaultPageContainer>
-      <Box
-        bgGradient="linear(transparent 0%, background.level0 50%, transparent 100%)"
-        bottom="0"
-        h="200px"
-        left="0"
-        mb="-100px"
-        position="absolute"
-        w="full"
-      />
-    </Noise>
+              <FadeInOnView animateOnce={false}>
+                <Box
+                  margin={{ base: '32px auto', md: '0' }}
+                  position="relative"
+                  sx={{
+                    '@keyframes scaleUpFadeIn': {
+                      from: { opacity: 0, transform: 'scale(0.8)' },
+                      to: { opacity: 1, transform: 'scale(1)' },
+                    },
+                    animation: `scaleUpFadeIn 1s ease-out forwards`,
+                  }}
+                  width={{ base: '98%', md: 'clamp(800px, 85vw, 1200px)' }}
+                >
+                  <RadialPattern
+                    circleCount={radialPatternProps?.circleCount}
+                    height={radialPatternProps?.height}
+                    left="50%"
+                    position="absolute"
+                    top="50%"
+                    transform="translate(-50%, -50%)"
+                    width={radialPatternProps?.width}
+                    zIndex={-1}
+                  />
+                  <Picture
+                    altText="veBAL token"
+                    defaultImgType="png"
+                    directory="/images/vebal/"
+                    imgAvif
+                    imgName="vebal"
+                    imgPng
+                  />
+                </Box>
+              </FadeInOnView>
+            </GridItem>
+          </Grid>
+        </DefaultPageContainer>
+      </Noise>
+    </Box>
   )
 }

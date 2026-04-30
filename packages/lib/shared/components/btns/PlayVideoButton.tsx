@@ -1,11 +1,23 @@
 'use client'
 
 import { TriangleDownIcon } from '@chakra-ui/icons'
-import { IconButton } from '@chakra-ui/react'
+import { IconButton, type IconButtonProps } from '@chakra-ui/react'
 
-export function PlayVideoButton({ size = 24 }: { size?: number }) {
+export type PlayVideoButtonProps = {
+  /** Width and height in pixels */
+  size?: number
+} & Omit<IconButtonProps, 'aria-label' | 'icon' | 'size' | 'h' | 'w'>
+
+export function PlayVideoButton({
+  size = 24,
+  isRound = true,
+  shadow = 'md',
+  variant = 'primary',
+  ...rest
+}: PlayVideoButtonProps) {
   return (
     <IconButton
+      {...rest}
       aria-label="Play video"
       h={size}
       icon={
@@ -17,9 +29,9 @@ export function PlayVideoButton({ size = 24 }: { size?: number }) {
           w={size / 2}
         />
       }
-      isRound
-      shadow="md"
-      variant="primary"
+      isRound={isRound}
+      shadow={shadow}
+      variant={variant}
       w={size}
     />
   )
