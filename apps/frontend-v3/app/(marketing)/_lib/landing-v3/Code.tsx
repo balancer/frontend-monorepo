@@ -4,7 +4,6 @@ import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
@@ -14,6 +13,7 @@ import './vscode.theme.css'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-solidity'
 import { useInView } from 'motion/react'
+import { ImageBorderCard } from './ImageBorderCard'
 
 const TYPING_SPEED = 20 // milliseconds per character
 
@@ -83,96 +83,81 @@ export function Code() {
             </Text>
           </FadeIn>
         </VStack>
-        <Card mt="2xl">
-          <Box background="background.level0" minH="500px" position="relative" shadow="innerXl">
-            <Box
-              bottom={0}
-              h="100%"
-              left={0}
-              opacity={0.3}
-              overflow="hidden"
-              position="absolute"
-              right={0}
-              shadow="innerXl"
-              top={0}
-              w="100%"
-            >
-              <RadialPattern
-                circleCount={12}
-                height={800}
-                innerHeight={100}
-                innerWidth={100}
-                intensity={2}
-                left="calc(50% - 400px)"
-                padding="15px"
-                position="absolute"
-                top="calc(50% - 400px)"
-                width={800}
-              />
-            </Box>
-            <Center px={{ base: 'xs', lg: '2xl' }} py="2xl">
-              <Stack
-                alignItems="center"
-                direction={{ base: 'column', lg: 'row' }}
-                gap="2xl"
-                w="full"
-              >
-                <Box w="full">
-                  <VStack alignItems="start" px={{ base: 'md', lg: '0' }} spacing="lg">
-                    <BlurIn delay={0.4}>
-                      <Text
-                        background="font.special"
-                        backgroundClip="text"
-                        fontSize="sm"
-                        variant="eyebrow"
-                      >
-                        Simplicity
-                      </Text>
-                    </BlurIn>
-                    <WordsPullUp
-                      as="h3"
-                      color="font.primary"
-                      fontSize={{ base: '2xl', lg: '4xl' }}
-                      fontWeight="bold"
-                      letterSpacing="-0.04rem"
-                      lineHeight={1}
-                      pr={{ base: 'xxs', lg: '0.9' }}
-                      text="Building on v3 is simple"
-                    />
-                    <FadeIn delay={0.2} direction="up" duration={0.6}>
-                      <Text color="font.secondary">
-                        To make custom pool creation easy, core functions have been moved from pools
-                        into the heavily audited Vault. For example, here’s all the code needed to
-                        build a swap function for a Constant Product Pool.
-                      </Text>
-                    </FadeIn>
-                  </VStack>
-                </Box>
-                <Box w="full">
-                  <Card ref={codeBoxRef}>
-                    <pre
-                      className="language-solidity"
-                      style={{
-                        padding: '2rem',
-                        borderRadius: '8px',
-                        minHeight: '400px',
-                      }}
+        <ImageBorderCard mt="2xl">
+          <Box
+            bottom={0}
+            h="100%"
+            left={0}
+            opacity={0.3}
+            overflow="hidden"
+            position="absolute"
+            right={0}
+            top={0}
+            w="100%"
+          ></Box>
+          <Center minH="500px" px={{ base: 'xs', lg: '2xl' }} py="2xl">
+            <Stack alignItems="center" direction={{ base: 'column', lg: 'row' }} gap="2xl" w="full">
+              <Box w="full">
+                <VStack alignItems="start" px={{ base: 'md', lg: '0' }} spacing="lg">
+                  <BlurIn delay={0.4}>
+                    <Text
+                      background="font.special"
+                      backgroundClip="text"
+                      fontSize="sm"
+                      variant="eyebrow"
                     >
-                      <code
-                        className="language-solidity"
-                        dangerouslySetInnerHTML={{ __html: displayedText }}
-                        style={{
-                          whiteSpace: isMobile ? 'pre-line' : 'pre',
-                          wordBreak: isMobile ? 'break-word' : 'normal',
-                        }}
-                      />
-                    </pre>
-                  </Card>
-                </Box>
-              </Stack>
-            </Center>
-          </Box>
-        </Card>
+                      Simplicity
+                    </Text>
+                  </BlurIn>
+                  <WordsPullUp
+                    as="h3"
+                    color="font.primary"
+                    fontSize={{ base: '2xl', lg: '4xl' }}
+                    fontWeight="bold"
+                    letterSpacing="-0.04rem"
+                    lineHeight={1}
+                    pr={{ base: 'xxs', lg: '0.9' }}
+                    text="Building on v3 is simple"
+                  />
+                  <FadeIn delay={0.2} direction="up" duration={0.6}>
+                    <Text color="font.secondary">
+                      To make custom pool creation easy, core functions have been moved from pools
+                      into the heavily audited Vault. For example, here’s all the code needed to
+                      build a swap function for a Constant Product Pool.
+                    </Text>
+                  </FadeIn>
+                </VStack>
+              </Box>
+              <Box w="full">
+                <Card
+                  background={{ base: 'transparent', md: 'background.level2' }}
+                  borderWidth={{ base: 0, md: '1px' }}
+                  p={{ base: 0, md: 'md' }}
+                  ref={codeBoxRef}
+                  shadow={{ base: 'none', md: '3xl' }}
+                >
+                  <pre
+                    className="language-solidity"
+                    style={{
+                      padding: '2rem',
+                      borderRadius: '8px',
+                      minHeight: '400px',
+                    }}
+                  >
+                    <code
+                      className="language-solidity"
+                      dangerouslySetInnerHTML={{ __html: displayedText }}
+                      style={{
+                        whiteSpace: isMobile ? 'pre-line' : 'pre',
+                        wordBreak: isMobile ? 'break-word' : 'normal',
+                      }}
+                    />
+                  </pre>
+                </Card>
+              </Box>
+            </Stack>
+          </Center>
+        </ImageBorderCard>
       </DefaultPageContainer>
       <Box
         bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
