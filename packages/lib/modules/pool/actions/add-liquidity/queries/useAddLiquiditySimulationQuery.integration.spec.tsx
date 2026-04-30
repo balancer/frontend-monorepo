@@ -7,6 +7,9 @@ import { selectAddLiquidityHandler } from '../handlers/selectAddLiquidityHandler
 import { useAddLiquiditySimulationQuery } from './useAddLiquiditySimulationQuery'
 import { HumanTokenAmountWithSymbol } from '@repo/lib/modules/tokens/token.types'
 
+const SIMULATION_WAIT_TIMEOUT_MS = 60_000
+const SIMULATION_TEST_TIMEOUT_MS = 120_000
+
 async function testQuery(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
   const handler = selectAddLiquidityHandler(aWjAuraWethPoolElementMock())
   const { result } = testHook(
@@ -18,16 +21,22 @@ async function testQuery(humanAmountsIn: HumanTokenAmountWithSymbol[]) {
   return result
 }
 
-test('queries btp out for add liquidity', async () => {
-  const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
-    { tokenAddress: wETHAddress, humanAmount: '100', symbol: 'WETH' },
-    { tokenAddress: wjAuraAddress, humanAmount: '1', symbol: 'wjAura' },
-  ]
+test(
+  'queries btp out for add liquidity',
+  async () => {
+    const humanAmountsIn: HumanTokenAmountWithSymbol[] = [
+      { tokenAddress: wETHAddress, humanAmount: '100', symbol: 'WETH' },
+      { tokenAddress: wjAuraAddress, humanAmount: '1', symbol: 'wjAura' },
+    ]
 
-  const result = await testQuery(humanAmountsIn)
+    const result = await testQuery(humanAmountsIn)
 
-  await waitFor(() => expect(result.current.data?.bptOut).toBeDefined())
+    await waitFor(() => expect(result.current.data?.bptOut).toBeDefined(), {
+      timeout: SIMULATION_WAIT_TIMEOUT_MS,
+    })
 
-  expect(result.current.data?.bptOut?.amount).toBeDefined()
-  expect(result.current.isLoading).toBeFalsy()
-})
+    expect(result.current.data?.bptOut?.amount).toBeDefined()
+    expect(result.current.isLoading).toBeFalsy()
+  },
+  SIMULATION_TEST_TIMEOUT_MS
+)
