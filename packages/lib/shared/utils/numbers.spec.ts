@@ -162,6 +162,17 @@ describe('bn', () => {
     expect(bn(12345n).toFixed()).toBe('12345')
     expect(bn('0.0000000000000035').toFixed()).toBe('0.0000000000000035')
   })
+
+  test('returns NaN for invalid string inputs instead of throwing', () => {
+    expect(bn('').isNaN()).toBe(true)
+    expect(bn(' ').isNaN()).toBe(true)
+    expect(bn('abc').isNaN()).toBe(true)
+  })
+
+  test('throws for nullish inputs passed at runtime', () => {
+    expect(() => bn(undefined as any)).toThrow(TypeError)
+    expect(() => bn(null as any)).toThrow(TypeError)
+  })
 })
 
 test('all formats types do not break with super small inputs (AKA dust)', () => {

@@ -33,7 +33,6 @@ export function ProjectedPriceChart({
   const theme = useChakraTheme()
   const { isMobile } = useBreakpoints()
 
-  const colorMode = '_dark'
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -104,7 +103,7 @@ export function ProjectedPriceChart({
         rotate: isMobile ? 45 : 0, // Rotate labels on mobile
         fontSize: isMobile ? 10 : 12,
         margin: 8,
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
       },
       splitNumber: (() => {
@@ -127,7 +126,7 @@ export function ProjectedPriceChart({
         formatter: (value: number) => {
           return toCurrency(value)
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
       },
     },

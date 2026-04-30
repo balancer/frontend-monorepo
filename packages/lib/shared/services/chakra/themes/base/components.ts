@@ -69,10 +69,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             width: 'full',
           },
           icon: {
-            color: 'orange.500',
-            _dark: {
-              color: 'green.500',
-            },
+            color: 'green.500',
           },
           button: {
             width: 'full',
@@ -581,14 +578,11 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
         gold: {
           background: 'background.gold',
-          color: 'white',
           shadow: '2xl',
           _hover: {
             shadow: 'sm',
           },
-          _dark: {
-            color: 'font.dark',
-          },
+          color: 'font.dark',
         },
         goldSecondary: {
           background: 'background.gold',
@@ -596,9 +590,6 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           border: '1px solid transparent',
           borderColor: 'red',
           color: 'font.gold',
-          _dark: {
-            color: 'font.gold',
-          },
         },
         danger: {
           background: 'red.400',
@@ -639,24 +630,13 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           px: '2',
           py: '1.5',
           fontSize: 'xs',
-          color: 'font.secondary',
           fontWeight: 'bold',
           borderRadius: '4px',
+          color: 'font.secondary',
           _hover: {
             color: 'font.maxContrast',
-            transform: 'none',
             _disabled: {
-              background: 'transparent',
               color: 'font.secondary',
-            },
-          },
-          _dark: {
-            color: 'font.secondary',
-            _hover: {
-              color: 'font.maxContrast',
-              _disabled: {
-                color: 'font.secondary',
-              },
             },
           },
           _disabled: {
@@ -671,15 +651,12 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           px: '2',
           py: '1.5',
           fontSize: 'xs',
-          color: 'gray.700',
           fontWeight: 'bold',
           borderRadius: '4px',
           _hover: {
             transform: 'none',
           },
-          _dark: {
-            color: 'background.level3',
-          },
+          color: 'background.level3',
         },
         buttonGroupActiveGray: {
           background: 'white',
@@ -688,15 +665,12 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           px: '2',
           py: '1.5',
           fontSize: 'sm',
-          color: 'white',
           fontWeight: '700',
           borderRadius: '4px',
           _hover: {
             transform: 'none',
           },
-          _dark: {
-            color: 'background.level3',
-          },
+          color: 'background.level3',
         },
         buttonGroupInactiveGray: {
           background: 'white',
@@ -705,15 +679,12 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           px: '2',
           py: '1.5',
           fontSize: 'sm',
-          color: 'gray.700',
           fontWeight: '500',
           borderRadius: '4px',
           _hover: {
             transform: 'none',
           },
-          _dark: {
-            color: 'gray.400',
-          },
+          color: 'gray.400',
         },
         buttonGroupInactiveCompact: {
           backgroundColor: 'transparent',
@@ -775,11 +746,8 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           paddingX: '5',
         },
         overlay: {
-          bg: 'rgba(0,0,0,0.85)',
           backdropFilter: 'blur(4px)',
-          _dark: {
-            bg: 'rgba(0,0,0,0.7)',
-          },
+          bg: 'rgba(0,0,0,0.7)',
         },
       },
       sizes: {
@@ -804,11 +772,8 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           color: 'font.primary',
         },
         overlay: {
-          bg: 'rgba(0,0,0,0.85)',
           backdropFilter: 'blur(4px)',
-          _dark: {
-            bg: 'rgba(0,0,0,0.7)',
-          },
+          bg: 'rgba(0,0,0,0.7)',
         },
       },
     },
@@ -824,10 +789,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           bg: 'background.level3',
           borderColor: 'background.level3',
           color: 'background.level3',
-          '--popper-arrow-shadow-color': '#fff',
-          _dark: {
-            '--popper-arrow-shadow-color': 'border.base',
-          },
+          '--popper-arrow-shadow-color': 'border.base',
         },
         closeButton: {
           color: 'font.primary',
@@ -839,10 +801,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         header: {
           borderBottomWidth: '1px',
           borderBottomColor: 'border.divider',
-          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 1)',
-          _dark: {
-            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.15)',
-          },
+          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.15)',
           paddingInlineStart: 0,
           paddingInlineEnd: 0,
           marginInline: 3,
@@ -980,14 +939,12 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             width: 'full',
             height: 'full',
             rounded: '2xl',
-            _dark: {
-              backgroundColor: 'transparent',
-              backgroundImage: `radial-gradient(
+            backgroundColor: 'transparent',
+            backgroundImage: `radial-gradient(
                   farthest-corner at 80px 0px,
                   rgba(180, 189, 200, 0.1) 0%,
                   rgba(255, 255, 255, 0.0) 100%
                 )`,
-            },
           },
         },
       },
@@ -1031,16 +988,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             },
           },
           _hover: {
-            boxShadow: '0 0 0 2px var(--chakra-colors-green-600)',
-            _dark: {
-              boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
-            },
+            boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
           },
           _focus: {
-            boxShadow: '0 0 0 2px var(--chakra-colors-green-600)',
-            _dark: {
-              boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
-            },
+            boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
           },
           _disabled: {
             border: '1px solid',
@@ -1103,16 +1054,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             },
           },
           _hover: {
-            boxShadow: '0 0 0 2px var(--chakra-colors-green-600)',
-            _dark: {
-              boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
-            },
+            boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
           },
           _focus: {
-            boxShadow: '0 0 0 2px var(--chakra-colors-green-600)',
-            _dark: {
-              boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
-            },
+            boxShadow: '0 0 0 2px var(--chakra-colors-green-500)',
           },
           _disabled: {
             border: '1px solid',
@@ -1151,9 +1096,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             width: '16px',
           },
           track: {
-            _dark: {
-              bg: '#282D34', // fix: what token?
-            },
+            bg: '#282D34', // fix: what token?
             height: '5px',
           },
         },
@@ -1173,10 +1116,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
       baseStyle: {
         borderColor: 'border.divider',
         borderWidth: '1px',
-        boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 1)',
-        _dark: {
-          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.15)',
-        },
+        boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.15)',
       },
     },
     Alert: {
@@ -1192,28 +1132,16 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           rounded: 'md',
           alignItems: 'center',
           "&[data-status='info']": {
-            background: 'var(--chakra-colors-purple-200)',
-            _dark: {
-              backgroundColor: 'var(--chakra-colors-purple-300)',
-            },
+            backgroundColor: 'var(--chakra-colors-purple-300)',
           },
           "&[data-status='warning']": {
-            background: 'var(--chakra-colors-orange-200)',
-            _dark: {
-              background: 'var(--chakra-colors-orange-300)',
-            },
+            backgroundColor: 'var(--chakra-colors-orange-300)',
           },
           "&[data-status='success']": {
-            backgroundColor: 'var(--chakra-colors-green-300)',
-            _dark: {
-              backgroundColor: 'var(--chakra-colors-green-400)',
-            },
+            backgroundColor: 'var(--chakra-colors-green-400)',
           },
           "&[data-status='error']": {
-            backgroundColor: 'var(--chakra-colors-red-300)',
-            _dark: {
-              backgroundColor: 'var(--chakra-colors-red-400)',
-            },
+            backgroundColor: 'var(--chakra-colors-red-400)',
           },
         },
         title: {
@@ -1293,43 +1221,27 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           color: 'font.secondary',
           "&[data-status='active']": {
             color: 'font.primary',
-            _dark: {
-              color: 'font.primary',
-            },
           },
         },
         indicator: {
           color: 'font.secondary',
           borderStyle: 'dashed',
           "&[data-status='active']": {
-            background: 'transparent',
+            borderStyle: 'solid',
+            backgroundColor: 'transparent',
             borderColor: 'font.primary',
             color: 'font.primary',
-            borderStyle: 'solid',
-            _dark: {
-              backgroundColor: 'transparent',
-              borderColor: 'font.primary',
-              color: 'font.primary',
-            },
           },
           "&[data-status='complete']": {
-            background: 'transparent',
-            borderColor: 'green.500',
             border: '2px solid',
+            backgroundColor: 'transparent',
+            borderColor: 'green.500',
             color: 'green.500',
-            _dark: {
-              backgroundColor: 'transparent',
-              borderColor: 'green.500',
-              color: 'green.500',
-            },
           },
         },
         separator: {
           "&[data-status='complete']": {
-            background: 'green.500',
-            _dark: {
-              backgroundColor: 'green.500',
-            },
+            backgroundColor: 'green.500',
           },
         },
       },

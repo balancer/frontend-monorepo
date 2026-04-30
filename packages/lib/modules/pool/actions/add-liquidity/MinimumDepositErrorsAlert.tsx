@@ -5,6 +5,7 @@ import { ListItem, Text, UnorderedList } from '@chakra-ui/react'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useFxRates } from '@repo/lib/shared/hooks/FxRatesProvider'
 import { symbolForCurrency } from '@repo/lib/shared/utils/currencies'
+import type BigNumber from 'bignumber.js'
 
 type Props = {
   errors: MinimumDepositErrors

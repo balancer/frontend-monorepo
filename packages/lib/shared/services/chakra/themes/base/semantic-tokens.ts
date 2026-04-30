@@ -3,10 +3,8 @@ export type SemanticTokens = ReturnType<typeof getSemanticTokens>
 export function getSemanticTokens(tokens: any, colors: any) {
   return {
     colors: {
-      primary: { _dark: 'primary.500' },
-      grayText: {
-        _dark: tokens.colors.dark.text.secondary,
-      },
+      primary: 'primary.500',
+      grayText: tokens.colors.dark.text.secondary,
       gradients: {
         text: {
           heading: {
@@ -24,231 +22,99 @@ export function getSemanticTokens(tokens: any, colors: any) {
 
       // Background colors
       background: {
-        level0: {
-          _dark: tokens.colors.dark.background.level0,
-        },
-        level1: {
-          _dark: tokens.colors.dark.background.level1,
-        },
-        level2: {
-          _dark: tokens.colors.dark.background.level2,
-        },
-        level3: {
-          _dark: tokens.colors.dark.background.level3,
-        },
-        level4: {
-          _dark: tokens.colors.dark.background.level4,
-        },
-        base: {
-          _dark: tokens.colors.dark.background.base,
-        },
-        baseWithOpacity: {
-          _dark: tokens.colors.dark.background.baseWithOpacity,
-        },
-        level0WithOpacity: {
-          _dark: tokens.colors.dark.background.level0WithOpacity,
-        },
-        special: {
-          _dark: tokens.colors.dark.background.special,
-        },
-        specialAlpha15: {
-          _dark: tokens.colors.dark.background.specialAlpha15,
-        },
-        specialSecondary: {
-          _dark: tokens.colors.dark.background.specialSecondary,
-        },
-        highlight: {
-          _dark: tokens.colors.dark.background.highlight,
-        },
-        gold: {
-          _dark: tokens.colors.dark.background.gold,
-        },
+        level0: tokens.colors.dark.background.level0,
+        level1: tokens.colors.dark.background.level1,
+        level2: tokens.colors.dark.background.level2,
+        level3: tokens.colors.dark.background.level3,
+        level4: tokens.colors.dark.background.level4,
+        base: tokens.colors.dark.background.base,
+        baseWithOpacity: tokens.colors.dark.background.baseWithOpacity,
+        level0WithOpacity: tokens.colors.dark.background.level0WithOpacity,
+        special: tokens.colors.dark.background.special,
+        specialAlpha15: tokens.colors.dark.background.specialAlpha15,
+        specialSecondary: tokens.colors.dark.background.specialSecondary,
+        highlight: tokens.colors.dark.background.highlight,
+        gold: tokens.colors.dark.background.gold,
         button: {
-          primary: {
-            _dark: tokens.colors.dark.button.background.primary,
-          },
-          secondary: {
-            _dark: tokens.colors.dark.button.background.secondary,
-          },
+          primary: tokens.colors.dark.button.background.primary,
+          secondary: tokens.colors.dark.button.background.secondary,
         },
-        warning: {
-          _dark: tokens.colors.dark.background.warning,
-        },
+        warning: tokens.colors.dark.background.warning,
       },
       input: {
-        fontDefault: {
-          _dark: tokens.colors.dark.input.fontDefault,
-        },
-        fontPlaceholder: {
-          _dark: tokens.colors.dark.input.fontPlaceholder,
-        },
-        fontFocus: {
-          _dark: tokens.colors.dark.input.fontFocus,
-        },
-        fontError: {
-          _dark: tokens.colors.dark.input.fontError,
-        },
-        fontHint: {
-          _dark: tokens.colors.dark.input.fontHint,
-        },
-        fontHintError: {
-          _dark: tokens.colors.dark.input.fontHintError,
-        },
-        borderDefault: {
-          _dark: tokens.colors.dark.input.borderDefault,
-        },
-        borderHover: {
-          _dark: tokens.colors.dark.input.borderHover,
-        },
-        borderFocus: {
-          _dark: tokens.colors.dark.input.borderFocus,
-        },
-        borderError: {
-          _dark: tokens.colors.dark.input.borderError,
-        },
-        borderErrorFocus: {
-          _dark: tokens.colors.dark.input.borderErrorFocus,
-        },
-        borderDisabled: {
-          _dark: tokens.colors.dark.input.borderDisabled,
-        },
-        caret: {
-          _dark: tokens.colors.dark.input.caret,
-        },
-        bgDefault: {
-          _dark: tokens.colors.dark.input.bgDefault,
-        },
-        bgHover: {
-          _dark: tokens.colors.dark.input.bgHover,
-        },
-        bgHoverDisabled: {
-          _dark: tokens.colors.dark.input.bgHoverDisabled,
-        },
-        bgFocus: {
-          _dark: tokens.colors.dark.input.bgFocus,
-        },
-        bgError: {
-          _dark: tokens.colors.dark.input.bgError,
-        },
-        bgErrorFocus: {
-          _dark: tokens.colors.dark.input.bgErrorFocus,
-        },
-        clearIcon: {
-          _dark: tokens.colors.dark.input.clearIcon,
-        },
+        fontDefault: tokens.colors.dark.input.fontDefault,
+        fontPlaceholder: tokens.colors.dark.input.fontPlaceholder,
+        fontFocus: tokens.colors.dark.input.fontFocus,
+        fontError: tokens.colors.dark.input.fontError,
+        fontHint: tokens.colors.dark.input.fontHint,
+        fontHintError: tokens.colors.dark.input.fontHintError,
+        borderDefault: tokens.colors.dark.input.borderDefault,
+        borderHover: tokens.colors.dark.input.borderHover,
+        borderFocus: tokens.colors.dark.input.borderFocus,
+        borderError: tokens.colors.dark.input.borderError,
+        borderErrorFocus: tokens.colors.dark.input.borderErrorFocus,
+        borderDisabled: tokens.colors.dark.input.borderDisabled,
+        caret: tokens.colors.dark.input.caret,
+        bgDefault: tokens.colors.dark.input.bgDefault,
+        bgHover: tokens.colors.dark.input.bgHover,
+        bgHoverDisabled: tokens.colors.dark.input.bgHoverDisabled,
+        bgFocus: tokens.colors.dark.input.bgFocus,
+        bgError: tokens.colors.dark.input.bgError,
+        bgErrorFocus: tokens.colors.dark.input.bgErrorFocus,
+        clearIcon: tokens.colors.dark.input.clearIcon,
       },
       formLabel: {
-        focus: {
-          _dark: tokens.colors.dark.input.labelFocus,
-        },
-        error: {
-          _dark: tokens.colors.dark.input.labelError,
-        },
+        focus: tokens.colors.dark.input.labelFocus,
+        error: tokens.colors.dark.input.labelError,
       },
-      formErrorMessage: {
-        _dark: tokens.colors.dark.input.labelError,
-      },
+      formErrorMessage: tokens.colors.dark.input.labelError,
       backgroundImage: {
         card: {
-          gradient: {
-            _dark: `radial-gradient(
+          gradient: `radial-gradient(
                 farthest-corner at 80px 0px,
                 rgba(180, 189, 200, 0.3) 0%,
                 rgba(255, 255, 255, 0.0) 100%
               )`,
-          },
         },
       },
 
       border: {
-        base: {
-          _dark: tokens.colors.dark.border.base,
-        },
-        divider: {
-          _dark: tokens.colors.dark.border.divider,
-        },
-        highlight: {
-          _dark: tokens.colors.dark.border.highlight,
-        },
+        base: tokens.colors.dark.border.base,
+        divider: tokens.colors.dark.border.divider,
+        highlight: tokens.colors.dark.border.highlight,
         button: {
-          disabled: {
-            _dark: tokens.colors.dark.button.border.disabled,
-          },
+          disabled: tokens.colors.dark.button.border.disabled,
         },
-        zen: {
-          _dark: tokens.colors.dark.border.zen,
-        },
-        subduedZen: {
-          _dark: tokens.colors.dark.border.subduedZen,
-        },
+        zen: tokens.colors.dark.border.zen,
+        subduedZen: tokens.colors.dark.border.subduedZen,
       },
 
       icon: {
-        base: {
-          _dark: tokens.colors.dark.icon.base,
-        },
+        base: tokens.colors.dark.icon.base,
       },
 
       // Text colors
       font: {
-        primary: {
-          _dark: tokens.colors.dark.text.primary,
-        },
-        secondary: {
-          _dark: tokens.colors.dark.text.secondary,
-        },
-        secondaryAlpha50: {
-          _dark: tokens.colors.dark.text.secondaryAlpha50,
-        },
-        primaryGradient: {
-          _dark: tokens.colors.dark.text.primaryGradient,
-        },
-        secondaryGradient: {
-          _dark: tokens.colors.dark.text.secondaryGradient,
-        },
-        special: {
-          _dark: tokens.colors.dark.text.special,
-        },
-        specialSecondary: {
-          _dark: tokens.colors.dark.text.specialSecondary,
-        },
-        opposite: {
-          _dark: tokens.colors.light.text.primary,
-        },
-        link: {
-          _dark: tokens.colors.dark.text.link,
-        },
-        linkHover: {
-          _dark: tokens.colors.dark.text.linkHover,
-        },
-        maxContrast: {
-          _dark: tokens.colors.dark.text.maxContrast,
-        },
-        maxContrastOpposite: {
-          _dark: tokens.colors.dark.text.maxContrastOpposite,
-        },
-        highlight: {
-          _dark: tokens.colors.dark.text.highlight,
-        },
-        warning: {
-          _dark: tokens.colors.dark.text.warning,
-        },
-        error: {
-          _dark: tokens.colors.dark.text.error,
-        },
-        accordionHeading: {
-          _dark: tokens.colors.dark.button.background.primary,
-        },
+        primary: tokens.colors.dark.text.primary,
+        secondary: tokens.colors.dark.text.secondary,
+        secondaryAlpha50: tokens.colors.dark.text.secondaryAlpha50,
+        primaryGradient: tokens.colors.dark.text.primaryGradient,
+        secondaryGradient: tokens.colors.dark.text.secondaryGradient,
+        special: tokens.colors.dark.text.special,
+        specialSecondary: tokens.colors.dark.text.specialSecondary,
+        opposite: tokens.colors.light.text.primary,
+        link: tokens.colors.dark.text.link,
+        linkHover: tokens.colors.dark.text.linkHover,
+        maxContrast: tokens.colors.dark.text.maxContrast,
+        maxContrastOpposite: tokens.colors.dark.text.maxContrastOpposite,
+        highlight: tokens.colors.dark.text.highlight,
+        warning: tokens.colors.dark.text.warning,
+        error: tokens.colors.dark.text.error,
+        accordionHeading: tokens.colors.dark.button.background.primary,
         button: {
-          tertiary: {
-            _dark: tokens.colors.dark.button.text.tertiary,
-          },
-          disabled: {
-            _dark: tokens.colors.dark.button.text.disabled,
-          },
-          primary: {
-            _dark: '#414853',
-          },
+          tertiary: tokens.colors.dark.button.text.tertiary,
+          disabled: tokens.colors.dark.button.text.disabled,
+          primary: '#414853',
         },
         dark: colors.gray['700'], // always dark
         light: '#E5D3BE', // always light
@@ -302,81 +168,33 @@ export function getSemanticTokens(tokens: any, colors: any) {
       '3xl': '6rem',
     },
     shadows: {
-      sm: {
-        _dark: tokens.shadows.dark.sm,
-      },
-      md: {
-        _dark: tokens.shadows.dark.md,
-      },
-      lg: {
-        _dark: tokens.shadows.dark.lg,
-      },
-      xl: {
-        _dark: tokens.shadows.dark.xl,
-      },
-      '2xl': {
-        _dark: tokens.shadows.dark['2xl'],
-      },
-      '3xl': {
-        _dark: tokens.shadows.dark['3xl'],
-      },
+      sm: tokens.shadows.dark.sm,
+      md: tokens.shadows.dark.md,
+      lg: tokens.shadows.dark.lg,
+      xl: tokens.shadows.dark.xl,
+      '2xl': tokens.shadows.dark['2xl'],
+      '3xl': tokens.shadows.dark['3xl'],
       innerSm: 'inset 0 0 4px 0 rgba(0, 0, 0, 0.06)',
-      innerBase: {
-        _dark: tokens.shadows.dark['shadowInnerBase'],
-      },
+      innerBase: tokens.shadows.dark['shadowInnerBase'],
       innerMd: 'inset 0 0 6px 0 rgba(0, 0, 0, 0.1)',
-      innerLg: {
-        _dark: tokens.shadows.dark.innerLg,
-      },
-      innerXl: {
-        _dark: tokens.shadows.dark.innerXl,
-      },
-      innerRockShadow: {
-        _dark: tokens.shadows.dark.innerRockShadow,
-      },
-      innerRockShadowSm: {
-        _dark: tokens.shadows.dark.innerRockShadowSm,
-      },
-      chartIconInner: {
-        _dark: tokens.shadows.dark.chartIconInner,
-      },
-      chartIconOuter: {
-        _dark: tokens.shadows.dark.chartIconOuter,
-      },
-      chart: {
-        _dark: tokens.shadows.dark.chart,
-      },
-      zen: {
-        _dark: tokens.shadows.dark.zen,
-      },
-      btnDefault: {
-        _dark: tokens.shadows.dark.btnDefault,
-      },
-      btnDefaultActive: {
-        _dark: tokens.shadows.dark.btnDefaultActive,
-      },
-      btnTertiary: {
-        _dark: tokens.shadows.dark.btnTertiary,
-      },
-      fontDefault: {
-        _dark: tokens.shadows.dark.fontDefault,
-      },
-      fontLight: {
-        _dark: tokens.shadows.dark.fontLight,
-      },
-      fontDark: {
-        _dark: tokens.shadows.dark.fontDark,
-      },
+      innerLg: tokens.shadows.dark.innerLg,
+      innerXl: tokens.shadows.dark.innerXl,
+      innerRockShadow: tokens.shadows.dark.innerRockShadow,
+      innerRockShadowSm: tokens.shadows.dark.innerRockShadowSm,
+      chartIconInner: tokens.shadows.dark.chartIconInner,
+      chartIconOuter: tokens.shadows.dark.chartIconOuter,
+      chart: tokens.shadows.dark.chart,
+      zen: tokens.shadows.dark.zen,
+      btnDefault: tokens.shadows.dark.btnDefault,
+      btnDefaultActive: tokens.shadows.dark.btnDefaultActive,
+      btnTertiary: tokens.shadows.dark.btnTertiary,
+      fontDefault: tokens.shadows.dark.fontDefault,
+      fontLight: tokens.shadows.dark.fontLight,
+      fontDark: tokens.shadows.dark.fontDark,
       input: {
-        innerBase: {
-          _dark: tokens.shadows.dark.input.innerBase,
-        },
-        innerFocus: {
-          _dark: tokens.shadows.dark.input.innerFocus,
-        },
-        innerError: {
-          _dark: tokens.shadows.dark.input.innerError,
-        },
+        innerBase: tokens.shadows.dark.input.innerBase,
+        innerFocus: tokens.shadows.dark.input.innerFocus,
+        innerError: tokens.shadows.dark.input.innerError,
       },
     },
     sizes: {
