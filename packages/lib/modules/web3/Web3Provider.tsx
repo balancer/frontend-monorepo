@@ -19,7 +19,6 @@ export function Web3Provider({ children }: PropsWithChildren) {
   const isMounted = useIsMounted()
 
   const { colors, radii, shadows, semanticTokens, fonts } = useTheme()
-  const colorModeKey = '_dark'
 
   const { wagmiConfig } = useWagmiConfig()
 
@@ -69,9 +68,9 @@ export function Web3Provider({ children }: PropsWithChildren) {
       // generalBorderDim: '...',
       // menuItemBackground: '...',
       // modalBackdrop: '...',
-      modalBackground: semanticTokens.colors.background.level0[colorModeKey],
+      modalBackground: semanticTokens.colors.background.level0,
       // modalBorder: '...',
-      modalText: semanticTokens.colors.font.primary[colorModeKey],
+      modalText: semanticTokens.colors.font.primary,
       // modalTextDim: '...',
       // modalTextSecondary: '...',
       // profileAction: '...',

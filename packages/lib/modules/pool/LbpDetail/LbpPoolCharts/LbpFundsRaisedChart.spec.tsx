@@ -17,10 +17,7 @@ const chakraThemeMock = {
   semanticTokens: {
     colors: {
       font: {
-        primary: {
-          default: '#f7fafc',
-          _dark: '#f7fafc',
-        },
+        primary: '#f7fafc',
       },
     },
   },

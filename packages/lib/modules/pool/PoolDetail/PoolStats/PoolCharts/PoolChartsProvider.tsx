@@ -85,7 +85,6 @@ export const getDefaultPoolChartOptions = (
     text: theme.colors.gray[400],
   }
 
-  const colorMode = '_dark'
   return {
     grid: {
       left: '1.5%',
@@ -104,7 +103,7 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return format(new Date(value * 1000), 'MMM d')
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
         interval: 0,
         showMaxLabel: false,
@@ -137,7 +136,7 @@ export const getDefaultPoolChartOptions = (
         formatter: (value: number) => {
           return currencyFormatter(value)
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,

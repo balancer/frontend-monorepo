@@ -125,8 +125,8 @@ const getDefaultPoolActivityChartOptions = (
 ): echarts.EChartsCoreOption => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.semanticTokens.colors.background.level3._dark};`,
-    text: theme.semanticTokens.colors.font.primary._dark,
+    container: `background: ${theme.semanticTokens.colors.background.level3};`,
+    text: theme.semanticTokens.colors.font.primary,
   }
 
   return {

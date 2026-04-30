@@ -60,7 +60,7 @@ export const InputWithSlider = forwardRef(
       // setSliderPercent(newPercent)
     }
 
-    const boxShadowColor = theme.semanticTokens.colors.font.warning._dark
+    const boxShadowColor = theme.semanticTokens.colors.font.warning
 
     const boxShadow = isWarning ? `0 0 0 1px ${boxShadowColor}` : undefined
 
