@@ -181,6 +181,7 @@ export function getSemanticTokens(tokens: any, colors: any) {
       innerXl: tokens.shadows.dark.innerXl,
       innerRockShadow: tokens.shadows.dark.innerRockShadow,
       innerRockShadowSm: tokens.shadows.dark.innerRockShadowSm,
+      innerRockShadowXl: tokens.shadows.dark.innerRockShadowXl,
       chartIconInner: tokens.shadows.dark.chartIconInner,
       chartIconOuter: tokens.shadows.dark.chartIconOuter,
       chart: tokens.shadows.dark.chart,

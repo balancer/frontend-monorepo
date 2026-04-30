@@ -30,6 +30,7 @@ export function PlayVideoButton({
         />
       }
       isRound={isRound}
+      minW={size}
       shadow={shadow}
       variant={variant}
       w={size}

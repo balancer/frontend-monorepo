@@ -9,7 +9,6 @@ import {
   GridItem,
   Heading,
   Stack,
-  HStack,
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react'
@@ -17,8 +16,9 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-import { ArrowUpRight } from 'react-feather'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
+import LiquidMetal from '@bal/app/(marketing)/_lib/landing-v3/shared/LiquidMetal'
+import { ArrowUpRight } from 'react-feather'
 
 export function Hero() {
   const radialPatternProps = useBreakpointValue({
@@ -47,13 +47,15 @@ export function Hero() {
         shadow="innerBase"
       >
         <DefaultPageContainer
-          h={{ base: '500px', md: '800px' }}
+          h={{ base: '700px', md: '800px' }}
+          minH={{ lg: 'calc(95vh - 60px)' }}
           pb={['0', '0', '10']}
           position="relative"
           pt={['xl', '40px']}
           px="0"
         >
           <Grid
+            alignItems="center"
             gap={{ base: '0', md: '4' }}
             h="100%"
             overflow={{ base: 'hidden', md: 'visible' }}
@@ -68,8 +70,6 @@ export function Hero() {
                   justifyContent="center"
                   margin={{ base: '0 auto', md: '0' }}
                   pl={{ md: 'md', '2xl': '0' }}
-                  position="relative"
-                  top={{ base: '0', md: '200px' }}
                 >
                   <Stack alignItems={{ base: 'center', md: 'start' }} px="0">
                     <Text
@@ -84,8 +84,8 @@ export function Hero() {
                     </Text>
                     <Heading
                       as="h2"
-                      fontSize="48px"
-                      pb="sm"
+                      pb="ms"
+                      size="2xl"
                       sx={{ textWrap: 'pretty' }}
                       textAlign={{ base: 'center', md: 'start' }}
                     >
@@ -93,18 +93,19 @@ export function Hero() {
                     </Heading>
                     <Text
                       color="font.secondary"
+                      fontSize="md"
                       lineHeight="1.4"
-                      maxW="36ch"
+                      maxW="35ch"
                       mb="sm"
-                      sx={{ textWrap: 'balance' }}
+                      sx={{ textWrap: 'pretty' }}
                       textAlign={{ base: 'center', md: 'start' }}
                     >
-                      The ultimate platform for custom liquidity solutions. Balancer v3 perfectly
-                      balances simplicity and flexibility to reshape the future of AMMs.
+                      The ultimate platform for building custom DeFi liquidity pools. A perfect
+                      balance of simplicity and flexibility. Build the future of AMMs on Balancer.
                     </Text>
                   </Stack>
 
-                  <Flex gap="ms" maxWidth={320} mb="ms">
+                  <Flex gap="ms" maxWidth={360} mb="ms">
                     <Button
                       as={Link}
                       href="https://docs.balancer.fi"
@@ -131,21 +132,24 @@ export function Hero() {
                       </Button>
                     </Box>
                   </Flex>
-
-                  <HStack
-                    alignItems="center"
-                    as={Link}
+                  <Link
+                    color="font.secondary"
+                    fontSize="sm"
                     href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
-                    mt="2"
-                    spacing="ms"
                   >
-                    <PlayVideoButton isRound={false} size={8} sx={{ borderRadius: 'xs' }} />
-                    <Text color="font.secondary">Learn about Balancer v3</Text>
-                  </HStack>
+                    <Flex alignItems="center" gap="sm">
+                      <Box height="28px" rounded="full" width="28px">
+                        <PlayVideoButton size={7} />
+                      </Box>
+                      <Text color="font.secondary" fontSize="sm">
+                        Watch Balancer v3 intro
+                      </Text>
+                    </Flex>
+                  </Link>
                 </Stack>
               </FadeInOnView>
             </GridItem>
-
+            {/* Image Column */}
             <GridItem
               display="flex"
               justifyContent={{ base: 'center', md: 'flex-start' }}
@@ -162,7 +166,7 @@ export function Hero() {
                     },
                     animation: `scaleUpFadeIn 1s ease-out forwards`,
                   }}
-                  width={{ base: '98%', md: 'clamp(800px, 85vw, 1200px)' }}
+                  width={{ base: 'calc(100% - 100px)', md: 'clamp(800px, 85vw, 800px)' }}
                 >
                   <RadialPattern
                     circleCount={radialPatternProps?.circleCount}
@@ -174,14 +178,49 @@ export function Hero() {
                     width={radialPatternProps?.width}
                     zIndex={-1}
                   />
-                  <Picture
-                    altText="veBAL token"
-                    defaultImgType="png"
-                    directory="/images/vebal/"
-                    imgAvif
-                    imgName="vebal"
-                    imgPng
-                  />
+                  <Box boxShadow="0 40px 80px rgba(0, 0, 0, 0.5)" rounded="full">
+                    <Box
+                      bg="#31373F"
+                      overflow="hidden"
+                      position="relative"
+                      rounded="full"
+                      shadow="2xl"
+                    >
+                      <Picture
+                        altText="Balancer protocol"
+                        defaultImgType="jpg"
+                        directory="/images/textures/"
+                        fetchPriority="high"
+                        imgAvif
+                        imgJpg
+                        imgName="slate-square-large"
+                        loading="eager"
+                      />
+                      <Box
+                        h="full"
+                        left="0"
+                        position="absolute"
+                        rounded="full"
+                        shadow="innerRockShadowXl"
+                        top="0"
+                        w="full"
+                      />
+                      <Box
+                        inset="0"
+                        pointerEvents="none"
+                        position="absolute"
+                        sx={{
+                          '@keyframes shaderFadeIn': {
+                            from: { opacity: 0 },
+                            to: { opacity: 1 },
+                          },
+                          animation: 'shaderFadeIn 0.6s ease-out 0.2s both',
+                        }}
+                      >
+                        <LiquidMetal size="100%" />
+                      </Box>
+                    </Box>
+                  </Box>
                 </Box>
               </FadeInOnView>
             </GridItem>
