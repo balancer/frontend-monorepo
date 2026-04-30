@@ -2,7 +2,7 @@ import { Address } from 'viem'
 import { fetchPoolMock } from './fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { lowerFirst } from 'lodash'
@@ -51,7 +51,7 @@ ${poolJson} as unknown as Pool
 }
 
 function formatFile(filePath: string) {
-  execSync(`npx prettier --write "${filePath}"`, { stdio: 'ignore' })
+  execFileSync('npx', ['prettier', '--write', filePath], { stdio: 'ignore' })
 }
 
 export function createPoolVarName(poolName: string) {
