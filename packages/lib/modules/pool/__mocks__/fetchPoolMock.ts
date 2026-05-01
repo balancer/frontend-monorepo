@@ -12,8 +12,18 @@ import {
 import { nested50WETH_50_3poolId } from '@repo/lib/debug-helpers'
 import { Address } from 'viem'
 
+const FETCH_POOL_MOCK_MAX_ATTEMPTS = 3
+const FETCH_POOL_MOCK_RETRY_DELAY_MS = 1_000
+const FETCH_POOL_MOCK_RESPONSE_SNIPPET_LENGTH = 500
+
 function astToQueryString(ast: any): string {
   return print(ast)
+}
+
+async function sleep(time: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
 }
 
 type FetchPoolMockParams = {
@@ -36,18 +46,42 @@ export async function fetchPoolMock({
     userAddress,
   }
 
-  const getPoolQuery = (await fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query: queryString, variables }),
-  })
-    .then(response => {
-      if (!response.ok) console.log(response.body)
-      return response.json()
-    })
-    .then(result => result.data)) as GetPoolQuery
+  let lastError: unknown
+  let getPoolQuery: GetPoolQuery | undefined
+
+  for (let attempt = 1; attempt <= FETCH_POOL_MOCK_MAX_ATTEMPTS; attempt++) {
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: queryString, variables }),
+      })
+      const responseBody = await response.text()
+
+      if (!response.ok) {
+        throw new Error(
+          `Pool mock API request failed with status ${response.status} ${response.statusText}. ${formatResponseDetails(response, responseBody)}`
+        )
+      }
+
+      try {
+        getPoolQuery = JSON.parse(responseBody).data as GetPoolQuery
+        break
+      } catch (error) {
+        throw new Error(
+          `Pool mock API returned invalid JSON. ${formatResponseDetails(response, responseBody)}`,
+          { cause: error }
+        )
+      }
+    } catch (error) {
+      lastError = error
+      if (attempt < FETCH_POOL_MOCK_MAX_ATTEMPTS) await sleep(FETCH_POOL_MOCK_RETRY_DELAY_MS)
+    }
+  }
+
+  if (!getPoolQuery && lastError) throw lastError
 
   if (!getPoolQuery?.pool) {
     const errorMessage = `Pool not found in api ${apiUrl} network ${chain} poolId ${poolId}`
@@ -55,4 +89,10 @@ export async function fetchPoolMock({
   }
 
   return getPoolQuery.pool as GqlPoolElement
+}
+
+function formatResponseDetails(response: Response, responseBody: string) {
+  const contentType = response.headers.get('content-type') || 'unknown content-type'
+  const bodySnippet = responseBody.slice(0, FETCH_POOL_MOCK_RESPONSE_SNIPPET_LENGTH)
+  return `Content-Type: ${contentType}. Body: ${bodySnippet}`
 }
