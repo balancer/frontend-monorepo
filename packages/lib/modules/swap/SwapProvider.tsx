@@ -1,5 +1,6 @@
 'use client'
 
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useApolloClient, useReactiveVar } from '@apollo/client/react'
 import { ApolloClient } from '@apollo/client'
 import { HumanAmount } from '@balancer/sdk'
