@@ -37,11 +37,9 @@ const getDefaultPoolActivityChartOptions = (
 ): echarts.EChartsCoreOption => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
-    container: `background: ${theme.semanticTokens.colors.background.level3._dark};`,
-    text: theme.semanticTokens.colors.font.secondary._dark,
+    container: `background: ${theme.semanticTokens.colors.background.level3};`,
+    text: theme.semanticTokens.colors.font.secondary,
   }
-
-  const colorMode = '_dark'
 
   return {
     grid: {
@@ -67,7 +65,7 @@ const getDefaultPoolActivityChartOptions = (
                 : ''
             }`
           ),
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: false,
@@ -96,7 +94,7 @@ const getDefaultPoolActivityChartOptions = (
         formatter: (value: number) => {
           return currencyFormatter(value)
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
         interval: 'auto',
         showMaxLabel: true,

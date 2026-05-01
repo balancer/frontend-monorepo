@@ -5,7 +5,7 @@ import {
   GqlPoolAprItemType,
 } from '../services/api/generated/graphql'
 import { bn } from '../utils/numbers'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 
 export const swapFeesTooltipText = `LPs earn fees when swaps are routed through this pool. The displayed APR is net earnings for LPs (with all protocol fees already deducted). Fees automatically compound into positions—no claiming needed.`
 

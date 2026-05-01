@@ -15,6 +15,10 @@ BigInt.prototype.toJSON = function () {
   return this.toString()
 }
 
+// TODO: Remove this once all calls to bn() have been checked for strict mode compliance
+// https://github.com/balancer/frontend-monorepo/issues/2395
+BigNumber.set({ STRICT: false })
+
 export const MAX_BIGINT = BigInt(MAX_UINT256)
 export const MAX_BIGNUMBER = bn(MAX_UINT256)
 

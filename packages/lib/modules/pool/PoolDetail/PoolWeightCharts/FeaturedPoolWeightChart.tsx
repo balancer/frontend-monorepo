@@ -52,8 +52,7 @@ const normalSize: ChartSizeValues = {
 
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
   const theme = useTheme()
-  const colorModeKey = '_dark'
-  const chartOuter = isSmall ? '' : theme.semanticTokens.shadows.chartIconOuter[colorModeKey]
+  const chartOuter = isSmall ? '' : theme.semanticTokens.shadows.chartIconOuter
   return (
     <Box
       alignItems="center"
@@ -108,7 +107,6 @@ export function FeaturedPoolWeightChart({
   const chartSizeValues = isSmall ? smallSize : normalSize
   const eChartsRef = useRef<EChartsReactCore | null>(null)
   const theme = useTheme()
-  const colorMode = '_dark'
 
   const chartOption = useMemo(() => {
     return {
@@ -165,7 +163,7 @@ export function FeaturedPoolWeightChart({
         },
       ],
     }
-  }, [chartSizeValues, chain, displayTokens, colorMode, theme.colors.chartBorder])
+  }, [chartSizeValues, chain, displayTokens, theme.colors.chartBorder])
 
   return (
     <VStack>

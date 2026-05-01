@@ -35,7 +35,6 @@ export function LbpFundsRaisedChart() {
   const theme = useChakraTheme()
   const { isMobile } = useBreakpoints()
 
-  const colorMode = '_dark'
   const now = new Date()
 
   const chartData = useMemo(() => {
@@ -63,7 +62,7 @@ export function LbpFundsRaisedChart() {
       top: '4%',
       style: {
         text: reserveTokenSymbol,
-        fill: theme.semanticTokens.colors.font.primary[colorMode],
+        fill: theme.semanticTokens.colors.font.primary,
         opacity: 0.8,
         fontSize: 12,
         fontWeight: 600,
@@ -86,7 +85,7 @@ export function LbpFundsRaisedChart() {
         rotate: isMobile ? 45 : 0,
         fontSize: isMobile ? 10 : 12,
         margin: 8,
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
       },
       splitNumber: (() => {
@@ -112,7 +111,7 @@ export function LbpFundsRaisedChart() {
 
           return `${fNum('token', value)}`
         },
-        color: theme.semanticTokens.colors.font.primary[colorMode],
+        color: theme.semanticTokens.colors.font.primary,
         opacity: 0.5,
       },
     },
@@ -197,7 +196,7 @@ export function LbpFundsRaisedChart() {
             padding: 2,
           },
           value: {
-            color: theme.semanticTokens.colors.font.primary[colorMode],
+            color: theme.semanticTokens.colors.font.primary,
             fontWeight: 'bold',
             padding: 2,
           },

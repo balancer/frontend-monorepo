@@ -13,17 +13,10 @@ const variants = {
       rounded: '2xl',
       backgroundColor: 'transparent',
       backgroundImage: `radial-gradient(
-            farthest-corner at 80px 0px,
-            rgba(235, 220, 204, 0.3) 0%,
-            rgba(255, 255, 255, 0.0) 100%
-          )`,
-      _dark: {
-        backgroundImage: `radial-gradient(
           farthest-corner at 80px 0px,
           rgba(180, 189, 200, 0.1) 0%,
           rgba(255, 255, 255, 0.0) 100%
         )`,
-      },
     },
   }),
 }

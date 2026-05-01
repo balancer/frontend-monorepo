@@ -116,26 +116,17 @@ function AppIcon({
 
   return (
     <Box
-      _dark={{
-        bg: 'background.level2',
-        color: 'font.secondary',
-        _hover: {
-          color: 'font.maxContrast',
-          bg: 'background.level4',
-          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
-        },
-      }}
       _hover={{
+        color: 'font.maxContrast',
         bg: 'background.level4',
-        color: 'brown.500',
-        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
+        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
       }}
       alignItems="center"
       as={motion.div}
       aspectRatio={1}
       bg="background.level2"
       borderRadius="full"
-      color="brown.300"
+      color="font.secondary"
       cursor="pointer"
       display="flex"
       justifyContent="center"
@@ -156,27 +147,16 @@ function AppIcon({
 function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & BoxProps) {
   return (
     <Box
-      _dark={{
-        bg: 'background.level2',
-        color: 'font.secondary',
-        _hover: {
-          color: 'font.maxContrast',
-          bg: 'background.level4',
-          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
-        },
-      }}
       _hover={{
+        color: 'font.maxContrast',
         bg: 'background.level4',
-        color: 'brown.500',
-        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
-        transform: 'scale(1.1)',
-        transition: 'scale 0.3s ease-out',
+        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
       }}
       alignItems="center"
       aspectRatio={1}
       bg="background.level2"
       borderRadius="full"
-      color="brown.300"
+      color="font.secondary"
       cursor="pointer"
       display="flex"
       justifyContent="center"

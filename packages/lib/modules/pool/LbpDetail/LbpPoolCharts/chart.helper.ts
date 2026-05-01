@@ -1,6 +1,7 @@
 import { LbpPrice } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { addHours, isBefore } from 'date-fns'
+import type BigNumber from 'bignumber.js'
 
 export function interpolatePrices(
   startWeight: number,

@@ -54,8 +54,7 @@ const normalSize: ChartSizeValues = {
 
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
   const theme = useTheme()
-  const colorModeKey = '_dark'
-  const chartOuter = isSmall ? '' : theme.semanticTokens.shadows.chartIconOuter[colorModeKey]
+  const chartOuter = isSmall ? '' : theme.semanticTokens.shadows.chartIconOuter
   return (
     <Box
       alignItems="center"

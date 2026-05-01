@@ -12,7 +12,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { TooltipAprItem } from './TooltipAprItem'
-import BigNumber from 'bignumber.js'
+import type BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import StarsIcon from '../../icons/StarsIcon'
 
