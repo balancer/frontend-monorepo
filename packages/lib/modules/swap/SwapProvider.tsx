@@ -18,6 +18,7 @@ import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
 import { ChainSlug, chainToSlugMap, getChainSlug } from '../pool/pool.utils'
+import { getWalletChainSyncAction } from './useWalletChainSync'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { usePriceImpact } from '../price-impact/PriceImpactProvider'
 import { useTokenBalances } from '../tokens/TokenBalancesProvider'
@@ -621,13 +622,18 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   // When wallet chain changes, update the swap form chain
   useEffect(() => {
-    if (!isConnected) {
-      hasInitializedUserChain.current = false
-      return
-    }
+    const action = getWalletChainSyncAction(
+      isConnected,
+      hasInitializedUserChain.current,
+      walletChain,
+      selectedChainRef.current
+    )
 
-    if (hasInitializedUserChain.current && walletChain !== selectedChainRef.current) {
+    if (action === 'reset') {
+      hasInitializedUserChain.current = false
+    } else if (action === 'sync') {
       setSelectedChain(walletChain)
+      hasInitializedUserChain.current = true
     } else {
       hasInitializedUserChain.current = true
     }
