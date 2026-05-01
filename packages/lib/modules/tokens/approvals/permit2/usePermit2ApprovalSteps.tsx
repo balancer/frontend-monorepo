@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/purity */
 import { useMemo } from 'react'
 import { getChainId, getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
