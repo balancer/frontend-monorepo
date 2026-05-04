@@ -4,6 +4,8 @@ import { base, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 import { createConfig } from 'wagmi'
 import { mock } from 'wagmi/connectors'
 
+const TEST_RPC_TIMEOUT_MS = 60_000
+
 export const mainnetTest = {
   ...mainnet,
   ...getTestRpcUrls(mainnet.id),
@@ -68,12 +70,12 @@ function createTestWagmiConfig() {
     pollingInterval: 100,
     storage: null,
     transports: {
-      [mainnetTest.id]: http(),
-      [polygonTest.id]: http(),
-      [sepoliaTest.id]: http(),
-      [baseTest.id]: http(),
-      [gnosisTest.id]: http(),
-      [sonicTest.id]: http(),
+      [mainnetTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
+      [polygonTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
+      [sepoliaTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
+      [baseTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
+      [gnosisTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
+      [sonicTest.id]: http(undefined, { timeout: TEST_RPC_TIMEOUT_MS }),
     },
     ssr: false,
   })
