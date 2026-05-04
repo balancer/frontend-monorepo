@@ -1,6 +1,5 @@
 'use client'
 
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useApolloClient, useReactiveVar } from '@apollo/client/react'
 import { ApolloClient } from '@apollo/client'
 import { HumanAmount } from '@balancer/sdk'
@@ -16,9 +15,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
-import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
+import { PropsWithChildren, createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
 import { ChainSlug, chainToSlugMap, getChainSlug } from '../pool/pool.utils'
+import { getWalletChainSyncAction } from './useWalletChainSync'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { usePriceImpact } from '../price-impact/PriceImpactProvider'
 import { useTokenBalances } from '../tokens/TokenBalancesProvider'
@@ -128,7 +128,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const swapState = useReactiveVar(swapStateVar)
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [tokenSelectKey, setTokenSelectKey] = useState<'tokenIn' | 'tokenOut'>('tokenIn')
-  const [initUserChain, setInitUserChain] = useState<GqlChain | undefined>(undefined)
+  const hasInitializedUserChain = useRef(false)
 
   const { isConnected } = useUserAccount()
   const { chain: walletChain } = useNetworkConfig()
@@ -138,6 +138,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const { setPriceImpact, resetPriceImpact } = usePriceImpact()
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
+  const selectedChainRef = useRef(selectedChain)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
@@ -615,14 +616,28 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
   }, [])
 
+  useEffect(() => {
+    selectedChainRef.current = selectedChain
+  }, [selectedChain])
+
   // When wallet chain changes, update the swap form chain
   useEffect(() => {
-    if (isConnected && initUserChain && walletChain !== selectedChain) {
+    const action = getWalletChainSyncAction(
+      isConnected,
+      hasInitializedUserChain.current,
+      walletChain,
+      selectedChainRef.current
+    )
+
+    if (action === 'reset') {
+      hasInitializedUserChain.current = false
+    } else if (action === 'sync') {
       setSelectedChain(walletChain)
-    } else if (isConnected) {
-      setInitUserChain(walletChain)
+      hasInitializedUserChain.current = true
+    } else {
+      hasInitializedUserChain.current = true
     }
-  }, [walletChain])
+  }, [isConnected, walletChain])
 
   // When a new simulation is triggered, update the state
   useEffect(() => {

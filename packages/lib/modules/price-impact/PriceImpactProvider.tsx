@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { AlertTriangle, XOctagon } from 'react-feather'
-import { PropsWithChildren, createContext, useEffect, useState } from 'react'
+import { PropsWithChildren, createContext, useCallback, useRef, useState } from 'react'
 import { useMandatoryContext } from '../../shared/utils/contexts'
 import { Box, BoxProps } from '@chakra-ui/react'
 import { getPriceImpactColor, getPriceImpactLevel } from './price-impact.utils'
@@ -8,29 +7,42 @@ import { getPriceImpactColor, getPriceImpactLevel } from './price-impact.utils'
 export type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
 
 export function usePriceImpactLogic() {
-  const [priceImpactLevel, setPriceImpactLevel] = useState<PriceImpactLevel>('low')
-  const [priceImpactColor, setPriceImpactColor] = useState('green.400')
   const [acceptPriceImpactRisk, setAcceptPriceImpactRisk] = useState(false)
   const [priceImpact, setPriceImpact] = useState<string | number | undefined | null>()
-  const [hasToAcceptHighPriceImpact, setHasToAcceptHighPriceImpact] = useState(false)
+  const priceImpactRef = useRef(priceImpact)
+  const priceImpactValue =
+    priceImpact == null
+      ? undefined
+      : typeof priceImpact === 'string'
+        ? Number(priceImpact)
+        : priceImpact
+  const priceImpactLevel =
+    priceImpactValue == null || Number.isNaN(priceImpactValue)
+      ? 'low'
+      : getPriceImpactLevel(priceImpactValue)
+  const priceImpactColor = getPriceImpactColor(priceImpactLevel)
+  const hasToAcceptHighPriceImpact =
+    priceImpactLevel === 'high' || priceImpactLevel === 'max' || priceImpactLevel === 'unknown'
 
   function PriceImpactIcon({
     priceImpactLevel,
     size = 16,
     ...rest
   }: { priceImpactLevel: PriceImpactLevel; size?: number } & BoxProps) {
+    const iconColor = getPriceImpactColor(priceImpactLevel)
+
     switch (priceImpactLevel) {
       case 'unknown':
       case 'high':
       case 'max':
         return (
-          <Box color={priceImpactColor} {...rest}>
+          <Box color={iconColor} {...rest}>
             <XOctagon size={size} />
           </Box>
         )
       case 'medium':
         return (
-          <Box color={priceImpactColor} {...rest}>
+          <Box color={iconColor} {...rest}>
             <AlertTriangle size={size} />
           </Box>
         )
@@ -40,36 +52,18 @@ export function usePriceImpactLogic() {
     }
   }
 
-  useEffect(() => {
-    if (priceImpact) {
-      const priceImpactValue = typeof priceImpact === 'string' ? Number(priceImpact) : priceImpact
-      setPriceImpactLevel(getPriceImpactLevel(priceImpactValue))
-      // reset accept high price impact when price impact changes
+  const updatePriceImpact = useCallback((nextPriceImpact: string | number | undefined | null) => {
+    if (!Object.is(priceImpactRef.current, nextPriceImpact)) {
+      // Reset acceptance whenever the quoted impact changes.
       setAcceptPriceImpactRisk(false)
-    } else {
-      setPriceImpactLevel('low')
     }
-  }, [priceImpact])
 
-  useEffect(() => {
-    setPriceImpactColor(getPriceImpactColor(priceImpactLevel))
-  }, [priceImpactLevel])
-
-  useEffect(() => {
-    if (
-      priceImpactLevel === 'high' ||
-      priceImpactLevel === 'max' ||
-      priceImpactLevel === 'unknown'
-    ) {
-      setHasToAcceptHighPriceImpact(true)
-    } else {
-      setHasToAcceptHighPriceImpact(false)
-    }
-  }, [priceImpactLevel])
+    priceImpactRef.current = nextPriceImpact
+    setPriceImpact(nextPriceImpact)
+  }, [])
 
   function resetPriceImpact() {
-    setPriceImpact(undefined)
-    setPriceImpactLevel('low')
+    updatePriceImpact(undefined)
   }
 
   return {
@@ -78,11 +72,9 @@ export function usePriceImpactLogic() {
     acceptPriceImpactRisk,
     hasToAcceptHighPriceImpact,
     priceImpact,
-    setPriceImpactColor,
     setAcceptPriceImpactRisk,
     PriceImpactIcon,
-    setPriceImpact,
-    setPriceImpactLevel,
+    setPriceImpact: updatePriceImpact,
     resetPriceImpact,
   }
 }

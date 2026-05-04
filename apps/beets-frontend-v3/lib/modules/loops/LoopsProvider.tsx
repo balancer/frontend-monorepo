@@ -16,9 +16,14 @@ import { useLoopsGetRate } from './hooks/useLoopsGetRate'
 import { useLoopsWithdrawSteps } from './hooks/useLoopsWithdrawSteps'
 
 const CHAIN = GqlChain.Sonic
+const DEFAULT_ACTIVE_TAB: ButtonGroupOption = {
+  value: '0',
+  label: 'Deposit',
+  disabled: false,
+}
 
 export function useLoopsLogic() {
-  const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
+  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(DEFAULT_ACTIVE_TAB)
   const [amountAssets, setAmountAssets] = useState('')
   const [amountShares, setAmountShares] = useState('')
   const { isConnected } = useUserAccount()
