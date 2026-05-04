@@ -1,5 +1,5 @@
 import { AlertTriangle, XOctagon } from 'react-feather'
-import { PropsWithChildren, createContext, useState } from 'react'
+import { PropsWithChildren, createContext, useCallback, useRef, useState } from 'react'
 import { useMandatoryContext } from '../../shared/utils/contexts'
 import { Box, BoxProps } from '@chakra-ui/react'
 import { getPriceImpactColor, getPriceImpactLevel } from './price-impact.utils'
@@ -9,6 +9,7 @@ export type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
 export function usePriceImpactLogic() {
   const [acceptPriceImpactRisk, setAcceptPriceImpactRisk] = useState(false)
   const [priceImpact, setPriceImpact] = useState<string | number | undefined | null>()
+  const priceImpactRef = useRef(priceImpact)
   const priceImpactValue =
     priceImpact == null
       ? undefined
@@ -51,11 +52,15 @@ export function usePriceImpactLogic() {
     }
   }
 
-  function updatePriceImpact(nextPriceImpact: string | number | undefined | null) {
+  const updatePriceImpact = useCallback((nextPriceImpact: string | number | undefined | null) => {
+    if (!Object.is(priceImpactRef.current, nextPriceImpact)) {
+      // Reset acceptance whenever the quoted impact changes.
+      setAcceptPriceImpactRisk(false)
+    }
+
+    priceImpactRef.current = nextPriceImpact
     setPriceImpact(nextPriceImpact)
-    // Reset acceptance whenever the quoted impact changes.
-    setAcceptPriceImpactRisk(false)
-  }
+  }, [])
 
   function resetPriceImpact() {
     updatePriceImpact(undefined)

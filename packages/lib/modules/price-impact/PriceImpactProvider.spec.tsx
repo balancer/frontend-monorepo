@@ -44,4 +44,22 @@ describe('usePriceImpactLogic', () => {
     expect(result.current.priceImpactColor).toBe('grayText')
     expect(result.current.hasToAcceptHighPriceImpact).toBe(false)
   })
+
+  it('keeps accepted risk when the same price impact is set again', () => {
+    const { result } = renderHook(() => usePriceImpactLogic())
+
+    act(() => {
+      result.current.setPriceImpact(0.06)
+    })
+
+    act(() => {
+      result.current.setAcceptPriceImpactRisk(true)
+    })
+
+    act(() => {
+      result.current.setPriceImpact(0.06)
+    })
+
+    expect(result.current.acceptPriceImpactRisk).toBe(true)
+  })
 })
