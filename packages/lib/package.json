@@ -105,7 +105,7 @@
     "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "1.4.6",
     "@viem/anvil": "0.0.10",
-    "@vitejs/plugin-react": "4.7.0",
+    "@vitejs/plugin-react": "6.0.1",
     "@wagmi/cli": "2.10.0",
     "autoprefixer": "10.5.0",
     "cross-fetch": "4.1.0",
