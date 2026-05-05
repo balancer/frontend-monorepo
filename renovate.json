@@ -169,6 +169,12 @@
       "matchPackageNames": ["zod"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Block @vitejs/plugin-react major upgrades — v6 requires vite 8 which is not yet in the project.",
+      "matchPackageNames": ["@vitejs/plugin-react"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
