@@ -15,9 +15,7 @@ describe('calculateInvariant', () => {
       balances: [200, 50],
       weights: [0.8, 0.2],
     })
-    // 200^0.8 * 50^0.2
-    expect(result).toBeGreaterThan(0)
-    expect(Number.isFinite(result)).toBe(true)
+    expect(result).toBeCloseTo(151.57165665103986)
   })
 
   it('handles zero balances', () => {
@@ -33,8 +31,7 @@ describe('calculateInvariant', () => {
       balances: [100, 200, 300],
       weights: [0.4, 0.3, 0.3],
     })
-    expect(result).toBeGreaterThan(0)
-    expect(Number.isFinite(result)).toBe(true)
+    expect(result).toBeCloseTo(171.17698594097052)
   })
 })
 
@@ -69,8 +66,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 1,
     })
-    expect(result).toBeGreaterThan(0)
-    expect(result).toBeLessThan(100)
+    expect(result).toBeCloseTo(9.090909090909108)
   })
 
   it('calculates correct output for larger swap', () => {
@@ -81,8 +77,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 1,
     })
-    expect(result).toBeGreaterThan(80)
-    expect(result).toBeLessThan(100)
+    expect(result).toBeCloseTo(90.90909090909122)
   })
 
   it('handles three tokens correctly', () => {
@@ -93,8 +88,7 @@ describe('calculateOutGivenIn', () => {
       tokenInIndex: 0,
       tokenOutIndex: 1,
     })
-    expect(result).toBeGreaterThan(0)
-    expect(Number.isFinite(result)).toBe(true)
+    expect(result).toBeCloseTo(23.867398881551992)
   })
 
   it('calculates correctly with different pool sizes', () => {
@@ -114,6 +108,7 @@ describe('calculateOutGivenIn', () => {
       tokenOutIndex: 1,
     })
 
-    expect(result2).toBeGreaterThan(result1)
+    expect(result1).toBeCloseTo(9.090909090909108)
+    expect(result2).toBeCloseTo(9.90099009900996)
   })
 })

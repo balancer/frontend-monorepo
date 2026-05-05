@@ -96,8 +96,7 @@ describe('calculateLowerMargin', () => {
       virtualBalanceA: 476,
       virtualBalanceB: 909,
     })
-    expect(result).toBeGreaterThan(0)
-    expect(Number.isFinite(result)).toBe(true)
+    expect(result).toBeCloseTo(462.37576625669095)
   })
 })
 
@@ -109,8 +108,7 @@ describe('calculateUpperMargin', () => {
       virtualBalanceA: 476,
       virtualBalanceB: 909,
     })
-    expect(result).toBeGreaterThan(0)
-    expect(Number.isFinite(result)).toBe(true)
+    expect(result).toBeCloseTo(339.7576625669094)
   })
 })
 
@@ -148,8 +146,7 @@ describe('calculateOutGivenIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
-    expect(result).toBeGreaterThan(0)
-    expect(result).toBeLessThan(200) // Can't swap more than total balance B
+    expect(result).toBeCloseTo(8.196721311475358)
   })
 
   it('calculates output for Token B swap', () => {
@@ -161,8 +158,7 @@ describe('calculateOutGivenIn', () => {
       virtualBalanceA: 500,
       virtualBalanceB: 300,
     })
-    expect(result).toBeGreaterThan(0)
-    expect(result).toBeLessThan(100) // Can't swap more than total balance A
+    expect(result).toBeCloseTo(11.764705882352814)
   })
 })
 
@@ -177,7 +173,7 @@ describe('calculateBalancesAfterSwapIn', () => {
       virtualBalanceB: 300,
     })
     expect(result.newBalanceA).toBe(110) // 100 + 10
-    expect(result.newBalanceB).toBeLessThan(200) // decreases due to swap
+    expect(result.newBalanceB).toBeCloseTo(191.80327868852464)
   })
 
   it('updates balances correctly for Token B swap', () => {
@@ -190,7 +186,7 @@ describe('calculateBalancesAfterSwapIn', () => {
       virtualBalanceB: 300,
     })
     expect(result.newBalanceB).toBe(210) // 200 + 10
-    expect(result.newBalanceA).toBeLessThan(100) // decreases due to swap
+    expect(result.newBalanceA).toBeCloseTo(88.23529411764719)
   })
 })
 
@@ -234,16 +230,13 @@ describe('recalculateVirtualBalances', () => {
 
   it('updates price ratio when in update window', () => {
     const result = recalculateVirtualBalances(baseParams)
-    expect(result.newPriceRatio).toBeGreaterThan(1)
-    expect(result.newPriceRatio).toBeLessThan(2)
+    expect(result.newPriceRatio).toBeCloseTo(1.4142135623730951)
   })
 
   it('returns valid virtual balances', () => {
     const result = recalculateVirtualBalances(baseParams)
-    expect(Number.isFinite(result.newVirtualBalances.virtualBalanceA)).toBe(true)
-    expect(Number.isFinite(result.newVirtualBalances.virtualBalanceB)).toBe(true)
-    expect(result.newVirtualBalances.virtualBalanceA).toBeGreaterThan(0)
-    expect(result.newVirtualBalances.virtualBalanceB).toBeGreaterThan(0)
+    expect(result.newVirtualBalances.virtualBalanceA).toBeCloseTo(1104.8779707016797)
+    expect(result.newVirtualBalances.virtualBalanceB).toBeCloseTo(1104.8779707016797)
   })
 })
 
@@ -255,9 +248,9 @@ describe('calculateInitialBalances', () => {
       targetPrice: 1,
     })
     expect(result.balanceA).toBe(1000)
-    expect(result.balanceB).toBeGreaterThan(0)
-    expect(result.virtualBalanceA).toBeGreaterThan(0)
-    expect(result.virtualBalanceB).toBeGreaterThan(0)
+    expect(result.balanceB).toBeCloseTo(1000)
+    expect(result.virtualBalanceA).toBeCloseTo(2414.2135623730956)
+    expect(result.virtualBalanceB).toBeCloseTo(2414.2135623730956)
   })
 
   it('returns valid balances for edge case prices', () => {
@@ -266,7 +259,9 @@ describe('calculateInitialBalances', () => {
       maxPrice: 1.1,
       targetPrice: 1,
     })
-    expect(result.balanceB).toBeGreaterThan(0)
     expect(result.balanceA).toBe(1000)
+    expect(result.balanceB).toBeCloseTo(1102.6978320796618)
+    expect(result.virtualBalanceA).toBeCloseTo(20488.088481701463)
+    expect(result.virtualBalanceB).toBeCloseTo(20385.3906496218)
   })
 })
