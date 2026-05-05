@@ -19,8 +19,6 @@ export function PoolsNetworkWatcher() {
       if (searchParams.size === 0 || (searchParams.size === 1 && networks.length > 0)) {
         if (chain.id === 146) {
           setNetworks([GqlChain.Sonic])
-        } else if (chain.id === 10) {
-          setNetworks([GqlChain.Optimism])
         }
       }
     }

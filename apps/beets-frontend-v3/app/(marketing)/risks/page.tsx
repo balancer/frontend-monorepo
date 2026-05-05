@@ -135,11 +135,6 @@ export default function Privacy() {
                     <Link href="risks#network-risks">
                       <h6>Layer 2 network risks</h6>
                     </Link>
-                    <ul>
-                      <li>
-                        <Link href="risks#optimism">Optimism</Link>
-                      </li>
-                    </ul>
                   </li>
                 </ul>
               </nav>
@@ -1431,24 +1426,6 @@ export default function Privacy() {
                 </p>
               </div>
             </FadeInOnView>
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
-              <h4 className="anchor" id="optimism">
-                Optimism risks
-              </h4>
-              <p>
-                <a href="https://www.optimism.io/">Optimism</a> is a Layer 2 scaling solution for
-                Ethereum that uses Optimistic Rollups to improve transaction throughput and reduce
-                fees. Although, the Balancer App UI doesn&rsquo;t support Optimism, the Balancer
-                Protocol smart contracts are deployed on Optimism and currently used by{' '}
-                <a href="https://op.beets.fi/">Beethoven X</a>.
-              </p>
-              <p>
-                View the risks of using Optimism on{' '}
-                <a href="https://l2beat.com/scaling/projects/optimism">L2Beat</a>.
-              </p>
-            </div>
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">

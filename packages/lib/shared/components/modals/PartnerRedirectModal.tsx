@@ -61,7 +61,7 @@ const partnerInfo: PartnerInfo = {
     fullName: 'Beethoven X',
     category: 'AMM / DEX',
     description:
-      'Beethoven X is a community-driven DEX and DeFi power house. Governed by the BEETS token and living on the Fantom Opera and Optimism chains.',
+      'Beethoven X is a community-driven DEX and DeFi power house governed by the BEETS token and living on Sonic.',
     url: 'https://beets.fi',
     imageName: 'beets',
   },

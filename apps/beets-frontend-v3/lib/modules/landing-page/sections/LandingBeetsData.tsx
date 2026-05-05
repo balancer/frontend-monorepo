@@ -238,11 +238,11 @@ export function LandingBeetsData({
             </GridItem>
           </Grid>
         </Box>
-        <Grid gap="none" templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} w="full">
+        <Grid gap="none" templateColumns="1fr" w="full">
           <GridItem bg="rgba(255, 255, 255, 0.05)">
             <ChainDataCard
               button={
-                <Button as={NextLink} href="/pools?networks=SONIC" variant="primary">
+                <Button as={NextLink} href="/pools" variant="primary">
                   Sonic Pools
                 </Button>
               }
@@ -250,20 +250,6 @@ export function LandingBeetsData({
               isSonic
               networkColor="orange"
               protocolData={chainData[getChainId(GqlChain.Sonic)]}
-              stakedSonicData={stakedSonicData}
-              totalTvl={totalTvl}
-            />
-          </GridItem>
-          <GridItem bg="rgba(0, 0, 0, 0.2)">
-            <ChainDataCard
-              button={
-                <Button as={NextLink} href="/pools?networks=OPTIMISM" variant="primary">
-                  Optimism Pools
-                </Button>
-              }
-              chain={GqlChain.Optimism}
-              networkColor="red"
-              protocolData={chainData[getChainId(GqlChain.Optimism)]}
               stakedSonicData={stakedSonicData}
               totalTvl={totalTvl}
             />

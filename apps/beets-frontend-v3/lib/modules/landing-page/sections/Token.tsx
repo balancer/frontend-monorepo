@@ -53,7 +53,7 @@ export function Token() {
             </GridItem>
             <GridItem>
               <FeatureCard
-                description="$BEETS is bridgeable between Optimism and Fantom - and more importantly for existing holders on FTM, easily migratable to Sonic."
+                description="$BEETS is bridgeable from Fantom and migratable to Sonic."
                 title="Bridge & Migrate"
               />
             </GridItem>

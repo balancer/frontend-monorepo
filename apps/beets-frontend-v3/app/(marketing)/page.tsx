@@ -33,13 +33,6 @@ export default async function Home() {
     },
   })
 
-  const { data: protocolDataOptimism } = await client.query({
-    query: GetProtocolStatsPerChainDocument,
-    variables: {
-      chain: GqlChain.Optimism,
-    },
-  })
-
   const { data: stakedSonicData } = await client.query({
     query: GetStakedSonicDataDocument,
     variables: {},
@@ -48,8 +41,7 @@ export default async function Home() {
   if (
     protocolData === undefined ||
     stakedSonicData === undefined ||
-    protocolDataSonic === undefined ||
-    protocolDataOptimism === undefined
+    protocolDataSonic === undefined
   ) {
     return null
   }
@@ -57,7 +49,7 @@ export default async function Home() {
   return (
     <LandingPageLayout
       protocolData={protocolData}
-      protocolDataPerChain={[protocolDataSonic, protocolDataOptimism]}
+      protocolDataPerChain={[protocolDataSonic]}
       stakedSonicData={stakedSonicData}
     />
   )

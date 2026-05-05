@@ -2,7 +2,7 @@ import { ProjectConfig } from '@repo/lib/config/config.types'
 import { PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
-export const beetsSupportedNetworks = [GqlChain.Sonic, GqlChain.Optimism]
+export const beetsSupportedNetworks = [GqlChain.Sonic]
 //  as const satisfies GqlChain[]
 
 export const ProjectConfigBeets: ProjectConfig = {
@@ -15,7 +15,7 @@ export const ProjectConfigBeets: ProjectConfig = {
   corePoolId: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005', // maBEETS BEETS8020 (Fresh BEETS) pool on Sonic
   defaultNetwork: GqlChain.Sonic,
   ensNetwork: GqlChain.Sonic,
-  delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic & optimism,
+  delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic,
   merklRewardsChains: [GqlChain.Sonic],
   options: {
     poolDisplayType: PoolDisplayType.Name,
