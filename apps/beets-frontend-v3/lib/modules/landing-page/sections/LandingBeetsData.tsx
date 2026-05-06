@@ -6,7 +6,6 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { BeetsByTheNumbers } from '../components/BeetsByTheNumbers'
 import {
-  GetProtocolStatsPerChainQuery,
   GetProtocolStatsQuery,
   GetStakedSonicDataQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -30,7 +29,6 @@ export function LandingBeetsData({
   stakedSonicData,
 }: {
   protocolData: GetProtocolStatsQuery
-  protocolDataPerChain: GetProtocolStatsPerChainQuery[]
   stakedSonicData: GetStakedSonicDataQuery
 }) {
   const { toCurrency } = useCurrency()
