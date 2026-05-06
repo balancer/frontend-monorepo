@@ -61,6 +61,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
           bg: 'background.level0',
         }}
         key={keyValue}
+        minW="fit-content"
         px={{ base: '0', sm: 'md' }}
         transition="all 0.2s ease-in-out"
         w="full"
