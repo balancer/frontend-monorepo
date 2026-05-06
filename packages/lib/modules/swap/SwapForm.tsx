@@ -25,6 +25,7 @@ import { SwapPreviewModal } from './modal/SwapModal'
 import { TransactionSettings } from '../user/settings/TransactionSettings'
 import { PriceImpactAccordion } from '../price-impact/PriceImpactAccordion'
 import { ChainSelect } from '../chains/ChainSelect'
+import { hasMultipleNetworks } from '../pool/pool.utils'
 import { ArrowDown, CheckCircle, Link, Repeat } from 'react-feather'
 import { SwapRate } from './SwapRate'
 import { SwapDetails } from './SwapDetails'
@@ -261,7 +262,7 @@ export function SwapForm({
                 <ContractWalletAlert />
               )}
 
-              {!isPoolSwap && (
+              {!isPoolSwap && hasMultipleNetworks(PROJECT_CONFIG.supportedNetworks) && (
                 <ChainSelect
                   onChange={newValue => {
                     setSelectedChain(newValue as GqlChain)

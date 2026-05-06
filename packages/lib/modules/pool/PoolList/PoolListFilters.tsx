@@ -50,6 +50,7 @@ import ButtonGroup, {
 import { useCow } from '../../cow/useCow'
 import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
+import { hasMultipleNetworks } from '../pool.utils'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 import NextLink from 'next/link'
@@ -232,10 +233,6 @@ export interface PoolNetworkFiltersArgs {
   toggledNetworks: GqlChain[]
   toggleNetwork: (checked: boolean, value: GqlChain) => void
   setNetworks: (value: GqlChain[] | null) => void
-}
-
-export function shouldShowNetworkFilters(supportedNetworks: GqlChain[]) {
-  return supportedNetworks.length > 1
 }
 
 export function PoolNetworkFilters({
@@ -545,7 +542,7 @@ export function PoolListFilters() {
   }
 
   const { options, supportedNetworks } = PROJECT_CONFIG
-  const showNetworkFilters = shouldShowNetworkFilters(supportedNetworks)
+  const showNetworkFilters = hasMultipleNetworks(supportedNetworks)
 
   return (
     <VStack w="full">
