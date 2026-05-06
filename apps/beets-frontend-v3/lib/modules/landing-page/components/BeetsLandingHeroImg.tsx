@@ -14,7 +14,7 @@ export function BeetsLandingHeroImg() {
   const isInView = useInView(ref, { once: true })
 
   return (
-    <Box bottom={0} h="1200px" left={0} position="absolute" top={-100} w="100%">
+    <Box bottom={0} h="1050px" left={0} position="absolute" top={-100} w="100%">
       <AnimatePresence>
         <motion.div
           animate={isInView ? { opacity: 0.5, willChange: 'opacity' } : {}}

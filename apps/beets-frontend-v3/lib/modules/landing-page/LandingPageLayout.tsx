@@ -33,7 +33,7 @@ export function LandingPageLayout({
         protocolDataPerChain={protocolDataPerChain}
         stakedSonicData={stakedSonicData}
       />
-      <Box mb="2xl" mt="2xl" pb="3xl">
+      <Box mb="2xl" mt="3xl" pb="3xl" pt="2xl">
         <LandingBeetsStakedSonic />
       </Box>
       <Box mb="2xl" pb="3xl">
