@@ -69,9 +69,6 @@ export default function Privacy() {
                         <Link href="risks#composability-risk">DeFi composability risk</Link>
                       </li>
                       <li>
-                        <Link href="risks#governance-risk">DAO Governance risk</Link>
-                      </li>
-                      <li>
                         <Link href="risks#flash-loans-risk">Flash Loans risk</Link>
                       </li>
                       <li>
@@ -130,11 +127,6 @@ export default function Privacy() {
                         <Link href="risks#btf">Blockchain Traded Funds</Link>
                       </li>
                     </ul>
-                  </li>
-                  <li>
-                    <Link href="risks#network-risks">
-                      <h6>Layer 2 network risks</h6>
-                    </Link>
                   </li>
                 </ul>
               </nav>
@@ -386,108 +378,6 @@ export default function Privacy() {
                 Other risks could cascade if a protocol within a composability stack has a liquidity
                 crisis, an unfavorable governance decision or regulatory outcome.
               </p>
-            </div>
-          </FadeInOnView>
-          <FadeInOnView>
-            <div className="subsection">
-              <h4 className="anchor" id="governance-risk">
-                DAO Governance risk
-              </h4>
-              <p>
-                Balancer currently uses off-chain voting mechanisms to signal the will of veBAL
-                token holders (vote-escrow BAL). This off-chain voting is done via{' '}
-                <a href="https://snapshot.org/">Snapshot</a>
-                —originally developed in-house by Balancer Labs.
-              </p>
-              <p>A summary of the immutability of the Balancer Protocol&rsquo;s smart contracts:</p>
-              <ul>
-                <li>
-                  Balancer V1 contracts are immutable, so there were no core protocol parameters
-                  that could be changed.
-                </li>
-                <li>
-                  Balancer V2 contracts do allow for some tweaking of core protocol parameters,
-                  including the ability to:
-                  <ul>
-                    <li>
-                      Set a share of swap fees to be diverted to the protocol (hard capped at 50% of
-                      the swap fee)
-                    </li>
-                    <li>Set a Flash Loan fee</li>
-                    <li>
-                      Extract from the vault collected protocol fees and/or excess balances (e.g.
-                      airdrops), to any destination
-                    </li>
-                    <li>Set the address of the oracle implementation</li>
-                    <li>
-                      Set relayer addresses: relayers are (user opt-in, audited) contracts that can
-                      make calls to the vault (with the transaction “sender” being any arbitrary
-                      address) and use the sender&rsquo;s ERC20 vault allowance, internal balance or
-                      BPTs on their behalf
-                    </li>
-                    <li>
-                      Set dynamic-fee controllers: addresses (initially assigned to Gauntlet) that
-                      may change the swap fee for pools created by the dynamic-fee pool factory that
-                      will be deployed by Balancer Labs
-                    </li>
-                    <li>Add and remove veBAL gauges</li>
-                  </ul>
-                </li>
-              </ul>
-              <p>
-                Note: The system of Balancer Governance may change in the future. For example,
-                Balancer community members have expressed interest in moving from the Multisig
-                towards on-chain governance execution by veBAL token holders.
-              </p>
-              <p>
-                The main risk with this setup consisting of off-chain voting executed by MultiSigs:
-              </p>
-              <ul>
-                <li>
-                  The{' '}
-                  <a href="https://docs.balancer.fi/concepts/governance/multisig.html#dao-multisig-signer-set">
-                    Multisig signer set
-                  </a>{' '}
-                  could go rogue and disregard the decision made by veBAL holders in the off-chain
-                  voting.
-                </li>
-                <li>
-                  The{' '}
-                  <a href="https://docs.balancer.fi/concepts/governance/multisig.html#dao-multisig-signer-set">
-                    Multisig signer set
-                  </a>{' '}
-                  could mistakenly execute the wrong instruction without malice.
-                </li>
-                <li>
-                  An individual or an entity could acquire substantial veBAL and vote against the
-                  interests of the majority of the community.
-                </li>
-              </ul>
-              <h5>How Balancer aims to mitigate this risk:</h5>
-              <ul>
-                <li>
-                  The core of Balancer smart contracts are immutable and do not use proxies or other
-                  upgrade mechanisms. Only parameters, which are considered to be less
-                  &lsquo;dangerous&rsquo; may be tweaked.
-                </li>
-                <li>
-                  The Multisig does&nbsp;not&nbsp;have custody of, nor control over, funds from
-                  liquidity providers locked inside Balancer Protocol contracts. Balancer V2 was
-                  designed so that even if a multisig goes rogue, all the liquidity is safe and can
-                  be withdrawn by their rightful owners.
-                </li>
-              </ul>
-              <h5>How LPs can mitigate this risk:</h5>
-              <ul>
-                <li>
-                  LPs should stay up to date with Balancer Governance by following discussions on
-                  the forum and participating in the off-chain voting.
-                </li>
-                <li>
-                  LPs may review past votes and verify that the DAO Multisig has executed outcomes
-                  accurately.
-                </li>
-              </ul>
             </div>
           </FadeInOnView>
           <FadeInOnView>
@@ -1398,34 +1288,6 @@ export default function Privacy() {
             </FadeInOnView>
 
             <Divider />
-            <FadeInOnView>
-              <div className="subsection">
-                <h3 className="anchor" id="network-risks">
-                  Network risks (L2s and Sidechains)
-                </h3>
-                <p>
-                  Sidechains and Layer 2 networks can offer advantages over Ethereum Mainnet, like
-                  faster transaction times and lower fees. However, they come with their own set of
-                  risks and trade-offs.
-                </p>
-                <p>
-                  For example, sidechains and Layer 2 networks often have a different security
-                  models. They may rely on a smaller set of validators or different consensus
-                  mechanisms, which could potentially make them more susceptible to attacks or
-                  centralization risks.
-                </p>
-                <p>
-                  In addition, there are bridging risks when user&rsquo;s move funds between
-                  networks. Asset bridges rely on smart contracts to facilitate transfers between
-                  Ethereum Mainnet and Layer 2/sidechains. These contracts may have vulnerabilities,
-                  which could expose users&apos; funds to risks during the bridging process.
-                </p>
-                <p>
-                  This list of networks below is not updated regularly and may not reflect all
-                  networks supported by this UI.
-                </p>
-              </div>
-            </FadeInOnView>
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
