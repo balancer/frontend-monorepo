@@ -169,6 +169,12 @@
       "matchPackageNames": ["zod"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Block TypeScript major upgrades until moduleResolution and deep import issues are resolved.",
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
