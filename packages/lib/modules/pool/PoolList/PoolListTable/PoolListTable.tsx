@@ -63,11 +63,8 @@ export function PoolListTable({ pools, count, loading }: Props) {
       left={{ base: '-4px', sm: '0' }}
       overflowX={{ base: 'auto', '2xl': 'hidden' }}
       overflowY="hidden"
-      p={{ base: '0', sm: '0' }}
-      position="relative"
-      // fixing right padding for horizontal scroll on mobile
-      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
-      w={{ base: '100vw', lg: 'full' }}
+      p="0"
+      w="full"
     >
       <PaginatedTable
         getRowId={item => item.id}

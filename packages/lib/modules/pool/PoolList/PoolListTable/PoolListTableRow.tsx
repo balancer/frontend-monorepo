@@ -67,7 +67,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
         w="full"
       >
         <Link href={getPoolPath(pool)} prefetch role="group">
-          <Grid {...rest} pr="4" py={{ base: 'ms', md: 'md' }}>
+          <Grid {...rest} pr={{ base: 0, lg: 4 }} py={{ base: 'ms', md: 'md' }}>
             <GridItem>
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
@@ -124,11 +124,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               </TooltipWithTouch>
             </GridItem>
             <GridItem justifySelf="end" pr={{ base: 'md', lg: 'sm', xl: '0' }}>
-              <HStack
-                gap="xxs"
-                mr={needsMarginForPoints && !hasPoints ? '12px' : '0'}
-                pr={{ base: '0', sm: 'sm', lg: '0' }}
-              >
+              <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '12px' : '0'} pr="0">
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
                   chain={pool.chain}
