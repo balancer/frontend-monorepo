@@ -61,7 +61,7 @@ const partnerInfo: PartnerInfo = {
     fullName: 'Beets',
     category: 'AMM / DEX',
     description:
-      'Beets is a community-driven DEX and DeFi power house governed by the BEETS token and living on Sonic.',
+      'Beets is a community-driven DEX and DeFi powerhouse governed by the BEETS token and living on Sonic.',
     url: 'https://beets.fi',
     imageName: 'beets',
   },
