@@ -181,6 +181,12 @@
       "matchPackageNames": ["@vitejs/plugin-react"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Block vitest-mock-extended major upgrades — v4 requires vitest 4 which is not yet in the project.",
+      "matchPackageNames": ["vitest-mock-extended"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
