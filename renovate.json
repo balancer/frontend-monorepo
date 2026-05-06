@@ -175,6 +175,12 @@
       "matchPackageNames": ["typescript"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "Block @vitejs/plugin-react major upgrades — v5 is not compatible with 'moduleResolution': 'node'",
+      "matchPackageNames": ["@vitejs/plugin-react"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
