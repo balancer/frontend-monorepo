@@ -32,6 +32,8 @@ pnpm workspaces + Turborepo. Both `apps/frontend-v3` (Balancer) and `apps/beets-
 
 Vitest across all packages. Integration tests live in `packages/lib` and use a separate config.
 
+Name Vitest files with `*.spec.*`. Use `*.integration.spec.*` for integration tests. Do not add new `*.test.*` files.
+
 Run a single integration test file:
 
 ```bash
