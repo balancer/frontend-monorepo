@@ -63,7 +63,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
       left={{ base: '-4px', sm: '0' }}
       overflowX={{ base: 'auto', '2xl': 'hidden' }}
       overflowY="hidden"
-      p="0"
+      p={{ base: '0', sm: '0' }}
       w="full"
     >
       <PaginatedTable
