@@ -53,7 +53,7 @@ export function PaginatedTable<T>({
 
   return (
     <>
-      <VStack gap="0" w="full">
+      <VStack gap="0" minW="fit-content" w="full">
         <TableHeader />
         <Divider />
         <Box position="relative" w="full">

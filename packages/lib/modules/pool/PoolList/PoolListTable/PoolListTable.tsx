@@ -5,7 +5,7 @@ import { PoolListTableHeader } from './PoolListTableHeader'
 import { PoolListTableRow } from './PoolListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { PoolListItem } from '../../pool.types'
-import { Box, Card, Skeleton } from '@chakra-ui/react'
+import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from '../PoolListProvider'
 import { useCallback, useMemo } from 'react'
@@ -64,24 +64,19 @@ export function PoolListTable({ pools, count, loading }: Props) {
       overflowX={{ base: 'auto', '2xl': 'hidden' }}
       overflowY="hidden"
       p={{ base: '0', sm: '0' }}
-      position="relative"
-      // fixing right padding for horizontal scroll on mobile
-      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
-      w={{ base: '100vw', lg: 'full' }}
+      w="full"
     >
-      <Box minW="max-content" w="full">
-        <PaginatedTable
-          getRowId={item => item.id}
-          items={pools}
-          loading={loading}
-          loadingSpinnerPosition="top"
-          noItemsFoundLabel="No pools found"
-          paginationProps={paginationProps}
-          renderTableHeader={renderTableHeader}
-          renderTableRow={renderTableRow}
-          showPagination={showPagination}
-        />
-      </Box>
+      <PaginatedTable
+        getRowId={item => item.id}
+        items={pools}
+        loading={loading}
+        loadingSpinnerPosition="top"
+        noItemsFoundLabel="No pools found"
+        paginationProps={paginationProps}
+        renderTableHeader={renderTableHeader}
+        renderTableRow={renderTableRow}
+        showPagination={showPagination}
+      />
     </Card>
   )
 }

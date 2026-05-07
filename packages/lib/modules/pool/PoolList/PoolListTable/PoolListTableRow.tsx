@@ -61,6 +61,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
           bg: 'background.level0',
         }}
         key={keyValue}
+        minW="fit-content"
         px={{ base: '0', sm: 'md' }}
         transition="all 0.2s ease-in-out"
         w="full"
@@ -123,11 +124,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               </TooltipWithTouch>
             </GridItem>
             <GridItem justifySelf="end" pr={{ base: 'md', lg: 'sm', xl: '0' }}>
-              <HStack
-                gap="xxs"
-                mr={needsMarginForPoints && !hasPoints ? '12px' : '0'}
-                pr={{ base: '0', sm: 'sm', lg: '0' }}
-              >
+              <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '12px' : '0'} pr="0">
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
                   chain={pool.chain}
