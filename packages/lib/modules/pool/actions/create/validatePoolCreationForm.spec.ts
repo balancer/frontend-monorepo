@@ -126,6 +126,15 @@ describe('validatePoolCreationForm', () => {
         ).toBe('Amount must be greater than 0')
       })
 
+      it('does not throw for malformed token amounts', () => {
+        expect(
+          validatePoolTokens.hasAmountError(mockToken({ amount: 'abc' }), PoolType.CowAmm)
+        ).toEqual({
+          error: 'Amount must be greater than 0',
+          possibleErrors: ['Amount must be greater than 0', 'Minimum amount is 1'],
+        })
+      })
+
       it('enforces higher minimum for CowAmm tokens with low decimals', () => {
         const lowDecimalsToken = mockToken({ amount: '0.001', data: { decimals: 6 } as any })
         expect(validatePoolTokens.hasAmountError(lowDecimalsToken, PoolType.CowAmm).error).toBe(

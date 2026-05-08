@@ -68,7 +68,12 @@ export const validatePoolTokens = {
 
     // CoW amm on v1 has special amount requirement based on token decimals
     const tokenDecimals = token.data?.decimals || 0
-    const rawAmount = parseUnits(token.amount, tokenDecimals)
+    let rawAmount: bigint
+    try {
+      rawAmount = parseUnits(token.amount, tokenDecimals)
+    } catch {
+      return { error: LESS_THAN_0_ERROR, possibleErrors }
+    }
     const isInvalidAmountForCowPool =
       isCowPool(poolType) && tokenDecimals < 18 && rawAmount < BigInt(1e6)
     if (isInvalidAmountForCowPool) return { error: LESS_THAN_1_ERROR, possibleErrors }
