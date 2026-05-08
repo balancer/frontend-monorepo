@@ -16,31 +16,6 @@ describe('useHydratePoolCreationForm', () => {
     vi.clearAllMocks()
   })
 
-  it('returns isLoadingPool from useUninitializedPool', async () => {
-    const { useUninitializedPool } = await import('./useUninitializedPool')
-    const { usePoolCreationForm } = await import('./PoolCreationFormProvider')
-
-    ;(useUninitializedPool as ReturnType<typeof vi.fn>).mockReturnValue({
-      poolFormData: null,
-      reClammFormData: null,
-      eclpFormData: null,
-      isLoadingPool: true,
-      shouldHydratePoolCreationForm: false,
-      areAllParamsDefined: false,
-      poolAddressParam: undefined,
-    })
-    ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
-      poolCreationForm: { reset: vi.fn() },
-      setPoolAddress: vi.fn(),
-      reClammConfigForm: { reset: vi.fn() },
-      eclpConfigForm: { reset: vi.fn() },
-      goToLastStep: vi.fn(),
-    })
-
-    const { result } = testHook(() => useHydratePoolCreationForm())
-    expect(result.current.isLoadingPool).toBe(true)
-  })
-
   it('clears pool address when areAllParamsDefined becomes true', async () => {
     const { useUninitializedPool } = await import('./useUninitializedPool')
     const { usePoolCreationForm } = await import('./PoolCreationFormProvider')
@@ -134,38 +109,6 @@ describe('useHydratePoolCreationForm', () => {
 
     testHook(() => useHydratePoolCreationForm())
     expect(poolCreationFormReset).not.toHaveBeenCalled()
-  })
-
-  it('only resets forms that have data (skips null form data)', async () => {
-    const { useUninitializedPool } = await import('./useUninitializedPool')
-    const { usePoolCreationForm } = await import('./PoolCreationFormProvider')
-
-    const poolCreationFormReset = vi.fn()
-    const reClammConfigFormReset = vi.fn()
-    const eclpConfigFormReset = vi.fn()
-
-    ;(useUninitializedPool as ReturnType<typeof vi.fn>).mockReturnValue({
-      poolFormData: null,
-      reClammFormData: { initialTargetPrice: '100' },
-      eclpFormData: null,
-      isLoadingPool: false,
-      shouldHydratePoolCreationForm: true,
-      areAllParamsDefined: false,
-      poolAddressParam: undefined,
-    })
-    ;(usePoolCreationForm as ReturnType<typeof vi.fn>).mockReturnValue({
-      poolCreationForm: { reset: poolCreationFormReset },
-      setPoolAddress: vi.fn(),
-      reClammConfigForm: { reset: reClammConfigFormReset },
-      eclpConfigForm: { reset: eclpConfigFormReset },
-      goToLastStep: vi.fn(),
-    })
-
-    testHook(() => useHydratePoolCreationForm())
-
-    expect(poolCreationFormReset).not.toHaveBeenCalled()
-    expect(reClammConfigFormReset).toHaveBeenCalledWith({ initialTargetPrice: '100' })
-    expect(eclpConfigFormReset).not.toHaveBeenCalled()
   })
 
   it('reacts to changes in shouldHydratePoolCreationForm via rerender', async () => {

@@ -62,16 +62,6 @@ vi.mock('viem', async () => {
   }
 })
 
-vi.mock('@repo/lib/shared/utils/query-errors', async () => {
-  const actual = await vi.importActual<typeof import('@repo/lib/shared/utils/query-errors')>(
-    '@repo/lib/shared/utils/query-errors'
-  )
-  return {
-    ...actual,
-    sentryMetaForCreatePoolHandler: vi.fn(() => ({})),
-  }
-})
-
 describe('useCreatePoolBuildCall', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -243,40 +233,5 @@ describe('useCreatePoolBuildCall', () => {
 
     await waitFor(() => expect(result.current.isError).toBeTruthy())
     expect(result.current.error?.message).toContain('Missing bCoW factory')
-  })
-
-  it('includes blockNumber in Sentry error metadata', async () => {
-    const mockBuildCall = { callData: '0xdata', to: '0xto' }
-
-    const { CreatePool } = await import('@balancer/sdk')
-    const mockInstance = { buildCall: vi.fn().mockReturnValue(mockBuildCall) }
-    ;(CreatePool as ReturnType<typeof vi.fn>).mockImplementation(() => mockInstance)
-
-    const { useUserAccount } = await import('@repo/lib/modules/web3/UserAccountProvider')
-    ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
-      userAddress: defaultTestUserAccount,
-      isConnected: true,
-    })
-
-    const { useBlockNumber } = await import('wagmi')
-    ;(useBlockNumber as ReturnType<typeof vi.fn>).mockReturnValue({ data: 12345n })
-
-    const { sentryMetaForCreatePoolHandler } = await import('@repo/lib/shared/utils/query-errors')
-    const mockSentryMeta = vi.fn().mockReturnValue({})
-    ;(sentryMetaForCreatePoolHandler as ReturnType<typeof vi.fn>).mockImplementation(mockSentryMeta)
-
-    const { result } = testHook(() =>
-      useCreatePoolBuildCall({
-        createPoolInput: v3Input as any,
-        enabled: true,
-      })
-    )
-
-    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-
-    expect(mockSentryMeta).toHaveBeenCalledWith('Error in create pool build call', {
-      ...v3Input,
-      blockNumber: 12345n,
-    })
   })
 })

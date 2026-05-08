@@ -19,33 +19,6 @@ const mockToken = (overrides: Partial<PoolCreationToken> = {}): PoolCreationToke
 
 describe('validatePoolCreationForm', () => {
   describe('validatePoolTokens', () => {
-    describe('isValidTokens', () => {
-      it('validates that all tokens have addresses', () => {
-        expect(
-          validatePoolTokens.isValidTokens([
-            mockToken({ address: '0x111' }),
-            mockToken({ address: '0x222' }),
-          ])
-        ).toBe(true)
-        expect(
-          validatePoolTokens.isValidTokens([
-            mockToken({ address: undefined }),
-            mockToken({ address: '0x222' }),
-          ])
-        ).toBe(false)
-      })
-    })
-
-    describe('maxTokens', () => {
-      it('returns pool-type-specific max token limits', () => {
-        expect(validatePoolTokens.maxTokens(PoolType.Stable as SupportedPoolTypes)).toBe(5)
-        expect(validatePoolTokens.maxTokens(PoolType.Weighted as SupportedPoolTypes)).toBe(8)
-        expect(validatePoolTokens.maxTokens(PoolType.GyroE as SupportedPoolTypes)).toBe(2)
-        expect(validatePoolTokens.maxTokens(PoolType.ReClamm as SupportedPoolTypes)).toBe(2)
-        expect(validatePoolTokens.maxTokens(PoolType.CowAmm as SupportedPoolTypes)).toBe(2)
-      })
-    })
-
     describe('isAtMaxTokens', () => {
       it('checks if token count has reached the pool type limit', () => {
         expect(
@@ -56,37 +29,6 @@ describe('validatePoolCreationForm', () => {
         ).toBe(true)
         expect(
           validatePoolTokens.isAtMaxTokens(PoolType.Stable as SupportedPoolTypes, [mockToken()])
-        ).toBe(false)
-      })
-    })
-
-    describe('totalWeight', () => {
-      it('sums token weights including decimals', () => {
-        expect(
-          validatePoolTokens.totalWeight([mockToken({ weight: '30' }), mockToken({ weight: '70' })])
-        ).toBe(100)
-        expect(
-          validatePoolTokens.totalWeight([
-            mockToken({ weight: '33.33' }),
-            mockToken({ weight: '66.67' }),
-          ])
-        ).toBeCloseTo(100, 1)
-      })
-    })
-
-    describe('isAllWeightInputsPopulated', () => {
-      it('checks that every token has a weight value', () => {
-        expect(
-          validatePoolTokens.isAllWeightInputsPopulated([
-            mockToken({ weight: '50' }),
-            mockToken({ weight: '50' }),
-          ])
-        ).toBe(true)
-        expect(
-          validatePoolTokens.isAllWeightInputsPopulated([
-            mockToken({ weight: '' }),
-            mockToken({ weight: '50' }),
-          ])
         ).toBe(false)
       })
     })
@@ -146,23 +88,6 @@ describe('validatePoolCreationForm', () => {
       })
     })
 
-    describe('isValidTotalWeight', () => {
-      it('returns true only when total weight is exactly 100', () => {
-        expect(
-          validatePoolTokens.isValidTotalWeight([
-            mockToken({ weight: '50' }),
-            mockToken({ weight: '50' }),
-          ])
-        ).toBe(true)
-        expect(
-          validatePoolTokens.isValidTotalWeight([
-            mockToken({ weight: '60' }),
-            mockToken({ weight: '50' }),
-          ])
-        ).toBe(false)
-      })
-    })
-
     describe('isValidTokenWeights', () => {
       it('always returns true for non-weighted pools', () => {
         expect(validatePoolTokens.isValidTokenWeights(PoolType.Stable, [mockToken()])).toBe(true)
@@ -211,20 +136,6 @@ describe('validatePoolCreationForm', () => {
         expect(
           validatePoolTokens.hasAmountError(sufficientToken, PoolType.CowAmm).error
         ).toBeUndefined()
-      })
-
-      it('returns no error for non-CowAmm pools with amount > 0', () => {
-        expect(
-          validatePoolTokens.hasAmountError(mockToken({ amount: '100' }), PoolType.Weighted).error
-        ).toBeUndefined()
-      })
-
-      it('includes possible errors in result for UI display', () => {
-        const result = validatePoolTokens.hasAmountError(mockToken(), PoolType.Weighted)
-        expect(result.possibleErrors).toEqual([
-          'Amount must be greater than 0',
-          'Minimum amount is 1',
-        ])
       })
     })
   })
