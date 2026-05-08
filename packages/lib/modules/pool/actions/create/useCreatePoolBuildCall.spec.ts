@@ -3,6 +3,7 @@ import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { useCreatePoolBuildCall } from './useCreatePoolBuildCall'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { waitFor } from '@testing-library/react'
+import { encodeFunctionData, parseAbi } from 'viem'
 
 vi.mock('@balancer/sdk', async () => {
   const actual = await vi.importActual<typeof import('@balancer/sdk')>('@balancer/sdk')
@@ -43,25 +44,6 @@ vi.mock('@repo/lib/config/app.config', async () => {
   }
 })
 
-vi.mock('viem', async () => {
-  const actual = await vi.importActual<typeof import('viem')>('viem')
-  return {
-    ...actual,
-    encodeFunctionData: vi.fn(),
-    parseAbi: vi.fn(() => [
-      {
-        type: 'function',
-        name: 'newBPool',
-        inputs: [
-          { name: 'name', type: 'string' },
-          { name: 'symbol', type: 'string' },
-        ],
-        outputs: [],
-      },
-    ]),
-  }
-})
-
 describe('useCreatePoolBuildCall', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -69,6 +51,7 @@ describe('useCreatePoolBuildCall', () => {
 
   const v3Input = { protocolVersion: 3 as const, chainId: 1 }
   const v1Input = { protocolVersion: 1 as const, chainId: 1, name: 'CoW Pool', symbol: 'COW' }
+  const bCowFactory = '0x1234567890123456789012345678901234567890'
 
   async function setupV3Mocks() {
     const { CreatePool } = await import('@balancer/sdk')
@@ -111,7 +94,7 @@ describe('useCreatePoolBuildCall', () => {
     })
   })
 
-  it('builds v1 CoW AMM pool call via bCoW factory', async () => {
+  it('builds v1 CoW AMM pool call with real bCoW calldata encoding', async () => {
     const { useUserAccount } = await import('@repo/lib/modules/web3/UserAccountProvider')
     ;(useUserAccount as ReturnType<typeof vi.fn>).mockReturnValue({
       userAddress: defaultTestUserAccount,
@@ -126,11 +109,8 @@ describe('useCreatePoolBuildCall', () => {
 
     const { getNetworkConfig } = await import('@repo/lib/config/app.config')
     ;(getNetworkConfig as ReturnType<typeof vi.fn>).mockReturnValue({
-      contracts: { balancer: { bCoWFactory: '0xcowFactoryAddress' } },
+      contracts: { balancer: { bCoWFactory: bCowFactory } },
     })
-
-    const { encodeFunctionData } = await import('viem')
-    ;(encodeFunctionData as ReturnType<typeof vi.fn>).mockReturnValue('0xcallv1')
 
     const { result } = testHook(() =>
       useCreatePoolBuildCall({
@@ -141,21 +121,15 @@ describe('useCreatePoolBuildCall', () => {
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-    expect(result.current.data?.to).toBe('0xcowFactoryAddress')
-    expect(encodeFunctionData).toHaveBeenCalledWith({
-      abi: [
-        {
-          type: 'function',
-          name: 'newBPool',
-          inputs: [
-            { name: 'name', type: 'string' },
-            { name: 'symbol', type: 'string' },
-          ],
-          outputs: [],
-        },
-      ],
-      functionName: 'newBPool',
-      args: ['CoW Pool', 'COW'],
+    expect(result.current.data).toEqual({
+      chainId: 1,
+      account: defaultTestUserAccount,
+      data: encodeFunctionData({
+        abi: parseAbi(['function newBPool(string name, string symbol)']),
+        functionName: 'newBPool',
+        args: ['CoW Pool', 'COW'],
+      }),
+      to: bCowFactory,
     })
   })
 
